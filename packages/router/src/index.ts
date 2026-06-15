@@ -189,16 +189,42 @@ const NAVIGATION: NavigationType = {
         path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
       },
       {
-        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_CHUYEN_DE_NGHIEN_CU,
-        label: "Phân công CĐNC",
+        id: "chuyen-de-nghien-cuu",
+        label: "Chuyên đề nghiên cứu",
         icon: ClipboardCheck,
-        path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_CHUYEN_DE_NGHIEN_CU,
+        children: [
+          {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_CHUYEN_DE_NGHIEN_CU,
+            label: "Phân công CĐNC",
+            path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_CHUYEN_DE_NGHIEN_CU,
+            description: "Phân công CĐNC",
+          },
+          {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_CHUYEN_DE_NGHIEN_CUU,
+            label: "Danh sách CĐNC",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_CHUYEN_DE_NGHIEN_CUU,
+            description: "Danh sách CĐNC",
+          },
+        ],
       },
       {
-        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_THUC_TAP,
-        label: "Phân công Thực tập",
+        id: "thuc-tap",
+        label: "Thực tập",
         icon: ClipboardCheck,
-        path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_THUC_TAP,
+        children: [
+          {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_THUC_TAP,
+            label: "Phân công thực tập",
+            path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_THUC_TAP,
+            description: "Phân công thực tập",
+          },
+          {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_THUC_TAP,
+            label: "Danh sách thực tập",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_THUC_TAP,
+            description: "Danh sách thực tập",
+          },
+        ],
       },
       {
         id: "dang-ky-hoc",
@@ -315,24 +341,6 @@ const NAVIGATION: NavigationType = {
             label: "Sửa điểm",
             path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_SUA_DIEM,
             description: "Sửa điểm",
-          },
-          {
-            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
-            label: "SV/HV chuyển trường",
-            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
-            description: "SV/HV chuyển trường",
-          },
-          {
-            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_CHUYEN_DE_NGHIEN_CUU,
-            label: "Chuyên đề nghiên cứu",
-            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_CHUYEN_DE_NGHIEN_CUU,
-            description: "Chuyên đề nghiên cứu",
-          },
-          {
-            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_THUC_TAP,
-            label: "Thực tập",
-            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_THUC_TAP,
-            description: "Thực tập",
           },
           {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
@@ -471,6 +479,12 @@ const NAVIGATION: NavigationType = {
                 label: "Ngôn ngữ đào tạo",
                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_NGON_NGU_DAO_TAO,
                 description: "Ngôn ngữ đào tạo",
+              },
+              {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
+                label: "SV/HV chuyển trường",
+                path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
+                description: "SV/HV chuyển trường",
               },
               {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_NOI_DUNG_TINH_TAI,
