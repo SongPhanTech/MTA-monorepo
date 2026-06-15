@@ -1,7 +1,3 @@
-// Hook quản lý màn "Điểm danh" của lớp trợ giảng (cổng giảng viên).
-// Chịu trách nhiệm: nạp bộ lọc (môn học / lớp), nạp danh sách sinh viên + buổi học
-// theo ngày, giữ trạng thái điểm danh cục bộ và lưu xuống DB.
-
 import type {
   SinhVienDiemDanhRow,
   ThongTinBuoiHoc,
@@ -60,7 +56,6 @@ const useDiemDanhTroGiang = (lopIdMacDinh?: string) => {
     { enabled: !!profileId && !!semesterId && !!trainingObjectTypeId }
   )
 
-  // Môn học = các subject phân biệt trong danh sách lớp trợ giảng.
   const monHocOptions = useMemo(() => {
     const map = new Map<string, string>()
     dsLop.forEach((lop) => {
@@ -69,7 +64,6 @@ const useDiemDanhTroGiang = (lopIdMacDinh?: string) => {
     return Array.from(map, ([value, label]) => ({ value, label }))
   }, [dsLop])
 
-  // Lớp = các lớp môn học thuộc môn đã chọn.
   const lopOptions = useMemo(
     () =>
       dsLop
@@ -78,7 +72,19 @@ const useDiemDanhTroGiang = (lopIdMacDinh?: string) => {
     [dsLop, monHocId]
   )
 
-  // ----- Nạp chi tiết lớp (sinh viên + buổi học + điểm danh đã có) -----
+  useEffect(() => {
+    if (monHocOptions.length === 0) return
+    if (monHocId && monHocOptions.some((o) => o.value === monHocId)) return
+    const lopMacDinh = lopIdMacDinh ? dsLop.find((lop) => lop.id === lopIdMacDinh) : undefined
+    setMonHocId(lopMacDinh?.subject?.id ?? monHocOptions[0]?.value)
+  }, [monHocId, monHocOptions, dsLop, lopIdMacDinh])
+
+  useEffect(() => {
+    if (lopOptions.length === 0) return
+    if (lopId && lopOptions.some((o) => o.value === lopId)) return
+    setLopId(lopOptions[0]?.value)
+  }, [lopId, lopOptions])
+
   const ngayBatDau = useMemo(() => (khoaTai ? dayjs(khoaTai.ngay).startOf("day").toDate() : null), [
     khoaTai,
   ])
@@ -109,8 +115,7 @@ const useDiemDanhTroGiang = (lopIdMacDinh?: string) => {
   // Phiếu điểm danh đã tồn tại cho ngày đang chọn (nếu có).
   const phieuDaCo = chiTietLop?.subjectClassAttendances?.[0]
 
-  // Seed trạng thái cục bộ mỗi khi chi tiết lớp được nạp lại.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: chỉ seed khi dữ liệu đổi
+
   useEffect(() => {
     if (!chiTietLop) return
 
@@ -189,7 +194,6 @@ const useDiemDanhTroGiang = (lopIdMacDinh?: string) => {
       const classScheduleId = chiTietLop?.classSchedules?.[0]?.id
 
       if (phieuDaCo) {
-        // Cập nhật phiếu đã có: ghi chú buổi học + từng sinh viên.
         const transactions: any[] = [
           {
             model: "SubjectClassAttendance",
@@ -268,7 +272,6 @@ const useDiemDanhTroGiang = (lopIdMacDinh?: string) => {
     setLopId,
     setNgay,
     layDanhSach,
-    // dữ liệu
     danhSach,
     thongTinBuoiHoc,
     tongKet,
@@ -276,7 +279,6 @@ const useDiemDanhTroGiang = (lopIdMacDinh?: string) => {
     setGhiChuBuoiHoc,
     daLayDanhSach: !!khoaTai,
     dangTaiChiTiet: !!khoaTai && dangTaiChiTiet,
-    // hành vi
     doiTrangThaiSinhVien,
     doiGhiChuSinhVien,
     luuDiemDanh,
