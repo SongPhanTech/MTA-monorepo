@@ -2,7 +2,7 @@ import type { SinhVienLopQuanLyRow } from "@components/cong-giang-vien/lop-quan-
 import { Button, Table, Tag } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { BarChart3, Eye } from "lucide-react"
-import { type CSSProperties, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const CHIEU_CAO_HEADER_BANG = 48
 
@@ -58,7 +58,6 @@ const BangDanhSachSinhVien = ({
       title: "STT",
       width: 56,
       align: "center",
-      fixed: "left",
       render: (_value, _record, index) => (trang - 1) * soTrang + index + 1,
     },
     {
@@ -105,7 +104,6 @@ const BangDanhSachSinhVien = ({
       title: "Thao tác",
       width: 200,
       align: "center",
-      fixed: "right",
       render: (_value, record) => (
         <div className="flex items-center justify-center gap-2">
           <Button
@@ -130,22 +128,17 @@ const BangDanhSachSinhVien = ({
   ]
 
   return (
-    <div
-      ref={vungBangRef}
-      className="flex min-h-0 flex-1 flex-col overflow-hidden px-4 pb-2"
-      style={{ "--gv-body-h": `${chieuCaoBody}px` } as CSSProperties}
-    >
+    <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden px-4 pb-2">
       <Table<SinhVienLopQuanLyRow>
         rowKey="id"
         size="small"
-        tableLayout="fixed"
         columns={columns}
         dataSource={danhSach}
         loading={loading}
         pagination={false}
         scroll={{ x: 1100, y: chieuCaoBody }}
         rowClassName={(_, index) => (index % 2 === 1 ? "bg-gray-50/80" : "")}
-        className="bang-gv-full [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
+        className="bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
       />
     </div>
   )

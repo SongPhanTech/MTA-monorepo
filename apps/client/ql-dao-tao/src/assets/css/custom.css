@@ -125,6 +125,15 @@
   height: var(--gv-body-h, auto) !important;
 }
 
+/* Bảng chi tiết lớp quản lý GV — tắt height 100% global để scroll.y hiển thị đúng hàng */
+.bang-lq-chi-tiet.ant-table-wrapper .ant-table,
+.bang-lq-chi-tiet.ant-table-wrapper .ant-spin-nested-loading,
+.bang-lq-chi-tiet.ant-table-wrapper .ant-spin-container,
+.bang-lq-chi-tiet.ant-table-wrapper .ant-table-container,
+.bang-lq-chi-tiet.ant-table-wrapper div {
+  height: auto !important;
+}
+
 .ant-layout {
   background: #ffffff;
 }
