@@ -4,6 +4,7 @@ import DocumentPaths from "@components/commons/documentPaths"
 import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import Select from "@components/commons/select"
+import TreeSelect from "@components/commons/tree-select"
 import useSpinner from "@hooks/spinner"
 import { useSession } from "@workspace/auth/react"
 import {
@@ -22,7 +23,7 @@ import { sqlTransaction } from "@workspace/libs/api/model"
 import { diffArrays, type ItemProps } from "@workspace/libs/utils"
 import { Button, Col, Form, Input, InputNumber, type InputRef, message, Row, Tabs } from "antd"
 import { GripVertical } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { DndProvider, useDrag, useDrop } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -77,6 +78,28 @@ const PutTieuChiMinhChungModal = () => {
   const { data: listEvidence } = useFindManyEvidence()
   const { data: listEvidenceCategory } = useFindManyEvidenceCategory()
   const { mutateAsync: createEvidence } = useCreateEvidence()
+
+  const treeData = useMemo(() => {
+    if (!listEvidenceCategory || !listEvidence) return []
+    return listEvidenceCategory.map((cat) => {
+      const children = listEvidence
+        .filter((evi) => evi.categoryId === cat.id)
+        .map((evi) => ({
+          title: evi.name,
+          label: evi.name,
+          value: evi.id,
+          key: evi.id,
+        }))
+      return {
+        title: cat.name,
+        label: cat.name,
+        value: cat.id,
+        key: cat.id,
+        selectable: false,
+        children,
+      }
+    })
+  }, [listEvidenceCategory, listEvidence])
 
   const { data: initialValue } = useFindUniqueRequirementCriterion(
     {
@@ -341,16 +364,21 @@ const PutTieuChiMinhChungModal = () => {
     setItems(updated)
   }
 
-  const hanldeOnchange = (value: ItemProps[]) => {
-    if (value?.length) {
-      setItems(
-        value.map((i: ItemProps) => {
-          return {
-            value: i?.value,
-            label: i?.label,
-          }
-        })
-      )
+  const hanldeOnchange = (selectedIds: string[]) => {
+    if (selectedIds?.length && listEvidence) {
+      const existingItems = items.filter((item) => selectedIds.includes(item.value))
+      const existingIds = existingItems.map((item) => item.value)
+      const newIds = selectedIds.filter((id) => !existingIds.includes(id))
+
+      const newItems = newIds.map((id) => {
+        const found = listEvidence.find((e) => e.id === id)
+        return {
+          value: id,
+          label: found ? found.name : id,
+        }
+      })
+
+      setItems([...existingItems, ...newItems])
     } else {
       setItems([])
     }
@@ -491,19 +519,13 @@ const PutTieuChiMinhChungModal = () => {
                 <>
                   <Col span={24}>
                     <FormItem form={form} label="Minh chứng" name="evidences" required>
-                      <Select
-                        mode="multiple"
-                        maxTagCount={"responsive"}
+                      <TreeSelect
+                        multiple
+                        maxTagCount="responsive"
                         placeholder="Chọn minh chứng"
-                        options={listEvidence?.map((i) => {
-                          return {
-                            label: i.name,
-                            value: i.id,
-                            key: i.id,
-                          }
-                        })}
-                        onChange={(value, option: any) => {
-                          hanldeOnchange(option)
+                        treeData={treeData}
+                        onChange={(value: any) => {
+                          hanldeOnchange(value)
                         }}
                       />
                     </FormItem>

@@ -1,13 +1,13 @@
 import PutFormModal from "@components/commons/put-modal"
-import Select from "@components/commons/select"
+import TreeSelect from "@components/commons/tree-select"
 import useSpinner from "@hooks/spinner"
 import { evaluationPeriodStore } from "@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia"
 import { useStore } from "@tanstack/react-store"
 import { useSession } from "@workspace/auth/react"
-import { useFindManyEvidence } from "@workspace/db/hooks"
+import { useFindManyEvidence, useFindManyEvidenceCategory } from "@workspace/db/hooks"
 import type { ItemProps } from "@workspace/libs/utils"
 import { Col, Form, message } from "antd"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 export type PutEvidenceType = {
   evidences: string
@@ -49,6 +49,7 @@ const PinEvidenceToPeriod = () => {
       hideSpinner()
     }
   }
+  const { data: listEvidenceCategory } = useFindManyEvidenceCategory()
   const { data: listEvidence } = useFindManyEvidence({
     where: {
       analysisFormEvidence: {
@@ -95,6 +96,47 @@ const PinEvidenceToPeriod = () => {
     },
   })
 
+  const treeData = useMemo(() => {
+    if (!listEvidenceCategory || !listEvidence) return []
+    return listEvidenceCategory
+      .map((cat) => {
+        const children = listEvidence
+          .filter((evi) => evi.categoryId === cat.id)
+          .map((evi) => ({
+            title: evi.name,
+            label: evi.name,
+            value: evi.id,
+            key: evi.id,
+          }))
+        return {
+          title: cat.name,
+          label: cat.name,
+          value: cat.id,
+          key: cat.id,
+          selectable: false,
+          children,
+        }
+      })
+      .filter((cat) => cat.children.length > 0)
+  }, [listEvidenceCategory, listEvidence])
+
+  const handleChange = (selectedIds: string[]) => {
+    if (selectedIds?.length && listEvidence) {
+      setItems(
+        selectedIds.map((id) => {
+          const found = listEvidence.find((e) => e.id === id)
+          return {
+            value: id,
+            label: found?.name ?? id,
+            key: id,
+          }
+        })
+      )
+    } else {
+      setItems([])
+    }
+  }
+
   return (
     <PutFormModal
       open={isOpen}
@@ -107,22 +149,12 @@ const PinEvidenceToPeriod = () => {
     >
       <Col span={24}>
         <Form.Item name="evidences" label="Minh chứng">
-          <Select
-            mode="multiple"
+          <TreeSelect
+            multiple
+            maxTagCount="responsive"
             placeholder="Chọn minh chứng"
-            options={listEvidence?.map((i) => {
-              return {
-                label: i.name,
-                value: i.id,
-                key: i.id,
-              }
-            })}
-            onChange={(_value, option) => {
-              const opts = (Array.isArray(option) ? option : [option]).filter(
-                (o): o is ItemProps => !!o
-              )
-              setItems(opts)
-            }}
+            treeData={treeData}
+            onChange={handleChange}
           />
         </Form.Item>
       </Col>
