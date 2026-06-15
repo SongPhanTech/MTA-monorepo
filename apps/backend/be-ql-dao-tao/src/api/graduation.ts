@@ -2979,7 +2979,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
   }
 
   try {
-    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangNganHan_v9.docx")
+    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangNganHan_v10.docx")
     const zip = new PizZip(templateBuffer)
     const doc = new Docxtemplater(zip, {
       paragraphLoop: true,
