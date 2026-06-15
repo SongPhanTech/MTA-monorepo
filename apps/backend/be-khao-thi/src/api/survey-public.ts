@@ -1,6 +1,11 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { models } from "@workspace/db/zod"
 import { prisma } from ".."
+import {
+  findExistingSurveySession,
+  isProfileInSurveyAudience,
+  resolveSurveyUserByCode,
+} from "../lib/survey-audience"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -172,11 +177,11 @@ app.openapi(getPublicSurvey, async (c) => {
 
   const lectureInfo = lecture
     ? {
-        firstName: lecture.userProfile.firstName,
-        lastName: lecture.userProfile.lastName,
+        firstName: lecture.userProfile.firstName ?? "",
+        lastName: lecture.userProfile.lastName ?? "",
         academicDegree: lecture.userProfile.academicDegreeType?.sTen,
         academicRank: lecture.userProfile.academicRankType?.sTen,
-        organization: lecture.organization.sTen,
+        organization: lecture.organization?.sTen ?? null,
       }
     : null
 
@@ -267,25 +272,23 @@ app.openapi(savePublicSurvey, async (c) => {
   if (survey.isPublic) {
     if (!survey.anonymous) {
       if (!studentCode) {
-        return c.json({ message: "Vui lý nhập mã SV" }, 400)
+        return c.json({ message: "Vui lòng nhập mã" }, 400)
       }
 
-      const student = await prisma.student.findFirst({
-        where: { code: studentCode, deletedAt: null },
-      })
-      if (!student) {
-        return c.json({ message: "Mã SV không tồn tại" }, 404)
+      const resolvedUser = await resolveSurveyUserByCode(studentCode)
+      if (!resolvedUser) {
+        return c.json({ message: "Mã không tồn tại" }, 404)
       }
 
-      studentId = student.id
-      profileId = student.userProfileId
+      const inAudience = await isProfileInSurveyAudience(prisma, resolvedUser.profileId, surveyId)
+      if (!inAudience) {
+        return c.json({ message: "Mã không có trong danh sách đối tượng làm khảo sát" }, 400)
+      }
 
-      const existingSession = await prisma.surveySession.findFirst({
-        where: {
-          surveyId,
-          studentId: student.id,
-        },
-      })
+      studentId = resolvedUser.studentId
+      profileId = resolvedUser.profileId
+
+      const existingSession = await findExistingSurveySession(prisma, surveyId, resolvedUser)
 
       if (existingSession) {
         return c.json({ message: "Bạn đã hoàn thành bài khảo sát này" }, 400)
@@ -334,8 +337,8 @@ const validateUserSurvey = createRoute({
   operationId: "validate-user-survey",
   path: "/validate-user-survey",
   tags: ["Survey"],
-  summary: "Kiểm tra mã sinh viên có trong cơ sở dữ liệu",
-  description: "Kiểm tra mã sinh viên có trong cơ sở dữ liệu",
+  summary: "Kiểm tra mã người làm khảo sát có trong danh sách đối tượng",
+  description: "Kiểm tra mã học viên, giảng viên hoặc cán bộ có trong danh sách đối tượng làm khảo sát",
   method: "get",
   request: {
     query: z.object({
@@ -382,23 +385,21 @@ app.openapi(validateUserSurvey, async (c) => {
   const { studentCode, surveyId } = c.req.valid("query")
 
   if (!studentCode) {
-    return c.json({ message: "Vui lý nhập mã SV" }, 400)
+    return c.json({ message: "Vui lòng nhập mã" }, 400)
   }
 
-  const student = await prisma.student.findFirst({
-    where: { code: studentCode, deletedAt: null },
-  })
-  if (!student) {
-    return c.json({ message: "Mã SV không tồn tại" }, 404)
+  const resolvedUser = await resolveSurveyUserByCode(studentCode)
+  if (!resolvedUser) {
+    return c.json({ message: "Mã không tồn tại" }, 404)
   }
 
   if (surveyId) {
-    const existingSession = await prisma.surveySession.findFirst({
-      where: {
-        surveyId,
-        studentId: student.id,
-      },
-    })
+    const inAudience = await isProfileInSurveyAudience(prisma, resolvedUser.profileId, surveyId)
+    if (!inAudience) {
+      return c.json({ message: "Mã không có trong danh sách đối tượng làm khảo sát" }, 400)
+    }
+
+    const existingSession = await findExistingSurveySession(prisma, surveyId, resolvedUser)
 
     if (existingSession) {
       return c.json({ message: "Bạn đã hoàn thành bài khảo sát này" }, 400)
