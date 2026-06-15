@@ -6,6 +6,7 @@ import {
   RankingContext,
   StudentStatus,
   SubjectRequirementType,
+  ThesisType,
 } from "@workspace/db"
 import {
   AcademicRankingConvertScalarSchema,
@@ -2604,11 +2605,9 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           thoi_gian_dao_tao: safeString(curriculumVersion?.trainingTime?.name || "24 tháng"),
           ngon_ngu_dao_tao: "Tiếng Việt",
           hinh_thuc_dao_tao: safeString(course?.trainingObjectType?.trainingForm?.name),
-          dinh_huong: course?.trainingObjectType?.name?.toLowerCase()?.includes("nghiên cứu")
+          dinh_huong: tP?.thesisType === ThesisType.THESIS
             ? "nghiên cứu"
-            : course?.trainingObjectType?.name?.toLowerCase()?.includes("ứng dụng")
-              ? "ứng dụng"
-              : "",
+            : "ứng dụng",
           academic_year: safeString(academicYear),
           data: subjectRows,
           tong_so_tc: totalCredits,
@@ -2618,7 +2617,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           ten_de_an_tot_nghiep: safeString(tP?.title),
           danh_sach_can_bo_huong_dan: safeString(supervisors),
           ngay_bao_ve: safeString(defenseDateParts?.fullVi),
-          hoc_phan_tot_nghiep: course?.trainingObjectType?.name?.toLowerCase()?.includes("cao học")
+          hoc_phan_tot_nghiep: tP?.thesisType === ThesisType.THESIS
             ? "luận văn tốt nghiệp"
             : "đề án tốt nghiệp",
           ngay_in: safeString(pDateParts?.day),
@@ -2648,7 +2647,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
   }
 
   try {
-    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v11.docx")
+    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v12.docx")
     const zip = new PizZip(templateBuffer)
     const doc = new Docxtemplater(zip, {
       paragraphLoop: true,
