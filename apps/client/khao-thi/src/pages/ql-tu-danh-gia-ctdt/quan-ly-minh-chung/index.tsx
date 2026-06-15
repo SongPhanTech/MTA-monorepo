@@ -277,7 +277,7 @@ export default function EvidenceCategory() {
               {
                 title: "Mã minh chứng",
                 width: 100,
-                render: (_, record) => record?.code || "",
+                render: (_, record) => record?.suffix || "",
               },
               {
                 title: "Tên minh chứng",
