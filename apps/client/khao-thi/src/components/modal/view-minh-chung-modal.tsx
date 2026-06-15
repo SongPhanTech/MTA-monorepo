@@ -1,9 +1,9 @@
 import { DownloadOutlined, EyeOutlined, FileOutlined } from "@ant-design/icons"
-import { useFindUniqueEvidence } from "@workspace/db/hooks"
+import { useFindManyEvidence, useFindManyEvidenceCategory, useFindUniqueEvidence } from "@workspace/db/hooks"
 import { getMinioUrl } from "@workspace/libs/utils"
-import { Descriptions, Modal, Skeleton, Typography } from "antd"
+import { Descriptions, Modal, Skeleton, Tree, Typography } from "antd"
+import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-
 const ViewMinhChungModal = () => {
   const { isOpen, onClose, input } = useDisclosure<{ evidenceId: string }>({
     tag: "ViewMinhChungModal",
@@ -24,6 +24,23 @@ const ViewMinhChungModal = () => {
     },
     { enabled: !!input?.evidenceId }
   )
+
+  const { data: listEvidenceCategory = [] } = useFindManyEvidenceCategory()
+  const { data: listEvidence = [] } = useFindManyEvidence()
+
+  const treeData = useMemo(() => {
+    return listEvidenceCategory.map((cat) => ({
+      title: cat.name,
+      key: cat.id,
+      selectable: false,
+      children: listEvidence
+        .filter((evi) => evi.categoryId === cat.id)
+        .map((evi) => ({
+          title: evi.name,
+          key: evi.id,
+        })),
+    }))
+  }, [listEvidenceCategory, listEvidence])
 
   return (
     <Modal
@@ -56,6 +73,15 @@ const ViewMinhChungModal = () => {
           {data.description && (
             <Descriptions.Item label="Mô tả">{data.description}</Descriptions.Item>
           )}
+          <Descriptions.Item label="Vị trí trong danh mục">
+            <Tree
+              defaultExpandAll
+              selectedKeys={input?.evidenceId ? [input.evidenceId] : []}
+              treeData={treeData}
+              selectable
+              className="max-h-[250px] overflow-y-auto"
+            />
+          </Descriptions.Item>
           <Descriptions.Item label={`Bằng chứng đính kèm`}>
             {data.evidenceFile && data.evidenceFile.length > 0 ? (
               <div className="flex flex-col gap-2">

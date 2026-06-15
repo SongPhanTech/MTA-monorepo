@@ -1,13 +1,16 @@
 import PutFormModal from "@components/commons/put-modal"
-import Select from "@components/commons/select"
 import useSpinner from "@hooks/spinner"
 import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from "@workspace/db"
-import { useFindManyEvidence, useFindUniqueRequirementCriterion } from "@workspace/db/hooks"
+import {
+  useFindManyEvidence,
+  useFindManyEvidenceCategory,
+  useFindUniqueRequirementCriterion,
+} from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
-import { diffArrays, type ItemProps } from "@workspace/libs/utils"
-import { Col, Form, Input, message } from "antd"
+import { diffArrays } from "@workspace/libs/utils"
+import { Col, Form, Input, message, Tree, type TreeProps } from "antd"
 import { GripVertical } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { DndProvider, useDrag, useDrop } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -18,11 +21,18 @@ export type PutEvidenceType = RequirementCriterion & {
 interface MyTreeNode {
   title: string
   key: string
-  value?: string // nếu bạn muốn gán giá trị riêng
+  value?: string
   children?: MyTreeNode[]
 }
+
+type Item = {
+  value: string
+  label: string
+}
+
 const AddEvidenceToPeriod = () => {
-  const [items, setItems] = useState<ItemProps[] | []>([])
+  const [items, setItems] = useState<Item[]>([])
+  const [checkedKeys, setCheckedKeys] = useState<string[]>([])
   const [form] = Form.useForm<PutEvidenceType>()
   const {
     isOpen,
@@ -30,7 +40,11 @@ const AddEvidenceToPeriod = () => {
     input: id,
   } = useDisclosure<string>({
     tag: "AddEvidenceToPeriod",
-    onClose: form.resetFields,
+    onClose: () => {
+      form.resetFields()
+      setItems([])
+      setCheckedKeys([])
+    },
   })
 
   const { showSpinner, hideSpinner } = useSpinner()
@@ -142,6 +156,23 @@ const AddEvidenceToPeriod = () => {
     }
   }
   const { data: listEvidence } = useFindManyEvidence()
+  const { data: listEvidenceCategory } = useFindManyEvidenceCategory()
+
+  const treeData = useMemo(() => {
+    if (!listEvidenceCategory || !listEvidence) return []
+    return listEvidenceCategory.map((cat) => ({
+      title: cat.name,
+      key: cat.id,
+      disableCheckbox: true,
+      children: listEvidence
+        .filter((evi) => evi.categoryId === cat.id)
+        .map((evi) => ({
+          title: evi.name,
+          key: evi.id,
+          value: evi.id,
+        })),
+    }))
+  }, [listEvidenceCategory, listEvidence])
   const { data: initialValue } = useFindUniqueRequirementCriterion(
     {
       where: { id },
@@ -166,6 +197,10 @@ const AddEvidenceToPeriod = () => {
         ...initialValue,
         evidences: initialValue.evidences.map((evi: AnalysisFormEvidence) => evi.evidenceId),
       })
+      const evidenceIds = initialValue.evidences.map(
+        (evi: AnalysisFormEvidence) => evi.evidenceId
+      )
+      setCheckedKeys(evidenceIds)
       setItems(
         initialValue.evidences.map((evi: AnalysisFormEvidence & { evidence: Evidence }) => {
           return {
@@ -179,10 +214,6 @@ const AddEvidenceToPeriod = () => {
   }, [initialValue])
 
   const ItemType = "LIST_ITEM"
-  type Item = {
-    value: string
-    label: string
-  }
 
   type DragItem = {
     id: number
@@ -236,13 +267,21 @@ const AddEvidenceToPeriod = () => {
     )
   }
 
-  const hanldeOnchange = (value: ItemProps[]) => {
-    if (value?.length) {
+  const onCheck: TreeProps["onCheck"] = (_checked, info) => {
+    const leafKeys = (info.checkedNodes as MyTreeNode[])
+      .filter((node) => !node.children?.length)
+      .map((node) => node.value ?? node.key)
+
+    setCheckedKeys(leafKeys)
+    form.setFieldValue("evidences", leafKeys)
+
+    if (leafKeys.length && listEvidence) {
       setItems(
-        value.map((i: ItemProps) => {
+        leafKeys.map((evidenceId) => {
+          const found = listEvidence.find((e) => e.id === evidenceId)
           return {
-            value: i?.value,
-            label: i?.label,
+            value: evidenceId,
+            label: found?.name ?? evidenceId,
           }
         })
       )
@@ -263,29 +302,14 @@ const AddEvidenceToPeriod = () => {
     >
       <Col span={24}>
         <Form.Item name="evidences" label="Minh chứng" required>
-          <Select
-            mode="multiple"
-            maxTagCount={"responsive"}
-            placeholder="Chọn minh chứng"
-            options={listEvidence?.map((i) => {
-              return {
-                label: i.name,
-                value: i.id,
-                key: i.id,
-              }
-            })}
-            onChange={(value, option: any) => {
-              hanldeOnchange(option)
-            }}
+          <Tree
+            defaultExpandAll
+            checkedKeys={checkedKeys}
+            treeData={treeData}
+            checkable
+            onCheck={onCheck}
+            className="max-h-[300px] overflow-y-auto border rounded p-2"
           />
-          {/* <Tree
-                        defaultExpandAll
-                        checkedKeys={initValue}
-                        treeData={treeData}
-                        checkable
-                        multiple
-                        onCheck={onCheck}
-                    /> */}
         </Form.Item>
       </Col>
       <Col span={24}>
