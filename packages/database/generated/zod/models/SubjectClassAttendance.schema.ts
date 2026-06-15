@@ -15,6 +15,7 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
     time: z.coerce.date(),
+    note: z.string().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -27,17 +28,20 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     time: z.coerce.date(),
+    note: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
     subjectClass: z.record(z.string(), z.unknown()),
     profile: z.record(z.string(), z.unknown()).optional(),
+    classSchedule: z.record(z.string(), z.unknown()).optional(),
     subjectClassAttendanceStudent: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     subjectClassId: z.string(),
     profileId: z.string().uuid().nullish(),
+    classScheduleId: z.string().nullish(),
 }
 );
 
@@ -73,7 +77,8 @@ export const SubjectClassAttendancePrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    time: z.coerce.date()
+    time: z.coerce.date(),
+    note: z.string().nullish()
 }).partial().passthrough();
 
 

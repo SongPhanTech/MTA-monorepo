@@ -5,6 +5,8 @@
 /* eslint-disable */
 
 import { z } from 'zod/v3';
+import { AttendanceStatus } from '../../zenstack/models';
+import { AttendanceStatusSchema } from '../enums/AttendanceStatus.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -14,7 +16,8 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
-    attendanceStatus: z.boolean().default(true),
+    attendanceStatus: AttendanceStatusSchema,
+    note: z.string().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -26,7 +29,8 @@ const baseSchemaWithoutDefaults = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    attendanceStatus: z.boolean(),
+    attendanceStatus: AttendanceStatusSchema,
+    note: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -72,7 +76,8 @@ export const SubjectClassAttendanceStudentPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    attendanceStatus: z.boolean()
+    attendanceStatus: AttendanceStatusSchema,
+    note: z.string().nullish()
 }).partial().passthrough();
 
 

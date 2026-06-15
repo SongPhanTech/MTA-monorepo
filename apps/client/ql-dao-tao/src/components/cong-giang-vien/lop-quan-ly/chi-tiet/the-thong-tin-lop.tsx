@@ -1,14 +1,6 @@
 import type { ThongTinLopQuanLyTomTat } from "@components/cong-giang-vien/lop-quan-ly/types"
 import { Skeleton, Tag } from "antd"
-import {
-  BookOpen,
-  GraduationCap,
-  Layers,
-  School,
-  Target,
-  UserRound,
-  Users,
-} from "lucide-react"
+import { BookOpen, GraduationCap, Layers, School, Target, UserRound, Users } from "lucide-react"
 import type { ReactNode } from "react"
 
 interface TheThongTinLopProps {

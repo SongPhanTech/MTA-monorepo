@@ -57,6 +57,7 @@ const relationSchema = z.object({
     userProfiles: z.array(z.unknown()).optional(),
     originalSchedule: z.record(z.string(), z.unknown()).optional(),
     replacementSchedule: z.record(z.string(), z.unknown()).optional(),
+    subjectClassAttendances: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

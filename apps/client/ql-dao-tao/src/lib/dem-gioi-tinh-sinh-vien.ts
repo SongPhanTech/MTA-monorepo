@@ -1,7 +1,10 @@
-type GioiTinh = {
-  sMa?: string | null
-  sTen?: string | null
-} | null | undefined
+type GioiTinh =
+  | {
+      sMa?: string | null
+      sTen?: string | null
+    }
+  | null
+  | undefined
 
 type SinhVienCoGioiTinh = {
   userProfile?: {

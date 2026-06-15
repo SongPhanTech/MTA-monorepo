@@ -165,8 +165,7 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
       ) ?? 0
 
     const cpaValue = ketQuaKy?.cumulativeGpaBase4
-    const cpa =
-      cpaValue != null ? `${Number(cpaValue).toFixed(2).replace(".", ",")} / 4,00` : "—"
+    const cpa = cpaValue != null ? `${Number(cpaValue).toFixed(2).replace(".", ",")} / 4,00` : "—"
 
     const suKien: SuKienQuaTrinh[] = [
       ...(student.archivedAward ?? []).map((item) => ({
@@ -250,8 +249,7 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
         ngayNhapHoc: dinhDangNgay(khoaHoc?.admissionStartDate),
         coVanHocTap: lop?.lecturerManagement?.userProfile?.fullname ?? "",
         hinhThuc: ct?.trainingType?.name ?? "",
-        thoiGianDaoTao:
-          khoaHoc?.maxTrainingTime != null ? `${khoaHoc.maxTrainingTime} năm` : "",
+        thoiGianDaoTao: khoaHoc?.maxTrainingTime != null ? `${khoaHoc.maxTrainingTime} năm` : "",
         trangThai: layNhanTrangThai(student.status),
         nienKhoa,
       },
@@ -265,7 +263,8 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
         ngayVaoDang: dinhDangNgay(profile?.CPVJoinDate),
         ngayVaoDoan: dinhDangNgay(profile?.unionDate),
         hocBong: (student.scholarshipAwards?.length ?? 0) > 0 ? "Có" : "Không",
-        uuTien: student.priorityReason ?? student.priorityObject?.map((p) => p.name).join(", ") ?? "",
+        uuTien:
+          student.priorityReason ?? student.priorityObject?.map((p) => p.name).join(", ") ?? "",
       },
       lichSuHocTap: {
         tongHocPhan,
@@ -273,7 +272,7 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
         cpa,
         xepLoaiHocLuc: ketQuaKy?.rank?.classification ?? null,
         xepLoaiRenLuyen: ketQuaKy?.studentTrainingType
-          ? XEP_LOAI_RL[ketQuaKy.studentTrainingType] ?? ketQuaKy.studentTrainingType
+          ? (XEP_LOAI_RL[ketQuaKy.studentTrainingType] ?? ketQuaKy.studentTrainingType)
           : null,
       },
     }

@@ -23,6 +23,7 @@ import { EquivalencySide } from "../prisma-client";
 import { SubjectRequirementType } from "../prisma-client";
 import { ClassRegisterStatus } from "../prisma-client";
 import { SubjectClassSchedule } from "../prisma-client";
+import { AttendanceStatus } from "../prisma-client";
 import { PeriodType } from "../prisma-client";
 import { SubjectClassType } from "../prisma-client";
 import { SubjectClassStatus } from "../prisma-client";

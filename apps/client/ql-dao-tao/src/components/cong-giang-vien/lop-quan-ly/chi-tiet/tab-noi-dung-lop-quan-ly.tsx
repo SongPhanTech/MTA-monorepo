@@ -59,12 +59,13 @@ const TabDanhSachSinhVien = ({
         soTrang={soTrang}
         visible={visible}
         layNhanTrangThai={layNhanTrangThai}
-        onXemHoSo={(studentId) =>
-          router.push(hoSoSinhVienLopQuanLyPath(fixedClassId, studentId))
-        }
+        onXemHoSo={(studentId) => router.push(hoSoSinhVienLopQuanLyPath(fixedClassId, studentId))}
         onXemKetQuaHocTap={(studentId) =>
           router.push(
-            ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID.replace("[id]", studentId)
+            ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID.replace(
+              "[id]",
+              studentId
+            )
           )
         }
       />

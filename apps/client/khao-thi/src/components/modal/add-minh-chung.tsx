@@ -197,9 +197,7 @@ const AddEvidenceToPeriod = () => {
         ...initialValue,
         evidences: initialValue.evidences.map((evi: AnalysisFormEvidence) => evi.evidenceId),
       })
-      const evidenceIds = initialValue.evidences.map(
-        (evi: AnalysisFormEvidence) => evi.evidenceId
-      )
+      const evidenceIds = initialValue.evidences.map((evi: AnalysisFormEvidence) => evi.evidenceId)
       setCheckedKeys(evidenceIds)
       setItems(
         initialValue.evidences.map((evi: AnalysisFormEvidence & { evidence: Evidence }) => {

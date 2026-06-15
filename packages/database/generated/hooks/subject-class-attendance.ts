@@ -327,7 +327,7 @@ export function useSuspenseCountSubjectClassAttendance<TArgs extends Prisma.Subj
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('SubjectClassAttendance', `${endpoint}/subjectClassAttendance/count`, args, options, fetch);
 }
 
-export function useCheckSubjectClassAttendance<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; subjectClassId?: string; profileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSubjectClassAttendance<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; subjectClassId?: string; profileId?: string; classScheduleId?: string; note?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SubjectClassAttendance', `${endpoint}/subjectClassAttendance/check`, args, options, fetch);
 }

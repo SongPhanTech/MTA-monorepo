@@ -33,7 +33,12 @@ const TheTomTatSinhVien = ({ data, onXemAnhGoc, onInHoSo }: TheTomTatSinhVienPro
 
     <div className="mt-3 flex flex-col gap-2 border-t border-gray-100 pt-3">
       {data.anhDaiDien ? (
-        <Button type="link" size="small" className="h-auto p-0 text-cgv-green-dark" onClick={onXemAnhGoc}>
+        <Button
+          type="link"
+          size="small"
+          className="h-auto p-0 text-cgv-green-dark"
+          onClick={onXemAnhGoc}
+        >
           Xem ảnh hồ sơ gốc
         </Button>
       ) : null}

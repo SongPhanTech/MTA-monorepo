@@ -59,8 +59,7 @@ const useTongKetLopQuanLy = (fixedClassId: string, enabled: boolean) => {
   )
 
   const trainingCourseId = fixedClass?.trainingCourseId ?? ""
-  const baseScoreKhoa =
-    fixedClass?.trainingCourse?.baseScore ?? AcademicRankingBaseType.Base10
+  const baseScoreKhoa = fixedClass?.trainingCourse?.baseScore ?? AcademicRankingBaseType.Base10
 
   const { data: xepLoaiTotNghiep = [] } = useFindManyAcademicRankingConvert(
     {

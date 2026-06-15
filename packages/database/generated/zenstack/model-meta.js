@@ -12569,6 +12569,25 @@ const metadata = {
                     attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'profile',
+                }, classSchedule: {
+                    name: "classSchedule",
+                    type: "ClassSchedule",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'subjectClassAttendances',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "classScheduleId" },
+                }, classScheduleId: {
+                    name: "classScheduleId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'classSchedule',
+                }, note: {
+                    name: "note",
+                    type: "String",
+                    isOptional: true,
                 }, subjectClassAttendanceStudent: {
                     name: "subjectClassAttendanceStudent",
                     type: "SubjectClassAttendanceStudent",
@@ -12654,8 +12673,12 @@ const metadata = {
                     relationField: 'student',
                 }, attendanceStatus: {
                     name: "attendanceStatus",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    type: "AttendanceStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, note: {
+                    name: "note",
+                    type: "String",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -13016,6 +13039,12 @@ const metadata = {
                     name: "cancelReason",
                     type: "String",
                     isOptional: true,
+                }, subjectClassAttendances: {
+                    name: "subjectClassAttendances",
+                    type: "SubjectClassAttendance",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'classSchedule',
                 },
             }, uniqueConstraints: {
                 id: {

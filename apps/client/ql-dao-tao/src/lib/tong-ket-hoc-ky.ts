@@ -1,7 +1,4 @@
-import {
-  AcademicRankingBaseType,
-  type AcademicRankingConvert,
-} from "@workspace/db/client"
+import { AcademicRankingBaseType, type AcademicRankingConvert } from "@workspace/db/client"
 
 type KetQuaHocKy = {
   gpaBase4?: unknown
@@ -104,10 +101,7 @@ export const layRankOrderTbTroXuong = (xepLoaiTotNghiep: AcademicRankingConvert[
   return tb?.rankOrder ?? null
 }
 
-export const laHocLucTbTroXuong = (
-  rankOrder: number | null,
-  nguongRankOrder: number | null
-) => {
+export const laHocLucTbTroXuong = (rankOrder: number | null, nguongRankOrder: number | null) => {
   if (rankOrder == null || nguongRankOrder == null) return false
   return rankOrder >= nguongRankOrder
 }

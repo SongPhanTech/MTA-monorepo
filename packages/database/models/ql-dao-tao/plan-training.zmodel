@@ -959,6 +959,15 @@ enum SubjectClassSchedule {
   @@schema("ql-dao-tao")
 }
 
+// Trạng thái điểm danh sinh viên
+enum AttendanceStatus {
+  PRESENT          // Có mặt
+  EXCUSED_ABSENT   // Vắng có phép
+  UNEXCUSED_ABSENT // Vắng không phép
+
+  @@schema("ql-dao-tao")
+}
+
 // Enum cho loại tiết học
 enum PeriodType {
   THEORY      // Lý thuyết
@@ -1100,6 +1109,11 @@ model SubjectClassAttendance extends Base {
   // Người điểm danh
   profile                       UserProfile?                    @relation(fields: [profileId], references: [id])
   profileId                     String?                         @db.Uuid
+  // Buổi học cụ thể (lấy tiết học, phòng học, ngày học từ đây)
+  classSchedule                 ClassSchedule?                  @relation(fields: [classScheduleId], references: [id])
+  classScheduleId               String?
+  // Ghi chú buổi học
+  note                          String?
   subjectClassAttendanceStudent SubjectClassAttendanceStudent[]
   @@schema("ql-dao-tao")
 }
@@ -1112,7 +1126,9 @@ model SubjectClassAttendanceStudent extends Base {
   student                  Student                @relation(fields: [studentId], references: [id])
   studentId                String
   //Trạng thái điểm danh
-  attendanceStatus         Boolean                @default(true)
+  attendanceStatus         AttendanceStatus       @default(PRESENT)
+  // Ghi chú từng sinh viên
+  note                     String?
 
   @@schema("ql-dao-tao")
 }
@@ -1188,6 +1204,8 @@ model ClassSchedule extends Base {
   replacementSchedule ClassSchedule? @relation("ReplacementSchedule")
 
   cancelReason        String?          // Lý do hủy
+
+  subjectClassAttendances SubjectClassAttendance[]
 
   @@schema("ql-dao-tao")
 }

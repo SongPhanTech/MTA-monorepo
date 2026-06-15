@@ -589,6 +589,7 @@ export * from './SubjectRequirementType.schema';
 export * from './ClassRegisterStatus.schema';
 export * from './SubjectClassSchedule.schema';
 export * from './SubjectClassStatus.schema';
+export * from './AttendanceStatus.schema';
 export * from './PeriodType.schema';
 export * from './ScoreCorrectionStatus.schema';
 export * from './TrainingObjectTypes.schema';

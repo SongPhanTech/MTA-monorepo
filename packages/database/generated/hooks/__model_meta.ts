@@ -11953,6 +11953,24 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'profile',
+                }, classSchedule: {
+                    name: "classSchedule",
+                    type: "ClassSchedule",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'subjectClassAttendances',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "classScheduleId" },
+                }, classScheduleId: {
+                    name: "classScheduleId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'classSchedule',
+                }, note: {
+                    name: "note",
+                    type: "String",
+                    isOptional: true,
                 }, subjectClassAttendanceStudent: {
                     name: "subjectClassAttendanceStudent",
                     type: "SubjectClassAttendanceStudent",
@@ -12033,8 +12051,12 @@ const metadata: ModelMeta = {
                     relationField: 'student',
                 }, attendanceStatus: {
                     name: "attendanceStatus",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    type: "AttendanceStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, note: {
+                    name: "note",
+                    type: "String",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -12374,6 +12396,12 @@ const metadata: ModelMeta = {
                     name: "cancelReason",
                     type: "String",
                     isOptional: true,
+                }, subjectClassAttendances: {
+                    name: "subjectClassAttendances",
+                    type: "SubjectClassAttendance",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'classSchedule',
                 },
             }, uniqueConstraints: {
                 id: {

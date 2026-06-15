@@ -191,6 +191,14 @@ enum SubjectClassSchedule {
   @@schema("ql-dao-tao")
 }
 
+enum AttendanceStatus {
+  PRESENT
+  EXCUSED_ABSENT
+  UNEXCUSED_ABSENT
+
+  @@schema("ql-dao-tao")
+}
+
 enum PeriodType {
   THEORY
   PRACTICE
@@ -3529,6 +3537,9 @@ model SubjectClassAttendance {
   subjectClassId                String
   profile                       UserProfile?                    @relation(fields: [profileId], references: [id])
   profileId                     String?                         @db.Uuid()
+  classSchedule                 ClassSchedule?                  @relation(fields: [classScheduleId], references: [id])
+  classScheduleId               String?
+  note                          String?
   subjectClassAttendanceStudent SubjectClassAttendanceStudent[]
 
   @@schema("ql-dao-tao")
@@ -3547,7 +3558,8 @@ model SubjectClassAttendanceStudent {
   subjectClassAttendanceId String
   student                  Student                @relation(fields: [studentId], references: [id])
   studentId                String
-  attendanceStatus         Boolean                @default(true)
+  attendanceStatus         AttendanceStatus       @default(PRESENT)
+  note                     String?
 
   @@schema("ql-dao-tao")
 }
@@ -3596,36 +3608,37 @@ model SubjectClassTime {
 }
 
 model ClassSchedule {
-  id                  String         @id() @default(cuid())
-  code                String?        @unique()
-  active              Boolean        @default(true)
-  description         String?        @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime       @default(now())
-  updatedAt           DateTime       @default(now()) @updatedAt()
-  createdBy           String?        @db.Uuid()
-  subjectClass        SubjectClass?  @relation(fields: [subjectClassId], references: [id])
-  subjectClassId      String?
-  periodType          PeriodType     @default(THEORY)
-  startPeriod         Int
-  endPeriod           Int
-  startTime           DateTime?
-  endTime             DateTime?
-  classDate           DateTime       @db.Date()
-  room                Room?          @relation(fields: [roomId], references: [id])
-  roomId              String?
-  lecturer            Lecturer?      @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
-  lecturerId          String?
-  extraLecturer       Lecturer?      @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
-  extraLecturerId     String?
-  userProfiles        UserProfile[]
-  location            String?
-  notes               String?
-  isReplacement       Boolean        @default(false)
-  originalSchedule    ClassSchedule? @relation("ReplacementSchedule", fields: [originalScheduleId], references: [id])
-  originalScheduleId  String?        @unique()
-  replacementSchedule ClassSchedule? @relation("ReplacementSchedule")
-  cancelReason        String?
+  id                      String                   @id() @default(cuid())
+  code                    String?                  @unique()
+  active                  Boolean                  @default(true)
+  description             String?                  @db.Text()
+  deletedAt               DateTime?
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @default(now()) @updatedAt()
+  createdBy               String?                  @db.Uuid()
+  subjectClass            SubjectClass?            @relation(fields: [subjectClassId], references: [id])
+  subjectClassId          String?
+  periodType              PeriodType               @default(THEORY)
+  startPeriod             Int
+  endPeriod               Int
+  startTime               DateTime?
+  endTime                 DateTime?
+  classDate               DateTime                 @db.Date()
+  room                    Room?                    @relation(fields: [roomId], references: [id])
+  roomId                  String?
+  lecturer                Lecturer?                @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
+  lecturerId              String?
+  extraLecturer           Lecturer?                @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
+  extraLecturerId         String?
+  userProfiles            UserProfile[]
+  location                String?
+  notes                   String?
+  isReplacement           Boolean                  @default(false)
+  originalSchedule        ClassSchedule?           @relation("ReplacementSchedule", fields: [originalScheduleId], references: [id])
+  originalScheduleId      String?                  @unique()
+  replacementSchedule     ClassSchedule?           @relation("ReplacementSchedule")
+  cancelReason            String?
+  subjectClassAttendances SubjectClassAttendance[]
 
   @@schema("ql-dao-tao")
 }

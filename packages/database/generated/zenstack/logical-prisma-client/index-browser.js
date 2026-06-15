@@ -2173,7 +2173,9 @@ exports.Prisma.SubjectClassAttendanceScalarFieldEnum = {
   createdBy: 'createdBy',
   time: 'time',
   subjectClassId: 'subjectClassId',
-  profileId: 'profileId'
+  profileId: 'profileId',
+  classScheduleId: 'classScheduleId',
+  note: 'note'
 };
 
 exports.Prisma.SubjectClassAttendanceStudentScalarFieldEnum = {
@@ -2187,7 +2189,8 @@ exports.Prisma.SubjectClassAttendanceStudentScalarFieldEnum = {
   createdBy: 'createdBy',
   subjectClassAttendanceId: 'subjectClassAttendanceId',
   studentId: 'studentId',
-  attendanceStatus: 'attendanceStatus'
+  attendanceStatus: 'attendanceStatus',
+  note: 'note'
 };
 
 exports.Prisma.SubjectClassHistoryScalarFieldEnum = {
@@ -6369,7 +6372,9 @@ exports.Prisma.SubjectClassAttendanceOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   subjectClassId: 'subjectClassId',
-  profileId: 'profileId'
+  profileId: 'profileId',
+  classScheduleId: 'classScheduleId',
+  note: 'note'
 };
 
 exports.Prisma.SubjectClassAttendanceStudentOrderByRelevanceFieldEnum = {
@@ -6378,7 +6383,8 @@ exports.Prisma.SubjectClassAttendanceStudentOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   subjectClassAttendanceId: 'subjectClassAttendanceId',
-  studentId: 'studentId'
+  studentId: 'studentId',
+  note: 'note'
 };
 
 exports.Prisma.SubjectClassHistoryOrderByRelevanceFieldEnum = {
@@ -8256,6 +8262,12 @@ exports.SubjectClassSchedule = exports.$Enums.SubjectClassSchedule = {
 exports.SubjectClassStatus = exports.$Enums.SubjectClassStatus = {
   DRAFT: 'DRAFT',
   OFFICIAL: 'OFFICIAL'
+};
+
+exports.AttendanceStatus = exports.$Enums.AttendanceStatus = {
+  PRESENT: 'PRESENT',
+  EXCUSED_ABSENT: 'EXCUSED_ABSENT',
+  UNEXCUSED_ABSENT: 'UNEXCUSED_ABSENT'
 };
 
 exports.PeriodType = exports.$Enums.PeriodType = {

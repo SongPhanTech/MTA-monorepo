@@ -2948,6 +2948,7 @@ export type EquivalencySide = $Enums.EquivalencySide;
 export type SubjectRequirementType = $Enums.SubjectRequirementType;
 export type ClassRegisterStatus = $Enums.ClassRegisterStatus;
 export type SubjectClassSchedule = $Enums.SubjectClassSchedule;
+export type AttendanceStatus = $Enums.AttendanceStatus;
 export type PeriodType = $Enums.PeriodType;
 export type SubjectClassType = $Enums.SubjectClassType;
 export type SubjectClassStatus = $Enums.SubjectClassStatus;
@@ -5651,6 +5652,7 @@ export const EquivalencySide: typeof $Enums.EquivalencySide;
 export const SubjectRequirementType: typeof $Enums.SubjectRequirementType;
 export const ClassRegisterStatus: typeof $Enums.ClassRegisterStatus;
 export const SubjectClassSchedule: typeof $Enums.SubjectClassSchedule;
+export const AttendanceStatus: typeof $Enums.AttendanceStatus;
 export const PeriodType: typeof $Enums.PeriodType;
 export const SubjectClassType: typeof $Enums.SubjectClassType;
 export const SubjectClassStatus: typeof $Enums.SubjectClassStatus;
@@ -5837,6 +5839,12 @@ export namespace $Enums {
         EVENING: 'EVENING'
     };
     export type SubjectClassSchedule = (typeof SubjectClassSchedule)[keyof typeof SubjectClassSchedule];
+    export const AttendanceStatus: {
+        PRESENT: 'PRESENT',
+        EXCUSED_ABSENT: 'EXCUSED_ABSENT',
+        UNEXCUSED_ABSENT: 'UNEXCUSED_ABSENT'
+    };
+    export type AttendanceStatus = (typeof AttendanceStatus)[keyof typeof AttendanceStatus];
     export const PeriodType: {
         THEORY: 'THEORY',
         PRACTICE: 'PRACTICE',
@@ -8604,7 +8612,9 @@ export namespace Prisma {
         createdBy: 'createdBy',
         time: 'time',
         subjectClassId: 'subjectClassId',
-        profileId: 'profileId'
+        profileId: 'profileId',
+        classScheduleId: 'classScheduleId',
+        note: 'note'
     };
     export const SubjectClassAttendanceStudentScalarFieldEnum: {
         id: 'id',
@@ -8617,7 +8627,8 @@ export namespace Prisma {
         createdBy: 'createdBy',
         subjectClassAttendanceId: 'subjectClassAttendanceId',
         studentId: 'studentId',
-        attendanceStatus: 'attendanceStatus'
+        attendanceStatus: 'attendanceStatus',
+        note: 'note'
     };
     export const SubjectClassHistoryScalarFieldEnum: {
         id: 'id',
@@ -12515,7 +12526,9 @@ export namespace Prisma {
         description: 'description',
         createdBy: 'createdBy',
         subjectClassId: 'subjectClassId',
-        profileId: 'profileId'
+        profileId: 'profileId',
+        classScheduleId: 'classScheduleId',
+        note: 'note'
     };
     export const SubjectClassAttendanceStudentOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -12523,7 +12536,8 @@ export namespace Prisma {
         description: 'description',
         createdBy: 'createdBy',
         subjectClassAttendanceId: 'subjectClassAttendanceId',
-        studentId: 'studentId'
+        studentId: 'studentId',
+        note: 'note'
     };
     export const SubjectClassHistoryOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -55628,6 +55642,7 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         subjectClass<T extends SubjectClassDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClassDefaultArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         profile<T extends SubjectClassAttendance$profileArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClassAttendance$profileArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        classSchedule<T extends SubjectClassAttendance$classScheduleArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClassAttendance$classScheduleArgs<ExtArgs>>): Prisma__ClassScheduleClient<$Result.GetResult<Prisma.$ClassSchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         subjectClassAttendanceStudent<T extends SubjectClassAttendance$subjectClassAttendanceStudentArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClassAttendance$subjectClassAttendanceStudentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassAttendanceStudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -55666,6 +55681,8 @@ export namespace Prisma {
         readonly time: FieldRef<"SubjectClassAttendance", 'DateTime'>;
         readonly subjectClassId: FieldRef<"SubjectClassAttendance", 'String'>;
         readonly profileId: FieldRef<"SubjectClassAttendance", 'String'>;
+        readonly classScheduleId: FieldRef<"SubjectClassAttendance", 'String'>;
+        readonly note: FieldRef<"SubjectClassAttendance", 'String'>;
     }
 
     export interface SubjectClassAttendanceStudentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -56049,7 +56066,8 @@ export namespace Prisma {
         readonly createdBy: FieldRef<"SubjectClassAttendanceStudent", 'String'>;
         readonly subjectClassAttendanceId: FieldRef<"SubjectClassAttendanceStudent", 'String'>;
         readonly studentId: FieldRef<"SubjectClassAttendanceStudent", 'String'>;
-        readonly attendanceStatus: FieldRef<"SubjectClassAttendanceStudent", 'Boolean'>;
+        readonly attendanceStatus: FieldRef<"SubjectClassAttendanceStudent", 'AttendanceStatus'>;
+        readonly note: FieldRef<"SubjectClassAttendanceStudent", 'String'>;
     }
 
     export interface SubjectClassHistoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -57176,6 +57194,7 @@ export namespace Prisma {
         userProfiles<T extends ClassSchedule$userProfilesArgs<ExtArgs> = {}>(args?: Subset<T, ClassSchedule$userProfilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         originalSchedule<T extends ClassSchedule$originalScheduleArgs<ExtArgs> = {}>(args?: Subset<T, ClassSchedule$originalScheduleArgs<ExtArgs>>): Prisma__ClassScheduleClient<$Result.GetResult<Prisma.$ClassSchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         replacementSchedule<T extends ClassSchedule$replacementScheduleArgs<ExtArgs> = {}>(args?: Subset<T, ClassSchedule$replacementScheduleArgs<ExtArgs>>): Prisma__ClassScheduleClient<$Result.GetResult<Prisma.$ClassSchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        subjectClassAttendances<T extends ClassSchedule$subjectClassAttendancesArgs<ExtArgs> = {}>(args?: Subset<T, ClassSchedule$subjectClassAttendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassAttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -147192,9 +147211,11 @@ export namespace Prisma {
      */
     export type ClassScheduleCountOutputType = {
         userProfiles: number
+        subjectClassAttendances: number
     };
     export type ClassScheduleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         userProfiles?: boolean | ClassScheduleCountOutputTypeCountUserProfilesArgs
+        subjectClassAttendances?: boolean | ClassScheduleCountOutputTypeCountSubjectClassAttendancesArgs
     };
     /**
      * ClassScheduleCountOutputType without action
@@ -147210,6 +147231,12 @@ export namespace Prisma {
      */
     export type ClassScheduleCountOutputTypeCountUserProfilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: UserProfileWhereInput
+    };
+    /**
+     * ClassScheduleCountOutputType without action
+     */
+    export type ClassScheduleCountOutputTypeCountSubjectClassAttendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: SubjectClassAttendanceWhereInput
     };
     /**
      * Count Type ScoreCorrectionTicketCountOutputType
@@ -238490,6 +238517,8 @@ export namespace Prisma {
         time: Date | null
         subjectClassId: string | null
         profileId: string | null
+        classScheduleId: string | null
+        note: string | null
     };
     export type SubjectClassAttendanceMaxAggregateOutputType = {
         id: string | null
@@ -238503,6 +238532,8 @@ export namespace Prisma {
         time: Date | null
         subjectClassId: string | null
         profileId: string | null
+        classScheduleId: string | null
+        note: string | null
     };
     export type SubjectClassAttendanceCountAggregateOutputType = {
         id: number
@@ -238516,6 +238547,8 @@ export namespace Prisma {
         time: number
         subjectClassId: number
         profileId: number
+        classScheduleId: number
+        note: number
         _all: number
     };
     export type SubjectClassAttendanceMinAggregateInputType = {
@@ -238530,6 +238563,8 @@ export namespace Prisma {
         time?: true
         subjectClassId?: true
         profileId?: true
+        classScheduleId?: true
+        note?: true
     };
     export type SubjectClassAttendanceMaxAggregateInputType = {
         id?: true
@@ -238543,6 +238578,8 @@ export namespace Prisma {
         time?: true
         subjectClassId?: true
         profileId?: true
+        classScheduleId?: true
+        note?: true
     };
     export type SubjectClassAttendanceCountAggregateInputType = {
         id?: true
@@ -238556,6 +238593,8 @@ export namespace Prisma {
         time?: true
         subjectClassId?: true
         profileId?: true
+        classScheduleId?: true
+        note?: true
         _all?: true
     };
     export type SubjectClassAttendanceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -238636,6 +238675,8 @@ export namespace Prisma {
         time: Date
         subjectClassId: string
         profileId: string | null
+        classScheduleId: string | null
+        note: string | null
         _count: SubjectClassAttendanceCountAggregateOutputType | null
         _min: SubjectClassAttendanceMinAggregateOutputType | null
         _max: SubjectClassAttendanceMaxAggregateOutputType | null
@@ -238664,8 +238705,11 @@ export namespace Prisma {
         time?: boolean
         subjectClassId?: boolean
         profileId?: boolean
+        classScheduleId?: boolean
+        note?: boolean
         subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
         profile?: boolean | SubjectClassAttendance$profileArgs<ExtArgs>
+        classSchedule?: boolean | SubjectClassAttendance$classScheduleArgs<ExtArgs>
         subjectClassAttendanceStudent?: boolean | SubjectClassAttendance$subjectClassAttendanceStudentArgs<ExtArgs>
         _count?: boolean | SubjectClassAttendanceCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["subjectClassAttendance"]>;
@@ -238681,8 +238725,11 @@ export namespace Prisma {
         time?: boolean
         subjectClassId?: boolean
         profileId?: boolean
+        classScheduleId?: boolean
+        note?: boolean
         subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
         profile?: boolean | SubjectClassAttendance$profileArgs<ExtArgs>
+        classSchedule?: boolean | SubjectClassAttendance$classScheduleArgs<ExtArgs>
     }, ExtArgs["result"]["subjectClassAttendance"]>;
     export type SubjectClassAttendanceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -238696,8 +238743,11 @@ export namespace Prisma {
         time?: boolean
         subjectClassId?: boolean
         profileId?: boolean
+        classScheduleId?: boolean
+        note?: boolean
         subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
         profile?: boolean | SubjectClassAttendance$profileArgs<ExtArgs>
+        classSchedule?: boolean | SubjectClassAttendance$classScheduleArgs<ExtArgs>
     }, ExtArgs["result"]["subjectClassAttendance"]>;
     export type SubjectClassAttendanceSelectScalar = {
         id?: boolean
@@ -238711,27 +238761,33 @@ export namespace Prisma {
         time?: boolean
         subjectClassId?: boolean
         profileId?: boolean
+        classScheduleId?: boolean
+        note?: boolean
     };
-    export type SubjectClassAttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "time" | "subjectClassId" | "profileId", ExtArgs["result"]["subjectClassAttendance"]>;
+    export type SubjectClassAttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "time" | "subjectClassId" | "profileId" | "classScheduleId" | "note", ExtArgs["result"]["subjectClassAttendance"]>;
     export type SubjectClassAttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
         profile?: boolean | SubjectClassAttendance$profileArgs<ExtArgs>
+        classSchedule?: boolean | SubjectClassAttendance$classScheduleArgs<ExtArgs>
         subjectClassAttendanceStudent?: boolean | SubjectClassAttendance$subjectClassAttendanceStudentArgs<ExtArgs>
         _count?: boolean | SubjectClassAttendanceCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type SubjectClassAttendanceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
         profile?: boolean | SubjectClassAttendance$profileArgs<ExtArgs>
+        classSchedule?: boolean | SubjectClassAttendance$classScheduleArgs<ExtArgs>
     };
     export type SubjectClassAttendanceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
         profile?: boolean | SubjectClassAttendance$profileArgs<ExtArgs>
+        classSchedule?: boolean | SubjectClassAttendance$classScheduleArgs<ExtArgs>
     };
     export type $SubjectClassAttendancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "SubjectClassAttendance"
         objects: {
             subjectClass: Prisma.$SubjectClassPayload<ExtArgs>
             profile: Prisma.$UserProfilePayload<ExtArgs> | null
+            classSchedule: Prisma.$ClassSchedulePayload<ExtArgs> | null
             subjectClassAttendanceStudent: Prisma.$SubjectClassAttendanceStudentPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -238746,6 +238802,8 @@ export namespace Prisma {
             time: Date
             subjectClassId: string
             profileId: string | null
+            classScheduleId: string | null
+            note: string | null
         }, ExtArgs["result"]["subjectClassAttendance"]>
         composites: {}
     };
@@ -239149,6 +239207,24 @@ export namespace Prisma {
         where?: UserProfileWhereInput
     };
     /**
+     * SubjectClassAttendance.classSchedule
+     */
+    export type SubjectClassAttendance$classScheduleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassSchedule
+         */
+        select?: ClassScheduleSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassSchedule
+         */
+        omit?: ClassScheduleOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassScheduleInclude<ExtArgs> | null
+        where?: ClassScheduleWhereInput
+    };
+    /**
      * SubjectClassAttendance.subjectClassAttendanceStudent
      */
     export type SubjectClassAttendance$subjectClassAttendanceStudentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -239207,7 +239283,8 @@ export namespace Prisma {
         createdBy: string | null
         subjectClassAttendanceId: string | null
         studentId: string | null
-        attendanceStatus: boolean | null
+        attendanceStatus: $Enums.AttendanceStatus | null
+        note: string | null
     };
     export type SubjectClassAttendanceStudentMaxAggregateOutputType = {
         id: string | null
@@ -239220,7 +239297,8 @@ export namespace Prisma {
         createdBy: string | null
         subjectClassAttendanceId: string | null
         studentId: string | null
-        attendanceStatus: boolean | null
+        attendanceStatus: $Enums.AttendanceStatus | null
+        note: string | null
     };
     export type SubjectClassAttendanceStudentCountAggregateOutputType = {
         id: number
@@ -239234,6 +239312,7 @@ export namespace Prisma {
         subjectClassAttendanceId: number
         studentId: number
         attendanceStatus: number
+        note: number
         _all: number
     };
     export type SubjectClassAttendanceStudentMinAggregateInputType = {
@@ -239248,6 +239327,7 @@ export namespace Prisma {
         subjectClassAttendanceId?: true
         studentId?: true
         attendanceStatus?: true
+        note?: true
     };
     export type SubjectClassAttendanceStudentMaxAggregateInputType = {
         id?: true
@@ -239261,6 +239341,7 @@ export namespace Prisma {
         subjectClassAttendanceId?: true
         studentId?: true
         attendanceStatus?: true
+        note?: true
     };
     export type SubjectClassAttendanceStudentCountAggregateInputType = {
         id?: true
@@ -239274,6 +239355,7 @@ export namespace Prisma {
         subjectClassAttendanceId?: true
         studentId?: true
         attendanceStatus?: true
+        note?: true
         _all?: true
     };
     export type SubjectClassAttendanceStudentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -239353,7 +239435,8 @@ export namespace Prisma {
         createdBy: string | null
         subjectClassAttendanceId: string
         studentId: string
-        attendanceStatus: boolean
+        attendanceStatus: $Enums.AttendanceStatus
+        note: string | null
         _count: SubjectClassAttendanceStudentCountAggregateOutputType | null
         _min: SubjectClassAttendanceStudentMinAggregateOutputType | null
         _max: SubjectClassAttendanceStudentMaxAggregateOutputType | null
@@ -239382,6 +239465,7 @@ export namespace Prisma {
         subjectClassAttendanceId?: boolean
         studentId?: boolean
         attendanceStatus?: boolean
+        note?: boolean
         subjectClassAttendance?: boolean | SubjectClassAttendanceDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["subjectClassAttendanceStudent"]>;
@@ -239397,6 +239481,7 @@ export namespace Prisma {
         subjectClassAttendanceId?: boolean
         studentId?: boolean
         attendanceStatus?: boolean
+        note?: boolean
         subjectClassAttendance?: boolean | SubjectClassAttendanceDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["subjectClassAttendanceStudent"]>;
@@ -239412,6 +239497,7 @@ export namespace Prisma {
         subjectClassAttendanceId?: boolean
         studentId?: boolean
         attendanceStatus?: boolean
+        note?: boolean
         subjectClassAttendance?: boolean | SubjectClassAttendanceDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["subjectClassAttendanceStudent"]>;
@@ -239427,8 +239513,9 @@ export namespace Prisma {
         subjectClassAttendanceId?: boolean
         studentId?: boolean
         attendanceStatus?: boolean
+        note?: boolean
     };
-    export type SubjectClassAttendanceStudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "subjectClassAttendanceId" | "studentId" | "attendanceStatus", ExtArgs["result"]["subjectClassAttendanceStudent"]>;
+    export type SubjectClassAttendanceStudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "subjectClassAttendanceId" | "studentId" | "attendanceStatus" | "note", ExtArgs["result"]["subjectClassAttendanceStudent"]>;
     export type SubjectClassAttendanceStudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClassAttendance?: boolean | SubjectClassAttendanceDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -239458,7 +239545,8 @@ export namespace Prisma {
             createdBy: string | null
             subjectClassAttendanceId: string
             studentId: string
-            attendanceStatus: boolean
+            attendanceStatus: $Enums.AttendanceStatus
+            note: string | null
         }, ExtArgs["result"]["subjectClassAttendanceStudent"]>
         composites: {}
     };
@@ -241668,6 +241756,7 @@ export namespace Prisma {
         userProfiles?: boolean | ClassSchedule$userProfilesArgs<ExtArgs>
         originalSchedule?: boolean | ClassSchedule$originalScheduleArgs<ExtArgs>
         replacementSchedule?: boolean | ClassSchedule$replacementScheduleArgs<ExtArgs>
+        subjectClassAttendances?: boolean | ClassSchedule$subjectClassAttendancesArgs<ExtArgs>
         _count?: boolean | ClassScheduleCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["classSchedule"]>;
     export type ClassScheduleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -241764,6 +241853,7 @@ export namespace Prisma {
         userProfiles?: boolean | ClassSchedule$userProfilesArgs<ExtArgs>
         originalSchedule?: boolean | ClassSchedule$originalScheduleArgs<ExtArgs>
         replacementSchedule?: boolean | ClassSchedule$replacementScheduleArgs<ExtArgs>
+        subjectClassAttendances?: boolean | ClassSchedule$subjectClassAttendancesArgs<ExtArgs>
         _count?: boolean | ClassScheduleCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type ClassScheduleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -241790,6 +241880,7 @@ export namespace Prisma {
             userProfiles: Prisma.$UserProfilePayload<ExtArgs>[]
             originalSchedule: Prisma.$ClassSchedulePayload<ExtArgs> | null
             replacementSchedule: Prisma.$ClassSchedulePayload<ExtArgs> | null
+            subjectClassAttendances: Prisma.$SubjectClassAttendancePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -242329,6 +242420,29 @@ export namespace Prisma {
          */
         include?: ClassScheduleInclude<ExtArgs> | null
         where?: ClassScheduleWhereInput
+    };
+    /**
+     * ClassSchedule.subjectClassAttendances
+     */
+    export type ClassSchedule$subjectClassAttendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClassAttendance
+         */
+        select?: SubjectClassAttendanceSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClassAttendance
+         */
+        omit?: SubjectClassAttendanceOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassAttendanceInclude<ExtArgs> | null
+        where?: SubjectClassAttendanceWhereInput
+        orderBy?: SubjectClassAttendanceOrderByWithRelationInput | SubjectClassAttendanceOrderByWithRelationInput[]
+        cursor?: SubjectClassAttendanceWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: SubjectClassAttendanceScalarFieldEnum | SubjectClassAttendanceScalarFieldEnum[]
     };
     /**
      * ClassSchedule without action
@@ -373787,6 +373901,14 @@ export namespace Prisma {
      */
     export type ListEnumSubjectClassStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubjectClassStatus[]'>;
     /**
+     * Reference to a field of type 'AttendanceStatus'
+     */
+    export type EnumAttendanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AttendanceStatus'>;
+    /**
+     * Reference to a field of type 'AttendanceStatus[]'
+     */
+    export type ListEnumAttendanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AttendanceStatus[]'>;
+    /**
      * Reference to a field of type 'PeriodType'
      */
     export type EnumPeriodTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PeriodType'>;
@@ -386659,8 +386781,11 @@ export namespace Prisma {
         time?: DateTimeFilter<"SubjectClassAttendance"> | Date | string
         subjectClassId?: StringFilter<"SubjectClassAttendance"> | string
         profileId?: UuidNullableFilter<"SubjectClassAttendance"> | string | null
+        classScheduleId?: StringNullableFilter<"SubjectClassAttendance"> | string | null
+        note?: StringNullableFilter<"SubjectClassAttendance"> | string | null
         subjectClass?: XOR<SubjectClassScalarRelationFilter, SubjectClassWhereInput>
         profile?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
+        classSchedule?: XOR<ClassScheduleNullableScalarRelationFilter, ClassScheduleWhereInput> | null
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentListRelationFilter
     };
     export type SubjectClassAttendanceOrderByWithRelationInput = {
@@ -386675,8 +386800,11 @@ export namespace Prisma {
         time?: SortOrder
         subjectClassId?: SortOrder
         profileId?: SortOrderInput | SortOrder
+        classScheduleId?: SortOrderInput | SortOrder
+        note?: SortOrderInput | SortOrder
         subjectClass?: SubjectClassOrderByWithRelationInput
         profile?: UserProfileOrderByWithRelationInput
+        classSchedule?: ClassScheduleOrderByWithRelationInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentOrderByRelationAggregateInput
         _relevance?: SubjectClassAttendanceOrderByRelevanceInput
     };
@@ -386695,8 +386823,11 @@ export namespace Prisma {
         time?: DateTimeFilter<"SubjectClassAttendance"> | Date | string
         subjectClassId?: StringFilter<"SubjectClassAttendance"> | string
         profileId?: UuidNullableFilter<"SubjectClassAttendance"> | string | null
+        classScheduleId?: StringNullableFilter<"SubjectClassAttendance"> | string | null
+        note?: StringNullableFilter<"SubjectClassAttendance"> | string | null
         subjectClass?: XOR<SubjectClassScalarRelationFilter, SubjectClassWhereInput>
         profile?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
+        classSchedule?: XOR<ClassScheduleNullableScalarRelationFilter, ClassScheduleWhereInput> | null
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentListRelationFilter
     }, "id" | "code">;
     export type SubjectClassAttendanceOrderByWithAggregationInput = {
@@ -386711,6 +386842,8 @@ export namespace Prisma {
         time?: SortOrder
         subjectClassId?: SortOrder
         profileId?: SortOrderInput | SortOrder
+        classScheduleId?: SortOrderInput | SortOrder
+        note?: SortOrderInput | SortOrder
         _count?: SubjectClassAttendanceCountOrderByAggregateInput
         _max?: SubjectClassAttendanceMaxOrderByAggregateInput
         _min?: SubjectClassAttendanceMinOrderByAggregateInput
@@ -386730,6 +386863,8 @@ export namespace Prisma {
         time?: DateTimeWithAggregatesFilter<"SubjectClassAttendance"> | Date | string
         subjectClassId?: StringWithAggregatesFilter<"SubjectClassAttendance"> | string
         profileId?: UuidNullableWithAggregatesFilter<"SubjectClassAttendance"> | string | null
+        classScheduleId?: StringNullableWithAggregatesFilter<"SubjectClassAttendance"> | string | null
+        note?: StringNullableWithAggregatesFilter<"SubjectClassAttendance"> | string | null
     };
     export type SubjectClassAttendanceStudentWhereInput = {
         AND?: SubjectClassAttendanceStudentWhereInput | SubjectClassAttendanceStudentWhereInput[]
@@ -386745,7 +386880,8 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"SubjectClassAttendanceStudent"> | string | null
         subjectClassAttendanceId?: StringFilter<"SubjectClassAttendanceStudent"> | string
         studentId?: StringFilter<"SubjectClassAttendanceStudent"> | string
-        attendanceStatus?: BoolFilter<"SubjectClassAttendanceStudent"> | boolean
+        attendanceStatus?: EnumAttendanceStatusFilter<"SubjectClassAttendanceStudent"> | $Enums.AttendanceStatus
+        note?: StringNullableFilter<"SubjectClassAttendanceStudent"> | string | null
         subjectClassAttendance?: XOR<SubjectClassAttendanceScalarRelationFilter, SubjectClassAttendanceWhereInput>
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     };
@@ -386761,6 +386897,7 @@ export namespace Prisma {
         subjectClassAttendanceId?: SortOrder
         studentId?: SortOrder
         attendanceStatus?: SortOrder
+        note?: SortOrderInput | SortOrder
         subjectClassAttendance?: SubjectClassAttendanceOrderByWithRelationInput
         student?: StudentOrderByWithRelationInput
         _relevance?: SubjectClassAttendanceStudentOrderByRelevanceInput
@@ -386779,7 +386916,8 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"SubjectClassAttendanceStudent"> | string | null
         subjectClassAttendanceId?: StringFilter<"SubjectClassAttendanceStudent"> | string
         studentId?: StringFilter<"SubjectClassAttendanceStudent"> | string
-        attendanceStatus?: BoolFilter<"SubjectClassAttendanceStudent"> | boolean
+        attendanceStatus?: EnumAttendanceStatusFilter<"SubjectClassAttendanceStudent"> | $Enums.AttendanceStatus
+        note?: StringNullableFilter<"SubjectClassAttendanceStudent"> | string | null
         subjectClassAttendance?: XOR<SubjectClassAttendanceScalarRelationFilter, SubjectClassAttendanceWhereInput>
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     }, "id" | "code">;
@@ -386795,6 +386933,7 @@ export namespace Prisma {
         subjectClassAttendanceId?: SortOrder
         studentId?: SortOrder
         attendanceStatus?: SortOrder
+        note?: SortOrderInput | SortOrder
         _count?: SubjectClassAttendanceStudentCountOrderByAggregateInput
         _max?: SubjectClassAttendanceStudentMaxOrderByAggregateInput
         _min?: SubjectClassAttendanceStudentMinOrderByAggregateInput
@@ -386813,7 +386952,8 @@ export namespace Prisma {
         createdBy?: UuidNullableWithAggregatesFilter<"SubjectClassAttendanceStudent"> | string | null
         subjectClassAttendanceId?: StringWithAggregatesFilter<"SubjectClassAttendanceStudent"> | string
         studentId?: StringWithAggregatesFilter<"SubjectClassAttendanceStudent"> | string
-        attendanceStatus?: BoolWithAggregatesFilter<"SubjectClassAttendanceStudent"> | boolean
+        attendanceStatus?: EnumAttendanceStatusWithAggregatesFilter<"SubjectClassAttendanceStudent"> | $Enums.AttendanceStatus
+        note?: StringNullableWithAggregatesFilter<"SubjectClassAttendanceStudent"> | string | null
     };
     export type SubjectClassHistoryWhereInput = {
         AND?: SubjectClassHistoryWhereInput | SubjectClassHistoryWhereInput[]
@@ -387051,6 +387191,7 @@ export namespace Prisma {
         userProfiles?: UserProfileListRelationFilter
         originalSchedule?: XOR<ClassScheduleNullableScalarRelationFilter, ClassScheduleWhereInput> | null
         replacementSchedule?: XOR<ClassScheduleNullableScalarRelationFilter, ClassScheduleWhereInput> | null
+        subjectClassAttendances?: SubjectClassAttendanceListRelationFilter
     };
     export type ClassScheduleOrderByWithRelationInput = {
         id?: SortOrder
@@ -387083,6 +387224,7 @@ export namespace Prisma {
         userProfiles?: UserProfileOrderByRelationAggregateInput
         originalSchedule?: ClassScheduleOrderByWithRelationInput
         replacementSchedule?: ClassScheduleOrderByWithRelationInput
+        subjectClassAttendances?: SubjectClassAttendanceOrderByRelationAggregateInput
         _relevance?: ClassScheduleOrderByRelevanceInput
     };
     export type ClassScheduleWhereUniqueInput = Prisma.AtLeast<{
@@ -387119,6 +387261,7 @@ export namespace Prisma {
         userProfiles?: UserProfileListRelationFilter
         originalSchedule?: XOR<ClassScheduleNullableScalarRelationFilter, ClassScheduleWhereInput> | null
         replacementSchedule?: XOR<ClassScheduleNullableScalarRelationFilter, ClassScheduleWhereInput> | null
+        subjectClassAttendances?: SubjectClassAttendanceListRelationFilter
     }, "id" | "code" | "originalScheduleId">;
     export type ClassScheduleOrderByWithAggregationInput = {
         id?: SortOrder
@@ -418649,8 +418792,10 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         time: Date | string
+        note?: string | null
         subjectClass: SubjectClassCreateNestedOneWithoutSubjectClassAttendancesInput
         profile?: UserProfileCreateNestedOneWithoutSubjectClassAttendanceInput
+        classSchedule?: ClassScheduleCreateNestedOneWithoutSubjectClassAttendancesInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutSubjectClassAttendanceInput
     };
     export type SubjectClassAttendanceUncheckedCreateInput = {
@@ -418665,6 +418810,8 @@ export namespace Prisma {
         time: Date | string
         subjectClassId: string
         profileId?: string | null
+        classScheduleId?: string | null
+        note?: string | null
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutSubjectClassAttendanceInput
     };
     export type SubjectClassAttendanceUpdateInput = {
@@ -418677,8 +418824,10 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         time?: DateTimeFieldUpdateOperationsInput | Date | string
+        note?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClass?: SubjectClassUpdateOneRequiredWithoutSubjectClassAttendancesNestedInput
         profile?: UserProfileUpdateOneWithoutSubjectClassAttendanceNestedInput
+        classSchedule?: ClassScheduleUpdateOneWithoutSubjectClassAttendancesNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutSubjectClassAttendanceNestedInput
     };
     export type SubjectClassAttendanceUncheckedUpdateInput = {
@@ -418693,6 +418842,8 @@ export namespace Prisma {
         time?: DateTimeFieldUpdateOperationsInput | Date | string
         subjectClassId?: StringFieldUpdateOperationsInput | string
         profileId?: NullableStringFieldUpdateOperationsInput | string | null
+        classScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutSubjectClassAttendanceNestedInput
     };
     export type SubjectClassAttendanceCreateManyInput = {
@@ -418707,6 +418858,8 @@ export namespace Prisma {
         time: Date | string
         subjectClassId: string
         profileId?: string | null
+        classScheduleId?: string | null
+        note?: string | null
     };
     export type SubjectClassAttendanceUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -418718,6 +418871,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         time?: DateTimeFieldUpdateOperationsInput | Date | string
+        note?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SubjectClassAttendanceUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -418731,6 +418885,8 @@ export namespace Prisma {
         time?: DateTimeFieldUpdateOperationsInput | Date | string
         subjectClassId?: StringFieldUpdateOperationsInput | string
         profileId?: NullableStringFieldUpdateOperationsInput | string | null
+        classScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SubjectClassAttendanceStudentCreateInput = {
         id?: string
@@ -418741,7 +418897,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        attendanceStatus?: boolean
+        attendanceStatus?: $Enums.AttendanceStatus
+        note?: string | null
         subjectClassAttendance: SubjectClassAttendanceCreateNestedOneWithoutSubjectClassAttendanceStudentInput
         student: StudentCreateNestedOneWithoutSubjectClassAttendanceStudentInput
     };
@@ -418756,7 +418913,8 @@ export namespace Prisma {
         createdBy?: string | null
         subjectClassAttendanceId: string
         studentId: string
-        attendanceStatus?: boolean
+        attendanceStatus?: $Enums.AttendanceStatus
+        note?: string | null
     };
     export type SubjectClassAttendanceStudentUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -418767,7 +418925,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        attendanceStatus?: BoolFieldUpdateOperationsInput | boolean
+        attendanceStatus?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+        note?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassAttendance?: SubjectClassAttendanceUpdateOneRequiredWithoutSubjectClassAttendanceStudentNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassAttendanceStudentNestedInput
     };
@@ -418782,7 +418941,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassAttendanceId?: StringFieldUpdateOperationsInput | string
         studentId?: StringFieldUpdateOperationsInput | string
-        attendanceStatus?: BoolFieldUpdateOperationsInput | boolean
+        attendanceStatus?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+        note?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SubjectClassAttendanceStudentCreateManyInput = {
         id?: string
@@ -418795,7 +418955,8 @@ export namespace Prisma {
         createdBy?: string | null
         subjectClassAttendanceId: string
         studentId: string
-        attendanceStatus?: boolean
+        attendanceStatus?: $Enums.AttendanceStatus
+        note?: string | null
     };
     export type SubjectClassAttendanceStudentUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -418806,7 +418967,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        attendanceStatus?: BoolFieldUpdateOperationsInput | boolean
+        attendanceStatus?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+        note?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SubjectClassAttendanceStudentUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -418819,7 +418981,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassAttendanceId?: StringFieldUpdateOperationsInput | string
         studentId?: StringFieldUpdateOperationsInput | string
-        attendanceStatus?: BoolFieldUpdateOperationsInput | boolean
+        attendanceStatus?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+        note?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SubjectClassHistoryCreateInput = {
         id?: string
@@ -419075,6 +419238,7 @@ export namespace Prisma {
         userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
         originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
         replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleUncheckedCreateInput = {
         id?: string
@@ -419102,6 +419266,7 @@ export namespace Prisma {
         cancelReason?: string | null
         userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
         replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -419129,6 +419294,7 @@ export namespace Prisma {
         userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
         originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
         replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -419156,6 +419322,7 @@ export namespace Prisma {
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
         userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleCreateManyInput = {
         id?: string
@@ -447416,6 +447583,10 @@ export namespace Prisma {
         _min?: NestedEnumSubjectClassStatusFilter<$PrismaModel>
         _max?: NestedEnumSubjectClassStatusFilter<$PrismaModel>
     };
+    export type ClassScheduleNullableScalarRelationFilter = {
+        is?: ClassScheduleWhereInput | null
+        isNot?: ClassScheduleWhereInput | null
+    };
     export type SubjectClassAttendanceStudentListRelationFilter = {
         every?: SubjectClassAttendanceStudentWhereInput
         some?: SubjectClassAttendanceStudentWhereInput
@@ -447441,6 +447612,8 @@ export namespace Prisma {
         time?: SortOrder
         subjectClassId?: SortOrder
         profileId?: SortOrder
+        classScheduleId?: SortOrder
+        note?: SortOrder
     };
     export type SubjectClassAttendanceMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -447454,6 +447627,8 @@ export namespace Prisma {
         time?: SortOrder
         subjectClassId?: SortOrder
         profileId?: SortOrder
+        classScheduleId?: SortOrder
+        note?: SortOrder
     };
     export type SubjectClassAttendanceMinOrderByAggregateInput = {
         id?: SortOrder
@@ -447467,6 +447642,14 @@ export namespace Prisma {
         time?: SortOrder
         subjectClassId?: SortOrder
         profileId?: SortOrder
+        classScheduleId?: SortOrder
+        note?: SortOrder
+    };
+    export type EnumAttendanceStatusFilter<$PrismaModel = never> = {
+        equals?: $Enums.AttendanceStatus | EnumAttendanceStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumAttendanceStatusFilter<$PrismaModel> | $Enums.AttendanceStatus
     };
     export type SubjectClassAttendanceScalarRelationFilter = {
         is?: SubjectClassAttendanceWhereInput
@@ -447489,6 +447672,7 @@ export namespace Prisma {
         subjectClassAttendanceId?: SortOrder
         studentId?: SortOrder
         attendanceStatus?: SortOrder
+        note?: SortOrder
     };
     export type SubjectClassAttendanceStudentMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -447502,6 +447686,7 @@ export namespace Prisma {
         subjectClassAttendanceId?: SortOrder
         studentId?: SortOrder
         attendanceStatus?: SortOrder
+        note?: SortOrder
     };
     export type SubjectClassAttendanceStudentMinOrderByAggregateInput = {
         id?: SortOrder
@@ -447515,6 +447700,16 @@ export namespace Prisma {
         subjectClassAttendanceId?: SortOrder
         studentId?: SortOrder
         attendanceStatus?: SortOrder
+        note?: SortOrder
+    };
+    export type EnumAttendanceStatusWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.AttendanceStatus | EnumAttendanceStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumAttendanceStatusWithAggregatesFilter<$PrismaModel> | $Enums.AttendanceStatus
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumAttendanceStatusFilter<$PrismaModel>
+        _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
     };
     export type SubjectClassHistoryOrderByRelevanceInput = {
         fields: SubjectClassHistoryOrderByRelevanceFieldEnum | SubjectClassHistoryOrderByRelevanceFieldEnum[]
@@ -447640,10 +447835,6 @@ export namespace Prisma {
         in?: $Enums.PeriodType[] | ListEnumPeriodTypeFieldRefInput<$PrismaModel>
         notIn?: $Enums.PeriodType[] | ListEnumPeriodTypeFieldRefInput<$PrismaModel>
         not?: NestedEnumPeriodTypeFilter<$PrismaModel> | $Enums.PeriodType
-    };
-    export type ClassScheduleNullableScalarRelationFilter = {
-        is?: ClassScheduleWhereInput | null
-        isNot?: ClassScheduleWhereInput | null
     };
     export type ClassScheduleOrderByRelevanceInput = {
         fields: ClassScheduleOrderByRelevanceFieldEnum | ClassScheduleOrderByRelevanceFieldEnum[]
@@ -470675,6 +470866,11 @@ export namespace Prisma {
         connectOrCreate?: UserProfileCreateOrConnectWithoutSubjectClassAttendanceInput
         connect?: UserProfileWhereUniqueInput
     };
+    export type ClassScheduleCreateNestedOneWithoutSubjectClassAttendancesInput = {
+        create?: XOR<ClassScheduleCreateWithoutSubjectClassAttendancesInput, ClassScheduleUncheckedCreateWithoutSubjectClassAttendancesInput>
+        connectOrCreate?: ClassScheduleCreateOrConnectWithoutSubjectClassAttendancesInput
+        connect?: ClassScheduleWhereUniqueInput
+    };
     export type SubjectClassAttendanceStudentCreateNestedManyWithoutSubjectClassAttendanceInput = {
         create?: XOR<SubjectClassAttendanceStudentCreateWithoutSubjectClassAttendanceInput, SubjectClassAttendanceStudentUncheckedCreateWithoutSubjectClassAttendanceInput> | SubjectClassAttendanceStudentCreateWithoutSubjectClassAttendanceInput[] | SubjectClassAttendanceStudentUncheckedCreateWithoutSubjectClassAttendanceInput[]
         connectOrCreate?: SubjectClassAttendanceStudentCreateOrConnectWithoutSubjectClassAttendanceInput | SubjectClassAttendanceStudentCreateOrConnectWithoutSubjectClassAttendanceInput[]
@@ -470702,6 +470898,15 @@ export namespace Prisma {
         delete?: UserProfileWhereInput | boolean
         connect?: UserProfileWhereUniqueInput
         update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutSubjectClassAttendanceInput, UserProfileUpdateWithoutSubjectClassAttendanceInput>, UserProfileUncheckedUpdateWithoutSubjectClassAttendanceInput>
+    };
+    export type ClassScheduleUpdateOneWithoutSubjectClassAttendancesNestedInput = {
+        create?: XOR<ClassScheduleCreateWithoutSubjectClassAttendancesInput, ClassScheduleUncheckedCreateWithoutSubjectClassAttendancesInput>
+        connectOrCreate?: ClassScheduleCreateOrConnectWithoutSubjectClassAttendancesInput
+        upsert?: ClassScheduleUpsertWithoutSubjectClassAttendancesInput
+        disconnect?: ClassScheduleWhereInput | boolean
+        delete?: ClassScheduleWhereInput | boolean
+        connect?: ClassScheduleWhereUniqueInput
+        update?: XOR<XOR<ClassScheduleUpdateToOneWithWhereWithoutSubjectClassAttendancesInput, ClassScheduleUpdateWithoutSubjectClassAttendancesInput>, ClassScheduleUncheckedUpdateWithoutSubjectClassAttendancesInput>
     };
     export type SubjectClassAttendanceStudentUpdateManyWithoutSubjectClassAttendanceNestedInput = {
         create?: XOR<SubjectClassAttendanceStudentCreateWithoutSubjectClassAttendanceInput, SubjectClassAttendanceStudentUncheckedCreateWithoutSubjectClassAttendanceInput> | SubjectClassAttendanceStudentCreateWithoutSubjectClassAttendanceInput[] | SubjectClassAttendanceStudentUncheckedCreateWithoutSubjectClassAttendanceInput[]
@@ -470738,6 +470943,9 @@ export namespace Prisma {
         create?: XOR<StudentCreateWithoutSubjectClassAttendanceStudentInput, StudentUncheckedCreateWithoutSubjectClassAttendanceStudentInput>
         connectOrCreate?: StudentCreateOrConnectWithoutSubjectClassAttendanceStudentInput
         connect?: StudentWhereUniqueInput
+    };
+    export type EnumAttendanceStatusFieldUpdateOperationsInput = {
+        set?: $Enums.AttendanceStatus
     };
     export type SubjectClassAttendanceUpdateOneRequiredWithoutSubjectClassAttendanceStudentNestedInput = {
         create?: XOR<SubjectClassAttendanceCreateWithoutSubjectClassAttendanceStudentInput, SubjectClassAttendanceUncheckedCreateWithoutSubjectClassAttendanceStudentInput>
@@ -470826,6 +471034,12 @@ export namespace Prisma {
         connectOrCreate?: ClassScheduleCreateOrConnectWithoutOriginalScheduleInput
         connect?: ClassScheduleWhereUniqueInput
     };
+    export type SubjectClassAttendanceCreateNestedManyWithoutClassScheduleInput = {
+        create?: XOR<SubjectClassAttendanceCreateWithoutClassScheduleInput, SubjectClassAttendanceUncheckedCreateWithoutClassScheduleInput> | SubjectClassAttendanceCreateWithoutClassScheduleInput[] | SubjectClassAttendanceUncheckedCreateWithoutClassScheduleInput[]
+        connectOrCreate?: SubjectClassAttendanceCreateOrConnectWithoutClassScheduleInput | SubjectClassAttendanceCreateOrConnectWithoutClassScheduleInput[]
+        createMany?: SubjectClassAttendanceCreateManyClassScheduleInputEnvelope
+        connect?: SubjectClassAttendanceWhereUniqueInput | SubjectClassAttendanceWhereUniqueInput[]
+    };
     export type UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput = {
         create?: XOR<UserProfileCreateWithoutClassSchedulesInput, UserProfileUncheckedCreateWithoutClassSchedulesInput> | UserProfileCreateWithoutClassSchedulesInput[] | UserProfileUncheckedCreateWithoutClassSchedulesInput[]
         connectOrCreate?: UserProfileCreateOrConnectWithoutClassSchedulesInput | UserProfileCreateOrConnectWithoutClassSchedulesInput[]
@@ -470835,6 +471049,12 @@ export namespace Prisma {
         create?: XOR<ClassScheduleCreateWithoutOriginalScheduleInput, ClassScheduleUncheckedCreateWithoutOriginalScheduleInput>
         connectOrCreate?: ClassScheduleCreateOrConnectWithoutOriginalScheduleInput
         connect?: ClassScheduleWhereUniqueInput
+    };
+    export type SubjectClassAttendanceUncheckedCreateNestedManyWithoutClassScheduleInput = {
+        create?: XOR<SubjectClassAttendanceCreateWithoutClassScheduleInput, SubjectClassAttendanceUncheckedCreateWithoutClassScheduleInput> | SubjectClassAttendanceCreateWithoutClassScheduleInput[] | SubjectClassAttendanceUncheckedCreateWithoutClassScheduleInput[]
+        connectOrCreate?: SubjectClassAttendanceCreateOrConnectWithoutClassScheduleInput | SubjectClassAttendanceCreateOrConnectWithoutClassScheduleInput[]
+        createMany?: SubjectClassAttendanceCreateManyClassScheduleInputEnvelope
+        connect?: SubjectClassAttendanceWhereUniqueInput | SubjectClassAttendanceWhereUniqueInput[]
     };
     export type EnumPeriodTypeFieldUpdateOperationsInput = {
         set?: $Enums.PeriodType
@@ -470905,6 +471125,19 @@ export namespace Prisma {
         connect?: ClassScheduleWhereUniqueInput
         update?: XOR<XOR<ClassScheduleUpdateToOneWithWhereWithoutOriginalScheduleInput, ClassScheduleUpdateWithoutOriginalScheduleInput>, ClassScheduleUncheckedUpdateWithoutOriginalScheduleInput>
     };
+    export type SubjectClassAttendanceUpdateManyWithoutClassScheduleNestedInput = {
+        create?: XOR<SubjectClassAttendanceCreateWithoutClassScheduleInput, SubjectClassAttendanceUncheckedCreateWithoutClassScheduleInput> | SubjectClassAttendanceCreateWithoutClassScheduleInput[] | SubjectClassAttendanceUncheckedCreateWithoutClassScheduleInput[]
+        connectOrCreate?: SubjectClassAttendanceCreateOrConnectWithoutClassScheduleInput | SubjectClassAttendanceCreateOrConnectWithoutClassScheduleInput[]
+        upsert?: SubjectClassAttendanceUpsertWithWhereUniqueWithoutClassScheduleInput | SubjectClassAttendanceUpsertWithWhereUniqueWithoutClassScheduleInput[]
+        createMany?: SubjectClassAttendanceCreateManyClassScheduleInputEnvelope
+        set?: SubjectClassAttendanceWhereUniqueInput | SubjectClassAttendanceWhereUniqueInput[]
+        disconnect?: SubjectClassAttendanceWhereUniqueInput | SubjectClassAttendanceWhereUniqueInput[]
+        delete?: SubjectClassAttendanceWhereUniqueInput | SubjectClassAttendanceWhereUniqueInput[]
+        connect?: SubjectClassAttendanceWhereUniqueInput | SubjectClassAttendanceWhereUniqueInput[]
+        update?: SubjectClassAttendanceUpdateWithWhereUniqueWithoutClassScheduleInput | SubjectClassAttendanceUpdateWithWhereUniqueWithoutClassScheduleInput[]
+        updateMany?: SubjectClassAttendanceUpdateManyWithWhereWithoutClassScheduleInput | SubjectClassAttendanceUpdateManyWithWhereWithoutClassScheduleInput[]
+        deleteMany?: SubjectClassAttendanceScalarWhereInput | SubjectClassAttendanceScalarWhereInput[]
+    };
     export type UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput = {
         create?: XOR<UserProfileCreateWithoutClassSchedulesInput, UserProfileUncheckedCreateWithoutClassSchedulesInput> | UserProfileCreateWithoutClassSchedulesInput[] | UserProfileUncheckedCreateWithoutClassSchedulesInput[]
         connectOrCreate?: UserProfileCreateOrConnectWithoutClassSchedulesInput | UserProfileCreateOrConnectWithoutClassSchedulesInput[]
@@ -470925,6 +471158,19 @@ export namespace Prisma {
         delete?: ClassScheduleWhereInput | boolean
         connect?: ClassScheduleWhereUniqueInput
         update?: XOR<XOR<ClassScheduleUpdateToOneWithWhereWithoutOriginalScheduleInput, ClassScheduleUpdateWithoutOriginalScheduleInput>, ClassScheduleUncheckedUpdateWithoutOriginalScheduleInput>
+    };
+    export type SubjectClassAttendanceUncheckedUpdateManyWithoutClassScheduleNestedInput = {
+        create?: XOR<SubjectClassAttendanceCreateWithoutClassScheduleInput, SubjectClassAttendanceUncheckedCreateWithoutClassScheduleInput> | SubjectClassAttendanceCreateWithoutClassScheduleInput[] | SubjectClassAttendanceUncheckedCreateWithoutClassScheduleInput[]
+        connectOrCreate?: SubjectClassAttendanceCreateOrConnectWithoutClassScheduleInput | SubjectClassAttendanceCreateOrConnectWithoutClassScheduleInput[]
+        upsert?: SubjectClassAttendanceUpsertWithWhereUniqueWithoutClassScheduleInput | SubjectClassAttendanceUpsertWithWhereUniqueWithoutClassScheduleInput[]
+        createMany?: SubjectClassAttendanceCreateManyClassScheduleInputEnvelope
+        set?: SubjectClassAttendanceWhereUniqueInput | SubjectClassAttendanceWhereUniqueInput[]
+        disconnect?: SubjectClassAttendanceWhereUniqueInput | SubjectClassAttendanceWhereUniqueInput[]
+        delete?: SubjectClassAttendanceWhereUniqueInput | SubjectClassAttendanceWhereUniqueInput[]
+        connect?: SubjectClassAttendanceWhereUniqueInput | SubjectClassAttendanceWhereUniqueInput[]
+        update?: SubjectClassAttendanceUpdateWithWhereUniqueWithoutClassScheduleInput | SubjectClassAttendanceUpdateWithWhereUniqueWithoutClassScheduleInput[]
+        updateMany?: SubjectClassAttendanceUpdateManyWithWhereWithoutClassScheduleInput | SubjectClassAttendanceUpdateManyWithWhereWithoutClassScheduleInput[]
+        deleteMany?: SubjectClassAttendanceScalarWhereInput | SubjectClassAttendanceScalarWhereInput[]
     };
     export type TrainingObjectTypeCreateNestedOneWithoutScoreCorrectionTicketInput = {
         create?: XOR<TrainingObjectTypeCreateWithoutScoreCorrectionTicketInput, TrainingObjectTypeUncheckedCreateWithoutScoreCorrectionTicketInput>
@@ -486190,6 +486436,21 @@ export namespace Prisma {
         _min?: NestedEnumSubjectClassStatusFilter<$PrismaModel>
         _max?: NestedEnumSubjectClassStatusFilter<$PrismaModel>
     };
+    export type NestedEnumAttendanceStatusFilter<$PrismaModel = never> = {
+        equals?: $Enums.AttendanceStatus | EnumAttendanceStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumAttendanceStatusFilter<$PrismaModel> | $Enums.AttendanceStatus
+    };
+    export type NestedEnumAttendanceStatusWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.AttendanceStatus | EnumAttendanceStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumAttendanceStatusWithAggregatesFilter<$PrismaModel> | $Enums.AttendanceStatus
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumAttendanceStatusFilter<$PrismaModel>
+        _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
+    };
     export type NestedEnumPeriodTypeFilter<$PrismaModel = never> = {
         equals?: $Enums.PeriodType | EnumPeriodTypeFieldRefInput<$PrismaModel>
         in?: $Enums.PeriodType[] | ListEnumPeriodTypeFieldRefInput<$PrismaModel>
@@ -491315,6 +491576,7 @@ export namespace Prisma {
         extraLecturer?: LecturerCreateNestedOneWithoutExtraClassSchedulesInput
         originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
         replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleUncheckedCreateWithoutUserProfilesInput = {
         id?: string
@@ -491341,6 +491603,7 @@ export namespace Prisma {
         originalScheduleId?: string | null
         cancelReason?: string | null
         replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleCreateOrConnectWithoutUserProfilesInput = {
         where: ClassScheduleWhereUniqueInput
@@ -491400,7 +491663,9 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         time: Date | string
+        note?: string | null
         subjectClass: SubjectClassCreateNestedOneWithoutSubjectClassAttendancesInput
+        classSchedule?: ClassScheduleCreateNestedOneWithoutSubjectClassAttendancesInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutSubjectClassAttendanceInput
     };
     export type SubjectClassAttendanceUncheckedCreateWithoutProfileInput = {
@@ -491414,6 +491679,8 @@ export namespace Prisma {
         createdBy?: string | null
         time: Date | string
         subjectClassId: string
+        classScheduleId?: string | null
+        note?: string | null
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutSubjectClassAttendanceInput
     };
     export type SubjectClassAttendanceCreateOrConnectWithoutProfileInput = {
@@ -495009,6 +495276,8 @@ export namespace Prisma {
         time?: DateTimeFilter<"SubjectClassAttendance"> | Date | string
         subjectClassId?: StringFilter<"SubjectClassAttendance"> | string
         profileId?: UuidNullableFilter<"SubjectClassAttendance"> | string | null
+        classScheduleId?: StringNullableFilter<"SubjectClassAttendance"> | string | null
+        note?: StringNullableFilter<"SubjectClassAttendance"> | string | null
     };
     export type DM_HocHamCreateWithoutHocHamInput = {
         Id?: string
@@ -558446,6 +558715,7 @@ export namespace Prisma {
         userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
         originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
         replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleUncheckedCreateWithoutSubjectClassInput = {
         id?: string
@@ -558472,6 +558742,7 @@ export namespace Prisma {
         cancelReason?: string | null
         userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
         replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleCreateOrConnectWithoutSubjectClassInput = {
         where: ClassScheduleWhereUniqueInput
@@ -559017,7 +559288,9 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         time: Date | string
+        note?: string | null
         profile?: UserProfileCreateNestedOneWithoutSubjectClassAttendanceInput
+        classSchedule?: ClassScheduleCreateNestedOneWithoutSubjectClassAttendancesInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutSubjectClassAttendanceInput
     };
     export type SubjectClassAttendanceUncheckedCreateWithoutSubjectClassInput = {
@@ -559031,6 +559304,8 @@ export namespace Prisma {
         createdBy?: string | null
         time: Date | string
         profileId?: string | null
+        classScheduleId?: string | null
+        note?: string | null
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutSubjectClassAttendanceInput
     };
     export type SubjectClassAttendanceCreateOrConnectWithoutSubjectClassInput = {
@@ -560438,6 +560713,64 @@ export namespace Prisma {
         where: UserProfileWhereUniqueInput
         create: XOR<UserProfileCreateWithoutSubjectClassAttendanceInput, UserProfileUncheckedCreateWithoutSubjectClassAttendanceInput>
     };
+    export type ClassScheduleCreateWithoutSubjectClassAttendancesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        periodType?: $Enums.PeriodType
+        startPeriod: number
+        endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
+        classDate: Date | string
+        location?: string | null
+        notes?: string | null
+        isReplacement?: boolean
+        cancelReason?: string | null
+        subjectClass?: SubjectClassCreateNestedOneWithoutClassSchedulesInput
+        room?: RoomCreateNestedOneWithoutClassSchedulesInput
+        lecturer?: LecturerCreateNestedOneWithoutClassSchedulesInput
+        extraLecturer?: LecturerCreateNestedOneWithoutExtraClassSchedulesInput
+        userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
+        originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
+        replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
+    };
+    export type ClassScheduleUncheckedCreateWithoutSubjectClassAttendancesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        subjectClassId?: string | null
+        periodType?: $Enums.PeriodType
+        startPeriod: number
+        endPeriod: number
+        startTime?: Date | string | null
+        endTime?: Date | string | null
+        classDate: Date | string
+        roomId?: string | null
+        lecturerId?: string | null
+        extraLecturerId?: string | null
+        location?: string | null
+        notes?: string | null
+        isReplacement?: boolean
+        originalScheduleId?: string | null
+        cancelReason?: string | null
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
+        replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
+    };
+    export type ClassScheduleCreateOrConnectWithoutSubjectClassAttendancesInput = {
+        where: ClassScheduleWhereUniqueInput
+        create: XOR<ClassScheduleCreateWithoutSubjectClassAttendancesInput, ClassScheduleUncheckedCreateWithoutSubjectClassAttendancesInput>
+    };
     export type SubjectClassAttendanceStudentCreateWithoutSubjectClassAttendanceInput = {
         id?: string
         code?: string | null
@@ -560447,7 +560780,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        attendanceStatus?: boolean
+        attendanceStatus?: $Enums.AttendanceStatus
+        note?: string | null
         student: StudentCreateNestedOneWithoutSubjectClassAttendanceStudentInput
     };
     export type SubjectClassAttendanceStudentUncheckedCreateWithoutSubjectClassAttendanceInput = {
@@ -560460,7 +560794,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         studentId: string
-        attendanceStatus?: boolean
+        attendanceStatus?: $Enums.AttendanceStatus
+        note?: string | null
     };
     export type SubjectClassAttendanceStudentCreateOrConnectWithoutSubjectClassAttendanceInput = {
         where: SubjectClassAttendanceStudentWhereUniqueInput
@@ -560950,6 +561285,69 @@ export namespace Prisma {
         classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
         individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutRelatedUserProfilesNestedInput
     };
+    export type ClassScheduleUpsertWithoutSubjectClassAttendancesInput = {
+        update: XOR<ClassScheduleUpdateWithoutSubjectClassAttendancesInput, ClassScheduleUncheckedUpdateWithoutSubjectClassAttendancesInput>
+        create: XOR<ClassScheduleCreateWithoutSubjectClassAttendancesInput, ClassScheduleUncheckedCreateWithoutSubjectClassAttendancesInput>
+        where?: ClassScheduleWhereInput
+    };
+    export type ClassScheduleUpdateToOneWithWhereWithoutSubjectClassAttendancesInput = {
+        where?: ClassScheduleWhereInput
+        data: XOR<ClassScheduleUpdateWithoutSubjectClassAttendancesInput, ClassScheduleUncheckedUpdateWithoutSubjectClassAttendancesInput>
+    };
+    export type ClassScheduleUpdateWithoutSubjectClassAttendancesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
+        startPeriod?: IntFieldUpdateOperationsInput | number
+        endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        classDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        location?: NullableStringFieldUpdateOperationsInput | string | null
+        notes?: NullableStringFieldUpdateOperationsInput | string | null
+        isReplacement?: BoolFieldUpdateOperationsInput | boolean
+        cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClass?: SubjectClassUpdateOneWithoutClassSchedulesNestedInput
+        room?: RoomUpdateOneWithoutClassSchedulesNestedInput
+        lecturer?: LecturerUpdateOneWithoutClassSchedulesNestedInput
+        extraLecturer?: LecturerUpdateOneWithoutExtraClassSchedulesNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
+        originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
+        replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
+    };
+    export type ClassScheduleUncheckedUpdateWithoutSubjectClassAttendancesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        periodType?: EnumPeriodTypeFieldUpdateOperationsInput | $Enums.PeriodType
+        startPeriod?: IntFieldUpdateOperationsInput | number
+        endPeriod?: IntFieldUpdateOperationsInput | number
+        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        classDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        location?: NullableStringFieldUpdateOperationsInput | string | null
+        notes?: NullableStringFieldUpdateOperationsInput | string | null
+        isReplacement?: BoolFieldUpdateOperationsInput | boolean
+        originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+        cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
+        replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
+    };
     export type SubjectClassAttendanceStudentUpsertWithWhereUniqueWithoutSubjectClassAttendanceInput = {
         where: SubjectClassAttendanceStudentWhereUniqueInput
         update: XOR<SubjectClassAttendanceStudentUpdateWithoutSubjectClassAttendanceInput, SubjectClassAttendanceStudentUncheckedUpdateWithoutSubjectClassAttendanceInput>
@@ -560977,7 +561375,8 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"SubjectClassAttendanceStudent"> | string | null
         subjectClassAttendanceId?: StringFilter<"SubjectClassAttendanceStudent"> | string
         studentId?: StringFilter<"SubjectClassAttendanceStudent"> | string
-        attendanceStatus?: BoolFilter<"SubjectClassAttendanceStudent"> | boolean
+        attendanceStatus?: EnumAttendanceStatusFilter<"SubjectClassAttendanceStudent"> | $Enums.AttendanceStatus
+        note?: StringNullableFilter<"SubjectClassAttendanceStudent"> | string | null
     };
     export type SubjectClassAttendanceCreateWithoutSubjectClassAttendanceStudentInput = {
         id?: string
@@ -560989,8 +561388,10 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         time: Date | string
+        note?: string | null
         subjectClass: SubjectClassCreateNestedOneWithoutSubjectClassAttendancesInput
         profile?: UserProfileCreateNestedOneWithoutSubjectClassAttendanceInput
+        classSchedule?: ClassScheduleCreateNestedOneWithoutSubjectClassAttendancesInput
     };
     export type SubjectClassAttendanceUncheckedCreateWithoutSubjectClassAttendanceStudentInput = {
         id?: string
@@ -561004,6 +561405,8 @@ export namespace Prisma {
         time: Date | string
         subjectClassId: string
         profileId?: string | null
+        classScheduleId?: string | null
+        note?: string | null
     };
     export type SubjectClassAttendanceCreateOrConnectWithoutSubjectClassAttendanceStudentInput = {
         where: SubjectClassAttendanceWhereUniqueInput
@@ -561184,8 +561587,10 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         time?: DateTimeFieldUpdateOperationsInput | Date | string
+        note?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClass?: SubjectClassUpdateOneRequiredWithoutSubjectClassAttendancesNestedInput
         profile?: UserProfileUpdateOneWithoutSubjectClassAttendanceNestedInput
+        classSchedule?: ClassScheduleUpdateOneWithoutSubjectClassAttendancesNestedInput
     };
     export type SubjectClassAttendanceUncheckedUpdateWithoutSubjectClassAttendanceStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -561199,6 +561604,8 @@ export namespace Prisma {
         time?: DateTimeFieldUpdateOperationsInput | Date | string
         subjectClassId?: StringFieldUpdateOperationsInput | string
         profileId?: NullableStringFieldUpdateOperationsInput | string | null
+        classScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StudentUpsertWithoutSubjectClassAttendanceStudentInput = {
         update: XOR<StudentUpdateWithoutSubjectClassAttendanceStudentInput, StudentUncheckedUpdateWithoutSubjectClassAttendanceStudentInput>
@@ -563255,6 +563662,7 @@ export namespace Prisma {
         extraLecturer?: LecturerCreateNestedOneWithoutExtraClassSchedulesInput
         userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
         originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleUncheckedCreateWithoutReplacementScheduleInput = {
         id?: string
@@ -563281,6 +563689,7 @@ export namespace Prisma {
         originalScheduleId?: string | null
         cancelReason?: string | null
         userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleCreateOrConnectWithoutReplacementScheduleInput = {
         where: ClassScheduleWhereUniqueInput
@@ -563311,6 +563720,7 @@ export namespace Prisma {
         extraLecturer?: LecturerCreateNestedOneWithoutExtraClassSchedulesInput
         userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
         replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleUncheckedCreateWithoutOriginalScheduleInput = {
         id?: string
@@ -563337,10 +563747,49 @@ export namespace Prisma {
         cancelReason?: string | null
         userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
         replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleCreateOrConnectWithoutOriginalScheduleInput = {
         where: ClassScheduleWhereUniqueInput
         create: XOR<ClassScheduleCreateWithoutOriginalScheduleInput, ClassScheduleUncheckedCreateWithoutOriginalScheduleInput>
+    };
+    export type SubjectClassAttendanceCreateWithoutClassScheduleInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        time: Date | string
+        note?: string | null
+        subjectClass: SubjectClassCreateNestedOneWithoutSubjectClassAttendancesInput
+        profile?: UserProfileCreateNestedOneWithoutSubjectClassAttendanceInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutSubjectClassAttendanceInput
+    };
+    export type SubjectClassAttendanceUncheckedCreateWithoutClassScheduleInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        time: Date | string
+        subjectClassId: string
+        profileId?: string | null
+        note?: string | null
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutSubjectClassAttendanceInput
+    };
+    export type SubjectClassAttendanceCreateOrConnectWithoutClassScheduleInput = {
+        where: SubjectClassAttendanceWhereUniqueInput
+        create: XOR<SubjectClassAttendanceCreateWithoutClassScheduleInput, SubjectClassAttendanceUncheckedCreateWithoutClassScheduleInput>
+    };
+    export type SubjectClassAttendanceCreateManyClassScheduleInputEnvelope = {
+        data: SubjectClassAttendanceCreateManyClassScheduleInput | SubjectClassAttendanceCreateManyClassScheduleInput[]
+        skipDuplicates?: boolean
     };
     export type SubjectClassUpsertWithoutClassSchedulesInput = {
         update: XOR<SubjectClassUpdateWithoutClassSchedulesInput, SubjectClassUncheckedUpdateWithoutClassSchedulesInput>
@@ -563737,6 +564186,7 @@ export namespace Prisma {
         extraLecturer?: LecturerUpdateOneWithoutExtraClassSchedulesNestedInput
         userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
         originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateWithoutReplacementScheduleInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -563763,6 +564213,7 @@ export namespace Prisma {
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
         userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleUpsertWithoutOriginalScheduleInput = {
         update: XOR<ClassScheduleUpdateWithoutOriginalScheduleInput, ClassScheduleUncheckedUpdateWithoutOriginalScheduleInput>
@@ -563798,6 +564249,7 @@ export namespace Prisma {
         extraLecturer?: LecturerUpdateOneWithoutExtraClassSchedulesNestedInput
         userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateWithoutOriginalScheduleInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -563824,6 +564276,20 @@ export namespace Prisma {
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
         userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutClassScheduleNestedInput
+    };
+    export type SubjectClassAttendanceUpsertWithWhereUniqueWithoutClassScheduleInput = {
+        where: SubjectClassAttendanceWhereUniqueInput
+        update: XOR<SubjectClassAttendanceUpdateWithoutClassScheduleInput, SubjectClassAttendanceUncheckedUpdateWithoutClassScheduleInput>
+        create: XOR<SubjectClassAttendanceCreateWithoutClassScheduleInput, SubjectClassAttendanceUncheckedCreateWithoutClassScheduleInput>
+    };
+    export type SubjectClassAttendanceUpdateWithWhereUniqueWithoutClassScheduleInput = {
+        where: SubjectClassAttendanceWhereUniqueInput
+        data: XOR<SubjectClassAttendanceUpdateWithoutClassScheduleInput, SubjectClassAttendanceUncheckedUpdateWithoutClassScheduleInput>
+    };
+    export type SubjectClassAttendanceUpdateManyWithWhereWithoutClassScheduleInput = {
+        where: SubjectClassAttendanceScalarWhereInput
+        data: XOR<SubjectClassAttendanceUpdateManyMutationInput, SubjectClassAttendanceUncheckedUpdateManyWithoutClassScheduleInput>
     };
     export type TrainingObjectTypeCreateWithoutScoreCorrectionTicketInput = {
         id?: string
@@ -567495,6 +567961,7 @@ export namespace Prisma {
         userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
         originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
         replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleUncheckedCreateWithoutRoomInput = {
         id?: string
@@ -567521,6 +567988,7 @@ export namespace Prisma {
         cancelReason?: string | null
         userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
         replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleCreateOrConnectWithoutRoomInput = {
         where: ClassScheduleWhereUniqueInput
@@ -574460,7 +574928,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
-        attendanceStatus?: boolean
+        attendanceStatus?: $Enums.AttendanceStatus
+        note?: string | null
         subjectClassAttendance: SubjectClassAttendanceCreateNestedOneWithoutSubjectClassAttendanceStudentInput
     };
     export type SubjectClassAttendanceStudentUncheckedCreateWithoutStudentInput = {
@@ -574473,7 +574942,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         subjectClassAttendanceId: string
-        attendanceStatus?: boolean
+        attendanceStatus?: $Enums.AttendanceStatus
+        note?: string | null
     };
     export type SubjectClassAttendanceStudentCreateOrConnectWithoutStudentInput = {
         where: SubjectClassAttendanceStudentWhereUniqueInput
@@ -579647,6 +580117,7 @@ export namespace Prisma {
         userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
         originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
         replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleUncheckedCreateWithoutLecturerInput = {
         id?: string
@@ -579673,6 +580144,7 @@ export namespace Prisma {
         cancelReason?: string | null
         userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
         replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleCreateOrConnectWithoutLecturerInput = {
         where: ClassScheduleWhereUniqueInput
@@ -579707,6 +580179,7 @@ export namespace Prisma {
         userProfiles?: UserProfileCreateNestedManyWithoutClassSchedulesInput
         originalSchedule?: ClassScheduleCreateNestedOneWithoutReplacementScheduleInput
         replacementSchedule?: ClassScheduleCreateNestedOneWithoutOriginalScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleUncheckedCreateWithoutExtraLecturerInput = {
         id?: string
@@ -579733,6 +580206,7 @@ export namespace Prisma {
         cancelReason?: string | null
         userProfiles?: UserProfileUncheckedCreateNestedManyWithoutClassSchedulesInput
         replacementSchedule?: ClassScheduleUncheckedCreateNestedOneWithoutOriginalScheduleInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutClassScheduleInput
     };
     export type ClassScheduleCreateOrConnectWithoutExtraLecturerInput = {
         where: ClassScheduleWhereUniqueInput
@@ -631384,6 +631858,8 @@ export namespace Prisma {
         createdBy?: string | null
         time: Date | string
         subjectClassId: string
+        classScheduleId?: string | null
+        note?: string | null
     };
     export type RelativeUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -633477,6 +633953,7 @@ export namespace Prisma {
         extraLecturer?: LecturerUpdateOneWithoutExtraClassSchedulesNestedInput
         originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
         replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateWithoutUserProfilesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -633503,6 +633980,7 @@ export namespace Prisma {
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
         replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateManyWithoutUserProfilesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -633598,7 +634076,9 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         time?: DateTimeFieldUpdateOperationsInput | Date | string
+        note?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClass?: SubjectClassUpdateOneRequiredWithoutSubjectClassAttendancesNestedInput
+        classSchedule?: ClassScheduleUpdateOneWithoutSubjectClassAttendancesNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutSubjectClassAttendanceNestedInput
     };
     export type SubjectClassAttendanceUncheckedUpdateWithoutProfileInput = {
@@ -633612,6 +634092,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         time?: DateTimeFieldUpdateOperationsInput | Date | string
         subjectClassId?: StringFieldUpdateOperationsInput | string
+        classScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutSubjectClassAttendanceNestedInput
     };
     export type SubjectClassAttendanceUncheckedUpdateManyWithoutProfileInput = {
@@ -633625,6 +634107,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         time?: DateTimeFieldUpdateOperationsInput | Date | string
         subjectClassId?: StringFieldUpdateOperationsInput | string
+        classScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DM_NhanVienCreateManyGroupInput = {
         Id?: string
@@ -665809,6 +666293,8 @@ export namespace Prisma {
         createdBy?: string | null
         time: Date | string
         profileId?: string | null
+        classScheduleId?: string | null
+        note?: string | null
     };
     export type StudentSubjectScoreUpdateWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -666025,6 +666511,7 @@ export namespace Prisma {
         userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
         originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
         replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -666051,6 +666538,7 @@ export namespace Prisma {
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
         userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateManyWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -666754,7 +667242,9 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         time?: DateTimeFieldUpdateOperationsInput | Date | string
+        note?: NullableStringFieldUpdateOperationsInput | string | null
         profile?: UserProfileUpdateOneWithoutSubjectClassAttendanceNestedInput
+        classSchedule?: ClassScheduleUpdateOneWithoutSubjectClassAttendancesNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutSubjectClassAttendanceNestedInput
     };
     export type SubjectClassAttendanceUncheckedUpdateWithoutSubjectClassInput = {
@@ -666768,6 +667258,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         time?: DateTimeFieldUpdateOperationsInput | Date | string
         profileId?: NullableStringFieldUpdateOperationsInput | string | null
+        classScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutSubjectClassAttendanceNestedInput
     };
     export type SubjectClassAttendanceUncheckedUpdateManyWithoutSubjectClassInput = {
@@ -666781,6 +667273,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         time?: DateTimeFieldUpdateOperationsInput | Date | string
         profileId?: NullableStringFieldUpdateOperationsInput | string | null
+        classScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SubjectClassAttendanceStudentCreateManySubjectClassAttendanceInput = {
         id?: string
@@ -666792,7 +667286,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         studentId: string
-        attendanceStatus?: boolean
+        attendanceStatus?: $Enums.AttendanceStatus
+        note?: string | null
     };
     export type SubjectClassAttendanceStudentUpdateWithoutSubjectClassAttendanceInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -666803,7 +667298,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        attendanceStatus?: BoolFieldUpdateOperationsInput | boolean
+        attendanceStatus?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+        note?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutSubjectClassAttendanceStudentNestedInput
     };
     export type SubjectClassAttendanceStudentUncheckedUpdateWithoutSubjectClassAttendanceInput = {
@@ -666816,7 +667312,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         studentId?: StringFieldUpdateOperationsInput | string
-        attendanceStatus?: BoolFieldUpdateOperationsInput | boolean
+        attendanceStatus?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+        note?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SubjectClassAttendanceStudentUncheckedUpdateManyWithoutSubjectClassAttendanceInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -666828,7 +667325,22 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         studentId?: StringFieldUpdateOperationsInput | string
-        attendanceStatus?: BoolFieldUpdateOperationsInput | boolean
+        attendanceStatus?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type SubjectClassAttendanceCreateManyClassScheduleInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        time: Date | string
+        subjectClassId: string
+        profileId?: string | null
+        note?: string | null
     };
     export type UserProfileUpdateWithoutClassSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -667309,6 +667821,50 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type SubjectClassAttendanceUpdateWithoutClassScheduleInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        time?: DateTimeFieldUpdateOperationsInput | Date | string
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClass?: SubjectClassUpdateOneRequiredWithoutSubjectClassAttendancesNestedInput
+        profile?: UserProfileUpdateOneWithoutSubjectClassAttendanceNestedInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutSubjectClassAttendanceNestedInput
+    };
+    export type SubjectClassAttendanceUncheckedUpdateWithoutClassScheduleInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        time?: DateTimeFieldUpdateOperationsInput | Date | string
+        subjectClassId?: StringFieldUpdateOperationsInput | string
+        profileId?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutSubjectClassAttendanceNestedInput
+    };
+    export type SubjectClassAttendanceUncheckedUpdateManyWithoutClassScheduleInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        time?: DateTimeFieldUpdateOperationsInput | Date | string
+        subjectClassId?: StringFieldUpdateOperationsInput | string
+        profileId?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ScoreCorrectionItemCreateManyTicketInput = {
         id?: string
@@ -671033,6 +671589,7 @@ export namespace Prisma {
         userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
         originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
         replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -671059,6 +671616,7 @@ export namespace Prisma {
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
         userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateManyWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -673864,7 +674422,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         subjectClassAttendanceId: string
-        attendanceStatus?: boolean
+        attendanceStatus?: $Enums.AttendanceStatus
+        note?: string | null
     };
     export type TrainingActivityCreateManyStudentInput = {
         id?: string
@@ -675655,7 +676214,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        attendanceStatus?: BoolFieldUpdateOperationsInput | boolean
+        attendanceStatus?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+        note?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassAttendance?: SubjectClassAttendanceUpdateOneRequiredWithoutSubjectClassAttendanceStudentNestedInput
     };
     export type SubjectClassAttendanceStudentUncheckedUpdateWithoutStudentInput = {
@@ -675668,7 +676228,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassAttendanceId?: StringFieldUpdateOperationsInput | string
-        attendanceStatus?: BoolFieldUpdateOperationsInput | boolean
+        attendanceStatus?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+        note?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -675680,7 +676241,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassAttendanceId?: StringFieldUpdateOperationsInput | string
-        attendanceStatus?: BoolFieldUpdateOperationsInput | boolean
+        attendanceStatus?: EnumAttendanceStatusFieldUpdateOperationsInput | $Enums.AttendanceStatus
+        note?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type TrainingActivityUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -678035,6 +678597,7 @@ export namespace Prisma {
         userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
         originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
         replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateWithoutLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -678061,6 +678624,7 @@ export namespace Prisma {
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
         userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateManyWithoutLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -678111,6 +678675,7 @@ export namespace Prisma {
         userProfiles?: UserProfileUpdateManyWithoutClassSchedulesNestedInput
         originalSchedule?: ClassScheduleUpdateOneWithoutReplacementScheduleNestedInput
         replacementSchedule?: ClassScheduleUpdateOneWithoutOriginalScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateWithoutExtraLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -678137,6 +678702,7 @@ export namespace Prisma {
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
         userProfiles?: UserProfileUncheckedUpdateManyWithoutClassSchedulesNestedInput
         replacementSchedule?: ClassScheduleUncheckedUpdateOneWithoutOriginalScheduleNestedInput
+        subjectClassAttendances?: SubjectClassAttendanceUncheckedUpdateManyWithoutClassScheduleNestedInput
     };
     export type ClassScheduleUncheckedUpdateManyWithoutExtraLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
