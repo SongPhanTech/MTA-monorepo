@@ -71,7 +71,7 @@ const StatCardsKhaoSat = ({ thongKe }: StatCardsKhaoSatProps) => {
               </div>
               <div className="flex flex-col">
                 <span className={`text-2xl font-bold leading-tight ${item.mauChu}`}>
-                  {String(item.soLuong).padStart(2, "0")}
+                  {item.soLuong}
                 </span>
                 <span className="text-sm text-gray-500">{item.nhan}</span>
               </div>
