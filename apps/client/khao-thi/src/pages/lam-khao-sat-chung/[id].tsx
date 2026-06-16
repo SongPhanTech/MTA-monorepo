@@ -163,8 +163,8 @@ function TakeTestPage() {
       } else {
         message.error(res?.data?.message || "Đã xảy ra lỗi")
       }
-    } catch (error) {
-      console.log(error)
+    } catch (error: any) {
+      message.error(error?.info?.message || "Đã xảy ra lỗi")
     }
   }
 
@@ -459,8 +459,8 @@ function TakeTestPage() {
             className={cn("mt-4", "w-full")}
           >
             <Col span={24}>
-              <FormItem form={formUser} name={"code"} label="Mã học viên" required>
-                <Input placeholder="Mã học viên" />
+              <FormItem form={formUser} name={"code"} label="Mã HV/GV" required>
+                <Input placeholder="Nhập mã học viên hoặc giảng viên" />
               </FormItem>
             </Col>
           </Form>
