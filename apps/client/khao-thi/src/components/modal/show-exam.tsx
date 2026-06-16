@@ -4,10 +4,15 @@ import { Button, Flex, Input, Modal, message } from "antd"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 const ThongTinKhaoSatModal = () => {
-  const { isOpen, onClose, input } = useDisclosure<{ dataTable: any[]; id: string }>({
+  const { isOpen, onClose, input } = useDisclosure<{
+    dataTable: any[]
+    id: string
+    isCluster?: boolean
+  }>({
     tag: "ThongTinKhaoSatModal",
   })
-  const link = `${window.location.hostname}/ems/lam-khao-sat/${input?.id}`
+  const surveyPath = input?.isCluster ? "lam-khao-sat-chung" : "lam-khao-sat"
+  const link = `${window.location.hostname}/ems/${surveyPath}/${input?.id}`
 
   // const handleCopy = async () => {
   //     try {

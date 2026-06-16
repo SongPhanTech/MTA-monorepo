@@ -45,6 +45,7 @@ function TakeTestPage() {
   const [form] = Form.useForm<PutSurveySession>()
   const [formUser] = Form.useForm<PutUser>()
   const [survey, setSurvey] = useState<SurveyType>()
+  const [activeSurveyId, setActiveSurveyId] = useState<string>()
   const [isLoading, setIsLoading] = useState(true)
   const [anonymous, setAnonymous] = useState(true)
   const [isOpen, setIsOpen] = useState(false)
@@ -105,7 +106,7 @@ function TakeTestPage() {
       const res = await createSavePublicSurvey({
         data: {
           startedAt: new Date(startAt).toISOString(),
-          surveyId: id,
+          surveyId: activeSurveyId || id,
           studentCode,
           responses: dataSubmit?.responses?.map((i, index) => {
             return {
@@ -134,21 +135,27 @@ function TakeTestPage() {
     }
   }
 
-  const fetchData = async () => {
-    const response = await getPublicSurvey(id)
+  const fetchSurveyById = async (surveyId: string) => {
+    const response = await getPublicSurvey(surveyId)
     if (response?.status === 200) {
       if (!response?.data?.isPublic) {
-        return
-      }
-      if (!response?.data?.anonymous) {
-        setAnonymous(false)
-        setIsOpen(true)
+        return null
       }
 
       setSurvey(response?.data)
       setStartAt(new Date())
-    } else {
-      message.error(response?.data?.message)
+      return response.data
+    }
+
+    message.error(response?.data?.message)
+    return null
+  }
+
+  const fetchData = async () => {
+    const data = await fetchSurveyById(id)
+    if (data && !data.anonymous) {
+      setAnonymous(false)
+      setIsOpen(true)
     }
     setIsLoading(false)
   }
@@ -158,6 +165,11 @@ function TakeTestPage() {
       const studentCode = formUser.getFieldValue("code")
       const res = await validateUserSurvey({ studentCode, surveyId: id })
       if (res.status === 200) {
+        const pendingSurveyId = (res.data as { pendingSurveyId?: string })?.pendingSurveyId
+        if (pendingSurveyId) {
+          setActiveSurveyId(pendingSurveyId)
+          await fetchSurveyById(pendingSurveyId)
+        }
         setAnonymous(true)
         setIsOpen(false)
       } else {

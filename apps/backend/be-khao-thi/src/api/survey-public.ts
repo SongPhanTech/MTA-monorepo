@@ -3,7 +3,9 @@ import { models } from "@workspace/db/zod"
 import { prisma } from ".."
 import {
   findExistingSurveySession,
+  findPendingSurveysUnderCluster,
   isProfileInSurveyAudience,
+  resolveSurveyIdFromSurveyOrCluster,
   resolveSurveyUserByCode,
 } from "../lib/survey-audience"
 
@@ -161,31 +163,75 @@ app.openapi(getPublicSurvey, async (c) => {
       semester: true,
     },
   })
-  if (!survey) {
+
+  if (survey) {
+    if (survey.startDate > new Date()) {
+      return c.json({ message: "Khảo sát chưa mở" }, 400)
+    }
+
+    if (survey.endDate && survey.endDate < new Date()) {
+      return c.json({ message: "Khảo sát đã đóng" }, 400)
+    }
+
+    const { lecture, ...data } = survey
+
+    const lectureInfo = lecture
+      ? {
+          firstName: lecture.userProfile.firstName ?? "",
+          lastName: lecture.userProfile.lastName ?? "",
+          academicDegree: lecture.userProfile.academicDegreeType?.sTen,
+          academicRank: lecture.userProfile.academicRankType?.sTen,
+          organization: lecture.organization?.sTen ?? null,
+        }
+      : null
+
+    return c.json({ ...data, lectureInfo }, 200)
+  }
+
+  const clusterSurvey = await prisma.clusterSurvey.findUnique({
+    where: { id, deletedAt: null, active: true },
+    include: {
+      surveyQuestion: {
+        include: {
+          surveyQuestionGroup: true,
+          specificChoice: true,
+        },
+      },
+      surveyChoice: true,
+      surveys: {
+        where: { deletedAt: null, active: true },
+        take: 1,
+        include: {
+          semester: true,
+        },
+      },
+    },
+  })
+
+  if (!clusterSurvey) {
     return c.json({ message: "Đợt khảo sát không tồn tại" }, 404)
   }
 
-  if (survey.startDate > new Date()) {
+  if (clusterSurvey.startDate > new Date()) {
     return c.json({ message: "Khảo sát chưa mở" }, 400)
   }
 
-  if (survey.endDate && survey.endDate < new Date()) {
+  if (clusterSurvey.endDate && clusterSurvey.endDate < new Date()) {
     return c.json({ message: "Khảo sát đã đóng" }, 400)
   }
 
-  const { lecture, ...data } = survey
+  const { surveys, ...clusterData } = clusterSurvey
 
-  const lectureInfo = lecture
-    ? {
-        firstName: lecture.userProfile.firstName ?? "",
-        lastName: lecture.userProfile.lastName ?? "",
-        academicDegree: lecture.userProfile.academicDegreeType?.sTen,
-        academicRank: lecture.userProfile.academicRankType?.sTen,
-        organization: lecture.organization?.sTen ?? null,
-      }
-    : null
-
-  return c.json({ ...data, lectureInfo }, 200)
+  return c.json(
+    {
+      ...clusterData,
+      clusterSurveyId: clusterSurvey.id,
+      semester: surveys[0]?.semester ?? null,
+      subjectClass: null,
+      lectureInfo: null,
+    },
+    200
+  )
 })
 
 const savePublicSurvey = createRoute({
@@ -262,6 +308,20 @@ const savePublicSurvey = createRoute({
 app.openapi(savePublicSurvey, async (c) => {
   let { surveyId, profileId, studentId, studentCode, surveyObjectTypeId, startedAt, responses } =
     c.req.valid("json")
+
+  let resolvedUser = studentCode ? await resolveSurveyUserByCode(studentCode) : undefined
+  const actualSurveyId = await resolveSurveyIdFromSurveyOrCluster(
+    prisma,
+    surveyId,
+    resolvedUser ?? undefined
+  )
+
+  if (!actualSurveyId) {
+    return c.json({ message: "Đợt khảo sát không tồn tại" }, 404)
+  }
+
+  surveyId = actualSurveyId
+
   const survey = await prisma.survey.findUnique({
     where: { id: surveyId, deletedAt: null, active: true },
     include: { surveyChoice: true },
@@ -275,7 +335,9 @@ app.openapi(savePublicSurvey, async (c) => {
         return c.json({ message: "Vui lòng nhập mã" }, 400)
       }
 
-      const resolvedUser = await resolveSurveyUserByCode(studentCode)
+      if (!resolvedUser) {
+        resolvedUser = await resolveSurveyUserByCode(studentCode)
+      }
       if (!resolvedUser) {
         return c.json({ message: "Mã không tồn tại" }, 404)
       }
@@ -355,6 +417,7 @@ const validateUserSurvey = createRoute({
           schema: z.object({
             studentCode: z.string(),
             exists: z.boolean(),
+            pendingSurveyId: z.string().optional(),
           }),
         },
       },
@@ -395,15 +458,63 @@ app.openapi(validateUserSurvey, async (c) => {
   }
 
   if (surveyId) {
-    const inAudience = await isProfileInSurveyAudience(prisma, resolvedUser.profileId, surveyId)
-    if (!inAudience) {
-      return c.json({ message: "Mã không có trong danh sách đối tượng làm khảo sát" }, 400)
-    }
+    const survey = await prisma.survey.findFirst({
+      where: { id: surveyId, deletedAt: null, active: true },
+      select: { id: true },
+    })
 
-    const existingSession = await findExistingSurveySession(prisma, surveyId, resolvedUser)
+    if (survey) {
+      const inAudience = await isProfileInSurveyAudience(prisma, resolvedUser.profileId, surveyId)
+      if (!inAudience) {
+        return c.json({ message: "Mã không có trong danh sách đối tượng làm khảo sát" }, 400)
+      }
 
-    if (existingSession) {
-      return c.json({ message: "Bạn đã hoàn thành bài khảo sát này" }, 400)
+      const existingSession = await findExistingSurveySession(prisma, surveyId, resolvedUser)
+
+      if (existingSession) {
+        return c.json({ message: "Bạn đã hoàn thành bài khảo sát này" }, 400)
+      }
+    } else {
+      const cluster = await prisma.clusterSurvey.findFirst({
+        where: { id: surveyId, deletedAt: null, active: true },
+        select: { id: true },
+      })
+
+      if (!cluster) {
+        return c.json({ message: "Đợt khảo sát không tồn tại" }, 404)
+      }
+
+      const pendingSurveyIds = await findPendingSurveysUnderCluster(
+        prisma,
+        cluster.id,
+        resolvedUser
+      )
+
+      if (pendingSurveyIds.length === 0) {
+        const surveys = await prisma.survey.findMany({
+          where: { clusterSurveyId: cluster.id, deletedAt: null, active: true },
+          select: { id: true },
+        })
+
+        let hasAudienceSurvey = false
+        for (const item of surveys) {
+          if (await isProfileInSurveyAudience(prisma, resolvedUser.profileId, item.id)) {
+            hasAudienceSurvey = true
+            break
+          }
+        }
+
+        if (!hasAudienceSurvey) {
+          return c.json({ message: "Mã không có trong danh sách đối tượng làm khảo sát" }, 400)
+        }
+
+        return c.json({ message: "Bạn đã hoàn thành bài khảo sát này" }, 400)
+      }
+
+      return c.json(
+        { studentCode, exists: true, pendingSurveyId: pendingSurveyIds[0] },
+        200
+      )
     }
   }
 

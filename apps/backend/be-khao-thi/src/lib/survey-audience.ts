@@ -205,3 +205,51 @@ export async function findExistingSurveySession(
     },
   })
 }
+
+export async function findPendingSurveysUnderCluster(
+  prisma: PrismaClient,
+  clusterSurveyId: string,
+  user: ResolvedSurveyUser
+) {
+  const surveys = await prisma.survey.findMany({
+    where: { clusterSurveyId, deletedAt: null, active: true },
+    select: { id: true },
+    orderBy: { createdAt: "asc" },
+  })
+
+  const pendingSurveyIds: string[] = []
+  for (const survey of surveys) {
+    const inAudience = await isProfileInSurveyAudience(prisma, user.profileId, survey.id)
+    if (!inAudience) continue
+
+    const existingSession = await findExistingSurveySession(prisma, survey.id, user)
+    if (!existingSession) {
+      pendingSurveyIds.push(survey.id)
+    }
+  }
+
+  return pendingSurveyIds
+}
+
+export async function resolveSurveyIdFromSurveyOrCluster(
+  prisma: PrismaClient,
+  id: string,
+  user?: ResolvedSurveyUser
+) {
+  const survey = await prisma.survey.findFirst({
+    where: { id, deletedAt: null, active: true },
+    select: { id: true },
+  })
+  if (survey) return survey.id
+
+  const cluster = await prisma.clusterSurvey.findFirst({
+    where: { id, deletedAt: null, active: true },
+    select: { id: true },
+  })
+  if (!cluster) return null
+
+  if (!user) return null
+
+  const pendingSurveyIds = await findPendingSurveysUnderCluster(prisma, cluster.id, user)
+  return pendingSurveyIds[0] ?? null
+}

@@ -191,7 +191,7 @@ function TabDotKhaoSatCum({
     onOpen({ id: "", type: "multiple" })
   }
 
-  const { onOpen: onOpenKhaoSat } = useDisclosure<{ dataTable: any[]; id: string }>({
+  const { onOpen: onOpenKhaoSat } = useDisclosure<{ dataTable: any[]; id: string; isCluster?: boolean }>({
     tag: "ThongTinKhaoSatModal",
   })
 
@@ -489,6 +489,7 @@ function TabDotKhaoSatCum({
                               onOpenKhaoSat({
                                 dataTable: surveyObjectType,
                                 id: id,
+                                isCluster: true,
                               })
                               // router.push(`/lam-khao-sat/${id}`)
                             }}
