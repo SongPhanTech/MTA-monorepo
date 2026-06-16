@@ -12,6 +12,7 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import dayjs from "dayjs"
 import { useSession } from "@workspace/auth/react"
 import { queryClient } from "@api/index"
+import { $Enums } from "@workspace/db/client"
 export type PutSubjectClassAttendance = {
   time: Date | null
   list: any[]
@@ -90,29 +91,13 @@ const AddSubjectClassAttendance = () => {
                     createMany: {
                       data: dataListStudent.map((opt, index) => ({
                         studentId: opt.id,
-                        attendanceStatus: true,
+                        attendanceStatus: $Enums.AttendanceStatus.PRESENT,
                       })),
                     },
                   }
                 : undefined,
           },
         })
-        // initialValue?.subjectClass?.subjectClassStudent?.forEach((item)=>{
-        //     listTransaction.push({
-        //         model: 'subjectClassAttendanceStudent',
-        //         operation: 'create',
-        //         data:{
-        //             data:{
-        //                 time: output.time ? output.time : new Date(),
-        //                 subjectClassId:input?.subjectClassId,
-        //                 studentId:item.studentId,
-        //                 profileId:id
-        //             }
-        //         }
-        //     })
-        // })
-        // let res= await sqlTransaction(listTransaction)
-
         if (res) {
           message.success("Tạo thành công")
           onClose()
