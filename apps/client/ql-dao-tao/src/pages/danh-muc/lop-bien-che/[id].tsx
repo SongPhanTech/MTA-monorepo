@@ -523,7 +523,7 @@ export default function StudentFixedClassPage() {
 
       const chuthichMonHoc = subjectsInOrder?.map((s, index) => `M${index + 1}. ${s.subject.name}`)
 
-      const studentRows = data.map((student, index) => {
+      const studentRows: TableRow[] = data.map((student, index) => {
         const diem: (string | number | null)[] = (subjectsInOrder || []).map((subjectInfo) => {
           const scoreData = (student as any).subjectClassStudent?.find(
             (score: any) => score.subjectVersionId === subjectInfo.subject.id
@@ -588,25 +588,43 @@ export default function StudentFixedClassPage() {
               align: "center" as const,
               border: true,
             },
-            ...Array.from({ length: 23 }).map((_, i) => ({
-              value: diem[i] !== undefined ? (diem[i] !== null ? String(diem[i]) : null) : null,
-              align: "right" as const,
-              border: true,
-            })),
+            ...(subjectsInOrder || []).map((subjectInfo, i) => {
+              const scoreValue = diem[i]
+              const numericScore =
+                typeof scoreValue === "number"
+                  ? scoreValue
+                  : typeof scoreValue === "string" && scoreValue.trim() !== ""
+                    ? Number(scoreValue)
+                    : null
+              const isGraduation =
+                (subjectInfo as any)?.subjectVersion?.trainingBlocks?.[0]?.graduation === true
+              const isFailed =
+                Number.isFinite(numericScore)
+                  ? !convertScoreWithGraduation(numericScore, isGraduation)
+                      ?.pass
+                  : false
+
+              return {
+                value: scoreValue !== undefined ? (scoreValue !== null ? String(scoreValue) : null) : null,
+                align: "center" as const,
+                border: true,
+                color: isFailed ? "FF0000" : undefined,
+              }
+            }),
             {
               value: ccta !== null ? String(ccta) : null,
-              align: "right" as const,
+              align: "center" as const,
               border: true,
             },
             {
               value: tbc !== null ? String(tbc) : null,
-              align: "right" as const,
+              align: "center" as const,
               border: true,
               bold: true,
             },
             {
               value: dlv !== null ? String(dlv) : null,
-              align: "right" as const,
+              align: "center" as const,
               border: true,
               bold: true,
             },
@@ -614,30 +632,177 @@ export default function StudentFixedClassPage() {
         }
       })
 
+      type SemesterGroup = { semesterNum: number; subjects: NonNullable<typeof subjectsInOrder> }
+      const semesterGroups: SemesterGroup[] = []
+      ;(subjectsInOrder || []).forEach((s) => {
+        const semNum = s.semester || 0
+        let group = semesterGroups.find((g) => g.semesterNum === semNum)
+        if (!group) {
+          group = { semesterNum: semNum, subjects: [] }
+          semesterGroups.push(group)
+        }
+        group.subjects.push(s)
+      })
+      semesterGroups.sort((a, b) => a.semesterNum - b.semesterNum)
+
+      const formatSchoolYear = (semester: any) => {
+        if (semester?.schoolYear?.name) return semester.schoolYear.name
+
+        if (semester?.schoolYear?.startDate) {
+          const startYear = dayjs(semester.schoolYear.startDate).year()
+          const endYear = semester.schoolYear.endDate
+            ? dayjs(semester.schoolYear.endDate).year()
+            : startYear + 1
+          return `${startYear}-${endYear}`
+        }
+
+        if (semester?.startDate) {
+          const startYear = dayjs(semester.startDate).year()
+          return `${startYear}-${startYear + 1}`
+        }
+
+        return ""
+      }
+
+      const getSemesterLabel = (semNum: number): string => {
+        const semGroupIndex = semesterGroups.findIndex((g) => g.semesterNum === semNum)
+        for (const student of data) {
+          const semResults = (student as any).studentSemesterResult || []
+          if (semResults.length > 0) {
+            const sortedSems = [...semResults].sort(
+              (a: any, b: any) =>
+                new Date(a.semester?.startDate || 0).getTime() -
+                new Date(b.semester?.startDate || 0).getTime()
+            )
+            const matchedSem = sortedSems[semGroupIndex]
+            if (matchedSem?.semester) {
+              const semesterName = matchedSem.semester.name || `Học kỳ ${semNum}`
+              const schoolYear = formatSchoolYear(matchedSem.semester)
+
+              return schoolYear ? `${semesterName} (năm học ${schoolYear})` : semesterName
+            }
+          }
+        }
+        return `Học kỳ ${semNum}`
+      }
+
+      const totalSubjectCols = subjectsInOrder?.length || 0
+      const totalTableCols = 4 + totalSubjectCols + 3
+
+      const headerRow5: TableRow = {
+        cells: [
+          { value: null, border: true, rowSpan: 2 },
+          {
+            value: `Lớp: ${fixedClass?.name || ""}`,
+            align: "center",
+            bold: true,
+            border: true,
+            colSpan: 2,
+            rowSpan: 2,
+            wrapText: true,
+          },
+          {
+            value: "Bảng điểm các học phần cơ sở và chuyên ngành",
+            align: "center",
+            bold: true,
+            border: true,
+            colSpan: totalTableCols - 3,
+            wrapText: true,
+          },
+        ],
+      }
+
+      const headerRow6Cells: TableRow["cells"] = [
+        {
+          value: "Đối tượng",
+          align: "center",
+          bold: true,
+          border: true,
+          rowSpan: 3,
+          wrapText: true,
+        },
+      ]
+      semesterGroups.forEach((group) => {
+        const label = getSemesterLabel(group.semesterNum)
+        headerRow6Cells.push({
+          value: label,
+          align: "center",
+          bold: true,
+          border: true,
+          colSpan: group.subjects.length,
+          wrapText: true,
+        })
+      })
+      headerRow6Cells.push(
+        { value: null, border: true },
+        { value: null, border: true },
+        { value: null, border: true }
+      )
+      const headerRow6: TableRow = { cells: headerRow6Cells }
+
+      const headerRow7Left: TableRow = {
+        cells: [
+        { value: "STT", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
+        { value: "Họ và tên", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
+        { value: "Ngày sinh", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
+        ],
+      }
+
+      const headerRow7ScoreCells: TableRow["cells"] = [
+        ...(subjectsInOrder || []).map((_, i) => ({
+          value: `M${i + 1}`,
+          align: "center" as const,
+          bold: true,
+          border: true,
+          wrapText: false,
+        })),
+        { value: "CCTA", align: "center", bold: true, border: true, rowSpan: 2, wrapText: false },
+        { value: "Điểm", align: "center", bold: true, border: true, colSpan: 2, wrapText: false },
+      ]
+      const headerRow7Score: TableRow = { cells: headerRow7ScoreCells }
+
+      const headerRow8Credit: TableRow = {
+        cells: [
+        ...(subjectsInOrder || []).map((s) => ({
+          value: s.subject.credit ? Number(s.subject.credit).toFixed(1) : "",
+          align: "center" as const,
+          border: true,
+          wrapText: false,
+        })),
+        ],
+      }
+      const headerRow8Score: TableRow = {
+        cells: [
+        { value: "TBC", align: "center", bold: true, border: true, wrapText: false },
+        { value: "ĐLV", align: "center", bold: true, border: true, wrapText: false },
+        ],
+      }
+
       const columnFooterRows: TableRow[] = []
-      const maxRowsPerColumn = 9
+      const chuthichPerRow = 3
+      const totalChuthich = chuthichMonHoc?.length || 0
+      const maxRowsPerColumn = Math.ceil(totalChuthich / chuthichPerRow)
 
       for (let i = 0; i < maxRowsPerColumn; i++) {
-        const cell1 = chuthichMonHoc?.[i]
-          ? { value: chuthichMonHoc[i], border: false, colSpan: 10 }
-          : { value: null, border: false, colSpan: 10 }
-        const cell2 = chuthichMonHoc?.[i + 9]
-          ? { value: chuthichMonHoc[i + 9], border: false, colSpan: 10 }
-          : { value: null, border: false, colSpan: 10 }
-        const cell3 = chuthichMonHoc?.[i + 18]
-          ? { value: chuthichMonHoc[i + 18], border: false, colSpan: 10 }
-          : { value: null, border: false, colSpan: 10 }
-
-        columnFooterRows.push({ cells: [cell1, cell2, cell3] })
+        const rowCells: TableRow["cells"] = []
+        for (let col = 0; col < chuthichPerRow; col++) {
+          const idx = i + col * maxRowsPerColumn
+          rowCells.push(
+            chuthichMonHoc?.[idx]
+              ? { value: chuthichMonHoc[idx], border: false, colSpan: 10 }
+              : { value: null, border: false, colSpan: 10 }
+          )
+        }
+        columnFooterRows.push({ cells: rowCells })
       }
 
       const thongKeRows: TableRow[] = [
         {
           cells: [
             {
-              value: `Tổng số học phần: ${tongSoHP}, Tổng số tín chỉ: ${tongSoTC}`,
+              value: `Tổng số học phần: ${tongSoHP} HP, tổng số tín chỉ: ${tongSoTC} TC`,
               border: false,
-              colSpan: 20,
+              colSpan: totalTableCols,
               bold: true,
             },
           ],
@@ -646,66 +811,62 @@ export default function StudentFixedClassPage() {
 
       const ghiChuRows: TableRow[] = [
         { cells: [{ value: null, border: false }] },
-        {
-          cells: [{ value: "GHI CHÚ:", border: false, bold: true, colSpan: 10 }],
-        },
-        {
-          cells: [
-            {
-              value:
-                "1. 'Null': Môn đã lên danh sách thi nhưng chưa thi hoặc giảng viên chưa nhập điểm",
-              border: false,
-              colSpan: 20,
-            },
-          ],
-        },
-        {
-          cells: [
-            {
-              value: "2. ' ': Môn chưa lên danh sách thi",
-              border: false,
-              colSpan: 20,
-            },
-          ],
-        },
-        {
-          cells: [{ value: "3. 'Miễn': Môn miễn học", border: false, colSpan: 20 }],
-        },
-        {
-          cells: [{ value: "4. 'HT': Môn hoãn thi", border: false, colSpan: 20 }],
-        },
-        {
-          cells: [{ value: "4. 'CT': Môn cấm thi", border: false, colSpan: 20 }],
-        },
-        {
-          cells: [{ value: "5. 'ĐCT': Môn đình chỉ thi", border: false, colSpan: 20 }],
-        },
-        {
-          cells: [
-            {
-              value:
-                "6. Điểm TBC: Tính điểm trung bình cộng của tất cả các môn đã có điểm ở thời điểm xuất file excel điểm (Không tính điểm môn chưa thi, không tính điểm môn hoãn thi, miễn thi)",
-              border: false,
-              colSpan: 30,
-            },
-          ],
-        },
+        { cells: [{ value: null, border: false }, { value: "GHI CHÚ:", border: false, bold: true, colSpan: 29 }] },
+        { cells: [{ value: null, border: false }, { value: "1. 'Null': Môn đã lên danh sách thi nhưng chưa thi hoặc giảng viên chưa nhập điểm", border: false, colSpan: 29 }] },
+        { cells: [{ value: null, border: false }, { value: "2. ' ': Môn chưa lên danh sách thi", border: false, colSpan: 29 }] },
+        { cells: [{ value: null, border: false }, { value: "3. 'Miễn': Môn miễn học", border: false, colSpan: 29 }] },
+        { cells: [{ value: null, border: false }, { value: "4. 'HT': Môn hoãn thi", border: false, colSpan: 29 }] },
+        { cells: [{ value: null, border: false }, { value: "4. 'CT': Môn cấm thi", border: false, colSpan: 29 }] },
+        { cells: [{ value: null, border: false }, { value: "5. 'ĐCT': Môn đình chỉ thi", border: false, colSpan: 29 }] },
+        { cells: [{ value: null, border: false }, { value: "6. Điểm TBC: Tính điểm trung bình cộng của tất cả các môn đã có điểm ở thời điểm xuất file excel điểm (Không tính điểm môn chưa thi, không tính điểm môn hoãn thi, miễn thi)", border: false, colSpan: 29 }] },
       ]
 
-      exportFromTemplate({
-        templateUrl: getMinioUrl("/mta/template/Bangdiemtheolop.xlsx"),
+      const bodyRows = [...studentRows, ...thongKeRows, ...columnFooterRows, ...ghiChuRows]
+      console.log("bodyRows", `${fixedClass?.curriculumVersion?.curriculum.trainingMajor.code} - ${fixedClass?.curriculumVersion?.curriculum.trainingMajor.name}`)
+      const chuyenNganhText = `${fixedClass?.curriculumVersion?.curriculum.trainingMajor.code} - ${fixedClass?.curriculumVersion?.curriculum.trainingMajor.name}`
+
+      await exportFromTemplate({
+        templateUrl: getMinioUrl("/mta/template/BangdiemTheoLop_v2.xlsx"),
         sheets: [
           {
             sheet: "BaoCaoDiem",
             data: {
-              khoa: `KẾT QUẢ ĐÀO TẠO TOÀN ${fixedClass?.trainingCourse.name?.toUpperCase()}`,
-              chuyenNganh: `${fixedClass?.curriculumVersion?.curriculum.trainingMajor.code} - ${fixedClass?.curriculumVersion?.curriculum.trainingMajor.name}`,
+              khoa: fixedClass?.trainingCourse.name?.toUpperCase() || "",
+              chuyenNganh: chuyenNganhText,
               lop: fixedClass?.name || null,
-              tongSoHP: tongSoHP || null,
-              tongSoTC: tongSoTC || null,
             },
+            tableStartCell: { row: 5, col: 1 },
+            rows: [headerRow5],
+          },
+          {
+            sheet: "BaoCaoDiem",
+            tableStartCell: { row: 6, col: 4 },
+            rows: [headerRow6],
+          },
+          {
+            sheet: "BaoCaoDiem",
+            tableStartCell: { row: 7, col: 1 },
+            rows: [headerRow7Left],
+          },
+          {
+            sheet: "BaoCaoDiem",
+            tableStartCell: { row: 7, col: 5 },
+            rows: [headerRow7Score],
+          },
+          {
+            sheet: "BaoCaoDiem",
+            tableStartCell: { row: 8, col: 5 },
+            rows: [headerRow8Credit],
+          },
+          {
+            sheet: "BaoCaoDiem",
+            tableStartCell: { row: 8, col: 5 + totalSubjectCols + 1 },
+            rows: [headerRow8Score],
+          },
+          {
+            sheet: "BaoCaoDiem",
             tableStartCell: { row: 9, col: 1 },
-            rows: [...studentRows, ...thongKeRows, ...columnFooterRows, ...ghiChuRows],
+            rows: bodyRows,
           },
         ],
         fileName: `BangDiem-${fixedClass?.name}.xlsx`,
@@ -808,7 +969,6 @@ export default function StudentFixedClassPage() {
             for (const semester of rawData) {
               for (const subjectClass of semester.subjectClasses) {
                 for (const scs of subjectClass.subjectClassStudent) {
-                  // scs = subjectClassStudent
                   const subjectId = scs.subjectVersion?.id
                   if (!subjectId) continue
 
@@ -894,10 +1054,9 @@ export default function StudentFixedClassPage() {
                 if (Number.isNaN(date.getTime())) {
                   return ""
                 }
-                // 4. Trả về định dạng dd/mm/yyyy
                 return date.toLocaleDateString("vi-VN")
               } catch (e) {
-                return "" // Trả về rỗng nếu có lỗi
+                return ""
               }
             })(item.userProfile?.dateOfBirth),
             maSV: item.code,
@@ -942,8 +1101,6 @@ export default function StudentFixedClassPage() {
               ],
             })) ?? []
 
-          // Dòng trung bình học kỳ
-
           const trungBinhRow: TableRow = {
             cells: [
               { value: null },
@@ -979,7 +1136,6 @@ export default function StudentFixedClassPage() {
           0
         )
 
-        // Tính điểm trung bình hệ 10 toàn khoá: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
         const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
           (acc: number, curr: IHocKi) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
           0
@@ -1027,7 +1183,7 @@ export default function StudentFixedClassPage() {
 
         const dateSignatureRow: TableRow = {
           cells: [
-            { value: null, colSpan: 12, border: false }, // Ô trống bên trái
+            { value: null, colSpan: 12, border: false },
             {
               value: `Hà Nội, ngày ${new Date().getDate()} tháng ${
                 new Date().getMonth() + 1
@@ -1053,7 +1209,7 @@ export default function StudentFixedClassPage() {
         }
         const nameSignatureRow: TableRow = {
           cells: [
-            { value: null, colSpan: 12, border: false }, // Ô trống bên trái
+            { value: null, colSpan: 12, border: false },
             {
               value: "Đại tá, TS Nguyễn Văn Bình												",
               colSpan: 6,
@@ -1605,7 +1761,6 @@ export default function StudentFixedClassPage() {
               })
             })
           }
-          console.log("item", item)
           const sampleStudentData = {
             fullname: item.userProfile?.fullname,
             dateOfBirth: ((dateInput) => {
@@ -2275,7 +2430,6 @@ export default function StudentFixedClassPage() {
                 dataIndex: "rank",
                 type: "input",
                 render: (__, record) => {
-                  console.log(record.userProfile?.rank?.sTen)
                   return record.userProfile?.rank?.sTen
                 },
               },
