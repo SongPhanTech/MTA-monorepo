@@ -4,9 +4,7 @@ import DongTomTatDiemDanh from "@components/cong-giang-vien/lop-tro-giang/diem-d
 import ThongTinBuoiHocCard from "@components/cong-giang-vien/lop-tro-giang/diem-danh/thong-tin-buoi-hoc"
 import TieuDeDiemDanh from "@components/cong-giang-vien/lop-tro-giang/diem-danh/tieu-de-diem-danh"
 import TongKetDiemDanhCard from "@components/cong-giang-vien/lop-tro-giang/diem-danh/tong-ket-diem-danh"
-import {
-  CONG_GIANG_VIEN_LOP_GIANG_DAY_PATH,
-} from "@constants/cong-giang-vien-path"
+import { CONG_GIANG_VIEN_LOP_GIANG_DAY_PATH } from "@constants/cong-giang-vien-path"
 import { useDiemDanhGiangDay } from "@hooks/use-diem-danh-giang-day"
 import { Empty, message } from "antd"
 import { useRouter } from "next/router"
@@ -41,7 +39,10 @@ const TrangDiemDanhGiangDay = () => {
 
   return (
     <div className="flex h-[calc(100vh-112px)] flex-col gap-4">
-      <TieuDeDiemDanh danhMucLabel="Lớp giảng dạy" danhMucPath={CONG_GIANG_VIEN_LOP_GIANG_DAY_PATH} />
+      <TieuDeDiemDanh
+        danhMucLabel="Lớp giảng dạy"
+        danhMucPath={CONG_GIANG_VIEN_LOP_GIANG_DAY_PATH}
+      />
 
       <BoLocDiemDanh
         monHocId={monHocId}

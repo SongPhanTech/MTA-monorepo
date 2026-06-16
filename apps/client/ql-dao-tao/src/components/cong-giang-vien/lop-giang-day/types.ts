@@ -47,10 +47,7 @@ export const layTrangThaiNhapDiem = (record: {
   if (record.enteredExamScore || record.enteredScore) {
     return { label: "Đã nhập điểm TX, ĐK", color: "green" }
   }
-  if (
-    record.scoreDeadLineStart &&
-    dayjs().isAfter(dayjs(record.scoreDeadLineStart))
-  ) {
+  if (record.scoreDeadLineStart && dayjs().isAfter(dayjs(record.scoreDeadLineStart))) {
     return { label: "Đang nhập điểm quá trình", color: "processing" }
   }
   return { label: "Chưa nhập điểm", color: "red" }

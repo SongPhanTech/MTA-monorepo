@@ -158,6 +158,11 @@ export default function StudentFixedClassPage() {
         trainingCourse: {
           include: {
             trainingObjectType: true,
+            semesterStart: {
+              include: {
+                schoolYear: true,
+              },
+            },
           },
         },
         curriculumVersion: {
@@ -209,7 +214,6 @@ export default function StudentFixedClassPage() {
     }
   )
 
-  // Danh sách chức vụ cán bộ lớp + màu đánh dấu tương ứng
   const canBoRoles = [
     { id: fixedClass?.classMonitorId, label: "Lớp trưởng", className: "bg-blue-200" },
     { id: fixedClass?.unionSecretaryId, label: "Bí thư", className: "bg-green-200" },
@@ -221,14 +225,12 @@ export default function StudentFixedClassPage() {
     },
   ]
 
-  // Map studentId -> className để tô màu dòng theo chức vụ
   const roleByStudentId = useMemo(() => {
     const map: Record<string, string> = {}
     for (const r of canBoRoles) {
       if (r.id) map[r.id] = r.className
     }
     return map
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     fixedClass?.classMonitorId,
     fixedClass?.unionSecretaryId,
@@ -236,7 +238,7 @@ export default function StudentFixedClassPage() {
     fixedClass?.deputyUnionSecretaryId,
   ])
 
-  const { data = [], refetch } = useFindManyStudent(
+  const { data = [] } = useFindManyStudent(
     {
       where: {
         fixedClassId,
@@ -389,7 +391,13 @@ export default function StudentFixedClassPage() {
         },
         studentSemesterResult: {
           orderBy: { semester: { startDate: "desc" } },
-          include: { semester: true },
+          include: {
+            semester: {
+              include: {
+                schoolYear: true,
+              },
+            },
+          },
         },
         thesisRegistrations: {
           include: {
@@ -511,7 +519,6 @@ export default function StudentFixedClassPage() {
   const showPopconfirm = () => {
     setOpen(true)
   }
-
   const handleExportDiemLop = async () => {
     showSpinner()
     try {
@@ -539,18 +546,24 @@ export default function StudentFixedClassPage() {
       const subjectsInOrder = fixedClass?.curriculumVersion?.trainingBlocks
         .flatMap((block) => block.subjects)
         .sort((a, b) => (a.semester || 0) - (b.semester || 0))
+      type SubjectInOrder = NonNullable<typeof subjectsInOrder>[number]
+      type NumericLike = {
+        toNumber?: () => number
+        toString: () => string
+      }
+      type ScoreExportValue = string | number | NumericLike | null
       const tongSoHP = subjectsInOrder?.length
       const tongSoTC = subjectsInOrder?.reduce((sum, s) => sum + (s.subject.credit || 0), 0)
 
       const chuthichMonHoc = subjectsInOrder?.map((s, index) => `M${index + 1}. ${s.subject.name}`)
 
       const studentRows: TableRow[] = data.map((student, index) => {
-        const thesisReg = (student as any).thesisRegistrations?.[0]
+        const thesisReg = student.thesisRegistrations?.[0]
         const defenseScore = thesisReg?.thesisProject?.defenseRecord?.finalScore
 
-        const diem: (string | number | null)[] = (subjectsInOrder || []).map((subjectInfo) => {
-          const scoreData = (student as any).subjectClassStudent?.find(
-            (score: any) => score.subjectVersionId === subjectInfo.subject.id
+        const diem: ScoreExportValue[] = (subjectsInOrder || []).map((subjectInfo) => {
+          const scoreData = student.subjectClassStudent?.find(
+            (score) => score.subjectVersionId === subjectInfo.subject.id
           )
 
           if (!scoreData) return " "
@@ -568,18 +581,21 @@ export default function StudentFixedClassPage() {
         })
         const ccta = student.foreignLangPass ? "Đạt" : ""
 
-        let totalScore = 0
-        let totalScoredSubjects = 0
+        let totalWeightedScore = 0
+        let totalCredits = 0
 
-        ;(subjectsInOrder || []).forEach((_subjectInfo, i) => {
+        ;(subjectsInOrder || []).forEach((subjectInfo, i) => {
           const numericD = toNumericScore(diem[i])
-          if (numericD != null && Number.isFinite(numericD)) {
-            totalScore += numericD
-            totalScoredSubjects += 1
+          const credit = Number(subjectInfo.subject.credit || 0)
+
+          if (numericD != null && Number.isFinite(numericD) && credit > 0) {
+            totalWeightedScore += numericD * credit
+            totalCredits += credit
           }
         })
+
         const tbcCalculated =
-          totalScoredSubjects > 0 ? Number((totalScore / totalScoredSubjects).toFixed(2)) : null
+          totalCredits > 0 ? Number((totalWeightedScore / totalCredits).toFixed(2)) : null
         const tbcDisplay = tbcCalculated
 
         let dlv: number | null = null
@@ -600,7 +616,7 @@ export default function StudentFixedClassPage() {
         return {
           cells: [
             { value: index + 1, align: "center" as const, border: true },
-            { value: student.userProfile.fullname, border: true, align: "center" as const, },
+            { value: student.userProfile.fullname, border: true, align: "center" as const },
             {
               value: student.userProfile.dateOfBirth
                 ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
@@ -615,12 +631,13 @@ export default function StudentFixedClassPage() {
             },
             ...(subjectsInOrder || []).map((subjectInfo, i) => {
               const scoreValue = diem[i]
-              const isGraduation =
-                (subjectInfo as any)?.subjectVersion?.trainingBlocks?.[0]?.graduation === true
+              const isGraduation = subjectInfo.graduation === true
               const passThreshold = isGraduation ? scoreToPassGraduation : 4.0
               const numericScore = toNumericScore(scoreValue)
               const isFailed =
-                numericScore != null && Number.isFinite(numericScore) ? numericScore < passThreshold : false
+                numericScore != null && Number.isFinite(numericScore)
+                  ? numericScore < passThreshold
+                  : false
 
               return {
                 value: scoreValue !== undefined && scoreValue !== null ? String(scoreValue) : null,
@@ -649,8 +666,7 @@ export default function StudentFixedClassPage() {
           ],
         }
       })
-
-      type SemesterGroup = { semesterNum: number; subjects: NonNullable<typeof subjectsInOrder> }
+      type SemesterGroup = { semesterNum: number; subjects: SubjectInOrder[] }
       const semesterGroups: SemesterGroup[] = []
       ;(subjectsInOrder || []).forEach((s) => {
         const semNum = s.semester || 0
@@ -663,45 +679,20 @@ export default function StudentFixedClassPage() {
       })
       semesterGroups.sort((a, b) => a.semesterNum - b.semesterNum)
 
-      const formatSchoolYear = (semester: any) => {
-        if (semester?.schoolYear?.name) return semester.schoolYear.name
-
-        if (semester?.schoolYear?.startDate) {
-          const startYear = dayjs(semester.schoolYear.startDate).year()
-          const endYear = semester.schoolYear.endDate
-            ? dayjs(semester.schoolYear.endDate).year()
-            : startYear + 1
-          return `${startYear}-${endYear}`
-        }
-
-        if (semester?.startDate) {
-          const startYear = dayjs(semester.startDate).year()
-          return `${startYear}-${startYear + 1}`
-        }
-
-        return ""
-      }
-
       const getSemesterLabel = (semNum: number): string => {
-        const semGroupIndex = semesterGroups.findIndex((g) => g.semesterNum === semNum)
-        for (const student of data) {
-          const semResults = (student as any).studentSemesterResult || []
-          if (semResults.length > 0) {
-            const sortedSems = [...semResults].sort(
-              (a: any, b: any) =>
-                new Date(a.semester?.startDate || 0).getTime() -
-                new Date(b.semester?.startDate || 0).getTime()
-            )
-            const matchedSem = sortedSems[semGroupIndex]
-            if (matchedSem?.semester) {
-              const semesterName = matchedSem.semester.name || `Học kỳ ${semNum}`
-              const schoolYear = formatSchoolYear(matchedSem.semester)
+        const courseStartSchoolYear = fixedClass?.trainingCourse?.semesterStart?.schoolYear
+        const semesterIndexInYear = ((semNum - 1) % 2) + 1
+        const schoolYearOffset = Math.floor((semNum - 1) / 2)
+        const semesterName = `Học kỳ ${semesterIndexInYear}`
 
-              return schoolYear ? `${semesterName} (năm học ${schoolYear})` : semesterName
-            }
-          }
-        }
-        return `Học kỳ ${semNum}`
+        if (!courseStartSchoolYear?.startDate) return semesterName
+
+        const startYear = dayjs(courseStartSchoolYear.startDate).year() + schoolYearOffset
+        const endYear = courseStartSchoolYear.endDate
+          ? dayjs(courseStartSchoolYear.endDate).year() + schoolYearOffset
+          : startYear + 1
+
+        return `${semesterName} (năm học ${startYear}-${endYear})`
       }
 
       const totalSubjectCols = subjectsInOrder?.length || 0
@@ -760,9 +751,23 @@ export default function StudentFixedClassPage() {
 
       const headerRow7Left: TableRow = {
         cells: [
-        { value: "STT", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
-        { value: "Họ và tên", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
-        { value: "Ngày sinh", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
+          { value: "STT", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
+          {
+            value: "Họ và tên",
+            align: "center",
+            bold: true,
+            border: true,
+            rowSpan: 2,
+            wrapText: true,
+          },
+          {
+            value: "Ngày sinh",
+            align: "center",
+            bold: true,
+            border: true,
+            rowSpan: 2,
+            wrapText: true,
+          },
         ],
       }
 
@@ -781,18 +786,18 @@ export default function StudentFixedClassPage() {
 
       const headerRow8Credit: TableRow = {
         cells: [
-        ...(subjectsInOrder || []).map((s) => ({
-          value: s.subject.credit ? Number(s.subject.credit).toFixed(1) : "",
-          align: "center" as const,
-          border: true,
-          wrapText: false,
-        })),
+          ...(subjectsInOrder || []).map((s) => ({
+            value: s.subject.credit ? Number(s.subject.credit).toFixed(1) : "",
+            align: "center" as const,
+            border: true,
+            wrapText: false,
+          })),
         ],
       }
       const headerRow8Score: TableRow = {
         cells: [
-        { value: "TBC", align: "center", bold: true, border: true, wrapText: false },
-        { value: "ĐLV", align: "center", bold: true, border: true, wrapText: false },
+          { value: "TBC", align: "center", bold: true, border: true, wrapText: false },
+          { value: "ĐLV", align: "center", bold: true, border: true, wrapText: false },
         ],
       }
 
@@ -842,14 +847,64 @@ export default function StudentFixedClassPage() {
 
       const ghiChuRows: TableRow[] = [
         { cells: [{ value: null, border: false }] },
-        { cells: [{ value: null, border: false }, { value: "GHI CHÚ:", border: false, bold: true, colSpan: 29 }] },
-        { cells: [{ value: null, border: false }, { value: "1. 'Null': Môn đã lên danh sách thi nhưng chưa thi hoặc giảng viên chưa nhập điểm", border: false, colSpan: 29 }] },
-        { cells: [{ value: null, border: false }, { value: "2. ' ': Môn chưa lên danh sách thi", border: false, colSpan: 29 }] },
-        { cells: [{ value: null, border: false }, { value: "3. 'Miễn': Môn miễn học", border: false, colSpan: 29 }] },
-        { cells: [{ value: null, border: false }, { value: "4. 'HT': Môn hoãn thi", border: false, colSpan: 29 }] },
-        { cells: [{ value: null, border: false }, { value: "4. 'CT': Môn cấm thi", border: false, colSpan: 29 }] },
-        { cells: [{ value: null, border: false }, { value: "5. 'ĐCT': Môn đình chỉ thi", border: false, colSpan: 29 }] },
-        { cells: [{ value: null, border: false }, { value: "6. Điểm TBC: Tính điểm trung bình cộng của tất cả các môn đã có điểm ở thời điểm xuất file excel điểm (Không tính điểm môn chưa thi, không tính điểm môn hoãn thi, miễn thi)", border: false, colSpan: 29 }] },
+        {
+          cells: [
+            { value: null, border: false },
+            { value: "GHI CHÚ:", border: false, bold: true, colSpan: 29 },
+          ],
+        },
+        {
+          cells: [
+            { value: null, border: false },
+            {
+              value:
+                "1. 'Null': Môn đã lên danh sách thi nhưng chưa thi hoặc giảng viên chưa nhập điểm",
+              border: false,
+              colSpan: 29,
+            },
+          ],
+        },
+        {
+          cells: [
+            { value: null, border: false },
+            { value: "2. ' ': Môn chưa lên danh sách thi", border: false, colSpan: 29 },
+          ],
+        },
+        {
+          cells: [
+            { value: null, border: false },
+            { value: "3. 'Miễn': Môn miễn học", border: false, colSpan: 29 },
+          ],
+        },
+        {
+          cells: [
+            { value: null, border: false },
+            { value: "4. 'HT': Môn hoãn thi", border: false, colSpan: 29 },
+          ],
+        },
+        {
+          cells: [
+            { value: null, border: false },
+            { value: "4. 'CT': Môn cấm thi", border: false, colSpan: 29 },
+          ],
+        },
+        {
+          cells: [
+            { value: null, border: false },
+            { value: "5. 'ĐCT': Môn đình chỉ thi", border: false, colSpan: 29 },
+          ],
+        },
+        {
+          cells: [
+            { value: null, border: false },
+            {
+              value:
+                "6. Điểm TBC: Tính điểm trung bình cộng của tất cả các môn đã có điểm ở thời điểm xuất file excel điểm (Không tính điểm môn chưa thi, không tính điểm môn hoãn thi, miễn thi)",
+              border: false,
+              colSpan: 29,
+            },
+          ],
+        },
       ]
 
       const bodyRows = [...studentRows, ...thongKeRows, ...columnFooterRows, ...ghiChuRows]
