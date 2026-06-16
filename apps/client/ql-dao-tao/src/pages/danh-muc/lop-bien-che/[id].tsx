@@ -524,6 +524,11 @@ export default function StudentFixedClassPage() {
       const chuthichMonHoc = subjectsInOrder?.map((s, index) => `M${index + 1}. ${s.subject.name}`)
 
       const studentRows: TableRow[] = data.map((student, index) => {
+        const semesterResult = (student as any).studentSemesterResult?.[0]
+        const tbcFromResult = semesterResult?.gpaBase10 ?? semesterResult?.gpaBase10WithBonus ?? null
+        const thesisReg = (student as any).thesisRegistrations?.[0]
+        const defenseScore = thesisReg?.thesisProject?.defenseRecord?.finalScore
+
         const diem: (string | number | null)[] = (subjectsInOrder || []).map((subjectInfo) => {
           const scoreData = (student as any).subjectClassStudent?.find(
             (score: any) => score.subjectVersionId === subjectInfo.subject.id
@@ -546,36 +551,45 @@ export default function StudentFixedClassPage() {
 
         let totalScoreCredits = 0
         let totalCreditsForAvg = 0
+        let hasAnyNumericSubjectScore = false
 
         ;(subjectsInOrder || []).forEach((subjectInfo, i) => {
           const d = diem[i]
           if (typeof d === "number") {
+            hasAnyNumericSubjectScore = true
             totalScoreCredits += d * (subjectInfo.subject.credit || 0)
             totalCreditsForAvg += subjectInfo.subject.credit || 0
           }
         })
-        const tbcData =
-          totalCreditsForAvg > 0 ? (totalScoreCredits / totalCreditsForAvg).toFixed(2) : null
-        const tbc = tbcData ? Number(tbcData) : null
+        const tbcCalculated =
+          totalCreditsForAvg > 0 ? Number((totalScoreCredits / totalCreditsForAvg).toFixed(2)) : null
+        const tbc =
+          tbcFromResult != null && Number.isFinite(Number(tbcFromResult))
+            ? Number(tbcFromResult)
+            : tbcCalculated
+        const tbcDisplay =
+          tbc == null ? null : tbc === 0 && !hasAnyNumericSubjectScore ? null : tbc
 
-        const thesisReg = (student as any).thesisRegistrations?.[0]
-        const dlvData = thesisReg?.thesisProject?.defenseRecord?.finalScore
-        let dlv = dlvData ? Number(dlvData) : null
-
+        let dlv: number | null = null
+        if (defenseScore != null) {
+          const parsed = Number(defenseScore)
+          if (Number.isFinite(parsed)) dlv = parsed
+        }
         if (dlv === null) {
-          const gradSubjectIndex = (subjectsInOrder || []).findIndex((s) =>
-            s.subject.name.toLowerCase().includes("luận văn")
-          )
-          if (gradSubjectIndex >= 0) {
-            const d = diem[gradSubjectIndex]
-            if (typeof d === "number") dlv = d
+          const thesisSubjectIndex = (subjectsInOrder || []).findIndex((s) => {
+            const name = s.subject.name.toLowerCase()
+            return name.includes("luận văn") || name.includes("đề án")
+          })
+          if (thesisSubjectIndex >= 0) {
+            const d = diem[thesisSubjectIndex]
+            if (typeof d === "number" && Number.isFinite(d)) dlv = d
           }
         }
 
         return {
           cells: [
             { value: index + 1, align: "center" as const, border: true },
-            { value: student.userProfile.fullname, border: true },
+            { value: student.userProfile.fullname, border: true, align: "center" as const, },
             {
               value: student.userProfile.dateOfBirth
                 ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
@@ -617,7 +631,7 @@ export default function StudentFixedClassPage() {
               border: true,
             },
             {
-              value: tbc !== null ? String(tbc) : null,
+              value: tbcDisplay !== null ? String(tbcDisplay) : null,
               align: "center" as const,
               border: true,
               bold: true,
@@ -782,6 +796,7 @@ export default function StudentFixedClassPage() {
       const chuthichPerRow = 3
       const totalChuthich = chuthichMonHoc?.length || 0
       const maxRowsPerColumn = Math.ceil(totalChuthich / chuthichPerRow)
+      const footerColSpan = Math.ceil(totalTableCols / chuthichPerRow)
 
       for (let i = 0; i < maxRowsPerColumn; i++) {
         const rowCells: TableRow["cells"] = []
@@ -789,11 +804,23 @@ export default function StudentFixedClassPage() {
           const idx = i + col * maxRowsPerColumn
           rowCells.push(
             chuthichMonHoc?.[idx]
-              ? { value: chuthichMonHoc[idx], border: false, colSpan: 10 }
-              : { value: null, border: false, colSpan: 10 }
+              ? {
+                  value: chuthichMonHoc[idx],
+                  border: false,
+                  colSpan: footerColSpan,
+                  wrapText: false,
+                }
+              : { value: null, border: false, colSpan: footerColSpan, wrapText: false }
           )
         }
-        columnFooterRows.push({ cells: rowCells })
+        const usedCols = footerColSpan * chuthichPerRow
+        const missingCols = Math.max(0, totalTableCols - usedCols)
+        if (missingCols > 0) {
+          rowCells.push({ value: null, border: false, colSpan: missingCols })
+        }
+        columnFooterRows.push({
+          cells: rowCells,
+        })
       }
 
       const thongKeRows: TableRow[] = [
@@ -822,11 +849,10 @@ export default function StudentFixedClassPage() {
       ]
 
       const bodyRows = [...studentRows, ...thongKeRows, ...columnFooterRows, ...ghiChuRows]
-      console.log("bodyRows", `${fixedClass?.curriculumVersion?.curriculum.trainingMajor.code} - ${fixedClass?.curriculumVersion?.curriculum.trainingMajor.name}`)
       const chuyenNganhText = `${fixedClass?.curriculumVersion?.curriculum.trainingMajor.code} - ${fixedClass?.curriculumVersion?.curriculum.trainingMajor.name}`
 
       await exportFromTemplate({
-        templateUrl: getMinioUrl("/mta/template/BangdiemTheoLop_v2.xlsx"),
+        templateUrl: getMinioUrl("/mta/template/BangdiemTheoLop_v3.xlsx"),
         sheets: [
           {
             sheet: "BaoCaoDiem",
