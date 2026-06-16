@@ -124,7 +124,7 @@ const useHoSoCaNhan = () => {
     [data?.quaTrinhCongTac]
   )
 
-  return { thongTin, thongKe, lienHe, daoTao, quaTrinhCongTac, isLoading }
+  return { profileId, thongTin, thongKe, lienHe, daoTao, quaTrinhCongTac, isLoading }
 }
 
 export { useHoSoCaNhan }

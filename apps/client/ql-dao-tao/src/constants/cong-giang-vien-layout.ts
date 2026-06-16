@@ -1,5 +1,5 @@
 /** Chiều rộng sidebar Cổng giảng viên (px). */
-export const CONG_GIANG_VIEN_SIDER_WIDTH = 240
+export const CONG_GIANG_VIEN_SIDER_WIDTH = 250
 
 /** Chiều rộng sidebar khi thu gọn (px). */
 export const CONG_GIANG_VIEN_SIDER_COLLAPSED_WIDTH = 80

@@ -53,8 +53,8 @@ function CongGiangVienTrangChuPage() {
         <Col xs={24} xl={18} className="flex h-full min-h-0">
           <div className="flex min-h-0 w-full flex-1 flex-col gap-1">
             <div className="shrink-0">
-              <LoiChao hoVaTen={thongTin.hoVaTen} khoa={thongTin.donViCongTac} />
-              <div className="mb-1 flex justify-end">
+              <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+                <LoiChao hoVaTen={thongTin.hoVaTen} khoa={thongTin.donViCongTac} />
                 <BoLocThoiGian />
               </div>
               <TheThongKe

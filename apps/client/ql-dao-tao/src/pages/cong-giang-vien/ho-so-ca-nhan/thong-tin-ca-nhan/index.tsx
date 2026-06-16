@@ -5,7 +5,8 @@ import { useHoSoCaNhan } from "@hooks/use-ho-so-ca-nhan"
 import { Breadcrumb, Skeleton, Typography } from "antd"
 
 const ThongTinCaNhanPage = () => {
-  const { thongTin, thongKe, lienHe, daoTao, quaTrinhCongTac, isLoading } = useHoSoCaNhan()
+  const { profileId, thongTin, thongKe, lienHe, daoTao, quaTrinhCongTac, isLoading } =
+    useHoSoCaNhan()
 
   return (
     <div>
@@ -26,7 +27,7 @@ const ThongTinCaNhanPage = () => {
         <Skeleton active paragraph={{ rows: 10 }} />
       ) : (
         <>
-          <ThongTinChung thongTin={thongTin} thongKe={thongKe} />
+          <ThongTinChung thongTin={thongTin} thongKe={thongKe} profileId={profileId} />
           <ThongTinLienHeDaoTao lienHe={lienHe} daoTao={daoTao} />
           <QuaTrinhCongTacBlock danhSach={quaTrinhCongTac} />
         </>
