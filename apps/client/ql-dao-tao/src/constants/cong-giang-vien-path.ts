@@ -3,7 +3,9 @@ export const CONG_GIANG_VIEN_THONG_BAO_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/thon
 export const CONG_GIANG_VIEN_LICH_CUA_TOI_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/lich-cua-toi`
 export const CONG_GIANG_VIEN_LOP_QUAN_LY_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/lop-quan-ly`
 export const CONG_GIANG_VIEN_LOP_TRO_GIANG_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/lop-tro-giang`
+export const CONG_GIANG_VIEN_LOP_GIANG_DAY_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/lop-giang-day/danh-sach-lop-giang-day`
 export const CONG_GIANG_VIEN_DIEM_DANH_PATH = `${CONG_GIANG_VIEN_LOP_TRO_GIANG_PATH}/diem-danh`
+export const CONG_GIANG_VIEN_DIEM_DANH_GIANG_DAY_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/lop-giang-day/diem-danh`
 
 export const chiTietLopQuanLyPath = (id: string) => `${CONG_GIANG_VIEN_LOP_QUAN_LY_PATH}/${id}`
 
@@ -12,6 +14,11 @@ export const diemDanhTroGiangPath = (subjectClassId?: string) =>
   subjectClassId
     ? `${CONG_GIANG_VIEN_DIEM_DANH_PATH}?lopId=${subjectClassId}`
     : CONG_GIANG_VIEN_DIEM_DANH_PATH
+
+export const diemDanhGiangDayPath = (subjectClassId?: string) =>
+  subjectClassId
+    ? `${CONG_GIANG_VIEN_DIEM_DANH_GIANG_DAY_PATH}?lopId=${subjectClassId}`
+    : CONG_GIANG_VIEN_DIEM_DANH_GIANG_DAY_PATH
 
 export const hoSoSinhVienLopQuanLyPath = (fixedClassId: string, studentId: string) =>
   `${CONG_GIANG_VIEN_LOP_QUAN_LY_PATH}/${fixedClassId}/sinh-vien/${studentId}`

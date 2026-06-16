@@ -130,7 +130,9 @@
 .bang-lq-chi-tiet.ant-table-wrapper .ant-spin-nested-loading,
 .bang-lq-chi-tiet.ant-table-wrapper .ant-spin-container,
 .bang-lq-chi-tiet.ant-table-wrapper .ant-table-container,
-.bang-lq-chi-tiet.ant-table-wrapper div {
+.bang-lq-chi-tiet.ant-table-wrapper .ant-table-content,
+.bang-lq-chi-tiet.ant-table-wrapper .ant-table-header,
+.bang-lq-chi-tiet.ant-table-wrapper .ant-table-body {
   height: auto !important;
 }
 

@@ -8950,7 +8950,7 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Users/minhah/code/MTA-monorepo/packages/database/logical-1781582061365.prisma",
+    "sourceFilePath": "/Users/minhah/code/MTA-monorepo/packages/database/logical-1781591922155.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
