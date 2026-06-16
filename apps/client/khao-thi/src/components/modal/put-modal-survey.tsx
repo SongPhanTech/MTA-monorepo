@@ -16,8 +16,10 @@ import {
 } from "@workspace/db/hooks"
 import { useCreateClusterSurvey } from "@workspace/libs/api/exam"
 import { sqlTransaction } from "@workspace/libs/api/model"
+import { ROUTER_PATH } from "@workspace/router"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import {
+  Alert,
   Button,
   Col,
   Form,
@@ -29,6 +31,7 @@ import {
   Steps,
   TreeSelect as TreeSelectAnt,
 } from "antd"
+import Link from "next/link"
 import dayjs from "dayjs"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -489,6 +492,28 @@ const PutSurveyModal = () => {
               </FormItem>
             </Col>
 
+            {input?.type === "multiple" && (
+              <Col span={24}>
+                <Alert
+                  type="warning"
+                  showIcon
+                  message={
+                    <>
+                      Đối với khảo sát giảng viên, vui lòng không chọn Công khai. Học viên thực hiện
+                      khảo sát tại{" "}
+                      <Link
+                        href={ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT}
+                        className="font-semibold text-[#1677ff] underline"
+                      >
+                        Khảo sát của tôi
+                      </Link>
+                      .
+                    </>
+                  }
+                  className="mb-4"
+                />
+              </Col>
+            )}
             <Col span={12}>
               <Row gutter={16}>
                 <Col span={8}>
