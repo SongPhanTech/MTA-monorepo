@@ -260,7 +260,6 @@ async function handleExcelJSDefault(
     // 2️⃣ Render bảng động
     if (rows && tableStartCell) {
       let currentRow = tableStartCell.row
-      const colWidths: number[] = []
 
       if (rows.length > 1) {
         worksheet.spliceRows(tableStartCell.row + 1, 0, ...Array(rows.length - 1).fill([]))
@@ -331,12 +330,6 @@ async function handleExcelJSDefault(
             )
           }
 
-          const textLength = String(cellData.value ?? "").length
-          for (let i = 0; i < colSpan; i++) {
-            const idx = currentCol - tableStartCell.col + i
-            colWidths[idx] = Math.max(colWidths[idx] || 10, textLength + 2)
-          }
-
           currentCol += colSpan
         }
 
@@ -344,10 +337,6 @@ async function handleExcelJSDefault(
         currentRow++
       }
 
-      // 3️⃣ Autofit column width
-      // colWidths.forEach((width, index) => {
-      //     worksheet.getColumn(tableStartCell.col + index).width = width
-      // })
     }
 
     if (sheetOption.thinBorderRange) {
@@ -428,8 +417,6 @@ async function handleSheetJSExport(
     if (rows && tableStartCell) {
       let currentRow = tableStartCell.row
 
-      const templateRow = worksheet.getRow(tableStartCell.row)
-
       if (rows.length > 1) {
         worksheet.spliceRows(tableStartCell.row + 1, 0, ...Array(rows.length - 1).fill([]))
       }
@@ -438,12 +425,11 @@ async function handleSheetJSExport(
         let currentCol = tableStartCell.col
 
         const excelRow = worksheet.getRow(currentRow)
-
-        excelRow.height = templateRow.height
+        excelRow.height = worksheet.getRow(tableStartCell.row).height
 
         for (const cellData of rowData.cells) {
           const cell = excelRow.getCell(currentCol)
-          const templateCell = templateRow.getCell(currentCol)
+          const templateCell = worksheet.getRow(tableStartCell.row).getCell(currentCol)
 
           cloneCellStyle(templateCell, cell)
 
