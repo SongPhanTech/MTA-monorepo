@@ -515,6 +515,27 @@ export default function StudentFixedClassPage() {
   const handleExportDiemLop = async () => {
     showSpinner()
     try {
+      const toNumericScore = (value: unknown) => {
+        if (typeof value === "number") return Number.isFinite(value) ? value : null
+        if (typeof value === "string") {
+          const normalized = value.trim().replace(",", ".")
+          if (normalized === "") return null
+          const parsed = Number(normalized)
+          return Number.isFinite(parsed) ? parsed : null
+        }
+        if (value && typeof value === "object") {
+          const maybeNumber = (value as { toNumber?: () => number }).toNumber?.()
+          if (typeof maybeNumber === "number" && Number.isFinite(maybeNumber)) return maybeNumber
+
+          const text = String(value).trim().replace(",", ".")
+          if (text && text !== "[object Object]") {
+            const parsed = Number(text)
+            return Number.isFinite(parsed) ? parsed : null
+          }
+        }
+        return null
+      }
+
       const subjectsInOrder = fixedClass?.curriculumVersion?.trainingBlocks
         .flatMap((block) => block.subjects)
         .sort((a, b) => (a.semester || 0) - (b.semester || 0))
@@ -524,8 +545,6 @@ export default function StudentFixedClassPage() {
       const chuthichMonHoc = subjectsInOrder?.map((s, index) => `M${index + 1}. ${s.subject.name}`)
 
       const studentRows: TableRow[] = data.map((student, index) => {
-        const semesterResult = (student as any).studentSemesterResult?.[0]
-        const tbcFromResult = semesterResult?.gpaBase10 ?? semesterResult?.gpaBase10WithBonus ?? null
         const thesisReg = (student as any).thesisRegistrations?.[0]
         const defenseScore = thesisReg?.thesisProject?.defenseRecord?.finalScore
 
@@ -534,7 +553,7 @@ export default function StudentFixedClassPage() {
             (score: any) => score.subjectVersionId === subjectInfo.subject.id
           )
 
-          if (!scoreData) return ""
+          if (!scoreData) return " "
           if (scoreData.exempted) return "Miễn"
           if (scoreData.examPostponed) return "HT"
           if (scoreData.examBanned) return "CT"
@@ -549,40 +568,32 @@ export default function StudentFixedClassPage() {
         })
         const ccta = student.foreignLangPass ? "Đạt" : ""
 
-        let totalScoreCredits = 0
-        let totalCreditsForAvg = 0
-        let hasAnyNumericSubjectScore = false
+        let totalScore = 0
+        let totalScoredSubjects = 0
 
-        ;(subjectsInOrder || []).forEach((subjectInfo, i) => {
-          const d = diem[i]
-          if (typeof d === "number") {
-            hasAnyNumericSubjectScore = true
-            totalScoreCredits += d * (subjectInfo.subject.credit || 0)
-            totalCreditsForAvg += subjectInfo.subject.credit || 0
+        ;(subjectsInOrder || []).forEach((_subjectInfo, i) => {
+          const numericD = toNumericScore(diem[i])
+          if (numericD != null && Number.isFinite(numericD)) {
+            totalScore += numericD
+            totalScoredSubjects += 1
           }
         })
         const tbcCalculated =
-          totalCreditsForAvg > 0 ? Number((totalScoreCredits / totalCreditsForAvg).toFixed(2)) : null
-        const tbc =
-          tbcFromResult != null && Number.isFinite(Number(tbcFromResult))
-            ? Number(tbcFromResult)
-            : tbcCalculated
-        const tbcDisplay =
-          tbc == null ? null : tbc === 0 && !hasAnyNumericSubjectScore ? null : tbc
+          totalScoredSubjects > 0 ? Number((totalScore / totalScoredSubjects).toFixed(2)) : null
+        const tbcDisplay = tbcCalculated
 
         let dlv: number | null = null
-        if (defenseScore != null) {
-          const parsed = Number(defenseScore)
-          if (Number.isFinite(parsed)) dlv = parsed
-        }
-        if (dlv === null) {
+        const parsedDefenseScore = toNumericScore(defenseScore)
+        if (parsedDefenseScore != null && Number.isFinite(parsedDefenseScore)) {
+          dlv = parsedDefenseScore
+        } else {
           const thesisSubjectIndex = (subjectsInOrder || []).findIndex((s) => {
             const name = s.subject.name.toLowerCase()
             return name.includes("luận văn") || name.includes("đề án")
           })
           if (thesisSubjectIndex >= 0) {
-            const d = diem[thesisSubjectIndex]
-            if (typeof d === "number" && Number.isFinite(d)) dlv = d
+            const numericD = toNumericScore(diem[thesisSubjectIndex])
+            if (numericD != null && Number.isFinite(numericD)) dlv = numericD
           }
         }
 
@@ -604,25 +615,18 @@ export default function StudentFixedClassPage() {
             },
             ...(subjectsInOrder || []).map((subjectInfo, i) => {
               const scoreValue = diem[i]
-              const numericScore =
-                typeof scoreValue === "number"
-                  ? scoreValue
-                  : typeof scoreValue === "string" && scoreValue.trim() !== ""
-                    ? Number(scoreValue)
-                    : null
               const isGraduation =
                 (subjectInfo as any)?.subjectVersion?.trainingBlocks?.[0]?.graduation === true
+              const passThreshold = isGraduation ? scoreToPassGraduation : 4.0
+              const numericScore = toNumericScore(scoreValue)
               const isFailed =
-                Number.isFinite(numericScore)
-                  ? !convertScoreWithGraduation(numericScore, isGraduation)
-                      ?.pass
-                  : false
+                numericScore != null && Number.isFinite(numericScore) ? numericScore < passThreshold : false
 
               return {
-                value: scoreValue !== undefined ? (scoreValue !== null ? String(scoreValue) : null) : null,
+                value: scoreValue !== undefined && scoreValue !== null ? String(scoreValue) : null,
                 align: "center" as const,
                 border: true,
-                color: isFailed ? "FF0000" : undefined,
+                color: isFailed ? "FFFF0000" : undefined,
               }
             }),
             {

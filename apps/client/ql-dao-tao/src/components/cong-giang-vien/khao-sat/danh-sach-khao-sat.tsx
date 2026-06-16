@@ -1,6 +1,8 @@
 import type { KhaoSatItem } from "@hooks/use-khao-sat-giang-vien"
 import CardKhaoSat from "@components/cong-giang-vien/khao-sat/card-khao-sat"
 import { Empty, Skeleton } from "antd"
+import { ChevronDown, ChevronUp } from "lucide-react"
+import { useState } from "react"
 
 interface NhomKhaoSat {
   dangDienRa: KhaoSatItem[]
@@ -26,6 +28,16 @@ const CAC_NHOM: CauHinhNhom[] = [
 ]
 
 const DanhSachKhaoSat = ({ nhomTheoTrangThai, isLoading }: DanhSachKhaoSatProps) => {
+  const [nhomMo, setNhomMo] = useState<Record<keyof NhomKhaoSat, boolean>>({
+    dangDienRa: true,
+    sapDienRa: true,
+    daKetThuc: true,
+  })
+
+  const toggleNhom = (key: keyof NhomKhaoSat) => {
+    setNhomMo((prev) => ({ ...prev, [key]: !prev[key] }))
+  }
+
   if (isLoading) {
     return <Skeleton active className="mt-4" paragraph={{ rows: 6 }} />
   }
@@ -47,10 +59,21 @@ const DanhSachKhaoSat = ({ nhomTheoTrangThai, isLoading }: DanhSachKhaoSatProps)
 
         return (
           <div key={nhom.key}>
-            <h3 className={`mb-2 text-base font-bold ${nhom.mauTieuDe}`}>{nhom.tieuDe}</h3>
-            {danhSach.map((ks) => (
-              <CardKhaoSat key={ks.id} khaoSat={ks} />
-            ))}
+            <div className="mb-2 flex items-center justify-between">
+              <h3 className={`text-base font-bold ${nhom.mauTieuDe}`}>{nhom.tieuDe}</h3>
+              <button
+                type="button"
+                className="flex h-7 w-7 items-center justify-center rounded text-gray-500 hover:bg-gray-100"
+                onClick={() => toggleNhom(nhom.key)}
+                aria-label={nhomMo[nhom.key] ? "Ẩn nhóm khảo sát" : "Hiện nhóm khảo sát"}
+              >
+                {nhomMo[nhom.key] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+              </button>
+            </div>
+            {nhomMo[nhom.key] &&
+              danhSach.map((ks) => (
+                <CardKhaoSat key={ks.id} khaoSat={ks} />
+              ))}
           </div>
         )
       })}
