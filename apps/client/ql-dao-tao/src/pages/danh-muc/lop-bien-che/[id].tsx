@@ -568,18 +568,21 @@ export default function StudentFixedClassPage() {
         })
         const ccta = student.foreignLangPass ? "Đạt" : ""
 
-        let totalScore = 0
-        let totalScoredSubjects = 0
+        let totalWeightedScore = 0
+        let totalCredits = 0
 
-        ;(subjectsInOrder || []).forEach((_subjectInfo, i) => {
+        ;(subjectsInOrder || []).forEach((subjectInfo, i) => {
           const numericD = toNumericScore(diem[i])
-          if (numericD != null && Number.isFinite(numericD)) {
-            totalScore += numericD
-            totalScoredSubjects += 1
+          const credit = Number(subjectInfo.subject.credit || 0)
+
+          if (numericD != null && Number.isFinite(numericD) && credit > 0) {
+            totalWeightedScore += numericD * credit
+            totalCredits += credit
           }
         })
+
         const tbcCalculated =
-          totalScoredSubjects > 0 ? Number((totalScore / totalScoredSubjects).toFixed(2)) : null
+          totalCredits > 0 ? Number((totalWeightedScore / totalCredits).toFixed(2)) : null
         const tbcDisplay = tbcCalculated
 
         let dlv: number | null = null
@@ -600,7 +603,7 @@ export default function StudentFixedClassPage() {
         return {
           cells: [
             { value: index + 1, align: "center" as const, border: true },
-            { value: student.userProfile.fullname, border: true, align: "center" as const, },
+            { value: student.userProfile.fullname, border: true, align: "center" as const },
             {
               value: student.userProfile.dateOfBirth
                 ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
@@ -620,7 +623,9 @@ export default function StudentFixedClassPage() {
               const passThreshold = isGraduation ? scoreToPassGraduation : 4.0
               const numericScore = toNumericScore(scoreValue)
               const isFailed =
-                numericScore != null && Number.isFinite(numericScore) ? numericScore < passThreshold : false
+                numericScore != null && Number.isFinite(numericScore)
+                  ? numericScore < passThreshold
+                  : false
 
               return {
                 value: scoreValue !== undefined && scoreValue !== null ? String(scoreValue) : null,
@@ -760,9 +765,23 @@ export default function StudentFixedClassPage() {
 
       const headerRow7Left: TableRow = {
         cells: [
-        { value: "STT", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
-        { value: "Họ và tên", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
-        { value: "Ngày sinh", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
+          { value: "STT", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
+          {
+            value: "Họ và tên",
+            align: "center",
+            bold: true,
+            border: true,
+            rowSpan: 2,
+            wrapText: true,
+          },
+          {
+            value: "Ngày sinh",
+            align: "center",
+            bold: true,
+            border: true,
+            rowSpan: 2,
+            wrapText: true,
+          },
         ],
       }
 
@@ -781,18 +800,18 @@ export default function StudentFixedClassPage() {
 
       const headerRow8Credit: TableRow = {
         cells: [
-        ...(subjectsInOrder || []).map((s) => ({
-          value: s.subject.credit ? Number(s.subject.credit).toFixed(1) : "",
-          align: "center" as const,
-          border: true,
-          wrapText: false,
-        })),
+          ...(subjectsInOrder || []).map((s) => ({
+            value: s.subject.credit ? Number(s.subject.credit).toFixed(1) : "",
+            align: "center" as const,
+            border: true,
+            wrapText: false,
+          })),
         ],
       }
       const headerRow8Score: TableRow = {
         cells: [
-        { value: "TBC", align: "center", bold: true, border: true, wrapText: false },
-        { value: "ĐLV", align: "center", bold: true, border: true, wrapText: false },
+          { value: "TBC", align: "center", bold: true, border: true, wrapText: false },
+          { value: "ĐLV", align: "center", bold: true, border: true, wrapText: false },
         ],
       }
 
@@ -842,14 +861,64 @@ export default function StudentFixedClassPage() {
 
       const ghiChuRows: TableRow[] = [
         { cells: [{ value: null, border: false }] },
-        { cells: [{ value: null, border: false }, { value: "GHI CHÚ:", border: false, bold: true, colSpan: 29 }] },
-        { cells: [{ value: null, border: false }, { value: "1. 'Null': Môn đã lên danh sách thi nhưng chưa thi hoặc giảng viên chưa nhập điểm", border: false, colSpan: 29 }] },
-        { cells: [{ value: null, border: false }, { value: "2. ' ': Môn chưa lên danh sách thi", border: false, colSpan: 29 }] },
-        { cells: [{ value: null, border: false }, { value: "3. 'Miễn': Môn miễn học", border: false, colSpan: 29 }] },
-        { cells: [{ value: null, border: false }, { value: "4. 'HT': Môn hoãn thi", border: false, colSpan: 29 }] },
-        { cells: [{ value: null, border: false }, { value: "4. 'CT': Môn cấm thi", border: false, colSpan: 29 }] },
-        { cells: [{ value: null, border: false }, { value: "5. 'ĐCT': Môn đình chỉ thi", border: false, colSpan: 29 }] },
-        { cells: [{ value: null, border: false }, { value: "6. Điểm TBC: Tính điểm trung bình cộng của tất cả các môn đã có điểm ở thời điểm xuất file excel điểm (Không tính điểm môn chưa thi, không tính điểm môn hoãn thi, miễn thi)", border: false, colSpan: 29 }] },
+        {
+          cells: [
+            { value: null, border: false },
+            { value: "GHI CHÚ:", border: false, bold: true, colSpan: 29 },
+          ],
+        },
+        {
+          cells: [
+            { value: null, border: false },
+            {
+              value:
+                "1. 'Null': Môn đã lên danh sách thi nhưng chưa thi hoặc giảng viên chưa nhập điểm",
+              border: false,
+              colSpan: 29,
+            },
+          ],
+        },
+        {
+          cells: [
+            { value: null, border: false },
+            { value: "2. ' ': Môn chưa lên danh sách thi", border: false, colSpan: 29 },
+          ],
+        },
+        {
+          cells: [
+            { value: null, border: false },
+            { value: "3. 'Miễn': Môn miễn học", border: false, colSpan: 29 },
+          ],
+        },
+        {
+          cells: [
+            { value: null, border: false },
+            { value: "4. 'HT': Môn hoãn thi", border: false, colSpan: 29 },
+          ],
+        },
+        {
+          cells: [
+            { value: null, border: false },
+            { value: "4. 'CT': Môn cấm thi", border: false, colSpan: 29 },
+          ],
+        },
+        {
+          cells: [
+            { value: null, border: false },
+            { value: "5. 'ĐCT': Môn đình chỉ thi", border: false, colSpan: 29 },
+          ],
+        },
+        {
+          cells: [
+            { value: null, border: false },
+            {
+              value:
+                "6. Điểm TBC: Tính điểm trung bình cộng của tất cả các môn đã có điểm ở thời điểm xuất file excel điểm (Không tính điểm môn chưa thi, không tính điểm môn hoãn thi, miễn thi)",
+              border: false,
+              colSpan: 29,
+            },
+          ],
+        },
       ]
 
       const bodyRows = [...studentRows, ...thongKeRows, ...columnFooterRows, ...ghiChuRows]

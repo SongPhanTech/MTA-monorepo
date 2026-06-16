@@ -61,9 +61,7 @@ const BangLopGiangDay = ({
   const moNhapDiem = (id: string, loai: "qua-trinh" | "thi") => {
     diemLopMonHocStore.setState({ selectedSubjectClassId: id })
     router.push(
-      loai === "qua-trinh"
-        ? nhapDiemQuaTrinhGiangDayPath(id)
-        : nhapDiemThiGiangDayPath(id)
+      loai === "qua-trinh" ? nhapDiemQuaTrinhGiangDayPath(id) : nhapDiemThiGiangDayPath(id)
     )
   }
 

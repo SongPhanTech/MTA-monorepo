@@ -367,7 +367,10 @@ const NhapDiemThiGiangDayPage = () => {
             />
           </div>
           <div className="flex items-end">
-            <Button icon={<Search size={14} />} className="bg-cgv-green-dark text-white hover:!bg-cgv-green-dark/90">
+            <Button
+              icon={<Search size={14} />}
+              className="bg-cgv-green-dark text-white hover:!bg-cgv-green-dark/90"
+            >
               Tìm kiếm
             </Button>
           </div>
@@ -388,12 +391,24 @@ const NhapDiemThiGiangDayPage = () => {
       <div className="rounded-lg border border-gray-100 bg-white p-3">
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="grid grid-cols-2 gap-y-2 text-sm">
-            <div>Mã lớp: <b>{lopMonHoc?.code ?? ""}</b></div>
-            <div>Học kỳ: <b>{lopMonHoc?.semester?.name ?? ""}</b></div>
-            <div>Tên lớp: <b>{lopMonHoc?.name ?? ""}</b></div>
-            <div>Tín chỉ: <b>{lopMonHoc?.subject?.credit ?? ""}</b></div>
-            <div>Môn học: <b>{lopMonHoc?.subject?.name ?? ""}</b></div>
-            <div>Sĩ số sinh viên: <b>{lopMonHoc?._count?.subjectClassStudent ?? 0}</b></div>
+            <div>
+              Mã lớp: <b>{lopMonHoc?.code ?? ""}</b>
+            </div>
+            <div>
+              Học kỳ: <b>{lopMonHoc?.semester?.name ?? ""}</b>
+            </div>
+            <div>
+              Tên lớp: <b>{lopMonHoc?.name ?? ""}</b>
+            </div>
+            <div>
+              Tín chỉ: <b>{lopMonHoc?.subject?.credit ?? ""}</b>
+            </div>
+            <div>
+              Môn học: <b>{lopMonHoc?.subject?.name ?? ""}</b>
+            </div>
+            <div>
+              Sĩ số sinh viên: <b>{lopMonHoc?._count?.subjectClassStudent ?? 0}</b>
+            </div>
             <div>
               Hạn nhập điểm:{" "}
               <b>
@@ -405,11 +420,21 @@ const NhapDiemThiGiangDayPage = () => {
           </div>
           <div className="rounded border border-gray-100 p-3 text-sm">
             <div className="mb-2 font-semibold text-cgv-green-dark">THỐNG KÊ</div>
-            <div>Tổng số sinh viên: <b>{thongKe.tong}</b></div>
-            <div>Đã nhập điểm: <b className="text-green-600">{thongKe.daNhap}</b></div>
-            <div>Chưa nhập điểm: <b className="text-red-500">{thongKe.chuaNhap}</b></div>
-            <div className="mt-3">Điểm HP cao nhất: <b>{thongKe.max.toFixed(2)}</b></div>
-            <div>Điểm HP thấp nhất: <b>{thongKe.min.toFixed(2)}</b></div>
+            <div>
+              Tổng số sinh viên: <b>{thongKe.tong}</b>
+            </div>
+            <div>
+              Đã nhập điểm: <b className="text-green-600">{thongKe.daNhap}</b>
+            </div>
+            <div>
+              Chưa nhập điểm: <b className="text-red-500">{thongKe.chuaNhap}</b>
+            </div>
+            <div className="mt-3">
+              Điểm HP cao nhất: <b>{thongKe.max.toFixed(2)}</b>
+            </div>
+            <div>
+              Điểm HP thấp nhất: <b>{thongKe.min.toFixed(2)}</b>
+            </div>
           </div>
         </div>
       </div>
@@ -457,7 +482,13 @@ const NhapDiemThiGiangDayPage = () => {
                 />
               ),
             },
-            { title: "Điểm HP", dataIndex: "finalScore", width: 100, align: "center", render: (v) => v ?? "" },
+            {
+              title: "Điểm HP",
+              dataIndex: "finalScore",
+              width: 100,
+              align: "center",
+              render: (v) => v ?? "",
+            },
             { title: "Điểm chữ", dataIndex: "letter", width: 100, align: "center" },
             {
               title: "Ghi chú",
@@ -517,9 +548,27 @@ const NhapDiemThiGiangDayPage = () => {
               width: 180,
               render: (_v, r) => r.updatedBy?.fullname ?? "—",
             },
-            { title: "Chuyên cần", dataIndex: "attendanceScore", align: "center", width: 100, render: (v) => v ?? "" },
-            { title: "Định kỳ", dataIndex: "midtermScore", align: "center", width: 100, render: (v) => v ?? "" },
-            { title: "Điểm thi", dataIndex: "examScore", align: "center", width: 100, render: (v) => v ?? "" },
+            {
+              title: "Chuyên cần",
+              dataIndex: "attendanceScore",
+              align: "center",
+              width: 100,
+              render: (v) => v ?? "",
+            },
+            {
+              title: "Định kỳ",
+              dataIndex: "midtermScore",
+              align: "center",
+              width: 100,
+              render: (v) => v ?? "",
+            },
+            {
+              title: "Điểm thi",
+              dataIndex: "examScore",
+              align: "center",
+              width: 100,
+              render: (v) => v ?? "",
+            },
             {
               title: "Điểm HP",
               dataIndex: "finalScore",

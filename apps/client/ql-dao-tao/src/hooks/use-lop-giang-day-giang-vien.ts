@@ -1,4 +1,7 @@
-import type { BoLocLopGiangDay, LopGiangDayRow } from "@components/cong-giang-vien/lop-giang-day/types"
+import type {
+  BoLocLopGiangDay,
+  LopGiangDayRow,
+} from "@components/cong-giang-vien/lop-giang-day/types"
 import {
   dieuKienTrangThaiNhapDiem,
   layHanConLai,
@@ -140,9 +143,7 @@ const useLopGiangDayGiangVien = () => {
           hanNdqt: item.scoreDeadline ? dayjs(item.scoreDeadline).format("DD/MM/YYYY") : "",
           hanDqt: layHanConLai(item.scoreDeadline, item.isLockScore),
           ngayThi: item.examDate ? dayjs(item.examDate).toISOString() : null,
-          hanNdt: item.examScoreDeadline
-            ? dayjs(item.examScoreDeadline).format("DD/MM/YYYY")
-            : "",
+          hanNdt: item.examScoreDeadline ? dayjs(item.examScoreDeadline).format("DD/MM/YYYY") : "",
           hanDt: layHanConLai(item.examScoreDeadline, item.isLockExamScore),
           giangVien1: formatLecturerName(item.mainLecturer),
           giangVien2: formatLecturerName(item.extraLecturer),
