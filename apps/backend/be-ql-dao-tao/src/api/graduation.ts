@@ -2572,14 +2572,14 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         .sort((a, b) => (roleOrder[a.role] ?? 99) - (roleOrder[b.role] ?? 99))
         .map((m, idx) => {
           const expert = m.expert
-          const rank = safeString(expert?.academicRankType?.sTen)
-          const degree = safeString(expert?.academicDegreeType?.sTen)
+          const rank = safeString(expert?.academicRankType?.sMa)
+          const degree = safeString(expert?.academicDegreeType?.sMa)
           const title = [rank, degree].filter(Boolean).join(".")
           const chucVi = chucViByRole[m.role] ?? "Ủy viên"
 
           return {
             chuc_vi: `${idx + 1}. ${chucVi}`,
-            ten_day_du: [title, safeString(expert?.name)].filter(Boolean).join(" "),
+            ten_day_du: [title, safeString(expert?.name)].filter(Boolean).join(" ").trim(),
             don_vi: safeString(expert?.organization),
             vai_tro_hoi_dong: vaiTroByRole[m.role] ?? "",
           }
@@ -2644,7 +2644,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
   }
 
   try {
-    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v12.docx")
+    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v13.docx")
     const zip = new PizZip(templateBuffer)
     const doc = new Docxtemplater(zip, {
       paragraphLoop: true,
