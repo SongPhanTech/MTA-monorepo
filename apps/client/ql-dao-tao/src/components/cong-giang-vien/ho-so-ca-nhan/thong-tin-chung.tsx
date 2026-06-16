@@ -1,11 +1,15 @@
+import DoiAnhDaiDien from "@components/cong-giang-vien/ho-so-ca-nhan/doi-anh-dai-dien"
 import InputRow from "@components/cong-giang-vien/ho-so-ca-nhan/hang-thong-tin"
+import PutThongTinCaNhanModal from "@components/cong-giang-vien/ho-so-ca-nhan/put-thong-tin-ca-nhan"
 import type { ThongKeHoSo, ThongTinCaNhan } from "@components/cong-giang-vien/ho-so-ca-nhan/types"
-import { Avatar, Card, Col, Row, Tag } from "antd"
-import { UserRound } from "lucide-react"
+import { Button, Card, Col, Row, Tag } from "antd"
+import { SquarePen } from "lucide-react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 
 interface ThongTinChungProps {
   thongTin: ThongTinCaNhan
   thongKe: ThongKeHoSo
+  profileId?: string
 }
 
 interface ItemThongKe {
@@ -15,7 +19,11 @@ interface ItemThongKe {
 }
 
 // Khối 1: Card đầu trang - ảnh đại diện, thông tin chung (2 cột) và ô thống kê.
-const ThongTinChung = ({ thongTin, thongKe }: ThongTinChungProps) => {
+const ThongTinChung = ({ thongTin, thongKe, profileId }: ThongTinChungProps) => {
+  const { onOpen: moChinhSua } = useDisclosure<{ id: string }>({
+    tag: "PutThongTinCaNhanModal",
+  })
+
   const danhSachThongKe: ItemThongKe[] = [
     { key: "nam-cong-tac", nhan: "Số năm công tác", giaTri: thongKe.soNamCongTac },
     {
@@ -32,17 +40,22 @@ const ThongTinChung = ({ thongTin, thongKe }: ThongTinChungProps) => {
   ]
 
   return (
-    <Card size="small" className="mb-4">
+    <Card size="small" className="relative mb-4">
+      {/* Nút chỉnh sửa thông tin */}
+      <Button
+        type="default"
+        icon={<SquarePen size={16} />}
+        className="absolute right-3 top-3 z-10"
+        disabled={!profileId}
+        onClick={() => profileId && moChinhSua({ id: profileId })}
+      >
+        Chỉnh sửa
+      </Button>
+
       <Row gutter={[24, 16]}>
         {/* Ảnh đại diện */}
-        <Col xs={24} sm={6} md={5} xl={4} className="flex justify-center sm:justify-start">
-          <Avatar
-            shape="square"
-            size={140}
-            src={thongTin.anhDaiDien}
-            icon={<UserRound />}
-            className="rounded-lg"
-          />
+        <Col xs={24} sm={6} md={5} xl={4} className="flex justify-center">
+          <DoiAnhDaiDien profileId={profileId} anhDaiDien={thongTin.anhDaiDien} />
         </Col>
 
         {/* Thông tin chung - 2 cột */}
@@ -75,9 +88,9 @@ const ThongTinChung = ({ thongTin, thongKe }: ThongTinChungProps) => {
           </Row>
         </Col>
 
-        {/* Ô thống kê */}
+        {/* Ô thống kê - đẩy xuống dưới nút "Chỉnh sửa" */}
         <Col xs={24} xl={6}>
-          <div className="h-full rounded-lg bg-cgv-green p-4">
+          <div className="rounded-lg bg-cgv-green p-4 xl:mt-12">
             <p className="mb-3 font-semibold text-cgv-green-dark">THỐNG KÊ</p>
             <div className="flex flex-col gap-2">
               {danhSachThongKe.map((item) => (

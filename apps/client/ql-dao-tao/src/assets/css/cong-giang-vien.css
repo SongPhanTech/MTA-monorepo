@@ -98,14 +98,26 @@
   color: #9ca3af !important;
 }
 
+.giang-vien-sider-menu .ant-menu-item:hover,
+.giang-vien-sider-menu .ant-menu-submenu-title:hover {
+  background: #7cbf97 !important;
+  color: #ffffff !important;
+}
+
+.giang-vien-sider-menu .ant-menu-item:hover .ant-menu-item-icon,
+.giang-vien-sider-menu .ant-menu-submenu-title:hover .ant-menu-item-icon,
+.giang-vien-sider-menu .ant-menu-item:hover a {
+  color: #ffffff !important;
+}
+
 .giang-vien-sider-menu .ant-menu-item-selected {
-  background: #ebf6ed !important;
-  color: #004725 !important;
+  background: #3f9468 !important;
+  color: #ffffff !important;
 }
 
 .giang-vien-sider-menu .ant-menu-item-selected .ant-menu-item-icon,
 .giang-vien-sider-menu .ant-menu-item-selected a {
-  color: #004725 !important;
+  color: #ffffff !important;
 }
 
 .giang-vien-sider-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
