@@ -53,6 +53,37 @@ function sanitizeExcelCellValue(value: unknown): ExcelJS.CellValue {
   return value.replace(INVALID_XML_CONTROL_CHARS, "")
 }
 
+function replaceTemplatePlaceholders(
+  value: ExcelJS.CellValue,
+  data: Record<string, string | number | null>
+): ExcelJS.CellValue {
+  if (typeof value === "string") {
+    let text = value
+    for (const key in data) {
+      text = text.replace(new RegExp(`{{\\s*${key}\\s*}}`, "g"), String(data[key] ?? ""))
+    }
+    return sanitizeExcelCellValue(text)
+  }
+
+  if (value && typeof value === "object" && "richText" in value && Array.isArray(value.richText)) {
+    return {
+      ...value,
+      richText: value.richText.map((part) => {
+        let text = part.text
+        for (const key in data) {
+          text = text.replace(new RegExp(`{{\\s*${key}\\s*}}`, "g"), String(data[key] ?? ""))
+        }
+        return {
+          ...part,
+          text: sanitizeExcelCellValue(text) as string,
+        }
+      }),
+    } as ExcelJS.CellRichTextValue
+  }
+
+  return value
+}
+
 function cloneWorksheet(
   workbook: ExcelJS.Workbook,
   sourceSheet: ExcelJS.Worksheet,
@@ -222,13 +253,7 @@ async function handleExcelJSDefault(
     // 1️⃣ Replace placeholder {{...}}
     worksheet.eachRow((row) => {
       row.eachCell((cell) => {
-        if (typeof cell.value === "string") {
-          let text = cell.value
-          for (const key in data) {
-            text = text.replace(new RegExp(`{{\\s*${key}\\s*}}`, "g"), String(data[key] ?? ""))
-          }
-          cell.value = sanitizeExcelCellValue(text) as ExcelJS.CellValue
-        }
+        cell.value = replaceTemplatePlaceholders(cell.value, data)
       })
     })
 
@@ -396,15 +421,7 @@ async function handleSheetJSExport(
     }
     worksheet.eachRow((row) => {
       row.eachCell((cell) => {
-        if (typeof cell.value === "string") {
-          let text = cell.value
-
-          for (const key in data) {
-            text = text.replace(new RegExp(`{{\\s*${key}\\s*}}`, "g"), String(data[key] ?? ""))
-          }
-
-          cell.value = sanitizeExcelCellValue(text)
-        }
+        cell.value = replaceTemplatePlaceholders(cell.value, data)
       })
     })
 
@@ -580,13 +597,7 @@ async function handleExcelJSMergeSheets(
     // 1b. Thay thế placeholder {{...}}
     worksheet.eachRow((row) => {
       row.eachCell((cell) => {
-        if (typeof cell.value === "string") {
-          let text = cell.value
-          for (const key in data) {
-            text = text.replace(new RegExp(`{{\\s*${key}\\s*}}`, "g"), String(data[key] ?? ""))
-          }
-          cell.value = sanitizeExcelCellValue(text)
-        }
+        cell.value = replaceTemplatePlaceholders(cell.value, data)
       })
     })
 
