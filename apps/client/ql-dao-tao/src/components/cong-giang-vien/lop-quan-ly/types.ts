@@ -62,7 +62,10 @@ export type DiemRenLuyenRow = {
 
 export type ThongKeDiemRenLuyen = {
   tongSinhVien: number
-  duLieuBieuDo: { stt: number; diem: number }[]
+  soSinhVienCoDiem: number
+  diemTrungBinh: number | null
+  diemCaoNhat: number | null
+  diemThapNhat: number | null
 }
 
 export type TongKetRow = {

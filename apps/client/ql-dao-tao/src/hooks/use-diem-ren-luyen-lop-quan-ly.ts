@@ -87,13 +87,18 @@ const useDiemRenLuyenLopQuanLy = (fixedClassId: string, enabled: boolean) => {
   )
 
   const thongKe: ThongKeDiemRenLuyen = useMemo(() => {
-    const duLieuBieuDo = tatCaSinhVien
-      .map((sv, index) => ({ stt: index + 1, diem: layDiemRenLuyenSinhVien(sv) }))
-      .filter((item): item is { stt: number; diem: number } => item.diem != null)
+    const danhSachDiem = tatCaSinhVien
+      .map((sv) => layDiemRenLuyenSinhVien(sv))
+      .filter((diem): diem is number => diem != null)
+    const tongDiem = danhSachDiem.reduce((sum, diem) => sum + diem, 0)
 
     return {
       tongSinhVien: tatCaSinhVien.length,
-      duLieuBieuDo,
+      soSinhVienCoDiem: danhSachDiem.length,
+      diemTrungBinh:
+        danhSachDiem.length > 0 ? Math.round((tongDiem / danhSachDiem.length) * 100) / 100 : null,
+      diemCaoNhat: danhSachDiem.length > 0 ? Math.max(...danhSachDiem) : null,
+      diemThapNhat: danhSachDiem.length > 0 ? Math.min(...danhSachDiem) : null,
     }
   }, [tatCaSinhVien])
 
