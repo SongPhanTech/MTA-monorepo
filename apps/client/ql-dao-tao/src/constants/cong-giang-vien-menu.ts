@@ -51,7 +51,7 @@ export const CONG_GIANG_VIEN_MENU: CongGiangVienMenuItem[] = [
     children: [
       {
         id: "gv-ds-lop-giang-day",
-        label: "Danh sách lớp giảng dạy",
+        label: "Danh sách lớp",
         path: ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_LOP_GIANG_DAY_DANH_SACH_LOP_GIANG_DAY,
       },
       {
@@ -75,7 +75,7 @@ export const CONG_GIANG_VIEN_MENU: CongGiangVienMenuItem[] = [
   },
   {
     id: "gv-nghien-cuu",
-    label: "Nghiên cứu",
+    label: "Nghiên cứu khoa học",
     icon: BinocularsIcon,
     path: ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_NGHIEN_CUU,
   },
