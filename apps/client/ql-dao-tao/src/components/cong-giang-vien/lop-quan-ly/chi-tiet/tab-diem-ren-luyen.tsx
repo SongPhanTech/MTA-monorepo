@@ -3,7 +3,6 @@ import BangDiemRenLuyen from "@components/cong-giang-vien/lop-quan-ly/chi-tiet/b
 import PhanTrangSinhVien from "@components/cong-giang-vien/lop-quan-ly/chi-tiet/phan-trang-sinh-vien"
 import TheThongKeDiemRenLuyen from "@components/cong-giang-vien/lop-quan-ly/chi-tiet/the-thong-ke-diem-ren-luyen"
 import { useDiemRenLuyenLopQuanLy } from "@hooks/use-diem-ren-luyen-lop-quan-ly"
-import { useDisclosure } from "react-hook-disclosure-modal"
 
 interface TabDiemRenLuyenProps {
   fixedClassId: string
@@ -24,19 +23,11 @@ const TabDiemRenLuyen = ({ fixedClassId, enabled }: TabDiemRenLuyenProps) => {
     dangTai,
   } = useDiemRenLuyenLopQuanLy(fixedClassId, enabled)
 
-  const { onOpen: moChiTietSinhVien } = useDisclosure<string>({ tag: "ModalChiTietSinhVien" })
-
   return (
     <div className="flex h-full min-h-0 flex-col">
       <BoLocDiemRenLuyen semesterId={semesterId || ""} onApDung={apDungHocKy} />
       <TheThongKeDiemRenLuyen thongKe={thongKe} />
-      <BangDiemRenLuyen
-        danhSach={danhSach}
-        loading={dangTai}
-        trang={trang}
-        soTrang={soTrang}
-        onXemChiTiet={moChiTietSinhVien}
-      />
+      <BangDiemRenLuyen danhSach={danhSach} loading={dangTai} trang={trang} soTrang={soTrang} />
       <PhanTrangSinhVien
         trang={trang}
         soTrang={soTrang}

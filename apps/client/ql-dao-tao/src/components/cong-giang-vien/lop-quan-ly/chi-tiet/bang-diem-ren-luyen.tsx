@@ -1,8 +1,6 @@
 import type { DiemRenLuyenRow } from "@components/cong-giang-vien/lop-quan-ly/types"
-import { useStudentTrainingTypeOptions } from "@hooks/studentTrainingType"
-import { Button, Table, Tag } from "antd"
+import { Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
-import { Eye } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 
 const CHIEU_CAO_HEADER_BANG = 48
@@ -12,7 +10,6 @@ interface BangDiemRenLuyenProps {
   loading?: boolean
   trang: number
   soTrang: number
-  onXemChiTiet: (id: string) => void
 }
 
 const BangDiemRenLuyen = ({
@@ -20,12 +17,9 @@ const BangDiemRenLuyen = ({
   loading,
   trang,
   soTrang,
-  onXemChiTiet,
 }: BangDiemRenLuyenProps) => {
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(320)
-  const { getStudentTrainingTypeLabel, getStudentTrainingTypeColor } =
-    useStudentTrainingTypeOptions()
 
   useEffect(() => {
     const el = vungBangRef.current
@@ -72,39 +66,11 @@ const BangDiemRenLuyen = ({
       render: (value: number | null) => (value != null ? value : "—"),
     },
     {
-      title: "Xếp loại",
-      dataIndex: "xepLoai",
-      width: 140,
-      align: "center",
-      render: (value: DiemRenLuyenRow["xepLoai"]) =>
-        value ? (
-          <Tag color={getStudentTrainingTypeColor(value)}>{getStudentTrainingTypeLabel(value)}</Tag>
-        ) : (
-          "—"
-        ),
-    },
-    {
       title: "Ghi chú",
       dataIndex: "ghiChu",
       width: 140,
       ellipsis: true,
       render: (value: string) => value || "—",
-    },
-    {
-      title: "Chi tiết",
-      width: 90,
-      align: "center",
-      render: (_value, record) => (
-        <Button
-          type="link"
-          size="small"
-          icon={<Eye size={14} />}
-          className="inline-flex items-center gap-1 px-0 text-cgv-green-dark"
-          onClick={() => onXemChiTiet(record.id)}
-        >
-          Chi tiết
-        </Button>
-      ),
     },
   ]
 

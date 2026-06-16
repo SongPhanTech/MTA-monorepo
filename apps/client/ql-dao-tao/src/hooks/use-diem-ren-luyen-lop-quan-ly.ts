@@ -4,7 +4,6 @@ import type {
 } from "@components/cong-giang-vien/lop-quan-ly/types"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import {
-  laDatDiemRenLuyen,
   layDiemRenLuyenSinhVien,
   layGhiChuDiemRenLuyen,
   layXepLoaiRenLuyen,
@@ -88,29 +87,13 @@ const useDiemRenLuyenLopQuanLy = (fixedClassId: string, enabled: boolean) => {
   )
 
   const thongKe: ThongKeDiemRenLuyen = useMemo(() => {
-    let soDat = 0
-    let soKhongDat = 0
-    let tongDiem = 0
-    let soCoDiem = 0
-
-    for (const sv of tatCaSinhVien) {
-      const diem = layDiemRenLuyenSinhVien(sv)
-      const xepLoai = layXepLoaiRenLuyen(sv)
-
-      if (diem != null) {
-        tongDiem += diem
-        soCoDiem += 1
-      }
-
-      if (laDatDiemRenLuyen(diem, xepLoai)) soDat += 1
-      else if (diem != null) soKhongDat += 1
-    }
+    const duLieuBieuDo = tatCaSinhVien
+      .map((sv, index) => ({ stt: index + 1, diem: layDiemRenLuyenSinhVien(sv) }))
+      .filter((item): item is { stt: number; diem: number } => item.diem != null)
 
     return {
       tongSinhVien: tatCaSinhVien.length,
-      soDat,
-      soKhongDat,
-      diemTrungBinh: soCoDiem > 0 ? Math.round((tongDiem / soCoDiem) * 100) / 100 : null,
+      duLieuBieuDo,
     }
   }, [tatCaSinhVien])
 
