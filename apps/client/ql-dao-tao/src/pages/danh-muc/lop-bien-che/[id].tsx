@@ -158,6 +158,11 @@ export default function StudentFixedClassPage() {
         trainingCourse: {
           include: {
             trainingObjectType: true,
+            semesterStart: {
+              include: {
+                schoolYear: true,
+              },
+            },
           },
         },
         curriculumVersion: {
@@ -209,7 +214,6 @@ export default function StudentFixedClassPage() {
     }
   )
 
-  // Danh sách chức vụ cán bộ lớp + màu đánh dấu tương ứng
   const canBoRoles = [
     { id: fixedClass?.classMonitorId, label: "Lớp trưởng", className: "bg-blue-200" },
     { id: fixedClass?.unionSecretaryId, label: "Bí thư", className: "bg-green-200" },
@@ -221,14 +225,12 @@ export default function StudentFixedClassPage() {
     },
   ]
 
-  // Map studentId -> className để tô màu dòng theo chức vụ
   const roleByStudentId = useMemo(() => {
     const map: Record<string, string> = {}
     for (const r of canBoRoles) {
       if (r.id) map[r.id] = r.className
     }
     return map
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     fixedClass?.classMonitorId,
     fixedClass?.unionSecretaryId,
@@ -236,7 +238,7 @@ export default function StudentFixedClassPage() {
     fixedClass?.deputyUnionSecretaryId,
   ])
 
-  const { data = [], refetch } = useFindManyStudent(
+  const { data = [] } = useFindManyStudent(
     {
       where: {
         fixedClassId,
@@ -389,7 +391,13 @@ export default function StudentFixedClassPage() {
         },
         studentSemesterResult: {
           orderBy: { semester: { startDate: "desc" } },
-          include: { semester: true },
+          include: {
+            semester: {
+              include: {
+                schoolYear: true,
+              },
+            },
+          },
         },
         thesisRegistrations: {
           include: {
@@ -511,7 +519,6 @@ export default function StudentFixedClassPage() {
   const showPopconfirm = () => {
     setOpen(true)
   }
-
   const handleExportDiemLop = async () => {
     showSpinner()
     try {
@@ -539,18 +546,24 @@ export default function StudentFixedClassPage() {
       const subjectsInOrder = fixedClass?.curriculumVersion?.trainingBlocks
         .flatMap((block) => block.subjects)
         .sort((a, b) => (a.semester || 0) - (b.semester || 0))
+      type SubjectInOrder = NonNullable<typeof subjectsInOrder>[number]
+      type NumericLike = {
+        toNumber?: () => number
+        toString: () => string
+      }
+      type ScoreExportValue = string | number | NumericLike | null
       const tongSoHP = subjectsInOrder?.length
       const tongSoTC = subjectsInOrder?.reduce((sum, s) => sum + (s.subject.credit || 0), 0)
 
       const chuthichMonHoc = subjectsInOrder?.map((s, index) => `M${index + 1}. ${s.subject.name}`)
 
       const studentRows: TableRow[] = data.map((student, index) => {
-        const thesisReg = (student as any).thesisRegistrations?.[0]
+        const thesisReg = student.thesisRegistrations?.[0]
         const defenseScore = thesisReg?.thesisProject?.defenseRecord?.finalScore
 
-        const diem: (string | number | null)[] = (subjectsInOrder || []).map((subjectInfo) => {
-          const scoreData = (student as any).subjectClassStudent?.find(
-            (score: any) => score.subjectVersionId === subjectInfo.subject.id
+        const diem: ScoreExportValue[] = (subjectsInOrder || []).map((subjectInfo) => {
+          const scoreData = student.subjectClassStudent?.find(
+            (score) => score.subjectVersionId === subjectInfo.subject.id
           )
 
           if (!scoreData) return " "
@@ -618,8 +631,7 @@ export default function StudentFixedClassPage() {
             },
             ...(subjectsInOrder || []).map((subjectInfo, i) => {
               const scoreValue = diem[i]
-              const isGraduation =
-                (subjectInfo as any)?.subjectVersion?.trainingBlocks?.[0]?.graduation === true
+              const isGraduation = subjectInfo.graduation === true
               const passThreshold = isGraduation ? scoreToPassGraduation : 4.0
               const numericScore = toNumericScore(scoreValue)
               const isFailed =
@@ -654,8 +666,7 @@ export default function StudentFixedClassPage() {
           ],
         }
       })
-
-      type SemesterGroup = { semesterNum: number; subjects: NonNullable<typeof subjectsInOrder> }
+      type SemesterGroup = { semesterNum: number; subjects: SubjectInOrder[] }
       const semesterGroups: SemesterGroup[] = []
       ;(subjectsInOrder || []).forEach((s) => {
         const semNum = s.semester || 0
@@ -668,45 +679,20 @@ export default function StudentFixedClassPage() {
       })
       semesterGroups.sort((a, b) => a.semesterNum - b.semesterNum)
 
-      const formatSchoolYear = (semester: any) => {
-        if (semester?.schoolYear?.name) return semester.schoolYear.name
-
-        if (semester?.schoolYear?.startDate) {
-          const startYear = dayjs(semester.schoolYear.startDate).year()
-          const endYear = semester.schoolYear.endDate
-            ? dayjs(semester.schoolYear.endDate).year()
-            : startYear + 1
-          return `${startYear}-${endYear}`
-        }
-
-        if (semester?.startDate) {
-          const startYear = dayjs(semester.startDate).year()
-          return `${startYear}-${startYear + 1}`
-        }
-
-        return ""
-      }
-
       const getSemesterLabel = (semNum: number): string => {
-        const semGroupIndex = semesterGroups.findIndex((g) => g.semesterNum === semNum)
-        for (const student of data) {
-          const semResults = (student as any).studentSemesterResult || []
-          if (semResults.length > 0) {
-            const sortedSems = [...semResults].sort(
-              (a: any, b: any) =>
-                new Date(a.semester?.startDate || 0).getTime() -
-                new Date(b.semester?.startDate || 0).getTime()
-            )
-            const matchedSem = sortedSems[semGroupIndex]
-            if (matchedSem?.semester) {
-              const semesterName = matchedSem.semester.name || `Học kỳ ${semNum}`
-              const schoolYear = formatSchoolYear(matchedSem.semester)
+        const courseStartSchoolYear = fixedClass?.trainingCourse?.semesterStart?.schoolYear
+        const semesterIndexInYear = ((semNum - 1) % 2) + 1
+        const schoolYearOffset = Math.floor((semNum - 1) / 2)
+        const semesterName = `Học kỳ ${semesterIndexInYear}`
 
-              return schoolYear ? `${semesterName} (năm học ${schoolYear})` : semesterName
-            }
-          }
-        }
-        return `Học kỳ ${semNum}`
+        if (!courseStartSchoolYear?.startDate) return semesterName
+
+        const startYear = dayjs(courseStartSchoolYear.startDate).year() + schoolYearOffset
+        const endYear = courseStartSchoolYear.endDate
+          ? dayjs(courseStartSchoolYear.endDate).year() + schoolYearOffset
+          : startYear + 1
+
+        return `${semesterName} (năm học ${startYear}-${endYear})`
       }
 
       const totalSubjectCols = subjectsInOrder?.length || 0
