@@ -27465,9 +27465,12 @@ const metadata: ModelMeta = {
                 }, surveyId_studentId: {
                     name: "surveyId_studentId",
                     fields: ["surveyId", "studentId"]
+                }, surveyId_profileId: {
+                    name: "surveyId_profileId",
+                    fields: ["surveyId", "profileId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         surveyResponse: {
             name: 'SurveyResponse', fields: {

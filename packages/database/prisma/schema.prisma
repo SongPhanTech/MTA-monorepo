@@ -6934,6 +6934,7 @@ model SurveySession {
   responses          SurveyResponse[]
 
   @@unique([surveyId, studentId])
+  @@unique([surveyId, profileId])
   @@schema("khao-thi")
 }
 

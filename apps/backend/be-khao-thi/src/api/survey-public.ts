@@ -338,7 +338,8 @@ const validateUserSurvey = createRoute({
   path: "/validate-user-survey",
   tags: ["Survey"],
   summary: "Kiểm tra mã người làm khảo sát có trong danh sách đối tượng",
-  description: "Kiểm tra mã học viên, giảng viên hoặc cán bộ có trong danh sách đối tượng làm khảo sát",
+  description:
+    "Kiểm tra mã học viên, giảng viên hoặc cán bộ có trong danh sách đối tượng làm khảo sát",
   method: "get",
   request: {
     query: z.object({

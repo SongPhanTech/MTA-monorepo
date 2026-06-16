@@ -1,8 +1,8 @@
-import DatePicker from "@components/commons/date-picker";
-import Select from "@components/commons/select";
+import DatePicker from "@components/commons/date-picker"
+import Select from "@components/commons/select"
 import { useFindManySchoolYear } from "@workspace/db/hooks"
 import { useSemesterStore } from "@workspace/ui"
-import { Button} from "antd"
+import { Button } from "antd"
 import type { Dayjs } from "dayjs"
 import { useMemo } from "react"
 

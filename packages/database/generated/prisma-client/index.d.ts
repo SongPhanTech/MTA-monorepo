@@ -431494,6 +431494,7 @@ export namespace Prisma {
     id?: string
     code?: string
     surveyId_studentId?: SurveySessionSurveyIdStudentIdCompoundUniqueInput
+    surveyId_profileId?: SurveySessionSurveyIdProfileIdCompoundUniqueInput
     AND?: SurveySessionWhereInput | SurveySessionWhereInput[]
     OR?: SurveySessionWhereInput[]
     NOT?: SurveySessionWhereInput | SurveySessionWhereInput[]
@@ -431515,7 +431516,7 @@ export namespace Prisma {
     student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
     surveyObjectType?: XOR<SurveyObjectTypeNullableScalarRelationFilter, SurveyObjectTypeWhereInput> | null
     responses?: SurveyResponseListRelationFilter
-  }, "id" | "code" | "surveyId_studentId">
+  }, "id" | "code" | "surveyId_studentId" | "surveyId_profileId">
 
   export type SurveySessionOrderByWithAggregationInput = {
     id?: SortOrder
@@ -491489,6 +491490,11 @@ export namespace Prisma {
   export type SurveySessionSurveyIdStudentIdCompoundUniqueInput = {
     surveyId: string
     studentId: string
+  }
+
+  export type SurveySessionSurveyIdProfileIdCompoundUniqueInput = {
+    surveyId: string
+    profileId: string
   }
 
   export type SurveySessionCountOrderByAggregateInput = {

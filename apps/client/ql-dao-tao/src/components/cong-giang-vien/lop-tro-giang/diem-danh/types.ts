@@ -37,7 +37,8 @@ export const tinhTongKet = (danhSach: SinhVienDiemDanhRow[]): TongKetDiemDanh =>
   const coMat = danhSach.filter((sv) => sv.trangThai === "PRESENT").length
   const vangCoPhep = danhSach.filter((sv) => sv.trangThai === "EXCUSED_ABSENT").length
   const vangKhongPhep = danhSach.filter((sv) => sv.trangThai === "UNEXCUSED_ABSENT").length
-  const phanTram = (so: number) => (tongSinhVien ? Math.round((so / tongSinhVien) * 10000) / 100 : 0)
+  const phanTram = (so: number) =>
+    tongSinhVien ? Math.round((so / tongSinhVien) * 10000) / 100 : 0
 
   return {
     tongSinhVien,

@@ -85,12 +85,14 @@ const useDiemDanhTroGiang = (lopIdMacDinh?: string) => {
     setLopId(lopOptions[0]?.value)
   }, [lopId, lopOptions])
 
-  const ngayBatDau = useMemo(() => (khoaTai ? dayjs(khoaTai.ngay).startOf("day").toDate() : null), [
-    khoaTai,
-  ])
-  const ngayKetThuc = useMemo(() => (khoaTai ? dayjs(khoaTai.ngay).endOf("day").toDate() : null), [
-    khoaTai,
-  ])
+  const ngayBatDau = useMemo(
+    () => (khoaTai ? dayjs(khoaTai.ngay).startOf("day").toDate() : null),
+    [khoaTai]
+  )
+  const ngayKetThuc = useMemo(
+    () => (khoaTai ? dayjs(khoaTai.ngay).endOf("day").toDate() : null),
+    [khoaTai]
+  )
 
   const { data: chiTietLop, isLoading: dangTaiChiTiet } = useFindUniqueSubjectClass(
     {
@@ -114,7 +116,6 @@ const useDiemDanhTroGiang = (lopIdMacDinh?: string) => {
 
   // Phiếu điểm danh đã tồn tại cho ngày đang chọn (nếu có).
   const phieuDaCo = chiTietLop?.subjectClassAttendances?.[0]
-
 
   useEffect(() => {
     if (!chiTietLop) return
@@ -178,7 +179,7 @@ const useDiemDanhTroGiang = (lopIdMacDinh?: string) => {
   }
 
   const doiGhiChuSinhVien = (studentId: string, ghiChu: string) => {
-    setDanhSach((prev) => (prev.map((sv) => (sv.studentId === studentId ? { ...sv, ghiChu } : sv))))
+    setDanhSach((prev) => prev.map((sv) => (sv.studentId === studentId ? { ...sv, ghiChu } : sv)))
   }
 
   const { mutateAsync: taoPhieu } = useCreateSubjectClassAttendance()

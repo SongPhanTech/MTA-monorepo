@@ -26026,6 +26026,9 @@ const metadata: ModelMeta = {
                 }, surveyId_studentId: {
                     name: "surveyId_studentId",
                     fields: ["surveyId", "studentId"]
+                }, surveyId_profileId: {
+                    name: "surveyId_profileId",
+                    fields: ["surveyId", "profileId"]
                 },
             },
         },

@@ -16,12 +16,10 @@ const DongTomTatDiemDanh = ({ tongKet }: DongTomTatDiemDanhProps) => (
       </span>
     </span>
     <span className="text-gray-700">
-      Vắng có phép:{" "}
-      <span className="font-semibold text-amber-600">{tongKet.vangCoPhep}</span>
+      Vắng có phép: <span className="font-semibold text-amber-600">{tongKet.vangCoPhep}</span>
     </span>
     <span className="text-gray-700">
-      Vắng không phép:{" "}
-      <span className="font-semibold text-red-500">{tongKet.vangKhongPhep}</span>
+      Vắng không phép: <span className="font-semibold text-red-500">{tongKet.vangKhongPhep}</span>
     </span>
   </div>
 )

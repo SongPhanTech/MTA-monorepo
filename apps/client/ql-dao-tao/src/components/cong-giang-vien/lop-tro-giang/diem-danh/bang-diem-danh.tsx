@@ -33,10 +33,7 @@ const BangDiemDanh = ({ danhSach, loading, onDoiTrangThai, onDoiGhiChu }: BangDi
     return () => observer.disconnect()
   }, [])
 
-  const oCheckbox = (
-    record: SinhVienDiemDanhRow,
-    trangThai: TrangThaiDiemDanh
-  ) => (
+  const oCheckbox = (record: SinhVienDiemDanhRow, trangThai: TrangThaiDiemDanh) => (
     <Checkbox
       checked={record.trangThai === trangThai}
       onChange={() => onDoiTrangThai(record.studentId, trangThai)}
