@@ -1,13 +1,10 @@
 import type { QuaTrinhCongTac } from "@components/cong-giang-vien/ho-so-ca-nhan/types"
-import { GIA_TRI_TRONG } from "@components/cong-giang-vien/ho-so-ca-nhan/hang-thong-tin"
 import { Card, Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
 
 interface QuaTrinhCongTacProps {
   danhSach: QuaTrinhCongTac[]
 }
-
-const hienThiOTrong = (value?: string) => (value?.trim() ? value : GIA_TRI_TRONG)
 
 // Khối 3: Bảng quá trình công tác.
 const QuaTrinhCongTacBlock = ({ danhSach }: QuaTrinhCongTacProps) => {
@@ -16,24 +13,21 @@ const QuaTrinhCongTacBlock = ({ danhSach }: QuaTrinhCongTacProps) => {
       title: "Thời gian",
       dataIndex: "thoiGian",
       width: 220,
-      render: (value: string) => hienThiOTrong(value),
     },
     {
       title: "Đơn vị công tác",
       dataIndex: "donViCongTac",
-      render: (value: string) => hienThiOTrong(value),
     },
     {
       title: "Vị trí công tác",
       dataIndex: "viTriCongTac",
       width: 220,
-      render: (value: string) => hienThiOTrong(value),
     },
     {
       title: "Ghi chú",
       dataIndex: "ghiChu",
       width: 220,
-      render: (value: string | undefined) => hienThiOTrong(value),
+      render: (value: string | undefined) => value || "",
     },
   ]
 

@@ -1,4 +1,4 @@
-import InputRow, { GIA_TRI_TRONG } from "@components/cong-giang-vien/ho-so-ca-nhan/hang-thong-tin"
+import InputRow from "@components/cong-giang-vien/ho-so-ca-nhan/hang-thong-tin"
 import type { ThongKeHoSo, ThongTinCaNhan } from "@components/cong-giang-vien/ho-so-ca-nhan/types"
 import { Avatar, Card, Col, Row, Tag } from "antd"
 import { UserRound } from "lucide-react"
@@ -33,9 +33,9 @@ const ThongTinChung = ({ thongTin, thongKe }: ThongTinChungProps) => {
 
   return (
     <Card size="small" className="mb-4">
-      <Row gutter={[8, 16]} align="top">
+      <Row gutter={[24, 16]}>
         {/* Ảnh đại diện */}
-        <Col flex="140px" className="flex justify-center sm:justify-start">
+        <Col xs={24} sm={6} md={5} xl={4} className="flex justify-center sm:justify-start">
           <Avatar
             shape="square"
             size={140}
@@ -46,8 +46,8 @@ const ThongTinChung = ({ thongTin, thongKe }: ThongTinChungProps) => {
         </Col>
 
         {/* Thông tin chung - 2 cột */}
-        <Col flex="auto" className="min-w-0">
-          <Row gutter={[16, 8]}>
+        <Col xs={24} sm={18} md={19} xl={14}>
+          <Row gutter={[24, 8]}>
             <Col xs={24} md={12}>
               <div className="flex flex-col gap-2">
                 <InputRow label="Họ và tên" value={thongTin.hoVaTen} />
@@ -68,13 +68,7 @@ const ThongTinChung = ({ thongTin, thongKe }: ThongTinChungProps) => {
                 <InputRow label="Ngày vào trường" value={thongTin.ngayVaoTruong} />
                 <InputRow
                   label="Tình trạng"
-                  value={
-                    thongTin.tinhTrang ? (
-                      <Tag color="green">{thongTin.tinhTrang}</Tag>
-                    ) : (
-                      GIA_TRI_TRONG
-                    )
-                  }
+                  value={<Tag color="green">{thongTin.tinhTrang}</Tag>}
                 />
               </div>
             </Col>
@@ -90,7 +84,7 @@ const ThongTinChung = ({ thongTin, thongKe }: ThongTinChungProps) => {
                 <div key={item.key} className="flex items-baseline justify-between gap-3 text-sm">
                   <span className="text-gray-600">{item.nhan}</span>
                   <span className="whitespace-nowrap text-right font-semibold text-cgv-green-dark">
-                    {item.giaTri || GIA_TRI_TRONG}
+                    {item.giaTri}
                   </span>
                 </div>
               ))}
