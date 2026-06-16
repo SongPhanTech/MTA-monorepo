@@ -1,11 +1,12 @@
-import DatePicker from "@components/commons/date-picker"
 import type { LopGiangDayRow } from "@components/cong-giang-vien/lop-giang-day/types"
-import { diemDanhGiangDayPath } from "@constants/cong-giang-vien-path"
+import {
+  diemDanhGiangDayPath,
+  nhapDiemThiGiangDayPath,
+  nhapDiemQuaTrinhGiangDayPath,
+} from "@constants/cong-giang-vien-path"
 import { diemLopMonHocStore } from "@pages/quan-ly-diem/ql-diem-lop-mon-hoc"
 import { $Enums } from "@workspace/db/client"
-import { useUpdateSubjectClass } from "@workspace/db/hooks"
-import { ROUTER_PATH } from "@workspace/router"
-import { Button, Checkbox, Dropdown, Table, Tag, Tooltip, message } from "antd"
+import { Button, Checkbox, Dropdown, Table, Tag, Tooltip } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import type { MenuProps } from "antd"
 import dayjs from "dayjs"
@@ -42,7 +43,6 @@ const BangLopGiangDay = ({
   const router = useRouter()
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(320)
-  const { mutateAsync: capNhatLopMonHoc } = useUpdateSubjectClass()
 
   useEffect(() => {
     const el = vungBangRef.current
@@ -60,26 +60,15 @@ const BangLopGiangDay = ({
 
   const moNhapDiem = (id: string, loai: "qua-trinh" | "thi") => {
     diemLopMonHocStore.setState({ selectedSubjectClassId: id })
-    router.push({
-      pathname: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-      query: { loaiNhapDiem: loai },
-    })
+    router.push(
+      loai === "qua-trinh"
+        ? nhapDiemQuaTrinhGiangDayPath(id)
+        : nhapDiemThiGiangDayPath(id)
+    )
   }
 
   const moDiemDanh = (id: string) => {
     router.push(diemDanhGiangDayPath(id))
-  }
-
-  const doiNgayThi = async (id: string, value: dayjs.Dayjs | null) => {
-    try {
-      await capNhatLopMonHoc({
-        where: { id },
-        data: { examDate: value ? value.toISOString() : null },
-      })
-      message.success("Cập nhật ngày thi thành công")
-    } catch {
-      message.error("Không thể cập nhật ngày thi")
-    }
   }
 
   const columns: ColumnsType<LopGiangDayRow> = [
@@ -175,15 +164,7 @@ const BangLopGiangDay = ({
       dataIndex: "ngayThi",
       width: 140,
       align: "center",
-      render: (value: string | null, record) => (
-        <DatePicker
-          allowClear
-          format="DD/MM/YYYY"
-          value={value ? dayjs(value) : null}
-          className="w-full"
-          onChange={(date) => doiNgayThi(record.id, date)}
-        />
-      ),
+      render: (value: string | null) => (value ? dayjs(value).format("DD/MM/YYYY") : ""),
     },
     {
       title: "Hạn NĐT",
