@@ -2578,7 +2578,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           return {
             chuc_vi: `${idx + 1}. ${chucVi}`,
             ten_day_du: [title, safeString(expert?.name)].filter(Boolean).join(" ").trim(),
-            don_vi: safeString(expert?.lecturer?.organization?.sTen),
+            don_vi: safeString(expert?.lecturer?.organization?.sTen || expert?.workplace),
             vai_tro_hoi_dong: vaiTroByRole[m.role] ?? "",
           }
         })
