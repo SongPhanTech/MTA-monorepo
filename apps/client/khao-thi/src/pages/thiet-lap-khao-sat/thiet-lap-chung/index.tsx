@@ -35,7 +35,7 @@ function Page() {
       },
       {
         key: "3",
-        label: "Nhóm câu hỏi khảo sát",
+        label: topicSlected?.type === "CLUSTER" ? "Câu hỏi khảo sát" : "Nhóm câu hỏi khảo sát",
         children: <TabNhomCauHoi topicSlected={topicSlected} />,
         disabled: !topicSlected?.id,
       },
