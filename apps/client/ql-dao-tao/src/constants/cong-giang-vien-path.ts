@@ -35,5 +35,8 @@ export const nhapDiemThiGiangDayPath = (subjectClassId?: string) =>
 export const hoSoSinhVienLopQuanLyPath = (fixedClassId: string, studentId: string) =>
   `${CONG_GIANG_VIEN_LOP_QUAN_LY_PATH}/${fixedClassId}/sinh-vien/${studentId}`
 
+export const ketQuaHocTapSinhVienLopQuanLyPath = (fixedClassId: string, studentId: string) =>
+  `${CONG_GIANG_VIEN_LOP_QUAN_LY_PATH}/${fixedClassId}/sinh-vien/${studentId}/ket-qua-hoc-tap`
+
 export const isCongGiangVienRoute = (pathname: string) =>
   pathname === CONG_GIANG_VIEN_BASE_PATH || pathname.startsWith(`${CONG_GIANG_VIEN_BASE_PATH}/`)

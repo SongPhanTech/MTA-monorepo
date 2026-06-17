@@ -164,8 +164,8 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
         0
       ) ?? 0
 
-    const cpaValue = ketQuaKy?.cumulativeGpaBase4
-    const cpa = cpaValue != null ? `${Number(cpaValue).toFixed(2).replace(".", ",")} / 4,00` : "—"
+    const gpaValue = ketQuaKy?.cumulativeGpaBase4
+    const gpa = gpaValue != null ? `${Number(gpaValue).toFixed(2).replace(".", ",")} / 4,00` : "—"
 
     const suKien: SuKienQuaTrinh[] = [
       ...(student.archivedAward ?? []).map((item) => ({
@@ -269,7 +269,7 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
       lichSuHocTap: {
         tongHocPhan,
         tongTinChi,
-        cpa,
+        gpa,
         xepLoaiHocLuc: ketQuaKy?.rank?.classification ?? null,
         xepLoaiRenLuyen: ketQuaKy?.studentTrainingType
           ? (XEP_LOAI_RL[ketQuaKy.studentTrainingType] ?? ketQuaKy.studentTrainingType)

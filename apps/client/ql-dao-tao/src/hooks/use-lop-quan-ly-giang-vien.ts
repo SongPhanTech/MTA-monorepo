@@ -5,19 +5,12 @@ import type {
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { demGioiTinhSinhVien } from "@lib/dem-gioi-tinh-sinh-vien"
 import { useSession } from "@workspace/auth/react"
-import {
-  useCountFixedClass,
-  useFindFirstSemester,
-  useFindManyFixedClass,
-} from "@workspace/db/hooks"
-import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
+import { useCountFixedClass, useFindManyFixedClass } from "@workspace/db/hooks"
 import { useMemo, useState } from "react"
 
 const useLopQuanLyGiangVien = () => {
   const { data: me } = useSession()
   const profileId = me?.sDM_NhanVienId ?? ""
-  const { id: semesterId } = useSemesterStore()
-  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
   const [boLocNhap, setBoLocNhap] = useState<BoLocLopQuanLy>({
     tuKhoa: "",
@@ -29,14 +22,6 @@ const useLopQuanLyGiangVien = () => {
   })
   const [trang, setTrang] = useState(1)
   const [soTrang, setSoTrang] = useState(DEFAULT_PAGINATE_SIZE)
-
-  const { data: semester } = useFindFirstSemester(
-    {
-      where: { id: semesterId },
-      select: { schoolYearId: true },
-    },
-    { enabled: !!semesterId }
-  )
 
   const where = useMemo(
     () => ({
@@ -52,17 +37,11 @@ const useLopQuanLyGiangVien = () => {
             ],
           }
         : {}),
-      trainingCourse: {
-        trainingObjectTypeId,
-        semesterStart: {
-          schoolYearId: semester?.schoolYearId,
-        },
-      },
     }),
-    [profileId, boLocApDung, trainingObjectTypeId, semester?.schoolYearId]
+    [profileId, boLocApDung]
   )
 
-  const queryEnabled = !!profileId && !!trainingObjectTypeId && !!semester?.schoolYearId
+  const queryEnabled = !!profileId
 
   const { data = [], isLoading } = useFindManyFixedClass(
     {

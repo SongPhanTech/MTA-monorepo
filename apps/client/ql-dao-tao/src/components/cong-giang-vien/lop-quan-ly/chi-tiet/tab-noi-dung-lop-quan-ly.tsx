@@ -3,8 +3,10 @@ import BoLocSinhVien from "@components/cong-giang-vien/lop-quan-ly/chi-tiet/bo-l
 import PhanTrangSinhVien from "@components/cong-giang-vien/lop-quan-ly/chi-tiet/phan-trang-sinh-vien"
 import TabDiemRenLuyen from "@components/cong-giang-vien/lop-quan-ly/chi-tiet/tab-diem-ren-luyen"
 import TabTongKet from "@components/cong-giang-vien/lop-quan-ly/chi-tiet/tab-tong-ket"
-import { hoSoSinhVienLopQuanLyPath } from "@constants/cong-giang-vien-path"
-import { ROUTER_PATH } from "@workspace/router"
+import {
+  hoSoSinhVienLopQuanLyPath,
+  ketQuaHocTapSinhVienLopQuanLyPath,
+} from "@constants/cong-giang-vien-path"
 import { Tabs } from "antd"
 import { useRouter } from "next/router"
 import { useState } from "react"
@@ -61,12 +63,7 @@ const TabDanhSachSinhVien = ({
         layNhanTrangThai={layNhanTrangThai}
         onXemHoSo={(studentId) => router.push(hoSoSinhVienLopQuanLyPath(fixedClassId, studentId))}
         onXemKetQuaHocTap={(studentId) =>
-          router.push(
-            ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID.replace(
-              "[id]",
-              studentId
-            )
-          )
+          router.push(ketQuaHocTapSinhVienLopQuanLyPath(fixedClassId, studentId))
         }
       />
       <PhanTrangSinhVien

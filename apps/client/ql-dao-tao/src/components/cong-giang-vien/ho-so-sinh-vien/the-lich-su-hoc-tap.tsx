@@ -24,8 +24,8 @@ const TheLichSuHocTap = ({ data }: TheLichSuHocTapProps) => {
           <p className="m-0 mt-1 text-xl font-bold text-gray-800">{data.tongTinChi}</p>
         </div>
         <div className="col-span-2 rounded-lg bg-blue-50 p-3 text-center">
-          <p className="m-0 text-xs text-gray-500">CPA hiện tại</p>
-          <p className="m-0 mt-1 text-xl font-bold text-blue-700">{data.cpa}</p>
+          <p className="m-0 text-xs text-gray-500">GPA hiện tại</p>
+          <p className="m-0 mt-1 text-xl font-bold text-blue-700">{data.gpa}</p>
         </div>
         <div className="rounded-lg bg-gray-50 p-3 text-center">
           <p className="m-0 text-xs text-gray-500">Xếp loại học lực</p>

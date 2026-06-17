@@ -528,7 +528,7 @@ const ModalChiTietSinhVien = () => {
               render: (val) => (val ? Number(val).toFixed(2) : ""),
             },
             {
-              title: "CPA (4)",
+              title: "GPA(4)",
               dataIndex: "cumulativeGpaBase4",
               width: 90,
               align: "center",
@@ -542,7 +542,7 @@ const ModalChiTietSinhVien = () => {
               render: (val) => (val ? Number(val).toFixed(2) : ""),
             },
             {
-              title: "CPA (10)",
+              title: "GPA(10)",
               dataIndex: "cumulativeGpaBase10",
               width: 90,
               align: "center",
@@ -735,7 +735,7 @@ const ModalChiTietSinhVien = () => {
               render: (val) => val?.toString(),
             },
             {
-              title: "CPA (4)",
+              title: "GPA(4)",
               dataIndex: "cumulativeGpaBase4",
               width: 90,
               align: "center",
@@ -749,7 +749,7 @@ const ModalChiTietSinhVien = () => {
               render: (val) => val?.toString(),
             },
             {
-              title: "CPA (10)",
+              title: "GPA(10)",
               dataIndex: "cumulativeGpaBase10",
               width: 90,
               align: "center",
