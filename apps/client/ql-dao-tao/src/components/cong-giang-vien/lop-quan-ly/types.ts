@@ -78,21 +78,16 @@ export type TongKetRow = {
   ghiChu: string
 }
 
+export type ThongKeXepLoaiItem = {
+  ten: string
+  rankOrder: number
+  soSinhVien: number
+  tyLe: string
+}
+
 export type ThongKeTongKet = {
   tongSinhVien: number
   diemTrungBinh: number | null
   heDiem: 4 | 10
-  nguongDat: number | null
-  soDatNguong: number
-  tyLeDatNguong: string
-  soDuoiNguong: number
-  tyLeDuoiNguong: string
-  soXuatSac: number
-  tyLeXuatSac: string
-  soGioi: number
-  tyLeGioi: string
-  soKha: number
-  tyLeKha: string
-  soTbTroXuong: number
-  tyLeTbTroXuong: string
+  theoXepLoai: ThongKeXepLoaiItem[]
 }

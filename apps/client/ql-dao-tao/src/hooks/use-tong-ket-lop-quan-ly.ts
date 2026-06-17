@@ -1,12 +1,9 @@
 import type { ThongKeTongKet, TongKetRow } from "@components/cong-giang-vien/lop-quan-ly/types"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import {
-  laHocLucTbTroXuong,
   layDiemToiDa,
   layGpaHocKy,
   layHeDiemTotNghiep,
-  layNguongDatTotNghiep,
-  layRankOrderTbTroXuong,
   phanLoaiDiemTotNghiep,
 } from "@lib/tong-ket-hoc-ky"
 import { AcademicRankingBaseType, RankingContext } from "@workspace/db/client"
@@ -27,6 +24,7 @@ const STUDENT_INCLUDE = (semesterId: string) =>
       select: {
         gpaBase4: true,
         gpaBase10: true,
+        rank: { select: { classification: true, rankOrder: true } },
       },
       take: 1,
     },
@@ -34,6 +32,28 @@ const STUDENT_INCLUDE = (semesterId: string) =>
 
 const tinhTyLe = (so: number, tong: number) =>
   tong > 0 ? `${Math.round((so / tong) * 10000) / 100}%` : "0%"
+
+type KetQuaHocKySv = {
+  gpaBase4?: unknown
+  gpaBase10?: unknown
+  rank?: { classification?: string | null; rankOrder?: number | null } | null
+}
+
+const layXepLoaiHocKy = (
+  ketQua: KetQuaHocKySv | undefined,
+  gpa: number | null,
+  xepLoaiHocLuc: Parameters<typeof phanLoaiDiemTotNghiep>[1],
+  baseScoreKhoa: Parameters<typeof phanLoaiDiemTotNghiep>[2]
+) => {
+  const tuKetQua = ketQua?.rank?.classification
+  if (tuKetQua) {
+    return {
+      classification: tuKetQua,
+      rankOrder: ketQua.rank?.rankOrder ?? null,
+    }
+  }
+  return phanLoaiDiemTotNghiep(gpa, xepLoaiHocLuc, baseScoreKhoa)
+}
 
 const useTongKetLopQuanLy = (fixedClassId: string, enabled: boolean) => {
   const { id: semesterMacDinh } = useSemesterStore()
@@ -61,11 +81,11 @@ const useTongKetLopQuanLy = (fixedClassId: string, enabled: boolean) => {
   const trainingCourseId = fixedClass?.trainingCourseId ?? ""
   const baseScoreKhoa = fixedClass?.trainingCourse?.baseScore ?? AcademicRankingBaseType.Base10
 
-  const { data: xepLoaiTotNghiep = [] } = useFindManyAcademicRankingConvert(
+  const { data: xepLoaiHocLuc = [] } = useFindManyAcademicRankingConvert(
     {
       where: {
         trainingCourseId,
-        context: RankingContext.GRADUATION,
+        context: RankingContext.STUDYING,
         deletedAt: null,
         active: true,
       },
@@ -74,9 +94,7 @@ const useTongKetLopQuanLy = (fixedClassId: string, enabled: boolean) => {
     { enabled: enabled && !!trainingCourseId }
   )
 
-  const heDiem = layHeDiemTotNghiep(xepLoaiTotNghiep, baseScoreKhoa)
-  const nguongDat = layNguongDatTotNghiep(xepLoaiTotNghiep, baseScoreKhoa)
-  const rankOrderTbTroXuong = layRankOrderTbTroXuong(xepLoaiTotNghiep)
+  const heDiem = layHeDiemTotNghiep(xepLoaiHocLuc, baseScoreKhoa)
 
   const where = useMemo(
     () => ({
@@ -116,7 +134,7 @@ const useTongKetLopQuanLy = (fixedClassId: string, enabled: boolean) => {
       trangData.map((sv) => {
         const ketQua = sv.studentSemesterResult?.[0]
         const gpa = layGpaHocKy(ketQua, baseScoreKhoa)
-        const phanLoai = phanLoaiDiemTotNghiep(gpa, xepLoaiTotNghiep, baseScoreKhoa)
+        const phanLoai = layXepLoaiHocKy(ketQua, gpa, xepLoaiHocLuc, baseScoreKhoa)
         return {
           id: sv.id,
           maSinhVien: sv.userProfile?.code ?? sv.code ?? "",
@@ -127,37 +145,33 @@ const useTongKetLopQuanLy = (fixedClassId: string, enabled: boolean) => {
           ghiChu: "",
         }
       }),
-    [trangData, xepLoaiTotNghiep, baseScoreKhoa]
+    [trangData, xepLoaiHocLuc, baseScoreKhoa]
   )
 
   const thongKe: ThongKeTongKet = useMemo(() => {
     let tongDiem = 0
     let soCoDiem = 0
-    let soDatNguong = 0
-    let soDuoiNguong = 0
-    let soXuatSac = 0
-    let soGioi = 0
-    let soKha = 0
-    let soTbTroXuong = 0
+    const demTheoXepLoai = new Map<string, number>()
+
+    for (const item of xepLoaiHocLuc) {
+      demTheoXepLoai.set(item.classification, 0)
+    }
 
     for (const sv of tatCaSinhVien) {
       const ketQua = sv.studentSemesterResult?.[0]
       const gpa = layGpaHocKy(ketQua, baseScoreKhoa)
-      const phanLoai = phanLoaiDiemTotNghiep(gpa, xepLoaiTotNghiep, baseScoreKhoa)
+      const phanLoai = layXepLoaiHocKy(ketQua, gpa, xepLoaiHocLuc, baseScoreKhoa)
 
       if (gpa != null) {
         tongDiem += gpa
         soCoDiem += 1
-        if (phanLoai.graduated) soDatNguong += 1
-        else soDuoiNguong += 1
       }
 
       if (phanLoai.classification) {
-        const key = phanLoai.classification.toLowerCase()
-        if (key.includes("xuất sắc")) soXuatSac += 1
-        else if (key.includes("giỏi")) soGioi += 1
-        else if (key.includes("khá") && !key.includes("trung bình")) soKha += 1
-        else if (laHocLucTbTroXuong(phanLoai.rankOrder, rankOrderTbTroXuong)) soTbTroXuong += 1
+        demTheoXepLoai.set(
+          phanLoai.classification,
+          (demTheoXepLoai.get(phanLoai.classification) ?? 0) + 1
+        )
       }
     }
 
@@ -167,21 +181,14 @@ const useTongKetLopQuanLy = (fixedClassId: string, enabled: boolean) => {
       tongSinhVien: tong,
       diemTrungBinh: soCoDiem > 0 ? Math.round((tongDiem / soCoDiem) * 100) / 100 : null,
       heDiem,
-      nguongDat,
-      soDatNguong,
-      tyLeDatNguong: tinhTyLe(soDatNguong, tong),
-      soDuoiNguong,
-      tyLeDuoiNguong: tinhTyLe(soDuoiNguong, tong),
-      soXuatSac,
-      tyLeXuatSac: tinhTyLe(soXuatSac, tong),
-      soGioi,
-      tyLeGioi: tinhTyLe(soGioi, tong),
-      soKha,
-      tyLeKha: tinhTyLe(soKha, tong),
-      soTbTroXuong,
-      tyLeTbTroXuong: tinhTyLe(soTbTroXuong, tong),
+      theoXepLoai: xepLoaiHocLuc.map((item) => ({
+        ten: item.classification,
+        rankOrder: item.rankOrder,
+        soSinhVien: demTheoXepLoai.get(item.classification) ?? 0,
+        tyLe: tinhTyLe(demTheoXepLoai.get(item.classification) ?? 0, tong),
+      })),
     }
-  }, [tatCaSinhVien, xepLoaiTotNghiep, baseScoreKhoa, heDiem, nguongDat, rankOrderTbTroXuong])
+  }, [tatCaSinhVien, xepLoaiHocLuc, baseScoreKhoa, heDiem])
 
   const apDungHocKy = (id: string) => {
     setSemesterApDung(id)

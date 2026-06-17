@@ -18,7 +18,7 @@ const TheDon = ({
 }) => (
   <Card size="small" className="h-full shadow-sm" styles={{ body: { padding: 14 } }}>
     <div className="flex items-start justify-between gap-2">
-      <div className="min-w-0 flex-col gap-0.5">
+      <div className="min-w-0 flex flex-col gap-0.5">
         <span className="text-xs text-gray-500">{tieuDe}</span>
         <span className="text-2xl font-bold leading-tight text-blue-600">{giaTri}</span>
       </div>
@@ -35,9 +35,9 @@ const TheThongKeDiemRenLuyen = ({ thongKe }: TheThongKeDiemRenLuyenProps) => {
       <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Thống kê</p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
         <TheDon tieuDe="Tổng sinh viên" giaTri={thongKe.tongSinhVien} icon={<Users size={20} />} />
-        <TheDon tieuDe="Sinh viên có điểm" giaTri={thongKe.soSinhVienCoDiem} icon={<UserCheck size={20} />} />
+        {/* <TheDon tieuDe="Sinh viên có điểm" giaTri={thongKe.soSinhVienCoDiem} icon={<UserCheck size={20} />} /> */}
         <TheDon
-          tieuDe="Điểm trung bình"
+          tieuDe="Điểm TB"
           giaTri={thongKe.diemTrungBinh != null ? thongKe.diemTrungBinh : "—"}
           icon={<BarChart3 size={20} />}
         />
