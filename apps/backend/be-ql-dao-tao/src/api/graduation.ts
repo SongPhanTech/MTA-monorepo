@@ -2408,7 +2408,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
                     include: {
                       expert: {
                         include: {
-                          lecturer: { include: { userProfile: true } },
+                          lecturer: { include: { userProfile: true, organization: true } },
                           academicDegreeType: true,
                           academicRankType: true,
                         },
@@ -2567,7 +2567,6 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         REVIEWER_2: "Phản biện 2",
         MEMBER: "",
       }
-
       const councilMembers = [...(tP?.council?.members || [])]
         .sort((a, b) => (roleOrder[a.role] ?? 99) - (roleOrder[b.role] ?? 99))
         .map((m, idx) => {
@@ -2576,11 +2575,10 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           const degree = safeString(expert?.academicDegreeType?.sMa)
           const title = [rank, degree].filter(Boolean).join(".")
           const chucVi = chucViByRole[m.role] ?? "Ủy viên"
-
           return {
             chuc_vi: `${idx + 1}. ${chucVi}`,
             ten_day_du: [title, safeString(expert?.name)].filter(Boolean).join(" ").trim(),
-            don_vi: safeString(expert?.organization),
+            don_vi: safeString(expert?.lecturer?.organization?.sTen),
             vai_tro_hoi_dong: vaiTroByRole[m.role] ?? "",
           }
         })
