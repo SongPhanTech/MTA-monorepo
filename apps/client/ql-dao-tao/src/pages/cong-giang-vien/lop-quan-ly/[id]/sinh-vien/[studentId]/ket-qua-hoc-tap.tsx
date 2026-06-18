@@ -204,8 +204,8 @@ export default function KetQuaHocTapSinhVienPage() {
     : null
 
   return (
-    <div className="flex flex-col gap-4 pb-6">
-      <div className="flex items-center gap-3">
+    <div className="flex h-[calc(100vh-112px)] flex-col gap-4 overflow-hidden">
+      <div className="flex shrink-0 items-center gap-3">
         <Button
           type="text"
           icon={<ArrowLeft size={18} />}
@@ -225,9 +225,14 @@ export default function KetQuaHocTapSinhVienPage() {
         <Alert type="warning" showIcon message="Sinh viên không thuộc lớp quản lý hiện tại." />
       ) : (
         <>
-          {headerData ? <TheHeaderKetQuaHocTap data={headerData} /> : null}
+          {headerData ? (
+            <div className="shrink-0">
+              <TheHeaderKetQuaHocTap data={headerData} />
+            </div>
+          ) : null}
 
-          <BangDiemHocKy
+          <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+            <BangDiemHocKy
             studentId={studentId}
             fixedClassId={fixedClassId}
             ketQuaTheoKy={ketQuaTheoKy}
@@ -240,7 +245,8 @@ export default function KetQuaHocTapSinhVienPage() {
             tongTinChi={tongTinChi}
             gpaHocKy={`${dinhDangSo(ketQuaKyDangChon?.gpaBase4)} / 4,00`}
             xepLoaiHocLuc={ketQuaKyDangChon?.rank?.classification ?? "—"}
-          />
+            />
+          </div>
         </>
       )}
     </div>

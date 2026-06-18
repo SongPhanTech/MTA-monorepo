@@ -1,11 +1,15 @@
 import { FIXED_CLASS_STUDENT_STATUS } from "@constants/constants"
+import OChiSoThongKe from "@components/cong-giang-vien/o-chi-so-thong-ke"
 import { Avatar, Card, Tag } from "antd"
 import {
+  Award,
   BookOpen,
   Calendar,
   GraduationCap,
   Mail,
   Phone,
+  Shield,
+  Star,
   UserRound,
 } from "lucide-react"
 import type { ReactNode } from "react"
@@ -40,11 +44,13 @@ const HangThongTin = ({
   nhan: string
   giaTri: string
 }) => (
-  <div className="flex items-start gap-2 py-1.5">
-    <span className="mt-0.5 shrink-0 text-cgv-green-dark">{icon}</span>
-    <div className="min-w-0 text-sm leading-snug">
-      <span className="text-gray-500">{nhan}: </span>
-      <span className="font-medium text-gray-800">{giaTri}</span>
+  <div className="flex items-center gap-2.5 py-2">
+    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-50 text-cgv-green-dark">
+      {icon}
+    </div>
+    <div className="min-w-0 flex-1">
+      <p className="m-0 text-xs leading-tight text-gray-500">{nhan}</p>
+      <p className="m-0 mt-0.5 truncate text-sm font-medium leading-snug text-gray-800">{giaTri}</p>
     </div>
   </div>
 )
@@ -53,22 +59,28 @@ const OThongKe = ({
   tieuDe,
   giaTri,
   phu,
+  icon,
   mau = "blue",
 }: {
   tieuDe: string
   giaTri: string
   phu?: string
+  icon?: ReactNode
   mau?: "blue" | "green"
 }) => (
-  <div className="flex flex-col justify-center px-4 py-3">
-    <p className="m-0 text-xs text-gray-500">{tieuDe}</p>
-    <p className="m-0 mt-1 leading-tight">
-      <span className={`text-2xl font-bold ${mau === "green" ? "text-cgv-green-dark" : "text-blue-600"}`}>
+  <OChiSoThongKe
+    label={tieuDe}
+    icon={icon}
+    variant={mau === "green" ? "green" : "blue"}
+    plain
+    value={
+      <>
         {giaTri}
-      </span>
-      {phu ? <span className="text-sm text-gray-400"> {phu}</span> : null}
-    </p>
-  </div>
+        {phu ? <span className="text-sm font-normal text-gray-400"> {phu}</span> : null}
+      </>
+    }
+    valueClassName={mau === "green" ? "text-cgv-green-dark" : "text-blue-600"}
+  />
 )
 
 const TheHeaderKetQuaHocTap = ({ data }: { data: DuLieuHeaderKetQuaHocTap }) => (
@@ -146,20 +158,33 @@ const TheHeaderKetQuaHocTap = ({ data }: { data: DuLieuHeaderKetQuaHocTap }) => 
       styles={{ body: { padding: 0 } }}
     >
       <div className="grid grid-cols-2 divide-x divide-y divide-gray-100">
-        <OThongKe tieuDe="GPA hiện tại" giaTri={data.gpaHienTai} phu="/ 4.00" mau="blue" />
+        <OThongKe
+          tieuDe="GPA hiện tại"
+          giaTri={data.gpaHienTai}
+          phu="/ 4.00"
+          icon={<Award size={18} />}
+          mau="blue"
+        />
         <OThongKe
           tieuDe="Tín chỉ tích lũy"
           giaTri={data.tinChiTichLuy}
           phu={`/ ${data.tinChiTong}`}
+          icon={<GraduationCap size={18} />}
           mau="blue"
         />
         <OThongKe
           tieuDe="Điểm rèn luyện TB"
           giaTri={data.diemRenLuyenTb}
           phu="/ 100"
+          icon={<Shield size={18} />}
           mau="green"
         />
-        <OThongKe tieuDe="Xếp loại học lực" giaTri={data.xepLoaiHocLuc} mau="green" />
+        <OThongKe
+          tieuDe="Xếp loại học lực"
+          giaTri={data.xepLoaiHocLuc}
+          icon={<Star size={18} />}
+          mau="green"
+        />
       </div>
     </Card>
   </div>

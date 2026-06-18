@@ -30,8 +30,7 @@ const STUDENT_INCLUDE = {
       trainingCourse: {
         select: {
           name: true,
-          startYear: true,
-          endYear: true,
+          academicYear: true,
           maxTrainingTime: true,
           admissionStartDate: true,
         },
@@ -111,16 +110,6 @@ const layNhanTrangThai = (status: string) => {
   return meta ?? { label: status, color: "default" }
 }
 
-const XEP_LOAI_RL: Record<string, string> = {
-  EXCELLENT: "Xuất sắc",
-  GOOD: "Tốt",
-  FAIR: "Khá",
-  MEDIUM: "Trung bình khá",
-  AVERAGE: "Trung bình",
-  POOR: "Yếu",
-  VERY_POOR: "Kém",
-}
-
 const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
   const { data: me } = useSession()
   const profileId = me?.sDM_NhanVienId ?? ""
@@ -155,7 +144,7 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
     const ct = lop?.curriculumVersion ?? student.curriculumVersion
     const ketQuaKy = student.studentSemesterResult?.[0]
 
-    const nienKhoa = [khoaHoc?.startYear, khoaHoc?.endYear].filter(Boolean).join(" - ")
+    const nienKhoa = khoaHoc?.academicYear ?? ""
 
     const tongHocPhan = student.subjectClassStudent?.length ?? 0
     const tongTinChi =
@@ -271,9 +260,8 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
         tongTinChi,
         gpa,
         xepLoaiHocLuc: ketQuaKy?.rank?.classification ?? null,
-        xepLoaiRenLuyen: ketQuaKy?.studentTrainingType
-          ? (XEP_LOAI_RL[ketQuaKy.studentTrainingType] ?? ketQuaKy.studentTrainingType)
-          : null,
+        diemRenLuyen:
+          ketQuaKy?.conductScore != null ? `${ketQuaKy.conductScore} / 100` : null,
       },
     }
   }, [student])

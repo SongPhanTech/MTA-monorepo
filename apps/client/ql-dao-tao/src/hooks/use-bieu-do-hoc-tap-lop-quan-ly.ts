@@ -221,41 +221,12 @@ const useBieuDoHocTapLopQuanLy = (
     const chuyenCanPct = (value: number | null) =>
       value != null ? lamTron((value / 10) * 100, 0) : null
 
-    const hienThiXepHang = () => {
-      if (xepHangLop.length === 0) return []
-
-      const currentIdx = xepHangLop.findIndex((item) => item.id === studentId)
-      const chiSo = new Set<number>()
-
-      for (let i = 0; i < Math.min(4, xepHangLop.length); i++) chiSo.add(i)
-      if (currentIdx >= 0) {
-        chiSo.add(currentIdx)
-        if (currentIdx > 0) chiSo.add(currentIdx - 1)
-        if (currentIdx < xepHangLop.length - 1) chiSo.add(currentIdx + 1)
-      }
-      chiSo.add(xepHangLop.length - 1)
-
-      const sorted = [...chiSo].sort((a, b) => a - b)
-      const rows: Array<
-        | { loai: "dong"; thuHang: number; hoTen: string; gpa: number; laBan: boolean }
-        | { loai: "ellipsis" }
-      > = []
-
-      for (let i = 0; i < sorted.length; i++) {
-        const idx = sorted[i]
-        if (i > 0 && idx - sorted[i - 1] > 1) rows.push({ loai: "ellipsis" })
-        const item = xepHangLop[idx]
-        rows.push({
-          loai: "dong",
-          thuHang: idx + 1,
-          hoTen: item.hoTen,
-          gpa: item.gpa,
-          laBan: item.id === studentId,
-        })
-      }
-
-      return rows
-    }
+    const bangXepHang = xepHangLop.map((item, index) => ({
+      thuHang: index + 1,
+      hoTen: item.hoTen,
+      gpa: item.gpa,
+      laBan: item.id === studentId,
+    }))
 
     return {
       gpaHienTai,
@@ -267,7 +238,7 @@ const useBieuDoHocTapLopQuanLy = (
       tinChiTong,
       xepLoaiHocLuc: hocKyMoiNhat?.rank?.classification ?? "—",
       duLieuGpaTheoKy,
-      bangXepHang: hienThiXepHang(),
+      bangXepHang,
       soSanhLop: [
         {
           nhan: "Điểm trung bình",
