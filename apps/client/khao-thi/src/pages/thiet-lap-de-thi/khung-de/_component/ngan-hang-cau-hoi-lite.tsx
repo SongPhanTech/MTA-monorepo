@@ -1,17 +1,18 @@
-import { EyeOutlined } from "@ant-design/icons"
+import { EyeOutlined, RightOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
-import { LEVEL_COLORS } from "@constants/constants"
+import { LEVEL_COLORS, QUESTION_TYPE_LABELS, QUESTION_TYPE_OPTIONS } from "@constants/constants"
 import { store } from "@pages/thiet-lap-de-thi/khung-de"
 import { useStore } from "@tanstack/react-store"
+import type { ConfigExam } from "@workspace/db/client"
 import {
   useFindManyExamMatrix,
   useFindManyKnowledgeBlock,
   useFindManyQuestion,
   useFindUniqueQuestionBank,
 } from "@workspace/db/hooks"
-import { Button, Col, Row, Tooltip } from "antd"
+import { Button, Col, Row, Tooltip, Alert } from "antd"
 import { BookPlus } from "lucide-react"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 interface QuestionBankLiteProps {
@@ -19,11 +20,23 @@ interface QuestionBankLiteProps {
   questionBankId: string
 }
 
+const matchesConfigExam = (
+  q: { difficult: string; type: string | null; point: number },
+  config: ConfigExam
+) =>
+  q.difficult === config.difficult &&
+  (config.type == null || q.type === config.type) &&
+  q.point === config.point
+
+const formatMissingQuestionTypes = (labels: string[]) =>
+  labels.length === QUESTION_TYPE_OPTIONS.length ? "Tất cả" : labels.join(", ")
+
 export default function QuestionBankLite({
   examFrameworkId,
   questionBankId,
 }: QuestionBankLiteProps) {
   const matrixId = useStore(store, (s) => s.matrixId)
+  const [warningExpanded, setWarningExpanded] = useState(true)
 
   const { onOpen: onOpenQuestionListModal } = useDisclosure<{
     knowledgeBlockId: string
@@ -80,6 +93,8 @@ export default function QuestionBankLite({
         id: true,
         knowledgeBlockId: true,
         difficult: true,
+        type: true,
+        point: true,
       },
     },
     { enabled: knowledgeBlockIds.length > 0 }
@@ -113,18 +128,22 @@ export default function QuestionBankLite({
           current: number
           required: number
           missing: number
+          point: number
         }
       > = {}
 
       LEVEL_COLORS.forEach((l) => {
-        const current = qs.filter((q) => q.difficult === l.key).length
-
-        const required = kb.configExams?.find((c) => c.difficult === l.key)?.quantity ?? 0
+        const config = kb.configExams?.find((c) => c.difficult === l.key)
+        const required = config?.quantity ?? 0
+        const current = config
+          ? qs.filter((q) => matchesConfigExam(q, config)).length
+          : 0
 
         stats[l.key] = {
           current,
           required,
           missing: Math.max(required - current, 0),
+          point: config?.point ?? 0,
         }
       })
 
@@ -137,6 +156,69 @@ export default function QuestionBankLite({
       }
     })
   }, [knowledgeBlocks, allQuestionsForStats, matrixMap])
+
+  const missingByBlock = useMemo(() => {
+    const groups: {
+      knowledgeBlockId: string
+      knowledgeBlockName: string
+      items: {
+        key: string
+        levelLabel: string
+        typeLabel: string
+        point: number
+        missing: number
+        missingTypeLabels: string[]
+      }[]
+    }[] = []
+
+    for (const kb of knowledgeBlocks) {
+      const qs = allQuestionsForStats.filter((q) => q.knowledgeBlockId === kb.id)
+      const items: (typeof groups)[number]["items"] = []
+
+      for (const config of kb.configExams ?? []) {
+        if (!config.quantity) continue
+
+        const current = qs.filter((q) => matchesConfigExam(q, config)).length
+        const missing = config.quantity - current
+        if (missing <= 0) continue
+
+        const levelLabel =
+          LEVEL_COLORS.find((l) => l.key === config.difficult)?.label ?? config.difficult
+        const typeLabel = config.type
+          ? (QUESTION_TYPE_LABELS[config.type as keyof typeof QUESTION_TYPE_LABELS] ??
+            config.type)
+          : "Tất cả"
+
+        const poolAtSlot = qs.filter(
+          (q) => q.difficult === config.difficult && q.point === config.point
+        )
+        const missingTypeLabels = config.type
+          ? [typeLabel]
+          : QUESTION_TYPE_OPTIONS.filter(
+              ({ value }) => poolAtSlot.filter((q) => q.type === value).length === 0
+            ).map(({ label }) => label)
+
+        items.push({
+          key: `${kb.id}-${config.difficult}-${config.type ?? "all"}-${config.point}`,
+          levelLabel,
+          typeLabel,
+          point: config.point,
+          missing,
+          missingTypeLabels,
+        })
+      }
+
+      if (items.length > 0) {
+        groups.push({
+          knowledgeBlockId: kb.id,
+          knowledgeBlockName: kb.name,
+          items,
+        })
+      }
+    }
+
+    return groups
+  }, [knowledgeBlocks, allQuestionsForStats])
 
   return (
     <div>
@@ -166,6 +248,51 @@ export default function QuestionBankLite({
         </Col>
 
         <Col span={24}>
+          {missingByBlock.length > 0 && (
+            <Alert
+              type="warning"
+              showIcon
+              className="mt-2 mb-4"
+              message={
+                <button
+                  type="button"
+                  className="flex items-center gap-2 w-full text-left bg-transparent border-0 p-0 cursor-pointer"
+                  onClick={() => setWarningExpanded((v) => !v)}
+                >
+                  <RightOutlined
+                    className={`text-xs transition-transform duration-200 ${warningExpanded ? "rotate-90" : ""}`}
+                  />
+                  Ngân hàng câu hỏi chưa đủ để sinh đề theo ma trận. Cần bổ sung:
+                </button>
+              }
+              description={
+                warningExpanded ? (
+                  <ul className="mt-2 mb-0 pl-5 list-disc">
+                    {missingByBlock.map((block) => (
+                      <li key={block.knowledgeBlockId}>
+                        <strong>{block.knowledgeBlockName}</strong>
+                        <ul className="mt-1 mb-0 pl-5 list-[circle]">
+                          {block.items.map((item) => (
+                            <li key={item.key}>
+                              {item.levelLabel}, {item.point} đ/câu: thiếu {item.missing} câu
+                              {item.missingTypeLabels.length > 0 && (
+                                <span className="block text-[13px] text-gray-700 mt-0.5">
+                                  Các loại đang thiếu:{" "}
+                                  <strong>
+                                    {formatMissingQuestionTypes(item.missingTypeLabels)}
+                                  </strong>
+                                </span>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null
+              }
+            />
+          )}
           <Table
             rowKey="id"
             className="mt-2"
@@ -187,8 +314,20 @@ export default function QuestionBankLite({
                 title: l.label,
                 dataIndex: l.key,
                 align: "center" as const,
-                render: (v: { current: number; required: number; missing: number }) => (
-                  <div className="flex items-center justify-center gap-1">
+                render: (v: {
+                  current: number
+                  required: number
+                  missing: number
+                  point: number
+                }) => (
+                  <Tooltip
+                    title={
+                      v.required > 0
+                        ? `Cần ${v.required} câu đúng mức độ và ${v.point} điểm/câu`
+                        : undefined
+                    }
+                  >
+                    <div className="flex items-center justify-center gap-1">
                     {/* Số câu hiện tại */}
                     <span
                       className="inline-flex items-center justify-center min-w-[28px] h-[24px]
@@ -211,6 +350,7 @@ export default function QuestionBankLite({
                       </span>
                     )}
                   </div>
+                  </Tooltip>
                 ),
               })),
               {

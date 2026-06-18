@@ -231,6 +231,13 @@ export default function QuestionListByKnowledgeBlockModal() {
             render: (_, r) => LEVEL_COLUMNS.find((l) => l.difficult === r.difficult)?.label,
           },
           {
+            title: "Điểm",
+            dataIndex: "point",
+            width: 80,
+            align: "center",
+            render: (point: number) => point ?? 0,
+          },
+          {
             title: "Thao tác",
             width: 90,
             align: "center",
