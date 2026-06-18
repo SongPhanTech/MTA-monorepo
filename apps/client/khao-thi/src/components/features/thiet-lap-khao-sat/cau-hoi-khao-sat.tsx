@@ -6,9 +6,11 @@ import EditIcon from "@components/icons/edit"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import { useSurveyQuestionTypeOptions } from "@hooks/survey-question-type"
+import { $Enums } from "@workspace/db/client"
 import {
   useCountSurveyQuestion,
   useFindManySurveyQuestion,
+  useFindManySurveyQuestionGroup,
   useUpdateSurveyQuestion,
 } from "@workspace/db/hooks"
 import { getMinioUrl } from "@workspace/libs/utils"
@@ -18,7 +20,16 @@ import { Button, Col, Flex, message, Row } from "antd"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
-function CauHoiKhaoSat({ id, type }: { id: string; type: string }) {
+function CauHoiKhaoSat({
+  id,
+  type,
+  surveyTopicId,
+}: {
+  id?: string
+  type: string
+  surveyTopicId?: string
+}) {
+  const isLecturerSurvey = type === $Enums.SurveyType.CLUSTER
   const { can, canSome } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -31,9 +42,41 @@ function CauHoiKhaoSat({ id, type }: { id: string; type: string }) {
     surveyId: undefined,
   })
 
+  const { data: topicQuestionGroups = [] } = useFindManySurveyQuestionGroup(
+    {
+      where: {
+        surveyTopic: {
+          some: {
+            id: surveyTopicId,
+          },
+        },
+      },
+      orderBy: { createdAt: "asc" },
+      take: 1,
+    },
+    {
+      enabled: !!surveyTopicId,
+    }
+  )
+
+  const defaultQuestionGroupId = topicQuestionGroups[0]?.id || ""
+  const questionGroupId = isLecturerSurvey ? defaultQuestionGroupId : id
+
   const where = useMemo(
     () => ({
-      surveyQuestionGroupId: id,
+      ...(isLecturerSurvey && surveyTopicId
+        ? {
+            surveyQuestionGroup: {
+              surveyTopic: {
+                some: {
+                  id: surveyTopicId,
+                },
+              },
+            },
+          }
+        : {
+            surveyQuestionGroupId: id,
+          }),
       ...(filters.code && filters.code !== ""
         ? {
             code: {
@@ -61,7 +104,7 @@ function CauHoiKhaoSat({ id, type }: { id: string; type: string }) {
           }
         : {}),
     }),
-    [filters.code, filters.name, filters.surveyId, filters.surveyQuestionType, id]
+    [filters.code, filters.name, filters.surveyId, filters.surveyQuestionType, id, isLecturerSurvey, surveyTopicId]
   )
 
   const { data = [] } = useFindManySurveyQuestion(
@@ -73,7 +116,7 @@ function CauHoiKhaoSat({ id, type }: { id: string; type: string }) {
       skip: (currentPage - 1) * numberOfPages,
     },
     {
-      enabled: !!id,
+      enabled: isLecturerSurvey ? !!surveyTopicId : !!id,
     }
   )
 
@@ -89,12 +132,15 @@ function CauHoiKhaoSat({ id, type }: { id: string; type: string }) {
     id: string
     surveyQuestionGroupId?: string
     type?: string
+    surveyTopicId?: string
   }>({
     tag: "PutSurveyQuestionModal",
   })
   const { onOpen: openImportQuestionModal } = useDisclosure<{
     id: string
     surveyQuestionGroupId?: string
+    type?: string
+    surveyTopicId?: string
   }>({
     tag: "PutSurveyImportQuestionModal",
   })
@@ -102,12 +148,19 @@ function CauHoiKhaoSat({ id, type }: { id: string; type: string }) {
   const { showSpinner, hideSpinner } = useSpinner()
 
   const handleModal = () => {
-    openSurveyQuestionModal({ id: "", surveyQuestionGroupId: id, type })
+    openSurveyQuestionModal({
+      id: "",
+      surveyQuestionGroupId: questionGroupId,
+      type,
+      surveyTopicId,
+    })
   }
   const handleImport = () => {
     openImportQuestionModal({
-      id,
-      surveyQuestionGroupId: id,
+      id: questionGroupId || "",
+      surveyQuestionGroupId: questionGroupId,
+      type,
+      surveyTopicId,
     })
   }
 
