@@ -58,7 +58,7 @@ export type LichSuHocTapSinhVien = {
   tongTinChi: number
   gpa: string
   xepLoaiHocLuc: string | null
-  xepLoaiRenLuyen: string | null
+  diemRenLuyen: string | null
 }
 
 export type HoSoSinhVien = {

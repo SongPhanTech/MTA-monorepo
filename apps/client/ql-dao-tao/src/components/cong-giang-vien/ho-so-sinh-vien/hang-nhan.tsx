@@ -4,9 +4,9 @@ interface HangNhanProps {
 }
 
 const HangNhan = ({ label, value }: HangNhanProps) => (
-  <div className="flex gap-2 py-1.5 text-sm">
-    <span className="w-[130px] shrink-0 text-gray-500">{label}</span>
-    <span className="min-w-0 flex-1 font-medium text-gray-800">{value || "—"}</span>
+  <div className="py-2">
+    <p className="m-0 text-xs text-gray-500">{label}</p>
+    <p className="m-0 mt-1 text-sm font-medium leading-snug text-gray-800">{value || "—"}</p>
   </div>
 )
 

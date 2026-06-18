@@ -19,9 +19,11 @@ const TheThongTinHocTap = ({ data }: TheThongTinHocTapProps) => (
     <HangNhan label="Cố vấn HT" value={data.coVanHocTap} />
     <HangNhan label="Hình thức" value={data.hinhThuc} />
     <HangNhan label="Thời gian ĐT" value={data.thoiGianDaoTao} />
-    <div className="flex gap-2 py-1.5 text-sm">
-      <span className="w-[130px] shrink-0 text-gray-500">Trạng thái</span>
-      <Tag color={data.trangThai.color}>{data.trangThai.label}</Tag>
+    <div className="py-2">
+      <p className="m-0 text-xs text-gray-500">Trạng thái</p>
+      <Tag color={data.trangThai.color} className="mt-1">
+        {data.trangThai.label}
+      </Tag>
     </div>
     <HangNhan label="Niên khóa" value={data.nienKhoa} />
   </Card>

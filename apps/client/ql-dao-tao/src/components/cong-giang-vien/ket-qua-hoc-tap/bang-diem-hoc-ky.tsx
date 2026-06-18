@@ -3,7 +3,9 @@ import TinhNangPhatTrien from "@components/cong-giang-vien/tinh-nang-phat-trien"
 import type { KetQuaKyBieuDo } from "@hooks/use-bieu-do-hoc-tap-lop-quan-ly"
 import { Card, Select, Table, Tabs, Tag } from "antd"
 import type { ColumnsType } from "antd/es/table"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
+
+const CHIEU_CAO_HEADER_BANG = 80
 
 export type DiemHocKyRow = {
   id: string
@@ -41,7 +43,7 @@ interface BangDiemHocKyProps {
 }
 
 const TAB_CLASS =
-  "[&_.ant-tabs-nav]:mb-0 [&_.ant-tabs-tab-active_.ant-tabs-tab-btn]:!text-cgv-green-dark [&_.ant-tabs-tab-btn]:font-medium [&_.ant-tabs-ink-bar]:!bg-cgv-green-dark"
+  "flex h-full min-h-0 flex-1 flex-col overflow-hidden [&_.ant-tabs-nav]:mb-0 [&_.ant-tabs-nav]:shrink-0 [&_.ant-tabs-nav]:px-4 [&_.ant-tabs-content-holder]:flex [&_.ant-tabs-content-holder]:min-h-0 [&_.ant-tabs-content-holder]:flex-1 [&_.ant-tabs-content-holder]:flex-col [&_.ant-tabs-content-holder]:overflow-hidden [&_.ant-tabs-content]:h-full [&_.ant-tabs-content]:min-h-0 [&_.ant-tabs-tabpane]:h-full [&_.ant-tabs-tabpane-active]:!flex [&_.ant-tabs-tabpane-active]:!min-h-0 [&_.ant-tabs-tabpane-active]:!flex-1 [&_.ant-tabs-tabpane-active]:!flex-col [&_.ant-tabs-tab-active_.ant-tabs-tab-btn]:!text-cgv-green-dark [&_.ant-tabs-tab-btn]:font-medium [&_.ant-tabs-ink-bar]:!bg-cgv-green-dark"
 
 const dinhDangDiem = (value: number | null | undefined) =>
   value == null ? "—" : Number(value).toFixed(1)
@@ -148,6 +150,28 @@ const BangDiemHocKy = ({
   const [schoolYearId, setSchoolYearId] = useState<string>()
   const [semesterNhap, setSemesterNhap] = useState<string>()
   const [hienThi, setHienThi] = useState("tat_ca")
+  const vungBangRef = useRef<HTMLDivElement>(null)
+  const [chieuCaoBody, setChieuCaoBody] = useState(320)
+
+  useEffect(() => {
+    const el = vungBangRef.current
+    if (!el || tabActive !== "bang-diem-hoc-ky") return
+
+    const capNhatChieuCao = () => {
+      setChieuCaoBody(Math.max(160, el.clientHeight - CHIEU_CAO_HEADER_BANG))
+    }
+
+    capNhatChieuCao()
+    const raf = requestAnimationFrame(capNhatChieuCao)
+    const observer = new ResizeObserver(capNhatChieuCao)
+    observer.observe(el)
+    window.addEventListener("resize", capNhatChieuCao)
+    return () => {
+      cancelAnimationFrame(raf)
+      observer.disconnect()
+      window.removeEventListener("resize", capNhatChieuCao)
+    }
+  }, [tabActive, rows.length, loading])
 
   const schoolYearOptions = useMemo(() => {
     const map = new Map<string, string>()
@@ -185,8 +209,8 @@ const BangDiemHocKy = ({
   }
 
   const noiDungBang = (
-    <>
-      <div className="flex flex-wrap items-center gap-4 border-b border-gray-100 px-4 py-3">
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="flex shrink-0 flex-wrap items-center gap-4 border-b border-gray-100 px-4 py-3">
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-600">Năm học</span>
           <Select
@@ -221,7 +245,7 @@ const BangDiemHocKy = ({
         </div>
       </div>
 
-      <div className="px-4 py-3">
+      <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden px-4 pt-3">
         <Table<DiemHocKyRow>
           rowKey="id"
           size="small"
@@ -229,12 +253,13 @@ const BangDiemHocKy = ({
           dataSource={rows}
           loading={loading}
           pagination={false}
-          scroll={{ x: 1040 }}
+          scroll={{ x: 1040, y: chieuCaoBody }}
           bordered
-          className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
+          className="bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
         />
+      </div>
 
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-2 border border-t-0 border-gray-200 bg-gray-50 px-4 py-3 text-sm">
+      <div className="flex shrink-0 flex-wrap items-center gap-x-8 gap-y-2 border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
           <span>
             Tổng số học phần: <b className="text-cgv-green-dark">{tongHocPhan}</b>
           </span>
@@ -248,12 +273,14 @@ const BangDiemHocKy = ({
             Xếp loại học lực: <b className="text-cgv-green-dark">{xepLoaiHocLuc}</b>
           </span>
         </div>
-      </div>
-    </>
+    </div>
   )
 
   return (
-    <Card className="rounded-xl shadow-sm" styles={{ body: { padding: 0 } }}>
+    <Card
+      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl shadow-sm [&_.ant-card-body]:flex [&_.ant-card-body]:min-h-0 [&_.ant-card-body]:flex-1 [&_.ant-card-body]:flex-col [&_.ant-card-body]:overflow-hidden"
+      styles={{ body: { padding: 0 } }}
+    >
       <Tabs
         className={TAB_CLASS}
         activeKey={tabActive}
@@ -268,7 +295,7 @@ const BangDiemHocKy = ({
             key: "tong-hop-toan-khoa",
             label: "Tổng hợp toàn khóa",
             children: (
-              <div className="px-4 py-6">
+              <div className="min-h-0 flex-1 overflow-y-auto px-4 py-6">
                 <TinhNangPhatTrien />
               </div>
             ),
@@ -277,12 +304,14 @@ const BangDiemHocKy = ({
             key: "bieu-do-hoc-tap",
             label: "Biểu đồ học tập",
             children: (
-              <TabBieuDoHocTap
-                studentId={studentId}
-                fixedClassId={fixedClassId}
-                ketQuaTheoKy={ketQuaTheoKy}
-                enabled={tabActive === "bieu-do-hoc-tap"}
-              />
+              <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+                <TabBieuDoHocTap
+                  studentId={studentId}
+                  fixedClassId={fixedClassId}
+                  ketQuaTheoKy={ketQuaTheoKy}
+                  enabled={tabActive === "bieu-do-hoc-tap"}
+                />
+              </div>
             ),
           },
         ]}
