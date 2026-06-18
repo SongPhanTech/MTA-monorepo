@@ -12,12 +12,7 @@ interface BangDiemRenLuyenProps {
   soTrang: number
 }
 
-const BangDiemRenLuyen = ({
-  danhSach,
-  loading,
-  trang,
-  soTrang,
-}: BangDiemRenLuyenProps) => {
+const BangDiemRenLuyen = ({ danhSach, loading, trang, soTrang }: BangDiemRenLuyenProps) => {
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(320)
 
@@ -83,9 +78,8 @@ const BangDiemRenLuyen = ({
         dataSource={danhSach}
         loading={loading}
         pagination={false}
-        scroll={{ x: 900, y: chieuCaoBody }}
         rowClassName={(_, index) => (index % 2 === 1 ? "bg-gray-50/80" : "")}
-        className="bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
+        className="bang-lq-chi-tiet mt-2 [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
       />
     </div>
   )

@@ -3,10 +3,8 @@ import BoLocLopGiangDayBar from "@components/cong-giang-vien/lop-giang-day/bo-lo
 import PhanTrangLopQuanLy from "@components/cong-giang-vien/lop-quan-ly/phan-trang-lop-quan-ly"
 import { useLopGiangDayGiangVien } from "@hooks/use-lop-giang-day-giang-vien"
 import { Breadcrumb, Typography } from "antd"
-import { useState } from "react"
 
 const DanhSachLopGiangDay = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const {
     boLoc,
     capNhatBoLoc,
@@ -42,14 +40,7 @@ const DanhSachLopGiangDay = () => {
         onTimKiem={timKiem}
       />
 
-      <BangLopGiangDay
-        danhSach={danhSach}
-        loading={isLoading}
-        trang={trang}
-        soTrang={soTrang}
-        selectedRowKeys={selectedRowKeys}
-        onSelectRows={setSelectedRowKeys}
-      />
+      <BangLopGiangDay danhSach={danhSach} loading={isLoading} trang={trang} soTrang={soTrang} />
 
       <PhanTrangLopQuanLy
         trang={trang}

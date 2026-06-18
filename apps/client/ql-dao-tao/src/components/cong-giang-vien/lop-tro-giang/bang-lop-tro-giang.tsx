@@ -141,7 +141,7 @@ const BangLopTroGiang = ({ danhSach, loading, trang, soTrang }: BangLopTroGiangP
         dataSource={danhSach}
         loading={loading}
         pagination={false}
-        className="[&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
+        className="[&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
       />
     </div>
   )

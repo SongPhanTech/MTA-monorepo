@@ -25,14 +25,14 @@ const BoLocSinhVien = ({ boLoc, onChange, onDoiBoLocNgay, onTimKiem }: BoLocSinh
         value={boLoc.tuKhoa}
         onChange={(e) => onChange({ tuKhoa: e.target.value })}
         onPressEnter={onTimKiem}
-        className="h-10 min-w-[240px] flex-1 text-sm"
+        className="h-8 min-w-[240px] flex-1 text-sm"
       />
 
       <Button
         type="primary"
         icon={<Search size={16} />}
         onClick={onTimKiem}
-        className="flex h-10 items-center gap-2 bg-cgv-green-dark hover:!bg-cgv-green-dark/90"
+        className="flex h-8 items-center gap-2 bg-cgv-green-dark hover:!bg-cgv-green-dark/90"
       >
         Tìm kiếm
       </Button>

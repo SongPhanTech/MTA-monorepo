@@ -70,15 +70,6 @@ const BoLocDiemRenLuyen = ({ semesterId, onApDung }: BoLocDiemRenLuyenProps) => 
           }))}
         />
       </div>
-
-      <Button
-        type="primary"
-        icon={<Search size={16} />}
-        onClick={handleTimKiem}
-        className="ml-auto flex h-10 items-center gap-2 bg-cgv-green-dark hover:!bg-cgv-green-dark/90"
-      >
-        Tìm kiếm
-      </Button>
     </div>
   )
 }

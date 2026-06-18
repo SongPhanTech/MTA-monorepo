@@ -47,7 +47,7 @@ const useLopQuanLyGiangVien = () => {
     {
       where,
       include: {
-        managementOrganization: { select: { sTen: true } },
+        managementOrganization: { select: { sMa: true, sTen: true } },
         trainingCourse: {
           include: {
             semesterStart: {
@@ -84,7 +84,7 @@ const useLopQuanLyGiangVien = () => {
           id: item.id,
           maLop: item.code ?? "",
           tenLop: item.name ?? "",
-          donViQuanLy: item.managementOrganization?.sTen ?? "",
+          donViQuanLy: item.managementOrganization?.sMa ?? "",
           siSoNam,
           siSoNu,
           siSoTong,

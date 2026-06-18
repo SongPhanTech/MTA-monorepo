@@ -51,19 +51,19 @@ const BangDanhSachLopQuanLy = ({
     {
       title: "Mã lớp",
       dataIndex: "maLop",
-      width: 130,
+      width: 80,
       ellipsis: true,
     },
     {
       title: "Tên lớp",
       dataIndex: "tenLop",
-      width: 180,
+      width: 200,
       ellipsis: true,
     },
     {
       title: "Đơn vị quản lý",
       dataIndex: "donViQuanLy",
-      width: 160,
+      width: 100,
       ellipsis: true,
     },
     {
@@ -135,7 +135,7 @@ const BangDanhSachLopQuanLy = ({
         loading={loading}
         pagination={false}
         scroll={{ x: 1200, y: chieuCaoBody }}
-        className="[&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
+        className="[&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
       />
     </div>
   )

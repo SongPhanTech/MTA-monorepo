@@ -255,7 +255,7 @@ const BangDiemHocKy = ({
           pagination={false}
           scroll={{ x: 1040, y: chieuCaoBody }}
           bordered
-          className="bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
+          className="bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
         />
       </div>
 

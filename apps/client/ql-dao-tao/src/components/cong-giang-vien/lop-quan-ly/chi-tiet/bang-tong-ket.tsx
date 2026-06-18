@@ -111,9 +111,8 @@ const BangTongKet = ({ danhSach, loading, trang, soTrang, onXemChiTiet }: BangTo
         dataSource={danhSach}
         loading={loading}
         pagination={false}
-        scroll={{ x: 980, y: chieuCaoBody }}
         rowClassName={(_, index) => (index % 2 === 1 ? "bg-gray-50/80" : "")}
-        className="bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
+        className="bang-lq-chi-tiet mt-2 [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400 [&_.ant-table-thead>tr>th:first-child]:!rounded-tl-none [&_.ant-table-thead>tr>th:last-child]:!rounded-tr-none"
       />
     </div>
   )

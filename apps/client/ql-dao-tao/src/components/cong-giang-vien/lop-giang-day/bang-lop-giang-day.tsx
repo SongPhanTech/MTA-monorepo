@@ -29,18 +29,9 @@ interface BangLopGiangDayProps {
   loading?: boolean
   trang: number
   soTrang: number
-  selectedRowKeys: Key[]
-  onSelectRows: (keys: Key[]) => void
 }
 
-const BangLopGiangDay = ({
-  danhSach,
-  loading,
-  trang,
-  soTrang,
-  selectedRowKeys,
-  onSelectRows,
-}: BangLopGiangDayProps) => {
+const BangLopGiangDay = ({ danhSach, loading, trang, soTrang }: BangLopGiangDayProps) => {
   const router = useRouter()
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(320)
@@ -265,12 +256,8 @@ const BangLopGiangDay = ({
         dataSource={danhSach}
         loading={loading}
         pagination={false}
-        rowSelection={{
-          selectedRowKeys,
-          onChange: onSelectRows,
-        }}
         scroll={{ x: 2200, y: chieuCaoBody }}
-        className="bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
+        className="bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
       />
     </div>
   )
