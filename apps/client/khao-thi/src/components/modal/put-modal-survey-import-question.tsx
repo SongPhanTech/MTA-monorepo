@@ -6,7 +6,8 @@ import Select from "@components/commons/select"
 import useSpinner from "@hooks/spinner"
 import { useSurveyQuestionTypeOptions } from "@hooks/survey-question-type"
 import { type SurveyQuestion, type SurveyQuestionGroup, SurveyQuestionType } from "@workspace/db"
-import { useFindManySurveyQuestionGroup, useFindUniqueSurveyQuestion } from "@workspace/db/hooks"
+import { $Enums } from "@workspace/db/client"
+import { useCreateSurveyQuestionGroup, useFindManySurveyQuestionGroup, useFindUniqueSurveyQuestion } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { PizZip } from "@workspace/libs/docxjs"
 import { Button, Col, Form, message, Table, Upload } from "antd"
@@ -183,6 +184,8 @@ const PutSurveyImportQuestionModal = () => {
   const { isOpen, onClose, input } = useDisclosure<{
     id: string
     surveyQuestionGroupId?: string
+    type?: string
+    surveyTopicId?: string
   }>({
     tag: "PutSurveyImportQuestionModal",
     onClose: form.resetFields,
@@ -199,6 +202,55 @@ const PutSurveyImportQuestionModal = () => {
   }))
 
   const { data: surveyQuestionGroupData = [] } = useFindManySurveyQuestionGroup()
+  const { mutateAsync: createSurveyQuestionGroup } = useCreateSurveyQuestionGroup()
+  const { data: topicQuestionGroups = [] } = useFindManySurveyQuestionGroup(
+    {
+      where: {
+        surveyTopic: {
+          some: {
+            id: input?.surveyTopicId,
+          },
+        },
+      },
+      orderBy: { createdAt: "asc" },
+      take: 1,
+    },
+    {
+      enabled: input?.type === $Enums.SurveyType.CLUSTER && !!input?.surveyTopicId,
+    }
+  )
+
+  const isLecturerSurvey = input?.type === $Enums.SurveyType.CLUSTER
+
+  async function resolveSurveyQuestionGroupId(groupId?: string | null) {
+    if (groupId) return groupId
+    if (!isLecturerSurvey || !input?.surveyTopicId) return groupId ?? undefined
+
+    if (topicQuestionGroups[0]?.id) {
+      return topicQuestionGroups[0].id
+    }
+
+    const defaultGroup = await createSurveyQuestionGroup({
+      data: {
+        name: "Nhóm câu hỏi mặc định",
+        surveyTopic: {
+          connect: {
+            id: input.surveyTopicId,
+          },
+        },
+      },
+    })
+
+    queryClient.invalidateQueries({
+      queryKey: ["SurveyQuestionGroup"],
+    })
+
+    if (!defaultGroup?.id) {
+      return undefined
+    }
+
+    return defaultGroup.id
+  }
 
   const parser = new XMLParser({
     ignoreAttributes: false,
@@ -309,7 +361,8 @@ const PutSurveyImportQuestionModal = () => {
   async function onOk(output?: SurveyQuestion) {
     if (!output) return
 
-    if (!output.surveyQuestionGroupId) {
+    const surveyQuestionGroupId = await resolveSurveyQuestionGroupId(output.surveyQuestionGroupId)
+    if (!surveyQuestionGroupId) {
       message.warning("Vui lòng chọn nhóm câu hỏi khảo sát")
       return
     }
@@ -329,7 +382,7 @@ const PutSurveyImportQuestionModal = () => {
         data: {
           data: {
             name: i.content,
-            surveyQuestionGroupId: output.surveyQuestionGroupId,
+            surveyQuestionGroupId,
             type: i.type,
             description: null,
             ...(i.type === SurveyQuestionType.SINGLE_CHOICE && i.specificChoice?.length
@@ -370,13 +423,17 @@ const PutSurveyImportQuestionModal = () => {
   )
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
-    console.log(input)
     if (input?.surveyQuestionGroupId) {
       form.setFieldsValue({
         surveyQuestionGroupId: input?.surveyQuestionGroupId,
       })
+      return
     }
-  }, [input?.surveyQuestionGroupId])
+
+    if (isLecturerSurvey && topicQuestionGroups[0]?.id) {
+      form.setFieldsValue({ surveyQuestionGroupId: topicQuestionGroups[0].id })
+    }
+  }, [input?.surveyQuestionGroupId, isLecturerSurvey, topicQuestionGroups])
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
     if (surveyQuestion) {
@@ -409,19 +466,21 @@ const PutSurveyImportQuestionModal = () => {
         </Form.Item>
       </Col>
 
-      <Col span={24}>
-        <FormItem form={form} name="surveyQuestionGroupId" label="Nhóm câu hỏi khảo sát" required>
-          <Select
-            placeholder="Chọn nhóm câu hỏi khảo sát"
-            options={surveyQuestionGroupData.map((i: SurveyQuestionGroup) => {
-              return {
-                value: i.id,
-                label: i.name,
-              }
-            })}
-          />
-        </FormItem>
-      </Col>
+      {!isLecturerSurvey && (
+        <Col span={24}>
+          <FormItem form={form} name="surveyQuestionGroupId" label="Nhóm câu hỏi khảo sát" required>
+            <Select
+              placeholder="Chọn nhóm câu hỏi khảo sát"
+              options={surveyQuestionGroupData.map((i: SurveyQuestionGroup) => {
+                return {
+                  value: i.id,
+                  label: i.name,
+                }
+              })}
+            />
+          </FormItem>
+        </Col>
+      )}
       <Col span={24}>
         {importedQuestions.length > 0 && (
           <Col span={24}>

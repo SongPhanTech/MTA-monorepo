@@ -118,14 +118,6 @@ const BangLopTroGiang = ({ danhSach, loading, trang, soTrang }: BangLopTroGiangP
               className="text-cgv-green-dark"
             />
           </Tooltip>
-          <Tooltip title="Thống kê">
-            <Button
-              type="text"
-              size="small"
-              icon={<BarChart3 size={16} />}
-              className="text-cgv-green-dark"
-            />
-          </Tooltip>
         </div>
       ),
     },

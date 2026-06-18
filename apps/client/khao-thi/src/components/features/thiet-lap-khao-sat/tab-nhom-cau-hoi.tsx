@@ -7,6 +7,7 @@ import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import { cn } from "@lib/utils"
 import type { SurveyTopic } from "@workspace/db"
+import { $Enums } from "@workspace/db/client"
 import {
   useCountSurveyQuestionGroup,
   useFindManySurveyQuestionGroup,
@@ -21,6 +22,7 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import CauHoiKhaoSat from "./cau-hoi-khao-sat"
 
 function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
+  const isLecturerSurvey = topicSlected?.type === $Enums.SurveyType.CLUSTER
   const [selectedID, setSelectedID] = useState("")
   const { can } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
@@ -67,7 +69,7 @@ function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
       skip: (currentPage - 1) * numberOfPages,
     },
     {
-      enabled: !!topicSlected?.id,
+      enabled: !!topicSlected?.id && !isLecturerSurvey,
     }
   )
 
@@ -117,6 +119,15 @@ function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
   useEffect(() => {
     setSelectedID("")
   }, [topicSlected])
+
+  if (isLecturerSurvey) {
+    return (
+      <CauHoiKhaoSat
+        surveyTopicId={topicSlected?.id || ""}
+        type={topicSlected?.type || ""}
+      />
+    )
+  }
 
   return (
     <div>
