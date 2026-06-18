@@ -6,8 +6,10 @@ import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
 import { useSurveyQuestionTypeOptions } from "@hooks/survey-question-type"
 import type { SurveyQuestion, SurveyQuestionGroup } from "@workspace/db"
+import { $Enums } from "@workspace/db/client"
 import {
   useCreateSurveyQuestion,
+  useCreateSurveyQuestionGroup,
   useFindManySurveyQuestionGroup,
   useFindUniqueSurveyQuestion,
   useUpdateSurveyQuestion,
@@ -27,6 +29,7 @@ const PutSurveyQuestionModal = () => {
     id: string
     surveyQuestionGroupId: string
     type: string
+    surveyTopicId?: string
   }>({
     tag: "PutSurveyQuestionModal",
     onClose: form.resetFields,
@@ -59,14 +62,68 @@ const PutSurveyQuestionModal = () => {
     useSurveyQuestionTypeOptions()
   const { mutateAsync: create } = useCreateSurveyQuestion()
   const { mutateAsync: update } = useUpdateSurveyQuestion()
+  const { mutateAsync: createSurveyQuestionGroup } = useCreateSurveyQuestionGroup()
 
   const { data: surveyQuestionGroupData = [] } = useFindManySurveyQuestionGroup()
+  const { data: topicQuestionGroups = [] } = useFindManySurveyQuestionGroup(
+    {
+      where: {
+        surveyTopic: {
+          some: {
+            id: input?.surveyTopicId,
+          },
+        },
+      },
+      orderBy: { createdAt: "asc" },
+      take: 1,
+    },
+    {
+      enabled: input?.type === $Enums.SurveyType.CLUSTER && !!input?.surveyTopicId,
+    }
+  )
+
+  const isLecturerSurvey = input?.type === $Enums.SurveyType.CLUSTER
+
+  async function resolveSurveyQuestionGroupId(groupId?: string | null) {
+    if (groupId) return groupId
+    if (!isLecturerSurvey || !input?.surveyTopicId) return groupId ?? undefined
+
+    if (topicQuestionGroups[0]?.id) {
+      return topicQuestionGroups[0].id
+    }
+
+    const defaultGroup = await createSurveyQuestionGroup({
+      data: {
+        name: "Nhóm câu hỏi mặc định",
+        surveyTopic: {
+          connect: {
+            id: input.surveyTopicId,
+          },
+        },
+      },
+    })
+
+    queryClient.invalidateQueries({
+      queryKey: ["SurveyQuestionGroup"],
+    })
+
+    if (!defaultGroup?.id) {
+      return undefined
+    }
+
+    return defaultGroup.id
+  }
 
   async function onOk(output?: PutSurveyQuestionType) {
     if (!output) return
 
     try {
       showSpinner()
+      const surveyQuestionGroupId = await resolveSurveyQuestionGroupId(output.surveyQuestionGroupId)
+      if (!surveyQuestionGroupId) {
+        message.warning("Vui lòng chọn nhóm câu hỏi khảo sát")
+        return
+      }
       if (output.type === "SINGLE_CHOICE" && output.specificChoice?.length > 0) {
         if (input?.id) {
           if (output.specificChoice?.length > 0) {
@@ -89,7 +146,7 @@ const PutSurveyQuestionModal = () => {
                   },
                   data: {
                     name: output.name.trim(),
-                    surveyQuestionGroupId: output.surveyQuestionGroupId,
+                    surveyQuestionGroupId,
                     type: output.type,
                     description: output.description,
                     specificChoice: {
@@ -113,7 +170,7 @@ const PutSurveyQuestionModal = () => {
             await update({
               data: {
                 name: output.name.trim(),
-                surveyQuestionGroupId: output.surveyQuestionGroupId,
+                surveyQuestionGroupId: surveyQuestionGroupId,
                 type: output.type,
                 description: output.description,
                 specificChoice: {
@@ -130,7 +187,7 @@ const PutSurveyQuestionModal = () => {
           await create({
             data: {
               name: output.name.trim(),
-              surveyQuestionGroupId: output.surveyQuestionGroupId,
+              surveyQuestionGroupId: surveyQuestionGroupId,
               type: output.type,
               description: output.description,
               specificChoice: {
@@ -147,7 +204,7 @@ const PutSurveyQuestionModal = () => {
           await update({
             data: {
               name: output.name.trim(),
-              surveyQuestionGroupId: output.surveyQuestionGroupId,
+              surveyQuestionGroupId: surveyQuestionGroupId,
               type: output.type,
               description: output.description,
             },
@@ -160,7 +217,7 @@ const PutSurveyQuestionModal = () => {
           await create({
             data: {
               name: output.name.trim(),
-              surveyQuestionGroupId: output.surveyQuestionGroupId,
+              surveyQuestionGroupId: surveyQuestionGroupId,
               type: output.type,
               description: output.description,
             },
@@ -220,8 +277,13 @@ const PutSurveyQuestionModal = () => {
   useEffect(() => {
     if (input?.surveyQuestionGroupId) {
       form.setFieldsValue({ surveyQuestionGroupId: input?.surveyQuestionGroupId })
+      return
     }
-  }, [input?.surveyQuestionGroupId])
+
+    if (isLecturerSurvey && topicQuestionGroups[0]?.id) {
+      form.setFieldsValue({ surveyQuestionGroupId: topicQuestionGroups[0].id })
+    }
+  }, [input?.surveyQuestionGroupId, isLecturerSurvey, topicQuestionGroups])
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
     if (surveyQuestion) {
@@ -255,19 +317,21 @@ const PutSurveyQuestionModal = () => {
           <Input placeholder="Nhập câu hỏi khảo sát" />
         </FormItem>
       </Col>
-      <Col span={12}>
-        <FormItem form={form} name="surveyQuestionGroupId" label="Nhóm câu hỏi khảo sát" required>
-          <Select
-            placeholder="Chọn nhóm câu hỏi khảo sát"
-            options={surveyQuestionGroupData.map((i: SurveyQuestionGroup) => {
-              return {
-                value: i.id,
-                label: i.name,
-              }
-            })}
-          />
-        </FormItem>
-      </Col>
+      {!isLecturerSurvey && (
+        <Col span={12}>
+          <FormItem form={form} name="surveyQuestionGroupId" label="Nhóm câu hỏi khảo sát" required>
+            <Select
+              placeholder="Chọn nhóm câu hỏi khảo sát"
+              options={surveyQuestionGroupData.map((i: SurveyQuestionGroup) => {
+                return {
+                  value: i.id,
+                  label: i.name,
+                }
+              })}
+            />
+          </FormItem>
+        </Col>
+      )}
       <Col span={12}>
         <FormItem form={form} name="type" label="Loại câu hỏi khảo sát" required>
           <Select placeholder="Chọn loại câu hỏi khảo sát" options={surveyQuestionTypeOptions} />

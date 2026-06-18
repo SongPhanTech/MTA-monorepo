@@ -119,6 +119,26 @@ const ExportLecturerInSurvey = ({
         },
       }
 
+      const centerColumns = new Set([1, 4, 5, 6])
+
+      const addBorderToRange = (
+        sheet: ExcelJS.Worksheet,
+        fromRow: number,
+        toRow: number,
+        toCol: number
+      ) => {
+        for (let row = fromRow; row <= toRow; row++) {
+          for (let col = 1; col <= toCol; col++) {
+            sheet.getCell(row, col).border = {
+              top: { style: "thin", color: { argb: "FF000000" } },
+              left: { style: "thin", color: { argb: "FF000000" } },
+              right: { style: "thin", color: { argb: "FF000000" } },
+              bottom: { style: "thin", color: { argb: "FF000000" } },
+            }
+          }
+        }
+      }
+
       worksheet.mergeCells("A1:C2")
       worksheet.getCell("A1").value = "BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ"
       worksheet.getCell("A1").style = headerTitleStyle
@@ -126,25 +146,23 @@ const ExportLecturerInSurvey = ({
       worksheet.getRow(1).height = 30
       worksheet.getRow(2).height = 30
 
-      worksheet.mergeCells("E1:H2")
-      worksheet.getCell("E1").value =
+      worksheet.mergeCells("D1:G2")
+      worksheet.getCell("D1").value =
         "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc"
-      worksheet.getCell("E1").style = headerTitleStyle
+      worksheet.getCell("D1").style = headerTitleStyle
 
-      worksheet.mergeCells("A4:H4")
+      worksheet.mergeCells("A4:G4")
       worksheet.getCell("A4").value = `Danh sách bài khảo sát: ${surveyName}`
       worksheet.getCell("A4").style = headerSubtitleStyle
       worksheet.getRow(4).height = 20
 
       // Thêm tiêu đề bảng
-      const headerRow = worksheet.getRow(7)
+      const headerRow = worksheet.getRow(6)
       headerRow.values = [
         "STT",
-        "Lớp môn học",
         "Giảng viên",
-        "CCCD",
+        "Lớp môn học",
         "SĐT",
-        "Đơn vị quản lý",
         "Ngày bắt đầu",
         "Ngày kết thúc",
       ]
@@ -157,16 +175,15 @@ const ExportLecturerInSurvey = ({
         { width: 10 },
         { width: 40 },
         { width: 40 },
-        { width: 20 },
-        { width: 20 },
-        { width: 20 },
+        { width: 15 },
         { width: 20 },
         { width: 20 },
       ]
-      if (data && data.length > 0) {
+      const dataRowCount = data?.length || 0
+      if (dataRowCount > 0) {
         data.forEach((i: any, index: number) => {
-          const headerRowValue: any = worksheet.getRow(8 + index)
-          headerRowValue.values = [
+          const dataRow = worksheet.getRow(8 + index)
+          dataRow.values = [
             index + 1,
             `${i?.code || ""} - ${i?.userProfile?.lastName || ""} ${i?.userProfile?.firstName || ""}`,
             i?.survey?.length > 0
@@ -174,14 +191,21 @@ const ExportLecturerInSurvey = ({
                   ?.map((t: any) => `${t.subjectClass?.code || ""} - ${t.subjectClass?.name || ""}`)
                   .join("\n")
               : "",
-            i?.userProfile?.idCardNumber || "",
             i?.userProfile?.phoneNumber || "",
-            i?.organization?.sMa || "",
             i?.survey[0]?.startDate ? dayjs(i?.survey[0]?.startDate).format("DD/MM/YYYY") : "",
             i?.survey[0]?.endDate ? dayjs(i?.survey[0]?.endDate).format("DD/MM/YYYY") : "",
           ]
+          dataRow.eachCell((cell: ExcelJS.Cell, colNumber: number) => {
+            cell.font = { ...golbalFontStyle, size: 14 }
+            cell.alignment = {
+              horizontal: centerColumns.has(colNumber) ? "center" : "left",
+              vertical: "middle",
+              wrapText: true,
+            }
+          })
         })
       }
+      addBorderToRange(worksheet, 6, 6 + dataRowCount, 6)
 
       // Xuất file
       const buffer = await workbook.xlsx.writeBuffer()
