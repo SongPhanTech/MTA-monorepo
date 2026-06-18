@@ -129,6 +129,7 @@ const useLopGiangDayGiangVien = () => {
         const trangThai = layTrangThaiNhapDiem(item)
         return {
           id: item.id,
+          subjectVersionId: item.subjectId ?? "",
           maLop: item.code ?? "",
           tenMonHoc: item.subject?.name ?? "",
           soTinChi: item.subject?.credit ?? null,

@@ -1,5 +1,6 @@
 import type { LopGiangDayRow } from "@components/cong-giang-vien/lop-giang-day/types"
 import {
+  chiTietMonHocGiangDayPath,
   diemDanhGiangDayPath,
   nhapDiemThiGiangDayPath,
   nhapDiemQuaTrinhGiangDayPath,
@@ -10,7 +11,7 @@ import { Button, Checkbox, Dropdown, Table, Tag, Tooltip } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import type { MenuProps } from "antd"
 import dayjs from "dayjs"
-import { CalendarPlus, Ellipsis, PenLine } from "lucide-react"
+import { CalendarPlus, Ellipsis, Eye, PenLine } from "lucide-react"
 import { useRouter } from "next/router"
 import { useEffect, useRef, useState, type Key } from "react"
 
@@ -206,6 +207,12 @@ const BangLopGiangDay = ({
       render: (_value, record) => {
         const menuItems: MenuProps["items"] = [
           {
+            key: "diem-danh",
+            label: "Điểm danh",
+            icon: <CalendarPlus size={14} />,
+            onClick: () => moDiemDanh(record.id),
+          },
+          {
             key: "nhap-diem-qua-trinh",
             label: "Nhập điểm quá trình",
             icon: <PenLine size={14} />,
@@ -221,13 +228,15 @@ const BangLopGiangDay = ({
 
         return (
           <div className="flex items-center justify-center gap-1">
-            <Tooltip title="Điểm danh">
+            <Tooltip title="Xem chi tiết">
               <Button
                 type="text"
                 size="small"
-                icon={<CalendarPlus size={16} />}
+                icon={<Eye size={16} />}
+                onClick={() =>
+                  router.push(chiTietMonHocGiangDayPath(record.subjectVersionId, record.id))
+                }
                 className="text-cgv-green-dark"
-                onClick={() => moDiemDanh(record.id)}
               />
             </Tooltip>
             <Dropdown menu={{ items: menuItems }} trigger={["click"]}>

@@ -15,6 +15,7 @@ export interface BoLocLopGiangDay {
 
 export interface LopGiangDayRow {
   id: string
+  subjectVersionId: string
   maLop: string
   tenMonHoc: string
   soTinChi: number | null

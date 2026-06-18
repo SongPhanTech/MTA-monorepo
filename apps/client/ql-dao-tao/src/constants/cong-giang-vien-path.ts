@@ -9,6 +9,7 @@ export const CONG_GIANG_VIEN_CHI_TIET_MON_HOC_PATH = `${CONG_GIANG_VIEN_LOP_TRO_
 export const CONG_GIANG_VIEN_DIEM_DANH_GIANG_DAY_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/lop-giang-day/diem-danh`
 export const CONG_GIANG_VIEN_NHAP_DIEM_QUA_TRINH_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/lop-giang-day/nhap-diem-qua-trinh`
 export const CONG_GIANG_VIEN_NHAP_DIEM_THI_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/lop-giang-day/nhap-diem-thi`
+export const CONG_GIANG_VIEN_CHI_TIET_MON_HOC_GIANG_DAY_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/lop-giang-day/chi-tiet`
 
 export const chiTietLopQuanLyPath = (id: string) => `${CONG_GIANG_VIEN_LOP_QUAN_LY_PATH}/${id}`
 
@@ -40,6 +41,14 @@ export const nhapDiemThiGiangDayPath = (subjectClassId?: string) =>
   subjectClassId
     ? `${CONG_GIANG_VIEN_NHAP_DIEM_THI_PATH}?lopId=${subjectClassId}`
     : CONG_GIANG_VIEN_NHAP_DIEM_THI_PATH
+
+/** Mở màn chi tiết môn học của lớp giảng dạy theo phiên bản môn học (kèm lớp để lấy ngôn ngữ giảng dạy). */
+export const chiTietMonHocGiangDayPath = (subjectVersionId?: string, subjectClassId?: string) => {
+  if (!subjectVersionId) return CONG_GIANG_VIEN_CHI_TIET_MON_HOC_GIANG_DAY_PATH
+  const params = new URLSearchParams({ subjectVersionId })
+  if (subjectClassId) params.set("lopId", subjectClassId)
+  return `${CONG_GIANG_VIEN_CHI_TIET_MON_HOC_GIANG_DAY_PATH}?${params.toString()}`
+}
 
 export const hoSoSinhVienLopQuanLyPath = (fixedClassId: string, studentId: string) =>
   `${CONG_GIANG_VIEN_LOP_QUAN_LY_PATH}/${fixedClassId}/sinh-vien/${studentId}`
