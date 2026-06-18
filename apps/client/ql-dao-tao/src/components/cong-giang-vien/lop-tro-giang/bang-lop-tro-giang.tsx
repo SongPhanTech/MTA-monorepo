@@ -2,7 +2,10 @@ import {
   type LopTroGiangRow,
   TRANG_THAI_TRO_GIANG_META,
 } from "@components/cong-giang-vien/lop-tro-giang/types"
-import { diemDanhTroGiangPath } from "@constants/cong-giang-vien-path"
+import {
+  chiTietMonHocTroGiangPath,
+  diemDanhTroGiangPath,
+} from "@constants/cong-giang-vien-path"
 import { Button, Table, Tag, Tooltip } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { BarChart3, ClipboardCheck, Eye } from "lucide-react"
@@ -106,6 +109,9 @@ const BangLopTroGiang = ({ danhSach, loading, trang, soTrang }: BangLopTroGiangP
               type="text"
               size="small"
               icon={<Eye size={16} />}
+              onClick={() =>
+                router.push(chiTietMonHocTroGiangPath(record.subjectVersionId, record.id))
+              }
               className="text-cgv-green-dark"
             />
           </Tooltip>
@@ -135,7 +141,6 @@ const BangLopTroGiang = ({ danhSach, loading, trang, soTrang }: BangLopTroGiangP
         dataSource={danhSach}
         loading={loading}
         pagination={false}
-        scroll={{ x: 1300, y: chieuCaoBody }}
         className="[&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
       />
     </div>

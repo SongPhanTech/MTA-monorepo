@@ -24,6 +24,7 @@ export interface BoLocLopTroGiang {
 /** Dòng dữ liệu cho bảng Lớp trợ giảng. */
 export interface LopTroGiangRow {
   id: string
+  subjectVersionId: string
   maHocPhan: string
   tenHocPhan: string
   giangVienPhuTrach: string

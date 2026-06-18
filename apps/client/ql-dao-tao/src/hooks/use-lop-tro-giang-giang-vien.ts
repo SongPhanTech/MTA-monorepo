@@ -109,6 +109,7 @@ const useLopTroGiangGiangVien = () => {
     () =>
       data.map((item) => ({
         id: item.id,
+        subjectVersionId: item.subjectId ?? "",
         maHocPhan: item.subject?.code ?? "",
         tenHocPhan: item.subject?.name ?? "",
         giangVienPhuTrach: item.mainLecturer?.userProfile?.fullname ?? "",
