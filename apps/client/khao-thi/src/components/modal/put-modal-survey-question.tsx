@@ -6,6 +6,7 @@ import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
 import { useSurveyQuestionTypeOptions } from "@hooks/survey-question-type"
 import type { SurveyQuestion, SurveyQuestionGroup } from "@workspace/db"
+import { $Enums } from "@workspace/db/client"
 import {
   useCreateSurveyQuestion,
   useCreateSurveyQuestionGroup,
@@ -77,11 +78,11 @@ const PutSurveyQuestionModal = () => {
       take: 1,
     },
     {
-      enabled: input?.type === "CLUSTER" && !!input?.surveyTopicId,
+      enabled: input?.type === $Enums.SurveyType.CLUSTER && !!input?.surveyTopicId,
     }
   )
 
-  const isLecturerSurvey = input?.type === "CLUSTER"
+  const isLecturerSurvey = input?.type === $Enums.SurveyType.CLUSTER
 
   async function resolveSurveyQuestionGroupId(groupId?: string | null) {
     if (groupId) return groupId

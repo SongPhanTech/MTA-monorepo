@@ -119,7 +119,7 @@ const ExportLecturerInSurvey = ({
         },
       }
 
-      const centerColumns = new Set([1, 4, 5, 6, 7])
+      const centerColumns = new Set([1, 4, 5, 6])
 
       const addBorderToRange = (
         sheet: ExcelJS.Worksheet,
@@ -157,13 +157,12 @@ const ExportLecturerInSurvey = ({
       worksheet.getRow(4).height = 20
 
       // Thêm tiêu đề bảng
-      const headerRow = worksheet.getRow(7)
+      const headerRow = worksheet.getRow(6)
       headerRow.values = [
         "STT",
         "Giảng viên",
         "Lớp môn học",
         "SĐT",
-        "Đơn vị quản lý",
         "Ngày bắt đầu",
         "Ngày kết thúc",
       ]
@@ -176,8 +175,7 @@ const ExportLecturerInSurvey = ({
         { width: 10 },
         { width: 40 },
         { width: 40 },
-        { width: 20 },
-        { width: 20 },
+        { width: 15 },
         { width: 20 },
         { width: 20 },
       ]
@@ -194,7 +192,6 @@ const ExportLecturerInSurvey = ({
                   .join("\n")
               : "",
             i?.userProfile?.phoneNumber || "",
-            i?.organization?.sMa || "",
             i?.survey[0]?.startDate ? dayjs(i?.survey[0]?.startDate).format("DD/MM/YYYY") : "",
             i?.survey[0]?.endDate ? dayjs(i?.survey[0]?.endDate).format("DD/MM/YYYY") : "",
           ]
@@ -208,7 +205,7 @@ const ExportLecturerInSurvey = ({
           })
         })
       }
-      addBorderToRange(worksheet, 7, 7 + dataRowCount, 7)
+      addBorderToRange(worksheet, 6, 6 + dataRowCount, 6)
 
       // Xuất file
       const buffer = await workbook.xlsx.writeBuffer()

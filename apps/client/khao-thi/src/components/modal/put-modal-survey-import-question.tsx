@@ -6,6 +6,7 @@ import Select from "@components/commons/select"
 import useSpinner from "@hooks/spinner"
 import { useSurveyQuestionTypeOptions } from "@hooks/survey-question-type"
 import { type SurveyQuestion, type SurveyQuestionGroup, SurveyQuestionType } from "@workspace/db"
+import { $Enums } from "@workspace/db/client"
 import { useCreateSurveyQuestionGroup, useFindManySurveyQuestionGroup, useFindUniqueSurveyQuestion } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { PizZip } from "@workspace/libs/docxjs"
@@ -215,11 +216,11 @@ const PutSurveyImportQuestionModal = () => {
       take: 1,
     },
     {
-      enabled: input?.type === "CLUSTER" && !!input?.surveyTopicId,
+      enabled: input?.type === $Enums.SurveyType.CLUSTER && !!input?.surveyTopicId,
     }
   )
 
-  const isLecturerSurvey = input?.type === "CLUSTER"
+  const isLecturerSurvey = input?.type === $Enums.SurveyType.CLUSTER
 
   async function resolveSurveyQuestionGroupId(groupId?: string | null) {
     if (groupId) return groupId

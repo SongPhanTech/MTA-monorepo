@@ -6,6 +6,7 @@ import EditIcon from "@components/icons/edit"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import { useSurveyQuestionTypeOptions } from "@hooks/survey-question-type"
+import { $Enums } from "@workspace/db/client"
 import {
   useCountSurveyQuestion,
   useFindManySurveyQuestion,
@@ -28,7 +29,7 @@ function CauHoiKhaoSat({
   type: string
   surveyTopicId?: string
 }) {
-  const isLecturerSurvey = type === "CLUSTER"
+  const isLecturerSurvey = type === $Enums.SurveyType.CLUSTER
   const { can, canSome } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
