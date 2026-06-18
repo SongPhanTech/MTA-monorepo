@@ -5,6 +5,7 @@ import {
 } from "@components/features/thiet-lap-khao-sat"
 import DefaultLayout from "@layouts/default-layout"
 import type { SurveyTopic } from "@workspace/db"
+import { $Enums } from "@workspace/db/client"
 import { Tabs, type TabsProps } from "antd"
 import { useMemo, useState } from "react"
 
@@ -35,7 +36,10 @@ function Page() {
       },
       {
         key: "3",
-        label: topicSlected?.type === "CLUSTER" ? "Câu hỏi khảo sát" : "Nhóm câu hỏi khảo sát",
+        label:
+          topicSlected?.type === $Enums.SurveyType.CLUSTER
+            ? "Câu hỏi khảo sát"
+            : "Nhóm câu hỏi khảo sát",
         children: <TabNhomCauHoi topicSlected={topicSlected} />,
         disabled: !topicSlected?.id,
       },
