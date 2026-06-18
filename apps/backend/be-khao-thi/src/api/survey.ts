@@ -1496,7 +1496,8 @@ app.openapi(sinhdetudong, async (c) => {
             const pool = knowledgeBlock.questions.filter(
               (i: any) =>
                 i?.difficult === configExam.difficult &&
-                (configExam.type == null || i?.type === configExam.type)
+                (configExam.type == null || i?.type === configExam.type) &&
+                i?.point === configExam.point
             )
 
             if (pool.length < configExam.quantity) {

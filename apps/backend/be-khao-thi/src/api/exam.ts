@@ -372,7 +372,8 @@ app.openapi(sinhdethuCong, async (c) => {
         const listRamdom = knowledgeBlock.questions.filter(
           (i: any) =>
             i?.difficult === configExam.difficult &&
-            (configExam.type == null || i?.type === configExam.type)
+            (configExam.type == null || i?.type === configExam.type) &&
+            i?.point === configExam.point
         )
 
         if (listRamdom.length < configExam.quantity) {
