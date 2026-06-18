@@ -44,12 +44,14 @@ const HangThongTin = ({
   nhan: string
   giaTri: string
 }) => (
-  <div className="flex flex-col items-center px-2 py-2 text-center">
-    <p className="m-0 text-xs text-gray-500">{nhan}</p>
-    <div className="my-2 flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 text-cgv-green-dark">
+  <div className="flex items-center gap-2.5 py-2">
+    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-50 text-cgv-green-dark">
       {icon}
     </div>
-    <p className="m-0 text-sm font-medium leading-snug text-gray-800">{giaTri}</p>
+    <div className="min-w-0 flex-1">
+      <p className="m-0 text-xs leading-tight text-gray-500">{nhan}</p>
+      <p className="m-0 mt-0.5 truncate text-sm font-medium leading-snug text-gray-800">{giaTri}</p>
+    </div>
   </div>
 )
 
