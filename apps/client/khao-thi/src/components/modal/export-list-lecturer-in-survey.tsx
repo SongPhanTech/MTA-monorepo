@@ -146,12 +146,12 @@ const ExportLecturerInSurvey = ({
       worksheet.getRow(1).height = 30
       worksheet.getRow(2).height = 30
 
-      worksheet.mergeCells("E1:H2")
-      worksheet.getCell("E1").value =
+      worksheet.mergeCells("D1:G2")
+      worksheet.getCell("D1").value =
         "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc"
-      worksheet.getCell("E1").style = headerTitleStyle
+      worksheet.getCell("D1").style = headerTitleStyle
 
-      worksheet.mergeCells("A4:H4")
+      worksheet.mergeCells("A4:G4")
       worksheet.getCell("A4").value = `Danh sách bài khảo sát: ${surveyName}`
       worksheet.getCell("A4").style = headerSubtitleStyle
       worksheet.getRow(4).height = 20
