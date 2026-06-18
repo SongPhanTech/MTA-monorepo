@@ -66,15 +66,6 @@ const BoLocLopQuanLyBar = ({ boLoc, onChange, onDoiLoaiLop, onTimKiem }: BoLocLo
         />
       </div>
 
-      <Input
-        allowClear
-        placeholder="Nhập mã lớp hoặc tên lớp"
-        value={boLoc.tuKhoa}
-        onChange={(e) => onChange({ tuKhoa: e.target.value })}
-        onPressEnter={onTimKiem}
-        className="h-10 min-w-[220px] flex-1 text-sm"
-      />
-
       <div className="flex items-center gap-2">
         <span className="text-sm text-gray-600">Loại lớp:</span>
         <Select
@@ -87,6 +78,15 @@ const BoLocLopQuanLyBar = ({ boLoc, onChange, onDoiLoaiLop, onTimKiem }: BoLocLo
           ]}
         />
       </div>
+
+      <Input
+        allowClear
+        placeholder="Nhập mã lớp hoặc tên lớp"
+        value={boLoc.tuKhoa}
+        onChange={(e) => onChange({ tuKhoa: e.target.value })}
+        onPressEnter={onTimKiem}
+        className="h-10 min-w-[220px] flex-1 text-sm"
+      />
 
       <Button
         type="primary"

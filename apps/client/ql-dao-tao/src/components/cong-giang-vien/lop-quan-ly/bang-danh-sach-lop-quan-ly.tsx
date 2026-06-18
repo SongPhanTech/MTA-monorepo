@@ -109,26 +109,14 @@ const BangDanhSachLopQuanLy = ({
       render: (value: LopQuanLyChiTietRow["classType"]) => getFixedClassTypeLabel(value),
     },
     {
-      title: "Ghi chú",
-      dataIndex: "ghiChu",
-      width: 120,
-      ellipsis: true,
-      render: (value: string) => value || "—",
-    },
-    {
       title: "Thao tác",
       width: 90,
       align: "center",
       fixed: "right",
       render: (_value, record) => (
-        <Button
-          type="link"
-          size="small"
-          icon={<Eye size={14} />}
-          className="inline-flex items-center gap-1 px-0 text-cgv-green-dark"
-          onClick={() => onXemChiTiet(record.id)}
-        >
-          Xem
+        <Button type="link" size="small" onClick={() => onXemChiTiet(record.id)}>
+          <Eye size={14} className="text-cgv-green-dark" />
+          <span className="text-cgv-green-dark">Xem</span>
         </Button>
       ),
     },
