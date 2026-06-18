@@ -13,7 +13,7 @@ import {
   useFindUniqueQuestion,
   useUpdateQuestion,
 } from "@workspace/db/hooks"
-import { Button, Checkbox, Col, Form, Input, message, Radio, Row, Tooltip } from "antd"
+import { Button, Checkbox, Col, Form, Input, InputNumber, message, Radio, Row, Tooltip } from "antd"
 import { Trash2 } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -134,6 +134,7 @@ const PutQuestionModal = () => {
         questionBankId: input?.questionBankId,
         knowledgeBlockId: output.knowledgeBlockId,
         difficult: output.difficult,
+        point: output.point ?? 0
       }
 
       let res: any = null
@@ -372,6 +373,13 @@ const PutQuestionModal = () => {
   //   }
   // }, [initialValue, form]);
   useEffect(() => {
+    if (!isOpen) return
+    if (input?.id) return
+    form.setFieldsValue({ point: 0, isAutoGraded: false })
+    setStorageType("khung")
+  }, [isOpen, input?.id, form])
+
+  useEffect(() => {
     if (!initialValue) return
     const type = initialValue.type
     let options: any[] = []
@@ -525,32 +533,16 @@ const PutQuestionModal = () => {
                   />
                 </FormItem>
               </Col>
-              {/* <Col span={12}>
+              <Col span={12}>
                 <FormItem form={form} name="point" label="Điểm" required>
                   <InputNumber
                     min={0}
-                    type="number"
                     placeholder="Nhập điểm"
-                    defaultValue={1}
-                    step={0.1}
+                    step={0.25}
                     className="w-full"
                   />
                 </FormItem>
               </Col>
-              {typeQuestion !== QuestionType.ESSAY && (
-                <Col span={12}>
-                  <FormItem
-                    form={form}
-                    name={"isAutoGraded"}
-                    label="Tự động chấm điểm"
-                  >
-                    <Radio.Group buttonStyle="solid">
-                      <Radio value={true}>Có</Radio>
-                      <Radio value={false}>Không</Radio>
-                    </Radio.Group>
-                  </FormItem>
-                </Col>
-              )} */}
               <Col span={24}>
                 <div className="border-t border-[#D1D5DB] x-auto my-2" />
               </Col>
