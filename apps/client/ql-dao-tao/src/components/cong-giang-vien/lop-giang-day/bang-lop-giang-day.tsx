@@ -256,8 +256,8 @@ const BangLopGiangDay = ({ danhSach, loading, trang, soTrang }: BangLopGiangDayP
         dataSource={danhSach}
         loading={loading}
         pagination={false}
-        scroll={{ x: 2200, y: chieuCaoBody }}
-        className="bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
+        scroll={{ x: "max-content" }}
+        className="bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400 [&_.ant-table-cell-scrollbar]:!hidden"
       />
     </div>
   )
