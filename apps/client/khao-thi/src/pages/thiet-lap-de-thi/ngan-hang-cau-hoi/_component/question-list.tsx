@@ -6,6 +6,7 @@ import Table from "@components/commons/table"
 import type { FilterProps } from "@components/commons/typeFilter"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
+import { CLUSTER_QUESTION_TYPE } from "@/utils/cluster-question-utils"
 import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS, QUESTION_TYPE_OPTIONS } from "@constants/constants"
 import type { QuestionType } from "@workspace/db/client"
 import {
@@ -83,9 +84,11 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
   const { data: knowledgeBlockData = [] } = useFindManyKnowledgeBlock()
 
   const where = useMemo(
-    () => ({
-      deletedAt: null as null,
-      questionBankId,
+    () =>
+      ({
+        deletedAt: null as null,
+        questionBankId,
+        parentQuestionId: null,
       ...(filters.questionType && filters.questionType.length > 0
         ? {
             type: { in: filters.questionType },
@@ -107,12 +110,12 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
             },
           }
         : {}),
-      ...(filters.difficult && filters.difficult.length > 0
-        ? {
-            difficult: { in: filters.difficult },
-          }
-        : {}),
-    }),
+        ...(filters.difficult && filters.difficult.length > 0
+          ? {
+              difficult: { in: filters.difficult },
+            }
+          : {}),
+      }) as any,
     [questionBankId, filters.questionType, filters.content, filters.explanation, filters.difficult]
   )
 
@@ -131,8 +134,14 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
         multipleChoiceOptions: true,
         fillInBlankSlots: true,
         orderingItems: true,
+        subQuestions: {
+          orderBy: { order: "asc" },
+          include: {
+            multipleChoiceOptions: { orderBy: { order: "asc" } },
+          },
+        },
       },
-    },
+    } as Parameters<typeof useFindManyQuestion>[0],
     queryOptions
   )
 
@@ -323,74 +332,60 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                 width: 280,
                 fixed: "left",
                 type: "input",
-                render: (__, record) => (
-                  <HtmlTruncate>
-                    <div>
-                      {/* Nội dung câu hỏi */}
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: record.content
-                            ? renderWithMath(record.content)
-                            : "<i>Chưa có nội dung</i>",
-                        }}
-                      />
+                render: (__, record) => {
+                  const row = record as typeof record & {
+                    subQuestions?: Array<{
+                      id: string
+                      content: string
+                      multipleChoiceOptions?: Array<{ id: string; content: string }>
+                    }>
+                  }
 
-                      {/* Các đáp án trắc nghiệm */}
-                      {/* {(record.type === QuestionType.MULTIPLE_CHOICE ||
-                        record.type === QuestionType.SINGLE_CHOICE) && (
-                        <div className="mt-2 space-y-1">
-                          {record?.multipleChoiceOptions
-                            ?.sort(
-                              (
-                                a: MultipleChoiceOption,
-                                b: MultipleChoiceOption
-                              ) => (a.order || 0) - (b.order || 0)
-                            )
-                            .map((option: MultipleChoiceOption) => (
-                              <div
-                                key={option.id}
-                                className={`text-xs ${"text-gray-600"}`}
-                              >
-                                <span
-                                  dangerouslySetInnerHTML={{
-                                    __html: option.content
-                                      ? renderWithMath(option.content)
-                                      : "",
-                                  }}
-                                />
-                              </div>
-                            ))}
-                        </div>
-                      )} */}
+                  return (
+                    <HtmlTruncate>
+                      <div>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: row.content
+                              ? renderWithMath(row.content)
+                              : "<i>Chưa có nội dung</i>",
+                          }}
+                        />
 
-                      {/* Các đáp án sắp xếp thứ tự */}
-                      {/* {record.type === QuestionType.ORDERING && (
-                        <div className="mt-2 space-y-1">
-                          {record?.orderingItems
-                            ?.sort(
-                              (a: OrderingItem, b: OrderingItem) =>
-                                (a.correctOrder || 0) - (b.correctOrder || 0)
-                            )
-                            .map((item: OrderingItem, index: number) => (
-                              <div
-                                key={item.id}
-                                className="text-xs text-gray-600"
-                              >
-                                {index + 1}.{" "}
-                                <span
-                                  dangerouslySetInnerHTML={{
-                                    __html: item.content
-                                      ? renderWithMath(item.content)
-                                      : "",
-                                  }}
-                                />
-                              </div>
-                            ))}
-                        </div>
-                      )} */}
-                    </div>
-                  </HtmlTruncate>
-                ),
+                        {(row.subQuestions?.length ?? 0) > 0 &&
+                          row.type === CLUSTER_QUESTION_TYPE && (
+                            <div className="mt-3 space-y-2 border-t border-gray-200 pt-2">
+                              {(row.subQuestions ?? []).map((sub, subIndex) => (
+                                <div key={sub.id} className="text-xs">
+                                  <div className="font-medium text-gray-700 mb-1">
+                                    {String.fromCharCode(97 + subIndex)}){" "}
+                                    {sub.content ? (
+                                      <span
+                                        dangerouslySetInnerHTML={{
+                                          __html: renderWithMath(sub.content),
+                                        }}
+                                      />
+                                    ) : null}
+                                  </div>
+                                  {sub.multipleChoiceOptions?.map((option) => (
+                                    <div key={option.id} className="text-gray-600 pl-2">
+                                      <span
+                                        dangerouslySetInnerHTML={{
+                                          __html: option.content
+                                            ? renderWithMath(option.content)
+                                            : "",
+                                        }}
+                                      />
+                                    </div>
+                                  ))}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                      </div>
+                    </HtmlTruncate>
+                  )
+                },
               },
               {
                 title: "Loại câu hỏi",
@@ -427,9 +422,7 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                   value: id,
                   label: name,
                 })),
-                render: (__, record) => {
-                  return record?.knowledgeBlock?.name || ""
-                },
+                render: (__, record) => (record as any)?.knowledgeBlock?.name || "",
               },
               {
                 title: "Thao tác",
