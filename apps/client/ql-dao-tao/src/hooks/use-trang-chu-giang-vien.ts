@@ -52,7 +52,11 @@ const useTrangChuGiangVien = () => {
           },
         },
         manageFixedClass: {
-          where: { active: true },
+          where: {
+            deletedAt: null,
+            active: true,
+            ...(semesterId ? { trainingCourse: { semesterStartId: semesterId } } : {}),
+          },
           include: {
             _count: { select: { students: true } },
           },
