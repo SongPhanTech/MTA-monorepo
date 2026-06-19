@@ -49,7 +49,7 @@ model Question extends Base {
   point                 Float                  @default(1) // Điểm số
   explanation           String? // Giải thích đáp án
   isAutoGraded          Boolean                @default(false)
-  difficult             Difficult
+  difficult             Difficult?
   order                 Int? // Thứ tự câu con trong câu hỏi chùm
   // Liên kết với các bảng dữ liệu chi tiết theo từng loại câu hỏi
   multipleChoiceOptions MultipleChoiceOption[]
@@ -69,6 +69,8 @@ model Question extends Base {
   /// Câu trả lời của thí sinh trong các phiên thi
   // answers               Answer[]
 
+  @@unique([parentQuestionId, order])
+  @@index([parentQuestionId])
   @@schema("khao-thi")
 }
 
