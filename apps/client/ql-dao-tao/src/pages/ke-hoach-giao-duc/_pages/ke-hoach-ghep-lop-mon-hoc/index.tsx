@@ -315,6 +315,7 @@ export default function KeHoachGhepLopMonHoc() {
           where: {
             semesterId,
             trainingObjectTypeId,
+            type: { not: $Enums.SubjectClassType.REEXAM },
           },
           select: {
             id: true,

@@ -419,11 +419,14 @@ const PutOneSubjectClassModal = () => {
           ? dayjs(subjectClassData.scoreDeadLineStart)
           : null,
         dayOfWeeks: [...new Set(subjectClassData.subjectClassTimes?.map((item) => item.dayOfWeek))],
-        times: subjectClassData.subjectClassTimes?.uniqueByKey("dayOfWeek")?.map((item) => ({
-          dayOfWeek: item.dayOfWeek,
-          startPeriod: item.startPeriod,
-          endPeriod: item.endPeriod,
-        })),
+        times: subjectClassData.subjectClassTimes
+          ?.uniqueByKeys(["dayOfWeek", "startPeriod", "endPeriod"])
+          ?.sort((a, b) => a.dayOfWeek - b.dayOfWeek || a.startPeriod - b.startPeriod)
+          ?.map((item) => ({
+            dayOfWeek: item.dayOfWeek,
+            startPeriod: item.startPeriod,
+            endPeriod: item.endPeriod,
+          })),
       })
     }
   }, [subjectClassData])
@@ -702,7 +705,7 @@ const PutOneSubjectClassModal = () => {
                       dataIndex: "startPeriod",
                       key: "startPeriod",
                       align: "center",
-                      render: (value) => (
+                      render: (value, _record, index) => (
                         <Select
                           defaultValue={value}
                           options={Object.entries(PERIOD).map(([key, val]) => ({
@@ -710,12 +713,9 @@ const PutOneSubjectClassModal = () => {
                             value: Number(key),
                           }))}
                           onChange={(val) => {
-                            const newTimes = times.map((time) => {
-                              if (time.startPeriod === value) {
-                                return { ...time, startPeriod: val }
-                              }
-                              return time
-                            })
+                            const newTimes = times.map((time, i) =>
+                              i === index ? { ...time, startPeriod: val } : time
+                            )
                             form.setFieldsValue({
                               times: newTimes,
                             })
@@ -729,7 +729,7 @@ const PutOneSubjectClassModal = () => {
                       dataIndex: "endPeriod",
                       key: "endPeriod",
                       align: "center",
-                      render: (value, record) => (
+                      render: (value, record, index) => (
                         <Select
                           defaultValue={value}
                           options={Object.entries(PERIOD)
@@ -739,12 +739,9 @@ const PutOneSubjectClassModal = () => {
                             }))
                             .filter((item) => Number(item.value) >= record.startPeriod)}
                           onChange={(val) => {
-                            const newTimes = times.map((time) => {
-                              if (time.endPeriod === value) {
-                                return { ...time, endPeriod: val }
-                              }
-                              return time
-                            })
+                            const newTimes = times.map((time, i) =>
+                              i === index ? { ...time, endPeriod: val } : time
+                            )
                             form.setFieldsValue({
                               times: newTimes,
                             })
