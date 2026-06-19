@@ -2,7 +2,7 @@ import { queryClient } from "@api/index"
 import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
 import type { Prisma } from "@workspace/db/client"
 import { useFindManyExamBank, useUpdateExamBank } from "@workspace/db/hooks"
-import { getMinioUrl } from "@workspace/libs/utils"
+import { getMinioUrl, formatQuestionPoint } from "@workspace/libs/utils"
 import { Button, Divider, Flex, Input, Modal } from "antd"
 import { TemplateHandler } from "easy-template-x"
 import { useEffect, useMemo, useRef, useState } from "react"
@@ -195,7 +195,7 @@ const PrintBatchExplanation = () => {
 
               return {
                 order: q?.order || qIndex + 1,
-                point: Number(question?.point || 0).toFixed(1),
+                point: formatQuestionPoint(question?.point),
                 content: convertHtmlBreaks(question?.content || ""),
                 answer: answer,
               }
@@ -421,7 +421,7 @@ const PrintBatchExplanation = () => {
                       }}
                     >
                       <strong>
-                        Câu {q?.order || qIndex + 1}({Number(q?.question?.point || 0).toFixed(1)}{" "}
+                        Câu {q?.order || qIndex + 1}({formatQuestionPoint(q?.question?.point)}{" "}
                         điểm):
                       </strong>{" "}
                       <span
@@ -476,7 +476,7 @@ const PrintBatchExplanation = () => {
                       verticalAlign: "middle",
                     }}
                   >
-                    {Number(q?.question?.point || 0).toFixed(1)}đ
+                    {formatQuestionPoint(q?.question?.point)}đ
                   </td>
                 </tr>
               ))}

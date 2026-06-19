@@ -1,7 +1,7 @@
 import { queryClient } from "@api/index"
 import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
 import { useFindUniqueExamBank, useUpdateExamBank } from "@workspace/db/hooks"
-import { getMinioUrl } from "@workspace/libs/utils"
+import { getMinioUrl, formatQuestionPoint } from "@workspace/libs/utils"
 import { Button, Flex, Input, Modal } from "antd"
 import { TemplateHandler } from "easy-template-x"
 import { useEffect, useRef, useState } from "react"
@@ -136,7 +136,7 @@ const PrintExplanation = () => {
 
             return {
               order: String(q?.order || index + 1),
-              point: Number(question?.point || 0).toFixed(1),
+              point: formatQuestionPoint(question?.point),
               content: convertHtmlBreaks(question?.content || ""),
               answer: answer,
             }
@@ -418,7 +418,7 @@ const PrintExplanation = () => {
                         }}
                       >
                         <strong>
-                          Câu {q?.order || index + 1}({Number(q?.question?.point || 0).toFixed(1)}{" "}
+                          Câu {q?.order || index + 1}({formatQuestionPoint(q?.question?.point)}{" "}
                           điểm):
                         </strong>{" "}
                         <span
@@ -512,7 +512,7 @@ const PrintExplanation = () => {
                         verticalAlign: "middle",
                       }}
                     >
-                      {Number(q?.question?.point || 0).toFixed(1)}đ
+                      {formatQuestionPoint(q?.question?.point)}đ
                     </td>
                   </tr>
                 ))}

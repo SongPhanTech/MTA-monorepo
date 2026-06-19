@@ -2,7 +2,7 @@ import { queryClient } from "@api/index"
 import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
 import { useFindUniqueExamBank, useUpdateExamBank } from "@workspace/db/hooks"
 import { useGetExamBankWithGrouping } from "@workspace/libs/api/exam"
-import { getMinioUrl } from "@workspace/libs/utils"
+import { getMinioUrl, formatQuestionPoint } from "@workspace/libs/utils"
 import { Button, Flex, Input, Modal } from "antd"
 import { TemplateData, TemplateHandler } from "easy-template-x"
 import { useEffect, useRef, useState } from "react"
@@ -99,7 +99,7 @@ const PrintExamBank = () => {
 
     const mapQuestion = (q: any, index: number) => ({
       order: String(q?.order || index + 1),
-      point: Number(q?.question?.point || 0).toFixed(1),
+      point: formatQuestionPoint(q?.question?.point),
       content: convertHtmlBreaks(q?.question?.content) || "",
     })
 
@@ -346,7 +346,7 @@ const PrintExamBank = () => {
                     <div key={q?.id} style={{ marginBottom: "15px" }}>
                       <div>
                         <strong>
-                          Câu {qIndex + 1}({Number(q?.question?.point || 0).toFixed(1)} điểm):
+                          Câu {qIndex + 1}({formatQuestionPoint(q?.question?.point)} điểm):
                         </strong>{" "}
                         <span
                           dangerouslySetInnerHTML={{
@@ -365,7 +365,7 @@ const PrintExamBank = () => {
                       <div>
                         <strong>
                           Câu {(groupedData.listQuestionChoice?.length ?? 0) + qIndex + 1}(
-                          {Number(q?.question?.point || 0).toFixed(1)} điểm):
+                          {formatQuestionPoint(q?.question?.point)} điểm):
                         </strong>{" "}
                         <span
                           dangerouslySetInnerHTML={{
@@ -385,7 +385,7 @@ const PrintExamBank = () => {
                     <div key={q?.id} style={{ marginBottom: "15px" }}>
                       <div>
                         <strong>
-                          Câu {index + 1}({Number(q?.question?.point || 0).toFixed(1)} điểm):
+                          Câu {index + 1}({formatQuestionPoint(q?.question?.point)} điểm):
                         </strong>{" "}
                         <span
                           dangerouslySetInnerHTML={{

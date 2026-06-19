@@ -681,3 +681,10 @@ export function* chunk<T>(arr: T[], size: number): Generator<T[]> {
     yield arr.slice(i, i + size)
   }
 }
+
+/** Hiển thị điểm câu hỏi (0.25, 0.5, 1…) — tránh toFixed(1) làm 0.25 → 0.3 */
+export function formatQuestionPoint(point?: number | null): string {
+  if (point == null || Number.isNaN(point)) return "0"
+  const rounded = Math.round(point * 100) / 100
+  return Number.isInteger(rounded) ? String(rounded) : String(rounded)
+}
