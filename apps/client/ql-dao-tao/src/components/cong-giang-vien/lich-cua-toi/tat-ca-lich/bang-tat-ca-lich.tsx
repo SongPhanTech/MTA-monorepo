@@ -1,4 +1,5 @@
 import type { CheDoHienThiLich } from "@components/cong-giang-vien/lich-cua-toi/types"
+import { CLASS_O_THU_BANG, taoOnCellThu } from "@components/cong-giang-vien/lich-cua-toi/utils"
 import type {
   DongBangTatCaLich,
   DongBangThangTatCaLich,
@@ -133,7 +134,8 @@ const BangTatCaLich = ({
       key: "thu",
       width: COT.thu,
       align: "center",
-      onCell: (row) => ({ rowSpan: row.rowSpanThu }),
+      onHeaderCell: () => ({ className: CLASS_O_THU_BANG }),
+      onCell: (row) => taoOnCellThu(row.rowSpanThu),
     },
     {
       title: "Ngày",
@@ -161,7 +163,8 @@ const BangTatCaLich = ({
       key: "thu",
       width: COT.thu,
       align: "center",
-      onCell: (row) => ({ rowSpan: row.rowSpanThu }),
+      onHeaderCell: () => ({ className: CLASS_O_THU_BANG }),
+      onCell: (row) => taoOnCellThu(row.rowSpanThu),
     },
     ...(cotChiTiet as ColumnsType<DongBangThangTatCaLich>),
   ]

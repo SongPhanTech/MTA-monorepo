@@ -11,6 +11,8 @@ import {
   gioTrongTimeline,
   tinhViTriTimeline,
 } from "@components/cong-giang-vien/lich-cua-toi/timeline/constants"
+import { CLASS_TIEU_DE_THU } from "@components/cong-giang-vien/lich-cua-toi/utils"
+import { cn } from "@workspace/ui/lib/utils"
 import { Empty, Spin } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
 import { useMemo } from "react"
@@ -98,19 +100,25 @@ const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onSua }: LichTuanCaN
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-        <div className="sticky top-0 z-10 flex border-b border-gray-200 bg-white pb-2 pt-0.5">
+        <div className="sticky top-0 z-10 flex border-b border-cgv-green/30 bg-cgv-green/10 pb-2 pt-0.5">
           <div className="flex w-11 shrink-0 items-end pb-0.5 text-[10px] leading-none text-gray-400">
             GMT+7
           </div>
           <div className="grid min-w-0 flex-1 grid-cols-7 gap-1">
-            {ngayTrongTuan.map((ngay) => (
-              <div
-                key={ngay.format("YYYY-MM-DD")}
-                className="truncate text-center text-xs font-medium text-gray-700"
-              >
-                {formatNhanNgayTuan(ngay)}
-              </div>
-            ))}
+            {ngayTrongTuan.map((ngay) => {
+              const laHomNay = ngay.isSame(dayjs().startOf("day"), "day")
+              return (
+                <div
+                  key={ngay.format("YYYY-MM-DD")}
+                  className={cn(
+                    CLASS_TIEU_DE_THU,
+                    laHomNay && "bg-cgv-green/35 ring-1 ring-inset ring-cgv-green-dark/30"
+                  )}
+                >
+                  {formatNhanNgayTuan(ngay)}
+                </div>
+              )
+            })}
           </div>
         </div>
 
