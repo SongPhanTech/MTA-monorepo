@@ -21,9 +21,10 @@ interface QuestionBankLiteProps {
 }
 
 const matchesConfigExam = (
-  q: { difficult: string; type: string | null; point: number },
+  q: { difficult: string | null; type: string | null; point: number },
   config: ConfigExam
 ) =>
+  q.difficult != null &&
   q.difficult === config.difficult &&
   (config.type == null || q.type === config.type) &&
   q.point === config.point
@@ -88,6 +89,7 @@ export default function QuestionBankLite({
       where: {
         knowledgeBlockId: { in: knowledgeBlockIds },
         deletedAt: null,
+        parentQuestionId: null,
       },
       select: {
         id: true,

@@ -3,6 +3,7 @@ import { renderWithMath } from "@components/commons/rich-text-editor/renderWithM
 import Table from "@components/commons/table"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
+import { CLUSTER_QUESTION_TYPE, formatClusterSubLabel } from "@/utils/cluster-question-utils"
 import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS } from "@constants/constants"
 import type { QuestionType } from "@workspace/db/client"
 import {
@@ -42,6 +43,7 @@ export default function QuestionListByKnowledgeBlockModal() {
     () => ({
       knowledgeBlockId,
       deletedAt: null,
+      parentQuestionId: null,
     }),
     [knowledgeBlockId]
   )
@@ -54,6 +56,13 @@ export default function QuestionListByKnowledgeBlockModal() {
         multipleChoiceOptions: true,
         fillInBlankSlots: true,
         orderingItems: true,
+        subQuestions: {
+          where: { deletedAt: null },
+          orderBy: { order: "asc" },
+          include: {
+            multipleChoiceOptions: { orderBy: { order: "asc" } },
+          },
+        },
         questionBank: {
           include: {
             subjectVersion: true,
@@ -206,15 +215,65 @@ export default function QuestionListByKnowledgeBlockModal() {
             dataIndex: "content",
             width: 300,
             fixed: "left",
-            render: (html: string) => (
-              <HtmlTruncate>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: html ? renderWithMath(html) : "<i>Chưa có nội dung</i>",
-                  }}
-                />
-              </HtmlTruncate>
-            ),
+            render: (_, record) => {
+              const row = record as typeof record & {
+                subQuestions?: Array<{
+                  id: string
+                  content: string
+                  multipleChoiceOptions?: Array<{ id: string; content: string }>
+                }>
+              }
+
+              return (
+                <HtmlTruncate>
+                  <div>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: row.content
+                          ? renderWithMath(row.content)
+                          : "<i>Chưa có nội dung</i>",
+                      }}
+                    />
+                    {(row.subQuestions?.length ?? 0) > 0 &&
+                      row.type === CLUSTER_QUESTION_TYPE && (
+                        <div className="mt-3 space-y-2 border-t border-gray-200 pt-2">
+                          {(row.subQuestions ?? []).map((sub, subIndex) => {
+                            const { prefix, body } = formatClusterSubLabel(subIndex, sub.content)
+                            return (
+                              <div key={sub.id} className="text-xs">
+                                <div className="font-medium text-gray-700 mb-1">
+                                  {prefix}
+                                  {body ? (
+                                    <>
+                                      {" "}
+                                      <span
+                                        dangerouslySetInnerHTML={{
+                                          __html: renderWithMath(body),
+                                        }}
+                                      />
+                                    </>
+                                  ) : null}
+                                </div>
+                                {sub.multipleChoiceOptions?.map((option) => (
+                                  <div key={option.id} className="text-gray-600 pl-2">
+                                    <span
+                                      dangerouslySetInnerHTML={{
+                                        __html: option.content
+                                          ? renderWithMath(option.content)
+                                          : "",
+                                      }}
+                                    />
+                                  </div>
+                                ))}
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )}
+                  </div>
+                </HtmlTruncate>
+              )
+            },
           },
           {
             title: "Loại",

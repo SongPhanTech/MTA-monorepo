@@ -5,6 +5,16 @@ import { RichTextEditor } from "@components/commons/rich-text-editor"
 import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
+import ClusterSubQuestionsForm, { defaultSubQuestion } from "@components/modal/cluster-sub-questions-form"
+import {
+  buildSubQuestionCreateData,
+  CLUSTER_QUESTION_TYPE,
+  formatClusterSubLabel,
+  mapSubQuestionFromDb,
+  updateSubQuestion,
+  validateSubQuestion,
+} from "@/utils/cluster-question-utils"
+import type { SubQuestionFormItem } from "@components/modal/cluster-sub-questions-form"
 import { DIFFICULT_OPTIONS, QUESTION_TYPE_OPTIONS } from "@constants/constants"
 import { type Prisma, QuestionType } from "@workspace/db/client"
 import {
@@ -13,6 +23,7 @@ import {
   useFindUniqueQuestion,
   useUpdateQuestion,
 } from "@workspace/db/hooks"
+import { sqlTransaction } from "@workspace/libs/api/model"
 import { Button, Checkbox, Col, Form, Input, InputNumber, message, Radio, Row, Tooltip } from "antd"
 import { Trash2 } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
@@ -42,7 +53,9 @@ export type PutQuestionType = Prisma.QuestionGetPayload<{
       }
     }
   }
-}>
+}> & {
+  subQuestions?: SubQuestionFormItem[]
+}
 
 const PutQuestionModal = () => {
   const [form] = Form.useForm<PutQuestionType>()
@@ -80,6 +93,7 @@ const PutQuestionModal = () => {
   })
 
   const typeQuestion = Form.useWatch("type", form)
+  const parentDifficult = Form.useWatch("difficult", form)
   const content = Form.useWatch("content", form)
   const explanation = Form.useWatch("explanation", form)
   const listForm =
@@ -89,6 +103,23 @@ const PutQuestionModal = () => {
       isCorrect?: boolean
       correctOrder?: number
     }>) || []
+  const subQuestionsPreview = Form.useWatch("subQuestions", form) || []
+
+  const syncSubQuestionsDifficult = (difficult = parentDifficult) => {
+    if (!difficult) return
+    const subs: SubQuestionFormItem[] = form.getFieldValue("subQuestions") ?? []
+    if (!subs.length) return
+    if (subs.every((sq) => sq.difficult === difficult)) return
+    form.setFieldValue(
+      "subQuestions",
+      subs.map((sq) => ({ ...sq, difficult }))
+    )
+  }
+
+  useEffect(() => {
+    if (typeQuestion !== CLUSTER_QUESTION_TYPE) return
+    syncSubQuestionsDifficult()
+  }, [parentDifficult, typeQuestion, subQuestionsPreview.length])
 
   const { mutateAsync: createQuestion } = useCreateQuestion()
   const { mutateAsync: updateQuestion } = useUpdateQuestion()
@@ -101,6 +132,14 @@ const PutQuestionModal = () => {
         multipleChoiceOptions: true,
         fillInBlankSlots: true,
         orderingItems: true,
+        subQuestions: {
+          orderBy: { order: "asc" },
+          include: {
+            multipleChoiceOptions: true,
+            fillInBlankSlots: true,
+            orderingItems: true,
+          },
+        },
       },
     },
     {
@@ -297,7 +336,82 @@ const PutQuestionModal = () => {
           })
           message.success("Thêm câu hỏi thành công")
         }
-      } else {
+      } else if (output.type === CLUSTER_QUESTION_TYPE) {
+        const subQuestions: SubQuestionFormItem[] = (
+          (form.getFieldValue("subQuestions") ?? []) as SubQuestionFormItem[]
+        ).map((sq) => ({ ...sq, difficult: output.difficult ?? sq.difficult ?? "D1" }))
+
+        if (!subQuestions.length) {
+          message.error("Vui lòng thêm ít nhất một câu hỏi con")
+          return
+        }
+
+        for (let i = 0; i < subQuestions.length; i++) {
+          const err = validateSubQuestion(subQuestions[i], i)
+          if (err) {
+            message.error(err)
+            return
+          }
+        }
+
+        const clusterData = {
+          ...data,
+          type: CLUSTER_QUESTION_TYPE,
+          isAutoGraded: true,
+        }
+
+        if (input?.id) {
+          const existingIds =
+            (initialValue?.subQuestions as { id: string }[] | undefined)?.map((s) => s.id) ?? []
+          const formIds = subQuestions.filter((s) => s.id).map((s) => s.id!)
+          const toDelete = existingIds.filter((id) => !formIds.includes(id))
+
+          if (toDelete.length) {
+            await sqlTransaction([
+              {
+                model: "Question",
+                operation: "deleteMany",
+                data: { where: { id: { in: toDelete } } },
+              },
+            ])
+          }
+
+          await updateQuestion({ where: { id: input.id }, data: clusterData })
+
+          for (let i = 0; i < subQuestions.length; i++) {
+            const sq = subQuestions[i]
+            if (sq.id) {
+              await updateSubQuestion(
+                sq.id,
+                sq,
+                i + 1,
+                input.questionBankId,
+                updateQuestion
+              )
+            } else {
+              await createQuestion({
+                data: buildSubQuestionCreateData(sq, i + 1, input.questionBankId, input.id),
+              })
+            }
+          }
+          message.success("Cập nhật thành công")
+        } else {
+          await createQuestion({
+            data: {
+              ...clusterData,
+              subQuestions: {
+                create: subQuestions.map((sq, i) =>
+                  buildSubQuestionCreateData(sq, i + 1, input.questionBankId)
+                ),
+              },
+            },
+          })
+          message.success("Thêm câu hỏi thành công")
+        }
+      } else if (
+        output.type !== QuestionType.FILL_IN_BLANK &&
+        output.type !== QuestionType.ORDERING
+      ) {
         if (input?.id) {
           await updateQuestion({
             data,
@@ -430,10 +544,26 @@ const PutQuestionModal = () => {
         options = []
     }
 
+    if (type === CLUSTER_QUESTION_TYPE) {
+      setDataOptions([])
+      const { subQuestions: _subs, ...rest } = initialValue
+      form.setFieldsValue({
+        ...rest,
+        multipleChoiceOptions: [],
+        subQuestions:
+          initialValue.subQuestions?.map((sub) => ({
+            ...mapSubQuestionFromDb(sub),
+            difficult: initialValue.difficult ?? "D1",
+          })) || [{ ...defaultSubQuestion(), difficult: initialValue.difficult ?? "D1" }],
+      })
+      return
+    }
+
     setDataOptions(options)
 
+    const { subQuestions: _subs, ...rest } = initialValue
     form.setFieldsValue({
-      ...initialValue,
+      ...rest,
       multipleChoiceOptions: options,
     })
   }, [initialValue, form])
@@ -442,6 +572,15 @@ const PutQuestionModal = () => {
     if (!typeQuestion) return
 
     if (input?.id) return
+
+    if (typeQuestion === CLUSTER_QUESTION_TYPE) {
+      setDataOptions([])
+      form.setFieldValue("multipleChoiceOptions", [])
+      form.setFieldValue("subQuestions", [
+        { ...defaultSubQuestion(), difficult: form.getFieldValue("difficult") ?? "D1" },
+      ])
+      return
+    }
 
     let defaultOptions: any[] = []
 
@@ -544,7 +683,7 @@ const PutQuestionModal = () => {
               <Col span={24}>
                 <FormItem
                   form={form}
-                  label="Câu hỏi"
+                  label={typeQuestion === CLUSTER_QUESTION_TYPE ? "Đề bài chung" : "Câu hỏi"}
                   name={"content"}
                   required
                   rules={[
@@ -557,6 +696,7 @@ const PutQuestionModal = () => {
                   <RichTextEditor />
                 </FormItem>
               </Col>
+              {typeQuestion === CLUSTER_QUESTION_TYPE && <ClusterSubQuestionsForm />}
               {/* Tự luận */}
               <Col span={24}>
                 {(typeQuestion === QuestionType.ESSAY || typeQuestion === QuestionType.ORAL) && (
@@ -855,6 +995,33 @@ const PutQuestionModal = () => {
                           <div>{i.content}</div>
                         </div>
                       ))}
+                    </div>
+                  )}
+                  {typeQuestion === CLUSTER_QUESTION_TYPE && (
+                    <div>
+                      <div className="mb-3 font-[500]">Câu hỏi con</div>
+                      {subQuestionsPreview.map((sq, subIndex) => {
+                        const { prefix, body } = formatClusterSubLabel(subIndex, sq.content)
+                        return (
+                        <div key={subIndex} className="mb-4">
+                          <div className="font-medium text-sm text-[#111827] mb-2">
+                            {prefix}
+                            {body ? ` ${body}` : " (chưa có nội dung)"}
+                          </div>
+                          {sq.multipleChoiceOptions?.map((opt, optIndex) => (
+                            <div
+                              key={optIndex}
+                              className={`flex items-center gap-3 border-solid border-[1px] p-3 mb-3 rounded-[8px] ${
+                                opt.isCorrect ? "border-green-500 bg-green-100" : ""
+                              }`}
+                            >
+                              <Checkbox checked={opt.isCorrect} />
+                              <div>{opt.content || `Đáp án ${optIndex + 1}`}</div>
+                            </div>
+                          ))}
+                        </div>
+                        )
+                      })}
                     </div>
                   )}
                 </div>
