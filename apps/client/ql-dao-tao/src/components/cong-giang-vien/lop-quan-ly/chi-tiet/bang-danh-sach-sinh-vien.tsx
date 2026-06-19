@@ -107,17 +107,17 @@ const BangDanhSachSinhVien = ({
         <div className="flex items-center justify-center gap-2">
           <Button
             size="small"
-            icon={<Eye size={14} />}
+            icon={<Eye size={14} className="block" />}
             onClick={() => onXemHoSo(record.id)}
-            className="inline-flex items-center gap-1 border-cgv-green-dark text-cgv-green-dark"
+            className="inline-flex items-center justify-center gap-1 border-cgv-green-dark leading-none text-cgv-green-dark [&_.ant-btn-icon]:flex [&_.ant-btn-icon]:items-center"
           >
             Hồ sơ
           </Button>
           <Button
             size="small"
-            icon={<BarChart3 size={14} />}
+            icon={<BarChart3 size={14} className="block" />}
             onClick={() => onXemKetQuaHocTap(record.id)}
-            className="inline-flex items-center gap-1 border-cgv-green-dark text-cgv-green-dark"
+            className="inline-flex items-center justify-center gap-1 border-cgv-green-dark leading-none text-cgv-green-dark [&_.ant-btn-icon]:flex [&_.ant-btn-icon]:items-center"
           >
             KQ học tập
           </Button>

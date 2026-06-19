@@ -104,7 +104,7 @@ const CongGiangVienLayout = ({
               overflow: "hidden",
             }}
           >
-            <Content className="flex h-full flex-col overflow-hidden px-2 py-2">
+            <Content className="flex h-full flex-col overflow-y-auto px-2 py-2">
               {unLayout ? (
                 <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
               ) : (
