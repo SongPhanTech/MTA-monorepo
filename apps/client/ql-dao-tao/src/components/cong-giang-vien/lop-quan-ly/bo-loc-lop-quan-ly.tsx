@@ -1,8 +1,9 @@
+import Select from "@components/commons/select"
 import type { BoLocLopQuanLy } from "@components/cong-giang-vien/lop-quan-ly/types"
 import { useFixedClassTypeOptions } from "@hooks/fixedClassType"
 import { useFindManySchoolYear } from "@workspace/db/hooks"
 import { useSemesterStore } from "@workspace/ui"
-import { Button, Input, Select } from "antd"
+import { Button, Input } from "antd"
 import { Search } from "lucide-react"
 import { useMemo } from "react"
 

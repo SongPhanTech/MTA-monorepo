@@ -1,6 +1,7 @@
 export const CONG_GIANG_VIEN_BASE_PATH = "/cong-giang-vien"
 export const CONG_GIANG_VIEN_THONG_BAO_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/thong-bao`
 export const CONG_GIANG_VIEN_LICH_CUA_TOI_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/lich-cua-toi`
+export const CONG_GIANG_VIEN_KHAO_SAT_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/khao-sat`
 export const CONG_GIANG_VIEN_LOP_QUAN_LY_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/lop-quan-ly`
 export const CONG_GIANG_VIEN_LOP_TRO_GIANG_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/lop-tro-giang`
 export const CONG_GIANG_VIEN_LOP_GIANG_DAY_PATH = `${CONG_GIANG_VIEN_BASE_PATH}/lop-giang-day/danh-sach-lop-giang-day`
@@ -41,6 +42,12 @@ export const nhapDiemThiGiangDayPath = (subjectClassId?: string) =>
   subjectClassId
     ? `${CONG_GIANG_VIEN_NHAP_DIEM_THI_PATH}?lopId=${subjectClassId}`
     : CONG_GIANG_VIEN_NHAP_DIEM_THI_PATH
+
+/** Mở màn khảo sát, có thể truyền sẵn khảo sát cần trả lời để mở nhanh. */
+export const khaoSatGiangVienPath = (surveyId?: string) =>
+  surveyId
+    ? `${CONG_GIANG_VIEN_KHAO_SAT_PATH}?surveyId=${surveyId}`
+    : CONG_GIANG_VIEN_KHAO_SAT_PATH
 
 /** Mở màn chi tiết môn học của lớp giảng dạy theo phiên bản môn học (kèm lớp để lấy ngôn ngữ giảng dạy). */
 export const chiTietMonHocGiangDayPath = (subjectVersionId?: string, subjectClassId?: string) => {

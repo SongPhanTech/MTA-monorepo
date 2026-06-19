@@ -1,7 +1,7 @@
 import dayjs from "dayjs"
 
-export const GIO_BAT_DAU_LICH_NGAY = 0
-export const GIO_KET_THUC_LICH_NGAY = 24
+export const GIO_BAT_DAU_LICH_NGAY = 6
+export const GIO_KET_THUC_LICH_NGAY = 23
 export const CHIEU_CAO_MOI_GIO_LICH_NGAY = 56
 
 export const CHIEU_CAO_LICH_NGAY =
@@ -39,8 +39,8 @@ export const tinhViTriLichNgay = (
   }
 }
 
-export const GIO_BAT_DAU_LICH_TUAN = 0
-export const GIO_KET_THUC_LICH_TUAN = 24
+export const GIO_BAT_DAU_LICH_TUAN = 6
+export const GIO_KET_THUC_LICH_TUAN = 23
 export const CHIEU_CAO_MOI_GIO_LICH_TUAN = CHIEU_CAO_MOI_GIO_LICH_NGAY
 
 export const CHIEU_CAO_LICH_TUAN =

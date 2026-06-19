@@ -3,7 +3,9 @@ import { useFindFirstSemester } from "@workspace/db/hooks"
 import { Button, TreeSelectFloat } from "@workspace/ui"
 import { Breadcrumb, Input, Select, Typography } from "antd"
 import { RefreshCcw, Search } from "lucide-react"
-import { useEffect, useMemo, useState } from "react"
+import { useRouter } from "next/router"
+import { useEffect, useMemo, useRef, useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 import StatCardsKhaoSat from "@components/cong-giang-vien/khao-sat/stat-cards-khao-sat"
 import DanhSachKhaoSat from "@components/cong-giang-vien/khao-sat/danh-sach-khao-sat"
 
@@ -17,9 +19,23 @@ const TUY_CHON_TRANG_THAI: { label: string; value: TrangThaiLoc }[] = [
 ]
 
 const KhaoSatGiangVien = () => {
+  const router = useRouter()
   const [semesterId, setSemesterId] = useState<string>()
   const [tuKhoa, setTuKhoa] = useState("")
   const [trangThai, setTrangThai] = useState<TrangThaiLoc>("tat_ca")
+
+  // Mở nhanh khảo sát khi điều hướng từ thông báo (?surveyId=...)
+  const { onOpen: moLamKhaoSat } = useDisclosure<{ surveyId: string }>({ tag: "ModalLamKhaoSat" })
+  const daMoTuThongBao = useRef(false)
+
+  useEffect(() => {
+    if (!router.isReady || daMoTuThongBao.current) return
+    const surveyId = router.query.surveyId
+    if (typeof surveyId === "string" && surveyId) {
+      daMoTuThongBao.current = true
+      moLamKhaoSat({ surveyId })
+    }
+  }, [router.isReady, router.query.surveyId, moLamKhaoSat])
 
   // Mặc định chọn kỳ học hiện tại (kỳ chứa ngày hôm nay)
   const now = useMemo(() => new Date().toISOString(), [])

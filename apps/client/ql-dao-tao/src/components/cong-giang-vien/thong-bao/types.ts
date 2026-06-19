@@ -1,4 +1,5 @@
 import {
+  khaoSatGiangVienPath,
   nhapDiemQuaTrinhGiangDayPath,
   nhapDiemThiGiangDayPath,
 } from "@constants/cong-giang-vien-path"
@@ -41,7 +42,11 @@ export interface ThongBaoView {
   thoiGian: string
   hanXuLy?: string
   daDoc: boolean
-  /** Id lớp môn học liên quan (trích từ `code` thông báo) để mở đúng trang nhập điểm. */
+  /**
+   * Id đối tượng liên quan trích từ `code` thông báo để mở nhanh đúng trang.
+   * - Hạn nhập điểm: id lớp môn học (subjectClassId).
+   * - Hạn khảo sát: id khảo sát (surveyId).
+   */
   subjectClassId?: string
 }
 
@@ -180,13 +185,17 @@ export const laySubjectClassIdTuMaThongBao = (code?: string | null): string | un
   return code.split("-")[2] || undefined
 }
 
-/** Đường dẫn trang nhập điểm tương ứng với loại thông báo (chỉ áp dụng cho hạn nhập điểm). */
+/** Đường dẫn trang xử lý tương ứng với loại thông báo (nhập điểm / khảo sát). */
 export const duongDanNhapDiemTheoThongBao = (thongBao: ThongBaoView): string | undefined => {
   if (thongBao.loai === "PROCESS_SCORE_DEADLINE") {
     return nhapDiemQuaTrinhGiangDayPath(thongBao.subjectClassId)
   }
   if (thongBao.loai === "EXAM_DEADLINE") {
     return nhapDiemThiGiangDayPath(thongBao.subjectClassId)
+  }
+  if (thongBao.loai === "SURVEY_DEADLINE") {
+    // Với hạn khảo sát, `subjectClassId` thực chất là surveyId (trích từ code thông báo).
+    return khaoSatGiangVienPath(thongBao.subjectClassId)
   }
   return undefined
 }

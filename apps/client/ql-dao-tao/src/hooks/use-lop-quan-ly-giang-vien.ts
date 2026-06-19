@@ -6,11 +6,13 @@ import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { demGioiTinhSinhVien } from "@lib/dem-gioi-tinh-sinh-vien"
 import { useSession } from "@workspace/auth/react"
 import { useCountFixedClass, useFindManyFixedClass } from "@workspace/db/hooks"
+import { useSemesterStore } from "@workspace/ui"
 import { useMemo, useState } from "react"
 
 const useLopQuanLyGiangVien = () => {
   const { data: me } = useSession()
   const profileId = me?.sDM_NhanVienId ?? ""
+  const { id: semesterId } = useSemesterStore()
 
   const [boLocNhap, setBoLocNhap] = useState<BoLocLopQuanLy>({
     tuKhoa: "",
@@ -28,6 +30,7 @@ const useLopQuanLyGiangVien = () => {
       deletedAt: null,
       active: true,
       lecturerManagement: { userProfileId: profileId },
+      ...(semesterId ? { trainingCourse: { semesterStartId: semesterId } } : {}),
       ...(boLocApDung.loaiLop !== "tat_ca" ? { classType: boLocApDung.loaiLop } : {}),
       ...(boLocApDung.tuKhoa
         ? {
@@ -38,7 +41,7 @@ const useLopQuanLyGiangVien = () => {
           }
         : {}),
     }),
-    [profileId, boLocApDung]
+    [profileId, semesterId, boLocApDung]
   )
 
   const queryEnabled = !!profileId

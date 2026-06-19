@@ -43,7 +43,7 @@ const LichNgay = ({ suKien, isLoading }: LichNgayProps) => {
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden">
-      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden pt-2">
         <div className="relative flex" style={{ height: CHIEU_CAO_LICH_NGAY }}>
           <div className="relative w-8 shrink-0">
             {gioNhan.map((gio) => (
