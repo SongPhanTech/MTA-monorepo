@@ -104,6 +104,7 @@ export const questionTypeLabels: Record<QuestionType, string> = {
   [QuestionType.MULTIPLE_CHOICE]: "Nhiều lựa chọn",
   [QuestionType.FILL_IN_BLANK]: "Điền trống",
   [QuestionType.ORDERING]: "Sắp xếp",
+  [QuestionType.CLUSTER]: "Câu hỏi nhóm",
 }
 
 export const questionTypeOptions: QuestionTypeOption[] = Object.entries(questionTypeLabels).map(
