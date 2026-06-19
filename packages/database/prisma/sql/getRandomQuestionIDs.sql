@@ -10,6 +10,5 @@ and "khao-thi"."Question"."type" = $2::"khao-thi"."QuestionType"
 and "khao-thi"."Question"."point" = $3
 and ($4::TEXT IS NULL AND "khao-thi"."Question"."knowledgeBlockId" IS NOT NULL OR "Question"."knowledgeBlockId" = $4)
 and "khao-thi"."Question"."deletedAt" IS NULL
-and "khao-thi"."Question"."parentQuestionId" IS NULL
 ORDER BY RANDOM()
 LIMIT $5
