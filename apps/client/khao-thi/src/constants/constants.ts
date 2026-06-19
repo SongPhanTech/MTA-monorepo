@@ -188,6 +188,8 @@ const LEVEL_COLORS = [
   { key: "D4", label: "Vận dụng cao", color: "green" },
 ]
 
+const CLUSTER_QUESTION_TYPE = "CLUSTER" as QuestionType
+
 const QUESTION_TYPE_LABELS: Record<QuestionType, string> = {
   [QuestionType.ESSAY]: "Tự luận",
   [QuestionType.ORAL]: "Vấn đáp",
@@ -195,15 +197,23 @@ const QUESTION_TYPE_LABELS: Record<QuestionType, string> = {
   [QuestionType.MULTIPLE_CHOICE]: "Trắc nghiệm nhiều đáp án",
   [QuestionType.FILL_IN_BLANK]: "Điền khuyết",
   [QuestionType.ORDERING]: "Sắp xếp",
+  [CLUSTER_QUESTION_TYPE]: "Câu hỏi chùm",
 }
 
 const QUESTION_TYPE_OPTIONS: Array<{
   value: QuestionType
   label: string
-}> = Object.values(QuestionType).map((type) => ({
-  value: type,
-  label: QUESTION_TYPE_LABELS[type],
-}))
+}> = (() => {
+  const fromEnum = Object.values(QuestionType).map((type) => ({
+    value: type,
+    label: QUESTION_TYPE_LABELS[type] ?? type,
+  }))
+  if (fromEnum.some((o) => o.value === CLUSTER_QUESTION_TYPE)) return fromEnum
+  return [
+    ...fromEnum,
+    { value: CLUSTER_QUESTION_TYPE, label: QUESTION_TYPE_LABELS[CLUSTER_QUESTION_TYPE] },
+  ]
+})()
 
 const DIFFICULT_OPTIONS: Array<{
   value: Difficult
