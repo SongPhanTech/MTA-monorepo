@@ -6,7 +6,7 @@ import Table from "@components/commons/table"
 import type { FilterProps } from "@components/commons/typeFilter"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
-import { CLUSTER_QUESTION_TYPE } from "@/utils/cluster-question-utils"
+import { CLUSTER_QUESTION_TYPE, formatClusterSubLabel } from "@/utils/cluster-question-utils"
 import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS, QUESTION_TYPE_OPTIONS } from "@constants/constants"
 import type { QuestionType } from "@workspace/db/client"
 import {
@@ -355,16 +355,21 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                         {(row.subQuestions?.length ?? 0) > 0 &&
                           row.type === CLUSTER_QUESTION_TYPE && (
                             <div className="mt-3 space-y-2 border-t border-gray-200 pt-2">
-                              {(row.subQuestions ?? []).map((sub, subIndex) => (
+                              {(row.subQuestions ?? []).map((sub, subIndex) => {
+                                const { prefix, body } = formatClusterSubLabel(subIndex, sub.content)
+                                return (
                                 <div key={sub.id} className="text-xs">
                                   <div className="font-medium text-gray-700 mb-1">
-                                    {String.fromCharCode(97 + subIndex)}){" "}
-                                    {sub.content ? (
-                                      <span
-                                        dangerouslySetInnerHTML={{
-                                          __html: renderWithMath(sub.content),
-                                        }}
-                                      />
+                                    {prefix}
+                                    {body ? (
+                                      <>
+                                        {" "}
+                                        <span
+                                          dangerouslySetInnerHTML={{
+                                            __html: renderWithMath(body),
+                                          }}
+                                        />
+                                      </>
                                     ) : null}
                                   </div>
                                   {sub.multipleChoiceOptions?.map((option) => (
@@ -379,7 +384,8 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                                     </div>
                                   ))}
                                 </div>
-                              ))}
+                                )
+                              })}
                             </div>
                           )}
                       </div>

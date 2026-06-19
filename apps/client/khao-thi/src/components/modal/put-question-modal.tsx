@@ -9,6 +9,7 @@ import ClusterSubQuestionsForm, { defaultSubQuestion } from "@components/modal/c
 import {
   buildSubQuestionCreateData,
   CLUSTER_QUESTION_TYPE,
+  formatClusterSubLabel,
   mapSubQuestionFromDb,
   updateSubQuestion,
   validateSubQuestion,
@@ -92,6 +93,7 @@ const PutQuestionModal = () => {
   })
 
   const typeQuestion = Form.useWatch("type", form)
+  const parentDifficult = Form.useWatch("difficult", form)
   const content = Form.useWatch("content", form)
   const explanation = Form.useWatch("explanation", form)
   const listForm =
@@ -102,6 +104,22 @@ const PutQuestionModal = () => {
       correctOrder?: number
     }>) || []
   const subQuestionsPreview = Form.useWatch("subQuestions", form) || []
+
+  const syncSubQuestionsDifficult = (difficult = parentDifficult) => {
+    if (!difficult) return
+    const subs: SubQuestionFormItem[] = form.getFieldValue("subQuestions") ?? []
+    if (!subs.length) return
+    if (subs.every((sq) => sq.difficult === difficult)) return
+    form.setFieldValue(
+      "subQuestions",
+      subs.map((sq) => ({ ...sq, difficult }))
+    )
+  }
+
+  useEffect(() => {
+    if (typeQuestion !== CLUSTER_QUESTION_TYPE) return
+    syncSubQuestionsDifficult()
+  }, [parentDifficult, typeQuestion, subQuestionsPreview.length])
 
   const { mutateAsync: createQuestion } = useCreateQuestion()
   const { mutateAsync: updateQuestion } = useUpdateQuestion()
@@ -319,7 +337,9 @@ const PutQuestionModal = () => {
           message.success("Thêm câu hỏi thành công")
         }
       } else if (output.type === CLUSTER_QUESTION_TYPE) {
-        const subQuestions: SubQuestionFormItem[] = form.getFieldValue("subQuestions") ?? []
+        const subQuestions: SubQuestionFormItem[] = (
+          (form.getFieldValue("subQuestions") ?? []) as SubQuestionFormItem[]
+        ).map((sq) => ({ ...sq, difficult: output.difficult ?? sq.difficult ?? "D1" }))
 
         if (!subQuestions.length) {
           message.error("Vui lòng thêm ít nhất một câu hỏi con")
@@ -531,7 +551,10 @@ const PutQuestionModal = () => {
         ...rest,
         multipleChoiceOptions: [],
         subQuestions:
-          initialValue.subQuestions?.map(mapSubQuestionFromDb) || [defaultSubQuestion()],
+          initialValue.subQuestions?.map((sub) => ({
+            ...mapSubQuestionFromDb(sub),
+            difficult: initialValue.difficult ?? "D1",
+          })) || [{ ...defaultSubQuestion(), difficult: initialValue.difficult ?? "D1" }],
       })
       return
     }
@@ -553,7 +576,9 @@ const PutQuestionModal = () => {
     if (typeQuestion === CLUSTER_QUESTION_TYPE) {
       setDataOptions([])
       form.setFieldValue("multipleChoiceOptions", [])
-      form.setFieldValue("subQuestions", [defaultSubQuestion()])
+      form.setFieldValue("subQuestions", [
+        { ...defaultSubQuestion(), difficult: form.getFieldValue("difficult") ?? "D1" },
+      ])
       return
     }
 
@@ -975,11 +1000,13 @@ const PutQuestionModal = () => {
                   {typeQuestion === CLUSTER_QUESTION_TYPE && (
                     <div>
                       <div className="mb-3 font-[500]">Câu hỏi con</div>
-                      {subQuestionsPreview.map((sq, subIndex) => (
+                      {subQuestionsPreview.map((sq, subIndex) => {
+                        const { prefix, body } = formatClusterSubLabel(subIndex, sq.content)
+                        return (
                         <div key={subIndex} className="mb-4">
                           <div className="font-medium text-sm text-[#111827] mb-2">
-                            {String.fromCharCode(97 + subIndex)}){" "}
-                            {sq.content || "(chưa có nội dung)"}
+                            {prefix}
+                            {body ? ` ${body}` : " (chưa có nội dung)"}
                           </div>
                           {sq.multipleChoiceOptions?.map((opt, optIndex) => (
                             <div
@@ -993,7 +1020,8 @@ const PutQuestionModal = () => {
                             </div>
                           ))}
                         </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   )}
                 </div>

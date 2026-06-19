@@ -6,7 +6,7 @@ import { renderWithMath } from "@components/commons/rich-text-editor/renderWithM
 import Table from "@components/commons/table"
 import type { FilterProps } from "@components/commons/typeFilter"
 import { DIFFICULT_LABELS, QUESTION_TYPE_LABELS } from "@constants/constants"
-import { CLUSTER_QUESTION_TYPE } from "@/utils/cluster-question-utils"
+import { CLUSTER_QUESTION_TYPE, formatClusterSubLabel } from "@/utils/cluster-question-utils"
 import useSpinner from "@hooks/spinner"
 import { createId, type Difficult, QuestionType } from "@workspace/db"
 import { useFindManyKnowledgeBlock } from "@workspace/db/hooks"
@@ -434,7 +434,10 @@ const WordImportModal: React.FC = () => {
 
   const subQuestionStartRegex = /^([a-z])\)\s*(.*)$/i
 
-  const parseMcSegment = (segmentLines: string[]) => {
+  const subQuestionMetaRegex =
+    /^\(\s*(TNN|TN|DK|SX|TL)\s*-\s*(NB|TH|VD|VDC)\s*\)\s*\(\s*([\d.,]+)\s*đ\s*\)\s*(.*)$/i
+
+  const splitSegmentBodyAndAnswer = (segmentLines: string[]) => {
     const answerStartIdx = segmentLines.findIndex((l) => /^\*\s*Đáp\s*án\s*:/i.test(l))
     const bodyLines = (
       answerStartIdx >= 0 ? segmentLines.slice(0, answerStartIdx) : segmentLines
@@ -451,31 +454,199 @@ const WordImportModal: React.FC = () => {
       }
     }
 
+    return { bodyLines, answerLines }
+  }
+
+  const parseQuestionSegment = (type: QuestionType, segmentLines: string[]) => {
+    const { bodyLines, answerLines } = splitSegmentBodyAndAnswer(segmentLines)
     const normalizedBody = normalizeWordQuestionText(bodyLines.join("\n"))
     const { questionLines, optionLines } = splitQuestionContentAndOptionLines(
       normalizedBody.split("\n").filter(Boolean)
     )
+    const rawQuestionText = normalizeWordQuestionText(questionLines.join("\n"))
+    const answerTextRaw = normalizeWordQuestionText(answerLines.join("\n"))
 
-    const optionsRaw = optionLines.map((line) => {
-      const match = line.match(/^([A-D])\.\s*(.+)$/i)
-      return {
-        label: match?.[1]?.toUpperCase(),
-        content: match?.[2] || "",
-        isCorrect: false,
+    const result: any = {
+      content: cleanQuestionText(rawQuestionText),
+      explanation: answerTextRaw,
+      answer: answerTextRaw,
+      optionsRaw: [],
+    }
+
+    if (type === QuestionType.SINGLE_CHOICE || type === QuestionType.MULTIPLE_CHOICE) {
+      result.optionsRaw = optionLines.map((line) => {
+        const match = line.match(/^([A-D])\.\s*(.+)$/i)
+        return {
+          label: match?.[1]?.toUpperCase(),
+          content: match?.[2] || "",
+          isCorrect: false,
+        }
+      })
+
+      if (type === QuestionType.SINGLE_CHOICE) {
+        const correctMatch = answerLines[0]?.match(/^([A-D])\.?\s*/i)
+        const correct = correctMatch?.[1]?.toUpperCase()
+        result.optionsRaw.forEach((o: any) => {
+          o.isCorrect = o.label === correct
+        })
+      } else {
+        const correctLabels = answerLines
+          .map((l) => l.trim())
+          .map((l) => l.match(/^([A-D])\./i)?.[1]?.toUpperCase())
+          .filter(Boolean)
+        result.optionsRaw.forEach((o: any) => {
+          o.isCorrect = correctLabels.includes(o.label)
+        })
       }
-    })
+    } else if (type === QuestionType.ORDERING) {
+      result.optionsRaw = optionLines.map((line) => {
+        const match = line.match(/^([A-D])\.\s*(.+)$/i)
+        return {
+          label: match?.[1]?.toUpperCase(),
+          content: match?.[2] || "",
+        }
+      })
+    }
 
-    const correctMatch = answerLines[0]?.match(/^([A-D])\.?\s*/i)
-    const correct = correctMatch?.[1]?.toUpperCase()
-    optionsRaw.forEach((o) => {
-      o.isCorrect = o.label === correct
-    })
+    return result
+  }
+
+  const parseSubQuestionMeta = (
+    restAfterLabel: string,
+    fallback: { type: QuestionType; difficult: Difficult; point: number }
+  ) => {
+    const metaMatch = restAfterLabel.match(subQuestionMetaRegex)
+    if (!metaMatch) {
+      return {
+        type: fallback.type,
+        difficult: fallback.difficult,
+        point: fallback.point,
+        remainderLines: restAfterLabel ? [restAfterLabel] : [],
+      }
+    }
+
+    const type = mapQuestionTypeFromText(metaMatch[1]) ?? fallback.type
+    const difficult = mapDifficultFromText(metaMatch[2]) ?? fallback.difficult
+    const point = Number.parseFloat(metaMatch[3].replace(",", "."))
+    const trailing = metaMatch[4]?.trim()
 
     return {
-      content: cleanQuestionText(questionLines.join("\n")),
-      optionsRaw,
-      explanation: normalizeWordQuestionText(answerLines.join("\n")),
+      type,
+      difficult,
+      point: Number.isNaN(point) ? fallback.point : point,
+      remainderLines: trailing ? [trailing] : [],
     }
+  }
+
+  const validateParsedSubQuestion = (sq: any) => {
+    if (sq.type === QuestionType.SINGLE_CHOICE || sq.type === QuestionType.MULTIPLE_CHOICE) {
+      return !sq.optionsRaw?.length || !sq.optionsRaw.some((o: any) => o.isCorrect)
+    }
+    if (sq.type === QuestionType.ORDERING) {
+      return !sq.optionsRaw?.length || !sq.answer
+    }
+    if (sq.type === QuestionType.FILL_IN_BLANK) {
+      return !sq.answer?.trim()
+    }
+    return false
+  }
+
+  const buildSubQuestionRelationRows = (sq: any, subId: string) => {
+    const multipleChoiceOptions: any[] = []
+    const orderingItems: any[] = []
+    const fillInBlankSlots: any[] = []
+
+    if (
+      (sq.type === QuestionType.SINGLE_CHOICE || sq.type === QuestionType.MULTIPLE_CHOICE) &&
+      sq.optionsRaw?.length > 0
+    ) {
+      sq.optionsRaw.forEach((opt: any, optIndex: number) => {
+        multipleChoiceOptions.push({
+          questionId: subId,
+          content: `${opt.label}. ${opt.content}`,
+          isCorrect: opt.isCorrect,
+          order: optIndex + 1,
+        })
+      })
+    }
+
+    if (sq.type === QuestionType.ORDERING && sq.optionsRaw?.length > 0) {
+      const orderMatch = sq.answer?.match(
+        /([A-D])\s*(?:→|->)\s*([A-D])(?:\s*(?:→|->)\s*([A-D]))?(?:\s*(?:→|->)\s*([A-D]))?/
+      )
+
+      if (orderMatch) {
+        const correctSequence = orderMatch.slice(1).filter(Boolean) as string[]
+        const orderMap = new Map<string, number>()
+        correctSequence.forEach((label: string, idx: number) => {
+          orderMap.set(label, idx + 1)
+        })
+
+        sq.optionsRaw.forEach((opt: any) => {
+          orderingItems.push({
+            questionId: subId,
+            content: `${opt.label}. ${opt.content}`,
+            correctOrder: orderMap.get(opt.label) ?? sq.optionsRaw.length + 1,
+          })
+        })
+      }
+    }
+
+    if (sq.type === QuestionType.FILL_IN_BLANK) {
+      const slotMatches =
+        sq.answer
+          ?.split(/[\n;]/)
+          .map((line: string) => {
+            const match = line.match(/^\s*[([\{]?(\d+)[)\]\}\.\:\=\-]*\s*(.+)$/)
+            if (!match) return null
+            return {
+              order: Number(match[1]),
+              correctAnswer: match[2].trim(),
+            }
+          })
+          .filter(Boolean) || []
+
+      slotMatches.forEach((slot: any) => {
+        fillInBlankSlots.push({
+          questionId: subId,
+          order: slot.order,
+          correctAnswer: slot.correctAnswer,
+        })
+      })
+    }
+
+    return { multipleChoiceOptions, orderingItems, fillInBlankSlots }
+  }
+
+  const questionStartRegex =
+    /^Câu\s*(\d+)\s*:\s*\(\s*(TNN|TN|DK|SX|TL|CH)\s*-\s*(NB|TH|VD|VDC)\s*\)\s*\(\s*[\d.,]+\s*đ\s*\)/i
+
+  const normalizeFingerprintText = (text?: string) =>
+    (text || "").trim().replace(/\s+/g, " ")
+
+  const clusterFingerprint = (q: any) => {
+    const subFp = (q.subQuestionsRaw || [])
+      .map(
+        (sq: any) =>
+          `${sq.label}:${sq.type}:${sq.point}:${sq.difficult}:${normalizeFingerprintText(sq.content)}:${(sq.optionsRaw || [])
+            .map((o: any) => `${o.label}=${normalizeFingerprintText(o.content)}`)
+            .join(",")}`
+      )
+      .join("|")
+    return `cluster:${normalizeFingerprintText(q.content)}:${subFp}`
+  }
+
+  const dedupeExtractedQuestions = (items: any[]) => {
+    const seen = new Set<string>()
+    return items.filter((q) => {
+      const key =
+        q.type === CLUSTER_QUESTION_TYPE
+          ? clusterFingerprint(q)
+          : `${q.type}:${normalizeFingerprintText(q.content)}:${q.point}`
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
   }
 
   const parseClusterSubQuestions = (
@@ -485,7 +656,15 @@ const WordImportModal: React.FC = () => {
     parentPoint: number
   ) => {
     const stemLines: string[] = []
-    if (headerInfo.questionText) stemLines.push(headerInfo.questionText)
+    const stemSeen = new Set<string>()
+    const addStemLine = (line: string) => {
+      const trimmed = line.trim()
+      if (!trimmed || stemSeen.has(trimmed)) return
+      stemSeen.add(trimmed)
+      stemLines.push(trimmed)
+    }
+
+    if (headerInfo.questionText) addStemLine(headerInfo.questionText)
 
     const subStarts: { index: number; label: string }[] = []
     for (let i = 0; i < blockLines.length; i++) {
@@ -497,7 +676,7 @@ const WordImportModal: React.FC = () => {
           label: line.match(subQuestionStartRegex)?.[1]?.toLowerCase() || "",
         })
       } else if (subStarts.length === 0) {
-        stemLines.push(line)
+        addStemLine(line)
       }
     }
 
@@ -514,22 +693,32 @@ const WordImportModal: React.FC = () => {
 
     const subQuestions = subStarts.map((start, s) => {
       const end = s + 1 < subStarts.length ? subStarts[s + 1].index : blockLines.length
-      const segmentLines = blockLines
+      const rawSegmentLines = blockLines
         .slice(start.index, end)
         .map((l) => l.trim())
         .filter(Boolean)
-        .map((line) => line.replace(subQuestionStartRegex, "$2").trim())
-        .filter(Boolean)
 
-      const parsed = parseMcSegment(segmentLines)
+      const firstLine = rawSegmentLines[0] || ""
+      const restAfterLabel = firstLine.match(subQuestionStartRegex)?.[2]?.trim() || ""
+      const otherLines = rawSegmentLines.slice(1)
 
-      return {
+      const meta = parseSubQuestionMeta(restAfterLabel, {
         type: QuestionType.SINGLE_CHOICE,
         difficult,
         point: pointPerSub,
+      })
+
+      const segmentLines = [...meta.remainderLines, ...otherLines]
+      const parsed = parseQuestionSegment(meta.type, segmentLines)
+
+      return {
+        type: meta.type,
+        difficult: meta.difficult,
+        point: meta.point,
         content: parsed.content,
         optionsRaw: parsed.optionsRaw,
         explanation: parsed.explanation,
+        answer: parsed.answer,
         label: start.label,
       }
     })
@@ -619,8 +808,8 @@ const WordImportModal: React.FC = () => {
       for (const line of lines) {
         const trimmed = line.text.replace(/\s+/g, " ").trim()
 
-        // Kiểm tra xem dòng này có phải bắt đầu câu hỏi mới không
-        if (/^Câu\s+\d+\s*:/i.test(trimmed)) {
+        // Chỉ tách block khi gặp header câu hỏi đầy đủ (tránh tách nhầm trong nội dung)
+        if (questionStartRegex.test(trimmed)) {
           foundFirstQuestion = true
           // Lưu block cũ
           if (currentBlock.length > 0) {
@@ -687,6 +876,69 @@ const WordImportModal: React.FC = () => {
           errors.push({ rowIndex: headerInfo.questionNumber, message: pointCheck.warning })
         }
 
+        if (type === CLUSTER_QUESTION_TYPE) {
+          const clusterParsed = parseClusterSubQuestions(
+            blockLines.slice(1),
+            headerInfo,
+            difficult,
+            point ?? headerInfo.point
+          )
+
+          if ("error" in clusterParsed && clusterParsed.error) {
+            errors.push({
+              rowIndex: headerInfo.questionNumber,
+              message: `Câu ${headerInfo.questionNumber}: ${clusterParsed.error}`,
+            })
+            continue
+          }
+
+          const invalidSub = clusterParsed.subQuestions.find(validateParsedSubQuestion)
+          if (invalidSub) {
+            errors.push({
+              rowIndex: headerInfo.questionNumber,
+              message: `Câu ${headerInfo.questionNumber}: Thiếu đáp án hoặc dữ liệu ở câu hỏi con ${invalidSub.label})`,
+            })
+          }
+
+          extractedQuestions.push({
+            type,
+            difficult,
+            contentImagesRaw: allImages,
+            explanationImagesRaw: [],
+            pointRaw: headerInfo.point,
+            point: pointCheck.isInvalid ? undefined : point,
+            pointStatus: pointCheck.color,
+            content: clusterParsed.stem,
+            subQuestionsRaw: clusterParsed.subQuestions,
+            previewContent: [
+              clusterParsed.stem,
+              ...clusterParsed.subQuestions.map((sq, i) => {
+                const { prefix, body } = formatClusterSubLabel(i, sq.content)
+                if (
+                  sq.type === QuestionType.SINGLE_CHOICE ||
+                  sq.type === QuestionType.MULTIPLE_CHOICE
+                ) {
+                  const opts = sq.optionsRaw
+                    .map((o: any) => `${o.label}. ${o.content}`)
+                    .join("    ")
+                  return `${prefix}${body ? ` ${body}\n` : " "}${opts}`
+                }
+                if (sq.type === QuestionType.ORDERING && sq.optionsRaw?.length) {
+                  const opts = sq.optionsRaw
+                    .map((o: any) => `${o.label}. ${o.content}`)
+                    .join("\n")
+                  return `${prefix}${body ? ` ${body}\n` : " "}${opts}`
+                }
+                return `${prefix}${body ? ` ${body}` : ""}`
+              }),
+            ].join("\n\n"),
+            explanation: clusterParsed.subQuestions
+              .map((sq, i) => `${String.fromCharCode(97 + i)}) ${sq.explanation || "—"}`)
+              .join("\n"),
+          })
+          continue
+        }
+
         // Tìm dòng bắt đầu bằng "*Đáp án"
         const answerStartIdx = blockLines.findIndex((l) => /^\*\s*Đáp\s*án\s*:/i.test(l))
 
@@ -735,45 +987,7 @@ const WordImportModal: React.FC = () => {
           previewContent: previewQuestionText,
         }
 
-        if (type === CLUSTER_QUESTION_TYPE) {
-          const clusterParsed = parseClusterSubQuestions(
-            blockLines.slice(1),
-            headerInfo,
-            difficult,
-            point ?? headerInfo.point
-          )
-
-          if ("error" in clusterParsed && clusterParsed.error) {
-            errors.push({
-              rowIndex: headerInfo.questionNumber,
-              message: `Câu ${headerInfo.questionNumber}: ${clusterParsed.error}`,
-            })
-            continue
-          }
-
-          const invalidSub = clusterParsed.subQuestions.find(
-            (sq) => !sq.optionsRaw?.length || !sq.optionsRaw.some((o: any) => o.isCorrect)
-          )
-          if (invalidSub) {
-            errors.push({
-              rowIndex: headerInfo.questionNumber,
-              message: `Câu ${headerInfo.questionNumber}: Thiếu đáp án ở câu hỏi con`,
-            })
-          }
-
-          question.content = clusterParsed.stem
-          question.subQuestionsRaw = clusterParsed.subQuestions
-          question.previewContent = [
-            clusterParsed.stem,
-            ...clusterParsed.subQuestions.map((sq, i) => {
-              const opts = sq.optionsRaw.map((o: any) => `${o.label}. ${o.content}`).join("    ")
-              return `${String.fromCharCode(97 + i)}) ${sq.content ? `${sq.content}\n` : ""}${opts}`
-            }),
-          ].join("\n\n")
-          question.explanation = clusterParsed.subQuestions
-            .map((sq, i) => `${String.fromCharCode(97 + i)}) ${sq.explanation || "—"}`)
-            .join("\n")
-        } else if (type === QuestionType.SINGLE_CHOICE || type === QuestionType.MULTIPLE_CHOICE) {
+        if (type === QuestionType.SINGLE_CHOICE || type === QuestionType.MULTIPLE_CHOICE) {
           question.content = cleanQuestionText(rawQuestionText)
 
           question.optionsRaw = optionLines.map((line) => {
@@ -830,7 +1044,9 @@ const WordImportModal: React.FC = () => {
         extractedQuestions.push(question)
       }
 
-      const questionsWithKey = extractedQuestions.map((q, index) => ({
+      const dedupedQuestions = dedupeExtractedQuestions(extractedQuestions)
+
+      const questionsWithKey = dedupedQuestions.map((q, index) => ({
         ...q,
         key: index.toString(),
       }))
@@ -846,7 +1062,7 @@ const WordImportModal: React.FC = () => {
       setSelectedRowKeys(questionsWithKey.map((q) => q.key))
       setImportErrors(errors)
 
-      message.success(`Đã import ${extractedQuestions.length} câu hỏi`)
+      message.success(`Đã import ${dedupedQuestions.length} câu hỏi`)
     } catch (error) {
       console.error(error)
       message.error("Có lỗi xảy ra khi đọc file Word")
@@ -1194,30 +1410,29 @@ const WordImportModal: React.FC = () => {
 
         const subQuestionsData: any[] = []
         const subOptionsData: any[] = []
+        const subOrderingData: any[] = []
+        const subFillInBlankData: any[] = []
 
         clusterPayload.subQuestionsRaw.forEach((sq, index) => {
           const subId = createId()
           subQuestionsData.push({
             id: subId,
-            content: sq.content || `${String.fromCharCode(96 + index + 1)})`,
+            content: sq.content?.trim() || "",
             type: sq.type,
             difficult: sq.difficult,
             point: sq.point,
-            isAutoGraded: true,
+            explanation: sq.explanation,
+            isAutoGraded: sq.type !== QuestionType.ESSAY,
             questionBankId,
             parentQuestionId: parentId,
             order: index + 1,
             ...(storageType === "khung" ? { knowledgeBlockId } : {}),
           })
 
-          sq.optionsRaw?.forEach((opt: any, optIndex: number) => {
-            subOptionsData.push({
-              questionId: subId,
-              content: `${opt.label}. ${opt.content}`,
-              isCorrect: opt.isCorrect,
-              order: optIndex + 1,
-            })
-          })
+          const relations = buildSubQuestionRelationRows(sq, subId)
+          subOptionsData.push(...relations.multipleChoiceOptions)
+          subOrderingData.push(...relations.orderingItems)
+          subFillInBlankData.push(...relations.fillInBlankSlots)
         })
 
         if (subQuestionsData.length > 0) {
@@ -1233,6 +1448,22 @@ const WordImportModal: React.FC = () => {
             model: "MultipleChoiceOption",
             operation: "createMany",
             data: { data: subOptionsData },
+          })
+        }
+
+        if (subOrderingData.length > 0) {
+          clusterOps.push({
+            model: "OrderingItem",
+            operation: "createMany",
+            data: { data: subOrderingData },
+          })
+        }
+
+        if (subFillInBlankData.length > 0) {
+          clusterOps.push({
+            model: "FillInBlankSlot",
+            operation: "createMany",
+            data: { data: subFillInBlankData },
           })
         }
 

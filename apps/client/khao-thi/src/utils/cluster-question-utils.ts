@@ -66,7 +66,7 @@ export function buildSubQuestionCreateData(
   parentQuestionId?: string
 ) {
   const base = {
-    content: sq.content || `${String.fromCharCode(96 + order)})`,
+    content: sq.content?.trim() || "",
     type: sq.type,
     difficult: sq.difficult,
     point: sq.point ?? 0,
@@ -156,7 +156,7 @@ export async function updateSubQuestion(
   }) => Promise<unknown>
 ) {
   const base = {
-    content: sq.content || `${String.fromCharCode(96 + order)})`,
+    content: sq.content?.trim() || "",
     type: sq.type,
     difficult: sq.difficult,
     point: sq.point ?? 0,
@@ -195,3 +195,15 @@ export async function updateSubQuestion(
 }
 
 export { CLUSTER_QUESTION_TYPE }
+
+export function formatClusterSubLabel(index: number, content?: string) {
+  const label = String.fromCharCode(97 + index)
+  const text = (content || "").trim()
+  if (!text || new RegExp(`^${label}\\)\\s*$`, "i").test(text)) {
+    return { prefix: `${label})`, body: "" }
+  }
+  return {
+    prefix: `${label})`,
+    body: text.replace(new RegExp(`^${label}\\)\\s*`, "i"), ""),
+  }
+}

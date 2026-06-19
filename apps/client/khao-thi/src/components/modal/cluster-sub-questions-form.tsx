@@ -1,6 +1,6 @@
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
-import { DIFFICULT_OPTIONS, QUESTION_TYPE_OPTIONS } from "@constants/constants"
+import { QUESTION_TYPE_OPTIONS } from "@constants/constants"
 import type { Difficult, QuestionType } from "@workspace/db/client"
 import { QuestionType as QuestionTypeEnum } from "@workspace/db/client"
 import { Button, Checkbox, Col, Form, Input, InputNumber, Row, Tooltip } from "antd"
@@ -82,7 +82,7 @@ export default function ClusterSubQuestionsForm() {
                       <Form.Item name={[field.name, "id"]} hidden>
                         <Input />
                       </Form.Item>
-                      <Col span={8}>
+                      <Col span={12}>
                         <Form.Item
                           name={[field.name, "type"]}
                           label="Loại câu hỏi"
@@ -92,7 +92,8 @@ export default function ClusterSubQuestionsForm() {
                           <Select options={SUB_QUESTION_TYPE_OPTIONS} />
                         </Form.Item>
                       </Col>
-                      <Col span={8}>
+                      
+                      {/* <Col span={8}>
                         <Form.Item
                           name={[field.name, "difficult"]}
                           label="Mức độ"
@@ -101,8 +102,8 @@ export default function ClusterSubQuestionsForm() {
                         >
                           <Select options={DIFFICULT_OPTIONS} />
                         </Form.Item>
-                      </Col>
-                      <Col span={8}>
+                      </Col> */}
+                      <Col span={12}>
                         <Form.Item
                           name={[field.name, "point"]}
                           label="Điểm"

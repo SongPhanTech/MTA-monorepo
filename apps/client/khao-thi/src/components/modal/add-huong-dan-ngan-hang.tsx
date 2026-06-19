@@ -110,6 +110,11 @@ const AddHuongDanNganHang = () => {
             <Text code>a)</Text>, <Text code>b)</Text>...
           </li>
           <li>
+            Mỗi câu con <Text strong>tuỳ chọn</Text> khai báo riêng{" "}
+            <Text code>( Loại câu hỏi- Độ khó) ( Điểm đ)</Text> — không có thì mặc định{" "}
+            <Text code>TN</Text>, cùng độ khó câu chùm, điểm chia đều
+          </li>
+          <li>
             Mỗi câu con có <Text code>*Đáp án:</Text> riêng
           </li>
           <li>
@@ -211,19 +216,22 @@ Câu 5: (TL-TH) (0.5 đ) Phân tích vấn đề cơ bản của triết học
 *Đáp án: Gợi ý: Trình bày 2 mặt (vật chất – ý thức, khả năng nhận thức) và ý nghĩa của nó.
 
 Câu 6: (CH-NB) (0.75 đ) Hãy chọn từ khác biệt:
-a) A. rough
+a) (TN-NB) (0.25 đ)
+A. rough
 B. sum
 C. utter
 D. union
 *Đáp án: C. utter
 
-b) A. noon
+b) (TN-NB) (0.25 đ)
+A. noon
 B. tool
 C. blood
 D. spoon
 *Đáp án: B. tool
 
-c) A. chemist
+c) (TN-NB) (0.25 đ)
+A. chemist
 B. chicken
 C. church
 D. century
