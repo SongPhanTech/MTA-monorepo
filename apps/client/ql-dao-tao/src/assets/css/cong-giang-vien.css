@@ -85,7 +85,7 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: #6b7280 !important;
+  color: #111827 !important;
   border-radius: 8px !important;
   margin: 2px 0 !important;
   width: 100%;
@@ -93,20 +93,29 @@
   line-height: 44px !important;
 }
 
+.giang-vien-sider-menu .ant-menu-item a,
+.giang-vien-sider-menu .ant-menu-title-content {
+  color: #111827 !important;
+}
+
 .giang-vien-sider-menu .ant-menu-item .ant-menu-item-icon,
-.giang-vien-sider-menu .ant-menu-submenu-title .ant-menu-item-icon {
-  color: #9ca3af !important;
+.giang-vien-sider-menu .ant-menu-submenu-title .ant-menu-item-icon,
+.giang-vien-sider-menu .giang-vien-menu-icon {
+  color: #111827 !important;
 }
 
 .giang-vien-sider-menu .ant-menu-item:hover,
 .giang-vien-sider-menu .ant-menu-submenu-title:hover {
-  background: #7cbf97 !important;
+  background: #4a9468 !important;
   color: #ffffff !important;
 }
 
 .giang-vien-sider-menu .ant-menu-item:hover .ant-menu-item-icon,
 .giang-vien-sider-menu .ant-menu-submenu-title:hover .ant-menu-item-icon,
-.giang-vien-sider-menu .ant-menu-item:hover a {
+.giang-vien-sider-menu .ant-menu-item:hover a,
+.giang-vien-sider-menu .ant-menu-item:hover .ant-menu-title-content,
+.giang-vien-sider-menu .ant-menu-submenu-title:hover .ant-menu-title-content,
+.giang-vien-sider-menu .ant-menu-item:hover .giang-vien-menu-icon {
   color: #ffffff !important;
 }
 
@@ -121,7 +130,7 @@
 }
 
 .giang-vien-sider-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
-  color: #004725 !important;
+  color: #111827 !important;
 }
 
 .giang-vien-sider-menu .ant-menu-sub.ant-menu-inline {
@@ -132,9 +141,23 @@
   text-transform: none;
   font-size: 13px;
   font-weight: 500;
+  color: #111827 !important;
   padding-left: 44px !important;
   height: 38px !important;
   line-height: 38px !important;
+}
+
+.giang-vien-sider-menu .ant-menu-sub .ant-menu-item a {
+  color: #111827 !important;
+}
+
+.giang-vien-sider-menu .ant-menu-sub .ant-menu-item:hover {
+  background: #4a9468 !important;
+  color: #ffffff !important;
+}
+
+.giang-vien-sider-menu .ant-menu-sub .ant-menu-item:hover a {
+  color: #ffffff !important;
 }
 
 .giang-vien-menu-badge .ant-badge-count {
