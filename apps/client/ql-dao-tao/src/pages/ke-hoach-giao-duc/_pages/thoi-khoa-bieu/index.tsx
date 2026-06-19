@@ -722,14 +722,19 @@ export default function ThoiKhoaBieu({
                   width: 150,
                   align: "center",
                   render: (_, record) => {
-                    return record.subjectClassTimes?.uniqueByKey?.("dayOfWeek")?.map?.((tkb) => {
-                      return (
-                        <p>
-                          {tkb.dayOfWeek === 8 ? "CN" : `T${tkb.dayOfWeek}`} - {tkb.startPeriod} -{" "}
-                          {tkb.endPeriod}
-                        </p>
+                    return record.subjectClassTimes
+                      ?.uniqueByKeys?.(["dayOfWeek", "startPeriod", "endPeriod"])
+                      ?.sort?.(
+                        (a, b) => a.dayOfWeek - b.dayOfWeek || a.startPeriod - b.startPeriod
                       )
-                    })
+                      ?.map?.((tkb) => {
+                        return (
+                          <p key={`${tkb.dayOfWeek}-${tkb.startPeriod}-${tkb.endPeriod}`}>
+                            {tkb.dayOfWeek === 8 ? "CN" : `T${tkb.dayOfWeek}`} - {tkb.startPeriod} -{" "}
+                            {tkb.endPeriod}
+                          </p>
+                        )
+                      })
                   },
                 },
                 // {

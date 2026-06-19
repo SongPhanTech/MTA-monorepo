@@ -224,6 +224,7 @@ declare global {
   interface Array<T> {
     compare(otherArray: T[], cb: (a: T, b: T) => boolean): boolean
     uniqueByKey<K extends keyof T>(key: K): T[]
+    uniqueByKeys<K extends keyof T>(keys: K[]): T[]
     flatten<K extends keyof T>(key: K): T[]
     sortVietnameseName<K extends keyof T>(key: K): T[]
   }
@@ -346,6 +347,18 @@ Array.prototype.uniqueByKey = function <T, K extends keyof T>(this: T[], key: K)
   return this.filter((item) => {
     if (!seen.has(item[key])) {
       seen.add(item[key])
+      return true
+    }
+    return false
+  })
+}
+
+Array.prototype.uniqueByKeys = function <T, K extends keyof T>(this: T[], keys: K[]): T[] {
+  const seen = new Set<string>()
+  return this.filter((item) => {
+    const composite = keys.map((key) => String(item[key])).join("|")
+    if (!seen.has(composite)) {
+      seen.add(composite)
       return true
     }
     return false

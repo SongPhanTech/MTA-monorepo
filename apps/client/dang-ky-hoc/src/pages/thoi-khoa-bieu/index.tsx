@@ -369,9 +369,13 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                 align: "center",
                 render: (_, record) =>
                   record.subjectClassTimes
-                    ?.uniqueByKey?.("dayOfWeek")
+                    ?.uniqueByKeys?.(["dayOfWeek", "startPeriod", "endPeriod"])
+                    ?.sort?.(
+                      (a: SubjectClassTime, b: SubjectClassTime) =>
+                        a.dayOfWeek - b.dayOfWeek || a.startPeriod - b.startPeriod
+                    )
                     ?.map?.((tkb: SubjectClassTime) => (
-                      <p key={tkb.dayOfWeek}>
+                      <p key={`${tkb.dayOfWeek}-${tkb.startPeriod}-${tkb.endPeriod}`}>
                         {tkb.dayOfWeek === 8 ? "CN" : `T${tkb.dayOfWeek}`} - {tkb.startPeriod} -{" "}
                         {tkb.endPeriod}
                       </p>
