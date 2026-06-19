@@ -13,6 +13,7 @@ enum QuestionType {
   MULTIPLE_CHOICE // Trắc nghiệm nhiều lựa chọn
   FILL_IN_BLANK   // Điền vào chỗ trống
   ORDERING        // Sắp xếp thứ tự
+  CLUSTER         // Câu hỏi chùm
 
   @@schema("khao-thi")
 }
@@ -49,6 +50,7 @@ model Question extends Base {
   explanation           String? // Giải thích đáp án
   isAutoGraded          Boolean                @default(false)
   difficult             Difficult
+  order                 Int? // Thứ tự câu con trong câu hỏi chùm
   // Liên kết với các bảng dữ liệu chi tiết theo từng loại câu hỏi
   multipleChoiceOptions MultipleChoiceOption[]
   fillInBlankSlots      FillInBlankSlot[]
@@ -59,7 +61,9 @@ model Question extends Base {
   knowledgeBlock        KnowledgeBlock?        @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId      String?
 
-
+  parentQuestion        Question?              @relation("QuestionCluster", fields: [parentQuestionId], references: [id], onDelete: Cascade)
+  parentQuestionId      String?
+  subQuestions          Question[]             @relation("QuestionCluster")
 
   sessionQuestions      ExamBankQuestion[]
   /// Câu trả lời của thí sinh trong các phiên thi
