@@ -52,15 +52,15 @@ const ThongTinChung = ({ thongTin, thongKe, profileId }: ThongTinChungProps) => 
         Chỉnh sửa
       </Button>
 
-      <Row gutter={[24, 16]}>
+      <Row gutter={[12, 16]}>
         {/* Ảnh đại diện */}
-        <Col xs={24} sm={6} md={5} xl={4} className="flex justify-center">
+        <Col xs={24} sm={5} md={4} xl={3} className="flex justify-center sm:justify-start">
           <DoiAnhDaiDien profileId={profileId} anhDaiDien={thongTin.anhDaiDien} />
         </Col>
 
         {/* Thông tin chung - 2 cột */}
-        <Col xs={24} sm={18} md={19} xl={14}>
-          <Row gutter={[24, 8]}>
+        <Col xs={24} sm={19} md={20} xl={15}>
+          <Row gutter={[12, 8]}>
             <Col xs={24} md={12}>
               <div className="flex flex-col gap-2">
                 <InputRow label="Họ và tên" value={thongTin.hoVaTen} />
@@ -81,7 +81,7 @@ const ThongTinChung = ({ thongTin, thongKe, profileId }: ThongTinChungProps) => 
                 <InputRow label="Ngày vào trường" value={thongTin.ngayVaoTruong} />
                 <InputRow
                   label="Tình trạng"
-                  value={<Tag color="green">{thongTin.tinhTrang}</Tag>}
+                  value={thongTin.tinhTrang ? <Tag color="green">{thongTin.tinhTrang}</Tag> : "_"}
                 />
               </div>
             </Col>

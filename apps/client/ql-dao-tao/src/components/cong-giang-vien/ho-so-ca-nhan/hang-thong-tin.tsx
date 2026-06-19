@@ -12,7 +12,7 @@ const InputRow = ({ label, value, labelWith = 130 }: HangThongTinProps) => {
       <span className="shrink-0 whitespace-nowrap text-gray-500" style={{ minWidth: labelWith }}>
         {label}:
       </span>
-      <span className="flex-1 font-medium text-gray-800">{value || ""}</span>
+      <span className="flex-1 font-medium text-gray-800">{value || "_"}</span>
     </div>
   )
 }

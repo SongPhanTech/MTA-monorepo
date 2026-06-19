@@ -11,7 +11,7 @@ import type { MouseEvent } from "react"
 interface TheThongBaoProps {
   thongBao: ThongBaoView
   compact?: boolean
-  onClick?: (id: string) => void
+  onClick?: (thongBao: ThongBaoView) => void
   onDanhDauDaDoc?: (id: string) => void
 }
 
@@ -37,7 +37,7 @@ const TheThongBao = ({ thongBao, compact, onClick, onDanhDauDaDoc }: TheThongBao
     >
       <button
         type="button"
-        onClick={() => onClick?.(thongBao.id)}
+        onClick={() => onClick?.(thongBao)}
         className="flex min-w-0 flex-1 cursor-pointer items-stretch gap-0 border-none bg-transparent p-0 text-left"
       >
         <div className={cn("w-1 shrink-0", mucMeta.accent, thongBao.daDoc && "opacity-50")} />

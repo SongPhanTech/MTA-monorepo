@@ -8,6 +8,7 @@ import type {
 import {
   DANH_SACH_LOAI_THONG_BAO_GV,
   isLoaiThongBaoGv,
+  laySubjectClassIdTuMaThongBao,
   THU_TU_MUC_CANH_BAO,
 } from "@components/cong-giang-vien/thong-bao/types"
 import { loadDaDocIds, saveDaDocIds } from "@lib/thong-bao-da-doc"
@@ -29,6 +30,7 @@ const mapThongBao = (
     title: string
     content: string
     type: string
+    code?: string | null
     publishedAt: Date | string
     expiresAt?: Date | string | null
   },
@@ -47,6 +49,7 @@ const mapThongBao = (
     thoiGian: dayjs(item.publishedAt).format("HH:mm • DD/MM/YYYY"),
     hanXuLy: item.expiresAt ? dayjs(item.expiresAt).format("DD/MM/YYYY") : undefined,
     daDoc: daDocIds.has(item.id),
+    subjectClassId: laySubjectClassIdTuMaThongBao(item.code),
   }
 }
 
@@ -126,6 +129,7 @@ const useThongBaoGiangVien = () => {
         title: true,
         content: true,
         type: true,
+        code: true,
         publishedAt: true,
         expiresAt: true,
       },

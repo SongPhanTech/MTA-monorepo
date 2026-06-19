@@ -5,7 +5,7 @@ import { Empty, Spin } from "antd"
 interface DanhSachThongBaoProps {
   danhSach: ThongBaoView[]
   loading?: boolean
-  onChon?: (id: string) => void
+  onChon?: (thongBao: ThongBaoView) => void
   onDanhDauDaDoc?: (id: string) => void
 }
 

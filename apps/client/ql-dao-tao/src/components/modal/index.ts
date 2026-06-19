@@ -1,4 +1,4 @@
-import { PutLichVaSuKienModal, ViewNotificationModal, XemTaiLieu } from "@workspace/ui"
+import { PutLichVaSuKienModal, XemTaiLieu } from "@workspace/ui"
 import PutAddCertificateScoreModal from "./add-certificate"
 import AddStudentToFixedClassModal from "./add-student-to-fixedClass"
 import GanCanBoLopModal from "./gan-can-bo-lop"
@@ -135,7 +135,6 @@ export {
   PutNoiDungTinhTaiModal,
   XemTaiLieu,
   PutLichVaSuKienModal,
-  ViewNotificationModal,
   ModalViewHistoryChange,
   PutUpdateProfileModal,
   PutUploadProfileModal,

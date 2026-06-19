@@ -1,3 +1,7 @@
+import {
+  nhapDiemQuaTrinhGiangDayPath,
+  nhapDiemThiGiangDayPath,
+} from "@constants/cong-giang-vien-path"
 import type { LucideIcon } from "lucide-react"
 import { ClipboardList, Clock, FileText, Users } from "lucide-react"
 
@@ -37,6 +41,8 @@ export interface ThongBaoView {
   thoiGian: string
   hanXuLy?: string
   daDoc: boolean
+  /** Id lớp môn học liên quan (trích từ `code` thông báo) để mở đúng trang nhập điểm. */
+  subjectClassId?: string
 }
 
 export interface LoaiThongBaoMeta {
@@ -163,3 +169,24 @@ export const THU_TU_MUC_CANH_BAO: Record<MucCanhBao, number> = {
 
 export const isLoaiThongBaoGv = (type: string): type is LoaiThongBaoGv =>
   DANH_SACH_LOAI_THONG_BAO_GV.includes(type as LoaiThongBaoGv)
+
+/**
+ * Trích id lớp môn học từ `code` thông báo deadline.
+ * Định dạng code: `CRON-{type}-{subjectClassId}-{lecturerId}-{slotKey}`.
+ * Id là cuid (không chứa dấu "-") nên phần tử thứ 3 luôn là subjectClassId.
+ */
+export const laySubjectClassIdTuMaThongBao = (code?: string | null): string | undefined => {
+  if (!code?.startsWith("CRON-")) return undefined
+  return code.split("-")[2] || undefined
+}
+
+/** Đường dẫn trang nhập điểm tương ứng với loại thông báo (chỉ áp dụng cho hạn nhập điểm). */
+export const duongDanNhapDiemTheoThongBao = (thongBao: ThongBaoView): string | undefined => {
+  if (thongBao.loai === "PROCESS_SCORE_DEADLINE") {
+    return nhapDiemQuaTrinhGiangDayPath(thongBao.subjectClassId)
+  }
+  if (thongBao.loai === "EXAM_DEADLINE") {
+    return nhapDiemThiGiangDayPath(thongBao.subjectClassId)
+  }
+  return undefined
+}

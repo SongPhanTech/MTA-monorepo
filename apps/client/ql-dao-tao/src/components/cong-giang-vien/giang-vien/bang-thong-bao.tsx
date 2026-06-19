@@ -1,10 +1,14 @@
 import KhungPanel from "@components/cong-giang-vien/giang-vien/khung-panel"
 import TheThongBao from "@components/cong-giang-vien/thong-bao/the-thong-bao"
+import {
+  duongDanNhapDiemTheoThongBao,
+  type ThongBaoView,
+} from "@components/cong-giang-vien/thong-bao/types"
 import { CONG_GIANG_VIEN_THONG_BAO_PATH } from "@constants/cong-giang-vien-path"
 import { useThongBaoGiangVien } from "@hooks/use-thong-bao-giang-vien"
 import { Empty, Spin } from "antd"
 import Link from "next/link"
-import { useDisclosure } from "react-hook-disclosure-modal"
+import { useRouter } from "next/router"
 
 interface BangThongBaoProps {
   gon?: boolean
@@ -14,13 +18,12 @@ interface BangThongBaoProps {
 const BangThongBao = ({ gon }: BangThongBaoProps) => {
   const { danhSachTomTat, isLoading, danhDauDaDoc } = useThongBaoGiangVien()
 
-  const { onOpen: moChiTiet } = useDisclosure<string>({
-    tag: "ViewNotificationModal",
-  })
+  const router = useRouter()
 
-  const handleChon = (id: string) => {
-    danhDauDaDoc(id)
-    moChiTiet(id)
+  const handleChon = (thongBao: ThongBaoView) => {
+    danhDauDaDoc(thongBao.id)
+    const duongDan = duongDanNhapDiemTheoThongBao(thongBao)
+    if (duongDan) router.push(duongDan)
   }
 
   const noiDung = isLoading ? (

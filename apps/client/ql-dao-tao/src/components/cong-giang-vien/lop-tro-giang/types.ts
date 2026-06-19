@@ -57,14 +57,14 @@ const layGioTiet = (period: number, loai: "startTime" | "endTime") => {
 export const formatThoiKhoaBieu = (
   times: Pick<SubjectClassTime, "dayOfWeek" | "startPeriod" | "endPeriod">[]
 ): string => {
-  return times
-    .map((t) => {
-      const thu = TEN_THU(t.dayOfWeek)
-      const tiet = `Tiết ${t.startPeriod}-${t.endPeriod}`
-      const gioBatDau = layGioTiet(t.startPeriod, "startTime")
-      const gioKetThuc = layGioTiet(t.endPeriod, "endTime")
-      const gio = gioBatDau && gioKetThuc ? ` (${gioBatDau} - ${gioKetThuc})` : ""
-      return `${thu} - ${tiet}${gio}`
-    })
-    .join("\n")
+  const dong = times.map((t) => {
+    const thu = TEN_THU(t.dayOfWeek)
+    const tiet = `Tiết ${t.startPeriod}-${t.endPeriod}`
+    const gioBatDau = layGioTiet(t.startPeriod, "startTime")
+    const gioKetThuc = layGioTiet(t.endPeriod, "endTime")
+    const gio = gioBatDau && gioKetThuc ? ` (${gioBatDau} - ${gioKetThuc})` : ""
+    return `${thu} - ${tiet}${gio}`
+  })
+  // Lịch giống nhau (cùng thứ/tiết) thì chỉ hiện 1 dòng.
+  return [...new Set(dong)].join("\n")
 }

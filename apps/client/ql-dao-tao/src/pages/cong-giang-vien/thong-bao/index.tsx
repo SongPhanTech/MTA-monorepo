@@ -2,9 +2,13 @@ import BoLocThongBao from "@components/cong-giang-vien/thong-bao/bo-loc-thong-ba
 import DanhSachThongBao from "@components/cong-giang-vien/thong-bao/danh-sach-thong-bao"
 import PhanTrangThongBao from "@components/cong-giang-vien/thong-bao/phan-trang-thong-bao"
 import TieuDeTrangThongBao from "@components/cong-giang-vien/thong-bao/tieu-de-trang"
+import {
+  duongDanNhapDiemTheoThongBao,
+  type ThongBaoView,
+} from "@components/cong-giang-vien/thong-bao/types"
 import { useThongBaoGiangVien } from "@hooks/use-thong-bao-giang-vien"
 import { message } from "antd"
-import { useDisclosure } from "react-hook-disclosure-modal"
+import { useRouter } from "next/router"
 
 function ThongBaoGiangVienPage() {
   const {
@@ -22,13 +26,12 @@ function ThongBaoGiangVienPage() {
     danhDauTatCaDaDoc,
   } = useThongBaoGiangVien()
 
-  const { onOpen: moChiTiet } = useDisclosure<string>({
-    tag: "ViewNotificationModal",
-  })
+  const router = useRouter()
 
-  const handleChonThongBao = (id: string) => {
-    danhDauDaDoc(id)
-    moChiTiet(id)
+  const handleChonThongBao = (thongBao: ThongBaoView) => {
+    danhDauDaDoc(thongBao.id)
+    const duongDan = duongDanNhapDiemTheoThongBao(thongBao)
+    if (duongDan) router.push(duongDan)
   }
 
   const handleDanhDauDaDoc = (id: string) => {
