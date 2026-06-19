@@ -3,6 +3,7 @@ import type {
   DongLichGiangDay,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-giang-day/types"
 import type { CheDoHienThiLich } from "@components/cong-giang-vien/lich-cua-toi/types"
+import { CLASS_O_THU_BANG, taoOnCellThu } from "@components/cong-giang-vien/lich-cua-toi/utils"
 import { Button, Input, Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { Filter, Search } from "lucide-react"
@@ -106,7 +107,8 @@ const BangLichGiangDay = ({
       key: "thu",
       width: 72,
       align: "center",
-      onCell: (row) => ({ rowSpan: row.rowSpanThu }),
+      onHeaderCell: () => ({ className: CLASS_O_THU_BANG }),
+      onCell: (row) => taoOnCellThu(row.rowSpanThu),
     },
     {
       title: "Ngày",

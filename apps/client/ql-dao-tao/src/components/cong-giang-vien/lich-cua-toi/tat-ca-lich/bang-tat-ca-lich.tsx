@@ -1,4 +1,5 @@
 import type { CheDoHienThiLich } from "@components/cong-giang-vien/lich-cua-toi/types"
+import { CLASS_O_THU_BANG, taoOnCellThu } from "@components/cong-giang-vien/lich-cua-toi/utils"
 import type {
   DongBangTatCaLich,
   DongBangThangTatCaLich,
@@ -20,6 +21,26 @@ interface BangTatCaLichProps {
 }
 
 const CHIEU_CAO_HEADER_BANG = 39
+
+/** Độ rộng cột — tổng vượt viewport để hiện thanh cuộn ngang khi cần */
+const COT = {
+  thoiGian: 136,
+  noiDung: 280,
+  loaiLich: 112,
+  diaDiem: 200,
+  ghiChu: 220,
+  thu: 68,
+  ngayTuan: 76,
+  ngayThang: 100,
+} as const
+
+const SCROLL_X_NGAY =
+  COT.thoiGian + COT.noiDung + COT.loaiLich + COT.diaDiem + COT.ghiChu
+const SCROLL_X_TUAN = SCROLL_X_NGAY + COT.thu + COT.ngayTuan
+const SCROLL_X_THANG = SCROLL_X_NGAY + COT.ngayThang + COT.thu
+
+const CLASS_BANG =
+  "bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600 [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400 [&_.ant-table-cell]:!text-xs"
 
 const renderLoaiLich = (row: DongTatCaLich) => (
   <span
@@ -58,44 +79,50 @@ const BangTatCaLich = ({
     const observer = new ResizeObserver(capNhatChieuCao)
     observer.observe(el)
     return () => observer.disconnect()
-  }, [])
+  }, [cheDoHienThi, danhSach.length, danhSachBangTuan.length, danhSachBangThang.length, dangTai])
 
   const cotChiTiet: ColumnsType<DongTatCaLich> = [
     {
       title: "Thời gian",
       dataIndex: "thoiGian",
       key: "thoiGian",
-      width: 130,
+      width: COT.thoiGian,
+      ellipsis: true,
     },
     {
       title: "Nội dung",
       key: "noiDung",
+      width: COT.noiDung,
       ellipsis: true,
       render: (_, row) =>
         cheDoHienThi === "ngay" ? (
-          row.noiDung
+          <span className="block truncate" title={row.noiDung}>
+            {row.noiDung}
+          </span>
         ) : (
-          <span className="font-semibold">{row.tieuDeHienThi}</span>
+          <span className="block truncate font-semibold" title={row.tieuDeHienThi}>
+            {row.tieuDeHienThi}
+          </span>
         ),
     },
     {
       title: "Loại lịch",
       key: "loaiLich",
-      width: 120,
+      width: COT.loaiLich,
       render: (_, row) => renderLoaiLich(row),
     },
     {
       title: "Địa điểm",
       dataIndex: "diaDiem",
       key: "diaDiem",
-      width: 180,
+      width: COT.diaDiem,
       ellipsis: true,
     },
     {
       title: "Ghi chú",
       dataIndex: "ghiChu",
       key: "ghiChu",
-      width: 200,
+      width: COT.ghiChu,
       ellipsis: true,
     },
   ]
@@ -105,15 +132,16 @@ const BangTatCaLich = ({
       title: "Thứ",
       dataIndex: "thu",
       key: "thu",
-      width: 72,
+      width: COT.thu,
       align: "center",
-      onCell: (row) => ({ rowSpan: row.rowSpanThu }),
+      onHeaderCell: () => ({ className: CLASS_O_THU_BANG }),
+      onCell: (row) => taoOnCellThu(row.rowSpanThu),
     },
     {
       title: "Ngày",
       dataIndex: "ngay",
       key: "ngay",
-      width: 72,
+      width: COT.ngayTuan,
       align: "center",
       onCell: (row) => ({ rowSpan: row.rowSpanNgay }),
     },
@@ -125,7 +153,7 @@ const BangTatCaLich = ({
       title: "Ngày",
       dataIndex: "ngay",
       key: "ngay",
-      width: 110,
+      width: COT.ngayThang,
       align: "center",
       onCell: (row) => ({ rowSpan: row.rowSpanNgay }),
     },
@@ -133,9 +161,10 @@ const BangTatCaLich = ({
       title: "Thứ",
       dataIndex: "thu",
       key: "thu",
-      width: 72,
+      width: COT.thu,
       align: "center",
-      onCell: (row) => ({ rowSpan: row.rowSpanThu }),
+      onHeaderCell: () => ({ className: CLASS_O_THU_BANG }),
+      onCell: (row) => taoOnCellThu(row.rowSpanThu),
     },
     ...(cotChiTiet as ColumnsType<DongBangThangTatCaLich>),
   ]
@@ -170,8 +199,9 @@ const BangTatCaLich = ({
             loading={dangTai}
             pagination={false}
             size="small"
-            scroll={{ x: 1020, y: chieuCaoBody }}
-            className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600 [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
+            tableLayout="fixed"
+            scroll={{ x: SCROLL_X_THANG, y: chieuCaoBody }}
+            className={CLASS_BANG}
             locale={{ emptyText }}
           />
         ) : cheDoHienThi === "tuan" ? (
@@ -182,8 +212,9 @@ const BangTatCaLich = ({
             loading={dangTai}
             pagination={false}
             size="small"
-            scroll={{ x: 980, y: chieuCaoBody }}
-            className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600 [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
+            tableLayout="fixed"
+            scroll={{ x: SCROLL_X_TUAN, y: chieuCaoBody }}
+            className={CLASS_BANG}
             locale={{ emptyText }}
           />
         ) : (
@@ -194,8 +225,9 @@ const BangTatCaLich = ({
             loading={dangTai}
             pagination={false}
             size="small"
-            scroll={{ x: 860, y: chieuCaoBody }}
-            className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600 [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
+            tableLayout="fixed"
+            scroll={{ x: SCROLL_X_NGAY, y: chieuCaoBody }}
+            className={CLASS_BANG}
             locale={{ emptyText }}
           />
         )}

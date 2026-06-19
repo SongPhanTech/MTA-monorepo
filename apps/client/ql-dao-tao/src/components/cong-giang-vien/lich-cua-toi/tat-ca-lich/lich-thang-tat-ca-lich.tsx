@@ -5,6 +5,7 @@ import {
   layKhoangThang,
   taoNgayTrongLichThang,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-giang-day/utils"
+import { CLASS_TIEU_DE_THU, TIEU_DE_THU } from "@components/cong-giang-vien/lich-cua-toi/utils"
 import { cn } from "@workspace/ui/lib/utils"
 import { Spin } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
@@ -18,7 +19,6 @@ interface LichThangTatCaLichProps {
   onChonNgay?: (ngay: Dayjs) => void
 }
 
-const TIEU_DE_THU = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"] as const
 const SO_SU_KIEN_TOI_DA = 3
 
 const formatGioSuKien = (suKien: DongTatCaLich) => {
@@ -65,12 +65,9 @@ const LichThangTatCaLich = ({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="min-h-0 flex-1 overflow-auto">
-        <div className="sticky top-0 z-10 grid grid-cols-7 border-b border-gray-200 bg-white">
+        <div className="sticky top-0 z-10 grid grid-cols-7 border-b border-cgv-green/30 bg-cgv-green/10">
           {TIEU_DE_THU.map((thu) => (
-            <div
-              key={thu}
-              className="border-l border-gray-100 px-1 py-2 text-center text-xs font-medium text-gray-600 first:border-l-0"
-            >
+            <div key={thu} className={CLASS_TIEU_DE_THU}>
               {thu}
             </div>
           ))}

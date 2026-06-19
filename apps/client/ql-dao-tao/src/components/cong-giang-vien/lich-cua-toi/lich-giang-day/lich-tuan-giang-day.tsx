@@ -12,6 +12,7 @@ import {
   gioTrongTimeline,
   tinhViTriTimeline,
 } from "@components/cong-giang-vien/lich-cua-toi/timeline/constants"
+import { CLASS_TIEU_DE_THU } from "@components/cong-giang-vien/lich-cua-toi/utils"
 import { LOAI_LICH_META } from "@components/cong-giang-vien/giang-vien/types"
 import { cn } from "@workspace/ui/lib/utils"
 import { Empty, Spin } from "antd"
@@ -72,7 +73,7 @@ const LichTuanGiangDay = ({ danhSach, dauTuan, dangTai }: LichTuanGiangDayProps)
     <div className="flex h-full min-h-0 flex-col gap-2">
       <div ref={vungCuonRef} className="min-h-0 flex-1 overflow-auto">
         <div className="min-w-[840px]">
-          <div className="sticky top-0 z-10 flex border-b border-gray-200 bg-white">
+          <div className="sticky top-0 z-10 flex border-b border-cgv-green/30 bg-cgv-green/10">
             <div className="w-11 shrink-0" />
             <div className="grid min-w-0 flex-1 grid-cols-7">
               {ngayTrongTuan.map((ngay) => {
@@ -82,13 +83,11 @@ const LichTuanGiangDay = ({ danhSach, dauTuan, dangTai }: LichTuanGiangDayProps)
                     key={ngay.format("YYYY-MM-DD")}
                     ref={laHomNay ? cotHomNayRef : undefined}
                     className={cn(
-                      "border-l border-gray-100 px-1 py-2 text-center first:border-l-0",
-                      laHomNay && "bg-cgv-green/20"
+                      CLASS_TIEU_DE_THU,
+                      laHomNay && "bg-cgv-green/35 ring-1 ring-inset ring-cgv-green-dark/30"
                     )}
                   >
-                    <div className="text-xs font-medium text-gray-700">
-                      {formatNhanNgayTuan(ngay)}
-                    </div>
+                    <div className="truncate">{formatNhanNgayTuan(ngay)}</div>
                     {laHomNay ? (
                       <span className="mt-1 inline-block rounded-full bg-cgv-green px-2 py-0.5 text-[10px] font-medium text-cgv-green-dark">
                         Hôm nay

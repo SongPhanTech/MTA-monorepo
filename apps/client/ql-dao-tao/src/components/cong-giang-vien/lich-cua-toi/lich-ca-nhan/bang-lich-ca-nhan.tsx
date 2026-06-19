@@ -6,6 +6,7 @@ import type {
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
 import { MAU_LOAI_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import type { CheDoHienThiLich } from "@components/cong-giang-vien/lich-cua-toi/types"
+import { CLASS_O_THU_BANG, taoOnCellThu } from "@components/cong-giang-vien/lich-cua-toi/utils"
 import EditIcon from "@components/icons/edit"
 import DeleteIcon from "@components/icons/delete"
 import { Button, Input, Table } from "antd"
@@ -148,7 +149,8 @@ const BangLichCaNhan = ({
       key: "thu",
       width: 72,
       align: "center",
-      onCell: (row) => ({ rowSpan: row.rowSpanThu }),
+      onHeaderCell: () => ({ className: CLASS_O_THU_BANG }),
+      onCell: (row) => taoOnCellThu(row.rowSpanThu),
     },
     {
       title: "Ngày",

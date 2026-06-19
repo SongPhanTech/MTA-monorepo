@@ -12,6 +12,7 @@ import {
   formatNhanNgayTuan,
   taoNgayTrongTuan,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-giang-day/utils"
+import { CLASS_TIEU_DE_THU } from "@components/cong-giang-vien/lich-cua-toi/utils"
 import { cn } from "@workspace/ui/lib/utils"
 import { Empty, Spin } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
@@ -88,7 +89,7 @@ const LichTuanTatCaLich = ({ danhSach, dauTuan, tags, dangTai }: LichTuanTatCaLi
     <div className="flex h-full min-h-0 flex-col">
       <div ref={vungCuonRef} className="min-h-0 flex-1 overflow-auto">
         <div className="min-w-[840px]">
-          <div className="sticky top-0 z-10 flex border-b border-gray-200 bg-white pb-2">
+          <div className="sticky top-0 z-10 flex border-b border-cgv-green/30 bg-cgv-green/10 pb-2">
             <div className="w-11 shrink-0" />
             <div className="grid min-w-0 flex-1 grid-cols-7">
               {ngayTrongTuan.map((ngay) => {
@@ -98,8 +99,8 @@ const LichTuanTatCaLich = ({ danhSach, dauTuan, tags, dangTai }: LichTuanTatCaLi
                     key={ngay.format("YYYY-MM-DD")}
                     ref={laHomNay ? cotHomNayRef : undefined}
                     className={cn(
-                      "truncate px-1 text-center text-xs font-medium text-gray-700",
-                      laHomNay && "text-cgv-green-dark"
+                      CLASS_TIEU_DE_THU,
+                      laHomNay && "bg-cgv-green/35 ring-1 ring-inset ring-cgv-green-dark/30"
                     )}
                   >
                     {formatNhanNgayTuan(ngay)}
