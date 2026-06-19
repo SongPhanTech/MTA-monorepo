@@ -197,7 +197,7 @@ const QUESTION_TYPE_LABELS: Record<QuestionType, string> = {
   [QuestionType.MULTIPLE_CHOICE]: "Trắc nghiệm nhiều đáp án",
   [QuestionType.FILL_IN_BLANK]: "Điền khuyết",
   [QuestionType.ORDERING]: "Sắp xếp",
-  [CLUSTER_QUESTION_TYPE]: "Câu hỏi chùm",
+  [QuestionType.CLUSTER]: "Câu hỏi chùm",
 }
 
 const QUESTION_TYPE_OPTIONS: Array<{
