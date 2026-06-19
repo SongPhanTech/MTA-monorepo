@@ -46,7 +46,9 @@ const OChiSoThongKe = ({
         : `rounded-lg ${compact ? "p-2" : "p-3"} ${MAU_NEN[variant]}`
     }`}
   >
-    <p className={`m-0 text-gray-500 ${compact ? "text-[10px] leading-tight" : "text-xs"}`}>{label}</p>
+    <p className={`m-0 text-gray-500 ${compact ? "text-[10px] leading-tight" : "text-xs"}`}>
+      {label}
+    </p>
     {icon ? (
       <div
         className={`flex shrink-0 items-center justify-center rounded-xl shadow-sm ${

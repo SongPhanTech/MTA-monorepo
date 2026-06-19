@@ -85,10 +85,7 @@ const OThongKe = ({
 
 const TheHeaderKetQuaHocTap = ({ data }: { data: DuLieuHeaderKetQuaHocTap }) => (
   <div className="flex flex-col gap-4 xl:flex-row xl:items-stretch">
-    <Card
-      className="flex-1 rounded-xl shadow-sm"
-      styles={{ body: { padding: "20px 24px" } }}
-    >
+    <Card className="flex-1 rounded-xl shadow-sm" styles={{ body: { padding: "20px 24px" } }}>
       <div className="flex flex-col gap-5 lg:flex-row lg:items-stretch">
         <div className="flex shrink-0 gap-4 lg:w-[220px] lg:flex-col lg:items-center lg:text-center">
           <Avatar
@@ -128,11 +125,7 @@ const TheHeaderKetQuaHocTap = ({ data }: { data: DuLieuHeaderKetQuaHocTap }) => 
         <div className="hidden w-px shrink-0 bg-gray-200 lg:block" />
 
         <div className="min-w-0 flex-1 lg:max-w-[240px]">
-          <HangThongTin
-            icon={<GraduationCap size={15} />}
-            nhan="Khóa học"
-            giaTri={data.khoaHoc}
-          />
+          <HangThongTin icon={<GraduationCap size={15} />} nhan="Khóa học" giaTri={data.khoaHoc} />
           <HangThongTin icon={<BookOpen size={15} />} nhan="Khoa" giaTri={data.khoa} />
           <HangThongTin
             icon={<BookOpen size={15} />}

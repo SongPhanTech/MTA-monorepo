@@ -621,6 +621,7 @@ enum QuestionType {
   MULTIPLE_CHOICE
   FILL_IN_BLANK
   ORDERING
+  CLUSTER
 
   @@schema("khao-thi")
 }
@@ -6438,7 +6439,8 @@ model Question {
   point                 Float                  @default(1)
   explanation           String?
   isAutoGraded          Boolean                @default(false)
-  difficult             Difficult
+  difficult             Difficult?
+  order                 Int?
   multipleChoiceOptions MultipleChoiceOption[]
   fillInBlankSlots      FillInBlankSlot[]
   orderingItems         OrderingItem[]
@@ -6446,8 +6448,13 @@ model Question {
   questionBankId        String
   knowledgeBlock        KnowledgeBlock?        @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId      String?
+  parentQuestion        Question?              @relation("QuestionCluster", fields: [parentQuestionId], references: [id], onDelete: Cascade)
+  parentQuestionId      String?
+  subQuestions          Question[]             @relation("QuestionCluster")
   sessionQuestions      ExamBankQuestion[]
 
+  @@unique([parentQuestionId, order])
+  @@index([parentQuestionId])
   @@schema("khao-thi")
 }
 

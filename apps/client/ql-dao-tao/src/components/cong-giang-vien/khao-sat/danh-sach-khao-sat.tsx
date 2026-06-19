@@ -70,10 +70,7 @@ const DanhSachKhaoSat = ({ nhomTheoTrangThai, isLoading }: DanhSachKhaoSatProps)
                 {nhomMo[nhom.key] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
               </button>
             </div>
-            {nhomMo[nhom.key] &&
-              danhSach.map((ks) => (
-                <CardKhaoSat key={ks.id} khaoSat={ks} />
-              ))}
+            {nhomMo[nhom.key] && danhSach.map((ks) => <CardKhaoSat key={ks.id} khaoSat={ks} />)}
           </div>
         )
       })}

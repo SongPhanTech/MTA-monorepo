@@ -121,12 +121,7 @@ function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
   }, [topicSlected])
 
   if (isLecturerSurvey) {
-    return (
-      <CauHoiKhaoSat
-        surveyTopicId={topicSlected?.id || ""}
-        type={topicSlected?.type || ""}
-      />
-    )
+    return <CauHoiKhaoSat surveyTopicId={topicSlected?.id || ""} type={topicSlected?.type || ""} />
   }
 
   return (

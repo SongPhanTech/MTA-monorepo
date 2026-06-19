@@ -25244,6 +25244,11 @@ const metadata = {
                 }, difficult: {
                     name: "difficult",
                     type: "Difficult",
+                    isOptional: true,
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                    isOptional: true,
                 }, multipleChoiceOptions: {
                     name: "multipleChoiceOptions",
                     type: "MultipleChoiceOption",
@@ -25290,6 +25295,29 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'knowledgeBlock',
+                }, parentQuestion: {
+                    name: "parentQuestion",
+                    type: "Question",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "QuestionCluster" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
+                    backLink: 'subQuestions',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "parentQuestionId" },
+                }, parentQuestionId: {
+                    name: "parentQuestionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'parentQuestion',
+                }, subQuestions: {
+                    name: "subQuestions",
+                    type: "Question",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "QuestionCluster" }] }],
+                    backLink: 'parentQuestion',
                 }, sessionQuestions: {
                     name: "sessionQuestions",
                     type: "ExamBankQuestion",
@@ -25304,9 +25332,12 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, parentQuestionId_order: {
+                    name: "parentQuestionId_order",
+                    fields: ["parentQuestionId", "order"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         multipleChoiceOption: {
             name: 'MultipleChoiceOption', fields: {

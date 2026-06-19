@@ -104,7 +104,15 @@ function CauHoiKhaoSat({
           }
         : {}),
     }),
-    [filters.code, filters.name, filters.surveyId, filters.surveyQuestionType, id, isLecturerSurvey, surveyTopicId]
+    [
+      filters.code,
+      filters.name,
+      filters.surveyId,
+      filters.surveyQuestionType,
+      id,
+      isLecturerSurvey,
+      surveyTopicId,
+    ]
   )
 
   const { data = [] } = useFindManySurveyQuestion(

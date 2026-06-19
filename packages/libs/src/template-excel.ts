@@ -336,7 +336,6 @@ async function handleExcelJSDefault(
         excelRow.commit()
         currentRow++
       }
-
     }
 
     if (sheetOption.thinBorderRange) {

@@ -22,7 +22,8 @@ const baseSchema = z.object({
     point: z.number().default(1),
     explanation: z.string().nullish(),
     isAutoGraded: z.boolean().default(false),
-    difficult: DifficultSchema,
+    difficult: DifficultSchema.nullish(),
+    order: z.number().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -39,7 +40,8 @@ const baseSchemaWithoutDefaults = z.object({
     point: z.number(),
     explanation: z.string().nullish(),
     isAutoGraded: z.boolean(),
-    difficult: DifficultSchema,
+    difficult: DifficultSchema.nullish(),
+    order: z.number().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -48,12 +50,15 @@ const relationSchema = z.object({
     orderingItems: z.array(z.unknown()).optional(),
     questionBank: z.record(z.string(), z.unknown()),
     knowledgeBlock: z.record(z.string(), z.unknown()).optional(),
+    parentQuestion: z.record(z.string(), z.unknown()).optional(),
+    subQuestions: z.array(z.unknown()).optional(),
     sessionQuestions: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     questionBankId: z.string(),
     knowledgeBlockId: z.string().nullish(),
+    parentQuestionId: z.string().nullish(),
 }
 );
 
@@ -94,7 +99,8 @@ export const QuestionPrismaUpdateSchema = z.object({
     point: z.union([z.number(), z.record(z.string(), z.unknown())]),
     explanation: z.string().nullish(),
     isAutoGraded: z.boolean(),
-    difficult: DifficultSchema
+    difficult: DifficultSchema.nullish(),
+    order: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 

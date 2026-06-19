@@ -260,19 +260,19 @@ const BangDiemHocKy = ({
       </div>
 
       <div className="flex shrink-0 flex-wrap items-center gap-x-8 gap-y-2 border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
-          <span>
-            Tổng số học phần: <b className="text-cgv-green-dark">{tongHocPhan}</b>
-          </span>
-          <span>
-            Tổng số tín chỉ: <b className="text-cgv-green-dark">{tongTinChi}</b>
-          </span>
-          <span>
-            GPA học kỳ: <b className="text-blue-600">{gpaHocKy}</b>
-          </span>
-          <span>
-            Xếp loại học lực: <b className="text-cgv-green-dark">{xepLoaiHocLuc}</b>
-          </span>
-        </div>
+        <span>
+          Tổng số học phần: <b className="text-cgv-green-dark">{tongHocPhan}</b>
+        </span>
+        <span>
+          Tổng số tín chỉ: <b className="text-cgv-green-dark">{tongTinChi}</b>
+        </span>
+        <span>
+          GPA học kỳ: <b className="text-blue-600">{gpaHocKy}</b>
+        </span>
+        <span>
+          Xếp loại học lực: <b className="text-cgv-green-dark">{xepLoaiHocLuc}</b>
+        </span>
+      </div>
     </div>
   )
 

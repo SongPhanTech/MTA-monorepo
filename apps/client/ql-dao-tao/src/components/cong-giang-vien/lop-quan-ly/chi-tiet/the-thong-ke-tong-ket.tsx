@@ -62,7 +62,11 @@ const TheThongKeTongKet = ({ thongKe }: TheThongKeTongKetProps) => {
 
       <div className="flex flex-col gap-3">
         <div className="grid grid-cols-2 gap-3 sm:max-w-md">
-          <TheDon tieuDe="Tổng sinh viên" giaTri={thongKe.tongSinhVien} icon={<Users size={20} />} />
+          <TheDon
+            tieuDe="Tổng sinh viên"
+            giaTri={thongKe.tongSinhVien}
+            icon={<Users size={20} />}
+          />
           <TheDon
             tieuDe="Điểm TB cả lớp"
             giaTri={dinhDangGpa(thongKe.diemTrungBinh)}

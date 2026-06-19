@@ -4212,8 +4212,10 @@ exports.Prisma.QuestionScalarFieldEnum = {
   explanation: 'explanation',
   isAutoGraded: 'isAutoGraded',
   difficult: 'difficult',
+  order: 'order',
   questionBankId: 'questionBankId',
-  knowledgeBlockId: 'knowledgeBlockId'
+  knowledgeBlockId: 'knowledgeBlockId',
+  parentQuestionId: 'parentQuestionId'
 };
 
 exports.Prisma.MultipleChoiceOptionScalarFieldEnum = {
@@ -7601,7 +7603,8 @@ exports.Prisma.QuestionOrderByRelevanceFieldEnum = {
   content: 'content',
   explanation: 'explanation',
   questionBankId: 'questionBankId',
-  knowledgeBlockId: 'knowledgeBlockId'
+  knowledgeBlockId: 'knowledgeBlockId',
+  parentQuestionId: 'parentQuestionId'
 };
 
 exports.Prisma.MultipleChoiceOptionOrderByRelevanceFieldEnum = {
@@ -8583,7 +8586,8 @@ exports.QuestionType = exports.$Enums.QuestionType = {
   SINGLE_CHOICE: 'SINGLE_CHOICE',
   MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
   FILL_IN_BLANK: 'FILL_IN_BLANK',
-  ORDERING: 'ORDERING'
+  ORDERING: 'ORDERING',
+  CLUSTER: 'CLUSTER'
 };
 
 exports.Difficult = exports.$Enums.Difficult = {

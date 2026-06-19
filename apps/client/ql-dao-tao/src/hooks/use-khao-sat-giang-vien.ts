@@ -74,17 +74,19 @@ const useKhaoSatGiangVien = ({
 
   const danhSach = useMemo<KhaoSatItem[]>(() => {
     const raw = data?.status === 200 ? (data.data.data as KhaoSatItem[]) : []
-    return raw
-      // Chỉ lấy khảo sát chung (loại bỏ khảo sát đánh giá giảng viên - CLUSTER)
-      .filter((ks) => ks.surveyTopic?.type === "SINGLE")
-      .map((ks) => {
-        const tenHocKyNamHoc = ks.semesterId ? mapNamHoc.get(ks.semesterId) : undefined
-        return {
-          ...ks,
-          tenHocKy: tenHocKyNamHoc?.tenHocKy,
-          tenNamHoc: tenHocKyNamHoc?.tenNamHoc,
-        }
-      })
+    return (
+      raw
+        // Chỉ lấy khảo sát chung (loại bỏ khảo sát đánh giá giảng viên - CLUSTER)
+        .filter((ks) => ks.surveyTopic?.type === "SINGLE")
+        .map((ks) => {
+          const tenHocKyNamHoc = ks.semesterId ? mapNamHoc.get(ks.semesterId) : undefined
+          return {
+            ...ks,
+            tenHocKy: tenHocKyNamHoc?.tenHocKy,
+            tenNamHoc: tenHocKyNamHoc?.tenNamHoc,
+          }
+        })
+    )
   }, [data, mapNamHoc])
 
   const tongSo = danhSach.length

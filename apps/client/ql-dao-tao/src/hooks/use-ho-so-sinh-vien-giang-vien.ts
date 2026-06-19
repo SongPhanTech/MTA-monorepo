@@ -260,8 +260,7 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
         tongTinChi,
         gpa,
         xepLoaiHocLuc: ketQuaKy?.rank?.classification ?? null,
-        diemRenLuyen:
-          ketQuaKy?.conductScore != null ? `${ketQuaKy.conductScore} / 100` : null,
+        diemRenLuyen: ketQuaKy?.conductScore != null ? `${ketQuaKy.conductScore} / 100` : null,
       },
     }
   }, [student])

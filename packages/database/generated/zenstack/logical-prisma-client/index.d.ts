@@ -6177,7 +6177,8 @@ export namespace $Enums {
         SINGLE_CHOICE: 'SINGLE_CHOICE',
         MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
         FILL_IN_BLANK: 'FILL_IN_BLANK',
-        ORDERING: 'ORDERING'
+        ORDERING: 'ORDERING',
+        CLUSTER: 'CLUSTER'
     };
     export type QuestionType = (typeof QuestionType)[keyof typeof QuestionType];
     export const Difficult: {
@@ -10537,8 +10538,10 @@ export namespace Prisma {
         explanation: 'explanation',
         isAutoGraded: 'isAutoGraded',
         difficult: 'difficult',
+        order: 'order',
         questionBankId: 'questionBankId',
-        knowledgeBlockId: 'knowledgeBlockId'
+        knowledgeBlockId: 'knowledgeBlockId',
+        parentQuestionId: 'parentQuestionId'
     };
     export const MultipleChoiceOptionScalarFieldEnum: {
         id: 'id',
@@ -13641,7 +13644,8 @@ export namespace Prisma {
         content: 'content',
         explanation: 'explanation',
         questionBankId: 'questionBankId',
-        knowledgeBlockId: 'knowledgeBlockId'
+        knowledgeBlockId: 'knowledgeBlockId',
+        parentQuestionId: 'parentQuestionId'
     };
     export const MultipleChoiceOptionOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -100077,6 +100081,8 @@ export namespace Prisma {
         orderingItems<T extends Question$orderingItemsArgs<ExtArgs> = {}>(args?: Subset<T, Question$orderingItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderingItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         questionBank<T extends QuestionBankDefaultArgs<ExtArgs> = {}>(args?: Subset<T, QuestionBankDefaultArgs<ExtArgs>>): Prisma__QuestionBankClient<$Result.GetResult<Prisma.$QuestionBankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         knowledgeBlock<T extends Question$knowledgeBlockArgs<ExtArgs> = {}>(args?: Subset<T, Question$knowledgeBlockArgs<ExtArgs>>): Prisma__KnowledgeBlockClient<$Result.GetResult<Prisma.$KnowledgeBlockPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        parentQuestion<T extends Question$parentQuestionArgs<ExtArgs> = {}>(args?: Subset<T, Question$parentQuestionArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        subQuestions<T extends Question$subQuestionsArgs<ExtArgs> = {}>(args?: Subset<T, Question$subQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         sessionQuestions<T extends Question$sessionQuestionsArgs<ExtArgs> = {}>(args?: Subset<T, Question$sessionQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamBankQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -100118,8 +100124,10 @@ export namespace Prisma {
         readonly explanation: FieldRef<"Question", 'String'>;
         readonly isAutoGraded: FieldRef<"Question", 'Boolean'>;
         readonly difficult: FieldRef<"Question", 'Difficult'>;
+        readonly order: FieldRef<"Question", 'Int'>;
         readonly questionBankId: FieldRef<"Question", 'String'>;
         readonly knowledgeBlockId: FieldRef<"Question", 'String'>;
+        readonly parentQuestionId: FieldRef<"Question", 'String'>;
     }
 
     export interface MultipleChoiceOptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -150005,12 +150013,14 @@ export namespace Prisma {
         multipleChoiceOptions: number
         fillInBlankSlots: number
         orderingItems: number
+        subQuestions: number
         sessionQuestions: number
     };
     export type QuestionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         multipleChoiceOptions?: boolean | QuestionCountOutputTypeCountMultipleChoiceOptionsArgs
         fillInBlankSlots?: boolean | QuestionCountOutputTypeCountFillInBlankSlotsArgs
         orderingItems?: boolean | QuestionCountOutputTypeCountOrderingItemsArgs
+        subQuestions?: boolean | QuestionCountOutputTypeCountSubQuestionsArgs
         sessionQuestions?: boolean | QuestionCountOutputTypeCountSessionQuestionsArgs
     };
     /**
@@ -150039,6 +150049,12 @@ export namespace Prisma {
      */
     export type QuestionCountOutputTypeCountOrderingItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: OrderingItemWhereInput
+    };
+    /**
+     * QuestionCountOutputType without action
+     */
+    export type QuestionCountOutputTypeCountSubQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: QuestionWhereInput
     };
     /**
      * QuestionCountOutputType without action
@@ -330104,9 +330120,11 @@ export namespace Prisma {
     };
     export type QuestionAvgAggregateOutputType = {
         point: number | null
+        order: number | null
     };
     export type QuestionSumAggregateOutputType = {
         point: number | null
+        order: number | null
     };
     export type QuestionMinAggregateOutputType = {
         id: string | null
@@ -330123,8 +330141,10 @@ export namespace Prisma {
         explanation: string | null
         isAutoGraded: boolean | null
         difficult: $Enums.Difficult | null
+        order: number | null
         questionBankId: string | null
         knowledgeBlockId: string | null
+        parentQuestionId: string | null
     };
     export type QuestionMaxAggregateOutputType = {
         id: string | null
@@ -330141,8 +330161,10 @@ export namespace Prisma {
         explanation: string | null
         isAutoGraded: boolean | null
         difficult: $Enums.Difficult | null
+        order: number | null
         questionBankId: string | null
         knowledgeBlockId: string | null
+        parentQuestionId: string | null
     };
     export type QuestionCountAggregateOutputType = {
         id: number
@@ -330159,15 +330181,19 @@ export namespace Prisma {
         explanation: number
         isAutoGraded: number
         difficult: number
+        order: number
         questionBankId: number
         knowledgeBlockId: number
+        parentQuestionId: number
         _all: number
     };
     export type QuestionAvgAggregateInputType = {
         point?: true
+        order?: true
     };
     export type QuestionSumAggregateInputType = {
         point?: true
+        order?: true
     };
     export type QuestionMinAggregateInputType = {
         id?: true
@@ -330184,8 +330210,10 @@ export namespace Prisma {
         explanation?: true
         isAutoGraded?: true
         difficult?: true
+        order?: true
         questionBankId?: true
         knowledgeBlockId?: true
+        parentQuestionId?: true
     };
     export type QuestionMaxAggregateInputType = {
         id?: true
@@ -330202,8 +330230,10 @@ export namespace Prisma {
         explanation?: true
         isAutoGraded?: true
         difficult?: true
+        order?: true
         questionBankId?: true
         knowledgeBlockId?: true
+        parentQuestionId?: true
     };
     export type QuestionCountAggregateInputType = {
         id?: true
@@ -330220,8 +330250,10 @@ export namespace Prisma {
         explanation?: true
         isAutoGraded?: true
         difficult?: true
+        order?: true
         questionBankId?: true
         knowledgeBlockId?: true
+        parentQuestionId?: true
         _all?: true
     };
     export type QuestionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -330318,9 +330350,11 @@ export namespace Prisma {
         point: number
         explanation: string | null
         isAutoGraded: boolean
-        difficult: $Enums.Difficult
+        difficult: $Enums.Difficult | null
+        order: number | null
         questionBankId: string
         knowledgeBlockId: string | null
+        parentQuestionId: string | null
         _count: QuestionCountAggregateOutputType | null
         _avg: QuestionAvgAggregateOutputType | null
         _sum: QuestionSumAggregateOutputType | null
@@ -330354,13 +330388,17 @@ export namespace Prisma {
         explanation?: boolean
         isAutoGraded?: boolean
         difficult?: boolean
+        order?: boolean
         questionBankId?: boolean
         knowledgeBlockId?: boolean
+        parentQuestionId?: boolean
         multipleChoiceOptions?: boolean | Question$multipleChoiceOptionsArgs<ExtArgs>
         fillInBlankSlots?: boolean | Question$fillInBlankSlotsArgs<ExtArgs>
         orderingItems?: boolean | Question$orderingItemsArgs<ExtArgs>
         questionBank?: boolean | QuestionBankDefaultArgs<ExtArgs>
         knowledgeBlock?: boolean | Question$knowledgeBlockArgs<ExtArgs>
+        parentQuestion?: boolean | Question$parentQuestionArgs<ExtArgs>
+        subQuestions?: boolean | Question$subQuestionsArgs<ExtArgs>
         sessionQuestions?: boolean | Question$sessionQuestionsArgs<ExtArgs>
         _count?: boolean | QuestionCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["question"]>;
@@ -330379,10 +330417,13 @@ export namespace Prisma {
         explanation?: boolean
         isAutoGraded?: boolean
         difficult?: boolean
+        order?: boolean
         questionBankId?: boolean
         knowledgeBlockId?: boolean
+        parentQuestionId?: boolean
         questionBank?: boolean | QuestionBankDefaultArgs<ExtArgs>
         knowledgeBlock?: boolean | Question$knowledgeBlockArgs<ExtArgs>
+        parentQuestion?: boolean | Question$parentQuestionArgs<ExtArgs>
     }, ExtArgs["result"]["question"]>;
     export type QuestionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -330399,10 +330440,13 @@ export namespace Prisma {
         explanation?: boolean
         isAutoGraded?: boolean
         difficult?: boolean
+        order?: boolean
         questionBankId?: boolean
         knowledgeBlockId?: boolean
+        parentQuestionId?: boolean
         questionBank?: boolean | QuestionBankDefaultArgs<ExtArgs>
         knowledgeBlock?: boolean | Question$knowledgeBlockArgs<ExtArgs>
+        parentQuestion?: boolean | Question$parentQuestionArgs<ExtArgs>
     }, ExtArgs["result"]["question"]>;
     export type QuestionSelectScalar = {
         id?: boolean
@@ -330419,26 +330463,32 @@ export namespace Prisma {
         explanation?: boolean
         isAutoGraded?: boolean
         difficult?: boolean
+        order?: boolean
         questionBankId?: boolean
         knowledgeBlockId?: boolean
+        parentQuestionId?: boolean
     };
-    export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "content" | "type" | "point" | "explanation" | "isAutoGraded" | "difficult" | "questionBankId" | "knowledgeBlockId", ExtArgs["result"]["question"]>;
+    export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "content" | "type" | "point" | "explanation" | "isAutoGraded" | "difficult" | "order" | "questionBankId" | "knowledgeBlockId" | "parentQuestionId", ExtArgs["result"]["question"]>;
     export type QuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         multipleChoiceOptions?: boolean | Question$multipleChoiceOptionsArgs<ExtArgs>
         fillInBlankSlots?: boolean | Question$fillInBlankSlotsArgs<ExtArgs>
         orderingItems?: boolean | Question$orderingItemsArgs<ExtArgs>
         questionBank?: boolean | QuestionBankDefaultArgs<ExtArgs>
         knowledgeBlock?: boolean | Question$knowledgeBlockArgs<ExtArgs>
+        parentQuestion?: boolean | Question$parentQuestionArgs<ExtArgs>
+        subQuestions?: boolean | Question$subQuestionsArgs<ExtArgs>
         sessionQuestions?: boolean | Question$sessionQuestionsArgs<ExtArgs>
         _count?: boolean | QuestionCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type QuestionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         questionBank?: boolean | QuestionBankDefaultArgs<ExtArgs>
         knowledgeBlock?: boolean | Question$knowledgeBlockArgs<ExtArgs>
+        parentQuestion?: boolean | Question$parentQuestionArgs<ExtArgs>
     };
     export type QuestionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         questionBank?: boolean | QuestionBankDefaultArgs<ExtArgs>
         knowledgeBlock?: boolean | Question$knowledgeBlockArgs<ExtArgs>
+        parentQuestion?: boolean | Question$parentQuestionArgs<ExtArgs>
     };
     export type $QuestionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "Question"
@@ -330448,6 +330498,8 @@ export namespace Prisma {
             orderingItems: Prisma.$OrderingItemPayload<ExtArgs>[]
             questionBank: Prisma.$QuestionBankPayload<ExtArgs>
             knowledgeBlock: Prisma.$KnowledgeBlockPayload<ExtArgs> | null
+            parentQuestion: Prisma.$QuestionPayload<ExtArgs> | null
+            subQuestions: Prisma.$QuestionPayload<ExtArgs>[]
             sessionQuestions: Prisma.$ExamBankQuestionPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -330464,9 +330516,11 @@ export namespace Prisma {
             point: number
             explanation: string | null
             isAutoGraded: boolean
-            difficult: $Enums.Difficult
+            difficult: $Enums.Difficult | null
+            order: number | null
             questionBankId: string
             knowledgeBlockId: string | null
+            parentQuestionId: string | null
         }, ExtArgs["result"]["question"]>
         composites: {}
     };
@@ -330937,6 +330991,47 @@ export namespace Prisma {
          */
         include?: KnowledgeBlockInclude<ExtArgs> | null
         where?: KnowledgeBlockWhereInput
+    };
+    /**
+     * Question.parentQuestion
+     */
+    export type Question$parentQuestionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Question
+         */
+        select?: QuestionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Question
+         */
+        omit?: QuestionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: QuestionInclude<ExtArgs> | null
+        where?: QuestionWhereInput
+    };
+    /**
+     * Question.subQuestions
+     */
+    export type Question$subQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Question
+         */
+        select?: QuestionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Question
+         */
+        omit?: QuestionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: QuestionInclude<ExtArgs> | null
+        where?: QuestionWhereInput
+        orderBy?: QuestionOrderByWithRelationInput | QuestionOrderByWithRelationInput[]
+        cursor?: QuestionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: QuestionScalarFieldEnum | QuestionScalarFieldEnum[]
     };
     /**
      * Question.sessionQuestions
@@ -399351,14 +399446,18 @@ export namespace Prisma {
         point?: FloatFilter<"Question"> | number
         explanation?: StringNullableFilter<"Question"> | string | null
         isAutoGraded?: BoolFilter<"Question"> | boolean
-        difficult?: EnumDifficultFilter<"Question"> | $Enums.Difficult
+        difficult?: EnumDifficultNullableFilter<"Question"> | $Enums.Difficult | null
+        order?: IntNullableFilter<"Question"> | number | null
         questionBankId?: StringFilter<"Question"> | string
         knowledgeBlockId?: StringNullableFilter<"Question"> | string | null
+        parentQuestionId?: StringNullableFilter<"Question"> | string | null
         multipleChoiceOptions?: MultipleChoiceOptionListRelationFilter
         fillInBlankSlots?: FillInBlankSlotListRelationFilter
         orderingItems?: OrderingItemListRelationFilter
         questionBank?: XOR<QuestionBankScalarRelationFilter, QuestionBankWhereInput>
         knowledgeBlock?: XOR<KnowledgeBlockNullableScalarRelationFilter, KnowledgeBlockWhereInput> | null
+        parentQuestion?: XOR<QuestionNullableScalarRelationFilter, QuestionWhereInput> | null
+        subQuestions?: QuestionListRelationFilter
         sessionQuestions?: ExamBankQuestionListRelationFilter
     };
     export type QuestionOrderByWithRelationInput = {
@@ -399375,20 +399474,25 @@ export namespace Prisma {
         point?: SortOrder
         explanation?: SortOrderInput | SortOrder
         isAutoGraded?: SortOrder
-        difficult?: SortOrder
+        difficult?: SortOrderInput | SortOrder
+        order?: SortOrderInput | SortOrder
         questionBankId?: SortOrder
         knowledgeBlockId?: SortOrderInput | SortOrder
+        parentQuestionId?: SortOrderInput | SortOrder
         multipleChoiceOptions?: MultipleChoiceOptionOrderByRelationAggregateInput
         fillInBlankSlots?: FillInBlankSlotOrderByRelationAggregateInput
         orderingItems?: OrderingItemOrderByRelationAggregateInput
         questionBank?: QuestionBankOrderByWithRelationInput
         knowledgeBlock?: KnowledgeBlockOrderByWithRelationInput
+        parentQuestion?: QuestionOrderByWithRelationInput
+        subQuestions?: QuestionOrderByRelationAggregateInput
         sessionQuestions?: ExamBankQuestionOrderByRelationAggregateInput
         _relevance?: QuestionOrderByRelevanceInput
     };
     export type QuestionWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
+        parentQuestionId_order?: QuestionParentQuestionIdOrderCompoundUniqueInput
         AND?: QuestionWhereInput | QuestionWhereInput[]
         OR?: QuestionWhereInput[]
         NOT?: QuestionWhereInput | QuestionWhereInput[]
@@ -399403,16 +399507,20 @@ export namespace Prisma {
         point?: FloatFilter<"Question"> | number
         explanation?: StringNullableFilter<"Question"> | string | null
         isAutoGraded?: BoolFilter<"Question"> | boolean
-        difficult?: EnumDifficultFilter<"Question"> | $Enums.Difficult
+        difficult?: EnumDifficultNullableFilter<"Question"> | $Enums.Difficult | null
+        order?: IntNullableFilter<"Question"> | number | null
         questionBankId?: StringFilter<"Question"> | string
         knowledgeBlockId?: StringNullableFilter<"Question"> | string | null
+        parentQuestionId?: StringNullableFilter<"Question"> | string | null
         multipleChoiceOptions?: MultipleChoiceOptionListRelationFilter
         fillInBlankSlots?: FillInBlankSlotListRelationFilter
         orderingItems?: OrderingItemListRelationFilter
         questionBank?: XOR<QuestionBankScalarRelationFilter, QuestionBankWhereInput>
         knowledgeBlock?: XOR<KnowledgeBlockNullableScalarRelationFilter, KnowledgeBlockWhereInput> | null
+        parentQuestion?: XOR<QuestionNullableScalarRelationFilter, QuestionWhereInput> | null
+        subQuestions?: QuestionListRelationFilter
         sessionQuestions?: ExamBankQuestionListRelationFilter
-    }, "id" | "code">;
+    }, "id" | "code" | "parentQuestionId_order">;
     export type QuestionOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -399427,9 +399535,11 @@ export namespace Prisma {
         point?: SortOrder
         explanation?: SortOrderInput | SortOrder
         isAutoGraded?: SortOrder
-        difficult?: SortOrder
+        difficult?: SortOrderInput | SortOrder
+        order?: SortOrderInput | SortOrder
         questionBankId?: SortOrder
         knowledgeBlockId?: SortOrderInput | SortOrder
+        parentQuestionId?: SortOrderInput | SortOrder
         _count?: QuestionCountOrderByAggregateInput
         _avg?: QuestionAvgOrderByAggregateInput
         _max?: QuestionMaxOrderByAggregateInput
@@ -399453,9 +399563,11 @@ export namespace Prisma {
         point?: FloatWithAggregatesFilter<"Question"> | number
         explanation?: StringNullableWithAggregatesFilter<"Question"> | string | null
         isAutoGraded?: BoolWithAggregatesFilter<"Question"> | boolean
-        difficult?: EnumDifficultWithAggregatesFilter<"Question"> | $Enums.Difficult
+        difficult?: EnumDifficultNullableWithAggregatesFilter<"Question"> | $Enums.Difficult | null
+        order?: IntNullableWithAggregatesFilter<"Question"> | number | null
         questionBankId?: StringWithAggregatesFilter<"Question"> | string
         knowledgeBlockId?: StringNullableWithAggregatesFilter<"Question"> | string | null
+        parentQuestionId?: StringNullableWithAggregatesFilter<"Question"> | string | null
     };
     export type MultipleChoiceOptionWhereInput = {
         AND?: MultipleChoiceOptionWhereInput | MultipleChoiceOptionWhereInput[]
@@ -432924,12 +433036,15 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
         fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
         questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
+        parentQuestion?: QuestionCreateNestedOneWithoutSubQuestionsInput
+        subQuestions?: QuestionCreateNestedManyWithoutParentQuestionInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUncheckedCreateInput = {
@@ -432946,12 +433061,15 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         questionBankId: string
         knowledgeBlockId?: string | null
+        parentQuestionId?: string | null
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
         fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
+        subQuestions?: QuestionUncheckedCreateNestedManyWithoutParentQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUpdateInput = {
@@ -432968,12 +433086,15 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
         fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
         questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
+        parentQuestion?: QuestionUpdateOneWithoutSubQuestionsNestedInput
+        subQuestions?: QuestionUpdateManyWithoutParentQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateInput = {
@@ -432990,12 +433111,15 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         questionBankId?: StringFieldUpdateOperationsInput | string
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+        parentQuestionId?: NullableStringFieldUpdateOperationsInput | string | null
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
         fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
+        subQuestions?: QuestionUncheckedUpdateManyWithoutParentQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionCreateManyInput = {
@@ -433012,9 +433136,11 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         questionBankId: string
         knowledgeBlockId?: string | null
+        parentQuestionId?: string | null
     };
     export type QuestionUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -433030,7 +433156,8 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
     };
     export type QuestionUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -433046,9 +433173,11 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         questionBankId?: StringFieldUpdateOperationsInput | string
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+        parentQuestionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type MultipleChoiceOptionCreateInput = {
         id?: string
@@ -455932,11 +456061,11 @@ export namespace Prisma {
         notIn?: $Enums.QuestionType[] | ListEnumQuestionTypeFieldRefInput<$PrismaModel>
         not?: NestedEnumQuestionTypeFilter<$PrismaModel> | $Enums.QuestionType
     };
-    export type EnumDifficultFilter<$PrismaModel = never> = {
-        equals?: $Enums.Difficult | EnumDifficultFieldRefInput<$PrismaModel>
-        in?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
-        notIn?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
-        not?: NestedEnumDifficultFilter<$PrismaModel> | $Enums.Difficult
+    export type EnumDifficultNullableFilter<$PrismaModel = never> = {
+        equals?: $Enums.Difficult | EnumDifficultFieldRefInput<$PrismaModel> | null
+        in?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel> | null
+        notIn?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel> | null
+        not?: NestedEnumDifficultNullableFilter<$PrismaModel> | $Enums.Difficult | null
     };
     export type MultipleChoiceOptionListRelationFilter = {
         every?: MultipleChoiceOptionWhereInput
@@ -455956,6 +456085,10 @@ export namespace Prisma {
     export type QuestionBankScalarRelationFilter = {
         is?: QuestionBankWhereInput
         isNot?: QuestionBankWhereInput
+    };
+    export type QuestionNullableScalarRelationFilter = {
+        is?: QuestionWhereInput | null
+        isNot?: QuestionWhereInput | null
     };
     export type ExamBankQuestionListRelationFilter = {
         every?: ExamBankQuestionWhereInput
@@ -455979,6 +456112,10 @@ export namespace Prisma {
         sort: SortOrder
         search: string
     };
+    export type QuestionParentQuestionIdOrderCompoundUniqueInput = {
+        parentQuestionId: string
+        order: number
+    };
     export type QuestionCountOrderByAggregateInput = {
         id?: SortOrder
         code?: SortOrder
@@ -455994,11 +456131,14 @@ export namespace Prisma {
         explanation?: SortOrder
         isAutoGraded?: SortOrder
         difficult?: SortOrder
+        order?: SortOrder
         questionBankId?: SortOrder
         knowledgeBlockId?: SortOrder
+        parentQuestionId?: SortOrder
     };
     export type QuestionAvgOrderByAggregateInput = {
         point?: SortOrder
+        order?: SortOrder
     };
     export type QuestionMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -456015,8 +456155,10 @@ export namespace Prisma {
         explanation?: SortOrder
         isAutoGraded?: SortOrder
         difficult?: SortOrder
+        order?: SortOrder
         questionBankId?: SortOrder
         knowledgeBlockId?: SortOrder
+        parentQuestionId?: SortOrder
     };
     export type QuestionMinOrderByAggregateInput = {
         id?: SortOrder
@@ -456033,11 +456175,14 @@ export namespace Prisma {
         explanation?: SortOrder
         isAutoGraded?: SortOrder
         difficult?: SortOrder
+        order?: SortOrder
         questionBankId?: SortOrder
         knowledgeBlockId?: SortOrder
+        parentQuestionId?: SortOrder
     };
     export type QuestionSumOrderByAggregateInput = {
         point?: SortOrder
+        order?: SortOrder
     };
     export type EnumQuestionTypeWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.QuestionType | EnumQuestionTypeFieldRefInput<$PrismaModel>
@@ -456048,14 +456193,14 @@ export namespace Prisma {
         _min?: NestedEnumQuestionTypeFilter<$PrismaModel>
         _max?: NestedEnumQuestionTypeFilter<$PrismaModel>
     };
-    export type EnumDifficultWithAggregatesFilter<$PrismaModel = never> = {
-        equals?: $Enums.Difficult | EnumDifficultFieldRefInput<$PrismaModel>
-        in?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
-        notIn?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
-        not?: NestedEnumDifficultWithAggregatesFilter<$PrismaModel> | $Enums.Difficult
-        _count?: NestedIntFilter<$PrismaModel>
-        _min?: NestedEnumDifficultFilter<$PrismaModel>
-        _max?: NestedEnumDifficultFilter<$PrismaModel>
+    export type EnumDifficultNullableWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.Difficult | EnumDifficultFieldRefInput<$PrismaModel> | null
+        in?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel> | null
+        notIn?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel> | null
+        not?: NestedEnumDifficultNullableWithAggregatesFilter<$PrismaModel> | $Enums.Difficult | null
+        _count?: NestedIntNullableFilter<$PrismaModel>
+        _min?: NestedEnumDifficultNullableFilter<$PrismaModel>
+        _max?: NestedEnumDifficultNullableFilter<$PrismaModel>
     };
     export type QuestionScalarRelationFilter = {
         is?: QuestionWhereInput
@@ -456787,6 +456932,12 @@ export namespace Prisma {
         examMatrixId?: SortOrder
         subjectVersionId?: SortOrder
     };
+    export type EnumDifficultFilter<$PrismaModel = never> = {
+        equals?: $Enums.Difficult | EnumDifficultFieldRefInput<$PrismaModel>
+        in?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
+        notIn?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
+        not?: NestedEnumDifficultFilter<$PrismaModel> | $Enums.Difficult
+    };
     export type EnumQuestionTypeNullableFilter<$PrismaModel = never> = {
         equals?: $Enums.QuestionType | EnumQuestionTypeFieldRefInput<$PrismaModel> | null
         in?: $Enums.QuestionType[] | ListEnumQuestionTypeFieldRefInput<$PrismaModel> | null
@@ -456854,6 +457005,15 @@ export namespace Prisma {
     export type ConfigExamSumOrderByAggregateInput = {
         quantity?: SortOrder
         point?: SortOrder
+    };
+    export type EnumDifficultWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.Difficult | EnumDifficultFieldRefInput<$PrismaModel>
+        in?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
+        notIn?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
+        not?: NestedEnumDifficultWithAggregatesFilter<$PrismaModel> | $Enums.Difficult
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumDifficultFilter<$PrismaModel>
+        _max?: NestedEnumDifficultFilter<$PrismaModel>
     };
     export type EnumQuestionTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.QuestionType | EnumQuestionTypeFieldRefInput<$PrismaModel> | null
@@ -482173,6 +482333,17 @@ export namespace Prisma {
         connectOrCreate?: KnowledgeBlockCreateOrConnectWithoutQuestionsInput
         connect?: KnowledgeBlockWhereUniqueInput
     };
+    export type QuestionCreateNestedOneWithoutSubQuestionsInput = {
+        create?: XOR<QuestionCreateWithoutSubQuestionsInput, QuestionUncheckedCreateWithoutSubQuestionsInput>
+        connectOrCreate?: QuestionCreateOrConnectWithoutSubQuestionsInput
+        connect?: QuestionWhereUniqueInput
+    };
+    export type QuestionCreateNestedManyWithoutParentQuestionInput = {
+        create?: XOR<QuestionCreateWithoutParentQuestionInput, QuestionUncheckedCreateWithoutParentQuestionInput> | QuestionCreateWithoutParentQuestionInput[] | QuestionUncheckedCreateWithoutParentQuestionInput[]
+        connectOrCreate?: QuestionCreateOrConnectWithoutParentQuestionInput | QuestionCreateOrConnectWithoutParentQuestionInput[]
+        createMany?: QuestionCreateManyParentQuestionInputEnvelope
+        connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    };
     export type ExamBankQuestionCreateNestedManyWithoutQuestionInput = {
         create?: XOR<ExamBankQuestionCreateWithoutQuestionInput, ExamBankQuestionUncheckedCreateWithoutQuestionInput> | ExamBankQuestionCreateWithoutQuestionInput[] | ExamBankQuestionUncheckedCreateWithoutQuestionInput[]
         connectOrCreate?: ExamBankQuestionCreateOrConnectWithoutQuestionInput | ExamBankQuestionCreateOrConnectWithoutQuestionInput[]
@@ -482197,6 +482368,12 @@ export namespace Prisma {
         createMany?: OrderingItemCreateManyQuestionInputEnvelope
         connect?: OrderingItemWhereUniqueInput | OrderingItemWhereUniqueInput[]
     };
+    export type QuestionUncheckedCreateNestedManyWithoutParentQuestionInput = {
+        create?: XOR<QuestionCreateWithoutParentQuestionInput, QuestionUncheckedCreateWithoutParentQuestionInput> | QuestionCreateWithoutParentQuestionInput[] | QuestionUncheckedCreateWithoutParentQuestionInput[]
+        connectOrCreate?: QuestionCreateOrConnectWithoutParentQuestionInput | QuestionCreateOrConnectWithoutParentQuestionInput[]
+        createMany?: QuestionCreateManyParentQuestionInputEnvelope
+        connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    };
     export type ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput = {
         create?: XOR<ExamBankQuestionCreateWithoutQuestionInput, ExamBankQuestionUncheckedCreateWithoutQuestionInput> | ExamBankQuestionCreateWithoutQuestionInput[] | ExamBankQuestionUncheckedCreateWithoutQuestionInput[]
         connectOrCreate?: ExamBankQuestionCreateOrConnectWithoutQuestionInput | ExamBankQuestionCreateOrConnectWithoutQuestionInput[]
@@ -482206,8 +482383,8 @@ export namespace Prisma {
     export type EnumQuestionTypeFieldUpdateOperationsInput = {
         set?: $Enums.QuestionType
     };
-    export type EnumDifficultFieldUpdateOperationsInput = {
-        set?: $Enums.Difficult
+    export type NullableEnumDifficultFieldUpdateOperationsInput = {
+        set?: $Enums.Difficult | null
     };
     export type MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput = {
         create?: XOR<MultipleChoiceOptionCreateWithoutQuestionInput, MultipleChoiceOptionUncheckedCreateWithoutQuestionInput> | MultipleChoiceOptionCreateWithoutQuestionInput[] | MultipleChoiceOptionUncheckedCreateWithoutQuestionInput[]
@@ -482264,6 +482441,28 @@ export namespace Prisma {
         connect?: KnowledgeBlockWhereUniqueInput
         update?: XOR<XOR<KnowledgeBlockUpdateToOneWithWhereWithoutQuestionsInput, KnowledgeBlockUpdateWithoutQuestionsInput>, KnowledgeBlockUncheckedUpdateWithoutQuestionsInput>
     };
+    export type QuestionUpdateOneWithoutSubQuestionsNestedInput = {
+        create?: XOR<QuestionCreateWithoutSubQuestionsInput, QuestionUncheckedCreateWithoutSubQuestionsInput>
+        connectOrCreate?: QuestionCreateOrConnectWithoutSubQuestionsInput
+        upsert?: QuestionUpsertWithoutSubQuestionsInput
+        disconnect?: QuestionWhereInput | boolean
+        delete?: QuestionWhereInput | boolean
+        connect?: QuestionWhereUniqueInput
+        update?: XOR<XOR<QuestionUpdateToOneWithWhereWithoutSubQuestionsInput, QuestionUpdateWithoutSubQuestionsInput>, QuestionUncheckedUpdateWithoutSubQuestionsInput>
+    };
+    export type QuestionUpdateManyWithoutParentQuestionNestedInput = {
+        create?: XOR<QuestionCreateWithoutParentQuestionInput, QuestionUncheckedCreateWithoutParentQuestionInput> | QuestionCreateWithoutParentQuestionInput[] | QuestionUncheckedCreateWithoutParentQuestionInput[]
+        connectOrCreate?: QuestionCreateOrConnectWithoutParentQuestionInput | QuestionCreateOrConnectWithoutParentQuestionInput[]
+        upsert?: QuestionUpsertWithWhereUniqueWithoutParentQuestionInput | QuestionUpsertWithWhereUniqueWithoutParentQuestionInput[]
+        createMany?: QuestionCreateManyParentQuestionInputEnvelope
+        set?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+        disconnect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+        delete?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+        connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+        update?: QuestionUpdateWithWhereUniqueWithoutParentQuestionInput | QuestionUpdateWithWhereUniqueWithoutParentQuestionInput[]
+        updateMany?: QuestionUpdateManyWithWhereWithoutParentQuestionInput | QuestionUpdateManyWithWhereWithoutParentQuestionInput[]
+        deleteMany?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
+    };
     export type ExamBankQuestionUpdateManyWithoutQuestionNestedInput = {
         create?: XOR<ExamBankQuestionCreateWithoutQuestionInput, ExamBankQuestionUncheckedCreateWithoutQuestionInput> | ExamBankQuestionCreateWithoutQuestionInput[] | ExamBankQuestionUncheckedCreateWithoutQuestionInput[]
         connectOrCreate?: ExamBankQuestionCreateOrConnectWithoutQuestionInput | ExamBankQuestionCreateOrConnectWithoutQuestionInput[]
@@ -482315,6 +482514,19 @@ export namespace Prisma {
         update?: OrderingItemUpdateWithWhereUniqueWithoutQuestionInput | OrderingItemUpdateWithWhereUniqueWithoutQuestionInput[]
         updateMany?: OrderingItemUpdateManyWithWhereWithoutQuestionInput | OrderingItemUpdateManyWithWhereWithoutQuestionInput[]
         deleteMany?: OrderingItemScalarWhereInput | OrderingItemScalarWhereInput[]
+    };
+    export type QuestionUncheckedUpdateManyWithoutParentQuestionNestedInput = {
+        create?: XOR<QuestionCreateWithoutParentQuestionInput, QuestionUncheckedCreateWithoutParentQuestionInput> | QuestionCreateWithoutParentQuestionInput[] | QuestionUncheckedCreateWithoutParentQuestionInput[]
+        connectOrCreate?: QuestionCreateOrConnectWithoutParentQuestionInput | QuestionCreateOrConnectWithoutParentQuestionInput[]
+        upsert?: QuestionUpsertWithWhereUniqueWithoutParentQuestionInput | QuestionUpsertWithWhereUniqueWithoutParentQuestionInput[]
+        createMany?: QuestionCreateManyParentQuestionInputEnvelope
+        set?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+        disconnect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+        delete?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+        connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+        update?: QuestionUpdateWithWhereUniqueWithoutParentQuestionInput | QuestionUpdateWithWhereUniqueWithoutParentQuestionInput[]
+        updateMany?: QuestionUpdateManyWithWhereWithoutParentQuestionInput | QuestionUpdateManyWithWhereWithoutParentQuestionInput[]
+        deleteMany?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
     };
     export type ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput = {
         create?: XOR<ExamBankQuestionCreateWithoutQuestionInput, ExamBankQuestionUncheckedCreateWithoutQuestionInput> | ExamBankQuestionCreateWithoutQuestionInput[] | ExamBankQuestionUncheckedCreateWithoutQuestionInput[]
@@ -483098,6 +483310,9 @@ export namespace Prisma {
         create?: XOR<KnowledgeBlockCreateWithoutConfigExamsInput, KnowledgeBlockUncheckedCreateWithoutConfigExamsInput>
         connectOrCreate?: KnowledgeBlockCreateOrConnectWithoutConfigExamsInput
         connect?: KnowledgeBlockWhereUniqueInput
+    };
+    export type EnumDifficultFieldUpdateOperationsInput = {
+        set?: $Enums.Difficult
     };
     export type NullableEnumQuestionTypeFieldUpdateOperationsInput = {
         set?: $Enums.QuestionType | null
@@ -487052,11 +487267,11 @@ export namespace Prisma {
         notIn?: $Enums.QuestionType[] | ListEnumQuestionTypeFieldRefInput<$PrismaModel>
         not?: NestedEnumQuestionTypeFilter<$PrismaModel> | $Enums.QuestionType
     };
-    export type NestedEnumDifficultFilter<$PrismaModel = never> = {
-        equals?: $Enums.Difficult | EnumDifficultFieldRefInput<$PrismaModel>
-        in?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
-        notIn?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
-        not?: NestedEnumDifficultFilter<$PrismaModel> | $Enums.Difficult
+    export type NestedEnumDifficultNullableFilter<$PrismaModel = never> = {
+        equals?: $Enums.Difficult | EnumDifficultFieldRefInput<$PrismaModel> | null
+        in?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel> | null
+        notIn?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel> | null
+        not?: NestedEnumDifficultNullableFilter<$PrismaModel> | $Enums.Difficult | null
     };
     export type NestedEnumQuestionTypeWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.QuestionType | EnumQuestionTypeFieldRefInput<$PrismaModel>
@@ -487067,14 +487282,14 @@ export namespace Prisma {
         _min?: NestedEnumQuestionTypeFilter<$PrismaModel>
         _max?: NestedEnumQuestionTypeFilter<$PrismaModel>
     };
-    export type NestedEnumDifficultWithAggregatesFilter<$PrismaModel = never> = {
-        equals?: $Enums.Difficult | EnumDifficultFieldRefInput<$PrismaModel>
-        in?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
-        notIn?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
-        not?: NestedEnumDifficultWithAggregatesFilter<$PrismaModel> | $Enums.Difficult
-        _count?: NestedIntFilter<$PrismaModel>
-        _min?: NestedEnumDifficultFilter<$PrismaModel>
-        _max?: NestedEnumDifficultFilter<$PrismaModel>
+    export type NestedEnumDifficultNullableWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.Difficult | EnumDifficultFieldRefInput<$PrismaModel> | null
+        in?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel> | null
+        notIn?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel> | null
+        not?: NestedEnumDifficultNullableWithAggregatesFilter<$PrismaModel> | $Enums.Difficult | null
+        _count?: NestedIntNullableFilter<$PrismaModel>
+        _min?: NestedEnumDifficultNullableFilter<$PrismaModel>
+        _max?: NestedEnumDifficultNullableFilter<$PrismaModel>
     };
     export type NestedEnumExamTypeNullableFilter<$PrismaModel = never> = {
         equals?: $Enums.ExamType | EnumExamTypeFieldRefInput<$PrismaModel> | null
@@ -487091,11 +487306,26 @@ export namespace Prisma {
         _min?: NestedEnumExamTypeNullableFilter<$PrismaModel>
         _max?: NestedEnumExamTypeNullableFilter<$PrismaModel>
     };
+    export type NestedEnumDifficultFilter<$PrismaModel = never> = {
+        equals?: $Enums.Difficult | EnumDifficultFieldRefInput<$PrismaModel>
+        in?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
+        notIn?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
+        not?: NestedEnumDifficultFilter<$PrismaModel> | $Enums.Difficult
+    };
     export type NestedEnumQuestionTypeNullableFilter<$PrismaModel = never> = {
         equals?: $Enums.QuestionType | EnumQuestionTypeFieldRefInput<$PrismaModel> | null
         in?: $Enums.QuestionType[] | ListEnumQuestionTypeFieldRefInput<$PrismaModel> | null
         notIn?: $Enums.QuestionType[] | ListEnumQuestionTypeFieldRefInput<$PrismaModel> | null
         not?: NestedEnumQuestionTypeNullableFilter<$PrismaModel> | $Enums.QuestionType | null
+    };
+    export type NestedEnumDifficultWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.Difficult | EnumDifficultFieldRefInput<$PrismaModel>
+        in?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
+        notIn?: $Enums.Difficult[] | ListEnumDifficultFieldRefInput<$PrismaModel>
+        not?: NestedEnumDifficultWithAggregatesFilter<$PrismaModel> | $Enums.Difficult
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumDifficultFilter<$PrismaModel>
+        _max?: NestedEnumDifficultFilter<$PrismaModel>
     };
     export type NestedEnumQuestionTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.QuestionType | EnumQuestionTypeFieldRefInput<$PrismaModel> | null
@@ -614823,11 +615053,14 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
         fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
+        parentQuestion?: QuestionCreateNestedOneWithoutSubQuestionsInput
+        subQuestions?: QuestionCreateNestedManyWithoutParentQuestionInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUncheckedCreateWithoutQuestionBankInput = {
@@ -614844,11 +615077,14 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         knowledgeBlockId?: string | null
+        parentQuestionId?: string | null
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
         fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
+        subQuestions?: QuestionUncheckedCreateNestedManyWithoutParentQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionCreateOrConnectWithoutQuestionBankInput = {
@@ -615006,9 +615242,11 @@ export namespace Prisma {
         point?: FloatFilter<"Question"> | number
         explanation?: StringNullableFilter<"Question"> | string | null
         isAutoGraded?: BoolFilter<"Question"> | boolean
-        difficult?: EnumDifficultFilter<"Question"> | $Enums.Difficult
+        difficult?: EnumDifficultNullableFilter<"Question"> | $Enums.Difficult | null
+        order?: IntNullableFilter<"Question"> | number | null
         questionBankId?: StringFilter<"Question"> | string
         knowledgeBlockId?: StringNullableFilter<"Question"> | string | null
+        parentQuestionId?: StringNullableFilter<"Question"> | string | null
     };
     export type MultipleChoiceOptionCreateWithoutQuestionInput = {
         id?: string
@@ -615169,6 +615407,114 @@ export namespace Prisma {
     export type KnowledgeBlockCreateOrConnectWithoutQuestionsInput = {
         where: KnowledgeBlockWhereUniqueInput
         create: XOR<KnowledgeBlockCreateWithoutQuestionsInput, KnowledgeBlockUncheckedCreateWithoutQuestionsInput>
+    };
+    export type QuestionCreateWithoutSubQuestionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        content: string
+        type?: $Enums.QuestionType
+        point?: number
+        explanation?: string | null
+        isAutoGraded?: boolean
+        difficult?: $Enums.Difficult | null
+        order?: number | null
+        multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
+        questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
+        knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
+        parentQuestion?: QuestionCreateNestedOneWithoutSubQuestionsInput
+        sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
+    };
+    export type QuestionUncheckedCreateWithoutSubQuestionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        content: string
+        type?: $Enums.QuestionType
+        point?: number
+        explanation?: string | null
+        isAutoGraded?: boolean
+        difficult?: $Enums.Difficult | null
+        order?: number | null
+        questionBankId: string
+        knowledgeBlockId?: string | null
+        parentQuestionId?: string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
+        sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
+    };
+    export type QuestionCreateOrConnectWithoutSubQuestionsInput = {
+        where: QuestionWhereUniqueInput
+        create: XOR<QuestionCreateWithoutSubQuestionsInput, QuestionUncheckedCreateWithoutSubQuestionsInput>
+    };
+    export type QuestionCreateWithoutParentQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        content: string
+        type?: $Enums.QuestionType
+        point?: number
+        explanation?: string | null
+        isAutoGraded?: boolean
+        difficult?: $Enums.Difficult | null
+        order?: number | null
+        multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
+        questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
+        knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
+        subQuestions?: QuestionCreateNestedManyWithoutParentQuestionInput
+        sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
+    };
+    export type QuestionUncheckedCreateWithoutParentQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        content: string
+        type?: $Enums.QuestionType
+        point?: number
+        explanation?: string | null
+        isAutoGraded?: boolean
+        difficult?: $Enums.Difficult | null
+        order?: number | null
+        questionBankId: string
+        knowledgeBlockId?: string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
+        subQuestions?: QuestionUncheckedCreateNestedManyWithoutParentQuestionInput
+        sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
+    };
+    export type QuestionCreateOrConnectWithoutParentQuestionInput = {
+        where: QuestionWhereUniqueInput
+        create: XOR<QuestionCreateWithoutParentQuestionInput, QuestionUncheckedCreateWithoutParentQuestionInput>
+    };
+    export type QuestionCreateManyParentQuestionInputEnvelope = {
+        data: QuestionCreateManyParentQuestionInput | QuestionCreateManyParentQuestionInput[]
+        skipDuplicates?: boolean
     };
     export type ExamBankQuestionCreateWithoutQuestionInput = {
         id?: string
@@ -615362,6 +615708,76 @@ export namespace Prisma {
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutKnowledgeBlockNestedInput
         configExams?: ConfigExamUncheckedUpdateManyWithoutKnowledgeBlockNestedInput
     };
+    export type QuestionUpsertWithoutSubQuestionsInput = {
+        update: XOR<QuestionUpdateWithoutSubQuestionsInput, QuestionUncheckedUpdateWithoutSubQuestionsInput>
+        create: XOR<QuestionCreateWithoutSubQuestionsInput, QuestionUncheckedCreateWithoutSubQuestionsInput>
+        where?: QuestionWhereInput
+    };
+    export type QuestionUpdateToOneWithWhereWithoutSubQuestionsInput = {
+        where?: QuestionWhereInput
+        data: XOR<QuestionUpdateWithoutSubQuestionsInput, QuestionUncheckedUpdateWithoutSubQuestionsInput>
+    };
+    export type QuestionUpdateWithoutSubQuestionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        content?: StringFieldUpdateOperationsInput | string
+        type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
+        point?: FloatFieldUpdateOperationsInput | number
+        explanation?: NullableStringFieldUpdateOperationsInput | string | null
+        isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
+        multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
+        questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
+        knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
+        parentQuestion?: QuestionUpdateOneWithoutSubQuestionsNestedInput
+        sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
+    };
+    export type QuestionUncheckedUpdateWithoutSubQuestionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        content?: StringFieldUpdateOperationsInput | string
+        type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
+        point?: FloatFieldUpdateOperationsInput | number
+        explanation?: NullableStringFieldUpdateOperationsInput | string | null
+        isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
+        questionBankId?: StringFieldUpdateOperationsInput | string
+        knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+        parentQuestionId?: NullableStringFieldUpdateOperationsInput | string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
+        sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
+    };
+    export type QuestionUpsertWithWhereUniqueWithoutParentQuestionInput = {
+        where: QuestionWhereUniqueInput
+        update: XOR<QuestionUpdateWithoutParentQuestionInput, QuestionUncheckedUpdateWithoutParentQuestionInput>
+        create: XOR<QuestionCreateWithoutParentQuestionInput, QuestionUncheckedCreateWithoutParentQuestionInput>
+    };
+    export type QuestionUpdateWithWhereUniqueWithoutParentQuestionInput = {
+        where: QuestionWhereUniqueInput
+        data: XOR<QuestionUpdateWithoutParentQuestionInput, QuestionUncheckedUpdateWithoutParentQuestionInput>
+    };
+    export type QuestionUpdateManyWithWhereWithoutParentQuestionInput = {
+        where: QuestionScalarWhereInput
+        data: XOR<QuestionUpdateManyMutationInput, QuestionUncheckedUpdateManyWithoutParentQuestionInput>
+    };
     export type ExamBankQuestionUpsertWithWhereUniqueWithoutQuestionInput = {
         where: ExamBankQuestionWhereUniqueInput
         update: XOR<ExamBankQuestionUpdateWithoutQuestionInput, ExamBankQuestionUncheckedUpdateWithoutQuestionInput>
@@ -615405,11 +615821,14 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
         questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
+        parentQuestion?: QuestionCreateNestedOneWithoutSubQuestionsInput
+        subQuestions?: QuestionCreateNestedManyWithoutParentQuestionInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUncheckedCreateWithoutMultipleChoiceOptionsInput = {
@@ -615426,11 +615845,14 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         questionBankId: string
         knowledgeBlockId?: string | null
+        parentQuestionId?: string | null
         fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
+        subQuestions?: QuestionUncheckedCreateNestedManyWithoutParentQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionCreateOrConnectWithoutMultipleChoiceOptionsInput = {
@@ -615460,11 +615882,14 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
         questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
+        parentQuestion?: QuestionUpdateOneWithoutSubQuestionsNestedInput
+        subQuestions?: QuestionUpdateManyWithoutParentQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateWithoutMultipleChoiceOptionsInput = {
@@ -615481,11 +615906,14 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         questionBankId?: StringFieldUpdateOperationsInput | string
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+        parentQuestionId?: NullableStringFieldUpdateOperationsInput | string | null
         fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
+        subQuestions?: QuestionUncheckedUpdateManyWithoutParentQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionCreateWithoutFillInBlankSlotsInput = {
@@ -615502,11 +615930,14 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
         questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
+        parentQuestion?: QuestionCreateNestedOneWithoutSubQuestionsInput
+        subQuestions?: QuestionCreateNestedManyWithoutParentQuestionInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUncheckedCreateWithoutFillInBlankSlotsInput = {
@@ -615523,11 +615954,14 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         questionBankId: string
         knowledgeBlockId?: string | null
+        parentQuestionId?: string | null
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
+        subQuestions?: QuestionUncheckedCreateNestedManyWithoutParentQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionCreateOrConnectWithoutFillInBlankSlotsInput = {
@@ -615557,11 +615991,14 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
         questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
+        parentQuestion?: QuestionUpdateOneWithoutSubQuestionsNestedInput
+        subQuestions?: QuestionUpdateManyWithoutParentQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateWithoutFillInBlankSlotsInput = {
@@ -615578,11 +616015,14 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         questionBankId?: StringFieldUpdateOperationsInput | string
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+        parentQuestionId?: NullableStringFieldUpdateOperationsInput | string | null
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
+        subQuestions?: QuestionUncheckedUpdateManyWithoutParentQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionCreateWithoutOrderingItemsInput = {
@@ -615599,11 +616039,14 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
         fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
         questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
+        parentQuestion?: QuestionCreateNestedOneWithoutSubQuestionsInput
+        subQuestions?: QuestionCreateNestedManyWithoutParentQuestionInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUncheckedCreateWithoutOrderingItemsInput = {
@@ -615620,11 +616063,14 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         questionBankId: string
         knowledgeBlockId?: string | null
+        parentQuestionId?: string | null
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
         fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
+        subQuestions?: QuestionUncheckedCreateNestedManyWithoutParentQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionCreateOrConnectWithoutOrderingItemsInput = {
@@ -615654,11 +616100,14 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
         fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
         questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
+        parentQuestion?: QuestionUpdateOneWithoutSubQuestionsNestedInput
+        subQuestions?: QuestionUpdateManyWithoutParentQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateWithoutOrderingItemsInput = {
@@ -615675,11 +616124,14 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         questionBankId?: StringFieldUpdateOperationsInput | string
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+        parentQuestionId?: NullableStringFieldUpdateOperationsInput | string | null
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
         fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
+        subQuestions?: QuestionUncheckedUpdateManyWithoutParentQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type SubjectVersionCreateWithoutExamsInput = {
@@ -617492,12 +617944,15 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
         fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
         questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
+        parentQuestion?: QuestionCreateNestedOneWithoutSubQuestionsInput
+        subQuestions?: QuestionCreateNestedManyWithoutParentQuestionInput
     };
     export type QuestionUncheckedCreateWithoutSessionQuestionsInput = {
         id?: string
@@ -617513,12 +617968,15 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         questionBankId: string
         knowledgeBlockId?: string | null
+        parentQuestionId?: string | null
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
         fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
+        subQuestions?: QuestionUncheckedCreateNestedManyWithoutParentQuestionInput
     };
     export type QuestionCreateOrConnectWithoutSessionQuestionsInput = {
         where: QuestionWhereUniqueInput
@@ -617598,12 +618056,15 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
         fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
         questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
+        parentQuestion?: QuestionUpdateOneWithoutSubQuestionsNestedInput
+        subQuestions?: QuestionUpdateManyWithoutParentQuestionNestedInput
     };
     export type QuestionUncheckedUpdateWithoutSessionQuestionsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -617619,12 +618080,15 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         questionBankId?: StringFieldUpdateOperationsInput | string
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+        parentQuestionId?: NullableStringFieldUpdateOperationsInput | string | null
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
         fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
+        subQuestions?: QuestionUncheckedUpdateManyWithoutParentQuestionNestedInput
     };
     export type ExamListCreateWithoutExamPapersInput = {
         id?: string
@@ -618492,11 +618956,14 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
         fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
         questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
+        parentQuestion?: QuestionCreateNestedOneWithoutSubQuestionsInput
+        subQuestions?: QuestionCreateNestedManyWithoutParentQuestionInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUncheckedCreateWithoutKnowledgeBlockInput = {
@@ -618513,11 +618980,14 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         questionBankId: string
+        parentQuestionId?: string | null
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
         fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
+        subQuestions?: QuestionUncheckedCreateNestedManyWithoutParentQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionCreateOrConnectWithoutKnowledgeBlockInput = {
@@ -688212,8 +688682,10 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         knowledgeBlockId?: string | null
+        parentQuestionId?: string | null
     };
     export type QuestionUpdateWithoutQuestionBankInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -688229,11 +688701,14 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
         fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
+        parentQuestion?: QuestionUpdateOneWithoutSubQuestionsNestedInput
+        subQuestions?: QuestionUpdateManyWithoutParentQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateWithoutQuestionBankInput = {
@@ -688250,11 +688725,14 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+        parentQuestionId?: NullableStringFieldUpdateOperationsInput | string | null
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
         fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
+        subQuestions?: QuestionUncheckedUpdateManyWithoutParentQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateManyWithoutQuestionBankInput = {
@@ -688271,8 +688749,10 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+        parentQuestionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type MultipleChoiceOptionCreateManyQuestionInput = {
         id?: string
@@ -688310,6 +688790,25 @@ export namespace Prisma {
         createdBy?: string | null
         content: string
         correctOrder: number
+    };
+    export type QuestionCreateManyParentQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        content: string
+        type?: $Enums.QuestionType
+        point?: number
+        explanation?: string | null
+        isAutoGraded?: boolean
+        difficult?: $Enums.Difficult | null
+        order?: number | null
+        questionBankId: string
+        knowledgeBlockId?: string | null
     };
     export type ExamBankQuestionCreateManyQuestionInput = {
         id?: string
@@ -688433,6 +688932,73 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         content?: StringFieldUpdateOperationsInput | string
         correctOrder?: IntFieldUpdateOperationsInput | number
+    };
+    export type QuestionUpdateWithoutParentQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        content?: StringFieldUpdateOperationsInput | string
+        type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
+        point?: FloatFieldUpdateOperationsInput | number
+        explanation?: NullableStringFieldUpdateOperationsInput | string | null
+        isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
+        multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
+        questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
+        knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
+        subQuestions?: QuestionUpdateManyWithoutParentQuestionNestedInput
+        sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
+    };
+    export type QuestionUncheckedUpdateWithoutParentQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        content?: StringFieldUpdateOperationsInput | string
+        type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
+        point?: FloatFieldUpdateOperationsInput | number
+        explanation?: NullableStringFieldUpdateOperationsInput | string | null
+        isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
+        questionBankId?: StringFieldUpdateOperationsInput | string
+        knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
+        subQuestions?: QuestionUncheckedUpdateManyWithoutParentQuestionNestedInput
+        sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
+    };
+    export type QuestionUncheckedUpdateManyWithoutParentQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        content?: StringFieldUpdateOperationsInput | string
+        type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
+        point?: FloatFieldUpdateOperationsInput | number
+        explanation?: NullableStringFieldUpdateOperationsInput | string | null
+        isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
+        questionBankId?: StringFieldUpdateOperationsInput | string
+        knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ExamBankQuestionUpdateWithoutQuestionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -689308,8 +689874,10 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
-        difficult: $Enums.Difficult
+        difficult?: $Enums.Difficult | null
+        order?: number | null
         questionBankId: string
+        parentQuestionId?: string | null
     };
     export type DocumentFileCreateManyKnowledgeBlockInput = {
         id?: string
@@ -689375,11 +689943,14 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
         fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
         questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
+        parentQuestion?: QuestionUpdateOneWithoutSubQuestionsNestedInput
+        subQuestions?: QuestionUpdateManyWithoutParentQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateWithoutKnowledgeBlockInput = {
@@ -689396,11 +689967,14 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         questionBankId?: StringFieldUpdateOperationsInput | string
+        parentQuestionId?: NullableStringFieldUpdateOperationsInput | string | null
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
         fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
+        subQuestions?: QuestionUncheckedUpdateManyWithoutParentQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateManyWithoutKnowledgeBlockInput = {
@@ -689417,8 +689991,10 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
+        difficult?: NullableEnumDifficultFieldUpdateOperationsInput | $Enums.Difficult | null
+        order?: NullableIntFieldUpdateOperationsInput | number | null
         questionBankId?: StringFieldUpdateOperationsInput | string
+        parentQuestionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUpdateWithoutKnowledgeBlockInput = {
         id?: StringFieldUpdateOperationsInput | string

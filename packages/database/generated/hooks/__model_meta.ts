@@ -23915,6 +23915,11 @@ const metadata: ModelMeta = {
                 }, difficult: {
                     name: "difficult",
                     type: "Difficult",
+                    isOptional: true,
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                    isOptional: true,
                 }, multipleChoiceOptions: {
                     name: "multipleChoiceOptions",
                     type: "MultipleChoiceOption",
@@ -23959,6 +23964,27 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'knowledgeBlock',
+                }, parentQuestion: {
+                    name: "parentQuestion",
+                    type: "Question",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'subQuestions',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "parentQuestionId" },
+                }, parentQuestionId: {
+                    name: "parentQuestionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'parentQuestion',
+                }, subQuestions: {
+                    name: "subQuestions",
+                    type: "Question",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'parentQuestion',
                 }, sessionQuestions: {
                     name: "sessionQuestions",
                     type: "ExamBankQuestion",
@@ -23973,6 +23999,9 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, parentQuestionId_order: {
+                    name: "parentQuestionId_order",
+                    fields: ["parentQuestionId", "order"]
                 },
             },
         },

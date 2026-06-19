@@ -134,7 +134,7 @@ const PutQuestionModal = () => {
         questionBankId: input?.questionBankId,
         knowledgeBlockId: output.knowledgeBlockId,
         difficult: output.difficult,
-        point: output.point ?? 0
+        point: output.point ?? 0,
       }
 
       let res: any = null
@@ -535,12 +535,7 @@ const PutQuestionModal = () => {
               </Col>
               <Col span={12}>
                 <FormItem form={form} name="point" label="Điểm" required>
-                  <InputNumber
-                    min={0}
-                    placeholder="Nhập điểm"
-                    step={0.25}
-                    className="w-full"
-                  />
+                  <InputNumber min={0} placeholder="Nhập điểm" step={0.25} className="w-full" />
                 </FormItem>
               </Col>
               <Col span={24}>

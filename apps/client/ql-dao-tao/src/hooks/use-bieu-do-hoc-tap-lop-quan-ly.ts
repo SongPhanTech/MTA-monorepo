@@ -91,8 +91,7 @@ const useBieuDoHocTapLopQuanLy = (
   const thongKe = useMemo(() => {
     const gpaHienTai = so(hocKyMoiNhat?.cumulativeGpaBase4)
     const gpaTruoc = so(hocKyTruoc?.cumulativeGpaBase4)
-    const chenhGpa =
-      gpaHienTai != null && gpaTruoc != null ? lamTron(gpaHienTai - gpaTruoc) : null
+    const chenhGpa = gpaHienTai != null && gpaTruoc != null ? lamTron(gpaHienTai - gpaTruoc) : null
 
     const duLieuGpaTheoKy = ketQuaSapXep.map((item, index) => {
       const nhan = [
@@ -135,9 +134,7 @@ const useBieuDoHocTapLopQuanLy = (
     const thuHang = xepHangLop.findIndex((item) => item.id === studentId) + 1
     const tongSinhVien = xepHangLop.length
     const topPhanTram =
-      thuHang > 0 && tongSinhVien > 0
-        ? Math.round((thuHang / tongSinhVien) * 100)
-        : null
+      thuHang > 0 && tongSinhVien > 0 ? Math.round((thuHang / tongSinhVien) * 100) : null
 
     const diemSvKy = diemMonHocLop.filter((item) => item.studentId === studentId)
     const diemTbSv = trungBinh(
@@ -184,7 +181,9 @@ const useBieuDoHocTapLopQuanLy = (
     )
     const diemThiLop = trungBinh(
       Array.from(diemTheoSv.values())
-        .map((list) => trungBinh(list.map((item) => item.examScore).filter((v): v is number => v != null)))
+        .map((list) =>
+          trungBinh(list.map((item) => item.examScore).filter((v): v is number => v != null))
+        )
         .filter((v): v is number => v != null)
     )
     const chuyenCanLop = trungBinh(

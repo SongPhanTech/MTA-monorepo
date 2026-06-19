@@ -2,10 +2,7 @@ import {
   type LopTroGiangRow,
   TRANG_THAI_TRO_GIANG_META,
 } from "@components/cong-giang-vien/lop-tro-giang/types"
-import {
-  chiTietMonHocTroGiangPath,
-  diemDanhTroGiangPath,
-} from "@constants/cong-giang-vien-path"
+import { chiTietMonHocTroGiangPath, diemDanhTroGiangPath } from "@constants/cong-giang-vien-path"
 import { Button, Table, Tag, Tooltip } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { BarChart3, ClipboardCheck, Eye } from "lucide-react"

@@ -87,9 +87,7 @@ const TongQuanMonHoc = ({
           <Descriptions.Item label="Hệ số điểm thường xuyên">
             {formatHeSo(heSoThuongXuyen)}
           </Descriptions.Item>
-          <Descriptions.Item label="Hệ số điểm định kỳ">
-            {formatHeSo(heSoDinhKy)}
-          </Descriptions.Item>
+          <Descriptions.Item label="Hệ số điểm định kỳ">{formatHeSo(heSoDinhKy)}</Descriptions.Item>
           <Descriptions.Item label="Hệ số điểm thi">{formatHeSo(heSoThi)}</Descriptions.Item>
         </Descriptions>
       </Khoi>

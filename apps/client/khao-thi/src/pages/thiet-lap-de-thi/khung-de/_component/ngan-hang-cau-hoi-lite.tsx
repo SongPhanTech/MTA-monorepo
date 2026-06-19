@@ -135,9 +135,7 @@ export default function QuestionBankLite({
       LEVEL_COLORS.forEach((l) => {
         const config = kb.configExams?.find((c) => c.difficult === l.key)
         const required = config?.quantity ?? 0
-        const current = config
-          ? qs.filter((q) => matchesConfigExam(q, config)).length
-          : 0
+        const current = config ? qs.filter((q) => matchesConfigExam(q, config)).length : 0
 
         stats[l.key] = {
           current,
@@ -185,8 +183,7 @@ export default function QuestionBankLite({
         const levelLabel =
           LEVEL_COLORS.find((l) => l.key === config.difficult)?.label ?? config.difficult
         const typeLabel = config.type
-          ? (QUESTION_TYPE_LABELS[config.type as keyof typeof QUESTION_TYPE_LABELS] ??
-            config.type)
+          ? (QUESTION_TYPE_LABELS[config.type as keyof typeof QUESTION_TYPE_LABELS] ?? config.type)
           : "Tất cả"
 
         const poolAtSlot = qs.filter(
@@ -328,28 +325,28 @@ export default function QuestionBankLite({
                     }
                   >
                     <div className="flex items-center justify-center gap-1">
-                    {/* Số câu hiện tại */}
-                    <span
-                      className="inline-flex items-center justify-center min-w-[28px] h-[24px]
+                      {/* Số câu hiện tại */}
+                      <span
+                        className="inline-flex items-center justify-center min-w-[28px] h-[24px]
                        rounded border border-green-300 text-green-600
                        text-sm font-semibold bg-green-50"
-                    >
-                      {v.current}
-                    </span>
+                      >
+                        {v.current}
+                      </span>
 
-                    {/* Badge thiếu */}
-                    {v.missing > 0 && (
-                      <span
-                        className="inline-flex items-center justify-center
+                      {/* Badge thiếu */}
+                      {v.missing > 0 && (
+                        <span
+                          className="inline-flex items-center justify-center
                            px-1.5 h-[24px]
                            rounded border border-red-300
                            bg-red-50 text-red-500
                            text-xs font-medium"
-                      >
-                        Thiếu {v.missing}
-                      </span>
-                    )}
-                  </div>
+                        >
+                          Thiếu {v.missing}
+                        </span>
+                      )}
+                    </div>
                   </Tooltip>
                 ),
               })),

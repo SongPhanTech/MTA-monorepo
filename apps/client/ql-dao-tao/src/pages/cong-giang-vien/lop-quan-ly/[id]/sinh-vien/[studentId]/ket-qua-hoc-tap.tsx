@@ -97,7 +97,9 @@ export default function KetQuaHocTapSinhVienPage() {
     { enabled: !!studentId }
   )
 
-  const { convertScore } = useScoreConverter(student?.fixedClass?.trainingCourse?.scoreConverts ?? [])
+  const { convertScore } = useScoreConverter(
+    student?.fixedClass?.trainingCourse?.scoreConverts ?? []
+  )
 
   const ketQuaTheoKy = student?.studentSemesterResult ?? []
   const ketQuaMoiNhat = ketQuaTheoKy[0]
@@ -151,7 +153,10 @@ export default function KetQuaHocTapSinhVienPage() {
   const rows: RowData[] = useMemo(
     () =>
       diemMonHoc.map((item) => {
-        const diemHp = item.manualFinalScore != null ? Number(item.manualFinalScore) : Number(item.finalScore ?? 0)
+        const diemHp =
+          item.manualFinalScore != null
+            ? Number(item.manualFinalScore)
+            : Number(item.finalScore ?? 0)
         const quyDoi = convertScore(diemHp)
         return {
           id: item.id,
@@ -179,7 +184,8 @@ export default function KetQuaHocTapSinhVienPage() {
         hoVaTen: student.userProfile?.fullname ?? "—",
         maSinhVien: student.code ?? "—",
         gioiTinh: student.userProfile?.gender?.sTen ?? "—",
-        lop: [student.fixedClass?.code, student.fixedClass?.name].filter(Boolean).join(" - ") || "—",
+        lop:
+          [student.fixedClass?.code, student.fixedClass?.name].filter(Boolean).join(" - ") || "—",
         trangThai: layNhanTrangThaiSinhVien(student.status),
         ngaySinh: dinhDangNgay(student.userProfile?.dateOfBirth),
         email: student.userProfile?.email ?? "—",
@@ -192,7 +198,10 @@ export default function KetQuaHocTapSinhVienPage() {
           "—",
         ngayVaoTruong: dinhDangNgay(student.fixedClass?.trainingCourse?.admissionStartDate),
         gpaHienTai: dinhDangSo(ketQuaMoiNhat?.cumulativeGpaBase4),
-        tinChiTichLuy: ketQuaMoiNhat?.accumulatedCredits != null ? String(ketQuaMoiNhat.accumulatedCredits) : "—",
+        tinChiTichLuy:
+          ketQuaMoiNhat?.accumulatedCredits != null
+            ? String(ketQuaMoiNhat.accumulatedCredits)
+            : "—",
         tinChiTong:
           ketQuaMoiNhat?.totalCreditsByCurriculum != null
             ? String(ketQuaMoiNhat.totalCreditsByCurriculum)
@@ -233,18 +242,18 @@ export default function KetQuaHocTapSinhVienPage() {
 
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
             <BangDiemHocKy
-            studentId={studentId}
-            fixedClassId={fixedClassId}
-            ketQuaTheoKy={ketQuaTheoKy}
-            hocKyOptions={hocKyOptions}
-            semesterId={semesterId}
-            onDoiHocKy={setSemesterId}
-            rows={rows}
-            loading={dangTaiDiem}
-            tongHocPhan={rows.length}
-            tongTinChi={tongTinChi}
-            gpaHocKy={`${dinhDangSo(ketQuaKyDangChon?.gpaBase4)} / 4,00`}
-            xepLoaiHocLuc={ketQuaKyDangChon?.rank?.classification ?? "—"}
+              studentId={studentId}
+              fixedClassId={fixedClassId}
+              ketQuaTheoKy={ketQuaTheoKy}
+              hocKyOptions={hocKyOptions}
+              semesterId={semesterId}
+              onDoiHocKy={setSemesterId}
+              rows={rows}
+              loading={dangTaiDiem}
+              tongHocPhan={rows.length}
+              tongTinChi={tongTinChi}
+              gpaHocKy={`${dinhDangSo(ketQuaKyDangChon?.gpaBase4)} / 4,00`}
+              xepLoaiHocLuc={ketQuaKyDangChon?.rank?.classification ?? "—"}
             />
           </div>
         </>
@@ -252,4 +261,3 @@ export default function KetQuaHocTapSinhVienPage() {
     </div>
   )
 }
-

@@ -61,11 +61,7 @@ const ExportStudentInSurvey = ({
       bottom: { style: "thin" as ExcelJS.BorderStyle, color: { argb: "FF000000" } },
     }
 
-    const applyTableCellStyle = (
-      cell: ExcelJS.Cell,
-      colNumber: number,
-      isHeader = false
-    ) => {
+    const applyTableCellStyle = (cell: ExcelJS.Cell, colNumber: number, isHeader = false) => {
       cell.font = {
         ...golbalFontStyle,
         bold: isHeader,
