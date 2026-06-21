@@ -1,6 +1,5 @@
 import logo_mta from "@assets/images/daotao.svg"
 import SidebarMenuLayout from "@components/layouts/sider"
-// import ToggleVaiTro from "@components/layouts/toggle-vai-tro"
 import { useMenuList } from "@hooks/menu-list"
 import { cn } from "@lib/utils"
 import { CONFIG_KEY } from "@workspace/constant"
@@ -132,7 +131,6 @@ const DefaultLayout = ({
             <Breadcrumb className="text-xs" items={listBreadcrumb} />
           </div>
           <div className="flex items-center gap-2">
-            {/* <ToggleVaiTro /> */}
             <HeaderApp />
           </div>
         </Header>

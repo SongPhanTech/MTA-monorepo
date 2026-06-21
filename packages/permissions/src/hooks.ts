@@ -1,4 +1,5 @@
 import NAVIGATION, {
+  type CONG_GIANG_VIEN_PERMISSION,
   type DANG_KY_HOC_PERMISSION,
   type KHAO_THI_PERMISSION,
   type MenuItem,
@@ -57,7 +58,8 @@ const useAbility = () => {
         | DANG_KY_HOC_PERMISSION
         | QL_DAO_TAO_PERMISSION
         | TRO_LY_AO_PERMISSION
-        | QL_HO_SO_PERMISSION,
+        | QL_HO_SO_PERMISSION
+        | CONG_GIANG_VIEN_PERMISSION,
       ...action: (keyof typeof PERMISSIONS)[]
     ) => {
       if (
@@ -78,7 +80,8 @@ const useAbility = () => {
         | DANG_KY_HOC_PERMISSION
         | QL_DAO_TAO_PERMISSION
         | TRO_LY_AO_PERMISSION
-        | QL_HO_SO_PERMISSION,
+        | QL_HO_SO_PERMISSION
+        | CONG_GIANG_VIEN_PERMISSION,
       ...action: (keyof typeof PERMISSIONS)[]
     ) => {
       if (

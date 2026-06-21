@@ -23,18 +23,9 @@ import { useRouter } from "next/router"
 import { type ReactNode, useEffect, useState } from "react"
 import { ReactHookModalProvider } from "react-hook-disclosure-modal"
 import LoadingBar from "react-top-loading-bar"
-import "@assets/css/cong-giang-vien.css"
 import "@assets/css/custom.css"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { lightThemeCustom } from "@workspace/ui"
-import {
-  CONG_GIANG_VIEN_LICH_CUA_TOI_PATH,
-  isCongGiangVienRoute,
-} from "@constants/cong-giang-vien-path"
-import CongGiangVienLayout from "@layouts/cong-giang-vien-layout"
-import { useGiangVien } from "@hooks/use-giang-vien"
-import { ROUTER_PATH } from "@workspace/router"
-import { setLayoutMode, useLayoutMode } from "@/stores/layout-mode"
 
 dayjs.locale("vi")
 dayjs.extend(weekOfYear)
@@ -44,7 +35,6 @@ dayjs.extend(isSameOrBefore)
 dayjs.extend(quarterOfYear)
 dayjs.extend(isBetween)
 
-// Layout cổng GV mới chỉ áp dụng cho route /cong-giang-vien/* khi user là giảng viên.
 function AppContent({
   Component,
   pageProps,
@@ -52,45 +42,13 @@ function AppContent({
   Component: AppProps["Component"]
   pageProps: AppProps["pageProps"]
 }) {
-  const router = useRouter()
-  const mode = useLayoutMode()
-  const { isGiangVien, isLoading } = useGiangVien()
-  const pathname = router.pathname
-  const onCongGiangVienRoute = isCongGiangVienRoute(pathname)
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <>
-  useEffect(() => {
-    if (!isLoading && !isGiangVien && mode === "giang-vien") {
-      setLayoutMode("quan-tri")
-    }
-  }, [isLoading, isGiangVien, mode])
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <>
-  useEffect(() => {
-    if (!isLoading && !isGiangVien && onCongGiangVienRoute) {
-      router.replace(ROUTER_PATH.QL_DAO_TAO.HOME)
-    }
-  }, [isLoading, isGiangVien, onCongGiangVienRoute, router.replace])
-
-  if (onCongGiangVienRoute && isLoading) return null
-  if (mode === null && isLoading) return null
-
   const componentWithLayout = Component as NextComponentType & {
     getLayout?: (page: ReactNode) => ReactNode
   }
   const getLayout: (page: ReactNode) => ReactNode =
     componentWithLayout.getLayout ?? ((page) => page)
 
-  const pageElement = <Component {...pageProps} />
-  const useCongGiangVienLayout = isGiangVien && onCongGiangVienRoute
-  const unLayout =
-    pathname === ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_GIANG_VIEN ||
-    pathname === CONG_GIANG_VIEN_LICH_CUA_TOI_PATH
-
-  if (useCongGiangVienLayout) {
-    return <CongGiangVienLayout unLayout={unLayout}>{pageElement}</CongGiangVienLayout>
-  }
-  return <>{getLayout(pageElement)}</>
+  return <>{getLayout(<Component {...pageProps} />)}</>
 }
 
 function App({ Component, pageProps }: AppProps) {

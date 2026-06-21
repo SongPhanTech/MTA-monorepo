@@ -11,9 +11,11 @@ import type { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon"
 import {
   AwardIcon,
   BarChart3,
+  Bell,
   BinocularsIcon,
   BookOpenCheck,
   BookUser,
+  Briefcase,
   CalendarDays,
   CalendarRange,
   ChartLine,
@@ -30,11 +32,13 @@ import {
   Settings,
   User,
   User2Icon,
+  Users,
 } from "lucide-react"
 import { DANG_KY_HOC_PERMISSION } from "../generated/dang-ky-hoc"
 import { KHAO_THI_PERMISSION } from "../generated/khao-thi"
 import { QL_DAO_TAO_PERMISSION } from "../generated/ql-dao-tao"
 import { QL_HO_SO_PERMISSION } from "../generated/ql-ho-so"
+import { CONG_GIANG_VIEN_PERMISSION } from "../generated/cong-giang-vien"
 import ROUTER_PATH from "../generated/router"
 import { TRO_LY_AO_PERMISSION } from "../generated/tro-ly-ao"
 import "./index.css"
@@ -1065,6 +1069,97 @@ const NAVIGATION: NavigationType = {
       },
     ],
   },
+  CONG_GIANG_VIEN: {
+    label: "Cổng giảng viên",
+    menus: [
+      {
+        id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_HOME,
+        label: "Trang chủ",
+        icon: House,
+        path: ROUTER_PATH.CONG_GIANG_VIEN.HOME,
+        description: "Trang chủ cổng giảng viên",
+      },
+      {
+        id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_LICH_CUA_TOI,
+        label: "Lịch của tôi",
+        icon: CalendarDays,
+        path: ROUTER_PATH.CONG_GIANG_VIEN.LICH_CUA_TOI,
+        description: "Lịch của tôi",
+      },
+      {
+        id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_LOP_QUAN_LY,
+        label: "Lớp quản lý",
+        icon: Users,
+        path: ROUTER_PATH.CONG_GIANG_VIEN.LOP_QUAN_LY,
+        description: "Lớp quản lý",
+      },
+      {
+        id: "cgv-lop-giang-day",
+        label: "Lớp giảng dạy",
+        icon: GraduationCap,
+        description: "Lớp giảng dạy",
+        children: [
+          {
+            id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_LOP_GIANG_DAY_DANH_SACH_LOP_GIANG_DAY,
+            label: "Danh sách lớp",
+            icon: GraduationCap,
+            path: ROUTER_PATH.CONG_GIANG_VIEN.LOP_GIANG_DAY_DANH_SACH_LOP_GIANG_DAY,
+            description: "Danh sách lớp",
+          },
+          {
+            id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_LOP_GIANG_DAY_TAI_GIANG_VIEN,
+            label: "Tải giảng dạy",
+            icon: GraduationCap,
+            path: ROUTER_PATH.CONG_GIANG_VIEN.LOP_GIANG_DAY_TAI_GIANG_VIEN,
+            description: "Tải giảng dạy",
+          },
+        ],
+      },
+      {
+        id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_LOP_TRO_GIANG,
+        label: "Lớp trợ giảng",
+        icon: Briefcase,
+        path: ROUTER_PATH.CONG_GIANG_VIEN.LOP_TRO_GIANG,
+        description: "Lớp trợ giảng",
+      },
+      {
+        id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_KHAO_SAT,
+        label: "Khảo sát",
+        icon: ClipboardCheck,
+        path: ROUTER_PATH.CONG_GIANG_VIEN.KHAO_SAT,
+        description: "Khảo sát giảng viên",
+      },
+      {
+        id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_NGHIEN_CUU,
+        label: "Nghiên cứu",
+        icon: BinocularsIcon,
+        path: ROUTER_PATH.CONG_GIANG_VIEN.NGHIEN_CUU,
+        description: "Nghiên cứu khoa học",
+      },
+      {
+        id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_THONG_BAO,
+        label: "Thông báo",
+        icon: Bell,
+        path: ROUTER_PATH.CONG_GIANG_VIEN.THONG_BAO,
+        description: "Thông báo",
+      },
+      {
+        id: "cgv-ho-so",
+        label: "Hồ sơ cá nhân",
+        icon: User,
+        description: "Hồ sơ cá nhân",
+        children: [
+          {
+            id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_HO_SO_CA_NHAN_THONG_TIN_CA_NHAN,
+            label: "Thông tin cá nhân",
+            icon: User,
+            path: ROUTER_PATH.CONG_GIANG_VIEN.HO_SO_CA_NHAN_THONG_TIN_CA_NHAN,
+            description: "Thông tin cá nhân",
+          },
+        ],
+      },
+    ],
+  },
 }
 
 const PUBLIC_ROUTER = [ROUTER_PATH.KHAO_THI.LAM_KHAO_SAT_ID.replace("[id]", "")]
@@ -1072,6 +1167,7 @@ const PUBLIC_ROUTER = [ROUTER_PATH.KHAO_THI.LAM_KHAO_SAT_ID.replace("[id]", "")]
 export {
   DANG_KY_HOC_PERMISSION,
   KHAO_THI_PERMISSION,
+  CONG_GIANG_VIEN_PERMISSION,
   PUBLIC_ROUTER,
   QL_DAO_TAO_PERMISSION,
   QL_HO_SO_PERMISSION,
