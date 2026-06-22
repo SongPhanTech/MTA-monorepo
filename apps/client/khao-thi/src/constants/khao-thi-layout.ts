@@ -1,0 +1,11 @@
+export const KHAO_THI_SIDER_WIDTH = 230
+
+export const KHAO_THI_SIDER_COLLAPSED_WIDTH = 80
+
+export const KHAO_THI_HEADER_HEIGHT = 64
+
+export const KHAO_THI_CONTENT_VERTICAL_OFFSET = KHAO_THI_HEADER_HEIGHT + 32
+
+export const KHAO_THI_SIDEBAR_COLLAPSE_STORAGE_KEY = "collapsed"
+
+export const KHAO_THI_PORTAL_TITLE = "Quản lý khảo thí"

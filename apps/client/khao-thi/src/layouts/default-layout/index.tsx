@@ -8,7 +8,6 @@ import { CONFIG_KEY } from "@workspace/constant"
 import { useFindUniqueConfig } from "@workspace/db/hooks"
 import { getDynamicBreadcrumb } from "@workspace/permissions/hooks"
 import { SelectTrainingObjectType, TreeSelectSemester } from "@workspace/ui"
-// import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
 import { Divider, Layout, Tooltip, theme } from "antd"
 import Image from "next/image"
 import Link from "next/link"
@@ -16,9 +15,6 @@ import { useRouter } from "next/router"
 import { type ReactNode, useEffect, useMemo, useState } from "react"
 import { IdleTimerProvider } from "react-idle-timer"
 import HeaderApp from "@/components/header"
-// import { Footer } from 'antd/es/layout/layout'
-// import { useAppVersionInfo } from '@workspace/libs/api/public'
-//import packageInfo from '../../../package.json'
 
 const { Header, Content } = Layout
 interface breadcrumListProps {
@@ -130,6 +126,7 @@ const DefaultLayout = ({
       onIdle={() => {}}
     >
       <Layout style={{ minHeight: "100vh" }} hasSider>
+        <div className="khao-thi-header-divider" aria-hidden />
         <SiderDefaultLayout
           logo1={<Image src={logo_mta} alt="logo MTA" className="size-10" />}
           logo2={
@@ -150,7 +147,7 @@ const DefaultLayout = ({
           }}
         >
           <Header
-            className={`flex justify-between items-center bg-white fixed z-[1000] top-0  ${collapsed ? "w-[calc(100%-80px)] left-[80px]" : "w-[calc(100%-230px)] left-[230px]"}`}
+            className={`flex h-16 justify-between items-center bg-[#f8fafc] fixed z-[1000] top-0  ${collapsed ? "w-[calc(100%-80px)] left-[80px]" : "w-[calc(100%-230px)] left-[230px]"}`}
           >
             {/* <span className="text-lg font-bold text-primary">
                             {headerChildren ? headerChildren : title}
@@ -169,7 +166,7 @@ const DefaultLayout = ({
             </div>
             <HeaderApp />
           </Header>
-          <Content className="mt-16">
+          <Content className="khao-thi-layout-content">
             {unLayout ? (
               children
             ) : (
