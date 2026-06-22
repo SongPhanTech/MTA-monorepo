@@ -1,7 +1,6 @@
 import { queryClient } from "@api/index"
 import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
-import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
 import Select from "@components/commons/select"
 import TreeSelect from "@components/commons/tree-select"
 import { useStore } from "@tanstack/react-store"
@@ -20,6 +19,7 @@ import { DndProvider, useDrag, useDrop } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { store } from "@/pages/thiet-lap-de-thi/danh-sach-de"
+import { renderQuestionPreviewHtml } from "@/utils/cluster-question-utils"
 import { examTypeOptions } from "@workspace/libs/constants"
 import { useSingleTopicGeneration } from "@workspace/libs/api/exam"
 
@@ -77,11 +77,22 @@ const SinhDeThuCongModal = () => {
           },
         },
         questions: {
+          where: {
+            parentQuestionId: null,
+            deletedAt: null,
+          },
           include: {
             multipleChoiceOptions: true,
             fillInBlankSlots: true,
             orderingItems: true,
             questionBank: true,
+            subQuestions: {
+              where: { deletedAt: null },
+              orderBy: { order: "asc" },
+              include: {
+                multipleChoiceOptions: { orderBy: { order: "asc" } },
+              },
+            },
           },
         },
       },
@@ -98,7 +109,17 @@ const SinhDeThuCongModal = () => {
       include: {
         questions: {
           include: {
-            question: true,
+            question: {
+              include: {
+                subQuestions: {
+                  where: { deletedAt: null },
+                  orderBy: { order: "asc" },
+                  include: {
+                    multipleChoiceOptions: { orderBy: { order: "asc" } },
+                  },
+                },
+              },
+            },
           },
         },
         examMatrix: {
@@ -135,22 +156,30 @@ const SinhDeThuCongModal = () => {
       : []
   }, [dataExam])
 
+  const questionById = useMemo(() => {
+    const map = new Map<string, Parameters<typeof renderQuestionPreviewHtml>[0]>()
+    for (const block of KnowledgeBlockData) {
+      for (const question of block.questions) map.set(question.id, question)
+    }
+    for (const eq of data?.questions ?? []) {
+      if (eq.question) map.set(eq.questionId, eq.question)
+    }
+    return map
+  }, [KnowledgeBlockData, data?.questions])
+
   const treeData = useMemo(() => {
-    return KnowledgeBlockData.map((item) => {
-      return {
-        value: item.id,
-        title: item.name,
-        isParent: true,
-        children: item.questions.map((question) => {
-          return {
-            value: question.id,
-            title: renderWithMath(question.content),
-            isParent: false,
-            html: question.content,
-          }
-        }),
-      }
-    })
+    return KnowledgeBlockData.map((item) => ({
+      value: item.id,
+      title: item.name,
+      isParent: true,
+      children: item.questions.map((question) => ({
+        value: question.id,
+        title: question.content,
+        label: question.content,
+        html: renderQuestionPreviewHtml(question),
+        isParent: false,
+      })),
+    }))
   }, [KnowledgeBlockData])
 
   const next = async () => {
@@ -205,9 +234,6 @@ const SinhDeThuCongModal = () => {
   const ItemType = "LIST_ITEM"
   type Item = {
     value: string
-    label: any
-    title?: string
-    html: any
   }
 
   type DragItem = {
@@ -258,33 +284,22 @@ const SinhDeThuCongModal = () => {
     return (
       <div
         ref={ref}
-        className="p-2 flex items-center border rounded mb-2 bg-white shadow-sm cursor-move w-full"
+        className="p-2 flex items-start border rounded mb-2 bg-white shadow-sm cursor-move w-full"
       >
-        <GripVertical className="text-blue-400" />
-
-        {item?.label?.props?.dangerouslySetInnerHTML?.__html ? (
-          <div
-            className="ml-2 font-[500]"
-            dangerouslySetInnerHTML={{
-              __html: item?.label?.props?.dangerouslySetInnerHTML?.__html,
-            }}
-          />
-        ) : (
-          <div
-            className="ml-2 font-[500]"
-            dangerouslySetInnerHTML={{
-              __html: item?.label,
-            }}
-          />
-        )}
+        <GripVertical className="text-blue-400 shrink-0 mt-1" />
+        <div
+          className="ml-2 font-[500] flex-1 min-w-0"
+          dangerouslySetInnerHTML={{
+            __html: renderQuestionPreviewHtml(questionById.get(item.value) ?? {}),
+          }}
+        />
       </div>
     )
   }
-  const handleOnChange = (value: string[], label: React.ReactNode[]) => {
+  const handleOnChange = (value: string[]) => {
     if (value?.length) {
-      const newItems = value.map((i, idx) => ({
+      const newItems = value.map((i) => ({
         value: i,
-        label: label?.[idx],
       }))
       setItems(newItems)
 
@@ -410,15 +425,17 @@ const SinhDeThuCongModal = () => {
                   treeDefaultExpandAll
                   onChange={handleOnChange}
                   style={{ width: "100%" }}
-                  treeTitleRender={(node) => {
-                    return (
+                  treeTitleRender={(node) =>
+                    node.isParent ? (
+                      <span>{String(node.title)}</span>
+                    ) : (
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: node?.title || "",
+                          __html: String((node as { html?: string }).html ?? ""),
                         }}
                       />
                     )
-                  }}
+                  }
                 />
               </FormItem>
             </Col>
@@ -456,7 +473,6 @@ const SinhDeThuCongModal = () => {
       const initialItems =
         data?.questions.map((i: any) => ({
           value: i.questionId,
-          label: i.question.content,
         })) || []
       setItems(initialItems)
       setShowExplain(!!data.explain)
