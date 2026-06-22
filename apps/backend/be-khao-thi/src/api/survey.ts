@@ -1471,7 +1471,23 @@ app.openapi(sinhdetudong, async (c) => {
       deletedAt: null,
     },
     include: {
-      questions: true,
+      questions: {
+        where: {
+          deletedAt: null,
+          parentQuestionId: null,
+        },
+        include: {
+          subQuestions: {
+            where: { deletedAt: null },
+            orderBy: { order: "asc" },
+            include: {
+              multipleChoiceOptions: { orderBy: { order: "asc" } },
+              fillInBlankSlots: { orderBy: { order: "asc" } },
+              orderingItems: true,
+            },
+          },
+        },
+      },
       configExams: true,
     },
   })
@@ -1522,7 +1538,10 @@ app.openapi(sinhdetudong, async (c) => {
               selected = [...fromUnused, ...fromUsed]
             }
 
-            selected.forEach((q: any) => usedQuestionIds.add(q.id))
+            selected.forEach((q: any) => {
+              usedQuestionIds.add(q.id)
+              q.subQuestions?.forEach((sub: any) => usedQuestionIds.add(sub.id))
+            })
             questions = [...questions, ...selected]
           }
         }
