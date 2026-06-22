@@ -1363,6 +1363,9 @@ export default function PhanCongGiangDay({
                                       subject: {
                                         select: {
                                           managementOrganization: {
+                                            where: {
+                                              bDeleted: false,
+                                            },
                                             select: {
                                               sTen: true,
                                               sMa: true,
@@ -1435,6 +1438,7 @@ export default function PhanCongGiangDay({
                               data: {
                                 where: {
                                   bActive: true,
+                                  bDeleted: false,
                                 },
                                 select: {
                                   sMa: true,
