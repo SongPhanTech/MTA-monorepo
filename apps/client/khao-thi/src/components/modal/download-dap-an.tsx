@@ -1,6 +1,6 @@
 import { queryClient } from "@api/index"
-import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
 import { useFindUniqueExamBank, useUpdateExamBank } from "@workspace/db/hooks"
+import { useGetExamBankWithGrouping } from "@workspace/libs/api/exam"
 import { getMinioUrl, formatQuestionPoint } from "@workspace/libs/utils"
 import { Button, Flex, Input, Modal } from "antd"
 import { TemplateHandler } from "easy-template-x"
@@ -8,17 +8,18 @@ import { useEffect, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 import { convertHtmlBreaks, saveFile } from "@/utils/saveFile"
+import {
+  plainQuestionAnswerText,
+  renderQuestionAnswerHtml,
+  renderQuestionExamHtml,
+} from "@/utils/cluster-question-utils"
 import { useSession } from "@workspace/auth/react"
 
 const PrintExplanation = () => {
   const { data: me } = useSession()
   const [name, setName] = useState(me?.fullName || "")
   const [duration, setDuration] = useState("")
-  const { isOpen, onClose, input } = useDisclosure<{
-    id: string
-  }>({
-    tag: "PrintExplanation",
-  })
+  const { isOpen, onClose, input } = useDisclosure<{ id: string }>({ tag: "PrintExplanation" })
 
   const [hasDownloaded, setHasDownloaded] = useState(false)
   const [isDownloading, setIsDownloading] = useState(false)
@@ -26,52 +27,26 @@ const PrintExplanation = () => {
 
   const { data } = useFindUniqueExamBank(
     {
-      where: {
-        id: input?.id,
-      },
+      where: { id: input?.id },
       include: {
-        exam: {
-          include: {
-            semester: true,
-            subjectVersion: true,
-          },
-        },
-        questions: {
-          include: {
-            question: {
-              include: {
-                multipleChoiceOptions: true,
-                fillInBlankSlots: true,
-                orderingItems: true,
-              },
-            },
-          },
-        },
-        subjectClass: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        examMatrix: {
-          include: {
-            examFramework: {
-              select: {
-                time: true,
-              },
-            },
-          },
-        },
+        exam: { include: { semester: true, subjectVersion: true } },
+        subjectClass: { select: { id: true, name: true } },
+        examMatrix: { include: { examFramework: { select: { time: true } } } },
       },
     },
-    {
-      enabled: !!input?.id,
-    }
+    { enabled: !!input?.id }
   )
 
-  const subjectClassName = data?.subjectClass?.name || ""
+  const { mutateAsync: fetchGroupedQuestions, data: groupedResponse } = useGetExamBankWithGrouping()
+  const questions =
+    groupedResponse?.status === 200 ? (groupedResponse.data.questions ?? []) : []
 
-  // Tự động fill thời gian từ examFramework
+  useEffect(() => {
+    if (input?.id) {
+      fetchGroupedQuestions({ data: { id: input.id, isGroup: false } })
+    }
+  }, [input?.id, fetchGroupedQuestions])
+
   useEffect(() => {
     if (data?.examMatrix?.examFramework?.time) {
       setDuration(String(data.examMatrix.examFramework.time))
@@ -89,11 +64,10 @@ const PrintExplanation = () => {
   const day = examDate.getDate()
   const month = examDate.getMonth() + 1
   const year = examDate.getFullYear()
+  const subjectClassName = data?.subjectClass?.name || ""
 
-  // Download file
   const handleDownload = async () => {
     if (!data) return
-
     setIsDownloading(true)
     try {
       const res = await fetch(getMinioUrl("mta/template/template-dap-an-bk.docx"))
@@ -109,43 +83,16 @@ const PrintExplanation = () => {
         month: String(month),
         year: String(year),
         teacherName: name,
-        questions:
-          data.questions?.map((q, index) => {
-            const question = q?.question
-            let answer = ""
-
-            // Xử lý đáp án theo loại câu hỏi
-            if (question?.multipleChoiceOptions && question?.multipleChoiceOptions?.length > 0) {
-              // Lấy các đáp án đúng
-              const correctAnswers = question.multipleChoiceOptions
-                .filter((option) => option?.isCorrect)
-                .map((option) => convertHtmlBreaks(option?.content || ""))
-                .join(", ")
-              answer = correctAnswers
-            } else if (question?.orderingItems && question?.orderingItems?.length > 0) {
-              // Hiển thị thứ tự đúng
-              const orderSequence = question.orderingItems
-                .sort((a, b) => (a?.correctOrder || 0) - (b?.correctOrder || 0))
-                .map((_, idx) => String.fromCharCode(65 + idx))
-                .join(" → ")
-              answer = orderSequence
-            } else {
-              // Các loại câu hỏi khác (tự luận, điền chỗ trống, v.v.)
-              answer = convertHtmlBreaks(question?.explanation || "")
-            }
-
-            return {
-              order: String(q?.order || index + 1),
-              point: formatQuestionPoint(question?.point),
-              content: convertHtmlBreaks(question?.content || ""),
-              answer: answer,
-            }
-          }) || [],
+        questions: questions.map((q: any, index: number) => ({
+          order: String(q?.order || index + 1),
+          point: formatQuestionPoint(q?.question?.point),
+          content: convertHtmlBreaks(renderQuestionExamHtml(q?.question ?? {})) || "",
+          answer: convertHtmlBreaks(plainQuestionAnswerText(q?.question ?? {})),
+        })),
       }
 
       const handler = new TemplateHandler()
       const doc = await handler.process(templateFile, templateData)
-
       saveFile(`Dap-An-${data?.exam?.subjectVersion?.name}.docx`, doc)
       setHasDownloaded(true)
     } catch (error) {
@@ -157,19 +104,10 @@ const PrintExplanation = () => {
 
   const handleClose = async () => {
     if (hasDownloaded) {
-      await updateExamBank({
-        where: {
-          id: input?.id,
-        },
-        data: {
-          isLock: true,
-        },
-      })
+      await updateExamBank({ where: { id: input?.id }, data: { isLock: true } })
     }
     setHasDownloaded(false)
-    queryClient.invalidateQueries({
-      queryKey: ["ExamBank"],
-    })
+    queryClient.invalidateQueries({ queryKey: ["ExamBank"] })
     onClose()
   }
 
@@ -179,12 +117,7 @@ const PrintExplanation = () => {
         <div className="flex items-center gap-4">
           <span>Xem trước đáp án</span>
           <div className="flex-1 flex items-center justify-center gap-4">
-            <Input
-              placeholder="Nhập tên"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-56"
-            />
+            <Input placeholder="Nhập tên" value={name} onChange={(e) => setName(e.target.value)} className="w-56" />
             <Input
               placeholder="Nhập thời gian thi"
               value={duration}
@@ -210,14 +143,7 @@ const PrintExplanation = () => {
         </Flex>
       }
     >
-      <div
-        style={{
-          maxHeight: "70vh",
-          overflow: "auto",
-          border: "1px solid #d9d9d9",
-          padding: "16px",
-        }}
-      >
+      <div style={{ maxHeight: "70vh", overflow: "auto", border: "1px solid #d9d9d9", padding: "16px" }}>
         <div
           ref={printRef}
           style={{
@@ -234,105 +160,41 @@ const PrintExplanation = () => {
           <style>
             {`
               @media print {
-                /* Force all text to black when printing (avoid browser default link blue) */
-                #print-explanation, #print-explanation * {
-                  color: #000 !important;
-                }
-                #print-explanation a,
-                #print-explanation a:visited,
-                #print-explanation a:hover,
-                #print-explanation a:active {
-                  color: #000 !important;
-                  text-decoration: none !important;
+                #print-explanation, #print-explanation * { color: #000 !important; }
+                #print-explanation a, #print-explanation a:visited,
+                #print-explanation a:hover, #print-explanation a:active {
+                  color: #000 !important; text-decoration: none !important;
                 }
               }
             `}
           </style>
 
           <div id="print-explanation">
-            {/* Header */}
-            <div
-              style={{
-                position: "relative",
-                marginBottom: "10px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
-                  BAN KHẢO THÍ & ĐBCLGD-ĐT
-                </div>
+            <div style={{ position: "relative", marginBottom: "10px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>BAN KHẢO THÍ & ĐBCLGD-ĐT</div>
                 <div style={{ fontWeight: "bold" }}>{data?.exam?.semester?.name || "HKI"}</div>
               </div>
-              <div
-                style={{
-                  position: "absolute",
-                  left: "55%",
-                  top: "0",
-                  transform: "translateX(-50%)",
-                  fontWeight: "bold",
-                }}
-              >
+              <div style={{ position: "absolute", left: "55%", top: "0", transform: "translateX(-50%)", fontWeight: "bold" }}>
                 PHIẾU ĐỀ THI
               </div>
             </div>
 
-            {/* Class info */}
-            <div
-              style={{
-                textAlign: "center",
-                marginBottom: "10px",
-                marginLeft: "10%",
-              }}
-            >
+            <div style={{ textAlign: "center", marginBottom: "10px", marginLeft: "10%" }}>
               <span style={{ fontWeight: "normal" }}>(Dùng cho lớp: {subjectClassName})</span>
             </div>
 
-            {/* Date */}
-            <div
-              style={{
-                textAlign: "right",
-                fontStyle: "italic",
-                marginBottom: "15px",
-              }}
-            >
+            <div style={{ textAlign: "right", fontStyle: "italic", marginBottom: "15px" }}>
               Ngày {day} tháng {month} năm {year}
             </div>
 
-            {/* Main info table */}
-            <table
-              style={{
-                width: "100%",
-                border: "1px solid black",
-                borderCollapse: "collapse",
-                marginBottom: "20px",
-              }}
-            >
+            <table style={{ width: "100%", border: "1px solid black", borderCollapse: "collapse", marginBottom: "20px" }}>
               <tbody>
                 <tr>
-                  <td
-                    style={{
-                      border: "1px solid black",
-                      padding: "10px",
-                      width: "25%",
-                      textAlign: "center",
-                      verticalAlign: "middle",
-                    }}
-                  >
+                  <td style={{ border: "1px solid black", padding: "10px", width: "25%", textAlign: "center", verticalAlign: "middle" }}>
                     <strong>Giáo viên ra đề</strong>
                   </td>
-                  <td
-                    style={{
-                      border: "1px solid black",
-                      padding: "10px",
-                      width: "50%",
-                      verticalAlign: "middle",
-                    }}
-                  >
+                  <td style={{ border: "1px solid black", padding: "10px", width: "50%", verticalAlign: "middle" }}>
                     <div style={{ textAlign: "center", marginBottom: "5px" }}>
                       <strong>Đề thi số : {data?.examCode || "001"}</strong>
                     </div>
@@ -342,176 +204,46 @@ const PrintExplanation = () => {
                     <div style={{ textAlign: "center", marginBottom: "10px" }}>
                       <strong>
                         Thời gian làm bài:{" "}
-                        {duration || data?.examMatrix?.examFramework?.time || data?.exam?.duration}{" "}
-                        phút
+                        {duration || data?.examMatrix?.examFramework?.time || data?.exam?.duration} phút
                       </strong>
                     </div>
                   </td>
-                  <td
-                    style={{
-                      border: "1px solid black",
-                      padding: "10px",
-                      width: "25%",
-                      textAlign: "center",
-                      verticalAlign: "middle",
-                    }}
-                  >
-                    <div style={{ marginBottom: "5px" }}>
-                      <strong>Ban Khảo thi</strong>
-                    </div>
-                    <div style={{ marginBottom: "5px" }}>
-                      <strong>& ĐBCLGD-ĐT</strong>
-                    </div>
+                  <td style={{ border: "1px solid black", padding: "10px", width: "25%", textAlign: "center", verticalAlign: "middle" }}>
+                    <div style={{ marginBottom: "5px" }}><strong>Ban Khảo thi</strong></div>
+                    <div style={{ marginBottom: "5px" }}><strong>& ĐBCLGD-ĐT</strong></div>
                     <div style={{ fontStyle: "italic" }}>{name}</div>
                   </td>
                 </tr>
               </tbody>
             </table>
 
-            {/* Questions and Answers Table */}
-            <table
-              style={{
-                width: "100%",
-                border: "1px solid black",
-                borderCollapse: "collapse",
-                marginBottom: "20px",
-              }}
-            >
+            <table style={{ width: "100%", border: "1px solid black", borderCollapse: "collapse", marginBottom: "20px" }}>
               <thead>
                 <tr>
-                  <th
-                    style={{
-                      border: "1px solid black",
-                      padding: "15px",
-                      width: "85%",
-                      textAlign: "center",
-                      fontWeight: "bold",
-                    }}
-                  >
+                  <th style={{ border: "1px solid black", padding: "15px", width: "85%", textAlign: "center", fontWeight: "bold" }}>
                     Nội dung câu hỏi và đáp án
                   </th>
-                  <th
-                    style={{
-                      border: "1px solid black",
-                      padding: "15px",
-                      width: "15%",
-                      textAlign: "center",
-                      fontWeight: "bold",
-                    }}
-                  >
+                  <th style={{ border: "1px solid black", padding: "15px", width: "15%", textAlign: "center", fontWeight: "bold" }}>
                     Điểm
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {data?.questions?.map((q, index: number) => (
+                {questions.map((q: any, index: number) => (
                   <tr key={q?.id}>
-                    <td
-                      style={{
-                        border: "1px solid black",
-                        padding: "15px",
-                      }}
-                    >
-                      <div
-                        style={{
-                          marginBottom: "12px",
-                        }}
-                      >
+                    <td style={{ border: "1px solid black", padding: "15px" }}>
+                      <div style={{ marginBottom: "12px" }}>
                         <strong>
-                          Câu {q?.order || index + 1}({formatQuestionPoint(q?.question?.point)}{" "}
-                          điểm):
+                          Câu {q?.order || index + 1}({formatQuestionPoint(q?.question?.point)} điểm):
                         </strong>{" "}
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: renderWithMath(q?.question?.content || "")
-                              .replace(/<p[^>]*>/g, "")
-                              .replace(/<\/p>/g, " ")
-                              .trim(),
-                          }}
-                        />
-                        {q?.question?.multipleChoiceOptions &&
-                          q?.question?.multipleChoiceOptions?.length > 0 && (
-                            <div>
-                              {q.question.multipleChoiceOptions.map((option) => (
-                                <div
-                                  key={option?.id}
-                                  style={{
-                                    marginLeft: "20px",
-                                    color: "#000",
-                                    fontWeight: "normal",
-                                  }}
-                                >
-                                  <span
-                                    dangerouslySetInnerHTML={{
-                                      __html: renderWithMath(option?.content || ""),
-                                    }}
-                                  />
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        {q?.question?.orderingItems && q?.question?.orderingItems?.length > 0 && (
-                          <div>
-                            {q.question.orderingItems.map((option) => (
-                              <div
-                                key={option?.id}
-                                style={{
-                                  marginLeft: "20px",
-                                  color: "#000",
-                                  fontWeight: "normal",
-                                }}
-                              >
-                                <span
-                                  dangerouslySetInnerHTML={{
-                                    __html: renderWithMath(option?.content || ""),
-                                  }}
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                        <span dangerouslySetInnerHTML={{ __html: renderQuestionExamHtml(q?.question ?? {}) }} />
                       </div>
                       <div style={{ marginTop: "8px" }}>
                         <strong>Đáp án:</strong>{" "}
-                        {q?.question?.multipleChoiceOptions &&
-                        q?.question?.multipleChoiceOptions?.length > 0 ? (
-                          <span
-                            dangerouslySetInnerHTML={{
-                              __html: renderWithMath(
-                                q.question.multipleChoiceOptions
-                                  .filter((option) => option?.isCorrect)
-                                  .map((option) => option?.content || "")
-                                  .join(", ")
-                              ),
-                            }}
-                          />
-                        ) : q?.question?.orderingItems && q?.question?.orderingItems?.length > 0 ? (
-                          <span>
-                            {q.question.orderingItems
-                              .sort((a, b) => (a?.correctOrder || 0) - (b?.correctOrder || 0))
-                              .map((_, idx) => String.fromCharCode(65 + idx))
-                              .join(" -> ")}
-                          </span>
-                        ) : (
-                          <span
-                            dangerouslySetInnerHTML={{
-                              __html: renderWithMath(q?.question?.explanation || "")
-                                .replace(/<p[^>]*>/g, "")
-                                .replace(/<\/p>/g, " ")
-                                .trim(),
-                            }}
-                          />
-                        )}
+                        <span dangerouslySetInnerHTML={{ __html: renderQuestionAnswerHtml(q?.question ?? {}) }} />
                       </div>
                     </td>
-                    <td
-                      style={{
-                        border: "1px solid black",
-                        padding: "10px",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                      }}
-                    >
+                    <td style={{ border: "1px solid black", padding: "10px", textAlign: "center", verticalAlign: "middle" }}>
                       {formatQuestionPoint(q?.question?.point)}đ
                     </td>
                   </tr>

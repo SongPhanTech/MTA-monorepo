@@ -1,5 +1,4 @@
 import { queryClient } from "@api/index"
-import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
 import type { Prisma } from "@workspace/db/client"
 import { useFindManyExamBank, useUpdateExamBank } from "@workspace/db/hooks"
 import { getExamBankWithGrouping } from "@workspace/libs/api/exam"
@@ -11,6 +10,7 @@ import { useEffect, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 import { convertHtmlBreaks, saveFile } from "@/utils/saveFile"
+import { renderQuestionExamHtml } from "@/utils/cluster-question-utils"
 import { useSession } from "@workspace/auth/react"
 
 export type ExamBankType = Prisma.ExamBankGetPayload<{
@@ -135,7 +135,7 @@ const PrintBatchExamBank = () => {
     const mapQuestion = (q: any, index: number) => ({
       order: index + 1,
       point: formatQuestionPoint(q?.question?.point),
-      content: convertHtmlBreaks(q?.question?.content || ""),
+      content: convertHtmlBreaks(renderQuestionExamHtml(q?.question ?? {})) || "",
     })
 
     const templateData = {
@@ -343,10 +343,7 @@ const PrintBatchExamBank = () => {
                       </strong>{" "}
                       <span
                         dangerouslySetInnerHTML={{
-                          __html: renderWithMath(q?.question?.content || "")
-                            .replace(/<p[^>]*>/g, "")
-                            .replace(/<\/p>/g, " ")
-                            .trim(),
+                          __html: renderQuestionExamHtml(q?.question ?? {}),
                         }}
                       />
                     </div>
@@ -362,10 +359,7 @@ const PrintBatchExamBank = () => {
                       </strong>{" "}
                       <span
                         dangerouslySetInnerHTML={{
-                          __html: renderWithMath(q?.question?.content || "")
-                            .replace(/<p[^>]*>/g, "")
-                            .replace(/<\/p>/g, " ")
-                            .trim(),
+                          __html: renderQuestionExamHtml(q?.question ?? {}),
                         }}
                       />
                     </div>
@@ -382,10 +376,7 @@ const PrintBatchExamBank = () => {
                       </strong>{" "}
                       <span
                         dangerouslySetInnerHTML={{
-                          __html: renderWithMath(q?.question?.content || "")
-                            .replace(/<p[^>]*>/g, "")
-                            .replace(/<\/p>/g, " ")
-                            .trim(),
+                          __html: renderQuestionExamHtml(q?.question ?? {}),
                         }}
                       />
                     </div>

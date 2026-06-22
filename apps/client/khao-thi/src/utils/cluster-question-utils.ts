@@ -241,3 +241,102 @@ export function renderQuestionPreviewHtml(question: QuestionPreviewInput) {
 
   return html
 }
+
+export type QuestionExamInput = Omit<QuestionPreviewInput, "subQuestions"> & {
+  multipleChoiceOptions?: Array<{ id?: string; content?: string | null; isCorrect?: boolean }>
+  fillInBlankSlots?: Array<{ order: number; correctAnswer: string }>
+  orderingItems?: Array<{ id?: string; content?: string | null; correctOrder?: number }>
+  explanation?: string | null
+  subQuestions?: Array<{
+    id: string
+    content: string
+    type?: QuestionType
+    multipleChoiceOptions?: Array<{ content?: string | null; isCorrect?: boolean }>
+    fillInBlankSlots?: Array<{ order: number; correctAnswer: string }>
+    orderingItems?: Array<{ content?: string | null; correctOrder?: number }>
+    explanation?: string | null
+  }>
+}
+
+const stripParagraphTags = (html: string) =>
+  html.replace(/<p[^>]*>/g, "").replace(/<\/p>/g, " ").trim()
+
+function renderOptionsBlock(
+  multipleChoiceOptions?: QuestionExamInput["multipleChoiceOptions"],
+  orderingItems?: QuestionExamInput["orderingItems"]
+) {
+  return [
+    ...(multipleChoiceOptions ?? []).map(
+      (o) =>
+        `<div style="margin-left:20px">${o.content ? stripParagraphTags(renderWithMath(o.content)) : ""}</div>`
+    ),
+    ...(orderingItems ?? []).map(
+      (o) =>
+        `<div style="margin-left:20px">${o.content ? stripParagraphTags(renderWithMath(o.content)) : ""}</div>`
+    ),
+  ].join("")
+}
+
+/** In/tải đề & đáp án — cùng style inline với câu thường */
+export function renderQuestionExamHtml(question: QuestionExamInput) {
+  let html = question.content ? stripParagraphTags(renderWithMath(question.content)) : ""
+
+  if (question.type === CLUSTER_QUESTION_TYPE && question.subQuestions?.length) {
+    html += question.subQuestions
+      .map((sub, i) => {
+        const { prefix, body } = formatClusterSubLabel(i, sub.content)
+        const subText = body ? ` ${stripParagraphTags(renderWithMath(body))}` : ""
+        return `<div style="margin-top:8px"><strong>${prefix}</strong>${subText}${renderOptionsBlock(sub.multipleChoiceOptions, sub.orderingItems)}</div>`
+      })
+      .join("")
+    return html
+  }
+
+  return html + renderOptionsBlock(question.multipleChoiceOptions, question.orderingItems)
+}
+
+function answerTextForOne(question: QuestionExamInput): string {
+  if (question.multipleChoiceOptions?.length) {
+    return question.multipleChoiceOptions
+      .filter((o) => o.isCorrect)
+      .map((o) => o.content ?? "")
+      .join(", ")
+  }
+  if (question.orderingItems?.length) {
+    return [...question.orderingItems]
+      .sort((a, b) => (a.correctOrder ?? 0) - (b.correctOrder ?? 0))
+      .map((_, i) => String.fromCharCode(65 + i))
+      .join(" → ")
+  }
+  if (question.fillInBlankSlots?.length) {
+    return [...question.fillInBlankSlots]
+      .sort((a, b) => a.order - b.order)
+      .map((s) => s.correctAnswer)
+      .join(", ")
+  }
+  return question.explanation ?? ""
+}
+
+export function renderQuestionAnswerHtml(question: QuestionExamInput): string {
+  if (question.type === CLUSTER_QUESTION_TYPE && question.subQuestions?.length) {
+    return question.subQuestions
+      .map((sub, i) => {
+        const { prefix } = formatClusterSubLabel(i, sub.content)
+        return `<div style="margin-top:4px"><strong>${prefix}</strong> ${stripParagraphTags(renderWithMath(answerTextForOne(sub)))}</div>`
+      })
+      .join("")
+  }
+  return stripParagraphTags(renderWithMath(answerTextForOne(question)))
+}
+
+export function plainQuestionAnswerText(question: QuestionExamInput): string {
+  if (question.type === CLUSTER_QUESTION_TYPE && question.subQuestions?.length) {
+    return question.subQuestions
+      .map((sub, i) => {
+        const { prefix } = formatClusterSubLabel(i, sub.content)
+        return `${prefix} ${answerTextForOne(sub)}`
+      })
+      .join("\n")
+  }
+  return answerTextForOne(question)
+}
