@@ -75,6 +75,8 @@ export interface UnitInfo {
   /** @nullable */
   sTenDayDu?: string | null;
   /** @nullable */
+  sTenTiengAnh?: string | null;
+  /** @nullable */
   sTenGiaoDich?: string | null;
   /** @nullable */
   sMaDonVi?: string | null;
@@ -93,4 +95,7 @@ export interface UnitInfo {
   sFax?: string | null;
   /** @nullable */
   sDienThoai?: string | null;
+  /** @nullable */
+  sTenCongUngDung?: string | null;
+  bHienThiTenCongUngDung?: boolean;
 }

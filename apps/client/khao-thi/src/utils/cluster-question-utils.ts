@@ -1,7 +1,10 @@
 import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
 import type { Prisma, QuestionType } from "@workspace/db/client"
 import { QuestionType as QuestionTypeEnum } from "@workspace/db/client"
-import { CLUSTER_QUESTION_TYPE, type SubQuestionFormItem } from "../components/modal/cluster-sub-questions-form"
+import {
+  CLUSTER_QUESTION_TYPE,
+  type SubQuestionFormItem,
+} from "../components/modal/cluster-sub-questions-form"
 
 export type QuestionPreviewInput = {
   content?: string | null
@@ -220,12 +223,12 @@ export function formatClusterSubLabel(index: number, content?: string) {
 }
 
 export function renderQuestionPreviewHtml(question: QuestionPreviewInput) {
-  let html = question.content
-    ? renderWithMath(question.content)
-    : "<i>Chưa có nội dung</i>"
+  let html = question.content ? renderWithMath(question.content) : "<i>Chưa có nội dung</i>"
 
   if ((question.subQuestions?.length ?? 0) > 0 && question.type === CLUSTER_QUESTION_TYPE) {
-    html += `<div class="mt-3 space-y-2 border-t border-gray-200 pt-2">${(question.subQuestions ?? [])
+    html += `<div class="mt-3 space-y-2 border-t border-gray-200 pt-2">${(
+      question.subQuestions ?? []
+    )
       .map((sub, subIndex) => {
         const { prefix, body } = formatClusterSubLabel(subIndex, sub.content)
         const options = (sub.multipleChoiceOptions ?? [])

@@ -532,8 +532,8 @@ export const useSavePublicSurvey = <
 }
 
 /**
- * Kiểm tra mã sinh viên có trong cơ sở dữ liệu
- * @summary Kiểm tra mã sinh viên có trong cơ sở dữ liệu
+ * Kiểm tra mã học viên, giảng viên hoặc cán bộ có trong danh sách đối tượng làm khảo sát
+ * @summary Kiểm tra mã người làm khảo sát có trong danh sách đối tượng
  */
 export type validateUserSurveyResponse200 = {
   data: ValidateUserSurvey200
@@ -675,7 +675,7 @@ export function useValidateUserSurvey<
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Kiểm tra mã sinh viên có trong cơ sở dữ liệu
+ * @summary Kiểm tra mã người làm khảo sát có trong danh sách đối tượng
  */
 
 export function useValidateUserSurvey<

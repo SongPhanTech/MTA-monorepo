@@ -34,8 +34,7 @@ const COT = {
   ngayThang: 100,
 } as const
 
-const SCROLL_X_NGAY =
-  COT.thoiGian + COT.noiDung + COT.loaiLich + COT.diaDiem + COT.ghiChu
+const SCROLL_X_NGAY = COT.thoiGian + COT.noiDung + COT.loaiLich + COT.diaDiem + COT.ghiChu
 const SCROLL_X_TUAN = SCROLL_X_NGAY + COT.thu + COT.ngayTuan
 const SCROLL_X_THANG = SCROLL_X_NGAY + COT.ngayThang + COT.thu
 

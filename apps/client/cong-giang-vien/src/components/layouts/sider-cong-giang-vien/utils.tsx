@@ -54,10 +54,7 @@ export const findOpenKeys = (menus: MenuItem[], currentPath: string | null): str
   return []
 }
 
-export const findMatchingKey = (
-  menus: MenuItem[],
-  pathname: string | null
-): string | undefined => {
+export const findMatchingKey = (menus: MenuItem[], pathname: string | null): string | undefined => {
   if (!pathname) return undefined
 
   for (const item of menus) {

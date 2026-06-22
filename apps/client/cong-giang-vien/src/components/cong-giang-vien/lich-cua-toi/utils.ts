@@ -3,7 +3,15 @@ import isoWeek from "dayjs/plugin/isoWeek"
 
 dayjs.extend(isoWeek)
 
-export const TIEU_DE_THU = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"] as const
+export const TIEU_DE_THU = [
+  "Thứ 2",
+  "Thứ 3",
+  "Thứ 4",
+  "Thứ 5",
+  "Thứ 6",
+  "Thứ 7",
+  "Chủ nhật",
+] as const
 
 /** Tiêu đề cột Thứ trên lịch tháng / header tuần */
 export const CLASS_TIEU_DE_THU =

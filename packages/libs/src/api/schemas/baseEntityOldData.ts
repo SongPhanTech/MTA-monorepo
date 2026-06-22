@@ -51,8 +51,11 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 import type { Company } from './company';
+import type { Sequence } from './sequence';
+import type { SequenceEditDto } from './sequenceEditDto';
+import type { UserSession } from './userSession';
 
 /**
  * @nullable
  */
-export type BaseEntityOldData = Company | null;
+export type BaseEntityOldData = Company | Sequence | SequenceEditDto | UserSession | null;

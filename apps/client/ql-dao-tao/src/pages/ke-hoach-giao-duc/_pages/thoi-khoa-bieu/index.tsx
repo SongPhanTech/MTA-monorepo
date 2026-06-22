@@ -724,9 +724,7 @@ export default function ThoiKhoaBieu({
                   render: (_, record) => {
                     return record.subjectClassTimes
                       ?.uniqueByKeys?.(["dayOfWeek", "startPeriod", "endPeriod"])
-                      ?.sort?.(
-                        (a, b) => a.dayOfWeek - b.dayOfWeek || a.startPeriod - b.startPeriod
-                      )
+                      ?.sort?.((a, b) => a.dayOfWeek - b.dayOfWeek || a.startPeriod - b.startPeriod)
                       ?.map?.((tkb) => {
                         return (
                           <p key={`${tkb.dayOfWeek}-${tkb.startPeriod}-${tkb.endPeriod}`}>

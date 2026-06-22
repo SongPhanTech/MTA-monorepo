@@ -621,14 +621,15 @@ const WordImportModal: React.FC = () => {
   const questionStartRegex =
     /^Câu\s*(\d+)\s*:\s*\(\s*(TNN|TN|DK|SX|TL|CH)\s*-\s*(NB|TH|VD|VDC)\s*\)\s*\(\s*[\d.,]+\s*đ\s*\)/i
 
-  const normalizeFingerprintText = (text?: string) =>
-    (text || "").trim().replace(/\s+/g, " ")
+  const normalizeFingerprintText = (text?: string) => (text || "").trim().replace(/\s+/g, " ")
 
   const clusterFingerprint = (q: any) => {
     const subFp = (q.subQuestionsRaw || [])
       .map(
         (sq: any) =>
-          `${sq.label}:${sq.type}:${sq.point}:${sq.difficult}:${normalizeFingerprintText(sq.content)}:${(sq.optionsRaw || [])
+          `${sq.label}:${sq.type}:${sq.point}:${sq.difficult}:${normalizeFingerprintText(sq.content)}:${(
+            sq.optionsRaw || []
+          )
             .map((o: any) => `${o.label}=${normalizeFingerprintText(o.content)}`)
             .join(",")}`
       )
@@ -688,8 +689,7 @@ const WordImportModal: React.FC = () => {
       }
     }
 
-    const pointPerSub =
-      Math.round((parentPoint / subStarts.length) * 100) / 100 || parentPoint
+    const pointPerSub = Math.round((parentPoint / subStarts.length) * 100) / 100 || parentPoint
 
     const subQuestions = subStarts.map((start, s) => {
       const end = s + 1 < subStarts.length ? subStarts[s + 1].index : blockLines.length
@@ -924,9 +924,7 @@ const WordImportModal: React.FC = () => {
                   return `${prefix}${body ? ` ${body}\n` : " "}${opts}`
                 }
                 if (sq.type === QuestionType.ORDERING && sq.optionsRaw?.length) {
-                  const opts = sq.optionsRaw
-                    .map((o: any) => `${o.label}. ${o.content}`)
-                    .join("\n")
+                  const opts = sq.optionsRaw.map((o: any) => `${o.label}. ${o.content}`).join("\n")
                   return `${prefix}${body ? ` ${body}\n` : " "}${opts}`
                 }
                 return `${prefix}${body ? ` ${body}` : ""}`

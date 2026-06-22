@@ -106,8 +106,8 @@ const AddHuongDanNganHang = () => {
           </li>
           <li>Các đáp án xuống dòng (A, B, C...)</li>
           <li>
-            Câu hỏi chùm (<Text code>CH</Text>): đề chung + câu con bắt đầu{" "}
-            <Text code>a)</Text>, <Text code>b)</Text>...
+            Câu hỏi chùm (<Text code>CH</Text>): đề chung + câu con bắt đầu <Text code>a)</Text>,{" "}
+            <Text code>b)</Text>...
           </li>
           <li>
             Mỗi câu con <Text strong>tuỳ chọn</Text> khai báo riêng{" "}

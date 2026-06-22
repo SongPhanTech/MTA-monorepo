@@ -5,7 +5,9 @@ import { RichTextEditor } from "@components/commons/rich-text-editor"
 import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
-import ClusterSubQuestionsForm, { defaultSubQuestion } from "@components/modal/cluster-sub-questions-form"
+import ClusterSubQuestionsForm, {
+  defaultSubQuestion,
+} from "@components/modal/cluster-sub-questions-form"
 import {
   buildSubQuestionCreateData,
   CLUSTER_QUESTION_TYPE,
@@ -381,13 +383,7 @@ const PutQuestionModal = () => {
           for (let i = 0; i < subQuestions.length; i++) {
             const sq = subQuestions[i]
             if (sq.id) {
-              await updateSubQuestion(
-                sq.id,
-                sq,
-                i + 1,
-                input.questionBankId,
-                updateQuestion
-              )
+              await updateSubQuestion(sq.id, sq, i + 1, input.questionBankId, updateQuestion)
             } else {
               await createQuestion({
                 data: buildSubQuestionCreateData(sq, i + 1, input.questionBankId, input.id),
@@ -550,11 +546,10 @@ const PutQuestionModal = () => {
       form.setFieldsValue({
         ...rest,
         multipleChoiceOptions: [],
-        subQuestions:
-          initialValue.subQuestions?.map((sub) => ({
-            ...mapSubQuestionFromDb(sub),
-            difficult: initialValue.difficult ?? "D1",
-          })) || [{ ...defaultSubQuestion(), difficult: initialValue.difficult ?? "D1" }],
+        subQuestions: initialValue.subQuestions?.map((sub) => ({
+          ...mapSubQuestionFromDb(sub),
+          difficult: initialValue.difficult ?? "D1",
+        })) || [{ ...defaultSubQuestion(), difficult: initialValue.difficult ?? "D1" }],
       })
       return
     }
@@ -1003,23 +998,23 @@ const PutQuestionModal = () => {
                       {subQuestionsPreview.map((sq, subIndex) => {
                         const { prefix, body } = formatClusterSubLabel(subIndex, sq.content)
                         return (
-                        <div key={subIndex} className="mb-4">
-                          <div className="font-medium text-sm text-[#111827] mb-2">
-                            {prefix}
-                            {body ? ` ${body}` : " (chưa có nội dung)"}
-                          </div>
-                          {sq.multipleChoiceOptions?.map((opt, optIndex) => (
-                            <div
-                              key={optIndex}
-                              className={`flex items-center gap-3 border-solid border-[1px] p-3 mb-3 rounded-[8px] ${
-                                opt.isCorrect ? "border-green-500 bg-green-100" : ""
-                              }`}
-                            >
-                              <Checkbox checked={opt.isCorrect} />
-                              <div>{opt.content || `Đáp án ${optIndex + 1}`}</div>
+                          <div key={subIndex} className="mb-4">
+                            <div className="font-medium text-sm text-[#111827] mb-2">
+                              {prefix}
+                              {body ? ` ${body}` : " (chưa có nội dung)"}
                             </div>
-                          ))}
-                        </div>
+                            {sq.multipleChoiceOptions?.map((opt, optIndex) => (
+                              <div
+                                key={optIndex}
+                                className={`flex items-center gap-3 border-solid border-[1px] p-3 mb-3 rounded-[8px] ${
+                                  opt.isCorrect ? "border-green-500 bg-green-100" : ""
+                                }`}
+                              >
+                                <Checkbox checked={opt.isCorrect} />
+                                <div>{opt.content || `Đáp án ${optIndex + 1}`}</div>
+                              </div>
+                            ))}
+                          </div>
                         )
                       })}
                     </div>

@@ -89,27 +89,27 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
         deletedAt: null as null,
         questionBankId,
         parentQuestionId: null,
-      ...(filters.questionType && filters.questionType.length > 0
-        ? {
-            type: { in: filters.questionType },
-          }
-        : {}),
-      ...(filters.content && filters.content !== ""
-        ? {
-            content: {
-              contains: filters.content,
-              mode: "insensitive" as const,
-            },
-          }
-        : {}),
-      ...(filters.explanation && filters.explanation !== ""
-        ? {
-            explanation: {
-              contains: filters.explanation,
-              mode: "insensitive" as const,
-            },
-          }
-        : {}),
+        ...(filters.questionType && filters.questionType.length > 0
+          ? {
+              type: { in: filters.questionType },
+            }
+          : {}),
+        ...(filters.content && filters.content !== ""
+          ? {
+              content: {
+                contains: filters.content,
+                mode: "insensitive" as const,
+              },
+            }
+          : {}),
+        ...(filters.explanation && filters.explanation !== ""
+          ? {
+              explanation: {
+                contains: filters.explanation,
+                mode: "insensitive" as const,
+              },
+            }
+          : {}),
         ...(filters.difficult && filters.difficult.length > 0
           ? {
               difficult: { in: filters.difficult },
@@ -356,34 +356,37 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                           row.type === CLUSTER_QUESTION_TYPE && (
                             <div className="mt-3 space-y-2 border-t border-gray-200 pt-2">
                               {(row.subQuestions ?? []).map((sub, subIndex) => {
-                                const { prefix, body } = formatClusterSubLabel(subIndex, sub.content)
+                                const { prefix, body } = formatClusterSubLabel(
+                                  subIndex,
+                                  sub.content
+                                )
                                 return (
-                                <div key={sub.id} className="text-xs">
-                                  <div className="font-medium text-gray-700 mb-1">
-                                    {prefix}
-                                    {body ? (
-                                      <>
-                                        {" "}
+                                  <div key={sub.id} className="text-xs">
+                                    <div className="font-medium text-gray-700 mb-1">
+                                      {prefix}
+                                      {body ? (
+                                        <>
+                                          {" "}
+                                          <span
+                                            dangerouslySetInnerHTML={{
+                                              __html: renderWithMath(body),
+                                            }}
+                                          />
+                                        </>
+                                      ) : null}
+                                    </div>
+                                    {sub.multipleChoiceOptions?.map((option) => (
+                                      <div key={option.id} className="text-gray-600 pl-2">
                                         <span
                                           dangerouslySetInnerHTML={{
-                                            __html: renderWithMath(body),
+                                            __html: option.content
+                                              ? renderWithMath(option.content)
+                                              : "",
                                           }}
                                         />
-                                      </>
-                                    ) : null}
+                                      </div>
+                                    ))}
                                   </div>
-                                  {sub.multipleChoiceOptions?.map((option) => (
-                                    <div key={option.id} className="text-gray-600 pl-2">
-                                      <span
-                                        dangerouslySetInnerHTML={{
-                                          __html: option.content
-                                            ? renderWithMath(option.content)
-                                            : "",
-                                        }}
-                                      />
-                                    </div>
-                                  ))}
-                                </div>
                                 )
                               })}
                             </div>
