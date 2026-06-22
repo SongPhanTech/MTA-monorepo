@@ -596,7 +596,6 @@ const PutThongTinCaNhanModal = () => {
       maskClosable={false}
       title="Cập nhật thông tin cá nhân"
       width={900}
-      rowWrap={false}
     >
       <Tabs
         items={[

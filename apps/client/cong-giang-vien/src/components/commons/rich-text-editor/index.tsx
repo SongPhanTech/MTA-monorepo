@@ -41,6 +41,7 @@ type TextEditorProps = {
   mentions?: Array<MentionType>
   editorProps?: Omit<EditorContentProps, "ref" | "editor">
   id?: string
+  editable?: boolean | undefined
 }
 
 export function RichTextEditor({

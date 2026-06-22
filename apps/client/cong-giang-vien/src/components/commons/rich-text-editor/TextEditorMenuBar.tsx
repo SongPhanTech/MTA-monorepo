@@ -24,18 +24,27 @@ import {
   RiAlignLeft,
   RiAlignRight,
   RiBold,
-  RiCodeSSlashLine,
   RiFunctions,
   RiImage2Line,
   RiItalic,
   RiListOrdered2,
-  RiMarkPenFill,
   RiMoneyDollarBoxLine,
   RiMoneyDollarCircleLine,
   RiStrikethrough,
 } from "react-icons/ri"
 import "katex/dist/katex.min.css"
-import { Columns, Merge, Plus, Rows, Split, Table, TableProperties, Trash2 } from "lucide-react"
+import {
+  Columns,
+  Merge,
+  Plus,
+  Redo,
+  Rows,
+  Split,
+  Table,
+  TableProperties,
+  Trash2,
+  Undo,
+} from "lucide-react"
 
 const { Title } = Typography
 
@@ -73,7 +82,15 @@ const Button = ({
   </Tooltip>
 )
 
-export default function TextEditorMenuBar({ editor, id }: { editor: Editor | null; id?: string }) {
+export default function TextEditorMenuBar({
+  editor,
+  id,
+  editable = true,
+}: {
+  editor: Editor | null
+  id?: string
+  editable?: boolean
+}) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [mathModalVisible, setMathModalVisible] = useState(false)
   const [mathInput, setMathInput] = useState("")
@@ -293,6 +310,8 @@ export default function TextEditorMenuBar({ editor, id }: { editor: Editor | nul
   }
 
   if (!editor) return null
+  // Ẩn toolbar nếu không editable
+  if (!editable) return null
 
   const groupedButtons: MenuButton[][] = [
     [
@@ -321,22 +340,6 @@ export default function TextEditorMenuBar({ editor, id }: { editor: Editor | nul
         onClick: () => editor.chain().focus().toggleStrike().run(),
         isActive: editor.isActive("strike"),
         disabled: !editor.can().chain().focus().toggleStrike().run(),
-      },
-    ],
-    [
-      {
-        id: "RiMarkPenFill",
-        icon: <RiMarkPenFill className="size-5" />,
-        onClick: () => editor.chain().focus().toggleHighlight().run(),
-        isActive: editor.isActive("highlight"),
-        disabled: !editor.can().chain().focus().toggleHighlight().run(),
-      },
-      {
-        id: "RiCodeSSlashLine",
-        icon: <RiCodeSSlashLine className="size-5" />,
-        onClick: () => editor.chain().focus().toggleCode().run(),
-        isActive: editor.isActive("code"),
-        disabled: !editor.can().chain().focus().toggleCode().run(),
       },
     ],
     [
@@ -421,7 +424,7 @@ export default function TextEditorMenuBar({ editor, id }: { editor: Editor | nul
         onClick: () => wrapSelectionWith("$$", "$$"),
         isActive: false,
         disabled: false,
-        description: "Math latex div",
+        description: "Math latex block",
       },
     ],
     [
@@ -496,6 +499,20 @@ export default function TextEditorMenuBar({ editor, id }: { editor: Editor | nul
         isActive: false,
         disabled: !editor.can().chain().focus().splitCell().run(),
         description: "Tách ô",
+      },
+      {
+        id: "undo",
+        icon: <Undo className="size-5" />,
+        onClick: () => editor.chain().focus().undo().run(),
+        isActive: false,
+        description: "Hoàn tác",
+      },
+      {
+        id: "redo",
+        icon: <Redo className="size-5" />,
+        onClick: () => editor.chain().focus().redo().run(),
+        isActive: false,
+        description: "Làm lại",
       },
       {
         id: "deleteTable",

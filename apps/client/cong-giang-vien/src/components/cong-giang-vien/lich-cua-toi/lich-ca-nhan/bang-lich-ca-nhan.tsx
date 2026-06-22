@@ -227,7 +227,6 @@ const BangLichCaNhan = ({
             scrollable
             maxHeight={chieuCaoBody}
             defaultExpandAll
-            resetIndexPerGroup
             className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600 [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
             locale={{ emptyText }}
           />
