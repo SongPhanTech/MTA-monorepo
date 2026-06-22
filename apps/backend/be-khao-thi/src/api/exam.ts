@@ -230,7 +230,21 @@ app.openapi(getExamBankWithGrouping, async (c) => {
     where: { id },
     include: {
       questions: {
-        include: { question: true },
+        include: {
+          question: {
+            include: {
+              subQuestions: {
+                where: { deletedAt: null },
+                orderBy: { order: "asc" },
+                include: {
+                  multipleChoiceOptions: { orderBy: { order: "asc" } },
+                  fillInBlankSlots: { orderBy: { order: "asc" } },
+                  orderingItems: true,
+                },
+              },
+            },
+          },
+        },
         orderBy: { order: "asc" },
       },
     },
@@ -355,7 +369,23 @@ app.openapi(sinhdethuCong, async (c) => {
       deletedAt: null,
     },
     include: {
-      questions: true,
+      questions: {
+        where: {
+          deletedAt: null,
+          parentQuestionId: null,
+        },
+        include: {
+          subQuestions: {
+            where: { deletedAt: null },
+            orderBy: { order: "asc" },
+            include: {
+              multipleChoiceOptions: { orderBy: { order: "asc" } },
+              fillInBlankSlots: { orderBy: { order: "asc" } },
+              orderingItems: true,
+            },
+          },
+        },
+      },
       configExams: true,
     },
   })

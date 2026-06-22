@@ -1,6 +1,17 @@
+import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
 import type { Prisma, QuestionType } from "@workspace/db/client"
 import { QuestionType as QuestionTypeEnum } from "@workspace/db/client"
 import { CLUSTER_QUESTION_TYPE, type SubQuestionFormItem } from "../components/modal/cluster-sub-questions-form"
+
+export type QuestionPreviewInput = {
+  content?: string | null
+  type?: QuestionType
+  subQuestions?: Array<{
+    id: string
+    content: string
+    multipleChoiceOptions?: Array<{ id: string; content: string }>
+  }>
+}
 
 export function mapSubQuestionFromDb(
   sub: Prisma.QuestionGetPayload<{
@@ -206,4 +217,27 @@ export function formatClusterSubLabel(index: number, content?: string) {
     prefix: `${label})`,
     body: text.replace(new RegExp(`^${label}\\)\\s*`, "i"), ""),
   }
+}
+
+export function renderQuestionPreviewHtml(question: QuestionPreviewInput) {
+  let html = question.content
+    ? renderWithMath(question.content)
+    : "<i>Chưa có nội dung</i>"
+
+  if ((question.subQuestions?.length ?? 0) > 0 && question.type === CLUSTER_QUESTION_TYPE) {
+    html += `<div class="mt-3 space-y-2 border-t border-gray-200 pt-2">${(question.subQuestions ?? [])
+      .map((sub, subIndex) => {
+        const { prefix, body } = formatClusterSubLabel(subIndex, sub.content)
+        const options = (sub.multipleChoiceOptions ?? [])
+          .map(
+            (o) =>
+              `<div class="text-gray-600 pl-2"><span>${o.content ? renderWithMath(o.content) : ""}</span></div>`
+          )
+          .join("")
+        return `<div class="text-xs"><div class="font-medium text-gray-700 mb-1">${prefix}${body ? ` <span>${renderWithMath(body)}</span>` : ""}</div>${options}</div>`
+      })
+      .join("")}</div>`
+  }
+
+  return html
 }
