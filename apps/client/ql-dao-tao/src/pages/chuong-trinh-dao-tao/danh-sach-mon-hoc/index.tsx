@@ -360,7 +360,7 @@ export default function SubjectList() {
       subject.subjectVersion?.forEach((version: any) => {
         dataExport.push({
           "Nhóm môn": subject.name,
-          "Đơn vị quản lý": subject.managementOrganization?.sTen || "",
+          "Đơn vị quản lý": version.managementOrganization?.sTen || "",
           "Mã môn học": version.code,
           "Tên môn học": version.name,
           "Mã TKB": version.codeTkb,
@@ -514,9 +514,9 @@ export default function SubjectList() {
           <TableCollapse
             rowKey="key"
             headerTitleKey={({ name, managementOrganization }) => {
-              const org = [managementOrganization?.sMa, managementOrganization?.sTen]
-                .filter(Boolean)
-                .join(" - ")
+              const rawTen = managementOrganization?.sTen
+              const sTen = !rawTen || rawTen === "Unknown" ? "Chưa có ĐVQL" : rawTen
+              const org = [managementOrganization?.sMa, sTen].filter(Boolean).join(" - ")
 
               return `Nhóm môn: ${[name, org].filter(Boolean).join(" | ")}`
             }}
