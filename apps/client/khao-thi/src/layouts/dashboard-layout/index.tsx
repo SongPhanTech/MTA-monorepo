@@ -47,6 +47,7 @@ const DashboardLayout = ({ children, className }: { children: ReactNode; classNa
       onIdle={() => {}}
     >
       <Layout style={{ minHeight: "100vh" }} hasSider className="bg-blue-50">
+        <div className="khao-thi-header-divider" aria-hidden />
         <SiderDefaultLayout
           logo1={<Image src={logo_mta} alt="logo MTA" className="size-10" />}
           logo2={
@@ -67,12 +68,11 @@ const DashboardLayout = ({ children, className }: { children: ReactNode; classNa
           }}
         >
           <Header
-            className={`flex justify-between items-center bg-white shadow-sm mb-2 fixed z-[1000] top-0  ${collapsed ? "w-[calc(100%-80px)] left-[80px]" : "w-[calc(100%-230px)] left-[230px]"}`}
+            className={`flex h-16 justify-end items-center bg-[#f8fafc] fixed z-[1000] top-0  ${collapsed ? "w-[calc(100%-80px)] left-[80px]" : "w-[calc(100%-230px)] left-[230px]"}`}
           >
-            <span className="text-lg font-bold text-primary" />
             <HeaderApp />
           </Header>
-          <Content className="mx-2 mt-20">
+          <Content className="khao-thi-layout-content mx-2">
             {/* <div
                             className={cn(
                                 'min-h-[calc(100vh-64px-24px)] rounded-lg',

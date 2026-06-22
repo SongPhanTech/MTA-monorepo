@@ -233,6 +233,9 @@ app.openapi(getExamBankWithGrouping, async (c) => {
         include: {
           question: {
             include: {
+              multipleChoiceOptions: { orderBy: { order: "asc" } },
+              fillInBlankSlots: { orderBy: { order: "asc" } },
+              orderingItems: true,
               subQuestions: {
                 where: { deletedAt: null },
                 orderBy: { order: "asc" },

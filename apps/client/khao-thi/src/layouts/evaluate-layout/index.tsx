@@ -57,6 +57,7 @@ const EvaluateLayout = ({
       onIdle={() => {}}
     >
       <Layout style={{ minHeight: "100vh" }} hasSider>
+        <div className="khao-thi-header-divider" aria-hidden />
         <SiderDefaultLayout
           logo1={<Image src={logo_mta} alt="logo MTA" className="size-10" />}
           logo2={
@@ -77,7 +78,7 @@ const EvaluateLayout = ({
           }}
         >
           <Header
-            className={`flex justify-between items-center bg-white fixed z-[1000] top-0  ${collapsed ? "w-[calc(100%-80px)] left-[80px]" : "w-[calc(100%-230px)] left-[230px]"}`}
+            className={`flex h-16 justify-between items-center bg-[#f8fafc] fixed z-[1000] top-0  ${collapsed ? "w-[calc(100%-80px)] left-[80px]" : "w-[calc(100%-230px)] left-[230px]"}`}
           >
             <div className="flex items-center">
               <div className="flex items-center space-x-2">
@@ -89,7 +90,7 @@ const EvaluateLayout = ({
             </div>
             <HeaderApp />
           </Header>
-          <Content className="mt-16">
+          <Content className="khao-thi-layout-content">
             {unLayout ? (
               children
             ) : (

@@ -1,13 +1,13 @@
+import SidebarMenuToggle from "@components/layouts/sidebar-menu-toggle"
 import type { MenuItem } from "@workspace/router"
 import { Layout, Menu, Tooltip } from "antd"
 import type { ItemType, MenuItemType } from "antd/es/menu/interface"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { type ReactNode, useState } from "react"
+import { type ReactNode, useEffect, useState } from "react"
 
 const { Sider } = Layout
 
-// Định nghĩa kiểu dữ liệu cho props của SiderDefaultLayout
 interface SiderDefaultLayoutProps {
   collapsed: boolean
   theme: "light" | "dark"
@@ -17,7 +17,6 @@ interface SiderDefaultLayoutProps {
   logo2: ReactNode
 }
 
-// Hàm hỗ trợ để chuyển đổi "item props" thành thành cấu trúc phù hợp
 function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
   return menus.map((item) => ({
     label: item.children ? (
@@ -62,7 +61,7 @@ const findOpenKeys = (menus: MenuItem[], currentPath: string | null): string[] =
   }
   return []
 }
-// Component SiderDefaultLayout
+
 const SiderDefaultLayout = ({
   collapsed,
   theme,
@@ -72,13 +71,21 @@ const SiderDefaultLayout = ({
   logo2,
 }: SiderDefaultLayoutProps) => {
   const pathname = usePathname()
-
-  // State để quản lý các menu đang mở
   const [openKeys, setOpenKeys] = useState<string[]>(findOpenKeys(items, pathname))
+
+  useEffect(() => {
+    if (collapsed) {
+      setOpenKeys([])
+      return
+    }
+    setOpenKeys(findOpenKeys(items, pathname))
+  }, [collapsed, items, pathname])
+
   return (
     <Sider
+      className="khao-thi-sider"
       style={{
-        overflow: "auto",
+        overflow: "hidden",
         height: "100vh",
         position: "fixed",
         insetInlineStart: 0,
@@ -87,29 +94,30 @@ const SiderDefaultLayout = ({
         scrollbarWidth: "none",
       }}
       collapsible
+      trigger={null}
       onCollapse={onCollapse}
       collapsed={collapsed}
       theme={theme}
       width={230}
     >
       <div
-        className={`flex items-center bg-white justify-center py-3 fixed z-[100] top-[0px] left-[0px] ${collapsed ? "w-[80px]" : "w-[230px]"}`}
+        className={`khao-thi-sider-logo ${collapsed ? "khao-thi-sider-logo--collapsed" : ""}`}
       >
         {collapsed ? logo1 : logo2}
       </div>
       <Menu
-        className="pb-20 pt-[64px] h-full"
-        theme={"light"}
+        className="khao-thi-sider-menu"
+        theme="light"
         mode="inline"
+        inlineCollapsed={collapsed}
         selectedKeys={pathname ? [pathname] : []}
         openKeys={openKeys}
-        onOpenChange={setOpenKeys} // Cập nhật trạng thái openKeys khi menu được mở/đóng
+        onOpenChange={setOpenKeys}
         items={getMenus(items)}
-        style={{
-          background: "transparent",
-          borderTop: "1px solid #f1f1f1",
-        }}
       />
+      <div className="khao-thi-sider-footer">
+        <SidebarMenuToggle collapsed={collapsed} onToggle={(value) => onCollapse?.(value)} />
+      </div>
     </Sider>
   )
 }

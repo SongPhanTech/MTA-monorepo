@@ -1,5 +1,4 @@
 import { queryClient } from "@api/index"
-import { renderWithMath } from "@components/commons/rich-text-editor/renderWithMath"
 import { useFindUniqueExamBank, useUpdateExamBank } from "@workspace/db/hooks"
 import { useGetExamBankWithGrouping } from "@workspace/libs/api/exam"
 import { getMinioUrl, formatQuestionPoint } from "@workspace/libs/utils"
@@ -9,6 +8,7 @@ import { useEffect, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 import { convertHtmlBreaks, saveFile } from "@/utils/saveFile"
+import { renderQuestionExamHtml } from "@/utils/cluster-question-utils"
 import { useSession } from "@workspace/auth/react"
 
 const PrintExamBank = () => {
@@ -88,6 +88,8 @@ const PrintExamBank = () => {
   const month = examDate.getMonth() + 1
   const year = examDate.getFullYear()
 
+  const renderQuestionHtml = (question: any) => renderQuestionExamHtml(question ?? {})
+
   const handleDownload = async () => {
     setIsExporting(true)
     if (!data || !groupedData) return
@@ -100,7 +102,7 @@ const PrintExamBank = () => {
     const mapQuestion = (q: any, index: number) => ({
       order: String(q?.order || index + 1),
       point: formatQuestionPoint(q?.question?.point),
-      content: convertHtmlBreaks(q?.question?.content) || "",
+      content: convertHtmlBreaks(renderQuestionExamHtml(q?.question ?? {})) || "",
     })
 
     const baseTemplateData = {
@@ -350,10 +352,7 @@ const PrintExamBank = () => {
                         </strong>{" "}
                         <span
                           dangerouslySetInnerHTML={{
-                            __html: renderWithMath(q?.question?.content || "")
-                              .replace(/<p[^>]*>/g, "")
-                              .replace(/<\/p>/g, " ")
-                              .trim(),
+                            __html: renderQuestionHtml(q?.question),
                           }}
                         />
                       </div>
@@ -369,10 +368,7 @@ const PrintExamBank = () => {
                         </strong>{" "}
                         <span
                           dangerouslySetInnerHTML={{
-                            __html: renderWithMath(q?.question?.content || "")
-                              .replace(/<p[^>]*>/g, "")
-                              .replace(/<\/p>/g, " ")
-                              .trim(),
+                            __html: renderQuestionHtml(q?.question),
                           }}
                         />
                       </div>
@@ -389,10 +385,7 @@ const PrintExamBank = () => {
                         </strong>{" "}
                         <span
                           dangerouslySetInnerHTML={{
-                            __html: renderWithMath(q?.question?.content || "")
-                              .replace(/<p[^>]*>/g, "")
-                              .replace(/<\/p>/g, " ")
-                              .trim(),
+                            __html: renderQuestionHtml(q?.question),
                           }}
                         />
                       </div>
