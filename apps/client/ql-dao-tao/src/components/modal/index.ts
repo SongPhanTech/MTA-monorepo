@@ -121,11 +121,8 @@ import AddSubjectClassAttendance from "./add-diem-danh"
 import AddSubjectClassAttendanceStudent from "./add-diem-danh-mon-hoc"
 import PutAvailableTrainingTimeModal from "./PutAvailableTrainingTimeModal"
 import ModalPhienDiemKyHoc from "./modal-phien-diem-ky-hoc"
-import ModalThemLichCaNhan from "./modal-them-lich-ca-nhan"
-import ModalThemLoaiLich from "./modal-them-loai-lich"
 import ModalLamKhaoSat from "./modal-lam-khao-sat"
 import ModalXemLaiKhaoSat from "./modal-xem-lai-khao-sat"
-import PutThongTinCaNhanModal from "../cong-giang-vien/ho-so-ca-nhan/put-thong-tin-ca-nhan"
 
 export {
   ModalChiTietLopBienChe,
@@ -251,11 +248,8 @@ export {
   AddSubjectClassAttendanceStudent,
   PutAvailableTrainingTimeModal,
   ModalPhienDiemKyHoc,
-  ModalThemLichCaNhan,
-  ModalThemLoaiLich,
   ModalLamKhaoSat,
   ModalXemLaiKhaoSat,
-  PutThongTinCaNhanModal,
   ExportStatsArchivedAwardModal,
 }
 export * from "./ke-hoach-dao-tao"
