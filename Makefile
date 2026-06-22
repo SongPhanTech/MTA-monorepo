@@ -102,11 +102,12 @@ PKG_DAO_TAO := ql-dao-tao
 PKG_HO_SO := ql-ho-so
 PKG_AI := tro-ly-ao
 PKG_DANG_KY_HOC := dang-ky-hoc
+PKG_CONG_GIANG_VIEN := cong-giang-vien
 
 # Maps for build types (backend/frontend)
 BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL) $(PKG_BE_DAO_TAO_SHARED) $(PKG_BE_EXCHANGE)
 # FE_PKGS := $(PKG_DAO_TAO) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_DANG_KY_HOC)
-FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_DANG_KY_HOC)
+FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_DANG_KY_HOC) $(PKG_CONG_GIANG_VIEN)
 
 # Client App Mappings
 CDN_NAME_ql-dao-tao = lms-cdn
@@ -119,6 +120,8 @@ CDN_NAME_ql-ho-so = hrm-cdn
 ROUTER_NAME_ql-ho-so = hrm
 CDN_NAME_khao-thi = ems-cdn
 ROUTER_NAME_khao-thi = ems
+CDN_NAME_cong-giang-vien = cong-giang-vien-cdn
+ROUTER_NAME_cong-giang-vien = cong-giang-vien
 
 # Per-app URL suffix appended to FE_APP_URL → NEXT_PUBLIC_APP_URL
 # Format: <domain from profile><suffix below>  e.g. https://mta.swantech.vn/lms/home
@@ -127,6 +130,7 @@ APP_URL_SUFFIX_khao-thi     = /ems/home
 APP_URL_SUFFIX_dang-ky-hoc  = /dangkyhoc
 APP_URL_SUFFIX_ql-ho-so     = /hrm/home
 APP_URL_SUFFIX_tro-ly-ao    = /chatbot/?mode=tro-ly-ao
+APP_URL_SUFFIX_cong-giang-vien = /conggiangvien/home
 
 # Targets
 .PHONY: all clean push deploy release all-be build-all-be build-all-fe ship-fe \
