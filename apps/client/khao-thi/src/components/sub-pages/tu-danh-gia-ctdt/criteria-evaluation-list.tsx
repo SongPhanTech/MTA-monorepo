@@ -1,6 +1,7 @@
 import CommentList from "@components/commons/comment-list"
 import { RichTextEditor } from "@components/commons/rich-text-editor"
 import ExportAllCriteriaEvaluation from "@components/modal/export-all-criteria-evaluation"
+import ImportCriteriaEvaluation from "@components/modal/import-criteria-evaluation"
 import { getStatusConfig } from "@constants/constants"
 import type { DataTabEvaluationCriterionType } from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports"
 import { $Enums } from "@workspace/db/client"
@@ -118,7 +119,10 @@ export default function CriteriaEvaluationListSubPage({
       {/* Header with export button */}
       <div className="sticky top-0 z-10 bg-white py-2 flex flex-row justify-end items-center gap-2 mb-4">
         {allStandards && allStandards.length > 0 && (
-          <ExportAllCriteriaEvaluation standards={allStandards} />
+          <>
+            <ExportAllCriteriaEvaluation standards={allStandards} />
+            <ImportCriteriaEvaluation allData={allStandards} label="Nhập tất cả" />
+          </>
         )}
       </div>
 
