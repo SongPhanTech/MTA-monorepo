@@ -3,6 +3,7 @@ import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import EditIcon from "@components/icons/edit"
 import ExportCriteriaAnalysis from "@components/modal/export-criteria-analysis"
+import ImportCriteriaAnalysis from "@components/modal/import-criteria-analysis"
 import {
   DEADLINE_OPTIONS,
   EVALUATION_CRITERION_STATUS_OPTIONS,
@@ -228,7 +229,11 @@ const CriteriaAnalysisSubPage = ({
                 </Button>
               </Popconfirm>
             )}
-
+          {userRole !== "P13" &&
+            can(
+              KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
+              "THEM"
+            ) && <ImportCriteriaAnalysis data={data} refetch={refetch} />}
           <ExportCriteriaAnalysis data={data} idx={idx} />
         </div>
       </div>
