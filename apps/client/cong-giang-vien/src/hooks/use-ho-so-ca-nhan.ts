@@ -6,7 +6,7 @@ import type {
   TrinhDoDaoTao,
 } from "@components/cong-giang-vien/ho-so-ca-nhan/types"
 import { useSession } from "@workspace/auth/react"
-import { useFindUniqueUserProfile } from "@workspace/db/hooks"
+import { useFindUniqueDM_DonVi, useFindUniqueUserProfile } from "@workspace/db/hooks"
 import dayjs from "dayjs"
 import { useMemo } from "react"
 
@@ -42,6 +42,17 @@ const useHoSoCaNhan = () => {
     { enabled: !!profileId }
   )
 
+  const org = data?.lecturer?.organization
+  const isBoMon = org?.iLoaiDonVi === 7 || org?.iCapDonVi === 3
+
+  const { data: parentOrg } = useFindUniqueDM_DonVi(
+    {
+      where: { Id: org?.sParentId ?? "" },
+      select: { sTen: true },
+    },
+    { enabled: isBoMon && !!org?.sParentId }
+  )
+
   const hocViMoiNhat = useMemo(() => {
     if (!data?.hocVi?.length) return undefined
     return [...data.hocVi].sort((a, b) => (b.year ?? 0) - (a.year ?? 0))[0]
@@ -61,7 +72,9 @@ const useHoSoCaNhan = () => {
       soDienThoai: data?.phoneNumber ?? "",
       cmndCccd: data?.idCardNumber ?? "",
       maGiangVien: data?.lecturer?.lectureID ?? data?.code ?? "",
-      donViCongTac: data?.lecturer?.organization?.sTen ?? "",
+      donViCongTac: org?.sTen ?? "",
+      khoa: isBoMon ? (parentOrg?.sTen ?? "") : (org?.sTen ?? ""),
+      boMon: isBoMon ? (org?.sTen ?? "") : "",
       chucVu: data?.chucVuChinhQuyen?.sTen ?? "",
       chucDanh: data?.level?.sTen ?? "",
       hocHam: hocHamMoiNhat?.academicRankType?.sTen ?? "",
@@ -69,7 +82,7 @@ const useHoSoCaNhan = () => {
       tinhTrang: data?.trangThaiLamViec?.name ?? "",
       anhDaiDien: data?.avatar ?? undefined,
     }),
-    [data, hocHamMoiNhat]
+    [data, hocHamMoiNhat, org, isBoMon, parentOrg]
   )
 
   const thongKe: ThongKeHoSo = useMemo(() => {

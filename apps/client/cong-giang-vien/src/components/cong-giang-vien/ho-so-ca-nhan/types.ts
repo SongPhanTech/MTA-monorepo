@@ -10,6 +10,8 @@ export interface ThongTinCaNhan {
   cmndCccd: string
   maGiangVien: string
   donViCongTac: string
+  khoa: string
+  boMon: string
   chucVu: string
   chucDanh: string
   hocHam: string

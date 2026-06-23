@@ -35,8 +35,8 @@ function CongGiangVienTrangChuPage() {
     () => ({
       hoVaTen: thongTin.hoVaTen,
       maGiangVien: thongTin.maGiangVien,
-      khoa: thongTin.donViCongTac,
-      boMon: thongTin.chucDanh,
+      khoa: thongTin.khoa,
+      boMon: thongTin.boMon,
       hocVi: daoTao.trinhDo || thongTin.hocHam,
       email: thongTin.email,
       dienThoai: thongTin.soDienThoai,
@@ -54,7 +54,7 @@ function CongGiangVienTrangChuPage() {
           <div className="flex min-h-0 w-full flex-1 flex-col gap-1">
             <div className="shrink-0">
               <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
-                <LoiChao hoVaTen={thongTin.hoVaTen} khoa={thongTin.donViCongTac} />
+                <LoiChao hoVaTen={thongTin.hoVaTen} khoa={thongTin.khoa || thongTin.boMon} />
                 <BoLocThoiGian />
               </div>
               <TheThongKe
