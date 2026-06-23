@@ -162,6 +162,46 @@ export type GiaTriFormLichCaNhan = {
   nguoiLienQuanIds?: string[]
 }
 
+export type NguoiLienQuanTomTat = {
+  id: string
+  fullname?: string | null
+  email?: string | null
+  code?: string | null
+  lecturer?: {
+    lectureID?: string | null
+    organization?: { sTen?: string | null } | null
+  } | null
+}
+
+export type TuyChonNguoiLienQuan = {
+  value: string
+  label: string
+  ten: string
+  ma?: string
+  phongBan?: string
+}
+
+export const layMaNguoiLienQuan = (nguoi: NguoiLienQuanTomTat) =>
+  nguoi.lecturer?.lectureID?.trim() || nguoi.code?.trim() || ""
+
+export const layPhongBanNguoiLienQuan = (nguoi: NguoiLienQuanTomTat) =>
+  nguoi.lecturer?.organization?.sTen?.trim() || ""
+
+export const taoTuyChonNguoiLienQuan = (nguoi: NguoiLienQuanTomTat): TuyChonNguoiLienQuan => {
+  const ten = nguoi.fullname?.trim() || nguoi.email || nguoi.id
+  const ma = layMaNguoiLienQuan(nguoi)
+  const phongBan = layPhongBanNguoiLienQuan(nguoi)
+  const phu = [ma && `Mã: ${ma}`, phongBan && `PB: ${phongBan}`].filter(Boolean).join(" · ")
+
+  return {
+    value: nguoi.id,
+    ten,
+    ma: ma || undefined,
+    phongBan: phongBan || undefined,
+    label: phu ? `${ten} (${phu})` : ten,
+  }
+}
+
 export const chuyenNhacLichSangPhut = (nhacLich?: string | null): number | null => {
   if (!nhacLich || nhacLich === "none") return null
   const phut = Number(nhacLich)

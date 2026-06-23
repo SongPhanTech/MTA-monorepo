@@ -165,6 +165,106 @@
 }
 
 /* Modal thêm lịch cá nhân */
+.modal-them-lich-ca-nhan.ant-modal .ant-modal-content {
+  height: auto;
+}
+
+.modal-them-lich-ca-nhan .ant-modal-body {
+  flex: none;
+  overflow: visible;
+  padding: 12px 28px 4px !important;
+}
+
+.modal-them-lich-ca-nhan .ant-modal-body .ant-row {
+  display: block !important;
+  margin: 0 !important;
+}
+
+.modal-them-lich-ca-nhan .ant-modal-header {
+  padding: 12px 28px 8px !important;
+  margin-bottom: 0 !important;
+}
+
+.modal-them-lich-ca-nhan .ant-modal-footer {
+  padding: 8px 28px 12px !important;
+}
+
+.modal-them-lich-ca-nhan .ant-form-item {
+  margin-bottom: 8px;
+}
+
+.modal-them-lich-ca-nhan .ant-form-item-label {
+  padding-bottom: 2px !important;
+}
+
+.modal-them-lich-ca-nhan .ant-form-item-label > label {
+  height: auto !important;
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.modal-them-lich-ca-nhan .ant-input,
+.modal-them-lich-ca-nhan .ant-input-affix-wrapper,
+.modal-them-lich-ca-nhan .ant-picker,
+.modal-them-lich-ca-nhan .ant-select-selector,
+.modal-them-lich-ca-nhan .ant-input-textarea textarea {
+  font-size: 13px !important;
+  border-radius: 8px !important;
+}
+
+.modal-them-lich-ca-nhan .ant-input-affix-wrapper:not(.ant-input-textarea-affix-wrapper),
+.modal-them-lich-ca-nhan .ant-picker,
+.modal-them-lich-ca-nhan .ant-select-single .ant-select-selector {
+  min-height: 36px !important;
+  height: 36px !important;
+}
+
+.modal-them-lich-ca-nhan .ant-input-textarea-affix-wrapper {
+  height: auto !important;
+  min-height: auto !important;
+}
+
+.modal-them-lich-ca-nhan .ant-input-textarea textarea {
+  min-height: 72px !important;
+  height: auto !important;
+  padding: 8px 11px !important;
+}
+
+.modal-them-lich-ca-nhan .ant-select-multiple .ant-select-selector {
+  min-height: 36px !important;
+}
+
+.modal-them-lich-ca-nhan .ant-input-textarea-show-count::after {
+  font-size: 11px;
+}
+
+.modal-them-lich-ca-nhan [class*="khoang-thoi-gian"] > p {
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.modal-them-lich-ca-nhan .khoang-thoi-gian .ant-picker,
+.modal-them-lich-ca-nhan .khoang-thoi-gian .ant-picker-input > input {
+  width: 100%;
+}
+
+.modal-them-lich-ca-nhan .khoang-thoi-gian .ant-form-item-control-input-content {
+  width: 100%;
+}
+
+.modal-them-lich-ca-nhan [class*="tagId"] button,
+.modal-them-lich-ca-nhan .flex.w-full.items-stretch button {
+  height: 36px !important;
+  font-size: 12px !important;
+}
+
+.modal-them-lich-ca-nhan .ant-btn {
+  height: 34px;
+  font-size: 13px;
+  padding-inline: 14px;
+}
+
 .modal-them-lich-ca-nhan .ant-form-item-required::before {
   color: #ef4444 !important;
 }

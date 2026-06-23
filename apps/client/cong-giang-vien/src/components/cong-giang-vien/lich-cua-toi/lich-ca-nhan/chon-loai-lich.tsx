@@ -4,8 +4,8 @@ import { cn } from "@workspace/ui/lib/utils"
 import type { PersonalWorkTag } from "@workspace/db/client"
 import { Dropdown, Popover } from "antd"
 import type { MenuProps } from "antd"
-import { Plus } from "lucide-react"
-import { forwardRef, useMemo, useState, type MouseEvent } from "react"
+import { BookOpen, Plus, User, Users } from "lucide-react"
+import { forwardRef, useMemo, useState, type MouseEvent, type ReactNode } from "react"
 
 interface ChonLoaiLichProps {
   tags: Pick<PersonalWorkTag, "id" | "name" | "color">[]
@@ -15,6 +15,18 @@ interface ChonLoaiLichProps {
   onSuaLoai?: (tagId: string) => void
   onXoaLoai?: (tagId: string) => void
   dangTai?: boolean
+}
+
+const iconTheoTenTag = (ten: string, mau: string): ReactNode => {
+  const props = { size: 16, style: { color: mau } }
+  const chuan = ten.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase()
+  if (chuan.includes("hop") || chuan.includes("meeting")) {
+    return <Users {...props} />
+  }
+  if (chuan.includes("ca nhan") || chuan.includes("personal")) {
+    return <User {...props} />
+  }
+  return <BookOpen {...props} />
 }
 
 const NutLoaiLich = ({
@@ -38,7 +50,7 @@ const NutLoaiLich = ({
       onClick={onClick}
       onDoubleClick={onDoubleClick}
       className={cn(
-        "inline-flex h-10 min-w-0 flex-1 items-center justify-center gap-2 rounded-lg border px-2 text-sm font-medium transition-all",
+        "inline-flex h-10 min-w-0 flex-1 items-center justify-center gap-2 rounded-lg border px-3 text-sm font-medium transition-all",
         dangChon
           ? "border-2 bg-white shadow-none"
           : "border-gray-200 bg-white text-gray-700 hover:border-gray-300",
@@ -50,11 +62,7 @@ const NutLoaiLich = ({
         color: dangChon ? mau : undefined,
       }}
     >
-      <span
-        className="h-2.5 w-2.5 shrink-0 rounded-full"
-        style={{ backgroundColor: mau }}
-        aria-hidden
-      />
+      {iconTheoTenTag(tag.name, mau)}
       <span className="truncate">{tag.name}</span>
     </button>
   )
