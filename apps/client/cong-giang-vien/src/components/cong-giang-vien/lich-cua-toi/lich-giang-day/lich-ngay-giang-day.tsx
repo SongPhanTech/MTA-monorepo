@@ -48,14 +48,14 @@ const LichNgayGiangDay = ({ danhSach, dangTai }: LichNgayGiangDayProps) => {
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-2">
-      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden pt-2">
         <div className="relative flex" style={{ height: CHIEU_CAO_TIMELINE }}>
           <div className="relative w-11 shrink-0">
             {gioNhan.map((gio) => (
               <span
                 key={gio}
                 className="absolute right-1 -translate-y-1/2 text-xs leading-none text-gray-400"
-                style={{ top: gio * CHIEU_CAO_MOI_GIO }}
+                style={{ top: (gio - gioNhan[0]) * CHIEU_CAO_MOI_GIO }}
               >
                 {formatGioTimeline(gio)}
               </span>
@@ -67,7 +67,7 @@ const LichNgayGiangDay = ({ danhSach, dangTai }: LichNgayGiangDayProps) => {
               <div
                 key={gio}
                 className="pointer-events-none absolute left-0 right-0 border-t border-dashed border-gray-200"
-                style={{ top: gio * CHIEU_CAO_MOI_GIO }}
+                style={{ top: (gio - gioNhan[0]) * CHIEU_CAO_MOI_GIO }}
               />
             ))}
 
