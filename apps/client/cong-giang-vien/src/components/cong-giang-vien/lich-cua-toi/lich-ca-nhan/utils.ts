@@ -162,6 +162,75 @@ export type GiaTriFormLichCaNhan = {
   nguoiLienQuanIds?: string[]
 }
 
+export const CHON_NGUOI_LIEN_QUAN = {
+  id: true,
+  fullname: true,
+  email: true,
+  code: true,
+  lecturer: {
+    select: {
+      lectureID: true,
+      organization: { select: { sMa: true, sCode: true } },
+    },
+  },
+  educationAndTraining: {
+    take: 1,
+    select: {
+      registerNumber: true,
+      fixedClass: {
+        select: {
+          managementOrganization: { select: { sMa: true, sCode: true } },
+        },
+      },
+    },
+  },
+} as const
+
+export const taoDieuKienTimNguoiLienQuan = (tuKhoa: string) => ({
+  OR: [
+    { fullname: { contains: tuKhoa, mode: "insensitive" as const } },
+    { email: { contains: tuKhoa, mode: "insensitive" as const } },
+    { phoneNumber: { contains: tuKhoa, mode: "insensitive" as const } },
+    { code: { contains: tuKhoa, mode: "insensitive" as const } },
+    {
+      lecturer: {
+        lectureID: { contains: tuKhoa, mode: "insensitive" as const },
+      },
+    },
+    {
+      lecturer: {
+        organization: {
+          OR: [
+            { sMa: { contains: tuKhoa, mode: "insensitive" as const } },
+            { sCode: { contains: tuKhoa, mode: "insensitive" as const } },
+          ],
+        },
+      },
+    },
+    {
+      educationAndTraining: {
+        some: {
+          registerNumber: { contains: tuKhoa, mode: "insensitive" as const },
+        },
+      },
+    },
+    {
+      educationAndTraining: {
+        some: {
+          fixedClass: {
+            managementOrganization: {
+              OR: [
+                { sMa: { contains: tuKhoa, mode: "insensitive" as const } },
+                { sCode: { contains: tuKhoa, mode: "insensitive" as const } },
+              ],
+            },
+          },
+        },
+      },
+    },
+  ],
+})
+
 export type NguoiLienQuanTomTat = {
   id: string
   fullname?: string | null
@@ -169,8 +238,14 @@ export type NguoiLienQuanTomTat = {
   code?: string | null
   lecturer?: {
     lectureID?: string | null
-    organization?: { sTen?: string | null } | null
+    organization?: { sMa?: string | null; sCode?: string | null } | null
   } | null
+  educationAndTraining?: Array<{
+    registerNumber?: string | null
+    fixedClass?: {
+      managementOrganization?: { sMa?: string | null; sCode?: string | null } | null
+    } | null
+  }>
 }
 
 export type TuyChonNguoiLienQuan = {
@@ -178,27 +253,50 @@ export type TuyChonNguoiLienQuan = {
   label: string
   ten: string
   ma?: string
-  phongBan?: string
+  maDonVi?: string
 }
 
-export const layMaNguoiLienQuan = (nguoi: NguoiLienQuanTomTat) =>
-  nguoi.lecturer?.lectureID?.trim() || nguoi.code?.trim() || ""
+export const layMaNguoiLienQuan = (nguoi: NguoiLienQuanTomTat) => {
+  const maGv = nguoi.lecturer?.lectureID?.trim()
+  if (maGv) return maGv
 
-export const layPhongBanNguoiLienQuan = (nguoi: NguoiLienQuanTomTat) =>
-  nguoi.lecturer?.organization?.sTen?.trim() || ""
+  const hocVien = nguoi.educationAndTraining?.[0]
+  return nguoi.code?.trim() || hocVien?.registerNumber?.trim() || ""
+}
+
+export const layMaDonViNguoiLienQuan = (nguoi: NguoiLienQuanTomTat) => {
+  const donViGv = nguoi.lecturer?.organization
+  if (donViGv) {
+    return donViGv.sMa?.trim() || donViGv.sCode?.trim() || ""
+  }
+
+  const donViSv = nguoi.educationAndTraining?.[0]?.fixedClass?.managementOrganization
+  if (donViSv) {
+    return donViSv.sMa?.trim() || donViSv.sCode?.trim() || ""
+  }
+
+  return ""
+}
+
+export const taoNhanNguoiLienQuan = (nguoi: NguoiLienQuanTomTat) => {
+  const ten = nguoi.fullname?.trim() || nguoi.email?.trim() || nguoi.id
+  const ma = layMaNguoiLienQuan(nguoi)
+  const maDonVi = layMaDonViNguoiLienQuan(nguoi)
+
+  return [ma, ten, maDonVi].filter(Boolean).join(" - ")
+}
 
 export const taoTuyChonNguoiLienQuan = (nguoi: NguoiLienQuanTomTat): TuyChonNguoiLienQuan => {
-  const ten = nguoi.fullname?.trim() || nguoi.email || nguoi.id
+  const ten = nguoi.fullname?.trim() || nguoi.email?.trim() || nguoi.id
   const ma = layMaNguoiLienQuan(nguoi)
-  const phongBan = layPhongBanNguoiLienQuan(nguoi)
-  const phu = [ma && `Mã: ${ma}`, phongBan && `PB: ${phongBan}`].filter(Boolean).join(" · ")
+  const maDonVi = layMaDonViNguoiLienQuan(nguoi)
 
   return {
     value: nguoi.id,
     ten,
     ma: ma || undefined,
-    phongBan: phongBan || undefined,
-    label: phu ? `${ten} (${phu})` : ten,
+    maDonVi: maDonVi || undefined,
+    label: taoNhanNguoiLienQuan(nguoi),
   }
 }
 

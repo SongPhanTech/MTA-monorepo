@@ -6,9 +6,11 @@ import ChonLoaiLich from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/
 import { TUY_CHON_NHAC_LICH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/constants"
 import type { GiaTriFormLichCaNhan } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import {
+  CHON_NGUOI_LIEN_QUAN,
   chuyenPhutSangNhacLich,
   datGioCaNgay,
   MAU_LOAI_MAC_DINH,
+  taoDieuKienTimNguoiLienQuan,
   taoDuLieuLuuLich,
   taoThoiGianLich,
   taoTuyChonNguoiLienQuan,
@@ -82,18 +84,7 @@ const ModalThemLichCaNhan = () => {
       include: {
         tags: { select: { id: true } },
         relatedUserProfiles: {
-          select: {
-            id: true,
-            fullname: true,
-            email: true,
-            code: true,
-            lecturer: {
-              select: {
-                lectureID: true,
-                organization: { select: { sTen: true } },
-              },
-            },
-          },
+          select: CHON_NGUOI_LIEN_QUAN,
         },
       },
     },
@@ -104,41 +95,9 @@ const ModalThemLichCaNhan = () => {
     {
       where: {
         active: true,
-        ...(timNguoiLienQuan
-          ? {
-              OR: [
-                { fullname: { contains: timNguoiLienQuan, mode: "insensitive" } },
-                { email: { contains: timNguoiLienQuan, mode: "insensitive" } },
-                { phoneNumber: { contains: timNguoiLienQuan, mode: "insensitive" } },
-                { code: { contains: timNguoiLienQuan, mode: "insensitive" } },
-                {
-                  lecturer: {
-                    lectureID: { contains: timNguoiLienQuan, mode: "insensitive" },
-                  },
-                },
-                {
-                  lecturer: {
-                    organization: {
-                      sTen: { contains: timNguoiLienQuan, mode: "insensitive" },
-                    },
-                  },
-                },
-              ],
-            }
-          : {}),
+        ...(timNguoiLienQuan ? taoDieuKienTimNguoiLienQuan(timNguoiLienQuan) : {}),
       },
-      select: {
-        id: true,
-        fullname: true,
-        email: true,
-        code: true,
-        lecturer: {
-          select: {
-            lectureID: true,
-            organization: { select: { sTen: true } },
-          },
-        },
-      },
+      select: CHON_NGUOI_LIEN_QUAN,
       take: 50,
       orderBy: [{ fullname: "asc" }],
     },
@@ -588,23 +547,11 @@ const ModalThemLichCaNhan = () => {
             allowClear
             showSearch
             filterOption={false}
-            placeholder="Tìm kiếm giảng viên, người dùng..."
+            placeholder="Tìm theo mã SV/GV, tên, mã đơn vị..."
             className="w-full [&_.ant-select-selector]:!min-h-9"
             options={tuyChonNguoiLienQuan}
             optionRender={(option) => (
-              <div className="py-0.5">
-                <div className="text-sm font-medium text-gray-900">{option.data.ten}</div>
-                {option.data.ma || option.data.phongBan ? (
-                  <div className="text-xs text-gray-500">
-                    {[
-                      option.data.ma ? `Mã: ${option.data.ma}` : null,
-                      option.data.phongBan ? `Phòng ban: ${option.data.phongBan}` : null,
-                    ]
-                      .filter(Boolean)
-                      .join(" · ")}
-                  </div>
-                ) : null}
-              </div>
+              <div className="py-0.5 text-sm text-gray-900">{option.data.label}</div>
             )}
             onSearch={setTimNguoiLienQuan}
             suffixIcon={<UserPlus size={14} className="text-gray-400" />}
