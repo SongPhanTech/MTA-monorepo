@@ -47,7 +47,7 @@ const useKhaoSatGiangVien = ({
   trangThai = "tat_ca",
 }: UseKhaoSatGiangVienParams = {}) => {
   const { data: session } = useSession()
-  const profileId = session?.sDM_NhanVienId || "fa330b1b-4326-4018-b3d9-3cd79344f660"
+  const profileId = session?.sDM_NhanVienId
 
   const { data, isLoading, isFetching, refetch } = useGetSurveysOfProfile(
     profileId as string,
