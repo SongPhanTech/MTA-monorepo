@@ -38,8 +38,7 @@ const PrintExplanation = () => {
   )
 
   const { mutateAsync: fetchGroupedQuestions, data: groupedResponse } = useGetExamBankWithGrouping()
-  const questions =
-    groupedResponse?.status === 200 ? (groupedResponse.data.questions ?? []) : []
+  const questions = groupedResponse?.status === 200 ? (groupedResponse.data.questions ?? []) : []
 
   useEffect(() => {
     if (input?.id) {
@@ -117,7 +116,12 @@ const PrintExplanation = () => {
         <div className="flex items-center gap-4">
           <span>Xem trước đáp án</span>
           <div className="flex-1 flex items-center justify-center gap-4">
-            <Input placeholder="Nhập tên" value={name} onChange={(e) => setName(e.target.value)} className="w-56" />
+            <Input
+              placeholder="Nhập tên"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-56"
+            />
             <Input
               placeholder="Nhập thời gian thi"
               value={duration}
@@ -143,7 +147,14 @@ const PrintExplanation = () => {
         </Flex>
       }
     >
-      <div style={{ maxHeight: "70vh", overflow: "auto", border: "1px solid #d9d9d9", padding: "16px" }}>
+      <div
+        style={{
+          maxHeight: "70vh",
+          overflow: "auto",
+          border: "1px solid #d9d9d9",
+          padding: "16px",
+        }}
+      >
         <div
           ref={printRef}
           style={{
@@ -172,10 +183,20 @@ const PrintExplanation = () => {
           <div id="print-explanation">
             <div style={{ position: "relative", marginBottom: "10px" }}>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>BAN KHẢO THÍ & ĐBCLGD-ĐT</div>
+                <div style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
+                  BAN KHẢO THÍ & ĐBCLGD-ĐT
+                </div>
                 <div style={{ fontWeight: "bold" }}>{data?.exam?.semester?.name || "HKI"}</div>
               </div>
-              <div style={{ position: "absolute", left: "55%", top: "0", transform: "translateX(-50%)", fontWeight: "bold" }}>
+              <div
+                style={{
+                  position: "absolute",
+                  left: "55%",
+                  top: "0",
+                  transform: "translateX(-50%)",
+                  fontWeight: "bold",
+                }}
+              >
                 PHIẾU ĐỀ THI
               </div>
             </div>
@@ -188,13 +209,35 @@ const PrintExplanation = () => {
               Ngày {day} tháng {month} năm {year}
             </div>
 
-            <table style={{ width: "100%", border: "1px solid black", borderCollapse: "collapse", marginBottom: "20px" }}>
+            <table
+              style={{
+                width: "100%",
+                border: "1px solid black",
+                borderCollapse: "collapse",
+                marginBottom: "20px",
+              }}
+            >
               <tbody>
                 <tr>
-                  <td style={{ border: "1px solid black", padding: "10px", width: "25%", textAlign: "center", verticalAlign: "middle" }}>
+                  <td
+                    style={{
+                      border: "1px solid black",
+                      padding: "10px",
+                      width: "25%",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
                     <strong>Giáo viên ra đề</strong>
                   </td>
-                  <td style={{ border: "1px solid black", padding: "10px", width: "50%", verticalAlign: "middle" }}>
+                  <td
+                    style={{
+                      border: "1px solid black",
+                      padding: "10px",
+                      width: "50%",
+                      verticalAlign: "middle",
+                    }}
+                  >
                     <div style={{ textAlign: "center", marginBottom: "5px" }}>
                       <strong>Đề thi số : {data?.examCode || "001"}</strong>
                     </div>
@@ -204,26 +247,62 @@ const PrintExplanation = () => {
                     <div style={{ textAlign: "center", marginBottom: "10px" }}>
                       <strong>
                         Thời gian làm bài:{" "}
-                        {duration || data?.examMatrix?.examFramework?.time || data?.exam?.duration} phút
+                        {duration || data?.examMatrix?.examFramework?.time || data?.exam?.duration}{" "}
+                        phút
                       </strong>
                     </div>
                   </td>
-                  <td style={{ border: "1px solid black", padding: "10px", width: "25%", textAlign: "center", verticalAlign: "middle" }}>
-                    <div style={{ marginBottom: "5px" }}><strong>Ban Khảo thi</strong></div>
-                    <div style={{ marginBottom: "5px" }}><strong>& ĐBCLGD-ĐT</strong></div>
+                  <td
+                    style={{
+                      border: "1px solid black",
+                      padding: "10px",
+                      width: "25%",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
+                    <div style={{ marginBottom: "5px" }}>
+                      <strong>Ban Khảo thi</strong>
+                    </div>
+                    <div style={{ marginBottom: "5px" }}>
+                      <strong>& ĐBCLGD-ĐT</strong>
+                    </div>
                     <div style={{ fontStyle: "italic" }}>{name}</div>
                   </td>
                 </tr>
               </tbody>
             </table>
 
-            <table style={{ width: "100%", border: "1px solid black", borderCollapse: "collapse", marginBottom: "20px" }}>
+            <table
+              style={{
+                width: "100%",
+                border: "1px solid black",
+                borderCollapse: "collapse",
+                marginBottom: "20px",
+              }}
+            >
               <thead>
                 <tr>
-                  <th style={{ border: "1px solid black", padding: "15px", width: "85%", textAlign: "center", fontWeight: "bold" }}>
+                  <th
+                    style={{
+                      border: "1px solid black",
+                      padding: "15px",
+                      width: "85%",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
                     Nội dung câu hỏi và đáp án
                   </th>
-                  <th style={{ border: "1px solid black", padding: "15px", width: "15%", textAlign: "center", fontWeight: "bold" }}>
+                  <th
+                    style={{
+                      border: "1px solid black",
+                      padding: "15px",
+                      width: "15%",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
                     Điểm
                   </th>
                 </tr>
@@ -234,16 +313,32 @@ const PrintExplanation = () => {
                     <td style={{ border: "1px solid black", padding: "15px" }}>
                       <div style={{ marginBottom: "12px" }}>
                         <strong>
-                          Câu {q?.order || index + 1}({formatQuestionPoint(q?.question?.point)} điểm):
+                          Câu {q?.order || index + 1}({formatQuestionPoint(q?.question?.point)}{" "}
+                          điểm):
                         </strong>{" "}
-                        <span dangerouslySetInnerHTML={{ __html: renderQuestionExamHtml(q?.question ?? {}) }} />
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: renderQuestionExamHtml(q?.question ?? {}),
+                          }}
+                        />
                       </div>
                       <div style={{ marginTop: "8px" }}>
                         <strong>Đáp án:</strong>{" "}
-                        <span dangerouslySetInnerHTML={{ __html: renderQuestionAnswerHtml(q?.question ?? {}) }} />
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: renderQuestionAnswerHtml(q?.question ?? {}),
+                          }}
+                        />
                       </div>
                     </td>
-                    <td style={{ border: "1px solid black", padding: "10px", textAlign: "center", verticalAlign: "middle" }}>
+                    <td
+                      style={{
+                        border: "1px solid black",
+                        padding: "10px",
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                      }}
+                    >
                       {formatQuestionPoint(q?.question?.point)}đ
                     </td>
                   </tr>

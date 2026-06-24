@@ -446,9 +446,7 @@ export const lichCoGiaoNhau = (
   ketThuc: Date | string | Dayjs,
   lichKhacBatDau: Date | string | Dayjs,
   lichKhacKetThuc: Date | string | Dayjs
-) =>
-  dayjs(batDau).isBefore(dayjs(lichKhacKetThuc)) &&
-  dayjs(ketThuc).isAfter(dayjs(lichKhacBatDau))
+) => dayjs(batDau).isBefore(dayjs(lichKhacKetThuc)) && dayjs(ketThuc).isAfter(dayjs(lichKhacBatDau))
 
 export const taoDieuKienTimLichGiaoNhau = (
   lecturerId: string,

@@ -3,9 +3,10 @@ import BoLocDiemDanh from "@components/cong-giang-vien/lop-tro-giang/diem-danh/b
 import DongTomTatDiemDanh from "@components/cong-giang-vien/lop-tro-giang/diem-danh/dong-tom-tat-diem-danh"
 import ThongTinBuoiHocCard from "@components/cong-giang-vien/lop-tro-giang/diem-danh/thong-tin-buoi-hoc"
 import TieuDeDiemDanh from "@components/cong-giang-vien/lop-tro-giang/diem-danh/tieu-de-diem-danh"
+import NutLuuDiemDanh from "@components/cong-giang-vien/lop-tro-giang/diem-danh/nut-luu-diem-danh"
 import TongKetDiemDanhCard from "@components/cong-giang-vien/lop-tro-giang/diem-danh/tong-ket-diem-danh"
 import { useDiemDanhTroGiang } from "@hooks/use-diem-danh-tro-giang"
-import { Empty, message } from "antd"
+import { Empty } from "antd"
 import { useRouter } from "next/router"
 
 const TrangDiemDanhTroGiang = () => {
@@ -69,18 +70,20 @@ const TrangDiemDanhTroGiang = () => {
             />
           </div>
 
-          <div className="flex h-full min-h-0 flex-col gap-4 overflow-y-auto">
-            <ThongTinBuoiHocCard
-              thongTin={thongTinBuoiHoc}
-              ghiChuBuoiHoc={ghiChuBuoiHoc}
-              onDoiGhiChu={setGhiChuBuoiHoc}
-            />
-            <TongKetDiemDanhCard
-              tongKet={tongKet}
-              dangLuu={dangLuu}
-              onLuu={luuDiemDanh}
-              onXuatExcel={() => message.info("Tính năng xuất Excel đang phát triển")}
-            />
+          <div className="flex h-full min-h-0 flex-col">
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <div className="flex flex-col gap-4">
+                <ThongTinBuoiHocCard
+                  thongTin={thongTinBuoiHoc}
+                  ghiChuBuoiHoc={ghiChuBuoiHoc}
+                  onDoiGhiChu={setGhiChuBuoiHoc}
+                />
+                <TongKetDiemDanhCard tongKet={tongKet} />
+              </div>
+            </div>
+            <div className="shrink-0 border-t border-gray-100 bg-white pt-3">
+              <NutLuuDiemDanh dangLuu={dangLuu} onLuu={luuDiemDanh} />
+            </div>
           </div>
         </div>
       )}

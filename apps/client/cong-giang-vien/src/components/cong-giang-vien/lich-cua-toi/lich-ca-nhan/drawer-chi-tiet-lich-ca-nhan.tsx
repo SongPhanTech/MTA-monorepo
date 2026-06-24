@@ -102,9 +102,7 @@ const DrawerChiTietLichCaNhan = ({
   const nguoiLienQuan = lich?.relatedUserProfiles ?? []
   const hienThiNguoiLienQuan = nguoiLienQuan.slice(0, 3)
   const conLaiNguoi = nguoiLienQuan.length - hienThiNguoiLienQuan.length
-  const thoiGian = lich
-    ? formatGioChiTietLich(lich.startTime, lich.endTime, lich.allDay)
-    : null
+  const thoiGian = lich ? formatGioChiTietLich(lich.startTime, lich.endTime, lich.allDay) : null
 
   const xacNhanXoa = () => {
     if (!lichId) return

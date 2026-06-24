@@ -33,18 +33,21 @@ app.openapi(
   async (c) => {
     const { appCode } = c.req.valid("query")
 
+    const getAppCode = appCode.toLowerCase()
+
     const headerToken = c.req.header("Authorization")?.split(" ")[1]
-    const xToken = headerToken || getCookie(c, `x-token-${appCode}`)
+    const xToken = headerToken || getCookie(c, `x-token-${getAppCode}`)
 
     const tenantCode = getCookie(c, "x-tenantcode") || "dev"
     const reqCookie = c.req.header("Cookie") || ""
 
     console.log("[get-session].xToken", xToken)
+    console.log("[get-session].appCode", getAppCode)
     if (!xToken) {
       return c.json({ error: "Unauthorized" }, 401)
     }
 
-    const cookie = headerToken ? `x-tenantcode=dev; x-token-${appCode}=${xToken}` : reqCookie
+    const cookie = headerToken ? `x-tenantcode=dev; x-token-${getAppCode}=${xToken}` : reqCookie
 
     const session = await auth({ xToken, appCode, tenantCode, cookie })
     if (!session) {

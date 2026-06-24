@@ -100,9 +100,7 @@ const SiderDefaultLayout = ({
       theme={theme}
       width={230}
     >
-      <div
-        className={`khao-thi-sider-logo ${collapsed ? "khao-thi-sider-logo--collapsed" : ""}`}
-      >
+      <div className={`khao-thi-sider-logo ${collapsed ? "khao-thi-sider-logo--collapsed" : ""}`}>
         {collapsed ? logo1 : logo2}
       </div>
       <Menu
