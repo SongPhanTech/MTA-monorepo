@@ -4,6 +4,7 @@ import type {
   TrangThaiLop,
 } from "@components/cong-giang-vien/giang-vien/types"
 import { useSession } from "@workspace/auth/react"
+import { $Enums } from "@workspace/db/client"
 import { useFindFirstLecturer } from "@workspace/db/hooks"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import dayjs from "dayjs"
@@ -31,6 +32,9 @@ const useTrangChuGiangVien = () => {
     semesterId,
     trainingObjectTypeId: trainingObjectId,
     cancelled: false,
+    deletedAt: null,
+    active: true,
+    status: $Enums.SubjectClassStatus.OFFICIAL,
   }
 
   const { data: lecturer, isLoading } = useFindFirstLecturer(
