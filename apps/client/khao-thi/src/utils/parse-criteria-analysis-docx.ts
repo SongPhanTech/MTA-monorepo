@@ -104,7 +104,11 @@ const getRowCells = (row: Record<string, unknown>) =>
 const getTableHeaderText = (table: Record<string, unknown>): string => {
   const rows = getTableRows(table).slice(0, 2)
   return rows
-    .map((row) => getRowCells(row).map((cell) => extractTextFromCell(cell)).join(" "))
+    .map((row) =>
+      getRowCells(row)
+        .map((cell) => extractTextFromCell(cell))
+        .join(" ")
+    )
     .join(" ")
 }
 
@@ -299,10 +303,7 @@ export async function parseCriteriaAnalysisDocx(file: File): Promise<ParsedCrite
 
   const sectionsNeedingAnalysis = Array.from(sectionMap.values())
     .filter((section) => section.analysisRows.length === 0)
-    .sort(
-      (a, b) =>
-        a.standardOrder - b.standardOrder || a.criterionOrder - b.criterionOrder
-    )
+    .sort((a, b) => a.standardOrder - b.standardOrder || a.criterionOrder - b.criterionOrder)
 
   let analysisIndex = 0
   for (const table of analysisTables) {

@@ -13,6 +13,6 @@ export const CONG_GIANG_VIEN_CONTENT_VERTICAL_OFFSET = CONG_GIANG_VIEN_HEADER_HE
 /** localStorage key lưu trạng thái thu gọn sidebar. */
 export const CONG_GIANG_VIEN_SIDEBAR_COLLAPSE_STORAGE_KEY = "collapsed"
 
-export const CONG_GIANG_VIEN_DEFAULT_SCHOOL_NAME = "Học viện Kỹ thuật Quân sự"
+export const CONG_GIANG_VIEN_DEFAULT_SCHOOL_NAME = ""
 
 export const CONG_GIANG_VIEN_PORTAL_TITLE = "Cổng giảng viên"

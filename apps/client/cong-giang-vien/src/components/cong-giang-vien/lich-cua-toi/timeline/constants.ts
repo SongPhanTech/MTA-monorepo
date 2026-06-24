@@ -27,9 +27,6 @@ export const tinhViTriTimeline = (
 
   return {
     topPx: Math.max(0, (phutBatDau / 60) * CHIEU_CAO_MOI_GIO),
-    heightPx: Math.max(
-      chieuCaoToiThieu,
-      ((phutKetThuc - phutBatDau) / 60) * CHIEU_CAO_MOI_GIO
-    ),
+    heightPx: Math.max(chieuCaoToiThieu, ((phutKetThuc - phutBatDau) / 60) * CHIEU_CAO_MOI_GIO),
   }
 }

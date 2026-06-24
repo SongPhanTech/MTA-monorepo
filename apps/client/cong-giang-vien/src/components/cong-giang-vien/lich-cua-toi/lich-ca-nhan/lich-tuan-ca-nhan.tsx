@@ -39,7 +39,13 @@ type SuKienViTri = DongLichCaNhan & {
   diaDiemHienThi: string
 }
 
-const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onXemChiTiet }: LichTuanCaNhanProps) => {
+const LichTuanCaNhan = ({
+  danhSach,
+  dauTuan,
+  tags,
+  dangTai,
+  onXemChiTiet,
+}: LichTuanCaNhanProps) => {
   const gioNhan = useMemo(() => gioTrongTimeline(), [])
 
   const ngayTrongTuan = useMemo(
@@ -124,79 +130,79 @@ const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onXemChiTiet }: Lich
 
         <div className="pt-2">
           <div className="relative flex" style={{ height: CHIEU_CAO_TIMELINE }}>
-          <div className="relative w-11 shrink-0">
-            {gioNhan.map((gio) => (
-              <span
-                key={gio}
-                className="absolute right-1 -translate-y-1/2 text-xs leading-none text-gray-400"
-                style={{ top: (gio - gioNhan[0]) * CHIEU_CAO_MOI_GIO }}
-              >
-                {formatGioTimeline(gio)}
-              </span>
-            ))}
-          </div>
-
-          <div className="relative grid min-w-0 flex-1 grid-cols-7">
-            {ngayTrongTuan.map((ngay) => {
-              const key = ngay.format("YYYY-MM-DD")
-              const suKienNgay = suKienTheoNgay.get(key) ?? []
-
-              return (
-                <div
-                  key={key}
-                  className="relative border-l border-gray-100 first:border-l-0"
-                  style={{ height: CHIEU_CAO_TIMELINE }}
+            <div className="relative w-11 shrink-0">
+              {gioNhan.map((gio) => (
+                <span
+                  key={gio}
+                  className="absolute right-1 -translate-y-1/2 text-xs leading-none text-gray-400"
+                  style={{ top: (gio - gioNhan[0]) * CHIEU_CAO_MOI_GIO }}
                 >
-                  {gioNhan.slice(1).map((gio) => (
-                    <div
-                      key={gio}
-                      className="pointer-events-none absolute left-0 right-0 border-t border-dashed border-gray-200"
-                      style={{ top: (gio - gioNhan[0]) * CHIEU_CAO_MOI_GIO }}
-                    />
-                  ))}
+                  {formatGioTimeline(gio)}
+                </span>
+              ))}
+            </div>
 
-                  {suKienNgay.map((suKien) => (
-                    <button
-                      key={suKien.id}
-                      type="button"
-                      onClick={() => onXemChiTiet?.(suKien.id)}
-                      className="absolute left-0.5 right-0.5 overflow-hidden rounded-sm border border-gray-100 px-1.5 py-1 text-left transition-shadow hover:shadow-sm"
-                      style={{
-                        top: suKien.topPx,
-                        height: suKien.heightPx,
-                        backgroundColor: `${suKien.mau}14`,
-                        borderLeftWidth: 3,
-                        borderLeftColor: suKien.mau,
-                      }}
-                    >
-                      <p className="m-0 truncate text-[10px] leading-tight text-gray-500">
-                        {suKien.khoangThoiGian}
-                      </p>
-                      <p className="m-0 truncate text-[11px] font-semibold leading-tight text-gray-800">
-                        {suKien.tieuDe}
-                      </p>
-                      {suKien.diaDiemHienThi ? (
+            <div className="relative grid min-w-0 flex-1 grid-cols-7">
+              {ngayTrongTuan.map((ngay) => {
+                const key = ngay.format("YYYY-MM-DD")
+                const suKienNgay = suKienTheoNgay.get(key) ?? []
+
+                return (
+                  <div
+                    key={key}
+                    className="relative border-l border-gray-100 first:border-l-0"
+                    style={{ height: CHIEU_CAO_TIMELINE }}
+                  >
+                    {gioNhan.slice(1).map((gio) => (
+                      <div
+                        key={gio}
+                        className="pointer-events-none absolute left-0 right-0 border-t border-dashed border-gray-200"
+                        style={{ top: (gio - gioNhan[0]) * CHIEU_CAO_MOI_GIO }}
+                      />
+                    ))}
+
+                    {suKienNgay.map((suKien) => (
+                      <button
+                        key={suKien.id}
+                        type="button"
+                        onClick={() => onXemChiTiet?.(suKien.id)}
+                        className="absolute left-0.5 right-0.5 overflow-hidden rounded-sm border border-gray-100 px-1.5 py-1 text-left transition-shadow hover:shadow-sm"
+                        style={{
+                          top: suKien.topPx,
+                          height: suKien.heightPx,
+                          backgroundColor: `${suKien.mau}14`,
+                          borderLeftWidth: 3,
+                          borderLeftColor: suKien.mau,
+                        }}
+                      >
                         <p className="m-0 truncate text-[10px] leading-tight text-gray-500">
-                          {suKien.diaDiemHienThi}
+                          {suKien.khoangThoiGian}
                         </p>
-                      ) : null}
-                    </button>
-                  ))}
-                </div>
-              )
-            })}
+                        <p className="m-0 truncate text-[11px] font-semibold leading-tight text-gray-800">
+                          {suKien.tieuDe}
+                        </p>
+                        {suKien.diaDiemHienThi ? (
+                          <p className="m-0 truncate text-[10px] leading-tight text-gray-500">
+                            {suKien.diaDiemHienThi}
+                          </p>
+                        ) : null}
+                      </button>
+                    ))}
+                  </div>
+                )
+              })}
 
-            {!coSuKien ? (
-              <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                <Empty
-                  description="Không có sự kiện trong tuần"
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  className="m-0"
-                />
-              </div>
-            ) : null}
+              {!coSuKien ? (
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                  <Empty
+                    description="Không có sự kiện trong tuần"
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                    className="m-0"
+                  />
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
         </div>
       </div>
 

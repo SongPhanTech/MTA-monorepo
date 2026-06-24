@@ -146,9 +146,7 @@ const ModalThemLoaiLich = () => {
               value={mauChon}
               format="hex"
               disabledAlpha
-              onChange={(color) =>
-                form.setFieldValue("color", color.toHexString().toUpperCase())
-              }
+              onChange={(color) => form.setFieldValue("color", color.toHexString().toUpperCase())}
               className="block w-full [&_.ant-color-picker-trigger]:!h-10 [&_.ant-color-picker-trigger]:!w-full [&_.ant-color-picker-trigger]:!border-0 [&_.ant-color-picker-trigger]:!bg-transparent [&_.ant-color-picker-trigger]:!p-0 [&_.ant-color-picker-trigger]:!shadow-none"
             >
               <button

@@ -83,12 +83,14 @@ app.route("/api/thesis-payment", ThesisPaymentApp)
 app.use("/api/check/*", jwtAuth("lms"))
 // setupAuth(app)
 app.all("/api/system/:appcode/*", async (c) => {
-  const appCode = c.req.param("appcode")
+  const appCode = c.req.param("appcode").toLowerCase()
   const pathProxy = c.req.path.replace(`/api/system/${appCode}/`, "")
   const clientId = (() => {
     switch (appCode) {
       case "lms":
         return process.env.KEYCLOAK_CLIENT_ID_LMS || ""
+      case "conggiangvien":
+        return process.env.KEYCLOAK_CLIENT_ID_CONG_GIANG_VIEN || ""
       case "ems":
         return process.env.KEYCLOAK_CLIENT_ID_EMS || ""
       case "hrm":
@@ -109,6 +111,8 @@ app.all("/api/system/:appcode/*", async (c) => {
     switch (appCode) {
       case "lms":
         return process.env.KEYCLOAK_CLIENT_SECRET_LMS || ""
+      case "conggiangvien":
+        return process.env.KEYCLOAK_CLIENT_SECRET_CONG_GIANG_VIEN || ""
       case "ems":
         return process.env.KEYCLOAK_CLIENT_SECRET_EMS || ""
       case "hrm":

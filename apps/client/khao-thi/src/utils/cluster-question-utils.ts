@@ -262,7 +262,10 @@ export type QuestionExamInput = Omit<QuestionPreviewInput, "subQuestions"> & {
 }
 
 const stripParagraphTags = (html: string) =>
-  html.replace(/<p[^>]*>/g, "").replace(/<\/p>/g, " ").trim()
+  html
+    .replace(/<p[^>]*>/g, "")
+    .replace(/<\/p>/g, " ")
+    .trim()
 
 function renderOptionsBlock(
   multipleChoiceOptions?: QuestionExamInput["multipleChoiceOptions"],
