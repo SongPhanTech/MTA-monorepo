@@ -27,7 +27,12 @@ const FIXED_CLASS_INCLUDE = {
     include: {
       curriculum: {
         include: {
-          trainingMajor: { select: { name: true } },
+          trainingMajor: {
+            select: {
+              name: true,
+              organization: { select: { sTen: true } },
+            },
+          },
         },
       },
       trainingLevel: { select: { name: true } },
@@ -89,7 +94,10 @@ const useChiTietLopQuanLyGiangVien = (fixedClassId: string) => {
       tenLop: fixedClass.name ?? "",
       trangThaiLop,
       siSo: fixedClass._count?.students ?? 0,
-      donViQuanLy: fixedClass.managementOrganization?.sTen ?? "",
+      donViQuanLy:
+        fixedClass.curriculumVersion?.curriculum?.trainingMajor?.organization?.sTen ??
+        fixedClass.managementOrganization?.sTen ??
+        "",
       chuyenNganh: fixedClass.curriculumVersion?.curriculum?.trainingMajor?.name ?? "",
       khoa: khoaLabel,
       bacDaoTao: fixedClass.curriculumVersion?.trainingLevel?.name ?? "",

@@ -11,8 +11,11 @@ interface TabDiemRenLuyenProps {
 
 const TabDiemRenLuyen = ({ fixedClassId, enabled }: TabDiemRenLuyenProps) => {
   const {
+    schoolYearId,
     semesterId,
-    apDungHocKy,
+    apDungBoLoc,
+    locDiem,
+    chonLocDiem,
     danhSach,
     thongKe,
     tongSo,
@@ -25,8 +28,16 @@ const TabDiemRenLuyen = ({ fixedClassId, enabled }: TabDiemRenLuyenProps) => {
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <BoLocDiemRenLuyen semesterId={semesterId || ""} onApDung={apDungHocKy} />
-      <TheThongKeDiemRenLuyen thongKe={thongKe} />
+      <BoLocDiemRenLuyen
+        schoolYearId={schoolYearId}
+        semesterId={semesterId}
+        onApDung={apDungBoLoc}
+      />
+      <TheThongKeDiemRenLuyen
+        thongKe={thongKe}
+        locDiem={locDiem}
+        onChonLocDiem={chonLocDiem}
+      />
       <BangDiemRenLuyen danhSach={danhSach} loading={dangTai} trang={trang} soTrang={soTrang} />
       <PhanTrangSinhVien
         trang={trang}

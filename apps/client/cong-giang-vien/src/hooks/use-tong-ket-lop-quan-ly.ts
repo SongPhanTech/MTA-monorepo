@@ -10,6 +10,7 @@ import { AcademicRankingBaseType, RankingContext } from "@workspace/db/client"
 import {
   useCountStudent,
   useFindManyAcademicRankingConvert,
+  useFindManySchoolYear,
   useFindManyStudent,
   useFindUniqueFixedClass,
 } from "@workspace/db/hooks"
@@ -57,15 +58,36 @@ const layXepLoaiHocKy = (
 
 const useTongKetLopQuanLy = (fixedClassId: string, enabled: boolean) => {
   const { id: semesterMacDinh } = useSemesterStore()
-  const [semesterApDung, setSemesterApDung] = useState(semesterMacDinh)
+  const [schoolYearApDung, setSchoolYearApDung] = useState<string>("")
+  const [semesterApDung, setSemesterApDung] = useState<string | undefined>(semesterMacDinh)
   const [trang, setTrang] = useState(1)
   const [soTrang, setSoTrang] = useState(DEFAULT_PAGINATE_SIZE)
+
+  const { data: schoolYears = [] } = useFindManySchoolYear({
+    orderBy: { startDate: "desc" },
+    include: { semesters: { orderBy: { createdAt: "desc" } } },
+  })
+
+  const schoolYearMacDinh = useMemo(() => {
+    if (semesterMacDinh) {
+      const tuHocKy = schoolYears.find((year) =>
+        year.semesters.some((semester) => semester.id === semesterMacDinh)
+      )?.id
+      if (tuHocKy) return tuHocKy
+    }
+    return schoolYears[0]?.id ?? ""
+  }, [schoolYears, semesterMacDinh])
+
+  useEffect(() => {
+    if (schoolYearMacDinh) setSchoolYearApDung(schoolYearMacDinh)
+  }, [schoolYearMacDinh])
 
   useEffect(() => {
     if (semesterMacDinh) setSemesterApDung(semesterMacDinh)
   }, [semesterMacDinh])
 
-  const semesterId = semesterApDung || semesterMacDinh || ""
+  const schoolYearId = schoolYearApDung || schoolYearMacDinh
+  const semesterId = semesterApDung || ""
 
   const { data: fixedClass } = useFindUniqueFixedClass(
     {
@@ -190,14 +212,22 @@ const useTongKetLopQuanLy = (fixedClassId: string, enabled: boolean) => {
     }
   }, [tatCaSinhVien, xepLoaiHocLuc, baseScoreKhoa, heDiem])
 
-  const apDungHocKy = (id: string) => {
-    setSemesterApDung(id)
+  const apDungBoLoc = ({
+    schoolYearId: yearId,
+    semesterId: kyId,
+  }: {
+    schoolYearId: string
+    semesterId?: string
+  }) => {
+    setSchoolYearApDung(yearId)
+    setSemesterApDung(kyId)
     setTrang(1)
   }
 
   return {
+    schoolYearId,
     semesterId,
-    apDungHocKy,
+    apDungBoLoc,
     danhSach,
     thongKe,
     tongSo,

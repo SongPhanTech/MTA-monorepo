@@ -89,21 +89,23 @@ const BangTongKet = ({ danhSach, loading, trang, soTrang, onXemChiTiet }: BangTo
       width: 90,
       align: "center",
       render: (_value, record) => (
-        <Button
-          type="link"
-          size="small"
-          icon={<Eye size={14} />}
-          className="inline-flex items-center gap-1 px-0 text-cgv-green-dark"
-          onClick={() => onXemChiTiet(record.id)}
-        >
-          Chi tiết
-        </Button>
+        <div className="flex items-center justify-center">
+          <Button
+            type="link"
+            size="small"
+            icon={<Eye size={14} className="block" />}
+            className="inline-flex h-auto items-center justify-center gap-1 px-0 leading-none text-cgv-green-dark [&_.ant-btn-icon]:flex [&_.ant-btn-icon]:items-center"
+            onClick={() => onXemChiTiet(record.id)}
+          >
+            Chi tiết
+          </Button>
+        </div>
       ),
     },
   ]
 
   return (
-    <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden px-4 pb-2">
+    <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden px-4 pb-2 mt-2">
       <Table<TongKetRow>
         rowKey="id"
         size="small"
@@ -111,6 +113,7 @@ const BangTongKet = ({ danhSach, loading, trang, soTrang, onXemChiTiet }: BangTo
         dataSource={danhSach}
         loading={loading}
         pagination={false}
+        scroll={{ x: 986, y: chieuCaoBody }}
         bordered={true}
         rowClassName={(_, index) => (index % 2 === 1 ? "bg-gray-50/80" : "")}
         // className="bang-lq-chi-tiet mt-2 [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400 [&_.ant-table-thead>tr>th:first-child]:!rounded-tl-none [&_.ant-table-thead>tr>th:last-child]:!rounded-tr-none"

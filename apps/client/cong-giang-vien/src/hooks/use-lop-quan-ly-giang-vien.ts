@@ -51,6 +51,19 @@ const useLopQuanLyGiangVien = () => {
       where,
       include: {
         managementOrganization: { select: { sMa: true, sTen: true } },
+        curriculumVersion: {
+          include: {
+            curriculum: {
+              include: {
+                trainingMajor: {
+                  select: {
+                    organization: { select: { sTen: true, sMa: true } },
+                  },
+                },
+              },
+            },
+          },
+        },
         trainingCourse: {
           include: {
             semesterStart: {
@@ -87,7 +100,11 @@ const useLopQuanLyGiangVien = () => {
           id: item.id,
           maLop: item.code ?? "",
           tenLop: item.name ?? "",
-          donViQuanLy: item.managementOrganization?.sMa ?? "",
+          donViQuanLy:
+            item.curriculumVersion?.curriculum?.trainingMajor?.organization?.sTen ??
+            item.managementOrganization?.sTen ??
+            item.managementOrganization?.sMa ??
+            "",
           siSoNam,
           siSoNu,
           siSoTong,
