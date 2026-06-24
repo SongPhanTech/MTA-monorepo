@@ -1,7 +1,6 @@
+import Select from "@components/commons/select"
 import { useFindManySchoolYear } from "@workspace/db/hooks"
 import { useSemesterStore } from "@workspace/ui"
-import { Button, Select } from "antd"
-import { Search } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 
 interface BoLocDiemRenLuyenProps {

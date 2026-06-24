@@ -62,6 +62,19 @@ export default function KetQuaHocTapSinhVienPage() {
         fixedClass: {
           include: {
             managementOrganization: { select: { sTen: true } },
+            curriculumVersion: {
+              include: {
+                curriculum: {
+                  include: {
+                    trainingMajor: {
+                      select: {
+                        organization: { select: { sTen: true } },
+                      },
+                    },
+                  },
+                },
+              },
+            },
             trainingCourse: {
               select: {
                 name: true,
@@ -191,7 +204,10 @@ export default function KetQuaHocTapSinhVienPage() {
         email: student.userProfile?.email ?? "—",
         sdt: student.userProfile?.phoneNumber ?? "—",
         khoaHoc: student.fixedClass?.trainingCourse?.code ?? "—",
-        khoa: student.fixedClass?.managementOrganization?.sTen ?? "—",
+        khoa:
+          student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.organization?.sTen ??
+          student.fixedClass?.managementOrganization?.sTen ??
+          "—",
         chuongTrinhDaoTao:
           student.curriculumVersion?.curriculum?.trainingMajor?.name ??
           student.curriculumVersion?.name ??
