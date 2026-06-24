@@ -79,8 +79,8 @@
   padding: 8px;
 }
 
-.giang-vien-sider-menu .ant-menu-item,
-.giang-vien-sider-menu .ant-menu-submenu-title {
+.giang-vien-sider-menu:not(.ant-menu-inline-collapsed) .ant-menu-item,
+.giang-vien-sider-menu:not(.ant-menu-inline-collapsed) .ant-menu-submenu-title {
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 600;
@@ -91,6 +91,82 @@
   width: 100%;
   height: 44px !important;
   line-height: 44px !important;
+}
+
+.giang-vien-sider-menu.ant-menu-inline-collapsed {
+  padding: 8px !important;
+  width: 100% !important;
+}
+
+.giang-vien-sider-menu.ant-menu-inline-collapsed > .ant-menu-item,
+.giang-vien-sider-menu.ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title {
+  display: block !important;
+  height: 48px !important;
+  line-height: 48px !important;
+  padding-inline: calc(50% - 12px) !important;
+  padding-block: 0 !important;
+  margin: 2px 0 !important;
+  width: 100% !important;
+  inset-inline-start: 0 !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+.giang-vien-sider-menu.ant-menu-inline-collapsed .ant-menu-item .ant-menu-item-icon,
+.giang-vien-sider-menu.ant-menu-inline-collapsed .ant-menu-submenu-title .ant-menu-item-icon {
+  position: static !important;
+  inset: auto !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  margin: 0 !important;
+  line-height: 0 !important;
+  font-size: 18px !important;
+  transform: none !important;
+}
+
+.giang-vien-sider-menu.ant-menu-inline-collapsed .giang-vien-menu-icon,
+.giang-vien-sider-menu.ant-menu-inline-collapsed .giang-vien-menu-icon svg {
+  display: block !important;
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.giang-vien-sider-menu.ant-menu-inline-collapsed .ant-menu-title-content {
+  display: inline-block !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  vertical-align: middle !important;
+}
+
+.giang-vien-sider-menu.ant-menu-inline-collapsed .ant-menu-submenu-arrow {
+  display: none !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+}
+
+.giang-vien-sider-menu.ant-menu-inline-collapsed .ant-menu-submenu-selected > .ant-menu-submenu-title {
+  background: #3f9468 !important;
+  color: #ffffff !important;
+}
+
+.giang-vien-sider-menu.ant-menu-inline-collapsed
+  .ant-menu-submenu-selected
+  > .ant-menu-submenu-title
+  .ant-menu-item-icon,
+.giang-vien-sider-menu.ant-menu-inline-collapsed
+  .ant-menu-submenu-selected
+  > .ant-menu-submenu-title
+  .giang-vien-menu-icon {
+  color: #ffffff !important;
 }
 
 .giang-vien-sider-menu .ant-menu-item a,

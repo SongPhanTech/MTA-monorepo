@@ -11,7 +11,7 @@ import {
 import type { MenuItem } from "@workspace/router"
 import { Layout, Menu } from "antd"
 import { useRouter } from "next/router"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 const { Sider } = Layout
 
@@ -30,6 +30,14 @@ const SiderCongGiangVien = ({ collapsed, items }: SiderCongGiangVienProps) => {
     const matched = findMatchingKey(items, cleanPathname)
     return matched ? [matched] : [cleanPathname]
   }, [items, pathname])
+
+  useEffect(() => {
+    if (collapsed) {
+      setOpenKeys([])
+      return
+    }
+    setOpenKeys(findOpenKeys(items, pathname))
+  }, [collapsed, items, pathname])
 
   return (
     <Sider
@@ -54,6 +62,7 @@ const SiderCongGiangVien = ({ collapsed, items }: SiderCongGiangVienProps) => {
         className="giang-vien-sider-menu"
         theme="light"
         mode="inline"
+        inlineCollapsed={collapsed}
         selectedKeys={selectedKeys}
         openKeys={openKeys}
         onOpenChange={setOpenKeys}
