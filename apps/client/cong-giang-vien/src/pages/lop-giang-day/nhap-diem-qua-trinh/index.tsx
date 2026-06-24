@@ -13,10 +13,117 @@ import { sqlTransaction } from "@workspace/libs/api/model"
 import type { SqlTransactionBodyItem } from "@workspace/libs/api/schemas/sqlTransactionBodyItem"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Breadcrumb, Button, Input, InputNumber, Modal, Select, Table, message } from "antd"
+import { cn } from "@workspace/ui/lib/utils"
 import dayjs from "dayjs"
-import { ArrowLeft, FileDown, FileUp, History, RotateCcw, Save } from "lucide-react"
+import {
+  ArrowLeft,
+  Ban,
+  BookOpen,
+  CalendarClock,
+  CalendarDays,
+  CheckCircle2,
+  CircleSlash2,
+  ClipboardCheck,
+  FileDown,
+  FileUp,
+  GraduationCap,
+  Hash,
+  History,
+  RefreshCcw,
+  RotateCcw,
+  Save,
+} from "lucide-react"
 import { useRouter } from "next/router"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
+import type { ReactNode } from "react"
+
+const CHIEU_CAO_HEADER_BANG = 39
+
+const HE_SO_MAC_DINH = {
+  coef_1: 0.1,
+  coef_2: 0.3,
+  coef_3: 0.6,
+  scoreToTakeExam: 4,
+  scoreToPass: 5,
+  maxReExamScore: 5,
+  reduceReExamScore: 0,
+  examScoreToPass: 4,
+} as const
+
+type ScoreRowGoc = {
+  id: string
+  student?: {
+    fixedClass?: {
+      trainingCourse?: {
+        coef_1: number
+        coef_2: number
+      } | null
+    } | null
+  } | null
+}
+
+const tinhDiemQT = (row: RowData, goc?: ScoreRowGoc): number | null => {
+  if (row.attendanceScore == null || row.midtermScore == null) return null
+  if (row.finalScore != null) return row.finalScore
+  const tc = goc?.student?.fixedClass?.trainingCourse ?? HE_SO_MAC_DINH
+  return Number((row.attendanceScore * tc.coef_1 + row.midtermScore * tc.coef_2).toFixed(1))
+}
+
+const TheThongKeNgang = ({
+  icon,
+  tieuDe,
+  giaTri,
+  tyLe,
+  tone = "blue",
+}: {
+  icon: ReactNode
+  tieuDe: string
+  giaTri: string
+  tyLe?: string
+  tone?: "green" | "yellow" | "blue" | "teal" | "red"
+}) => {
+  const toneClass =
+    tone === "green"
+      ? "bg-[#e8f7ef] text-[#16a34a]"
+      : tone === "yellow"
+        ? "bg-[#fff4dd] text-[#f59e0b]"
+        : tone === "teal"
+          ? "bg-[#e8faf7] text-[#14b8a6]"
+          : tone === "red"
+            ? "bg-[#ffe9e9] text-[#ef4444]"
+            : "bg-[#eaf3ff] text-[#3b82f6]"
+
+  return (
+    <div className="flex h-[84px] items-center gap-2 rounded-lg border border-gray-100 bg-white px-2.5 py-2">
+      <span className={cn("inline-flex h-8 w-8 items-center justify-center rounded-full", toneClass)}>
+        {icon}
+      </span>
+      <div className="min-w-0">
+        <div className="truncate text-[10px] font-semibold text-gray-500">{tieuDe}</div>
+        <div className="mt-1 flex items-end gap-1.5">
+          <span className="text-[24px] font-bold leading-[22px] text-cgv-green-dark">{giaTri}</span>
+          {tyLe ? <span className="pb-0.5 text-[10px] font-semibold text-gray-500">{tyLe}</span> : null}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const TheThongTinLopHang = ({
+  icon,
+  label,
+  value,
+}: {
+  icon: ReactNode
+  label: string
+  value: string
+}) => (
+  <div className="flex items-center gap-2 text-[13px] leading-7">
+    <span className="inline-flex h-4 w-4 items-center justify-center text-cgv-green-dark/80">{icon}</span>
+    <span className="shrink-0 text-gray-500">{label}</span>
+    <span className="truncate font-semibold text-gray-900">{value}</span>
+  </div>
+)
 
 type RowData = {
   id: string
@@ -43,8 +150,24 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
   const [lopId, setLopId] = useState<string | undefined>(lopIdMacDinh)
   const [rows, setRows] = useState<RowData[]>([])
   const [historyTarget, setHistoryTarget] = useState<{ id: string; hoTen: string } | null>(null)
+  const vungBangRef = useRef<HTMLDivElement>(null)
+  const [chieuCaoBody, setChieuCaoBody] = useState(320)
 
-  const { data: schoolYears = [], isLoading: dangTaiNamHoc } = useFindManySchoolYear({
+  useEffect(() => {
+    const el = vungBangRef.current
+    if (!el) return
+
+    const capNhatChieuCao = () => {
+      setChieuCaoBody(Math.max(160, el.clientHeight - CHIEU_CAO_HEADER_BANG))
+    }
+
+    capNhatChieuCao()
+    const observer = new ResizeObserver(capNhatChieuCao)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  const { data: schoolYears = [] } = useFindManySchoolYear({
     orderBy: { startDate: "desc" },
     include: { semesters: { orderBy: { createdAt: "desc" } } },
   })
@@ -65,14 +188,15 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
     { enabled: !!profileId && !!semesterId && !!trainingObjectTypeId }
   )
 
-  const selectedYearId = useMemo(
-    () => schoolYears.find((year) => year.semesters.some((s) => s.id === semesterId))?.id,
-    [schoolYears, semesterId]
-  )
-
-  const semestersOfYear = useMemo(
-    () => schoolYears.find((year) => year.id === selectedYearId)?.semesters ?? [],
-    [schoolYears, selectedYearId]
+  const semesterOptions = useMemo(
+    () =>
+      schoolYears.flatMap((year) =>
+        year.semesters.map((semester) => ({
+          value: semester.id,
+          label: `${year.name} ${semester.name}`,
+        }))
+      ),
+    [schoolYears]
   )
 
   const monHocOptions = useMemo(() => {
@@ -103,12 +227,6 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
     if (lopId && lopOptions.some((o) => o.value === lopId)) return
     setLopId(lopOptions[0]?.value)
   }, [lopId, lopOptions])
-
-  const handleChangeYear = (yearId: string) => {
-    const year = schoolYears.find((item) => item.id === yearId)
-    const firstSemester = year?.semesters?.[0]
-    if (firstSemester) onSelect(firstSemester.id)
-  }
 
   const handleChangeMonHoc = (value?: string) => {
     setMonHocId(value)
@@ -193,16 +311,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
         const next = { ...row, ...patch }
         const goc = scoreRows.find((x) => x.id === id)
         const trainingCourse = goc?.student?.fixedClass?.trainingCourse
-        const heSoMacDinh = {
-          coef_1: 0.1,
-          coef_2: 0.3,
-          coef_3: 0.6,
-          scoreToTakeExam: 4,
-          scoreToPass: 5,
-          maxReExamScore: 5,
-          reduceReExamScore: 0,
-          examScoreToPass: 4,
-        }
+        const heSoMacDinh = HE_SO_MAC_DINH
         const finalScore =
           next.attendanceScore == null || next.midtermScore == null || next.examScore == null
             ? null
@@ -235,16 +344,47 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
   const thongKe = useMemo(() => {
     const tong = rows.length
     const daNhap = rows.filter((r) => r.attendanceScore != null && r.midtermScore != null).length
-    const chuaNhap = tong - daNhap
-    const finals = rows.map((r) => r.finalScore).filter((v): v is number => v != null)
+    const rowsWithQT = rows
+      .map((row) => {
+        const goc = scoreRows.find((x) => x.id === row.id)
+        const diem = tinhDiemQT(row, goc)
+        return diem == null ? null : { row, diem, duDieuKienThi: diem >= HE_SO_MAC_DINH.scoreToTakeExam }
+      })
+      .filter(
+        (item): item is { row: RowData; diem: number; duDieuKienThi: boolean } => item != null
+      )
+
+    if (rowsWithQT.length === 0) {
+      return {
+        tong,
+        daNhap,
+        chuaNhap: tong - daNhap,
+        max: null as number | null,
+        min: null as number | null,
+        diemTb: null as number | null,
+        duDieuKienThi: 0,
+        camThi: 0,
+      }
+    }
+
+    const sorted = [...rowsWithQT].sort((a, b) => b.diem - a.diem)
+    const maxItem = sorted[0]
+    const minItem = sorted[sorted.length - 1]
+    const tongDiem = rowsWithQT.reduce((sum, item) => sum + item.diem, 0)
+    const duDieuKienThi = rowsWithQT.filter((item) => item.duDieuKienThi).length
+    const camThi = rowsWithQT.length - duDieuKienThi
+
     return {
       tong,
       daNhap,
-      chuaNhap,
-      max: finals.length ? Math.max(...finals) : 0,
-      min: finals.length ? Math.min(...finals) : 0,
+      chuaNhap: tong - daNhap,
+      max: maxItem.diem,
+      min: minItem.diem,
+      diemTb: tongDiem / rowsWithQT.length,
+      duDieuKienThi,
+      camThi,
     }
-  }, [rows])
+  }, [rows, scoreRows])
 
   const luu = async () => {
     if (quaHanNhapDiemQuaTrinh) {
@@ -338,26 +478,13 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
       </div>
 
       <div className="rounded-lg border border-gray-100 bg-white p-3">
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_1fr_1fr_1fr_auto]">
-          <div>
-            <div className="mb-1 text-xs text-gray-500">Năm học</div>
-            <Select
-              loading={dangTaiNamHoc}
-              value={selectedYearId}
-              onChange={handleChangeYear}
-              options={schoolYears.map((year) => ({ value: year.id, label: year.name }))}
-              className="w-full"
-            />
-          </div>
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_1fr_1fr_auto]">
           <div>
             <div className="mb-1 text-xs text-gray-500">Học kỳ</div>
             <Select
               value={semesterId}
               onChange={onSelect}
-              options={semestersOfYear.map((semester) => ({
-                value: semester.id,
-                label: semester.name,
-              }))}
+              options={semesterOptions}
               className="w-full"
             />
           </div>
@@ -382,6 +509,95 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
             />
           </div>
           <div className="flex items-end justify-end gap-2">
+            <Button icon={<RefreshCcw size={14} />} onClick={() => refetch()}>
+              Tải dữ liệu
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-lg border border-gray-100 bg-white p-3">
+        <div className="overflow-hidden rounded-lg border border-gray-100">
+          <div className="grid grid-cols-1 lg:grid-cols-[250px_minmax(0,1fr)]">
+            <div className="border-b border-gray-100 bg-gray-50/70 px-3 py-2 lg:border-b-0 lg:border-r">
+              <div className="space-y-0.5">
+                <TheThongTinLopHang icon={<Hash size={14} />} label="Mã lớp:" value={lopMonHoc?.code ?? "—"} />
+                <TheThongTinLopHang
+                  icon={<BookOpen size={14} />}
+                  label="Tên lớp:"
+                  value={lopMonHoc?.name ?? "—"}
+                />
+                <TheThongTinLopHang
+                  icon={<CalendarDays size={14} />}
+                  label="Học kỳ:"
+                  value={lopMonHoc?.semester?.name ?? "—"}
+                />
+                <TheThongTinLopHang
+                  icon={<GraduationCap size={14} />}
+                  label="Tín chỉ:"
+                  value={String(lopMonHoc?.subject?.credit ?? "—")}
+                />
+                <TheThongTinLopHang
+                  icon={<CalendarClock size={14} />}
+                  label="Hạn nhập điểm:"
+                  value={
+                    lopMonHoc?.scoreDeadline
+                      ? dayjs(lopMonHoc.scoreDeadline).format("DD/MM/YYYY HH:mm")
+                      : "—"
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="bg-white p-1.5">
+              <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 xl:grid-cols-5">
+                <TheThongKeNgang
+                  icon={<ClipboardCheck size={18} />}
+                  tieuDe="Đã nhập"
+                  giaTri={String(thongKe.daNhap)}
+                  tyLe={`${thongKe.tong ? Math.round((thongKe.daNhap / thongKe.tong) * 100) : 0}%`}
+                  tone="green"
+                />
+                <TheThongKeNgang
+                  icon={<CircleSlash2 size={18} />}
+                  tieuDe="Chưa nhập"
+                  giaTri={String(thongKe.chuaNhap)}
+                  tyLe={`${thongKe.tong ? Math.round((thongKe.chuaNhap / thongKe.tong) * 100) : 0}%`}
+                  tone="yellow"
+                />
+                <TheThongKeNgang
+                  icon={<GraduationCap size={18} />}
+                  tieuDe="Điểm TB quá trình"
+                  giaTri={thongKe.diemTb != null ? thongKe.diemTb.toFixed(1) : "—"}
+                  tyLe="/10"
+                  tone="blue"
+                />
+                <TheThongKeNgang
+                  icon={<CheckCircle2 size={18} />}
+                  tieuDe="Đủ điều kiện thi"
+                  giaTri={String(thongKe.duDieuKienThi)}
+                  tyLe={`${thongKe.tong ? Math.round((thongKe.duDieuKienThi / thongKe.tong) * 100) : 0}%`}
+                  tone="teal"
+                />
+                <TheThongKeNgang
+                  icon={<Ban size={18} />}
+                  tieuDe="Cấm thi"
+                  giaTri={String(thongKe.camThi)}
+                  tyLe={`${thongKe.tong ? Math.round((thongKe.camThi / thongKe.tong) * 100) : 0}%`}
+                  tone="red"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-gray-100 bg-white p-3">
+        <div className="mb-2 flex shrink-0 flex-wrap items-center justify-between gap-x-3 gap-y-2">
+          <span className="text-sm font-semibold text-cgv-green-dark">
+            BẢNG NHẬP ĐIỂM QUÁ TRÌNH
+          </span>
+          <div className="flex items-center gap-2">
             <Button icon={<Save size={14} />} onClick={luu} disabled={quaHanNhapDiemQuaTrinh}>
               Lưu
             </Button>
@@ -393,69 +609,13 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
             </Button>
           </div>
         </div>
-      </div>
-
-      <div className="rounded-lg border border-gray-100 bg-white p-3">
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
-          <div className="grid grid-cols-2 gap-y-2 text-sm">
-            <div>
-              Mã lớp: <b>{lopMonHoc?.code ?? ""}</b>
-            </div>
-            <div>
-              Học kỳ: <b>{lopMonHoc?.semester?.name ?? ""}</b>
-            </div>
-            <div>
-              Tên lớp: <b>{lopMonHoc?.name ?? ""}</b>
-            </div>
-            <div>
-              Tín chỉ: <b>{lopMonHoc?.subject?.credit ?? ""}</b>
-            </div>
-            <div>
-              Môn học: <b>{lopMonHoc?.subject?.name ?? ""}</b>
-            </div>
-            <div>
-              Sĩ số sinh viên: <b>{lopMonHoc?._count?.subjectClassStudent ?? 0}</b>
-            </div>
-            <div>
-              Hạn nhập điểm:{" "}
-              <b>
-                {lopMonHoc?.scoreDeadline
-                  ? dayjs(lopMonHoc.scoreDeadline).format("DD/MM/YYYY HH:mm")
-                  : ""}
-              </b>
-            </div>
-          </div>
-          <div className="rounded border border-gray-100 p-3 text-sm">
-            <div className="mb-2 font-semibold text-cgv-green-dark">THỐNG KÊ</div>
-            <div>
-              Tổng số sinh viên: <b>{thongKe.tong}</b>
-            </div>
-            <div>
-              Đã nhập điểm: <b className="text-green-600">{thongKe.daNhap}</b>
-            </div>
-            <div>
-              Chưa nhập điểm: <b className="text-red-500">{thongKe.chuaNhap}</b>
-            </div>
-            <div className="mt-3">
-              Điểm QT cao nhất: <b>{thongKe.max.toFixed(2)}</b>
-            </div>
-            <div>
-              Điểm QT thấp nhất: <b>{thongKe.min.toFixed(2)}</b>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="min-h-0 flex-1 overflow-auto rounded-lg border border-gray-100 bg-white p-3">
-        <div className="mb-2 text-sm font-semibold text-cgv-green-dark">
-          BẢNG NHẬP ĐIỂM QUÁ TRÌNH
-        </div>
+        <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden">
         <Table<RowData>
           rowKey="id"
           pagination={false}
           size="small"
           dataSource={rows}
-          scroll={{ y: "calc(100vh - 520px)" }}
+          scroll={{ y: chieuCaoBody }}
           columns={[
             { title: "STT", width: 56, align: "center", render: (_v, _r, i) => i + 1 },
             { title: "MÃ SV", dataIndex: "mssv", width: 100, align: "center" },
@@ -543,8 +703,6 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
             },
           ]}
         />
-        <div className="mt-2 rounded bg-green-50 px-3 py-1 text-xs text-gray-600">
-          Ghi chú: Điểm thành phần được tính theo thang điểm 0 - 10 (làm tròn 1 chữ số thập phân)
         </div>
       </div>
 
