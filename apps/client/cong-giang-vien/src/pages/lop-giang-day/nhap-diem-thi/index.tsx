@@ -13,10 +13,29 @@ import { sqlTransaction } from "@workspace/libs/api/model"
 import type { SqlTransactionBodyItem } from "@workspace/libs/api/schemas/sqlTransactionBodyItem"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Breadcrumb, Button, Input, InputNumber, Modal, Select, Table, message } from "antd"
+import { cn } from "@workspace/ui/lib/utils"
 import dayjs from "dayjs"
-import { ArrowLeft, FileDown, FileUp, History, RotateCcw, Save, Search } from "lucide-react"
+import {
+  ArrowLeft,
+  Ban,
+  BookOpen,
+  CalendarClock,
+  CalendarDays,
+  CheckCircle2,
+  CircleSlash2,
+  ClipboardCheck,
+  FileDown,
+  FileUp,
+  GraduationCap,
+  Hash,
+  History,
+  RefreshCcw,
+  RotateCcw,
+  Save,
+} from "lucide-react"
 import { useRouter } from "next/router"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
+import type { ReactNode } from "react"
 
 type RowData = {
   id: string
@@ -31,6 +50,84 @@ type RowData = {
   isChanged: boolean
 }
 
+const CHIEU_CAO_HEADER_BANG = 39
+
+const HE_SO_MAC_DINH = {
+  coef_1: 0.1,
+  coef_2: 0.3,
+  coef_3: 0.6,
+  scoreToTakeExam: 4,
+  scoreToPass: 5,
+  maxReExamScore: 5,
+  reduceReExamScore: 0,
+  examScoreToPass: 4,
+} as const
+
+const TheThongKeNgang = ({
+  icon,
+  tieuDe,
+  giaTri,
+  tyLe,
+  tone = "blue",
+  onClick,
+}: {
+  icon: ReactNode
+  tieuDe: string
+  giaTri: string
+  tyLe?: string
+  tone?: "green" | "yellow" | "blue" | "teal" | "red"
+  onClick?: () => void
+}) => {
+  const toneClass =
+    tone === "green"
+      ? "bg-[#e8f7ef] text-[#16a34a]"
+      : tone === "yellow"
+        ? "bg-[#fff4dd] text-[#f59e0b]"
+        : tone === "teal"
+          ? "bg-[#e8faf7] text-[#14b8a6]"
+          : tone === "red"
+            ? "bg-[#ffe9e9] text-[#ef4444]"
+            : "bg-[#eaf3ff] text-[#3b82f6]"
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "flex h-[84px] items-center gap-2 rounded-lg border border-gray-100 bg-white px-2.5 py-2 text-left",
+        onClick && "transition-colors hover:border-cgv-green/35 hover:bg-cgv-green/5"
+      )}
+    >
+      <span className={cn("inline-flex h-8 w-8 items-center justify-center rounded-full", toneClass)}>
+        {icon}
+      </span>
+      <div className="min-w-0">
+        <div className="truncate text-[10px] font-semibold text-gray-500">{tieuDe}</div>
+        <div className="mt-1 flex items-end gap-1.5">
+          <span className="text-[24px] font-bold leading-[22px] text-cgv-green-dark">{giaTri}</span>
+          {tyLe ? <span className="pb-0.5 text-[10px] font-semibold text-gray-500">{tyLe}</span> : null}
+        </div>
+      </div>
+    </button>
+  )
+}
+
+const TheThongTinLopHang = ({
+  icon,
+  label,
+  value,
+}: {
+  icon: ReactNode
+  label: string
+  value: string
+}) => (
+  <div className="flex items-center gap-2 text-[13px] leading-7">
+    <span className="inline-flex h-4 w-4 items-center justify-center text-cgv-green-dark/80">{icon}</span>
+    <span className="shrink-0 text-gray-500">{label}</span>
+    <span className="truncate font-semibold text-gray-900">{value}</span>
+  </div>
+)
+
 const NhapDiemThiGiangDayPage = () => {
   const router = useRouter()
   const lopIdMacDinh = router.query.lopId as string | undefined
@@ -43,6 +140,23 @@ const NhapDiemThiGiangDayPage = () => {
   const [lopId, setLopId] = useState<string | undefined>(lopIdMacDinh)
   const [rows, setRows] = useState<RowData[]>([])
   const [historyTarget, setHistoryTarget] = useState<{ id: string; hoTen: string } | null>(null)
+  const [dongFocusIds, setDongFocusIds] = useState<string[]>([])
+  const vungBangRef = useRef<HTMLDivElement>(null)
+  const [chieuCaoBody, setChieuCaoBody] = useState(320)
+
+  useEffect(() => {
+    const el = vungBangRef.current
+    if (!el) return
+
+    const capNhatChieuCao = () => {
+      setChieuCaoBody(Math.max(160, el.clientHeight - CHIEU_CAO_HEADER_BANG))
+    }
+
+    capNhatChieuCao()
+    const observer = new ResizeObserver(capNhatChieuCao)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   const { data: schoolYears = [], isLoading: dangTaiNamHoc } = useFindManySchoolYear({
     orderBy: { startDate: "desc" },
@@ -155,15 +269,26 @@ const NhapDiemThiGiangDayPage = () => {
   )
 
   useEffect(() => {
+    setDongFocusIds([])
     const mapped: RowData[] = scoreRows.map((r) => ({
+      // Khi refetch sau lưu, cần tính lại điểm chữ từ điểm HP hiện có,
+      // nếu không cột điểm chữ sẽ bị rỗng do chỉ lưu ở state.
+      ...(function () {
+        const trainingCourse = r.student?.fixedClass?.trainingCourse
+        const finalScore = r.finalScore != null ? Number(r.finalScore) : null
+        const convert =
+          finalScore != null ? scoreConvert(finalScore, trainingCourse?.scoreConverts ?? []) : null
+        return {
+          finalScore,
+          letter: convert?.letter ?? "",
+        }
+      })(),
       id: r.id,
       mssv: r.student?.code ?? "",
       hoTen: r.student?.userProfile?.fullname ?? "",
       attendanceScore: r.attendanceScore ?? null,
       midtermScore: r.midtermScore ?? null,
       examScore: r.examScore ?? null,
-      finalScore: r.finalScore != null ? Number(r.finalScore) : null,
-      letter: "",
       description: r.description ?? "",
       isChanged: false,
     }))
@@ -177,21 +302,11 @@ const NhapDiemThiGiangDayPage = () => {
         const next = { ...row, ...patch }
         const goc = scoreRows.find((x) => x.id === id)
         const trainingCourse = goc?.student?.fixedClass?.trainingCourse
-        const heSoMacDinh = {
-          coef_1: 0.1,
-          coef_2: 0.3,
-          coef_3: 0.6,
-          scoreToTakeExam: 4,
-          scoreToPass: 5,
-          maxReExamScore: 5,
-          reduceReExamScore: 0,
-          examScoreToPass: 4,
-        }
         const finalScore =
           next.attendanceScore == null || next.midtermScore == null || next.examScore == null
             ? null
             : calcFinalScore(
-                trainingCourse ?? heSoMacDinh,
+                trainingCourse ?? HE_SO_MAC_DINH,
                 {
                   attendanceScore: next.attendanceScore,
                   midtermScore: next.midtermScore,
@@ -221,14 +336,32 @@ const NhapDiemThiGiangDayPage = () => {
     const daNhap = rows.filter((r) => r.examScore != null).length
     const chuaNhap = tong - daNhap
     const finals = rows.map((r) => r.finalScore).filter((v): v is number => v != null)
+
+    const max = finals.length ? Math.max(...finals) : null
+    const min = finals.length ? Math.min(...finals) : null
+    const idsMax = max == null ? [] : rows.filter((r) => r.finalScore === max).map((r) => r.id)
+    const idsMin = min == null ? [] : rows.filter((r) => r.finalScore === min).map((r) => r.id)
+
     return {
       tong,
       daNhap,
       chuaNhap,
-      max: finals.length ? Math.max(...finals) : 0,
-      min: finals.length ? Math.min(...finals) : 0,
+      diemTb: finals.length ? finals.reduce((sum, v) => sum + v, 0) / finals.length : null,
+      max,
+      min,
+      idsMax,
+      idsMin,
     }
   }, [rows])
+
+  const focusNhieuDongBang = (ids: string[]) => {
+    if (ids.length === 0) return
+    setDongFocusIds(ids)
+    requestAnimationFrame(() => {
+      const rowEl = vungBangRef.current?.querySelector<HTMLElement>(`tr[data-row-key="${ids[0]}"]`)
+      rowEl?.scrollIntoView({ block: "center", behavior: "smooth" })
+    })
+  }
 
   const luu = async () => {
     if (quaHanNhapDiemThi) {
@@ -320,7 +453,7 @@ const NhapDiemThiGiangDayPage = () => {
       </div>
 
       <div className="rounded-lg border border-gray-100 bg-white p-3">
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_1fr_1fr_1fr_auto_auto]">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_1fr_1fr_1fr_auto]">
           <div>
             <div className="mb-1 text-xs text-gray-500">Năm học</div>
             <Select
@@ -370,15 +503,96 @@ const NhapDiemThiGiangDayPage = () => {
               className="w-full"
             />
           </div>
-          <div className="flex items-end">
-            <Button
-              icon={<Search size={14} />}
-              className="bg-cgv-green-dark text-white hover:!bg-cgv-green-dark/90"
-            >
-              Tìm kiếm
+          <div className="flex items-end justify-end gap-2">
+            <Button icon={<RefreshCcw size={14} />} onClick={() => refetch()}>
+              Tải dữ liệu
             </Button>
           </div>
-          <div className="flex items-end justify-end gap-2">
+        </div>
+      </div>
+
+      <div className="rounded-lg border border-gray-100 bg-white p-3">
+        <div className="overflow-hidden rounded-lg border border-gray-100">
+          <div className="grid grid-cols-1 lg:grid-cols-[250px_minmax(0,1fr)]">
+            <div className="border-b border-gray-100 bg-gray-50/70 px-3 py-2 lg:border-b-0 lg:border-r">
+              <div className="space-y-0.5">
+                <TheThongTinLopHang icon={<Hash size={14} />} label="Mã lớp:" value={lopMonHoc?.code ?? "—"} />
+                <TheThongTinLopHang
+                  icon={<BookOpen size={14} />}
+                  label="Tên lớp:"
+                  value={lopMonHoc?.name ?? "—"}
+                />
+                <TheThongTinLopHang
+                  icon={<CalendarDays size={14} />}
+                  label="Học kỳ:"
+                  value={lopMonHoc?.semester?.name ?? "—"}
+                />
+                <TheThongTinLopHang
+                  icon={<GraduationCap size={14} />}
+                  label="Tín chỉ:"
+                  value={String(lopMonHoc?.subject?.credit ?? "—")}
+                />
+                <TheThongTinLopHang
+                  icon={<CalendarClock size={14} />}
+                  label="Hạn nhập điểm:"
+                  value={
+                    lopMonHoc?.examScoreDeadline
+                      ? dayjs(lopMonHoc.examScoreDeadline).format("DD/MM/YYYY HH:mm")
+                      : "—"
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="bg-white p-1.5">
+              <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 xl:grid-cols-5">
+                <TheThongKeNgang
+                  icon={<ClipboardCheck size={18} />}
+                  tieuDe="Đã nhập"
+                  giaTri={String(thongKe.daNhap)}
+                  tyLe={`${thongKe.tong ? Math.round((thongKe.daNhap / thongKe.tong) * 100) : 0}%`}
+                  tone="green"
+                />
+                <TheThongKeNgang
+                  icon={<CircleSlash2 size={18} />}
+                  tieuDe="Chưa nhập"
+                  giaTri={String(thongKe.chuaNhap)}
+                  tyLe={`${thongKe.tong ? Math.round((thongKe.chuaNhap / thongKe.tong) * 100) : 0}%`}
+                  tone="yellow"
+                />
+                <TheThongKeNgang
+                  icon={<GraduationCap size={18} />}
+                  tieuDe="Điểm HP trung bình"
+                  giaTri={thongKe.diemTb != null ? thongKe.diemTb.toFixed(2) : "—"}
+                  tyLe="/10"
+                  tone="blue"
+                />
+                <TheThongKeNgang
+                  icon={<CheckCircle2 size={18} />}
+                  tieuDe="Điểm HP cao nhất"
+                  giaTri={thongKe.max != null ? thongKe.max.toFixed(1) : "—"}
+                  tyLe={`${thongKe.idsMax.length} sinh viên`}
+                  tone="teal"
+                  onClick={() => focusNhieuDongBang(thongKe.idsMax)}
+                />
+                <TheThongKeNgang
+                  icon={<Ban size={18} />}
+                  tieuDe="Điểm HP thấp nhất"
+                  giaTri={thongKe.min != null ? thongKe.min.toFixed(1) : "—"}
+                  tyLe={`${thongKe.idsMin.length} sinh viên`}
+                  tone="red"
+                  onClick={() => focusNhieuDongBang(thongKe.idsMin)}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-gray-100 bg-white p-3">
+        <div className="mb-2 flex shrink-0 flex-wrap items-center justify-between gap-x-3 gap-y-2">
+          <span className="text-sm font-semibold text-cgv-green-dark">BẢNG NHẬP ĐIỂM THI</span>
+          <div className="flex items-center gap-2">
             <Button icon={<Save size={14} />} onClick={luu} disabled={quaHanNhapDiemThi}>
               Lưu
             </Button>
@@ -390,67 +604,18 @@ const NhapDiemThiGiangDayPage = () => {
             </Button>
           </div>
         </div>
-      </div>
-
-      <div className="rounded-lg border border-gray-100 bg-white p-3">
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
-          <div className="grid grid-cols-2 gap-y-2 text-sm">
-            <div>
-              Mã lớp: <b>{lopMonHoc?.code ?? ""}</b>
-            </div>
-            <div>
-              Học kỳ: <b>{lopMonHoc?.semester?.name ?? ""}</b>
-            </div>
-            <div>
-              Tên lớp: <b>{lopMonHoc?.name ?? ""}</b>
-            </div>
-            <div>
-              Tín chỉ: <b>{lopMonHoc?.subject?.credit ?? ""}</b>
-            </div>
-            <div>
-              Môn học: <b>{lopMonHoc?.subject?.name ?? ""}</b>
-            </div>
-            <div>
-              Sĩ số sinh viên: <b>{lopMonHoc?._count?.subjectClassStudent ?? 0}</b>
-            </div>
-            <div>
-              Hạn nhập điểm:{" "}
-              <b>
-                {lopMonHoc?.examScoreDeadline
-                  ? dayjs(lopMonHoc.examScoreDeadline).format("DD/MM/YYYY HH:mm")
-                  : ""}
-              </b>
-            </div>
-          </div>
-          <div className="rounded border border-gray-100 p-3 text-sm">
-            <div className="mb-2 font-semibold text-cgv-green-dark">THỐNG KÊ</div>
-            <div>
-              Tổng số sinh viên: <b>{thongKe.tong}</b>
-            </div>
-            <div>
-              Đã nhập điểm: <b className="text-green-600">{thongKe.daNhap}</b>
-            </div>
-            <div>
-              Chưa nhập điểm: <b className="text-red-500">{thongKe.chuaNhap}</b>
-            </div>
-            <div className="mt-3">
-              Điểm HP cao nhất: <b>{thongKe.max.toFixed(2)}</b>
-            </div>
-            <div>
-              Điểm HP thấp nhất: <b>{thongKe.min.toFixed(2)}</b>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="min-h-0 flex-1 overflow-auto rounded-lg border border-gray-100 bg-white p-3">
-        <div className="mb-2 text-sm font-semibold text-cgv-green-dark">BẢNG NHẬP ĐIỂM THI</div>
+        <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden">
         <Table<RowData>
           rowKey="id"
           pagination={false}
           size="small"
           dataSource={rows}
-          scroll={{ y: "calc(100vh - 520px)" }}
+          scroll={{ y: chieuCaoBody }}
+          onRow={(record) => ({
+            className: dongFocusIds.includes(record.id)
+              ? "[&>td]:!bg-cgv-green/35 [&>td]:!transition-colors"
+              : undefined,
+          })}
           columns={[
             { title: "STT", width: 56, align: "center", render: (_v, _r, i) => i + 1 },
             { title: "MÃ SV", dataIndex: "mssv", width: 100, align: "center" },
@@ -522,8 +687,6 @@ const NhapDiemThiGiangDayPage = () => {
             },
           ]}
         />
-        <div className="mt-2 rounded bg-green-50 px-3 py-1 text-xs text-gray-600">
-          Ghi chú: Điểm thành phần được tính theo thang điểm 0 - 10 (làm tròn 1 chữ số thập phân)
         </div>
       </div>
 

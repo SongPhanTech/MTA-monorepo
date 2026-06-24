@@ -287,14 +287,24 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
 
   useEffect(() => {
     const mapped: RowData[] = scoreRows.map((r) => ({
+      // Sau khi refetch (ví dụ vừa lưu), tính lại điểm chữ từ điểm HP
+      // để không bị rỗng cột "Điểm chữ".
+      ...(function () {
+        const trainingCourse = r.student?.fixedClass?.trainingCourse
+        const finalScore = r.finalScore != null ? Number(r.finalScore) : null
+        const convert =
+          finalScore != null ? scoreConvert(finalScore, trainingCourse?.scoreConverts ?? []) : null
+        return {
+          finalScore,
+          letter: convert?.letter ?? "",
+        }
+      })(),
       id: r.id,
       mssv: r.student?.code ?? "",
       hoTen: r.student?.userProfile?.fullname ?? "",
       attendanceScore: r.attendanceScore ?? null,
       midtermScore: r.midtermScore ?? null,
       examScore: r.examScore ?? null,
-      finalScore: r.finalScore != null ? Number(r.finalScore) : null,
-      letter: "",
       description: r.description ?? "",
       isChanged: false,
     }))
