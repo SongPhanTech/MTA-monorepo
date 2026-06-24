@@ -19,6 +19,7 @@ import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { getDeadlineStatus } from "@/utils/getDeadlineStatus"
 import { queryClient } from "@api/index"
+import ImportCriteriaEvaluation from "@components/modal/import-criteria-evaluation"
 
 export type DataTabEvaluationCriterionType = StandardPeriod & {
   criteria: (CriterionPeriod & {
@@ -211,6 +212,7 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
       </span>
       <div className="flex gap-2 mr-2">
         <ExportCriteriaEvaluation data={data} />
+        {canEdit && <ImportCriteriaEvaluation data={data} />}
         <Button type="primary" size="small" onClick={handleSubmit} disabled={!canEdit}>
           Lưu đánh giá
         </Button>

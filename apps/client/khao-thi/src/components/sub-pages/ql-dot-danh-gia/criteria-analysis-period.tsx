@@ -2,6 +2,7 @@ import CommentList from "@components/commons/comment-list"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import ExportCriteriaAnalysis from "@components/modal/export-criteria-analysis"
+import ImportCriteriaAnalysis from "@components/modal/import-criteria-analysis"
 import type { DataTabType } from "@components/sub-pages/tu-danh-gia-ctdt/criteria-analysis"
 import {
   DEADLINE_OPTIONS,
@@ -20,6 +21,7 @@ import { getDeadlineStatus } from "@/utils/getDeadlineStatus"
 const CriteriaAnalysisPeriodSubPage = ({
   data,
   allData,
+  refetch,
 }: {
   data: DataTabType
   idx: number
@@ -99,6 +101,7 @@ const CriteriaAnalysisPeriodSubPage = ({
             label="Xuất tất cả"
             fileName="Phieu_phan_tich_tieu_chi_Tat_ca.docx"
           />
+          <ImportCriteriaAnalysis allData={allData} label="Nhập tất cả" refetch={refetch} />
         </div>
       </div>
       {!filteredCriteria || filteredCriteria.length === 0 ? (
