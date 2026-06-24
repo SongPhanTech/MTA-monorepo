@@ -14,8 +14,9 @@ interface TabTongKetProps {
 const TabTongKet = ({ fixedClassId, enabled }: TabTongKetProps) => {
   const router = useRouter()
   const {
+    schoolYearId,
     semesterId,
-    apDungHocKy,
+    apDungBoLoc,
     danhSach,
     thongKe,
     tongSo,
@@ -32,7 +33,11 @@ const TabTongKet = ({ fixedClassId, enabled }: TabTongKetProps) => {
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <BoLocDiemRenLuyen semesterId={semesterId || ""} onApDung={apDungHocKy} />
+      <BoLocDiemRenLuyen
+        schoolYearId={schoolYearId}
+        semesterId={semesterId}
+        onApDung={apDungBoLoc}
+      />
       <TheThongKeTongKet thongKe={thongKe} />
       <BangTongKet
         danhSach={danhSach}

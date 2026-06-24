@@ -70,7 +70,7 @@ const BangDiemRenLuyen = ({ danhSach, loading, trang, soTrang }: BangDiemRenLuye
   ]
 
   return (
-    <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden px-4 pb-2">
+    <div ref={vungBangRef} className="min-h-0 mt-2 flex-1 overflow-hidden px-4 pb-2">
       <Table<DiemRenLuyenRow>
         rowKey="id"
         size="small"

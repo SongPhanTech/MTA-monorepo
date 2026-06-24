@@ -53,7 +53,7 @@ const DashboardLayout = ({ children, className }: { children: ReactNode; classNa
           logo2={
             <div className="flex items-center justify-center text-center">
               <Image src={logo_mta} alt="logo MTA" className="w-10 h-10 mr-3" />
-              <span className="text-xl font-bold color text-primary">Quản lý khảo thí</span>
+              <span className="text-base font-bold color text-primary">Quản lý khảo thí</span>
             </div>
           }
           items={menus}

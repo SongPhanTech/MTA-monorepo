@@ -69,6 +69,8 @@ export type ThongKeDiemRenLuyen = {
   diemThapNhat: number | null
 }
 
+export type LocDiemRenLuyen = "cao_nhat" | "thap_nhat" | null
+
 export type TongKetRow = {
   id: string
   maSinhVien: string

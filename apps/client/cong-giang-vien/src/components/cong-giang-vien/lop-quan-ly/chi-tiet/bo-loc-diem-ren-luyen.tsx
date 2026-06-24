@@ -4,13 +4,19 @@ import { useSemesterStore } from "@workspace/ui"
 import { useEffect, useMemo, useState } from "react"
 
 interface BoLocDiemRenLuyenProps {
-  semesterId: string
-  onApDung: (semesterId: string) => void
+  schoolYearId: string
+  semesterId?: string
+  onApDung: (params: { schoolYearId: string; semesterId?: string }) => void
 }
 
-const BoLocDiemRenLuyen = ({ semesterId, onApDung }: BoLocDiemRenLuyenProps) => {
+const BoLocDiemRenLuyen = ({ schoolYearId, semesterId, onApDung }: BoLocDiemRenLuyenProps) => {
   const { onSelect } = useSemesterStore()
-  const [semesterNhap, setSemesterNhap] = useState(semesterId)
+  const [schoolYearNhap, setSchoolYearNhap] = useState(schoolYearId)
+  const [semesterNhap, setSemesterNhap] = useState<string | undefined>(semesterId)
+
+  useEffect(() => {
+    setSchoolYearNhap(schoolYearId)
+  }, [schoolYearId])
 
   useEffect(() => {
     setSemesterNhap(semesterId)
@@ -21,25 +27,25 @@ const BoLocDiemRenLuyen = ({ semesterId, onApDung }: BoLocDiemRenLuyenProps) => 
     include: { semesters: { orderBy: { createdAt: "desc" } } },
   })
 
-  const selectedYearId = useMemo(
-    () => schoolYears.find((year) => year.semesters.some((s) => s.id === semesterNhap))?.id,
-    [schoolYears, semesterNhap]
-  )
-
   const semestersOfYear = useMemo(
-    () => schoolYears.find((year) => year.id === selectedYearId)?.semesters ?? [],
-    [schoolYears, selectedYearId]
+    () => schoolYears.find((year) => year.id === schoolYearNhap)?.semesters ?? [],
+    [schoolYears, schoolYearNhap]
   )
 
   const handleChangeYear = (yearId: string) => {
-    const year = schoolYears.find((item) => item.id === yearId)
-    const firstSemester = year?.semesters?.[0]
-    if (firstSemester) setSemesterNhap(firstSemester.id)
+    setSchoolYearNhap(yearId)
+    setSemesterNhap(undefined)
+    onApDung({ schoolYearId: yearId })
   }
 
-  const handleTimKiem = () => {
-    onSelect(semesterNhap)
-    onApDung(semesterNhap)
+  const handleChangeSemester = (id?: string) => {
+    setSemesterNhap(id)
+    if (id) {
+      onSelect(id)
+      onApDung({ schoolYearId: schoolYearNhap, semesterId: id })
+      return
+    }
+    onApDung({ schoolYearId: schoolYearNhap })
   }
 
   return (
@@ -50,7 +56,7 @@ const BoLocDiemRenLuyen = ({ semesterId, onApDung }: BoLocDiemRenLuyenProps) => 
           loading={isLoading}
           placeholder="Chọn năm học"
           className="min-w-[140px]"
-          value={selectedYearId}
+          value={schoolYearNhap || undefined}
           onChange={handleChangeYear}
           options={schoolYears.map((year) => ({ value: year.id, label: year.name }))}
         />
@@ -62,7 +68,7 @@ const BoLocDiemRenLuyen = ({ semesterId, onApDung }: BoLocDiemRenLuyenProps) => 
           placeholder="Chọn học kỳ"
           className="min-w-[140px]"
           value={semesterNhap}
-          onChange={setSemesterNhap}
+          onChange={handleChangeSemester}
           options={semestersOfYear.map((semester) => ({
             value: semester.id,
             label: semester.name,

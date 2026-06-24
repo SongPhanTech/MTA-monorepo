@@ -134,7 +134,7 @@ const BangDanhSachSinhVien = ({
   ]
 
   return (
-    <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden px-4 pb-2">
+    <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden px-4 pb-2 mt-2">
       <Table<SinhVienLopQuanLyRow>
         rowKey="id"
         size="small"
