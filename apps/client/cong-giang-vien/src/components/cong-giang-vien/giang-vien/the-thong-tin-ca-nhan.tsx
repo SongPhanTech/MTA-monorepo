@@ -31,7 +31,7 @@ const TheThongTinCaNhan = ({ thongTin, isLoading }: TheThongTinCaNhanProps) => {
       nhan: "Mã giảng viên",
       giaTri: thongTin.maGiangVien,
     },
-    { key: "khoa", icon: <Building2 size={14} />, nhan: "Khoa", giaTri: thongTin.khoa },
+    { key: "khoa", icon: <Building2 size={14} />, nhan: "Khoa/Viện", giaTri: thongTin.khoa },
     { key: "bo-mon", icon: <BookOpen size={14} />, nhan: "Bộ môn", giaTri: thongTin.boMon },
     { key: "hoc-vi", icon: <GraduationCap size={14} />, nhan: "Học vị", giaTri: thongTin.hocVi },
     { key: "email", icon: <Mail size={14} />, nhan: "Email", giaTri: thongTin.email },

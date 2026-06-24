@@ -1,5 +1,5 @@
 import logo_mta from "@assets/images/daotao.svg"
-import GiangVienHeaderApp from "@components/header/giang-vien-header-app"
+import GiangVienHeaderApp from "@components/header"
 import SiderCongGiangVien from "@components/layouts/sider-cong-giang-vien"
 import {
   CONG_GIANG_VIEN_CONTENT_VERTICAL_OFFSET,
@@ -36,8 +36,6 @@ const CongGiangVienLayout = ({
   className?: string
   unLayout?: boolean
 }) => {
-  const { data: unitInfoResponse } = useGetUnitInfosInfo()
-  const unitInfo = unitInfoResponse?.data
   const menus = useMenuList()
 
   const [collapsed, setCollapsed] = useState(readSidebarCollapsed)
@@ -60,7 +58,7 @@ const CongGiangVienLayout = ({
   })
 
   const siderWidth = collapsed ? CONG_GIANG_VIEN_SIDER_COLLAPSED_WIDTH : CONG_GIANG_VIEN_SIDER_WIDTH
-  const schoolName = unitInfo?.sTenDayDu || CONG_GIANG_VIEN_DEFAULT_SCHOOL_NAME
+  const schoolName = CONG_GIANG_VIEN_DEFAULT_SCHOOL_NAME
 
   return (
     <IdleTimerProvider

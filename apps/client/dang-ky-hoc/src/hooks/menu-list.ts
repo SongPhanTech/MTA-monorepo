@@ -5,7 +5,6 @@ import NAVIGATION from "@workspace/router"
 import { useEffect } from "react"
 
 const useMenuList = () => {
-  const isUpdateAbility = useStoreState((actions) => actions.appState.isUpdateAbility)
   const setIsUpdateAbility = useStoreActions((actions) => actions.appState.setIsUpdateAbility)
   const permissions = usePermissions()
 
