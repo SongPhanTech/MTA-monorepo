@@ -90,6 +90,12 @@ const BangDanhSachSinhVien = ({
       ellipsis: true,
     },
     {
+      title: "Số điện thoại",
+      dataIndex: "soDienThoai",
+      width: 120,
+      align: "center",
+    },
+    {
       title: "Trạng thái",
       dataIndex: "trangThai",
       width: 130,
@@ -103,6 +109,7 @@ const BangDanhSachSinhVien = ({
       title: "Thao tác",
       width: 200,
       align: "center",
+      fixed: "right",
       render: (_value, record) => (
         <div className="flex items-center justify-center gap-2">
           <Button
@@ -135,9 +142,9 @@ const BangDanhSachSinhVien = ({
         dataSource={danhSach}
         loading={loading}
         pagination={false}
-        scroll={{ x: "max-content" }}
+        scroll={{ x: 1300, y: chieuCaoBody }}
         rowClassName={(_, index) => (index % 2 === 1 ? "bg-gray-50/80" : "")}
-        className="bang-lq-chi-tiet mt-2 [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
+        // className="bang-lq-chi-tiet mt-2 [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
       />
     </div>
   )

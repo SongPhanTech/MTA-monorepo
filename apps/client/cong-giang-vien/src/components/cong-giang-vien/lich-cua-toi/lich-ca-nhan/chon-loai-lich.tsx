@@ -4,8 +4,8 @@ import { cn } from "@workspace/ui/lib/utils"
 import type { PersonalWorkTag } from "@workspace/db/client"
 import { Dropdown, Popover } from "antd"
 import type { MenuProps } from "antd"
-import { BookOpen, Plus, User, Users } from "lucide-react"
-import { forwardRef, useMemo, useState, type MouseEvent, type ReactNode } from "react"
+import { Plus } from "lucide-react"
+import { forwardRef, useMemo, useState, type MouseEvent } from "react"
 
 interface ChonLoaiLichProps {
   tags: Pick<PersonalWorkTag, "id" | "name" | "color">[]
@@ -15,18 +15,6 @@ interface ChonLoaiLichProps {
   onSuaLoai?: (tagId: string) => void
   onXoaLoai?: (tagId: string) => void
   dangTai?: boolean
-}
-
-const iconTheoTenTag = (ten: string, mau: string): ReactNode => {
-  const props = { size: 16, style: { color: mau } }
-  const chuan = ten.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase()
-  if (chuan.includes("hop") || chuan.includes("meeting")) {
-    return <Users {...props} />
-  }
-  if (chuan.includes("ca nhan") || chuan.includes("personal")) {
-    return <User {...props} />
-  }
-  return <BookOpen {...props} />
 }
 
 const NutLoaiLich = ({
@@ -62,7 +50,6 @@ const NutLoaiLich = ({
         color: dangChon ? mau : undefined,
       }}
     >
-      {iconTheoTenTag(tag.name, mau)}
       <span className="truncate">{tag.name}</span>
     </button>
   )

@@ -34,6 +34,7 @@ export type SinhVienLopQuanLyRow = {
   gioiTinh: string
   ngaySinh: string
   lienHe: string
+  soDienThoai: string
   trangThai: StudentStatus
 }
 

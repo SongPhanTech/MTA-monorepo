@@ -200,7 +200,8 @@ const BangTatCaLich = ({
             size="small"
             tableLayout="fixed"
             scroll={{ x: SCROLL_X_THANG, y: chieuCaoBody }}
-            className={CLASS_BANG}
+            // className={CLASS_BANG}
+            bordered={true}
             locale={{ emptyText }}
           />
         ) : cheDoHienThi === "tuan" ? (
@@ -213,7 +214,8 @@ const BangTatCaLich = ({
             size="small"
             tableLayout="fixed"
             scroll={{ x: SCROLL_X_TUAN, y: chieuCaoBody }}
-            className={CLASS_BANG}
+            // className={CLASS_BANG}
+            bordered={true}
             locale={{ emptyText }}
           />
         ) : (
@@ -226,7 +228,8 @@ const BangTatCaLich = ({
             size="small"
             tableLayout="fixed"
             scroll={{ x: SCROLL_X_NGAY, y: chieuCaoBody }}
-            className={CLASS_BANG}
+            // className={CLASS_BANG}
+            bordered={true}
             locale={{ emptyText }}
           />
         )}

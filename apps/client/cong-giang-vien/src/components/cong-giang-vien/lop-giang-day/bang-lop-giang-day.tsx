@@ -245,10 +245,7 @@ const BangLopGiangDay = ({ danhSach, loading, trang, soTrang }: BangLopGiangDayP
   ]
 
   return (
-    <div
-      ref={vungBangRef}
-      className="min-h-0 flex-1 overflow-hidden rounded-lg border border-gray-100 bg-white"
-    >
+    <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden rounded-lg  bg-white">
       <Table<LopGiangDayRow>
         rowKey="id"
         size="small"
@@ -257,7 +254,8 @@ const BangLopGiangDay = ({ danhSach, loading, trang, soTrang }: BangLopGiangDayP
         loading={loading}
         pagination={false}
         scroll={{ x: "max-content" }}
-        className="bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400 [&_.ant-table-cell-scrollbar]:!hidden"
+        bordered={true}
+        // className="bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400 [&_.ant-table-cell-scrollbar]:!hidden"
       />
     </div>
   )

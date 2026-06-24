@@ -156,7 +156,8 @@ const useChiTietLopQuanLyGiangVien = (fixedClassId: string) => {
         ngaySinh: sv.userProfile?.dateOfBirth
           ? dayjs(sv.userProfile.dateOfBirth).format("DD/MM/YYYY")
           : "",
-        lienHe: sv.userProfile?.email ?? sv.userProfile?.phoneNumber ?? "",
+        lienHe: sv.userProfile?.email ?? "",
+        soDienThoai: sv.userProfile?.phoneNumber ?? "",
         trangThai: sv.status,
       })),
     [sinhVienData]

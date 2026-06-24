@@ -20,7 +20,7 @@ interface LichThangCaNhanProps {
   tags: TagLoaiLich[]
   dangTai?: boolean
   onChonNgay?: (ngay: Dayjs) => void
-  onSua?: (id: string) => void
+  onXemChiTiet?: (id: string) => void
 }
 
 const SO_SU_KIEN_TOI_DA = 3
@@ -36,7 +36,7 @@ const LichThangCaNhan = ({
   tags,
   dangTai,
   onChonNgay,
-  onSua,
+  onXemChiTiet,
 }: LichThangCaNhanProps) => {
   const thangXem = useMemo(() => ngayChon.startOf("month"), [ngayChon])
   const homNay = useMemo(() => dayjs().startOf("day"), [])
@@ -121,7 +121,7 @@ const LichThangCaNhan = ({
                       <button
                         key={suKien.id}
                         type="button"
-                        onClick={() => onSua?.(suKien.id)}
+                        onClick={() => onXemChiTiet?.(suKien.id)}
                         className="flex min-w-0 items-center gap-1 rounded px-0.5 text-left hover:bg-gray-100/80"
                         title={suKien.tieuDe}
                       >

@@ -130,10 +130,7 @@ const BangLopTroGiang = ({ danhSach, loading, trang, soTrang }: BangLopTroGiangP
   ]
 
   return (
-    <div
-      ref={vungBangRef}
-      className="min-h-0 flex-1 overflow-hidden rounded-lg border border-gray-100 bg-white"
-    >
+    <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden rounded-lg  bg-white">
       <Table<LopTroGiangRow>
         rowKey="id"
         size="small"
@@ -141,7 +138,8 @@ const BangLopTroGiang = ({ danhSach, loading, trang, soTrang }: BangLopTroGiangP
         dataSource={danhSach}
         loading={loading}
         pagination={false}
-        className="[&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
+        bordered={true}
+        // className="[&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
       />
     </div>
   )

@@ -22,7 +22,7 @@ interface LichTuanCaNhanProps {
   dauTuan: Dayjs
   tags: TagLoaiLich[]
   dangTai?: boolean
-  onSua?: (id: string) => void
+  onXemChiTiet?: (id: string) => void
 }
 
 const TEN_THU = ["Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"] as const
@@ -39,7 +39,7 @@ type SuKienViTri = DongLichCaNhan & {
   diaDiemHienThi: string
 }
 
-const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onSua }: LichTuanCaNhanProps) => {
+const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onXemChiTiet }: LichTuanCaNhanProps) => {
   const gioNhan = useMemo(() => gioTrongTimeline(), [])
 
   const ngayTrongTuan = useMemo(
@@ -159,7 +159,7 @@ const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onSua }: LichTuanCaN
                     <button
                       key={suKien.id}
                       type="button"
-                      onClick={() => onSua?.(suKien.id)}
+                      onClick={() => onXemChiTiet?.(suKien.id)}
                       className="absolute left-0.5 right-0.5 overflow-hidden rounded-sm border border-gray-100 px-1.5 py-1 text-left transition-shadow hover:shadow-sm"
                       style={{
                         top: suKien.topPx,

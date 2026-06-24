@@ -13,29 +13,18 @@ import {
 } from "@components/cong-giang-vien/lich-cua-toi/timeline/constants"
 import { Empty, Spin } from "antd"
 import dayjs from "dayjs"
-import { BookOpen, User, Users } from "lucide-react"
-import { type ReactNode, useMemo } from "react"
+import { useMemo } from "react"
 
 interface LichNgayCaNhanProps {
   danhSach: DongLichCaNhan[]
   tags: TagLoaiLich[]
   dangTai?: boolean
-  onSua?: (id: string) => void
-}
-
-const iconTheoTenTag = (ten: string, mau: string): ReactNode => {
-  const props = { size: 14, style: { color: mau } }
-  const chuan = ten.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase()
-  if (chuan.includes("hop") || chuan.includes("giang") || chuan.includes("day")) {
-    return <Users {...props} />
-  }
-  if (chuan.includes("ca nhan")) return <User {...props} />
-  return <BookOpen {...props} />
+  onXemChiTiet?: (id: string) => void
 }
 
 const layMauSuKien = (suKien: DongLichCaNhan) => suKien.mauLoai ?? MAU_LOAI_MAC_DINH
 
-const LichNgayCaNhan = ({ danhSach, tags, dangTai, onSua }: LichNgayCaNhanProps) => {
+const LichNgayCaNhan = ({ danhSach, tags, dangTai, onXemChiTiet }: LichNgayCaNhanProps) => {
   const gioNhan = useMemo(() => gioTrongTimeline(), [])
 
   const viTriSuKien = useMemo(() => {
@@ -115,7 +104,7 @@ const LichNgayCaNhan = ({ danhSach, tags, dangTai, onSua }: LichNgayCaNhanProps)
                 <button
                   key={suKien.id}
                   type="button"
-                  onClick={() => onSua?.(suKien.id)}
+                  onClick={() => onXemChiTiet?.(suKien.id)}
                   className="absolute left-0 right-0 flex min-h-[36px] items-center gap-2 overflow-hidden rounded-md border border-gray-100 px-3 py-2 text-left transition-shadow hover:shadow-sm"
                   style={{
                     top: suKien.topPx,
@@ -139,11 +128,10 @@ const LichNgayCaNhan = ({ danhSach, tags, dangTai, onSua }: LichNgayCaNhanProps)
                   </div>
 
                   <span
-                    className="inline-flex shrink-0 items-center gap-1 text-xs font-medium"
+                    className="shrink-0 truncate text-xs font-medium"
                     style={{ color: suKien.mau }}
                   >
                     {suKien.tenLoai !== "—" ? suKien.tenLoai : "Loại lịch"}
-                    {iconTheoTenTag(suKien.tenLoai, suKien.mau)}
                   </span>
                 </button>
               ))

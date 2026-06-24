@@ -4,6 +4,10 @@ import type {
   NhomLoaiLichCaNhan,
   NhomNgayLich,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
+import {
+  TUY_CHON_LAP_LAI,
+  TUY_CHON_NHAC_LICH,
+} from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/constants"
 import type { Prisma } from "@workspace/db"
 import { ScheduleRepeatType } from "@workspace/db/client"
 import dayjs, { type Dayjs } from "dayjs"
@@ -308,6 +312,71 @@ export const chuyenNhacLichSangPhut = (nhacLich?: string | null): number | null 
 
 export const chuyenPhutSangNhacLich = (phut?: number | null): string =>
   phut == null ? "none" : String(phut)
+
+export const layNhanNhacLich = (phut?: number | null) => {
+  if (phut == null) return "Không nhắc"
+  const tuyChon = TUY_CHON_NHAC_LICH.find((item) => item.value === String(phut))
+  return tuyChon?.label ?? `Trước ${phut} phút`
+}
+
+export const layNhanNhacLichChiTiet = (phut?: number | null) => {
+  if (phut == null) return "Không nhắc"
+  if (phut >= 1440 && phut % 1440 === 0) {
+    const ngay = phut / 1440
+    return `${ngay} ngày trước sự kiện`
+  }
+  if (phut >= 60 && phut % 60 === 0) {
+    const gio = phut / 60
+    return `${gio} giờ trước sự kiện`
+  }
+  return `${phut} phút trước sự kiện`
+}
+
+export const layNhanLapLai = (repeatType?: ScheduleRepeatType | null) => {
+  const tuyChon = TUY_CHON_LAP_LAI.find((item) => item.value === (repeatType ?? "NONE"))
+  if ((repeatType ?? "NONE") === "NONE") return "Không lặp"
+  return tuyChon?.label ?? "Không lặp"
+}
+
+export const formatGioChiTietLich = (
+  startTime: string | Date,
+  endTime: string | Date,
+  allDay: boolean
+) => {
+  const batDau = dayjs(startTime)
+  const ketThuc = dayjs(endTime)
+  const nhanNgay = `${TEN_THU[batDau.day()]}, ${batDau.format("DD/MM/YYYY")}`
+
+  if (allDay) {
+    return { gio: "Cả ngày", ngay: nhanNgay }
+  }
+
+  return {
+    gio: `${batDau.format("HH:mm")} - ${ketThuc.format("HH:mm")}`,
+    ngay: nhanNgay,
+  }
+}
+
+export const formatThoiGianChiTietLich = (
+  startTime: string | Date,
+  endTime: string | Date,
+  allDay: boolean
+) => {
+  const batDau = dayjs(startTime)
+  const ketThuc = dayjs(endTime)
+  const nhanNgay = `${TEN_THU[batDau.day()]}, ${batDau.format("DD/MM/YYYY")}`
+
+  if (allDay) return `Cả ngày · ${nhanNgay}`
+
+  return `${batDau.format("HH:mm")} - ${ketThuc.format("HH:mm")} · ${nhanNgay}`
+}
+
+export const layChuCaiVietTat = (ten: string) => {
+  const tu = ten.trim().split(/\s+/).filter(Boolean)
+  if (tu.length === 0) return "?"
+  if (tu.length === 1) return tu[0].slice(0, 2).toUpperCase()
+  return `${tu[0][0] ?? ""}${tu[tu.length - 1][0] ?? ""}`.toUpperCase()
+}
 
 export const taoDuLieuLuuLich = (
   giaTri: GiaTriFormLichCaNhan,

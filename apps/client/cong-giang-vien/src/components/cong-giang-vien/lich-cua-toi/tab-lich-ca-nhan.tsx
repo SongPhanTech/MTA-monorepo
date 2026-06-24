@@ -1,4 +1,5 @@
 import BangLichCaNhan from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/bang-lich-ca-nhan"
+import DrawerChiTietLichCaNhan from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/drawer-chi-tiet-lich-ca-nhan"
 import LichNgayCaNhan from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/lich-ngay-ca-nhan"
 import LichThangCaNhan from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/lich-thang-ca-nhan"
 import LichTuanCaNhan from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/lich-tuan-ca-nhan"
@@ -7,6 +8,7 @@ import ThanhCongCuLichCaNhan from "@components/cong-giang-vien/lich-cua-toi/lich
 import TheThongKeLichCaNhan from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/the-thong-ke"
 import { useLichCaNhan } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/use-lich-ca-nhan"
 import { message } from "antd"
+import { useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 /** Tab Lịch cá nhân — chế độ Ngày / Tuần / Tháng + dạng Bảng / Lịch. */
@@ -44,15 +46,37 @@ const TabLichCaNhan = () => {
     onXoa,
   } = useLichCaNhan()
 
+  const [lichChiTietId, setLichChiTietId] = useState<string | null>(null)
+
   const handleThemLich = () => {
     moThemLich({ ngayMacDinh: ngayChon.format("YYYY-MM-DD") })
   }
 
   const handleSua = (id: string) => {
+    setLichChiTietId(null)
     moThemLich({ id })
   }
 
+  const handleXemChiTiet = (id: string) => {
+    setLichChiTietId(id)
+  }
+
+  const handleHoanThanh = (_id: string) => {
+    message.info("Chức năng đánh dấu hoàn thành sẽ được cập nhật sau")
+  }
+
   const handleXoa = async (id: string) => {
+    try {
+      await onXoa(id)
+      setLichChiTietId(null)
+      message.success("Đã xóa lịch")
+    } catch (error: unknown) {
+      const err = error as { info?: { message?: string } }
+      message.error(err?.info?.message ?? "Không thể xóa lịch")
+    }
+  }
+
+  const handleXoaTuBang = async (id: string) => {
     try {
       await onXoa(id)
       message.success("Đã xóa lịch")
@@ -93,7 +117,7 @@ const TabLichCaNhan = () => {
             dangTai={isLoading}
             onDoiTuKhoa={onDoiTuKhoa}
             onSua={handleSua}
-            onXoa={handleXoa}
+            onXoa={handleXoaTuBang}
           />
         ) : cheDoHienThi === "thang" ? (
           <LichThangCaNhan
@@ -102,7 +126,7 @@ const TabLichCaNhan = () => {
             tags={tags}
             dangTai={isLoading}
             onChonNgay={setNgayChon}
-            onSua={handleSua}
+            onXemChiTiet={handleXemChiTiet}
           />
         ) : cheDoHienThi === "tuan" ? (
           <LichTuanCaNhan
@@ -110,17 +134,26 @@ const TabLichCaNhan = () => {
             dauTuan={dauTuan}
             tags={tags}
             dangTai={isLoading}
-            onSua={handleSua}
+            onXemChiTiet={handleXemChiTiet}
           />
         ) : (
           <LichNgayCaNhan
             danhSach={danhSachGoc}
             tags={tags}
             dangTai={isLoading}
-            onSua={handleSua}
+            onXemChiTiet={handleXemChiTiet}
           />
         )}
       </div>
+
+      <DrawerChiTietLichCaNhan
+        open={!!lichChiTietId}
+        lichId={lichChiTietId}
+        onClose={() => setLichChiTietId(null)}
+        onChinhSua={handleSua}
+        onXoa={handleXoa}
+        onHoanThanh={handleHoanThanh}
+      />
 
       {dangXem === "bang" ? (
         <div className="shrink-0">
