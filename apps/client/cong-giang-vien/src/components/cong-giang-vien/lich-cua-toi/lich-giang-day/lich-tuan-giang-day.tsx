@@ -26,9 +26,10 @@ interface LichTuanGiangDayProps {
   danhSach: DongLichGiangDay[]
   dauTuan: Dayjs
   dangTai?: boolean
+  onXemChiTiet?: (id: string) => void
 }
 
-const LichTuanGiangDay = ({ danhSach, dauTuan, dangTai }: LichTuanGiangDayProps) => {
+const LichTuanGiangDay = ({ danhSach, dauTuan, dangTai, onXemChiTiet }: LichTuanGiangDayProps) => {
   const homNay = useMemo(() => dayjs().startOf("day"), [])
   const vungCuonRef = useRef<HTMLDivElement>(null)
   const cotHomNayRef = useRef<HTMLDivElement>(null)
@@ -136,10 +137,12 @@ const LichTuanGiangDay = ({ danhSach, dauTuan, dangTai }: LichTuanGiangDayProps)
                     ))}
 
                     {suKienNgay.map((suKien) => (
-                      <div
+                      <button
                         key={suKien.id}
+                        type="button"
+                        onClick={() => onXemChiTiet?.(suKien.id)}
                         className={cn(
-                          "absolute left-0.5 right-0.5 overflow-hidden rounded-md border border-gray-100 px-1.5 py-1",
+                          "absolute left-0.5 right-0.5 z-[1] min-h-[28px] cursor-pointer overflow-hidden rounded-md border border-gray-100 px-1.5 py-1 text-left transition-opacity hover:z-[2] hover:opacity-90",
                           suKien.meta.blockBg,
                           suKien.meta.blockBorder
                         )}
@@ -161,7 +164,7 @@ const LichTuanGiangDay = ({ danhSach, dauTuan, dangTai }: LichTuanGiangDayProps)
                         <p className="m-0 truncate text-[10px] font-medium leading-tight text-gray-800">
                           {suKien.tenHocPhan}
                         </p>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 )

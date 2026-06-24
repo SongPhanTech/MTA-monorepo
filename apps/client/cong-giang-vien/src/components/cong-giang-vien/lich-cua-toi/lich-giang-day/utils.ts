@@ -246,3 +246,97 @@ export const tinhThongKeLichGiangDay = (danhSach: DongLichGiangDay[]) => {
     soPhongHoc: phong.size,
   }
 }
+
+export const CHON_CHI_TIET_LICH_GIANG_DAY = {
+  id: true,
+  classDate: true,
+  startTime: true,
+  endTime: true,
+  startPeriod: true,
+  endPeriod: true,
+  notes: true,
+  subjectClass: {
+    select: {
+      id: true,
+      code: true,
+      name: true,
+      subjectClassStudent: { select: { id: true } },
+      subject: {
+        select: {
+          name: true,
+          code: true,
+          managementOrganization: { select: { sTen: true } },
+        },
+      },
+      trainingObjectType: {
+        select: {
+          trainingForm: { select: { name: true } },
+        },
+      },
+      mainLecturer: {
+        select: {
+          code: true,
+          userProfile: {
+            select: {
+              fullname: true,
+              academicRankType: { select: { sMa: true } },
+              academicDegreeType: { select: { sMa: true } },
+            },
+          },
+        },
+      },
+    },
+  },
+  lecturer: {
+    select: {
+      code: true,
+      userProfile: {
+        select: {
+          fullname: true,
+          academicRankType: { select: { sMa: true } },
+          academicDegreeType: { select: { sMa: true } },
+        },
+      },
+    },
+  },
+  extraLecturer: {
+    select: {
+      code: true,
+      userProfile: {
+        select: {
+          fullname: true,
+          academicRankType: { select: { sMa: true } },
+          academicDegreeType: { select: { sMa: true } },
+        },
+      },
+    },
+  },
+  room: { select: { name: true } },
+} as const
+
+export const formatThoiGianChiTietGiangDay = (
+  classDate: Date | string,
+  startTime: Date | string | null | undefined,
+  endTime: Date | string | null | undefined,
+  startPeriod: number,
+  endPeriod: number
+) => {
+  const ngay = dayjs(classDate)
+  const soTiet = Math.max(1, endPeriod - startPeriod + 1)
+  const nhanNgay = `${TEN_THU[ngay.day()]}, ${ngay.format("DD/MM/YYYY")}`
+
+  if (startTime && endTime) {
+    const batDau = dayjs(startTime)
+    const ketThuc = dayjs(endTime)
+    return `${nhanNgay}, ${batDau.format("HH:mm")} - ${ketThuc.format("HH:mm")} (${soTiet} tiết)`
+  }
+
+  return `${nhanNgay}, Tiết ${startPeriod} - ${endPeriod} (${soTiet} tiết)`
+}
+
+export const layTenMonHocChiTietGiangDay = (lich: {
+  subjectClass?: {
+    name?: string | null
+    subject?: { name?: string | null } | null
+  } | null
+}) => lich.subjectClass?.subject?.name?.trim() || lich.subjectClass?.name?.trim() || "—"

@@ -26,6 +26,7 @@ interface LichTuanTatCaLichProps {
   dauTuan: Dayjs
   tags: TagLoaiLich[]
   dangTai?: boolean
+  onXemChiTiet?: (suKien: DongTatCaLich) => void
 }
 
 type SuKienViTri = DongTatCaLich & {
@@ -33,7 +34,7 @@ type SuKienViTri = DongTatCaLich & {
   heightPx: number
 }
 
-const LichTuanTatCaLich = ({ danhSach, dauTuan, tags, dangTai }: LichTuanTatCaLichProps) => {
+const LichTuanTatCaLich = ({ danhSach, dauTuan, tags, dangTai, onXemChiTiet }: LichTuanTatCaLichProps) => {
   const homNay = useMemo(() => dayjs().startOf("day"), [])
   const vungCuonRef = useRef<HTMLDivElement>(null)
   const cotHomNayRef = useRef<HTMLDivElement>(null)
@@ -146,9 +147,11 @@ const LichTuanTatCaLich = ({ danhSach, dauTuan, tags, dangTai }: LichTuanTatCaLi
                     ))}
 
                     {suKienNgay.map((suKien) => (
-                      <div
+                      <button
                         key={suKien.id}
-                        className="absolute left-0.5 right-0.5 overflow-hidden rounded-sm border border-gray-100 px-1.5 py-1"
+                        type="button"
+                        onClick={() => onXemChiTiet?.(suKien)}
+                        className="absolute left-0.5 right-0.5 z-[1] min-h-[28px] cursor-pointer overflow-hidden rounded-sm border border-gray-100 px-1.5 py-1 text-left transition-opacity hover:z-[2] hover:opacity-90"
                         style={{
                           top: suKien.topPx,
                           height: suKien.heightPx,
@@ -168,7 +171,7 @@ const LichTuanTatCaLich = ({ danhSach, dauTuan, tags, dangTai }: LichTuanTatCaLi
                             {suKien.diaDiem}
                           </p>
                         ) : null}
-                      </div>
+                      </button>
                     ))}
                   </div>
                 )

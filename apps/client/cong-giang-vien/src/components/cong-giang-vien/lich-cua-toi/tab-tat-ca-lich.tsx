@@ -1,3 +1,5 @@
+import DrawerChiTietLichCaNhan from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/drawer-chi-tiet-lich-ca-nhan"
+import DrawerChiTietLichGiangDay from "@components/cong-giang-vien/lich-cua-toi/lich-giang-day/drawer-chi-tiet-lich-giang-day"
 import BangTatCaLich from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/bang-tat-ca-lich"
 import LichNgayTatCaLich from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/lich-ngay-tat-ca-lich"
 import LichThangTatCaLich from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/lich-thang-tat-ca-lich"
@@ -5,10 +7,25 @@ import LichTuanTatCaLich from "@components/cong-giang-vien/lich-cua-toi/tat-ca-l
 import PhanTrangTatCaLich from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/phan-trang"
 import ThanhCongCuTatCaLich from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/thanh-cong-cu"
 import TheThongKeTatCaLich from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/the-thong-ke"
+import type {
+  DongTatCaLich,
+  LichChiTietTatCa,
+} from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/types"
 import { useTatCaLich } from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/use-tat-ca-lich"
+import { useDeleteIndividualSchedule } from "@workspace/db/hooks"
+import { message } from "antd"
+import { useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 
 /** Tab Tất cả lịch — gộp lịch giảng dạy + lịch cá nhân. */
 const TabTatCaLich = () => {
+  const { onOpen: moThemLich } = useDisclosure<{ id?: string; ngayMacDinh?: string }>({
+    tag: "ModalThemLichCaNhan",
+  })
+  const { mutateAsync: xoaLichCaNhan } = useDeleteIndividualSchedule()
+
+  const [lichChiTiet, setLichChiTiet] = useState<LichChiTietTatCa | null>(null)
+
   const {
     cheDoHienThi,
     setCheDoHienThi,
@@ -36,6 +53,32 @@ const TabTatCaLich = () => {
     ketThuc,
     isLoading,
   } = useTatCaLich()
+
+  const handleXemChiTiet = (suKien: DongTatCaLich) => {
+    setLichChiTiet({ nguon: suKien.nguon, id: suKien.idGoc })
+  }
+
+  const dongChiTiet = () => setLichChiTiet(null)
+
+  const handleSuaLichCaNhan = (id: string) => {
+    setLichChiTiet(null)
+    moThemLich({ id })
+  }
+
+  const handleXoaLichCaNhan = async (id: string) => {
+    try {
+      await xoaLichCaNhan({ where: { id } })
+      setLichChiTiet(null)
+      message.success("Đã xóa lịch")
+    } catch (error: unknown) {
+      const err = error as { info?: { message?: string } }
+      message.error(err?.info?.message ?? "Không thể xóa lịch")
+    }
+  }
+
+  const handleHoanThanhLichCaNhan = (_id: string) => {
+    message.info("Chức năng đánh dấu hoàn thành sẽ được cập nhật sau")
+  }
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-lg bg-white p-4 shadow-sm">
@@ -66,6 +109,7 @@ const TabTatCaLich = () => {
             tuKhoa={tuKhoa}
             dangTai={isLoading}
             onDoiTuKhoa={onDoiTuKhoa}
+            onXemChiTiet={handleXemChiTiet}
           />
         ) : cheDoHienThi === "tuan" ? (
           <LichTuanTatCaLich
@@ -73,6 +117,7 @@ const TabTatCaLich = () => {
             dauTuan={dauTuan}
             tags={tags}
             dangTai={isLoading}
+            onXemChiTiet={handleXemChiTiet}
           />
         ) : cheDoHienThi === "thang" ? (
           <LichThangTatCaLich
@@ -81,11 +126,32 @@ const TabTatCaLich = () => {
             tags={tags}
             dangTai={isLoading}
             onChonNgay={onDoiNgay}
+            onXemChiTiet={handleXemChiTiet}
           />
         ) : cheDoHienThi === "ngay" ? (
-          <LichNgayTatCaLich danhSach={danhSachGoc} tags={tags} dangTai={isLoading} />
+          <LichNgayTatCaLich
+            danhSach={danhSachGoc}
+            tags={tags}
+            dangTai={isLoading}
+            onXemChiTiet={handleXemChiTiet}
+          />
         ) : null}
       </div>
+
+      <DrawerChiTietLichGiangDay
+        open={lichChiTiet?.nguon === "giang-day"}
+        lichId={lichChiTiet?.nguon === "giang-day" ? lichChiTiet.id : null}
+        onClose={dongChiTiet}
+      />
+
+      <DrawerChiTietLichCaNhan
+        open={lichChiTiet?.nguon === "ca-nhan"}
+        lichId={lichChiTiet?.nguon === "ca-nhan" ? lichChiTiet.id : null}
+        onClose={dongChiTiet}
+        onChinhSua={handleSuaLichCaNhan}
+        onXoa={handleXoaLichCaNhan}
+        onHoanThanh={handleHoanThanhLichCaNhan}
+      />
 
       {dangXem === "bang" ? (
         <div className="shrink-0">

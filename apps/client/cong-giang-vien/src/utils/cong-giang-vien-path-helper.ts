@@ -21,10 +21,15 @@ export const chiTietMonHocTroGiangPath = (subjectVersionId?: string, subjectClas
   return `${CGV.LOP_TRO_GIANG_CHI_TIET}?${params.toString()}`
 }
 
-export const diemDanhGiangDayPath = (subjectClassId?: string) =>
-  subjectClassId
-    ? `${CGV.LOP_GIANG_DAY_DIEM_DANH}?lopId=${subjectClassId}`
-    : CGV.LOP_GIANG_DAY_DIEM_DANH
+/** Mở màn điểm danh; có thể truyền sẵn lớp và ngày học (YYYY-MM-DD). */
+export const diemDanhGiangDayPath = (subjectClassId?: string, ngay?: string) => {
+  if (!subjectClassId) return CGV.LOP_GIANG_DAY_DIEM_DANH
+
+  const params = new URLSearchParams({ lopId: subjectClassId })
+  if (ngay?.trim()) params.set("ngay", ngay.trim())
+
+  return `${CGV.LOP_GIANG_DAY_DIEM_DANH}?${params.toString()}`
+}
 
 export const nhapDiemQuaTrinhGiangDayPath = (subjectClassId?: string) =>
   subjectClassId

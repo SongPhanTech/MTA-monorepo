@@ -4,7 +4,7 @@ import { fetchSession } from "."
 import { SessionContext } from "./provider"
 
 /** Mock local — gỡ trước khi deploy production. */
-const DEV_MOCK_PROFILE_ID = "d2de3ad6-6bdc-41cb-b3bf-de8ad82f2d7a"
+const DEV_MOCK_PROFILE_ID = "b8bd3015-c14e-4037-9fbe-1041003b92d2"
 
 const taoMockSession = (): Session => ({
   userId: DEV_MOCK_PROFILE_ID,

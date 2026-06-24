@@ -16,11 +16,18 @@ interface LichThangGiangDayProps {
   ngayChon: Dayjs
   dangTai?: boolean
   onChonNgay?: (ngay: Dayjs) => void
+  onXemChiTiet?: (id: string) => void
 }
 
 const SO_SU_KIEN_TOI_DA = 3
 
-const LichThangGiangDay = ({ danhSach, ngayChon, dangTai, onChonNgay }: LichThangGiangDayProps) => {
+const LichThangGiangDay = ({
+  danhSach,
+  ngayChon,
+  dangTai,
+  onChonNgay,
+  onXemChiTiet,
+}: LichThangGiangDayProps) => {
   const thangXem = useMemo(() => ngayChon.startOf("month"), [ngayChon])
   const homNay = useMemo(() => dayjs().startOf("day"), [])
 
@@ -99,9 +106,14 @@ const LichThangGiangDay = ({ danhSach, ngayChon, dangTai, onChonNgay }: LichThan
 
                 <div className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-hidden">
                   {hienThi.map((suKien) => (
-                    <div
+                    <button
                       key={suKien.id}
-                      className="flex min-w-0 items-center gap-1 rounded px-0.5"
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onXemChiTiet?.(suKien.id)
+                      }}
+                      className="relative z-[1] flex min-w-0 items-center gap-1 rounded px-0.5 text-left hover:z-[2] hover:bg-gray-100/80"
                       title={`${suKien.thoiGianBatDau} ${suKien.hocPhan}`}
                     >
                       <span
@@ -115,7 +127,7 @@ const LichThangGiangDay = ({ danhSach, ngayChon, dangTai, onChonNgay }: LichThan
                       <span className="truncate text-[10px] font-medium text-gray-800">
                         {layMaHienThiLichGiangDay(suKien)}
                       </span>
-                    </div>
+                    </button>
                   ))}
                 </div>
 

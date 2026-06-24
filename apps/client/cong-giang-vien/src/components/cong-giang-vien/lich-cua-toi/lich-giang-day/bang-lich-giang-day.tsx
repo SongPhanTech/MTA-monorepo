@@ -17,6 +17,7 @@ interface BangLichGiangDayProps {
   tuKhoa: string
   dangTai?: boolean
   onDoiTuKhoa: (value: string) => void
+  onXemChiTiet?: (id: string) => void
 }
 
 const CHIEU_CAO_HEADER_BANG = 39
@@ -66,6 +67,7 @@ const BangLichGiangDay = ({
   tuKhoa,
   dangTai,
   onDoiTuKhoa,
+  onXemChiTiet,
 }: BangLichGiangDayProps) => {
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(240)
@@ -143,13 +145,23 @@ const BangLichGiangDay = ({
       : "Tìm theo học phần, lớp học phần, phòng học..."
 
   const onRowTheoNgay = (record: DongLichBangTheoNgayGiangDay) => ({
-    className:
+    className: [
+      onXemChiTiet ? "cursor-pointer" : undefined,
       cheDoHienThi === "thang" &&
       ngayHomNayKey &&
       record.ngayKey === ngayHomNayKey &&
       record.rowSpanNgay > 0
         ? "lich-gd-hom-nay"
         : undefined,
+    ]
+      .filter(Boolean)
+      .join(" "),
+    onClick: () => onXemChiTiet?.(record.id),
+  })
+
+  const onRowCoBan = (record: DongLichGiangDay) => ({
+    className: onXemChiTiet ? "cursor-pointer" : undefined,
+    onClick: () => onXemChiTiet?.(record.id),
   })
 
   return (
@@ -177,7 +189,8 @@ const BangLichGiangDay = ({
             size="small"
             onRow={onRowTheoNgay}
             scroll={{ x: 908, y: chieuCaoBody }}
-            className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600 [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
+            bordered={true}
+            // className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600 [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
             locale={{ emptyText }}
           />
         ) : cheDoHienThi === "tuan" ? (
@@ -188,8 +201,10 @@ const BangLichGiangDay = ({
             loading={dangTai}
             pagination={false}
             size="small"
+            onRow={onRowTheoNgay}
             scroll={{ x: 948, y: chieuCaoBody }}
-            className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600 [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
+            bordered={true}
+            // className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600 [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
             locale={{ emptyText }}
           />
         ) : (
@@ -200,8 +215,10 @@ const BangLichGiangDay = ({
             loading={dangTai}
             pagination={false}
             size="small"
+            onRow={onRowCoBan}
             scroll={{ x: 908, y: chieuCaoBody }}
-            className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600 [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
+            bordered={true}
+            // className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600 [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
             locale={{ emptyText }}
           />
         )}

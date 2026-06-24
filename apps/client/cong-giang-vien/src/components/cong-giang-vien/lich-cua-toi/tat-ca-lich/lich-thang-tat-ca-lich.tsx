@@ -17,6 +17,7 @@ interface LichThangTatCaLichProps {
   tags: TagLoaiLich[]
   dangTai?: boolean
   onChonNgay?: (ngay: Dayjs) => void
+  onXemChiTiet?: (suKien: DongTatCaLich) => void
 }
 
 const SO_SU_KIEN_TOI_DA = 3
@@ -32,6 +33,7 @@ const LichThangTatCaLich = ({
   tags,
   dangTai,
   onChonNgay,
+  onXemChiTiet,
 }: LichThangTatCaLichProps) => {
   const thangXem = useMemo(() => ngayChon.startOf("month"), [ngayChon])
   const homNay = useMemo(() => dayjs().startOf("day"), [])
@@ -111,9 +113,14 @@ const LichThangTatCaLich = ({
 
                 <div className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-hidden">
                   {hienThi.map((suKien) => (
-                    <div
+                    <button
                       key={suKien.id}
-                      className="flex min-w-0 items-center gap-1 overflow-hidden rounded-sm border border-gray-100 px-1 py-0.5"
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onXemChiTiet?.(suKien)
+                      }}
+                      className="relative z-[1] flex min-w-0 items-center gap-1 overflow-hidden rounded-sm border border-gray-100 px-1 py-0.5 text-left hover:z-[2] hover:bg-gray-100/80"
                       style={{
                         backgroundColor: `${suKien.mauLoai}14`,
                         borderLeftWidth: 3,
@@ -127,7 +134,7 @@ const LichThangTatCaLich = ({
                       <span className="truncate text-[10px] font-medium text-gray-800">
                         {suKien.tieuDeHienThi}
                       </span>
-                    </div>
+                    </button>
                   ))}
                 </div>
 

@@ -15,9 +15,15 @@ import { sqlTransaction } from "@workspace/libs/api/model"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { message } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
-const useDiemDanhGiangDay = (lopIdMacDinh?: string) => {
+const parseNgayMacDinh = (raw?: string) => {
+  if (!raw?.trim()) return dayjs()
+  const parsed = dayjs(raw.trim(), "YYYY-MM-DD", true)
+  return parsed.isValid() ? parsed.startOf("day") : dayjs()
+}
+
+const useDiemDanhGiangDay = (lopIdMacDinh?: string, ngayMacDinh?: string) => {
   const { data: me } = useSession()
   const profileId = me?.sDM_NhanVienId ?? ""
   const { id: semesterId } = useSemesterStore()
@@ -25,8 +31,9 @@ const useDiemDanhGiangDay = (lopIdMacDinh?: string) => {
 
   const [monHocId, setMonHocId] = useState<string | undefined>()
   const [lopId, setLopId] = useState<string | undefined>(lopIdMacDinh)
-  const [ngay, setNgay] = useState<Dayjs>(dayjs())
+  const [ngay, setNgay] = useState<Dayjs>(() => parseNgayMacDinh(ngayMacDinh))
   const [khoaTai, setKhoaTai] = useState<{ lopId: string; ngay: string } | null>(null)
+  const daTuDongTaiTuLich = useRef(false)
 
   const [danhSach, setDanhSach] = useState<SinhVienDiemDanhRow[]>([])
   const [ghiChuBuoiHoc, setGhiChuBuoiHoc] = useState("")
@@ -79,6 +86,23 @@ const useDiemDanhGiangDay = (lopIdMacDinh?: string) => {
     if (lopId && lopOptions.some((o) => o.value === lopId)) return
     setLopId(lopOptions[0]?.value)
   }, [lopId, lopOptions])
+
+  useEffect(() => {
+    if (ngayMacDinh?.trim()) setNgay(parseNgayMacDinh(ngayMacDinh))
+  }, [ngayMacDinh])
+
+  useEffect(() => {
+    if (daTuDongTaiTuLich.current) return
+    if (!lopIdMacDinh || !ngayMacDinh?.trim()) return
+    if (dangTaiLop) return
+    if (!lopId || lopId !== lopIdMacDinh) return
+    if (!lopOptions.some((o) => o.value === lopId)) return
+
+    daTuDongTaiTuLich.current = true
+    const ngayHopLe = parseNgayMacDinh(ngayMacDinh)
+    setNgay(ngayHopLe)
+    setKhoaTai({ lopId, ngay: ngayHopLe.toISOString() })
+  }, [lopIdMacDinh, ngayMacDinh, lopId, dangTaiLop, lopOptions])
 
   const ngayBatDau = useMemo(
     () => (khoaTai ? dayjs(khoaTai.ngay).startOf("day").toDate() : null),

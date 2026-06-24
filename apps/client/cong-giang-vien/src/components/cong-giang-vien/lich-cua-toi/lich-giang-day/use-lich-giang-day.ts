@@ -87,7 +87,11 @@ const useLichGiangDay = () => {
 
   const duDieuKienQuery = !!profileId && !!semesterId && !!trainingObjectId
 
-  const { data: lichRaw = [], isLoading: dangTaiLich } = useFindManyClassSchedule(
+  const {
+    data: lichRaw = [],
+    isLoading: dangTaiLich,
+    isFetching: dangTaiLaiLich,
+  } = useFindManyClassSchedule(
     {
       where: {
         ...khoangHienTai,
@@ -117,6 +121,16 @@ const useLichGiangDay = () => {
   )
 
   const danhSachGoc = useMemo(() => lichRaw.map(mapLichGiangDaySangDong), [lichRaw])
+
+  const danhSachLichNgay = useMemo(
+    () => danhSachGoc.filter((item) => item.ngayKey === ngayChon.format("YYYY-MM-DD")),
+    [danhSachGoc, ngayChon]
+  )
+
+  const danhSachLichThang = useMemo(
+    () => locSuKienTrongThang(danhSachGoc, ngayChon),
+    [danhSachGoc, ngayChon]
+  )
 
   const danhSachTrongThang = useMemo(
     () => (cheDoHienThi === "thang" ? locSuKienTrongThang(danhSachGoc, ngayChon) : danhSachGoc),
@@ -267,6 +281,8 @@ const useLichGiangDay = () => {
     onDoiTuKhoa,
     thongKe,
     danhSachGoc,
+    danhSachLichNgay,
+    danhSachLichThang,
     danhSachTrang,
     danhSachBangTheoNgay,
     tongSo,
@@ -276,7 +292,7 @@ const useLichGiangDay = () => {
     batDau,
     ketThuc,
     donViPhanTrang: phanTrangTheoNgay ? ("ngày" as const) : ("lịch" as const),
-    isLoading: dangTaiLecturer || dangTaiLich,
+    isLoading: dangTaiLecturer || dangTaiLich || dangTaiLaiLich,
   }
 }
 

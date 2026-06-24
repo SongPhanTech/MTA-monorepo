@@ -15,9 +15,10 @@ interface LichNgayTatCaLichProps {
   danhSach: DongTatCaLich[]
   tags: TagLoaiLich[]
   dangTai?: boolean
+  onXemChiTiet?: (suKien: DongTatCaLich) => void
 }
 
-const LichNgayTatCaLich = ({ danhSach, tags, dangTai }: LichNgayTatCaLichProps) => {
+const LichNgayTatCaLich = ({ danhSach, tags, dangTai, onXemChiTiet }: LichNgayTatCaLichProps) => {
   const gioNhan = useMemo(() => gioTrongLichNgay(), [])
 
   const viTriSuKien = useMemo(
@@ -82,9 +83,11 @@ const LichNgayTatCaLich = ({ danhSach, tags, dangTai }: LichNgayTatCaLichProps) 
               </div>
             ) : (
               viTriSuKien.map((suKien) => (
-                <div
+                <button
                   key={suKien.id}
-                  className="absolute left-0 right-0 overflow-hidden rounded-md border border-gray-100 px-3 py-2"
+                  type="button"
+                  onClick={() => onXemChiTiet?.(suKien)}
+                  className="absolute left-0 right-0 z-[1] min-h-[36px] cursor-pointer overflow-hidden rounded-md border border-gray-100 px-3 py-2 text-left transition-opacity hover:z-[2] hover:opacity-90"
                   style={{
                     top: suKien.topPx,
                     height: suKien.heightPx,
@@ -97,7 +100,7 @@ const LichNgayTatCaLich = ({ danhSach, tags, dangTai }: LichNgayTatCaLichProps) 
                     {suKien.tieuDeHienThi}
                   </p>
                   <p className="m-0 truncate text-xs text-gray-500">{suKien.phuDe}</p>
-                </div>
+                </button>
               ))
             )}
           </div>

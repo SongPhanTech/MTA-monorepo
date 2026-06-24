@@ -14,9 +14,10 @@ import { useMemo } from "react"
 interface LichNgayGiangDayProps {
   danhSach: DongLichGiangDay[]
   dangTai?: boolean
+  onXemChiTiet?: (id: string) => void
 }
 
-const LichNgayGiangDay = ({ danhSach, dangTai }: LichNgayGiangDayProps) => {
+const LichNgayGiangDay = ({ danhSach, dangTai, onXemChiTiet }: LichNgayGiangDayProps) => {
   const gioNhan = useMemo(() => gioTrongTimeline(), [])
 
   const viTriSuKien = useMemo(() => {
@@ -84,9 +85,11 @@ const LichNgayGiangDay = ({ danhSach, dangTai }: LichNgayGiangDayProps) => {
               </div>
             ) : (
               viTriSuKien.map((suKien) => (
-                <div
+                <button
                   key={suKien.id}
-                  className={`absolute left-0 right-0 overflow-hidden rounded-md border border-gray-100 px-3 py-2 ${suKien.meta.blockBg} ${suKien.meta.blockBorder}`}
+                  type="button"
+                  onClick={() => onXemChiTiet?.(suKien.id)}
+                  className={`absolute left-0 right-0 z-[1] min-h-[36px] cursor-pointer overflow-hidden rounded-md border border-gray-100 px-3 py-2 text-left transition-opacity hover:z-[2] hover:opacity-90 ${suKien.meta.blockBg} ${suKien.meta.blockBorder}`}
                   style={{
                     top: suKien.topPx,
                     height: suKien.heightPx,
@@ -100,7 +103,7 @@ const LichNgayGiangDay = ({ danhSach, dangTai }: LichNgayGiangDayProps) => {
                   {suKien.phuDe ? (
                     <p className="m-0 truncate text-xs text-gray-500">{suKien.phuDe}</p>
                   ) : null}
-                </div>
+                </button>
               ))
             )}
           </div>

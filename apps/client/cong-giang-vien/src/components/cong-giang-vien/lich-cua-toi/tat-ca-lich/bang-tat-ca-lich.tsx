@@ -18,6 +18,7 @@ interface BangTatCaLichProps {
   tuKhoa: string
   dangTai?: boolean
   onDoiTuKhoa: (value: string) => void
+  onXemChiTiet?: (suKien: DongTatCaLich) => void
 }
 
 const CHIEU_CAO_HEADER_BANG = 39
@@ -62,6 +63,7 @@ const BangTatCaLich = ({
   tuKhoa,
   dangTai,
   onDoiTuKhoa,
+  onXemChiTiet,
 }: BangTatCaLichProps) => {
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(240)
@@ -175,6 +177,11 @@ const BangTatCaLich = ({
         ? "Không có lịch trong tuần"
         : "Không có lịch trong ngày"
 
+  const onRow = (record: DongTatCaLich) => ({
+    className: onXemChiTiet ? "cursor-pointer" : undefined,
+    onClick: () => onXemChiTiet?.(record),
+  })
+
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
       <div className="flex shrink-0 items-center gap-2">
@@ -202,6 +209,7 @@ const BangTatCaLich = ({
             scroll={{ x: SCROLL_X_THANG, y: chieuCaoBody }}
             // className={CLASS_BANG}
             bordered={true}
+            onRow={onRow}
             locale={{ emptyText }}
           />
         ) : cheDoHienThi === "tuan" ? (
@@ -216,6 +224,7 @@ const BangTatCaLich = ({
             scroll={{ x: SCROLL_X_TUAN, y: chieuCaoBody }}
             // className={CLASS_BANG}
             bordered={true}
+            onRow={onRow}
             locale={{ emptyText }}
           />
         ) : (
@@ -230,6 +239,7 @@ const BangTatCaLich = ({
             scroll={{ x: SCROLL_X_NGAY, y: chieuCaoBody }}
             // className={CLASS_BANG}
             bordered={true}
+            onRow={onRow}
             locale={{ emptyText }}
           />
         )}

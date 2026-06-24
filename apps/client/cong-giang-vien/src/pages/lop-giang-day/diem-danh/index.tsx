@@ -11,7 +11,8 @@ import { useRouter } from "next/router"
 
 const TrangDiemDanhGiangDay = () => {
   const router = useRouter()
-  const lopIdMacDinh = router.query.lopId as string | undefined
+  const lopIdMacDinh = router.isReady ? (router.query.lopId as string | undefined) : undefined
+  const ngayMacDinh = router.isReady ? (router.query.ngay as string | undefined) : undefined
 
   const {
     monHocId,
@@ -35,7 +36,7 @@ const TrangDiemDanhGiangDay = () => {
     doiGhiChuSinhVien,
     luuDiemDanh,
     dangLuu,
-  } = useDiemDanhGiangDay(lopIdMacDinh)
+  } = useDiemDanhGiangDay(lopIdMacDinh, ngayMacDinh)
 
   return (
     <div className="flex h-[calc(100vh-112px)] flex-col gap-4">
