@@ -13,9 +13,11 @@ import {
   taoDieuKienTimNguoiLienQuan,
   taoDuLieuLuuLich,
   taoThoiGianLich,
+  taoThongBaoLichGiaoNhau,
   taoTuyChonNguoiLienQuan,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import { demSoLichGanTag } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/dem-lich-gan-tag"
+import { timLichGiaoNhau } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/kiem-tra-lich-giao-nhau"
 import useSpinner from "@hooks/spinner"
 import { useLecturerHienTai } from "@hooks/use-lecturer-hien-tai"
 import {
@@ -217,8 +219,19 @@ const ModalThemLichCaNhan = () => {
     }
 
     try {
+      const lichGiaoNhau = await timLichGiaoNhau(lecturerId, startTime, endTime, input?.id)
+      if (lichGiaoNhau.length > 0) {
+        message.error(taoThongBaoLichGiaoNhau(lichGiaoNhau[0]))
+        return
+      }
+    } catch {
+      message.error("Không thể kiểm tra lịch trùng")
+      return
+    }
+
+    try {
       showSpinner()
-      const duLieuChung = taoDuLieuLuuLich(giaTri, taoThoiGianLich(giaTri))
+      const duLieuChung = taoDuLieuLuuLich(giaTri, { startTime, endTime, allDay })
       const nguoiLienQuanIds = giaTri.nguoiLienQuanIds ?? []
 
       if (input?.id) {

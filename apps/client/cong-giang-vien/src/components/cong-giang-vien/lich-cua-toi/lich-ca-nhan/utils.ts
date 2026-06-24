@@ -439,3 +439,37 @@ export const khoangThangQuery = (dauThang: Dayjs, cuoiThang: Dayjs) => ({
   startTime: { lt: cuoiThang.endOf("day").toDate() },
   endTime: { gt: dauThang.startOf("day").toDate() },
 })
+
+/** Hai khoảng thời gian giao nhau khi lịch này chưa kết thúc thì lịch kia đã bắt đầu. */
+export const lichCoGiaoNhau = (
+  batDau: Date | string | Dayjs,
+  ketThuc: Date | string | Dayjs,
+  lichKhacBatDau: Date | string | Dayjs,
+  lichKhacKetThuc: Date | string | Dayjs
+) =>
+  dayjs(batDau).isBefore(dayjs(lichKhacKetThuc)) &&
+  dayjs(ketThuc).isAfter(dayjs(lichKhacBatDau))
+
+export const taoDieuKienTimLichGiaoNhau = (
+  lecturerId: string,
+  startTime: Date,
+  endTime: Date,
+  excludeId?: string
+) => ({
+  lecturerId,
+  active: true,
+  ...(excludeId ? { id: { not: excludeId } } : {}),
+  startTime: { lt: endTime },
+  endTime: { gt: startTime },
+})
+
+export const taoThongBaoLichGiaoNhau = (lich: {
+  title: string
+  startTime: string | Date
+  endTime: string | Date
+  allDay: boolean
+}) => {
+  const { gio, ngay } = formatGioChiTietLich(lich.startTime, lich.endTime, lich.allDay)
+  const thoiGian = lich.allDay ? ngay : `${gio}, ${ngay}`
+  return `Lịch bị trùng với "${lich.title}" (${thoiGian})`
+}
