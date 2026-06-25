@@ -14,10 +14,11 @@ import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import {
   ErrorMessageResponseSchema,
-  ImportErrorResponseSchema,
+  ImportFailureResponseSchema,
   ImportJobResponseSchema,
 } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import type { ErrorExtra } from "../types/error-extra"
 import {
   buildCurriculumMapOrThrow,
@@ -64,6 +65,7 @@ const importLecturer = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Import successfully",
       content: {
@@ -76,7 +78,7 @@ const importLecturer = createRoute({
       description: "Invalid file type",
       content: {
         "application/json": {
-          schema: ImportErrorResponseSchema,
+          schema: ImportFailureResponseSchema,
         },
       },
     },
@@ -536,6 +538,7 @@ const importGuestLecturer = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Import successfully",
       content: {
@@ -548,7 +551,7 @@ const importGuestLecturer = createRoute({
       description: "Invalid file type",
       content: {
         "application/json": {
-          schema: ImportErrorResponseSchema,
+          schema: ImportFailureResponseSchema,
         },
       },
     },
@@ -961,6 +964,7 @@ const importStudent = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Import Student successfully",
       content: {
@@ -973,7 +977,7 @@ const importStudent = createRoute({
       description: "Invalid file type",
       content: {
         "application/json": {
-          schema: ImportErrorResponseSchema,
+          schema: ImportFailureResponseSchema,
         },
       },
     },
@@ -1567,6 +1571,7 @@ const importHeQuanSu = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Import He quan su successfully",
       content: {
@@ -1579,7 +1584,7 @@ const importHeQuanSu = createRoute({
       description: "Invalid file type",
       content: {
         "application/json": {
-          schema: ImportErrorResponseSchema,
+          schema: ImportFailureResponseSchema,
         },
       },
     },
@@ -1759,6 +1764,7 @@ const importInternship = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Import internships successfully",
       content: {
@@ -1771,7 +1777,7 @@ const importInternship = createRoute({
       description: "Invalid file type",
       content: {
         "application/json": {
-          schema: ImportErrorResponseSchema,
+          schema: ImportFailureResponseSchema,
         },
       },
     },

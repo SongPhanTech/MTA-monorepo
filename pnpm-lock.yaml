@@ -502,6 +502,9 @@ importers:
       '@hono/zod-openapi':
         specifier: 'catalog:'
         version: 0.18.4(hono@4.10.6)(zod@3.25.76)
+      '@scalar/core':
+        specifier: 0.1.1
+        version: 0.1.1
       '@scalar/hono-api-reference':
         specifier: 'catalog:'
         version: 0.5.184(hono@4.10.6)
@@ -517,6 +520,9 @@ importers:
       decimal.js:
         specifier: 'catalog:'
         version: 10.6.0
+      docx:
+        specifier: 'catalog:'
+        version: 9.5.1
       docxtemplater:
         specifier: 'catalog:'
         version: 3.65.2
@@ -839,7 +845,7 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/plots':
         specifier: 'catalog:'
         version: 2.6.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1104,7 +1110,7 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/plots':
         specifier: 'catalog:'
         version: 2.6.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1366,7 +1372,7 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/plots':
         specifier: 'catalog:'
         version: 2.6.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1667,7 +1673,7 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/plots':
         specifier: 'catalog:'
         version: 2.6.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1941,7 +1947,7 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/plots':
         specifier: 'catalog:'
         version: 2.6.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2149,7 +2155,7 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@casl/ability':
         specifier: 'catalog:'
         version: 6.7.3
@@ -9943,7 +9949,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@ant-design/nextjs-registry@1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@ant-design/nextjs-registry@1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@ant-design/cssinjs': 1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       antd: 5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)

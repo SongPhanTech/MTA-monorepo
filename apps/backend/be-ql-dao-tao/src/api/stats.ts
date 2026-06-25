@@ -38,6 +38,7 @@ import {
   StatBaseResponseSchema,
 } from "../dto/stats-openapi.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -94,6 +95,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -169,6 +171,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -256,6 +259,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -330,6 +334,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -413,6 +418,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -492,6 +498,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -567,6 +574,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -659,6 +667,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -752,6 +761,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -828,6 +838,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -923,6 +934,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -1029,6 +1041,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -1121,6 +1134,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -1220,6 +1234,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -1317,6 +1332,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -1409,6 +1425,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -1522,6 +1539,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -1616,6 +1634,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -1724,6 +1743,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -1793,6 +1813,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -1863,6 +1884,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -1937,6 +1959,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -2002,6 +2025,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -2095,6 +2119,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -2171,6 +2196,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -2247,6 +2273,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -2326,6 +2353,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -2398,6 +2426,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -2520,6 +2549,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -2670,6 +2700,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -2748,6 +2779,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -2846,6 +2878,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -2977,6 +3010,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -3070,6 +3104,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -3157,6 +3192,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -3237,6 +3273,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -3326,6 +3363,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -3387,6 +3425,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -3455,6 +3494,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -3523,6 +3563,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -3588,6 +3629,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -3653,6 +3695,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -3720,6 +3763,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -3792,6 +3836,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -3875,6 +3920,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -3954,6 +4000,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -4039,6 +4086,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -4117,6 +4165,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -4217,6 +4266,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -4319,6 +4369,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -4390,6 +4441,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -4533,6 +4585,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {
@@ -4831,6 +4884,7 @@ app.openapi(
           },
         },
       },
+      ...standardErrorResponses(),
     },
   }),
   async (c) => {

@@ -12,9 +12,15 @@ import {
 } from "../lib/thong-bao-giang-vien"
 import { EnrollFixedClassOnSubjectClass, OpenSubjectClass } from "../dto/subject-class.dto"
 import { UploadExcelModel } from "../dto/upload-excel.dto"
-import { ListOf } from "../zod/base"
+import { DataSuccessResponseSchema, PaginatedDataResponseSchema } from "../zod/base"
 import { fieldDesc } from "../dto/openapi-helpers"
-import { ErrorMessageResponseSchema, ExcelBinaryResponseSchema } from "../dto/common-response.dto"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
+import {
+  ErrorMessageResponseSchema,
+  ExcelBinaryResponseSchema,
+  FailureBooleanResponseSchema,
+  SuccessMessageResponseSchema,
+} from "../dto/common-response.dto"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -44,16 +50,22 @@ const openSubjectClass = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
         "application/json": {
-          schema: ListOf(OpenSubjectClass),
+          schema: PaginatedDataResponseSchema(OpenSubjectClass),
         },
       },
       description: "Danh sách phân công giảng dạy thành công",
     },
     400: {
       description: "Yêu cầu không hợp lệ",
+      content: {
+        "application/json": {
+          schema: FailureBooleanResponseSchema,
+        },
+      },
     },
   },
 })
@@ -86,16 +98,22 @@ const enrollFixedClassOnSubjectClass = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
         "application/json": {
-          schema: ListOf(EnrollFixedClassOnSubjectClass),
+          schema: DataSuccessResponseSchema(EnrollFixedClassOnSubjectClass),
         },
       },
       description: "Đăng ký lớp môn học cho lớp quản lý thành công",
     },
     400: {
       description: "Yêu cầu không hợp lệ",
+      content: {
+        "application/json": {
+          schema: FailureBooleanResponseSchema,
+        },
+      },
     },
   },
 })
@@ -130,16 +148,22 @@ const setScoreDeadLine = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
         "application/json": {
-          schema: ErrorMessageResponseSchema,
+          schema: SuccessMessageResponseSchema,
         },
       },
       description: "Đặt hạn thành công",
     },
     400: {
       description: "Yêu cầu không hợp lệ",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
     },
   },
 })
@@ -172,16 +196,22 @@ const setExamScoreDeadLine = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
         "application/json": {
-          schema: ErrorMessageResponseSchema,
+          schema: SuccessMessageResponseSchema,
         },
       },
       description: "Đặt hạn thành công",
     },
     400: {
       description: "Yêu cầu không hợp lệ",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
     },
   },
 })
@@ -209,6 +239,7 @@ const uploadExcelImportScore = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
         "application/json": {
@@ -250,6 +281,7 @@ const exportSubjectClassScore = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export thành công",
       content: {
@@ -294,6 +326,7 @@ const exportSubjectClassListExcel = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Xuất danh sách lớp môn học thành công",
       content: {

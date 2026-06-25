@@ -6,8 +6,9 @@ import { read, utils } from "xlsx"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { parseDate } from "../utils"
-import { ListOf } from "../zod/base"
+import { DataListResponseSchema, PaginatedDataResponseSchema } from "../zod/base"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
 
 const uploadExcelCreateUserProfile = createRoute({
@@ -33,9 +34,10 @@ const uploadExcelCreateUserProfile = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
-        "application/json": { schema: ListOf(UserProfileScalarSchema) },
+        "application/json": { schema: PaginatedDataResponseSchema(UserProfileScalarSchema) },
       },
       description: "Tải danh sách thành công",
     },
@@ -71,9 +73,10 @@ const uploadExcelUpdateUserProfile = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
-        "application/json": { schema: ListOf(UserProfileScalarSchema) },
+        "application/json": { schema: PaginatedDataResponseSchema(UserProfileScalarSchema) },
       },
       description: "Tải danh sách thành công",
     },

@@ -18,8 +18,32 @@ export const PaginationQuerySchema = z
   })
   .openapi("PaginationQuery")
 
+/** @deprecated Dùng PaginatedDataResponseSchema cho response body — ListOf kế thừa query params page/limit. */
 export const ListOf = <T extends z.ZodTypeAny>(itemSchema: T) =>
   PaginationQuerySchema.extend({
     data: z.array(itemSchema),
     count: z.number().openapi(fieldDesc("Tổng số bản ghi thỏa điều kiện.", 100)),
   }).openapi(`ListOf${itemSchema._def.openapi?._internal?.refId}`)
+
+export const PaginatedDataResponseSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
+  z
+    .object({
+      data: z.array(itemSchema),
+      count: z.number().openapi(fieldDesc("Tổng số bản ghi thỏa điều kiện.", 100)),
+    })
+    .openapi(`PaginatedData${itemSchema._def.openapi?._internal?.refId ?? "Item"}`)
+
+export const DataSuccessResponseSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
+  z
+    .object({
+      data: z.array(itemSchema),
+      success: z.literal(true).openapi(fieldDesc("true = thao tác thành công.", true)),
+    })
+    .openapi(`DataSuccess${itemSchema._def.openapi?._internal?.refId ?? "Item"}`)
+
+export const DataListResponseSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
+  z
+    .object({
+      data: z.array(itemSchema),
+    })
+    .openapi(`DataList${itemSchema._def.openapi?._internal?.refId ?? "Item"}`)

@@ -4,6 +4,7 @@ import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
+import { excelSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -24,16 +25,10 @@ const exportExcelListStudentFixedClassTrainingPoint = createRoute({
     }),
   },
   responses: {
-    200: {
-      description: "Export list of student FixedClass as .xlsx",
-      content: {
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
-        },
-      },
-    },
+    ...excelSuccess("File Excel điểm rèn luyện lớp niên chế"),
+    ...standardErrorResponses(),
     400: {
-      description: "Invalid file upload",
+      description: "Tham số không hợp lệ",
       content: {
         "application/json": {
           schema: ErrorMessageResponseSchema,
@@ -41,7 +36,7 @@ const exportExcelListStudentFixedClassTrainingPoint = createRoute({
       },
     },
     404: {
-      description: "Not found",
+      description: "Không tìm thấy lớp niên chế",
       content: {
         "application/json": {
           schema: ErrorMessageResponseSchema,
@@ -75,6 +70,7 @@ const uploadExcelImportTrainingScore = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
         "application/json": {
@@ -84,7 +80,7 @@ const uploadExcelImportTrainingScore = createRoute({
           }),
         },
       },
-      description: "Tải danh sách thành công",
+      description: "Import điểm rèn luyện thành công",
     },
     400: {
       content: {
@@ -92,7 +88,7 @@ const uploadExcelImportTrainingScore = createRoute({
           schema: ErrorMessageResponseSchema,
         },
       },
-      description: "Invalid file upload",
+      description: "File không hợp lệ hoặc dữ liệu không khớp",
     },
   },
 })

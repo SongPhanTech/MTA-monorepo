@@ -3,6 +3,11 @@ import { z } from "zod"
 import { getVersionApps } from "../services/version-service"
 import { APP_SECRET_MAP } from "../config/mta.config"
 import { fieldDesc } from "../dto/openapi-helpers"
+import {
+  VersionAppErrorResponseSchema,
+  VersionAppResponseSchema,
+} from "../dto/student-result-openapi.dto"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono()
 
@@ -26,21 +31,20 @@ const getVersionRoute = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
-      description: "Thành công",
+      description: "Lấy phiên bản thành công",
       content: {
         "application/json": {
-          schema: z.any().openapi({ description: "Payload phiên bản từ MTA." }),
+          schema: VersionAppResponseSchema,
         },
       },
     },
     400: {
-      description: "Mã ứng dụng không hợp lệ",
+      description: "Mã ứng dụng không hợp lệ hoặc thiếu cấu hình secret",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.union([z.string(), z.array(z.any())]).openapi(fieldDesc("Chi tiết lỗi.")),
-          }),
+          schema: VersionAppErrorResponseSchema,
         },
       },
     },

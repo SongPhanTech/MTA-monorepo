@@ -1,4 +1,7 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
+import { CalcEvidenceTagsResponseSchema } from "../dto/evaluate-openapi.dto"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import { prisma } from ".."
 
 const app = new OpenAPIHono({ strict: false })
@@ -6,7 +9,7 @@ const app = new OpenAPIHono({ strict: false })
 const calcEvidenceTagsRoute = createRoute({
   operationId: "calc-evidence-tags",
   path: "/calc-evidence-tags",
-  tags: ["Evaluate"],
+  tags: ["Đánh giá"],
   summary: "Đánh tag minh chứng cho đợt đánh giá",
   method: "post",
   request: {
@@ -23,22 +26,20 @@ const calcEvidenceTagsRoute = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
-      description: "Danh sách minh chứng kèm tag.",
+      description: "Danh sách minh chứng kèm tag",
       content: {
         "application/json": {
-          schema: z.object({
-            evidenceTags: z.record(z.string(), z.string()),
-            result: z.array(z.any()),
-          }),
+          schema: CalcEvidenceTagsResponseSchema,
         },
       },
     },
     404: {
-      description: "Not found",
+      description: "Không tìm thấy đợt đánh giá",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },

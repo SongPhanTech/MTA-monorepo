@@ -6,6 +6,7 @@ import { read, utils, type WorkSheet } from "xlsx"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import {
   ErrorMessageResponseSchema,
   PlanTrainingImportResultSchema,
@@ -51,6 +52,7 @@ const importPhanCongGiangDay = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
         "application/json": {

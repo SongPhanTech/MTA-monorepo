@@ -3,8 +3,12 @@ import { $Enums } from "@workspace/db"
 import { calcFinalScore } from "@workspace/libs/utils"
 import Decimal from "decimal.js"
 import { prisma } from ".."
-import { SuccessBooleanResponseSchema } from "../dto/common-response.dto"
+import {
+  FailureBooleanResponseSchema,
+  SuccessBooleanResponseSchema,
+} from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -33,6 +37,7 @@ const approveScoreCorrection = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Duyệt thành công",
       content: {
@@ -42,18 +47,18 @@ const approveScoreCorrection = createRoute({
       },
     },
     400: {
-      description: "Error",
+      description: "Phiếu không hợp lệ hoặc lỗi nghiệp vụ",
       content: {
         "application/json": {
-          schema: SuccessBooleanResponseSchema,
+          schema: FailureBooleanResponseSchema,
         },
       },
     },
     500: {
-      description: "Internal Server Error",
+      description: "Lỗi máy chủ khi duyệt phiếu",
       content: {
         "application/json": {
-          schema: SuccessBooleanResponseSchema,
+          schema: FailureBooleanResponseSchema,
         },
       },
     },

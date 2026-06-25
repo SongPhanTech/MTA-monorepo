@@ -6,6 +6,7 @@ import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
 import { fieldDesc } from "../dto/openapi-helpers"
 import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
+import { excelSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -27,16 +28,10 @@ const exportDiplomaVerification = createRoute({
     }),
   },
   responses: {
-    200: {
-      description: "File Excel xác minh văn bằng",
-      content: {
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
-        },
-      },
-    },
+    ...excelSuccess("File Excel xác minh văn bằng"),
+    ...standardErrorResponses(),
     400: {
-      description: "Bad request",
+      description: "Khoảng ngày không hợp lệ",
       content: {
         "application/json": {
           schema: ErrorMessageResponseSchema,

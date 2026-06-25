@@ -1,7 +1,7 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums, Prisma } from "@workspace/db"
 import { prisma } from ".."
-import { ListOf, PaginationQuerySchema } from "../zod/base"
+import { DataListResponseSchema, PaginatedDataResponseSchema, PaginationQuerySchema } from "../zod/base"
 import {
   OpenSubjectClassRetakeItemSchema,
   ReExamStudentItemSchema,
@@ -9,6 +9,7 @@ import {
 } from "../dto/re-subject-class.dto"
 import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -57,10 +58,11 @@ const openSubjectClassRetake = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
         "application/json": {
-          schema: ListOf(OpenSubjectClassRetakeItemSchema),
+          schema: PaginatedDataResponseSchema(OpenSubjectClassRetakeItemSchema),
         },
       },
       description: "Danh sách phân công giảng dạy thành công",
@@ -95,10 +97,11 @@ const openSubjectClassRetakeStudents = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
         "application/json": {
-          schema: ListOf(RetakeStudentItemSchema),
+          schema: DataListResponseSchema(RetakeStudentItemSchema),
         },
       },
       description: "Danh sách phân công giảng dạy thành công",
@@ -154,10 +157,11 @@ const openSubjectClassReExam = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
         "application/json": {
-          schema: ListOf(
+          schema: PaginatedDataResponseSchema(
             OpenSubjectClassRetakeItemSchema.openapi("OpenSubjectClassReExamResponse")
           ),
         },
@@ -198,10 +202,11 @@ const openSubjectClassReExamStudents = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
         "application/json": {
-          schema: ListOf(ReExamStudentItemSchema),
+          schema: DataListResponseSchema(ReExamStudentItemSchema),
         },
       },
       description: "Danh sách sinh viên cần thi lại môn học",

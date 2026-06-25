@@ -15,6 +15,7 @@ import {
   SuccessMessageResponseSchema,
 } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -44,6 +45,7 @@ const importCurriculumVersion = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Import He quan su successfully",
       content: {
@@ -185,6 +187,7 @@ const exportCurriculumVersion = createRoute({
     params: z.object({ id: z.string().openapi(fieldDesc("ID CurriculumVersion.")) }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
@@ -382,6 +385,7 @@ const downloadCurriculumImportTemplate = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "File mẫu Excel CTĐT",
       content: {
