@@ -41,6 +41,7 @@ import {
   shortenClassification,
 } from "../utils"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import {
   CountOnlyResponseSchema,
   DocxBinaryResponseSchema,
@@ -89,6 +90,7 @@ const graduationApplicationInit = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Graduation application initialized successfully",
       content: {
@@ -201,6 +203,7 @@ const graduationCheck = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Graduation check successfully",
       content: {
@@ -976,6 +979,7 @@ const generateDiplomaNumber = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Successfully",
       content: {
@@ -1119,6 +1123,7 @@ const graduationSessionDecision = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Success",
       content: {
@@ -1232,6 +1237,7 @@ const statisticsGraduationDecision = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Successfully",
       content: {
@@ -1298,6 +1304,7 @@ const exportGraduationDecisionPptx = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Success",
       content: {
@@ -1523,6 +1530,7 @@ const exportGraduationRegisterMaster = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export graduation register master file",
       content: {
@@ -1887,6 +1895,7 @@ const exportPhoiBangCaoHoc = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export thành công",
       content: {
@@ -2060,6 +2069,7 @@ const exportPhoiBangNganHan = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export thành công",
       content: {
@@ -2302,6 +2312,7 @@ const exportPhuLucVanBangCaoHoc = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export thành công",
       content: {
@@ -2719,6 +2730,7 @@ const exportPhuLucVanBangNganHan = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export thành công",
       content: {
@@ -3036,6 +3048,7 @@ const getPhuLucIXData = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "OK",
       content: {
@@ -3256,6 +3269,7 @@ const getDanhSachTotNghiepData = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "OK",
       content: {
@@ -3411,6 +3425,7 @@ const getDanhSachHVChuaTotNghiepTA = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "OK",
       content: {

@@ -24,6 +24,10 @@ function asString(value: unknown): string | undefined {
   return typeof value === "string" ? value : undefined
 }
 
+function asArray<T>(value: unknown): T[] {
+  return Array.isArray(value) ? (value as T[]) : []
+}
+
 function markdownToParagraphs(markdown: string): Paragraph[] {
   const paragraphs: Paragraph[] = []
   for (const rawLine of markdown.split("\n")) {
@@ -59,88 +63,222 @@ function markdownToParagraphs(markdown: string): Paragraph[] {
   return paragraphs
 }
 
-function schemaPropertyLines(schema: unknown, indent = 0): string[] {
+type SchemaField = {
+  name: string
+  type: string
+  required: boolean
+  description: string
+  example: string
+  location?: string
+}
+
+function resolveRef(
+  doc: OpenApiDoc,
+  schema: unknown,
+  depth = 0
+): Record<string, unknown> | undefined {
   const s = asRecord(schema)
-  if (!s) return []
-  const pad = "  ".repeat(indent)
-  const lines: string[] = []
+  if (!s) return undefined
+  if (depth > 8) return s
 
-  const desc = asString(s.description)
-  const type = asString(s.type) ?? (s.enum ? "enum" : undefined)
-  if (desc || type) {
-    lines.push(`${pad}${type ? `[${type}] ` : ""}${desc ?? ""}`.trim())
-  }
-
-  const props = asRecord(s.properties)
-  if (props) {
-    for (const [name, propSchema] of Object.entries(props)) {
-      const prop = asRecord(propSchema)
-      const propType = prop ? (asString(prop.type) ?? "object") : "unknown"
-      const propDesc = prop ? asString(prop.description) : undefined
-      lines.push(`${pad}• ${name} (${propType}): ${propDesc ?? "—"}`)
-      if (prop?.properties || prop?.items) {
-        lines.push(...schemaPropertyLines(prop, indent + 1))
-      }
+  const ref = asString(s.$ref)
+  if (ref) {
+    const parts = ref.replace("#/", "").split("/")
+    let current: unknown = doc
+    for (const part of parts) {
+      current = asRecord(current)?.[part]
+    }
+    const resolved = asRecord(current)
+    if (resolved) {
+      return resolveRef(doc, { ...resolved, ...s, $ref: undefined }, depth + 1)
     }
   }
 
-  const items = asRecord(s.items)
-  if (items) {
-    lines.push(`${pad}• (mảng phần tử)`)
-    lines.push(...schemaPropertyLines(items, indent + 1))
-  }
-
-  return lines
+  return s
 }
 
-function contentSchemaLines(content: unknown): string[] {
-  const contentObj = asRecord(content)
-  if (!contentObj) return []
-  const lines: string[] = []
-  for (const [mediaType, media] of Object.entries(contentObj)) {
-    const mediaRec = asRecord(media)
-    const schema = mediaRec?.schema
-    lines.push(`Content-Type: ${mediaType}`)
-    lines.push(...schemaPropertyLines(schema))
-  }
-  return lines
+function schemaTypeLabel(schema: Record<string, unknown>): string {
+  if (schema.enum) return `enum(${asArray<string>(schema.enum).join(" | ")})`
+  if (asString(schema.format)) return `${asString(schema.type) ?? "string"} (${schema.format})`
+  if (schema.type) return asString(schema.type) ?? "unknown"
+  if (schema.properties) return "object"
+  if (schema.items) return "array"
+  if (schema.oneOf || schema.anyOf || schema.allOf) return "union"
+  return "unknown"
 }
 
-function parametersTable(parameters: unknown[]): Table | null {
-  if (!parameters.length) return null
-  const header = new TableRow({
-    children: [
-      new TableCell({
-        children: [new Paragraph({ children: [new TextRun({ text: "Tên", bold: true })] })],
-      }),
-      new TableCell({
-        children: [new Paragraph({ children: [new TextRun({ text: "Vị trí", bold: true })] })],
-      }),
-      new TableCell({
-        children: [new Paragraph({ children: [new TextRun({ text: "Bắt buộc", bold: true })] })],
-      }),
-      new TableCell({
-        children: [new Paragraph({ children: [new TextRun({ text: "Mô tả", bold: true })] })],
-      }),
-    ],
-  })
-  const rows = parameters.map((param) => {
-    const p = asRecord(param)
-    return new TableRow({
-      children: [
-        new TableCell({ children: [new Paragraph(asString(p?.name) ?? "—")] }),
-        new TableCell({ children: [new Paragraph(asString(p?.in) ?? "—")] }),
-        new TableCell({
-          children: [new Paragraph(p?.required === true ? "Có" : "Không")],
-        }),
-        new TableCell({ children: [new Paragraph(asString(p?.description) ?? "—")] }),
-      ],
+function collectSchemaFields(
+  doc: OpenApiDoc,
+  schema: unknown,
+  prefix = "",
+  requiredSet: Set<string> = new Set(),
+  visited = new Set<string>()
+): SchemaField[] {
+  const s = resolveRef(doc, schema)
+  if (!s) return []
+
+  const ref = asString(s.$ref)
+  if (ref && visited.has(ref)) return []
+  if (ref) visited.add(ref)
+
+  const fields: SchemaField[] = []
+  const required = new Set(asArray<string>(s.required))
+  const props = asRecord(s.properties)
+
+  if (props) {
+    for (const [name, propSchema] of Object.entries(props)) {
+      const prop = resolveRef(doc, propSchema)
+      if (!prop) continue
+      const fullName = prefix ? `${prefix}.${name}` : name
+      const isRequired = required.has(name) || requiredSet.has(fullName)
+      fields.push({
+        name: fullName,
+        type: schemaTypeLabel(prop),
+        required: isRequired,
+        description: asString(prop.description) ?? "—",
+        example: prop.example !== undefined ? JSON.stringify(prop.example) : "—",
+      })
+      if (prop.properties || prop.items) {
+        fields.push(...collectSchemaFields(doc, prop, fullName, requiredSet, visited))
+      }
+    }
+    return fields
+  }
+
+  const items = resolveRef(doc, s.items)
+  if (items && !prefix) {
+    fields.push({
+      name: "(mảng)",
+      type: `array<${schemaTypeLabel(items)}>`,
+      required: true,
+      description: asString(s.description) ?? "Danh sách phần tử",
+      example: "—",
     })
+    fields.push(...collectSchemaFields(doc, items, "[]", requiredSet, visited))
+  } else if (items) {
+    fields.push(...collectSchemaFields(doc, items, `${prefix}[]`, requiredSet, visited))
+  } else if (!props && prefix === "") {
+    fields.push({
+      name: "(giá trị)",
+      type: schemaTypeLabel(s),
+      required: true,
+      description: asString(s.description) ?? "—",
+      example: s.example !== undefined ? JSON.stringify(s.example) : "—",
+    })
+  }
+
+  return fields
+}
+
+function schemaFieldsTable(fields: SchemaField[]): Table | null {
+  if (!fields.length) return null
+  const header = new TableRow({
+    children: ["Tên", "Vị trí", "Kiểu", "Bắt buộc", "Mô tả", "Ví dụ"].map(
+      (text) =>
+        new TableCell({
+          children: [new Paragraph({ children: [new TextRun({ text, bold: true })] })],
+        })
+    ),
   })
+  const rows = fields.map(
+    (f) =>
+      new TableRow({
+        children: [
+          f.name,
+          f.location ?? "—",
+          f.type,
+          f.required ? "Có" : "Không",
+          f.description,
+          f.example,
+        ].map((text) => new TableCell({ children: [new Paragraph(text)] })),
+      })
+  )
   return new Table({
     width: { size: 100, type: WidthType.PERCENTAGE },
     rows: [header, ...rows],
   })
+}
+
+function parametersFromRequestBody(
+  doc: OpenApiDoc,
+  requestBody: Record<string, unknown>
+): SchemaField[] {
+  const fields: SchemaField[] = []
+  const content = asRecord(requestBody.content)
+  if (!content) return fields
+
+  for (const [mediaType, media] of Object.entries(content)) {
+    const schema = asRecord(media)?.schema
+    const bodyFields = collectSchemaFields(doc, schema)
+    for (const f of bodyFields) {
+      fields.push({ ...f, location: `body (${mediaType})` })
+    }
+    if (!bodyFields.length) {
+      fields.push({
+        name: "(body)",
+        type: mediaType,
+        required: requestBody.required !== false,
+        description: asString(requestBody.description) ?? "Request body",
+        example: "—",
+        location: `body (${mediaType})`,
+      })
+    }
+  }
+  return fields
+}
+
+function parametersFromOperation(
+  doc: OpenApiDoc,
+  operation: Record<string, unknown>
+): SchemaField[] {
+  const fields: SchemaField[] = []
+
+  for (const param of asArray<unknown>(operation.parameters)) {
+    const p = asRecord(param)
+    if (!p) continue
+    const schema = resolveRef(doc, p.schema)
+    fields.push({
+      name: asString(p.name) ?? "—",
+      location: asString(p.in) ?? "—",
+      type: schema ? schemaTypeLabel(schema) : "—",
+      required: p.required === true,
+      description: asString(p.description) ?? asString(schema?.description) ?? "—",
+      example: schema?.example !== undefined ? JSON.stringify(schema.example) : "—",
+    })
+  }
+
+  const requestBody = asRecord(operation.requestBody)
+  if (requestBody) {
+    fields.push(...parametersFromRequestBody(doc, requestBody))
+  }
+
+  return fields
+}
+
+function responseSchemaTable(doc: OpenApiDoc, response: Record<string, unknown>): Table | null {
+  const content = asRecord(response.content)
+  if (!content) return null
+
+  const fields: SchemaField[] = []
+  for (const [mediaType, media] of Object.entries(content)) {
+    const schema = asRecord(media)?.schema
+    const schemaFields = collectSchemaFields(doc, schema)
+    if (schemaFields.length) {
+      for (const f of schemaFields) {
+        fields.push({ ...f, location: mediaType })
+      }
+    } else {
+      fields.push({
+        name: "(nội dung)",
+        location: mediaType,
+        type: asString(asRecord(schema)?.format) === "binary" ? "binary" : mediaType,
+        required: true,
+        description: asString(asRecord(schema)?.description) ?? "—",
+        example: "—",
+      })
+    }
+  }
+  return schemaFieldsTable(fields)
 }
 
 function collectOperations(doc: OpenApiDoc): Array<{
@@ -275,52 +413,73 @@ export async function buildOpenApiDocx(openApiDoc: OpenApiDoc): Promise<Buffer> 
       children.push(...markdownToParagraphs(opDesc))
     }
 
-    const parameters = Array.isArray(operation.parameters) ? operation.parameters : []
-    if (parameters.length) {
-      children.push(
-        new Paragraph({
-          children: [new TextRun({ text: "Tham số", bold: true })],
-        })
-      )
-      const table = parametersTable(parameters)
-      if (table) children.push(table)
+    const inputFields = parametersFromOperation(openApiDoc, operation)
+    children.push(
+      new Paragraph({
+        children: [new TextRun({ text: "Đầu vào", bold: true })],
+      })
+    )
+    if (inputFields.length) {
+      const inputTable = schemaFieldsTable(inputFields)
+      if (inputTable) children.push(inputTable)
+    } else {
+      children.push(new Paragraph({ children: [new TextRun("Không có tham số.")] }))
     }
 
-    const requestBody = asRecord(operation.requestBody)
-    if (requestBody) {
-      children.push(
-        new Paragraph({
-          children: [new TextRun({ text: "Request body", bold: true })],
-        })
-      )
-      const rbDesc = asString(requestBody.description)
-      if (rbDesc) children.push(new Paragraph(rbDesc))
-      for (const line of contentSchemaLines(requestBody.content)) {
-        children.push(new Paragraph({ children: [new TextRun({ text: line, size: 20 })] }))
-      }
-    }
+    const responses = asRecord(operation.responses) ?? {}
+    const successEntries = Object.entries(responses).filter(([status]) => status.startsWith("2"))
+    const errorEntries = Object.entries(responses).filter(([status]) => !status.startsWith("2"))
 
-    const responses = asRecord(operation.responses)
-    if (responses) {
-      children.push(
-        new Paragraph({
-          children: [new TextRun({ text: "Responses", bold: true })],
-        })
-      )
-      for (const [status, response] of Object.entries(responses)) {
-        const res = asRecord(response)
+    children.push(
+      new Paragraph({
+        children: [new TextRun({ text: "Phản hồi thành công", bold: true })],
+      })
+    )
+    if (successEntries.length) {
+      for (const [status, response] of successEntries) {
+        const res = asRecord(response) ?? {}
         children.push(
           new Paragraph({
             children: [
               new TextRun({ text: `HTTP ${status}: `, bold: true }),
-              new TextRun(asString(res?.description) ?? "—"),
+              new TextRun(asString(res.description) ?? "—"),
             ],
           })
         )
-        for (const line of contentSchemaLines(res?.content)) {
-          children.push(new Paragraph({ children: [new TextRun({ text: line, size: 20 })] }))
-        }
+        const table = responseSchemaTable(openApiDoc, res)
+        if (table) children.push(table)
       }
+    } else {
+      children.push(new Paragraph({ children: [new TextRun("—")] }))
+    }
+
+    children.push(
+      new Paragraph({
+        children: [new TextRun({ text: "Phản hồi lỗi / thất bại", bold: true })],
+      })
+    )
+    if (errorEntries.length) {
+      for (const [status, response] of errorEntries) {
+        const res = asRecord(response) ?? {}
+        children.push(
+          new Paragraph({
+            children: [
+              new TextRun({ text: `HTTP ${status}: `, bold: true }),
+              new TextRun(asString(res.description) ?? "—"),
+            ],
+          })
+        )
+        const table = responseSchemaTable(openApiDoc, res)
+        if (table) children.push(table)
+      }
+    } else {
+      children.push(
+        new Paragraph({
+          children: [
+            new TextRun("Có thể trả về 400/404/409/500 theo handler chung — xem phần Giới thiệu."),
+          ],
+        })
+      )
     }
   }
 

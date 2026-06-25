@@ -1,5 +1,6 @@
 import { z } from "@hono/zod-openapi"
 import { fieldDesc } from "./openapi-helpers"
+import { standardErrorResponses } from "./openapi-route-helpers"
 
 export const PreviewOnlyRequestSchema = z
   .object({
@@ -35,3 +36,20 @@ export const StatBaseResponseSchema = z
     labels: z.array(z.string()).optional().openapi(fieldDesc("Nhãn cột hiển thị trên UI.")),
   })
   .openapi("StatBaseResponse")
+
+/** Response chuẩn cho endpoint thống kê: 200 + lỗi chuẩn. */
+export function statsRouteResponses<T extends z.ZodTypeAny>(dataSchema: T) {
+  return {
+    200: {
+      description: "Thống kê thành công",
+      content: {
+        "application/json": {
+          schema: StatBaseResponseSchema.extend({
+            data: z.array(dataSchema),
+          }),
+        },
+      },
+    },
+    ...standardErrorResponses(),
+  }
+}

@@ -10,11 +10,13 @@
   "dependencies": {
     "@hono/oidc-auth": "catalog:",
     "@hono/zod-openapi": "catalog:",
+    "@scalar/core": "0.1.1",
     "@scalar/hono-api-reference": "catalog:",
     "@workspace/db": "workspace:*",
     "@workspace/libs": "workspace:*",
     "axios": "catalog:",
     "decimal.js": "catalog:",
+    "docx": "catalog:",
     "docxtemplater": "catalog:",
     "exceljs": "catalog:",
     "hono": "catalog:",

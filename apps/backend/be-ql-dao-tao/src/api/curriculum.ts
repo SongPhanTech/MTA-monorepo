@@ -15,6 +15,7 @@ import {
   SuccessMessageResponseSchema,
 } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -44,6 +45,7 @@ const importCurriculumVersion = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Import He quan su successfully",
       content: {
@@ -185,6 +187,7 @@ const exportCurriculumVersion = createRoute({
     params: z.object({ id: z.string().openapi(fieldDesc("ID CurriculumVersion.")) }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
@@ -322,12 +325,36 @@ app.openapi(exportCurriculumVersion, async (c) => {
     })
   })
 
+  const kktTuChonData = data.trainingBlocks.map((tb) => ({
+    blockName: tb.trainingBlock.name.toUpperCase(),
+    so_tc: tb.electiveCreditsRequired || 0,
+  }))
+
   template.substitute(1, {
     curriculumName: data.name,
     code: data.code,
     trainingMajor: data.curriculum.trainingMajor.name,
     managementOrganization: data.curriculum.managementOrganization.sTen,
     subjects,
+  })
+
+  template.substitute("KKT_TU_CHON", {
+    subjects: kktTuChonData,
+    team: kktTuChonData,
+  })
+
+  const organizations = await prisma.dM_DonVi.findMany({
+    where: { bActive: true, bDeleted: false, iLoaiDonVi: { in: [5, 6, 7] } },
+    select: { sMa: true, sTKPUCode: true, sTen: true },
+    orderBy: { sTen: "asc" },
+  })
+
+  template.substitute("DON_VI", {
+    team: organizations.map((o) => ({
+      ma: o.sMa || "",
+      maTkpu: o.sTKPUCode || "",
+      name: o.sTen || "",
+    })),
   })
 
   const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
@@ -358,6 +385,7 @@ const downloadCurriculumImportTemplate = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "File mẫu Excel CTĐT",
       content: {

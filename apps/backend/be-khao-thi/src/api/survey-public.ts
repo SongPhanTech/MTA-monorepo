@@ -1,4 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { ErrorMessageResponseSchema, SuccessBooleanResponseSchema } from "../dto/common-response.dto"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import { models } from "@workspace/db/zod"
 import { prisma } from ".."
 import {
@@ -12,11 +14,12 @@ const app = new OpenAPIHono({ strict: false })
 const getPublicSurveys = createRoute({
   operationId: "get-public-surveys",
   path: "/get-public-surveys",
-  tags: ["Survey"],
+  tags: ["Khảo sát công khai"],
   summary: "Danh sách đợt khảo sát công khai",
   description: "Danh sách đợt khảo sát công khai",
   method: "get",
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Get Survey result",
       content: {
@@ -29,9 +32,7 @@ const getPublicSurveys = createRoute({
       description: "Bad request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -39,9 +40,7 @@ const getPublicSurveys = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -59,7 +58,7 @@ app.openapi(getPublicSurveys, async (c) => {
 const getPublicSurvey = createRoute({
   operationId: "get-public-survey",
   path: "/get-public-survey/{id}",
-  tags: ["Survey"],
+  tags: ["Khảo sát công khai"],
   summary: "Thông tin đợt khảo sát công khai",
   description: "Lấy thông tin đợt khảo sát công khai",
   method: "get",
@@ -69,6 +68,7 @@ const getPublicSurvey = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Get Survey result",
       content: {
@@ -104,9 +104,7 @@ const getPublicSurvey = createRoute({
       description: "Bad request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -114,9 +112,7 @@ const getPublicSurvey = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -191,7 +187,7 @@ app.openapi(getPublicSurvey, async (c) => {
 const savePublicSurvey = createRoute({
   operationId: "save-public-survey",
   path: "/save-public-survey",
-  tags: ["Survey"],
+  tags: ["Khảo sát công khai"],
   summary: "Lưu kết quả khảo sát công khai",
   description: "Lưu kết quả khảo sát công khai",
   method: "post",
@@ -223,16 +219,12 @@ const savePublicSurvey = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Save survey result",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              success: z.boolean(),
-              message: z.string(),
-            })
-            .openapi("save-survey-result"),
+          schema: SuccessBooleanResponseSchema,
         },
       },
     },
@@ -240,9 +232,7 @@ const savePublicSurvey = createRoute({
       description: "failed",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -250,9 +240,7 @@ const savePublicSurvey = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -336,7 +324,7 @@ app.openapi(savePublicSurvey, async (c) => {
 const validateUserSurvey = createRoute({
   operationId: "validate-user-survey",
   path: "/validate-user-survey",
-  tags: ["Survey"],
+  tags: ["Khảo sát công khai"],
   summary: "Kiểm tra mã người làm khảo sát có trong danh sách đối tượng",
   description:
     "Kiểm tra mã học viên, giảng viên hoặc cán bộ có trong danh sách đối tượng làm khảo sát",
@@ -348,6 +336,7 @@ const validateUserSurvey = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Get Survey result",
       content: {
@@ -363,9 +352,7 @@ const validateUserSurvey = createRoute({
       description: "Bad request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -373,9 +360,7 @@ const validateUserSurvey = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -414,7 +399,7 @@ app.openapi(validateUserSurvey, async (c) => {
 const getPublicSurveysV2 = createRoute({
   operationId: "get-public-surveys-v2",
   path: "/get-public-surveys-v2",
-  tags: ["Survey"],
+  tags: ["Khảo sát công khai"],
   summary: "Danh sách đợt khảo sát công khai (v2)",
   description: "Danh sách đợt khảo sát công khai, lọc theo học kỳ và loại đối tượng đào tạo",
   method: "get",
@@ -430,6 +415,7 @@ const getPublicSurveysV2 = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Get Survey result",
       content: {

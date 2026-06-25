@@ -1,4 +1,5 @@
 import { AcademicRankingBaseType, type AcademicRankingConvert } from "@workspace/db/client"
+import dayjs from "dayjs"
 
 type KetQuaHocKy = {
   gpaBase4?: unknown
@@ -42,6 +43,18 @@ export const layGpaHocKy = (
 
 export const dinhDangGpa = (value: number | null | undefined) =>
   value != null ? value.toFixed(2).replace(".", ",") : "—"
+
+export const dinhDangHeSoXetHocBong = (baseScore?: AcademicRankingBaseType | null) => {
+  if (baseScore === AcademicRankingBaseType.Base4) return "4"
+  if (baseScore === AcademicRankingBaseType.Base10) return "10"
+  return "—"
+}
+
+export const dinhDangNgaySinh = (date?: Date | string | null) =>
+  date ? dayjs(date).format("DD/MM/YYYY") : "—"
+
+export const chuyenSo = (value: unknown): number | null =>
+  value != null && value !== "" ? Number(value) : null
 
 /**
  * Phân loại điểm theo cấu hình xếp loại tốt nghiệp của khóa.

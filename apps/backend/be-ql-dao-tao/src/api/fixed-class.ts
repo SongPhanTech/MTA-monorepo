@@ -5,7 +5,9 @@ import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
-import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
+import { ErrorMessageResponseSchema, ExcelBinaryResponseSchema } from "../dto/common-response.dto"
+import { ClassDivisionResultSchema } from "../dto/student-result-openapi.dto"
+import { excelSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -30,16 +32,22 @@ const classDivision = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       content: {
         "application/json": {
-          schema: z.array(z.any()),
+          schema: ClassDivisionResultSchema,
         },
       },
-      description: "Tải danh sách thành công",
+      description: "Phân lớp thành công — mỗi phần tử là học viên hoặc thông báo lỗi dòng",
     },
     400: {
-      description: "Invalid file upload",
+      description: "File không hợp lệ hoặc vượt quá 50MB",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
     },
   },
 })
@@ -125,16 +133,10 @@ const fixedClassStudentCount = createRoute({
     }),
   },
   responses: {
-    200: {
-      description: "File Excel quân số theo khóa",
-      content: {
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
-        },
-      },
-    },
+    ...excelSuccess("File Excel quân số theo khóa"),
+    ...standardErrorResponses(),
     400: {
-      description: "Bad request",
+      description: "Tham số không hợp lệ",
       content: {
         "application/json": {
           schema: ErrorMessageResponseSchema,

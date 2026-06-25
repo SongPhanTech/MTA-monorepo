@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { prisma } from ".."
 import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -120,6 +121,7 @@ const calculateRoute = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Kết toán thành công",
       content: { "application/json": { schema: CalculateResponseSchema } },

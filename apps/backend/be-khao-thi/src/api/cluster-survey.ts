@@ -1,4 +1,7 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { ErrorMessageResponseSchema, ExcelBinaryResponseSchema, SuccessMessageResponseSchema } from "../dto/common-response.dto"
+import { ClusterSurveyDepartmentInfoResponseSchema } from "../dto/cluster-survey-openapi.dto"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import { getOrganizationAndAllChildren } from "@workspace/db"
 import { models } from "@workspace/db/zod"
 import { getTemplateBuffer } from "@workspace/libs/server"
@@ -22,7 +25,7 @@ const app = new OpenAPIHono({ strict: false })
 const createClusterSurvey = createRoute({
   operationId: "create-cluster-survey",
   path: "/cluster-survey",
-  tags: ["ClusterSurvey"],
+  tags: ["Cụm khảo sát"],
   summary: "Tạo cụm khảo sát",
   description: "Tạo cụm khảo sát",
   method: "post",
@@ -59,11 +62,12 @@ const createClusterSurvey = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Success",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: SuccessMessageResponseSchema,
         },
       },
     },
@@ -71,9 +75,7 @@ const createClusterSurvey = createRoute({
       description: "Invalid request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -81,9 +83,7 @@ const createClusterSurvey = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -212,7 +212,7 @@ const getClusterSurveyStatistics = createRoute({
   operationId: "get-cluster-survey-statistics",
   path: "/{id}/statistics",
   method: "get",
-  tags: ["ClusterSurvey"],
+  tags: ["Cụm khảo sát"],
   summary: "Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát",
   request: {
     params: z.object({ id: z.string() }),
@@ -222,6 +222,7 @@ const getClusterSurveyStatistics = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export thành công",
       content: {
@@ -239,7 +240,7 @@ const getClusterSurveyStatistics = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -304,7 +305,7 @@ const getLectureSurveyStatistics = createRoute({
   operationId: "get-lecture-survey-statistics",
   path: "/{id}/lecture-statistics",
   method: "get",
-  tags: ["ClusterSurvey"],
+  tags: ["Cụm khảo sát"],
   summary: "Thống kê câu trả lời theo giảng viên trong một cụm khảo sát",
   request: {
     params: z.object({ id: z.string() }),
@@ -313,6 +314,7 @@ const getLectureSurveyStatistics = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Get thành công",
       content: {
@@ -329,7 +331,7 @@ const getLectureSurveyStatistics = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -437,7 +439,7 @@ const getOrganizationSurveyStatistics = createRoute({
   operationId: "get-organization-survey-statistics",
   path: "/{id}/organization-statistics",
   method: "get",
-  tags: ["ClusterSurvey"],
+  tags: ["Cụm khảo sát"],
   summary: "Thống kê theo đơn vị",
   request: {
     params: z.object({ id: z.string() }),
@@ -446,6 +448,7 @@ const getOrganizationSurveyStatistics = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Get thành công",
       content: {
@@ -462,7 +465,7 @@ const getOrganizationSurveyStatistics = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -470,7 +473,7 @@ const getOrganizationSurveyStatistics = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -606,7 +609,7 @@ const exportClusterSurveyStatistics = createRoute({
   operationId: "export-cluster-survey-statistics",
   path: "/{id}/statistics/export",
   method: "get",
-  tags: ["ClusterSurvey"],
+  tags: ["Cụm khảo sát"],
   summary: "Excel thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát",
   request: {
     params: z.object({ id: z.string() }),
@@ -615,11 +618,12 @@ const exportClusterSurveyStatistics = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export thành công",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -627,7 +631,7 @@ const exportClusterSurveyStatistics = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -698,7 +702,7 @@ const getClusterSurveyStatisticsForLecturer = createRoute({
   operationId: "get-cluster-survey-statistics-for-lecturer",
   path: "/{id}/statistics-for-lecturer",
   method: "get",
-  tags: ["ClusterSurvey"],
+  tags: ["Cụm khảo sát"],
   summary: "Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát cuar từng giáo viên",
   request: {
     params: z.object({ id: z.string() }),
@@ -708,6 +712,7 @@ const getClusterSurveyStatisticsForLecturer = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Thành công",
       content: {
@@ -722,7 +727,7 @@ const getClusterSurveyStatisticsForLecturer = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -785,7 +790,7 @@ const getClusterSurveyStatisticsForDonVi = createRoute({
   operationId: "get-cluster-survey-statistics-for-organization",
   path: "/{id}/statistics-for-organization",
   method: "get",
-  tags: ["ClusterSurvey"],
+  tags: ["Cụm khảo sát"],
   summary: "Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát của từng đơn vị",
   request: {
     params: z.object({ id: z.string() }),
@@ -794,6 +799,7 @@ const getClusterSurveyStatisticsForDonVi = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Thành công",
       content: {
@@ -808,7 +814,7 @@ const getClusterSurveyStatisticsForDonVi = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -871,7 +877,7 @@ const getClusterSurveyStatisticsForHocVien = createRoute({
   operationId: "get-cluster-survey-statistics-for-all",
   path: "/{id}/statistics-for-all",
   method: "get",
-  tags: ["ClusterSurvey"],
+  tags: ["Cụm khảo sát"],
   summary: "Thống kê câu trả lời cho từng câu hỏi trong một cụm khảo sát của từng đơn vị",
   request: {
     params: z.object({ id: z.string() }),
@@ -880,6 +886,7 @@ const getClusterSurveyStatisticsForHocVien = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Thành công",
       content: {
@@ -894,7 +901,7 @@ const getClusterSurveyStatisticsForHocVien = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -970,7 +977,7 @@ const getClusterSurveyInfo = createRoute({
   operationId: "get-cluster-survey-info",
   path: "/{id}/get-cluster-survey-info",
   method: "get",
-  tags: ["ClusterSurvey"],
+  tags: ["Cụm khảo sát"],
   summary: "Thống kê khảo sát cụm thông tin chung",
   request: {
     params: z.object({ id: z.string() }),
@@ -981,6 +988,7 @@ const getClusterSurveyInfo = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Thành công",
       content: {
@@ -998,7 +1006,7 @@ const getClusterSurveyInfo = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -1076,7 +1084,7 @@ const getClusterSurveyInfoDepartment = createRoute({
   operationId: "get-cluster-survey-info-department",
   path: "/{id}/get-cluster-survey-info-department",
   method: "get",
-  tags: ["ClusterSurvey"],
+  tags: ["Cụm khảo sát"],
   summary: "Thống kê khảo sát cụm thông tin chung theo khoa",
   request: {
     params: z.object({ id: z.string() }),
@@ -1087,13 +1095,12 @@ const getClusterSurveyInfoDepartment = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Thành công",
       content: {
         "application/json": {
-          schema: z.object({
-            data: z.any(),
-          }),
+          schema: ClusterSurveyDepartmentInfoResponseSchema,
         },
       },
     },
@@ -1101,7 +1108,7 @@ const getClusterSurveyInfoDepartment = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },

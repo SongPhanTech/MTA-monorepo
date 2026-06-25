@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { exportThoiKhoaBieu } from "../services/thoi-khoa-bieu"
 import { ErrorMessageResponseSchema, ExcelBinaryResponseSchema } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono()
 
@@ -39,6 +40,7 @@ const exportThoiKhoaBieuRoute = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "File Excel thời khoá biểu",
       content: {

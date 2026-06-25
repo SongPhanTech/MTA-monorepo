@@ -18,3 +18,17 @@ export const SurveyStatisticSchema = z.object({
   surveyName: z.string(),
   questions: z.array(QuestionStatisticSchema),
 })
+
+export const SurveyFieldGroupStatisticSchema = z.object({
+  id: z.string(),
+  name: z.string().optional(),
+  questions: z.array(QuestionStatisticSchema),
+})
+
+export const SurveyStatisticsByFieldResponseSchema = z
+  .object({
+    surveyId: z.string(),
+    surveyName: z.string(),
+    data: z.array(SurveyFieldGroupStatisticSchema),
+  })
+  .openapi("SurveyStatisticsByFieldResponse")

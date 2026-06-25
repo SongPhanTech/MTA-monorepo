@@ -1,4 +1,10 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import {
+  ErrorMessageResponseSchema,
+  SuccessMessageResponseSchema,
+} from "../dto/common-response.dto"
+import { ExamBankQuestionsResultSchema, GenExamBankResultSchema } from "../dto/exam-openapi.dto"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import { $Enums, createId, type Prisma } from "@workspace/db"
 import { getRandomQuestionIDs } from "@workspace/db/sql"
 import { questionTypeLabels } from "@workspace/libs/constants"
@@ -10,7 +16,7 @@ const app = new OpenAPIHono({ strict: false })
 const genRandomExamQuestionByRule = createRoute({
   operationId: "gen-exam-bank",
   path: "/random-exam-question-by-rule",
-  tags: ["Exam"],
+  tags: ["Đề thi"],
   summary: "Sinh đề thi theo cấu trúc đề thi",
   description: "Lấy theo testStructureRule đã được tạo",
   method: "post",
@@ -36,36 +42,28 @@ const genRandomExamQuestionByRule = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
-      description: "Generate Exam bank result",
+      description: "Sinh đề thi thành công",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              success: z.boolean(),
-              message: z.string(),
-            })
-            .openapi("gen-exam-bank-result"),
+          schema: GenExamBankResultSchema,
         },
       },
     },
     400: {
-      description: "Not enough questions",
+      description: "Không đủ câu hỏi theo cấu trúc đề",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
     404: {
-      description: "Not found",
+      description: "Không tìm thấy kỳ thi hoặc cấu trúc đề",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -175,7 +173,7 @@ app.openapi(genRandomExamQuestionByRule, async (c) => {
 const getExamBankWithGrouping = createRoute({
   operationId: "get-exam-bank-with-grouping",
   path: "/exam-bank/questions",
-  tags: ["Exam"],
+  tags: ["Đề thi"],
   summary: "Lấy câu hỏi của đề thi có nhóm theo loại",
   description:
     "Truyền isGroup=true để nhóm câu hỏi trắc nghiệm và tự luận riêng, false để lấy tuần tự theo order",
@@ -197,18 +195,12 @@ const getExamBankWithGrouping = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Dữ liệu đề thi với câu hỏi đã xử lý",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              isGroup: z.boolean(),
-              questions: z.array(z.any()).optional(),
-              listQuestionChoice: z.array(z.any()).optional(),
-              listQuestionEssay: z.array(z.any()).optional(),
-            })
-            .openapi("exam-bank-questions-result"),
+          schema: ExamBankQuestionsResultSchema,
         },
       },
     },
@@ -216,7 +208,7 @@ const getExamBankWithGrouping = createRoute({
       description: "Không tìm thấy ExamBank",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -273,7 +265,7 @@ app.openapi(getExamBankWithGrouping, async (c) => {
 const sinhdethuCong = createRoute({
   operationId: "single-topic-generation",
   path: "/single-topic-generation",
-  tags: ["Exam"],
+  tags: ["Đề thi"],
   summary: "Sinh đề thủ công (1 đề)",
   description: "Sinh 1 đề duy nhất theo ma trận cấu hình",
   method: "post",
@@ -296,11 +288,12 @@ const sinhdethuCong = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
-      description: "Success",
+      description: "Sinh đề thủ công thành công",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: SuccessMessageResponseSchema,
         },
       },
     },
@@ -308,7 +301,7 @@ const sinhdethuCong = createRoute({
       description: "Invalid request",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },

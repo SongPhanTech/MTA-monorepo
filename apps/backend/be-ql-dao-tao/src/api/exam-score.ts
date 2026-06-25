@@ -7,6 +7,7 @@ import {
   SuccessBooleanResponseSchema,
 } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -35,6 +36,7 @@ const genExamListCode = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Generate Exam List code result",
       content: {
@@ -202,6 +204,7 @@ const saveExamScore = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Save exam codes result",
       content: {

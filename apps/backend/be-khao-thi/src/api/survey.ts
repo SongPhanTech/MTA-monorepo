@@ -1,20 +1,25 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { ErrorMessageResponseSchema, DocxBinaryResponseSchema, SuccessMessageResponseSchema } from "../dto/common-response.dto"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import type { Prisma } from "@workspace/db"
 import { models } from "@workspace/db/zod"
 import Docxtemplater from "docxtemplater"
 import PizZip from "pizzip"
 import { prisma } from ".."
-import { SurveyStatisticSchema } from "../dto/survey-statistic.dto"
+import {
+  SurveyStatisticSchema,
+  SurveyStatisticsByFieldResponseSchema,
+} from "../dto/survey-statistic.dto"
 import { getBufferFromUrl } from "../services/template.service"
 import { getCurrentDateForReport } from "../utils"
-import { ListOf, PaginationQuerySchema } from "../zod/base"
+import { PaginatedDataResponseSchema, PaginationQuerySchema } from "../zod/base"
 
 const app = new OpenAPIHono({ strict: false })
 
 const exportReportSurvey = createRoute({
   operationId: "export-report-survey",
   path: "/export-report-survey",
-  tags: ["Survey"],
+  tags: ["Khảo sát"],
   summary: "Báo cáo khảo sát",
   description: "Báo cáo khảo sát",
   method: "post",
@@ -34,11 +39,12 @@ const exportReportSurvey = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export báo cáo khảo sát.",
       content: {
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: DocxBinaryResponseSchema,
         },
       },
     },
@@ -46,9 +52,7 @@ const exportReportSurvey = createRoute({
       description: "Invalid request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -56,9 +60,7 @@ const exportReportSurvey = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -106,7 +108,7 @@ app.openapi(exportReportSurvey, async (c) => {
 const exportReportSurveyOrganizational = createRoute({
   operationId: "export-report-survey-organizational",
   path: "/export-report-survey-organizational",
-  tags: ["Survey"],
+  tags: ["Khảo sát"],
   summary: "Báo cáo khảo sát theo đơn vị",
   description: "Báo cáo khảo sát theo đơn vị",
   method: "post",
@@ -129,11 +131,12 @@ const exportReportSurveyOrganizational = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export báo cáo khảo sát.",
       content: {
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: DocxBinaryResponseSchema,
         },
       },
     },
@@ -141,9 +144,7 @@ const exportReportSurveyOrganizational = createRoute({
       description: "Invalid request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -151,9 +152,7 @@ const exportReportSurveyOrganizational = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -203,7 +202,7 @@ const getSurveyStatistics = createRoute({
   operationId: "get-survey-statistics",
   path: "/{id}/statistics",
   method: "get",
-  tags: ["Statistics"],
+  tags: ["Thống kê"],
   summary: "Thống kê câu trả lời cho từng câu hỏi trong một đợt khảo sát",
   request: {
     params: z.object({
@@ -213,6 +212,7 @@ const getSurveyStatistics = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Lấy dữ liệu thống kê thành công.",
       content: {
@@ -225,7 +225,7 @@ const getSurveyStatistics = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -298,7 +298,7 @@ const getSurveyStatisticsToField = createRoute({
   operationId: "get-survey-statistics-to-Field",
   path: "/{id}/statistics-to-Field",
   method: "get",
-  tags: ["Statistics"],
+  tags: ["Thống kê"],
   summary: "Thống kê câu trả lời cho từng nhóm câu hỏi trong một đợt khảo sát",
   request: {
     params: z.object({
@@ -308,15 +308,12 @@ const getSurveyStatisticsToField = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Lấy dữ liệu thống kê thành công.",
       content: {
         "application/json": {
-          schema: z.object({
-            surveyId: z.string(),
-            surveyName: z.string(),
-            data: z.array(z.any()),
-          }),
+          schema: SurveyStatisticsByFieldResponseSchema,
         },
       },
     },
@@ -324,7 +321,7 @@ const getSurveyStatisticsToField = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -493,7 +490,7 @@ const getSurveyObjects = createRoute({
   operationId: "get-survey-objects",
   path: "/objects",
   method: "get",
-  tags: ["Survey"],
+  tags: ["Khảo sát"],
   summary: "Danh sách người làm khảo sát",
   request: {
     query: PaginationQuerySchema.extend({
@@ -510,11 +507,12 @@ const getSurveyObjects = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Success",
       content: {
         "application/json": {
-          schema: ListOf(
+          schema: PaginatedDataResponseSchema(
             models.UserProfileScalarSchema.extend({
               lecturer: models.LecturerScalarSchema.extend({
                 organization: models.DM_DonViScalarSchema,
@@ -544,7 +542,7 @@ const getSurveyObjects = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -762,7 +760,7 @@ const getSurveyObjectCount = createRoute({
   operationId: "get-survey-object-count",
   path: "/objects/count",
   method: "get",
-  tags: ["Survey"],
+  tags: ["Khảo sát"],
   summary: "Lấy số người làm khảo sát",
   request: {
     query: z.object({
@@ -779,6 +777,7 @@ const getSurveyObjectCount = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Success",
       content: {
@@ -794,7 +793,7 @@ const getSurveyObjectCount = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -979,7 +978,7 @@ const getSurveysByProfile = createRoute({
   operationId: "get-surveys-of-profile",
   path: "/of-profile/{id}",
   method: "get",
-  tags: ["Survey"],
+  tags: ["Khảo sát"],
   summary: "Danh sách khảo sát cần làm",
   request: {
     params: z.object({ id: z.string() }),
@@ -993,11 +992,12 @@ const getSurveysByProfile = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Success",
       content: {
         "application/json": {
-          schema: ListOf(
+          schema: PaginatedDataResponseSchema(
             models.SurveyScalarSchema.extend({
               lecture: models.LecturerScalarSchema.extend({
                 organization: models.DM_DonViScalarSchema,
@@ -1016,7 +1016,7 @@ const getSurveysByProfile = createRoute({
       description: "Không tìm thấy khảo sát.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -1212,7 +1212,7 @@ app.openapi(getSurveysByProfile, async (c) => {
 const getPrivateSurvey = createRoute({
   operationId: "get-private-survey",
   path: "/get-private-survey/{id}",
-  tags: ["Survey"],
+  tags: ["Khảo sát"],
   summary: "Thông tin đợt khảo sát không công khai",
   description: "Lấy thông tin đợt khảo sát không công khai",
   method: "get",
@@ -1225,6 +1225,7 @@ const getPrivateSurvey = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Get Survey result",
       content: {
@@ -1260,9 +1261,7 @@ const getPrivateSurvey = createRoute({
       description: "Bad request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -1270,9 +1269,7 @@ const getPrivateSurvey = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -1356,7 +1353,7 @@ app.openapi(getPrivateSurvey, async (c) => {
 const sinhdetudong = createRoute({
   operationId: "automatic-topic-generation",
   path: "/automatic-topic-generation",
-  tags: ["Survey"],
+  tags: ["Khảo sát"],
   summary: "Sinh đề tự động",
   description: "Sinh đề tự động",
   method: "post",
@@ -1381,11 +1378,12 @@ const sinhdetudong = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Success",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: SuccessMessageResponseSchema,
         },
       },
     },
@@ -1393,9 +1391,7 @@ const sinhdetudong = createRoute({
       description: "Invalid request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -1403,9 +1399,7 @@ const sinhdetudong = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },

@@ -1,18 +1,13 @@
 import HangNhan from "@components/cong-giang-vien/ho-so-sinh-vien/hang-nhan"
+import KhoiThongTin from "@components/cong-giang-vien/ho-so-sinh-vien/khoi-thong-tin"
 import type { ThongTinCaNhanSinhVien } from "@components/cong-giang-vien/ho-so-sinh-vien/types"
-import { Card } from "antd"
 
 interface TheThongTinCaNhanProps {
   data: ThongTinCaNhanSinhVien
 }
 
 const TheThongTinCaNhan = ({ data }: TheThongTinCaNhanProps) => (
-  <Card
-    size="small"
-    title={<span className="text-sm font-semibold text-cgv-green-dark">Thông tin cá nhân</span>}
-    className="h-full shadow-sm"
-    styles={{ body: { padding: "12px 16px" } }}
-  >
+  <KhoiThongTin tieuDe="Thông tin cá nhân">
     <HangNhan label="Họ và tên" value={data.hoVaTen} />
     <HangNhan label="Ngày sinh" value={data.ngaySinh} />
     <HangNhan label="Giới tính" value={data.gioiTinh} />
@@ -23,7 +18,7 @@ const TheThongTinCaNhan = ({ data }: TheThongTinCaNhanProps) => (
     <HangNhan label="Dân tộc" value={data.danToc} />
     <HangNhan label="Tôn giáo" value={data.tonGiao} />
     <HangNhan label="Đối tượng" value={data.doiTuongUuTien} />
-  </Card>
+  </KhoiThongTin>
 )
 
 export default TheThongTinCaNhan

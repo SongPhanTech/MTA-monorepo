@@ -17,6 +17,7 @@ import {
   SuccessBooleanResponseSchema,
 } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -48,6 +49,7 @@ const certificateScore = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Success",
       content: {
@@ -212,6 +214,7 @@ const awardScore = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Success",
       content: {
@@ -408,6 +411,7 @@ const approveAwardScore = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Success",
       content: {
@@ -507,6 +511,7 @@ const statsArchivedAward = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Success",
       content: {
@@ -551,6 +556,7 @@ const exportStatsArchivedAwardRoute = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Success",
       content: {
@@ -607,6 +613,7 @@ const exportArchivedCertificateExcel = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export danh sách điểm chứng chỉ thành công",
       content: {
@@ -677,6 +684,7 @@ const exportArchivedCertificateMultiExcel = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export danh sách điểm chứng chỉ thành công",
       content: {
@@ -749,6 +757,7 @@ const exportStudentsMissingCertificateExcel = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export danh sách sinh viên thiếu chứng chỉ thành công",
       content: {

@@ -16,7 +16,10 @@ const TabTongKet = ({ fixedClassId, enabled }: TabTongKetProps) => {
   const {
     schoolYearId,
     semesterId,
+    theoKy,
     apDungBoLoc,
+    locXepLoai,
+    chonLocXepLoai,
     danhSach,
     thongKe,
     tongSo,
@@ -38,12 +41,17 @@ const TabTongKet = ({ fixedClassId, enabled }: TabTongKetProps) => {
         semesterId={semesterId}
         onApDung={apDungBoLoc}
       />
-      <TheThongKeTongKet thongKe={thongKe} />
+      <TheThongKeTongKet
+        thongKe={thongKe}
+        locXepLoai={locXepLoai}
+        onChonLocXepLoai={chonLocXepLoai}
+      />
       <BangTongKet
         danhSach={danhSach}
         loading={dangTai}
         trang={trang}
         soTrang={soTrang}
+        theoKy={theoKy}
         onXemChiTiet={xemChiTiet}
       />
       <PhanTrangSinhVien

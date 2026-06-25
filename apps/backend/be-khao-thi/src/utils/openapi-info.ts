@@ -1,0 +1,65 @@
+import type { Context } from "hono"
+
+export const OPENAPI_INFO_DESCRIPTION = `## Giới thiệu
+
+Tài liệu mô tả các **API tùy chỉnh** phục vụ hệ thống **Khảo thí (EMS)** của Học viện Kỹ thuật Quân sự (MTA).
+
+**Phạm vi:** các endpoint dưới \`/api/*\` được định nghĩa trong mã nguồn (khảo sát công khai/nội bộ, cụm khảo sát, sinh đề thi, đánh giá minh chứng).
+
+---
+
+## Xác thực
+
+Các endpoint nội bộ yêu cầu **Bearer Token (JWT)** khi middleware auth được bật. Endpoint khảo sát công khai (\`/api/survey/get-public-*\`) có thể truy cập không cần đăng nhập.
+
+\`\`\`
+Authorization: Bearer <access_token>
+\`\`\`
+
+---
+
+## Định dạng phản hồi thành công (2xx)
+
+- \`{ "success": true, "message": "..." }\` — lưu khảo sát, sinh đề
+- \`{ "message": "..." }\` — thao tác đơn giản
+- \`{ "data": [...], "count": N }\` — danh sách (một số API nội bộ)
+- \`{ "data": [...], "total": N }\` — danh sách phân trang (khảo sát công khai v2)
+- \`{ "evidenceTags": {}, "result": [...] }\` — đánh tag minh chứng
+- **File binary** — Excel (\`.xlsx\`) hoặc Word (\`.docx\`) báo cáo khảo sát
+
+---
+
+## Định dạng phản hồi lỗi (4xx / 5xx)
+
+\`\`\`json
+{ "message": "Mô tả lỗi bằng tiếng Việt" }
+\`\`\`
+
+| Mã HTTP | Khi nào |
+|---|---|
+| **400** | Dữ liệu không hợp lệ, khảo sát chưa mở/đã đóng, không đủ câu hỏi sinh đề |
+| **403** | IP bị chặn |
+| **404** | Không tìm thấy khảo sát, đề thi, đợt đánh giá |
+| **409** | Trùng dữ liệu unique |
+| **500** | Lỗi máy chủ |`
+
+export function buildOpenApiDocumentConfig(c: Context) {
+  return {
+    openapi: "3.0.0" as const,
+    info: {
+      version: "1.0.0",
+      title: "API Khảo thí — MTA",
+      description: OPENAPI_INFO_DESCRIPTION,
+    },
+    servers: [
+      {
+        url: new URL(c.req.url).origin,
+        description: "Current environment",
+      },
+      {
+        url: "https://api.khaothi.mta.swantech.vn",
+        description: "Dev environment",
+      },
+    ],
+  }
+}

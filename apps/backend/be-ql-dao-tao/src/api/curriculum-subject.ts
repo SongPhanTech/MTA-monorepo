@@ -15,6 +15,7 @@ import {
   SuccessMessageResponseSchema,
 } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 const app = new OpenAPIHono({ strict: false })
 
 const importCurriculumVersion = createRoute({
@@ -53,6 +54,7 @@ const importCurriculumVersion = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Import successfully",
       content: {

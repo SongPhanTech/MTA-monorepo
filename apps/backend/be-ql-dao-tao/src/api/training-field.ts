@@ -1,6 +1,8 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { prisma } from ".."
 import { fieldDesc } from "../dto/openapi-helpers"
+import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -33,6 +35,7 @@ const getTrainingField = createRoute({
 
 **Tham số:** không có.`,
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Thành công",
       content: {
@@ -45,9 +48,7 @@ const getTrainingField = createRoute({
       description: "Lỗi truy vấn",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string().openapi(fieldDesc("Thông báo lỗi.")),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },

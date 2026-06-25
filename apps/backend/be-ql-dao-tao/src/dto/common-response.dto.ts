@@ -8,6 +8,13 @@ export const SuccessBooleanResponseSchema = z
   })
   .openapi("SuccessBooleanResponse")
 
+export const FailureBooleanResponseSchema = z
+  .object({
+    success: z.boolean().openapi(fieldDesc("false = thao tác thất bại.", false)),
+    message: z.string().openapi(fieldDesc("Mô tả lỗi bằng tiếng Việt.")),
+  })
+  .openapi("FailureBooleanResponse")
+
 export const SuccessMessageResponseSchema = z
   .object({
     message: z.string().openapi(fieldDesc("Thông báo kết quả thành công.")),
@@ -67,6 +74,22 @@ export const ImportErrorResponseSchema = z
     errors: z.array(z.any()).optional().openapi(fieldDesc("Chi tiết lỗi từng dòng (parse Excel).")),
   })
   .openapi("ImportErrorResponse")
+
+export const ImportFailedResponseSchema = z
+  .object({
+    message: z.string().openapi(fieldDesc("Thông báo lỗi tổng quát.")),
+    failed: z.array(z.any()).openapi(fieldDesc("Danh sách bản ghi import thất bại.")),
+  })
+  .openapi("ImportFailedResponse")
+
+/** Import 400: lỗi parse Excel (errors) hoặc lỗi transaction (failed). */
+export const ImportFailureResponseSchema = z
+  .object({
+    message: z.string().openapi(fieldDesc("Thông báo lỗi tổng quát.")),
+    errors: z.array(z.any()).optional().openapi(fieldDesc("Chi tiết lỗi từng dòng (parse Excel).")),
+    failed: z.array(z.any()).optional().openapi(fieldDesc("Danh sách bản ghi import thất bại.")),
+  })
+  .openapi("ImportFailureResponse")
 
 /** Dùng khi errors là kết quả zParseSheetError từ parse Excel CTĐT. */
 export const SheetParseErrorResponseSchema = <T extends z.ZodTypeAny>(errorItemSchema: T) =>

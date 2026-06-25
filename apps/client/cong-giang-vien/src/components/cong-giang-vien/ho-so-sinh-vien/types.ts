@@ -3,9 +3,12 @@ export type TomTatSinhVien = {
   hoVaTen: string
   trangThai: { label: string; color: string }
   maSinhVien: string
+  ngaySinh: string
+  gioiTinh: string
   lop: string
   khoa: string
-  khoaVien: string
+  donViQuanLy: string
+  heDaoTao: string
 }
 
 export type ThongTinCaNhanSinhVien = {
@@ -61,12 +64,99 @@ export type LichSuHocTapSinhVien = {
   diemRenLuyen: string | null
 }
 
+export type ChungChiDaDuyet = {
+  id: string
+  certificateId: string
+  tenChungChi: string
+  trinhDoYeuCau: string
+  ketQua: string
+  ngayCap: string
+  donViCap: string
+}
+
+export type ChiTietMonHocDieuKien = {
+  tenMon: string
+  ketQua: string
+  diem?: string
+  namHoc: string
+  ghiChu?: string
+}
+
+export type DieuKienTotNghiepItem = {
+  dat: boolean
+  trinhDoYeuCau?: string
+  chungChi?: ChungChiDaDuyet | null
+  chiTietMonHoc?: ChiTietMonHocDieuKien | null
+}
+
+export type DieuKienTotNghiep = {
+  ngoaiNgu: DieuKienTotNghiepItem
+  tinHoc: DieuKienTotNghiepItem
+  giaoDucQuocPhong: DieuKienTotNghiepItem
+  renLuyenSucKhoe: DieuKienTotNghiepItem
+  duDieuKienDayDu: boolean
+}
+
+export type HocBongSinhVien = {
+  id: string
+  namHoc: string
+  hocKy: string
+  loaiHocBong: string
+  muc: string
+  giaTri: string
+  trangThai: { label: string; color: string }
+  ngayQuyetDinh: string
+}
+
+export type SuKienCanhBaoKyLuat = {
+  id: string
+  ngay: string
+  tieuDe: string
+  lyDo: string
+  trangThai: { label: string; color: string }
+}
+
+export type TinhTrangHocTapSinhVien = {
+  hocBong: HocBongSinhVien[]
+  lichSuCanhBaoKyLuat: SuKienCanhBaoKyLuat[]
+  capNhatCuoi?: string
+}
+
+export type GiaiThuongSinhVien = {
+  id: string
+  ngay: string
+  namHoc: string
+  tenGiaiThuong: string
+  thanhTich: string
+  donViTrao: string
+  soQuyetDinh: string
+  diemThuong: number
+  trangThai: { label: string; color: string }
+  moTa: string
+}
+
+export type QuyetDinhTotNghiepSinhVien = {
+  id: string
+  namHoc: string
+  hocKy: string
+  soQuyetDinh: string
+  loaiQuyetDinh: string
+  noiDung: string
+  nguoiKy: string
+  ngayKy: string
+  ghiChu: string
+}
+
 export type HoSoSinhVien = {
   tomTat: TomTatSinhVien
   caNhan: ThongTinCaNhanSinhVien
   hocTap: ThongTinHocTapSinhVien
   quaTrinh: SuKienQuaTrinh[]
+  dieuKienTotNghiep: DieuKienTotNghiep
   lienHe: ThongTinLienHeSinhVien
   khac: ThongTinKhacSinhVien
   lichSuHocTap: LichSuHocTapSinhVien
+  tinhTrangHocTap: TinhTrangHocTapSinhVien
+  giaiThuong: GiaiThuongSinhVien[]
+  quyetDinhTotNghiep: QuyetDinhTotNghiepSinhVien[]
 }

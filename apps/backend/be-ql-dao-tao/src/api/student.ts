@@ -30,8 +30,11 @@ import {
   ErrorDetailResponseSchema,
   ErrorMessageResponseSchema,
   ExcelBinaryResponseSchema,
+  SuccessMessageResponseSchema,
 } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { CalculateSemesterResultResponseSchema } from "../dto/student-result-openapi.dto"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -53,16 +56,17 @@ const tongKetHocKyHVSV = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
-      description: "Export list of student semester result as JSON",
+      description: "Tính toán kết quả học kỳ thành công",
       content: {
         "application/json": {
-          schema: z.any(),
+          schema: CalculateSemesterResultResponseSchema,
         },
       },
     },
     400: {
-      description: "Invalid semester ID",
+      description: "Học kỳ không tồn tại hoặc dữ liệu không hợp lệ",
       content: {
         "application/json": {
           schema: ErrorMessageResponseSchema,
@@ -70,7 +74,7 @@ const tongKetHocKyHVSV = createRoute({
       },
     },
     500: {
-      description: "Server error during calculation",
+      description: "Lỗi khi tính toán kết quả học kỳ",
       content: {
         "application/json": {
           schema: ErrorMessageResponseSchema,
@@ -98,24 +102,17 @@ const tongKetNamHocHVSV = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
-      description: "Export list of student schoolYear result",
+      description: "Đã khởi chạy tính toán kết quả năm học (xử lý nền)",
       content: {
         "application/json": {
-          schema: z.any(),
+          schema: SuccessMessageResponseSchema,
         },
       },
     },
     400: {
-      description: "Invalid",
-      content: {
-        "application/json": {
-          schema: ErrorMessageResponseSchema,
-        },
-      },
-    },
-    500: {
-      description: "Server error during calculation",
+      description: "Học kỳ không tồn tại",
       content: {
         "application/json": {
           schema: ErrorMessageResponseSchema,
@@ -147,19 +144,12 @@ const exportScholarshipJson = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export list of student scholarship as JSON",
       content: {
         "application/json": {
           schema: z.array(CourseStudentScholarshipResult),
-        },
-      },
-    },
-    404: {
-      description: "Not found",
-      content: {
-        "application/json": {
-          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -188,19 +178,12 @@ const exportScholarshipExcel = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export list of student scholarship as Excel",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
           schema: z.string().openapi({ type: "string", format: "binary" }),
-        },
-      },
-    },
-    404: {
-      description: "Not found",
-      content: {
-        "application/json": {
-          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -240,19 +223,12 @@ const exportAcademicWarningExcel = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export list of student academic warning as Excel",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
           schema: z.string().openapi({ type: "string", format: "binary" }),
-        },
-      },
-    },
-    404: {
-      description: "Not found",
-      content: {
-        "application/json": {
-          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -288,19 +264,12 @@ const exportAcademicWarningJson = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export list of student academic warning as JSON",
       content: {
         "application/json": {
           schema: z.array(CourseStudentAcademicWarningResult),
-        },
-      },
-    },
-    404: {
-      description: "Not found",
-      content: {
-        "application/json": {
-          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -335,19 +304,12 @@ const exportAcademicActionJson = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export list of student academic action as JSON",
       content: {
         "application/json": {
           schema: z.array(CourseStudentAcademicActionResult),
-        },
-      },
-    },
-    404: {
-      description: "Not found",
-      content: {
-        "application/json": {
-          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -372,19 +334,12 @@ const exportDecreaseAcademicWarningJson = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export list of student decrease academic warning as JSON",
       content: {
         "application/json": {
           schema: z.array(CourseStudentDecreaseAcademicWarningResult),
-        },
-      },
-    },
-    404: {
-      description: "Not found",
-      content: {
-        "application/json": {
-          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -436,19 +391,12 @@ const PheDuyetLuuBan = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Cập nhật trạng thái, điểm học viên theo xử lý học tập",
       content: {
         "application/json": {
           schema: CountMessageResponseSchema,
-        },
-      },
-    },
-    400: {
-      description: "Bad request",
-      content: {
-        "application/json": {
-          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -667,6 +615,7 @@ const debtStatistics = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "Export thống kê nợ",
       content: {
@@ -955,19 +904,12 @@ const downloadStudentImportTemplate = createRoute({
     }),
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "File mẫu Excel import học viên",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
           schema: ExcelBinaryResponseSchema,
-        },
-      },
-    },
-    404: {
-      description: "Not found",
-      content: {
-        "application/json": {
-          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -1007,19 +949,12 @@ const exportStudentProfiles = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "File Excel hồ sơ học viên",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
           schema: ExcelBinaryResponseSchema,
-        },
-      },
-    },
-    404: {
-      description: "Not found",
-      content: {
-        "application/json": {
-          schema: ErrorMessageResponseSchema,
         },
       },
     },

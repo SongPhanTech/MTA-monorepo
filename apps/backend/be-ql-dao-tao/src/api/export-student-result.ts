@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { exportStudentSemesterResult } from "../services/student-result"
 import { ErrorMessageResponseSchema, ExcelBinaryResponseSchema } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const app = new OpenAPIHono()
 
@@ -34,6 +35,7 @@ const exportStudentSemesterResultRoute = createRoute({
     },
   },
   responses: {
+    ...standardErrorResponses(),
     200: {
       description: "File Excel kết quả học tập",
       content: {

@@ -71,14 +71,25 @@ export type ThongKeDiemRenLuyen = {
 
 export type LocDiemRenLuyen = "cao_nhat" | "thap_nhat" | null
 
+export type LocXepLoaiTongKet = string | null
+
 export type TongKetRow = {
   id: string
   maSinhVien: string
   hoVaTen: string
-  diemToiDa: number
-  diem: number | null
+  ngaySinh: string | null
+  maLop: string
+  tenLop: string
+  namHocThu: number | null
+  hocKyThu: number | null
+  heSoXetHocBong: string | null
+  trungBinhHe4: number | null
+  tichLuyHe4: number | null
+  trungBinhHe10: number | null
+  tichLuyHe10: number | null
   xepLoai: string | null
-  ghiChu: string
+  diemRenLuyen: number | null
+  diem: number | null
 }
 
 export type ThongKeXepLoaiItem = {
