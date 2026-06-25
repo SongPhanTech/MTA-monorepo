@@ -44,13 +44,13 @@ const HangThongTin = ({
   nhan: string
   giaTri: string
 }) => (
-  <div className="flex items-center gap-2.5 py-2">
+  <div className="flex items-center gap-2 py-1.5">
     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-50 text-cgv-green-dark">
       {icon}
     </div>
     <div className="min-w-0 flex-1">
-      <p className="m-0 text-xs leading-tight text-gray-500">{nhan}</p>
-      <p className="m-0 mt-0.5 truncate text-sm font-medium leading-snug text-gray-800">{giaTri}</p>
+      <p className="m-0 text-[11px] leading-tight text-gray-500">{nhan}</p>
+      <p className="m-0 mt-0.5 truncate text-xs font-medium leading-snug text-gray-800">{giaTri}</p>
     </div>
   </div>
 )
@@ -95,16 +95,16 @@ const TheHeaderKetQuaHocTap = ({ data }: { data: DuLieuHeaderKetQuaHocTap }) => 
             className="shrink-0 bg-cgv-green/15 text-cgv-green-dark"
           />
           <div className="min-w-0 flex-1 lg:flex-none">
-            <p className="m-0 text-lg font-bold text-cgv-green-dark">{data.hoVaTen}</p>
-            <p className="m-0 mt-2 text-sm text-gray-600">
+            <p className="m-0 text-base font-bold text-cgv-green-dark">{data.hoVaTen}</p>
+            <p className="m-0 mt-1.5 text-xs text-gray-600">
               <span className="text-gray-500">MSSV:</span>{" "}
               <span className="font-semibold text-gray-800">{data.maSinhVien}</span>
             </p>
-            <p className="m-0 mt-1 text-sm text-gray-600">
+            <p className="m-0 mt-1 text-xs text-gray-600">
               <span className="text-gray-500">Giới tính:</span>{" "}
               <span className="font-semibold text-gray-800">{data.gioiTinh}</span>
             </p>
-            <p className="m-0 mt-1 text-sm text-gray-600">
+            <p className="m-0 mt-1 text-xs text-gray-600">
               <span className="text-gray-500">Lớp:</span>{" "}
               <span className="font-semibold text-gray-800">{data.lop}</span>
             </p>

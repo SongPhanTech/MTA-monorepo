@@ -29,6 +29,13 @@ interface TabBieuDoHocTapProps {
 const dinhDangSo = (value: number | null | undefined, chuSo = 2) =>
   value != null ? value.toFixed(chuSo).replace(".", ",") : "—"
 
+const layNhanHocKyNgan = (nhan: string) =>
+  nhan
+    .replace(" (Hiện tại)", "")
+    .replace(/^\d{4}\s*-\s*\d{4}\s*/i, "")
+    .replace(/^Năm học\s*\d{4}\s*-\s*\d{4}\s*/i, "")
+    .trim()
+
 const TheTomTat = ({
   tieuDe,
   giaTri,
@@ -44,7 +51,11 @@ const TheTomTat = ({
   mau?: "blue" | "green"
   extra?: React.ReactNode
 }) => (
-  <Card size="small" className="h-full rounded-lg shadow-sm" styles={{ body: { padding: 8 } }}>
+  <Card
+    size="small"
+    className="h-[112px] w-full min-w-0 rounded-lg shadow-sm"
+    styles={{ body: { padding: 8, height: "100%" } }}
+  >
     <OChiSoThongKe
       label={tieuDe}
       icon={icon}
@@ -153,7 +164,7 @@ const TabBieuDoHocTap = ({
 
   const chartData = useMemo(
     () => ({
-      labels: thongKe.duLieuGpaTheoKy.map((item) => item.nhan),
+      labels: thongKe.duLieuGpaTheoKy.map((item) => layNhanHocKyNgan(item.nhan)),
       datasets: [
         {
           label: "GPA của sinh viên",
@@ -224,7 +235,7 @@ const TabBieuDoHocTap = ({
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-2 overflow-hidden px-3 py-3">
-      <div className="grid shrink-0 grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid shrink-0 grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
         <TheTomTat
           tieuDe="GPA hiện tại"
           giaTri={dinhDangSo(thongKe.gpaHienTai)}
@@ -277,7 +288,7 @@ const TabBieuDoHocTap = ({
         />
       </div>
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-3 gap-2 overflow-hidden xl:grid-cols-3 xl:grid-rows-1">
+      <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-2 gap-2 overflow-hidden xl:grid-cols-2 xl:grid-rows-1">
         <Card
           size="small"
           className={lopCard}
@@ -385,31 +396,6 @@ const TabBieuDoHocTap = ({
           </div>
         </Card>
 
-        <Card size="small" className={lopCard} title={tieuDeCard("3. SO SÁNH VỚI TRUNG BÌNH LỚP")}>
-          <div className="min-h-0 flex-1 overflow-y-auto">
-            <div className="mb-2 flex items-center gap-3 text-[10px] text-gray-500">
-              <span className="inline-flex items-center gap-1.5">
-                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-cgv-green-dark" />
-                Sinh viên
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-gray-300" />
-                Trung bình lớp
-              </span>
-            </div>
-            <div className="space-y-2.5">
-              {thongKe.soSanhLop.map((item) => (
-                <ThanhSoSanh
-                  key={item.nhan}
-                  nhan={item.nhan}
-                  sinhVien={item.sinhVien}
-                  lop={item.lop}
-                  donVi={item.donVi}
-                />
-              ))}
-            </div>
-          </div>
-        </Card>
       </div>
     </div>
   )
