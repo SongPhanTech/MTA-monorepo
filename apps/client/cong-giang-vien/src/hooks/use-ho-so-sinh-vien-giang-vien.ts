@@ -2,12 +2,29 @@ import type {
   HoSoSinhVien,
   SuKienQuaTrinh,
 } from "@components/cong-giang-vien/ho-so-sinh-vien/types"
+import { mapDieuKienTotNghiep } from "@components/cong-giang-vien/ho-so-sinh-vien/map-dieu-kien-tot-nghiep"
+import { mapGiaiThuong } from "@components/cong-giang-vien/ho-so-sinh-vien/map-giai-thuong"
+import { mapQuyetDinhTotNghiep } from "@components/cong-giang-vien/ho-so-sinh-vien/map-quyet-dinh-tot-nghiep"
+import { mapTinhTrangHocTap } from "@components/cong-giang-vien/ho-so-sinh-vien/map-tinh-trang-hoc-tap"
 import { FIXED_CLASS_STUDENT_STATUS } from "@constants/constants"
 import { useSession } from "@workspace/auth/react"
 import { useFindUniqueFixedClass, useFindUniqueStudent } from "@workspace/db/hooks"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import dayjs from "dayjs"
 import { useMemo } from "react"
+
+const CHUAN_DAU_RA_CT_INCLUDE = {
+  outputStandardOnCurriculum: {
+    where: { isRequired: true },
+    include: {
+      outputStandard: {
+        include: {
+          certificates: { select: { id: true, name: true } },
+        },
+      },
+    },
+  },
+} as const
 
 const STUDENT_INCLUDE = {
   userProfile: {
@@ -33,6 +50,19 @@ const STUDENT_INCLUDE = {
           academicYear: true,
           maxTrainingTime: true,
           admissionStartDate: true,
+          academicRankingConvert: {
+            select: {
+              classification: true,
+              baseScore: true,
+              base4Min: true,
+              base4Max: true,
+              base10Min: true,
+              base10Max: true,
+              graduated: true,
+              rankOrder: true,
+              context: true,
+            },
+          },
         },
       },
       curriculumVersion: {
@@ -46,6 +76,7 @@ const STUDENT_INCLUDE = {
               },
             },
           },
+          ...CHUAN_DAU_RA_CT_INCLUDE,
         },
       },
     },
@@ -59,12 +90,25 @@ const STUDENT_INCLUDE = {
           trainingMajor: { select: { name: true } },
         },
       },
+      ...CHUAN_DAU_RA_CT_INCLUDE,
     },
   },
   priorityObject: { select: { name: true } },
   subjectClassStudent: {
     where: { subjectClassId: { not: null } },
-    include: { subjectClass: { include: { subject: { select: { credit: true } } } } },
+    include: {
+      subjectClass: {
+        include: {
+          subject: { select: { credit: true, name: true, code: true } },
+          semester: {
+            select: {
+              name: true,
+              schoolYear: { select: { name: true } },
+            },
+          },
+        },
+      },
+    },
   },
   studentSemesterResult: {
     include: { rank: { select: { classification: true } } },
@@ -72,11 +116,27 @@ const STUDENT_INCLUDE = {
     take: 1,
   },
   archivedAward: {
-    include: { award: { select: { name: true } } },
+    select: {
+      id: true,
+      code: true,
+      bonusScore: true,
+      date: true,
+      status: true,
+      description: true,
+      award: { select: { name: true } },
+    },
     orderBy: { date: "desc" as const },
   },
   archivedCertificate: {
-    include: { certificate: { select: { name: true } } },
+    include: {
+      certificate: {
+        select: {
+          id: true,
+          name: true,
+          outputStandard: { select: { id: true, name: true } },
+        },
+      },
+    },
     orderBy: { issuedDate: "desc" as const },
   },
   academicWarning: {
@@ -90,7 +150,64 @@ const STUDENT_INCLUDE = {
     },
     orderBy: { createdAt: "desc" as const },
   },
-  scholarshipAwards: { select: { id: true }, take: 1 },
+  scholarshipAwards: {
+    include: {
+      scholarship: { select: { name: true, rankOrder: true } },
+      semester: {
+        select: {
+          name: true,
+          schoolYear: { select: { name: true } },
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" as const },
+  },
+  studentAcademicDecision: {
+    include: {
+      appliedConfig: { select: { name: true, actionType: true } },
+      semester: { select: { name: true } },
+    },
+    orderBy: { createdAt: "desc" as const },
+  },
+  graduationDecision: {
+    include: {
+      finalRanking: { select: { classification: true } },
+      application: {
+        include: {
+          session: {
+            select: {
+              name: true,
+              sessionDate: true,
+              graduationDecisionNumber: true,
+              graduationDecisionDate: true,
+              graduationDecisionSigner: true,
+            },
+          },
+          rank: { select: { classification: true } },
+        },
+      },
+    },
+  },
+  graduationApplications: {
+    include: {
+      session: {
+        select: {
+          name: true,
+          sessionDate: true,
+          graduationDecisionNumber: true,
+          graduationDecisionDate: true,
+          graduationDecisionSigner: true,
+        },
+      },
+      rank: { select: { classification: true } },
+      decision: {
+        include: {
+          finalRanking: { select: { classification: true } },
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" as const },
+  },
 } as const
 
 const dinhDangNgay = (value?: Date | string | null) =>
@@ -207,18 +324,42 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
       })
       .find(Boolean)
 
+    const dieuKienTotNghiep = mapDieuKienTotNghiep({
+      foreignLangPass: student.foreignLangPass ?? false,
+      ITCertificationPass: student.ITCertificationPass ?? false,
+      militaryTrainingPass: student.militaryTrainingPass ?? false,
+      strengthTrainingPass: student.strengthTrainingPass ?? false,
+      archivedCertificate: student.archivedCertificate,
+      outputStandardOnCurriculum: ct?.outputStandardOnCurriculum,
+      subjectClassStudent: student.subjectClassStudent,
+    })
+
+    const tinhTrangHocTap = mapTinhTrangHocTap({
+      scholarshipAwards: student.scholarshipAwards,
+      academicWarning: student.academicWarning,
+      disciplinaryWarning: student.disciplinaryWarning,
+      studentAcademicDecision: student.studentAcademicDecision,
+      xepLoaiHocTap: khoaHoc?.academicRankingConvert,
+    })
+
+    const giaiThuong = mapGiaiThuong(student.archivedAward)
+    const quyetDinhTotNghiep = mapQuyetDinhTotNghiep({
+      graduationDecision: student.graduationDecision,
+      graduationApplications: student.graduationApplications,
+    })
+
     return {
       tomTat: {
         anhDaiDien: layAnhDaiDien(profile?.avatar),
         hoVaTen: profile?.fullname ?? "",
         trangThai: layNhanTrangThai(student.status),
         maSinhVien: student.code ?? profile?.code ?? "",
+        ngaySinh: dinhDangNgay(profile?.dateOfBirth),
+        gioiTinh: profile?.gender?.sTen ?? "",
         lop: lop ? `${lop.code ?? ""}${lop.name ? ` - ${lop.name}` : ""}` : "",
         khoa: khoaHoc?.name ?? "",
-        khoaVien:
-          lop?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ??
-          lop?.managementOrganization?.sTen ??
-          "",
+        donViQuanLy: lop?.managementOrganization?.sTen ?? "",
+        heDaoTao: ct?.trainingLevel?.name ?? "",
       },
       caNhan: {
         hoVaTen: profile?.fullname ?? "",
@@ -243,6 +384,7 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
         nienKhoa,
       },
       quaTrinh: suKien,
+      dieuKienTotNghiep,
       lienHe: {
         thuongTru: profile?.permanentAddress ?? "",
         hienTai: profile?.currentAddress ?? "",
@@ -262,6 +404,9 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
         xepLoaiHocLuc: ketQuaKy?.rank?.classification ?? null,
         diemRenLuyen: ketQuaKy?.conductScore != null ? `${ketQuaKy.conductScore} / 100` : null,
       },
+      tinhTrangHocTap,
+      giaiThuong,
+      quyetDinhTotNghiep,
     }
   }, [student])
 
