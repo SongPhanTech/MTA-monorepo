@@ -8916,7 +8916,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/minhah/code/MTA-monorepo/packages/database/generated/prisma-client",
+      "value": "/Users/phuong/Documents/Swantech/MTA-monorepo/packages/database/generated/prisma-client",
       "fromEnvVar": null
     },
     "config": {
@@ -8954,7 +8954,7 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Users/minhah/code/MTA-monorepo/packages/database/prisma/schema.prisma",
+    "sourceFilePath": "/Users/phuong/Documents/Swantech/MTA-monorepo/packages/database/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
