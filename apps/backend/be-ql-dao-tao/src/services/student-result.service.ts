@@ -662,8 +662,6 @@ const ThongTinDiemHocKy = async (
     // Tính điểm trung bình hệ 10 trong kỳ (chỉ tính môn đạt, không tính môn trượt)
     const diemTrungBinh10 =
       Math.round((DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / soTinChiDat || 0) * 100) / 100
-    console.log("Điểm trung bình hệ 4:", diemTrungBinh4)
-    console.log("Điểm trung bình hệ 10:", diemTrungBinh10)
     // Điểm thấp nhất
     return {
       diemTrungBinh4TrongKy: diemTrungBinh4,
@@ -695,9 +693,22 @@ export const calculateStudentSemesterResult = async (
   semesterId: string,
   trainingCourseId: string
 ): Promise<string> => {
-  // const results: StudentSemesterResult[] = []
+  const startedAt = Date.now()
+  const stats = {
+    totalStudents: 0,
+    upserted: 0,
+    skippedNoTrainingCourse: 0,
+    skippedNoSemesterInfo: 0,
+    skippedNoSemesterScore: 0,
+    gpaZero: 0,
+    failed: 0,
+  }
 
   try {
+    console.log(
+      `[tong-ket-hoc-ky] Bắt đầu tính toán — semesterId=${semesterId}, trainingCourseId=${trainingCourseId}`
+    )
+
     // Thông tin học kỳ
     const hocKyDauVao = await prisma.semester.findUnique({
       where: {
@@ -712,6 +723,16 @@ export const calculateStudentSemesterResult = async (
         endDate: true,
       },
     })
+
+    if (!hocKyDauVao) {
+      console.warn(
+        `[tong-ket-hoc-ky] Không tìm thấy học kỳ active — semesterId=${semesterId} (vẫn tiếp tục với ngày hiện tại)`
+      )
+    } else {
+      console.log(
+        `[tong-ket-hoc-ky] Học kỳ đầu vào: ${hocKyDauVao.name ?? hocKyDauVao.id} | startDate=${hocKyDauVao.startDate.toISOString()}`
+      )
+    }
 
     // Lấy danh sách ID sinh viên chưa tốt nghiệp
     const studentsIDs = await prisma.student.findMany({
@@ -775,6 +796,50 @@ export const calculateStudentSemesterResult = async (
       },
     })
 
+    stats.totalStudents = studentsIDs.length
+    console.log(
+      `[tong-ket-hoc-ky] Tìm thấy ${studentsIDs.length} sinh viên đang học thuộc khoá ${trainingCourseId}`
+    )
+
+    if (studentsIDs.length === 0) {
+      console.warn(
+        `[tong-ket-hoc-ky] Không có sinh viên nào để tổng kết — kiểm tra trainingCourseId hoặc trạng thái SV`
+      )
+    }
+
+    // Chẩn đoán nhanh: có điểm môn trong học kỳ này không?
+    const [subjectClassCount, scoreWithFinalCount, scoreInSemesterCount] = await Promise.all([
+      prisma.subjectClass.count({
+        where: { semesterId, deletedAt: null, cancelled: false },
+      }),
+      prisma.studentSubjectScore.count({
+        where: {
+          deletedAt: null,
+          active: true,
+          finalScore: { not: null },
+          student: { fixedClass: { trainingCourseId }, deletedAt: null },
+        },
+      }),
+      prisma.studentSubjectScore.count({
+        where: {
+          deletedAt: null,
+          active: true,
+          finalScore: { not: null },
+          withdrew: false,
+          subjectClass: { semesterId, cancelled: false },
+          student: { fixedClass: { trainingCourseId }, deletedAt: null },
+        },
+      }),
+    ])
+    console.log(
+      `[tong-ket-hoc-ky] Chẩn đoán dữ liệu — lớp môn trong kỳ=${subjectClassCount}, điểm có finalScore (khoá)=${scoreWithFinalCount}, điểm gắn lớp kỳ này=${scoreInSemesterCount}`
+    )
+    if (scoreInSemesterCount === 0) {
+      console.warn(
+        `[tong-ket-hoc-ky] Không có điểm finalScore nào gắn lớp môn học kỳ ${semesterId} — GPA/TC sẽ = 0 cho mọi SV`
+      )
+    }
+
     // Cấu hình điểm cộng cán bộ lớp và bảng quy đổi điểm
     const officerBonusScores = await prisma.officerBonusScore.findMany({
       where: { deletedAt: null, active: true },
@@ -798,10 +863,13 @@ export const calculateStudentSemesterResult = async (
     await pMap(
       studentsIDs,
       async (student) => {
+        const studentLabel = student.code ?? student.id
+        try {
         // lấy khoá học
         const trainingCourseId = student.fixedClass?.trainingCourseId
         if (!trainingCourseId) {
-          console.log(`Không tìm thấy khoá học cho sinh viên ${student.id}`)
+          stats.skippedNoTrainingCourse++
+          console.warn(`[tong-ket-hoc-ky] Bỏ qua SV ${studentLabel}: không có khoá học`)
           return
         }
         // Lấy thông tin tích lũy của sinh viên
@@ -813,7 +881,8 @@ export const calculateStudentSemesterResult = async (
         )
 
         if (!thongTinTichLuy) {
-          console.log(`Không tìm thấy thông tin học kỳ cho sinh viên ${student.id}`)
+          stats.skippedNoSemesterInfo++
+          console.warn(`[tong-ket-hoc-ky] Bỏ qua SV ${studentLabel}: không có thông tin học kỳ/tích lũy`)
           return
         }
 
@@ -833,7 +902,8 @@ export const calculateStudentSemesterResult = async (
           student.fixedClass?.trainingCourse?.scoreToPassGraduation || 0
         )
         if (!thongTinDiemHocKy) {
-          console.error(`Không tìm thấy thông tin điểm học kỳ cho sinh viên ${student.id}`)
+          stats.skippedNoSemesterScore++
+          console.warn(`[tong-ket-hoc-ky] Bỏ qua SV ${studentLabel}: không có thông tin điểm học kỳ`)
           return
         }
 
@@ -936,6 +1006,24 @@ export const calculateStudentSemesterResult = async (
           update: result,
           create: result,
         })
+
+        stats.upserted++
+        if (
+          thongTinDiemHocKy.diemTrungBinh4TrongKy === 0 ||
+          thongTinDiemHocKy.diemTrungBinh10TrongKy === 0
+        ) {
+          stats.gpaZero++
+        }
+
+        if (stats.upserted <= 3 || stats.upserted % 50 === 0) {
+          console.log(
+            `[tong-ket-hoc-ky] Mẫu SV #${stats.upserted} ${studentLabel}: gpa10=${thongTinDiemHocKy.diemTrungBinh10TrongKy}, gpa4=${thongTinDiemHocKy.diemTrungBinh4TrongKy}, TC ĐK=${thongTinDiemHocKy.tongTinChiDangKy}, TC đạt=${thongTinDiemHocKy.soTinChiDat}, TC không đạt=${thongTinDiemHocKy.soTinChiKhongDat}`
+          )
+        }
+        } catch (error) {
+          stats.failed++
+          console.error(`[tong-ket-hoc-ky] Lỗi khi xử lý SV ${studentLabel}:`, error)
+        }
       },
       {
         concurrency: 10,
@@ -1133,7 +1221,25 @@ export const calculateStudentSemesterResult = async (
     //     })
     // )
 
-    console.log("Tính toán kết quả học kỳ cho tất cả sinh viên đã hoàn thành.")
+    const savedInDb = await prisma.studentSemesterResult.count({
+      where: {
+        semesterId,
+        deletedAt: null,
+        student: {
+          deletedAt: null,
+          fixedClass: { trainingCourseId },
+        },
+      },
+    })
+
+    console.log(
+      `[tong-ket-hoc-ky] Hoàn tất trong ${Date.now() - startedAt}ms — ${JSON.stringify({
+        ...stats,
+        savedInDb,
+        semesterId,
+        trainingCourseId,
+      })}`
+    )
 
     return "Successfully calculated semester results for all students."
   } catch (error) {

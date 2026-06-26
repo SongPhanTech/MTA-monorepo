@@ -534,19 +534,35 @@ app.openapi(exportDecreaseAcademicWarningJson, async (c) => {
 
 app.openapi(tongKetHocKyHVSV, async (c) => {
   const { semesterId, trainingCourseId } = c.req.valid("query")
-  // Validate semester existence
+  const startedAt = Date.now()
+  console.log(
+    `[tong-ket-hoc-ky] Bắt đầu — semesterId=${semesterId}, trainingCourseId=${trainingCourseId}`
+  )
+
   const semester = await prisma.semester.findUnique({
     where: { id: semesterId },
   })
   if (!semester) {
+    console.warn(`[tong-ket-hoc-ky] Học kỳ không tồn tại — semesterId=${semesterId}`)
     return c.json({ message: `Kỳ học với ID ${semesterId} không tồn tại` }, 400)
   }
+
+  console.log(
+    `[tong-ket-hoc-ky] Học kỳ: ${semester.name ?? semester.id} | ${semester.startDate?.toISOString() ?? "?"} → ${semester.endDate?.toISOString() ?? "?"}`
+  )
+
   try {
     const studentResults = await calculateStudentSemesterResult(semesterId, trainingCourseId)
+    console.log(
+      `[tong-ket-hoc-ky] Hoàn tất trong ${Date.now() - startedAt}ms — ${studentResults}`
+    )
     return c.json(studentResults, 200)
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "Lỗi không xác định"
-    console.error(`Error calculating semester results for semester ${semesterId}: ${errorMessage}`)
+    console.error(
+      `[tong-ket-hoc-ky] Lỗi sau ${Date.now() - startedAt}ms — semesterId=${semesterId}, trainingCourseId=${trainingCourseId}: ${errorMessage}`,
+      error
+    )
     return c.json({ message: `Lỗi khi tính toán kết quả học kỳ: ${errorMessage}` }, 500)
   }
 })

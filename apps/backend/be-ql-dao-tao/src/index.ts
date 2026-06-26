@@ -157,7 +157,7 @@ showRoutes(app, { verbose: true })
 startQuetHanGiangVienCron(prisma)
 
 export default {
-  timeout: 60,
+  idleTimeout: 255, // giây — tổng kết 500+ SV có thể > 10s (mặc định Bun)
   fetch: app.fetch,
   hostname: "0.0.0.0",
   port: process.env.PORT || 3000,
