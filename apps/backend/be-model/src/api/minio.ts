@@ -1,21 +1,26 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { createId } from "@workspace/db"
+import { SuccessBooleanResponseSchema } from "../dto/common-response.dto"
 import {
   BucketItemDtoSchema,
+  ConvertDocumentResponseSchema,
   ListObjectDtoSchema,
   PresignedUrlDtoSchema,
   UrlDtoSchema,
 } from "../dto/minio"
+import { fieldDesc } from "../dto/openapi-helpers"
+import { jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 import { MinIOService } from "../services/minio"
 
 const app = new OpenAPIHono({ strict: false })
 
 const minioService = new MinIOService()
-// await minioService.onModuleInit()
 
 app.openapi(
   createRoute({
     operationId: "generatePresignedUrl",
+    tags: ["Lưu trữ MinIO"],
+    summary: "Tạo presigned URL upload",
     path: "/generate-presigned-url",
     method: "post",
     request: {
@@ -26,10 +31,8 @@ app.openapi(
       },
     },
     responses: {
-      200: {
-        content: { "application/json": { schema: UrlDtoSchema } },
-        description: "Generate presigned URL",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(UrlDtoSchema, "Tạo presigned URL thành công"),
     },
   }),
   async (c) => {
@@ -42,20 +45,16 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "listObjects",
+    tags: ["Lưu trữ MinIO"],
+    summary: "Liệt kê object trong bucket",
     path: "/",
     method: "get",
     request: {
       query: ListObjectDtoSchema,
     },
     responses: {
-      200: {
-        content: {
-          "application/json": {
-            schema: z.array(BucketItemDtoSchema),
-          },
-        },
-        description: "List objects",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(z.array(BucketItemDtoSchema), "Danh sách object"),
     },
   }),
   async (c) => {
@@ -68,16 +67,18 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "presignedGetObject",
+    tags: ["Lưu trữ MinIO"],
+    summary: "Tạo presigned URL download",
     path: "/presigned-url",
     method: "get",
     request: {
-      query: z.object({ objectName: z.string() }).openapi("PresignedGetObjectDto"),
+      query: z.object({
+        objectName: z.string().openapi(fieldDesc("Tên object trên MinIO.")),
+      }),
     },
     responses: {
-      200: {
-        content: { "application/json": { schema: UrlDtoSchema } },
-        description: "Generate presigned URL",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(UrlDtoSchema, "Tạo presigned URL download thành công"),
     },
   }),
   async (c) => {
@@ -90,20 +91,18 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "deleteObject",
+    tags: ["Lưu trữ MinIO"],
+    summary: "Xóa object trên MinIO",
     path: "/",
     method: "delete",
     request: {
-      query: z.object({ objectName: z.string() }).openapi("DeleteObjectDto"),
+      query: z.object({
+        objectName: z.string().openapi(fieldDesc("Tên object cần xóa.")),
+      }),
     },
     responses: {
-      200: {
-        description: "Delete object successfully",
-        content: {
-          "application/json": {
-            schema: z.object({ success: z.boolean() }),
-          },
-        },
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(SuccessBooleanResponseSchema, "Xóa object thành công"),
     },
   }),
   async (c) => {
@@ -116,29 +115,23 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "convertDocument",
+    tags: ["Lưu trữ MinIO"],
+    summary: "Chuyển đổi tài liệu qua OnlyOffice",
     path: "/convert-document",
     method: "get",
     request: {
       query: z
         .object({
-          url: z.string().url(),
-          fileType: z.string(),
-          outputtype: z.string(),
-          title: z.string().optional(),
+          url: z.string().url().openapi(fieldDesc("URL file nguồn.")),
+          fileType: z.string().openapi(fieldDesc("Loại file nguồn.", "docx")),
+          outputtype: z.string().openapi(fieldDesc("Loại file đích.", "pdf")),
+          title: z.string().optional().openapi(fieldDesc("Tiêu đề tài liệu.")),
         })
         .openapi("ConvertDocumentDto"),
     },
     responses: {
-      200: {
-        content: {
-          "application/json": {
-            schema: z.object({
-              fileUrl: z.string().url(),
-            }),
-          },
-        },
-        description: "Generate presigned URL",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(ConvertDocumentResponseSchema, "Chuyển đổi tài liệu thành công"),
     },
   }),
   async (c) => {

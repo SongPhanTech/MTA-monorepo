@@ -3,37 +3,40 @@ import type { PrismaClient } from "@workspace/db"
 import { PrismaClient as MssqlPrismaClient } from "@workspace/db/mssql"
 import { PrismaClient as MysqlPrismaClient } from "@workspace/db/mysql"
 import xlsx from "exceljs"
+import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
+import {
+  ColumnInfoSchema,
+  DatabaseNameSchema,
+  DatabaseTypeSchema,
+  DbColumnQuerySchema,
+  DbConnectionQuerySchema,
+  DbTableQuerySchema,
+  ExportTableByColumnsQuerySchema,
+  ExportTableBySqlQuerySchema,
+  ImportExcelResponseSchema,
+  ReadExcelColumnsResponseSchema,
+  SqlCheckResponseSchema,
+  TableNameSchema,
+} from "../dto/excel-import-export-openapi.dto"
+import { excelSuccess, jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { ensureDatabaseInUrl } from "../utils/database"
-
-const DatabaseTypeSchema = z.enum(["mysql", "mssql"]).default("mysql")
 
 const app = new OpenAPIHono({ strict: false })
 
 app.openapi(
   createRoute({
     operationId: "get-databases",
+    tags: ["Import/Export Excel"],
+    summary: "Liệt kê database trên server",
     path: "/get-databases",
     method: "get",
     request: {
-      query: z.object({
-        url: z.string(),
-        dbType: DatabaseTypeSchema,
-      }),
+      query: DbConnectionQuerySchema,
     },
     responses: {
-      200: {
-        content: {
-          "application/json": {
-            schema: z.array(
-              z.object({
-                Database: z.string(),
-              })
-            ),
-          },
-        },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(z.array(DatabaseNameSchema), "Danh sách database"),
     },
   }),
   async (c) => {
@@ -57,28 +60,16 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "get-tables",
+    tags: ["Import/Export Excel"],
+    summary: "Liệt kê bảng trong database",
     path: "/get-tables",
     method: "get",
     request: {
-      query: z.object({
-        url: z.string(),
-        database: z.string(),
-        dbType: DatabaseTypeSchema,
-      }),
+      query: DbTableQuerySchema,
     },
     responses: {
-      200: {
-        content: {
-          "application/json": {
-            schema: z.array(
-              z.object({
-                tableName: z.string(),
-              })
-            ),
-          },
-        },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(z.array(TableNameSchema), "Danh sách bảng"),
     },
   }),
   async (c) => {
@@ -104,38 +95,16 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "get-columns",
+    tags: ["Import/Export Excel"],
+    summary: "Liệt kê cột của bảng",
     path: "/get-columns",
     method: "get",
     request: {
-      query: z.object({
-        url: z.string(),
-        database: z.string(),
-        table: z.string(),
-        dbType: DatabaseTypeSchema,
-      }),
+      query: DbColumnQuerySchema,
     },
     responses: {
-      200: {
-        content: {
-          "application/json": {
-            schema: z.array(
-              z.object({
-                columnName: z.string(),
-                isNullable: z.boolean(),
-                dataType: z.string(),
-                characterMaximumLength: z.number().nullable(),
-                numericPrecision: z.number().nullable(),
-                numericScale: z.number().nullable(),
-                datetimePrecision: z.number().nullable(),
-                columnType: z.string(),
-                columnKey: z.string(),
-                columnComment: z.string(),
-              })
-            ),
-          },
-        },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(z.array(ColumnInfoSchema), "Danh sách cột"),
     },
   }),
   async (c) => {
@@ -214,26 +183,16 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "export-table-by-columns",
+    tags: ["Import/Export Excel"],
+    summary: "Export bảng theo danh sách cột ra Excel",
     path: "/export-table-by-columns",
     method: "get",
     request: {
-      query: z.object({
-        url: z.string(),
-        database: z.string(),
-        table: z.string(),
-        columns: z.array(z.string()).or(z.string()),
-        dbType: DatabaseTypeSchema,
-      }),
+      query: ExportTableByColumnsQuerySchema,
     },
     responses: {
-      200: {
-        description: "Successfully",
-        content: {
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-            schema: z.any().openapi({ type: "string", format: "binary" }),
-          },
-        },
-      },
+      ...standardErrorResponses(),
+      ...excelSuccess("File Excel chứa dữ liệu bảng"),
     },
   }),
   async (c) => {
@@ -315,36 +274,19 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "check-export-table-by-sql",
+    tags: ["Import/Export Excel"],
+    summary: "Kiểm tra câu SQL trước khi export",
     path: "/check-export-table-by-sql",
     method: "get",
     request: {
-      query: z.object({
-        url: z.string(),
-        database: z.string(),
-        sql: z.string(),
-        dbType: DatabaseTypeSchema,
-      }),
+      query: ExportTableBySqlQuerySchema,
     },
     responses: {
-      200: {
-        description: "Successfully",
-        content: {
-          "application/json": {
-            schema: z.object({
-              message: z.string(),
-            }),
-          },
-        },
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(SqlCheckResponseSchema, "Câu SQL hợp lệ"),
       500: {
-        description: "Error executing SQL",
-        content: {
-          "application/json": {
-            schema: z.object({
-              message: z.string(),
-            }),
-          },
-        },
+        description: "Lỗi thực thi SQL",
+        content: { "application/json": { schema: ErrorMessageResponseSchema } },
       },
     },
   }),
@@ -391,25 +333,16 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "export-table-by-sql",
+    tags: ["Import/Export Excel"],
+    summary: "Export kết quả câu SQL ra Excel",
     path: "/export-table-by-sql",
     method: "get",
     request: {
-      query: z.object({
-        url: z.string(),
-        database: z.string(),
-        sql: z.string(),
-        dbType: DatabaseTypeSchema,
-      }),
+      query: ExportTableBySqlQuerySchema,
     },
     responses: {
-      200: {
-        description: "Successfully",
-        content: {
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-            schema: z.any().openapi({ type: "string", format: "binary" }),
-          },
-        },
-      },
+      ...standardErrorResponses(),
+      ...excelSuccess("File Excel chứa kết quả truy vấn SQL"),
     },
   }),
   async (c) => {
@@ -459,6 +392,8 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "read-excel-columns",
+    tags: ["Import/Export Excel"],
+    summary: "Đọc danh sách cột từ file Excel upload",
     path: "/read-excel-columns",
     method: "post",
     request: {
@@ -471,23 +406,8 @@ app.openapi(
       },
     },
     responses: {
-      200: {
-        description: "Successfully",
-        content: {
-          "application/json": {
-            schema: z.object({
-              columns: z.array(
-                z.object({
-                  name: z.string(),
-                  sampleData1: z.any().nullish(),
-                  sampleData2: z.any().nullish(),
-                })
-              ),
-              count: z.number(),
-            }),
-          },
-        },
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(ReadExcelColumnsResponseSchema, "Đọc cột Excel thành công"),
     },
   }),
   async (c) => {
@@ -547,6 +467,8 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "import-excel-to-database",
+    tags: ["Import/Export Excel"],
+    summary: "Import dữ liệu từ Excel vào bảng database",
     path: "/import-excel-to-database",
     method: "post",
     request: {
@@ -567,16 +489,8 @@ app.openapi(
       },
     },
     responses: {
-      200: {
-        description: "Successfully",
-        content: {
-          "application/json": {
-            schema: z.object({
-              inserted: z.number(),
-            }),
-          },
-        },
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(ImportExcelResponseSchema, "Import Excel thành công"),
     },
   }),
   async (c) => {

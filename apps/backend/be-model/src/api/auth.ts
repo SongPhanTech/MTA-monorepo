@@ -1,6 +1,9 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { auth } from "@workspace/auth/server"
 import { getCookie } from "hono/cookie"
+import { UnauthorizedResponseSchema } from "../dto/common-response.dto"
+import { fieldDesc } from "../dto/openapi-helpers"
+import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import { sessionSchema } from "../dto/auth"
 
 const app = new OpenAPIHono({ strict: false })
@@ -8,25 +11,24 @@ const app = new OpenAPIHono({ strict: false })
 app.openapi(
   createRoute({
     operationId: "get-session",
+    tags: ["Xác thực"],
+    summary: "Lấy thông tin phiên đăng nhập",
     path: "/get-session",
     method: "get",
     request: {
       query: z.object({
-        appCode: z.string(),
+        appCode: z.string().openapi(fieldDesc("Mã ứng dụng (lms, ems, hrm, ...).", "lms")),
       }),
     },
     responses: {
+      ...standardErrorResponses(),
       200: {
         content: { "application/json": { schema: sessionSchema } },
-        description: "Get session successfully",
+        description: "Lấy phiên thành công",
       },
       401: {
-        content: {
-          "application/json": {
-            schema: z.object({ error: z.string() }).openapi("Unauthorized"),
-          },
-        },
-        description: "Unauthorized",
+        content: { "application/json": { schema: UnauthorizedResponseSchema } },
+        description: "Chưa đăng nhập hoặc token không hợp lệ",
       },
     },
   }),

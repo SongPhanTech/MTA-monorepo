@@ -11,7 +11,9 @@
   "dependencies": {
     "@hono/oidc-auth": "catalog:",
     "@hono/zod-openapi": "catalog:",
+    "@scalar/core": "0.1.1",
     "@scalar/hono-api-reference": "catalog:",
+    "docx": "catalog:",
     "@workspace/auth": "workspace:*",
     "@workspace/db": "workspace:*",
     "@workspace/libs": "workspace:*",

@@ -1,4 +1,10 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import {
+  ErrorMessageResponseSchema,
+  TemplatePreviewResponseSchema,
+} from "../dto/common-response.dto"
+import { fieldDesc } from "../dto/openapi-helpers"
+import { docxSuccess, jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 import { renderDocxTemplate, TemplateNotFoundError } from "../services/docx-template-render.service"
 import { MinIOService } from "../services/minio"
 
@@ -8,20 +14,26 @@ const minioService = new MinIOService()
 
 const DOCX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
-const docxTemplateSchema = z.object({
-  fileName: z.string(),
-  path: z.string(),
-  prefix: z.string().nullable().optional(),
-  data: z.record(z.unknown()),
-})
+const docxTemplateSchema = z
+  .object({
+    fileName: z.string().openapi(fieldDesc("Tên file khi tải về.")),
+    path: z.string().openapi(fieldDesc("Đường dẫn template trên MinIO.")),
+    prefix: z.string().nullable().optional().openapi(fieldDesc("Prefix thư mục template.")),
+    data: z.record(z.unknown()).openapi(fieldDesc("Dữ liệu điền vào template.")),
+  })
+  .openapi("DocxTemplateRequest")
 
-const docxPreviewSchema = docxTemplateSchema.extend({
-  previewKey: z.string(),
-})
+const docxPreviewSchema = docxTemplateSchema
+  .extend({
+    previewKey: z.string().openapi(fieldDesc("Khóa duy nhất cho file preview.")),
+  })
+  .openapi("DocxTemplatePreviewRequest")
 
 app.openapi(
   createRoute({
     operationId: "docxTemplate",
+    tags: ["Mẫu DOCX"],
+    summary: "Xuất file DOCX từ template",
     path: "/",
     method: "post",
     request: {
@@ -32,14 +44,8 @@ app.openapi(
       },
     },
     responses: {
-      200: {
-        description: "Export Docx thành công",
-        content: {
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
-            schema: z.any().openapi({ type: "string", format: "binary" }),
-          },
-        },
-      },
+      ...standardErrorResponses(),
+      ...docxSuccess("Xuất file DOCX thành công"),
     },
   }),
   async (c) => {
@@ -64,6 +70,8 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "docxTemplatePreview",
+    tags: ["Mẫu DOCX"],
+    summary: "Preview template DOCX trên MinIO",
     path: "/preview",
     method: "post",
     request: {
@@ -74,21 +82,11 @@ app.openapi(
       },
     },
     responses: {
-      200: {
-        description: "Fill template và lưu lên MinIO để preview",
-        content: {
-          "application/json": {
-            schema: z.object({ path: z.string(), fileType: z.string() }),
-          },
-        },
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(TemplatePreviewResponseSchema, "Lưu file preview lên MinIO thành công"),
       404: {
         description: "Không tìm thấy template",
-        content: { "application/json": { schema: z.object({ message: z.string() }) } },
-      },
-      500: {
-        description: "Lỗi xử lý template",
-        content: { "application/json": { schema: z.object({ message: z.string() }) } },
+        content: { "application/json": { schema: ErrorMessageResponseSchema } },
       },
     },
   }),

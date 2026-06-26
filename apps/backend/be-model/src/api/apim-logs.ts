@@ -1,5 +1,26 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { PrismaClient } from "@workspace/db"
+import {
+  ApiKeyCreateSchema,
+  ApiKeyListQuerySchema,
+  ApiKeyRenewSchema,
+  ApiKeyRevokeSchema,
+  ApiKeySchema,
+  ApimAccessRequestSchema,
+  ApimConfigLogsQuerySchema,
+  ApimConfigLogsUpdateSchema,
+  ApimCountRequestSchema,
+  ApimDeployLogCreateSchema,
+  ApimDeployLogSchema,
+  ApimDeployLogsQuerySchema,
+  ApimErrorRateSchema,
+  ApimLatencySchema,
+  ApimServiceTimeQuerySchema,
+  ApimThroughputQuerySchema,
+  ApimThroughputSchema,
+  OkBooleanResponseSchema,
+} from "../dto/apim-logs-openapi.dto"
+import { jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 
 const prismaApimLogs = new PrismaClient({
   datasourceUrl: process.env.APIM_LOGS_DATABASE_URL,
@@ -30,23 +51,19 @@ ensureApiKeysTable().catch((e) => console.error("[ERROR][ensureApiKeysTable]", e
 app.openapi(
   createRoute({
     operationId: "get-config-logs",
+    tags: ["Giám sát APIM"],
+    summary: "Kiểm tra cấu hình log FULL cho API",
     path: "/config-logs",
     method: "get",
     request: {
-      query: z.object({
-        apiId: z.string(),
-        baseUrl: z.string(),
-      }),
+      query: ApimConfigLogsQuerySchema,
     },
     responses: {
-      200: {
-        content: {
-          "application/json": {
-            schema: z.boolean(),
-          },
-        },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(
+        z.boolean().openapi({ description: "true = tất cả resource đều log FULL; false khi lỗi." }),
+        "Trạng thái log FULL"
+      ),
     },
   }),
   async (c) => {
@@ -79,30 +96,22 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "update-config-logs",
+    tags: ["Giám sát APIM"],
+    summary: "Bật/tắt log FULL cho tất cả resource của API",
     path: "/config-logs",
     method: "post",
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              apiId: z.string(),
-              baseUrl: z.string(),
-              enabled: z.boolean(),
-            }),
+            schema: ApimConfigLogsUpdateSchema,
           },
         },
       },
     },
     responses: {
-      200: {
-        content: {
-          "application/json": {
-            schema: z.any(),
-          },
-        },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(z.array(z.any()), "Kết quả cập nhật từng resource"),
     },
   }),
   async (c) => {
@@ -139,42 +148,19 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "access-requests",
+    tags: ["Giám sát APIM"],
+    summary: "Truy vấn log request/response APIM",
     path: "/access-requests",
     method: "get",
     request: {
-      query: z.object({
-        service: z.string(),
-        from: z.date({
-          coerce: true,
-        }),
-        to: z.date({
-          coerce: true,
-        }),
-      }),
+      query: ApimServiceTimeQuerySchema,
     },
     responses: {
-      200: {
-        content: {
-          "application/json": {
-            schema: z.array(
-              z.object({
-                tag: z.string(),
-                flow: z.string(),
-                time: z.number(),
-                verb: z.string(),
-                apiTo: z.string(),
-                level: z.string(),
-                headers: z.array(z.string()),
-                payload: z.any(),
-                service: z.string(),
-                statusCode: z.number(),
-                correlationId: z.string(),
-              })
-            ),
-          },
-        },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(
+        z.array(ApimAccessRequestSchema),
+        "Danh sách log (mảng rỗng khi lỗi truy vấn)"
+      ),
     },
   }),
   async (c) => {
@@ -209,33 +195,16 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "count-requests",
+    tags: ["Giám sát APIM"],
+    summary: "Đếm request theo API",
     path: "/count-requests",
     method: "get",
     request: {
-      query: z.object({
-        service: z.string(),
-        from: z.date({
-          coerce: true,
-        }),
-        to: z.date({
-          coerce: true,
-        }),
-      }),
+      query: ApimServiceTimeQuerySchema,
     },
     responses: {
-      200: {
-        content: {
-          "application/json": {
-            schema: z.array(
-              z.object({
-                api: z.string(),
-                total_requests: z.number(),
-              })
-            ),
-          },
-        },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(z.array(ApimCountRequestSchema), "Thống kê số request (mảng rỗng khi lỗi)"),
     },
   }),
   async (c) => {
@@ -273,36 +242,16 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "latency-average",
+    tags: ["Giám sát APIM"],
+    summary: "Thống kê độ trễ trung bình theo API",
     path: "/latency-average",
     method: "get",
     request: {
-      query: z.object({
-        service: z.string(),
-        from: z.date({
-          coerce: true,
-        }),
-        to: z.date({
-          coerce: true,
-        }),
-      }),
+      query: ApimServiceTimeQuerySchema,
     },
     responses: {
-      200: {
-        content: {
-          "application/json": {
-            schema: z.array(
-              z.object({
-                api: z.string(),
-                avg_latency: z.number(),
-                min_latency: z.number(),
-                max_latency: z.number(),
-                p95_latency: z.number(),
-              })
-            ),
-          },
-        },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(z.array(ApimLatencySchema), "Thống kê latency (mảng rỗng khi lỗi)"),
     },
   }),
   async (c) => {
@@ -355,35 +304,16 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "error-rate",
+    tags: ["Giám sát APIM"],
+    summary: "Thống kê tỷ lệ lỗi theo API",
     path: "/error-rate",
     method: "get",
     request: {
-      query: z.object({
-        service: z.string(),
-        from: z.date({
-          coerce: true,
-        }),
-        to: z.date({
-          coerce: true,
-        }),
-      }),
+      query: ApimServiceTimeQuerySchema,
     },
     responses: {
-      200: {
-        content: {
-          "application/json": {
-            schema: z.array(
-              z.object({
-                api: z.string(),
-                error_count: z.number(),
-                total_count: z.number(),
-                error_rate: z.number(),
-              })
-            ),
-          },
-        },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(z.array(ApimErrorRateSchema), "Thống kê error rate (mảng rỗng khi lỗi)"),
     },
   }),
   async (c) => {
@@ -430,34 +360,16 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "throughput",
+    tags: ["Giám sát APIM"],
+    summary: "Thống kê throughput theo thời gian",
     path: "/throughput",
     method: "get",
     request: {
-      query: z.object({
-        service: z.string(),
-        from: z.date({
-          coerce: true,
-        }),
-        to: z.date({
-          coerce: true,
-        }),
-        type: z.enum(["minute", "hour", "day"]).default("minute"),
-      }),
+      query: ApimThroughputQuerySchema,
     },
     responses: {
-      200: {
-        content: {
-          "application/json": {
-            schema: z.array(
-              z.object({
-                time: z.string(),
-                request_count: z.number(),
-              })
-            ),
-          },
-        },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(z.array(ApimThroughputSchema), "Thống kê throughput (mảng rỗng khi lỗi)"),
     },
   }),
   async (c) => {
@@ -501,31 +413,22 @@ export default app
 app.openapi(
   createRoute({
     operationId: "insert-deploy-log",
+    tags: ["Giám sát APIM"],
+    summary: "Ghi log deploy/undeploy API",
     path: "/deploy-logs",
     method: "post",
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              apiId: z.string(),
-              apiName: z.string(),
-              apiVersion: z.string(),
-              revisionName: z.string(),
-              environment: z.string(),
-              action: z.enum(["deploy", "undeploy"]),
-              status: z.enum(["success", "pending", "failed"]),
-              userName: z.string().optional(),
-            }),
+            schema: ApimDeployLogCreateSchema,
           },
         },
       },
     },
     responses: {
-      200: {
-        content: { "application/json": { schema: z.object({ ok: z.boolean() }) } },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(OkBooleanResponseSchema, "Ghi log thành công ({ ok: true/false })"),
     },
   }),
   async (c) => {
@@ -556,34 +459,16 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "get-deploy-logs",
+    tags: ["Giám sát APIM"],
+    summary: "Lấy lịch sử deploy API",
     path: "/deploy-logs",
     method: "get",
     request: {
-      query: z.object({
-        apiId: z.string(),
-        limit: z.coerce.number().default(50),
-      }),
+      query: ApimDeployLogsQuerySchema,
     },
     responses: {
-      200: {
-        content: {
-          "application/json": {
-            schema: z.array(
-              z.object({
-                time: z.string(),
-                apiName: z.string(),
-                apiVersion: z.string(),
-                revisionName: z.string(),
-                environment: z.string(),
-                action: z.string(),
-                status: z.string(),
-                userName: z.string(),
-              })
-            ),
-          },
-        },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(z.array(ApimDeployLogSchema), "Lịch sử deploy (mảng rỗng khi lỗi)"),
     },
   }),
   async (c) => {
@@ -619,19 +504,7 @@ app.openapi(
 
 // ---- Key (Token) Management ----
 
-const apiKeySchema = z.object({
-  id: z.string(),
-  apiId: z.string(),
-  keyValue: z.string(),
-  name: z.string(),
-  description: z.string().nullable(),
-  status: z.enum(["active", "revoked"]),
-  expiresAt: z.string().nullable(),
-  createdAt: z.string(),
-  createdBy: z.string(),
-  revokedAt: z.string().nullable(),
-  revokedBy: z.string().nullable(),
-})
+const ApiKeyNullableSchema = ApiKeySchema.nullable()
 
 type ApiKeyRow = {
   id: string
@@ -666,19 +539,16 @@ function mapApiKey(r: ApiKeyRow) {
 app.openapi(
   createRoute({
     operationId: "list-api-keys",
+    tags: ["Giám sát APIM"],
+    summary: "Danh sách API key theo API",
     path: "/api-keys",
     method: "get",
     request: {
-      query: z.object({
-        apiId: z.string(),
-        status: z.enum(["active", "revoked"]).optional(),
-      }),
+      query: ApiKeyListQuerySchema,
     },
     responses: {
-      200: {
-        content: { "application/json": { schema: z.array(apiKeySchema) } },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(z.array(ApiKeySchema), "Danh sách API key (mảng rỗng khi lỗi)"),
     },
   }),
   async (c) => {
@@ -714,29 +584,22 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "create-api-key",
+    tags: ["Giám sát APIM"],
+    summary: "Tạo API key mới",
     path: "/api-keys",
     method: "post",
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              apiId: z.string(),
-              name: z.string(),
-              description: z.string().optional(),
-              keyValue: z.string(),
-              expiresAt: z.string().datetime().optional(),
-              createdBy: z.string().optional(),
-            }),
+            schema: ApiKeyCreateSchema,
           },
         },
       },
     },
     responses: {
-      200: {
-        content: { "application/json": { schema: apiKeySchema } },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(ApiKeyNullableSchema, "API key vừa tạo (null nếu không insert được)"),
     },
   }),
   async (c) => {
@@ -763,6 +626,8 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "renew-api-key",
+    tags: ["Giám sát APIM"],
+    summary: "Gia hạn API key",
     path: "/api-keys/:id/renew",
     method: "post",
     request: {
@@ -770,18 +635,14 @@ app.openapi(
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              expiresAt: z.string().datetime(),
-            }),
+            schema: ApiKeyRenewSchema,
           },
         },
       },
     },
     responses: {
-      200: {
-        content: { "application/json": { schema: apiKeySchema } },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(ApiKeyNullableSchema, "API key sau gia hạn (null nếu không tìm thấy)"),
     },
   }),
   async (c) => {
@@ -806,6 +667,8 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "revoke-api-key",
+    tags: ["Giám sát APIM"],
+    summary: "Thu hồi API key",
     path: "/api-keys/:id/revoke",
     method: "post",
     request: {
@@ -813,18 +676,14 @@ app.openapi(
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              revokedBy: z.string().optional(),
-            }),
+            schema: ApiKeyRevokeSchema,
           },
         },
       },
     },
     responses: {
-      200: {
-        content: { "application/json": { schema: apiKeySchema } },
-        description: "Successfully",
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(ApiKeyNullableSchema, "API key sau revoke (null nếu không tìm thấy)"),
     },
   }),
   async (c) => {

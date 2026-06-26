@@ -1,4 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
+import { docxSuccess, jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 import { renderThesisPaymentDocx } from "../services/thesis-docx-render.service"
 import {
   buildCouncilPaymentExportPayload,
@@ -12,8 +14,6 @@ import {
 const app = new OpenAPIHono({ strict: false })
 
 const DOCX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-
-const errorSchema = z.object({ message: z.string() })
 
 const ThesisPaymentScopeSchema = z.object({
   thesisSessionId: z.string().openapi({ description: "ID đợt xét luận văn." }),
@@ -35,10 +35,12 @@ const SyncSupervisorPaymentsSchema = ThesisPaymentScopeSchema.extend({
   }),
 })
 
-const SyncResponseSchema = z.object({
-  syncedCount: z.number(),
-  projectCount: z.number(),
-})
+const SyncResponseSchema = z
+  .object({
+    syncedCount: z.number().openapi({ description: "Số bản ghi thanh toán đã đồng bộ." }),
+    projectCount: z.number().openapi({ description: "Số đề tài/luận văn trong phạm vi." }),
+  })
+  .openapi("ThesisPaymentSyncResponse")
 
 const syncCouncilPaymentsRoute = createRoute({
   operationId: "syncThesisCouncilPayments",
@@ -52,13 +54,11 @@ const syncCouncilPaymentsRoute = createRoute({
     },
   },
   responses: {
-    200: {
-      description: "Đồng bộ thành công",
-      content: { "application/json": { schema: SyncResponseSchema } },
-    },
+    ...standardErrorResponses(),
+    ...jsonSuccess(SyncResponseSchema, "Đồng bộ thành công"),
     400: {
-      description: "Bad request",
-      content: { "application/json": { schema: errorSchema } },
+      description: "Lỗi nghiệp vụ khi đồng bộ",
+      content: { "application/json": { schema: ErrorMessageResponseSchema } },
     },
   },
 })
@@ -75,13 +75,11 @@ const syncSupervisorPaymentsRoute = createRoute({
     },
   },
   responses: {
-    200: {
-      description: "Đồng bộ thành công",
-      content: { "application/json": { schema: SyncResponseSchema } },
-    },
+    ...standardErrorResponses(),
+    ...jsonSuccess(SyncResponseSchema, "Đồng bộ thành công"),
     400: {
-      description: "Bad request",
-      content: { "application/json": { schema: errorSchema } },
+      description: "Lỗi nghiệp vụ khi đồng bộ",
+      content: { "application/json": { schema: ErrorMessageResponseSchema } },
     },
   },
 })
@@ -98,17 +96,11 @@ const exportCouncilPaymentsRoute = createRoute({
     },
   },
   responses: {
-    200: {
-      description: "File DOCX thanh toán hội đồng",
-      content: {
-        [DOCX_CONTENT_TYPE]: {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
-        },
-      },
-    },
+    ...standardErrorResponses(),
+    ...docxSuccess("File DOCX thanh toán hội đồng"),
     400: {
-      description: "Bad request",
-      content: { "application/json": { schema: errorSchema } },
+      description: "Chưa có dữ liệu hoặc lỗi xuất file",
+      content: { "application/json": { schema: ErrorMessageResponseSchema } },
     },
   },
 })
@@ -125,17 +117,11 @@ const exportSupervisorPaymentsRoute = createRoute({
     },
   },
   responses: {
-    200: {
-      description: "File DOCX thanh toán hướng dẫn",
-      content: {
-        [DOCX_CONTENT_TYPE]: {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
-        },
-      },
-    },
+    ...standardErrorResponses(),
+    ...docxSuccess("File DOCX thanh toán hướng dẫn"),
     400: {
-      description: "Bad request",
-      content: { "application/json": { schema: errorSchema } },
+      description: "Chưa có dữ liệu hoặc lỗi xuất file",
+      content: { "application/json": { schema: ErrorMessageResponseSchema } },
     },
   },
 })

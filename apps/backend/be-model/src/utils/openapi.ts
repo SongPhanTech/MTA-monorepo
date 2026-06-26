@@ -1,29 +1,33 @@
 import type { OpenAPIHono } from "@hono/zod-openapi"
-import { apiReference } from "@scalar/hono-api-reference"
+import { getHtmlDocument } from "@scalar/core/libs/html-rendering"
+import { buildOpenApiDocx } from "../services/openapi-docx-export"
+import { buildOpenApiDocumentConfig } from "./openapi-info"
+import { injectReferenceExportDocx } from "./openapi-reference"
+
+const DOCX_FILENAME = "Tai-lieu-API-Model.docx"
 
 export function setupOpenApi(app: OpenAPIHono) {
-  app.doc("/openapi", (c) => ({
-    openapi: "3.0.0",
-    info: { version: "1.0.0", title: "My API" },
-    servers: [
-      {
-        url: "https://api.model.mta.swantech.vn",
-        description: "Dev environment",
-      },
-      {
-        url: new URL(c.req.url).origin,
-        description: "Current environment",
-      },
-    ],
-  }))
+  app.doc("/openapi", (c) => buildOpenApiDocumentConfig(c))
 
-  app.get(
-    "/reference",
-    apiReference({
-      theme: "purple",
-      spec: { url: "/openapi" },
+  app.get("/openapi/export-docx", async (c) => {
+    const openApiDoc = app.getOpenAPIDocument(buildOpenApiDocumentConfig(c))
+    const buffer = await buildOpenApiDocx(openApiDoc)
+    return c.body(new Uint8Array(buffer), 200, {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "Content-Disposition": `attachment; filename="${DOCX_FILENAME}"`,
     })
-  )
+  })
+
+  const scalarConfig = {
+    theme: "purple" as const,
+    pageTitle: "API Core Model — MTA",
+    spec: { url: "./openapi" },
+  }
+
+  app.get("/reference", async (c) => {
+    const html = getHtmlDocument({ ...scalarConfig, _integration: "hono" })
+    return c.html(injectReferenceExportDocx(html))
+  })
 
   app.openAPIRegistry.registerComponent("securitySchemes", "Bearer", {
     type: "http",

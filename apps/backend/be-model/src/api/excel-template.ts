@@ -2,6 +2,11 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { getMinioUrl } from "@workspace/libs"
 import ExcelJS from "exceljs"
 import XlsxTemplate from "xlsx-template"
+import {
+  ErrorMessageResponseSchema,
+  TemplatePreviewResponseSchema,
+} from "../dto/common-response.dto"
+import { excelSuccess, jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 import { MinIOService } from "../services/minio"
 
 const app = new OpenAPIHono({ strict: false })
@@ -417,6 +422,8 @@ async function buildExcelWorkbookBuffer(body: ExcelTemplateInput): Promise<Buffe
 app.openapi(
   createRoute({
     operationId: "excelTemplate",
+    tags: ["Mẫu Excel"],
+    summary: "Xuất file Excel từ template",
     path: "/",
     method: "post",
     request: {
@@ -429,14 +436,8 @@ app.openapi(
       },
     },
     responses: {
-      200: {
-        description: "Export thành công",
-        content: {
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-            schema: z.any().openapi({ type: "string", format: "binary" }),
-          },
-        },
-      },
+      ...standardErrorResponses(),
+      ...excelSuccess("Xuất file Excel thành công"),
     },
   }),
   async (c) => {
@@ -454,6 +455,8 @@ app.openapi(
 app.openapi(
   createRoute({
     operationId: "excelTemplatePreview",
+    tags: ["Mẫu Excel"],
+    summary: "Preview template Excel trên MinIO",
     path: "/preview",
     method: "post",
     request: {
@@ -464,17 +467,11 @@ app.openapi(
       },
     },
     responses: {
-      200: {
-        description: "Fill template và lưu lên MinIO để preview",
-        content: {
-          "application/json": {
-            schema: z.object({ path: z.string(), fileType: z.string() }),
-          },
-        },
-      },
+      ...standardErrorResponses(),
+      ...jsonSuccess(TemplatePreviewResponseSchema, "Lưu file preview lên MinIO thành công"),
       500: {
         description: "Lỗi xử lý template",
-        content: { "application/json": { schema: z.object({ message: z.string() }) } },
+        content: { "application/json": { schema: ErrorMessageResponseSchema } },
       },
     },
   }),
