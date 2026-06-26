@@ -4,7 +4,9 @@ export const OPENAPI_INFO_DESCRIPTION = `## Giới thiệu
 
 Tài liệu mô tả các **API tùy chỉnh** phục vụ hệ thống **Quản lý Đào tạo nội bộ** của Học viện Kỹ thuật Quân sự (MTA).
 
-**Phạm vi:** các endpoint dưới \`/api/*\` được định nghĩa trong mã nguồn (học viên, lớp HP, kỳ thi, tốt nghiệp, thống kê, import, xuất báo cáo, …). 
+**Phạm vi:**
+- API tùy chỉnh: học viên, lớp HP, kỳ thi, tốt nghiệp, thống kê, import, xuất báo cáo, … (\`/api/student\`, \`/api/subject-class\`, \`/api/exam\`, …)
+- Zenstack auto-CRUD: chỉ các model thuộc domain **quản lý đào tạo**, **chỉ GET** \`findMany\` và \`findUnique\`
 
 Bộ API được sử dụng bởi cán bộ quản lý đào tạo, giảng viên và hệ thống nghiệp vụ nội bộ.
 
@@ -37,6 +39,10 @@ Tùy endpoint, body JSON thành công có thể là một trong các dạng sau:
 - Mảng JSON \`[...]\` — danh sách đơn giản (phòng học, lĩnh vực đào tạo, …)
 - **File binary** — Excel (\`.xlsx\`), Word (\`.docx\`), PowerPoint (\`.pptx\`) với header \`Content-Disposition: attachment\`
 
+**Zenstack CRUD (\`/api/model/*\`):**
+- \`{ "data": ... }\` — kết quả truy vấn
+- \`{ "data": ..., "meta": { "serialization": ... } }\` — khi có meta serialization (superjson)
+
 ---
 
 ## Định dạng phản hồi lỗi (4xx / 5xx)
@@ -50,9 +56,10 @@ Hầu hết lỗi trả về JSON:
 | Mã HTTP | Khi nào | Body |
 |---|---|---|
 | **400** | Dữ liệu không hợp lệ, lỗi nghiệp vụ, parse Excel, FK Prisma P2003 | \`{ "message" }\`, \`{ "success": false, "message" }\`, \`{ "message", "errors"?: [...] }\`, hoặc \`{ "message", "failed"?: [...] }\` |
-| **403** | IP bị chặn | \`{ "message": "Your IP is blocked" }\` |
+| **403** | IP bị chặn, vi phạm access policy Zenstack | \`{ "message": "Your IP is blocked" }\` hoặc \`{ "message" }\` |
 | **404** | Không tìm thấy bản ghi (Prisma P2025) | \`{ "message" }\` |
 | **409** | Trùng dữ liệu unique (Prisma P2002) | \`{ "message" }\` |
+| **422** | Validation input Zenstack (Zod) | \`{ "message" }\` |
 | **500** | Lỗi máy chủ không xử lý | \`{ "message" }\` hoặc \`"Internal Server Error"\` |
 
 Một số endpoint đặc biệt:

@@ -17,7 +17,8 @@
         "./zod/models": "./generated/zod/models/index.ts",
         "./zod/enums": "./generated/zod/enums/index.ts",
         "./hooks": "./generated/hooks/index.ts",
-        "./hono": "./src/hono/index.ts"
+        "./hono": "./src/hono/index.ts",
+        "./openapi": "./src/openapi.ts"
     },
     "dependencies": {
         "@prisma/client": "catalog:",

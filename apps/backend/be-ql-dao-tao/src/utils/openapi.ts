@@ -1,16 +1,24 @@
 import type { OpenAPIHono } from "@hono/zod-openapi"
+import zenstackOpenApi from "@workspace/db/openapi"
 import { getHtmlDocument } from "@scalar/core/libs/html-rendering"
+import type { Context } from "hono"
 import { buildOpenApiDocx } from "../services/openapi-docx-export"
 import { buildOpenApiDocumentConfig } from "./openapi-info"
+import { mergeOpenApiSpecs } from "./merge-openapi"
 import { injectReferenceExportDocx } from "./openapi-reference"
 
 const DOCX_FILENAME = "Tai-lieu-API-Quan-ly-Dao-tao.docx"
 
+function getMergedOpenApiDocument(app: OpenAPIHono, c: Context) {
+  const honoDoc = app.getOpenAPIDocument(buildOpenApiDocumentConfig(c))
+  return mergeOpenApiSpecs(honoDoc, zenstackOpenApi as Record<string, unknown>)
+}
+
 export function setupOpenApi(app: OpenAPIHono) {
-  app.doc("/openapi", (c) => buildOpenApiDocumentConfig(c))
+  app.get("/openapi", (c) => c.json(getMergedOpenApiDocument(app, c)))
 
   app.get("/openapi/export-docx", async (c) => {
-    const openApiDoc = app.getOpenAPIDocument(buildOpenApiDocumentConfig(c))
+    const openApiDoc = getMergedOpenApiDocument(app, c)
     const buffer = await buildOpenApiDocx(openApiDoc)
     return c.body(new Uint8Array(buffer), 200, {
       "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",

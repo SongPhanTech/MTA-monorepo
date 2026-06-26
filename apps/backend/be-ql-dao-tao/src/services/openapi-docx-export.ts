@@ -112,14 +112,34 @@ function collectSchemaFields(
   schema: unknown,
   prefix = "",
   requiredSet: Set<string> = new Set(),
-  visited = new Set<string>()
+  visited = new Set<string>(),
+  depth = 0
 ): SchemaField[] {
+  if (depth > 8) return []
+
+  const rawRef = asString(asRecord(schema)?.$ref)
+  if (rawRef) {
+    if (visited.has(rawRef)) return []
+    visited.add(rawRef)
+  }
+
   const s = resolveRef(doc, schema)
   if (!s) return []
 
-  const ref = asString(s.$ref)
-  if (ref && visited.has(ref)) return []
-  if (ref) visited.add(ref)
+  if (s.oneOf || s.anyOf || s.allOf) {
+    if (prefix === "") {
+      return [
+        {
+          name: "(giá trị)",
+          type: schemaTypeLabel(s),
+          required: true,
+          description: asString(s.description) ?? "—",
+          example: s.example !== undefined ? JSON.stringify(s.example) : "—",
+        },
+      ]
+    }
+    return []
+  }
 
   const fields: SchemaField[] = []
   const required = new Set(asArray<string>(s.required))
@@ -139,7 +159,9 @@ function collectSchemaFields(
         example: prop.example !== undefined ? JSON.stringify(prop.example) : "—",
       })
       if (prop.properties || prop.items) {
-        fields.push(...collectSchemaFields(doc, prop, fullName, requiredSet, visited))
+        fields.push(
+          ...collectSchemaFields(doc, propSchema, fullName, requiredSet, visited, depth + 1)
+        )
       }
     }
     return fields
@@ -154,9 +176,11 @@ function collectSchemaFields(
       description: asString(s.description) ?? "Danh sách phần tử",
       example: "—",
     })
-    fields.push(...collectSchemaFields(doc, items, "[]", requiredSet, visited))
+    fields.push(...collectSchemaFields(doc, s.items, "[]", requiredSet, visited, depth + 1))
   } else if (items) {
-    fields.push(...collectSchemaFields(doc, items, `${prefix}[]`, requiredSet, visited))
+    fields.push(
+      ...collectSchemaFields(doc, s.items, `${prefix}[]`, requiredSet, visited, depth + 1)
+    )
   } else if (!props && prefix === "") {
     fields.push({
       name: "(giá trị)",

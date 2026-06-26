@@ -41,19 +41,17 @@ plugin hooks {
   output = 'generated/hooks'
 }
 
-// plugin openapi {
-//   provider = '@zenstackhq/openapi'
-//   // flavor = 'rest'
-//   output = './openapi.json'
-//   title = 'Auto generated API'
-//   version = '0.1.0'
-//   summary = 'Created with ZenStack'
-//   description = 'Auto generated API created with ZenStack'
-//   prefix = '/api/models'
-//   securitySchemes = {
-//         bearer: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-//         basic: { type: 'http', scheme: 'basic' },
-//   // apiKey: { type: 'apiKey', in: 'header', name: 'X-API-KEY' }
-//     }
-// }
+plugin openapi {
+  provider = '@zenstackhq/openapi'
+  flavor = 'rpc'
+  output = './generated/openapi.json'
+  title = 'ZenStack Model API'
+  version = '1.0.0'
+  prefix = '/api/model'
+  specVersion = '3.0.0'
+  omitInputDetails = true
+  securitySchemes = {
+    bearer: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+  }
+}
 

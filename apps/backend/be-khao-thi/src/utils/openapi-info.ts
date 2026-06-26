@@ -2,9 +2,11 @@ import type { Context } from "hono"
 
 export const OPENAPI_INFO_DESCRIPTION = `## Giới thiệu
 
-Tài liệu mô tả các **API tùy chỉnh** phục vụ hệ thống **Khảo thí (EMS)** của Học viện Kỹ thuật Quân sự (MTA).
+Tài liệu mô tả các API phục vụ hệ thống **Khảo thí (EMS)** của Học viện Kỹ thuật Quân sự (MTA).
 
-**Phạm vi:** các endpoint dưới \`/api/*\` được định nghĩa trong mã nguồn (khảo sát công khai/nội bộ, cụm khảo sát, sinh đề thi, đánh giá minh chứng).
+**Phạm vi:**
+- API tùy chỉnh: khảo sát công khai/nội bộ, cụm khảo sát, sinh đề thi, đánh giá minh chứng (\`/api/exam\`, \`/api/survey\`, \`/api/cluster-survey\`, \`/api/evaluate\`)
+- Zenstack auto-CRUD: chỉ các model thuộc domain **khảo thí**, **chỉ GET** \`findMany\` và \`findUnique\`
 
 ---
 
@@ -20,12 +22,17 @@ Authorization: Bearer <access_token>
 
 ## Định dạng phản hồi thành công (2xx)
 
+**API tùy chỉnh:**
 - \`{ "success": true, "message": "..." }\` — lưu khảo sát, sinh đề
 - \`{ "message": "..." }\` — thao tác đơn giản
 - \`{ "data": [...], "count": N }\` — danh sách (một số API nội bộ)
 - \`{ "data": [...], "total": N }\` — danh sách phân trang (khảo sát công khai v2)
 - \`{ "evidenceTags": {}, "result": [...] }\` — đánh tag minh chứng
 - **File binary** — Excel (\`.xlsx\`) hoặc Word (\`.docx\`) báo cáo khảo sát
+
+**Zenstack CRUD (\`/api/model/*\`):**
+- \`{ "data": ... }\` — kết quả truy vấn/ghi dữ liệu
+- \`{ "data": ..., "meta": { "serialization": ... } }\` — khi có meta serialization (superjson)
 
 ---
 
@@ -38,9 +45,10 @@ Authorization: Bearer <access_token>
 | Mã HTTP | Khi nào |
 |---|---|
 | **400** | Dữ liệu không hợp lệ, khảo sát chưa mở/đã đóng, không đủ câu hỏi sinh đề |
-| **403** | IP bị chặn |
-| **404** | Không tìm thấy khảo sát, đề thi, đợt đánh giá |
+| **403** | IP bị chặn, vi phạm access policy Zenstack |
+| **404** | Không tìm thấy khảo sát, đề thi, đợt đánh giá, bản ghi model |
 | **409** | Trùng dữ liệu unique |
+| **422** | Validation input Zenstack (Zod) |
 | **500** | Lỗi máy chủ |`
 
 export function buildOpenApiDocumentConfig(c: Context) {
