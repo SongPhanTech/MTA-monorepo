@@ -1,7 +1,9 @@
 export default {
   "CONG_GIANG_VIEN": {
+    "DANH_BA": "/danh-ba",
     "HO_SO_CA_NHAN_THONG_TIN_CA_NHAN": "/ho-so-ca-nhan/thong-tin-ca-nhan",
     "HOME": "/home",
+    "INDEX": "/",
     "KHAO_SAT": "/khao-sat",
     "LICH_CUA_TOI": "/lich-cua-toi",
     "LOP_GIANG_DAY_CHI_TIET": "/lop-giang-day/chi-tiet",
@@ -99,6 +101,7 @@ export default {
     "DANH_MUC_XEP_LOAI_HOC_LUC": "/danh-muc/xep-loai-hoc-luc",
     "DANH_MUC_XEP_LOAI_TOT_NGHIEP": "/danh-muc/xep-loai-tot-nghiep",
     "HOME": "/home",
+    "INDEX": "/",
     "KE_HOACH_GIAO_DUC": "/ke-hoach-giao-duc",
     "KE_HOACH_HOC_LAI": "/ke-hoach-hoc-lai",
     "KE_HOACH_THI_LAI": "/ke-hoach-thi-lai",
