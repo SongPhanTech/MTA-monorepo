@@ -21,6 +21,7 @@ enum NotificationType {
   PROCESS_SCORE_DEADLINE // Hạn nhập điểm quá trình
   EXAM_DEADLINE     // Hạn nhập điểm thi
   SURVEY_DEADLINE   // Hạn điền khảo sát
+  INDIVIDUAL_SCHEDULE // Lịch cá nhân
   @@schema("ql-danh-muc")
 }
 

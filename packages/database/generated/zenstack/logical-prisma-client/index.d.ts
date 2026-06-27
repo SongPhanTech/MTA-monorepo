@@ -5926,7 +5926,8 @@ export namespace $Enums {
         TEACHING_ASSIGNMENTS: 'TEACHING_ASSIGNMENTS',
         PROCESS_SCORE_DEADLINE: 'PROCESS_SCORE_DEADLINE',
         EXAM_DEADLINE: 'EXAM_DEADLINE',
-        SURVEY_DEADLINE: 'SURVEY_DEADLINE'
+        SURVEY_DEADLINE: 'SURVEY_DEADLINE',
+        INDIVIDUAL_SCHEDULE: 'INDIVIDUAL_SCHEDULE'
     };
     export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
     export const NotificationPriority: {

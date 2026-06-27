@@ -1404,7 +1404,8 @@
           "TEACHING_ASSIGNMENTS",
           "PROCESS_SCORE_DEADLINE",
           "EXAM_DEADLINE",
-          "SURVEY_DEADLINE"
+          "SURVEY_DEADLINE",
+          "INDIVIDUAL_SCHEDULE"
         ]
       },
       "NotificationPriority": {
