@@ -97,7 +97,7 @@ export default function DanhBa() {
       </div>
 
       <Row gutter={16} className="min-h-0 flex-1">
-        <Col span={8} className="h-full">
+        <Col span={6} className="h-full">
           <CayDonVi
             donViData={donViData as DonViDanhBa[]}
             selectedOrgId={selectedOrgId}
@@ -105,7 +105,7 @@ export default function DanhBa() {
             loading={isLoading}
           />
         </Col>
-        <Col span={16} className="h-full">
+        <Col span={18} className="h-full">
           <BangDanhBa
             donViData={donViData as DonViDanhBa[]}
             selectedOrgId={selectedOrgId}

@@ -52,4 +52,5 @@ export type DanhBaRow = {
   soDienThoai: string
   donVi: string
   viTriViecLam: string
+  gioiTinh: string
 }

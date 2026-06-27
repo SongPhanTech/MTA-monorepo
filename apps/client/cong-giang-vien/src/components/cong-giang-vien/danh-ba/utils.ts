@@ -66,8 +66,9 @@ export function mapLecturerToRow(lecturer: LecturerDanhBa, index: number): DanhB
 
   return {
     key: lecturer.lectureID || `lecturer-${index}`,
-    maCanBo: lecturer.lectureID || "",
+    maCanBo: lecturer.lectureID ?? "",
     hoTen: profile?.fullname || "",
+    gioiTinh: profile?.gender?.sTen ?? "",
     hocHam: getHocHamHocVi(profile),
     email: profile?.email || "",
     soDienThoai: profile?.phoneNumber || "",
@@ -85,6 +86,7 @@ export function filterLecturersBySearch(lecturers: LecturerDanhBa[], keyword: st
     const haystack = [
       lecturer.lectureID,
       profile?.fullname,
+      profile?.gender?.sTen,
       profile?.email,
       profile?.phoneNumber,
       lecturer.organization?.sTen,
@@ -146,4 +148,49 @@ export function getDefaultExpandedKeys(treeNodes: DataNode[], maxDepth = 2): str
 
   walk(treeNodes, 0)
   return keys
+}
+
+export function getAllTreeNodeKeys(treeNodes: DataNode[]): string[] {
+  const keys: string[] = []
+
+  const walk = (nodes: DataNode[]) => {
+    for (const node of nodes) {
+      keys.push(String(node.key))
+      if (node.children?.length) {
+        walk(node.children)
+      }
+    }
+  }
+
+  walk(treeNodes)
+  return keys
+}
+
+export function filterDonViByKeyword(
+  list: Array<{ Id: string; sTen: string | null; sParentId: string | null; sMa: string | null }>,
+  keyword: string
+) {
+  const normalizedKeyword = normalizeVietnamese(keyword.trim())
+  if (!normalizedKeyword) return list
+
+  const idMap = new Map(list.map((item) => [item.Id, item]))
+  const matchingIds = new Set<string>()
+
+  for (const item of list) {
+    const haystack = [item.sMa, item.sTen]
+      .filter(Boolean)
+      .map((value) => normalizeVietnamese(String(value)))
+
+    if (!haystack.some((value) => value.includes(normalizedKeyword))) continue
+
+    matchingIds.add(item.Id)
+
+    let parentId = item.sParentId
+    while (parentId && parentId !== "0") {
+      matchingIds.add(parentId)
+      parentId = idMap.get(parentId)?.sParentId ?? null
+    }
+  }
+
+  return list.filter((item) => matchingIds.has(item.Id))
 }

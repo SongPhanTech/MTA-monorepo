@@ -3,7 +3,6 @@ import {
   collectLecturersFromOrgIds,
   filterLecturersBySearch,
   getDescendantOrgIds,
-  getInitials,
   mapLecturerToRow,
 } from "@components/cong-giang-vien/danh-ba/utils"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
@@ -80,15 +79,18 @@ const BangDanhBa = ({
       ellipsis: true,
       render: (value: string) => (
         <div className="flex items-center gap-2">
-          <Avatar size={28} className="shrink-0 bg-cgv-green/20 text-xs text-cgv-green-dark">
-            {getInitials(value)}
-          </Avatar>
           <span className="truncate">{value}</span>
         </div>
       ),
     },
     {
-      title: "Học hàm",
+      title: "Giới tính",
+      dataIndex: "gioiTinh",
+      width: 100,
+      ellipsis: true,
+    },
+    {
+      title: "Học vị/Học hàm",
       dataIndex: "hocHam",
       width: 140,
       ellipsis: true,
@@ -98,18 +100,14 @@ const BangDanhBa = ({
       dataIndex: "email",
       width: 200,
       ellipsis: true,
-      render: (value: string) => (
-        <span className="text-red-600">{value}</span>
-      ),
+      render: (value: string) => <span>{value}</span>,
     },
     {
       title: "Số điện thoại",
       dataIndex: "soDienThoai",
       width: 130,
       ellipsis: true,
-      render: (value: string) => (
-        <span className="text-red-600">{value}</span>
-      ),
+      render: (value: string) => <span>{value}</span>,
     },
     {
       title: "Đơn vị",
@@ -121,6 +119,7 @@ const BangDanhBa = ({
       title: "Vị trí việc làm",
       dataIndex: "viTriViecLam",
       width: 160,
+      align: "center",
       ellipsis: true,
     },
   ]
@@ -167,7 +166,7 @@ const BangDanhBa = ({
           loading={loading}
           columns={columns}
           dataSource={dataSource}
-          scroll={{ x: 1100, y: chieuCaoBody }}
+          scroll={{ x: 1200, y: chieuCaoBody }}
           pagination={{
             pageSize: DEFAULT_PAGINATE_SIZE,
             showSizeChanger: true,
