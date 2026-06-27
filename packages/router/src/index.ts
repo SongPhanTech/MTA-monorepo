@@ -20,6 +20,7 @@ import {
   CalendarRange,
   ChartLine,
   ClipboardCheck,
+  Contact,
   FileCheck2,
   FolderOpen,
   GraduationCap,
@@ -1131,7 +1132,7 @@ const NAVIGATION: NavigationType = {
       },
       {
         id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_NGHIEN_CUU,
-        label: "Nghiên cứu",
+        label: "Nghiên cứu khoa học",
         icon: BinocularsIcon,
         path: ROUTER_PATH.CONG_GIANG_VIEN.NGHIEN_CUU,
         description: "Nghiên cứu khoa học",
@@ -1142,6 +1143,13 @@ const NAVIGATION: NavigationType = {
         icon: Bell,
         path: ROUTER_PATH.CONG_GIANG_VIEN.THONG_BAO,
         description: "Thông báo",
+      },
+      {
+        id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_DANH_BA,
+        label: "Danh bạ",
+        icon: Contact,
+        path: ROUTER_PATH.CONG_GIANG_VIEN.DANH_BA,
+        description: "Danh bạ",
       },
       {
         id: "cgv-ho-so",
