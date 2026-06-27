@@ -3,21 +3,24 @@ import {
   nhapDiemQuaTrinhGiangDayPath,
   nhapDiemThiGiangDayPath,
 } from "@/utils/cong-giang-vien-path-helper"
+import { ROUTER_PATH } from "@workspace/router"
 import type { LucideIcon } from "lucide-react"
-import { ClipboardList, Clock, FileText, Users } from "lucide-react"
+import { Calendar, ClipboardList, Clock, FileText, Users } from "lucide-react"
 
-/** 4 loại thông báo dùng tại cổng giảng viên. */
+/** 5 loại thông báo dùng tại cổng giảng viên. */
 export type LoaiThongBaoGv =
   | "TEACHING_ASSIGNMENTS"
   | "PROCESS_SCORE_DEADLINE"
   | "EXAM_DEADLINE"
   | "SURVEY_DEADLINE"
+  | "INDIVIDUAL_SCHEDULE"
 
 export const DANH_SACH_LOAI_THONG_BAO_GV: LoaiThongBaoGv[] = [
   "TEACHING_ASSIGNMENTS",
   "PROCESS_SCORE_DEADLINE",
   "EXAM_DEADLINE",
   "SURVEY_DEADLINE",
+  "INDIVIDUAL_SCHEDULE",
 ]
 
 export type MucCanhBao = "moi" | "sap_het_han" | "qua_han"
@@ -108,6 +111,15 @@ export const LOAI_THONG_BAO_META: Record<LoaiThongBaoGv, LoaiThongBaoMeta> = {
     tagColor: "text-violet-800",
     Icon: ClipboardList,
   },
+  INDIVIDUAL_SCHEDULE: {
+    label: "Nhắc lịch cá nhân",
+    tagLabel: "Lịch cá nhân",
+    iconBg: "bg-sky-50",
+    iconColor: "text-sky-600",
+    tagBg: "bg-sky-50",
+    tagColor: "text-sky-800",
+    Icon: Calendar,
+  },
 }
 
 /** Màu theo mức cảnh báo — thanh accent, trạng thái, tag mức độ. */
@@ -196,6 +208,9 @@ export const duongDanNhapDiemTheoThongBao = (thongBao: ThongBaoView): string | u
   if (thongBao.loai === "SURVEY_DEADLINE") {
     // Với hạn khảo sát, `subjectClassId` thực chất là surveyId (trích từ code thông báo).
     return khaoSatGiangVienPath(thongBao.subjectClassId)
+  }
+  if (thongBao.loai === "INDIVIDUAL_SCHEDULE") {
+    return ROUTER_PATH.CONG_GIANG_VIEN.LICH_CUA_TOI
   }
   return undefined
 }
