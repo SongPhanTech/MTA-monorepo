@@ -225,7 +225,7 @@ const PutThesisSession = () => {
       onCancel={onClose}
       maskClosable={true}
       title={id ? "Chỉnh sửa đợt xét luận văn" : "Thêm mới đợt xét luận văn"}
-      className="w-[70vw]"
+      className="w-[80vw]"
     >
       <Col span={8}>
         <FormItem form={form} name="name" label="Tên đợt xét luận văn" required>
