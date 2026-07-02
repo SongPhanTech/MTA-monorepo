@@ -14,6 +14,7 @@ import ModalChiTietLopBienChe from "./modal-chi-tiet-lop-bien-che"
 import ModalChiTietMonHoc from "./modal-chi-tiet-mon-hoc"
 import ModalChiTietSinhVien from "./modal-chi-tiet-sinh-vien"
 import ModalChuyenDiemLopMonHoc from "./modal-chuyen-diem-lmh"
+import ModalChuyenDotXetLuanVan from "./modal-chuyen-dot-xet-luan-van"
 import ModalChuyenDoiChungChiThanhDiem from "./modal-chuyen-doi-chung-chi-thanh-diem"
 import ModalChuyenLop from "./modal-chuyen-lop"
 import ModalChuyenLopLuuBan from "./modal-chuyen-lop-luu-ban"
@@ -240,6 +241,7 @@ export {
   PutResearchTopicModal,
   PutInternshipModal,
   ModalChuyenDiemLopMonHoc,
+  ModalChuyenDotXetLuanVan,
   ModalCurriculumVersionByTrainingBlock,
   ModalPreviewReason,
   ModalScoreDetail,

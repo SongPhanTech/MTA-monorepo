@@ -233,18 +233,6 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
       <Col span={8}>
-        <FormItem form={form} name="trainingCourseIds" label="Khóa học" required>
-          <Select
-            mode="multiple"
-            placeholder="Chọn khóa học"
-            options={trainingCourses?.map((item) => ({
-              label: item.name,
-              value: item.id,
-            }))}
-          />
-        </FormItem>
-      </Col>
-      <Col span={8}>
         <FormItem form={form} name="trainingObjectTypeId" label="Đối tượng đào tạo" required>
           <Select
             placeholder="Chọn đối tượng đào tạo"
@@ -253,6 +241,18 @@ const PutThesisSession = () => {
               value: item.id,
             }))}
             onChange={(value) => setTrainingObjectId(value)}
+          />
+        </FormItem>
+      </Col>
+      <Col span={8}>
+        <FormItem form={form} name="trainingCourseIds" label="Khóa học" required>
+          <Select
+            mode="multiple"
+            placeholder="Chọn khóa học"
+            options={trainingCourses?.map((item) => ({
+              label: item.name,
+              value: item.id,
+            }))}
           />
         </FormItem>
       </Col>

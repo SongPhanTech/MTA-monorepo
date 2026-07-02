@@ -1,6 +1,7 @@
 /** biome-ignore-all lint/a11y/useKeyWithClickEvents: <sử dụng onClick để ngăn chặn sự kiện click lồng nhau> */
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
+import type { ModalChuyenDotXetLuanVanInput } from "@components/modal/modal-chuyen-dot-xet-luan-van"
 import type { ModalTaoDuLieuMauLuanVanInput } from "@components/modal/modal-tao-du-lieu-mau-luan-van"
 import ApproveIcon from "@components/icons/approve"
 import DeleteIcon from "@components/icons/delete"
@@ -61,7 +62,7 @@ import {
   Space,
   Tag,
 } from "antd"
-import { SquarePen } from "lucide-react"
+import { ArrowRightLeft, SquarePen } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import TreeSelect from "@/components/commons/tree-select"
@@ -261,7 +262,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const nameSearchDebounceReady = useRef(false)
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [trainingCourseIds, setTrainingCourseIds] = useState<string[]>([])
-
   useEffect(() => {
     const id = window.setTimeout(() => {
       const next = nameKeyword.trim()
@@ -296,6 +296,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   })
   const { onOpen: openModalTaoDuLieuMau } = useDisclosure<ModalTaoDuLieuMauLuanVanInput>({
     tag: "ModalTaoDuLieuMauLuanVan",
+  })
+  const { onOpen: openModalChuyenDotXetLuanVan } = useDisclosure<ModalChuyenDotXetLuanVanInput>({
+    tag: "ModalChuyenDotXetLuanVan",
   })
   const { data: sDm_Donvi = [] } = useFindManyDM_DonVi({
     where: whereOrganization,
@@ -1802,6 +1805,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         setSearchParams({
                           ...searchParams,
                           thesisSessionId: value as string,
+                          fixedClassId: [],
                         })
                         setTrainingCourseIds(
                           thesisSessionData?.find((x) => x.id === value)?.trainingCourses?.map(
@@ -2939,13 +2943,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               // },
               {
                 title: "Thao tác",
-                width: 100,
+                width: 130,
                 fixed: "right",
                 align: "center",
                 render: (_, record) => {
                   if (record?.id) {
                     const status =
                       getThesisProjectForSession(record, searchParams.thesisSessionId)?.status || ""
+                    const hasThesisProject = !!getThesisProjectForSession(
+                      record,
+                      searchParams.thesisSessionId
+                    )?.id
                     return (
                       <Row className="justify-center gap-2">
                         {/** biome-ignore lint/a11y/noStaticElementInteractions: <React.Fragment> */}
@@ -3002,6 +3010,29 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                 })
                               }}
                             />
+                          ) : null}
+                          {role === "P7" && hasThesisProject ? (
+                            <span title="Chuyển đợt xét">
+                              <ArrowRightLeft
+                                size={24}
+                                className="cursor-pointer text-blue-600"
+                                onClick={() => {
+                                  const thesisProject = getThesisProjectForSession(
+                                    record,
+                                    searchParams.thesisSessionId
+                                  )
+                                  if (!thesisProject?.id) {
+                                    message.warning("Không tìm thấy luận văn/đề án để chuyển đợt xét.")
+                                    return
+                                  }
+                                  openModalChuyenDotXetLuanVan({
+                                    thesisProjectId: thesisProject.id,
+                                    thesisSessionId: searchParams.thesisSessionId || "",
+                                    onSuccess: refetchThesisTableData,
+                                  })
+                                }}
+                              />
+                            </span>
                           ) : null}
                           <SquarePen
                             size={24}
