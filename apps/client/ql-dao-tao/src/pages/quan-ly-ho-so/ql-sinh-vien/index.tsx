@@ -24,7 +24,6 @@ import {
   useFindManyTrainingCourse,
   useFindManyTrainingField,
   useFindManyTrainingMajor,
-  useUpdateStudent,
   useDeleteStudent,
   useDeleteUserProfile,
 } from "@workspace/db/hooks"
@@ -40,7 +39,7 @@ import dayjs from "dayjs"
 import { saveAs } from "file-saver"
 import { BookCheckIcon, InfoIcon } from "lucide-react"
 import { useRouter } from "next/router"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 dayjs.locale("vi")
@@ -66,6 +65,11 @@ export default function UserProfilePageDs() {
     phone: undefined,
     curriculumVersionParallel: undefined,
   })
+
+  const handleFiltersChange = (value: FilterProps) => {
+    setFilters(value)
+    setCurrentPage(1)
+  }
 
   const [importModalVisible, setImportModalVisible] = useState(false)
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -375,7 +379,7 @@ export default function UserProfilePageDs() {
 
   const handleFixedClassChange = (val?: string) => {
     if (!val) {
-      setFilters({
+      handleFiltersChange({
         ...filters,
         fixedClassId: undefined,
       })
@@ -384,7 +388,7 @@ export default function UserProfilePageDs() {
 
     const selectedClass = fixedClassMap.get(val)
 
-    setFilters({
+    handleFiltersChange({
       ...filters,
       fixedClassId: val,
       trainingCourseId: filters.trainingCourseId ?? selectedClass?.trainingCourseId,
@@ -471,12 +475,13 @@ export default function UserProfilePageDs() {
                   <Select
                     className="w-full"
                     placeholder="Chọn khoá học"
+                    value={filters.trainingCourseId}
                     options={TrainingCourseData.map((i: TrainingCourse) => ({
                       value: i.id,
                       label: i.name,
                     }))}
                     onChange={(val) =>
-                      setFilters({
+                      handleFiltersChange({
                         ...filters,
                         trainingCourseId: val,
                         fixedClassId: undefined,
@@ -553,10 +558,7 @@ export default function UserProfilePageDs() {
             className="h-[calc(100vh-250px)]"
             loading={isFetchingStudents || isLoadingStudents}
             filters={filters}
-            setFilters={(value) => {
-              setFilters(value)
-              setCurrentPage(1)
-            }}
+            setFilters={handleFiltersChange}
             onChange={(_, __, sorter: any) => {
               if (sorter.order) {
                 const order = sorter.order === "ascend" ? "asc" : "desc"

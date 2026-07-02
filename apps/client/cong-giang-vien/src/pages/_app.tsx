@@ -1,4 +1,5 @@
 import { queryClient } from "@api/index"
+import GiangVienAccessGuard from "@components/commons/giang-vien-access-guard"
 import { Spinner } from "@components/commons/spinner"
 import { colors } from "@constants/colors"
 import CongGiangVienLayout from "@layouts/cong-giang-vien-layout"
@@ -100,13 +101,15 @@ function App({ Component, pageProps }: AppProps) {
                 fetch: fetchInstance,
               }}
             >
-              <ReactHookModalProvider modals={modals}>
-                <CongGiangVienLayout unLayout={unLayout}>
-                  <Component {...pageProps} />
-                </CongGiangVienLayout>
-                {/* <WidgetChatbot src={getRuntimeEnv("NEXT_PUBLIC_CHATBOT_SRC")} /> */}
-                <Spinner />
-              </ReactHookModalProvider>
+              <GiangVienAccessGuard>
+                <ReactHookModalProvider modals={modals}>
+                  <CongGiangVienLayout unLayout={unLayout}>
+                    <Component {...pageProps} />
+                  </CongGiangVienLayout>
+                  {/* <WidgetChatbot src={getRuntimeEnv("NEXT_PUBLIC_CHATBOT_SRC")} /> */}
+                  <Spinner />
+                </ReactHookModalProvider>
+              </GiangVienAccessGuard>
             </ZenStackHooksProvider>
           </QueryClientProvider>
         </ConfigProvider>

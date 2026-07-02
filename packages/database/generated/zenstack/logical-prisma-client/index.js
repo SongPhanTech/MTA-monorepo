@@ -8915,7 +8915,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/minhah/code/MTA-monorepo/packages/database/generated/zenstack/logical-prisma-client",
+      "value": "/Users/phuong/Documents/Swantech/MTA-monorepo/packages/database/generated/zenstack/logical-prisma-client",
       "fromEnvVar": null
     },
     "config": {
@@ -8953,7 +8953,7 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Users/minhah/code/MTA-monorepo/packages/database/logical-1782961441334.prisma",
+    "sourceFilePath": "/Users/phuong/Documents/Swantech/MTA-monorepo/packages/database/logical-1782985905344.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
