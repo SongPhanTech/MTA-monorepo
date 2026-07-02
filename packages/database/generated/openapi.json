@@ -1967,6 +1967,10 @@
             "type": "boolean",
             "nullable": true
           },
+          "bLaSinhVien": {
+            "type": "boolean",
+            "nullable": true
+          },
           "group": {
             "allOf": [
               {
@@ -27855,6 +27859,10 @@
             "nullable": true
           },
           "bLaHocVien": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "bLaSinhVien": {
             "type": "boolean",
             "nullable": true
           },
@@ -66241,6 +66249,9 @@
           "bLaHocVien": {
             "type": "integer"
           },
+          "bLaSinhVien": {
+            "type": "integer"
+          },
           "groupId": {
             "type": "integer"
           },
@@ -66606,6 +66617,7 @@
           "bLaGiangVien",
           "bLaCanBoNhanVien",
           "bLaHocVien",
+          "bLaSinhVien",
           "groupId",
           "sDM_DonViId",
           "sDM_ViTriCongViecId",
@@ -66818,6 +66830,10 @@
             "nullable": true
           },
           "bLaHocVien": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "bLaSinhVien": {
             "type": "boolean",
             "nullable": true
           },
@@ -67353,6 +67369,10 @@
             "nullable": true
           },
           "bLaHocVien": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "bLaSinhVien": {
             "type": "boolean",
             "nullable": true
           },

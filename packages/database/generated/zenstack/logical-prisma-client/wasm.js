@@ -172,6 +172,7 @@ exports.Prisma.UserProfileScalarFieldEnum = {
   bLaGiangVien: 'bLaGiangVien',
   bLaCanBoNhanVien: 'bLaCanBoNhanVien',
   bLaHocVien: 'bLaHocVien',
+  bLaSinhVien: 'bLaSinhVien',
   groupId: 'groupId',
   sDM_DonViId: 'sDM_DonViId',
   sDM_ViTriCongViecId: 'sDM_ViTriCongViecId',

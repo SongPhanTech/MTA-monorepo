@@ -6715,6 +6715,7 @@ export namespace Prisma {
         bLaGiangVien: 'bLaGiangVien',
         bLaCanBoNhanVien: 'bLaCanBoNhanVien',
         bLaHocVien: 'bLaHocVien',
+        bLaSinhVien: 'bLaSinhVien',
         groupId: 'groupId',
         sDM_DonViId: 'sDM_DonViId',
         sDM_ViTriCongViecId: 'sDM_ViTriCongViecId',
@@ -15788,6 +15789,7 @@ export namespace Prisma {
         readonly bLaGiangVien: FieldRef<"UserProfile", 'Boolean'>;
         readonly bLaCanBoNhanVien: FieldRef<"UserProfile", 'Boolean'>;
         readonly bLaHocVien: FieldRef<"UserProfile", 'Boolean'>;
+        readonly bLaSinhVien: FieldRef<"UserProfile", 'Boolean'>;
         readonly groupId: FieldRef<"UserProfile", 'String'>;
         readonly sDM_DonViId: FieldRef<"UserProfile", 'String'>;
         readonly sDM_ViTriCongViecId: FieldRef<"UserProfile", 'String'>;
@@ -153341,6 +153343,7 @@ export namespace Prisma {
         bLaGiangVien: boolean | null
         bLaCanBoNhanVien: boolean | null
         bLaHocVien: boolean | null
+        bLaSinhVien: boolean | null
         groupId: string | null
         sDM_DonViId: string | null
         sDM_ViTriCongViecId: string | null
@@ -153471,6 +153474,7 @@ export namespace Prisma {
         bLaGiangVien: boolean | null
         bLaCanBoNhanVien: boolean | null
         bLaHocVien: boolean | null
+        bLaSinhVien: boolean | null
         groupId: string | null
         sDM_DonViId: string | null
         sDM_ViTriCongViecId: string | null
@@ -153601,6 +153605,7 @@ export namespace Prisma {
         bLaGiangVien: number
         bLaCanBoNhanVien: number
         bLaHocVien: number
+        bLaSinhVien: number
         groupId: number
         sDM_DonViId: number
         sDM_ViTriCongViecId: number
@@ -153744,6 +153749,7 @@ export namespace Prisma {
         bLaGiangVien?: true
         bLaCanBoNhanVien?: true
         bLaHocVien?: true
+        bLaSinhVien?: true
         groupId?: true
         sDM_DonViId?: true
         sDM_ViTriCongViecId?: true
@@ -153874,6 +153880,7 @@ export namespace Prisma {
         bLaGiangVien?: true
         bLaCanBoNhanVien?: true
         bLaHocVien?: true
+        bLaSinhVien?: true
         groupId?: true
         sDM_DonViId?: true
         sDM_ViTriCongViecId?: true
@@ -154004,6 +154011,7 @@ export namespace Prisma {
         bLaGiangVien?: true
         bLaCanBoNhanVien?: true
         bLaHocVien?: true
+        bLaSinhVien?: true
         groupId?: true
         sDM_DonViId?: true
         sDM_ViTriCongViecId?: true
@@ -154215,6 +154223,7 @@ export namespace Prisma {
         bLaGiangVien: boolean | null
         bLaCanBoNhanVien: boolean | null
         bLaHocVien: boolean | null
+        bLaSinhVien: boolean | null
         groupId: string | null
         sDM_DonViId: string | null
         sDM_ViTriCongViecId: string | null
@@ -154362,6 +154371,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean
         bLaCanBoNhanVien?: boolean
         bLaHocVien?: boolean
+        bLaSinhVien?: boolean
         groupId?: boolean
         sDM_DonViId?: boolean
         sDM_ViTriCongViecId?: boolean
@@ -154583,6 +154593,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean
         bLaCanBoNhanVien?: boolean
         bLaHocVien?: boolean
+        bLaSinhVien?: boolean
         groupId?: boolean
         sDM_DonViId?: boolean
         sDM_ViTriCongViecId?: boolean
@@ -154757,6 +154768,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean
         bLaCanBoNhanVien?: boolean
         bLaHocVien?: boolean
+        bLaSinhVien?: boolean
         groupId?: boolean
         sDM_DonViId?: boolean
         sDM_ViTriCongViecId?: boolean
@@ -154931,6 +154943,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean
         bLaCanBoNhanVien?: boolean
         bLaHocVien?: boolean
+        bLaSinhVien?: boolean
         groupId?: boolean
         sDM_DonViId?: boolean
         sDM_ViTriCongViecId?: boolean
@@ -155048,7 +155061,7 @@ export namespace Prisma {
         familyName?: boolean
         trinhDoHocVanId?: boolean
     };
-    export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "officePhone" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "chucVuChinhQuyenId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>;
+    export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "bLaSinhVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "officePhone" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "chucVuChinhQuyenId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>;
     export type UserProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         group?: boolean | UserProfile$groupArgs<ExtArgs>
         provinceCurrentAddress?: boolean | UserProfile$provinceCurrentAddressArgs<ExtArgs>
@@ -155353,6 +155366,7 @@ export namespace Prisma {
             bLaGiangVien: boolean | null
             bLaCanBoNhanVien: boolean | null
             bLaHocVien: boolean | null
+            bLaSinhVien: boolean | null
             groupId: string | null
             sDM_DonViId: string | null
             sDM_ViTriCongViecId: string | null
@@ -374617,6 +374631,7 @@ export namespace Prisma {
         bLaGiangVien?: BoolNullableFilter<"UserProfile"> | boolean | null
         bLaCanBoNhanVien?: BoolNullableFilter<"UserProfile"> | boolean | null
         bLaHocVien?: BoolNullableFilter<"UserProfile"> | boolean | null
+        bLaSinhVien?: BoolNullableFilter<"UserProfile"> | boolean | null
         groupId?: StringNullableFilter<"UserProfile"> | string | null
         sDM_DonViId?: UuidNullableFilter<"UserProfile"> | string | null
         sDM_ViTriCongViecId?: UuidNullableFilter<"UserProfile"> | string | null
@@ -374837,6 +374852,7 @@ export namespace Prisma {
         bLaGiangVien?: SortOrderInput | SortOrder
         bLaCanBoNhanVien?: SortOrderInput | SortOrder
         bLaHocVien?: SortOrderInput | SortOrder
+        bLaSinhVien?: SortOrderInput | SortOrder
         groupId?: SortOrderInput | SortOrder
         sDM_DonViId?: SortOrderInput | SortOrder
         sDM_ViTriCongViecId?: SortOrderInput | SortOrder
@@ -375062,6 +375078,7 @@ export namespace Prisma {
         bLaGiangVien?: BoolNullableFilter<"UserProfile"> | boolean | null
         bLaCanBoNhanVien?: BoolNullableFilter<"UserProfile"> | boolean | null
         bLaHocVien?: BoolNullableFilter<"UserProfile"> | boolean | null
+        bLaSinhVien?: BoolNullableFilter<"UserProfile"> | boolean | null
         groupId?: StringNullableFilter<"UserProfile"> | string | null
         sDM_DonViId?: UuidNullableFilter<"UserProfile"> | string | null
         sDM_ViTriCongViecId?: UuidNullableFilter<"UserProfile"> | string | null
@@ -375281,6 +375298,7 @@ export namespace Prisma {
         bLaGiangVien?: SortOrderInput | SortOrder
         bLaCanBoNhanVien?: SortOrderInput | SortOrder
         bLaHocVien?: SortOrderInput | SortOrder
+        bLaSinhVien?: SortOrderInput | SortOrder
         groupId?: SortOrderInput | SortOrder
         sDM_DonViId?: SortOrderInput | SortOrder
         sDM_ViTriCongViecId?: SortOrderInput | SortOrder
@@ -375419,6 +375437,7 @@ export namespace Prisma {
         bLaGiangVien?: BoolNullableWithAggregatesFilter<"UserProfile"> | boolean | null
         bLaCanBoNhanVien?: BoolNullableWithAggregatesFilter<"UserProfile"> | boolean | null
         bLaHocVien?: BoolNullableWithAggregatesFilter<"UserProfile"> | boolean | null
+        bLaSinhVien?: BoolNullableWithAggregatesFilter<"UserProfile"> | boolean | null
         groupId?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
         sDM_DonViId?: UuidNullableWithAggregatesFilter<"UserProfile"> | string | null
         sDM_ViTriCongViecId?: UuidNullableWithAggregatesFilter<"UserProfile"> | string | null
@@ -404843,6 +404862,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -405019,6 +405039,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -405195,6 +405216,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -405371,6 +405393,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -405547,6 +405570,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -405677,6 +405701,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -405763,6 +405788,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -439637,6 +439663,7 @@ export namespace Prisma {
         bLaGiangVien?: SortOrder
         bLaCanBoNhanVien?: SortOrder
         bLaHocVien?: SortOrder
+        bLaSinhVien?: SortOrder
         groupId?: SortOrder
         sDM_DonViId?: SortOrder
         sDM_ViTriCongViecId?: SortOrder
@@ -439773,6 +439800,7 @@ export namespace Prisma {
         bLaGiangVien?: SortOrder
         bLaCanBoNhanVien?: SortOrder
         bLaHocVien?: SortOrder
+        bLaSinhVien?: SortOrder
         groupId?: SortOrder
         sDM_DonViId?: SortOrder
         sDM_ViTriCongViecId?: SortOrder
@@ -439903,6 +439931,7 @@ export namespace Prisma {
         bLaGiangVien?: SortOrder
         bLaCanBoNhanVien?: SortOrder
         bLaHocVien?: SortOrder
+        bLaSinhVien?: SortOrder
         groupId?: SortOrder
         sDM_DonViId?: SortOrder
         sDM_ViTriCongViecId?: SortOrder
@@ -487445,6 +487474,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -487620,6 +487650,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -487808,6 +487839,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -487983,6 +488015,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -495592,6 +495625,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -495767,6 +495801,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -496004,6 +496039,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -496179,6 +496215,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -496404,6 +496441,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -496579,6 +496617,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -496822,6 +496861,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -496997,6 +497037,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -497222,6 +497263,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -497397,6 +497439,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -497640,6 +497683,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -497815,6 +497859,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -498106,6 +498151,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -498281,6 +498327,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -498600,6 +498647,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -498775,6 +498823,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -498976,6 +499025,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -499151,6 +499201,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -499370,6 +499421,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -499545,6 +499597,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -499720,6 +499773,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -499895,6 +499949,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -500109,6 +500164,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -500284,6 +500340,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -500490,6 +500547,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -500665,6 +500723,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -500879,6 +500938,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -501054,6 +501114,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -501338,6 +501399,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -501513,6 +501575,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -501789,6 +501852,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -501964,6 +502028,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -502177,6 +502242,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -502352,6 +502418,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -502583,6 +502650,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -502758,6 +502826,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -502933,6 +503002,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -503108,6 +503178,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -503296,6 +503367,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -503471,6 +503543,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -503686,6 +503759,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -503861,6 +503935,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -504094,6 +504169,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -504269,6 +504345,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -504520,6 +504597,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -504695,6 +504773,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -504969,6 +505048,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -505144,6 +505224,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -505447,6 +505528,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -505622,6 +505704,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -505958,6 +506041,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -506133,6 +506217,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -506360,6 +506445,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -506535,6 +506621,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -506785,6 +506872,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -506960,6 +507048,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -507161,6 +507250,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -507336,6 +507426,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -507555,6 +507646,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -507730,6 +507822,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -507905,6 +507998,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -508080,6 +508174,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -508268,6 +508363,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -508443,6 +508539,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -508618,6 +508715,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -508793,6 +508891,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -508981,6 +509080,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -509156,6 +509256,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -509331,6 +509432,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -509506,6 +509608,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -509694,6 +509797,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -509869,6 +509973,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -510088,6 +510193,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -510263,6 +510369,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -510500,6 +510607,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -510675,6 +510783,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -510850,6 +510959,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -511025,6 +511135,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -511213,6 +511324,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -511388,6 +511500,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -511607,6 +511720,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -511782,6 +511896,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -512019,6 +512134,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -512194,6 +512310,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -512395,6 +512512,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -512570,6 +512688,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -512789,6 +512908,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -512964,6 +513084,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -513139,6 +513260,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -513314,6 +513436,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -513502,6 +513625,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -513677,6 +513801,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -513932,6 +514057,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -514107,6 +514233,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -514390,6 +514517,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -514565,6 +514693,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -514766,6 +514895,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -514941,6 +515071,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -515160,6 +515291,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -515335,6 +515467,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -515562,6 +515695,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -515737,6 +515871,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -515987,6 +516122,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -516162,6 +516298,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -516449,6 +516586,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -516624,6 +516762,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -516904,6 +517043,7 @@ export namespace Prisma {
         bLaGiangVien?: BoolNullableFilter<"UserProfile"> | boolean | null
         bLaCanBoNhanVien?: BoolNullableFilter<"UserProfile"> | boolean | null
         bLaHocVien?: BoolNullableFilter<"UserProfile"> | boolean | null
+        bLaSinhVien?: BoolNullableFilter<"UserProfile"> | boolean | null
         groupId?: StringNullableFilter<"UserProfile"> | string | null
         sDM_DonViId?: UuidNullableFilter<"UserProfile"> | string | null
         sDM_ViTriCongViecId?: UuidNullableFilter<"UserProfile"> | string | null
@@ -517268,6 +517408,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -517443,6 +517584,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -517622,6 +517764,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -517797,6 +517940,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -518046,6 +518190,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -518221,6 +518366,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -518405,6 +518551,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -518580,6 +518727,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -518989,6 +519137,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -519164,6 +519313,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -519343,6 +519493,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -519518,6 +519669,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -519747,6 +519899,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -519922,6 +520075,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520106,6 +520260,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520281,6 +520436,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520533,6 +520689,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -520708,6 +520865,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -521036,6 +521194,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -521211,6 +521370,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -522074,6 +522234,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -522249,6 +522410,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -522494,6 +522656,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -522669,6 +522832,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -522865,6 +523029,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -523040,6 +523205,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -523223,6 +523389,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -523398,6 +523565,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -523813,6 +523981,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -523988,6 +524157,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -524423,6 +524593,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -524598,6 +524769,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -524987,6 +525159,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -525162,6 +525335,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -527137,6 +527311,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -527312,6 +527487,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -527612,6 +527788,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -527787,6 +527964,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -528152,6 +528330,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -528327,6 +528506,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -528585,6 +528765,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -528760,6 +528941,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -528943,6 +529125,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -529118,6 +529301,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -529301,6 +529485,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -529476,6 +529661,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -529659,6 +529845,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -529834,6 +530021,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -530136,6 +530324,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -530311,6 +530500,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -530494,6 +530684,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -530669,6 +530860,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -530852,6 +531044,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -531027,6 +531220,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -531210,6 +531404,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -531385,6 +531580,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -531671,6 +531867,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -531846,6 +532043,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -532029,6 +532227,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -532204,6 +532403,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -532387,6 +532587,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -532562,6 +532763,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -532745,6 +532947,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -532920,6 +533123,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -533155,6 +533359,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -533330,6 +533535,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -533513,6 +533719,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -533688,6 +533895,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -533871,6 +534079,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -534046,6 +534255,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -534229,6 +534439,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -534404,6 +534615,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -534639,6 +534851,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -534814,6 +535027,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -534997,6 +535211,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -535172,6 +535387,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -535355,6 +535571,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -535530,6 +535747,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -535713,6 +535931,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -535888,6 +536107,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -540117,6 +540337,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -540292,6 +540513,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -540567,6 +540789,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -540742,6 +540965,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -555519,6 +555743,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -555694,6 +555919,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -555999,6 +556225,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -556174,6 +556401,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -560623,6 +560851,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -560798,6 +561027,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -561199,6 +561429,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -561374,6 +561605,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -562148,6 +562380,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -562323,6 +562556,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -562632,6 +562866,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -562807,6 +563042,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -563547,6 +563783,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -563722,6 +563959,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -573499,6 +573737,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -573674,6 +573913,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -575458,6 +575698,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -575633,6 +575874,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -578974,6 +579216,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -579149,6 +579392,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -579458,6 +579702,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -579633,6 +579878,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -581535,6 +581781,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -581710,6 +581957,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -582423,6 +582671,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -582598,6 +582847,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -582904,6 +583154,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -583079,6 +583330,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -584618,6 +584870,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -584793,6 +585046,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -585191,6 +585445,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -585366,6 +585621,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -585713,6 +585969,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -585888,6 +586145,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -586220,6 +586478,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -586395,6 +586654,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -611022,6 +611282,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -611197,6 +611458,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -611507,6 +611769,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -611682,6 +611945,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -614088,6 +614352,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -614263,6 +614528,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -614492,6 +614758,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -614667,6 +614934,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622766,6 +623034,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -622941,6 +623210,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -623426,6 +623696,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -623601,6 +623872,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -625769,6 +626041,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -625944,6 +626217,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -626242,6 +626516,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -626417,6 +626692,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -626668,6 +626944,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -626843,6 +627120,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -627092,6 +627370,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -627267,6 +627546,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -627463,6 +627743,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -627638,6 +627919,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -627834,6 +628116,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -628009,6 +628292,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -628541,6 +628825,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -628716,6 +629001,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -628912,6 +629198,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -629087,6 +629374,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -629283,6 +629571,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -629458,6 +629747,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -629817,6 +630107,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -629992,6 +630283,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -630188,6 +630480,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -630363,6 +630656,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -630559,6 +630853,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -630734,6 +631029,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -630930,6 +631226,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -631105,6 +631402,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -634537,6 +634835,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
@@ -634814,6 +635113,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -634989,6 +635289,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -635164,6 +635465,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -635968,6 +636270,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -636111,6 +636414,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -636286,6 +636590,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -636461,6 +636766,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -636632,6 +636938,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -636761,6 +637068,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -636936,6 +637244,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637111,6 +637420,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637240,6 +637550,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -637369,6 +637680,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -637559,6 +637871,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637734,6 +638047,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637909,6 +638223,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638038,6 +638353,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638213,6 +638529,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638388,6 +638705,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638700,6 +639018,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -638883,6 +639202,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -639058,6 +639378,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -639233,6 +639554,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -639546,6 +639868,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -639729,6 +640052,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -639904,6 +640228,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -640079,6 +640404,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -640392,6 +640718,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -640535,6 +640862,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -640710,6 +641038,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -640885,6 +641214,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -642887,6 +643217,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -643016,6 +643347,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -643191,6 +643523,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -643366,6 +643699,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -643619,6 +643953,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -643748,6 +644083,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -643923,6 +644259,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -644098,6 +644435,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -644295,6 +644633,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -644486,6 +644825,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -644661,6 +645001,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -644836,6 +645177,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -645007,6 +645349,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -645136,6 +645479,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -645265,6 +645609,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -645394,6 +645739,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -645535,6 +645881,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -645710,6 +646057,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -645885,6 +646233,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646014,6 +646363,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646189,6 +646539,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646364,6 +646715,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646493,6 +646845,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646668,6 +647021,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646843,6 +647197,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646972,6 +647327,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -647147,6 +647503,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -647322,6 +647679,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -647493,6 +647851,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -647622,6 +647981,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -647751,6 +648111,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -647880,6 +648241,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -648021,6 +648383,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648196,6 +648559,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648371,6 +648735,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648500,6 +648865,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648675,6 +649041,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648850,6 +649217,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648979,6 +649347,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649154,6 +649523,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649329,6 +649699,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649458,6 +649829,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649633,6 +650005,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649808,6 +650181,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649979,6 +650353,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -650108,6 +650483,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -650237,6 +650613,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -650366,6 +650743,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -650495,6 +650873,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -650670,6 +651049,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -650845,6 +651225,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -650974,6 +651355,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651149,6 +651531,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651324,6 +651707,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651453,6 +651837,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651628,6 +652013,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651803,6 +652189,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651932,6 +652319,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -652107,6 +652495,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -652282,6 +652671,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -652411,6 +652801,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -652540,6 +652931,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -652669,6 +653061,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -652798,6 +653191,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -652927,6 +653321,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -653102,6 +653497,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -653277,6 +653673,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -653406,6 +653803,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -653581,6 +653979,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -653756,6 +654155,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -653885,6 +654285,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -654060,6 +654461,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -654235,6 +654637,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -654364,6 +654767,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -654539,6 +654943,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -654714,6 +655119,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -654843,6 +655249,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -654972,6 +655379,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -655101,6 +655509,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -655230,6 +655639,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -655359,6 +655769,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -655534,6 +655945,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -655709,6 +656121,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -655838,6 +656251,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656013,6 +656427,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656188,6 +656603,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656317,6 +656733,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656492,6 +656909,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656667,6 +657085,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656796,6 +657215,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656971,6 +657391,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -657146,6 +657567,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -667701,6 +668123,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -667876,6 +668299,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -668051,6 +668475,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -677328,6 +677753,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -677503,6 +677929,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -677678,6 +678105,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -692443,6 +692871,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -692572,6 +693001,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -692747,6 +693177,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -692922,6 +693353,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -693171,6 +693603,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -693300,6 +693733,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -693475,6 +693909,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -693650,6 +694085,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -693847,6 +694283,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -693976,6 +694413,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -694151,6 +694589,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -694326,6 +694765,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -694519,6 +694959,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -694648,6 +695089,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -694823,6 +695265,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -694998,6 +695441,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -695127,6 +695571,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -695256,6 +695701,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -695431,6 +695877,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -695606,6 +696053,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -695735,6 +696183,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -695864,6 +696313,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -696039,6 +696489,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -696214,6 +696665,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -696763,6 +697215,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -696892,6 +697345,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -697067,6 +697521,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -697242,6 +697697,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -697371,6 +697827,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -697500,6 +697957,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -697675,6 +698133,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -697850,6 +698309,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -697979,6 +698439,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -698108,6 +698569,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -698283,6 +698745,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -698458,6 +698921,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -698787,6 +699251,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -698916,6 +699381,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -699091,6 +699557,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -699266,6 +699733,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -699395,6 +699863,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -699524,6 +699993,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -699699,6 +700169,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -699874,6 +700345,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -700003,6 +700475,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -700132,6 +700605,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -700307,6 +700781,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -700482,6 +700957,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -700611,6 +701087,7 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
+        bLaSinhVien?: boolean | null
         groupId?: string | null
         sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
@@ -700740,6 +701217,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -700915,6 +701393,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -701090,6 +701569,7 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaSinhVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         groupId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null

@@ -240,6 +240,10 @@ const metadata: ModelMeta = {
                     name: "bLaHocVien",
                     type: "Boolean",
                     isOptional: true,
+                }, bLaSinhVien: {
+                    name: "bLaSinhVien",
+                    type: "Boolean",
+                    isOptional: true,
                 }, group: {
                     name: "group",
                     type: "Group",
