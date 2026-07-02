@@ -748,7 +748,6 @@ model UserProfile {
   bLaGiangVien                         Boolean?
   bLaCanBoNhanVien                     Boolean?
   bLaHocVien                           Boolean?
-  bLaSinhVien                          Boolean?
   group                                Group?                              @relation(fields: [groupId], references: [id])
   groupId                              String?
   sDM_DonViId                          String?                             @db.Uuid()
