@@ -29654,7 +29654,7 @@ export namespace Prisma {
     surveyObjectTypes: number
     classRegisterSession: number
     documentFiles: number
-    thesisSession: number
+    thesisSessions: number
     planTrainings: number
     graduationSessions: number
     planTrainingPractice: number
@@ -29673,7 +29673,7 @@ export namespace Prisma {
     surveyObjectTypes?: boolean | TrainingCourseCountOutputTypeCountSurveyObjectTypesArgs
     classRegisterSession?: boolean | TrainingCourseCountOutputTypeCountClassRegisterSessionArgs
     documentFiles?: boolean | TrainingCourseCountOutputTypeCountDocumentFilesArgs
-    thesisSession?: boolean | TrainingCourseCountOutputTypeCountThesisSessionArgs
+    thesisSessions?: boolean | TrainingCourseCountOutputTypeCountThesisSessionsArgs
     planTrainings?: boolean | TrainingCourseCountOutputTypeCountPlanTrainingsArgs
     graduationSessions?: boolean | TrainingCourseCountOutputTypeCountGraduationSessionsArgs
     planTrainingPractice?: boolean | TrainingCourseCountOutputTypeCountPlanTrainingPracticeArgs
@@ -29777,7 +29777,7 @@ export namespace Prisma {
   /**
    * TrainingCourseCountOutputType without action
    */
-  export type TrainingCourseCountOutputTypeCountThesisSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TrainingCourseCountOutputTypeCountThesisSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ThesisSessionWhereInput
   }
 
@@ -32348,10 +32348,12 @@ export namespace Prisma {
    */
 
   export type ThesisSessionCountOutputType = {
+    trainingCourses: number
     thesisProject: number
   }
 
   export type ThesisSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    trainingCourses?: boolean | ThesisSessionCountOutputTypeCountTrainingCoursesArgs
     thesisProject?: boolean | ThesisSessionCountOutputTypeCountThesisProjectArgs
   }
 
@@ -32364,6 +32366,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the ThesisSessionCountOutputType
      */
     select?: ThesisSessionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ThesisSessionCountOutputType without action
+   */
+  export type ThesisSessionCountOutputTypeCountTrainingCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TrainingCourseWhereInput
   }
 
   /**
@@ -151123,7 +151132,7 @@ export namespace Prisma {
     surveyObjectTypes?: boolean | TrainingCourse$surveyObjectTypesArgs<ExtArgs>
     classRegisterSession?: boolean | TrainingCourse$classRegisterSessionArgs<ExtArgs>
     documentFiles?: boolean | TrainingCourse$documentFilesArgs<ExtArgs>
-    thesisSession?: boolean | TrainingCourse$thesisSessionArgs<ExtArgs>
+    thesisSessions?: boolean | TrainingCourse$thesisSessionsArgs<ExtArgs>
     planTrainings?: boolean | TrainingCourse$planTrainingsArgs<ExtArgs>
     graduationSessions?: boolean | TrainingCourse$graduationSessionsArgs<ExtArgs>
     planTrainingPractice?: boolean | TrainingCourse$planTrainingPracticeArgs<ExtArgs>
@@ -151288,7 +151297,7 @@ export namespace Prisma {
     surveyObjectTypes?: boolean | TrainingCourse$surveyObjectTypesArgs<ExtArgs>
     classRegisterSession?: boolean | TrainingCourse$classRegisterSessionArgs<ExtArgs>
     documentFiles?: boolean | TrainingCourse$documentFilesArgs<ExtArgs>
-    thesisSession?: boolean | TrainingCourse$thesisSessionArgs<ExtArgs>
+    thesisSessions?: boolean | TrainingCourse$thesisSessionsArgs<ExtArgs>
     planTrainings?: boolean | TrainingCourse$planTrainingsArgs<ExtArgs>
     graduationSessions?: boolean | TrainingCourse$graduationSessionsArgs<ExtArgs>
     planTrainingPractice?: boolean | TrainingCourse$planTrainingPracticeArgs<ExtArgs>
@@ -151323,7 +151332,7 @@ export namespace Prisma {
       surveyObjectTypes: Prisma.$SurveyObjectTypePayload<ExtArgs>[]
       classRegisterSession: Prisma.$ClassRegisterSessionPayload<ExtArgs>[]
       documentFiles: Prisma.$DocumentFilePayload<ExtArgs>[]
-      thesisSession: Prisma.$ThesisSessionPayload<ExtArgs>[]
+      thesisSessions: Prisma.$ThesisSessionPayload<ExtArgs>[]
       planTrainings: Prisma.$PlanTrainingPayload<ExtArgs>[]
       graduationSessions: Prisma.$GraduationSessionPayload<ExtArgs>[]
       planTrainingPractice: Prisma.$PlanTrainingPracticePayload<ExtArgs>[]
@@ -151822,7 +151831,7 @@ export namespace Prisma {
     surveyObjectTypes<T extends TrainingCourse$surveyObjectTypesArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$surveyObjectTypesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     classRegisterSession<T extends TrainingCourse$classRegisterSessionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$classRegisterSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     documentFiles<T extends TrainingCourse$documentFilesArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$documentFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    thesisSession<T extends TrainingCourse$thesisSessionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$thesisSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    thesisSessions<T extends TrainingCourse$thesisSessionsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$thesisSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     planTrainings<T extends TrainingCourse$planTrainingsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$planTrainingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanTrainingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     graduationSessions<T extends TrainingCourse$graduationSessionsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$graduationSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GraduationSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     planTrainingPractice<T extends TrainingCourse$planTrainingPracticeArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$planTrainingPracticeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanTrainingPracticePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -152600,9 +152609,9 @@ export namespace Prisma {
   }
 
   /**
-   * TrainingCourse.thesisSession
+   * TrainingCourse.thesisSessions
    */
-  export type TrainingCourse$thesisSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TrainingCourse$thesisSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the ThesisSession
      */
@@ -239733,7 +239742,6 @@ export namespace Prisma {
     startDate: Date | null
     endDate: Date | null
     trainingObjectTypeId: string | null
-    trainingCourseId: string | null
     proposalReport: string | null
     councilReport: string | null
     graduationReport: string | null
@@ -239766,7 +239774,6 @@ export namespace Prisma {
     startDate: Date | null
     endDate: Date | null
     trainingObjectTypeId: string | null
-    trainingCourseId: string | null
     proposalReport: string | null
     councilReport: string | null
     graduationReport: string | null
@@ -239799,7 +239806,6 @@ export namespace Prisma {
     startDate: number
     endDate: number
     trainingObjectTypeId: number
-    trainingCourseId: number
     proposalReport: number
     councilReport: number
     graduationReport: number
@@ -239834,7 +239840,6 @@ export namespace Prisma {
     startDate?: true
     endDate?: true
     trainingObjectTypeId?: true
-    trainingCourseId?: true
     proposalReport?: true
     councilReport?: true
     graduationReport?: true
@@ -239867,7 +239872,6 @@ export namespace Prisma {
     startDate?: true
     endDate?: true
     trainingObjectTypeId?: true
-    trainingCourseId?: true
     proposalReport?: true
     councilReport?: true
     graduationReport?: true
@@ -239900,7 +239904,6 @@ export namespace Prisma {
     startDate?: true
     endDate?: true
     trainingObjectTypeId?: true
-    trainingCourseId?: true
     proposalReport?: true
     councilReport?: true
     graduationReport?: true
@@ -240006,7 +240009,6 @@ export namespace Prisma {
     startDate: Date
     endDate: Date
     trainingObjectTypeId: string
-    trainingCourseId: string
     proposalReport: string | null
     councilReport: string | null
     graduationReport: string | null
@@ -240056,7 +240058,6 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     trainingObjectTypeId?: boolean
-    trainingCourseId?: boolean
     proposalReport?: boolean
     councilReport?: boolean
     graduationReport?: boolean
@@ -240075,7 +240076,7 @@ export namespace Prisma {
     councilDeadline?: boolean
     configPaymentSessionId?: boolean
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+    trainingCourses?: boolean | ThesisSession$trainingCoursesArgs<ExtArgs>
     thesisProject?: boolean | ThesisSession$thesisProjectArgs<ExtArgs>
     configPayment?: boolean | ThesisSession$configPaymentArgs<ExtArgs>
     _count?: boolean | ThesisSessionCountOutputTypeDefaultArgs<ExtArgs>
@@ -240094,7 +240095,6 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     trainingObjectTypeId?: boolean
-    trainingCourseId?: boolean
     proposalReport?: boolean
     councilReport?: boolean
     graduationReport?: boolean
@@ -240113,7 +240113,6 @@ export namespace Prisma {
     councilDeadline?: boolean
     configPaymentSessionId?: boolean
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
     configPayment?: boolean | ThesisSession$configPaymentArgs<ExtArgs>
   }, ExtArgs["result"]["thesisSession"]>
 
@@ -240130,7 +240129,6 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     trainingObjectTypeId?: boolean
-    trainingCourseId?: boolean
     proposalReport?: boolean
     councilReport?: boolean
     graduationReport?: boolean
@@ -240149,7 +240147,6 @@ export namespace Prisma {
     councilDeadline?: boolean
     configPaymentSessionId?: boolean
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
     configPayment?: boolean | ThesisSession$configPaymentArgs<ExtArgs>
   }, ExtArgs["result"]["thesisSession"]>
 
@@ -240166,7 +240163,6 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     trainingObjectTypeId?: boolean
-    trainingCourseId?: boolean
     proposalReport?: boolean
     councilReport?: boolean
     graduationReport?: boolean
@@ -240186,22 +240182,20 @@ export namespace Prisma {
     configPaymentSessionId?: boolean
   }
 
-  export type ThesisSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "trainingObjectTypeId" | "trainingCourseId" | "proposalReport" | "councilReport" | "graduationReport" | "decisionNumber" | "decisionMaker" | "decisionDate" | "defenseDecisionNumber" | "defenseDecisionMaker" | "defenseDecisionDate" | "graduationNumber" | "graduationDecisionMaker" | "graduationDecisionDate" | "chief" | "deputy" | "topicEntryDeadline" | "councilDeadline" | "configPaymentSessionId", ExtArgs["result"]["thesisSession"]>
+  export type ThesisSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "trainingObjectTypeId" | "proposalReport" | "councilReport" | "graduationReport" | "decisionNumber" | "decisionMaker" | "decisionDate" | "defenseDecisionNumber" | "defenseDecisionMaker" | "defenseDecisionDate" | "graduationNumber" | "graduationDecisionMaker" | "graduationDecisionDate" | "chief" | "deputy" | "topicEntryDeadline" | "councilDeadline" | "configPaymentSessionId", ExtArgs["result"]["thesisSession"]>
   export type ThesisSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+    trainingCourses?: boolean | ThesisSession$trainingCoursesArgs<ExtArgs>
     thesisProject?: boolean | ThesisSession$thesisProjectArgs<ExtArgs>
     configPayment?: boolean | ThesisSession$configPaymentArgs<ExtArgs>
     _count?: boolean | ThesisSessionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ThesisSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
     configPayment?: boolean | ThesisSession$configPaymentArgs<ExtArgs>
   }
   export type ThesisSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
     configPayment?: boolean | ThesisSession$configPaymentArgs<ExtArgs>
   }
 
@@ -240209,7 +240203,7 @@ export namespace Prisma {
     name: "ThesisSession"
     objects: {
       trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs>
-      trainingCourse: Prisma.$TrainingCoursePayload<ExtArgs>
+      trainingCourses: Prisma.$TrainingCoursePayload<ExtArgs>[]
       thesisProject: Prisma.$ThesisProjectPayload<ExtArgs>[]
       configPayment: Prisma.$ConfigPaymentSessionPayload<ExtArgs> | null
     }
@@ -240226,7 +240220,6 @@ export namespace Prisma {
       startDate: Date
       endDate: Date
       trainingObjectTypeId: string
-      trainingCourseId: string
       /**
        * Tờ trình đề tài
        */
@@ -240684,7 +240677,7 @@ export namespace Prisma {
   export interface Prisma__ThesisSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     trainingObjectType<T extends TrainingObjectTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectTypeDefaultArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    trainingCourse<T extends TrainingCourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourseDefaultArgs<ExtArgs>>): Prisma__TrainingCourseClient<$Result.GetResult<Prisma.$TrainingCoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    trainingCourses<T extends ThesisSession$trainingCoursesArgs<ExtArgs> = {}>(args?: Subset<T, ThesisSession$trainingCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingCoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     thesisProject<T extends ThesisSession$thesisProjectArgs<ExtArgs> = {}>(args?: Subset<T, ThesisSession$thesisProjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     configPayment<T extends ThesisSession$configPaymentArgs<ExtArgs> = {}>(args?: Subset<T, ThesisSession$configPaymentArgs<ExtArgs>>): Prisma__ConfigPaymentSessionClient<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
@@ -240728,7 +240721,6 @@ export namespace Prisma {
     readonly startDate: FieldRef<"ThesisSession", 'DateTime'>
     readonly endDate: FieldRef<"ThesisSession", 'DateTime'>
     readonly trainingObjectTypeId: FieldRef<"ThesisSession", 'String'>
-    readonly trainingCourseId: FieldRef<"ThesisSession", 'String'>
     readonly proposalReport: FieldRef<"ThesisSession", 'String'>
     readonly councilReport: FieldRef<"ThesisSession", 'String'>
     readonly graduationReport: FieldRef<"ThesisSession", 'String'>
@@ -241139,6 +241131,30 @@ export namespace Prisma {
      * Limit how many ThesisSessions to delete.
      */
     limit?: number
+  }
+
+  /**
+   * ThesisSession.trainingCourses
+   */
+  export type ThesisSession$trainingCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourse
+     */
+    select?: TrainingCourseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourse
+     */
+    omit?: TrainingCourseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseInclude<ExtArgs> | null
+    where?: TrainingCourseWhereInput
+    orderBy?: TrainingCourseOrderByWithRelationInput | TrainingCourseOrderByWithRelationInput[]
+    cursor?: TrainingCourseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TrainingCourseScalarFieldEnum | TrainingCourseScalarFieldEnum[]
   }
 
   /**
@@ -395841,7 +395857,6 @@ export namespace Prisma {
     startDate: 'startDate',
     endDate: 'endDate',
     trainingObjectTypeId: 'trainingObjectTypeId',
-    trainingCourseId: 'trainingCourseId',
     proposalReport: 'proposalReport',
     councilReport: 'councilReport',
     graduationReport: 'graduationReport',
@@ -400520,7 +400535,6 @@ export namespace Prisma {
     createdBy: 'createdBy',
     name: 'name',
     trainingObjectTypeId: 'trainingObjectTypeId',
-    trainingCourseId: 'trainingCourseId',
     proposalReport: 'proposalReport',
     councilReport: 'councilReport',
     graduationReport: 'graduationReport',
@@ -413822,7 +413836,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeListRelationFilter
     classRegisterSession?: ClassRegisterSessionListRelationFilter
     documentFiles?: DocumentFileListRelationFilter
-    thesisSession?: ThesisSessionListRelationFilter
+    thesisSessions?: ThesisSessionListRelationFilter
     planTrainings?: PlanTrainingListRelationFilter
     graduationSessions?: GraduationSessionListRelationFilter
     planTrainingPractice?: PlanTrainingPracticeListRelationFilter
@@ -413886,7 +413900,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeOrderByRelationAggregateInput
     classRegisterSession?: ClassRegisterSessionOrderByRelationAggregateInput
     documentFiles?: DocumentFileOrderByRelationAggregateInput
-    thesisSession?: ThesisSessionOrderByRelationAggregateInput
+    thesisSessions?: ThesisSessionOrderByRelationAggregateInput
     planTrainings?: PlanTrainingOrderByRelationAggregateInput
     graduationSessions?: GraduationSessionOrderByRelationAggregateInput
     planTrainingPractice?: PlanTrainingPracticeOrderByRelationAggregateInput
@@ -413954,7 +413968,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeListRelationFilter
     classRegisterSession?: ClassRegisterSessionListRelationFilter
     documentFiles?: DocumentFileListRelationFilter
-    thesisSession?: ThesisSessionListRelationFilter
+    thesisSessions?: ThesisSessionListRelationFilter
     planTrainings?: PlanTrainingListRelationFilter
     graduationSessions?: GraduationSessionListRelationFilter
     planTrainingPractice?: PlanTrainingPracticeListRelationFilter
@@ -422025,7 +422039,6 @@ export namespace Prisma {
     startDate?: DateTimeFilter<"ThesisSession"> | Date | string
     endDate?: DateTimeFilter<"ThesisSession"> | Date | string
     trainingObjectTypeId?: StringFilter<"ThesisSession"> | string
-    trainingCourseId?: StringFilter<"ThesisSession"> | string
     proposalReport?: StringNullableFilter<"ThesisSession"> | string | null
     councilReport?: StringNullableFilter<"ThesisSession"> | string | null
     graduationReport?: StringNullableFilter<"ThesisSession"> | string | null
@@ -422044,7 +422057,7 @@ export namespace Prisma {
     councilDeadline?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
     configPaymentSessionId?: StringNullableFilter<"ThesisSession"> | string | null
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
-    trainingCourse?: XOR<TrainingCourseScalarRelationFilter, TrainingCourseWhereInput>
+    trainingCourses?: TrainingCourseListRelationFilter
     thesisProject?: ThesisProjectListRelationFilter
     configPayment?: XOR<ConfigPaymentSessionNullableScalarRelationFilter, ConfigPaymentSessionWhereInput> | null
   }
@@ -422062,7 +422075,6 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     trainingObjectTypeId?: SortOrder
-    trainingCourseId?: SortOrder
     proposalReport?: SortOrderInput | SortOrder
     councilReport?: SortOrderInput | SortOrder
     graduationReport?: SortOrderInput | SortOrder
@@ -422081,7 +422093,7 @@ export namespace Prisma {
     councilDeadline?: SortOrderInput | SortOrder
     configPaymentSessionId?: SortOrderInput | SortOrder
     trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
-    trainingCourse?: TrainingCourseOrderByWithRelationInput
+    trainingCourses?: TrainingCourseOrderByRelationAggregateInput
     thesisProject?: ThesisProjectOrderByRelationAggregateInput
     configPayment?: ConfigPaymentSessionOrderByWithRelationInput
     _relevance?: ThesisSessionOrderByRelevanceInput
@@ -422103,7 +422115,6 @@ export namespace Prisma {
     startDate?: DateTimeFilter<"ThesisSession"> | Date | string
     endDate?: DateTimeFilter<"ThesisSession"> | Date | string
     trainingObjectTypeId?: StringFilter<"ThesisSession"> | string
-    trainingCourseId?: StringFilter<"ThesisSession"> | string
     proposalReport?: StringNullableFilter<"ThesisSession"> | string | null
     councilReport?: StringNullableFilter<"ThesisSession"> | string | null
     graduationReport?: StringNullableFilter<"ThesisSession"> | string | null
@@ -422122,7 +422133,7 @@ export namespace Prisma {
     councilDeadline?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
     configPaymentSessionId?: StringNullableFilter<"ThesisSession"> | string | null
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
-    trainingCourse?: XOR<TrainingCourseScalarRelationFilter, TrainingCourseWhereInput>
+    trainingCourses?: TrainingCourseListRelationFilter
     thesisProject?: ThesisProjectListRelationFilter
     configPayment?: XOR<ConfigPaymentSessionNullableScalarRelationFilter, ConfigPaymentSessionWhereInput> | null
   }, "id" | "code">
@@ -422140,7 +422151,6 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     trainingObjectTypeId?: SortOrder
-    trainingCourseId?: SortOrder
     proposalReport?: SortOrderInput | SortOrder
     councilReport?: SortOrderInput | SortOrder
     graduationReport?: SortOrderInput | SortOrder
@@ -422179,7 +422189,6 @@ export namespace Prisma {
     startDate?: DateTimeWithAggregatesFilter<"ThesisSession"> | Date | string
     endDate?: DateTimeWithAggregatesFilter<"ThesisSession"> | Date | string
     trainingObjectTypeId?: StringWithAggregatesFilter<"ThesisSession"> | string
-    trainingCourseId?: StringWithAggregatesFilter<"ThesisSession"> | string
     proposalReport?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
     councilReport?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
     graduationReport?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
@@ -447102,7 +447111,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -447163,7 +447172,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -447224,7 +447233,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -447285,7 +447294,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -456536,7 +456545,7 @@ export namespace Prisma {
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
-    trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
+    trainingCourses?: TrainingCourseCreateNestedManyWithoutThesisSessionsInput
     thesisProject?: ThesisProjectCreateNestedManyWithoutThesisSessionInput
     configPayment?: ConfigPaymentSessionCreateNestedOneWithoutThesisSessionsInput
   }
@@ -456554,7 +456563,6 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     trainingObjectTypeId: string
-    trainingCourseId: string
     proposalReport?: string | null
     councilReport?: string | null
     graduationReport?: string | null
@@ -456572,6 +456580,7 @@ export namespace Prisma {
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
     configPaymentSessionId?: string | null
+    trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutThesisSessionsInput
     thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
   }
 
@@ -456604,7 +456613,7 @@ export namespace Prisma {
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
-    trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
+    trainingCourses?: TrainingCourseUpdateManyWithoutThesisSessionsNestedInput
     thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
     configPayment?: ConfigPaymentSessionUpdateOneWithoutThesisSessionsNestedInput
   }
@@ -456622,7 +456631,6 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingCourseId?: StringFieldUpdateOperationsInput | string
     proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
     councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     graduationReport?: NullableStringFieldUpdateOperationsInput | string | null
@@ -456640,6 +456648,7 @@ export namespace Prisma {
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     configPaymentSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutThesisSessionsNestedInput
     thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
   }
 
@@ -456656,7 +456665,6 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     trainingObjectTypeId: string
-    trainingCourseId: string
     proposalReport?: string | null
     councilReport?: string | null
     graduationReport?: string | null
@@ -456719,7 +456727,6 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingCourseId?: StringFieldUpdateOperationsInput | string
     proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
     councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     graduationReport?: NullableStringFieldUpdateOperationsInput | string | null
@@ -484838,7 +484845,6 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     trainingObjectTypeId?: SortOrder
-    trainingCourseId?: SortOrder
     proposalReport?: SortOrder
     councilReport?: SortOrder
     graduationReport?: SortOrder
@@ -484871,7 +484877,6 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     trainingObjectTypeId?: SortOrder
-    trainingCourseId?: SortOrder
     proposalReport?: SortOrder
     councilReport?: SortOrder
     graduationReport?: SortOrder
@@ -484904,7 +484909,6 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     trainingObjectTypeId?: SortOrder
-    trainingCourseId?: SortOrder
     proposalReport?: SortOrder
     councilReport?: SortOrder
     graduationReport?: SortOrder
@@ -503257,10 +503261,9 @@ export namespace Prisma {
     connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
   }
 
-  export type ThesisSessionCreateNestedManyWithoutTrainingCourseInput = {
-    create?: XOR<ThesisSessionCreateWithoutTrainingCourseInput, ThesisSessionUncheckedCreateWithoutTrainingCourseInput> | ThesisSessionCreateWithoutTrainingCourseInput[] | ThesisSessionUncheckedCreateWithoutTrainingCourseInput[]
-    connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingCourseInput | ThesisSessionCreateOrConnectWithoutTrainingCourseInput[]
-    createMany?: ThesisSessionCreateManyTrainingCourseInputEnvelope
+  export type ThesisSessionCreateNestedManyWithoutTrainingCoursesInput = {
+    create?: XOR<ThesisSessionCreateWithoutTrainingCoursesInput, ThesisSessionUncheckedCreateWithoutTrainingCoursesInput> | ThesisSessionCreateWithoutTrainingCoursesInput[] | ThesisSessionUncheckedCreateWithoutTrainingCoursesInput[]
+    connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingCoursesInput | ThesisSessionCreateOrConnectWithoutTrainingCoursesInput[]
     connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
   }
 
@@ -503366,10 +503369,9 @@ export namespace Prisma {
     connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
   }
 
-  export type ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput = {
-    create?: XOR<ThesisSessionCreateWithoutTrainingCourseInput, ThesisSessionUncheckedCreateWithoutTrainingCourseInput> | ThesisSessionCreateWithoutTrainingCourseInput[] | ThesisSessionUncheckedCreateWithoutTrainingCourseInput[]
-    connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingCourseInput | ThesisSessionCreateOrConnectWithoutTrainingCourseInput[]
-    createMany?: ThesisSessionCreateManyTrainingCourseInputEnvelope
+  export type ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput = {
+    create?: XOR<ThesisSessionCreateWithoutTrainingCoursesInput, ThesisSessionUncheckedCreateWithoutTrainingCoursesInput> | ThesisSessionCreateWithoutTrainingCoursesInput[] | ThesisSessionUncheckedCreateWithoutTrainingCoursesInput[]
+    connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingCoursesInput | ThesisSessionCreateOrConnectWithoutTrainingCoursesInput[]
     connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
   }
 
@@ -503589,17 +503591,16 @@ export namespace Prisma {
     deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
   }
 
-  export type ThesisSessionUpdateManyWithoutTrainingCourseNestedInput = {
-    create?: XOR<ThesisSessionCreateWithoutTrainingCourseInput, ThesisSessionUncheckedCreateWithoutTrainingCourseInput> | ThesisSessionCreateWithoutTrainingCourseInput[] | ThesisSessionUncheckedCreateWithoutTrainingCourseInput[]
-    connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingCourseInput | ThesisSessionCreateOrConnectWithoutTrainingCourseInput[]
-    upsert?: ThesisSessionUpsertWithWhereUniqueWithoutTrainingCourseInput | ThesisSessionUpsertWithWhereUniqueWithoutTrainingCourseInput[]
-    createMany?: ThesisSessionCreateManyTrainingCourseInputEnvelope
+  export type ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput = {
+    create?: XOR<ThesisSessionCreateWithoutTrainingCoursesInput, ThesisSessionUncheckedCreateWithoutTrainingCoursesInput> | ThesisSessionCreateWithoutTrainingCoursesInput[] | ThesisSessionUncheckedCreateWithoutTrainingCoursesInput[]
+    connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingCoursesInput | ThesisSessionCreateOrConnectWithoutTrainingCoursesInput[]
+    upsert?: ThesisSessionUpsertWithWhereUniqueWithoutTrainingCoursesInput | ThesisSessionUpsertWithWhereUniqueWithoutTrainingCoursesInput[]
     set?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
     disconnect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
     delete?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
     connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
-    update?: ThesisSessionUpdateWithWhereUniqueWithoutTrainingCourseInput | ThesisSessionUpdateWithWhereUniqueWithoutTrainingCourseInput[]
-    updateMany?: ThesisSessionUpdateManyWithWhereWithoutTrainingCourseInput | ThesisSessionUpdateManyWithWhereWithoutTrainingCourseInput[]
+    update?: ThesisSessionUpdateWithWhereUniqueWithoutTrainingCoursesInput | ThesisSessionUpdateWithWhereUniqueWithoutTrainingCoursesInput[]
+    updateMany?: ThesisSessionUpdateManyWithWhereWithoutTrainingCoursesInput | ThesisSessionUpdateManyWithWhereWithoutTrainingCoursesInput[]
     deleteMany?: ThesisSessionScalarWhereInput | ThesisSessionScalarWhereInput[]
   }
 
@@ -503810,17 +503811,16 @@ export namespace Prisma {
     deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
   }
 
-  export type ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput = {
-    create?: XOR<ThesisSessionCreateWithoutTrainingCourseInput, ThesisSessionUncheckedCreateWithoutTrainingCourseInput> | ThesisSessionCreateWithoutTrainingCourseInput[] | ThesisSessionUncheckedCreateWithoutTrainingCourseInput[]
-    connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingCourseInput | ThesisSessionCreateOrConnectWithoutTrainingCourseInput[]
-    upsert?: ThesisSessionUpsertWithWhereUniqueWithoutTrainingCourseInput | ThesisSessionUpsertWithWhereUniqueWithoutTrainingCourseInput[]
-    createMany?: ThesisSessionCreateManyTrainingCourseInputEnvelope
+  export type ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput = {
+    create?: XOR<ThesisSessionCreateWithoutTrainingCoursesInput, ThesisSessionUncheckedCreateWithoutTrainingCoursesInput> | ThesisSessionCreateWithoutTrainingCoursesInput[] | ThesisSessionUncheckedCreateWithoutTrainingCoursesInput[]
+    connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingCoursesInput | ThesisSessionCreateOrConnectWithoutTrainingCoursesInput[]
+    upsert?: ThesisSessionUpsertWithWhereUniqueWithoutTrainingCoursesInput | ThesisSessionUpsertWithWhereUniqueWithoutTrainingCoursesInput[]
     set?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
     disconnect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
     delete?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
     connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
-    update?: ThesisSessionUpdateWithWhereUniqueWithoutTrainingCourseInput | ThesisSessionUpdateWithWhereUniqueWithoutTrainingCourseInput[]
-    updateMany?: ThesisSessionUpdateManyWithWhereWithoutTrainingCourseInput | ThesisSessionUpdateManyWithWhereWithoutTrainingCourseInput[]
+    update?: ThesisSessionUpdateWithWhereUniqueWithoutTrainingCoursesInput | ThesisSessionUpdateWithWhereUniqueWithoutTrainingCoursesInput[]
+    updateMany?: ThesisSessionUpdateManyWithWhereWithoutTrainingCoursesInput | ThesisSessionUpdateManyWithWhereWithoutTrainingCoursesInput[]
     deleteMany?: ThesisSessionScalarWhereInput | ThesisSessionScalarWhereInput[]
   }
 
@@ -513569,10 +513569,10 @@ export namespace Prisma {
     connect?: TrainingObjectTypeWhereUniqueInput
   }
 
-  export type TrainingCourseCreateNestedOneWithoutThesisSessionInput = {
-    create?: XOR<TrainingCourseCreateWithoutThesisSessionInput, TrainingCourseUncheckedCreateWithoutThesisSessionInput>
-    connectOrCreate?: TrainingCourseCreateOrConnectWithoutThesisSessionInput
-    connect?: TrainingCourseWhereUniqueInput
+  export type TrainingCourseCreateNestedManyWithoutThesisSessionsInput = {
+    create?: XOR<TrainingCourseCreateWithoutThesisSessionsInput, TrainingCourseUncheckedCreateWithoutThesisSessionsInput> | TrainingCourseCreateWithoutThesisSessionsInput[] | TrainingCourseUncheckedCreateWithoutThesisSessionsInput[]
+    connectOrCreate?: TrainingCourseCreateOrConnectWithoutThesisSessionsInput | TrainingCourseCreateOrConnectWithoutThesisSessionsInput[]
+    connect?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
   }
 
   export type ThesisProjectCreateNestedManyWithoutThesisSessionInput = {
@@ -513586,6 +513586,12 @@ export namespace Prisma {
     create?: XOR<ConfigPaymentSessionCreateWithoutThesisSessionsInput, ConfigPaymentSessionUncheckedCreateWithoutThesisSessionsInput>
     connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutThesisSessionsInput
     connect?: ConfigPaymentSessionWhereUniqueInput
+  }
+
+  export type TrainingCourseUncheckedCreateNestedManyWithoutThesisSessionsInput = {
+    create?: XOR<TrainingCourseCreateWithoutThesisSessionsInput, TrainingCourseUncheckedCreateWithoutThesisSessionsInput> | TrainingCourseCreateWithoutThesisSessionsInput[] | TrainingCourseUncheckedCreateWithoutThesisSessionsInput[]
+    connectOrCreate?: TrainingCourseCreateOrConnectWithoutThesisSessionsInput | TrainingCourseCreateOrConnectWithoutThesisSessionsInput[]
+    connect?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
   }
 
   export type ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput = {
@@ -513603,12 +513609,17 @@ export namespace Prisma {
     update?: XOR<XOR<TrainingObjectTypeUpdateToOneWithWhereWithoutThesisSessionInput, TrainingObjectTypeUpdateWithoutThesisSessionInput>, TrainingObjectTypeUncheckedUpdateWithoutThesisSessionInput>
   }
 
-  export type TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput = {
-    create?: XOR<TrainingCourseCreateWithoutThesisSessionInput, TrainingCourseUncheckedCreateWithoutThesisSessionInput>
-    connectOrCreate?: TrainingCourseCreateOrConnectWithoutThesisSessionInput
-    upsert?: TrainingCourseUpsertWithoutThesisSessionInput
-    connect?: TrainingCourseWhereUniqueInput
-    update?: XOR<XOR<TrainingCourseUpdateToOneWithWhereWithoutThesisSessionInput, TrainingCourseUpdateWithoutThesisSessionInput>, TrainingCourseUncheckedUpdateWithoutThesisSessionInput>
+  export type TrainingCourseUpdateManyWithoutThesisSessionsNestedInput = {
+    create?: XOR<TrainingCourseCreateWithoutThesisSessionsInput, TrainingCourseUncheckedCreateWithoutThesisSessionsInput> | TrainingCourseCreateWithoutThesisSessionsInput[] | TrainingCourseUncheckedCreateWithoutThesisSessionsInput[]
+    connectOrCreate?: TrainingCourseCreateOrConnectWithoutThesisSessionsInput | TrainingCourseCreateOrConnectWithoutThesisSessionsInput[]
+    upsert?: TrainingCourseUpsertWithWhereUniqueWithoutThesisSessionsInput | TrainingCourseUpsertWithWhereUniqueWithoutThesisSessionsInput[]
+    set?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+    disconnect?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+    delete?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+    connect?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+    update?: TrainingCourseUpdateWithWhereUniqueWithoutThesisSessionsInput | TrainingCourseUpdateWithWhereUniqueWithoutThesisSessionsInput[]
+    updateMany?: TrainingCourseUpdateManyWithWhereWithoutThesisSessionsInput | TrainingCourseUpdateManyWithWhereWithoutThesisSessionsInput[]
+    deleteMany?: TrainingCourseScalarWhereInput | TrainingCourseScalarWhereInput[]
   }
 
   export type ThesisProjectUpdateManyWithoutThesisSessionNestedInput = {
@@ -513633,6 +513644,19 @@ export namespace Prisma {
     delete?: ConfigPaymentSessionWhereInput | boolean
     connect?: ConfigPaymentSessionWhereUniqueInput
     update?: XOR<XOR<ConfigPaymentSessionUpdateToOneWithWhereWithoutThesisSessionsInput, ConfigPaymentSessionUpdateWithoutThesisSessionsInput>, ConfigPaymentSessionUncheckedUpdateWithoutThesisSessionsInput>
+  }
+
+  export type TrainingCourseUncheckedUpdateManyWithoutThesisSessionsNestedInput = {
+    create?: XOR<TrainingCourseCreateWithoutThesisSessionsInput, TrainingCourseUncheckedCreateWithoutThesisSessionsInput> | TrainingCourseCreateWithoutThesisSessionsInput[] | TrainingCourseUncheckedCreateWithoutThesisSessionsInput[]
+    connectOrCreate?: TrainingCourseCreateOrConnectWithoutThesisSessionsInput | TrainingCourseCreateOrConnectWithoutThesisSessionsInput[]
+    upsert?: TrainingCourseUpsertWithWhereUniqueWithoutThesisSessionsInput | TrainingCourseUpsertWithWhereUniqueWithoutThesisSessionsInput[]
+    set?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+    disconnect?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+    delete?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+    connect?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+    update?: TrainingCourseUpdateWithWhereUniqueWithoutThesisSessionsInput | TrainingCourseUpdateWithWhereUniqueWithoutThesisSessionsInput[]
+    updateMany?: TrainingCourseUpdateManyWithWhereWithoutThesisSessionsInput | TrainingCourseUpdateManyWithWhereWithoutThesisSessionsInput[]
+    deleteMany?: TrainingCourseScalarWhereInput | TrainingCourseScalarWhereInput[]
   }
 
   export type ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput = {
@@ -575800,7 +575824,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
   }
@@ -575860,7 +575884,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
   }
@@ -576130,7 +576154,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
   }
@@ -576190,7 +576214,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
   }
@@ -576427,7 +576451,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
   }
@@ -576487,7 +576511,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
   }
@@ -576719,7 +576743,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
   }
@@ -576779,7 +576803,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
   }
@@ -584328,7 +584352,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -584388,7 +584412,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -586113,7 +586137,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -586173,7 +586197,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -587218,7 +587242,7 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ThesisSessionCreateWithoutTrainingCourseInput = {
+  export type ThesisSessionCreateWithoutTrainingCoursesInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -587251,7 +587275,7 @@ export namespace Prisma {
     configPayment?: ConfigPaymentSessionCreateNestedOneWithoutThesisSessionsInput
   }
 
-  export type ThesisSessionUncheckedCreateWithoutTrainingCourseInput = {
+  export type ThesisSessionUncheckedCreateWithoutTrainingCoursesInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -587284,14 +587308,9 @@ export namespace Prisma {
     thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
   }
 
-  export type ThesisSessionCreateOrConnectWithoutTrainingCourseInput = {
+  export type ThesisSessionCreateOrConnectWithoutTrainingCoursesInput = {
     where: ThesisSessionWhereUniqueInput
-    create: XOR<ThesisSessionCreateWithoutTrainingCourseInput, ThesisSessionUncheckedCreateWithoutTrainingCourseInput>
-  }
-
-  export type ThesisSessionCreateManyTrainingCourseInputEnvelope = {
-    data: ThesisSessionCreateManyTrainingCourseInput | ThesisSessionCreateManyTrainingCourseInput[]
-    skipDuplicates?: boolean
+    create: XOR<ThesisSessionCreateWithoutTrainingCoursesInput, ThesisSessionUncheckedCreateWithoutTrainingCoursesInput>
   }
 
   export type PlanTrainingCreateWithoutTrainingCourseInput = {
@@ -587986,20 +588005,20 @@ export namespace Prisma {
     data: XOR<DocumentFileUpdateManyMutationInput, DocumentFileUncheckedUpdateManyWithoutTrainingCourseInput>
   }
 
-  export type ThesisSessionUpsertWithWhereUniqueWithoutTrainingCourseInput = {
+  export type ThesisSessionUpsertWithWhereUniqueWithoutTrainingCoursesInput = {
     where: ThesisSessionWhereUniqueInput
-    update: XOR<ThesisSessionUpdateWithoutTrainingCourseInput, ThesisSessionUncheckedUpdateWithoutTrainingCourseInput>
-    create: XOR<ThesisSessionCreateWithoutTrainingCourseInput, ThesisSessionUncheckedCreateWithoutTrainingCourseInput>
+    update: XOR<ThesisSessionUpdateWithoutTrainingCoursesInput, ThesisSessionUncheckedUpdateWithoutTrainingCoursesInput>
+    create: XOR<ThesisSessionCreateWithoutTrainingCoursesInput, ThesisSessionUncheckedCreateWithoutTrainingCoursesInput>
   }
 
-  export type ThesisSessionUpdateWithWhereUniqueWithoutTrainingCourseInput = {
+  export type ThesisSessionUpdateWithWhereUniqueWithoutTrainingCoursesInput = {
     where: ThesisSessionWhereUniqueInput
-    data: XOR<ThesisSessionUpdateWithoutTrainingCourseInput, ThesisSessionUncheckedUpdateWithoutTrainingCourseInput>
+    data: XOR<ThesisSessionUpdateWithoutTrainingCoursesInput, ThesisSessionUncheckedUpdateWithoutTrainingCoursesInput>
   }
 
-  export type ThesisSessionUpdateManyWithWhereWithoutTrainingCourseInput = {
+  export type ThesisSessionUpdateManyWithWhereWithoutTrainingCoursesInput = {
     where: ThesisSessionScalarWhereInput
-    data: XOR<ThesisSessionUpdateManyMutationInput, ThesisSessionUncheckedUpdateManyWithoutTrainingCourseInput>
+    data: XOR<ThesisSessionUpdateManyMutationInput, ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesInput>
   }
 
   export type ThesisSessionScalarWhereInput = {
@@ -588018,7 +588037,6 @@ export namespace Prisma {
     startDate?: DateTimeFilter<"ThesisSession"> | Date | string
     endDate?: DateTimeFilter<"ThesisSession"> | Date | string
     trainingObjectTypeId?: StringFilter<"ThesisSession"> | string
-    trainingCourseId?: StringFilter<"ThesisSession"> | string
     proposalReport?: StringNullableFilter<"ThesisSession"> | string | null
     councilReport?: StringNullableFilter<"ThesisSession"> | string | null
     graduationReport?: StringNullableFilter<"ThesisSession"> | string | null
@@ -588178,7 +588196,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -588238,7 +588256,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -588314,7 +588332,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -588374,7 +588392,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -589070,7 +589088,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -589130,7 +589148,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -590634,7 +590652,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -590694,7 +590712,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -592026,7 +592044,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -592086,7 +592104,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -593006,7 +593024,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -593066,7 +593084,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -597972,7 +597990,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -598032,7 +598050,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -606169,7 +606187,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -606229,7 +606247,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -606891,7 +606909,7 @@ export namespace Prisma {
     deputy?: string | null
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
-    trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
+    trainingCourses?: TrainingCourseCreateNestedManyWithoutThesisSessionsInput
     thesisProject?: ThesisProjectCreateNestedManyWithoutThesisSessionInput
     configPayment?: ConfigPaymentSessionCreateNestedOneWithoutThesisSessionsInput
   }
@@ -606908,7 +606926,6 @@ export namespace Prisma {
     name: string
     startDate: Date | string
     endDate: Date | string
-    trainingCourseId: string
     proposalReport?: string | null
     councilReport?: string | null
     graduationReport?: string | null
@@ -606926,6 +606943,7 @@ export namespace Prisma {
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
     configPaymentSessionId?: string | null
+    trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutThesisSessionsInput
     thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
   }
 
@@ -613992,7 +614010,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -614052,7 +614070,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -614128,7 +614146,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -614188,7 +614206,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -620006,7 +620024,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -620066,7 +620084,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -630246,7 +630264,7 @@ export namespace Prisma {
     create: XOR<TrainingObjectTypeCreateWithoutThesisSessionInput, TrainingObjectTypeUncheckedCreateWithoutThesisSessionInput>
   }
 
-  export type TrainingCourseCreateWithoutThesisSessionInput = {
+  export type TrainingCourseCreateWithoutThesisSessionsInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -630306,7 +630324,7 @@ export namespace Prisma {
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
   }
 
-  export type TrainingCourseUncheckedCreateWithoutThesisSessionInput = {
+  export type TrainingCourseUncheckedCreateWithoutThesisSessionsInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -630366,9 +630384,9 @@ export namespace Prisma {
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
   }
 
-  export type TrainingCourseCreateOrConnectWithoutThesisSessionInput = {
+  export type TrainingCourseCreateOrConnectWithoutThesisSessionsInput = {
     where: TrainingCourseWhereUniqueInput
-    create: XOR<TrainingCourseCreateWithoutThesisSessionInput, TrainingCourseUncheckedCreateWithoutThesisSessionInput>
+    create: XOR<TrainingCourseCreateWithoutThesisSessionsInput, TrainingCourseUncheckedCreateWithoutThesisSessionsInput>
   }
 
   export type ThesisProjectCreateWithoutThesisSessionInput = {
@@ -630621,135 +630639,20 @@ export namespace Prisma {
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
-  export type TrainingCourseUpsertWithoutThesisSessionInput = {
-    update: XOR<TrainingCourseUpdateWithoutThesisSessionInput, TrainingCourseUncheckedUpdateWithoutThesisSessionInput>
-    create: XOR<TrainingCourseCreateWithoutThesisSessionInput, TrainingCourseUncheckedCreateWithoutThesisSessionInput>
-    where?: TrainingCourseWhereInput
+  export type TrainingCourseUpsertWithWhereUniqueWithoutThesisSessionsInput = {
+    where: TrainingCourseWhereUniqueInput
+    update: XOR<TrainingCourseUpdateWithoutThesisSessionsInput, TrainingCourseUncheckedUpdateWithoutThesisSessionsInput>
+    create: XOR<TrainingCourseCreateWithoutThesisSessionsInput, TrainingCourseUncheckedCreateWithoutThesisSessionsInput>
   }
 
-  export type TrainingCourseUpdateToOneWithWhereWithoutThesisSessionInput = {
-    where?: TrainingCourseWhereInput
-    data: XOR<TrainingCourseUpdateWithoutThesisSessionInput, TrainingCourseUncheckedUpdateWithoutThesisSessionInput>
+  export type TrainingCourseUpdateWithWhereUniqueWithoutThesisSessionsInput = {
+    where: TrainingCourseWhereUniqueInput
+    data: XOR<TrainingCourseUpdateWithoutThesisSessionsInput, TrainingCourseUncheckedUpdateWithoutThesisSessionsInput>
   }
 
-  export type TrainingCourseUpdateWithoutThesisSessionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
-    endYear?: NullableIntFieldUpdateOperationsInput | number | null
-    academicYear?: NullableStringFieldUpdateOperationsInput | string | null
-    maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
-    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
-    admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
-    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
-    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
-    admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
-    studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
-    regulation?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
-    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
-    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
-    baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
-    coef_1?: FloatFieldUpdateOperationsInput | number
-    coef_2?: FloatFieldUpdateOperationsInput | number
-    coef_3?: FloatFieldUpdateOperationsInput | number
-    scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
-    examScoreToPass?: FloatFieldUpdateOperationsInput | number
-    scoreToPass?: FloatFieldUpdateOperationsInput | number
-    scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
-    scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
-    scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
-    maxReExamScore?: FloatFieldUpdateOperationsInput | number
-    reduceReExamScore?: FloatFieldUpdateOperationsInput | number
-    scoreToRetain?: FloatFieldUpdateOperationsInput | number
-    semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
-    trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
-    trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
-    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
-    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
-    fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
-    scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
-    academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
-    scholarships?: ScholarshipUpdateManyWithoutTrainingCourseNestedInput
-    academicWarningRule?: AcademicWarningRuleUpdateManyWithoutTrainingCourseNestedInput
-    academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
-    notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
-    surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
-    classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
-    documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
-    graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
-    planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
-  }
-
-  export type TrainingCourseUncheckedUpdateWithoutThesisSessionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: StringFieldUpdateOperationsInput | string
-    semesterStartId?: StringFieldUpdateOperationsInput | string
-    startYear?: NullableIntFieldUpdateOperationsInput | number | null
-    endYear?: NullableIntFieldUpdateOperationsInput | number | null
-    academicYear?: NullableStringFieldUpdateOperationsInput | string | null
-    maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
-    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
-    admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
-    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
-    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
-    admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
-    studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
-    regulation?: NullableStringFieldUpdateOperationsInput | string | null
-    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
-    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
-    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
-    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
-    baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
-    coef_1?: FloatFieldUpdateOperationsInput | number
-    coef_2?: FloatFieldUpdateOperationsInput | number
-    coef_3?: FloatFieldUpdateOperationsInput | number
-    scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
-    examScoreToPass?: FloatFieldUpdateOperationsInput | number
-    scoreToPass?: FloatFieldUpdateOperationsInput | number
-    scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
-    scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
-    scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
-    maxReExamScore?: FloatFieldUpdateOperationsInput | number
-    reduceReExamScore?: FloatFieldUpdateOperationsInput | number
-    scoreToRetain?: FloatFieldUpdateOperationsInput | number
-    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    scholarships?: ScholarshipUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    academicWarningRule?: AcademicWarningRuleUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
-    surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
-    classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
-    documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
+  export type TrainingCourseUpdateManyWithWhereWithoutThesisSessionsInput = {
+    where: TrainingCourseScalarWhereInput
+    data: XOR<TrainingCourseUpdateManyMutationInput, TrainingCourseUncheckedUpdateManyWithoutThesisSessionsInput>
   }
 
   export type ThesisProjectUpsertWithWhereUniqueWithoutThesisSessionInput = {
@@ -631204,7 +631107,7 @@ export namespace Prisma {
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
-    trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
+    trainingCourses?: TrainingCourseCreateNestedManyWithoutThesisSessionsInput
     configPayment?: ConfigPaymentSessionCreateNestedOneWithoutThesisSessionsInput
   }
 
@@ -631221,7 +631124,6 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     trainingObjectTypeId: string
-    trainingCourseId: string
     proposalReport?: string | null
     councilReport?: string | null
     graduationReport?: string | null
@@ -631239,6 +631141,7 @@ export namespace Prisma {
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
     configPaymentSessionId?: string | null
+    trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutThesisSessionsInput
   }
 
   export type ThesisSessionCreateOrConnectWithoutThesisProjectInput = {
@@ -632325,7 +632228,7 @@ export namespace Prisma {
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
-    trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
+    trainingCourses?: TrainingCourseUpdateManyWithoutThesisSessionsNestedInput
     configPayment?: ConfigPaymentSessionUpdateOneWithoutThesisSessionsNestedInput
   }
 
@@ -632342,7 +632245,6 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingCourseId?: StringFieldUpdateOperationsInput | string
     proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
     councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     graduationReport?: NullableStringFieldUpdateOperationsInput | string | null
@@ -632360,6 +632262,7 @@ export namespace Prisma {
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     configPaymentSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutThesisSessionsNestedInput
   }
 
   export type ExpertProfileUpsertWithoutSupervisedThesesInput = {
@@ -637645,7 +637548,7 @@ export namespace Prisma {
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
-    trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
+    trainingCourses?: TrainingCourseCreateNestedManyWithoutThesisSessionsInput
     thesisProject?: ThesisProjectCreateNestedManyWithoutThesisSessionInput
   }
 
@@ -637662,7 +637565,6 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     trainingObjectTypeId: string
-    trainingCourseId: string
     proposalReport?: string | null
     councilReport?: string | null
     graduationReport?: string | null
@@ -637679,6 +637581,7 @@ export namespace Prisma {
     deputy?: string | null
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
+    trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutThesisSessionsInput
     thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
   }
 
@@ -638649,7 +638552,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -638709,7 +638612,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -639917,7 +639820,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -639977,7 +639880,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -641234,7 +641137,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -641294,7 +641197,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -641456,7 +641359,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -641516,7 +641419,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -644247,7 +644150,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -644307,7 +644210,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -644469,7 +644372,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -644529,7 +644432,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -645505,7 +645408,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
   }
@@ -645565,7 +645468,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
   }
@@ -645765,7 +645668,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
   }
@@ -645825,7 +645728,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
   }
@@ -649001,7 +648904,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -649061,7 +648964,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -649589,7 +649492,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -649649,7 +649552,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -664194,7 +664097,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -664254,7 +664157,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -669073,7 +668976,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutTrainingCourseInput
@@ -669133,7 +669036,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
-    thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
+    thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     planTrainings?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingCourseInput
     graduationSessions?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -669246,7 +669149,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -669306,7 +669209,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -705389,7 +705292,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -705449,7 +705352,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -706584,7 +706487,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -706644,7 +706547,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -707023,38 +706926,6 @@ export namespace Prisma {
     noteId?: string | null
     evaluationPeriodId?: string | null
     knowledgeBlockId?: string | null
-  }
-
-  export type ThesisSessionCreateManyTrainingCourseInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy?: string | null
-    name: string
-    startDate: Date | string
-    endDate: Date | string
-    trainingObjectTypeId: string
-    proposalReport?: string | null
-    councilReport?: string | null
-    graduationReport?: string | null
-    decisionNumber?: string | null
-    decisionMaker?: string | null
-    decisionDate?: Date | string | null
-    defenseDecisionNumber?: string | null
-    defenseDecisionMaker?: string | null
-    defenseDecisionDate?: Date | string | null
-    graduationNumber?: string | null
-    graduationDecisionMaker?: string | null
-    graduationDecisionDate?: Date | string | null
-    chief?: string | null
-    deputy?: string | null
-    topicEntryDeadline?: Date | string | null
-    councilDeadline?: Date | string | null
-    configPaymentSessionId?: string | null
   }
 
   export type PlanTrainingCreateManyTrainingCourseInput = {
@@ -707944,7 +707815,7 @@ export namespace Prisma {
     knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ThesisSessionUpdateWithoutTrainingCourseInput = {
+  export type ThesisSessionUpdateWithoutTrainingCoursesInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
@@ -707977,7 +707848,7 @@ export namespace Prisma {
     configPayment?: ConfigPaymentSessionUpdateOneWithoutThesisSessionsNestedInput
   }
 
-  export type ThesisSessionUncheckedUpdateWithoutTrainingCourseInput = {
+  export type ThesisSessionUncheckedUpdateWithoutTrainingCoursesInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
@@ -708010,7 +707881,7 @@ export namespace Prisma {
     thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
   }
 
-  export type ThesisSessionUncheckedUpdateManyWithoutTrainingCourseInput = {
+  export type ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
@@ -712263,7 +712134,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -712323,7 +712194,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -714610,7 +714481,6 @@ export namespace Prisma {
     name: string
     startDate: Date | string
     endDate: Date | string
-    trainingCourseId: string
     proposalReport?: string | null
     councilReport?: string | null
     graduationReport?: string | null
@@ -714794,7 +714664,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -714854,7 +714724,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -715682,7 +715552,7 @@ export namespace Prisma {
     deputy?: NullableStringFieldUpdateOperationsInput | string | null
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
+    trainingCourses?: TrainingCourseUpdateManyWithoutThesisSessionsNestedInput
     thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
     configPayment?: ConfigPaymentSessionUpdateOneWithoutThesisSessionsNestedInput
   }
@@ -715699,7 +715569,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    trainingCourseId?: StringFieldUpdateOperationsInput | string
     proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
     councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     graduationReport?: NullableStringFieldUpdateOperationsInput | string | null
@@ -715717,6 +715586,7 @@ export namespace Prisma {
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     configPaymentSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutThesisSessionsNestedInput
     thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
   }
 
@@ -715732,7 +715602,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    trainingCourseId?: StringFieldUpdateOperationsInput | string
     proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
     councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     graduationReport?: NullableStringFieldUpdateOperationsInput | string | null
@@ -723110,7 +722979,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -723170,7 +723039,7 @@ export namespace Prisma {
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -727640,6 +727509,171 @@ export namespace Prisma {
     projectEnd?: Date | string | null
   }
 
+  export type TrainingCourseUpdateWithoutThesisSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
+    endYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicYear?: NullableStringFieldUpdateOperationsInput | string | null
+    maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
+    admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
+    baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+    coef_1?: FloatFieldUpdateOperationsInput | number
+    coef_2?: FloatFieldUpdateOperationsInput | number
+    coef_3?: FloatFieldUpdateOperationsInput | number
+    scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
+    scoreToPass?: FloatFieldUpdateOperationsInput | number
+    scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
+    scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
+    scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+    maxReExamScore?: FloatFieldUpdateOperationsInput | number
+    reduceReExamScore?: FloatFieldUpdateOperationsInput | number
+    scoreToRetain?: FloatFieldUpdateOperationsInput | number
+    semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
+    trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingCourseNestedInput
+    fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
+    scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
+    academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
+    scholarships?: ScholarshipUpdateManyWithoutTrainingCourseNestedInput
+    academicWarningRule?: AcademicWarningRuleUpdateManyWithoutTrainingCourseNestedInput
+    academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
+    notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+    classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+    planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
+    graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
+    planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
+  }
+
+  export type TrainingCourseUncheckedUpdateWithoutThesisSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
+    endYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicYear?: NullableStringFieldUpdateOperationsInput | string | null
+    maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
+    admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
+    baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+    coef_1?: FloatFieldUpdateOperationsInput | number
+    coef_2?: FloatFieldUpdateOperationsInput | number
+    coef_3?: FloatFieldUpdateOperationsInput | number
+    scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
+    scoreToPass?: FloatFieldUpdateOperationsInput | number
+    scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
+    scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
+    scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+    maxReExamScore?: FloatFieldUpdateOperationsInput | number
+    reduceReExamScore?: FloatFieldUpdateOperationsInput | number
+    scoreToRetain?: FloatFieldUpdateOperationsInput | number
+    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    scholarships?: ScholarshipUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    academicWarningRule?: AcademicWarningRuleUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+    classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput
+  }
+
+  export type TrainingCourseUncheckedUpdateManyWithoutThesisSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
+    endYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicYear?: NullableStringFieldUpdateOperationsInput | string | null
+    maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    isRetakeExam?: BoolFieldUpdateOperationsInput | boolean
+    admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    admittedStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    enrolledStudent?: NullableIntFieldUpdateOperationsInput | number | null
+    admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
+    regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
+    baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+    coef_1?: FloatFieldUpdateOperationsInput | number
+    coef_2?: FloatFieldUpdateOperationsInput | number
+    coef_3?: FloatFieldUpdateOperationsInput | number
+    scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    examScoreToPass?: FloatFieldUpdateOperationsInput | number
+    scoreToPass?: FloatFieldUpdateOperationsInput | number
+    scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
+    scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
+    scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+    maxReExamScore?: FloatFieldUpdateOperationsInput | number
+    reduceReExamScore?: FloatFieldUpdateOperationsInput | number
+    scoreToRetain?: FloatFieldUpdateOperationsInput | number
+    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type ThesisProjectUpdateWithoutThesisSessionInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -730419,7 +730453,6 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     trainingObjectTypeId: string
-    trainingCourseId: string
     proposalReport?: string | null
     councilReport?: string | null
     graduationReport?: string | null
@@ -730495,7 +730528,7 @@ export namespace Prisma {
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
-    trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
+    trainingCourses?: TrainingCourseUpdateManyWithoutThesisSessionsNestedInput
     thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
   }
 
@@ -730512,7 +730545,6 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingCourseId?: StringFieldUpdateOperationsInput | string
     proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
     councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     graduationReport?: NullableStringFieldUpdateOperationsInput | string | null
@@ -730529,6 +730561,7 @@ export namespace Prisma {
     deputy?: NullableStringFieldUpdateOperationsInput | string | null
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutThesisSessionsNestedInput
     thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
   }
 
@@ -730545,7 +730578,6 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    trainingCourseId?: StringFieldUpdateOperationsInput | string
     proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
     councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     graduationReport?: NullableStringFieldUpdateOperationsInput | string | null
@@ -737316,7 +737348,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutTrainingCourseNestedInput
@@ -737376,7 +737408,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
-    thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     planTrainings?: PlanTrainingUncheckedUpdateManyWithoutTrainingCourseNestedInput
     graduationSessions?: GraduationSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutTrainingCourseNestedInput

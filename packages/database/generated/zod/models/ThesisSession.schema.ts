@@ -67,14 +67,13 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     trainingObjectType: z.record(z.string(), z.unknown()),
-    trainingCourse: z.record(z.string(), z.unknown()),
+    trainingCourses: z.array(z.unknown()).optional(),
     thesisProject: z.array(z.unknown()).optional(),
     configPayment: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     trainingObjectTypeId: z.string(),
-    trainingCourseId: z.string(),
     configPaymentSessionId: z.string().nullish(),
 }
 );

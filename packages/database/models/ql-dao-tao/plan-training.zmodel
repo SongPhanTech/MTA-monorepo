@@ -539,7 +539,7 @@ model TrainingCourse extends Base {
   surveyObjectTypes          SurveyObjectType[]
   classRegisterSession       ClassRegisterSession[]
   documentFiles              DocumentFile[]
-  thesisSession              ThesisSession[]
+  thesisSessions             ThesisSession[]
   planTrainings              PlanTraining[]
   graduationSessions         GraduationSession[]
   planTrainingPractice       PlanTrainingPractice[]

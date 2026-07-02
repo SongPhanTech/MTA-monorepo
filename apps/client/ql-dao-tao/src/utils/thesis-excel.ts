@@ -1909,7 +1909,7 @@ export const convertToGmcLvPbData = (
     const project = student?.thesisRegistrations?.[0]?.thesisProject
     if (!project) return
 
-    const dotXet = project.thesisSession?.trainingCourse?.name || ""
+    const dotXet = project.thesisSession?.trainingCourses?.map((c: any) => c.name).join(", ") || ""
     const ngaybaove = project.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : ""
     const giobaove = project.defenseSession?.startTime
       ? dayjs(project.defenseSession.startTime).format("HH:mm")
@@ -3795,7 +3795,7 @@ const convertToThongKeCoQuanDonViCanBoNgoaiHvData = (
     .find(Boolean)
 
   const khoa =
-    firstProject?.thesisSession?.trainingCourse?.name ||
+    firstProject?.thesisSession?.trainingCourses?.map((c: any) => c.name).join(", ") ||
     allStudentsInClasses[0]?.fixedClass?.trainingCourse?.name ||
     ""
   const dotxet = firstProject?.thesisSession?.name || ""

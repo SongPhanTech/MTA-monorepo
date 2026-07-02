@@ -10610,7 +10610,7 @@
               "$ref": "#/components/schemas/DocumentFile"
             }
           },
-          "thesisSession": {
+          "thesisSessions": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ThesisSession"
@@ -17462,11 +17462,11 @@
           "trainingObjectTypeId": {
             "type": "string"
           },
-          "trainingCourse": {
-            "$ref": "#/components/schemas/TrainingCourse"
-          },
-          "trainingCourseId": {
-            "type": "string"
+          "trainingCourses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingCourse"
+            }
           },
           "proposalReport": {
             "type": "string",
@@ -17565,9 +17565,7 @@
           "startDate",
           "endDate",
           "trainingObjectType",
-          "trainingObjectTypeId",
-          "trainingCourse",
-          "trainingCourseId"
+          "trainingObjectTypeId"
         ]
       },
       "ThesisProject": {
@@ -49879,9 +49877,6 @@
           "trainingObjectTypeId": {
             "type": "string"
           },
-          "trainingCourseId": {
-            "type": "string"
-          },
           "proposalReport": {
             "type": "string",
             "nullable": true
@@ -49988,8 +49983,7 @@
           "name",
           "startDate",
           "endDate",
-          "trainingObjectTypeId",
-          "trainingCourseId"
+          "trainingObjectTypeId"
         ]
       },
       "AggregateThesisProject": {
@@ -103132,9 +103126,6 @@
           "trainingObjectTypeId": {
             "type": "integer"
           },
-          "trainingCourseId": {
-            "type": "integer"
-          },
           "proposalReport": {
             "type": "integer"
           },
@@ -103203,7 +103194,6 @@
           "startDate",
           "endDate",
           "trainingObjectTypeId",
-          "trainingCourseId",
           "proposalReport",
           "councilReport",
           "graduationReport",
@@ -103277,10 +103267,6 @@
             "nullable": true
           },
           "trainingObjectTypeId": {
-            "type": "string",
-            "nullable": true
-          },
-          "trainingCourseId": {
             "type": "string",
             "nullable": true
           },
@@ -103412,10 +103398,6 @@
             "nullable": true
           },
           "trainingObjectTypeId": {
-            "type": "string",
-            "nullable": true
-          },
-          "trainingCourseId": {
             "type": "string",
             "nullable": true
           },

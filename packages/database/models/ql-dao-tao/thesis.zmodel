@@ -30,8 +30,7 @@ model ThesisSession extends Base {
   trainingObjectType    TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId  String
 
-  trainingCourse        TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId      String
+  trainingCourses       TrainingCourse[]
 
   /// Tờ trình đề tài
   proposalReport        String?

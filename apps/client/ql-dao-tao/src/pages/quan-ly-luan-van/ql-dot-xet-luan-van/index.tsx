@@ -55,7 +55,7 @@ export default function ThesisSession() {
     },
     include: {
       trainingObjectType: true,
-      trainingCourse: true,
+      trainingCourses: true,
     },
     take: numberOfPages,
     skip: (currentPage - 1) * numberOfPages,
@@ -178,10 +178,10 @@ export default function ThesisSession() {
               },
               {
                 title: "Khoá học",
-                dataIndex: "trainingCourseId",
-                width: 140,
+                width: 200,
                 align: "center",
-                render: (_, record) => record?.trainingCourse.name || "",
+                render: (_, record) =>
+                  record?.trainingCourses?.map((c: any) => c.name).join(", ") || "",
               },
               {
                 title: "Số QĐĐT",

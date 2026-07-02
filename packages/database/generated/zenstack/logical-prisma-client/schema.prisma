@@ -3320,7 +3320,7 @@ model TrainingCourse {
   surveyObjectTypes          SurveyObjectType[]
   classRegisterSession       ClassRegisterSession[]
   documentFiles              DocumentFile[]
-  thesisSession              ThesisSession[]
+  thesisSessions             ThesisSession[]
   planTrainings              PlanTraining[]
   graduationSessions         GraduationSession[]
   planTrainingPractice       PlanTrainingPractice[]
@@ -5334,8 +5334,7 @@ model ThesisSession {
   endDate                 DateTime
   trainingObjectType      TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId    String
-  trainingCourse          TrainingCourse        @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId        String
+  trainingCourses         TrainingCourse[]
   /// Tờ trình đề tài
   proposalReport          String?
   /// Tờ trình hội đồng

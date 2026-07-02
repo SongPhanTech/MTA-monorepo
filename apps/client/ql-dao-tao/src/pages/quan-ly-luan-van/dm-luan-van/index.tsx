@@ -260,7 +260,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const [debouncedNameKeyword, setDebouncedNameKeyword] = useState("")
   const nameSearchDebounceReady = useRef(false)
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-  const [trainingCourseId, setTrainingCourseId] = useState<string | null>(null)
+  const [trainingCourseIds, setTrainingCourseIds] = useState<string[]>([])
 
   useEffect(() => {
     const id = window.setTimeout(() => {
@@ -319,11 +319,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const { data: fixedClasses } = useFindManyFixedClass(
     {
       where: {
-        trainingCourseId: trainingCourseId ?? "",
+        trainingCourseId: trainingCourseIds.length ? { in: trainingCourseIds } : undefined,
       },
     },
     {
-      enabled: !!trainingCourseId,
+      enabled: trainingCourseIds.length > 0,
     }
   )
   const { data: expertProfileData } = useFindManyExpertProfile({
@@ -666,7 +666,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         supervisorPayAmounts: true,
                       },
                     },
-                    trainingCourse: {
+                    trainingCourses: {
                       include: {
                         trainingObjectType: true,
                       },
@@ -760,7 +760,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     },
     include: {
       trainingObjectType: true,
-      trainingCourse: true,
+      trainingCourses: true,
       configPayment: {
         include: {
           councilPayAmounts: true,
@@ -769,13 +769,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       },
     },
   })
-  const trainingCourse = thesisSessionData?.find(
-    (x) => x.id === searchParams.thesisSessionId
-  )?.trainingCourse
   const selectedThesisSession = useMemo(
     () => thesisSessionData?.find((s) => s.id === searchParams.thesisSessionId),
     [thesisSessionData, searchParams.thesisSessionId]
   )
+  const trainingCoursesDisplay = selectedThesisSession?.trainingCourses
+    ?.map((c) => c.name)
+    .join(", ")
   const thesisConfigPaymentSessionId = selectedThesisSession?.configPaymentSessionId ?? null
 
   const { mutateAsync: updateThesisSession } = useUpdateThesisSession()
@@ -1803,8 +1803,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           ...searchParams,
                           thesisSessionId: value as string,
                         })
-                        setTrainingCourseId(
-                          thesisSessionData?.find((x) => x.id === value)?.trainingCourse?.id || null
+                        setTrainingCourseIds(
+                          thesisSessionData?.find((x) => x.id === value)?.trainingCourses?.map(
+                            (c) => c.id
+                          ) ?? []
                         )
                         setCurrentPage(1)
                         setEditingRowKeys([])
@@ -1815,7 +1817,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   <Form.Item label="Khóa học" required>
                     <Input
                       className="w-36"
-                      value={trainingCourse?.name || ""}
+                      value={trainingCoursesDisplay || ""}
                       placeholder="Chọn khóa học"
                       readOnly={true}
                     />

@@ -9788,12 +9788,13 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingCourse',
-                }, thesisSession: {
-                    name: "thesisSession",
+                }, thesisSessions: {
+                    name: "thesisSessions",
                     type: "ThesisSession",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'trainingCourse',
+                    backLink: 'trainingCourses',
+                    isRelationOwner: true,
                 }, planTrainings: {
                     name: "planTrainings",
                     type: "PlanTraining",
@@ -17276,18 +17277,13 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'trainingObjectType',
-                }, trainingCourse: {
-                    name: "trainingCourse",
+                }, trainingCourses: {
+                    name: "trainingCourses",
                     type: "TrainingCourse",
                     isDataModel: true,
-                    backLink: 'thesisSession',
+                    isArray: true,
+                    backLink: 'thesisSessions',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingCourseId" },
-                }, trainingCourseId: {
-                    name: "trainingCourseId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingCourse',
                 }, proposalReport: {
                     name: "proposalReport",
                     type: "String",

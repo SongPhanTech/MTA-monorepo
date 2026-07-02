@@ -20,6 +20,7 @@ import { useFindManyTrainingObjectTypePermission } from "@workspace/ui"
 import { useEffect, useState } from "react"
 export type PutThesisSession = ThesisSession
 type PutThesisSessionForm = PutThesisSession & {
+  trainingCourseIds?: string[]
   decisionMakerRole?: "PGĐ" | "GĐ"
   decisionMakerName?: string
   defenseDecisionMakerRole?: "PGĐ" | "GĐ"
@@ -42,7 +43,10 @@ const PutThesisSession = () => {
 
   const { showSpinner, hideSpinner } = useSpinner()
 
-  const { data: thesisSession } = useFindUniqueThesisSession({ where: { id } }, { enabled: !!id })
+  const { data: thesisSession } = useFindUniqueThesisSession(
+    { where: { id }, include: { trainingCourses: { select: { id: true } } } },
+    { enabled: !!id }
+  )
 
   useEffect(() => {
     if (thesisSession) {
@@ -72,7 +76,7 @@ const PutThesisSession = () => {
         : graduationDecisionMakerRaw
       form.setFieldsValue({
         ...sessionRest,
-        trainingCourseId: thesisSession.trainingCourseId,
+        trainingCourseIds: thesisSession.trainingCourses?.map((c) => c.id) ?? [],
         trainingObjectTypeId: thesisSession.trainingObjectTypeId,
         decisionNumber: thesisSession.decisionNumber,
         decisionMakerRole,
@@ -151,11 +155,11 @@ const PutThesisSession = () => {
         .filter(Boolean)
         .join(" ")
         .trim()
+      const courseIds = output.trainingCourseIds ?? []
       const payload = {
         name: output.name.trim(),
         startDate: output.startDate ? dayjs(output.startDate).toDate() : new Date(),
         trainingObjectTypeId: output.trainingObjectTypeId,
-        trainingCourseId: output.trainingCourseId,
         proposalReport: output.proposalReport?.trim() || undefined,
         councilReport: output.councilReport?.trim() || undefined,
         graduationReport: output.graduationReport?.trim() || undefined,
@@ -180,7 +184,10 @@ const PutThesisSession = () => {
 
       if (id) {
         await updateThesisSession({
-          data: payload,
+          data: {
+            ...payload,
+            trainingCourses: { set: courseIds.map((courseId) => ({ id: courseId })) },
+          },
           where: { id },
         })
         message.success("Cập nhật thành công")
@@ -188,6 +195,7 @@ const PutThesisSession = () => {
         await createThesisSession({
           data: {
             ...payload,
+            trainingCourses: { connect: courseIds.map((courseId) => ({ id: courseId })) },
           },
         })
         message.success("Thêm mới thành công")
@@ -225,8 +233,9 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
       <Col span={8}>
-        <FormItem form={form} name="trainingCourseId" label="Khóa học" required>
+        <FormItem form={form} name="trainingCourseIds" label="Khóa học" required>
           <Select
+            mode="multiple"
             placeholder="Chọn khóa học"
             options={trainingCourses?.map((item) => ({
               label: item.name,
