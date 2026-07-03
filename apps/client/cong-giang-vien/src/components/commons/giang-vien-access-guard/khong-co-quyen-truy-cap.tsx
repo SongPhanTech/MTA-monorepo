@@ -1,4 +1,3 @@
-import { CONG_GIANG_VIEN_PORTAL_TITLE } from "@constants/cong-giang-vien-layout"
 import { Button, Result } from "antd"
 import { ArrowLeftOutlined, LockOutlined } from "@ant-design/icons"
 
@@ -19,10 +18,10 @@ const KhongCoQuyenTruyCap = () => {
           icon={<LockOutlined className="text-[#1677ff]" />}
           status="403"
           title="Bạn không có quyền truy cập ứng dụng"
-          subTitle={`Tài khoản của bạn không có vai trò giảng viên nên không thể sử dụng ${CONG_GIANG_VIEN_PORTAL_TITLE}. Vui lòng quay lại trang SSO Portal.`}
+          subTitle={`Tài khoản của bạn không có vai trò giảng viên. Vui lòng quay lại trang chủ.`}
           extra={
             <Button type="primary" icon={<ArrowLeftOutlined />} onClick={handleQuayVePortal}>
-              Quay về SSO Portal
+              Quay về trang chủ
             </Button>
           }
         />
