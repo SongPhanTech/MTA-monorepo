@@ -1,3 +1,7 @@
+import ImportScoreModal, {
+  type ImportScoreData,
+} from "@components/commons/print/nhap-diem-tu-file"
+import ExportScoreTemplate from "@components/commons/print/xuat-mau-nhap-diem"
 import { scoreConvert } from "@hooks/scoreConverter"
 import { ROUTER_PATH } from "@workspace/router"
 import { calcFinalScore } from "@workspace/libs/utils"
@@ -24,7 +28,6 @@ import {
   CheckCircle2,
   CircleSlash2,
   ClipboardCheck,
-  FileDown,
   FileUp,
   GraduationCap,
   Hash,
@@ -95,14 +98,18 @@ const TheThongKeNgang = ({
 
   return (
     <div className="flex h-[84px] items-center gap-2 rounded-lg border border-gray-100 bg-white px-2.5 py-2">
-      <span className={cn("inline-flex h-8 w-8 items-center justify-center rounded-full", toneClass)}>
+      <span
+        className={cn("inline-flex h-8 w-8 items-center justify-center rounded-full", toneClass)}
+      >
         {icon}
       </span>
       <div className="min-w-0">
         <div className="truncate text-[10px] font-semibold text-gray-500">{tieuDe}</div>
         <div className="mt-1 flex items-end gap-1.5">
           <span className="text-[24px] font-bold leading-[22px] text-cgv-green-dark">{giaTri}</span>
-          {tyLe ? <span className="pb-0.5 text-[10px] font-semibold text-gray-500">{tyLe}</span> : null}
+          {tyLe ? (
+            <span className="pb-0.5 text-[10px] font-semibold text-gray-500">{tyLe}</span>
+          ) : null}
         </div>
       </div>
     </div>
@@ -119,9 +126,11 @@ const TheThongTinLopHang = ({
   value: string
 }) => (
   <div className="flex items-center gap-2 text-[13px] leading-7">
-    <span className="inline-flex h-4 w-4 items-center justify-center text-cgv-green-dark/80">{icon}</span>
+    <span className="inline-flex h-4 w-4 items-center justify-center text-cgv-green-dark/80">
+      {icon}
+    </span>
     <span className="shrink-0 text-gray-500">{label}</span>
-    <span className="truncate font-semibold text-gray-900">{value}</span>
+    <span className="whitespace-nowrap font-semibold text-gray-900">{value}</span>
   </div>
 )
 
@@ -150,6 +159,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
   const [lopId, setLopId] = useState<string | undefined>(lopIdMacDinh)
   const [rows, setRows] = useState<RowData[]>([])
   const [historyTarget, setHistoryTarget] = useState<{ id: string; hoTen: string } | null>(null)
+  const [importModalVisible, setImportModalVisible] = useState(false)
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(320)
 
@@ -239,6 +249,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
       include: {
         semester: { include: { schoolYear: true } },
         subject: true,
+        mainLecturer: { include: { userProfile: { select: { fullname: true } } } },
         classSchedules: { include: { room: true }, take: 1 },
         _count: { select: { subjectClassStudent: true } },
       },
@@ -260,7 +271,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
         subjectClass: { select: { type: true } },
         student: {
           include: {
-            userProfile: { select: { fullname: true } },
+            userProfile: { select: { fullname: true, dateOfBirth: true } },
             fixedClass: {
               include: {
                 trainingCourse: { include: { scoreConverts: true } },
@@ -311,43 +322,61 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
     setRows(mapped)
   }, [scoreRows])
 
+  const tinhDongSauCapNhat = (
+    row: RowData,
+    patch: Partial<Pick<RowData, "attendanceScore" | "midtermScore" | "description">>
+  ): RowData => {
+    const next = { ...row, ...patch }
+    const goc = scoreRows.find((x) => x.id === row.id)
+    const trainingCourse = goc?.student?.fixedClass?.trainingCourse
+    const finalScore =
+      next.attendanceScore == null || next.midtermScore == null || next.examScore == null
+        ? null
+        : calcFinalScore(
+            trainingCourse ?? HE_SO_MAC_DINH,
+            {
+              attendanceScore: next.attendanceScore,
+              midtermScore: next.midtermScore,
+              examScore: next.examScore,
+              certificates: [],
+              awards: [],
+            },
+            goc?.subjectClass?.type ?? $Enums.SubjectClassType.NORMAL
+          )
+    const convert =
+      finalScore != null
+        ? scoreConvert(Number(finalScore), trainingCourse?.scoreConverts ?? [])
+        : null
+
+    return {
+      ...next,
+      finalScore: finalScore != null ? Number(finalScore) : null,
+      letter: convert?.letter ?? "",
+      isChanged: true,
+    }
+  }
+
+  const handleImportConfirm = (data: ImportScoreData[]) => {
+    const importMap = new Map(data.map((item) => [item.id, item]))
+    setRows((prev) =>
+      prev.map((row) => {
+        const imported = importMap.get(row.id)
+        if (!imported) return row
+        return tinhDongSauCapNhat(row, {
+          attendanceScore: imported.attendanceScore,
+          midtermScore: imported.midtermScore,
+        })
+      })
+    )
+    message.success("Nhập điểm từ file thành công!")
+  }
+
   const capNhatDong = (
     id: string,
     patch: Partial<Pick<RowData, "attendanceScore" | "midtermScore" | "description">>
   ) => {
     setRows((prev) =>
-      prev.map((row) => {
-        if (row.id !== id) return row
-        const next = { ...row, ...patch }
-        const goc = scoreRows.find((x) => x.id === id)
-        const trainingCourse = goc?.student?.fixedClass?.trainingCourse
-        const heSoMacDinh = HE_SO_MAC_DINH
-        const finalScore =
-          next.attendanceScore == null || next.midtermScore == null || next.examScore == null
-            ? null
-            : calcFinalScore(
-                trainingCourse ?? heSoMacDinh,
-                {
-                  attendanceScore: next.attendanceScore,
-                  midtermScore: next.midtermScore,
-                  examScore: next.examScore,
-                  certificates: [],
-                  awards: [],
-                },
-                goc?.subjectClass?.type ?? $Enums.SubjectClassType.NORMAL
-              )
-        const convert =
-          finalScore != null
-            ? scoreConvert(Number(finalScore), trainingCourse?.scoreConverts ?? [])
-            : null
-
-        return {
-          ...next,
-          finalScore: finalScore != null ? Number(finalScore) : null,
-          letter: convert?.letter ?? "",
-          isChanged: true,
-        }
-      })
+      prev.map((row) => (row.id === id ? tinhDongSauCapNhat(row, patch) : row))
     )
   }
 
@@ -358,7 +387,9 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
       .map((row) => {
         const goc = scoreRows.find((x) => x.id === row.id)
         const diem = tinhDiemQT(row, goc)
-        return diem == null ? null : { row, diem, duDieuKienThi: diem >= HE_SO_MAC_DINH.scoreToTakeExam }
+        return diem == null
+          ? null
+          : { row, diem, duDieuKienThi: diem >= HE_SO_MAC_DINH.scoreToTakeExam }
       })
       .filter(
         (item): item is { row: RowData; diem: number; duDieuKienThi: boolean } => item != null
@@ -528,19 +559,13 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
 
       <div className="rounded-lg border border-gray-100 bg-white p-3">
         <div className="overflow-hidden rounded-lg border border-gray-100">
-          <div className="grid grid-cols-1 lg:grid-cols-[250px_minmax(0,1fr)]">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(300px,auto)_minmax(0,1fr)]">
             <div className="border-b border-gray-100 bg-gray-50/70 px-3 py-2 lg:border-b-0 lg:border-r">
               <div className="space-y-0.5">
-                <TheThongTinLopHang icon={<Hash size={14} />} label="Mã lớp:" value={lopMonHoc?.code ?? "—"} />
                 <TheThongTinLopHang
-                  icon={<BookOpen size={14} />}
-                  label="Tên lớp:"
-                  value={lopMonHoc?.name ?? "—"}
-                />
-                <TheThongTinLopHang
-                  icon={<CalendarDays size={14} />}
-                  label="Học kỳ:"
-                  value={lopMonHoc?.semester?.name ?? "—"}
+                  icon={<Hash size={14} />}
+                  label="Mã lớp:"
+                  value={lopMonHoc?.code ?? "—"}
                 />
                 <TheThongTinLopHang
                   icon={<GraduationCap size={14} />}
@@ -552,7 +577,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                   label="Hạn nhập điểm:"
                   value={
                     lopMonHoc?.scoreDeadline
-                      ? dayjs(lopMonHoc.scoreDeadline).format("DD/MM/YYYY HH:mm")
+                      ? dayjs(lopMonHoc.scoreDeadline).format("DD/MM/YYYY")
                       : "—"
                   }
                 />
@@ -611,110 +636,126 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
             <Button icon={<Save size={14} />} onClick={luu} disabled={quaHanNhapDiemQuaTrinh}>
               Lưu
             </Button>
-            <Button icon={<FileUp size={14} />} onClick={() => message.info("Đang phát triển")}>
-              Nhập Excel
+            <Button
+              icon={<FileUp size={14} />}
+              onClick={() => setImportModalVisible(true)}
+              disabled={!lopId || rows.length === 0 || quaHanNhapDiemQuaTrinh}
+            >
+              Nhập điểm từ file
             </Button>
-            <Button icon={<FileDown size={14} />} onClick={() => message.info("Đang phát triển")}>
-              Xuất Excel
-            </Button>
+            <ExportScoreTemplate
+              selectedSubjectClass={lopId}
+              subjectClass={lopMonHoc}
+              dataTable={scoreRows}
+              type="TX/ĐK"
+              disabled={quaHanNhapDiemQuaTrinh}
+            />
           </div>
         </div>
         <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden">
-        <Table<RowData>
-          rowKey="id"
-          pagination={false}
-          size="small"
-          dataSource={rows}
-          scroll={{ y: chieuCaoBody }}
-          columns={[
-            { title: "STT", width: 56, align: "center", render: (_v, _r, i) => i + 1 },
-            { title: "MÃ SV", dataIndex: "mssv", width: 100, align: "center" },
-            { title: "Họ và tên", dataIndex: "hoTen", width: 180 },
-            {
-              title: "Chuyên cần",
-              dataIndex: "attendanceScore",
-              width: 120,
-              align: "center",
-              render: (value, row) => (
-                <InputNumber
-                  value={value ?? undefined}
-                  min={0}
-                  max={10}
-                  step={0.5}
-                  disabled={quaHanNhapDiemQuaTrinh}
-                  onChange={(v) => capNhatDong(row.id, { attendanceScore: Number(v) })}
-                  className="w-full"
-                />
-              ),
-            },
-            {
-              title: "Định kỳ",
-              dataIndex: "midtermScore",
-              width: 120,
-              align: "center",
-              render: (value, row) => (
-                <InputNumber
-                  value={value ?? undefined}
-                  min={0}
-                  max={10}
-                  step={0.5}
-                  disabled={quaHanNhapDiemQuaTrinh}
-                  onChange={(v) => capNhatDong(row.id, { midtermScore: Number(v) })}
-                  className="w-full"
-                />
-              ),
-            },
-            {
-              title: "Điểm thi",
-              dataIndex: "examScore",
-              width: 120,
-              align: "center",
-              render: (value) => <Input value={value ?? ""} disabled />,
-            },
-            {
-              title: "Điểm HP",
-              dataIndex: "finalScore",
-              width: 100,
-              align: "center",
-              render: (v) => v ?? "",
-            },
-            { title: "Điểm chữ", dataIndex: "letter", width: 100, align: "center" },
-            {
-              title: "Ghi chú",
-              dataIndex: "description",
-              render: (value, row) => (
-                <div className="flex items-center gap-2">
-                  <Input
-                    value={value}
-                    onChange={(e) => capNhatDong(row.id, { description: e.target.value })}
+          <Table<RowData>
+            rowKey="id"
+            pagination={false}
+            size="small"
+            dataSource={rows}
+            scroll={{ y: chieuCaoBody }}
+            columns={[
+              { title: "STT", width: 56, align: "center", render: (_v, _r, i) => i + 1 },
+              { title: "MÃ SV", dataIndex: "mssv", width: 100, align: "center" },
+              { title: "Họ và tên", dataIndex: "hoTen", width: 180 },
+              {
+                title: "Chuyên cần",
+                dataIndex: "attendanceScore",
+                width: 120,
+                align: "center",
+                render: (value, row) => (
+                  <InputNumber
+                    value={value ?? undefined}
+                    min={0}
+                    max={10}
+                    step={0.5}
                     disabled={quaHanNhapDiemQuaTrinh}
+                    onChange={(v) => capNhatDong(row.id, { attendanceScore: Number(v) })}
+                    className="w-full"
                   />
-                  <Button
-                    type="text"
-                    icon={<History size={14} />}
-                    title="Lịch sử chỉnh sửa"
-                    onClick={() => setHistoryTarget({ id: row.id, hoTen: row.hoTen })}
-                  />
-                  <Button
-                    type="text"
-                    icon={<RotateCcw size={14} />}
-                    title="Đặt lại dòng điểm"
+                ),
+              },
+              {
+                title: "Định kỳ",
+                dataIndex: "midtermScore",
+                width: 120,
+                align: "center",
+                render: (value, row) => (
+                  <InputNumber
+                    value={value ?? undefined}
+                    min={0}
+                    max={10}
+                    step={0.5}
                     disabled={quaHanNhapDiemQuaTrinh}
-                    onClick={() =>
-                      capNhatDong(row.id, {
-                        attendanceScore: null,
-                        midtermScore: null,
-                        description: "",
-                      })
-                    }
+                    onChange={(v) => capNhatDong(row.id, { midtermScore: Number(v) })}
+                    className="w-full"
                   />
-                </div>
-              ),
-            },
-          ]}
-        />
+                ),
+              },
+              {
+                title: "Điểm thi",
+                dataIndex: "examScore",
+                width: 120,
+                align: "center",
+                render: (value) => <Input value={value ?? ""} disabled />,
+              },
+              {
+                title: "Điểm HP",
+                dataIndex: "finalScore",
+                width: 100,
+                align: "center",
+                render: (v) => v ?? "",
+              },
+              { title: "Điểm chữ", dataIndex: "letter", width: 100, align: "center" },
+              {
+                title: "Ghi chú",
+                dataIndex: "description",
+                render: (value, row) => (
+                  <div className="flex items-center gap-2">
+                    <Input
+                      value={value}
+                      onChange={(e) => capNhatDong(row.id, { description: e.target.value })}
+                      disabled={quaHanNhapDiemQuaTrinh}
+                    />
+                    <Button
+                      type="text"
+                      icon={<History size={14} />}
+                      title="Lịch sử chỉnh sửa"
+                      onClick={() => setHistoryTarget({ id: row.id, hoTen: row.hoTen })}
+                    />
+                    <Button
+                      type="text"
+                      icon={<RotateCcw size={14} />}
+                      title="Đặt lại dòng điểm"
+                      disabled={quaHanNhapDiemQuaTrinh}
+                      onClick={() =>
+                        capNhatDong(row.id, {
+                          attendanceScore: null,
+                          midtermScore: null,
+                          description: "",
+                        })
+                      }
+                    />
+                  </div>
+                ),
+              },
+            ]}
+          />
         </div>
       </div>
+
+      <ImportScoreModal
+        visible={importModalVisible}
+        onCancel={() => setImportModalVisible(false)}
+        onConfirm={handleImportConfirm}
+        existingStudents={scoreRows}
+        scoreType="TX/ĐK"
+      />
 
       <Modal
         title={`Lịch sử chỉnh sửa điểm${historyTarget ? ` - ${historyTarget.hoTen}` : ""}`}

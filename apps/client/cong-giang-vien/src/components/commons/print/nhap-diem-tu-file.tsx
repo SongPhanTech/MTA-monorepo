@@ -1,13 +1,28 @@
 import { CloseOutlined } from "@ant-design/icons"
+import type { StudentSubjectScore } from "@workspace/db"
 import { Button, Modal, message, Space, Table, Tag } from "antd"
 import { useState } from "react"
 import * as XLSX from "xlsx"
 
+export type ImportScoreData = {
+  id: string
+  studentCode: string
+  studentName: string
+  dobStudent: string
+  className: string
+  attendanceScore: number | null
+  midtermScore: number | null
+  examScore: number | null
+}
+
+type ScoreImportType = "TX/ĐK" | "THI"
+
 interface ImportScoreModalProps {
   visible: boolean
   onCancel: () => void
-  onConfirm: (data: any[]) => void
-  existingStudents: any[]
+  onConfirm: (data: ImportScoreData[]) => void
+  existingStudents: (StudentSubjectScore & { student: { code: string | null } })[]
+  scoreType?: ScoreImportType
 }
 
 const ImportScoreModal = ({
@@ -15,8 +30,9 @@ const ImportScoreModal = ({
   onCancel,
   onConfirm,
   existingStudents,
+  scoreType = "TX/ĐK",
 }: ImportScoreModalProps) => {
-  const [previewData, setPreviewData] = useState<any[]>([])
+  const [previewData, setPreviewData] = useState<ImportScoreData[]>([])
   const [_file, setFile] = useState<File | null>(null)
   const [fileName, setFileName] = useState<string>("")
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -27,18 +43,17 @@ const ImportScoreModal = ({
 
     setFile(file)
     setFileName(file.name)
-    setSelectedRowKeys([]) // Reset selection khi chọn file mới
+    setSelectedRowKeys([])
 
     const reader = new FileReader()
     reader.onload = (e) => {
       const data = new Uint8Array(e.target?.result as ArrayBuffer)
       const workbook = XLSX.read(data, { type: "array" })
       const firstSheet = workbook.Sheets[workbook.SheetNames[0]]
-      const jsonData = XLSX.utils.sheet_to_json(firstSheet)
+      const jsonData = XLSX.utils.sheet_to_json(firstSheet) as Record<string, string>[]
 
-      // Tìm vị trí bắt đầu của bảng dữ liệu (dòng có STT)
       const tableStartIndex = jsonData.findIndex(
-        (item: any) => item["IMPORT ĐIỂM"] === "STT" || item.__EMPTY === "Mã sinh viên"
+        (item) => item["IMPORT ĐIỂM"] === "STT" || item.__EMPTY === "Mã sinh viên"
       )
 
       if (tableStartIndex === -1) {
@@ -46,22 +61,31 @@ const ImportScoreModal = ({
         return
       }
 
-      // Lấy chỉ các dòng từ vị trí bảng dữ liệu trở đi
       const tableData = jsonData.slice(tableStartIndex + 1)
 
-      // Format dữ liệu theo cấu trúc mong muốn
       const formattedData = tableData
-        .map((row: any) => ({
-          key: row.__EMPTY, // Sử dụng mã sinh viên làm key
-          studentCode: row.__EMPTY, // Mã sinh viên
-          studentName: row.__EMPTY_1, // Họ và Tên
-          dobStudent: row.__EMPTY_2, // Ngày sinh
-          className: row.__EMPTY_3, // Tên lớp
-          attendanceScore: Number.parseFloat(row.__EMPTY_4) || 0, // Điểm TX
-          midtermScore: Number.parseFloat(row.__EMPTY_5) || 0, // Điểm ĐK
-          examScore: Number.parseFloat(row.__EMPTY_6) || 0, // Điểm thi
-        }))
-        .filter((item: any) => item.studentCode) // Lọc các dòng trống
+        .map((row) => {
+          const attendanceScore = Number.parseFloat(row.__EMPTY_4)
+          const midtermScore = Number.parseFloat(row.__EMPTY_5)
+          const examScore = Number.parseFloat(row.__EMPTY_6)
+          const id = existingStudents.find((s) => s.student?.code === row.__EMPTY)?.id
+
+          if (!id) {
+            return null
+          }
+
+          return {
+            id,
+            studentCode: row.__EMPTY,
+            studentName: row.__EMPTY_1,
+            dobStudent: row.__EMPTY_2,
+            className: row.__EMPTY_3,
+            attendanceScore: Number.isNaN(attendanceScore) ? null : attendanceScore,
+            midtermScore: Number.isNaN(midtermScore) ? null : midtermScore,
+            examScore: Number.isNaN(examScore) ? null : examScore,
+          }
+        })
+        .filter((item) => item?.studentCode) as ImportScoreData[]
 
       setPreviewData(formattedData)
     }
@@ -90,31 +114,18 @@ const ImportScoreModal = ({
       return
     }
 
-    // Lọc chỉ những sinh viên được chọn
-    const selectedData = previewData.filter((item) => selectedRowKeys.includes(item.key))
-
-    // Validate data
+    const selectedData = previewData.filter((item) => selectedRowKeys.includes(item.id))
     const errors: string[] = []
 
     selectedData.forEach((item) => {
-      // Kiểm tra mã sinh viên
       const existingStudent = existingStudents.find((s) => s.student?.code === item.studentCode)
 
       if (!existingStudent) {
         errors.push(`Mã sinh viên ${item.studentCode} không tồn tại trong lớp`)
       }
 
-      // Kiểm tra điểm có đủ 3 loại không
-      if (
-        item.attendanceScore === undefined ||
-        item.midtermScore === undefined ||
-        item.examScore === undefined
-      ) {
-        errors.push(`Thiếu điểm cho sinh viên ${item.studentCode}`)
-      }
-
-      // Kiểm tra điểm nằm trong khoảng 0-10
-      const checkScoreRange = (score: number, scoreName: string) => {
+      const checkScoreRange = (score: number | null, scoreName: string) => {
+        if (score === null) return
         if (score < 0 || score > 10) {
           errors.push(
             `${scoreName} của sinh viên ${item.studentCode} phải từ 0 đến 10 (hiện tại: ${score})`
@@ -122,9 +133,12 @@ const ImportScoreModal = ({
         }
       }
 
-      checkScoreRange(item.attendanceScore, "Điểm TX")
-      checkScoreRange(item.midtermScore, "Điểm ĐK")
-      checkScoreRange(item.examScore, "Điểm thi")
+      if (scoreType === "TX/ĐK") {
+        checkScoreRange(item.attendanceScore, "Điểm TX")
+        checkScoreRange(item.midtermScore, "Điểm ĐK")
+      } else {
+        checkScoreRange(item.examScore, "Điểm thi")
+      }
     })
 
     if (errors.length > 0) {
@@ -167,13 +181,9 @@ const ImportScoreModal = ({
       title: "Điểm TX",
       dataIndex: "attendanceScore",
       key: "attendanceScore",
-      render: (score: number) => (
-        <span
-          style={{
-            color: score < 0 || score > 10 ? "red" : "inherit",
-          }}
-        >
-          {score}
+      render: (score: number | null) => (
+        <span style={{ color: score != null && (score < 0 || score > 10) ? "red" : "inherit" }}>
+          {score ?? ""}
         </span>
       ),
     },
@@ -181,13 +191,9 @@ const ImportScoreModal = ({
       title: "Điểm ĐK",
       dataIndex: "midtermScore",
       key: "midtermScore",
-      render: (score: number) => (
-        <span
-          style={{
-            color: score < 0 || score > 10 ? "red" : "inherit",
-          }}
-        >
-          {score}
+      render: (score: number | null) => (
+        <span style={{ color: score != null && (score < 0 || score > 10) ? "red" : "inherit" }}>
+          {score ?? ""}
         </span>
       ),
     },
@@ -195,13 +201,9 @@ const ImportScoreModal = ({
       title: "Điểm thi",
       dataIndex: "examScore",
       key: "examScore",
-      render: (score: number) => (
-        <span
-          style={{
-            color: score < 0 || score > 10 ? "red" : "inherit",
-          }}
-        >
-          {score}
+      render: (score: number | null) => (
+        <span style={{ color: score != null && (score < 0 || score > 10) ? "red" : "inherit" }}>
+          {score ?? ""}
         </span>
       ),
     },
@@ -236,7 +238,6 @@ const ImportScoreModal = ({
           style={{ display: "none" }}
         />
         <Button onClick={() => document.getElementById("file-upload")?.click()}>Chọn file</Button>
-
         {fileName && (
           <Space style={{ marginLeft: 16 }}>
             <Tag
@@ -248,7 +249,6 @@ const ImportScoreModal = ({
             </Tag>
           </Space>
         )}
-
         <p style={{ marginTop: 8 }}>Chọn file Excel mẫu đã xuất từ hệ thống</p>
       </div>
 
@@ -260,7 +260,7 @@ const ImportScoreModal = ({
           }}
           columns={columns}
           dataSource={previewData}
-          rowKey="key"
+          rowKey="id"
           pagination={false}
           scroll={{ y: 400 }}
           bordered

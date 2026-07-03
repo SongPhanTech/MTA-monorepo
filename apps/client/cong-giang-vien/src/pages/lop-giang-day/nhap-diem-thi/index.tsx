@@ -1,3 +1,7 @@
+import ImportScoreModal, {
+  type ImportScoreData,
+} from "@components/commons/print/nhap-diem-tu-file"
+import ExportScoreTemplate from "@components/commons/print/xuat-mau-nhap-diem"
 import { scoreConvert } from "@hooks/scoreConverter"
 import { ROUTER_PATH } from "@workspace/router"
 import { calcFinalScore } from "@workspace/libs/utils"
@@ -24,7 +28,6 @@ import {
   CheckCircle2,
   CircleSlash2,
   ClipboardCheck,
-  FileDown,
   FileUp,
   GraduationCap,
   Hash,
@@ -140,6 +143,7 @@ const NhapDiemThiGiangDayPage = () => {
   const [lopId, setLopId] = useState<string | undefined>(lopIdMacDinh)
   const [rows, setRows] = useState<RowData[]>([])
   const [historyTarget, setHistoryTarget] = useState<{ id: string; hoTen: string } | null>(null)
+  const [importModalVisible, setImportModalVisible] = useState(false)
   const [dongFocusIds, setDongFocusIds] = useState<string[]>([])
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(320)
@@ -224,6 +228,7 @@ const NhapDiemThiGiangDayPage = () => {
       include: {
         semester: { include: { schoolYear: true } },
         subject: true,
+        mainLecturer: { include: { userProfile: { select: { fullname: true } } } },
         classSchedules: { include: { room: true }, take: 1 },
         _count: { select: { subjectClassStudent: true } },
       },
@@ -245,7 +250,7 @@ const NhapDiemThiGiangDayPage = () => {
         subjectClass: { select: { type: true } },
         student: {
           include: {
-            userProfile: { select: { fullname: true } },
+            userProfile: { select: { fullname: true, dateOfBirth: true } },
             fixedClass: {
               include: {
                 trainingCourse: { include: { scoreConverts: true } },
@@ -295,39 +300,55 @@ const NhapDiemThiGiangDayPage = () => {
     setRows(mapped)
   }, [scoreRows])
 
-  const capNhatDong = (id: string, patch: Partial<Pick<RowData, "examScore" | "description">>) => {
+  const tinhDongSauCapNhat = (
+    row: RowData,
+    patch: Partial<Pick<RowData, "examScore" | "description">>
+  ): RowData => {
+    const next = { ...row, ...patch }
+    const goc = scoreRows.find((x) => x.id === row.id)
+    const trainingCourse = goc?.student?.fixedClass?.trainingCourse
+    const finalScore =
+      next.attendanceScore == null || next.midtermScore == null || next.examScore == null
+        ? null
+        : calcFinalScore(
+            trainingCourse ?? HE_SO_MAC_DINH,
+            {
+              attendanceScore: next.attendanceScore,
+              midtermScore: next.midtermScore,
+              examScore: next.examScore,
+              certificates: [],
+              awards: [],
+            },
+            goc?.subjectClass?.type ?? $Enums.SubjectClassType.NORMAL
+          )
+    const convert =
+      finalScore != null
+        ? scoreConvert(Number(finalScore), trainingCourse?.scoreConverts ?? [])
+        : null
+
+    return {
+      ...next,
+      finalScore: finalScore != null ? Number(finalScore) : null,
+      letter: convert?.letter ?? "",
+      isChanged: true,
+    }
+  }
+
+  const handleImportConfirm = (data: ImportScoreData[]) => {
+    const importMap = new Map(data.map((item) => [item.id, item]))
     setRows((prev) =>
       prev.map((row) => {
-        if (row.id !== id) return row
-        const next = { ...row, ...patch }
-        const goc = scoreRows.find((x) => x.id === id)
-        const trainingCourse = goc?.student?.fixedClass?.trainingCourse
-        const finalScore =
-          next.attendanceScore == null || next.midtermScore == null || next.examScore == null
-            ? null
-            : calcFinalScore(
-                trainingCourse ?? HE_SO_MAC_DINH,
-                {
-                  attendanceScore: next.attendanceScore,
-                  midtermScore: next.midtermScore,
-                  examScore: next.examScore,
-                  certificates: [],
-                  awards: [],
-                },
-                goc?.subjectClass?.type ?? $Enums.SubjectClassType.NORMAL
-              )
-        const convert =
-          finalScore != null
-            ? scoreConvert(Number(finalScore), trainingCourse?.scoreConverts ?? [])
-            : null
-
-        return {
-          ...next,
-          finalScore: finalScore != null ? Number(finalScore) : null,
-          letter: convert?.letter ?? "",
-          isChanged: true,
-        }
+        const imported = importMap.get(row.id)
+        if (!imported) return row
+        return tinhDongSauCapNhat(row, { examScore: imported.examScore })
       })
+    )
+    message.success("Nhập điểm từ file thành công!")
+  }
+
+  const capNhatDong = (id: string, patch: Partial<Pick<RowData, "examScore" | "description">>) => {
+    setRows((prev) =>
+      prev.map((row) => (row.id === id ? tinhDongSauCapNhat(row, patch) : row))
     )
   }
 
@@ -596,12 +617,20 @@ const NhapDiemThiGiangDayPage = () => {
             <Button icon={<Save size={14} />} onClick={luu} disabled={quaHanNhapDiemThi}>
               Lưu
             </Button>
-            <Button icon={<FileUp size={14} />} onClick={() => message.info("Đang phát triển")}>
-              Nhập Excel
+            <Button
+              icon={<FileUp size={14} />}
+              onClick={() => setImportModalVisible(true)}
+              disabled={!lopId || rows.length === 0 || quaHanNhapDiemThi}
+            >
+              Nhập điểm từ file
             </Button>
-            <Button icon={<FileDown size={14} />} onClick={() => message.info("Đang phát triển")}>
-              Xuất Excel
-            </Button>
+            <ExportScoreTemplate
+              selectedSubjectClass={lopId}
+              subjectClass={lopMonHoc}
+              dataTable={scoreRows}
+              type="THI"
+              disabled={quaHanNhapDiemThi}
+            />
           </div>
         </div>
         <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden">
@@ -689,6 +718,14 @@ const NhapDiemThiGiangDayPage = () => {
         />
         </div>
       </div>
+
+      <ImportScoreModal
+        visible={importModalVisible}
+        onCancel={() => setImportModalVisible(false)}
+        onConfirm={handleImportConfirm}
+        existingStudents={scoreRows}
+        scoreType="THI"
+      />
 
       <Modal
         title={`Lịch sử chỉnh sửa điểm${historyTarget ? ` - ${historyTarget.hoTen}` : ""}`}

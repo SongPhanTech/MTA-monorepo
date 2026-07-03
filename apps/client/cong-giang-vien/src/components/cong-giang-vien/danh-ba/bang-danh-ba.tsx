@@ -90,15 +90,9 @@ const BangDanhBa = ({
       ellipsis: true,
     },
     {
-      title: "Học vị/Học hàm",
-      dataIndex: "hocHam",
-      width: 140,
-      ellipsis: true,
-    },
-    {
       title: "Email",
       dataIndex: "email",
-      width: 200,
+      width: 180,
       ellipsis: true,
       render: (value: string) => <span>{value}</span>,
     },
@@ -112,14 +106,7 @@ const BangDanhBa = ({
     {
       title: "Đơn vị",
       dataIndex: "donVi",
-      width: 180,
-      ellipsis: true,
-    },
-    {
-      title: "Vị trí việc làm",
-      dataIndex: "viTriViecLam",
-      width: 160,
-      align: "center",
+      width: 200,
       ellipsis: true,
     },
   ]
@@ -164,6 +151,7 @@ const BangDanhBa = ({
           rowKey="key"
           size="small"
           loading={loading}
+          bordered
           columns={columns}
           dataSource={dataSource}
           scroll={{ x: 1200, y: chieuCaoBody }}

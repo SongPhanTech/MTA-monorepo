@@ -24,16 +24,6 @@ export type DonViDanhBa = Prisma.DM_DonViGetPayload<{
                 sTen: true
               }
             }
-            academicDegreeType: {
-              select: {
-                sTen: true
-              }
-            }
-            academicRankType: {
-              select: {
-                sTen: true
-              }
-            }
           }
         }
       }
@@ -47,10 +37,8 @@ export type DanhBaRow = {
   key: string
   maCanBo: string
   hoTen: string
-  hocHam: string
   email: string
   soDienThoai: string
   donVi: string
-  viTriViecLam: string
   gioiTinh: string
 }

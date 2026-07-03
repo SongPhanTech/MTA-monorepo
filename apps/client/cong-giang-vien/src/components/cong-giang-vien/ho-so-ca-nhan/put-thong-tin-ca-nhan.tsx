@@ -83,6 +83,7 @@ const PutThongTinCaNhanModal = () => {
     tag: "PutThongTinCaNhanModal",
     onClose: form.resetFields,
   })
+
   const id = input?.id
   const { showSpinner, hideSpinner } = useSpinner()
 
