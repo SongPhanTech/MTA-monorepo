@@ -9,13 +9,14 @@ type DeleteIconProps = {
   disabled?: boolean
 } & LucideProps
 
-const DeleteIcon = ({ title, popConfirm, disabled = false, ...props }: DeleteIconProps) => {
+const DeleteIcon = ({ title, popConfirm, disabled = false, className, ...props }: DeleteIconProps) => {
   const icon = (
     <Trash2
       size={16}
       strokeWidth={1.5}
       className={clsx(
-        disabled ? "text-gray-300 cursor-not-allowed" : "text-red-600 cursor-pointer"
+        disabled ? "text-gray-300 cursor-not-allowed" : "text-red-600 cursor-pointer",
+        className
       )}
       onClick={(e) => disabled && e.stopPropagation()}
       {...props}

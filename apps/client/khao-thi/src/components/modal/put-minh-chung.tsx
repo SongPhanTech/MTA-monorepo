@@ -154,7 +154,7 @@ const PutEvidence = () => {
       className="w-[700px] top-2"
     >
       <Col span={24}>
-        <FormItem form={form} name="suffix" label="Mã minh chứng" required>
+        <FormItem form={form} name="suffix" label="Mã minh chứng">
           <Input placeholder="Nhập mã minh chứng" />
         </FormItem>
       </Col>

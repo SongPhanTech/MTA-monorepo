@@ -1,3 +1,4 @@
+import { queryClient } from "@api/index"
 import TableCollapse from "@components/commons/tableCollapse"
 import type { FilterProps } from "@components/commons/typeFilter"
 import CreateIcon from "@components/icons/create"
@@ -6,13 +7,10 @@ import EditIcon from "@components/icons/edit"
 import useSpinner from "@hooks/spinner"
 import EvaluateLayout from "@layouts/evaluate-layout"
 import { DownloadOutlined, EyeOutlined, PaperClipOutlined } from "@ant-design/icons"
-import {
-  useDeleteEvidence,
-  useDeleteEvidenceCategory,
-  useFindManyEvidenceCategory,
-} from "@workspace/db/hooks"
+import { useDeleteEvidenceCategory, useFindManyEvidenceCategory } from "@workspace/db/hooks"
 import type { EvidenceFile } from "@workspace/db"
 import type { XemBangChungFilesInput } from "@components/modal/xem-bang-chung-files-modal"
+import { sqlTransaction } from "@workspace/libs/api/model"
 import { getMinioUrl, getRuntimeEnv } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
 import { KHAO_THI_PERMISSION } from "@workspace/router"
@@ -108,7 +106,10 @@ export default function EvidenceCategory() {
       evidences: {
         where,
         orderBy: [{ name: "desc" }],
-        include: { evidenceFile: true },
+        include: {
+          evidenceFile: true,
+          _count: { select: { analysisFormEvidence: true } },
+        },
       },
     },
     orderBy: [{ name: "desc" }],
@@ -154,6 +155,8 @@ export default function EvidenceCategory() {
       await deleteEvidenceCategory({
         where: { id },
       })
+      message.success("Xóa thành công")
+      queryClient.invalidateQueries({ queryKey: ["zenstack", "EvidenceCategory"] })
     } catch (error: any) {
       if (error?.info?.message) {
         message.error(error?.info?.message)
@@ -165,18 +168,35 @@ export default function EvidenceCategory() {
     }
   }
 
-  const { mutateAsync: deleteEvidence } = useDeleteEvidence()
-  async function handleDeleteEvidence(id: string) {
+  async function handleDeleteEvidence(id: string, analysisFormEvidenceCount: number) {
+    if (analysisFormEvidenceCount > 0) {
+      message.error("Minh chứng đã được đưa vào phiếu phân tích, không thể xóa")
+      return
+    }
+
     try {
       showSpinner()
-      await deleteEvidence({
-        where: { id },
-      })
-    } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message)
+      const res = await sqlTransaction([
+        {
+          model: "EvidenceFile",
+          operation: "deleteMany",
+          data: { where: { evidenceId: id } },
+        },
+        {
+          model: "Evidence",
+          operation: "delete",
+          data: { where: { id } },
+        },
+      ])
+
+      if (res.status !== 200) {
+        message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
         return
       }
+
+      message.success("Xóa thành công")
+      queryClient.invalidateQueries({ queryKey: ["zenstack", "EvidenceCategory"] })
+    } catch (error: any) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()
@@ -254,23 +274,38 @@ export default function EvidenceCategory() {
                     className="text-sm text-blue-700 cursor-pointer"
                   />
                 )}
-                {can(
-                  KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
-                  "XOA"
-                ) && (
-                  <DeleteIcon
-                    popConfirm={{
-                      onConfirm: (e) => {
-                        handleDeleteEvidenceCategory(record?.id)
-                        e?.stopPropagation()
-                      },
-                      onCancel: (e) => {
-                        e?.stopPropagation()
-                      },
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                )}
+                {can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG, "XOA") &&
+                  (() => {
+                    const hasEvidences = (record?.evidences?.length ?? 0) > 0
+
+                    return (
+                      <Tooltip
+                        placement="top"
+                        title={hasEvidences ? "Không thể xóa vì nhóm đã có minh chứng" : ""}
+                      >
+                        <DeleteIcon
+                          disabled={hasEvidences}
+                          className={
+                            hasEvidences ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                          }
+                          popConfirm={
+                            hasEvidences
+                              ? undefined
+                              : {
+                                  onConfirm: (e) => {
+                                    handleDeleteEvidenceCategory(record?.id)
+                                    e?.stopPropagation()
+                                  },
+                                  onCancel: (e) => {
+                                    e?.stopPropagation()
+                                  },
+                                }
+                          }
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </Tooltip>
+                    )
+                  })()}
               </div>
             )}
             columns={[
@@ -376,20 +411,47 @@ export default function EvidenceCategory() {
                         {can(
                           KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
                           "XOA"
-                        ) && (
-                          <DeleteIcon
-                            popConfirm={{
-                              onConfirm: (e) => {
-                                handleDeleteEvidence(record?.id)
-                                e?.stopPropagation()
-                              },
-                              onCancel: (e) => {
-                                e?.stopPropagation()
-                              },
-                            }}
-                            onClick={(e) => e.stopPropagation()}
-                          />
-                        )}
+                        ) &&
+                          (() => {
+                            const inAnalysisForm = (record?._count?.analysisFormEvidence ?? 0) > 0
+
+                            return (
+                              <Tooltip
+                                placement="top"
+                                title={
+                                  inAnalysisForm
+                                    ? "Minh chứng đã được đưa vào phiếu phân tích, không thể xóa"
+                                    : ""
+                                }
+                              >
+                                <DeleteIcon
+                                  disabled={inAnalysisForm}
+                                  className={
+                                    inAnalysisForm
+                                      ? "opacity-50 cursor-not-allowed"
+                                      : "cursor-pointer"
+                                  }
+                                  popConfirm={
+                                    inAnalysisForm
+                                      ? undefined
+                                      : {
+                                          onConfirm: (e) => {
+                                            handleDeleteEvidence(
+                                              record?.id,
+                                              record?._count?.analysisFormEvidence ?? 0
+                                            )
+                                            e?.stopPropagation()
+                                          },
+                                          onCancel: (e) => {
+                                            e?.stopPropagation()
+                                          },
+                                        }
+                                  }
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                              </Tooltip>
+                            )
+                          })()}
                       </Row>
                     )
                   }

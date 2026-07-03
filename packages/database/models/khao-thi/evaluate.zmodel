@@ -99,7 +99,7 @@ model Evidence extends Base {
   name                 String
   information          String // Số, ngày ban hành, hoặc thời điểm khảo sát, điều tra, phỏng vấn, quan sát,…
   issuer               String // Nơi ban hành hoặc nhóm, cá nhân thực hiện
-  suffix              String?
+  suffix               String?
 
   evidenceFile         EvidenceFile[]
   analysisFormEvidence AnalysisFormEvidence[]
