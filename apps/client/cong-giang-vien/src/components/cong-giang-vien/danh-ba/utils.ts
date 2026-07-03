@@ -3,10 +3,6 @@ import { normalizeVietnamese } from "@workspace/libs/utils"
 import type { DataNode } from "antd/es/tree"
 import type { DanhBaRow, DonViDanhBa, LecturerDanhBa } from "./types"
 
-export function getHocHamHocVi(profile: LecturerDanhBa["userProfile"]) {
-  return profile?.academicDegreeType?.sTen || profile?.academicRankType?.sTen || ""
-}
-
 export function getInitials(fullname?: string | null) {
   if (!fullname?.trim()) return "?"
   const parts = fullname.trim().split(/\s+/)
@@ -69,11 +65,9 @@ export function mapLecturerToRow(lecturer: LecturerDanhBa, index: number): DanhB
     maCanBo: lecturer.lectureID ?? "",
     hoTen: profile?.fullname || "",
     gioiTinh: profile?.gender?.sTen ?? "",
-    hocHam: getHocHamHocVi(profile),
     email: profile?.email || "",
     soDienThoai: profile?.phoneNumber || "",
     donVi: lecturer.organization?.sTen || "",
-    viTriViecLam: lecturer.lecturerType?.name || "",
   }
 }
 
@@ -91,7 +85,6 @@ export function filterLecturersBySearch(lecturers: LecturerDanhBa[], keyword: st
       profile?.phoneNumber,
       lecturer.organization?.sTen,
       lecturer.lecturerType?.name,
-      getHocHamHocVi(profile),
     ]
       .filter(Boolean)
       .map((value) => normalizeVietnamese(String(value)))
