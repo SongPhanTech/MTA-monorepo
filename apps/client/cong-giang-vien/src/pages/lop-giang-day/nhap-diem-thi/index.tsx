@@ -1,6 +1,4 @@
-import ImportScoreModal, {
-  type ImportScoreData,
-} from "@components/commons/print/nhap-diem-tu-file"
+import ImportScoreModal, { type ImportScoreData } from "@components/commons/print/nhap-diem-tu-file"
 import ExportScoreTemplate from "@components/commons/print/xuat-mau-nhap-diem"
 import { scoreConvert } from "@hooks/scoreConverter"
 import { ROUTER_PATH } from "@workspace/router"
@@ -101,14 +99,18 @@ const TheThongKeNgang = ({
         onClick && "transition-colors hover:border-cgv-green/35 hover:bg-cgv-green/5"
       )}
     >
-      <span className={cn("inline-flex h-8 w-8 items-center justify-center rounded-full", toneClass)}>
+      <span
+        className={cn("inline-flex h-8 w-8 items-center justify-center rounded-full", toneClass)}
+      >
         {icon}
       </span>
       <div className="min-w-0">
         <div className="truncate text-[10px] font-semibold text-gray-500">{tieuDe}</div>
         <div className="mt-1 flex items-end gap-1.5">
           <span className="text-[24px] font-bold leading-[22px] text-cgv-green-dark">{giaTri}</span>
-          {tyLe ? <span className="pb-0.5 text-[10px] font-semibold text-gray-500">{tyLe}</span> : null}
+          {tyLe ? (
+            <span className="pb-0.5 text-[10px] font-semibold text-gray-500">{tyLe}</span>
+          ) : null}
         </div>
       </div>
     </button>
@@ -125,7 +127,9 @@ const TheThongTinLopHang = ({
   value: string
 }) => (
   <div className="flex items-center gap-2 text-[13px] leading-7">
-    <span className="inline-flex h-4 w-4 items-center justify-center text-cgv-green-dark/80">{icon}</span>
+    <span className="inline-flex h-4 w-4 items-center justify-center text-cgv-green-dark/80">
+      {icon}
+    </span>
     <span className="shrink-0 text-gray-500">{label}</span>
     <span className="truncate font-semibold text-gray-900">{value}</span>
   </div>
@@ -347,9 +351,7 @@ const NhapDiemThiGiangDayPage = () => {
   }
 
   const capNhatDong = (id: string, patch: Partial<Pick<RowData, "examScore" | "description">>) => {
-    setRows((prev) =>
-      prev.map((row) => (row.id === id ? tinhDongSauCapNhat(row, patch) : row))
-    )
+    setRows((prev) => prev.map((row) => (row.id === id ? tinhDongSauCapNhat(row, patch) : row)))
   }
 
   const thongKe = useMemo(() => {
@@ -534,19 +536,13 @@ const NhapDiemThiGiangDayPage = () => {
 
       <div className="rounded-lg border border-gray-100 bg-white p-3">
         <div className="overflow-hidden rounded-lg border border-gray-100">
-          <div className="grid grid-cols-1 lg:grid-cols-[250px_minmax(0,1fr)]">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(300px,auto)_minmax(0,1fr)]">
             <div className="border-b border-gray-100 bg-gray-50/70 px-3 py-2 lg:border-b-0 lg:border-r">
               <div className="space-y-0.5">
-                <TheThongTinLopHang icon={<Hash size={14} />} label="Mã lớp:" value={lopMonHoc?.code ?? "—"} />
                 <TheThongTinLopHang
-                  icon={<BookOpen size={14} />}
-                  label="Tên lớp:"
-                  value={lopMonHoc?.name ?? "—"}
-                />
-                <TheThongTinLopHang
-                  icon={<CalendarDays size={14} />}
-                  label="Học kỳ:"
-                  value={lopMonHoc?.semester?.name ?? "—"}
+                  icon={<Hash size={14} />}
+                  label="Mã lớp:"
+                  value={lopMonHoc?.code ?? "—"}
                 />
                 <TheThongTinLopHang
                   icon={<GraduationCap size={14} />}
@@ -558,7 +554,7 @@ const NhapDiemThiGiangDayPage = () => {
                   label="Hạn nhập điểm:"
                   value={
                     lopMonHoc?.examScoreDeadline
-                      ? dayjs(lopMonHoc.examScoreDeadline).format("DD/MM/YYYY HH:mm")
+                      ? dayjs(lopMonHoc.examScoreDeadline).format("DD/MM/YYYY")
                       : "—"
                   }
                 />
@@ -634,88 +630,88 @@ const NhapDiemThiGiangDayPage = () => {
           </div>
         </div>
         <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden">
-        <Table<RowData>
-          rowKey="id"
-          pagination={false}
-          size="small"
-          dataSource={rows}
-          scroll={{ y: chieuCaoBody }}
-          onRow={(record) => ({
-            className: dongFocusIds.includes(record.id)
-              ? "[&>td]:!bg-cgv-green/35 [&>td]:!transition-colors"
-              : undefined,
-          })}
-          columns={[
-            { title: "STT", width: 56, align: "center", render: (_v, _r, i) => i + 1 },
-            { title: "MÃ SV", dataIndex: "mssv", width: 100, align: "center" },
-            { title: "Họ và tên", dataIndex: "hoTen", width: 180 },
-            {
-              title: "Chuyên cần",
-              dataIndex: "attendanceScore",
-              width: 120,
-              align: "center",
-              render: (v) => <Input value={v ?? ""} disabled />,
-            },
-            {
-              title: "Định kỳ",
-              dataIndex: "midtermScore",
-              width: 120,
-              align: "center",
-              render: (v) => <Input value={v ?? ""} disabled />,
-            },
-            {
-              title: "Điểm thi",
-              dataIndex: "examScore",
-              width: 120,
-              align: "center",
-              render: (value, row) => (
-                <InputNumber
-                  value={value ?? undefined}
-                  min={0}
-                  max={10}
-                  step={0.5}
-                  disabled={quaHanNhapDiemThi}
-                  onChange={(v) => capNhatDong(row.id, { examScore: Number(v) })}
-                  className="w-full"
-                />
-              ),
-            },
-            {
-              title: "Điểm HP",
-              dataIndex: "finalScore",
-              width: 100,
-              align: "center",
-              render: (v) => v ?? "",
-            },
-            { title: "Điểm chữ", dataIndex: "letter", width: 100, align: "center" },
-            {
-              title: "Ghi chú",
-              dataIndex: "description",
-              render: (value, row) => (
-                <div className="flex items-center gap-2">
-                  <Input
-                    value={value}
-                    onChange={(e) => capNhatDong(row.id, { description: e.target.value })}
+          <Table<RowData>
+            rowKey="id"
+            pagination={false}
+            size="small"
+            dataSource={rows}
+            scroll={{ y: chieuCaoBody }}
+            onRow={(record) => ({
+              className: dongFocusIds.includes(record.id)
+                ? "[&>td]:!bg-cgv-green/35 [&>td]:!transition-colors"
+                : undefined,
+            })}
+            columns={[
+              { title: "STT", width: 56, align: "center", render: (_v, _r, i) => i + 1 },
+              { title: "MÃ SV", dataIndex: "mssv", width: 100, align: "center" },
+              { title: "Họ và tên", dataIndex: "hoTen", width: 180 },
+              {
+                title: "Chuyên cần",
+                dataIndex: "attendanceScore",
+                width: 120,
+                align: "center",
+                render: (v) => <Input value={v ?? ""} disabled />,
+              },
+              {
+                title: "Định kỳ",
+                dataIndex: "midtermScore",
+                width: 120,
+                align: "center",
+                render: (v) => <Input value={v ?? ""} disabled />,
+              },
+              {
+                title: "Điểm thi",
+                dataIndex: "examScore",
+                width: 120,
+                align: "center",
+                render: (value, row) => (
+                  <InputNumber
+                    value={value ?? undefined}
+                    min={0}
+                    max={10}
+                    step={0.5}
                     disabled={quaHanNhapDiemThi}
+                    onChange={(v) => capNhatDong(row.id, { examScore: Number(v) })}
+                    className="w-full"
                   />
-                  <Button
-                    type="text"
-                    icon={<History size={14} />}
-                    title="Lịch sử chỉnh sửa"
-                    onClick={() => setHistoryTarget({ id: row.id, hoTen: row.hoTen })}
-                  />
-                  <Button
-                    type="text"
-                    icon={<RotateCcw size={14} />}
-                    title="Đặt lại dòng điểm"
-                    disabled={quaHanNhapDiemThi}
-                    onClick={() => capNhatDong(row.id, { examScore: null, description: "" })}
-                  />
-                </div>
-              ),
-            },
-          ]}
-        />
+                ),
+              },
+              {
+                title: "Điểm HP",
+                dataIndex: "finalScore",
+                width: 100,
+                align: "center",
+                render: (v) => v ?? "",
+              },
+              { title: "Điểm chữ", dataIndex: "letter", width: 100, align: "center" },
+              {
+                title: "Ghi chú",
+                dataIndex: "description",
+                render: (value, row) => (
+                  <div className="flex items-center gap-2">
+                    <Input
+                      value={value}
+                      onChange={(e) => capNhatDong(row.id, { description: e.target.value })}
+                      disabled={quaHanNhapDiemThi}
+                    />
+                    <Button
+                      type="text"
+                      icon={<History size={14} />}
+                      title="Lịch sử chỉnh sửa"
+                      onClick={() => setHistoryTarget({ id: row.id, hoTen: row.hoTen })}
+                    />
+                    <Button
+                      type="text"
+                      icon={<RotateCcw size={14} />}
+                      title="Đặt lại dòng điểm"
+                      disabled={quaHanNhapDiemThi}
+                      onClick={() => capNhatDong(row.id, { examScore: null, description: "" })}
+                    />
+                  </div>
+                ),
+              },
+            ]}
+          />
         </div>
       </div>
 
