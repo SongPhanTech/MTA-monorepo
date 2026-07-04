@@ -46,7 +46,7 @@ const DashboardLayout = ({ children, className }: { children: ReactNode; classNa
       timeout={Number.parseFloat(userSessionTimeout?.value || "15") * 60 * 1000}
       onIdle={() => {}}
     >
-      <Layout style={{ minHeight: "100vh" }} hasSider className="bg-blue-50">
+      <Layout style={{ height: "100vh", overflow: "hidden" }} hasSider className="bg-blue-50">
         <div className="khao-thi-header-divider" aria-hidden />
         <SiderDefaultLayout
           logo1={<Image src={logo_mta} alt="logo MTA" className="size-10" />}

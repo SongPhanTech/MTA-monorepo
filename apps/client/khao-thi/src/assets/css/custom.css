@@ -38,6 +38,10 @@
 .khao-thi-layout-content {
   margin-top: 64px;
   padding-top: 20px;
+  padding-bottom: 20px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .khao-thi-sider-footer {

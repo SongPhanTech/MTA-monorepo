@@ -42,26 +42,28 @@ const KhaoSatPrivateLayout = ({
       timeout={Number.parseFloat(userSessionTimeout?.value || "15") * 60 * 1000}
       onIdle={() => {}}
     >
-      <Layout style={{ minHeight: "100vh" }} hasSider>
+      <Layout style={{ height: "100vh", overflow: "hidden" }} hasSider>
         <Layout
           style={{
             marginInlineStart: 0, // Điều chỉnh margin theo trạng thái collapsed
             transition: "margin-inline-start 0.2s", // Hiệu ứng mượt
+            height: "100%",
+            overflow: "hidden",
           }}
         >
-          <Header className="flex justify-between items-center bg-white shadow-sm mb-2 fixed z-[1000] top-0  w-full">
+          <Header className="flex justify-between items-center bg-white shadow-sm fixed z-[1000] top-0 w-full">
             <div className="text-lg font-bold text-primary">{headerName || "KHẢO THÍ"} </div>
             <HeaderApp />
           </Header>
-          <Content className="mx-2 mt-20">
+          <Content
+            className="mx-2 mb-2 overflow-y-auto"
+            style={{ marginTop: 64, height: "calc(100vh - 64px)", boxSizing: "border-box" }}
+          >
             {unLayout ? (
               children
             ) : (
               <div
-                className={cn(
-                  "min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4",
-                  className
-                )}
+                className={cn("min-h-full bg-white rounded-lg shadow-sm p-4", className)}
                 style={{
                   background: colorBgContainer,
                 }}
