@@ -95,7 +95,7 @@ const ModalTaoDuLieuMauLuanVan = () => {
         thesisSessionId,
         studentIds: selectedStudents.map((s) => s.id),
       })
-      if (response.status !== 200) {
+      if (response.status !== 200 || !("createdCount" in response.data)) {
         message.error(
           "message" in response.data
             ? response.data.message
