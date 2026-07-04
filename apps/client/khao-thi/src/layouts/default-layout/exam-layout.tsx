@@ -124,7 +124,7 @@ const ExamLayout = ({
       timeout={Number.parseFloat(userSessionTimeout?.value || "15") * 60 * 1000}
       onIdle={() => {}}
     >
-      <Layout style={{ minHeight: "100vh" }} hasSider>
+      <Layout style={{ height: "100vh", overflow: "hidden" }} hasSider>
         <div className="khao-thi-header-divider" aria-hidden />
         <SiderDefaultLayout
           logo1={<Image src={logo_mta} alt="logo MTA" className="size-10" />}
@@ -168,7 +168,7 @@ const ExamLayout = ({
               children
             ) : (
               <div
-                className={cn("min-h-[calc(100vh-64px)] bg-white shadow-sm px-4", className)}
+                className={cn("min-h-full bg-white shadow-sm px-4", className)}
                 style={{
                   background: colorBgContainer,
                 }}

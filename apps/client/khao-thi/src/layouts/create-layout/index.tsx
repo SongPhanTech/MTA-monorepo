@@ -123,7 +123,7 @@ const CreateLayout = ({
       timeout={Number.parseFloat(userSessionTimeout?.value || "15") * 60 * 1000}
       onIdle={() => {}}
     >
-      <Layout style={{ minHeight: "100vh" }} hasSider>
+      <Layout style={{ height: "100vh", overflow: "hidden" }} hasSider>
         <div className="khao-thi-header-divider" aria-hidden />
         <SiderCreateLayout
           logo1={<Image src={logo_mta} alt="logo MTA" className="size-10" />}
