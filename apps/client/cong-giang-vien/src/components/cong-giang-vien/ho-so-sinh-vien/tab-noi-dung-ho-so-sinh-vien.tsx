@@ -36,9 +36,7 @@ const TabNoiDungHoSoSinhVien = ({ hoSo }: TabNoiDungHoSoSinhVienProps) => (
       },
       {
         key: "dieu-kien-tot-nghiep",
-        label: (
-          <TabLabel so={2} icon={<GraduationCap size={16} />} text="Điều kiện tốt nghiệp" />
-        ),
+        label: <TabLabel so={2} icon={<GraduationCap size={16} />} text="Điều kiện tốt nghiệp" />,
         children: <TabDieuKienTotNghiep data={hoSo.dieuKienTotNghiep} />,
       },
       {
@@ -53,9 +51,7 @@ const TabNoiDungHoSoSinhVien = ({ hoSo }: TabNoiDungHoSoSinhVienProps) => (
       },
       {
         key: "quyet-dinh-tot-nghiep",
-        label: (
-          <TabLabel so={5} icon={<FileText size={16} />} text="Quyết định tốt nghiệp" />
-        ),
+        label: <TabLabel so={5} icon={<FileText size={16} />} text="Quyết định tốt nghiệp" />,
         children: <TabQuyetDinhTotNghiep danhSach={hoSo.quyetDinhTotNghiep} />,
       },
     ]}

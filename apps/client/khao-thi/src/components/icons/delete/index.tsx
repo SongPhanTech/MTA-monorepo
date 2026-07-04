@@ -9,7 +9,13 @@ type DeleteIconProps = {
   disabled?: boolean
 } & LucideProps
 
-const DeleteIcon = ({ title, popConfirm, disabled = false, className, ...props }: DeleteIconProps) => {
+const DeleteIcon = ({
+  title,
+  popConfirm,
+  disabled = false,
+  className,
+  ...props
+}: DeleteIconProps) => {
   const icon = (
     <Trash2
       size={16}

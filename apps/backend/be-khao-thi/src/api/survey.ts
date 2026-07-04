@@ -1,5 +1,9 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
-import { ErrorMessageResponseSchema, DocxBinaryResponseSchema, SuccessMessageResponseSchema } from "../dto/common-response.dto"
+import {
+  ErrorMessageResponseSchema,
+  DocxBinaryResponseSchema,
+  SuccessMessageResponseSchema,
+} from "../dto/common-response.dto"
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import type { Prisma } from "@workspace/db"
 import { models } from "@workspace/db/zod"

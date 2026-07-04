@@ -15886,6 +15886,10 @@ const metadata: ModelMeta = {
                     name: "content",
                     type: "String",
                     isOptional: true,
+                }, isCompleted: {
+                    name: "isCompleted",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, reminderMinutes: {
                     name: "reminderMinutes",
                     type: "Int",

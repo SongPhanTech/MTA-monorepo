@@ -96,6 +96,7 @@ model IndividualSchedule extends Base {
   allDay    Boolean  @default(false) // Cả ngày
   location  String?  // Địa điểm / nền tảng
   content   String?  @db.Text // Nội dung công việc, cuộc họp, ghi chú
+  isCompleted Boolean  @default(false) // Đã hoàn thành
 
   reminderMinutes Int?               // Nhắc lịch: số phút trước giờ bắt đầu (null = không nhắc)
   repeatType      ScheduleRepeatType @default(NONE) // Lặp lại

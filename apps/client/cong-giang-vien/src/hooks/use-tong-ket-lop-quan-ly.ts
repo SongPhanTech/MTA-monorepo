@@ -1,9 +1,6 @@
 import type { ThongKeTongKet, TongKetRow } from "@components/cong-giang-vien/lop-quan-ly/types"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
-import {
-  layDiemRenLuyenNamHoc,
-  layDiemRenLuyenSinhVien,
-} from "@lib/diem-ren-luyen"
+import { layDiemRenLuyenNamHoc, layDiemRenLuyenSinhVien } from "@lib/diem-ren-luyen"
 import {
   chuyenSo,
   dinhDangHeSoXetHocBong,
@@ -12,7 +9,12 @@ import {
   layHeDiemTotNghiep,
   phanLoaiDiemTotNghiep,
 } from "@lib/tong-ket-hoc-ky"
-import { AcademicRankingBaseType, RankingContext, SemesterType, TrainingScoreStatus } from "@workspace/db/client"
+import {
+  AcademicRankingBaseType,
+  RankingContext,
+  SemesterType,
+  TrainingScoreStatus,
+} from "@workspace/db/client"
 import {
   useCountStudent,
   useFindManyAcademicRankingConvert,
@@ -174,8 +176,7 @@ const useTongKetLopQuanLy = (fixedClassId: string, enabled: boolean) => {
   const theoKy = !!semesterId
 
   const studentInclude = useMemo(
-    () =>
-      theoKy ? STUDENT_INCLUDE_KY(semesterId!) : STUDENT_INCLUDE_NAM(schoolYearId),
+    () => (theoKy ? STUDENT_INCLUDE_KY(semesterId!) : STUDENT_INCLUDE_NAM(schoolYearId)),
     [theoKy, semesterId, schoolYearId]
   )
 

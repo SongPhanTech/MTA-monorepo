@@ -31,11 +31,7 @@ const CayDonVi = ({ donViData, selectedOrgId, onSelectOrg, loading }: CayDonViPr
 
   useEffect(() => {
     if (!treeData.length) return
-    setExpandedKeys(
-      search.trim()
-        ? getAllTreeNodeKeys(treeData)
-        : getDefaultExpandedKeys(treeData)
-    )
+    setExpandedKeys(search.trim() ? getAllTreeNodeKeys(treeData) : getDefaultExpandedKeys(treeData))
   }, [treeData, search])
 
   useEffect(() => {

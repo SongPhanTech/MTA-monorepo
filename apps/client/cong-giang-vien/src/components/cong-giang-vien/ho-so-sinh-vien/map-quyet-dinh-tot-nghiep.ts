@@ -81,10 +81,7 @@ const mapTuQuyetDinh = (decision: GraduationDecisionRow): QuyetDinhTotNghiepSinh
 const mapTuDon = (app: GraduationApplicationRow): QuyetDinhTotNghiepSinhVien | null => {
   const decision = app.decision
   const session = app.session
-  const ngay =
-    decision?.decisionDate ??
-    session?.graduationDecisionDate ??
-    app.applicationDate
+  const ngay = decision?.decisionDate ?? session?.graduationDecisionDate ?? app.applicationDate
 
   if (!decision && app.status !== ApplicationStatus.APPROVED) return null
 

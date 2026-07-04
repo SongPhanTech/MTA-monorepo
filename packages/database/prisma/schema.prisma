@@ -4516,6 +4516,7 @@ model IndividualSchedule {
   allDay              Boolean            @default(false)
   location            String?
   content             String?            @db.Text()
+  isCompleted         Boolean            @default(false)
   reminderMinutes     Int?
   repeatType          ScheduleRepeatType @default(NONE)
   lecturer            Lecturer           @relation(fields: [lecturerId], references: [id])

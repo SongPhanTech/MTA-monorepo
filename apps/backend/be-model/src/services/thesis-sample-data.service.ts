@@ -1,8 +1,4 @@
-import {
-  CouncilProposalStatus,
-  FixedClassType,
-  ThesisType,
-} from "@workspace/db/client"
+import { CouncilProposalStatus, FixedClassType, ThesisType } from "@workspace/db/client"
 import { prisma } from ".."
 
 export type CreateSampleThesisDataParams = {

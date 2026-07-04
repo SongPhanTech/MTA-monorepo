@@ -33,11 +33,7 @@ const TabDiemRenLuyen = ({ fixedClassId, enabled }: TabDiemRenLuyenProps) => {
         semesterId={semesterId}
         onApDung={apDungBoLoc}
       />
-      <TheThongKeDiemRenLuyen
-        thongKe={thongKe}
-        locDiem={locDiem}
-        onChonLocDiem={chonLocDiem}
-      />
+      <TheThongKeDiemRenLuyen thongKe={thongKe} locDiem={locDiem} onChonLocDiem={chonLocDiem} />
       <BangDiemRenLuyen danhSach={danhSach} loading={dangTai} trang={trang} soTrang={soTrang} />
       <PhanTrangSinhVien
         trang={trang}

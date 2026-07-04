@@ -223155,6 +223155,7 @@ export namespace Prisma {
     allDay: boolean | null
     location: string | null
     content: string | null
+    isCompleted: boolean | null
     reminderMinutes: number | null
     repeatType: $Enums.ScheduleRepeatType | null
     lecturerId: string | null
@@ -223175,6 +223176,7 @@ export namespace Prisma {
     allDay: boolean | null
     location: string | null
     content: string | null
+    isCompleted: boolean | null
     reminderMinutes: number | null
     repeatType: $Enums.ScheduleRepeatType | null
     lecturerId: string | null
@@ -223195,6 +223197,7 @@ export namespace Prisma {
     allDay: number
     location: number
     content: number
+    isCompleted: number
     reminderMinutes: number
     repeatType: number
     lecturerId: number
@@ -223225,6 +223228,7 @@ export namespace Prisma {
     allDay?: true
     location?: true
     content?: true
+    isCompleted?: true
     reminderMinutes?: true
     repeatType?: true
     lecturerId?: true
@@ -223245,6 +223249,7 @@ export namespace Prisma {
     allDay?: true
     location?: true
     content?: true
+    isCompleted?: true
     reminderMinutes?: true
     repeatType?: true
     lecturerId?: true
@@ -223265,6 +223270,7 @@ export namespace Prisma {
     allDay?: true
     location?: true
     content?: true
+    isCompleted?: true
     reminderMinutes?: true
     repeatType?: true
     lecturerId?: true
@@ -223372,6 +223378,7 @@ export namespace Prisma {
     allDay: boolean
     location: string | null
     content: string | null
+    isCompleted: boolean
     reminderMinutes: number | null
     repeatType: $Enums.ScheduleRepeatType
     lecturerId: string
@@ -223411,6 +223418,7 @@ export namespace Prisma {
     allDay?: boolean
     location?: boolean
     content?: boolean
+    isCompleted?: boolean
     reminderMinutes?: boolean
     repeatType?: boolean
     lecturerId?: boolean
@@ -223435,6 +223443,7 @@ export namespace Prisma {
     allDay?: boolean
     location?: boolean
     content?: boolean
+    isCompleted?: boolean
     reminderMinutes?: boolean
     repeatType?: boolean
     lecturerId?: boolean
@@ -223456,6 +223465,7 @@ export namespace Prisma {
     allDay?: boolean
     location?: boolean
     content?: boolean
+    isCompleted?: boolean
     reminderMinutes?: boolean
     repeatType?: boolean
     lecturerId?: boolean
@@ -223477,12 +223487,13 @@ export namespace Prisma {
     allDay?: boolean
     location?: boolean
     content?: boolean
+    isCompleted?: boolean
     reminderMinutes?: boolean
     repeatType?: boolean
     lecturerId?: boolean
   }
 
-  export type IndividualScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "startTime" | "endTime" | "allDay" | "location" | "content" | "reminderMinutes" | "repeatType" | "lecturerId", ExtArgs["result"]["individualSchedule"]>
+  export type IndividualScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "startTime" | "endTime" | "allDay" | "location" | "content" | "isCompleted" | "reminderMinutes" | "repeatType" | "lecturerId", ExtArgs["result"]["individualSchedule"]>
   export type IndividualScheduleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
     tags?: boolean | IndividualSchedule$tagsArgs<ExtArgs>
@@ -223518,6 +223529,7 @@ export namespace Prisma {
       allDay: boolean
       location: string | null
       content: string | null
+      isCompleted: boolean
       reminderMinutes: number | null
       repeatType: $Enums.ScheduleRepeatType
       lecturerId: string
@@ -223961,6 +223973,7 @@ export namespace Prisma {
     readonly allDay: FieldRef<"IndividualSchedule", 'Boolean'>
     readonly location: FieldRef<"IndividualSchedule", 'String'>
     readonly content: FieldRef<"IndividualSchedule", 'String'>
+    readonly isCompleted: FieldRef<"IndividualSchedule", 'Boolean'>
     readonly reminderMinutes: FieldRef<"IndividualSchedule", 'Int'>
     readonly repeatType: FieldRef<"IndividualSchedule", 'ScheduleRepeatType'>
     readonly lecturerId: FieldRef<"IndividualSchedule", 'String'>
@@ -395599,6 +395612,7 @@ export namespace Prisma {
     allDay: 'allDay',
     location: 'location',
     content: 'content',
+    isCompleted: 'isCompleted',
     reminderMinutes: 'reminderMinutes',
     repeatType: 'repeatType',
     lecturerId: 'lecturerId'
@@ -420570,6 +420584,7 @@ export namespace Prisma {
     allDay?: BoolFilter<"IndividualSchedule"> | boolean
     location?: StringNullableFilter<"IndividualSchedule"> | string | null
     content?: StringNullableFilter<"IndividualSchedule"> | string | null
+    isCompleted?: BoolFilter<"IndividualSchedule"> | boolean
     reminderMinutes?: IntNullableFilter<"IndividualSchedule"> | number | null
     repeatType?: EnumScheduleRepeatTypeFilter<"IndividualSchedule"> | $Enums.ScheduleRepeatType
     lecturerId?: StringFilter<"IndividualSchedule"> | string
@@ -420593,6 +420608,7 @@ export namespace Prisma {
     allDay?: SortOrder
     location?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
+    isCompleted?: SortOrder
     reminderMinutes?: SortOrderInput | SortOrder
     repeatType?: SortOrder
     lecturerId?: SortOrder
@@ -420620,6 +420636,7 @@ export namespace Prisma {
     allDay?: BoolFilter<"IndividualSchedule"> | boolean
     location?: StringNullableFilter<"IndividualSchedule"> | string | null
     content?: StringNullableFilter<"IndividualSchedule"> | string | null
+    isCompleted?: BoolFilter<"IndividualSchedule"> | boolean
     reminderMinutes?: IntNullableFilter<"IndividualSchedule"> | number | null
     repeatType?: EnumScheduleRepeatTypeFilter<"IndividualSchedule"> | $Enums.ScheduleRepeatType
     lecturerId?: StringFilter<"IndividualSchedule"> | string
@@ -420643,6 +420660,7 @@ export namespace Prisma {
     allDay?: SortOrder
     location?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
+    isCompleted?: SortOrder
     reminderMinutes?: SortOrderInput | SortOrder
     repeatType?: SortOrder
     lecturerId?: SortOrder
@@ -420671,6 +420689,7 @@ export namespace Prisma {
     allDay?: BoolWithAggregatesFilter<"IndividualSchedule"> | boolean
     location?: StringNullableWithAggregatesFilter<"IndividualSchedule"> | string | null
     content?: StringNullableWithAggregatesFilter<"IndividualSchedule"> | string | null
+    isCompleted?: BoolWithAggregatesFilter<"IndividualSchedule"> | boolean
     reminderMinutes?: IntNullableWithAggregatesFilter<"IndividualSchedule"> | number | null
     repeatType?: EnumScheduleRepeatTypeWithAggregatesFilter<"IndividualSchedule"> | $Enums.ScheduleRepeatType
     lecturerId?: StringWithAggregatesFilter<"IndividualSchedule"> | string
@@ -454871,6 +454890,7 @@ export namespace Prisma {
     allDay?: boolean
     location?: string | null
     content?: string | null
+    isCompleted?: boolean
     reminderMinutes?: number | null
     repeatType?: $Enums.ScheduleRepeatType
     lecturer: LecturerCreateNestedOneWithoutIndividualSchedulesInput
@@ -454893,6 +454913,7 @@ export namespace Prisma {
     allDay?: boolean
     location?: string | null
     content?: string | null
+    isCompleted?: boolean
     reminderMinutes?: number | null
     repeatType?: $Enums.ScheduleRepeatType
     lecturerId: string
@@ -454915,6 +454936,7 @@ export namespace Prisma {
     allDay?: BoolFieldUpdateOperationsInput | boolean
     location?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    isCompleted?: BoolFieldUpdateOperationsInput | boolean
     reminderMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     repeatType?: EnumScheduleRepeatTypeFieldUpdateOperationsInput | $Enums.ScheduleRepeatType
     lecturer?: LecturerUpdateOneRequiredWithoutIndividualSchedulesNestedInput
@@ -454937,6 +454959,7 @@ export namespace Prisma {
     allDay?: BoolFieldUpdateOperationsInput | boolean
     location?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    isCompleted?: BoolFieldUpdateOperationsInput | boolean
     reminderMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     repeatType?: EnumScheduleRepeatTypeFieldUpdateOperationsInput | $Enums.ScheduleRepeatType
     lecturerId?: StringFieldUpdateOperationsInput | string
@@ -454959,6 +454982,7 @@ export namespace Prisma {
     allDay?: boolean
     location?: string | null
     content?: string | null
+    isCompleted?: boolean
     reminderMinutes?: number | null
     repeatType?: $Enums.ScheduleRepeatType
     lecturerId: string
@@ -454979,6 +455003,7 @@ export namespace Prisma {
     allDay?: BoolFieldUpdateOperationsInput | boolean
     location?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    isCompleted?: BoolFieldUpdateOperationsInput | boolean
     reminderMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     repeatType?: EnumScheduleRepeatTypeFieldUpdateOperationsInput | $Enums.ScheduleRepeatType
   }
@@ -454998,6 +455023,7 @@ export namespace Prisma {
     allDay?: BoolFieldUpdateOperationsInput | boolean
     location?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    isCompleted?: BoolFieldUpdateOperationsInput | boolean
     reminderMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     repeatType?: EnumScheduleRepeatTypeFieldUpdateOperationsInput | $Enums.ScheduleRepeatType
     lecturerId?: StringFieldUpdateOperationsInput | string
@@ -483909,6 +483935,7 @@ export namespace Prisma {
     allDay?: SortOrder
     location?: SortOrder
     content?: SortOrder
+    isCompleted?: SortOrder
     reminderMinutes?: SortOrder
     repeatType?: SortOrder
     lecturerId?: SortOrder
@@ -483933,6 +483960,7 @@ export namespace Prisma {
     allDay?: SortOrder
     location?: SortOrder
     content?: SortOrder
+    isCompleted?: SortOrder
     reminderMinutes?: SortOrder
     repeatType?: SortOrder
     lecturerId?: SortOrder
@@ -483953,6 +483981,7 @@ export namespace Prisma {
     allDay?: SortOrder
     location?: SortOrder
     content?: SortOrder
+    isCompleted?: SortOrder
     reminderMinutes?: SortOrder
     repeatType?: SortOrder
     lecturerId?: SortOrder
@@ -529917,6 +529946,7 @@ export namespace Prisma {
     allDay?: boolean
     location?: string | null
     content?: string | null
+    isCompleted?: boolean
     reminderMinutes?: number | null
     repeatType?: $Enums.ScheduleRepeatType
     lecturer: LecturerCreateNestedOneWithoutIndividualSchedulesInput
@@ -529938,6 +529968,7 @@ export namespace Prisma {
     allDay?: boolean
     location?: string | null
     content?: string | null
+    isCompleted?: boolean
     reminderMinutes?: number | null
     repeatType?: $Enums.ScheduleRepeatType
     lecturerId: string
@@ -533897,6 +533928,7 @@ export namespace Prisma {
     allDay?: BoolFilter<"IndividualSchedule"> | boolean
     location?: StringNullableFilter<"IndividualSchedule"> | string | null
     content?: StringNullableFilter<"IndividualSchedule"> | string | null
+    isCompleted?: BoolFilter<"IndividualSchedule"> | boolean
     reminderMinutes?: IntNullableFilter<"IndividualSchedule"> | number | null
     repeatType?: EnumScheduleRepeatTypeFilter<"IndividualSchedule"> | $Enums.ScheduleRepeatType
     lecturerId?: StringFilter<"IndividualSchedule"> | string
@@ -620743,6 +620775,7 @@ export namespace Prisma {
     allDay?: boolean
     location?: string | null
     content?: string | null
+    isCompleted?: boolean
     reminderMinutes?: number | null
     repeatType?: $Enums.ScheduleRepeatType
     lecturer: LecturerCreateNestedOneWithoutIndividualSchedulesInput
@@ -620764,6 +620797,7 @@ export namespace Prisma {
     allDay?: boolean
     location?: string | null
     content?: string | null
+    isCompleted?: boolean
     reminderMinutes?: number | null
     repeatType?: $Enums.ScheduleRepeatType
     lecturerId: string
@@ -623584,6 +623618,7 @@ export namespace Prisma {
     allDay?: boolean
     location?: string | null
     content?: string | null
+    isCompleted?: boolean
     reminderMinutes?: number | null
     repeatType?: $Enums.ScheduleRepeatType
     tags?: PersonalWorkTagCreateNestedManyWithoutSchedulesInput
@@ -623605,6 +623640,7 @@ export namespace Prisma {
     allDay?: boolean
     location?: string | null
     content?: string | null
+    isCompleted?: boolean
     reminderMinutes?: number | null
     repeatType?: $Enums.ScheduleRepeatType
     tags?: PersonalWorkTagUncheckedCreateNestedManyWithoutSchedulesInput
@@ -679558,6 +679594,7 @@ export namespace Prisma {
     allDay?: BoolFieldUpdateOperationsInput | boolean
     location?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    isCompleted?: BoolFieldUpdateOperationsInput | boolean
     reminderMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     repeatType?: EnumScheduleRepeatTypeFieldUpdateOperationsInput | $Enums.ScheduleRepeatType
     lecturer?: LecturerUpdateOneRequiredWithoutIndividualSchedulesNestedInput
@@ -679579,6 +679616,7 @@ export namespace Prisma {
     allDay?: BoolFieldUpdateOperationsInput | boolean
     location?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    isCompleted?: BoolFieldUpdateOperationsInput | boolean
     reminderMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     repeatType?: EnumScheduleRepeatTypeFieldUpdateOperationsInput | $Enums.ScheduleRepeatType
     lecturerId?: StringFieldUpdateOperationsInput | string
@@ -679600,6 +679638,7 @@ export namespace Prisma {
     allDay?: BoolFieldUpdateOperationsInput | boolean
     location?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    isCompleted?: BoolFieldUpdateOperationsInput | boolean
     reminderMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     repeatType?: EnumScheduleRepeatTypeFieldUpdateOperationsInput | $Enums.ScheduleRepeatType
     lecturerId?: StringFieldUpdateOperationsInput | string
@@ -723503,6 +723542,7 @@ export namespace Prisma {
     allDay?: BoolFieldUpdateOperationsInput | boolean
     location?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    isCompleted?: BoolFieldUpdateOperationsInput | boolean
     reminderMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     repeatType?: EnumScheduleRepeatTypeFieldUpdateOperationsInput | $Enums.ScheduleRepeatType
     lecturer?: LecturerUpdateOneRequiredWithoutIndividualSchedulesNestedInput
@@ -723524,6 +723564,7 @@ export namespace Prisma {
     allDay?: BoolFieldUpdateOperationsInput | boolean
     location?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    isCompleted?: BoolFieldUpdateOperationsInput | boolean
     reminderMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     repeatType?: EnumScheduleRepeatTypeFieldUpdateOperationsInput | $Enums.ScheduleRepeatType
     lecturerId?: StringFieldUpdateOperationsInput | string
@@ -723545,6 +723586,7 @@ export namespace Prisma {
     allDay?: BoolFieldUpdateOperationsInput | boolean
     location?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    isCompleted?: BoolFieldUpdateOperationsInput | boolean
     reminderMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     repeatType?: EnumScheduleRepeatTypeFieldUpdateOperationsInput | $Enums.ScheduleRepeatType
     lecturerId?: StringFieldUpdateOperationsInput | string
@@ -724650,6 +724692,7 @@ export namespace Prisma {
     allDay?: boolean
     location?: string | null
     content?: string | null
+    isCompleted?: boolean
     reminderMinutes?: number | null
     repeatType?: $Enums.ScheduleRepeatType
   }
@@ -726664,6 +726707,7 @@ export namespace Prisma {
     allDay?: BoolFieldUpdateOperationsInput | boolean
     location?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    isCompleted?: BoolFieldUpdateOperationsInput | boolean
     reminderMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     repeatType?: EnumScheduleRepeatTypeFieldUpdateOperationsInput | $Enums.ScheduleRepeatType
     tags?: PersonalWorkTagUpdateManyWithoutSchedulesNestedInput
@@ -726685,6 +726729,7 @@ export namespace Prisma {
     allDay?: BoolFieldUpdateOperationsInput | boolean
     location?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    isCompleted?: BoolFieldUpdateOperationsInput | boolean
     reminderMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     repeatType?: EnumScheduleRepeatTypeFieldUpdateOperationsInput | $Enums.ScheduleRepeatType
     tags?: PersonalWorkTagUncheckedUpdateManyWithoutSchedulesNestedInput
@@ -726706,6 +726751,7 @@ export namespace Prisma {
     allDay?: BoolFieldUpdateOperationsInput | boolean
     location?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
+    isCompleted?: BoolFieldUpdateOperationsInput | boolean
     reminderMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     repeatType?: EnumScheduleRepeatTypeFieldUpdateOperationsInput | $Enums.ScheduleRepeatType
   }

@@ -1,6 +1,4 @@
-import ImportScoreModal, {
-  type ImportScoreData,
-} from "@components/commons/print/nhap-diem-tu-file"
+import ImportScoreModal, { type ImportScoreData } from "@components/commons/print/nhap-diem-tu-file"
 import ExportScoreTemplate from "@components/commons/print/xuat-mau-nhap-diem"
 import { scoreConvert } from "@hooks/scoreConverter"
 import { ROUTER_PATH } from "@workspace/router"
@@ -375,9 +373,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
     id: string,
     patch: Partial<Pick<RowData, "attendanceScore" | "midtermScore" | "description">>
   ) => {
-    setRows((prev) =>
-      prev.map((row) => (row.id === id ? tinhDongSauCapNhat(row, patch) : row))
-    )
+    setRows((prev) => prev.map((row) => (row.id === id ? tinhDongSauCapNhat(row, patch) : row)))
   }
 
   const thongKe = useMemo(() => {

@@ -80,9 +80,7 @@ const BangTongKet = ({
         dataIndex: "maLop",
         width: 100,
         align: "center",
-        render: (value: string, record) => (
-          <Tooltip title={record.tenLop}>{value || "—"}</Tooltip>
-        ),
+        render: (value: string, record) => <Tooltip title={record.tenLop}>{value || "—"}</Tooltip>,
       },
       {
         title: "Năm học thứ...",

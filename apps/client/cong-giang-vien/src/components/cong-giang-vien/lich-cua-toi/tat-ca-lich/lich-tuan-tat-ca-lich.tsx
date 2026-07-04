@@ -34,7 +34,13 @@ type SuKienViTri = DongTatCaLich & {
   heightPx: number
 }
 
-const LichTuanTatCaLich = ({ danhSach, dauTuan, tags, dangTai, onXemChiTiet }: LichTuanTatCaLichProps) => {
+const LichTuanTatCaLich = ({
+  danhSach,
+  dauTuan,
+  tags,
+  dangTai,
+  onXemChiTiet,
+}: LichTuanTatCaLichProps) => {
   const homNay = useMemo(() => dayjs().startOf("day"), [])
   const vungCuonRef = useRef<HTMLDivElement>(null)
   const cotHomNayRef = useRef<HTMLDivElement>(null)

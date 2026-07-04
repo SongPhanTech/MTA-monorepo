@@ -127,8 +127,7 @@ const timChungChiTheoLoai = (
   chungChi.find((item) => {
     if (certificateIds.has(item.certificateId)) return true
     return (
-      phanLoaiTheoTen(item.trinhDoYeuCau) === loai ||
-      phanLoaiTheoTen(item.tenChungChi) === loai
+      phanLoaiTheoTen(item.trinhDoYeuCau) === loai || phanLoaiTheoTen(item.tenChungChi) === loai
     )
   }) ?? null
 
@@ -142,13 +141,10 @@ const mapChiTietMonHoc = (monHoc: MonHocRow[]) => {
   const mon = monHoc[0]
   if (!mon) return null
 
-  const diem =
-    chuyenThanhSo(mon.manualFinalScore) ?? chuyenThanhSo(mon.finalScore)
+  const diem = chuyenThanhSo(mon.manualFinalScore) ?? chuyenThanhSo(mon.finalScore)
   const tenMon = mon.subjectClass?.subject?.name ?? ""
   const namHoc =
-    mon.subjectClass?.semester?.schoolYear?.name ??
-    mon.subjectClass?.semester?.name ??
-    ""
+    mon.subjectClass?.semester?.schoolYear?.name ?? mon.subjectClass?.semester?.name ?? ""
 
   return {
     tenMon,
@@ -191,8 +187,7 @@ const taoDieuKienItem = (
     : null
 
   const datTuChungChi = !!chungChiDat
-  const datTuMon =
-    !!chiTietMonHocRaw?.diem && chiTietMonHocRaw.diem >= 5
+  const datTuMon = !!chiTietMonHocRaw?.diem && chiTietMonHocRaw.diem >= 5
   const dat = datCoSan || datTuChungChi || datTuMon
 
   const uuTienMonHoc = CO_DAT_MON[loai] && !!chiTietMonHoc
@@ -210,13 +205,7 @@ const mapDieuKienTotNghiep = (input: MapDieuKienTotNghiepInput): DieuKienTotNghi
   const chungChi = mapChungChiDaDuyet(input.archivedCertificate)
   const monHoc = input.subjectClassStudent ?? []
 
-  const ngoaiNgu = taoDieuKienItem(
-    "ngoaiNgu",
-    input.foreignLangPass,
-    chungChi,
-    chuanDauRa,
-    monHoc
-  )
+  const ngoaiNgu = taoDieuKienItem("ngoaiNgu", input.foreignLangPass, chungChi, chuanDauRa, monHoc)
   const tinHoc = taoDieuKienItem("tinHoc", input.ITCertificationPass, chungChi, chuanDauRa, monHoc)
   const giaoDucQuocPhong = taoDieuKienItem(
     "giaoDucQuocPhong",
@@ -238,8 +227,7 @@ const mapDieuKienTotNghiep = (input: MapDieuKienTotNghiepInput): DieuKienTotNghi
     tinHoc,
     giaoDucQuocPhong,
     renLuyenSucKhoe,
-    duDieuKienDayDu:
-      ngoaiNgu.dat && tinHoc.dat && giaoDucQuocPhong.dat && renLuyenSucKhoe.dat,
+    duDieuKienDayDu: ngoaiNgu.dat && tinHoc.dat && giaoDucQuocPhong.dat && renLuyenSucKhoe.dat,
   }
 }
 

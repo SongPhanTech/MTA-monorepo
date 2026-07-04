@@ -50,7 +50,10 @@ function cellText(cell: ExcelJS.Cell | undefined): string {
   }
   if (typeof value === "object") {
     if ("richText" in value && Array.isArray(value.richText)) {
-      return value.richText.map((part) => part.text || "").join("").trim()
+      return value.richText
+        .map((part) => part.text || "")
+        .join("")
+        .trim()
     }
     if ("text" in value && value.text != null) return String(value.text).trim()
     if ("result" in value) {
@@ -87,11 +90,7 @@ function parseExcelDate(cell: ExcelJS.Cell | undefined): Date | null {
     const month = Number(dmy[2])
     const year = Number(dmy[3])
     const date = new Date(year, month - 1, day)
-    if (
-      date.getFullYear() === year &&
-      date.getMonth() === month - 1 &&
-      date.getDate() === day
-    ) {
+    if (date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day) {
       return date
     }
     return null
@@ -203,7 +202,9 @@ async function buildLabelMapsFromDb(): Promise<LabelMaps> {
 function readImportRows(workbook: ExcelJS.Workbook): ImportRow[] {
   const sheet = workbook.getWorksheet("NhapHoiDong")
   if (!sheet) {
-    throw new Error('Không tìm thấy sheet "NhapHoiDong". Vui lòng dùng đúng file mẫu xuất từ hệ thống.')
+    throw new Error(
+      'Không tìm thấy sheet "NhapHoiDong". Vui lòng dùng đúng file mẫu xuất từ hệ thống.'
+    )
   }
 
   const headerRow = sheet.getRow(2)
@@ -347,9 +348,13 @@ export async function importCouncilFromExcel(
       "Ca bảo vệ"
     )
 
-    const councilIds = [councilChairman, councilSecretary, reviewer1, reviewer2, councilMember].filter(
-      (id): id is string => !!id
-    )
+    const councilIds = [
+      councilChairman,
+      councilSecretary,
+      reviewer1,
+      reviewer2,
+      councilMember,
+    ].filter((id): id is string => !!id)
     if (new Set(councilIds).size !== councilIds.length) {
       throw new Error(
         `Dòng ${row.rowNumber}${row.studentCode ? ` (mã HV: ${row.studentCode})` : ""}: các cán bộ hội đồng bảo vệ không được trùng nhau.`

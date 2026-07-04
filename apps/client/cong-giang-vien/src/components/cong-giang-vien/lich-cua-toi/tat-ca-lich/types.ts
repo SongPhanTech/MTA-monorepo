@@ -1,8 +1,6 @@
 export type NguonLichTatCa = "giang-day" | "ca-nhan"
 
-export type LichChiTietTatCa =
-  | { nguon: "giang-day"; id: string }
-  | { nguon: "ca-nhan"; id: string }
+export type LichChiTietTatCa = { nguon: "giang-day"; id: string } | { nguon: "ca-nhan"; id: string }
 
 export type DongTatCaLich = {
   id: string

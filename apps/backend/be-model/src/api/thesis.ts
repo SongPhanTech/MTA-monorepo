@@ -1,18 +1,13 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
-import {
-  excelSuccess,
-  jsonSuccess,
-  standardErrorResponses,
-} from "../dto/openapi-route-helpers"
+import { excelSuccess, jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 import { batchUpdateThesisProjects } from "../services/thesis-batch-update.service"
 import { exportCouncilImportTemplate } from "../services/thesis-council-export.service"
 import { importCouncilFromExcel } from "../services/thesis-council-import.service"
 import { deleteStudentThesis } from "../services/thesis-delete.service"
 import { createSampleThesisData } from "../services/thesis-sample-data.service"
 
-const XLSX_CONTENT_TYPE =
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+const XLSX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -20,7 +15,11 @@ const optionalIdSchema = z.string().nullable().optional()
 
 const BatchUpdateThesisItemSchema = z.object({
   thesisProjectId: z.string().min(1).openapi({ description: "ID đề tài/luận văn." }),
-  studentCode: z.string().nullable().optional().openapi({ description: "Mã học viên (hiển thị lỗi)." }),
+  studentCode: z
+    .string()
+    .nullable()
+    .optional()
+    .openapi({ description: "Mã học viên (hiển thị lỗi)." }),
   title: z.string().nullable().optional(),
   type: z.string().nullable().optional(),
   language: z.string().nullable().optional(),
@@ -93,7 +92,6 @@ app.openapi(batchUpdateThesisProjectsRoute, async (c) => {
     return c.json({ message }, 400)
   }
 })
-
 
 const CreateSampleThesisDataSchema = z.object({
   thesisSessionId: z.string().min(1).openapi({ description: "ID đợt xét luận văn." }),

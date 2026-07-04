@@ -16233,6 +16233,9 @@
             "type": "string",
             "nullable": true
           },
+          "isCompleted": {
+            "type": "boolean"
+          },
           "reminderMinutes": {
             "type": "integer",
             "nullable": true
@@ -16268,6 +16271,7 @@
           "startTime",
           "endTime",
           "allDay",
+          "isCompleted",
           "repeatType",
           "lecturer",
           "lecturerId"
@@ -48188,6 +48192,9 @@
             "type": "string",
             "nullable": true
           },
+          "isCompleted": {
+            "type": "boolean"
+          },
           "reminderMinutes": {
             "type": "integer",
             "nullable": true
@@ -48248,6 +48255,7 @@
           "startTime",
           "endTime",
           "allDay",
+          "isCompleted",
           "repeatType",
           "lecturerId"
         ]
@@ -100351,6 +100359,9 @@
           "content": {
             "type": "integer"
           },
+          "isCompleted": {
+            "type": "integer"
+          },
           "reminderMinutes": {
             "type": "integer"
           },
@@ -100379,6 +100390,7 @@
           "allDay",
           "location",
           "content",
+          "isCompleted",
           "reminderMinutes",
           "repeatType",
           "lecturerId",
@@ -100467,6 +100479,10 @@
             "type": "string",
             "nullable": true
           },
+          "isCompleted": {
+            "type": "boolean",
+            "nullable": true
+          },
           "reminderMinutes": {
             "type": "integer",
             "nullable": true
@@ -100547,6 +100563,10 @@
           },
           "content": {
             "type": "string",
+            "nullable": true
+          },
+          "isCompleted": {
+            "type": "boolean",
             "nullable": true
           },
           "reminderMinutes": {

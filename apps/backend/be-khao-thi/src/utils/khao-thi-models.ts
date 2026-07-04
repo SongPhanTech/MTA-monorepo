@@ -48,9 +48,7 @@ function toModelPathSegment(modelName: string): string {
   return modelName.charAt(0).toLowerCase() + modelName.slice(1)
 }
 
-export const KHAO_THI_MODEL_PATH_SEGMENTS = new Set(
-  KHAO_THI_MODEL_NAMES.map(toModelPathSegment)
-)
+export const KHAO_THI_MODEL_PATH_SEGMENTS = new Set(KHAO_THI_MODEL_NAMES.map(toModelPathSegment))
 
 export function isKhaoThiModelPath(path: string): boolean {
   const match = path.match(/^\/api\/model\/([^/]+)/)

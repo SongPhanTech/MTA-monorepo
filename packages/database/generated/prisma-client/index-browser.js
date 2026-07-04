@@ -2850,6 +2850,7 @@ exports.Prisma.IndividualScheduleScalarFieldEnum = {
   allDay: 'allDay',
   location: 'location',
   content: 'content',
+  isCompleted: 'isCompleted',
   reminderMinutes: 'reminderMinutes',
   repeatType: 'repeatType',
   lecturerId: 'lecturerId'

@@ -553,9 +553,7 @@ app.openapi(tongKetHocKyHVSV, async (c) => {
 
   try {
     const studentResults = await calculateStudentSemesterResult(semesterId, trainingCourseId)
-    console.log(
-      `[tong-ket-hoc-ky] Hoàn tất trong ${Date.now() - startedAt}ms — ${studentResults}`
-    )
+    console.log(`[tong-ket-hoc-ky] Hoàn tất trong ${Date.now() - startedAt}ms — ${studentResults}`)
     return c.json(studentResults, 200)
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "Lỗi không xác định"

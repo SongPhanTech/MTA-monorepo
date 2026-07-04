@@ -1,4 +1,7 @@
-import type { LocDiemRenLuyen, ThongKeDiemRenLuyen } from "@components/cong-giang-vien/lop-quan-ly/types"
+import type {
+  LocDiemRenLuyen,
+  ThongKeDiemRenLuyen,
+} from "@components/cong-giang-vien/lop-quan-ly/types"
 import { Card } from "antd"
 import { BarChart3, Trophy, Users } from "lucide-react"
 import type { ReactNode } from "react"
@@ -48,7 +51,11 @@ const TheDon = ({
   </Card>
 )
 
-const TheThongKeDiemRenLuyen = ({ thongKe, locDiem, onChonLocDiem }: TheThongKeDiemRenLuyenProps) => {
+const TheThongKeDiemRenLuyen = ({
+  thongKe,
+  locDiem,
+  onChonLocDiem,
+}: TheThongKeDiemRenLuyenProps) => {
   return (
     <div className="shrink-0 px-4 pt-3">
       <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Thống kê</p>

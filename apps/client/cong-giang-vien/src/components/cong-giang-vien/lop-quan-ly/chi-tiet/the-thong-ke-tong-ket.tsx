@@ -1,4 +1,7 @@
-import type { LocXepLoaiTongKet, ThongKeTongKet } from "@components/cong-giang-vien/lop-quan-ly/types"
+import type {
+  LocXepLoaiTongKet,
+  ThongKeTongKet,
+} from "@components/cong-giang-vien/lop-quan-ly/types"
 import { dinhDangGpa, mauXepLoaiHocLuc } from "@lib/tong-ket-hoc-ky"
 import { Card } from "antd"
 import { BarChart3, Users } from "lucide-react"

@@ -10,12 +10,7 @@ import useSpinner from "@hooks/spinner"
 import { useThesisProjectStatusOptions } from "@hooks/thesisProjectStatus"
 import DefaultLayout from "@layouts/default-layout"
 import { buildOrgTree } from "@lib/utils"
-import {
-  CouncilMember,
-  CouncilRole,
-  ThesisProjectStatus,
-  ThesisType,
-} from "@workspace/db/client"
+import { CouncilMember, CouncilRole, ThesisProjectStatus, ThesisType } from "@workspace/db/client"
 import { queryClient } from "@api/index"
 import {
   useCountStudent,
@@ -919,9 +914,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       const response = await exportCouncilImportTemplate({ thesisSessionId })
       if (response.status !== 200 || !(response.data instanceof Blob)) {
         message.error(
-          response.data &&
-            typeof response.data === "object" &&
-            "message" in response.data
+          response.data && typeof response.data === "object" && "message" in response.data
             ? String(response.data.message)
             : "Xuất mẫu nhập hội đồng thất bại."
         )
@@ -967,9 +960,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       const response = await importCouncilFromExcel(formData)
       if (response.status !== 200 || !("updatedCount" in response.data)) {
         message.error(
-          "message" in response.data
-            ? response.data.message
-            : "Import hội đồng thất bại."
+          "message" in response.data ? response.data.message : "Import hội đồng thất bại."
         )
         return
       }
@@ -1056,9 +1047,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         type: rowData.type ?? "",
         language: rowData.language ?? "",
         status: rowData.status ?? "",
-        defenseDate: rowData.defenseDate
-          ? new Date(rowData.defenseDate).toISOString()
-          : null,
+        defenseDate: rowData.defenseDate ? new Date(rowData.defenseDate).toISOString() : null,
         researchTopicAssociated: rowData.researchTopicAssociated || "",
         organizationId: rowData.organization || null,
         supervisorId: rowData.supervisor || null,

@@ -75,11 +75,9 @@ const DrawerChiTietLichGiangDay = ({ open, lichId, onClose }: DrawerChiTietLichG
 
   const subjectClass = lich?.subjectClass
   const maLop = subjectClass?.code?.trim() || "—"
-  const tenMon =
-    subjectClass?.subject?.name?.trim() || subjectClass?.name?.trim() || "—"
+  const tenMon = subjectClass?.subject?.name?.trim() || subjectClass?.name?.trim() || "—"
   const phongHoc = lich?.room?.name?.trim() || "—"
-  const hinhThuc =
-    subjectClass?.trainingObjectType?.trainingForm?.name?.trim() || "—"
+  const hinhThuc = subjectClass?.trainingObjectType?.trainingForm?.name?.trim() || "—"
   const giangVien =
     formatLecturerName(lich?.lecturer) ||
     formatLecturerName(lich?.extraLecturer) ||

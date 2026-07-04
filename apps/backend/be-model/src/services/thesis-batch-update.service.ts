@@ -57,10 +57,7 @@ function studentLabel(item: BatchUpdateThesisItem) {
   return item.studentCode || item.thesisProjectId
 }
 
-function hasDuplicateThesisSupervisors(
-  supervisorId: string | null,
-  coSupervisorId: string | null
-) {
+function hasDuplicateThesisSupervisors(supervisorId: string | null, coSupervisorId: string | null) {
   return supervisorId !== null && coSupervisorId !== null && supervisorId === coSupervisorId
 }
 

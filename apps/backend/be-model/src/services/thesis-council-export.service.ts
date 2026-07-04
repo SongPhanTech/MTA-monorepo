@@ -332,13 +332,7 @@ export async function exportCouncilImportTemplate(
   writeListColumn(listSheet, 3, "Thư ký", secretaryOptions)
   writeListColumn(listSheet, 4, "Phòng bảo vệ", roomOptions)
   writeListColumn(listSheet, 5, "Ca bảo vệ", sessionOptions)
-  listSheet.columns = [
-    { width: 40 },
-    { width: 40 },
-    { width: 40 },
-    { width: 24 },
-    { width: 14 },
-  ]
+  listSheet.columns = [{ width: 40 }, { width: 40 }, { width: 40 }, { width: 24 }, { width: 14 }]
 
   mapSheet.getCell("A1").value = "Loại"
   mapSheet.getCell("B1").value = "Nhãn"
@@ -429,8 +423,7 @@ export async function exportCouncilImportTemplate(
         formatDate(student?.userProfile?.dateOfBirth),
         student?.fixedClass?.name || "",
         project.title || "",
-        allExpertLabelById.get(project.supervisorId || "") ||
-          formatExpertName(project.supervisor),
+        allExpertLabelById.get(project.supervisorId || "") || formatExpertName(project.supervisor),
         allExpertLabelById.get(project.coSupervisorId || "") ||
           formatExpertName(project.coSupervisor),
         presidentLabelById.get(chairmanId) ||

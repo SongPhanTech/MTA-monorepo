@@ -48,10 +48,12 @@ export const layGhiChuDiemRenLuyen = (student: NguonDiemRenLuyen) => {
 
 export const layDiemRenLuyenNamHoc = (student: NguonDiemRenLuyenNamHoc) => {
   const diemNam = student.schoolYearTrainingScore?.[0]
-  if (diemNam?.status === TrainingScoreStatus.APPROVED && diemNam.score != null) return diemNam.score
+  if (diemNam?.status === TrainingScoreStatus.APPROVED && diemNam.score != null)
+    return diemNam.score
 
   const diemHk2 = student.semesterTrainingScore?.[0]
-  if (diemHk2?.status === TrainingScoreStatus.APPROVED && diemHk2.score != null) return diemHk2.score
+  if (diemHk2?.status === TrainingScoreStatus.APPROVED && diemHk2.score != null)
+    return diemHk2.score
 
   return null
 }

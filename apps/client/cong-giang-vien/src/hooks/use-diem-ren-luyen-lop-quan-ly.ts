@@ -119,8 +119,7 @@ const useDiemRenLuyenLopQuanLy = (fixedClassId: string, enabled: boolean) => {
   const theoKy = !!semesterId
 
   const studentInclude = useMemo(
-    () =>
-      theoKy ? STUDENT_INCLUDE_KY(semesterId!) : STUDENT_INCLUDE_NAM(schoolYearId),
+    () => (theoKy ? STUDENT_INCLUDE_KY(semesterId!) : STUDENT_INCLUDE_NAM(schoolYearId)),
     [theoKy, semesterId, schoolYearId]
   )
 
@@ -139,10 +138,7 @@ const useDiemRenLuyenLopQuanLy = (fixedClassId: string, enabled: boolean) => {
     {
       where,
       include: studentInclude,
-      orderBy: [
-        { userProfile: { firstName: "asc" } },
-        { userProfile: { lastName: "asc" } },
-      ],
+      orderBy: [{ userProfile: { firstName: "asc" } }, { userProfile: { lastName: "asc" } }],
       take: soTrang,
       skip: (trang - 1) * soTrang,
     },
@@ -155,10 +151,7 @@ const useDiemRenLuyenLopQuanLy = (fixedClassId: string, enabled: boolean) => {
     {
       where,
       include: studentInclude,
-      orderBy: [
-        { userProfile: { firstName: "asc" } },
-        { userProfile: { lastName: "asc" } },
-      ],
+      orderBy: [{ userProfile: { firstName: "asc" } }, { userProfile: { lastName: "asc" } }],
     },
     { enabled: queryEnabled }
   )

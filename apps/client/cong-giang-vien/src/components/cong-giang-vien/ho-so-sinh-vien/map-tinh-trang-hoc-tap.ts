@@ -131,7 +131,9 @@ const moTaCanhBaoHocTap = (item: AcademicWarningRow) => {
     return [hocKy, `Giảm từ mức ${tuMuc} xuống mức ${denMuc}`].filter(Boolean).join(" — ")
   }
   if (item.increasedFrom != null) {
-    return [hocKy, `Tăng từ mức ${item.increasedFrom} lên mức ${item.level}`].filter(Boolean).join(" — ")
+    return [hocKy, `Tăng từ mức ${item.increasedFrom} lên mức ${item.level}`]
+      .filter(Boolean)
+      .join(" — ")
   }
   return [hocKy, `Mức cảnh báo hiện tại: ${item.level}`].filter(Boolean).join(" — ")
 }
@@ -182,8 +184,7 @@ const mapLichSuCanhBaoKyLuat = (
   }
 
   for (const item of studentAcademicDecision) {
-    const hanhDong =
-      item.appliedConfig?.name ?? layNhanHanhDongHocVu(item.actionTaken)
+    const hanhDong = item.appliedConfig?.name ?? layNhanHanhDongHocVu(item.actionTaken)
     const hocKy = item.semester?.name ? `Học kỳ ${item.semester.name}` : ""
 
     if (item.status === DecisionStatus.PENDING || item.status === DecisionStatus.APPEALED) {
@@ -191,7 +192,9 @@ const mapLichSuCanhBaoKyLuat = (
         id: `dec-pending-${item.id}`,
         ngay: dinhDangNgay(item.decisionDate ?? item.createdAt),
         tieuDe: "Đang trong thời gian xem xét mức xử lý",
-        lyDo: item.reason ?? [hocKy, `Hội đồng kỷ luật đang xem xét hồ sơ: ${hanhDong}`].filter(Boolean).join(" — "),
+        lyDo:
+          item.reason ??
+          [hocKy, `Hội đồng kỷ luật đang xem xét hồ sơ: ${hanhDong}`].filter(Boolean).join(" — "),
         trangThai: { label: "Đang xử lý", color: "gray" },
       })
       continue

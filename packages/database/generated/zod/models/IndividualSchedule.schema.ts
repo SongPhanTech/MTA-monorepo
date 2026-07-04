@@ -22,6 +22,7 @@ const baseSchema = z.object({
     allDay: z.boolean().default(false),
     location: z.string().nullish(),
     content: z.string().nullish(),
+    isCompleted: z.boolean().default(false),
     reminderMinutes: z.number().nullish(),
     repeatType: ScheduleRepeatTypeSchema,
 }
@@ -41,6 +42,7 @@ const baseSchemaWithoutDefaults = z.object({
     allDay: z.boolean(),
     location: z.string().nullish(),
     content: z.string().nullish(),
+    isCompleted: z.boolean(),
     reminderMinutes: z.number().nullish(),
     repeatType: ScheduleRepeatTypeSchema,
 }
@@ -94,6 +96,7 @@ export const IndividualSchedulePrismaUpdateSchema = z.object({
     allDay: z.boolean(),
     location: z.string().nullish(),
     content: z.string().nullish(),
+    isCompleted: z.boolean(),
     reminderMinutes: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     repeatType: ScheduleRepeatTypeSchema
 }).partial().passthrough();
@@ -103,7 +106,7 @@ export const IndividualSchedulePrismaUpdateSchema = z.object({
  * `IndividualSchedule` schema for create operations excluding foreign keys and relations.
  */
 export const IndividualScheduleCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, allDay: true, repeatType: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, allDay: true, isCompleted: true, repeatType: true
 });
 
 
