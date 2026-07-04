@@ -4,18 +4,22 @@ import { useFindUniqueUserProfile } from "@workspace/db/hooks"
 const useGiangVien = () => {
   const { data: me, status: sessionStatus } = useSession()
   const profileId = me?.sDM_NhanVienId
+  const profileCheckEnabled = sessionStatus === "authenticated" && !!profileId
 
-  const { data, isLoading: profileLoading } = useFindUniqueUserProfile(
+  const { data, isPending: profilePending } = useFindUniqueUserProfile(
     {
       where: { id: profileId ?? "" },
       select: { bLaGiangVien: true },
     },
-    { enabled: !!profileId }
+    { enabled: profileCheckEnabled }
   )
+
+  const isSessionLoading = !sessionStatus || sessionStatus === "loading"
+  const isProfileLoading = profileCheckEnabled && profilePending
 
   return {
     isGiangVien: !!data?.bLaGiangVien,
-    isLoading: sessionStatus === "loading" || profileLoading,
+    isLoading: isSessionLoading || isProfileLoading,
   }
 }
 
