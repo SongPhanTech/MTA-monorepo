@@ -25,7 +25,9 @@ export const useSession = () => {
   useEffect(() => {
     if (status === "loading") return
     if (!status) {
-      if (dungMockSessionLocal()) {
+      const mockSession = dungMockSessionLocal()
+      console.log(mockSession)
+      if (mockSession) {
         setSessionState(taoMockSession())
         setStatus("authenticated")
         return
