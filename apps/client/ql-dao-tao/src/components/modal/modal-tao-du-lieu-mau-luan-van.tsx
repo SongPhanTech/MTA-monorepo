@@ -1,6 +1,6 @@
 import useSpinner from "@hooks/spinner"
-import { CouncilProposalStatus, FixedClassType, ThesisType } from "@workspace/db/client"
-import { useCreateStudentThesisRegistration, useCreateThesisProject } from "@workspace/db/hooks"
+import { ThesisType } from "@workspace/db/client"
+import { createSampleThesisData } from "@workspace/libs/api/thesis"
 import { Button, Flex, Modal, Table, Typography, message } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import dayjs from "dayjs"
@@ -13,12 +13,7 @@ export type TaoDuLieuMauStudentRow = {
   id: string
   code?: string | null
   userProfile?: { fullname?: string | null; dateOfBirth?: string | Date | null } | null
-  fixedClass?: { name?: string | null; classType?: FixedClassType | null } | null
-  curriculumVersion?: {
-    curriculum?: {
-      trainingMajor?: { organization?: { Id?: string | null } | null } | null
-    } | null
-  } | null
+  fixedClass?: { name?: string | null } | null
   thesisRegistrations?: Array<{
     deletedAt?: Date | string | null
     thesisProject?: {
@@ -48,42 +43,6 @@ export function studentHasThesisInSession(
   })
 }
 
-const buildSampleThesisPayload = (student: TaoDuLieuMauStudentRow, thesisSessionId: string) => {
-  const fixedClassType = student.fixedClass?.classType
-  const organizationId = student.curriculumVersion?.curriculum?.trainingMajor?.organization?.Id
-  const typeLabel = fixedClassType === FixedClassType.APPLICATION ? "Đề án" : "Luận văn"
-
-  return {
-    title: "",
-    summary: "",
-    titleEN: "",
-    maxStudents: 1,
-    language: "Tiếng Việt",
-    type: typeLabel,
-    organization: organizationId ? { connect: { Id: organizationId } } : { disconnect: true },
-    thesisSession: { connect: { id: thesisSessionId } },
-    thesisType: ThesisType.THESIS,
-    librarySubmission: {
-      create: {
-        isHardcopy: false,
-        isSoftcopy: false,
-        librarianNote: "",
-      },
-    },
-    council: {
-      create: {
-        proposedDate: new Date(),
-        status: CouncilProposalStatus.PENDING,
-      },
-    },
-    defenseRecord: {
-      create: {
-        isProfileComplete: false,
-      },
-    },
-  }
-}
-
 const ModalTaoDuLieuMauLuanVan = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
   const [tablePage, setTablePage] = useState(1)
@@ -97,8 +56,6 @@ const ModalTaoDuLieuMauLuanVan = () => {
   const students = input?.students ?? []
 
   const { showSpinner, hideSpinner } = useSpinner()
-  const { mutateAsync: createThesisProject } = useCreateThesisProject()
-  const { mutateAsync: createStudentThesisRegistration } = useCreateStudentThesisRegistration()
 
   useEffect(() => {
     if (!isOpen) {
@@ -134,20 +91,19 @@ const ModalTaoDuLieuMauLuanVan = () => {
 
     try {
       showSpinner()
-      await Promise.all(
-        selectedStudents.map(async (student) => {
-          const response = await createThesisProject({
-            data: buildSampleThesisPayload(student, thesisSessionId),
-          })
-          await createStudentThesisRegistration({
-            data: {
-              thesisProjectId: response?.id ?? "",
-              studentId: student.id,
-            },
-          })
-        })
-      )
-      message.success(`Đã tạo dữ liệu mẫu cho ${selectedStudents.length} sinh viên.`)
+      const response = await createSampleThesisData({
+        thesisSessionId,
+        studentIds: selectedStudents.map((s) => s.id),
+      })
+      if (response.status !== 200) {
+        message.error(
+          "message" in response.data
+            ? response.data.message
+            : "Đã xảy ra lỗi trong lúc tạo dữ liệu mẫu."
+        )
+        return
+      }
+      message.success(`Đã tạo dữ liệu mẫu cho ${response.data.createdCount} sinh viên.`)
       await input?.onSuccess?.()
       onClose()
     } catch (error) {

@@ -14,6 +14,7 @@ import AuthApp from "./api/auth"
 import ExcelImportExportApp from "./api/excel-import-export"
 import ExcelTemplateApp from "./api/excel-template"
 import DocxTemplateApp from "./api/docx-template"
+import ThesisApp from "./api/thesis"
 import ThesisPaymentApp from "./api/thesis-payment"
 import MinIOApp from "./api/minio"
 import SqlTransactionApp from "./api/transaction"
@@ -78,6 +79,7 @@ app.route("/api/wso2am", WSO2AmApp)
 app.route("/api/excel-import-export", ExcelImportExportApp)
 app.route("/api/excel-template", ExcelTemplateApp)
 app.route("/api/docx-template", DocxTemplateApp)
+app.route("/api/thesis", ThesisApp)
 app.route("/api/thesis-payment", ThesisPaymentApp)
 // TODO!: remove `/check`
 app.use("/api/check/*", jwtAuth("lms"))
