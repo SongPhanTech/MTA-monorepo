@@ -47,7 +47,7 @@ const LichNgayTatCaLich = ({ danhSach, tags, dangTai, onXemChiTiet }: LichNgayTa
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden pt-2">
         <div className="relative flex" style={{ height: CHIEU_CAO_LICH_NGAY }}>
           <div className="relative w-11 shrink-0">
             {gioNhan.map((gio) => (
