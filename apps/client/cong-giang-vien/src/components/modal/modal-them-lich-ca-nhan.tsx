@@ -100,7 +100,6 @@ const ModalThemLichCaNhan = () => {
         ...(timNguoiLienQuan ? taoDieuKienTimNguoiLienQuan(timNguoiLienQuan) : {}),
       },
       select: CHON_NGUOI_LIEN_QUAN,
-      take: 50,
       orderBy: [{ fullname: "asc" }],
     },
     { enabled: isOpen }

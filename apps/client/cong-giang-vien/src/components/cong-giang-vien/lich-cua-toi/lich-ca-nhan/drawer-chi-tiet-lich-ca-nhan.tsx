@@ -33,7 +33,8 @@ interface DrawerChiTietLichCaNhanProps {
   onClose: () => void
   onChinhSua: (id: string) => void
   onXoa: (id: string) => void
-  onHoanThanh: (id: string) => void
+  onHoanThanh: (id: string) => void | Promise<void>
+  dangHoanThanh?: boolean
 }
 
 const HangThongTin = ({
@@ -76,6 +77,7 @@ const DrawerChiTietLichCaNhan = ({
   onChinhSua,
   onXoa,
   onHoanThanh,
+  dangHoanThanh = false,
 }: DrawerChiTietLichCaNhanProps) => {
   const { data: lich, isLoading } = useFindUniqueIndividualSchedule(
     {
@@ -99,6 +101,7 @@ const DrawerChiTietLichCaNhan = ({
   const tag = lich?.tags[0]
   const mauTag = tag?.color ?? MAU_LOAI_MAC_DINH
   const tenTag = tag?.name ?? "Loại lịch"
+  const daHoanThanh = lich?.isCompleted ?? false
   const nguoiLienQuan = lich?.relatedUserProfiles ?? []
   const hienThiNguoiLienQuan = nguoiLienQuan.slice(0, 3)
   const conLaiNguoi = nguoiLienQuan.length - hienThiNguoiLienQuan.length
@@ -145,9 +148,16 @@ const DrawerChiTietLichCaNhan = ({
               Chỉnh sửa
             </Button>
             <Button
-              icon={<Check size={15} className="text-cgv-green-dark" />}
+              icon={<Check size={15} className={daHoanThanh ? "text-gray-400" : "text-cgv-green-dark"} />}
+              loading={dangHoanThanh}
+              disabled={daHoanThanh}
               onClick={() => onHoanThanh(lichId)}
-              className="!h-10 flex-1 !border-cgv-green-dark !bg-white !px-2 !text-xs !font-medium !text-cgv-green-dark shadow-none hover:!bg-cgv-green/5"
+              className={cn(
+                "!h-10 flex-1 !bg-white !px-2 !text-xs !font-medium shadow-none",
+                daHoanThanh
+                  ? "!border-gray-200 !text-gray-400"
+                  : "!border-cgv-green-dark !text-cgv-green-dark hover:!bg-cgv-green/5"
+              )}
             >
               Hoàn thành
             </Button>
@@ -171,7 +181,15 @@ const DrawerChiTietLichCaNhan = ({
       ) : (
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
           <div className="border-b border-gray-100 px-5 py-5">
-            <TheTagLoaiLich ten={tenTag} mau={mauTag} />
+            <div className="flex flex-wrap items-center gap-2">
+              <TheTagLoaiLich ten={tenTag} mau={mauTag} />
+              {daHoanThanh ? (
+                <span className="inline-flex items-center gap-1 rounded bg-cgv-green/10 px-2 py-0.5 text-[11px] font-semibold text-cgv-green-dark">
+                  <Check size={12} />
+                  Đã hoàn thành
+                </span>
+              ) : null}
+            </div>
             <h2 className="mt-3 text-xl font-bold leading-snug text-gray-900">{lich.title}</h2>
           </div>
 

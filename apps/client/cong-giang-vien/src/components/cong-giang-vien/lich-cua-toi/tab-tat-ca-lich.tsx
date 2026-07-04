@@ -12,7 +12,11 @@ import type {
   LichChiTietTatCa,
 } from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/types"
 import { useTatCaLich } from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/use-tat-ca-lich"
-import { useDeleteIndividualSchedule } from "@workspace/db/hooks"
+import { queryClient } from "@api/index"
+import {
+  useDeleteIndividualSchedule,
+  useUpdateIndividualSchedule,
+} from "@workspace/db/hooks"
 import { message } from "antd"
 import { useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -23,8 +27,10 @@ const TabTatCaLich = () => {
     tag: "ModalThemLichCaNhan",
   })
   const { mutateAsync: xoaLichCaNhan } = useDeleteIndividualSchedule()
+  const { mutateAsync: capNhatLichCaNhan } = useUpdateIndividualSchedule()
 
   const [lichChiTiet, setLichChiTiet] = useState<LichChiTietTatCa | null>(null)
+  const [dangHoanThanh, setDangHoanThanh] = useState(false)
 
   const {
     cheDoHienThi,
@@ -68,6 +74,7 @@ const TabTatCaLich = () => {
   const handleXoaLichCaNhan = async (id: string) => {
     try {
       await xoaLichCaNhan({ where: { id } })
+      await queryClient.invalidateQueries({ queryKey: ["IndividualSchedule"] })
       setLichChiTiet(null)
       message.success("Đã xóa lịch")
     } catch (error: unknown) {
@@ -76,8 +83,21 @@ const TabTatCaLich = () => {
     }
   }
 
-  const handleHoanThanhLichCaNhan = (_id: string) => {
-    message.info("Chức năng đánh dấu hoàn thành sẽ được cập nhật sau")
+  const handleHoanThanhLichCaNhan = async (id: string) => {
+    setDangHoanThanh(true)
+    try {
+      await capNhatLichCaNhan({
+        where: { id },
+        data: { isCompleted: true },
+      })
+      await queryClient.invalidateQueries({ queryKey: ["IndividualSchedule"] })
+      message.success("Đã đánh dấu hoàn thành")
+    } catch (error: unknown) {
+      const err = error as { info?: { message?: string } }
+      message.error(err?.info?.message ?? "Không thể cập nhật trạng thái lịch")
+    } finally {
+      setDangHoanThanh(false)
+    }
   }
 
   return (
@@ -151,6 +171,7 @@ const TabTatCaLich = () => {
         onChinhSua={handleSuaLichCaNhan}
         onXoa={handleXoaLichCaNhan}
         onHoanThanh={handleHoanThanhLichCaNhan}
+        dangHoanThanh={dangHoanThanh}
       />
 
       {dangXem === "bang" ? (

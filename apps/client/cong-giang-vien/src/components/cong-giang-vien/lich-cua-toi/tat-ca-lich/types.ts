@@ -19,6 +19,8 @@ export type DongTatCaLich = {
   mauLoai: string
   diaDiem: string
   ghiChu: string
+  /** Chỉ áp dụng cho lịch cá nhân. */
+  daHoanThanh?: boolean
 }
 
 export type ThongKeTatCaLich = {

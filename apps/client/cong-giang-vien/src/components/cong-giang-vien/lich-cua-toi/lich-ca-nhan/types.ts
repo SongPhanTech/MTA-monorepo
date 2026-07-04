@@ -22,6 +22,7 @@ export type DongLichCaNhan = {
   diaDiem: string
   noiDung: string
   ghiChu: string
+  daHoanThanh: boolean
 }
 
 export type NhomNgayLich = {

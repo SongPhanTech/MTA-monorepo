@@ -62,6 +62,7 @@ export const mapCaNhanSangTatCa = (lich: DongLichCaNhan): DongTatCaLich => ({
   mauLoai: lich.mauLoai ?? MAU_LOAI_MAC_DINH,
   diaDiem: hienThiDiaDiem(lich.diaDiem),
   ghiChu: hienThiGhiChu(lich.noiDung !== "—" ? lich.noiDung : "—"),
+  daHoanThanh: lich.daHoanThanh,
 })
 
 export const gopVaSapXepLich = (

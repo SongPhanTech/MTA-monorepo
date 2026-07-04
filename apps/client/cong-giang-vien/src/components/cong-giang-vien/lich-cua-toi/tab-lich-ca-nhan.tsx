@@ -44,9 +44,11 @@ const TabLichCaNhan = () => {
     ketThuc,
     isLoading,
     onXoa,
+    onHoanThanh,
   } = useLichCaNhan()
 
   const [lichChiTietId, setLichChiTietId] = useState<string | null>(null)
+  const [dangHoanThanh, setDangHoanThanh] = useState(false)
 
   const handleThemLich = () => {
     moThemLich({ ngayMacDinh: ngayChon.format("YYYY-MM-DD") })
@@ -61,8 +63,17 @@ const TabLichCaNhan = () => {
     setLichChiTietId(id)
   }
 
-  const handleHoanThanh = (_id: string) => {
-    message.info("Chức năng đánh dấu hoàn thành sẽ được cập nhật sau")
+  const handleHoanThanh = async (id: string) => {
+    setDangHoanThanh(true)
+    try {
+      await onHoanThanh(id)
+      message.success("Đã đánh dấu hoàn thành")
+    } catch (error: unknown) {
+      const err = error as { info?: { message?: string } }
+      message.error(err?.info?.message ?? "Không thể cập nhật trạng thái lịch")
+    } finally {
+      setDangHoanThanh(false)
+    }
   }
 
   const handleXoa = async (id: string) => {
@@ -153,6 +164,7 @@ const TabLichCaNhan = () => {
         onChinhSua={handleSua}
         onXoa={handleXoa}
         onHoanThanh={handleHoanThanh}
+        dangHoanThanh={dangHoanThanh}
       />
 
       {dangXem === "bang" ? (

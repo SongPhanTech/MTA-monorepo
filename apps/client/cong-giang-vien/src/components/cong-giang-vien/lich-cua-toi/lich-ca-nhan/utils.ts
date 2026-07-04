@@ -148,6 +148,7 @@ export const mapLichSangDong = (lich: LichVoiTag) => {
     diaDiem: lich.location?.trim() || "—",
     noiDung: lich.content?.trim() || "—",
     ghiChu: "—",
+    daHoanThanh: lich.isCompleted,
   }
 }
 

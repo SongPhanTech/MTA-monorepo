@@ -23,6 +23,7 @@ import {
   useDeleteIndividualSchedule,
   useFindManyIndividualSchedule,
   useFindManyPersonalWorkTag,
+  useUpdateIndividualSchedule,
 } from "@workspace/db/hooks"
 import dayjs, { type Dayjs } from "dayjs"
 import "dayjs/locale/vi"
@@ -132,6 +133,7 @@ const useLichCaNhan = () => {
   )
 
   const { mutateAsync: xoaLich } = useDeleteIndividualSchedule()
+  const { mutateAsync: capNhatLich } = useUpdateIndividualSchedule()
 
   const danhSachLich = useMemo(() => lichHienTaiRaw.map(mapLichSangDong), [lichHienTaiRaw])
   const danhSachTruoc = useMemo(() => lichTruocRaw.map(mapLichSangDong), [lichTruocRaw])
@@ -227,6 +229,17 @@ const useLichCaNhan = () => {
     [xoaLich]
   )
 
+  const onHoanThanh = useCallback(
+    async (id: string) => {
+      await capNhatLich({
+        where: { id },
+        data: { isCompleted: true },
+      })
+      await queryClient.invalidateQueries({ queryKey: ["IndividualSchedule"] })
+    },
+    [capNhatLich]
+  )
+
   return {
     cheDoHienThi,
     setCheDoHienThi,
@@ -256,6 +269,7 @@ const useLichCaNhan = () => {
     ketThuc,
     isLoading: dangTaiLecturer || dangTaiLich || dangTaiTag,
     onXoa,
+    onHoanThanh,
   }
 }
 

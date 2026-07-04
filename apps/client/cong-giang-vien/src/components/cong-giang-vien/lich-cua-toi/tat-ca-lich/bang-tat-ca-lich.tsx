@@ -5,6 +5,7 @@ import type {
   DongBangThangTatCaLich,
   DongTatCaLich,
 } from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/types"
+import { cn } from "@workspace/ui/lib/utils"
 import { Button, Input, Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { Filter, Search } from "lucide-react"
@@ -95,16 +96,24 @@ const BangTatCaLich = ({
       key: "noiDung",
       width: COT.noiDung,
       ellipsis: true,
-      render: (_, row) =>
-        cheDoHienThi === "ngay" ? (
-          <span className="block truncate" title={row.noiDung}>
-            {row.noiDung}
-          </span>
-        ) : (
-          <span className="block truncate font-semibold" title={row.tieuDeHienThi}>
-            {row.tieuDeHienThi}
-          </span>
-        ),
+      render: (_, row) => {
+        const tieuDe = cheDoHienThi === "ngay" ? row.noiDung : row.tieuDeHienThi
+        return (
+          <div className="flex min-w-0 items-center gap-2">
+            <span
+              className={cn("block truncate", cheDoHienThi !== "ngay" && "font-semibold")}
+              title={tieuDe}
+            >
+              {tieuDe}
+            </span>
+            {row.daHoanThanh ? (
+              <span className="shrink-0 rounded bg-cgv-green/10 px-1.5 py-0.5 text-[10px] font-semibold text-cgv-green-dark">
+                Đã hoàn thành
+              </span>
+            ) : null}
+          </div>
+        )
+      },
     },
     {
       title: "Loại lịch",

@@ -105,9 +105,20 @@ const BangLichCaNhan = ({
     },
     {
       title: "Tiêu đề",
-      dataIndex: "tieuDe",
       key: "tieuDe",
       ellipsis: true,
+      render: (_, row) => (
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="truncate" title={row.tieuDe}>
+            {row.tieuDe}
+          </span>
+          {row.daHoanThanh ? (
+            <span className="shrink-0 rounded bg-cgv-green/10 px-1.5 py-0.5 text-[10px] font-semibold text-cgv-green-dark">
+              Đã hoàn thành
+            </span>
+          ) : null}
+        </div>
+      ),
     },
     {
       title: "Loại lịch",
