@@ -186,6 +186,7 @@ export default function DanhMucDoAn() {
               positionCPV: true,
             },
           },
+          organization: true,
         },
       },
       secondarySupervisor: {
@@ -198,6 +199,7 @@ export default function DanhMucDoAn() {
               positionCPV: true,
             },
           },
+          organization: true,
         },
       },
       thirdSupervisor: {

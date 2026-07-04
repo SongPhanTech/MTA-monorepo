@@ -48,8 +48,11 @@ const PutOlympicScoreModal = () => {
       if (id) {
         await updateAward({
           data: {
-            // name: rest.name,
+            name: rest.name,
             bonusScore: rest.bonusScore,
+            subjects: {
+              set: (subjects || []).map((id) => ({ id })),
+            },
           },
           where: { id },
         })
@@ -84,6 +87,7 @@ const PutOlympicScoreModal = () => {
   const { data: level } = useFindUniqueAward(
     {
       where: { id },
+      include: { subjects: true },
     },
     { enabled: !!id }
   )
@@ -94,6 +98,7 @@ const PutOlympicScoreModal = () => {
       setTargetDisabled(false)
       form.setFieldsValue({
         ...level,
+        subjects: level.subjects?.map((s: any) => s.id) || [],
       })
     } else {
       form.setFieldsValue({

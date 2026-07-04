@@ -212,7 +212,7 @@ export default function OlympicAwards() {
                     <Row className="justify-center gap-2">
                       {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG, "SUA") && (
                         <EditIcon
-                          disabled={_count?.subjects > 0 || _count?.archivedAward > 0}
+                          disabled={_count?.archivedAward > 0}
                           onClick={onOpen.bind(null, id)}
                         />
                       )}

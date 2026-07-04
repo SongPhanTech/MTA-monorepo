@@ -99,6 +99,7 @@ export default function UserProfilePageLecture() {
   const where = useMemo(
     () => ({
       deletedAt: null,
+      active: true,
       ...(filters.code
         ? {
             code: {
