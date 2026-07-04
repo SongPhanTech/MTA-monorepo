@@ -112,8 +112,8 @@ export const LOAI_THONG_BAO_META: Record<LoaiThongBaoGv, LoaiThongBaoMeta> = {
     Icon: ClipboardList,
   },
   INDIVIDUAL_SCHEDULE: {
-    label: "Nhắc lịch cá nhân",
-    tagLabel: "Lịch cá nhân",
+    label: "Lịch cá nhân",
+    tagLabel: "Lịch của tôi",
     iconBg: "bg-sky-50",
     iconColor: "text-sky-600",
     tagBg: "bg-sky-50",

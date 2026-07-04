@@ -15,10 +15,10 @@ export const TIEU_DE_THU = [
 
 /** Tiêu đề cột Thứ trên lịch tháng / header tuần */
 export const CLASS_TIEU_DE_THU =
-  "border-l border-cgv-green/25 bg-cgv-green/25 px-1 py-2 text-center text-xs font-semibold text-cgv-green-dark first:border-l-0"
+  "border-l border-cgv-green bg-cgv-green px-1 py-2 text-center text-xs font-bold text-gray-900 first:border-l-0"
 
 /** Ô cột Thứ trong bảng (rowSpan theo ngày) */
-export const CLASS_O_THU_BANG = "bg-cgv-green/20 font-semibold text-cgv-green-dark"
+export const CLASS_O_THU_BANG = "bg-cgv-green font-bold text-gray-900"
 
 export const taoOnCellThu = (rowSpanThu: number) => ({
   rowSpan: rowSpanThu,

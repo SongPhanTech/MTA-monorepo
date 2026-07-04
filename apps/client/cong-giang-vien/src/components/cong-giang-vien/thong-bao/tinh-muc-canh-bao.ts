@@ -7,8 +7,8 @@ import {
 import dayjs from "dayjs"
 
 const tinhMucCanhBao = (loai: LoaiThongBaoGv, expiresAt?: Date | string | null): MucCanhBao => {
-  // Phân công giảng dạy không có hạn xử lý → luôn là thông báo mới.
-  if (loai === "TEACHING_ASSIGNMENTS") return "moi"
+  // Phân công giảng dạy / nhắc lịch cá nhân không phải hạn xử lý → luôn là thông báo mới.
+  if (loai === "TEACHING_ASSIGNMENTS" || loai === "INDIVIDUAL_SCHEDULE") return "moi"
 
   if (!expiresAt) return "moi"
 

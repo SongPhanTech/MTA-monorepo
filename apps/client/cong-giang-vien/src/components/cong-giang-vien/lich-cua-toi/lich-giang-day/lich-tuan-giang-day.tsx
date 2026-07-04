@@ -90,7 +90,7 @@ const LichTuanGiangDay = ({ danhSach, dauTuan, dangTai, onXemChiTiet }: LichTuan
                   >
                     <div className="truncate">{formatNhanNgayTuan(ngay)}</div>
                     {laHomNay ? (
-                      <span className="mt-1 inline-block rounded-full bg-cgv-green px-2 py-0.5 text-[10px] font-medium text-cgv-green-dark">
+                      <span className="mt-1 inline-block rounded-full bg-cgv-green px-2 py-0.5 text-[10px] font-semibold text-gray-900">
                         Hôm nay
                       </span>
                     ) : null}
