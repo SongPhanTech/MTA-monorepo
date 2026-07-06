@@ -216,7 +216,9 @@ export const mapLichGiangDaySangSuKien = (lich: LichGiangDayRaw): SuKienLich => 
     .minute(dayjs(dong.thoiGianKetThuc, "HH:mm").minute())
 
   return {
-    id: lich.id,
+    id: `gd-${lich.id}`,
+    idGoc: lich.id,
+    nguon: "giang-day",
     ngay: dayjs(lich.classDate).format("YYYY-MM-DD"),
     tieuDe: dong.hocPhan,
     tiet: `${lich.startPeriod} - ${lich.endPeriod}`,

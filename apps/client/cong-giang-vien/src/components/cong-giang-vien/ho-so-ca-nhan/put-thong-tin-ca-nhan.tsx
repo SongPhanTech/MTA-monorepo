@@ -59,7 +59,7 @@ type PutThongTinCaNhan = {
   genderId?: string | null
   dateOfBirth?: dayjs.Dayjs | null
   idCardNumber?: string | null
-  lectureID?: string | null
+  lectureCode?: string | null
   organizationId?: string | null
   email?: string | null
   phoneNumber?: string | null
@@ -116,7 +116,7 @@ const PutThongTinCaNhanModal = () => {
       genderId: data.genderId,
       dateOfBirth: data.dateOfBirth ? dayjs(data.dateOfBirth) : null,
       idCardNumber: data.idCardNumber,
-      lectureID: data.lecturer?.lectureID ?? data.code,
+      lectureCode: data.lecturer?.code,
       organizationId: data.lecturer?.organizationId,
       email: data.email,
       phoneNumber: data.phoneNumber,
@@ -182,7 +182,7 @@ const PutThongTinCaNhanModal = () => {
             ? {
                 lecturer: {
                   update: {
-                    lectureID: value.lectureID || undefined,
+                    code: value.lectureCode || undefined,
                     organizationId: value.organizationId || null,
                   },
                 },
@@ -282,7 +282,7 @@ const PutThongTinCaNhanModal = () => {
         </Form.Item>
       </Col>
       <Col span={12}>
-        <Form.Item name="lectureID" label="Mã giảng viên">
+        <Form.Item name="lectureCode" label="Mã giảng viên">
           <Input placeholder="Nhập mã giảng viên" />
         </Form.Item>
       </Col>
@@ -434,7 +434,7 @@ const PutThongTinCaNhanModal = () => {
               </Button>
             </div>
           ))}
-          <Button type="dashed" icon={<Plus size={16} />} onClick={() => add()}>
+          <Button type="dashed" block icon={<Plus size={16} />} onClick={() => add()}>
             Thêm học vị
           </Button>
         </div>
@@ -502,7 +502,7 @@ const PutThongTinCaNhanModal = () => {
               </Button>
             </div>
           ))}
-          <Button type="dashed" icon={<Plus size={16} />} onClick={() => add()}>
+          <Button type="dashed" block icon={<Plus size={16} />} onClick={() => add()}>
             Thêm học hàm
           </Button>
         </div>
@@ -580,7 +580,7 @@ const PutThongTinCaNhanModal = () => {
               </Button>
             </div>
           ))}
-          <Button type="dashed" icon={<Plus size={16} />} onClick={() => add()}>
+          <Button type="dashed" block icon={<Plus size={16} />} onClick={() => add()}>
             Thêm quá trình công tác
           </Button>
         </div>

@@ -217,7 +217,7 @@ deploy-cdn:
 	$(SCP) -O cdn.zip $(SERVER_HOST):$(FE_APP_DIR)/
 	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
 	docker compose -f $(FE_COMPOSE_FILE) down; \
-	rm -rf dang-ky-hoc-cdn/ lms-cdn/ ems-cdn/ hrm-cdn/ chatbot-cdn/; \
+	rm -rf dang-ky-hoc-cdn/ lms-cdn/ ems-cdn/ hrm-cdn/ chatbot-cdn/ cong-giang-vien-cdn/; \
 	unzip -q cdn.zip && \
 	mv cdn/* . && \
 	docker compose -f $(FE_COMPOSE_FILE) up -d"

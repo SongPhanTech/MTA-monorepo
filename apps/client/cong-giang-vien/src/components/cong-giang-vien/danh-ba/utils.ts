@@ -61,8 +61,8 @@ export function mapLecturerToRow(lecturer: LecturerDanhBa, index: number): DanhB
   const profile = lecturer.userProfile
 
   return {
-    key: lecturer.lectureID || `lecturer-${index}`,
-    maCanBo: lecturer.lectureID ?? "",
+    key: lecturer.code || `lecturer-${index}`,
+    maCanBo: lecturer.code ?? "",
     hoTen: profile?.fullname || "",
     gioiTinh: profile?.gender?.sTen ?? "",
     email: profile?.email || "",
@@ -78,7 +78,7 @@ export function filterLecturersBySearch(lecturers: LecturerDanhBa[], keyword: st
   return lecturers.filter((lecturer) => {
     const profile = lecturer.userProfile
     const haystack = [
-      lecturer.lectureID,
+      lecturer.code,
       profile?.fullname,
       profile?.gender?.sTen,
       profile?.email,

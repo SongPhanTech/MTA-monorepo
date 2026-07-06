@@ -291,6 +291,21 @@ export const taoNhanNguoiLienQuan = (nguoi: NguoiLienQuanTomTat) => {
   return [ma, ten, maDonVi].filter(Boolean).join(" - ")
 }
 
+const phanTachHoTenVietNam = (hoTen: string) => {
+  const parts = hoTen.trim().split(/\s+/).filter(Boolean)
+  return {
+    ten: parts.pop() ?? "",
+    ho: parts.shift() ?? "",
+  }
+}
+
+/** Sắp xếp theo tên → họ */
+export const soSanhHoTenVietNam = (a: string, b: string) => {
+  const nameA = phanTachHoTenVietNam(a)
+  const nameB = phanTachHoTenVietNam(b)
+  return nameA.ten.localeCompare(nameB.ten, "vi") || nameA.ho.localeCompare(nameB.ho, "vi")
+}
+
 export const taoTuyChonNguoiLienQuan = (nguoi: NguoiLienQuanTomTat): TuyChonNguoiLienQuan => {
   const ten = nguoi.fullname?.trim() || nguoi.email?.trim() || nguoi.id
   const ma = layMaNguoiLienQuan(nguoi)

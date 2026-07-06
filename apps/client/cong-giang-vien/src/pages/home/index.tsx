@@ -18,7 +18,7 @@ import { useMemo } from "react"
 
 function CongGiangVienTrangChuPage() {
   const router = useRouter()
-  const { thongTin, daoTao, isLoading: dangTaiHoSo } = useHoSoCaNhan()
+  const { profileId, thongTin, daoTao, isLoading: dangTaiHoSo } = useHoSoCaNhan()
   const { id: semesterId } = useSemesterStore()
   const { tongSo, thongKe: thongKeKhaoSat } = useKhaoSatGiangVien({ semesterId })
   const {
@@ -111,7 +111,11 @@ function CongGiangVienTrangChuPage() {
 
         <Col xs={24} xl={6} className="flex h-full min-h-0 flex-col gap-1">
           <div className="shrink-0">
-            <TheThongTinCaNhan thongTin={thongTinCaNhan} isLoading={dangTaiHoSo} />
+            <TheThongTinCaNhan
+              thongTin={thongTinCaNhan}
+              isLoading={dangTaiHoSo}
+              profileId={profileId}
+            />
           </div>
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
             <BangThongBao gon />

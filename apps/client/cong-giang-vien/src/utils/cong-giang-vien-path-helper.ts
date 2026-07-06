@@ -45,6 +45,17 @@ export const nhapDiemThiGiangDayPath = (subjectClassId?: string) =>
 export const khaoSatGiangVienPath = (surveyId?: string) =>
   surveyId ? `${CGV.KHAO_SAT}?surveyId=${surveyId}` : CGV.KHAO_SAT
 
+/** Mở màn lịch chi tiết; có thể truyền sẵn lịch cần xem (giảng dạy / cá nhân). */
+export const chiTietLichCuaToiPath = (
+  lichId: string,
+  nguon: "giang-day" | "ca-nhan",
+  ngay?: string
+) => {
+  const params = new URLSearchParams({ lichId, nguon })
+  if (ngay?.trim()) params.set("ngay", ngay.trim())
+  return `${CGV.LICH_CUA_TOI}?${params.toString()}`
+}
+
 /** Mở màn chi tiết môn học của lớp giảng dạy theo phiên bản môn học (kèm lớp để lấy ngôn ngữ giảng dạy). */
 export const chiTietMonHocGiangDayPath = (subjectVersionId?: string, subjectClassId?: string) => {
   if (!subjectVersionId) return CGV.LOP_GIANG_DAY_CHI_TIET

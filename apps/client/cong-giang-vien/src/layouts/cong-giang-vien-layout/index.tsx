@@ -11,14 +11,16 @@ import {
   CONG_GIANG_VIEN_SIDER_WIDTH,
 } from "@constants/cong-giang-vien-layout"
 import { useMenuList } from "@hooks/menu-list"
+import { useThongBaoGiangVien } from "@hooks/use-thong-bao-giang-vien"
 import { cn } from "@lib/utils"
 import { CONFIG_KEY } from "@workspace/constant"
 import { useFindUniqueConfig } from "@workspace/db/hooks"
 import { useGetUnitInfosInfo } from "@workspace/libs/api/system"
+import { ROUTER_PATH } from "@workspace/router"
 import { Button, Layout } from "antd"
 import { Menu as MenuIcon } from "lucide-react"
 import Image from "next/image"
-import { type ReactNode, useEffect, useState } from "react"
+import { type ReactNode, useEffect, useMemo, useState } from "react"
 import { IdleTimerProvider } from "react-idle-timer"
 
 const { Header, Content } = Layout
@@ -37,6 +39,14 @@ const CongGiangVienLayout = ({
   unLayout?: boolean
 }) => {
   const menus = useMenuList()
+  const { soChuaDoc } = useThongBaoGiangVien()
+
+  const menuBadges = useMemo(
+    () => ({
+      [ROUTER_PATH.CONG_GIANG_VIEN.THONG_BAO]: soChuaDoc,
+    }),
+    [soChuaDoc]
+  )
 
   const [collapsed, setCollapsed] = useState(readSidebarCollapsed)
 
@@ -94,7 +104,7 @@ const CongGiangVienLayout = ({
         </Header>
 
         <Layout hasSider style={{ marginTop: CONG_GIANG_VIEN_HEADER_HEIGHT }}>
-          <SiderCongGiangVien items={menus} collapsed={collapsed} />
+          <SiderCongGiangVien items={menus} collapsed={collapsed} menuBadges={menuBadges} />
           <Layout
             style={{
               marginInlineStart: siderWidth,

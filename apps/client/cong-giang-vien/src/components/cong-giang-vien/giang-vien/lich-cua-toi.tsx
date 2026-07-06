@@ -1,13 +1,15 @@
 import DatePicker from "@components/commons/date-picker"
 import LichNgay from "@components/cong-giang-vien/giang-vien/lich-ngay"
 import LichTuanBang from "@components/cong-giang-vien/giang-vien/lich-tuan-bang"
-import type { CheDoLich } from "@components/cong-giang-vien/giang-vien/types"
+import type { CheDoLich, SuKienLich } from "@components/cong-giang-vien/giang-vien/types"
 import { useLichCuaToi } from "@hooks/use-lich-cua-toi"
+import { chiTietLichCuaToiPath } from "@/utils/cong-giang-vien-path-helper"
 import { cn } from "@workspace/ui/lib/utils"
 import { Button, Segmented } from "antd"
 import type { Dayjs } from "dayjs"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { useState, type ReactNode } from "react"
+import { useRouter } from "next/router"
+import { useCallback, useState, type ReactNode } from "react"
 
 type LichCuaToiProps = {
   /** widget: khối nhỏ trên trang chủ; page: trang Lịch của tôi full màn hình */
@@ -61,6 +63,7 @@ const NhanNgayCoLich = ({
 }
 
 const LichCuaToi = ({ variant = "widget" }: LichCuaToiProps) => {
+  const router = useRouter()
   const laTrang = variant === "page"
   const {
     cheDo,
@@ -75,6 +78,13 @@ const LichCuaToi = ({ variant = "widget" }: LichCuaToiProps) => {
     dichDenNgay,
     isLoading,
   } = useLichCuaToi(laTrang ? "tuan" : "ngay")
+
+  const handleXemChiTiet = useCallback(
+    (suKien: SuKienLich) => {
+      router.push(chiTietLichCuaToiPath(suKien.idGoc, suKien.nguon, suKien.ngay))
+    },
+    [router]
+  )
 
   return (
     <div
@@ -156,11 +166,15 @@ const LichCuaToi = ({ variant = "widget" }: LichCuaToiProps) => {
         </div>
       </div>
 
-      <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden", laTrang ? "p-3" : "p-2")}>
+      <div className={cn("flex h-full min-h-0 flex-1 flex-col overflow-hidden", laTrang ? "p-3" : "p-2")}>
         {cheDo === "ngay" ? (
-          <LichNgay suKien={suKienNgay} isLoading={isLoading} />
+          <LichNgay suKien={suKienNgay} isLoading={isLoading} onXemChiTiet={handleXemChiTiet} />
         ) : (
-          <LichTuanBang suKien={suKienTuan} isLoading={isLoading} />
+          <LichTuanBang
+            suKien={suKienTuan}
+            isLoading={isLoading}
+            onXemChiTiet={handleXemChiTiet}
+          />
         )}
       </div>
     </div>
