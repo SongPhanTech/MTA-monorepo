@@ -1,14 +1,17 @@
 import type { SuKienLich } from "@components/cong-giang-vien/giang-vien/types"
 import { formatThu } from "@components/cong-giang-vien/lich-cua-toi/lich-giang-day/utils"
-import { Empty, Spin, Table } from "antd"
+import { Empty, Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import dayjs from "dayjs"
-import { useMemo } from "react"
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react"
 
 interface LichTuanBangProps {
   suKien: SuKienLich[]
   isLoading?: boolean
+  onXemChiTiet?: (suKien: SuKienLich) => void
 }
+
+const CHIEU_CAO_HEADER_BANG = 39
 
 /** Dòng bảng lịch tuần đã gộp các sự kiện cùng ngày để merge ô Thứ/Ngày. */
 type DongLichTuan = SuKienLich & {
@@ -90,35 +93,50 @@ const columns: ColumnsType<DongLichTuan> = [
   },
 ]
 
-const LichTuanBang = ({ suKien, isLoading }: LichTuanBangProps) => {
+const LichTuanBang = ({ suKien, isLoading, onXemChiTiet }: LichTuanBangProps) => {
+  const vungBangRef = useRef<HTMLDivElement>(null)
+  const [chieuCaoBody, setChieuCaoBody] = useState(120)
   const dongLich = useMemo(() => gopTheoNgay(suKien), [suKien])
 
-  if (isLoading) {
-    return (
-      <div className="flex h-full w-full items-center justify-center">
-        <Spin size="small" />
-      </div>
-    )
-  }
+  useEffect(() => {
+    const el = vungBangRef.current
+    if (!el) return
 
-  if (!suKien.length) {
-    return (
-      <div className="flex h-full w-full items-center justify-center">
-        <Empty description="Không có lịch" image={Empty.PRESENTED_IMAGE_SIMPLE} className="m-0" />
-      </div>
-    )
-  }
+    const capNhatChieuCao = () => {
+      setChieuCaoBody(Math.max(120, el.clientHeight - CHIEU_CAO_HEADER_BANG))
+    }
+
+    capNhatChieuCao()
+    const observer = new ResizeObserver(capNhatChieuCao)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [isLoading, suKien.length])
 
   return (
-    <div className="h-full overflow-auto [&_.ant-table]:text-xs">
+    <div
+      ref={vungBangRef}
+      className="h-full min-h-0 flex-1 overflow-hidden"
+      style={{ "--gv-body-h": `${chieuCaoBody}px` } as CSSProperties}
+    >
       <Table<DongLichTuan>
         rowKey="id"
         size="small"
         tableLayout="fixed"
         columns={columns}
         dataSource={dongLich}
+        loading={isLoading}
         pagination={false}
-        className="w-full"
+        scroll={{ x: "100%", y: chieuCaoBody }}
+        className="bang-gv-full h-full [&_.ant-table]:text-xs"
+        locale={{
+          emptyText: (
+            <Empty description="Không có lịch" image={Empty.PRESENTED_IMAGE_SIMPLE} className="m-0" />
+          ),
+        }}
+        onRow={(record) => ({
+          className: onXemChiTiet ? "cursor-pointer" : undefined,
+          onClick: () => onXemChiTiet?.(record),
+        })}
       />
     </div>
   )

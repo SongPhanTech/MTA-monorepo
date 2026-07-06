@@ -178,11 +178,6 @@ const ExportScoreTemplate = ({
     worksheet.getCell("C4").value = `${subjectClass?.code || ""}`
     worksheet.getCell("C4").style = headerSubtitleStyle
 
-    worksheet.mergeCells("D3:H3")
-    worksheet.getCell("D3").value =
-      `${subjectClass?.semester?.name || ""} năm học ${subjectClass?.semester?.schoolYear?.name || ""}`
-    worksheet.getCell("D3").style = headerSubtitleStyle
-
     worksheet.mergeCells("D4:H4")
     worksheet.getCell("D4").value = `${subjectClass?.subject?.name || ""}`
     worksheet.getCell("D4").style = headerSubtitleStyle

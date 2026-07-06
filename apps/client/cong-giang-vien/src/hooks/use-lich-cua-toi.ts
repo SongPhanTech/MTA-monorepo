@@ -58,6 +58,8 @@ const mapDongTatCaSangSuKien = (item: DongTatCaLich): SuKienLich => {
 
   return {
     id: item.id,
+    idGoc: item.idGoc,
+    nguon: item.nguon,
     ngay: item.ngayKey,
     tieuDe: item.tieuDeHienThi,
     tiet: tietMatch?.[1],

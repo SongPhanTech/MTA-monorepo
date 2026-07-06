@@ -71,7 +71,7 @@ const useHoSoCaNhan = () => {
       email: data?.email ?? "",
       soDienThoai: data?.phoneNumber ?? "",
       cmndCccd: data?.idCardNumber ?? "",
-      maGiangVien: data?.lecturer?.lectureID ?? data?.code ?? "",
+      maGiangVien: data?.lecturer?.code ?? "",
       donViCongTac: org?.sTen ?? "",
       khoa: isBoMon ? (parentOrg?.sTen ?? "") : (org?.sTen ?? ""),
       boMon: isBoMon ? (org?.sTen ?? "") : "",

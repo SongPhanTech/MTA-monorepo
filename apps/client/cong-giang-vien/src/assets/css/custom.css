@@ -21,6 +21,19 @@
 .ant-table-body:hover::-webkit-scrollbar-thumb {
   visibility: visible;
 }
+
+/* Bảng widget trang chủ GV — thân bảng lấp đầy ô lưới, header cố định khi cuộn */
+.bang-gv-full.ant-table-wrapper,
+.bang-gv-full .ant-spin-nested-loading,
+.bang-gv-full .ant-spin-container,
+.bang-gv-full .ant-table-container {
+  height: 100%;
+}
+
+.bang-gv-full .ant-table-body {
+  height: var(--gv-body-h, auto) !important;
+}
+
 .ant-table-expanded-row:hover {
   background-color: aliceblue;
 }

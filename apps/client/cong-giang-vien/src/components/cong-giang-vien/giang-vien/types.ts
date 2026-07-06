@@ -43,9 +43,13 @@ export interface ThongKeTrangChu {
   khaoSatSapDienRa: number
 }
 
+export type NguonLich = "giang-day" | "ca-nhan"
+
 /** Sự kiện lịch dùng cho view Ngày / Tuần (giảng dạy + cá nhân). */
 export interface SuKienLich {
   id: string
+  idGoc: string
+  nguon: NguonLich
   ngay: string
   tieuDe: string
   tiet?: string
