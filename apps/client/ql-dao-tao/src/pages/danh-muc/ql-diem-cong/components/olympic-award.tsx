@@ -218,7 +218,7 @@ export default function OlympicAwards() {
                       )}
                       {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG, "XOA") && (
                         <DeleteIcon
-                          disabled={_count?.subjects > 0 || _count?.archivedAward > 0}
+                          disabled={_count?.archivedAward > 0}
                           popConfirm={{
                             onConfirm: () => handleDelete(id),
                           }}

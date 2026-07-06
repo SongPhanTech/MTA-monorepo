@@ -542,6 +542,7 @@ export const buildSubjectMapOrThrow = async (
         code: s.code,
       })),
     },
+    include: { managementOrganization: { select: { sMa: true } } }
   })
 
   const codeConflicts = subjects
@@ -558,11 +559,17 @@ export const buildSubjectMapOrThrow = async (
       // }
       if (existing.credit !== s.credit) diffs.push("số tín chỉ")
       if (existing.period !== s.period) diffs.push("số tiết")
-      if (existing.managementOrganizationId !== orgMap.get(s.organizationCode || null)) {
+      if ((existing.managementOrganization?.sMa || null) !== (s.organizationCode || null)) {
         diffs.push("đơn vị quản lý")
       }
 
       if (diffs.length > 0) {
+        console.log(`[DEBUG_CONFLICT] Môn học: ${s.code}`, { 
+          diffs, 
+          excelCredit: s.credit, dbCredit: existing.credit, 
+          excelPeriod: s.period, dbPeriod: existing.period, 
+          excelOrg: s.organizationCode, dbOrg: existing.managementOrganization?.sMa 
+        });
         return { code: s.code, diffs }
       }
       return null
@@ -586,9 +593,9 @@ export const buildSubjectMapOrThrow = async (
         name: s.name,
         credit: s.credit,
         period: s.period,
-        managementOrganizationId: orgMap.get(s.organizationCode || null),
       })),
     },
+    include: { managementOrganization: { select: { sMa: true } } }
   })
 
   const combinationConflicts = subjects.filter((s) => {
@@ -598,7 +605,7 @@ export const buildSubjectMapOrThrow = async (
         e.name === s.name &&
         e.credit === s.credit &&
         e.period === s.period &&
-        e.managementOrganizationId === orgMap.get(s.organizationCode || null) &&
+        (e.managementOrganization?.sMa || null) === (s.organizationCode || null) &&
         e.code !== null &&
         e.code !== s.code
     )
@@ -620,11 +627,10 @@ export const buildSubjectMapOrThrow = async (
         trainingObjectTypeId: s.trainingObjectTypeId,
         ...(s.code ? { code: s.code } : {}),
         ...(orgMap.get(s.organizationCode || null)
-          ? { managementOrganizationId: orgMap.get(s.organizationCode || null) }
+          ? { managementOrganization: { sMa: s.organizationCode } }
           : {}),
         credit: s.credit,
         OR: [{ period: s.period }, { period: null }],
-        // TODO: correct this
         // examType: s.examType,
         // type: s.type,
         // schedulePeriod: s.schedulePeriod,

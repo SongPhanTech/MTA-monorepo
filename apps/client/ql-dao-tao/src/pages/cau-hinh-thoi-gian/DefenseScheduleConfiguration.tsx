@@ -2,14 +2,14 @@ import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
 import {
   useCreateDefenseSession,
-  useDeleteDefenseSession,
+  useDeleteManyDefenseSession,
   useFindManyDefenseSession,
-  useUpdateDefenseSession,
+  useUpdateManyDefenseSession,
 } from "@workspace/db/hooks"
-import { Button, Col, Flex, Form, message, Modal, Row, TimePicker } from "antd"
+import { Button, Col, Flex, Form, message, Modal, Row, TimePicker, Tooltip } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
 import utc from "dayjs/plugin/utc"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import EditOutlined from "@components/icons/edit"
 import DeleteIcon from "@components/icons/delete"
 
@@ -53,16 +53,52 @@ export default function DefenseScheduleConfigurationPage({
   const { showSpinner, hideSpinner } = useSpinner()
   const [form] = Form.useForm<FormValues>()
 
+  const targetThesisType = _isThesis ? "THESIS" : "PROJECT"
+
   const { data: rawData = [], refetch } = useFindManyDefenseSession({
     orderBy: { startTime: "asc" },
+    where: {
+      OR: [
+        {
+          thesisProject: {
+            some: { thesisType: targetThesisType },
+          },
+        },
+        {
+          thesisProject: {
+            none: {},
+          },
+        },
+      ],
+    },
+    include: {
+      thesisProject: {
+        where: { thesisType: targetThesisType },
+        select: { id: true },
+      },
+    },
   })
 
   const { mutateAsync: createSession } = useCreateDefenseSession()
-  const { mutateAsync: updateSession } = useUpdateDefenseSession()
-  const { mutateAsync: deleteSession } = useDeleteDefenseSession()
+  const { mutateAsync: updateManySession } = useUpdateManyDefenseSession()
+  const { mutateAsync: deleteManySession } = useDeleteManyDefenseSession()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingRow, setEditingRow] = useState<DefenseSessionRecord | null>(null)
+
+  const displayData = useMemo(() => {
+    const map = new Map<string, any>()
+    for (const item of rawData) {
+      const timeKey = formatSessionTimeDisplay(item.startTime)
+      const hasThesis = (item as any).thesisProject && (item as any).thesisProject.length > 0
+      if (!map.has(timeKey)) {
+        map.set(timeKey, { ...item, _hasThesis: hasThesis })
+      } else if (hasThesis) {
+        map.get(timeKey)._hasThesis = true
+      }
+    }
+    return Array.from(map.values())
+  }, [rawData])
 
   const handleSave = async () => {
     try {
@@ -75,7 +111,10 @@ export default function DefenseScheduleConfigurationPage({
 
       const newKey = timeKeyFromPicker(picked)
       const isDuplicated = rawData.some((item) => {
-        if (editingRow?.id === item.id) {
+        if (
+          editingRow &&
+          timeKeyFromStored(editingRow.startTime) === timeKeyFromStored(item.startTime)
+        ) {
           return false
         }
         return timeKeyFromStored(item.startTime) === newKey
@@ -91,8 +130,8 @@ export default function DefenseScheduleConfigurationPage({
       showSpinner()
 
       if (editingRow) {
-        await updateSession({
-          where: { id: editingRow.id },
+        await updateManySession({
+          where: { startTime: editingRow.startTime },
           data: { startTime: timeToSave },
         })
       } else {
@@ -119,10 +158,10 @@ export default function DefenseScheduleConfigurationPage({
     }
   }
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (startTime: Date | string) => {
     try {
       showSpinner()
-      await deleteSession({ where: { id } })
+      await deleteManySession({ where: { startTime } })
       message.success("Xóa thời gian bảo vệ thành công!")
       await refetch()
     } catch (error) {
@@ -160,7 +199,7 @@ export default function DefenseScheduleConfigurationPage({
         <Col span={24}>
           <Table
             rowKey="id"
-            data={rawData}
+            data={displayData}
             pagination={false}
             locale={{ emptyText: "Chưa có thời gian bảo vệ" }}
             columns={[
@@ -181,40 +220,62 @@ export default function DefenseScheduleConfigurationPage({
                 width: 100,
                 align: "center" as const,
                 fixed: "right" as const,
-                render: (_: unknown, record) => {
+                render: (_: unknown, record: any) => {
                   const row = record as DefenseSessionRecord
                   if (!row?.id) {
                     return null
                   }
 
+                  const hasThesis = record._hasThesis
+
+                  const editBtn = hasThesis ? (
+                    <EditOutlined className="text-sm text-gray-300 cursor-not-allowed pointer-events-none" />
+                  ) : (
+                    <EditOutlined
+                      className="text-sm text-blue-700 cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setEditingRow(row)
+                        const u = dayjs.utc(row.startTime)
+                        form.setFieldsValue({
+                          time: dayjs().hour(u.hour()).minute(u.minute()).second(0).millisecond(0),
+                        })
+                        setIsModalOpen(true)
+                      }}
+                    />
+                  )
+
+                  const deleteBtn = hasThesis ? (
+                    <DeleteIcon disabled={true} />
+                  ) : (
+                    <DeleteIcon
+                      title="Xóa thời gian bảo vệ"
+                      popConfirm={{
+                        title: "Xóa thời gian bảo vệ",
+                        description: "Bạn có chắc chắn muốn xóa thời gian bảo vệ này?",
+                        onConfirm: () => handleDelete(row.startTime),
+                        onPopupClick: (e) => e.stopPropagation(),
+                      }}
+                    />
+                  )
+
                   return (
                     <div className="flex justify-center gap-3" key={row.id}>
-                      <EditOutlined
-                        className="text-sm text-blue-700 cursor-pointer"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setEditingRow(row)
-                          const u = dayjs.utc(row.startTime)
-                          form.setFieldsValue({
-                            time: dayjs()
-                              .hour(u.hour())
-                              .minute(u.minute())
-                              .second(0)
-                              .millisecond(0),
-                          })
-                          setIsModalOpen(true)
-                        }}
-                      />
+                      {hasThesis ? (
+                        <Tooltip title="Khung giờ này đã được gán với đồ án/luận văn">
+                          <div className="inline-flex items-center">{editBtn}</div>
+                        </Tooltip>
+                      ) : (
+                        editBtn
+                      )}
 
-                      <DeleteIcon
-                        title="Xóa thời gian bảo vệ"
-                        popConfirm={{
-                          title: "Xóa thời gian bảo vệ",
-                          description: "Bạn có chắc chắn muốn xóa thời gian bảo vệ này?",
-                          onConfirm: () => handleDelete(row.id),
-                          onPopupClick: (e) => e.stopPropagation(),
-                        }}
-                      />
+                      {hasThesis ? (
+                        <Tooltip title="Khung giờ này đã được gán với đồ án/luận văn">
+                          <div className="inline-flex items-center">{deleteBtn}</div>
+                        </Tooltip>
+                      ) : (
+                        deleteBtn
+                      )}
                     </div>
                   )
                 },
