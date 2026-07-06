@@ -6,7 +6,7 @@ const useGiangVien = () => {
   const profileId = me?.sDM_NhanVienId
   const profileCheckEnabled = sessionStatus === "authenticated" && !!profileId
 
-  const { data, isPending: profilePending } = useFindUniqueUserProfile(
+  const { data, isPending, isFetching, isFetched } = useFindUniqueUserProfile(
     {
       where: { id: profileId ?? "" },
       select: { bLaGiangVien: true },
@@ -14,11 +14,21 @@ const useGiangVien = () => {
     { enabled: profileCheckEnabled }
   )
 
-  const isSessionLoading = !sessionStatus || sessionStatus === "loading"
-  const isProfileLoading = profileCheckEnabled && profilePending
+  const isSessionLoading =
+    !sessionStatus ||
+    sessionStatus === "loading" ||
+    sessionStatus === "unauthenticated"
+
+  const isProfileLoading =
+    sessionStatus === "authenticated" &&
+    !!profileId &&
+    (isPending || isFetching || !isFetched)
+
+  const accessResolved =
+    sessionStatus === "authenticated" && (!profileId || isFetched)
 
   return {
-    isGiangVien: !!data?.bLaGiangVien,
+    isGiangVien: accessResolved && !!profileId && !!data?.bLaGiangVien,
     isLoading: isSessionLoading || isProfileLoading,
   }
 }
