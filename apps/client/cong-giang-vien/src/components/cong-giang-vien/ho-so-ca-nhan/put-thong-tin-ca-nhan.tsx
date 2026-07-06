@@ -434,7 +434,7 @@ const PutThongTinCaNhanModal = () => {
               </Button>
             </div>
           ))}
-          <Button type="dashed" icon={<Plus size={16} />} onClick={() => add()}>
+          <Button type="dashed" block icon={<Plus size={16} />} onClick={() => add()}>
             Thêm học vị
           </Button>
         </div>
@@ -502,7 +502,7 @@ const PutThongTinCaNhanModal = () => {
               </Button>
             </div>
           ))}
-          <Button type="dashed" icon={<Plus size={16} />} onClick={() => add()}>
+          <Button type="dashed" block icon={<Plus size={16} />} onClick={() => add()}>
             Thêm học hàm
           </Button>
         </div>
@@ -580,7 +580,7 @@ const PutThongTinCaNhanModal = () => {
               </Button>
             </div>
           ))}
-          <Button type="dashed" icon={<Plus size={16} />} onClick={() => add()}>
+          <Button type="dashed" block icon={<Plus size={16} />} onClick={() => add()}>
             Thêm quá trình công tác
           </Button>
         </div>

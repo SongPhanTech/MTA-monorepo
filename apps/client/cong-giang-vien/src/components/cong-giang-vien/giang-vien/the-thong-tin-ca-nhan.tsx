@@ -1,11 +1,13 @@
 import type { ThongTinCaNhanTomTat } from "@components/cong-giang-vien/giang-vien/types"
-import { Skeleton } from "antd"
-import { BookOpen, Building2, GraduationCap, Mail, Phone, Users } from "lucide-react"
+import { Button, Skeleton } from "antd"
+import { BookOpen, Building2, GraduationCap, Mail, Phone, SquarePen, Users } from "lucide-react"
 import type { ReactNode } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 
 interface TheThongTinCaNhanProps {
   thongTin: ThongTinCaNhanTomTat
   isLoading?: boolean
+  profileId?: string
 }
 
 interface HangProps {
@@ -23,7 +25,11 @@ const Hang = ({ icon, nhan, giaTri }: HangProps) => (
 )
 
 // Thẻ THÔNG TIN CÁ NHÂN gọn — header xanh + danh sách icon/label/value.
-const TheThongTinCaNhan = ({ thongTin, isLoading }: TheThongTinCaNhanProps) => {
+const TheThongTinCaNhan = ({ thongTin, isLoading, profileId }: TheThongTinCaNhanProps) => {
+  const { onOpen: moChinhSua } = useDisclosure<{ id: string }>({
+    tag: "PutThongTinCaNhanModal",
+  })
+
   const danhSach = [
     {
       key: "ma-gv",
@@ -40,10 +46,20 @@ const TheThongTinCaNhan = ({ thongTin, isLoading }: TheThongTinCaNhanProps) => {
 
   return (
     <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-      <div className="rounded-t-lg bg-cgv-green-dark px-3 py-2">
+      <div className="flex items-center justify-between rounded-t-lg bg-cgv-green-dark px-3 py-2">
         <span className="text-xs font-bold uppercase tracking-wide text-white">
           Thông tin cá nhân
         </span>
+        <Button
+          type="text"
+          size="small"
+          className="!inline-flex !items-center gap-1 !text-white hover:!bg-white/10"
+          disabled={!profileId}
+          onClick={() => profileId && moChinhSua({ id: profileId })}
+        >
+          <SquarePen size={14} />
+          Chỉnh sửa
+        </Button>
       </div>
 
       <div className="px-3 py-2.5">
