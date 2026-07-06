@@ -18,9 +18,10 @@ const { Sider } = Layout
 interface SiderCongGiangVienProps {
   collapsed: boolean
   items: MenuItem[]
+  menuBadges?: Record<string, number>
 }
 
-const SiderCongGiangVien = ({ collapsed, items }: SiderCongGiangVienProps) => {
+const SiderCongGiangVien = ({ collapsed, items, menuBadges }: SiderCongGiangVienProps) => {
   const router = useRouter()
   const pathname = router.pathname
   const [openKeys, setOpenKeys] = useState<string[]>(() => findOpenKeys(items, pathname))
@@ -66,7 +67,7 @@ const SiderCongGiangVien = ({ collapsed, items }: SiderCongGiangVienProps) => {
         selectedKeys={selectedKeys}
         openKeys={openKeys}
         onOpenChange={setOpenKeys}
-        items={buildMenuItems(items)}
+        items={buildMenuItems(items, { menuBadges, collapsed })}
       />
     </Sider>
   )
