@@ -1528,8 +1528,8 @@ export async function calculateStudentYearResult({
   })
 
   const data: Prisma.StudentYearResultUncheckedCreateInput = {
-    isClassMonitor: !!student.classMonitor?.id,
-    isUnionLeader: !!student.unionLeaderOf?.id,
+    isClassMonitor: (student.classMonitor?.length ?? 0) > 0,
+    isUnionLeader: (student.unionLeaderOf?.length ?? 0) > 0,
     studentId: studentId,
     schoolYearId: schoolYearId,
     studyYear: new Date().getFullYear(),

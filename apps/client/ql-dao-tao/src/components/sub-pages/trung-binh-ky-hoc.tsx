@@ -472,12 +472,12 @@ const DiemTrungBinhKyHoc = () => {
               //       ? Number(value).toFixed(2).replace(".", ",")
               //       : "-",
               // },
-              {
-                title: "Tổng tín chỉ",
-                dataIndex: ["studentSemesterResult", "0", "totalCredits"],
-                width: 90,
-                align: "center",
-              },
+              // {
+              //   title: "Tổng tín chỉ",
+              //   dataIndex: ["studentSemesterResult", "0", "totalCredits"],
+              //   width: 90,
+              //   align: "center",
+              // },
               {
                 title: "Số TC đăng ký",
                 dataIndex: ["studentSemesterResult", "0", "registeredCredits"],
@@ -515,7 +515,7 @@ const DiemTrungBinhKyHoc = () => {
                 align: "center",
               },
               {
-                title: "Tổng TC học kỳ",
+                title: "Tổng TC theo CTĐT",
                 dataIndex: ["studentSemesterResult", "0", "totalCreditsByCurriculum"],
                 width: 80,
                 align: "center",

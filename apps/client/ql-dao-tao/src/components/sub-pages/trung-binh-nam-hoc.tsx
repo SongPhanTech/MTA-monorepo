@@ -410,12 +410,12 @@ const DiemTrungBinhKyHoc = () => {
                 width: 130,
                 align: "center",
               },
-              {
-                title: "Tổng tín chỉ",
-                dataIndex: ["studentYearResult", "0", "totalCredits"],
-                width: 90,
-                align: "center",
-              },
+              // {
+              //   title: "Tổng tín chỉ",
+              //   dataIndex: ["studentYearResult", "0", "totalCredits"],
+              //   width: 90,
+              //   align: "center",
+              // },
               {
                 title: "Số TC đăng ký",
                 dataIndex: ["studentYearResult", "0", "registeredCredits"],
