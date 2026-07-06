@@ -1,13 +1,32 @@
 import type { MenuItem } from "@workspace/router"
+import { Badge } from "antd"
 import type { ItemType, MenuItemType } from "antd/es/menu/interface"
 import type { LucideIcon } from "lucide-react"
 import Link from "next/link"
 import type { ReactNode } from "react"
 
-const renderMenuLabel = (item: MenuItem): ReactNode => {
+type BuildMenuItemsOptions = {
+  menuBadges?: Record<string, number>
+  collapsed?: boolean
+}
+
+const laySoBadge = (item: MenuItem, menuBadges?: Record<string, number>) => {
+  if (!item.path || !menuBadges) return 0
+  return menuBadges[item.path] ?? 0
+}
+
+const renderMenuLabel = (item: MenuItem, badgeCount: number): ReactNode => {
   const content = (
     <span className="flex w-full min-w-0 items-center justify-between gap-2">
       <span className="truncate">{item.label}</span>
+      {badgeCount > 0 ? (
+        <Badge
+          count={badgeCount}
+          size="small"
+          className="giang-vien-menu-badge shrink-0"
+          overflowCount={99}
+        />
+      ) : null}
     </span>
   )
 
@@ -22,18 +41,46 @@ const renderMenuLabel = (item: MenuItem): ReactNode => {
   )
 }
 
-export const buildMenuItems = (menus: MenuItem[]): ItemType<MenuItemType>[] =>
+const renderMenuIcon = (Icon: LucideIcon, badgeCount: number, collapsed?: boolean) => {
+  const icon = <Icon className="giang-vien-menu-icon" size={18} />
+
+  if (!collapsed || badgeCount <= 0) {
+    return icon
+  }
+
+  return (
+    <Badge
+      count={badgeCount}
+      size="small"
+      className="giang-vien-menu-badge"
+      overflowCount={99}
+      offset={[-2, 2]}
+    >
+      {icon}
+    </Badge>
+  )
+}
+
+export const buildMenuItems = (
+  menus: MenuItem[],
+  options?: BuildMenuItemsOptions
+): ItemType<MenuItemType>[] =>
   menus.map((item) => {
     const Icon = item.icon as LucideIcon | undefined
+    const badgeCount = laySoBadge(item, options?.menuBadges)
+
     return {
-      label: renderMenuLabel(item),
+      label: renderMenuLabel(item, options?.collapsed ? 0 : badgeCount),
       key: item.path || item.id,
-      icon: Icon ? <Icon className="giang-vien-menu-icon" size={18} /> : undefined,
+      icon: Icon ? renderMenuIcon(Icon, badgeCount, options?.collapsed) : undefined,
       children: item.children
-        ? item.children.map((child) => ({
-            label: renderMenuLabel(child),
-            key: child.path || child.id,
-          }))
+        ? item.children.map((child) => {
+            const childBadgeCount = laySoBadge(child, options?.menuBadges)
+            return {
+              label: renderMenuLabel(child, childBadgeCount),
+              key: child.path || child.id,
+            }
+          })
         : undefined,
     }
   })
