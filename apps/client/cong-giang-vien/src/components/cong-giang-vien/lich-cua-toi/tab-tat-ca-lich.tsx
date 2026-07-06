@@ -18,11 +18,16 @@ import {
   useUpdateIndividualSchedule,
 } from "@workspace/db/hooks"
 import { message } from "antd"
-import { useState } from "react"
+import dayjs from "dayjs"
+import { useRouter } from "next/router"
+import { useEffect, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 /** Tab Tất cả lịch — gộp lịch giảng dạy + lịch cá nhân. */
 const TabTatCaLich = () => {
+  const router = useRouter()
+  const daMoTuQuery = useRef(false)
+
   const { onOpen: moThemLich } = useDisclosure<{ id?: string; ngayMacDinh?: string }>({
     tag: "ModalThemLichCaNhan",
   })
@@ -65,6 +70,33 @@ const TabTatCaLich = () => {
   }
 
   const dongChiTiet = () => setLichChiTiet(null)
+
+  // Mở nhanh chi tiết lịch khi điều hướng từ trang chủ (?lichId=...&nguon=...)
+  useEffect(() => {
+    if (!router.isReady || daMoTuQuery.current) return
+
+    const { lichId, nguon, ngay } = router.query
+    if (typeof lichId !== "string" || !lichId) return
+    if (nguon !== "giang-day" && nguon !== "ca-nhan") return
+
+    daMoTuQuery.current = true
+
+    if (typeof ngay === "string" && ngay) {
+      onDoiNgay(dayjs(ngay))
+      setCheDoHienThi("ngay")
+      setDangXem("lich")
+    }
+
+    setLichChiTiet({ nguon, id: lichId })
+  }, [
+    router.isReady,
+    router.query.lichId,
+    router.query.nguon,
+    router.query.ngay,
+    onDoiNgay,
+    setCheDoHienThi,
+    setDangXem,
+  ])
 
   const handleSuaLichCaNhan = (id: string) => {
     setLichChiTiet(null)

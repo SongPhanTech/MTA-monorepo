@@ -12,9 +12,10 @@ import { useMemo } from "react"
 interface LichNgayProps {
   suKien: SuKienLich[]
   isLoading?: boolean
+  onXemChiTiet?: (suKien: SuKienLich) => void
 }
 
-const LichNgay = ({ suKien, isLoading }: LichNgayProps) => {
+const LichNgay = ({ suKien, isLoading, onXemChiTiet }: LichNgayProps) => {
   const gioNhan = useMemo(() => gioTrongLichNgay(), [])
 
   const viTriSuKien = useMemo(
@@ -79,9 +80,11 @@ const LichNgay = ({ suKien, isLoading }: LichNgayProps) => {
               </div>
             ) : (
               viTriSuKien.map((item) => (
-                <div
+                <button
                   key={item.id}
-                  className="absolute left-0 right-0 overflow-hidden rounded border-l-[3px] px-1.5 py-0.5"
+                  type="button"
+                  onClick={() => onXemChiTiet?.(item)}
+                  className="absolute left-0 right-0 z-[1] min-h-[28px] cursor-pointer overflow-hidden rounded border-l-[3px] px-1.5 py-0.5 text-left transition-opacity hover:z-[2] hover:opacity-90"
                   style={{
                     top: item.topPx,
                     height: item.heightPx,
@@ -95,7 +98,7 @@ const LichNgay = ({ suKien, isLoading }: LichNgayProps) => {
                   <p className="m-0 truncate text-[10px] leading-tight text-gray-500">
                     {item.phuDe}
                   </p>
-                </div>
+                </button>
               ))
             )}
           </div>
