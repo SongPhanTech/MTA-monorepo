@@ -101,7 +101,13 @@ type TUserProfile = {
 }
 
 type TGraduationDecision = {
-  graduationDecision?: Pick<GraduationDecision, "diplomaNumber" | "originalDiplomaNumber"> | null
+  graduationDecision?:
+    | (Pick<GraduationDecision, "diplomaNumber" | "originalDiplomaNumber"> & {
+        finalRanking?: {
+          classification?: string
+        }
+      })
+    | null
 }
 
 type TExportPayload = {
@@ -275,8 +281,12 @@ export default function StudentGradeSystem() {
         active: true,
         trainingObjectTypeId,
         ...(trainingCourseIds?.length && {
-          trainingCourseId: {
-            in: trainingCourseIds,
+          trainingCourses: {
+            some: {
+              id: {
+                in: trainingCourseIds,
+              },
+            },
           },
         }),
       },
@@ -355,7 +365,11 @@ export default function StudentGradeSystem() {
             nationality: true,
           },
         },
-        graduationDecision: true,
+        graduationDecision: {
+          include: {
+            finalRanking: true,
+          },
+        },
         thesisRegistrations: {
           include: {
             council: true,
@@ -535,6 +549,31 @@ export default function StudentGradeSystem() {
     const matched = scoreConverts.find(
       (range) => finalScore >= range.base10Min && finalScore <= range.base10Max
     )
+
+    return matched?.classification ?? ""
+  }
+
+  const getGraduationClassification = (
+    finalScoreBase10: number,
+    finalScoreBase4: number,
+    academicRankingConvert: any[] = []
+  ) => {
+    const graduationRankingData = academicRankingConvert.filter(
+      (item) => item?.context === "GRADUATION" && item?.graduated
+    )
+
+    if (!graduationRankingData.length) return ""
+
+    const graduationBaseScore =
+      graduationRankingData.find((item) => item?.base4Min != null)?.baseScore ??
+      graduationRankingData[0]?.baseScore
+
+    const matched = graduationRankingData.find((range) => {
+      if (graduationBaseScore === "Base4") {
+        return finalScoreBase4 >= range.base4Min && finalScoreBase4 <= range.base4Max
+      }
+      return finalScoreBase10 >= range.base10Min && finalScoreBase10 <= range.base10Max
+    })
 
     return matched?.classification ?? ""
   }
@@ -722,10 +761,25 @@ export default function StudentGradeSystem() {
         0
       )
 
+      const tongDiemNhanTinChiHe4 = student.semesters.reduce(
+        (acc, semester) =>
+          acc +
+          (semester.subjects?.reduce(
+            (s, sub) => s + (Number(sub?.thangDiem4) || 0) * (sub.soTinChi ?? 0),
+            0
+          ) ?? 0),
+        0
+      )
+
       const diemTBHe10 =
         tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))
 
-      const xepLoai = getScoreClassification(diemTBHe10, scoreConverts || [])
+      const diemTBHe4 =
+        tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
+
+      const xepLoai =
+        student.graduationDecision?.finalRanking?.classification ??
+        getGraduationClassification(diemTBHe10, diemTBHe4, academicRankingConvert || [])
 
       const gapRow: TableRow = {
         cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
@@ -982,10 +1036,25 @@ export default function StudentGradeSystem() {
         0
       )
 
+      const tongDiemNhanTinChiHe4 = student.semesters.reduce(
+        (acc, semester) =>
+          acc +
+          (semester.subjects?.reduce(
+            (s, sub) => s + (Number(sub?.thangDiem4) || 0) * (sub.soTinChi ?? 0),
+            0
+          ) ?? 0),
+        0
+      )
+
       const diemTBHe10 =
         tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))
 
-      const xepLoai = getScoreClassification(diemTBHe10, scoreConverts || [])
+      const diemTBHe4 =
+        tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
+
+      const xepLoai =
+        student.graduationDecision?.finalRanking?.classification ??
+        getGraduationClassification(diemTBHe10, diemTBHe4, academicRankingConvert || [])
 
       const gapRow: TableRow = {
         cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
