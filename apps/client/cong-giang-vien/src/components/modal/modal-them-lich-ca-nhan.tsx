@@ -14,7 +14,7 @@ import {
   taoDuLieuLuuLich,
   taoThoiGianLich,
   taoThongBaoLichGiaoNhau,
-  soSanhHoTenVietNam,
+  soSanhTheoFirstName,
   taoTuyChonNguoiLienQuan,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import { demSoLichGanTag } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/dem-lich-gan-tag"
@@ -115,7 +115,7 @@ const ModalThemLichCaNhan = () => {
         map.set(nguoi.id, taoTuyChonNguoiLienQuan(nguoi))
       }
     }
-    return [...map.values()].sort((a, b) => soSanhHoTenVietNam(a.ten, b.ten))
+    return [...map.values()].sort(soSanhTheoFirstName)
   }, [nguoiDung, lichHienTai?.relatedUserProfiles])
 
   const xuLyThayDoiForm = (

@@ -170,6 +170,8 @@ export type GiaTriFormLichCaNhan = {
 export const CHON_NGUOI_LIEN_QUAN = {
   id: true,
   fullname: true,
+  firstName: true,
+  lastName: true,
   email: true,
   code: true,
   lecturer: {
@@ -239,6 +241,8 @@ export const taoDieuKienTimNguoiLienQuan = (tuKhoa: string) => ({
 export type NguoiLienQuanTomTat = {
   id: string
   fullname?: string | null
+  firstName?: string | null
+  lastName?: string | null
   email?: string | null
   code?: string | null
   lecturer?: {
@@ -257,6 +261,8 @@ export type TuyChonNguoiLienQuan = {
   value: string
   label: string
   ten: string
+  firstName: string
+  lastName: string
   ma?: string
   maDonVi?: string
 }
@@ -306,6 +312,15 @@ export const soSanhHoTenVietNam = (a: string, b: string) => {
   return nameA.ten.localeCompare(nameB.ten, "vi") || nameA.ho.localeCompare(nameB.ho, "vi")
 }
 
+/** Sắp xếp theo firstName → lastName (fallback tách từ fullname nếu thiếu). */
+export const soSanhTheoFirstName = (a: TuyChonNguoiLienQuan, b: TuyChonNguoiLienQuan) => {
+  const firstA = a.firstName || phanTachHoTenVietNam(a.ten).ten
+  const firstB = b.firstName || phanTachHoTenVietNam(b.ten).ten
+  const lastA = a.lastName || phanTachHoTenVietNam(a.ten).ho
+  const lastB = b.lastName || phanTachHoTenVietNam(b.ten).ho
+  return firstA.localeCompare(firstB, "vi") || lastA.localeCompare(lastB, "vi")
+}
+
 export const taoTuyChonNguoiLienQuan = (nguoi: NguoiLienQuanTomTat): TuyChonNguoiLienQuan => {
   const ten = nguoi.fullname?.trim() || nguoi.email?.trim() || nguoi.id
   const ma = layMaNguoiLienQuan(nguoi)
@@ -314,6 +329,8 @@ export const taoTuyChonNguoiLienQuan = (nguoi: NguoiLienQuanTomTat): TuyChonNguo
   return {
     value: nguoi.id,
     ten,
+    firstName: nguoi.firstName?.trim() || "",
+    lastName: nguoi.lastName?.trim() || "",
     ma: ma || undefined,
     maDonVi: maDonVi || undefined,
     label: taoNhanNguoiLienQuan(nguoi),
