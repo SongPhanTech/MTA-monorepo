@@ -339,7 +339,6 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
       academicWarning: student.academicWarning,
       disciplinaryWarning: student.disciplinaryWarning,
       studentAcademicDecision: student.studentAcademicDecision,
-      xepLoaiHocTap: khoaHoc?.academicRankingConvert,
     })
 
     const giaiThuong = mapGiaiThuong(student.archivedAward)

@@ -102,7 +102,7 @@ export type HocBongSinhVien = {
   namHoc: string
   hocKy: string
   loaiHocBong: string
-  muc: string
+  gpaTaiThoiDiem: string
   giaTri: string
   trangThai: { label: string; color: string }
   ngayQuyetDinh: string

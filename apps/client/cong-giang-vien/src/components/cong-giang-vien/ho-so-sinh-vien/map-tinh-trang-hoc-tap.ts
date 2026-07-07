@@ -3,28 +3,8 @@ import type {
   SuKienCanhBaoKyLuat,
   TinhTrangHocTapSinhVien,
 } from "@components/cong-giang-vien/ho-so-sinh-vien/types"
-import { layHeDiemTotNghiep, phanLoaiDiemTotNghiep } from "@lib/tong-ket-hoc-ky"
-import {
-  AcademicActionType,
-  AcademicRankingBaseType,
-  type AcademicRankingConvert,
-  DecisionStatus,
-  RankingContext,
-} from "@workspace/db/client"
+import { AcademicActionType, DecisionStatus } from "@workspace/db/client"
 import dayjs from "dayjs"
-
-type XepLoaiHocTap = Pick<
-  AcademicRankingConvert,
-  | "classification"
-  | "baseScore"
-  | "base4Min"
-  | "base4Max"
-  | "base10Min"
-  | "base10Max"
-  | "graduated"
-  | "rankOrder"
-  | "context"
->
 
 type ScholarshipAwardRow = {
   id: string
@@ -71,7 +51,6 @@ export type MapTinhTrangHocTapInput = {
   academicWarning?: AcademicWarningRow[] | null
   disciplinaryWarning?: DisciplinaryWarningRow[] | null
   studentAcademicDecision?: AcademicDecisionRow[] | null
-  xepLoaiHocTap?: XepLoaiHocTap[] | null
 }
 
 const dinhDangNgay = (value?: Date | string | null) =>
@@ -96,28 +75,18 @@ const layNhanHanhDongHocVu = (action: AcademicActionType) => {
   }
 }
 
-const layMucTuGpa = (gpaAtAward: number, xepLoaiHocTap: XepLoaiHocTap[]) => {
-  if (!xepLoaiHocTap.length) return "—"
-  const ranks = xepLoaiHocTap as AcademicRankingConvert[]
-  const baseScore =
-    ranks[0]?.baseScore ??
-    (layHeDiemTotNghiep(ranks) === 4
-      ? AcademicRankingBaseType.Base4
-      : AcademicRankingBaseType.Base10)
-  const ketQua = phanLoaiDiemTotNghiep(gpaAtAward, ranks, baseScore)
-  return ketQua.classification ?? "—"
-}
+const dinhDangGpa = (gpaAtAward: number) =>
+  gpaAtAward != null && !Number.isNaN(Number(gpaAtAward))
+    ? Number(gpaAtAward).toFixed(2)
+    : "—"
 
-const mapHocBong = (
-  awards: ScholarshipAwardRow[],
-  xepLoaiHocTap: XepLoaiHocTap[]
-): HocBongSinhVien[] =>
+const mapHocBong = (awards: ScholarshipAwardRow[]): HocBongSinhVien[] =>
   awards.map((item) => ({
     id: item.id,
     namHoc: item.semester?.schoolYear?.name ?? "—",
     hocKy: item.semester?.name ?? "—",
     loaiHocBong: item.scholarship?.name ?? "—",
-    muc: layMucTuGpa(item.gpaAtAward, xepLoaiHocTap),
+    gpaTaiThoiDiem: dinhDangGpa(item.gpaAtAward),
     giaTri: dinhDangTien(item.amount),
     trangThai: { label: "Đã cấp", color: "green" },
     ngayQuyetDinh: dinhDangNgay(item.createdAt),
@@ -229,11 +198,7 @@ const layCapNhatCuoi = (
 }
 
 export const mapTinhTrangHocTap = (input: MapTinhTrangHocTapInput): TinhTrangHocTapSinhVien => {
-  const allXepLoai = input.xepLoaiHocTap ?? []
-  const xepLoaiStudying = allXepLoai.filter((item) => item.context === RankingContext.STUDYING)
-  const xepLoaiHocTap = xepLoaiStudying.length > 0 ? xepLoaiStudying : allXepLoai
-
-  const hocBong = mapHocBong(input.scholarshipAwards ?? [], xepLoaiHocTap)
+  const hocBong = mapHocBong(input.scholarshipAwards ?? [])
   const lichSuCanhBaoKyLuat = mapLichSuCanhBaoKyLuat(
     input.academicWarning ?? [],
     input.disciplinaryWarning ?? [],

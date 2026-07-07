@@ -6,7 +6,7 @@ import {
   mapLecturerToRow,
 } from "@components/cong-giang-vien/danh-ba/utils"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
-import { Avatar, Button, Input, Table, Tag } from "antd"
+import { Button, Input, Table, Tag } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { RefreshCw, Users } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
@@ -20,7 +20,10 @@ interface BangDanhBaProps {
   onReload: () => void
 }
 
-const CHIEU_CAO_HEADER_BANG = 96
+const CHIEU_CAO_DONG = 39
+const CHIEU_CAO_HEADER_TABLE = 40
+const CHIEU_CAO_PHAN_TRANG = 56
+const CHIEU_CAO_PADDING = 16
 
 const BangDanhBa = ({
   donViData,
@@ -31,21 +34,25 @@ const BangDanhBa = ({
   onReload,
 }: BangDanhBaProps) => {
   const vungBangRef = useRef<HTMLDivElement>(null)
-  const [chieuCaoBody, setChieuCaoBody] = useState(320)
+  const [chieuCaoKhungBang, setChieuCaoKhungBang] = useState(400)
+  const [trangHienTai, setTrangHienTai] = useState(1)
+  const [soBanGhiMoiTrang, setSoBanGhiMoiTrang] = useState(DEFAULT_PAGINATE_SIZE)
+
+  useEffect(() => {
+    setTrangHienTai(1)
+  }, [selectedOrgId, search])
 
   useEffect(() => {
     const el = vungBangRef.current
     if (!el) return
 
-    const capNhatChieuCao = () => {
-      setChieuCaoBody(Math.max(160, el.clientHeight - CHIEU_CAO_HEADER_BANG))
-    }
+    const capNhatChieuCao = () => setChieuCaoKhungBang(el.clientHeight)
 
     capNhatChieuCao()
     const observer = new ResizeObserver(capNhatChieuCao)
     observer.observe(el)
     return () => observer.disconnect()
-  }, [])
+  }, [selectedOrgId])
 
   const lecturers = useMemo(() => {
     if (!selectedOrgId) return []
@@ -64,6 +71,24 @@ const BangDanhBa = ({
     if (!selectedOrgId) return ""
     return donViData.find((item) => item.Id === selectedOrgId)?.sTen || ""
   }, [donViData, selectedOrgId])
+
+  const soDongTrangHienTai = useMemo(() => {
+    if (dataSource.length === 0) return 0
+    const batDau = (trangHienTai - 1) * soBanGhiMoiTrang
+    return Math.min(soBanGhiMoiTrang, dataSource.length - batDau)
+  }, [dataSource.length, trangHienTai, soBanGhiMoiTrang])
+
+  const chieuCaoScrollY = useMemo(() => {
+    if (soDongTrangHienTai === 0) return undefined
+
+    const chieuCaoToiDa = Math.max(
+      160,
+      chieuCaoKhungBang - CHIEU_CAO_HEADER_TABLE - CHIEU_CAO_PHAN_TRANG - CHIEU_CAO_PADDING
+    )
+    const chieuCaoTheoDong = soDongTrangHienTai * CHIEU_CAO_DONG
+
+    return Math.min(chieuCaoTheoDong, chieuCaoToiDa)
+  }, [soDongTrangHienTai, chieuCaoKhungBang])
 
   const columns: ColumnsType<DanhBaRow> = [
     {
@@ -127,7 +152,7 @@ const BangDanhBa = ({
 
   return (
     <div className="flex h-full min-h-0 flex-col rounded-lg border border-gray-200 bg-white">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-4 py-3">
+      <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-4 py-3">
         <div className="min-w-0">
           <p className="m-0 text-sm font-semibold text-gray-800">{selectedOrgName}</p>
         </div>
@@ -154,11 +179,19 @@ const BangDanhBa = ({
           bordered
           columns={columns}
           dataSource={dataSource}
-          scroll={{ x: 1200, y: chieuCaoBody }}
+          scroll={{ x: 1200, ...(chieuCaoScrollY ? { y: chieuCaoScrollY } : {}) }}
           pagination={{
-            pageSize: DEFAULT_PAGINATE_SIZE,
-            showSizeChanger: true,
+            current: trangHienTai,
+            pageSize: soBanGhiMoiTrang,
+            showSizeChanger: {
+              labelRender: ({ value }) => `${value} / trang`,
+              optionRender: (oriOption) => `${oriOption.value} / trang`,
+            },
             showTotal: (total) => `Tổng ${total} bản ghi`,
+            onChange: (trang, kichThuocTrang) => {
+              setTrangHienTai(trang)
+              setSoBanGhiMoiTrang(kichThuocTrang)
+            },
           }}
         />
       </div>
