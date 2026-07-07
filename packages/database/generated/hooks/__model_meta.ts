@@ -10190,14 +10190,30 @@ const metadata: ModelMeta = {
                     name: "trainingMajor",
                     type: "TrainingMajor",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'curriculum',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingMajorId" },
                 }, trainingMajorId: {
                     name: "trainingMajorId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'trainingMajor',
+                }, trainingField: {
+                    name: "trainingField",
+                    type: "TrainingField",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'curriculum',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingFieldId" },
+                }, trainingFieldId: {
+                    name: "trainingFieldId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingField',
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -13414,6 +13430,12 @@ const metadata: ModelMeta = {
                 }, trainingMajors: {
                     name: "trainingMajors",
                     type: "TrainingMajor",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingField',
+                }, curriculum: {
+                    name: "curriculum",
+                    type: "Curriculum",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingField',

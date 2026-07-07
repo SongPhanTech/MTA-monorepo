@@ -3117,8 +3117,10 @@ model Curriculum {
   englishName              String?
   managementOrganization   DM_DonVi            @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String              @db.Uuid()
-  trainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id])
-  trainingMajorId          String
+  trainingMajor            TrainingMajor?      @relation(fields: [trainingMajorId], references: [id])
+  trainingMajorId          String?
+  trainingField            TrainingField?      @relation(fields: [trainingFieldId], references: [id])
+  trainingFieldId          String?
   trainingObjectType       TrainingObjectType  @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId     String
   information              String?
@@ -3883,6 +3885,7 @@ model TrainingField {
   organizationId      String                              @db.Uuid()
   trainingObjectTypes TrainingFieldOnTrainingObjectType[]
   trainingMajors      TrainingMajor[]
+  curriculum          Curriculum[]
   surveyObjectTypes   SurveyObjectType[]
   documentFiles       DocumentFile[]
 

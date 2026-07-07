@@ -10978,10 +10978,28 @@
             "type": "string"
           },
           "trainingMajor": {
-            "$ref": "#/components/schemas/TrainingMajor"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TrainingMajor"
+              }
+            ],
+            "nullable": true
           },
           "trainingMajorId": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
+          },
+          "trainingField": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TrainingField"
+              }
+            ],
+            "nullable": true
+          },
+          "trainingFieldId": {
+            "type": "string",
+            "nullable": true
           },
           "trainingObjectType": {
             "$ref": "#/components/schemas/TrainingObjectType"
@@ -11018,8 +11036,6 @@
           "name",
           "managementOrganization",
           "managementOrganizationId",
-          "trainingMajor",
-          "trainingMajorId",
           "trainingObjectType",
           "trainingObjectTypeId"
         ]
@@ -13899,6 +13915,12 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/TrainingMajor"
+            }
+          },
+          "curriculum": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Curriculum"
             }
           },
           "surveyObjectTypes": {
@@ -40755,7 +40777,12 @@
             "type": "string"
           },
           "trainingMajorId": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
+          },
+          "trainingFieldId": {
+            "type": "string",
+            "nullable": true
           },
           "trainingObjectTypeId": {
             "type": "string"
@@ -40800,7 +40827,6 @@
           "updatedAt",
           "name",
           "managementOrganizationId",
-          "trainingMajorId",
           "trainingObjectTypeId"
         ]
       },
@@ -87788,6 +87814,9 @@
           "trainingMajorId": {
             "type": "integer"
           },
+          "trainingFieldId": {
+            "type": "integer"
+          },
           "trainingObjectTypeId": {
             "type": "integer"
           },
@@ -87814,6 +87843,7 @@
           "englishName",
           "managementOrganizationId",
           "trainingMajorId",
+          "trainingFieldId",
           "trainingObjectTypeId",
           "information",
           "renderPath",
@@ -87871,6 +87901,10 @@
             "nullable": true
           },
           "trainingMajorId": {
+            "type": "string",
+            "nullable": true
+          },
+          "trainingFieldId": {
             "type": "string",
             "nullable": true
           },
@@ -87939,6 +87973,10 @@
             "nullable": true
           },
           "trainingMajorId": {
+            "type": "string",
+            "nullable": true
+          },
+          "trainingFieldId": {
             "type": "string",
             "nullable": true
           },

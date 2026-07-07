@@ -908,7 +908,9 @@ export default function StudentFixedClassPage() {
       ]
 
       const bodyRows = [...studentRows, ...thongKeRows, ...columnFooterRows, ...ghiChuRows]
-      const chuyenNganhText = `${fixedClass?.curriculumVersion?.curriculum.trainingMajor.code} - ${fixedClass?.curriculumVersion?.curriculum.trainingMajor.name}`
+      const curriculum = fixedClass?.curriculumVersion?.curriculum
+      const nganhHoacChuyenNganh = curriculum?.trainingMajor ?? curriculum?.trainingMajor?.trainingField
+      const chuyenNganhText = [nganhHoacChuyenNganh?.code, nganhHoacChuyenNganh?.name].filter(Boolean).join(" - ")
 
       await exportFromTemplate({
         templateUrl: getMinioUrl("/mta/template/BangdiemTheoLop_v3.xlsx"),

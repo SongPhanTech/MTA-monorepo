@@ -9,6 +9,7 @@ import type { Curriculum, DocumentFile } from "@workspace/db/client"
 import {
   useCreateCurriculum,
   useFindManyDM_DonVi,
+  useFindManyTrainingField,
   useFindManyTrainingMajor,
   useFindUniqueCurriculum,
   useUpdateCurriculum,
@@ -51,8 +52,9 @@ const PutCurriculum = () => {
   })
 
   const trainingObjectTypeIdForm = Form.useWatch("trainingObjectTypeId", form)
+  const trainingFieldIdForm = Form.useWatch("trainingFieldId", form)
 
-  const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+  const { data: trainingFieldData = [] } = useFindManyTrainingField({
     select: {
       id: true,
       code: true,
@@ -68,6 +70,25 @@ const PutCurriculum = () => {
       : {},
   })
 
+  const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+    select: {
+      id: true,
+      code: true,
+      name: true,
+    },
+    orderBy: { name: "asc" },
+    where: {
+      ...(trainingObjectTypeIdForm
+        ? {
+            trainingObjectTypes: {
+              some: { trainingObjectTypeId: trainingObjectTypeIdForm },
+            },
+          }
+        : {}),
+      ...(trainingFieldIdForm ? { trainingFieldId: trainingFieldIdForm } : {}),
+    },
+  })
+
   const { mutateAsync: createCurriculum } = useCreateCurriculum()
   const { mutateAsync: updateCurriculum } = useUpdateCurriculum()
   async function onOk(output?: PutCurriculum) {
@@ -80,6 +101,7 @@ const PutCurriculum = () => {
         englishName: output.englishName,
         description: output.description,
         managementOrganizationId: output.managementOrganizationId,
+        trainingFieldId: output.trainingFieldId,
         trainingMajorId: output.trainingMajorId,
         trainingObjectTypeId: output.trainingObjectTypeId,
         active: output.active,
@@ -236,6 +258,22 @@ const PutCurriculum = () => {
                 label: i.name,
               }
             })}
+          />
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <FormItem form={form} name="trainingFieldId" label="Ngành đào tạo" required>
+          <Select
+            placeholder="Chọn ngành đào tạo"
+            options={trainingFieldData.map((field) => {
+              return {
+                value: field.id,
+                label: [field.code, field.name].filter(Boolean).join(" - "),
+              }
+            })}
+            onChange={() => {
+              form.setFieldValue("trainingMajorId", undefined)
+            }}
           />
         </FormItem>
       </Col>

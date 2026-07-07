@@ -153,6 +153,7 @@ model TrainingField extends Base {
   organizationId      String                              @db.Uuid
   trainingObjectTypes TrainingFieldOnTrainingObjectType[]
   trainingMajors      TrainingMajor[]
+  curriculum          Curriculum[]
   surveyObjectTypes   SurveyObjectType[]
   documentFiles       DocumentFile[]
 

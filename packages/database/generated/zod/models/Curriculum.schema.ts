@@ -37,7 +37,8 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     managementOrganization: z.record(z.string(), z.unknown()),
-    trainingMajor: z.record(z.string(), z.unknown()),
+    trainingMajor: z.record(z.string(), z.unknown()).optional(),
+    trainingField: z.record(z.string(), z.unknown()).optional(),
     trainingObjectType: z.record(z.string(), z.unknown()),
     documentFiles: z.array(z.unknown()).optional(),
     curriculumVersion: z.array(z.unknown()).optional(),
@@ -45,7 +46,8 @@ const relationSchema = z.object({
 );
 const fkSchema = z.object({
     managementOrganizationId: z.string().uuid(),
-    trainingMajorId: z.string(),
+    trainingMajorId: z.string().nullish(),
+    trainingFieldId: z.string().nullish(),
     trainingObjectTypeId: z.string(),
 }
 );

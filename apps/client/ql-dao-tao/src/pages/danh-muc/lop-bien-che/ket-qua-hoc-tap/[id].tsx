@@ -524,7 +524,9 @@ export default function StudentScoreClassPage() {
       dateOfBirth: student?.userProfile?.dateOfBirth,
       maSV: student?.code,
       htdt: student?.fixedClass?.trainingCourse.trainingObjectType.name,
-      nganh: student?.curriculumVersion?.curriculum.trainingMajor.name,
+      nganh:
+        student?.curriculumVersion?.curriculum.trainingMajor?.name ??
+        student?.curriculumVersion?.curriculum.trainingMajor?.trainingField?.name,
       lop: student?.fixedClass?.trainingCourse?.name,
       hocKis,
     }
@@ -778,7 +780,9 @@ export default function StudentScoreClassPage() {
       dateOfBirth: student?.userProfile?.dateOfBirth,
       maSV: student?.code,
       htdt: student?.fixedClass?.trainingCourse.trainingObjectType.name,
-      nganh: student?.curriculumVersion?.curriculum.trainingMajor.name,
+      nganh:
+        student?.curriculumVersion?.curriculum.trainingMajor?.name ??
+        student?.curriculumVersion?.curriculum.trainingMajor?.trainingField?.name,
       lop: student?.fixedClass?.trainingCourse?.name,
       hocKis,
     }
@@ -1031,7 +1035,9 @@ export default function StudentScoreClassPage() {
       thoiGianDaoTao: student?.curriculumVersion?.trainingTime?.name,
       nganhDaoTao: student?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name,
       trinhDoDaoTao: student?.curriculumVersion?.trainingLevel?.name,
-      chuyenNganh: student?.curriculumVersion?.curriculum.trainingMajor.name,
+      chuyenNganh:
+        student?.curriculumVersion?.curriculum.trainingMajor?.name ??
+        student?.curriculumVersion?.curriculum.trainingMajor?.trainingField?.name,
       hinhThucDaoTao: student?.curriculumVersion?.trainingType?.name,
     }
 
@@ -1162,8 +1168,8 @@ export default function StudentScoreClassPage() {
             student?.fixedClass?.trainingCourse.trainingObjectType.name,
             student?.fixedClass?.trainingCourse?.name,
             student?.curriculumVersion?.name,
-            student?.curriculumVersion?.curriculum.trainingMajor.name,
-            student?.curriculumVersion?.curriculum.trainingMajor.trainingField.name,
+            student?.curriculumVersion?.curriculum.trainingMajor?.name,
+            student?.curriculumVersion?.curriculum.trainingMajor?.trainingField?.name,
           ]
             .filter(Boolean)
             .join(" - ")}

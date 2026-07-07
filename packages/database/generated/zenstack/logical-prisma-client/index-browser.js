@@ -1898,6 +1898,7 @@ exports.Prisma.CurriculumScalarFieldEnum = {
   englishName: 'englishName',
   managementOrganizationId: 'managementOrganizationId',
   trainingMajorId: 'trainingMajorId',
+  trainingFieldId: 'trainingFieldId',
   trainingObjectTypeId: 'trainingObjectTypeId',
   information: 'information',
   renderPath: 'renderPath'
@@ -6213,6 +6214,7 @@ exports.Prisma.CurriculumOrderByRelevanceFieldEnum = {
   englishName: 'englishName',
   managementOrganizationId: 'managementOrganizationId',
   trainingMajorId: 'trainingMajorId',
+  trainingFieldId: 'trainingFieldId',
   trainingObjectTypeId: 'trainingObjectTypeId',
   information: 'information',
   renderPath: 'renderPath'
