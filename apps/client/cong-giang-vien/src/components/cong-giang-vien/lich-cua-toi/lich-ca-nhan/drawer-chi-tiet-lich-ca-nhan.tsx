@@ -5,7 +5,7 @@ import {
   layNhanLapLai,
   layNhanNhacLichChiTiet,
   MAU_LOAI_MAC_DINH,
-  soSanhHoTenVietNam,
+  soSanhNguoiLienQuan,
   taoNhanNguoiLienQuan,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import { cn } from "@workspace/ui/lib/utils"
@@ -103,11 +103,7 @@ const DrawerChiTietLichCaNhan = ({
   const mauTag = tag?.color ?? MAU_LOAI_MAC_DINH
   const tenTag = tag?.name ?? "Loại lịch"
   const daHoanThanh = lich?.isCompleted ?? false
-  const nguoiLienQuan = [...(lich?.relatedUserProfiles ?? [])].sort((a, b) => {
-    const tenA = a.fullname?.trim() || a.email?.trim() || a.id
-    const tenB = b.fullname?.trim() || b.email?.trim() || b.id
-    return soSanhHoTenVietNam(tenA, tenB)
-  })
+  const nguoiLienQuan = [...(lich?.relatedUserProfiles ?? [])].sort(soSanhNguoiLienQuan)
   const hienThiNguoiLienQuan = nguoiLienQuan.slice(0, 3)
   const conLaiNguoi = nguoiLienQuan.length - hienThiNguoiLienQuan.length
   const thoiGian = lich ? formatGioChiTietLich(lich.startTime, lich.endTime, lich.allDay) : null

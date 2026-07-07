@@ -1,15 +1,13 @@
+import NhanTrangThai from "@components/cong-giang-vien/ho-so-sinh-vien/nhan-trang-thai"
 import { FIXED_CLASS_STUDENT_STATUS } from "@constants/constants"
-import OChiSoThongKe from "@components/cong-giang-vien/o-chi-so-thong-ke"
-import { Avatar, Card, Tag } from "antd"
+import { Avatar, Card } from "antd"
 import {
-  Award,
   BookOpen,
   Calendar,
+  FileText,
   GraduationCap,
   Mail,
   Phone,
-  Shield,
-  Star,
   UserRound,
 } from "lucide-react"
 import type { ReactNode } from "react"
@@ -44,12 +42,16 @@ const HangThongTin = ({
   nhan: string
   giaTri: string
 }) => (
-  <div className="flex min-w-0 items-center gap-2">
-    <span className="shrink-0 text-cgv-green-dark/70">{icon}</span>
-    <p className="m-0 min-w-0 truncate text-xs leading-snug text-gray-600">
-      <span className="text-gray-400">{nhan}:</span>{" "}
-      <span className="font-medium text-gray-800">{giaTri || "—"}</span>
-    </p>
+  <div className="flex min-w-0 items-center gap-2.5">
+    <span className="flex h-8 w-8 shrink-0 items-center justify-center text-cgv-green-dark">
+      {icon}
+    </span>
+    <div className="min-w-0 flex-1">
+      <p className="m-0 text-[11px] leading-tight text-gray-500">{nhan}</p>
+      <p className="m-0 mt-0.5 line-clamp-2 break-words text-xs font-semibold leading-snug text-gray-800">
+        {giaTri || "—"}
+      </p>
+    </div>
   </div>
 )
 
@@ -57,125 +59,133 @@ const OThongKe = ({
   tieuDe,
   giaTri,
   phu,
-  icon,
   mau = "blue",
-  compact = false,
 }: {
   tieuDe: string
   giaTri: string
   phu?: string
-  icon?: ReactNode
   mau?: "blue" | "green"
-  compact?: boolean
 }) => (
-  <OChiSoThongKe
-    label={tieuDe}
-    icon={icon}
-    variant={mau === "green" ? "green" : "blue"}
-    plain
-    compact={compact}
-    value={
-      <>
-        {giaTri}
-        {phu ? <span className="text-sm font-normal text-gray-400"> {phu}</span> : null}
-      </>
-    }
-    valueClassName={mau === "green" ? "text-cgv-green-dark" : "text-blue-600"}
-  />
+  <div className="flex h-full flex-col items-center justify-center px-3 py-4 text-center">
+    <p className="m-0 text-[11px] leading-tight text-gray-500">{tieuDe}</p>
+    <p
+      className={`m-0 mt-1.5 text-lg font-bold leading-tight ${
+        mau === "green" ? "text-cgv-green-dark" : "text-blue-600"
+      }`}
+    >
+      {giaTri}
+      {phu ? <span className="text-sm font-semibold text-gray-400"> {phu}</span> : null}
+    </p>
+  </div>
+)
+
+const CotThongTin = ({
+  children,
+  className = "",
+}: {
+  children: ReactNode
+  className?: string
+}) => (
+  <div
+    className={`flex min-w-0 flex-col justify-start gap-2.5 border-gray-200 py-1 xl:h-full xl:border-l xl:px-5 ${className}`}
+  >
+    {children}
+  </div>
 )
 
 const TheHeaderKetQuaHocTap = ({ data }: { data: DuLieuHeaderKetQuaHocTap }) => (
   <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch">
-    <Card className="min-w-0 flex-1 rounded-xl shadow-sm" styles={{ body: { padding: "14px 18px" } }}>
-      <div className="flex items-start gap-5">
-        <div className="shrink-0 rounded-full bg-cgv-green/10 p-1 ring-1 ring-cgv-green-dark/10">
+    <Card
+      className="min-w-0 flex-1 rounded-xl border border-gray-200 shadow-sm"
+      styles={{ body: { padding: "18px 22px" } }}
+    >
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-4 xl:items-stretch xl:gap-0">
+        <div className="flex min-w-0 items-center gap-4 xl:pr-2">
           <Avatar
-            size={64}
+            size={88}
             src={data.anhDaiDien}
-            icon={<UserRound size={28} />}
-            className="bg-cgv-green/15 text-cgv-green-dark"
+            icon={<UserRound size={36} />}
+            className="shrink-0 bg-cgv-green/15 text-cgv-green-dark"
           />
-        </div>
-        <div className="min-w-0 flex-1 pt-0.5">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-            <p className="m-0 text-sm font-bold text-cgv-green-dark">{data.hoVaTen}</p>
-            <Tag color={data.trangThai.color} className="m-0 rounded-full px-2 py-0 text-[11px] leading-5">
-              {data.trangThai.label}
-            </Tag>
-            <span className="hidden h-3 w-px shrink-0 bg-gray-200 sm:block" />
-            <p className="m-0 text-xs text-gray-600">
-              <span className="text-gray-400">MSSV</span>{" "}
-              <span className="font-semibold text-gray-800">{data.maSinhVien}</span>
+          <div className="min-w-0 flex-1">
+            <p className="m-0 text-base font-bold leading-tight text-cgv-green-dark">
+              {data.hoVaTen}
             </p>
-            <span className="hidden h-3 w-px shrink-0 bg-gray-200 sm:block" />
-            <p className="m-0 text-xs text-gray-600">
-              <span className="text-gray-400">Giới tính</span>{" "}
-              <span className="font-medium text-gray-800">{data.gioiTinh}</span>
-            </p>
-            <span className="hidden h-3 w-px shrink-0 bg-gray-200 md:block" />
-            <p className="m-0 min-w-0 truncate text-xs text-gray-600">
-              <span className="text-gray-400">Lớp</span>{" "}
-              <span className="font-medium text-gray-800">{data.lop}</span>
-            </p>
+            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-600">
+              <span>
+                <span className="text-gray-500">MSSV:</span>{" "}
+                <span className="font-semibold text-gray-800">{data.maSinhVien}</span>
+              </span>
+              <span className="hidden h-3 w-px bg-gray-200 sm:block" />
+              <span>
+                <span className="text-gray-500">Giới tính:</span>{" "}
+                <span className="font-semibold text-gray-800">{data.gioiTinh}</span>
+              </span>
+            </div>
+            <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs text-gray-600">
+              <span>
+                <span className="text-gray-500">Lớp:</span>{" "}
+                <span className="font-semibold text-gray-800">{data.lop}</span>
+              </span>
+              <NhanTrangThai label={data.trangThai.label} />
+            </div>
           </div>
+        </div>
 
-          <div className="mt-3 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <HangThongTin icon={<Calendar size={13} />} nhan="Ngày sinh" giaTri={data.ngaySinh} />
-            <HangThongTin icon={<Mail size={13} />} nhan="Email" giaTri={data.email} />
-            <HangThongTin icon={<Phone size={13} />} nhan="SĐT" giaTri={data.sdt} />
-            <HangThongTin icon={<GraduationCap size={13} />} nhan="Khóa học" giaTri={data.khoaHoc} />
-            <HangThongTin icon={<BookOpen size={13} />} nhan="Khoa" giaTri={data.khoa} />
-            <HangThongTin
-              icon={<BookOpen size={13} />}
-              nhan="CTĐT"
-              giaTri={data.chuongTrinhDaoTao}
-            />
-            <HangThongTin
-              icon={<Calendar size={13} />}
-              nhan="Ngày vào trường"
-              giaTri={data.ngayVaoTruong}
-            />
-          </div>
-        </div>
+        <CotThongTin>
+          <HangThongTin icon={<Calendar size={16} />} nhan="Ngày sinh" giaTri={data.ngaySinh} />
+          <HangThongTin icon={<Mail size={16} />} nhan="Email" giaTri={data.email} />
+          <HangThongTin icon={<Phone size={16} />} nhan="SĐT liên hệ" giaTri={data.sdt} />
+        </CotThongTin>
+
+        <CotThongTin>
+          <HangThongTin
+            icon={<GraduationCap size={16} />}
+            nhan="Khóa học"
+            giaTri={data.khoaHoc}
+          />
+          <HangThongTin icon={<BookOpen size={16} />} nhan="Khoa" giaTri={data.khoa} />
+          <HangThongTin
+            icon={<FileText size={16} />}
+            nhan="Chương trình đào tạo"
+            giaTri={data.chuongTrinhDaoTao}
+          />
+        </CotThongTin>
+
+        <CotThongTin>
+          <HangThongTin
+            icon={<Calendar size={16} />}
+            nhan="Ngày vào trường"
+            giaTri={data.ngayVaoTruong}
+          />
+        </CotThongTin>
       </div>
     </Card>
 
     <Card
-      className="w-full shrink-0 rounded-xl shadow-sm lg:w-[272px]"
+      className="w-full shrink-0 rounded-xl border border-gray-200 shadow-sm lg:w-[260px]"
       styles={{ body: { padding: 0 } }}
     >
-      <div className="grid grid-cols-2 divide-x divide-y divide-gray-100">
+      <div className="grid h-full grid-cols-2 divide-x divide-y divide-gray-100">
         <OThongKe
-          tieuDe="GPA hiện tại"
+          tieuDe="CPA hiện tại"
           giaTri={data.gpaHienTai}
           phu="/ 4.00"
-          icon={<Award size={16} />}
           mau="blue"
-          compact
         />
         <OThongKe
           tieuDe="Tín chỉ tích lũy"
           giaTri={data.tinChiTichLuy}
           phu={`/ ${data.tinChiTong}`}
-          icon={<GraduationCap size={16} />}
           mau="blue"
-          compact
         />
         <OThongKe
           tieuDe="Điểm rèn luyện TB"
           giaTri={data.diemRenLuyenTb}
           phu="/ 100"
-          icon={<Shield size={16} />}
           mau="green"
-          compact
         />
-        <OThongKe
-          tieuDe="Xếp loại học lực"
-          giaTri={data.xepLoaiHocLuc}
-          icon={<Star size={16} />}
-          mau="green"
-          compact
-        />
+        <OThongKe tieuDe="Xếp loại học lực" giaTri={data.xepLoaiHocLuc} mau="green" />
       </div>
     </Card>
   </div>
