@@ -37,3 +37,18 @@
 .ant-table-expanded-row:hover {
   background-color: aliceblue;
 }
+
+/* Bảng tổng kết lớp quản lý — hiện thanh cuộn ngang */
+.bang-tong-ket .ant-table-body {
+  scrollbar-width: thin;
+}
+
+.bang-tong-ket .ant-table-body::-webkit-scrollbar {
+  width: 6px;
+  height: 8px;
+}
+
+.bang-tong-ket .ant-table-body::-webkit-scrollbar-thumb {
+  visibility: visible;
+  background-color: rgba(180, 180, 180, 0.5);
+}

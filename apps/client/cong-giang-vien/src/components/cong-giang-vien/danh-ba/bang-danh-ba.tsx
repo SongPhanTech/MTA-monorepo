@@ -92,6 +92,13 @@ const BangDanhBa = ({
 
   const columns: ColumnsType<DanhBaRow> = [
     {
+      title: "STT",
+      width: 56,
+      align: "center",
+      fixed: "left",
+      render: (_value, _record, index) => (trangHienTai - 1) * soBanGhiMoiTrang + index + 1,
+    },
+    {
       title: "Mã cán bộ",
       dataIndex: "maCanBo",
       width: 120,
@@ -179,7 +186,7 @@ const BangDanhBa = ({
           bordered
           columns={columns}
           dataSource={dataSource}
-          scroll={{ x: 1200, ...(chieuCaoScrollY ? { y: chieuCaoScrollY } : {}) }}
+          scroll={{ x: 1256, ...(chieuCaoScrollY ? { y: chieuCaoScrollY } : {}) }}
           pagination={{
             current: trangHienTai,
             pageSize: soBanGhiMoiTrang,

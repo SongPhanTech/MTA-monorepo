@@ -12,14 +12,12 @@ const TrangHoSoSinhVien = ({ hoSo }: TrangHoSoSinhVienProps) => {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:items-start">
-      <div className="lg:col-span-3">
+    <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 lg:grid-cols-[300px_minmax(0,1fr)] lg:items-stretch">
+      <div className="flex h-full min-h-0 flex-col overflow-hidden">
         <TheTomTatSinhVien data={hoSo.tomTat} onXemAnhGoc={xemAnhGoc} />
       </div>
-      <div className="lg:col-span-9">
-        <div className="overflow-hidden rounded-lg border border-gray-100 bg-white">
-          <TabNoiDungHoSoSinhVien hoSo={hoSo} />
-        </div>
+      <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-gray-100 bg-white">
+        <TabNoiDungHoSoSinhVien hoSo={hoSo} />
       </div>
     </div>
   )

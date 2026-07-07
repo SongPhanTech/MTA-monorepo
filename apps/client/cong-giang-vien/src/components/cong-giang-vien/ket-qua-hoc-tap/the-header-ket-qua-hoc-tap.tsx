@@ -44,14 +44,12 @@ const HangThongTin = ({
   nhan: string
   giaTri: string
 }) => (
-  <div className="flex items-center gap-2 py-1.5">
-    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-50 text-cgv-green-dark">
-      {icon}
-    </div>
-    <div className="min-w-0 flex-1">
-      <p className="m-0 text-[11px] leading-tight text-gray-500">{nhan}</p>
-      <p className="m-0 mt-0.5 truncate text-xs font-medium leading-snug text-gray-800">{giaTri}</p>
-    </div>
+  <div className="flex min-w-0 items-center gap-2">
+    <span className="shrink-0 text-cgv-green-dark/70">{icon}</span>
+    <p className="m-0 min-w-0 truncate text-xs leading-snug text-gray-600">
+      <span className="text-gray-400">{nhan}:</span>{" "}
+      <span className="font-medium text-gray-800">{giaTri || "—"}</span>
+    </p>
   </div>
 )
 
@@ -61,18 +59,21 @@ const OThongKe = ({
   phu,
   icon,
   mau = "blue",
+  compact = false,
 }: {
   tieuDe: string
   giaTri: string
   phu?: string
   icon?: ReactNode
   mau?: "blue" | "green"
+  compact?: boolean
 }) => (
   <OChiSoThongKe
     label={tieuDe}
     icon={icon}
     variant={mau === "green" ? "green" : "blue"}
     plain
+    compact={compact}
     value={
       <>
         {giaTri}
@@ -84,70 +85,63 @@ const OThongKe = ({
 )
 
 const TheHeaderKetQuaHocTap = ({ data }: { data: DuLieuHeaderKetQuaHocTap }) => (
-  <div className="flex flex-col gap-4 xl:flex-row xl:items-stretch">
-    <Card className="flex-1 rounded-xl shadow-sm" styles={{ body: { padding: "20px 24px" } }}>
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-stretch">
-        <div className="flex shrink-0 gap-4 lg:w-[220px] lg:flex-col lg:items-center lg:text-center">
+  <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch">
+    <Card className="min-w-0 flex-1 rounded-xl shadow-sm" styles={{ body: { padding: "14px 18px" } }}>
+      <div className="flex items-start gap-5">
+        <div className="shrink-0 rounded-full bg-cgv-green/10 p-1 ring-1 ring-cgv-green-dark/10">
           <Avatar
-            size={72}
+            size={64}
             src={data.anhDaiDien}
-            icon={<UserRound size={32} />}
-            className="shrink-0 bg-cgv-green/15 text-cgv-green-dark"
+            icon={<UserRound size={28} />}
+            className="bg-cgv-green/15 text-cgv-green-dark"
           />
-          <div className="min-w-0 flex-1 lg:flex-none">
-            <p className="m-0 text-base font-bold text-cgv-green-dark">{data.hoVaTen}</p>
-            <p className="m-0 mt-1.5 text-xs text-gray-600">
-              <span className="text-gray-500">MSSV:</span>{" "}
-              <span className="font-semibold text-gray-800">{data.maSinhVien}</span>
-            </p>
-            <p className="m-0 mt-1 text-xs text-gray-600">
-              <span className="text-gray-500">Giới tính:</span>{" "}
-              <span className="font-semibold text-gray-800">{data.gioiTinh}</span>
-            </p>
-            <p className="m-0 mt-1 text-xs text-gray-600">
-              <span className="text-gray-500">Lớp:</span>{" "}
-              <span className="font-semibold text-gray-800">{data.lop}</span>
-            </p>
-            <Tag color={data.trangThai.color} className="mt-2 rounded-full px-3">
+        </div>
+        <div className="min-w-0 flex-1 pt-0.5">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            <p className="m-0 text-sm font-bold text-cgv-green-dark">{data.hoVaTen}</p>
+            <Tag color={data.trangThai.color} className="m-0 rounded-full px-2 py-0 text-[11px] leading-5">
               {data.trangThai.label}
             </Tag>
+            <span className="hidden h-3 w-px shrink-0 bg-gray-200 sm:block" />
+            <p className="m-0 text-xs text-gray-600">
+              <span className="text-gray-400">MSSV</span>{" "}
+              <span className="font-semibold text-gray-800">{data.maSinhVien}</span>
+            </p>
+            <span className="hidden h-3 w-px shrink-0 bg-gray-200 sm:block" />
+            <p className="m-0 text-xs text-gray-600">
+              <span className="text-gray-400">Giới tính</span>{" "}
+              <span className="font-medium text-gray-800">{data.gioiTinh}</span>
+            </p>
+            <span className="hidden h-3 w-px shrink-0 bg-gray-200 md:block" />
+            <p className="m-0 min-w-0 truncate text-xs text-gray-600">
+              <span className="text-gray-400">Lớp</span>{" "}
+              <span className="font-medium text-gray-800">{data.lop}</span>
+            </p>
           </div>
-        </div>
 
-        <div className="hidden w-px shrink-0 bg-gray-200 lg:block" />
-
-        <div className="min-w-0 flex-1 lg:max-w-[220px]">
-          <HangThongTin icon={<Calendar size={15} />} nhan="Ngày sinh" giaTri={data.ngaySinh} />
-          <HangThongTin icon={<Mail size={15} />} nhan="Email" giaTri={data.email} />
-          <HangThongTin icon={<Phone size={15} />} nhan="SĐT liên hệ" giaTri={data.sdt} />
-        </div>
-
-        <div className="hidden w-px shrink-0 bg-gray-200 lg:block" />
-
-        <div className="min-w-0 flex-1 lg:max-w-[240px]">
-          <HangThongTin icon={<GraduationCap size={15} />} nhan="Khóa học" giaTri={data.khoaHoc} />
-          <HangThongTin icon={<BookOpen size={15} />} nhan="Khoa" giaTri={data.khoa} />
-          <HangThongTin
-            icon={<BookOpen size={15} />}
-            nhan="Chương trình đào tạo"
-            giaTri={data.chuongTrinhDaoTao}
-          />
-        </div>
-
-        <div className="hidden w-px shrink-0 bg-gray-200 lg:block" />
-
-        <div className="min-w-0 flex-1 lg:max-w-[180px]">
-          <HangThongTin
-            icon={<Calendar size={15} />}
-            nhan="Ngày vào trường"
-            giaTri={data.ngayVaoTruong}
-          />
+          <div className="mt-3 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <HangThongTin icon={<Calendar size={13} />} nhan="Ngày sinh" giaTri={data.ngaySinh} />
+            <HangThongTin icon={<Mail size={13} />} nhan="Email" giaTri={data.email} />
+            <HangThongTin icon={<Phone size={13} />} nhan="SĐT" giaTri={data.sdt} />
+            <HangThongTin icon={<GraduationCap size={13} />} nhan="Khóa học" giaTri={data.khoaHoc} />
+            <HangThongTin icon={<BookOpen size={13} />} nhan="Khoa" giaTri={data.khoa} />
+            <HangThongTin
+              icon={<BookOpen size={13} />}
+              nhan="CTĐT"
+              giaTri={data.chuongTrinhDaoTao}
+            />
+            <HangThongTin
+              icon={<Calendar size={13} />}
+              nhan="Ngày vào trường"
+              giaTri={data.ngayVaoTruong}
+            />
+          </div>
         </div>
       </div>
     </Card>
 
     <Card
-      className="w-full shrink-0 rounded-xl shadow-sm xl:w-[300px]"
+      className="w-full shrink-0 rounded-xl shadow-sm lg:w-[272px]"
       styles={{ body: { padding: 0 } }}
     >
       <div className="grid grid-cols-2 divide-x divide-y divide-gray-100">
@@ -155,28 +149,32 @@ const TheHeaderKetQuaHocTap = ({ data }: { data: DuLieuHeaderKetQuaHocTap }) => 
           tieuDe="GPA hiện tại"
           giaTri={data.gpaHienTai}
           phu="/ 4.00"
-          icon={<Award size={18} />}
+          icon={<Award size={16} />}
           mau="blue"
+          compact
         />
         <OThongKe
           tieuDe="Tín chỉ tích lũy"
           giaTri={data.tinChiTichLuy}
           phu={`/ ${data.tinChiTong}`}
-          icon={<GraduationCap size={18} />}
+          icon={<GraduationCap size={16} />}
           mau="blue"
+          compact
         />
         <OThongKe
           tieuDe="Điểm rèn luyện TB"
           giaTri={data.diemRenLuyenTb}
           phu="/ 100"
-          icon={<Shield size={18} />}
+          icon={<Shield size={16} />}
           mau="green"
+          compact
         />
         <OThongKe
           tieuDe="Xếp loại học lực"
           giaTri={data.xepLoaiHocLuc}
-          icon={<Star size={18} />}
+          icon={<Star size={16} />}
           mau="green"
+          compact
         />
       </div>
     </Card>

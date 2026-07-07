@@ -10,6 +10,7 @@ import {
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/constants"
 import type { Prisma } from "@workspace/db"
 import { ScheduleRepeatType } from "@workspace/db/client"
+import { splitFullName } from "@workspace/libs/utils"
 import dayjs, { type Dayjs } from "dayjs"
 import isoWeek from "dayjs/plugin/isoWeek"
 
@@ -297,29 +298,19 @@ export const taoNhanNguoiLienQuan = (nguoi: NguoiLienQuanTomTat) => {
   return [ma, ten, maDonVi].filter(Boolean).join(" - ")
 }
 
-const phanTachHoTenVietNam = (hoTen: string) => {
-  const parts = hoTen.trim().split(/\s+/).filter(Boolean)
-  return {
-    ten: parts.pop() ?? "",
-    ho: parts.shift() ?? "",
-  }
-}
-
-/** Sắp xếp theo tên → họ */
+/** Sắp xếp theo tên → họ và tên đệm (luôn tách từ fullname). */
 export const soSanhHoTenVietNam = (a: string, b: string) => {
-  const nameA = phanTachHoTenVietNam(a)
-  const nameB = phanTachHoTenVietNam(b)
-  return nameA.ten.localeCompare(nameB.ten, "vi") || nameA.ho.localeCompare(nameB.ho, "vi")
+  const nameA = splitFullName(a)
+  const nameB = splitFullName(b)
+  return (
+    nameA.firstName.localeCompare(nameB.firstName, "vi") ||
+    nameA.lastName.localeCompare(nameB.lastName, "vi")
+  )
 }
 
-/** Sắp xếp theo firstName → lastName (fallback tách từ fullname nếu thiếu). */
-export const soSanhTheoFirstName = (a: TuyChonNguoiLienQuan, b: TuyChonNguoiLienQuan) => {
-  const firstA = a.firstName || phanTachHoTenVietNam(a.ten).ten
-  const firstB = b.firstName || phanTachHoTenVietNam(b.ten).ten
-  const lastA = a.lastName || phanTachHoTenVietNam(a.ten).ho
-  const lastB = b.lastName || phanTachHoTenVietNam(b.ten).ho
-  return firstA.localeCompare(firstB, "vi") || lastA.localeCompare(lastB, "vi")
-}
+/** Sắp xếp option người liên quan theo tên (dùng fullname, không tin firstName/lastName DB). */
+export const soSanhTheoFirstName = (a: TuyChonNguoiLienQuan, b: TuyChonNguoiLienQuan) =>
+  soSanhHoTenVietNam(a.ten, b.ten)
 
 export const taoTuyChonNguoiLienQuan = (nguoi: NguoiLienQuanTomTat): TuyChonNguoiLienQuan => {
   const ten = nguoi.fullname?.trim() || nguoi.email?.trim() || nguoi.id
