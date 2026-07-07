@@ -11,7 +11,7 @@ import {
   laySubjectClassIdTuMaThongBao,
   THU_TU_MUC_CANH_BAO,
 } from "@components/cong-giang-vien/thong-bao/types"
-import { loadDaDocIds, saveDaDocIds } from "@lib/thong-bao-da-doc"
+import { loadDaDocIds, saveDaDocIds, THONG_BAO_DA_DOC_UPDATED_EVENT } from "@lib/thong-bao-da-doc"
 import { useSession } from "@workspace/auth/react"
 import { Prisma } from "@workspace/db/client"
 import { useFindFirstLecturer, useFindManyNotification } from "@workspace/db/hooks"
@@ -82,6 +82,20 @@ const useThongBaoGiangVien = () => {
 
   useEffect(() => {
     if (profileId) setDaDocIds(loadDaDocIds(profileId))
+  }, [profileId])
+
+  useEffect(() => {
+    if (!profileId) return
+
+    const dongBoDaDoc = (event: Event) => {
+      const { profileId: profileIdCapNhat } =
+        (event as CustomEvent<{ profileId?: string }>).detail ?? {}
+      if (profileIdCapNhat && profileIdCapNhat !== profileId) return
+      setDaDocIds(loadDaDocIds(profileId))
+    }
+
+    window.addEventListener(THONG_BAO_DA_DOC_UPDATED_EVENT, dongBoDaDoc)
+    return () => window.removeEventListener(THONG_BAO_DA_DOC_UPDATED_EVENT, dongBoDaDoc)
   }, [profileId])
 
   const today = dayjs().endOf("day").toDate()
