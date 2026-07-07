@@ -5,7 +5,7 @@ import {
 } from "@components/cong-giang-vien/thong-bao/types"
 import { cn } from "@lib/utils"
 import { Tooltip } from "antd"
-import { CheckCheck, ChevronRight } from "lucide-react"
+import { CheckCheck, ChevronRight, Sparkles } from "lucide-react"
 import type { MouseEvent } from "react"
 
 interface TheThongBaoProps {
@@ -60,6 +60,18 @@ const TheThongBao = ({ thongBao, compact, onClick, onDanhDauDaDoc }: TheThongBao
             <div className="flex min-w-0 items-center gap-2">
               {!thongBao.daDoc ? (
                 <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-blue-500" />
+              ) : null}
+              {thongBao.moiTrongNgay ? (
+                <span
+                  className={cn(
+                    "inline-flex shrink-0 items-center gap-0.5 rounded-full bg-red-500 font-bold uppercase tracking-wide text-white",
+                    compact ? "px-1.5 py-px text-[9px]" : "px-2 py-0.5 text-[10px]"
+                  )}
+                  title="Thông báo mới trong ngày"
+                >
+                  <Sparkles size={compact ? 10 : 11} strokeWidth={2.5} />
+                  New
+                </span>
               ) : null}
               <p
                 className={cn(

@@ -45,6 +45,8 @@ export interface ThongBaoView {
   thoiGian: string
   hanXuLy?: string
   daDoc: boolean
+  /** Thông báo được phát hành trong ngày hôm nay. */
+  moiTrongNgay: boolean
   /**
    * Id đối tượng liên quan trích từ `code` thông báo để mở nhanh đúng trang.
    * - Hạn nhập điểm: id lớp môn học (subjectClassId).

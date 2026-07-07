@@ -9,7 +9,6 @@ import {
   DANH_SACH_LOAI_THONG_BAO_GV,
   isLoaiThongBaoGv,
   laySubjectClassIdTuMaThongBao,
-  THU_TU_MUC_CANH_BAO,
 } from "@components/cong-giang-vien/thong-bao/types"
 import { loadDaDocIds, saveDaDocIds, THONG_BAO_DA_DOC_UPDATED_EVENT } from "@lib/thong-bao-da-doc"
 import { useSession } from "@workspace/auth/react"
@@ -49,18 +48,15 @@ const mapThongBao = (
     thoiGian: dayjs(item.publishedAt).format("HH:mm • DD/MM/YYYY"),
     hanXuLy: item.expiresAt ? dayjs(item.expiresAt).format("DD/MM/YYYY") : undefined,
     daDoc: daDocIds.has(item.id),
+    moiTrongNgay: dayjs(item.publishedAt).isSame(dayjs(), "day"),
     subjectClassId: laySubjectClassIdTuMaThongBao(item.code),
   }
 }
 
-const sapXepTheoUuTien = (
-  a: { view: ThongBaoView; publishedAt: Date | string },
-  b: { view: ThongBaoView; publishedAt: Date | string }
-) => {
-  const chenhMuc = THU_TU_MUC_CANH_BAO[a.view.mucCanhBao] - THU_TU_MUC_CANH_BAO[b.view.mucCanhBao]
-  if (chenhMuc !== 0) return chenhMuc
-  return dayjs(b.publishedAt).valueOf() - dayjs(a.publishedAt).valueOf()
-}
+const sapXepTheoMoiNhat = (
+  a: { publishedAt: Date | string },
+  b: { publishedAt: Date | string }
+) => dayjs(b.publishedAt).valueOf() - dayjs(a.publishedAt).valueOf()
 
 // Lấy thông báo 4 loại cảnh báo của giảng viên từ bảng Notification.
 const useThongBaoGiangVien = () => {
@@ -169,7 +165,7 @@ const useThongBaoGiangVien = () => {
         return view ? { view, publishedAt: item.publishedAt } : null
       })
       .filter((item): item is { view: ThongBaoView; publishedAt: Date } => item !== null)
-      .sort(sapXepTheoUuTien)
+      .sort(sapXepTheoMoiNhat)
       .map((item) => item.view)
   }, [raw, daDocIds])
 
