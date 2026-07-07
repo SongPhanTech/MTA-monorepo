@@ -6,6 +6,7 @@ import { Eye } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 const CHIEU_CAO_HEADER_BANG = 48
+const CHIEU_CAO_THANH_CUON_NGANG = 12
 
 interface BangTongKetProps {
   danhSach: TongKetRow[]
@@ -32,7 +33,9 @@ const BangTongKet = ({
     if (!el) return
 
     const capNhatChieuCao = () => {
-      setChieuCaoBody(Math.max(160, el.clientHeight - CHIEU_CAO_HEADER_BANG))
+      setChieuCaoBody(
+        Math.max(160, el.clientHeight - CHIEU_CAO_HEADER_BANG - CHIEU_CAO_THANH_CUON_NGANG)
+      )
     }
 
     capNhatChieuCao()
@@ -185,8 +188,9 @@ const BangTongKet = ({
         dataSource={danhSach}
         loading={loading}
         pagination={false}
-        scroll={{ x: theoKy ? 1680 : 1560, y: chieuCaoBody }}
+        scroll={{ x: "max-content", y: chieuCaoBody }}
         bordered={true}
+        className="bang-tong-ket"
         rowClassName={(_, index) => (index % 2 === 1 ? "bg-gray-50/80" : "")}
       />
     </div>

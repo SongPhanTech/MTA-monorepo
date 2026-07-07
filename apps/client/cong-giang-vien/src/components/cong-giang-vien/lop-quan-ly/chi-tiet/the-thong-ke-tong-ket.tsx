@@ -113,26 +113,28 @@ const TheDon = ({
       ]
         .filter(Boolean)
         .join(" ")}
-      styles={{ body: { padding: "14px 16px" } }}
+      styles={{ body: { padding: "10px 12px" } }}
       onClick={coTheNhan ? onClick : undefined}
     >
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <span className="truncate text-xs font-medium leading-snug text-gray-600">{tieuDe}</span>
-          <span className={`text-2xl font-extrabold leading-none tracking-tight ${style.text}`}>
-            {giaTri}
+      <div className="flex min-w-0 flex-col gap-1.5">
+        <div className="flex items-start justify-between gap-1.5">
+          <span className="line-clamp-2 min-w-0 flex-1 text-[11px] font-medium leading-snug text-gray-600">
+            {tieuDe}
           </span>
-          {phuDe ? (
-            <span className={`text-xs font-semibold leading-snug ${style.phuDe}`}>{phuDe}</span>
-          ) : (
-            <span className="invisible text-xs leading-snug">—</span>
-          )}
+          <div
+            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${style.iconBg} ${style.iconText}`}
+          >
+            {icon}
+          </div>
         </div>
-        <div
-          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${style.iconBg} ${style.iconText}`}
-        >
-          {icon}
-        </div>
+        <span className={`text-xl font-extrabold leading-none tracking-tight ${style.text}`}>
+          {giaTri}
+        </span>
+        {phuDe ? (
+          <span className={`text-[10px] font-semibold leading-snug ${style.phuDe}`}>{phuDe}</span>
+        ) : (
+          <span className="invisible text-[10px] leading-snug">—</span>
+        )}
       </div>
     </Card>
   )
@@ -143,40 +145,33 @@ const TheThongKeTongKet = ({ thongKe, locXepLoai, onChonLocXepLoai }: TheThongKe
     <div className="shrink-0 px-4 pt-3">
       <p className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">Thống kê</p>
 
-      <div className="flex flex-col gap-3">
-        <div className="grid grid-cols-2 gap-3 sm:max-w-md">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-8">
+        <TheDon
+          tieuDe="Tổng sinh viên"
+          giaTri={thongKe.tongSinhVien}
+          icon={<Users size={16} strokeWidth={2.25} />}
+          mau="violet"
+        />
+        <TheDon
+          tieuDe="Điểm TB cả lớp"
+          giaTri={dinhDangGpa(thongKe.diemTrungBinh)}
+          phuDe={`Hệ ${thongKe.heDiem}`}
+          icon={<BarChart3 size={16} strokeWidth={2.25} />}
+          mau="blue"
+        />
+        {thongKe.theoXepLoai.map((item) => (
           <TheDon
-            tieuDe="Tổng sinh viên"
-            giaTri={thongKe.tongSinhVien}
-            icon={<Users size={20} strokeWidth={2.25} />}
-            mau="violet"
+            key={item.ten}
+            tieuDe={item.ten}
+            giaTri={item.soSinhVien}
+            phuDe={item.tyLe}
+            icon={<Users size={16} strokeWidth={2.25} />}
+            mau={mauXepLoaiHocLuc(item.ten)}
+            coTheNhan={item.soSinhVien > 0}
+            dangChon={locXepLoai === item.ten}
+            onClick={() => onChonLocXepLoai(item.ten)}
           />
-          <TheDon
-            tieuDe="Điểm TB cả lớp"
-            giaTri={dinhDangGpa(thongKe.diemTrungBinh)}
-            phuDe={`Hệ ${thongKe.heDiem}`}
-            icon={<BarChart3 size={20} strokeWidth={2.25} />}
-            mau="blue"
-          />
-        </div>
-
-        {thongKe.theoXepLoai.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
-            {thongKe.theoXepLoai.map((item) => (
-              <TheDon
-                key={item.ten}
-                tieuDe={item.ten}
-                giaTri={item.soSinhVien}
-                phuDe={item.tyLe}
-                icon={<Users size={20} strokeWidth={2.25} />}
-                mau={mauXepLoaiHocLuc(item.ten)}
-                coTheNhan={item.soSinhVien > 0}
-                dangChon={locXepLoai === item.ten}
-                onClick={() => onChonLocXepLoai(item.ten)}
-              />
-            ))}
-          </div>
-        ) : null}
+        ))}
       </div>
     </div>
   )

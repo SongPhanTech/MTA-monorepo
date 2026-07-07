@@ -10,6 +10,7 @@ import {
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/constants"
 import type { Prisma } from "@workspace/db"
 import { ScheduleRepeatType } from "@workspace/db/client"
+import { splitFullName } from "@workspace/libs/utils"
 import dayjs, { type Dayjs } from "dayjs"
 import isoWeek from "dayjs/plugin/isoWeek"
 
@@ -297,29 +298,61 @@ export const taoNhanNguoiLienQuan = (nguoi: NguoiLienQuanTomTat) => {
   return [ma, ten, maDonVi].filter(Boolean).join(" - ")
 }
 
-const phanTachHoTenVietNam = (hoTen: string) => {
-  const parts = hoTen.trim().split(/\s+/).filter(Boolean)
-  return {
-    ten: parts.pop() ?? "",
-    ho: parts.shift() ?? "",
+const chuanHoaTenNguoiDeSort = (ten: string) => {
+  const trimmed = ten.trim().replaceAll(/\s+/g, " ")
+  const parts = trimmed.split(" ")
+  const last = parts.at(-1) || ""
+  if (/^\d+$/.test(last) || /^[A-Za-z]{1,4}\d{3,}$/.test(last)) {
+    parts.pop()
   }
+  return parts.join(" ").trim() || trimmed
 }
 
-/** Sắp xếp theo tên → họ */
+const normalizeForCompare = (s: string) =>
+  s
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .replaceAll(/\s+/g, " ")
+    .trim()
+    .toLowerCase()
+
+/** So sánh tên theo kiểu Việt Nam (tên → họ và tên đệm). */
 export const soSanhHoTenVietNam = (a: string, b: string) => {
-  const nameA = phanTachHoTenVietNam(a)
-  const nameB = phanTachHoTenVietNam(b)
-  return nameA.ten.localeCompare(nameB.ten, "vi") || nameA.ho.localeCompare(nameB.ho, "vi")
+  const cleanA = chuanHoaTenNguoiDeSort(a)
+  const cleanB = chuanHoaTenNguoiDeSort(b)
+
+  const nameA = splitFullName(cleanA)
+  const nameB = splitFullName(cleanB)
+
+  const firstA = normalizeForCompare(nameA.firstName)
+  const firstB = normalizeForCompare(nameB.firstName)
+  const lastA = normalizeForCompare(nameA.lastName)
+  const lastB = normalizeForCompare(nameB.lastName)
+
+  const fullA = normalizeForCompare(cleanA)
+  const fullB = normalizeForCompare(cleanB)
+
+  return (
+    firstA.localeCompare(firstB, "vi", { sensitivity: "base" }) ||
+    lastA.localeCompare(lastB, "vi", { sensitivity: "base" }) ||
+    // đảm bảo các bản ghi TRÙNG TÊN đứng liền nhau (khác mã vẫn kề nhau)
+    fullA.localeCompare(fullB, "vi", { sensitivity: "base" })
+  )
 }
 
-/** Sắp xếp theo firstName → lastName (fallback tách từ fullname nếu thiếu). */
-export const soSanhTheoFirstName = (a: TuyChonNguoiLienQuan, b: TuyChonNguoiLienQuan) => {
-  const firstA = a.firstName || phanTachHoTenVietNam(a.ten).ten
-  const firstB = b.firstName || phanTachHoTenVietNam(b.ten).ten
-  const lastA = a.lastName || phanTachHoTenVietNam(a.ten).ho
-  const lastB = b.lastName || phanTachHoTenVietNam(b.ten).ho
-  return firstA.localeCompare(firstB, "vi") || lastA.localeCompare(lastB, "vi")
-}
+const soSanhTheoLabel = (a: string, b: string) =>
+  a.localeCompare(b, "vi", { sensitivity: "base" })
+
+/** Sắp xếp option người liên quan theo TÊN (label chỉ dùng để tie-break). */
+export const soSanhTheoFirstName = (a: TuyChonNguoiLienQuan, b: TuyChonNguoiLienQuan) =>
+  soSanhHoTenVietNam(a.ten, b.ten) || soSanhTheoLabel(a.label, b.label)
+
+/** Sắp xếp người liên quan theo TÊN (label chỉ dùng để tie-break). */
+export const soSanhNguoiLienQuan = (a: NguoiLienQuanTomTat, b: NguoiLienQuanTomTat) =>
+  soSanhHoTenVietNam(
+    a.fullname?.trim() || a.email?.trim() || a.id,
+    b.fullname?.trim() || b.email?.trim() || b.id
+  ) || soSanhTheoLabel(taoNhanNguoiLienQuan(a), taoNhanNguoiLienQuan(b))
 
 export const taoTuyChonNguoiLienQuan = (nguoi: NguoiLienQuanTomTat): TuyChonNguoiLienQuan => {
   const ten = nguoi.fullname?.trim() || nguoi.email?.trim() || nguoi.id

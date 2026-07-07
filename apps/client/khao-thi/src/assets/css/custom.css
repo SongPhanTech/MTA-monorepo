@@ -30,7 +30,7 @@
   top: 64px;
   left: 0;
   right: 0;
-  z-index: 1001;
+  z-index: 999;
   border-bottom: 1px solid #f1f1f1;
   pointer-events: none;
 }

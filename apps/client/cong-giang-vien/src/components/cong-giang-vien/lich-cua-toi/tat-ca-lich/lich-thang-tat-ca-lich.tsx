@@ -7,7 +7,7 @@ import {
 } from "@components/cong-giang-vien/lich-cua-toi/lich-giang-day/utils"
 import { CLASS_TIEU_DE_THU, TIEU_DE_THU } from "@components/cong-giang-vien/lich-cua-toi/utils"
 import { cn } from "@workspace/ui/lib/utils"
-import { Spin } from "antd"
+import { Popover, Spin } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
 import { useMemo } from "react"
 
@@ -86,6 +86,7 @@ const LichThangTatCaLich = ({
             const laNgayChon = ngay.isSame(ngayChon, "day")
             const suKienNgay = suKienTheoNgay.get(key) ?? []
             const hienThi = suKienNgay.slice(0, SO_SU_KIEN_TOI_DA)
+            const suKienConLai = suKienNgay.slice(SO_SU_KIEN_TOI_DA)
             const conLai = suKienNgay.length - hienThi.length
 
             return (
@@ -139,9 +140,43 @@ const LichThangTatCaLich = ({
                 </div>
 
                 {conLai > 0 ? (
-                  <span className="mt-auto pt-0.5 text-[10px] font-medium text-blue-600">
-                    + {conLai} lịch khác
-                  </span>
+                  <Popover
+                    trigger="click"
+                    placement="bottomRight"
+                    overlayClassName="max-w-[280px]"
+                    content={
+                      <div className="flex max-h-60 w-[260px] flex-col gap-1 overflow-y-auto">
+                        {suKienConLai.map((suKien) => (
+                          <button
+                            key={suKien.id}
+                            type="button"
+                            onClick={() => onXemChiTiet?.(suKien)}
+                            className="flex min-w-0 items-center gap-1 rounded px-1 py-0.5 text-left hover:bg-gray-100/80"
+                            title={`${formatGioSuKien(suKien)} ${suKien.tieuDeHienThi}`}
+                          >
+                            <span
+                              className="h-1.5 w-1.5 shrink-0 rounded-full"
+                              style={{ backgroundColor: suKien.mauLoai }}
+                              aria-hidden
+                            />
+                            <span className="shrink-0 text-[10px] text-gray-500">
+                              {formatGioSuKien(suKien)}
+                            </span>
+                            <span className="truncate text-[10px] font-medium text-gray-800">
+                              {suKien.tieuDeHienThi}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    }
+                  >
+                    <button
+                      type="button"
+                      className="mt-auto self-start pt-0.5 text-[10px] font-medium text-blue-600 hover:text-blue-700"
+                    >
+                      + {conLai} lịch khác
+                    </button>
+                  </Popover>
                 ) : null}
               </div>
             )

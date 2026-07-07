@@ -39,9 +39,10 @@ const TheHocBong = ({ danhSach, capNhatCuoi }: TheHocBongProps) => {
       ellipsis: true,
     },
     {
-      title: "Mức",
-      dataIndex: "muc",
-      width: 110,
+      title: "GPA tại thời điểm",
+      dataIndex: "gpaTaiThoiDiem",
+      width: 130,
+      align: "center",
     },
     {
       title: "Giá trị (VNĐ)",

@@ -10,7 +10,7 @@ import {
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import { CLASS_TIEU_DE_THU, TIEU_DE_THU } from "@components/cong-giang-vien/lich-cua-toi/utils"
 import { cn } from "@workspace/ui/lib/utils"
-import { Spin } from "antd"
+import { Popover, Spin } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
 import { useMemo } from "react"
 
@@ -89,6 +89,7 @@ const LichThangCaNhan = ({
             const laNgayChon = ngay.isSame(ngayChon, "day")
             const suKienNgay = suKienTheoNgay.get(key) ?? []
             const hienThi = suKienNgay.slice(0, SO_SU_KIEN_TOI_DA)
+            const suKienConLai = suKienNgay.slice(SO_SU_KIEN_TOI_DA)
             const conLai = suKienNgay.length - hienThi.length
 
             return (
@@ -142,9 +143,46 @@ const LichThangCaNhan = ({
                 </div>
 
                 {conLai > 0 ? (
-                  <span className="absolute bottom-1 right-1 text-[10px] font-medium text-blue-600">
-                    +{conLai}
-                  </span>
+                  <Popover
+                    trigger="click"
+                    placement="bottomRight"
+                    overlayClassName="max-w-[280px]"
+                    content={
+                      <div className="flex max-h-60 w-[260px] flex-col gap-1 overflow-y-auto">
+                        {suKienConLai.map((suKien) => {
+                          const mau = layMauSuKien(suKien)
+                          return (
+                            <button
+                              key={suKien.id}
+                              type="button"
+                              onClick={() => onXemChiTiet?.(suKien.id)}
+                              className="flex min-w-0 items-center gap-1 rounded px-1 py-0.5 text-left hover:bg-gray-100/80"
+                              title={suKien.tieuDe}
+                            >
+                              <span
+                                className="h-1.5 w-1.5 shrink-0 rounded-full"
+                                style={{ backgroundColor: mau }}
+                                aria-hidden
+                              />
+                              <span className="shrink-0 text-[10px] text-gray-500">
+                                {formatGioSuKien(suKien)}
+                              </span>
+                              <span className="truncate text-[10px] font-medium text-gray-800">
+                                {suKien.tieuDe}
+                              </span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    }
+                  >
+                    <button
+                      type="button"
+                      className="mt-auto self-end pt-0.5 text-[10px] font-medium text-blue-600 hover:text-blue-700"
+                    >
+                      +{conLai}
+                    </button>
+                  </Popover>
                 ) : null}
               </div>
             )

@@ -29,8 +29,13 @@ const HangThongTin = ({
 const TheThongTinLop = ({ thongTin, loading }: TheThongTinLopProps) => {
   if (loading) {
     return (
-      <div className="rounded-lg border border-gray-100 bg-white p-4">
-        <Skeleton active paragraph={{ rows: 10 }} />
+      <div className="flex flex-col gap-3">
+        <div className="rounded-lg border border-gray-100 bg-cgv-green p-4">
+          <Skeleton active avatar paragraph={{ rows: 2 }} />
+        </div>
+        <div className="rounded-lg border border-gray-100 bg-white p-4">
+          <Skeleton active paragraph={{ rows: 8 }} />
+        </div>
       </div>
     )
   }
@@ -38,9 +43,9 @@ const TheThongTinLop = ({ thongTin, loading }: TheThongTinLopProps) => {
   if (!thongTin) return null
 
   return (
-    <div className="flex h-full min-h-0 flex-col rounded-lg border border-gray-100 bg-white">
-      <div className="border-b border-gray-100 px-4 py-5 text-center">
-        <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-cgv-green/30 text-cgv-green-dark">
+    <div className="flex h-full min-h-0 flex-col gap-3">
+      <div className="shrink-0 rounded-lg border border-gray-100 bg-cgv-green px-4 py-5 text-center">
+        <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-white text-cgv-green-dark shadow-sm ring-1 ring-cgv-green-dark/15">
           <Users size={28} />
         </div>
         <p className="m-0 text-sm font-semibold text-cgv-green-dark">{thongTin.maLop}</p>
@@ -50,7 +55,7 @@ const TheThongTinLop = ({ thongTin, loading }: TheThongTinLopProps) => {
         </Tag>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-2">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto rounded-lg border border-gray-100 bg-white px-4 py-2">
         <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-400">
           Thông tin lớp quản lý
         </p>
