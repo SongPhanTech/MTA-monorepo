@@ -747,7 +747,7 @@ export default function StudentGradeSystem() {
 
       const tongTinChi = student.semesters.reduce(
         (acc, semester) =>
-          acc + (semester.subjects?.reduce((s, sub) => s + (sub.soTinChi ?? 0), 0) ?? 0),
+          acc + (semester.subjects?.reduce((s, sub) => s + Number(sub.soTinChi ?? 0), 0) ?? 0),
         0
       )
 
@@ -755,7 +755,7 @@ export default function StudentGradeSystem() {
         (acc, semester) =>
           acc +
           (semester.subjects?.reduce(
-            (s, sub) => s + (Number(sub?.thangDiem10) || 0) * (sub.soTinChi ?? 0),
+            (s, sub) => s + (Number(sub?.thangDiem10) || 0) * Number(sub.soTinChi ?? 0),
             0
           ) ?? 0),
         0
@@ -765,7 +765,7 @@ export default function StudentGradeSystem() {
         (acc, semester) =>
           acc +
           (semester.subjects?.reduce(
-            (s, sub) => s + (Number(sub?.thangDiem4) || 0) * (sub.soTinChi ?? 0),
+            (s, sub) => s + (Number(sub?.thangDiem4) || 0) * Number(sub.soTinChi ?? 0),
             0
           ) ?? 0),
         0
@@ -1022,7 +1022,7 @@ export default function StudentGradeSystem() {
 
       const tongTinChi = student.semesters.reduce(
         (acc, semester) =>
-          acc + (semester.subjects?.reduce((s, sub) => s + (sub.soTinChi ?? 0), 0) ?? 0),
+          acc + (semester.subjects?.reduce((s, sub) => s + Number(sub.soTinChi ?? 0), 0) ?? 0),
         0
       )
 
@@ -1030,7 +1030,7 @@ export default function StudentGradeSystem() {
         (acc, semester) =>
           acc +
           (semester.subjects?.reduce(
-            (s, sub) => s + (Number(sub?.thangDiem10) || 0) * (sub.soTinChi ?? 0),
+            (s, sub) => s + (Number(sub?.thangDiem10) || 0) * Number(sub.soTinChi ?? 0),
             0
           ) ?? 0),
         0
@@ -1040,7 +1040,7 @@ export default function StudentGradeSystem() {
         (acc, semester) =>
           acc +
           (semester.subjects?.reduce(
-            (s, sub) => s + (Number(sub?.thangDiem4) || 0) * (sub.soTinChi ?? 0),
+            (s, sub) => s + (Number(sub?.thangDiem4) || 0) * Number(sub.soTinChi ?? 0),
             0
           ) ?? 0),
         0
