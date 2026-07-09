@@ -39,6 +39,7 @@ import UserProfileApp from "./api/user-profile"
 import { checkIp } from "./middlewares/check-ip"
 import { startQuetHanGiangVienCron } from "./cron/quet-han-giang-vien"
 import { startQuetNhacLichCaNhanCron } from "./cron/quet-nhac-lich-ca-nhan"
+import { startDonDepThongBaoCron } from "./cron/don-dep-thong-bao"
 import { setupOpenApi } from "./utils/openapi"
 import VersionApp from "./api/public-version"
 dayjs.extend(utc)
@@ -157,6 +158,7 @@ showRoutes(app, { verbose: true })
 
 startQuetHanGiangVienCron(prisma)
 startQuetNhacLichCaNhanCron(prisma)
+startDonDepThongBaoCron(prisma)
 
 export default {
   idleTimeout: 255, // giây — tổng kết 500+ SV có thể > 10s (mặc định Bun)
