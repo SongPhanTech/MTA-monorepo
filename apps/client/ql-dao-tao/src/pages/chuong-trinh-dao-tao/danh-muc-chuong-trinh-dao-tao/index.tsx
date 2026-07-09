@@ -151,9 +151,6 @@ export default function TrainingProgramCatalog() {
 
   const where = useMemo(() => {
     const curriculumVersionFilter = {
-      ...(!isViewAll && {
-        organizationId: donViId,
-      }),
       ...(filters.name && {
         name: { contains: filters.name, mode: "insensitive" as const },
       }),
@@ -222,8 +219,8 @@ export default function TrainingProgramCatalog() {
     return {
       deletedAt: null,
       trainingObjectTypeId,
-      ...(filters.managementOrganizationId && {
-        managementOrganizationId: filters.managementOrganizationId,
+      ...((filters.managementOrganizationId || (!isViewAll && donViId)) && {
+        managementOrganizationId: filters.managementOrganizationId || donViId,
       }),
       ...(filters.trainingMajorId && {
         trainingMajorId: filters.trainingMajorId,
