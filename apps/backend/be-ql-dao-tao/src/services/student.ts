@@ -362,10 +362,6 @@ export const exportStudentAcademicWarning = async ({
 export async function _generateStudentImportTemplate(
   trainingObjectTypeId: string
 ): Promise<ArrayBuffer> {
-  const trainingObjectType = await prisma.trainingObjectType.findUniqueOrThrow({
-    where: { id: trainingObjectTypeId },
-    select: { name: true },
-  })
   const [fixedClasses, curricula, organizations, trainingMajors, trainingFields] =
     await Promise.all([
       prisma.fixedClass.findMany({
@@ -423,12 +419,12 @@ export async function _generateStudentImportTemplate(
 
   const buffer = await getTemplateBuffer(prisma, "MauImportDSHV_v4.xlsx")
   const template = new XlsxTemplate(buffer)
-  template.substitute("HỌC VIÊN, SINH VIÊN", {
-    doituongdaotao: trainingObjectType.name,
-  })
-  template.substitute("DoiTuongDaoTao", {
-    team: [{ ten: trainingObjectType.name }],
-  })
+  // template.substitute("HỌC VIÊN, SINH VIÊN", {
+  //   doituongdaotao: trainingObjectType.name,
+  // })
+  // template.substitute("DoiTuongDaoTao", {
+  //   team: [{ ten: trainingObjectType.name }],
+  // })
   template.substitute("DanhMucLopQuanLi", {
     team: fixedClasses.map((fc) => ({ ma: fc.code || "", ten: fc.name })),
   })
