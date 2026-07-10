@@ -56,6 +56,7 @@ import {
   Tooltip,
   TreeSelect,
   Modal,
+  Radio,
 } from "antd"
 import type { Dayjs } from "dayjs"
 import _ from "lodash"
@@ -130,6 +131,8 @@ export default function PhanCongGiangDay({
   })
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>()
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false)
+  const [exportGroupType, setExportGroupType] = useState<"department" | "faculty">("faculty")
 
   const [copySourceId, setCopySourceId] = useState<string | null>(null)
   const [copyFields, setCopyFields] = useState<CopyFields>({
@@ -749,6 +752,350 @@ export default function PhanCongGiangDay({
     }
   }
 
+interface ExportOrgItem {
+  sMa: string | null
+  sTKPUCode: string | null
+  Id: string
+  sTen: string
+  sParentId: string | null
+}
+
+interface ExportSemesterItem {
+  semesterType: $Enums.SemesterType
+  schoolYear: {
+    startDate: Date | string
+    endDate: Date | string
+  }
+}
+
+interface ExportSubjectClassItem {
+  submitLecturerAssignmentAt: Date | null
+  sendLecturerAssignmentAt: Date | null
+  schedule: string | null
+  examType: $Enums.ExamType | null
+  mainLecturer?: {
+    userProfile?: {
+      fullname: string
+    } | null
+  } | null
+  subject: {
+    code: string
+    codeTkb?: string | null
+    name: string
+    credit: number
+    period: number
+    subject?: {
+      managementOrganization?: {
+        sTen: string
+        sMa: string | null
+        sTKPUCode: string | null
+        sParentId: string | null
+      } | null
+    } | null
+  }
+  extraLecturer?: {
+    userProfile?: {
+      fullname: string
+    } | null
+  } | null
+  fixedClasses: Array<{
+    code: string
+    _count: {
+      students: number
+    }
+  }>
+  room?: {
+    code: string
+    name: string
+  } | null
+  trainingLocation?: {
+    name: string
+  } | null
+}
+
+  const handleExportExcel = async (groupType: "department" | "faculty") => {
+    try {
+      showSpinner()
+      const res = await sqlTransaction([
+        {
+          model: "SubjectClass",
+          operation: "findMany",
+          data: {
+            where,
+            select: {
+              submitLecturerAssignmentAt: true,
+              schedule: true,
+              examType: true,
+              mainLecturer: {
+                select: {
+                  userProfile: {
+                    select: {
+                      fullname: true,
+                    },
+                  },
+                },
+              },
+              subject: {
+                select: {
+                  code: true,
+                  codeTkb: true,
+                  name: true,
+                  credit: true,
+                  period: true,
+                  subject: {
+                    select: {
+                      managementOrganization: {
+                        where: {
+                          bDeleted: false,
+                        },
+                        select: {
+                          sTen: true,
+                          sMa: true,
+                          sTKPUCode: true,
+                          sParentId: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+              extraLecturer: {
+                select: {
+                  userProfile: {
+                    select: {
+                      fullname: true,
+                    },
+                  },
+                },
+              },
+              fixedClasses: {
+                select: {
+                  code: true,
+                  _count: {
+                    select: {
+                      students: {
+                        where: {
+                          deletedAt: null,
+                          active: true,
+                          status: "ENROLLED",
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+              room: {
+                select: {
+                  code: true,
+                  name: true,
+                },
+              },
+              trainingLocation: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+        {
+          model: "Semester",
+          operation: "findUnique",
+          data: {
+            where: { id: semesterId },
+            select: {
+              semesterType: true,
+              schoolYear: {
+                select: {
+                  startDate: true,
+                  endDate: true,
+                },
+              },
+            },
+          },
+        },
+        {
+          model: "DM_DonVi",
+          operation: "findMany",
+          data: {
+            where: {
+              bActive: true,
+              bDeleted: false,
+            },
+            select: {
+              sMa: true,
+              sTKPUCode: true,
+              Id: true,
+              sTen: true,
+              sParentId: true,
+            },
+          },
+        },
+      ])
+
+      if (res.status !== 200) {
+        throw new Error("Lỗi khi xuất PCGD")
+      }
+
+      const payload = res.data[0] as ExportSubjectClassItem[]
+      const semesterPayload = res.data[1] as ExportSemesterItem
+      const orgPayload = res.data[2] as ExportOrgItem[]
+
+      const hocKy = (() => {
+        if (semesterPayload.semesterType === $Enums.SemesterType.FIRST) return "1"
+        if (semesterPayload.semesterType === $Enums.SemesterType.SECOND) return "2"
+        if (semesterPayload.semesterType === $Enums.SemesterType.SUMMER) return "Hè"
+        if (semesterPayload.semesterType === $Enums.SemesterType.FIRST_SUPPLEMENTARY) return "Phụ 1"
+        if (semesterPayload.semesterType === $Enums.SemesterType.SECOND_SUPPLEMENTARY) return "Phụ 2"
+        return ""
+      })()
+
+      const namHoc = (() => {
+        const startYear = dayjs(semesterPayload.schoolYear.startDate).year()
+        const endYear = startYear + 1
+        return `${startYear} - ${endYear}`
+      })()
+
+      let groupedPayload: Record<string, ExportSubjectClassItem[]> = {}
+      if (groupType === "faculty") {
+        const getFacultyMa = (item: ExportSubjectClassItem) => {
+          const deptMa = item?.subject?.subject?.managementOrganization?.sMa
+          if (!deptMa) return "MTA"
+          const dept = orgPayload.find((e) => e.sMa === deptMa)
+          if (!dept) return "MTA"
+
+          let current = dept
+          while (current) {
+            const parent = orgPayload.find((e) => e.Id === current.sParentId)
+            if (!parent || parent.sTen?.includes("Học viện") || !parent.sParentId) {
+              return current.sMa || current.Id || "MTA"
+            }
+            current = parent
+          }
+          return "MTA"
+        }
+        groupedPayload = Object.groupBy(payload, (item) => getFacultyMa(item)) as Record<string, any[]>
+      } else {
+        groupedPayload = Object.groupBy(
+          payload,
+          (item) => item?.subject?.subject?.managementOrganization?.sMa || "MTA"
+        ) as Record<string, ExportSubjectClassItem[]>
+      }
+
+      exportFromTemplate({
+        templateUrl: getMinioUrl("/mta/template/ke-hoach-dao-tao/bao-day.xlsx"),
+        extension: "xls",
+        fileName: `Bao_day_${dayjs().format("DD_MM_YYYY")}.xls`,
+        fontFamily: "Tahoma",
+        fontSize: 9,
+        sheets: Object.entries(groupedPayload).map(([key, items = []]) => {
+          const ngayGui = dayjs.unix(
+            Math.min(...items.map((i) => dayjs(i.sendLecturerAssignmentAt).unix() ?? Number.POSITIVE_INFINITY))
+          )
+          const ngayNhan = dayjs.unix(
+            Math.max(...items.map((i) => dayjs(i.sendLecturerAssignmentAt).unix() ?? Number.NEGATIVE_INFINITY))
+          )
+
+          let khoa: ExportOrgItem | undefined
+          let boMon: ExportOrgItem | undefined
+          let sheetName = "MTA"
+
+          if (groupType === "faculty") {
+            khoa = orgPayload.find((e) => e.sMa === key || e.Id === key)
+            const parentOrg = orgPayload.find((e) => e.Id === khoa?.sParentId)
+            boMon = khoa
+            khoa = parentOrg
+            sheetName = (boMon?.sTKPUCode || boMon?.sMa || boMon?.sTen || "MTA").substring(0, 30).replace(/[:\\/?*\[\]]/g, "_")
+          } else {
+            boMon = orgPayload.find((e) => e.sMa === key)
+            khoa = orgPayload.find((e) => e.Id === boMon?.sParentId)
+            sheetName = `BM_${boMon?.sTKPUCode || boMon?.sMa}`
+          }
+
+          const itemBySubjectCode = Object.groupBy(
+            items.filter((e) => e.fixedClasses.length > 0),
+            (item) => item.subject.code
+          )
+
+          return {
+            tableStartCell: {
+              col: 1,
+              row: 10,
+            },
+            data: {
+              khoa: khoa?.sTen || "",
+              bo_mon: boMon?.sTen || "",
+              ngay_gui: `Ngày ${ngayGui.format("DD")} tháng ${ngayGui.format("MM")} năm ${ngayGui.format("YYYY")}`,
+              ngay_nhan: `Ngày ${ngayNhan.format("DD")} tháng ${ngayNhan.format("MM")} năm ${ngayNhan.format("YYYY")}`,
+              hoc_ky: hocKy,
+              nam_hoc: namHoc,
+            },
+            rows: Object.entries(itemBySubjectCode).flatMap(([_, subjectItems = []], idxOfSubject) => {
+              return subjectItems.map((item, index) => {
+                const rowSpan = index === 0 ? subjectItems.length : 1
+                return {
+                  cells: [
+                    { value: idxOfSubject + 1, rowSpan, align: "center" },
+                    {
+                      value: item.subject?.codeTkb || item.subject?.code,
+                      rowSpan,
+                    },
+                    { value: item.subject?.name, rowSpan },
+                    { value: item.subject?.credit, rowSpan, align: "right" },
+                    {
+                      value: Math.floor((item.subject?.period ?? 0) / 15),
+                      rowSpan,
+                      align: "right",
+                    },
+                    { value: item.subject?.period ?? 0, rowSpan, align: "right" },
+                    { value: subjectItems.length, rowSpan, align: "right" },
+                    {
+                      value: item.schedule
+                        ? SUBJECT_CLASS_SCHEDULE_TYPE[item.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE]
+                        : "",
+                      align: "center",
+                    },
+                    {
+                      value: item.fixedClasses.reduce(
+                        (acc: number, curr: { code: string; _count: { students: number } }) =>
+                          acc + curr._count.students,
+                        0
+                      ),
+                    },
+                    {
+                      value: item.fixedClasses.map((fc: { code: string; _count: { students: number } }) => fc?.code).join(", "),
+                    },
+                    { value: item.trainingLocation?.name ?? "" },
+                    { value: item.mainLecturer?.userProfile?.fullname || "" },
+                    {
+                      value: item.extraLecturer?.userProfile?.fullname || "",
+                    },
+                    {
+                      value: item.room ? item.room.code || item.room.name : "",
+                    },
+                    {
+                      value: item.examType
+                        ? getExamTypeLabel(item?.examType, {
+                            exportPCGD: true,
+                          })
+                        : "",
+                    },
+                  ],
+                }
+              })
+            }),
+            sheet: sheetName,
+          }
+        }),
+      })
+      setIsExportModalOpen(false)
+    } catch (error) {
+      console.log("error", error)
+    } finally {
+      hideSpinner()
+    }
+  }
+
   async function handleP2DuyetPCGD() {
     try {
       showSpinner()
@@ -1331,334 +1678,39 @@ export default function PhanCongGiangDay({
                       </Popover>
                     )}
                   {!khoaBoMon && (
-                    <Button
-                      onClick={async () => {
-                        try {
-                          const res = await sqlTransaction([
-                            {
-                              model: "SubjectClass",
-                              operation: "findMany",
-                              data: {
-                                where,
-                                select: {
-                                  submitLecturerAssignmentAt: true,
-                                  schedule: true,
-                                  examType: true,
-                                  mainLecturer: {
-                                    select: {
-                                      userProfile: {
-                                        select: {
-                                          fullname: true,
-                                        },
-                                      },
-                                    },
-                                  },
-                                  subject: {
-                                    select: {
-                                      code: true,
-                                      codeTkb: true,
-                                      name: true,
-                                      credit: true,
-                                      period: true,
-                                      subject: {
-                                        select: {
-                                          managementOrganization: {
-                                            where: {
-                                              bDeleted: false,
-                                            },
-                                            select: {
-                                              sTen: true,
-                                              sMa: true,
-                                              sTKPUCode: true,
-                                              sParentId: true,
-                                            },
-                                          },
-                                        },
-                                      },
-                                    },
-                                  },
-                                  extraLecturer: {
-                                    select: {
-                                      userProfile: {
-                                        select: {
-                                          fullname: true,
-                                        },
-                                      },
-                                    },
-                                  },
-                                  fixedClasses: {
-                                    select: {
-                                      code: true,
-                                      _count: {
-                                        select: {
-                                          students: {
-                                            where: {
-                                              deletedAt: null,
-                                              active: true,
-                                              status: "ENROLLED",
-                                            },
-                                          },
-                                        },
-                                      },
-                                    },
-                                  },
-                                  room: {
-                                    select: {
-                                      code: true,
-                                      name: true,
-                                    },
-                                  },
-                                  trainingLocation: {
-                                    select: {
-                                      name: true,
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                            {
-                              model: "Semester",
-                              operation: "findUnique",
-                              data: {
-                                where: { id: semesterId },
-                                select: {
-                                  semesterType: true,
-                                  schoolYear: {
-                                    select: {
-                                      startDate: true,
-                                      endDate: true,
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                            {
-                              model: "DM_DonVi",
-                              operation: "findMany",
-                              data: {
-                                where: {
-                                  bActive: true,
-                                  bDeleted: false,
-                                },
-                                select: {
-                                  sMa: true,
-                                  sTKPUCode: true,
-                                  Id: true,
-                                  sTen: true,
-                                  sParentId: true,
-                                },
-                              },
-                            },
-                          ])
-
-                          if (res.status !== 200) {
-                            throw new Error("Lỗi khi xuất PCGD")
-                          }
-
-                          const payload = res.data[0] as Array<{
-                            schedule: string
-                            examType: $Enums.ExamType | null
-                            mainLecturer: any
-                            subject: {
-                              code: string
-                              codeTkb: string | null
-                              name: string
-                              credit: number
-                              period: number
-                              subject: {
-                                managementOrganization: {
-                                  sTen: string
-                                  sMa: string | null
-                                  sTKPUCode: string | null
-                                  sParentId: any
-                                }
-                              }
-                            }
-                            submitLecturerAssignmentAt: Date | null
-                            sendLecturerAssignmentAt: Date | null
-                            extraLecturer: any
-                            fixedClasses: Array<{
-                              code: string
-                              _count: {
-                                students: number
-                              }
-                            }>
-                            room: {
-                              code: string
-                              name: string
-                            }
-                            trainingLocation: {
-                              name: string
-                            }
-                          }>
-                          const semesterPayload = res.data[1] as {
-                            semesterType: $Enums.SemesterType
-                            schoolYear: {
-                              startDate: Date
-                              endDate: Date
-                            }
-                          }
-
-                          const orgPayload = res.data[2] as Array<{
-                            sMa: string | null
-                            sTKPUCode: string | null
-                            Id: string
-                            sTen: string
-                            sParentId: string
-                          }>
-
-                          const hocKy = (() => {
-                            if (semesterPayload.semesterType === $Enums.SemesterType.FIRST)
-                              return "1"
-                            if (semesterPayload.semesterType === $Enums.SemesterType.SECOND)
-                              return "2"
-                            if (semesterPayload.semesterType === $Enums.SemesterType.SUMMER)
-                              return "Hè"
-                            if (
-                              semesterPayload.semesterType ===
-                              $Enums.SemesterType.FIRST_SUPPLEMENTARY
-                            )
-                              return "Phụ 1"
-                            if (
-                              semesterPayload.semesterType ===
-                              $Enums.SemesterType.SECOND_SUPPLEMENTARY
-                            )
-                              return "Phụ 2"
-                            return ""
-                          })()
-
-                          const namHoc = (() => {
-                            const startYear = dayjs(semesterPayload.schoolYear.startDate).year()
-                            const endYear = startYear + 1
-                            return `${startYear} - ${endYear}`
-                          })()
-
-                          const groupedPayload = Object.groupBy(
-                            payload,
-                            (item) => item?.subject?.subject?.managementOrganization?.sMa || "MTA"
-                          )
-                          exportFromTemplate({
-                            templateUrl: getMinioUrl("/mta/template/ke-hoach-dao-tao/bao-day.xlsx"),
-                            extension: "xls",
-                            fileName: `Bao_day_${dayjs().format("DD_MM_YYYY")}.xls`,
-                            fontFamily: "Tahoma",
-                            fontSize: 9,
-                            sheets: Object.entries(groupedPayload).map(([sMa, items = []]) => {
-                              const ngayGui = dayjs.unix(
-                                Math.min(
-                                  ...items.map(
-                                    (i) =>
-                                      dayjs(i.sendLecturerAssignmentAt).unix() ??
-                                      Number.POSITIVE_INFINITY
-                                  )
-                                )
-                              )
-                              const ngayNhan = dayjs.unix(
-                                Math.max(
-                                  ...items.map(
-                                    (i) =>
-                                      dayjs(i.sendLecturerAssignmentAt).unix() ??
-                                      Number.NEGATIVE_INFINITY
-                                  )
-                                )
-                              )
-
-                              const boMon = orgPayload.find((e) => e.sMa === sMa)
-                              const khoa = orgPayload.find((e) => e.Id === boMon?.sParentId)
-
-                              const itemBySubjectCode = Object.groupBy(
-                                items.filter((e) => e.fixedClasses.length > 0),
-                                (item) => item?.subject?.code
-                              )
-
-                              return {
-                                tableStartCell: {
-                                  col: 1,
-                                  row: 10,
-                                },
-                                data: {
-                                  khoa: khoa?.sTen || "",
-                                  bo_mon: boMon?.sTen || "",
-                                  ngay_gui: `Ngày ${ngayGui.format("DD")} tháng ${ngayGui.format("MM")} năm ${ngayGui.format("YYYY")}`,
-                                  ngay_nhan: `Ngày ${ngayNhan.format("DD")} tháng ${ngayNhan.format("MM")} năm ${ngayNhan.format("YYYY")}`,
-                                  hoc_ky: hocKy,
-                                  nam_hoc: namHoc,
-                                },
-                                rows: Object.entries(itemBySubjectCode).flatMap(
-                                  ([_, subjectItems = []], idxOfSubject) => {
-                                    return subjectItems.map((item, index) => {
-                                      const rowSpan = index === 0 ? subjectItems.length : 1
-                                      return {
-                                        cells: [
-                                          { value: idxOfSubject + 1, rowSpan, align: "center" },
-                                          {
-                                            value: item.subject?.codeTkb || item.subject?.code,
-                                            rowSpan,
-                                          },
-                                          { value: item.subject?.name, rowSpan },
-                                          { value: item.subject?.credit, rowSpan, align: "right" },
-                                          {
-                                            value: Math.floor(item.subject.period / 15),
-                                            rowSpan,
-                                            align: "right",
-                                          },
-                                          { value: item.subject.period, rowSpan, align: "right" },
-                                          { value: subjectItems.length, rowSpan, align: "right" },
-                                          {
-                                            value: item.schedule
-                                              ? SUBJECT_CLASS_SCHEDULE_TYPE[
-                                                  item.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
-                                                ]
-                                              : "",
-                                            align: "center",
-                                          },
-                                          {
-                                            value: item.fixedClasses.reduce(
-                                              (acc, curr) => acc + curr._count.students,
-                                              0
-                                            ),
-                                          },
-                                          {
-                                            value: item.fixedClasses
-                                              .map((fc) => fc?.code)
-                                              .join(", "),
-                                          },
-                                          { value: item.trainingLocation?.name ?? "" },
-                                          { value: item.mainLecturer?.userProfile?.fullname || "" },
-                                          {
-                                            value: item.extraLecturer?.userProfile?.fullname || "",
-                                          },
-                                          {
-                                            value: item.room
-                                              ? item.room.code || item.room.name
-                                              : "",
-                                          },
-                                          {
-                                            value: item.examType
-                                              ? getExamTypeLabel(item?.examType, {
-                                                  exportPCGD: true,
-                                                })
-                                              : "",
-                                          },
-                                        ],
-                                      }
-                                    })
-                                  }
-                                ),
-                                sheet: `BM_${boMon?.sTKPUCode || boMon?.sMa}`,
-                              }
-                            }),
-                          })
-                        } catch (error) {
-                          console.log("error", error)
-                        }
-                      }}
-                      type="primary"
-                      className="bg-blue-500"
-                      disabled={!dataWithRowSpan?.length}
-                    >
-                      3. Xuất PCGD
-                    </Button>
+                    <>
+                      <Button
+                        onClick={() => setIsExportModalOpen(true)}
+                        type="primary"
+                        className="bg-blue-500"
+                        disabled={!dataWithRowSpan?.length}
+                      >
+                        3. Xuất PCGD
+                      </Button>
+                      <Modal
+                        title="Tùy chọn xuất phân công giảng dạy"
+                        open={isExportModalOpen}
+                        onCancel={() => setIsExportModalOpen(false)}
+                        onOk={() => handleExportExcel(exportGroupType)}
+                        okText="Xuất file"
+                        cancelText="Hủy"
+                      >
+                        <div style={{ padding: "16px 0" }}>
+                          <Radio.Group
+                            onChange={(e) => setExportGroupType(e.target.value)}
+                            value={exportGroupType}
+                            style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+                          >
+                            <Radio value="faculty">
+                              <strong>Xuất theo Khoa/Viện</strong>
+                            </Radio>
+                            <Radio value="department">
+                              <strong>Xuất theo Bộ môn</strong>
+                            </Radio>
+                          </Radio.Group>
+                        </div>
+                      </Modal>
+                    </>
                   )}
                   {!khoaBoMon &&
                     can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "NHAP_EXCEL") && (
