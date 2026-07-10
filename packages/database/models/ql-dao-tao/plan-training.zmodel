@@ -822,7 +822,7 @@ model SubjectVersion extends BaseNoCode {
   scoreLinkSubjectVersion  ScoreLinkSubjectVersion[]
 	certificate Certificate[]
 
-  @@unique([trainingObjectTypeId, name, credit, period, managementOrganizationId])
+  // @@unique([trainingObjectTypeId, name, credit, period, managementOrganizationId])
   // @@unique([trainingObjectTypeId, codeTkb])
   @@index([name, trainingObjectTypeId])
   @@index([subjectId])
