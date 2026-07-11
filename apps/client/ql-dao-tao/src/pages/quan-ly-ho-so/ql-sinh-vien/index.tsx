@@ -209,6 +209,11 @@ export default function UserProfilePageDs() {
               },
               {
                 fixedClassId: null,
+                curriculumVersion: {
+                  curriculum: {
+                    trainingObjectTypeId,
+                  },
+                },
               },
             ],
           }),
