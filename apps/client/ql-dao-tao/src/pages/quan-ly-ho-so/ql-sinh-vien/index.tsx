@@ -279,6 +279,7 @@ export default function UserProfilePageDs() {
             include: {
               curriculum: {
                 include: {
+                  trainingField: true,
                   trainingMajor: {
                     include: {
                       trainingField: true,
@@ -690,8 +691,11 @@ export default function UserProfilePageDs() {
                   value: item.id,
                 })),
                 render: (__, record: any) => {
-                  return record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-                    ?.trainingField?.name
+                  return (
+                    record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField
+                      ?.name ||
+                    record?.fixedClass?.curriculumVersion?.curriculum?.trainingField?.name
+                  )
                 },
               },
               {
