@@ -10967,9 +10967,6 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, trainingObjectTypeId_name_credit_period_managementOrganizationId: {
-                    name: "trainingObjectTypeId_name_credit_period_managementOrganizationId",
-                    fields: ["trainingObjectTypeId", "name", "credit", "period", "managementOrganizationId"]
                 },
             },
         },
@@ -13452,6 +13449,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingField',
+                }, students: {
+                    name: "students",
+                    type: "Student",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingField',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -14828,6 +14831,20 @@ const metadata: ModelMeta = {
                     name: "to",
                     type: "DateTime",
                     isOptional: true,
+                }, trainingField: {
+                    name: "trainingField",
+                    type: "TrainingField",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'students',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingFieldId" },
+                }, trainingFieldId: {
+                    name: "trainingFieldId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingField',
                 }, registerNumber: {
                     name: "registerNumber",
                     type: "String",

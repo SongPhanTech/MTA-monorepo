@@ -156,6 +156,7 @@ model TrainingField extends Base {
   curriculum          Curriculum[]
   surveyObjectTypes   SurveyObjectType[]
   documentFiles       DocumentFile[]
+  students            Student[]
 
   @@schema("ql-dao-tao")
 }

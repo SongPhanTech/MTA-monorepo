@@ -13934,6 +13934,12 @@
             "items": {
               "$ref": "#/components/schemas/DocumentFile"
             }
+          },
+          "students": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Student"
+            }
           }
         },
         "required": [
@@ -15148,6 +15154,18 @@
           "to": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "trainingField": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TrainingField"
+              }
+            ],
+            "nullable": true
+          },
+          "trainingFieldId": {
+            "type": "string",
             "nullable": true
           },
           "registerNumber": {
@@ -46943,6 +46961,10 @@
           "to": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "trainingFieldId": {
+            "type": "string",
             "nullable": true
           },
           "registerNumber": {
@@ -97522,6 +97544,9 @@
           "to": {
             "type": "integer"
           },
+          "trainingFieldId": {
+            "type": "integer"
+          },
           "registerNumber": {
             "type": "integer"
           },
@@ -97637,6 +97662,7 @@
           "note",
           "from",
           "to",
+          "trainingFieldId",
           "registerNumber",
           "doctoralCode",
           "admissionCombination",
@@ -97797,6 +97823,10 @@
           "to": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "trainingFieldId": {
+            "type": "string",
             "nullable": true
           },
           "registerNumber": {
@@ -97987,6 +98017,10 @@
           "to": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "trainingFieldId": {
+            "type": "string",
             "nullable": true
           },
           "registerNumber": {

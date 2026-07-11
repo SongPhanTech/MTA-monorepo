@@ -14151,6 +14151,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingField',
+                }, students: {
+                    name: "students",
+                    type: "Student",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingField',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -15604,6 +15610,21 @@ const metadata: ModelMeta = {
                     name: "to",
                     type: "DateTime",
                     isOptional: true,
+                }, trainingField: {
+                    name: "trainingField",
+                    type: "TrainingField",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'students',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingFieldId" },
+                }, trainingFieldId: {
+                    name: "trainingFieldId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingField',
                 }, registerNumber: {
                     name: "registerNumber",
                     type: "String",
