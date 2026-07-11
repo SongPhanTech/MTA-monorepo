@@ -309,12 +309,7 @@ const chuanHoaTenNguoiDeSort = (ten: string) => {
 }
 
 const normalizeForCompare = (s: string) =>
-  s
-    .normalize("NFD")
-    .replace(/\p{M}/gu, "")
-    .replaceAll(/\s+/g, " ")
-    .trim()
-    .toLowerCase()
+  s.normalize("NFD").replace(/\p{M}/gu, "").replaceAll(/\s+/g, " ").trim().toLowerCase()
 
 /** So sánh tên theo kiểu Việt Nam (tên → họ và tên đệm). */
 export const soSanhHoTenVietNam = (a: string, b: string) => {
@@ -340,8 +335,7 @@ export const soSanhHoTenVietNam = (a: string, b: string) => {
   )
 }
 
-const soSanhTheoLabel = (a: string, b: string) =>
-  a.localeCompare(b, "vi", { sensitivity: "base" })
+const soSanhTheoLabel = (a: string, b: string) => a.localeCompare(b, "vi", { sensitivity: "base" })
 
 /** Sắp xếp option người liên quan theo TÊN (label chỉ dùng để tie-break). */
 export const soSanhTheoFirstName = (a: TuyChonNguoiLienQuan, b: TuyChonNguoiLienQuan) =>

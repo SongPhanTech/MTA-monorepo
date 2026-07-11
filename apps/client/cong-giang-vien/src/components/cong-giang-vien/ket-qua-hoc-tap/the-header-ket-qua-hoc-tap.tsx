@@ -1,15 +1,7 @@
 import NhanTrangThai from "@components/cong-giang-vien/ho-so-sinh-vien/nhan-trang-thai"
 import { FIXED_CLASS_STUDENT_STATUS } from "@constants/constants"
 import { Avatar, Card } from "antd"
-import {
-  BookOpen,
-  Calendar,
-  FileText,
-  GraduationCap,
-  Mail,
-  Phone,
-  UserRound,
-} from "lucide-react"
+import { BookOpen, Calendar, FileText, GraduationCap, Mail, Phone, UserRound } from "lucide-react"
 import type { ReactNode } from "react"
 
 export type DuLieuHeaderKetQuaHocTap = {
@@ -79,13 +71,7 @@ const OThongKe = ({
   </div>
 )
 
-const CotThongTin = ({
-  children,
-  className = "",
-}: {
-  children: ReactNode
-  className?: string
-}) => (
+const CotThongTin = ({ children, className = "" }: { children: ReactNode; className?: string }) => (
   <div
     className={`flex min-w-0 flex-col justify-start gap-2.5 border-gray-200 py-1 xl:h-full xl:border-l xl:px-5 ${className}`}
   >
@@ -139,11 +125,7 @@ const TheHeaderKetQuaHocTap = ({ data }: { data: DuLieuHeaderKetQuaHocTap }) => 
         </CotThongTin>
 
         <CotThongTin>
-          <HangThongTin
-            icon={<GraduationCap size={16} />}
-            nhan="Khóa học"
-            giaTri={data.khoaHoc}
-          />
+          <HangThongTin icon={<GraduationCap size={16} />} nhan="Khóa học" giaTri={data.khoaHoc} />
           <HangThongTin icon={<BookOpen size={16} />} nhan="Khoa" giaTri={data.khoa} />
           <HangThongTin
             icon={<FileText size={16} />}
@@ -167,24 +149,14 @@ const TheHeaderKetQuaHocTap = ({ data }: { data: DuLieuHeaderKetQuaHocTap }) => 
       styles={{ body: { padding: 0 } }}
     >
       <div className="grid h-full grid-cols-2 divide-x divide-y divide-gray-100">
-        <OThongKe
-          tieuDe="CPA hiện tại"
-          giaTri={data.gpaHienTai}
-          phu="/ 4.00"
-          mau="blue"
-        />
+        <OThongKe tieuDe="CPA hiện tại" giaTri={data.gpaHienTai} phu="/ 4.00" mau="blue" />
         <OThongKe
           tieuDe="Tín chỉ tích lũy"
           giaTri={data.tinChiTichLuy}
           phu={`/ ${data.tinChiTong}`}
           mau="blue"
         />
-        <OThongKe
-          tieuDe="Điểm rèn luyện TB"
-          giaTri={data.diemRenLuyenTb}
-          phu="/ 100"
-          mau="green"
-        />
+        <OThongKe tieuDe="Điểm rèn luyện TB" giaTri={data.diemRenLuyenTb} phu="/ 100" mau="green" />
         <OThongKe tieuDe="Xếp loại học lực" giaTri={data.xepLoaiHocLuc} mau="green" />
       </div>
     </Card>

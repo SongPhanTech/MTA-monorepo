@@ -1,13 +1,6 @@
 import type { TomTatSinhVien } from "@components/cong-giang-vien/ho-so-sinh-vien/types"
 import { Avatar, Button, Tag } from "antd"
-import {
-  Calendar,
-  GraduationCap,
-  Layers,
-  School,
-  UserRound,
-  Users,
-} from "lucide-react"
+import { Calendar, GraduationCap, Layers, School, UserRound, Users } from "lucide-react"
 import type { ReactNode } from "react"
 
 interface TheTomTatSinhVienProps {

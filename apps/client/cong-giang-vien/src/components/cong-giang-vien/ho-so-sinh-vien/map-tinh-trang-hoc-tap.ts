@@ -76,9 +76,7 @@ const layNhanHanhDongHocVu = (action: AcademicActionType) => {
 }
 
 const dinhDangGpa = (gpaAtAward: number) =>
-  gpaAtAward != null && !Number.isNaN(Number(gpaAtAward))
-    ? Number(gpaAtAward).toFixed(2)
-    : "—"
+  gpaAtAward != null && !Number.isNaN(Number(gpaAtAward)) ? Number(gpaAtAward).toFixed(2) : "—"
 
 const mapHocBong = (awards: ScholarshipAwardRow[]): HocBongSinhVien[] =>
   awards.map((item) => ({

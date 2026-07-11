@@ -13,10 +13,7 @@ import type {
 } from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/types"
 import { useTatCaLich } from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/use-tat-ca-lich"
 import { queryClient } from "@api/index"
-import {
-  useDeleteIndividualSchedule,
-  useUpdateIndividualSchedule,
-} from "@workspace/db/hooks"
+import { useDeleteIndividualSchedule, useUpdateIndividualSchedule } from "@workspace/db/hooks"
 import { message } from "antd"
 import dayjs from "dayjs"
 import { useRouter } from "next/router"
