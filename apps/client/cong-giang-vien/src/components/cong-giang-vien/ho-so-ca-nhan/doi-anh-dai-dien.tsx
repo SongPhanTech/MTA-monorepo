@@ -1,4 +1,3 @@
-import { queryClient } from "@api/index"
 import useAnhDaiDien from "@hooks/use-anh-dai-dien"
 import { useUpdateUserProfile } from "@workspace/db/hooks"
 import { getRuntimeEnv } from "@workspace/libs/utils"
@@ -16,8 +15,10 @@ const KICH_THUOC_TOI_DA_MB = 5
 
 const DoiAnhDaiDien = ({ profileId, anhDaiDien }: DoiAnhDaiDienProps) => {
   const [dangTai, setDangTai] = useState(false)
-  const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
-  const linkAnh = useAnhDaiDien(profileId, anhDaiDien)
+  const [anhMoiTai, setAnhMoiTai] = useState<string>()
+  // Không refetch toàn bộ UserProfile (nặng, gây nháy cả trang) — chỉ tự cập nhật ảnh tại chỗ.
+  const { mutateAsync: updateUserProfile } = useUpdateUserProfile({ invalidateQueries: false })
+  const linkAnh = useAnhDaiDien(profileId, anhMoiTai ?? anhDaiDien)
 
   const handleUpload = async (file: File) => {
     if (!profileId) return
@@ -49,8 +50,8 @@ const DoiAnhDaiDien = ({ profileId, anhDaiDien }: DoiAnhDaiDienProps) => {
         where: { id: profileId },
         data: { avatar: fileName },
       })
+      setAnhMoiTai(fileName)
       message.success("Cập nhật ảnh đại diện thành công")
-      queryClient.invalidateQueries({ queryKey: ["UserProfile"] })
     } catch (error) {
       console.error(error)
       message.error("Không thể cập nhật ảnh đại diện, vui lòng thử lại")

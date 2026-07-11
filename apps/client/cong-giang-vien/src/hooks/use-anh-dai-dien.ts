@@ -41,9 +41,15 @@ const useAnhDaiDien = (userProfileId?: string, phienBan?: string) => {
         if (res?.status === 200) {
           urlAnh = URL.createObjectURL(res.data)
           setAnhDaiDien(urlAnh)
+        } else {
+          console.error("Không tải được ảnh đại diện", res)
+          setAnhDaiDien(undefined)
         }
-      } catch {
-        if (!daHuy) setAnhDaiDien(undefined)
+      } catch (error) {
+        if (!daHuy) {
+          console.error("Không tải được ảnh đại diện", error)
+          setAnhDaiDien(undefined)
+        }
       }
     }
 
