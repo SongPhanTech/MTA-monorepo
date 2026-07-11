@@ -1,5 +1,6 @@
 export type TomTatSinhVien = {
   anhDaiDien?: string
+  userProfileId?: string
   hoVaTen: string
   trangThai: { label: string; color: string }
   maSinhVien: string

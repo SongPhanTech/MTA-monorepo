@@ -542,7 +542,7 @@ export const buildSubjectMapOrThrow = async (
         code: s.code,
       })),
     },
-    include: { managementOrganization: { select: { sMa: true } } }
+    include: { managementOrganization: { select: { sMa: true } } },
   })
 
   const codeConflicts = subjects
@@ -564,12 +564,15 @@ export const buildSubjectMapOrThrow = async (
       }
 
       if (diffs.length > 0) {
-        console.log(`[DEBUG_CONFLICT] Môn học: ${s.code}`, { 
-          diffs, 
-          excelCredit: s.credit, dbCredit: existing.credit, 
-          excelPeriod: s.period, dbPeriod: existing.period, 
-          excelOrg: s.organizationCode, dbOrg: existing.managementOrganization?.sMa 
-        });
+        console.log(`[DEBUG_CONFLICT] Môn học: ${s.code}`, {
+          diffs,
+          excelCredit: s.credit,
+          dbCredit: existing.credit,
+          excelPeriod: s.period,
+          dbPeriod: existing.period,
+          excelOrg: s.organizationCode,
+          dbOrg: existing.managementOrganization?.sMa,
+        })
         return { code: s.code, diffs }
       }
       return null
@@ -595,7 +598,7 @@ export const buildSubjectMapOrThrow = async (
         period: s.period,
       })),
     },
-    include: { managementOrganization: { select: { sMa: true } } }
+    include: { managementOrganization: { select: { sMa: true } } },
   })
 
   const combinationConflicts = subjects.filter((s) => {

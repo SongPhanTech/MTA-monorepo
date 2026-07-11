@@ -5,7 +5,6 @@ import TheHeaderKetQuaHocTap, {
 import { chiTietLopQuanLyPath } from "@/utils/cong-giang-vien-path-helper"
 import { useScoreConverter } from "@hooks/scoreConverter"
 import { useFindManyStudentSubjectScore, useFindUniqueStudent } from "@workspace/db/hooks"
-import { getRuntimeEnv } from "@workspace/libs/utils"
 import { Alert, Button, Skeleton } from "antd"
 import dayjs from "dayjs"
 import { ArrowLeft } from "lucide-react"
@@ -31,15 +30,6 @@ const dinhDangNgay = (value?: string | Date | null) =>
 const dinhDangSo = (value: unknown, soChuSo = 2) =>
   value != null ? Number(value).toFixed(soChuSo).replace(".", ",") : "—"
 
-const layAnhDaiDien = (avatar?: string | null) => {
-  if (!avatar) return undefined
-  try {
-    return new URL(avatar, getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT")).href
-  } catch {
-    return undefined
-  }
-}
-
 export default function KetQuaHocTapSinhVienPage() {
   const router = useRouter()
   const fixedClassId = router.query.id as string
@@ -51,8 +41,8 @@ export default function KetQuaHocTapSinhVienPage() {
       include: {
         userProfile: {
           select: {
+            id: true,
             fullname: true,
-            avatar: true,
             dateOfBirth: true,
             email: true,
             phoneNumber: true,
@@ -193,7 +183,7 @@ export default function KetQuaHocTapSinhVienPage() {
 
   const headerData = student
     ? {
-        anhDaiDien: layAnhDaiDien(student.userProfile?.avatar),
+        userProfileId: student.userProfile?.id,
         hoVaTen: student.userProfile?.fullname ?? "—",
         maSinhVien: student.code ?? "—",
         gioiTinh: student.userProfile?.gender?.sTen ?? "—",

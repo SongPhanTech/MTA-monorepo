@@ -130,7 +130,11 @@ const LichTuanBang = ({ suKien, isLoading, onXemChiTiet }: LichTuanBangProps) =>
         className="bang-gv-full h-full [&_.ant-table]:text-xs"
         locale={{
           emptyText: (
-            <Empty description="Không có lịch" image={Empty.PRESENTED_IMAGE_SIMPLE} className="m-0" />
+            <Empty
+              description="Không có lịch"
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              className="m-0"
+            />
           ),
         }}
         onRow={(record) => ({

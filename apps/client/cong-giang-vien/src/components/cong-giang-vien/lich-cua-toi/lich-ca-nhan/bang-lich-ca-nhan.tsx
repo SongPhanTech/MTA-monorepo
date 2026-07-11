@@ -24,6 +24,7 @@ interface BangLichCaNhanProps {
   onDoiTuKhoa: (value: string) => void
   onSua?: (id: string) => void
   onXoa?: (id: string) => void
+  onXemChiTiet?: (id: string) => void
 }
 
 const CHIEU_CAO_HEADER_BANG = 39
@@ -56,6 +57,7 @@ const BangLichCaNhan = ({
   onDoiTuKhoa,
   onSua,
   onXoa,
+  onXemChiTiet,
 }: BangLichCaNhanProps) => {
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(240)
@@ -81,7 +83,10 @@ const BangLichCaNhan = ({
     align: "center",
     fixed: "right",
     render: (_, row) => (
-      <div className="flex items-center justify-center gap-2">
+      <div
+        className="flex items-center justify-center gap-2"
+        onClick={(e) => e.stopPropagation()}
+      >
         <EditIcon className="text-blue-600" title="Sửa" onClick={() => onSua?.(row.id)} />
         <DeleteIcon
           title="Xóa"
@@ -221,6 +226,10 @@ const BangLichCaNhan = ({
             bordered={true}
             // className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600 [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
             locale={{ emptyText }}
+            onRow={(row) => ({
+              onClick: () => onXemChiTiet?.(row.id),
+              style: { cursor: "pointer" },
+            })}
           />
         ) : cheDoHienThi === "tuan" ? (
           <TableCollapse<NhomNgayLich, "suKien">
@@ -242,6 +251,7 @@ const BangLichCaNhan = ({
             bordered={true}
             // className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600 [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
             locale={{ emptyText }}
+            onRowClick={(row) => onXemChiTiet?.(row.id)}
           />
         ) : (
           <Table<DongLichCaNhan>
@@ -255,6 +265,10 @@ const BangLichCaNhan = ({
             bordered={true}
             // className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600 [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
             locale={{ emptyText }}
+            onRow={(row) => ({
+              onClick: () => onXemChiTiet?.(row.id),
+              style: { cursor: "pointer" },
+            })}
           />
         )}
       </div>
