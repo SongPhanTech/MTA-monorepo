@@ -19,25 +19,44 @@ const fetchSession = async (): Promise<{
   data: Session | null
   error: Error | null
 }> => {
+  const appCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE")
+  const url = `${getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL")}/api/auth/get-session?appCode=${appCode}`
+
+  console.log("[fetchSession] ========== REQUEST ==========")
+  console.log("[fetchSession] url:", url)
+  console.log("[fetchSession] appCode:", appCode)
+  console.log("[fetchSession] document.cookie:", typeof document !== "undefined" ? document.cookie : "(ssr)")
+
   try {
-    const response = await fetch(
-      `${getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL")}/api/auth/get-session?appCode=${getRuntimeEnv("NEXT_PUBLIC_APP_CODE")}`,
-      {
-        method: "GET",
-        credentials: "include",
-      }
-    )
+    const response = await fetch(url, {
+      method: "GET",
+      credentials: "include",
+    })
+
+    console.log("[fetchSession] ========== RESPONSE ==========")
+    console.log("[fetchSession] status:", response.status, response.statusText)
+
+    const responseText = await response.text()
+    console.log("[fetchSession] body (raw):", responseText)
+
     if (!response.ok) {
-      throw new Error("Failed to fetch session")
+      throw new Error(`Failed to fetch session: ${response.status} ${responseText}`)
     }
-    const sessionData = await response.json()
+
+    const sessionData = JSON.parse(responseText) as Session
+    console.log("[fetchSession] body (parsed):", JSON.stringify(sessionData, null, 2))
+
     return {
       status: "authenticated",
       data: sessionData,
       error: null,
     }
   } catch (error) {
+    console.log("[fetchSession] ========== ERROR ==========")
+    console.log("[fetchSession] error:", error)
+
     if (window.NEXT_PUBLIC_AUTH_ISSUER) {
+      console.log("[fetchSession] redirecting to signIn...")
       signIn()
     }
     return {

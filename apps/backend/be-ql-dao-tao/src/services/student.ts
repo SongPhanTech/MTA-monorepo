@@ -362,7 +362,7 @@ export const exportStudentAcademicWarning = async ({
 export async function _generateStudentImportTemplate(
   trainingObjectTypeId: string
 ): Promise<ArrayBuffer> {
-  const [fixedClasses, curricula, organizations, trainingMajors, trainingFields] =
+  const [fixedClasses, curricula, organizations, trainingMajors, trainingFields, trainingObjectType] =
     await Promise.all([
       prisma.fixedClass.findMany({
         where: {
@@ -415,33 +415,42 @@ export async function _generateStudentImportTemplate(
         select: { name: true },
         orderBy: { name: "asc" },
       }),
+      prisma.trainingObjectType.findUniqueOrThrow({
+        where: { id: trainingObjectTypeId },
+        select: { name: true },
+      }),
     ])
 
   const buffer = await getTemplateBuffer(prisma, "MauImportDSHV_v4.xlsx")
   const template = new XlsxTemplate(buffer)
-  // template.substitute("HỌC VIÊN, SINH VIÊN", {
-  //   doituongdaotao: trainingObjectType.name,
-  // })
-  // template.substitute("DoiTuongDaoTao", {
-  //   team: [{ ten: trainingObjectType.name }],
-  // })
-  template.substitute("DanhMucLopQuanLi", {
+
+  const safeSubstitute = (sheetName: string, data: Record<string, unknown>) => {
+    try {
+      template.substitute(sheetName, data)
+    } catch (e) {
+      console.warn(`[_generateStudentImportTemplate] Không thể map sheet "${sheetName}":`, e)
+    }
+  }
+
+  safeSubstitute("HỌC VIÊN, SINH VIÊN", {
+    doituongdaotao: trainingObjectType.name,
+  })
+  safeSubstitute("DoiTuongDaoTao", {
+    team: [{ ten: trainingObjectType.name }],
+  })
+  safeSubstitute("DanhMucLopQuanLi", {
     team: fixedClasses.map((fc) => ({ ma: fc.code || "", ten: fc.name })),
   })
-
-  template.substitute("DanhMucChuongTrinhDaoTao", {
+  safeSubstitute("DanhMucChuongTrinhDaoTao", {
     team: curricula.map((c) => ({ ten: c.name })),
   })
-
-  template.substitute("DanhMucChuyenNganh", {
+  safeSubstitute("DanhMucChuyenNganh", {
     team: trainingMajors.map((tm) => ({ ten: tm.name })),
   })
-
-  template.substitute("DanhMucNganh", {
+  safeSubstitute("DanhMucNganh", {
     team: trainingFields.map((tf) => ({ ten: tf.name })),
   })
-
-  template.substitute("DanhMucDonViQuanLi", {
+  safeSubstitute("DanhMucDonViQuanLi", {
     team: organizations.map((o) => ({ ten: o.sTen })),
   })
 
