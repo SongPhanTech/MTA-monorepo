@@ -180,9 +180,9 @@ export default function StudentScoreClassPage() {
       dateOfBirth: student?.userProfile?.dateOfBirth,
       maSV: student?.code,
       // TODO: check htdt
-      htdt: student?.fixedClass?.trainingCourse.trainingObjectType.name,
-      nganh: student?.curriculumVersion?.curriculum.trainingMajor.name,
-      lop: student?.fixedClass?.trainingCourse?.name,
+      htdt: student?.fixedClass?.trainingCourse.trainingObjectType?.name || "",
+      nganh: student?.curriculumVersion?.curriculum.trainingMajor?.name || "",
+      lop: student?.fixedClass?.trainingCourse?.name || "",
       hocKis: hocKis,
     }
 
