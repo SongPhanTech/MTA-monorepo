@@ -1,7 +1,120 @@
-import { getTemplateBuffer } from "@workspace/libs/server"
-import type { $Enums } from "@workspace/db"
-import XlsxTemplate from "xlsx-template"
+import type { $Enums, Prisma } from "@workspace/db"
 import { prisma } from ".."
+import { renderXlsxTemplate } from "./render-xlsx-template"
+
+type SubjectClassExport = Prisma.SubjectClassGetPayload<{
+  include: {
+    subject: {
+      select: {
+        code: true
+        codeTkb: true
+        name: true
+        credit: true
+      }
+    }
+    mainLecturer: {
+      include: { userProfile: { select: { fullname: true } } }
+    }
+    extraLecturer: {
+      include: { userProfile: { select: { fullname: true } } }
+    }
+    room: {
+      select: {
+        name: true
+      }
+    }
+    subjectClassTimes: true
+  }
+}>
+
+const subjectClassInclude = {
+  subject: {
+    select: {
+      code: true,
+      codeTkb: true,
+      name: true,
+      credit: true,
+    },
+  },
+  mainLecturer: {
+    include: { userProfile: { select: { fullname: true } } },
+  },
+  extraLecturer: {
+    include: { userProfile: { select: { fullname: true } } },
+  },
+  room: {
+    select: {
+      name: true,
+    },
+  },
+  subjectClassTimes: {
+    orderBy: [{ dayOfWeek: "asc" }, { startPeriod: "asc" }],
+  },
+} satisfies Prisma.SubjectClassInclude
+
+function formatWeekday(dayOfWeek?: number | null) {
+  if (!dayOfWeek) return ""
+  return String(dayOfWeek)
+}
+
+function formatPeriod(startPeriod?: number | null, endPeriod?: number | null) {
+  if (!startPeriod || !endPeriod) return ""
+  return `${startPeriod}-${endPeriod}`
+}
+
+function buildExportRows(subjectClasses: SubjectClassExport[]) {
+  const groupedBySubject = Object.groupBy(subjectClasses, (sc) => sc.subject.code)
+
+  let subjectIndex = 0
+  return Object.entries(groupedBySubject).flatMap(([_, classes = []]) => {
+    subjectIndex++
+
+    return classes.flatMap((sc) => {
+      const uniqueTimes = [
+        ...new Map(
+          sc.subjectClassTimes.map((time) => [
+            `${time.dayOfWeek}-${time.startPeriod}-${time.endPeriod}`,
+            time,
+          ])
+        ).values(),
+      ]
+
+      const timeSlots = uniqueTimes.length > 0 ? uniqueTimes : [null]
+
+      return timeSlots.map((classTime) => ({
+        no: subjectIndex,
+        subjectCode: sc.subject.codeTkb || sc.subject.code,
+        subjectName: sc.subject.name,
+        credit: sc.subject.credit,
+        classCode: sc.code,
+        lecturers: [sc.mainLecturer, sc.extraLecturer]
+          .map((lecturer) => lecturer?.userProfile?.fullname)
+          .filter(Boolean)
+          .join(", "),
+        weekday: formatWeekday(classTime?.dayOfWeek),
+        period: formatPeriod(classTime?.startPeriod, classTime?.endPeriod),
+        room: sc.room?.name || "",
+        maxStudent: sc.maxStudent,
+      }))
+    })
+  })
+}
+
+function buildSchoolYearLabel(schoolYear: { name: string; startDate: Date }) {
+  if (schoolYear.name?.trim()) {
+    return schoolYear.name.trim()
+  }
+  const start = new Date(schoolYear.startDate).getFullYear()
+  return `${start} - ${start + 1}`
+}
+
+function buildSemesterTitle(semesterName: string, schoolYearLabel: string) {
+  return `${semesterName.toUpperCase()}, NĂM HỌC ${schoolYearLabel.toUpperCase()}`
+}
+
+function sanitizeSheetName(name: string) {
+  return name.replace(/[\\/?*:[\]]/g, "_").slice(0, 31) || "Khoa"
+}
 
 export async function exportThoiKhoaBieu({
   semesterId,
@@ -14,129 +127,100 @@ export async function exportThoiKhoaBieu({
   trainingCourseId?: string
   type?: $Enums.SubjectClassType
 }) {
-  const semester = await prisma.semester.findUniqueOrThrow({
-    where: { id: semesterId },
-    include: {
-      schoolYear: true,
-    },
-  })
+  const [semester, trainingObjectType] = await Promise.all([
+    prisma.semester.findUniqueOrThrow({
+      where: { id: semesterId },
+      include: {
+        schoolYear: true,
+      },
+    }),
+    prisma.trainingObjectType.findUniqueOrThrow({
+      where: { id: trainingObjectTypeId },
+      select: { name: true },
+    }),
+  ])
 
-  const semesterTypeLabel = (() => {
-    switch (semester.semesterType) {
-      case "FIRST":
-        return "Học kỳ 1"
-      case "SECOND":
-        return "Học kỳ 2"
-      case "SUMMER":
-        return "Học kỳ Hè"
-      case "FIRST_SUPPLEMENTARY":
-        return "Học kỳ phụ 1"
-      case "SECOND_SUPPLEMENTARY":
-        return "Học kỳ phụ 2"
-      default:
-        return semester.name
-    }
-  })()
+  const schoolYearLabel = buildSchoolYearLabel(semester.schoolYear)
 
-  const schoolYearLabel = (() => {
-    const start = new Date(semester.schoolYear.startDate).getFullYear()
-    const end = start + 1
-    return `${start} - ${end}`
-  })()
+  const subjectClassWhere = {
+    semesterId,
+    trainingObjectTypeId,
+    ...(type ? { type } : {}),
+    active: true,
+    deletedAt: null,
+    cancelled: false,
+    status: "OFFICIAL" as const,
+  }
 
-  const semesterName = `${semesterTypeLabel.toUpperCase()}, NĂM HỌC ${schoolYearLabel}`
-
-  const subjectClasses = await prisma.subjectClass.findMany({
-    where: {
-      semesterId,
-      trainingObjectTypeId,
-      ...(type ? { type } : {}),
-      ...(trainingCourseId
-        ? {
-            OR: [{ fixedClasses: { some: { trainingCourseId } } }, { fixedClasses: { none: {} } }],
-          }
-        : {}),
-      active: true,
-      deletedAt: null,
-    },
-    include: {
-      subject: {
-        select: {
-          code: true,
-          codeTkb: true,
-          name: true,
-          credit: true,
+  const trainingCourses = trainingCourseId
+    ? await prisma.trainingCourse.findMany({
+        where: {
+          id: trainingCourseId,
+          trainingObjectTypeId,
+          deletedAt: null,
         },
-      },
-      mainLecturer: {
-        include: { userProfile: { select: { fullname: true } } },
-      },
-      extraLecturer: {
-        include: { userProfile: { select: { fullname: true } } },
-      },
-      fixedClasses: {
-        select: {
-          _count: {
-            select: {
-              students: {
-                where: { deletedAt: null, active: true, status: "ENROLLED" },
+        select: { id: true, name: true },
+        orderBy: { name: "asc" },
+      })
+    : await prisma.trainingCourse.findMany({
+        where: {
+          trainingObjectTypeId,
+          deletedAt: null,
+          fixedClasses: {
+            some: {
+              deletedAt: null,
+              subjectClasses: {
+                some: subjectClassWhere,
               },
             },
           },
         },
-      },
-      room: {
-        select: {
-          name: true,
-        },
-      },
-      subjectClassTimes: {
-        take: 1,
-      },
-    },
-    orderBy: [{ subject: { code: "asc" } }, { code: "asc" }],
-  })
+        select: { id: true, name: true },
+        orderBy: { name: "asc" },
+      })
 
-  // Group by subject code
-  const groupedBySubject = Object.groupBy(subjectClasses, (sc) => sc.subject.code)
+  if (trainingCourses.length === 0) {
+    throw new Error("Không tìm thấy khóa học để xuất tờ trình")
+  }
 
-  let subjectIndex = 0
-  const data = Object.entries(groupedBySubject).flatMap(([_, classes = []]) => {
-    subjectIndex++
+  const templatePath = "MAU2_DanSu_template.xlsx"
+  const sheets: { sheetName: string; data: Record<string, unknown> }[] = []
 
-    return classes.map((sc) => {
-      const classTime = sc.subjectClassTimes[0]
-      return {
-        no: subjectIndex,
-        subjectCode: sc.subject.codeTkb || sc.subject.code,
-        subjectName: sc.subject.name,
-        credit: sc.subject.credit,
-        classCode: sc.code,
-        lecturers: [sc.mainLecturer, sc.extraLecturer]
-          .filter(Boolean)
-          .map((lecturer) =>
-            lecturer?.code
-              ? `${lecturer.userProfile?.fullname} (${lecturer.code})`
-              : lecturer?.userProfile?.fullname
-          )
-          .filter(Boolean)
-          .join("; "),
-        weekday: classTime?.dayOfWeek || "",
-        period: classTime ? `${classTime.startPeriod} - ${classTime.endPeriod}` : "",
-        room: sc.room?.name || "",
-        maxStudent: sc.maxStudent,
-      }
+  for (const trainingCourse of trainingCourses) {
+    const subjectClasses = await prisma.subjectClass.findMany({
+      where: {
+        ...subjectClassWhere,
+        OR: [
+          { fixedClasses: { some: { trainingCourseId: trainingCourse.id } } },
+          { fixedClasses: { none: {} } },
+        ],
+      },
+      include: subjectClassInclude,
+      orderBy: [{ subject: { code: "asc" } }, { code: "asc" }],
     })
+
+    if (subjectClasses.length === 0) {
+      continue
+    }
+
+    sheets.push({
+      sheetName: sanitizeSheetName(trainingCourse.name),
+      data: {
+        semesterName: buildSemesterTitle(semester.name, schoolYearLabel),
+        courseName: trainingCourse.name.toUpperCase(),
+        trainingObjectTypeName: trainingObjectType.name.toUpperCase(),
+        data: buildExportRows(subjectClasses),
+      },
+    })
+  }
+
+  if (sheets.length === 0) {
+    throw new Error("Không có dữ liệu thời khoá biểu để xuất")
+  }
+
+  return renderXlsxTemplate(prisma, {
+    templatePath,
+    sheets,
+    autoPatchTablePlaceholders: true,
   })
-
-  const buffer = await getTemplateBuffer(prisma, "MAU2_DanSu_template.xlsx")
-  const template = new XlsxTemplate(buffer)
-
-  template.substitute(1, {
-    semesterName,
-    data,
-  })
-
-  const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
-  return result
 }

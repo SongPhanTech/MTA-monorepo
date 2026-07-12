@@ -4,59 +4,80 @@
  * API Quản lý Đào tạo — MTA
  * ## Giới thiệu
 
-Tài liệu mô tả toàn bộ các API phục vụ hệ thống **Quản lý Đào tạo nội bộ** của Học viện Kỹ thuật Quân sự (MTA).
+Tài liệu mô tả các **API tùy chỉnh** phục vụ hệ thống **Quản lý Đào tạo nội bộ** của Học viện Kỹ thuật Quân sự (MTA).
 
-Bộ API này được sử dụng bởi các cán bộ quản lý đào tạo, giảng viên và hệ thống nghiệp vụ nội bộ, bao gồm:
+**Phạm vi:**
+- API tùy chỉnh: học viên, lớp HP, kỳ thi, tốt nghiệp, thống kê, import, xuất báo cáo, … (`/api/student`, `/api/subject-class`, `/api/exam`, …)
+- Zenstack auto-CRUD: chỉ các model thuộc domain **quản lý đào tạo**, **chỉ GET** `findMany` và `findUnique`
 
-- Quản lý **học viên / sinh viên**: kết quả học tập, học bổng, cảnh báo học vụ, xử lý học vụ
-- Quản lý **lớp học phần** và **lớp niên chế**: mở lớp, gán lớp, nhập/xuất điểm
-- Quản lý **kỳ thi**: lên danh sách thi, sinh phách, lưu điểm theo phách, thi lại
-- Quản lý **điểm chứng chỉ / điểm thưởng** (ArchivedScore): cộng điểm, phê duyệt, xuất báo cáo
-- Quản lý **chương trình đào tạo** (Curriculum): import/xuất phiên bản CTĐT, môn học
-- Xử lý **tốt nghiệp** (Graduation): xét điều kiện, cấp số hiệu bằng, in phôi bằng
-- **Thống kê & phân tích** (Stats): phân bổ sinh viên, GPA, tỷ lệ tốt nghiệp, KPI tổng quan
-- **Nhập dữ liệu** (Import): Excel giảng viên, học viên, hệ quân sự, thực tập
-- Xuất báo cáo **thời khóa biểu**, **kết quả học tập**, **văn bằng**
+Bộ API được sử dụng bởi cán bộ quản lý đào tạo, giảng viên và hệ thống nghiệp vụ nội bộ.
 
 ---
 
 ## Xác thực
 
-Tất cả các endpoint đều yêu cầu xác thực bằng **Bearer Token (JWT)**.
-
-Thêm header sau vào mỗi request:
+Các endpoint yêu cầu xác thực bằng **Bearer Token (JWT)** khi middleware auth được bật.
 
 ```
 Authorization: Bearer <access_token>
 ```
 
-Token được cấp sau khi đăng nhập qua hệ thống SSO của MTA. Token có thời hạn sử dụng; khi hết hạn cần làm mới (refresh) trước khi gọi lại API.
+Token được cấp sau khi đăng nhập qua hệ thống SSO của MTA.
 
 ---
 
-## Định dạng phản hồi
+## Định dạng phản hồi thành công (2xx)
 
-Hầu hết các endpoint trả về HTTP **200** với cấu trúc JSON thống nhất:
+Tùy endpoint, body JSON thành công có thể là một trong các dạng sau:
+
+- `{ "message": "..." }` — thao tác đơn giản
+- `{ "success": true, "message": "..." }` — duyệt phiếu, ghép kỳ thi, gán lớp NC, …
+- `{ "data": [...], "success": true }` — gán lớp niên chế vào lớp HP
+- `{ "message": "...", "count": N }` — cập nhật hàng loạt
+- `{ "message": "...", "time": ms }` — kết quả import Excel
+- `{ "data": [...], "count": N }` — danh sách có tổng số bản ghi
+- `{ "data": [...] }` — danh sách không kèm count (một số API học lại/thi lại)
+- `{ "data": [...], "count": N, "summary": {}, "preview": false }` — thống kê (Stats)
+- Mảng JSON `[...]` — danh sách đơn giản (phòng học, lĩnh vực đào tạo, …)
+- **File binary** — Excel (`.xlsx`), Word (`.docx`), PowerPoint (`.pptx`) với header `Content-Disposition: attachment`
+
+**Zenstack CRUD (`/api/model/*`):**
+- `{ "data": ... }` — kết quả truy vấn
+- `{ "data": ..., "meta": { "serialization": ... } }` — khi có meta serialization (superjson)
+
+---
+
+## Định dạng phản hồi lỗi (4xx / 5xx)
+
+Hầu hết lỗi trả về JSON:
 
 ```json
-{
-  "success": true,
-  "data": { ... },
-  "message": "..."
-}
+{ "message": "Mô tả lỗi bằng tiếng Việt" }
 ```
 
-Các endpoint xuất file (Excel, PowerPoint, PDF) trả về **blob binary** với `Content-Type` tương ứng (`application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`, ...).
+| Mã HTTP | Khi nào | Body |
+|---|---|---|
+| **400** | Dữ liệu không hợp lệ, lỗi nghiệp vụ, parse Excel, FK Prisma P2003 | `{ "message" }`, `{ "success": false, "message" }`, `{ "message", "errors"?: [...] }`, hoặc `{ "message", "failed"?: [...] }` |
+| **403** | IP bị chặn, vi phạm access policy Zenstack | `{ "message": "Your IP is blocked" }` hoặc `{ "message" }` |
+| **404** | Không tìm thấy bản ghi (Prisma P2025) | `{ "message" }` |
+| **409** | Trùng dữ liệu unique (Prisma P2002) | `{ "message" }` |
+| **422** | Validation input Zenstack (Zod) | `{ "message" }` |
+| **500** | Lỗi máy chủ không xử lý | `{ "message" }` hoặc `"Internal Server Error"` |
+
+Một số endpoint đặc biệt:
+- **Import:** `{ "message", "errors"?: [...] }` khi parse Excel; `{ "message", "failed": [...] }` khi lỗi transaction
+- **Kỳ thi / lớp HP:** `{ "success": false, "message" }` (HTTP 400) khi không có dữ liệu xử lý
+- **Duyệt sửa điểm:** `{ "success": false, "message" }` (HTTP 400)
+- **Tốt nghiệp:** `{ "message", "existing"?, "shouldSkip"? }` khi xung đột dữ liệu
 
 ---
 
 ## Quy ước chung
 
-- Request sử dụng **POST** (dữ liệu phức tạp) hoặc **GET** (truy vấn đơn giản).
-- Body gửi lên theo định dạng `application/json` hoặc `multipart/form-data` (khi upload file).
-- Các trường tìm kiếm **không phân biệt hoa/thường** (case-insensitive).
-- Ngày giờ trả về theo chuẩn **ISO 8601** (UTC).
-- Các endpoint **Import** nhận file Excel (`.xlsx`) qua `multipart/form-data`, trả về báo cáo kết quả từng dòng (thành công / lỗi).
+- Request dùng **POST** (dữ liệu phức tạp) hoặc **GET** (truy vấn đơn giản).
+- Body: `application/json` hoặc `multipart/form-data` (upload file Excel).
+- Endpoint **Import** nhận file `.xlsx`, trả về thời gian xử lý và danh sách lỗi từng dòng (nếu có).
+- Ngày giờ theo chuẩn **ISO 8601** (UTC) khi có trong response.
  * OpenAPI spec version: 1.0.0
  */
 import type { EnrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculum } from './enrollFixedClassOnSubjectClassFixedClassCurriculumVersionCurriculum';

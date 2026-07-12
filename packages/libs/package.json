@@ -17,7 +17,7 @@
         ".": "./src/index.ts"
     },
     "scripts": {
-        "generate:api": "orval"
+    "generate:api": "node scripts/prepare-openapi.mjs && node --stack-size=65536 ./node_modules/orval/dist/bin/orval.js"
     },
     "devDependencies": {
         "@types/file-saver": "catalog:",

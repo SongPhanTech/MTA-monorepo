@@ -63,20 +63,25 @@ const exportThoiKhoaBieuRoute = createRoute({
 app.openapi(exportThoiKhoaBieuRoute, async (c) => {
   const { semesterId, trainingObjectTypeId, trainingCourseId, type } = c.req.valid("json")
 
-  const result = await exportThoiKhoaBieu({
-    semesterId,
-    trainingObjectTypeId,
-    trainingCourseId,
-    type,
-  })
+  try {
+    const result = await exportThoiKhoaBieu({
+      semesterId,
+      trainingObjectTypeId,
+      trainingCourseId,
+      type,
+    })
 
-  const fileName = "Thoi-Khoa-Bieu.xlsx"
-  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+    const fileName = "To-trinh-thoi-khoa-bieu.xlsx"
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-  return c.body(result, 200, {
-    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "Content-Disposition": disposition,
-  })
+    return c.body(result, 200, {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Disposition": disposition,
+    })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Xuất tờ trình thất bại"
+    return c.json({ message }, 404)
+  }
 })
 
 export default app

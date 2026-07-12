@@ -20,7 +20,7 @@ export default defineConfig({
     },
   },
   training_api: {
-    input: "https://mta.swantech.vn/api/lms/openapi",
+    input: "./openapi/training.openapi.json",
     output: {
       client: "react-query",
       httpClient: "fetch",
@@ -38,7 +38,7 @@ export default defineConfig({
     },
   },
   ems_api: {
-    input: "https://mta.swantech.vn/api/ems/openapi",
+    input: "./openapi/ems.openapi.json",
     output: {
       client: "react-query",
       httpClient: "fetch",
