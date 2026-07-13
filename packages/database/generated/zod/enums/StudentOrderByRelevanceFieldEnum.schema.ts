@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const StudentOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "note", "registerNumber", "doctoralCode", "admissionCombination", "department", "departmentAddress", "universitySchool", "universityTrainingType", "universityMajor", "universityRank", "foreignLanguage", "priorityReason", "trainingLocationId", "unionLeader", "fixedClassId", "userProfileId", "registrationAreaId", "curriculumVersionId", "curriculumVersionParallelId"])
+export const StudentOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "note", "trainingFieldId", "registerNumber", "doctoralCode", "admissionCombination", "department", "departmentAddress", "universitySchool", "universityTrainingType", "universityMajor", "universityRank", "foreignLanguage", "priorityReason", "trainingLocationId", "unionLeader", "fixedClassId", "userProfileId", "registrationAreaId", "curriculumVersionId", "curriculumVersionParallelId"])

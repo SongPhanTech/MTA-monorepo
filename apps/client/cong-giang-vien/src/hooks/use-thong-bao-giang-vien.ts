@@ -53,10 +53,8 @@ const mapThongBao = (
   }
 }
 
-const sapXepTheoMoiNhat = (
-  a: { publishedAt: Date | string },
-  b: { publishedAt: Date | string }
-) => dayjs(b.publishedAt).valueOf() - dayjs(a.publishedAt).valueOf()
+const sapXepTheoMoiNhat = (a: { publishedAt: Date | string }, b: { publishedAt: Date | string }) =>
+  dayjs(b.publishedAt).valueOf() - dayjs(a.publishedAt).valueOf()
 
 // Lấy thông báo 4 loại cảnh báo của giảng viên từ bảng Notification.
 const useThongBaoGiangVien = () => {

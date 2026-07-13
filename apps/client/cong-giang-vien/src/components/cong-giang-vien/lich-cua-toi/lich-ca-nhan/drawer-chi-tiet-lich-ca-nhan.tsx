@@ -149,7 +149,12 @@ const DrawerChiTietLichCaNhan = ({
               Chỉnh sửa
             </Button>
             <Button
-              icon={<Check size={15} className={daHoanThanh ? "text-gray-400" : "text-cgv-green-dark"} />}
+              icon={
+                <Check
+                  size={15}
+                  className={daHoanThanh ? "text-gray-400" : "text-cgv-green-dark"}
+                />
+              }
               loading={dangHoanThanh}
               disabled={daHoanThanh}
               onClick={() => onHoanThanh(lichId)}

@@ -350,6 +350,7 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
     return {
       tomTat: {
         anhDaiDien: layAnhDaiDien(profile?.avatar),
+        userProfileId: profile?.id,
         hoVaTen: profile?.fullname ?? "",
         trangThai: layNhanTrangThai(student.status),
         maSinhVien: student.code ?? profile?.code ?? "",

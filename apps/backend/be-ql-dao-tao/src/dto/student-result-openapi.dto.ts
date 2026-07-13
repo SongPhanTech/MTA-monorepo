@@ -24,7 +24,7 @@ export const ClassDivisionResultSchema = z
   )
   .openapi("ClassDivisionResult")
 
-export const VersionAppResponseSchema = z.record(z.string(), z.unknown()).openapi({
+export const VersionAppResponseSchema = z.record(z.string(), z.any()).openapi({
   description: "Payload phiên bản ứng dụng trả về từ API MTA (cấu trúc do dịch vụ MTA quy định).",
 })
 

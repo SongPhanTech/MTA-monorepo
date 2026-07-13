@@ -6,7 +6,12 @@ import { getWarningLevelColor } from "@hooks/getWarningLevelColor"
 import useSpinner from "@hooks/spinner"
 import { useStudentTrainingTypeOptions } from "@hooks/studentTrainingType"
 import type { AcademicRankingConvert, FixedClass } from "@workspace/db/client"
-import { useCountStudent, useFindManyFixedClass, useFindManyStudent } from "@workspace/db/hooks"
+import {
+  useCountStudent,
+  useFindManyFixedClass,
+  useFindManyStudent,
+  useFindUniqueTrainingObjectType,
+} from "@workspace/db/hooks"
 import {
   useCalculateStudentSemesterResultJson,
   useExportStudentSemesterResult,
@@ -31,6 +36,13 @@ const DiemTrungBinhKyHoc = () => {
   const { id: semesterId } = useSemesterStore()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const { id: trainingCourseId } = useTrainingCourseStore()
+
+  // Lấy thông tin đối tượng đào tạo để phân biệt dân sự / quân sự
+  const { data: trainingObjectTypeData } = useFindUniqueTrainingObjectType(
+    { where: { id: trainingObjectTypeId ?? "" }, select: { type: true } },
+    { enabled: !!trainingObjectTypeId }
+  )
+  const isCivilian = trainingObjectTypeData?.type === "CIVILIAN"
 
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -157,6 +169,15 @@ const DiemTrungBinhKyHoc = () => {
             name: true,
             unionSecretaryId: true,
             classMonitorId: true,
+            trainingCourse: {
+              select: {
+                trainingObjectType: {
+                  select: {
+                    type: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -321,8 +342,11 @@ const DiemTrungBinhKyHoc = () => {
             rowClassName={(record: any) => {
               const gpa4 = record?.studentSemesterResult?.[0]?.gpaBase4
               const gpa10 = record?.studentSemesterResult?.[0]?.gpaBase10
+              const trainingObjectType =
+                record?.fixedClass?.trainingCourse?.trainingObjectType?.type
+              const isMilitary = trainingObjectType === "MILITARY"
               const hasResult = gpa4 !== null && gpa4 !== undefined
-              if (hasResult && (Number(gpa4) === 0 || Number(gpa10) === 0)) {
+              if (isMilitary && hasResult && (Number(gpa4) === 0 || Number(gpa10) === 0)) {
                 return "row-failed"
               }
               return ""
@@ -354,7 +378,7 @@ const DiemTrungBinhKyHoc = () => {
                 sorter: true,
                 showSorterTooltip: {
                   target: "sorter-icon",
-                  title: "Nhấp để sắp xếp", // Dòng chữ bạn muốn hiển thị
+                  title: "Nhấp để sắp xếp",
                 },
                 render: (__, record) => record?.userProfile?.fullname,
               },
@@ -376,18 +400,22 @@ const DiemTrungBinhKyHoc = () => {
                   <Tooltip title={record?.fixedClass?.name}>{record?.fixedClass?.code}</Tooltip>
                 ),
               },
-              {
-                title: "Năm học thứ...",
-                dataIndex: ["studentSemesterResult", "0", "studyYear"],
-                width: 100,
-                align: "center",
-              },
-              {
-                title: "Học kỳ thứ.../ toàn khoá",
-                dataIndex: ["studentSemesterResult", "0", "semesterIndexInCourse"],
-                width: 120,
-                align: "center",
-              },
+              ...(!isCivilian
+                ? [
+                    {
+                      title: "Năm học thứ...",
+                      dataIndex: ["studentSemesterResult", "0", "studyYear"],
+                      width: 100,
+                      align: "center" as const,
+                    },
+                    {
+                      title: "Học kỳ thứ.../ toàn khoá",
+                      dataIndex: ["studentSemesterResult", "0", "semesterIndexInCourse"],
+                      width: 120,
+                      align: "center" as const,
+                    },
+                  ]
+                : []),
               {
                 title: "Hệ số xét học bổng",
                 dataIndex: ["studentSemesterResult", "0", "baseScore"],

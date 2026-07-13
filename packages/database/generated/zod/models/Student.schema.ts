@@ -90,6 +90,7 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    trainingField: z.record(z.string(), z.unknown()).optional(),
     trainingLocation: z.record(z.string(), z.unknown()).optional(),
     priorityObject: z.array(z.unknown()).optional(),
     classMonitor: z.array(z.unknown()).optional(),
@@ -130,6 +131,7 @@ const relationSchema = z.object({
 }
 );
 const fkSchema = z.object({
+    trainingFieldId: z.string().nullish(),
     trainingLocationId: z.string().nullish(),
     fixedClassId: z.string().nullish(),
     userProfileId: z.string().uuid(),

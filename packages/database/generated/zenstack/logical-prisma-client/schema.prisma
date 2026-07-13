@@ -3602,7 +3602,6 @@ model SubjectVersion {
   scoreLinkSubjectVersion  ScoreLinkSubjectVersion[]
   certificate              Certificate[]
 
-  @@unique([trainingObjectTypeId, name, credit, period, managementOrganizationId])
   @@index([name, trainingObjectTypeId])
   @@index([subjectId])
   @@schema("ql-dao-tao")
@@ -4269,6 +4268,7 @@ model TrainingField {
   curriculum          Curriculum[]
   surveyObjectTypes   SurveyObjectType[]
   documentFiles       DocumentFile[]
+  students            Student[]
 
   @@schema("ql-dao-tao")
 }
@@ -4682,6 +4682,8 @@ model Student {
   note                           String?
   from                           DateTime?
   to                             DateTime?
+  trainingField                  TrainingField?                   @relation(fields: [trainingFieldId], references: [id])
+  trainingFieldId                String?
   /// số báo danh
   registerNumber                 String?
   /// mã hồ sơ tiến sĩ

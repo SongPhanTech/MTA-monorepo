@@ -86,7 +86,7 @@ const ModalPrintToKQHT = () => {
           select: {
             id: true,
             graduationDecision: {
-              select: { 
+              select: {
                 finalGpa: true,
                 finalRanking: {
                   select: {
@@ -511,8 +511,8 @@ const ModalPrintToKQHT = () => {
             <div className="flex">
               <div className="min-w-32">Xếp loại:</div>
               <span className="font-bold">
-                {subjectScoreData?.students?.[0]?.graduationDecision?.finalRanking?.classification ||
-                  convertAcademicRanking(gpaScore)?.classification}
+                {subjectScoreData?.students?.[0]?.graduationDecision?.finalRanking
+                  ?.classification || convertAcademicRanking(gpaScore)?.classification}
               </span>
             </div>
           </div>

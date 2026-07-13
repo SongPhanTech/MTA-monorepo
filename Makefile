@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= swan1
+SERVER_PROFILE ?= app
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -63,7 +63,7 @@ else ifeq ($(SERVER_PROFILE),local_mta)
 # ── Profile: app2 ─────────────────────────────────────────────────────────────
 else ifeq ($(SERVER_PROFILE),app)
   SERVER_HOST      := app
-  SERVER_PASSWORD  := 1
+  SERVER_PASSWORD  := 
   BE_DEPLOY_DIR    := ~/app/be
   BE_APP_DIR       := ~/app/be
   FE_APP_DIR       := ~/app/fe

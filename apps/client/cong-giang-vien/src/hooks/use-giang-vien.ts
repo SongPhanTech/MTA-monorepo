@@ -15,17 +15,12 @@ const useGiangVien = () => {
   )
 
   const isSessionLoading =
-    !sessionStatus ||
-    sessionStatus === "loading" ||
-    sessionStatus === "unauthenticated"
+    !sessionStatus || sessionStatus === "loading" || sessionStatus === "unauthenticated"
 
   const isProfileLoading =
-    sessionStatus === "authenticated" &&
-    !!profileId &&
-    (isPending || isFetching || !isFetched)
+    sessionStatus === "authenticated" && !!profileId && (isPending || isFetching || !isFetched)
 
-  const accessResolved =
-    sessionStatus === "authenticated" && (!profileId || isFetched)
+  const accessResolved = sessionStatus === "authenticated" && (!profileId || isFetched)
 
   return {
     isGiangVien: accessResolved && !!profileId && !!data?.bLaGiangVien,

@@ -129,6 +129,7 @@ const TabLichCaNhan = () => {
             onDoiTuKhoa={onDoiTuKhoa}
             onSua={handleSua}
             onXoa={handleXoaTuBang}
+            onXemChiTiet={handleXemChiTiet}
           />
         ) : cheDoHienThi === "thang" ? (
           <LichThangCaNhan

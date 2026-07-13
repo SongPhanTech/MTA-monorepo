@@ -1,19 +1,12 @@
 import NhanTrangThai from "@components/cong-giang-vien/ho-so-sinh-vien/nhan-trang-thai"
 import { FIXED_CLASS_STUDENT_STATUS } from "@constants/constants"
+import useAnhDaiDien from "@hooks/use-anh-dai-dien"
 import { Avatar, Card } from "antd"
-import {
-  BookOpen,
-  Calendar,
-  FileText,
-  GraduationCap,
-  Mail,
-  Phone,
-  UserRound,
-} from "lucide-react"
+import { BookOpen, Calendar, FileText, GraduationCap, Mail, Phone, UserRound } from "lucide-react"
 import type { ReactNode } from "react"
 
 export type DuLieuHeaderKetQuaHocTap = {
-  anhDaiDien?: string
+  userProfileId?: string
   hoVaTen: string
   maSinhVien: string
   gioiTinh: string
@@ -79,13 +72,7 @@ const OThongKe = ({
   </div>
 )
 
-const CotThongTin = ({
-  children,
-  className = "",
-}: {
-  children: ReactNode
-  className?: string
-}) => (
+const CotThongTin = ({ children, className = "" }: { children: ReactNode; className?: string }) => (
   <div
     className={`flex min-w-0 flex-col justify-start gap-2.5 border-gray-200 py-1 xl:h-full xl:border-l xl:px-5 ${className}`}
   >
@@ -93,103 +80,102 @@ const CotThongTin = ({
   </div>
 )
 
-const TheHeaderKetQuaHocTap = ({ data }: { data: DuLieuHeaderKetQuaHocTap }) => (
-  <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch">
-    <Card
-      className="min-w-0 flex-1 rounded-xl border border-gray-200 shadow-sm"
-      styles={{ body: { padding: "18px 22px" } }}
-    >
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-4 xl:items-stretch xl:gap-0">
-        <div className="flex min-w-0 items-center gap-4 xl:pr-2">
-          <Avatar
-            size={88}
-            src={data.anhDaiDien}
-            icon={<UserRound size={36} />}
-            className="shrink-0 bg-cgv-green/15 text-cgv-green-dark"
-          />
-          <div className="min-w-0 flex-1">
-            <p className="m-0 text-base font-bold leading-tight text-cgv-green-dark">
-              {data.hoVaTen}
-            </p>
-            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-600">
-              <span>
-                <span className="text-gray-500">MSSV:</span>{" "}
-                <span className="font-semibold text-gray-800">{data.maSinhVien}</span>
-              </span>
-              <span className="hidden h-3 w-px bg-gray-200 sm:block" />
-              <span>
-                <span className="text-gray-500">Giới tính:</span>{" "}
-                <span className="font-semibold text-gray-800">{data.gioiTinh}</span>
-              </span>
-            </div>
-            <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs text-gray-600">
-              <span>
-                <span className="text-gray-500">Lớp:</span>{" "}
-                <span className="font-semibold text-gray-800">{data.lop}</span>
-              </span>
-              <NhanTrangThai label={data.trangThai.label} />
+const TheHeaderKetQuaHocTap = ({ data }: { data: DuLieuHeaderKetQuaHocTap }) => {
+  const anhDaiDien = useAnhDaiDien(data.userProfileId)
+
+  return (
+    <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch">
+      <Card
+        className="min-w-0 flex-1 rounded-xl border border-gray-200 shadow-sm"
+        styles={{ body: { padding: "18px 22px" } }}
+      >
+        <div className="grid grid-cols-1 gap-5 xl:grid-cols-4 xl:items-stretch xl:gap-0">
+          <div className="flex min-w-0 items-center gap-4 xl:pr-2">
+            <Avatar
+              size={88}
+              src={anhDaiDien}
+              icon={<UserRound size={36} />}
+              className="shrink-0 bg-cgv-green/15 text-cgv-green-dark"
+            />
+            <div className="min-w-0 flex-1">
+              <p className="m-0 text-base font-bold leading-tight text-cgv-green-dark">
+                {data.hoVaTen}
+              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-600">
+                <span>
+                  <span className="text-gray-500">MSSV:</span>{" "}
+                  <span className="font-semibold text-gray-800">{data.maSinhVien}</span>
+                </span>
+                <span className="hidden h-3 w-px bg-gray-200 sm:block" />
+                <span>
+                  <span className="text-gray-500">Giới tính:</span>{" "}
+                  <span className="font-semibold text-gray-800">{data.gioiTinh}</span>
+                </span>
+              </div>
+              <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs text-gray-600">
+                <span>
+                  <span className="text-gray-500">Lớp:</span>{" "}
+                  <span className="font-semibold text-gray-800">{data.lop}</span>
+                </span>
+                <NhanTrangThai label={data.trangThai.label} />
+              </div>
             </div>
           </div>
+
+          <CotThongTin>
+            <HangThongTin icon={<Calendar size={16} />} nhan="Ngày sinh" giaTri={data.ngaySinh} />
+            <HangThongTin icon={<Mail size={16} />} nhan="Email" giaTri={data.email} />
+            <HangThongTin icon={<Phone size={16} />} nhan="SĐT liên hệ" giaTri={data.sdt} />
+          </CotThongTin>
+
+          <CotThongTin>
+            <HangThongTin
+              icon={<GraduationCap size={16} />}
+              nhan="Khóa học"
+              giaTri={data.khoaHoc}
+            />
+            <HangThongTin icon={<BookOpen size={16} />} nhan="Khoa" giaTri={data.khoa} />
+            <HangThongTin
+              icon={<FileText size={16} />}
+              nhan="Chương trình đào tạo"
+              giaTri={data.chuongTrinhDaoTao}
+            />
+          </CotThongTin>
+
+          <CotThongTin>
+            <HangThongTin
+              icon={<Calendar size={16} />}
+              nhan="Ngày vào trường"
+              giaTri={data.ngayVaoTruong}
+            />
+          </CotThongTin>
         </div>
+      </Card>
 
-        <CotThongTin>
-          <HangThongTin icon={<Calendar size={16} />} nhan="Ngày sinh" giaTri={data.ngaySinh} />
-          <HangThongTin icon={<Mail size={16} />} nhan="Email" giaTri={data.email} />
-          <HangThongTin icon={<Phone size={16} />} nhan="SĐT liên hệ" giaTri={data.sdt} />
-        </CotThongTin>
-
-        <CotThongTin>
-          <HangThongTin
-            icon={<GraduationCap size={16} />}
-            nhan="Khóa học"
-            giaTri={data.khoaHoc}
+      <Card
+        className="w-full shrink-0 rounded-xl border border-gray-200 shadow-sm lg:w-[260px]"
+        styles={{ body: { padding: 0 } }}
+      >
+        <div className="grid h-full grid-cols-2 divide-x divide-y divide-gray-100">
+          <OThongKe tieuDe="CPA hiện tại" giaTri={data.gpaHienTai} phu="/ 4.00" mau="blue" />
+          <OThongKe
+            tieuDe="Tín chỉ tích lũy"
+            giaTri={data.tinChiTichLuy}
+            phu={`/ ${data.tinChiTong}`}
+            mau="blue"
           />
-          <HangThongTin icon={<BookOpen size={16} />} nhan="Khoa" giaTri={data.khoa} />
-          <HangThongTin
-            icon={<FileText size={16} />}
-            nhan="Chương trình đào tạo"
-            giaTri={data.chuongTrinhDaoTao}
+          <OThongKe
+            tieuDe="Điểm rèn luyện TB"
+            giaTri={data.diemRenLuyenTb}
+            phu="/ 100"
+            mau="green"
           />
-        </CotThongTin>
-
-        <CotThongTin>
-          <HangThongTin
-            icon={<Calendar size={16} />}
-            nhan="Ngày vào trường"
-            giaTri={data.ngayVaoTruong}
-          />
-        </CotThongTin>
-      </div>
-    </Card>
-
-    <Card
-      className="w-full shrink-0 rounded-xl border border-gray-200 shadow-sm lg:w-[260px]"
-      styles={{ body: { padding: 0 } }}
-    >
-      <div className="grid h-full grid-cols-2 divide-x divide-y divide-gray-100">
-        <OThongKe
-          tieuDe="CPA hiện tại"
-          giaTri={data.gpaHienTai}
-          phu="/ 4.00"
-          mau="blue"
-        />
-        <OThongKe
-          tieuDe="Tín chỉ tích lũy"
-          giaTri={data.tinChiTichLuy}
-          phu={`/ ${data.tinChiTong}`}
-          mau="blue"
-        />
-        <OThongKe
-          tieuDe="Điểm rèn luyện TB"
-          giaTri={data.diemRenLuyenTb}
-          phu="/ 100"
-          mau="green"
-        />
-        <OThongKe tieuDe="Xếp loại học lực" giaTri={data.xepLoaiHocLuc} mau="green" />
-      </div>
-    </Card>
-  </div>
-)
+          <OThongKe tieuDe="Xếp loại học lực" giaTri={data.xepLoaiHocLuc} mau="green" />
+        </div>
+      </Card>
+    </div>
+  )
+}
 
 export const layNhanTrangThaiSinhVien = (status: string) => {
   const meta = FIXED_CLASS_STUDENT_STATUS[status as keyof typeof FIXED_CLASS_STUDENT_STATUS]

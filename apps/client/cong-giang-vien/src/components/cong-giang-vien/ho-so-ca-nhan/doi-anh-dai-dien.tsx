@@ -1,6 +1,6 @@
-import { queryClient } from "@api/index"
+import useAnhDaiDien from "@hooks/use-anh-dai-dien"
 import { useUpdateUserProfile } from "@workspace/db/hooks"
-import { getMinioUrl, getRuntimeEnv } from "@workspace/libs/utils"
+import { getRuntimeEnv } from "@workspace/libs/utils"
 import { Avatar, Button, message, Upload } from "antd"
 import axios from "axios"
 import { Camera, UserRound } from "lucide-react"
@@ -13,17 +13,19 @@ interface DoiAnhDaiDienProps {
 
 const KICH_THUOC_TOI_DA_MB = 5
 
-// Ảnh đại diện kèm nút "Đổi ảnh" đặt dưới avatar - upload qua API chung (đồng bộ với hồ sơ).
 const DoiAnhDaiDien = ({ profileId, anhDaiDien }: DoiAnhDaiDienProps) => {
   const [dangTai, setDangTai] = useState(false)
-  const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
+  const [anhMoiTai, setAnhMoiTai] = useState<string>()
+  // Không refetch toàn bộ UserProfile (nặng, gây nháy cả trang) — chỉ tự cập nhật ảnh tại chỗ.
+  const { mutateAsync: updateUserProfile } = useUpdateUserProfile({ invalidateQueries: false })
+  const linkAnh = useAnhDaiDien(profileId, anhMoiTai ?? anhDaiDien)
 
   const handleUpload = async (file: File) => {
     if (!profileId) return
     try {
       setDangTai(true)
-      const tenantCode = window.tenantCode || "dev"
-      const appCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || "lms"
+      const tenantCode = window.tenantCode
+      const appCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE")
       const formData = new FormData()
       formData.append("file", file)
 
@@ -48,8 +50,8 @@ const DoiAnhDaiDien = ({ profileId, anhDaiDien }: DoiAnhDaiDienProps) => {
         where: { id: profileId },
         data: { avatar: fileName },
       })
+      setAnhMoiTai(fileName)
       message.success("Cập nhật ảnh đại diện thành công")
-      queryClient.invalidateQueries({ queryKey: ["UserProfile"] })
     } catch (error) {
       console.error(error)
       message.error("Không thể cập nhật ảnh đại diện, vui lòng thử lại")
@@ -60,13 +62,7 @@ const DoiAnhDaiDien = ({ profileId, anhDaiDien }: DoiAnhDaiDienProps) => {
 
   return (
     <div className="flex w-fit flex-col items-center gap-2">
-      <Avatar
-        shape="square"
-        size={140}
-        src={getMinioUrl(anhDaiDien)}
-        icon={<UserRound />}
-        className="rounded-lg"
-      />
+      <Avatar shape="square" size={140} src={linkAnh} icon={<UserRound />} className="rounded-lg" />
       <Upload
         accept="image/*"
         maxCount={1}
