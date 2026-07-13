@@ -47,6 +47,7 @@ model DM_CapBac extends CoreBase {
 }
 
 model DM_ChucDanh extends CoreBase {
+  // 0: Chức vụ chính quyền, 1: Chức vụ Đảng
   iLoaiChucDanh Int?          @default(0)
   userProfile   UserProfile[]
   @@schema("mta")
