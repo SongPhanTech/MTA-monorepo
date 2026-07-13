@@ -28,7 +28,7 @@ type ExportTrainingDataSuccess = {
 }
 
 type ExportTrainingDataError = {
-  status: number
+  status: Exclude<number, 200>
   data: { message?: string }
   headers: Headers
 }

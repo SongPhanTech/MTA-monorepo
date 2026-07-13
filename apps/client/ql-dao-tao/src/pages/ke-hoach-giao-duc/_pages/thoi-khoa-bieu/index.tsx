@@ -582,7 +582,9 @@ export default function ThoiKhoaBieu({
         return
       }
 
-      message.error(res.data?.message || "Xuất dữ liệu thô thất bại")
+      message.error(
+        ("message" in res.data ? res.data.message : undefined) || "Xuất dữ liệu thô thất bại"
+      )
     } catch {
       message.error("Đã xảy ra lỗi khi xuất dữ liệu thô")
     } finally {
