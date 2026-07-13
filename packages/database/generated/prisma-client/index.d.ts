@@ -28096,6 +28096,7 @@ export namespace Prisma {
   export type DM_ChucVuCountOutputType = {
     userProfileCPV: number
     userProfile: number
+    userProfilePosition: number
     quaTrinhCongTac: number
     quaTrinhCuDiCongTac: number
     chucVuChinhQuyen: number
@@ -28105,6 +28106,7 @@ export namespace Prisma {
   export type DM_ChucVuCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userProfileCPV?: boolean | DM_ChucVuCountOutputTypeCountUserProfileCPVArgs
     userProfile?: boolean | DM_ChucVuCountOutputTypeCountUserProfileArgs
+    userProfilePosition?: boolean | DM_ChucVuCountOutputTypeCountUserProfilePositionArgs
     quaTrinhCongTac?: boolean | DM_ChucVuCountOutputTypeCountQuaTrinhCongTacArgs
     quaTrinhCuDiCongTac?: boolean | DM_ChucVuCountOutputTypeCountQuaTrinhCuDiCongTacArgs
     chucVuChinhQuyen?: boolean | DM_ChucVuCountOutputTypeCountChucVuChinhQuyenArgs
@@ -28133,6 +28135,13 @@ export namespace Prisma {
    * DM_ChucVuCountOutputType without action
    */
   export type DM_ChucVuCountOutputTypeCountUserProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserProfileWhereInput
+  }
+
+  /**
+   * DM_ChucVuCountOutputType without action
+   */
+  export type DM_ChucVuCountOutputTypeCountUserProfilePositionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserProfileWhereInput
   }
 
@@ -39175,6 +39184,7 @@ export namespace Prisma {
     academicRankTypeId: string | null
     academicRankDate: Date | null
     levelId: string | null
+    positionId: string | null
     chiHuyQuanLyId: string | null
     chuyenMonKyThuatId: string | null
     sucKhoeId: string | null
@@ -39306,6 +39316,7 @@ export namespace Prisma {
     academicRankTypeId: string | null
     academicRankDate: Date | null
     levelId: string | null
+    positionId: string | null
     chiHuyQuanLyId: string | null
     chuyenMonKyThuatId: string | null
     sucKhoeId: string | null
@@ -39437,6 +39448,7 @@ export namespace Prisma {
     academicRankTypeId: number
     academicRankDate: number
     levelId: number
+    positionId: number
     chiHuyQuanLyId: number
     chuyenMonKyThuatId: number
     sucKhoeId: number
@@ -39584,6 +39596,7 @@ export namespace Prisma {
     academicRankTypeId?: true
     academicRankDate?: true
     levelId?: true
+    positionId?: true
     chiHuyQuanLyId?: true
     chuyenMonKyThuatId?: true
     sucKhoeId?: true
@@ -39715,6 +39728,7 @@ export namespace Prisma {
     academicRankTypeId?: true
     academicRankDate?: true
     levelId?: true
+    positionId?: true
     chiHuyQuanLyId?: true
     chuyenMonKyThuatId?: true
     sucKhoeId?: true
@@ -39846,6 +39860,7 @@ export namespace Prisma {
     academicRankTypeId?: true
     academicRankDate?: true
     levelId?: true
+    positionId?: true
     chiHuyQuanLyId?: true
     chuyenMonKyThuatId?: true
     sucKhoeId?: true
@@ -40064,6 +40079,7 @@ export namespace Prisma {
     academicRankTypeId: string | null
     academicRankDate: Date | null
     levelId: string | null
+    positionId: string | null
     chiHuyQuanLyId: string | null
     chuyenMonKyThuatId: string | null
     sucKhoeId: string | null
@@ -40214,6 +40230,7 @@ export namespace Prisma {
     academicRankTypeId?: boolean
     academicRankDate?: boolean
     levelId?: boolean
+    positionId?: boolean
     chiHuyQuanLyId?: boolean
     chuyenMonKyThuatId?: boolean
     sucKhoeId?: boolean
@@ -40274,6 +40291,7 @@ export namespace Prisma {
     academicDegreeType?: boolean | UserProfile$academicDegreeTypeArgs<ExtArgs>
     academicRankType?: boolean | UserProfile$academicRankTypeArgs<ExtArgs>
     level?: boolean | UserProfile$levelArgs<ExtArgs>
+    position?: boolean | UserProfile$positionArgs<ExtArgs>
     chiHuyQuanLy?: boolean | UserProfile$chiHuyQuanLyArgs<ExtArgs>
     chuyenMonKyThuat?: boolean | UserProfile$chuyenMonKyThuatArgs<ExtArgs>
     sucKhoe?: boolean | UserProfile$sucKhoeArgs<ExtArgs>
@@ -40436,6 +40454,7 @@ export namespace Prisma {
     academicRankTypeId?: boolean
     academicRankDate?: boolean
     levelId?: boolean
+    positionId?: boolean
     chiHuyQuanLyId?: boolean
     chuyenMonKyThuatId?: boolean
     sucKhoeId?: boolean
@@ -40496,6 +40515,7 @@ export namespace Prisma {
     academicDegreeType?: boolean | UserProfile$academicDegreeTypeArgs<ExtArgs>
     academicRankType?: boolean | UserProfile$academicRankTypeArgs<ExtArgs>
     level?: boolean | UserProfile$levelArgs<ExtArgs>
+    position?: boolean | UserProfile$positionArgs<ExtArgs>
     chiHuyQuanLy?: boolean | UserProfile$chiHuyQuanLyArgs<ExtArgs>
     chuyenMonKyThuat?: boolean | UserProfile$chuyenMonKyThuatArgs<ExtArgs>
     sucKhoe?: boolean | UserProfile$sucKhoeArgs<ExtArgs>
@@ -40611,6 +40631,7 @@ export namespace Prisma {
     academicRankTypeId?: boolean
     academicRankDate?: boolean
     levelId?: boolean
+    positionId?: boolean
     chiHuyQuanLyId?: boolean
     chuyenMonKyThuatId?: boolean
     sucKhoeId?: boolean
@@ -40671,6 +40692,7 @@ export namespace Prisma {
     academicDegreeType?: boolean | UserProfile$academicDegreeTypeArgs<ExtArgs>
     academicRankType?: boolean | UserProfile$academicRankTypeArgs<ExtArgs>
     level?: boolean | UserProfile$levelArgs<ExtArgs>
+    position?: boolean | UserProfile$positionArgs<ExtArgs>
     chiHuyQuanLy?: boolean | UserProfile$chiHuyQuanLyArgs<ExtArgs>
     chuyenMonKyThuat?: boolean | UserProfile$chuyenMonKyThuatArgs<ExtArgs>
     sucKhoe?: boolean | UserProfile$sucKhoeArgs<ExtArgs>
@@ -40786,6 +40808,7 @@ export namespace Prisma {
     academicRankTypeId?: boolean
     academicRankDate?: boolean
     levelId?: boolean
+    positionId?: boolean
     chiHuyQuanLyId?: boolean
     chuyenMonKyThuatId?: boolean
     sucKhoeId?: boolean
@@ -40819,7 +40842,7 @@ export namespace Prisma {
     trinhDoHocVanId?: boolean
   }
 
-  export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "officePhone" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "chucVuChinhQuyenId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>
+  export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "officePhone" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "positionId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "chucVuChinhQuyenId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>
   export type UserProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     group?: boolean | UserProfile$groupArgs<ExtArgs>
     provinceCurrentAddress?: boolean | UserProfile$provinceCurrentAddressArgs<ExtArgs>
@@ -40850,6 +40873,7 @@ export namespace Prisma {
     academicDegreeType?: boolean | UserProfile$academicDegreeTypeArgs<ExtArgs>
     academicRankType?: boolean | UserProfile$academicRankTypeArgs<ExtArgs>
     level?: boolean | UserProfile$levelArgs<ExtArgs>
+    position?: boolean | UserProfile$positionArgs<ExtArgs>
     chiHuyQuanLy?: boolean | UserProfile$chiHuyQuanLyArgs<ExtArgs>
     chuyenMonKyThuat?: boolean | UserProfile$chuyenMonKyThuatArgs<ExtArgs>
     sucKhoe?: boolean | UserProfile$sucKhoeArgs<ExtArgs>
@@ -40943,6 +40967,7 @@ export namespace Prisma {
     academicDegreeType?: boolean | UserProfile$academicDegreeTypeArgs<ExtArgs>
     academicRankType?: boolean | UserProfile$academicRankTypeArgs<ExtArgs>
     level?: boolean | UserProfile$levelArgs<ExtArgs>
+    position?: boolean | UserProfile$positionArgs<ExtArgs>
     chiHuyQuanLy?: boolean | UserProfile$chiHuyQuanLyArgs<ExtArgs>
     chuyenMonKyThuat?: boolean | UserProfile$chuyenMonKyThuatArgs<ExtArgs>
     sucKhoe?: boolean | UserProfile$sucKhoeArgs<ExtArgs>
@@ -40989,6 +41014,7 @@ export namespace Prisma {
     academicDegreeType?: boolean | UserProfile$academicDegreeTypeArgs<ExtArgs>
     academicRankType?: boolean | UserProfile$academicRankTypeArgs<ExtArgs>
     level?: boolean | UserProfile$levelArgs<ExtArgs>
+    position?: boolean | UserProfile$positionArgs<ExtArgs>
     chiHuyQuanLy?: boolean | UserProfile$chiHuyQuanLyArgs<ExtArgs>
     chuyenMonKyThuat?: boolean | UserProfile$chuyenMonKyThuatArgs<ExtArgs>
     sucKhoe?: boolean | UserProfile$sucKhoeArgs<ExtArgs>
@@ -41038,6 +41064,7 @@ export namespace Prisma {
       academicDegreeType: Prisma.$DM_HocViPayload<ExtArgs> | null
       academicRankType: Prisma.$DM_HocHamPayload<ExtArgs> | null
       level: Prisma.$DM_ChucDanhPayload<ExtArgs> | null
+      position: Prisma.$DM_ChucVuPayload<ExtArgs> | null
       chiHuyQuanLy: Prisma.$DM_ChiHuyQuanLyPayload<ExtArgs> | null
       chuyenMonKyThuat: Prisma.$DM_ChuyenMonKyThuatPayload<ExtArgs> | null
       sucKhoe: Prisma.$DM_SucKhoePayload<ExtArgs> | null
@@ -41210,6 +41237,7 @@ export namespace Prisma {
       academicRankTypeId: string | null
       academicRankDate: Date | null
       levelId: string | null
+      positionId: string | null
       chiHuyQuanLyId: string | null
       chuyenMonKyThuatId: string | null
       sucKhoeId: string | null
@@ -41664,6 +41692,7 @@ export namespace Prisma {
     academicDegreeType<T extends UserProfile$academicDegreeTypeArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$academicDegreeTypeArgs<ExtArgs>>): Prisma__DM_HocViClient<$Result.GetResult<Prisma.$DM_HocViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     academicRankType<T extends UserProfile$academicRankTypeArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$academicRankTypeArgs<ExtArgs>>): Prisma__DM_HocHamClient<$Result.GetResult<Prisma.$DM_HocHamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     level<T extends UserProfile$levelArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$levelArgs<ExtArgs>>): Prisma__DM_ChucDanhClient<$Result.GetResult<Prisma.$DM_ChucDanhPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    position<T extends UserProfile$positionArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$positionArgs<ExtArgs>>): Prisma__DM_ChucVuClient<$Result.GetResult<Prisma.$DM_ChucVuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     chiHuyQuanLy<T extends UserProfile$chiHuyQuanLyArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$chiHuyQuanLyArgs<ExtArgs>>): Prisma__DM_ChiHuyQuanLyClient<$Result.GetResult<Prisma.$DM_ChiHuyQuanLyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     chuyenMonKyThuat<T extends UserProfile$chuyenMonKyThuatArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$chuyenMonKyThuatArgs<ExtArgs>>): Prisma__DM_ChuyenMonKyThuatClient<$Result.GetResult<Prisma.$DM_ChuyenMonKyThuatPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sucKhoe<T extends UserProfile$sucKhoeArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$sucKhoeArgs<ExtArgs>>): Prisma__DM_SucKhoeClient<$Result.GetResult<Prisma.$DM_SucKhoePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -41851,6 +41880,7 @@ export namespace Prisma {
     readonly academicRankTypeId: FieldRef<"UserProfile", 'String'>
     readonly academicRankDate: FieldRef<"UserProfile", 'DateTime'>
     readonly levelId: FieldRef<"UserProfile", 'String'>
+    readonly positionId: FieldRef<"UserProfile", 'String'>
     readonly chiHuyQuanLyId: FieldRef<"UserProfile", 'String'>
     readonly chuyenMonKyThuatId: FieldRef<"UserProfile", 'String'>
     readonly sucKhoeId: FieldRef<"UserProfile", 'String'>
@@ -42826,6 +42856,25 @@ export namespace Prisma {
      */
     include?: DM_ChucDanhInclude<ExtArgs> | null
     where?: DM_ChucDanhWhereInput
+  }
+
+  /**
+   * UserProfile.position
+   */
+  export type UserProfile$positionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DM_ChucVu
+     */
+    select?: DM_ChucVuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DM_ChucVu
+     */
+    omit?: DM_ChucVuOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_ChucVuInclude<ExtArgs> | null
+    where?: DM_ChucVuWhereInput
   }
 
   /**
@@ -96223,6 +96272,7 @@ export namespace Prisma {
     iNhomChucVu?: boolean
     userProfileCPV?: boolean | DM_ChucVu$userProfileCPVArgs<ExtArgs>
     userProfile?: boolean | DM_ChucVu$userProfileArgs<ExtArgs>
+    userProfilePosition?: boolean | DM_ChucVu$userProfilePositionArgs<ExtArgs>
     quaTrinhCongTac?: boolean | DM_ChucVu$quaTrinhCongTacArgs<ExtArgs>
     quaTrinhCuDiCongTac?: boolean | DM_ChucVu$quaTrinhCuDiCongTacArgs<ExtArgs>
     chucVuChinhQuyen?: boolean | DM_ChucVu$chucVuChinhQuyenArgs<ExtArgs>
@@ -96291,6 +96341,7 @@ export namespace Prisma {
   export type DM_ChucVuInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userProfileCPV?: boolean | DM_ChucVu$userProfileCPVArgs<ExtArgs>
     userProfile?: boolean | DM_ChucVu$userProfileArgs<ExtArgs>
+    userProfilePosition?: boolean | DM_ChucVu$userProfilePositionArgs<ExtArgs>
     quaTrinhCongTac?: boolean | DM_ChucVu$quaTrinhCongTacArgs<ExtArgs>
     quaTrinhCuDiCongTac?: boolean | DM_ChucVu$quaTrinhCuDiCongTacArgs<ExtArgs>
     chucVuChinhQuyen?: boolean | DM_ChucVu$chucVuChinhQuyenArgs<ExtArgs>
@@ -96305,6 +96356,7 @@ export namespace Prisma {
     objects: {
       userProfileCPV: Prisma.$UserProfilePayload<ExtArgs>[]
       userProfile: Prisma.$UserProfilePayload<ExtArgs>[]
+      userProfilePosition: Prisma.$UserProfilePayload<ExtArgs>[]
       quaTrinhCongTac: Prisma.$QuaTrinhCongTacPayload<ExtArgs>[]
       quaTrinhCuDiCongTac: Prisma.$QuaTrinhCuDiCongTacPayload<ExtArgs>[]
       chucVuChinhQuyen: Prisma.$ChucVuChinhQuyenPayload<ExtArgs>[]
@@ -96723,6 +96775,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     userProfileCPV<T extends DM_ChucVu$userProfileCPVArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$userProfileCPVArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     userProfile<T extends DM_ChucVu$userProfileArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$userProfileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    userProfilePosition<T extends DM_ChucVu$userProfilePositionArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$userProfilePositionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     quaTrinhCongTac<T extends DM_ChucVu$quaTrinhCongTacArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$quaTrinhCongTacArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuaTrinhCongTacPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     quaTrinhCuDiCongTac<T extends DM_ChucVu$quaTrinhCuDiCongTacArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$quaTrinhCuDiCongTacArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuaTrinhCuDiCongTacPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     chucVuChinhQuyen<T extends DM_ChucVu$chucVuChinhQuyenArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVu$chucVuChinhQuyenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChucVuChinhQuyenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -97187,6 +97240,30 @@ export namespace Prisma {
    * DM_ChucVu.userProfile
    */
   export type DM_ChucVu$userProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserProfile
+     */
+    select?: UserProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserProfile
+     */
+    omit?: UserProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserProfileInclude<ExtArgs> | null
+    where?: UserProfileWhereInput
+    orderBy?: UserProfileOrderByWithRelationInput | UserProfileOrderByWithRelationInput[]
+    cursor?: UserProfileWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserProfileScalarFieldEnum | UserProfileScalarFieldEnum[]
+  }
+
+  /**
+   * DM_ChucVu.userProfilePosition
+   */
+  export type DM_ChucVu$userProfilePositionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the UserProfile
      */
@@ -392772,6 +392849,7 @@ export namespace Prisma {
     academicRankTypeId: 'academicRankTypeId',
     academicRankDate: 'academicRankDate',
     levelId: 'levelId',
+    positionId: 'positionId',
     chiHuyQuanLyId: 'chiHuyQuanLyId',
     chuyenMonKyThuatId: 'chuyenMonKyThuatId',
     sucKhoeId: 'sucKhoeId',
@@ -398544,6 +398622,7 @@ export namespace Prisma {
     academicDegreeTypeId: 'academicDegreeTypeId',
     academicRankTypeId: 'academicRankTypeId',
     levelId: 'levelId',
+    positionId: 'positionId',
     chiHuyQuanLyId: 'chiHuyQuanLyId',
     chuyenMonKyThuatId: 'chuyenMonKyThuatId',
     sucKhoeId: 'sucKhoeId',
@@ -403681,6 +403760,7 @@ export namespace Prisma {
     academicRankTypeId?: UuidNullableFilter<"UserProfile"> | string | null
     academicRankDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     levelId?: UuidNullableFilter<"UserProfile"> | string | null
+    positionId?: UuidNullableFilter<"UserProfile"> | string | null
     chiHuyQuanLyId?: StringNullableFilter<"UserProfile"> | string | null
     chuyenMonKyThuatId?: StringNullableFilter<"UserProfile"> | string | null
     sucKhoeId?: StringNullableFilter<"UserProfile"> | string | null
@@ -403741,6 +403821,7 @@ export namespace Prisma {
     academicDegreeType?: XOR<DM_HocViNullableScalarRelationFilter, DM_HocViWhereInput> | null
     academicRankType?: XOR<DM_HocHamNullableScalarRelationFilter, DM_HocHamWhereInput> | null
     level?: XOR<DM_ChucDanhNullableScalarRelationFilter, DM_ChucDanhWhereInput> | null
+    position?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
     chiHuyQuanLy?: XOR<DM_ChiHuyQuanLyNullableScalarRelationFilter, DM_ChiHuyQuanLyWhereInput> | null
     chuyenMonKyThuat?: XOR<DM_ChuyenMonKyThuatNullableScalarRelationFilter, DM_ChuyenMonKyThuatWhereInput> | null
     sucKhoe?: XOR<DM_SucKhoeNullableScalarRelationFilter, DM_SucKhoeWhereInput> | null
@@ -403902,6 +403983,7 @@ export namespace Prisma {
     academicRankTypeId?: SortOrderInput | SortOrder
     academicRankDate?: SortOrderInput | SortOrder
     levelId?: SortOrderInput | SortOrder
+    positionId?: SortOrderInput | SortOrder
     chiHuyQuanLyId?: SortOrderInput | SortOrder
     chuyenMonKyThuatId?: SortOrderInput | SortOrder
     sucKhoeId?: SortOrderInput | SortOrder
@@ -403962,6 +404044,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViOrderByWithRelationInput
     academicRankType?: DM_HocHamOrderByWithRelationInput
     level?: DM_ChucDanhOrderByWithRelationInput
+    position?: DM_ChucVuOrderByWithRelationInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyOrderByWithRelationInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatOrderByWithRelationInput
     sucKhoe?: DM_SucKhoeOrderByWithRelationInput
@@ -404127,6 +404210,7 @@ export namespace Prisma {
     academicRankTypeId?: UuidNullableFilter<"UserProfile"> | string | null
     academicRankDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     levelId?: UuidNullableFilter<"UserProfile"> | string | null
+    positionId?: UuidNullableFilter<"UserProfile"> | string | null
     chiHuyQuanLyId?: StringNullableFilter<"UserProfile"> | string | null
     chuyenMonKyThuatId?: StringNullableFilter<"UserProfile"> | string | null
     sucKhoeId?: StringNullableFilter<"UserProfile"> | string | null
@@ -404187,6 +404271,7 @@ export namespace Prisma {
     academicDegreeType?: XOR<DM_HocViNullableScalarRelationFilter, DM_HocViWhereInput> | null
     academicRankType?: XOR<DM_HocHamNullableScalarRelationFilter, DM_HocHamWhereInput> | null
     level?: XOR<DM_ChucDanhNullableScalarRelationFilter, DM_ChucDanhWhereInput> | null
+    position?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
     chiHuyQuanLy?: XOR<DM_ChiHuyQuanLyNullableScalarRelationFilter, DM_ChiHuyQuanLyWhereInput> | null
     chuyenMonKyThuat?: XOR<DM_ChuyenMonKyThuatNullableScalarRelationFilter, DM_ChuyenMonKyThuatWhereInput> | null
     sucKhoe?: XOR<DM_SucKhoeNullableScalarRelationFilter, DM_SucKhoeWhereInput> | null
@@ -404348,6 +404433,7 @@ export namespace Prisma {
     academicRankTypeId?: SortOrderInput | SortOrder
     academicRankDate?: SortOrderInput | SortOrder
     levelId?: SortOrderInput | SortOrder
+    positionId?: SortOrderInput | SortOrder
     chiHuyQuanLyId?: SortOrderInput | SortOrder
     chuyenMonKyThuatId?: SortOrderInput | SortOrder
     sucKhoeId?: SortOrderInput | SortOrder
@@ -404487,6 +404573,7 @@ export namespace Prisma {
     academicRankTypeId?: UuidNullableWithAggregatesFilter<"UserProfile"> | string | null
     academicRankDate?: DateTimeNullableWithAggregatesFilter<"UserProfile"> | Date | string | null
     levelId?: UuidNullableWithAggregatesFilter<"UserProfile"> | string | null
+    positionId?: UuidNullableWithAggregatesFilter<"UserProfile"> | string | null
     chiHuyQuanLyId?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     chuyenMonKyThuatId?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
     sucKhoeId?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
@@ -408922,6 +409009,7 @@ export namespace Prisma {
     iNhomChucVu?: IntNullableFilter<"DM_ChucVu"> | number | null
     userProfileCPV?: UserProfileListRelationFilter
     userProfile?: UserProfileListRelationFilter
+    userProfilePosition?: UserProfileListRelationFilter
     quaTrinhCongTac?: QuaTrinhCongTacListRelationFilter
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacListRelationFilter
     chucVuChinhQuyen?: ChucVuChinhQuyenListRelationFilter
@@ -408947,6 +409035,7 @@ export namespace Prisma {
     iNhomChucVu?: SortOrderInput | SortOrder
     userProfileCPV?: UserProfileOrderByRelationAggregateInput
     userProfile?: UserProfileOrderByRelationAggregateInput
+    userProfilePosition?: UserProfileOrderByRelationAggregateInput
     quaTrinhCongTac?: QuaTrinhCongTacOrderByRelationAggregateInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacOrderByRelationAggregateInput
     chucVuChinhQuyen?: ChucVuChinhQuyenOrderByRelationAggregateInput
@@ -408976,6 +409065,7 @@ export namespace Prisma {
     iNhomChucVu?: IntNullableFilter<"DM_ChucVu"> | number | null
     userProfileCPV?: UserProfileListRelationFilter
     userProfile?: UserProfileListRelationFilter
+    userProfilePosition?: UserProfileListRelationFilter
     quaTrinhCongTac?: QuaTrinhCongTacListRelationFilter
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacListRelationFilter
     chucVuChinhQuyen?: ChucVuChinhQuyenListRelationFilter
@@ -435355,6 +435445,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -435516,6 +435607,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -435709,6 +435801,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -435870,6 +435963,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -436047,6 +436141,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -436265,6 +436360,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -441263,6 +441359,7 @@ export namespace Prisma {
     iNhomChucVu?: number | null
     userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
     userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
+    userProfilePosition?: UserProfileCreateNestedManyWithoutPositionInput
     quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
     chucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutChucVuChinhQuyenInput
@@ -441288,6 +441385,7 @@ export namespace Prisma {
     iNhomChucVu?: number | null
     userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
     userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+    userProfilePosition?: UserProfileUncheckedCreateNestedManyWithoutPositionInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
@@ -441313,6 +441411,7 @@ export namespace Prisma {
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
     userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
     userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
+    userProfilePosition?: UserProfileUpdateManyWithoutPositionNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutChucVuChinhQuyenNestedInput
@@ -441338,6 +441437,7 @@ export namespace Prisma {
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
     userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
     userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+    userProfilePosition?: UserProfileUncheckedUpdateManyWithoutPositionNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
@@ -471646,6 +471746,11 @@ export namespace Prisma {
     isNot?: DM_ChucDanhWhereInput | null
   }
 
+  export type DM_ChucVuNullableScalarRelationFilter = {
+    is?: DM_ChucVuWhereInput | null
+    isNot?: DM_ChucVuWhereInput | null
+  }
+
   export type DM_ChiHuyQuanLyNullableScalarRelationFilter = {
     is?: DM_ChiHuyQuanLyWhereInput | null
     isNot?: DM_ChiHuyQuanLyWhereInput | null
@@ -471704,11 +471809,6 @@ export namespace Prisma {
   export type DM_HinhThucKhenThuongDangNullableScalarRelationFilter = {
     is?: DM_HinhThucKhenThuongDangWhereInput | null
     isNot?: DM_HinhThucKhenThuongDangWhereInput | null
-  }
-
-  export type DM_ChucVuNullableScalarRelationFilter = {
-    is?: DM_ChucVuWhereInput | null
-    isNot?: DM_ChucVuWhereInput | null
   }
 
   export type RelativeListRelationFilter = {
@@ -472250,6 +472350,7 @@ export namespace Prisma {
     academicRankTypeId?: SortOrder
     academicRankDate?: SortOrder
     levelId?: SortOrder
+    positionId?: SortOrder
     chiHuyQuanLyId?: SortOrder
     chuyenMonKyThuatId?: SortOrder
     sucKhoeId?: SortOrder
@@ -472388,6 +472489,7 @@ export namespace Prisma {
     academicRankTypeId?: SortOrder
     academicRankDate?: SortOrder
     levelId?: SortOrder
+    positionId?: SortOrder
     chiHuyQuanLyId?: SortOrder
     chuyenMonKyThuatId?: SortOrder
     sucKhoeId?: SortOrder
@@ -472519,6 +472621,7 @@ export namespace Prisma {
     academicRankTypeId?: SortOrder
     academicRankDate?: SortOrder
     levelId?: SortOrder
+    positionId?: SortOrder
     chiHuyQuanLyId?: SortOrder
     chuyenMonKyThuatId?: SortOrder
     sucKhoeId?: SortOrder
@@ -493997,6 +494100,12 @@ export namespace Prisma {
     connect?: DM_ChucDanhWhereUniqueInput
   }
 
+  export type DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput = {
+    create?: XOR<DM_ChucVuCreateWithoutUserProfilePositionInput, DM_ChucVuUncheckedCreateWithoutUserProfilePositionInput>
+    connectOrCreate?: DM_ChucVuCreateOrConnectWithoutUserProfilePositionInput
+    connect?: DM_ChucVuWhereUniqueInput
+  }
+
   export type DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput = {
     create?: XOR<DM_ChiHuyQuanLyCreateWithoutUserProfileInput, DM_ChiHuyQuanLyUncheckedCreateWithoutUserProfileInput>
     connectOrCreate?: DM_ChiHuyQuanLyCreateOrConnectWithoutUserProfileInput
@@ -495023,6 +495132,16 @@ export namespace Prisma {
     delete?: DM_ChucDanhWhereInput | boolean
     connect?: DM_ChucDanhWhereUniqueInput
     update?: XOR<XOR<DM_ChucDanhUpdateToOneWithWhereWithoutUserProfileInput, DM_ChucDanhUpdateWithoutUserProfileInput>, DM_ChucDanhUncheckedUpdateWithoutUserProfileInput>
+  }
+
+  export type DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput = {
+    create?: XOR<DM_ChucVuCreateWithoutUserProfilePositionInput, DM_ChucVuUncheckedCreateWithoutUserProfilePositionInput>
+    connectOrCreate?: DM_ChucVuCreateOrConnectWithoutUserProfilePositionInput
+    upsert?: DM_ChucVuUpsertWithoutUserProfilePositionInput
+    disconnect?: DM_ChucVuWhereInput | boolean
+    delete?: DM_ChucVuWhereInput | boolean
+    connect?: DM_ChucVuWhereUniqueInput
+    update?: XOR<XOR<DM_ChucVuUpdateToOneWithWhereWithoutUserProfilePositionInput, DM_ChucVuUpdateWithoutUserProfilePositionInput>, DM_ChucVuUncheckedUpdateWithoutUserProfilePositionInput>
   }
 
   export type DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput = {
@@ -498323,6 +498442,13 @@ export namespace Prisma {
     connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
   }
 
+  export type UserProfileCreateNestedManyWithoutPositionInput = {
+    create?: XOR<UserProfileCreateWithoutPositionInput, UserProfileUncheckedCreateWithoutPositionInput> | UserProfileCreateWithoutPositionInput[] | UserProfileUncheckedCreateWithoutPositionInput[]
+    connectOrCreate?: UserProfileCreateOrConnectWithoutPositionInput | UserProfileCreateOrConnectWithoutPositionInput[]
+    createMany?: UserProfileCreateManyPositionInputEnvelope
+    connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+  }
+
   export type QuaTrinhCongTacCreateNestedManyWithoutChucVuInput = {
     create?: XOR<QuaTrinhCongTacCreateWithoutChucVuInput, QuaTrinhCongTacUncheckedCreateWithoutChucVuInput> | QuaTrinhCongTacCreateWithoutChucVuInput[] | QuaTrinhCongTacUncheckedCreateWithoutChucVuInput[]
     connectOrCreate?: QuaTrinhCongTacCreateOrConnectWithoutChucVuInput | QuaTrinhCongTacCreateOrConnectWithoutChucVuInput[]
@@ -498362,6 +498488,13 @@ export namespace Prisma {
     create?: XOR<UserProfileCreateWithoutChucVuChinhQuyenInput, UserProfileUncheckedCreateWithoutChucVuChinhQuyenInput> | UserProfileCreateWithoutChucVuChinhQuyenInput[] | UserProfileUncheckedCreateWithoutChucVuChinhQuyenInput[]
     connectOrCreate?: UserProfileCreateOrConnectWithoutChucVuChinhQuyenInput | UserProfileCreateOrConnectWithoutChucVuChinhQuyenInput[]
     createMany?: UserProfileCreateManyChucVuChinhQuyenInputEnvelope
+    connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+  }
+
+  export type UserProfileUncheckedCreateNestedManyWithoutPositionInput = {
+    create?: XOR<UserProfileCreateWithoutPositionInput, UserProfileUncheckedCreateWithoutPositionInput> | UserProfileCreateWithoutPositionInput[] | UserProfileUncheckedCreateWithoutPositionInput[]
+    connectOrCreate?: UserProfileCreateOrConnectWithoutPositionInput | UserProfileCreateOrConnectWithoutPositionInput[]
+    createMany?: UserProfileCreateManyPositionInputEnvelope
     connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
   }
 
@@ -498418,6 +498551,20 @@ export namespace Prisma {
     connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
     update?: UserProfileUpdateWithWhereUniqueWithoutChucVuChinhQuyenInput | UserProfileUpdateWithWhereUniqueWithoutChucVuChinhQuyenInput[]
     updateMany?: UserProfileUpdateManyWithWhereWithoutChucVuChinhQuyenInput | UserProfileUpdateManyWithWhereWithoutChucVuChinhQuyenInput[]
+    deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
+  }
+
+  export type UserProfileUpdateManyWithoutPositionNestedInput = {
+    create?: XOR<UserProfileCreateWithoutPositionInput, UserProfileUncheckedCreateWithoutPositionInput> | UserProfileCreateWithoutPositionInput[] | UserProfileUncheckedCreateWithoutPositionInput[]
+    connectOrCreate?: UserProfileCreateOrConnectWithoutPositionInput | UserProfileCreateOrConnectWithoutPositionInput[]
+    upsert?: UserProfileUpsertWithWhereUniqueWithoutPositionInput | UserProfileUpsertWithWhereUniqueWithoutPositionInput[]
+    createMany?: UserProfileCreateManyPositionInputEnvelope
+    set?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    disconnect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    delete?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    update?: UserProfileUpdateWithWhereUniqueWithoutPositionInput | UserProfileUpdateWithWhereUniqueWithoutPositionInput[]
+    updateMany?: UserProfileUpdateManyWithWhereWithoutPositionInput | UserProfileUpdateManyWithWhereWithoutPositionInput[]
     deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
   }
 
@@ -498502,6 +498649,20 @@ export namespace Prisma {
     connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
     update?: UserProfileUpdateWithWhereUniqueWithoutChucVuChinhQuyenInput | UserProfileUpdateWithWhereUniqueWithoutChucVuChinhQuyenInput[]
     updateMany?: UserProfileUpdateManyWithWhereWithoutChucVuChinhQuyenInput | UserProfileUpdateManyWithWhereWithoutChucVuChinhQuyenInput[]
+    deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
+  }
+
+  export type UserProfileUncheckedUpdateManyWithoutPositionNestedInput = {
+    create?: XOR<UserProfileCreateWithoutPositionInput, UserProfileUncheckedCreateWithoutPositionInput> | UserProfileCreateWithoutPositionInput[] | UserProfileUncheckedCreateWithoutPositionInput[]
+    connectOrCreate?: UserProfileCreateOrConnectWithoutPositionInput | UserProfileCreateOrConnectWithoutPositionInput[]
+    upsert?: UserProfileUpsertWithWhereUniqueWithoutPositionInput | UserProfileUpsertWithWhereUniqueWithoutPositionInput[]
+    createMany?: UserProfileCreateManyPositionInputEnvelope
+    set?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    disconnect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    delete?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+    update?: UserProfileUpdateWithWhereUniqueWithoutPositionInput | UserProfileUpdateWithWhereUniqueWithoutPositionInput[]
+    updateMany?: UserProfileUpdateManyWithWhereWithoutPositionInput | UserProfileUpdateManyWithWhereWithoutPositionInput[]
     deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
   }
 
@@ -525634,6 +525795,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -525794,6 +525956,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -526002,6 +526165,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -526162,6 +526326,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -527705,6 +527870,61 @@ export namespace Prisma {
     create: XOR<DM_ChucDanhCreateWithoutUserProfileInput, DM_ChucDanhUncheckedCreateWithoutUserProfileInput>
   }
 
+  export type DM_ChucVuCreateWithoutUserProfilePositionInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    iNhomChucVu?: number | null
+    userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
+    userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
+    quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
+    chucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutChucVuChinhQuyenInput
+    chucVuDang?: ChucVuDangCreateNestedManyWithoutChucVuDangInput
+  }
+
+  export type DM_ChucVuUncheckedCreateWithoutUserProfilePositionInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    iNhomChucVu?: number | null
+    userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
+    userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
+    chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+    chucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutChucVuDangInput
+  }
+
+  export type DM_ChucVuCreateOrConnectWithoutUserProfilePositionInput = {
+    where: DM_ChucVuWhereUniqueInput
+    create: XOR<DM_ChucVuCreateWithoutUserProfilePositionInput, DM_ChucVuUncheckedCreateWithoutUserProfilePositionInput>
+  }
+
   export type DM_ChiHuyQuanLyCreateWithoutUserProfileInput = {
     id?: string
     code?: string | null
@@ -528071,6 +528291,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     iNhomChucVu?: number | null
     userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
+    userProfilePosition?: UserProfileCreateNestedManyWithoutPositionInput
     quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
     chucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutChucVuChinhQuyenInput
@@ -528095,6 +528316,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     iNhomChucVu?: number | null
     userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+    userProfilePosition?: UserProfileUncheckedCreateNestedManyWithoutPositionInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
@@ -528124,6 +528346,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     iNhomChucVu?: number | null
     userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
+    userProfilePosition?: UserProfileCreateNestedManyWithoutPositionInput
     quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
     chucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutChucVuChinhQuyenInput
@@ -528148,6 +528371,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     iNhomChucVu?: number | null
     userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
+    userProfilePosition?: UserProfileUncheckedCreateNestedManyWithoutPositionInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
@@ -531997,6 +532221,67 @@ export namespace Prisma {
     iLoaiChucDanh?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
+  export type DM_ChucVuUpsertWithoutUserProfilePositionInput = {
+    update: XOR<DM_ChucVuUpdateWithoutUserProfilePositionInput, DM_ChucVuUncheckedUpdateWithoutUserProfilePositionInput>
+    create: XOR<DM_ChucVuCreateWithoutUserProfilePositionInput, DM_ChucVuUncheckedCreateWithoutUserProfilePositionInput>
+    where?: DM_ChucVuWhereInput
+  }
+
+  export type DM_ChucVuUpdateToOneWithWhereWithoutUserProfilePositionInput = {
+    where?: DM_ChucVuWhereInput
+    data: XOR<DM_ChucVuUpdateWithoutUserProfilePositionInput, DM_ChucVuUncheckedUpdateWithoutUserProfilePositionInput>
+  }
+
+  export type DM_ChucVuUpdateWithoutUserProfilePositionInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
+    userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
+    userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
+    chucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutChucVuChinhQuyenNestedInput
+    chucVuDang?: ChucVuDangUpdateManyWithoutChucVuDangNestedInput
+  }
+
+  export type DM_ChucVuUncheckedUpdateWithoutUserProfilePositionInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
+    userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
+    userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
+    chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+    chucVuDang?: ChucVuDangUncheckedUpdateManyWithoutChucVuDangNestedInput
+  }
+
   export type DM_ChiHuyQuanLyUpsertWithoutUserProfileInput = {
     update: XOR<DM_ChiHuyQuanLyUpdateWithoutUserProfileInput, DM_ChiHuyQuanLyUncheckedUpdateWithoutUserProfileInput>
     create: XOR<DM_ChiHuyQuanLyCreateWithoutUserProfileInput, DM_ChiHuyQuanLyUncheckedCreateWithoutUserProfileInput>
@@ -532446,6 +532731,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
     userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
+    userProfilePosition?: UserProfileUpdateManyWithoutPositionNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutChucVuChinhQuyenNestedInput
@@ -532470,6 +532756,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
     userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+    userProfilePosition?: UserProfileUncheckedUpdateManyWithoutPositionNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
@@ -532505,6 +532792,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
     userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
+    userProfilePosition?: UserProfileUpdateManyWithoutPositionNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutChucVuChinhQuyenNestedInput
@@ -532529,6 +532817,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
     userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
+    userProfilePosition?: UserProfileUncheckedUpdateManyWithoutPositionNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
@@ -534467,6 +534756,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -534627,6 +534917,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -534888,6 +535179,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -535048,6 +535340,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -535145,6 +535438,7 @@ export namespace Prisma {
     iNhomChucVu?: number | null
     userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
     userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
+    userProfilePosition?: UserProfileCreateNestedManyWithoutPositionInput
     quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
     chucVuDang?: ChucVuDangCreateNestedManyWithoutChucVuDangInput
@@ -535169,6 +535463,7 @@ export namespace Prisma {
     iNhomChucVu?: number | null
     userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
     userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+    userProfilePosition?: UserProfileUncheckedCreateNestedManyWithoutPositionInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
     chucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutChucVuDangInput
@@ -535293,6 +535588,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -535453,6 +535749,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -535566,6 +535863,7 @@ export namespace Prisma {
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
     userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
     userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
+    userProfilePosition?: UserProfileUpdateManyWithoutPositionNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
     chucVuDang?: ChucVuDangUpdateManyWithoutChucVuDangNestedInput
@@ -535590,6 +535888,7 @@ export namespace Prisma {
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
     userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
     userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+    userProfilePosition?: UserProfileUncheckedUpdateManyWithoutPositionNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     chucVuDang?: ChucVuDangUncheckedUpdateManyWithoutChucVuDangNestedInput
@@ -535720,6 +536019,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -535880,6 +536180,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -535977,6 +536278,7 @@ export namespace Prisma {
     iNhomChucVu?: number | null
     userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
     userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
+    userProfilePosition?: UserProfileCreateNestedManyWithoutPositionInput
     quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
     chucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutChucVuChinhQuyenInput
@@ -536001,6 +536303,7 @@ export namespace Prisma {
     iNhomChucVu?: number | null
     userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
     userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+    userProfilePosition?: UserProfileUncheckedCreateNestedManyWithoutPositionInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
@@ -536125,6 +536428,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -536285,6 +536589,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -536398,6 +536703,7 @@ export namespace Prisma {
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
     userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
     userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
+    userProfilePosition?: UserProfileUpdateManyWithoutPositionNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutChucVuChinhQuyenNestedInput
@@ -536422,6 +536728,7 @@ export namespace Prisma {
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
     userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
     userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+    userProfilePosition?: UserProfileUncheckedUpdateManyWithoutPositionNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
@@ -536552,6 +536859,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -536712,6 +537020,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -537029,6 +537338,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -537189,6 +537499,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -537540,6 +537851,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -537700,6 +538012,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -537921,6 +538234,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -538081,6 +538395,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -538324,6 +538639,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -538484,6 +538800,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538676,6 +538993,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -538836,6 +539154,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -539073,6 +539392,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -539233,6 +539553,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -539460,6 +539781,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -539620,6 +539942,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -539857,6 +540180,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -540017,6 +540341,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -540328,6 +540653,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -540488,6 +540814,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -540792,6 +541119,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -540952,6 +541280,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -541185,6 +541514,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -541345,6 +541675,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -541600,6 +541931,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -541760,6 +542092,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -541952,6 +542285,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -542112,6 +542446,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -542320,6 +542655,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -542480,6 +542816,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -542715,6 +543052,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -542875,6 +543213,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -543132,6 +543471,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -543292,6 +543632,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -543389,6 +543730,7 @@ export namespace Prisma {
     iNhomChucVu?: number | null
     userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
     userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
+    userProfilePosition?: UserProfileCreateNestedManyWithoutPositionInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutChucVuInput
     chucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutChucVuChinhQuyenInput
     chucVuDang?: ChucVuDangCreateNestedManyWithoutChucVuDangInput
@@ -543413,6 +543755,7 @@ export namespace Prisma {
     iNhomChucVu?: number | null
     userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
     userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+    userProfilePosition?: UserProfileUncheckedCreateNestedManyWithoutPositionInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutChucVuInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
     chucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutChucVuDangInput
@@ -543566,6 +543909,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -543726,6 +544070,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -543839,6 +544184,7 @@ export namespace Prisma {
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
     userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
     userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
+    userProfilePosition?: UserProfileUpdateManyWithoutPositionNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutChucVuNestedInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutChucVuChinhQuyenNestedInput
     chucVuDang?: ChucVuDangUpdateManyWithoutChucVuDangNestedInput
@@ -543863,6 +544209,7 @@ export namespace Prisma {
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
     userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
     userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+    userProfilePosition?: UserProfileUncheckedUpdateManyWithoutPositionNestedInput
     quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
     chucVuDang?: ChucVuDangUncheckedUpdateManyWithoutChucVuDangNestedInput
@@ -544028,6 +544375,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -544188,6 +544536,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -544285,6 +544634,7 @@ export namespace Prisma {
     iNhomChucVu?: number | null
     userProfileCPV?: UserProfileCreateNestedManyWithoutPositionCPVInput
     userProfile?: UserProfileCreateNestedManyWithoutChucVuChinhQuyenInput
+    userProfilePosition?: UserProfileCreateNestedManyWithoutPositionInput
     quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutChucVuInput
     chucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutChucVuChinhQuyenInput
     chucVuDang?: ChucVuDangCreateNestedManyWithoutChucVuDangInput
@@ -544309,6 +544659,7 @@ export namespace Prisma {
     iNhomChucVu?: number | null
     userProfileCPV?: UserProfileUncheckedCreateNestedManyWithoutPositionCPVInput
     userProfile?: UserProfileUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
+    userProfilePosition?: UserProfileUncheckedCreateNestedManyWithoutPositionInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutChucVuInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutChucVuChinhQuyenInput
     chucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutChucVuDangInput
@@ -544520,6 +544871,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -544680,6 +545032,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -544793,6 +545146,7 @@ export namespace Prisma {
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
     userProfileCPV?: UserProfileUpdateManyWithoutPositionCPVNestedInput
     userProfile?: UserProfileUpdateManyWithoutChucVuChinhQuyenNestedInput
+    userProfilePosition?: UserProfileUpdateManyWithoutPositionNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutChucVuNestedInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutChucVuChinhQuyenNestedInput
     chucVuDang?: ChucVuDangUpdateManyWithoutChucVuDangNestedInput
@@ -544817,6 +545171,7 @@ export namespace Prisma {
     iNhomChucVu?: NullableIntFieldUpdateOperationsInput | number | null
     userProfileCPV?: UserProfileUncheckedUpdateManyWithoutPositionCPVNestedInput
     userProfile?: UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
+    userProfilePosition?: UserProfileUncheckedUpdateManyWithoutPositionNestedInput
     quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutChucVuNestedInput
     chucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutChucVuChinhQuyenNestedInput
     chucVuDang?: ChucVuDangUncheckedUpdateManyWithoutChucVuDangNestedInput
@@ -545052,6 +545407,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -545212,6 +545568,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -545462,6 +545819,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -545622,6 +545980,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -545900,6 +546259,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -546060,6 +546420,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546281,6 +546642,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -546441,6 +546803,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -546684,6 +547047,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -546844,6 +547208,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -547036,6 +547401,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -547196,6 +547562,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -547404,6 +547771,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -547564,6 +547932,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -547756,6 +548125,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -547916,6 +548286,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -548124,6 +548495,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -548284,6 +548656,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -548476,6 +548849,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -548636,6 +549010,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -548844,6 +549219,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -549004,6 +549380,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -549243,6 +549620,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -549403,6 +549781,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -549664,6 +550043,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -549824,6 +550204,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -550016,6 +550397,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -550176,6 +550558,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -550384,6 +550767,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -550544,6 +550928,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -550783,6 +551168,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -550943,6 +551329,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -551204,6 +551591,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -551364,6 +551752,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -551585,6 +551974,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -551745,6 +552135,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -551988,6 +552379,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -552148,6 +552540,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -552340,6 +552733,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -552500,6 +552894,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -552708,6 +553103,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -552868,6 +553264,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -553149,6 +553546,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -553309,6 +553707,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -553624,6 +554023,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -553784,6 +554184,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -554005,6 +554406,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -554165,6 +554567,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -554408,6 +554811,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -554568,6 +554972,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -554818,6 +555223,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -554978,6 +555384,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -555256,6 +555663,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -555416,6 +555824,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -555726,6 +556135,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -555886,6 +556296,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -556181,6 +556592,7 @@ export namespace Prisma {
     academicRankTypeId?: UuidNullableFilter<"UserProfile"> | string | null
     academicRankDate?: DateTimeNullableFilter<"UserProfile"> | Date | string | null
     levelId?: UuidNullableFilter<"UserProfile"> | string | null
+    positionId?: UuidNullableFilter<"UserProfile"> | string | null
     chiHuyQuanLyId?: StringNullableFilter<"UserProfile"> | string | null
     chuyenMonKyThuatId?: StringNullableFilter<"UserProfile"> | string | null
     sucKhoeId?: StringNullableFilter<"UserProfile"> | string | null
@@ -556592,6 +557004,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -556752,6 +557165,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -556949,6 +557363,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -557109,6 +557524,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -557386,6 +557802,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -557546,6 +557963,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -557749,6 +558167,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -557909,6 +558328,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -558356,6 +558776,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -558516,6 +558937,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -558713,6 +559135,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -558873,6 +559296,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -559126,6 +559550,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -559286,6 +559711,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -559489,6 +559915,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -559649,6 +560076,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -559925,6 +560353,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -560085,6 +560514,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -560447,6 +560877,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -560607,6 +561038,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -561567,6 +561999,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -561727,6 +562160,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -562001,6 +562435,7 @@ export namespace Prisma {
     rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -562161,6 +562596,7 @@ export namespace Prisma {
     academicDegreeDate?: Date | string | null
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -562380,6 +562816,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -562540,6 +562977,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -562742,6 +563180,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -562902,6 +563341,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -562987,6 +563427,370 @@ export namespace Prisma {
 
   export type UserProfileCreateManyChucVuChinhQuyenInputEnvelope = {
     data: UserProfileCreateManyChucVuChinhQuyenInput | UserProfileCreateManyChucVuChinhQuyenInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserProfileCreateWithoutPositionInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    bLaNguoiDung?: boolean | null
+    bLaGiangVien?: boolean | null
+    bLaCanBoNhanVien?: boolean | null
+    bLaHocVien?: boolean | null
+    sDM_DonViId?: string | null
+    sDM_ViTriCongViecId?: string | null
+    sQuanlyTrucTiepId?: string | null
+    iDictionaryKey?: number | null
+    bSystem?: boolean | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    avatar?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    permanentAddress?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    officePhone?: string | null
+    email?: string | null
+    officerNumber?: string | null
+    rankDate?: Date | string | null
+    academicDegreeDate?: Date | string | null
+    academicRankDate?: Date | string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    group?: GroupCreateNestedOneWithoutUserProfileInput
+    provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
+    districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
+    communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
+    newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+    newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+    provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
+    provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
+    districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
+    communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
+    newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+    newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+    nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
+    religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
+    ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
+    provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
+    districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
+    communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
+    newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
+    newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
+    rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
+    academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
+    academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+    level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
+    chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
+    sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
+    nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
+    tinhTrangHonNhan?: DM_TinhTrangHonNhanCreateNestedOneWithoutUserProfileInput
+    trangThaiLamViec?: DM_TrangThaiLamViecCreateNestedOneWithoutUserProfileInput
+    dM_ChucDanhCMNVGiangVien?: DM_ChucDanhCMNVGiangVienCreateNestedOneWithoutUserProfileInput
+    dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienCreateNestedOneWithoutUserProfileInput
+    dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
+    dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
+    dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
+    dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+    chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    relatives?: RelativeCreateNestedManyWithoutUserProfileInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
+    ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
+    tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
+    capBac?: CapBacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
+    khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
+    kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
+    doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
+    keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
+    hocVi?: HocViCreateNestedManyWithoutUserProfileInput
+    hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
+    tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
+    chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
+    diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
+    thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
+    danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
+    quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
+    ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+    QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+    quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+    quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
+    trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
+    educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
+    lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+    lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+    studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
+    staffs?: StaffCreateNestedOneWithoutUserProfileInput
+    staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+    evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
+    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutUpdatedByInput
+    subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
+    changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
+    surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+    evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+    classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutRelatedUserProfilesInput
+    subjectClassAttendance?: SubjectClassAttendanceCreateNestedManyWithoutProfileInput
+  }
+
+  export type UserProfileUncheckedCreateWithoutPositionInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    bLaNguoiDung?: boolean | null
+    bLaGiangVien?: boolean | null
+    bLaCanBoNhanVien?: boolean | null
+    bLaHocVien?: boolean | null
+    groupId?: string | null
+    sDM_DonViId?: string | null
+    sDM_ViTriCongViecId?: string | null
+    sQuanlyTrucTiepId?: string | null
+    iDictionaryKey?: number | null
+    bSystem?: boolean | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    avatar?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    provinceCurrentAddressId?: string | null
+    districtCurrentAddressId?: string | null
+    communeCurrentAddressId?: string | null
+    newProvinceCurrentAddressId?: string | null
+    newCommuneCurrentAddressId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    provinceOfBirthId?: string | null
+    districtOfBirthId?: string | null
+    communeOfBirthId?: string | null
+    newProvinceOfBirthId?: string | null
+    newCommuneOfBirthId?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    genderId?: string | null
+    permanentAddress?: string | null
+    provincePermanentAddressId?: string | null
+    districtPermanentAddressId?: string | null
+    communePermanentAddressId?: string | null
+    newProvincePermanentAddressId?: string | null
+    newCommunePermanentAddressId?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    officePhone?: string | null
+    email?: string | null
+    nationalityId?: string | null
+    religionId?: string | null
+    ethnicityId?: string | null
+    provinceHometownId?: string | null
+    districtHometownId?: string | null
+    communeHometownId?: string | null
+    newProvinceHometownId?: string | null
+    newCommuneHometownId?: string | null
+    officerNumber?: string | null
+    rankId?: string | null
+    rankDate?: Date | string | null
+    academicDegreeTypeId?: string | null
+    academicDegreeDate?: Date | string | null
+    academicRankTypeId?: string | null
+    academicRankDate?: Date | string | null
+    levelId?: string | null
+    chiHuyQuanLyId?: string | null
+    chuyenMonKyThuatId?: string | null
+    sucKhoeId?: string | null
+    nhomMauId?: string | null
+    tinhTrangHonNhanId?: string | null
+    trangThaiLamViecId?: string | null
+    dM_ChucDanhCMNVGiangVienId?: string | null
+    dM_ChucDanhCMNVNghienCuuVienId?: string | null
+    dM_ChucDanhCMNVKySuId?: string | null
+    dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
+    dM_XepLoaiDanhGiaCanBoId?: string | null
+    dM_HinhThucKhenThuongDangId?: string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    trinhDoHocVanId?: string | null
+    relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
+    ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
+    tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
+    capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
+    khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
+    kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
+    doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
+    keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
+    hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
+    hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
+    tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
+    chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
+    diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
+    thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
+    danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
+    ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+    QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
+    educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
+    lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+    lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+    staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
+    staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+    subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+    changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
+    surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+    evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+    classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutRelatedUserProfilesInput
+    subjectClassAttendance?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutProfileInput
+  }
+
+  export type UserProfileCreateOrConnectWithoutPositionInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutPositionInput, UserProfileUncheckedCreateWithoutPositionInput>
+  }
+
+  export type UserProfileCreateManyPositionInputEnvelope = {
+    data: UserProfileCreateManyPositionInput | UserProfileCreateManyPositionInput[]
     skipDuplicates?: boolean
   }
 
@@ -563192,6 +563996,22 @@ export namespace Prisma {
     data: XOR<UserProfileUpdateManyMutationInput, UserProfileUncheckedUpdateManyWithoutChucVuChinhQuyenInput>
   }
 
+  export type UserProfileUpsertWithWhereUniqueWithoutPositionInput = {
+    where: UserProfileWhereUniqueInput
+    update: XOR<UserProfileUpdateWithoutPositionInput, UserProfileUncheckedUpdateWithoutPositionInput>
+    create: XOR<UserProfileCreateWithoutPositionInput, UserProfileUncheckedCreateWithoutPositionInput>
+  }
+
+  export type UserProfileUpdateWithWhereUniqueWithoutPositionInput = {
+    where: UserProfileWhereUniqueInput
+    data: XOR<UserProfileUpdateWithoutPositionInput, UserProfileUncheckedUpdateWithoutPositionInput>
+  }
+
+  export type UserProfileUpdateManyWithWhereWithoutPositionInput = {
+    where: UserProfileScalarWhereInput
+    data: XOR<UserProfileUpdateManyMutationInput, UserProfileUncheckedUpdateManyWithoutPositionInput>
+  }
+
   export type QuaTrinhCongTacUpsertWithWhereUniqueWithoutChucVuInput = {
     where: QuaTrinhCongTacWhereUniqueInput
     update: XOR<QuaTrinhCongTacUpdateWithoutChucVuInput, QuaTrinhCongTacUncheckedUpdateWithoutChucVuInput>
@@ -563369,6 +564189,7 @@ export namespace Prisma {
     rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -563529,6 +564350,7 @@ export namespace Prisma {
     academicDegreeDate?: Date | string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -564009,6 +564831,7 @@ export namespace Prisma {
     rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -564169,6 +564992,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -564601,6 +565425,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -564761,6 +565586,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -566911,6 +567737,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -567071,6 +567898,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -567407,6 +568235,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -567567,6 +568396,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -567973,6 +568803,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -568133,6 +568964,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -568423,6 +569255,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -568583,6 +569416,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -568785,6 +569619,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -568945,6 +569780,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -569147,6 +569983,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -569307,6 +570144,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -569509,6 +570347,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -569669,6 +570508,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -570010,6 +570850,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -570170,6 +571011,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -570372,6 +571214,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -570532,6 +571375,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -570734,6 +571578,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -570894,6 +571739,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -571096,6 +571942,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -571256,6 +572103,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -571580,6 +572428,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -571740,6 +572589,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -571942,6 +572792,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -572102,6 +572953,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -572304,6 +573156,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -572464,6 +573317,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -572666,6 +573520,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -572826,6 +573681,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -573092,6 +573948,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -573252,6 +574109,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -573454,6 +574312,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -573614,6 +574473,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -573816,6 +574676,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -573976,6 +574837,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -574178,6 +575040,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -574338,6 +575201,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -574604,6 +575468,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -574764,6 +575629,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -574966,6 +575832,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -575126,6 +575993,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -575328,6 +576196,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -575488,6 +576357,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -575690,6 +576560,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -575850,6 +576721,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -580331,6 +581203,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -580491,6 +581364,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -580790,6 +581664,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -580950,6 +581825,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -596808,6 +597684,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -596968,6 +597845,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -597297,6 +598175,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -597457,6 +598336,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -602189,6 +603069,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -602349,6 +603230,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -602781,6 +603663,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -602941,6 +603824,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -603761,6 +604645,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -603921,6 +604806,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -604254,6 +605140,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -604414,6 +605301,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -605190,6 +606078,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -605350,6 +606239,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -616151,6 +617041,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -616311,6 +617202,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -618302,6 +619194,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -618462,6 +619355,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622032,6 +622926,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -622192,6 +623087,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -622530,6 +623426,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -622690,6 +623587,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -624714,6 +625612,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -624874,6 +625773,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -625689,6 +626589,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -625849,6 +626750,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -626181,6 +627083,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -626341,6 +627244,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -628003,6 +628907,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -628163,6 +629068,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -628594,6 +629500,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -628754,6 +629661,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -629133,6 +630041,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -629293,6 +630202,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -629654,6 +630564,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -629814,6 +630725,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -655947,6 +656859,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -656107,6 +657020,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -656446,6 +657360,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -656606,6 +657521,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659220,6 +660136,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -659380,6 +660297,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -659633,6 +660551,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -659793,6 +660712,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -668507,6 +669427,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -668667,6 +669588,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -669188,6 +670110,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -669348,6 +670271,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -671642,6 +672566,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -671802,6 +672727,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -672136,6 +673062,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -672296,6 +673223,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -672576,6 +673504,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -672736,6 +673665,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -673014,6 +673944,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -673174,6 +674105,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -673392,6 +674324,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -673552,6 +674485,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -673770,6 +674704,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -673930,6 +674865,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -674526,6 +675462,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -674686,6 +675623,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -674904,6 +675842,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -675064,6 +676003,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -675282,6 +676222,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -675442,6 +676383,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -675844,6 +676786,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
     nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
@@ -676004,6 +676947,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
     nhomMauId?: string | null
@@ -676222,6 +677166,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
     nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
@@ -676382,6 +677327,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     sucKhoeId?: string | null
     nhomMauId?: string | null
@@ -676600,6 +677546,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
@@ -676760,6 +677707,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     nhomMauId?: string | null
@@ -676978,6 +677926,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
     academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
     level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
     sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
@@ -677138,6 +678087,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -680792,6 +681742,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -681092,6 +682043,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -681252,6 +682204,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -681428,6 +682381,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -682282,6 +683236,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -682443,6 +683398,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -682603,6 +683559,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -682779,6 +683736,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -682954,6 +683912,7 @@ export namespace Prisma {
     academicDegreeDate?: Date | string | null
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -683100,6 +684059,7 @@ export namespace Prisma {
     rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -683260,6 +684220,7 @@ export namespace Prisma {
     academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -683436,6 +684397,7 @@ export namespace Prisma {
     academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -683567,6 +684529,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -683697,6 +684660,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -683715,6 +684679,137 @@ export namespace Prisma {
     officialCPVDate?: Date | string | null
     CPVJoinPlace?: string | null
     positionCPVId?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    trinhDoHocVanId?: string | null
+  }
+
+  export type UserProfileCreateManyPositionInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    bLaNguoiDung?: boolean | null
+    bLaGiangVien?: boolean | null
+    bLaCanBoNhanVien?: boolean | null
+    bLaHocVien?: boolean | null
+    groupId?: string | null
+    sDM_DonViId?: string | null
+    sDM_ViTriCongViecId?: string | null
+    sQuanlyTrucTiepId?: string | null
+    iDictionaryKey?: number | null
+    bSystem?: boolean | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    avatar?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    provinceCurrentAddressId?: string | null
+    districtCurrentAddressId?: string | null
+    communeCurrentAddressId?: string | null
+    newProvinceCurrentAddressId?: string | null
+    newCommuneCurrentAddressId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    provinceOfBirthId?: string | null
+    districtOfBirthId?: string | null
+    communeOfBirthId?: string | null
+    newProvinceOfBirthId?: string | null
+    newCommuneOfBirthId?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    genderId?: string | null
+    permanentAddress?: string | null
+    provincePermanentAddressId?: string | null
+    districtPermanentAddressId?: string | null
+    communePermanentAddressId?: string | null
+    newProvincePermanentAddressId?: string | null
+    newCommunePermanentAddressId?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    officePhone?: string | null
+    email?: string | null
+    nationalityId?: string | null
+    religionId?: string | null
+    ethnicityId?: string | null
+    provinceHometownId?: string | null
+    districtHometownId?: string | null
+    communeHometownId?: string | null
+    newProvinceHometownId?: string | null
+    newCommuneHometownId?: string | null
+    officerNumber?: string | null
+    rankId?: string | null
+    rankDate?: Date | string | null
+    academicDegreeTypeId?: string | null
+    academicDegreeDate?: Date | string | null
+    academicRankTypeId?: string | null
+    academicRankDate?: Date | string | null
+    levelId?: string | null
+    chiHuyQuanLyId?: string | null
+    chuyenMonKyThuatId?: string | null
+    sucKhoeId?: string | null
+    nhomMauId?: string | null
+    tinhTrangHonNhanId?: string | null
+    trangThaiLamViecId?: string | null
+    dM_ChucDanhCMNVGiangVienId?: string | null
+    dM_ChucDanhCMNVNghienCuuVienId?: string | null
+    dM_ChucDanhCMNVKySuId?: string | null
+    dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
+    dM_XepLoaiDanhGiaCanBoId?: string | null
+    dM_HinhThucKhenThuongDangId?: string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    positionCPVId?: string | null
+    chucVuChinhQuyenId?: string | null
     tenureDate?: Date | string | null
     enlistmentDate?: Date | string | null
     reEnlistmentDate?: Date | string | null
@@ -683908,6 +685003,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -684068,6 +685164,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -684244,6 +685341,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -684390,6 +685488,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -684550,6 +685649,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -684726,6 +685826,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -684744,6 +685845,491 @@ export namespace Prisma {
     officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
     positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type UserProfileUpdateWithoutPositionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    officePhone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    group?: GroupUpdateOneWithoutUserProfileNestedInput
+    provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
+    provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
+    religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
+    ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
+    provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
+    districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
+    communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
+    newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
+    newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
+    rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
+    academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
+    academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+    level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
+    chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
+    sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
+    nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
+    tinhTrangHonNhan?: DM_TinhTrangHonNhanUpdateOneWithoutUserProfileNestedInput
+    trangThaiLamViec?: DM_TrangThaiLamViecUpdateOneWithoutUserProfileNestedInput
+    dM_ChucDanhCMNVGiangVien?: DM_ChucDanhCMNVGiangVienUpdateOneWithoutUserProfileNestedInput
+    dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienUpdateOneWithoutUserProfileNestedInput
+    dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
+    dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
+    dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
+    dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+    chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
+    ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
+    tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
+    capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
+    khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
+    kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
+    doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
+    keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
+    hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
+    hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
+    tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
+    chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
+    diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
+    thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
+    danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
+    quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
+    ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+    QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+    quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+    quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
+    trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
+    educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
+    lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+    lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+    studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
+    staffs?: StaffUpdateOneWithoutUserProfileNestedInput
+    staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+    evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
+    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutUpdatedByNestedInput
+    subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
+    changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
+    surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+    evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+    classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutRelatedUserProfilesNestedInput
+    subjectClassAttendance?: SubjectClassAttendanceUpdateManyWithoutProfileNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateWithoutPositionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    groupId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    genderId?: NullableStringFieldUpdateOperationsInput | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    officePhone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+    religionId?: NullableStringFieldUpdateOperationsInput | string | null
+    ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankId?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+    chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+    sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+    nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhTrangHonNhanId?: NullableStringFieldUpdateOperationsInput | string | null
+    trangThaiLamViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_ChucDanhCMNVGiangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+    relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
+    ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
+    tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
+    capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
+    khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
+    kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
+    doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
+    keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
+    hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
+    hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
+    tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
+    chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
+    diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
+    thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
+    danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
+    ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+    QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
+    educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
+    lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+    lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+    staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
+    staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+    subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+    changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
+    surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+    evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+    classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutRelatedUserProfilesNestedInput
+    subjectClassAttendance?: SubjectClassAttendanceUncheckedUpdateManyWithoutProfileNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateManyWithoutPositionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    groupId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    genderId?: NullableStringFieldUpdateOperationsInput | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    officePhone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+    religionId?: NullableStringFieldUpdateOperationsInput | string | null
+    ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankId?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+    chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+    sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+    nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhTrangHonNhanId?: NullableStringFieldUpdateOperationsInput | string | null
+    trangThaiLamViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_ChucDanhCMNVGiangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
     tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -685050,6 +686636,7 @@ export namespace Prisma {
     academicDegreeDate?: Date | string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -685253,6 +686840,7 @@ export namespace Prisma {
     rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -685413,6 +687001,7 @@ export namespace Prisma {
     academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -685589,6 +687178,7 @@ export namespace Prisma {
     academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -685912,6 +687502,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -686115,6 +687706,7 @@ export namespace Prisma {
     rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -686275,6 +687867,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -686451,6 +688044,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -686774,6 +688368,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -686935,6 +688530,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -687095,6 +688691,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -687271,6 +688868,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -689360,6 +690958,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -689506,6 +691105,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -689666,6 +691266,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -689842,6 +691443,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -690104,6 +691706,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -690250,6 +691853,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -690410,6 +692014,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -690586,6 +692191,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -690789,6 +692395,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -691001,6 +692608,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -691161,6 +692769,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -691337,6 +692946,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -691512,6 +693122,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -691642,6 +693253,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -691772,6 +693384,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -691902,6 +693515,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -692061,6 +693675,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -692221,6 +693836,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -692397,6 +694013,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -692543,6 +694160,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -692703,6 +694321,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -692879,6 +694498,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -693025,6 +694645,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -693185,6 +694806,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -693361,6 +694983,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -693507,6 +695130,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -693667,6 +695291,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -693843,6 +695468,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -694018,6 +695644,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -694148,6 +695775,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -694278,6 +695906,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -694408,6 +696037,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -694567,6 +696197,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -694727,6 +696358,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -694903,6 +696535,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -695049,6 +696682,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -695209,6 +696843,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -695385,6 +697020,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -695531,6 +697167,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -695691,6 +697328,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -695867,6 +697505,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -696013,6 +697652,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -696173,6 +697813,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -696349,6 +697990,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -696524,6 +698166,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -696654,6 +698297,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -696784,6 +698428,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -696914,6 +698559,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -697060,6 +698706,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -697220,6 +698867,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -697396,6 +699044,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -697542,6 +699191,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -697702,6 +699352,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -697878,6 +699529,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -698024,6 +699676,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -698184,6 +699837,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -698360,6 +700014,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -698506,6 +700161,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -698666,6 +700322,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -698842,6 +700499,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -698972,6 +700630,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -699102,6 +700761,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -699232,6 +700892,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -699362,6 +701023,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -699508,6 +701170,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -699668,6 +701331,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -699844,6 +701508,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -699990,6 +701655,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -700150,6 +701816,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -700326,6 +701993,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -700472,6 +702140,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -700632,6 +702301,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -700808,6 +702478,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -700954,6 +702625,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -701114,6 +702786,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -701290,6 +702963,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -701420,6 +703094,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -701550,6 +703225,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -701680,6 +703356,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -701810,6 +703487,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -701956,6 +703634,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -702116,6 +703795,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -702292,6 +703972,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -702438,6 +704119,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -702598,6 +704280,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -702774,6 +704457,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -702920,6 +704604,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -703080,6 +704765,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -703256,6 +704942,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -703402,6 +705089,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -703562,6 +705250,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -703738,6 +705427,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -714744,6 +716434,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -714904,6 +716595,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -715080,6 +716772,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -725085,6 +726778,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -725245,6 +726939,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -725421,6 +727116,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -740811,6 +742507,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -740957,6 +742654,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -741117,6 +742815,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -741293,6 +742992,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -741551,6 +743251,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -741697,6 +743398,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -741857,6 +743559,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -742033,6 +743736,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -742235,6 +743939,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -742381,6 +744086,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -742541,6 +744247,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -742717,6 +744424,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -742915,6 +744623,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -743061,6 +744770,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -743221,6 +744931,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -743397,6 +745108,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -743527,6 +745239,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -743673,6 +745386,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -743833,6 +745547,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -744009,6 +745724,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -744139,6 +745855,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -744285,6 +746002,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -744445,6 +746163,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -744621,6 +746340,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -745195,6 +746915,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -745341,6 +747062,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -745501,6 +747223,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -745677,6 +747400,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -745807,6 +747531,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -745953,6 +747678,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -746113,6 +747839,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -746289,6 +748016,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -746419,6 +748147,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -746565,6 +748294,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -746725,6 +748455,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -746901,6 +748632,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -747243,6 +748975,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
     nhomMauId?: string | null
@@ -747389,6 +749122,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
     nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
@@ -747549,6 +749283,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
     nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -747725,6 +749460,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
     nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -747855,6 +749591,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     sucKhoeId?: string | null
     nhomMauId?: string | null
@@ -748001,6 +749738,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
     nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
@@ -748161,6 +749899,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
     nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -748337,6 +750076,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
     nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -748467,6 +750207,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     nhomMauId?: string | null
@@ -748613,6 +750354,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
@@ -748773,6 +750515,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -748949,6 +750692,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -749079,6 +750823,7 @@ export namespace Prisma {
     academicRankTypeId?: string | null
     academicRankDate?: Date | string | null
     levelId?: string | null
+    positionId?: string | null
     chiHuyQuanLyId?: string | null
     chuyenMonKyThuatId?: string | null
     sucKhoeId?: string | null
@@ -749225,6 +750970,7 @@ export namespace Prisma {
     academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
     academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
     level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
     chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
     chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
     sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
@@ -749385,6 +751131,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -749561,6 +751308,7 @@ export namespace Prisma {
     academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    positionId?: NullableStringFieldUpdateOperationsInput | string | null
     chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
     chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
     sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null

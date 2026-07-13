@@ -7,6 +7,7 @@ import type { DomProps } from "@constants/type"
 import { buildOrgTree } from "@lib/utils"
 import type { SubmitForm } from "@pages/quan-ly-ho-so/tao-moi"
 import {
+  useFindManyDM_ChucDanh,
   useFindManyDM_DanToc,
   useFindManyDM_DonVi,
   useFindManyDM_GioiTinh,
@@ -37,6 +38,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
   const { data: tinhTrangHonNhan = [] } = useFindManyDM_TinhTrangHonNhan()
   const { data: provinceData = [] } = useFindManyDM_Tinh_New()
   const { data: provinceOldData = [] } = useFindManyDM_Tinh()
+  const { data: levelData = [] } = useFindManyDM_ChucDanh()
 
   // Địa chỉ mới (DM_Tinh_New, DM_XaPhuong_New)
   const watchedNewProvinceOfBirthId = Form.useWatch("newProvinceOfBirthId", form)
@@ -331,6 +333,28 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                   return {
                     value: i.id,
                     label: i.name,
+                  }
+                })}
+              />
+            </FormItem>
+          </Col>
+
+          <Col span={12}>
+            <FormItem
+              form={form}
+              name="levelId"
+              label="Chức danh"
+              className="mb-0"
+              normalize={(value) => (value === undefined ? null : value)}
+            >
+              <Select
+                allowClear
+                placeholder="Chọn chức danh"
+                className="h-9"
+                options={levelData.map((i) => {
+                  return {
+                    value: i.Id,
+                    label: i.sTen,
                   }
                 })}
               />
