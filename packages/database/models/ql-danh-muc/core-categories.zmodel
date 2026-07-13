@@ -57,6 +57,7 @@ model DM_ChucVu extends CoreBase {
   iNhomChucVu         Int?                  @default(0)
   userProfileCPV      UserProfile[]         @relation("positionCPV")
   userProfile         UserProfile[]         @relation("chucVuChinhQuyen")
+  userProfilePosition UserProfile[]         @relation("position")
   quaTrinhCongTac     QuaTrinhCongTac[]
   quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
   chucVuChinhQuyen    ChucVuChinhQuyen[]

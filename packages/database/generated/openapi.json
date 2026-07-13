@@ -2544,6 +2544,18 @@
             "type": "string",
             "nullable": true
           },
+          "position": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DM_ChucVu"
+              }
+            ],
+            "nullable": true
+          },
+          "positionId": {
+            "type": "string",
+            "nullable": true
+          },
           "chiHuyQuanLy": {
             "allOf": [
               {
@@ -6456,6 +6468,12 @@
             }
           },
           "userProfile": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserProfile"
+            }
+          },
+          "userProfilePosition": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/UserProfile"
@@ -28244,6 +28262,10 @@
             "nullable": true
           },
           "levelId": {
+            "type": "string",
+            "nullable": true
+          },
+          "positionId": {
             "type": "string",
             "nullable": true
           },
@@ -66552,6 +66574,9 @@
           "levelId": {
             "type": "integer"
           },
+          "positionId": {
+            "type": "integer"
+          },
           "chiHuyQuanLyId": {
             "type": "integer"
           },
@@ -66747,6 +66772,7 @@
           "academicRankTypeId",
           "academicRankDate",
           "levelId",
+          "positionId",
           "chiHuyQuanLyId",
           "chuyenMonKyThuatId",
           "sucKhoeId",
@@ -67220,6 +67246,10 @@
             "nullable": true
           },
           "levelId": {
+            "type": "string",
+            "nullable": true
+          },
+          "positionId": {
             "type": "string",
             "nullable": true
           },
@@ -67755,6 +67785,10 @@
             "nullable": true
           },
           "levelId": {
+            "type": "string",
+            "nullable": true
+          },
+          "positionId": {
             "type": "string",
             "nullable": true
           },
