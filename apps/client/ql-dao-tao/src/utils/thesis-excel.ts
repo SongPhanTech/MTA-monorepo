@@ -2430,6 +2430,7 @@ export const exportDanhSachNopLuanVanThuVien = async ({
     const response = await excelTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      return
     }
     const blob = response.data
     downloadFile(blob, "DanhSachNopLuanVanThuVien.xlsx")

@@ -45,7 +45,7 @@ export default function HSSVThiLai({ subjectVersionId, viewOnly }: RegisterClass
   // queryKey /api/subject-class/open-subject-class-retake
 
   const data = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
-  const countData = useMemo(() => (res?.status === 200 ? res?.data.count : 0), [res])
+  const countData = useMemo(() => (res?.status === 200 ? res.data.data.length : 0), [res])
 
   const debouncedRefetch = useCallback(
     _.debounce(() => {

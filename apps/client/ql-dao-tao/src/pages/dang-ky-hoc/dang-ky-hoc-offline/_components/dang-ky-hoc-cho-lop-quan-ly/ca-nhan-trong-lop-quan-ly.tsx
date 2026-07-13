@@ -495,6 +495,11 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
         },
       ])
 
+      if (scoreRes.status !== 200) {
+        message.error("Không thể kiểm tra điểm học viên")
+        return
+      }
+
       const studentSubjectScores = scoreRes.data[0] as StudentSubjectScore[]
       const studentIds = studentSubjectScores.map((s) => s.studentId)
 

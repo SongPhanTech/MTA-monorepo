@@ -304,7 +304,7 @@ const PutCurriculumVersion = () => {
           })
           if (res.status !== 200) {
             throw new Error(res.data?.message || "Lỗi khi nhập dữ liệu từ file", {
-              cause: res.data.errors,
+              cause: "errors" in res.data ? res.data.errors : undefined,
             })
           }
         }

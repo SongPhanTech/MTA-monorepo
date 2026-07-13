@@ -138,10 +138,14 @@ const ModalDanhSachChungChi = () => {
       setUploadingCertId(certId)
       const extension = file.name.split(".").pop() || ""
       const res = await generatePresignedUrl({ path: "tai-lieu-ctdt", extension })
-      await axios.put(res.data.url, file)
+      if (res.status !== 200) {
+        throw new Error("message" in res.data ? res.data.message : "Không thể tạo presigned URL")
+      }
+      const { url, fileName } = res.data
+      await axios.put(url, file)
       const newFile: DocFileItem = {
         name: file.name,
-        path: res.data.fileName,
+        path: fileName,
         size: BigInt(file.size || 0),
         mimeType: file.type,
       }

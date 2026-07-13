@@ -297,7 +297,7 @@ export default function CaNhanThiLai() {
     () => (res?.status === 200 ? [...res.data.data, ...studentList] : [...studentList]),
     [res, studentList]
   )
-  const countData = useMemo(() => (res?.status === 200 ? res?.data.count : 0), [res])
+  const countData = useMemo(() => (res?.status === 200 ? res.data.data.length : 0), [res])
 
   const debouncedRefetch = useCallback(
     _.debounce(() => {

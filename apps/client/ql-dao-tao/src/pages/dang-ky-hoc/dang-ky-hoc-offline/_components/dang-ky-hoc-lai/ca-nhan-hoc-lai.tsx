@@ -213,7 +213,7 @@ export default function CaNhanHocLai() {
     [res, studentList]
   )
   const countData = useMemo(
-    () => (res?.status === 200 ? res?.data.count + studentList.length : 0),
+    () => (res?.status === 200 ? res.data.data.length + studentList.length : 0),
     [res, studentList]
   )
 

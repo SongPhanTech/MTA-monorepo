@@ -336,8 +336,11 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
           },
         },
       ])
+      if (subjectStudent.status !== 200) {
+        return message.error("Không thể lấy danh sách sinh viên")
+      }
       const studentSubjectScoreData = subjectStudent
-        .data?.[0] as Prisma.StudentSubjectScoreGetPayload<{}>[]
+        .data[0] as Prisma.StudentSubjectScoreGetPayload<{}>[]
       if (studentSubjectScoreData.length === 0) {
         return message.error("Lớp môn học này không có sinh viên nào.")
       }
@@ -507,7 +510,11 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
         ])
         loading()
 
-        const allInternships = allData.data?.[0] as Array<{ id: string }>
+        if (allData.status !== 200) {
+          return message.error("Không thể lấy dữ liệu thực tập")
+        }
+
+        const allInternships = allData.data[0] as Array<{ id: string }>
         internshipIds = allInternships?.map((item) => item.id) || []
 
         if (internshipIds.length === 0) {

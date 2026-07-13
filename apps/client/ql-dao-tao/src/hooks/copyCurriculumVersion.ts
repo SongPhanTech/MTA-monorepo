@@ -38,6 +38,10 @@ export const useCloneCurriculumVersion = () => {
         },
       ])
 
+      if (res.status !== 200) {
+        throw new Error("Không thể lấy phiên bản CTĐT")
+      }
+
       const originalVersion = res.data[0] as Prisma.CurriculumVersionGetPayload<{
         include: {
           documentFiles: true

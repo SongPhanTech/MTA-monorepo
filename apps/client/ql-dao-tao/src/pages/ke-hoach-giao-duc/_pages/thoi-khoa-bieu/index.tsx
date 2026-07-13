@@ -13,6 +13,7 @@ import { emptyObjectIf } from "@workspace/constant"
 import { $Enums, type Prisma, type SubjectClass } from "@workspace/db/client"
 import { useCountDM_DonVi, useDeleteSubjectClass, useFindManyDM_DonVi } from "@workspace/db/hooks"
 import { whereOrganization } from "@workspace/libs/constants"
+import { ExportThoiKhoaBieuRequestType } from "@workspace/libs/api/schemas"
 import { useExportThoiKhoaBieu } from "@workspace/libs/api/training"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
@@ -528,7 +529,9 @@ export default function ThoiKhoaBieu({
           semesterId,
           trainingObjectTypeId,
           ...(trainingCourseId ? { trainingCourseId } : {}),
-          ...(type ? { type } : {}),
+          ...(type && type in ExportThoiKhoaBieuRequestType
+            ? { type: type as (typeof ExportThoiKhoaBieuRequestType)[keyof typeof ExportThoiKhoaBieuRequestType] }
+            : {}),
         },
       })
 

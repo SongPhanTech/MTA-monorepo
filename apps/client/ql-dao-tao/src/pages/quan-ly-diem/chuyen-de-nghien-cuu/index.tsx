@@ -301,8 +301,11 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
           },
         },
       ])
+      if (subjectStudent.status !== 200) {
+        return message.error("Không thể lấy danh sách sinh viên")
+      }
       const studentSubjectScoreData = subjectStudent
-        .data?.[0] as Prisma.StudentSubjectScoreGetPayload<{}>[]
+        .data[0] as Prisma.StudentSubjectScoreGetPayload<{}>[]
       if (studentSubjectScoreData.length === 0) {
         return message.error("Lớp môn học này không có sinh viên nào.")
       }
@@ -891,6 +894,10 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         },
                       ])
 
+                      if (expertProfiles.status !== 200) {
+                        return message.error("Không thể lấy danh sách chuyên gia")
+                      }
+
                       const expertProfilesData = expertProfiles
                         .data[0] as Prisma.ExpertProfileGetPayload<{
                         include: {
@@ -1141,6 +1148,10 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                           },
                         },
                       ])
+
+                      if (students.status !== 200) {
+                        return message.error("Không thể lấy danh sách sinh viên")
+                      }
 
                       const studentsData = students.data[0] as Prisma.StudentGetPayload<{
                         include: {
