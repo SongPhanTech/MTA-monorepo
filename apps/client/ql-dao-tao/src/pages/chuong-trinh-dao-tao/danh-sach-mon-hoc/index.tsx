@@ -299,7 +299,7 @@ export default function SubjectList() {
             id: record.id,
           },
         },
-        content: "Xóa môn học",
+        content: "Xóa học phần",
         action: HistorySubjectVersionType.DELETE,
         updatedBy: {
           connect: {
@@ -361,8 +361,8 @@ export default function SubjectList() {
         dataExport.push({
           "Nhóm môn": subject.name,
           "Đơn vị quản lý": version.managementOrganization?.sTen || "",
-          "Mã môn học": version.code,
-          "Tên môn học": version.name,
+          "Mã học phần": version.code,
+          "Tên học phần": version.name,
           "Mã TKB": version.codeTkb,
           "Số tín chỉ": version.credit,
           "Số tiết": version.period,
@@ -406,7 +406,7 @@ export default function SubjectList() {
       return newFilters
     })
   }
-  const pageTitle = "Danh sách môn học"
+  const pageTitle = "Danh sách học phần"
   return (
     <div>
       <Row>
@@ -430,7 +430,7 @@ export default function SubjectList() {
                         })
                       }
                       className="py-0 h-8"
-                      placeholder="Tìm kiếm môn học"
+                      placeholder="Tìm kiếm học phần"
                       prefix={
                         <Search
                           size={15}
@@ -478,7 +478,7 @@ export default function SubjectList() {
                 </Button>
                 <Button type="primary" onClick={handleExportExcel}>
                   <Download />
-                  Xuất DS môn học
+                  Xuất DS học phần
                 </Button>
                 {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC, "THEM") && (
                   <Button onClick={handleHistory} type="primary">
@@ -489,7 +489,7 @@ export default function SubjectList() {
                 {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC, "THEM") && (
                   <Popconfirm
                     placement="bottomRight"
-                    title={`Bạn có chắc muốn ${isLocked ? "mở" : "khoá"} chỉnh sửa môn học không?`}
+                    title={`Bạn có chắc muốn ${isLocked ? "mở" : "khoá"} chỉnh sửa học phần không?`}
                     onConfirm={handleToggleLock}
                     okText="Đồng ý"
                     cancelText="Hủy"
@@ -533,7 +533,7 @@ export default function SubjectList() {
             }}
             columns={[
               {
-                title: <Tooltip title="Mã môn học">Mã MH</Tooltip>,
+                title: <Tooltip title="Mã học phần">Mã học phần</Tooltip>,
                 dataIndex: "code",
                 width: 100,
                 align: "center",
@@ -706,7 +706,7 @@ export default function SubjectList() {
                 render: (record) => <div className="line-clamp-2">{record}</div>,
               },
               {
-                title: <Tooltip title="Đã mở lớp môn học">Đã mở LMH</Tooltip>,
+                title: <Tooltip title="Đã mở lớp học phần">Đã mở LHP</Tooltip>,
                 align: "center",
                 dataIndex: "isTeaching",
                 width: 120,
@@ -855,7 +855,7 @@ export default function SubjectList() {
                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
                     "THEM"
                   ) && (
-                    <Tooltip title="Thêm mới phiên bản môn học" placement="bottomLeft">
+                    <Tooltip title="Thêm mới phiên bản học phần" placement="bottomLeft">
                       <BookPlus
                         onClick={() => handleModalSubjectVersion(record.id, "", isLocked)}
                         className="cursor-pointer"

@@ -205,17 +205,6 @@ const importFileGiaoVienCoGioGiay = async (
 
   await prisma.$transaction(
     async (tx) => {
-      await tx.subjectClass.updateMany({
-        where: {
-          semesterId,
-          trainingObjectTypeId,
-          type,
-        },
-        data: {
-          cancelled: true,
-          lecturerAssignmentDeadline: null,
-        },
-      })
       await tx.classSchedule.deleteMany({
         where: {
           subjectClass: {
