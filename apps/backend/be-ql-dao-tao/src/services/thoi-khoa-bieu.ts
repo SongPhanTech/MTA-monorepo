@@ -166,7 +166,7 @@ export async function exportThoiKhoaBieu({
         where: {
           trainingObjectTypeId,
           deletedAt: null,
-          fixedClasses: {
+          fixedClass: {
             some: {
               deletedAt: null,
               subjectClasses: {
