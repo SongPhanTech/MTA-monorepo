@@ -217,6 +217,23 @@ export default function ThoiKhoaBieu({
             }
           : {}),
         type: type,
+        OR: [
+          {
+            subjectClassTimes: {
+              some: {},
+            },
+          },
+          {
+            subject: {
+              type: {
+                in: ["Practice", "Internship", "Project"],
+              },
+            },
+            lecturerId: {
+              not: null,
+            },
+          },
+        ],
       }) satisfies Prisma.SubjectClassWhereInput,
     [filters, semesterId, trainingObjectTypeId, khoaBoMon, type]
   )
@@ -791,7 +808,15 @@ export default function ThoiKhoaBieu({
                   title: "Ngày thi",
                   align: "center",
                   width: 100,
-                  render: (_, record) => (record.examDate ? formatDate(record.examDate) : ""),
+                  render: (_, record) => {
+                    const isPracticeOrInternshipOrProject = ["Practice", "Internship", "Project"].includes(
+                      record.subject?.type || ""
+                    )
+                    if (isPracticeOrInternshipOrProject) {
+                      return "Theo KH của giảng viên"
+                    }
+                    return record.examDate ? formatDate(record.examDate) : ""
+                  },
                 },
                 // {
                 //     title: 'Hạn nhập điểm TX/ĐK',
@@ -810,6 +835,12 @@ export default function ThoiKhoaBieu({
                   width: 150,
                   align: "center",
                   render: (_, record) => {
+                    const isPracticeOrInternshipOrProject = ["Practice", "Internship", "Project"].includes(
+                      record.subject?.type || ""
+                    )
+                    if (isPracticeOrInternshipOrProject) {
+                      return "Theo KH của giảng viên"
+                    }
                     return record.subjectClassTimes?.uniqueByKey?.("dayOfWeek")?.map?.((tkb) => {
                       return (
                         <p>

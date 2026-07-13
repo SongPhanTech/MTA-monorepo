@@ -486,8 +486,8 @@ const PutVersionSubjectModal = () => {
       maskClosable={true}
       title={
         subjectVersionId
-          ? `Sửa phiên bản môn học - ${subject?.name ?? ""}`
-          : `Thêm phiên bản môn học - ${subject?.name ?? ""}`
+          ? `Sửa phiên bản học phần - ${subject?.name ?? ""}`
+          : `Thêm phiên bản học phần - ${subject?.name ?? ""}`
       }
       className="w-[80vw]"
       okButtonProps={{ disabled: input?.isLocked }}
@@ -566,9 +566,9 @@ const PutVersionSubjectModal = () => {
           </FormItem>
         </Col>
         <Col span={8}>
-          <FormItem form={form} name="type" label="Loại môn học">
+          <FormItem form={form} name="type" label="Loại học phần">
             <Select
-              placeholder="Chọn loại môn học"
+              placeholder="Chọn loại học phần"
               options={subjectVersionTypeOptions?.map((item) => ({
                 label: item.label,
                 value: item.value,
@@ -719,13 +719,13 @@ const PutVersionSubjectModal = () => {
           </FormItem>
         </Col>
         <Col span={8}>
-          <Form.Item name="prerequisiteSubjectIds" label="Môn học tiên quyết">
+          <Form.Item name="prerequisiteSubjectIds" label="Học phần tiên quyết">
             <TreeSelect
               treeData={treeData}
               // treeCheckable={true}
               multiple={true}
               treeDefaultExpandAll
-              placeholder="Chọn môn học tiên quyết"
+              placeholder="Chọn học phần tiên quyết"
               style={{ width: "100%" }}
               {...(input?.isLocked
                 ? {
@@ -739,13 +739,13 @@ const PutVersionSubjectModal = () => {
           </Form.Item>
         </Col>
         <Col span={8}>
-          <Form.Item name="coRequisiteSubjectIds" label="Môn học học trước">
+          <Form.Item name="coRequisiteSubjectIds" label="Học phần học trước">
             <TreeSelect
               treeData={treeData}
               // treeCheckable={true}
               multiple={true}
               treeDefaultExpandAll
-              placeholder="Chọn môn học học trước"
+              placeholder="Chọn học phần học trước"
               style={{ width: "100%" }}
               {...(input?.isLocked
                 ? {
