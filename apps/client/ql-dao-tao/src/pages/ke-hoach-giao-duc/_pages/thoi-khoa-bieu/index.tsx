@@ -14,6 +14,7 @@ import { $Enums, type Prisma, type SubjectClass } from "@workspace/db/client"
 import { useCountDM_DonVi, useDeleteSubjectClass, useFindManyDM_DonVi } from "@workspace/db/hooks"
 import { whereOrganization } from "@workspace/libs/constants"
 import { ExportThoiKhoaBieuRequestType } from "@workspace/libs/api/schemas"
+import { useExportTrainingData } from "@workspace/libs/api/export-training-data"
 import { useExportThoiKhoaBieu } from "@workspace/libs/api/training"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
@@ -77,6 +78,7 @@ export default function ThoiKhoaBieu({
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const { id: trainingCourseId } = useTrainingCourseStore()
   const { mutateAsync: exportToTrinh } = useExportThoiKhoaBieu()
+  const { mutateAsync: exportRawData } = useExportTrainingData()
   const canXemTatCa = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "XEM_TAT_CA")
   const orgId = window.contextData?.organizationId
   const where = useMemo(
@@ -549,12 +551,52 @@ export default function ThoiKhoaBieu({
     }
   }
 
+  const handleExportRawData = async () => {
+    if (!semesterId) {
+      message.warning("Vui lòng chọn học kỳ")
+      return
+    }
+
+    if (!trainingObjectTypeId) {
+      message.warning("Vui lòng chọn đối tượng đào tạo")
+      return
+    }
+
+    try {
+      showSpinner()
+      const res = await exportRawData({
+        semesterId,
+        trainingObjectTypeId,
+        ...(trainingCourseId ? { trainingCourseId } : {}),
+        ...(type && type in ExportThoiKhoaBieuRequestType
+          ? { type: type as (typeof ExportThoiKhoaBieuRequestType)[keyof typeof ExportThoiKhoaBieuRequestType] }
+          : {}),
+      })
+
+      if (res.status === 200) {
+        message.success("Xuất dữ liệu thô thành công")
+        const blob = new Blob([JSON.stringify(res.data, null, 2)], {
+          type: "application/json;charset=utf-8",
+        })
+        saveAs(blob, "export-training-data.json")
+        return
+      }
+
+      message.error(res.data?.message || "Xuất dữ liệu thô thất bại")
+    } catch {
+      message.error("Đã xảy ra lỗi khi xuất dữ liệu thô")
+    } finally {
+      hideSpinner()
+    }
+  }
+
   return (
     <div>
       <Row gutter={[8, 8]}>
         <Col span={24}>
           <Affix offsetTop={105} style={{ zIndex: 1000 }}>
             <Flex gap={4} justify="end">
+              <Button onClick={handleExportRawData}>Xuất dữ liệu thô</Button>
               <Button type="primary" onClick={handleExportToTrinh}>
                 Xuất tờ trình
               </Button>
