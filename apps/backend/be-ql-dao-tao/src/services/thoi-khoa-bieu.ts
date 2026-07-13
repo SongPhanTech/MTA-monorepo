@@ -65,10 +65,8 @@ function formatPeriod(startPeriod?: number | null, endPeriod?: number | null) {
 function buildExportRows(subjectClasses: SubjectClassExport[]) {
   const groupedBySubject = Object.groupBy(subjectClasses, (sc) => sc.subject.code)
 
-  let subjectIndex = 0
+  let rowIndex = 0
   return Object.entries(groupedBySubject).flatMap(([_, classes = []]) => {
-    subjectIndex++
-
     return classes.flatMap((sc) => {
       const uniqueTimes = [
         ...new Map(
@@ -81,21 +79,24 @@ function buildExportRows(subjectClasses: SubjectClassExport[]) {
 
       const timeSlots = uniqueTimes.length > 0 ? uniqueTimes : [null]
 
-      return timeSlots.map((classTime) => ({
-        no: subjectIndex,
-        subjectCode: sc.subject.codeTkb || sc.subject.code,
-        subjectName: sc.subject.name,
-        credit: sc.subject.credit,
-        classCode: sc.code,
-        lecturers: [sc.mainLecturer, sc.extraLecturer]
-          .map((lecturer) => lecturer?.userProfile?.fullname)
-          .filter(Boolean)
-          .join(", "),
-        weekday: formatWeekday(classTime?.dayOfWeek),
-        period: formatPeriod(classTime?.startPeriod, classTime?.endPeriod),
-        room: sc.room?.name || "",
-        maxStudent: sc.maxStudent,
-      }))
+      return timeSlots.map((classTime) => {
+        rowIndex++
+        return {
+          no: rowIndex,
+          subjectCode: sc.subject.codeTkb || sc.subject.code,
+          subjectName: sc.subject.name,
+          credit: sc.subject.credit,
+          classCode: sc.code,
+          lecturers: [sc.mainLecturer, sc.extraLecturer]
+            .map((lecturer) => lecturer?.userProfile?.fullname)
+            .filter(Boolean)
+            .join(", "),
+          weekday: formatWeekday(classTime?.dayOfWeek),
+          period: formatPeriod(classTime?.startPeriod, classTime?.endPeriod),
+          room: sc.room?.name || "",
+          maxStudent: sc.maxStudent,
+        }
+      })
     })
   })
 }
