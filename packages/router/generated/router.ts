@@ -25,6 +25,7 @@ export default {
   "DANG_KY_HOC": {
     "CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao",
     "DANG_KY_HOC": "/dang-ky-hoc",
+    "DONG_BO_DU_LIEU": "/dong-bo-du-lieu",
     "HO_SO_CA_NHAN": "/ho-so-ca-nhan",
     "HOME": "/home",
     "INDEX": "/",

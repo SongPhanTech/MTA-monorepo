@@ -8,6 +8,7 @@ import { HTTPException } from "hono/http-exception"
 import type { ContentfulStatusCode } from "hono/utils/http-status"
 import AuthApp from "./api/auth"
 import ClassRegisterApp from "./api/class-register"
+import DataSyncHistoryApp from "./api/data-sync-history"
 import { checkIp } from "./middlewares/check-ip"
 import { setupOpenApi } from "./utils/openapi"
 
@@ -54,6 +55,7 @@ const audience = config.keycloak.clientId
 app.use("/api/*", jwtAuth("dangkyhoc"))
 
 app.route("/api/class-register", ClassRegisterApp)
+app.route("/api/data-sync", DataSyncHistoryApp)
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {

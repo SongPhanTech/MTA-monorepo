@@ -151,7 +151,14 @@ app.all("/api/system/:appcode/*", async (c) => {
 app.route("/api/minio", MinIOApp)
 app.route("/api/sql", SqlTransactionApp)
 
-const nv = await prisma.userProfile.findFirstOrThrow({})
+const mockProfileId = process.env.MOCK_USER_PROFILE_ID?.trim()
+const nv = mockProfileId
+  ? await prisma.userProfile.findUniqueOrThrow({ where: { id: mockProfileId } })
+  : await prisma.userProfile.findFirstOrThrow({})
+
+if (mockProfileId) {
+  console.log(`[be-model] Using mock user profile: ${nv.fullname} (${nv.id})`)
+}
 
 const TargetMap = {
   name: "Tên",

@@ -2293,6 +2293,27 @@ exports.Prisma.ScoreCorrectionItemScalarFieldEnum = {
   oldExamScore: 'oldExamScore'
 };
 
+exports.Prisma.DataSyncHistoryScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  type: 'type',
+  status: 'status',
+  sessionName: 'sessionName',
+  classRegisterSessionId: 'classRegisterSessionId',
+  fileName: 'fileName',
+  fileVersion: 'fileVersion',
+  sourceExportedAt: 'sourceExportedAt',
+  errorMessage: 'errorMessage',
+  recordCounts: 'recordCounts',
+  performedById: 'performedById'
+};
+
 exports.Prisma.TrainingObjectTypeScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -2797,14 +2818,9 @@ exports.Prisma.StudentYearResultScalarFieldEnum = {
   lowestFinalScore: 'lowestFinalScore',
   lowestGraduationScore: 'lowestGraduationScore',
   totalCredits: 'totalCredits',
-  registeredCredits: 'registeredCredits',
   retakingCredits: 'retakingCredits',
   reExamCredits: 'reExamCredits',
-  passedCredits: 'passedCredits',
   failedCredits: 'failedCredits',
-  accumulatedCredits: 'accumulatedCredits',
-  totalCreditsByCurriculum: 'totalCreditsByCurriculum',
-  totalFailedCredits: 'totalFailedCredits',
   isClassMonitor: 'isClassMonitor',
   isUnionLeader: 'isUnionLeader',
   academicWarningLevel: 'academicWarningLevel',
@@ -6454,6 +6470,19 @@ exports.Prisma.ScoreCorrectionItemOrderByRelevanceFieldEnum = {
   studentSubjectScoreId: 'studentSubjectScoreId'
 };
 
+exports.Prisma.DataSyncHistoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  sessionName: 'sessionName',
+  classRegisterSessionId: 'classRegisterSessionId',
+  fileName: 'fileName',
+  fileVersion: 'fileVersion',
+  errorMessage: 'errorMessage',
+  performedById: 'performedById'
+};
+
 exports.Prisma.TrainingObjectTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -8305,6 +8334,17 @@ exports.ScoreCorrectionStatus = exports.$Enums.ScoreCorrectionStatus = {
   APPROVED: 'APPROVED'
 };
 
+exports.DataSyncType = exports.$Enums.DataSyncType = {
+  IMPORT: 'IMPORT',
+  EXPORT: 'EXPORT'
+};
+
+exports.DataSyncStatus = exports.$Enums.DataSyncStatus = {
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED'
+};
+
 exports.TrainingObjectTypes = exports.$Enums.TrainingObjectTypes = {
   MILITARY: 'MILITARY',
   CIVILIAN: 'CIVILIAN',
@@ -8763,6 +8803,7 @@ exports.Prisma.ModelName = {
   ClassSchedule: 'ClassSchedule',
   ScoreCorrectionTicket: 'ScoreCorrectionTicket',
   ScoreCorrectionItem: 'ScoreCorrectionItem',
+  DataSyncHistory: 'DataSyncHistory',
   TrainingObjectType: 'TrainingObjectType',
   PriorityObject: 'PriorityObject',
   TrainingType: 'TrainingType',

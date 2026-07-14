@@ -1,4 +1,4 @@
-import { DownloadOutlined, EyeOutlined } from "@ant-design/icons"
+import { DownloadOutlined, EyeOutlined, UploadOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
@@ -14,6 +14,7 @@ import {
   useUpdateClassRegisterSession,
 } from "@workspace/db/hooks"
 import { useExportTrainingData } from "@workspace/libs/api/export-training-data"
+import { useImportTrainingData } from "@workspace/libs/api/import-training-data"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
 import { Select, useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
@@ -22,7 +23,7 @@ import dayjs from "dayjs"
 import { saveAs } from "file-saver"
 import { BookPlus } from "lucide-react"
 import { useRouter } from "next/router"
-import { useMemo, useState } from "react"
+import { useMemo, useRef, useState, type ChangeEvent } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 export default function ClassRegisterSession() {
@@ -142,6 +143,9 @@ export default function ClassRegisterSession() {
 
   const { mutateAsync: deleteClassRegisterSession } = useUpdateClassRegisterSession()
   const { mutateAsync: exportRawData } = useExportTrainingData()
+  const { mutateAsync: importRawData } = useImportTrainingData()
+  const importFileInputRef = useRef<HTMLInputElement>(null)
+  const [importSessionId, setImportSessionId] = useState<string | null>(null)
 
   async function handleDeleteClassRegisterSession(id: string) {
     try {
@@ -188,8 +192,58 @@ export default function ClassRegisterSession() {
     }
   }
 
+  function handleImportRawData(sessionId: string) {
+    setImportSessionId(sessionId)
+    importFileInputRef.current?.click()
+  }
+
+  async function handleImportFileChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    event.target.value = ""
+
+    if (!file || !importSessionId) {
+      setImportSessionId(null)
+      return
+    }
+
+    if (!file.name.endsWith(".json") && file.type !== "application/json") {
+      message.warning("Vui lòng chọn file JSON")
+      setImportSessionId(null)
+      return
+    }
+
+    try {
+      showSpinner()
+      const res = await importRawData({
+        classRegisterSessionId: importSessionId,
+        file,
+      })
+
+      if (res.status === 200) {
+        message.success(res.data.message || "Nhập dữ liệu đăng ký thành công")
+        return
+      }
+
+      message.warning(
+        ("message" in res.data ? res.data.message : undefined) || "Nhập dữ liệu đăng ký thất bại"
+      )
+    } catch {
+      message.error("Đã xảy ra lỗi khi nhập dữ liệu đăng ký")
+    } finally {
+      hideSpinner()
+      setImportSessionId(null)
+    }
+  }
+
   return (
     <div>
+      <input
+        ref={importFileInputRef}
+        type="file"
+        accept=".json,application/json"
+        className="hidden"
+        onChange={handleImportFileChange}
+      />
       <Row gutter={[16, 0]}>
         <Col span={24}>
           <Row gutter={[16, 16]} align="top" justify="space-between">
@@ -335,11 +389,20 @@ export default function ClassRegisterSession() {
               },
               {
                 title: "Thao tác",
-                width: 130,
+                width: 160,
                 align: "center",
                 fixed: "right",
                 render: (_, record) => (
                   <Row className="justify-center gap-2">
+                    <Tooltip title="Nhập dữ liệu đăng ký từ internet" placement="top">
+                      <UploadOutlined
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleImportRawData(record.id)
+                        }}
+                        className="text-sm cursor-pointer"
+                      />
+                    </Tooltip>
                     <Tooltip title="Xuất dữ liệu thô" placement="top">
                       <DownloadOutlined
                         onClick={(e) => {

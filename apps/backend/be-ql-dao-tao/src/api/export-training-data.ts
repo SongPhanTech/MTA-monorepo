@@ -34,7 +34,9 @@ const exportTrainingDataRoute = createRoute({
   summary: "Xuất dữ liệu thô theo đợt đăng ký học",
   description: `Xuất gói JSON theo 1 đợt đăng ký học online để migrate sang môi trường internet.
 
-**Bảng dữ liệu:** ClassRegisterSession, ClassRegisterSessionCredit, _ClassRegisterSessionToTrainingCourse, DM_DonVi, UserProfile, LecturerType, Lecturer, TrainingObjectType, SchoolYear, Semester, TrainingCourse, Subject, SubjectVersion, SubjectClass, SubjectClassTime, FixedClass, _FixedClassToSubjectClass, Room, Building, TrainingLocation, TrainingMajor, Curriculum, CurriculumVersion, Student, StudentSubjectScore, StudentSemesterResult, Exam, ClassSchedule.
+**Bảng danh mục:** toàn bộ bảng DM_* (mta, ql-ho-so), LecturerType, StaffType, StaffPosition, TrainingLanguage, TrainingType, TrainingLevel, TrainingForm, TrainingTime, DiplomaType, PriorityObject, AcademicRankingConvert, SubjectVersionCategory, LoadCategory, TemplateFile.
+
+**Bảng nghiệp vụ:** ClassRegisterSession, ClassRegisterSessionCredit, _ClassRegisterSessionToTrainingCourse, Student, UserProfile, Lecturer, TrainingObjectType, SchoolYear, Semester, TrainingCourse, Subject, SubjectVersion, SubjectClass, SubjectClassTime, FixedClass, _FixedClassToSubjectClass, Room, Building, TrainingLocation, TrainingMajor, Curriculum, CurriculumVersion, StudentSubjectScore, StudentSemesterResult, Exam, ClassSchedule.
 
 **Tham số:** classRegisterSessionId.`,
   request: {

@@ -34,6 +34,7 @@ import {
   User,
   User2Icon,
   Users,
+  ArrowLeftRight,
 } from "lucide-react"
 import { DANG_KY_HOC_PERMISSION } from "../generated/dang-ky-hoc"
 import { KHAO_THI_PERMISSION } from "../generated/khao-thi"
@@ -106,6 +107,13 @@ const NAVIGATION: NavigationType = {
         label: "Đăng ký học",
         icon: CalendarRange,
         path: ROUTER_PATH.DANG_KY_HOC.DANG_KY_HOC,
+      },
+      {
+        id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_DONG_BO_DU_LIEU,
+        label: "Đồng bộ dữ liệu",
+        icon: ArrowLeftRight,
+        path: ROUTER_PATH.DANG_KY_HOC.DONG_BO_DU_LIEU,
+        description: "Nhập/xuất dữ liệu giữa phần mềm nội bộ và cổng đăng ký học",
       },
       {
         id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_KHAO_SAT,

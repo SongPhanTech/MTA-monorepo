@@ -3,19 +3,21 @@ import type { Session } from ".."
 import { fetchSession } from "."
 import { SessionContext } from "./provider"
 
-/** Mock local — gỡ trước khi deploy production. */
-const DEV_MOCK_PROFILE_ID = "b8bd3015-c14e-4037-9fbe-1041003b92d2"
+const layMockProfileId = () => process.env.NEXT_PUBLIC_MOCK_USER_PROFILE_ID?.trim() || ""
 
-const taoMockSession = (): Session => ({
-  userId: DEV_MOCK_PROFILE_ID,
-  username: "local-dev",
-  fullName: "Local Dev",
-  organizationId: "",
-  sDM_NhanVienId: DEV_MOCK_PROFILE_ID,
-  sDM_DonViId: "",
-})
+const taoMockSession = (): Session => {
+  const profileId = layMockProfileId()
+  return {
+    userId: profileId,
+    username: process.env.NEXT_PUBLIC_MOCK_STUDENT_CODE?.trim() || "local-dev",
+    fullName: process.env.NEXT_PUBLIC_MOCK_USER_FULL_NAME?.trim() || "Local Dev",
+    organizationId: "",
+    sDM_NhanVienId: profileId,
+    sDM_DonViId: "",
+  }
+}
 
-const dungMockSessionLocal = () => process.env.NODE_ENV === "development"
+const dungMockSessionLocal = () => Boolean(layMockProfileId())
 
 export const useSession = () => {
   const { sessionState, setSessionState, setStatus, status } = useContext(SessionContext)
@@ -25,9 +27,7 @@ export const useSession = () => {
   useEffect(() => {
     if (status === "loading") return
     if (!status) {
-      const mockSession = dungMockSessionLocal()
-      console.log(mockSession)
-      if (mockSession) {
+      if (dungMockSessionLocal()) {
         setSessionState(taoMockSession())
         setStatus("authenticated")
         return
