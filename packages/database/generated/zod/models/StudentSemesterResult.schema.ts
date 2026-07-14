@@ -26,6 +26,8 @@ const baseSchema = z.object({
     cumulativeGpaBase4: DecimalSchema,
     gpaBase10: DecimalSchema,
     cumulativeGpaBase10: DecimalSchema,
+    cgpaBase4: DecimalSchema.default(0),
+    cgpaBase10: DecimalSchema.default(0),
     conductScore: z.number().nullish(),
     studentTrainingType: StudentTrainingTypeSchema.nullish(),
     lowestFinalScore: z.number(),
@@ -71,6 +73,8 @@ const baseSchemaWithoutDefaults = z.object({
     cumulativeGpaBase4: DecimalSchema,
     gpaBase10: DecimalSchema,
     cumulativeGpaBase10: DecimalSchema,
+    cgpaBase4: DecimalSchema,
+    cgpaBase10: DecimalSchema,
     conductScore: z.number().nullish(),
     studentTrainingType: StudentTrainingTypeSchema.nullish(),
     lowestFinalScore: z.number(),
@@ -152,6 +156,8 @@ export const StudentSemesterResultPrismaUpdateSchema = z.object({
     cumulativeGpaBase4: DecimalSchema,
     gpaBase10: DecimalSchema,
     cumulativeGpaBase10: DecimalSchema,
+    cgpaBase4: DecimalSchema,
+    cgpaBase10: DecimalSchema,
     conductScore: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     studentTrainingType: StudentTrainingTypeSchema.nullish(),
     lowestFinalScore: z.union([z.number(), z.record(z.string(), z.unknown())]),
@@ -185,7 +191,7 @@ export const StudentSemesterResultPrismaUpdateSchema = z.object({
  * `StudentSemesterResult` schema for create operations excluding foreign keys and relations.
  */
 export const StudentSemesterResultCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, retakingCredits: true, reExamCredits: true, postponeWithReason: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true, approved: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, cgpaBase4: true, cgpaBase10: true, retakingCredits: true, reExamCredits: true, postponeWithReason: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true, approved: true
 });
 
 

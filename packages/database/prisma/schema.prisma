@@ -4385,6 +4385,8 @@ model StudentSemesterResult {
   cumulativeGpaBase4       Decimal                 @db.Decimal(5, 2)
   gpaBase10                Decimal                 @db.Decimal(5, 2)
   cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)
+  cgpaBase4                Decimal                 @default(0) @db.Decimal(5, 2)
+  cgpaBase10               Decimal                 @default(0) @db.Decimal(5, 2)
   conductScore             Float?
   studentTrainingType      StudentTrainingType?
   rank                     AcademicRankingConvert? @relation(fields: [rankId], references: [id])
@@ -4438,6 +4440,8 @@ model StudentYearResult {
   cumulativeGpaBase4       Decimal                 @db.Decimal(5, 2)
   gpaBase10                Decimal                 @db.Decimal(5, 2)
   cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)
+  cgpaBase4                Decimal                 @default(0) @db.Decimal(5, 2)
+  cgpaBase10               Decimal                 @default(0) @db.Decimal(5, 2)
   conductScore             Float?
   studentTrainingType      StudentTrainingType?
   rank                     AcademicRankingConvert? @relation(fields: [rankId], references: [id])
@@ -4445,9 +4449,14 @@ model StudentYearResult {
   lowestFinalScore         Float?
   lowestGraduationScore    Float?
   totalCredits             Int
+  registeredCredits        Int                     @default(0)
   retakingCredits          Int                     @default(0)
   reExamCredits            Int                     @default(0)
+  passedCredits            Int                     @default(0)
   failedCredits            Int
+  accumulatedCredits       Int                     @default(0)
+  totalCreditsByCurriculum Int                     @default(0)
+  totalFailedCredits       Int                     @default(0)
   isClassMonitor           Boolean
   isUnionLeader            Boolean
   academicWarningLevel     Int                     @default(0)

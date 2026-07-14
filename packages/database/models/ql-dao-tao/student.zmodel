@@ -165,7 +165,8 @@ model StudentSemesterResult extends Base {
   cumulativeGpaBase4       Decimal                 @db.Decimal(5, 2)    // Tích luỹ hệ 4
   gpaBase10                Decimal                 @db.Decimal(5, 2)    // Điểm trung bình học kỳ hệ 10
   cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)    // Tích luỹ hệ 10
-
+  cgpaBase4                Decimal                 @default(0) @db.Decimal(5, 2)    // Trung bình chung tích luỹ hệ 4
+  cgpaBase10               Decimal                 @default(0) @db.Decimal(5, 2)    // Trung bình chung tích luỹ hệ 10
   conductScore             Float?   // Điểm rèn luyện trung bình của học kỳ
   studentTrainingType      StudentTrainingType? // xếp loại rèn luyện
 
@@ -226,6 +227,8 @@ model StudentYearResult extends  Base {
   cumulativeGpaBase4       Decimal                 @db.Decimal(5, 2)    // Tích luỹ hệ 4
   gpaBase10                Decimal                 @db.Decimal(5, 2)    // Điểm trung bình học kỳ hệ 10
   cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)    // Tích luỹ hệ 10
+  cgpaBase4                Decimal                 @default(0) @db.Decimal(5, 2)    // Trung bình chung tích luỹ hệ 4
+  cgpaBase10               Decimal                 @default(0) @db.Decimal(5, 2)    // Trung bình chung tích luỹ hệ 10
 
   conductScore             Float?   // Điểm rèn luyện trung bình của năm
   studentTrainingType      StudentTrainingType? // xếp loại rèn luyện

@@ -16217,6 +16217,14 @@ const metadata: ModelMeta = {
                     name: "cumulativeGpaBase10",
                     type: "Decimal",
                     attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
+                }, cgpaBase4: {
+                    name: "cgpaBase4",
+                    type: "Decimal",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }, { "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
+                }, cgpaBase10: {
+                    name: "cgpaBase10",
+                    type: "Decimal",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }, { "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
                 }, conductScore: {
                     name: "conductScore",
                     type: "Float",
@@ -16431,6 +16439,14 @@ const metadata: ModelMeta = {
                     name: "cumulativeGpaBase10",
                     type: "Decimal",
                     attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
+                }, cgpaBase4: {
+                    name: "cgpaBase4",
+                    type: "Decimal",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }, { "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
+                }, cgpaBase10: {
+                    name: "cgpaBase10",
+                    type: "Decimal",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }, { "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
                 }, conductScore: {
                     name: "conductScore",
                     type: "Float",

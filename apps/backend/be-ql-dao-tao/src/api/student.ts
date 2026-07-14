@@ -591,11 +591,11 @@ app.openapi(tongKetNamHocHVSV, async (c) => {
     },
   })
 
-  setTimeout(() => {
+  setTimeout(async () => {
     const chunkSize = 10
     for (let i = 0; i < students.length; i += chunkSize) {
       const chunk = students.slice(i, i + chunkSize)
-      Promise.allSettled(
+      await Promise.allSettled(
         chunk.map((s) =>
           calculateStudentYearResult({
             studentId: s.id,
