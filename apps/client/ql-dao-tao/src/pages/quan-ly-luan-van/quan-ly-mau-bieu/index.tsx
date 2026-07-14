@@ -383,6 +383,9 @@ export default function QuanLyMauBieu() {
     queryKey: ["mau-bieu-preview", selectedObjectName],
     queryFn: async () => {
       const res = await presignedGetObject({ objectName: selectedObjectName! })
+      if (res.status !== 200) {
+        throw new Error("message" in res.data ? res.data.message : "Không thể tạo presigned URL")
+      }
       return res.data.url
     },
     enabled: Boolean(selectedObjectName),
@@ -412,6 +415,9 @@ export default function QuanLyMauBieu() {
     try {
       showSpinner()
       const res = await presignedGetObject({ objectName })
+      if (res.status !== 200) {
+        throw new Error("message" in res.data ? res.data.message : "Không thể tạo presigned URL")
+      }
       const response = await fetch(res.data.url)
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
       const blob = await response.blob()
@@ -463,6 +469,14 @@ export default function QuanLyMauBieu() {
       name: baseName || undefined,
       flat: true,
     })
+
+    if (resPresignedUrl.status !== 200) {
+      throw new Error(
+        "message" in resPresignedUrl.data
+          ? resPresignedUrl.data.message
+          : "Không thể tạo presigned URL"
+      )
+    }
 
     await axios.put(resPresignedUrl.data.url, file, {
       headers: { "Content-Type": file.type || "application/octet-stream" },

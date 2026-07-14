@@ -460,7 +460,9 @@ const XemTaiLieu = () => {
   })
 
   const documentUrl = input?.convertTo
-    ? convertedDocumentUrl?.data?.fileUrl
+    ? convertedDocumentUrl?.status === 200
+      ? convertedDocumentUrl.data.fileUrl
+      : undefined
     : getMinioUrl(input?.uri || "")
 
   const fileType = input?.mimeType?.toLowerCase() ?? ""

@@ -130,8 +130,14 @@ const KhoiTaoMon = () => {
           }
         })
       )
+      if (resTB.status !== 200) {
+        message.error("Không thể lấy danh sách môn trong khối CTĐT")
+        return
+      }
+
       const res = await sqlTransaction(
-        resTB?.data?.map((tbs: any) => {
+        resTB.data.map((tbs) => {
+          const trainingBlockSubject = tbs as { id?: string } | null
           return {
             model: "PlanTrainingSubject",
             operation: "create",
@@ -141,7 +147,7 @@ const KhoiTaoMon = () => {
                   connect: { id: planTrainingId },
                 },
                 trainingBlockSubject: {
-                  connect: { id: tbs?.id },
+                  connect: { id: trainingBlockSubject?.id },
                 },
               },
             },

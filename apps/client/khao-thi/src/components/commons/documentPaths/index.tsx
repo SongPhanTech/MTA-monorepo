@@ -108,7 +108,17 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
         extension: extension,
       })
 
-      await axios.put(resPresignedUrl.data.url, file, {
+      if (resPresignedUrl.status !== 200) {
+        throw new Error(
+          "message" in resPresignedUrl.data
+            ? resPresignedUrl.data.message
+            : "Không thể tạo presigned URL"
+        )
+      }
+
+      const { url, fileName } = resPresignedUrl.data
+
+      await axios.put(url, file, {
         onUploadProgress: (progressEvent) => {
           const { loaded, total = 1, estimated = 0 } = progressEvent
           const percent = Math.floor((loaded * 100) / total)
@@ -117,7 +127,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
               ...form.getFieldValue("files"),
               [file.name]: {
                 ...file,
-                url: resPresignedUrl.data.fileName,
+                url: fileName,
                 progress: percent,
                 timeLeft: estimated,
               },
@@ -129,7 +139,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
       const newItem: UploadedFileItem = {
         file,
         name: file.name,
-        path: resPresignedUrl.data.fileName,
+        path: fileName,
         size: BigInt(file.size || 0),
         mimeType: file.type,
         [relationType]: relationId,

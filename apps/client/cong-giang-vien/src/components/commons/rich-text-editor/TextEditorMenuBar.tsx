@@ -109,12 +109,22 @@ export default function TextEditorMenuBar({
         extension,
       })
 
-      await fetch(resPresignedUrl.data.url, {
+      if (resPresignedUrl.status !== 200) {
+        throw new Error(
+          "message" in resPresignedUrl.data
+            ? resPresignedUrl.data.message
+            : "Không thể tạo presigned URL"
+        )
+      }
+
+      const { url, fileName } = resPresignedUrl.data
+
+      await fetch(url, {
         method: "PUT",
         body: file,
       })
 
-      const imageUrl = `${getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT")}/${resPresignedUrl.data.fileName}`
+      const imageUrl = `${getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT")}/${fileName}`
 
       editor
         ?.chain()

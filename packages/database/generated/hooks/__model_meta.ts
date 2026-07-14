@@ -859,6 +859,20 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'level',
+                }, position: {
+                    name: "position",
+                    type: "DM_ChucVu",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'userProfilePosition',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "positionId" },
+                }, positionId: {
+                    name: "positionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'position',
                 }, chiHuyQuanLy: {
                     name: "chiHuyQuanLy",
                     type: "DM_ChiHuyQuanLy",
@@ -5261,6 +5275,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'chucVuChinhQuyen',
+                }, userProfilePosition: {
+                    name: "userProfilePosition",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'position',
                 }, quaTrinhCongTac: {
                     name: "quaTrinhCongTac",
                     type: "QuaTrinhCongTac",

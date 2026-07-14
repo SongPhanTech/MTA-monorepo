@@ -862,6 +862,8 @@ model UserProfile {
   academicRankDate                     DateTime?
   level                                DM_ChucDanh?                        @relation(fields: [levelId], references: [Id])
   levelId                              String?                             @db.Uuid()
+  position                             DM_ChucVu?                          @relation("position", fields: [positionId], references: [Id])
+  positionId                           String?                             @db.Uuid()
   chiHuyQuanLy                         DM_ChiHuyQuanLy?                    @relation(fields: [chiHuyQuanLyId], references: [id])
   chiHuyQuanLyId                       String?
   chuyenMonKyThuat                     DM_ChuyenMonKyThuat?                @relation(fields: [chuyenMonKyThuatId], references: [id])
@@ -1870,6 +1872,7 @@ model DM_ChucVu {
   iNhomChucVu         Int?                  @default(0)
   userProfileCPV      UserProfile[]         @relation("positionCPV")
   userProfile         UserProfile[]         @relation("chucVuChinhQuyen")
+  userProfilePosition UserProfile[]         @relation("position")
   quaTrinhCongTac     QuaTrinhCongTac[]
   quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
   chucVuChinhQuyen    ChucVuChinhQuyen[]

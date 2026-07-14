@@ -57,6 +57,9 @@ const ModalViewHistoryChange = () => {
           operation: "findMany",
         },
       ])
+      if (dataHistory.status !== 200 || fullDataHistory.status !== 200) {
+        return
+      }
       setDataHistory(dataHistory.data[0] as SubjectVersionHistory[])
       setCountHistory((fullDataHistory.data[0] as SubjectVersionHistory[]).length)
     } catch (error) {

@@ -47,11 +47,21 @@ const FileUploadButton: React.FC<FileUploadButtonProps> = ({
         extension,
       })
 
-      await axios.put(resPresignedUrl.data.url, file, {})
+      if (resPresignedUrl.status !== 200) {
+        throw new Error(
+          "message" in resPresignedUrl.data
+            ? resPresignedUrl.data.message
+            : "Không thể tạo presigned URL"
+        )
+      }
+
+      const { url, fileName } = resPresignedUrl.data
+
+      await axios.put(url, file, {})
 
       const newFile: UploadedFile = {
         name: file.name,
-        path: resPresignedUrl.data.fileName,
+        path: fileName,
         size: BigInt(file.size || 0),
         mimeType: file.type,
       }
