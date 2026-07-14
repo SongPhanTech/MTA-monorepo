@@ -167,6 +167,10 @@ const TRAINING_CATALOG_LOADERS: CatalogEntry[] = [
     load: () => prisma.priorityObject.findMany({ where: { deletedAt: null } }),
   },
   {
+    key: "TrainingField",
+    load: () => prisma.trainingField.findMany({ where: { deletedAt: null } }),
+  },
+  {
     key: "AcademicRankingConvert",
     load: () => prisma.academicRankingConvert.findMany({ where: { deletedAt: null } }),
   },

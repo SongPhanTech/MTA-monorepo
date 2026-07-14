@@ -1,12 +1,23 @@
+import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import Loading from "@components/commons/loading"
 import DefaultLayout from "@layouts/default-layout"
+import { usePagination } from "@hooks/usePagination"
 import { type ImportJsonPreview, parseImportJsonFile } from "@/utils/parse-import-json"
 import {
   finishDataSync,
   startDataSync,
   useGetDataSyncHistory,
 } from "@workspace/libs/api/data-sync-history"
-import { useGetClassRegisterSession } from "@workspace/libs/api/portal"
+import { importFromInternal } from "@workspace/libs/api/portal-import-training-data"
+import {
+  downloadExportJson,
+  exportToInternal,
+} from "@workspace/libs/api/portal-export-registration-results"
+import {
+  getGetClassRegisterSessionQueryKey,
+  useGetClassRegisterSession,
+} from "@workspace/libs/api/portal"
+import { useQueryClient } from "@tanstack/react-query"
 import {
   Alert,
   Button,
@@ -29,6 +40,7 @@ import {
   ArrowDownToLine,
   ArrowUpFromLine,
   FileJson,
+  History,
   Info,
   Upload as UploadIcon,
 } from "lucide-react"
@@ -48,9 +60,11 @@ const IMPORT_DATA_ITEMS = [
 ]
 
 const EXPORT_DATA_ITEMS = [
-  "Nhật ký đăng ký học ",
-  "Điểm môn học sau đăng ký ",
-  "Thông tin đợt đăng ký và học viên liên quan",
+  "Nhật ký đăng ký học (ClassRegisterLogs)",
+  "Điểm môn học sau đăng ký (StudentSubjectScore)",
+  "Sinh viên / hồ sơ liên quan (Student, UserProfile)",
+  "Lớp học phần đã đăng ký (SubjectClass, SubjectVersion)",
+  "Thông tin đợt đăng ký (ClassRegisterSession)",
 ]
 
 function DongBoDuLieuPage() {
@@ -62,6 +76,12 @@ function DongBoDuLieuPage() {
   const [importParseError, setImportParseError] = useState<string | null>(null)
   const [importing, setImporting] = useState(false)
   const [exporting, setExporting] = useState(false)
+  const queryClient = useQueryClient()
+  const {
+    currentPage,
+    pageSize,
+    onChange: onPaginationChange,
+  } = usePagination(DEFAULT_PAGINATE_SIZE)
 
   const {
     data: history = [],
@@ -138,6 +158,12 @@ function DongBoDuLieuPage() {
     setImporting(true)
     let syncId: string | undefined
     try {
+      const file = importFiles[0]?.originFileObj
+      if (!file) {
+        message.error("Không đọc được file đã chọn")
+        return
+      }
+
       const startRes = await startDataSync({
         type: "IMPORT",
         sessionName: importPreview.sessionName,
@@ -154,10 +180,31 @@ function DongBoDuLieuPage() {
       }
 
       syncId = startRes.data.id
-      await new Promise((resolve) => setTimeout(resolve, 800))
-      await finishDataSync({ id: syncId, status: "FAILED", errorMessage: "Chức năng nhập dữ liệu đang phát triển" })
+
+      const importRes = await importFromInternal({
+        file,
+        syncHistoryId: syncId,
+      })
+
       await refetchHistory()
-      message.info("Chức năng nhập dữ liệu đang phát triển. Lịch sử đồng bộ đã được ghi nhận.")
+
+      if (importRes.status === 200 && "sessionName" in importRes.data) {
+        await queryClient.invalidateQueries({ queryKey: getGetClassRegisterSessionQueryKey() })
+        const warningCount = importRes.data.warnings?.length ?? 0
+        if (warningCount > 0) {
+          message.warning(
+            `Đã nhập đợt «${importRes.data.sessionName}» với ${warningCount} cảnh báo. Kiểm tra tab Lịch sử đồng bộ.`
+          )
+        } else {
+          message.success(`Nhập dữ liệu thành công: ${importRes.data.sessionName}`)
+        }
+      } else {
+        const errMessage =
+          importRes.data && "message" in importRes.data
+            ? String(importRes.data.message ?? "Nhập dữ liệu thất bại")
+            : "Nhập dữ liệu thất bại"
+        message.error(errMessage)
+      }
     } catch (error) {
       if (syncId) {
         await finishDataSync({
@@ -198,10 +245,31 @@ function DongBoDuLieuPage() {
       }
 
       syncId = startRes.data.id
-      await new Promise((resolve) => setTimeout(resolve, 800))
-      await finishDataSync({ id: syncId, status: "FAILED", errorMessage: "Chức năng xuất dữ liệu đang phát triển" })
+
+      const exportRes = await exportToInternal({
+        classRegisterSessionId: exportSessionId,
+        syncHistoryId: syncId,
+      })
+
       await refetchHistory()
-      message.info("Chức năng xuất dữ liệu đang phát triển. Lịch sử đồng bộ đã được ghi nhận.")
+
+      if (exportRes.status === 200 && "meta" in exportRes.data) {
+        downloadExportJson(exportRes.data, selectedExportSession?.name)
+        const count = exportRes.data.meta.registrationCount
+        if (!exportRes.data.meta.sessionEnded) {
+          message.warning(
+            `Đã xuất ${count} lượt đăng ký. Lưu ý: đợt đăng ký chưa kết thúc / vẫn đang mở.`
+          )
+        } else {
+          message.success(`Xuất thành công ${count} lượt đăng ký`)
+        }
+      } else {
+        const errMessage =
+          exportRes.data && "message" in exportRes.data
+            ? String(exportRes.data.message ?? "Xuất dữ liệu thất bại")
+            : "Xuất dữ liệu thất bại"
+        message.error(errMessage)
+      }
     } catch (error) {
       if (syncId) {
         await finishDataSync({
@@ -313,8 +381,8 @@ function DongBoDuLieuPage() {
                           Kéo thả hoặc bấm để chọn file JSON xuất từ đợt đăng ký nội bộ
                         </p>
                         <p className="ant-upload-hint text-gray-500">
-                          Định dạng: export-dot-dang-ky-*.json (phiên bản 1.3.0). File chứa đầy đủ
-                          thông tin đợt đăng ký cần khởi tạo.
+                          Định dạng: export-dot-dang-ky-*.json (phiên bản 1.3.2). File chứa
+                          đầy đủ thông tin đợt đăng ký cần khởi tạo.
                         </p>
                       </Dragger>
                     </div>
@@ -499,53 +567,82 @@ function DongBoDuLieuPage() {
               </Row>
             ),
           },
+          {
+            key: "history",
+            label: (
+              <span className="inline-flex items-center gap-2">
+                <History className="size-4" />
+                Lịch sử đồng bộ
+              </span>
+            ),
+            children: (
+              <Card>
+                <Table
+                  size="small"
+                  loading={historyLoading}
+                  pagination={{
+                    current: currentPage,
+                    pageSize,
+                    total: history.length,
+                    showSizeChanger: true,
+                    onChange: onPaginationChange,
+                  }}
+                  locale={{ emptyText: "Chưa có lịch sử đồng bộ" }}
+                  rowKey="id"
+                  dataSource={history}
+                  bordered={true}
+                  columns={[
+                    {
+                      title: "STT",
+                      width: 70,
+                      align: "center",
+                      render: (_: unknown, __: unknown, index: number) =>
+                        (currentPage - 1) * pageSize + index + 1,
+                    },
+                    {
+                      title: "Loại",
+                      dataIndex: "type",
+                      width: 120,
+                      render: (type: "IMPORT" | "EXPORT") =>
+                        type === "IMPORT" ? (
+                          <Tag color="blue">Nhập</Tag>
+                        ) : (
+                          <Tag color="green">Xuất</Tag>
+                        ),
+                    },
+                    {
+                      title: "Đợt đăng ký",
+                      dataIndex: "sessionName",
+                    },
+                    {
+                      title: "Tên file",
+                      dataIndex: "fileName",
+                      render: (value: string | null) => value ?? "—",
+                    },
+                    {
+                      title: "Trạng thái",
+                      dataIndex: "status",
+                      width: 120,
+                      render: (status: "PENDING" | "SUCCESS" | "FAILED") => {
+                        if (status === "SUCCESS") return <Tag color="success">Thành công</Tag>
+                        if (status === "FAILED") return <Tag color="error">Thất bại</Tag>
+                        return <Tag color="processing">Đang xử lý</Tag>
+                      },
+                    },
+                    {
+                      title: "Thời gian",
+                      dataIndex: "createdAt",
+                      width: 180,
+                      render: (value: string) =>
+                        value ? dayjs(value).format("HH:mm — DD/MM/YYYY") : "—",
+                    },
+                  ]}
+                />
+              </Card>
+            ),
+          },
         ]}
       />
-
-      <Card title="Lịch sử đồng bộ">
-        <Table
-          size="small"
-          loading={historyLoading}
-          pagination={{ pageSize: 10, showSizeChanger: false }}
-          locale={{ emptyText: "Chưa có lịch sử đồng bộ" }}
-          rowKey="id"
-          dataSource={history}
-          columns={[
-            {
-              title: "Loại",
-              dataIndex: "type",
-              width: 120,
-              render: (type: "IMPORT" | "EXPORT") =>
-                type === "IMPORT" ? <Tag color="blue">Nhập</Tag> : <Tag color="green">Xuất</Tag>,
-            },
-            {
-              title: "Đợt đăng ký",
-              dataIndex: "sessionName",
-            },
-            {
-              title: "Tên file",
-              dataIndex: "fileName",
-              render: (value: string | null) => value ?? "—",
-            },
-            {
-              title: "Trạng thái",
-              dataIndex: "status",
-              width: 120,
-              render: (status: "PENDING" | "SUCCESS" | "FAILED") => {
-                if (status === "SUCCESS") return <Tag color="success">Thành công</Tag>
-                if (status === "FAILED") return <Tag color="error">Thất bại</Tag>
-                return <Tag color="processing">Đang xử lý</Tag>
-              },
-            },
-            {
-              title: "Thời gian",
-              dataIndex: "createdAt",
-              width: 180,
-              render: (value: string) => (value ? dayjs(value).format("HH:mm — DD/MM/YYYY") : "—"),
-            },
-          ]}
-        />
-      </Card>
     </div>
   )
 }

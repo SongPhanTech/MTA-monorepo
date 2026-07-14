@@ -10,6 +10,13 @@ export type ImportTrainingDataPayload = {
   message: string
   imported?: number
   failed?: number
+  details?: {
+    classRegisterLogs: number
+    studentSubjectScore: number
+    removedLogs: number
+    removedScores: number
+  }
+  warnings?: string[]
 }
 
 type ImportTrainingDataSuccess = {

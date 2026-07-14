@@ -9,6 +9,8 @@ import type { ContentfulStatusCode } from "hono/utils/http-status"
 import AuthApp from "./api/auth"
 import ClassRegisterApp from "./api/class-register"
 import DataSyncHistoryApp from "./api/data-sync-history"
+import ExportRegistrationResultsApp from "./api/export-registration-results"
+import ImportTrainingDataApp from "./api/import-training-data"
 import { checkIp } from "./middlewares/check-ip"
 import { setupOpenApi } from "./utils/openapi"
 
@@ -56,6 +58,8 @@ app.use("/api/*", jwtAuth("dangkyhoc"))
 
 app.route("/api/class-register", ClassRegisterApp)
 app.route("/api/data-sync", DataSyncHistoryApp)
+app.route("/api/data-sync", ImportTrainingDataApp)
+app.route("/api/data-sync", ExportRegistrationResultsApp)
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {

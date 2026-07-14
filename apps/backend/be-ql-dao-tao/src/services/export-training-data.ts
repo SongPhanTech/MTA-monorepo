@@ -3,7 +3,7 @@ import { Prisma as PrismaNamespace } from "@workspace/db"
 import { prisma } from ".."
 import { loadAllCatalogs } from "./export-all-catalogs"
 
-export const EXPORT_TRAINING_DATA_VERSION = "1.3.0"
+export const EXPORT_TRAINING_DATA_VERSION = "1.3.2"
 
 export type ExportTrainingDataParams = {
   classRegisterSessionId: string
