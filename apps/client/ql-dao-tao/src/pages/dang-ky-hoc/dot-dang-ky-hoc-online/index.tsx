@@ -83,14 +83,6 @@ export default function ClassRegisterSession() {
               },
             }
           : {}),
-        ...(filters.trainingCourseId &&
-          filters.trainingCourseId !== "" && {
-            trainingCourses: {
-              some: {
-                id: filters.trainingCourseId,
-              },
-            },
-          }),
         ...(filters.active !== undefined && {
           active:
             String(filters.active) === "true"
@@ -102,6 +94,9 @@ export default function ClassRegisterSession() {
         trainingCourses: {
           some: {
             trainingObjectTypeId,
+            ...(filters.trainingCourseId && filters.trainingCourseId !== ""
+              ? { id: filters.trainingCourseId }
+              : {}),
           },
         },
       }) satisfies Prisma.ClassRegisterSessionWhereInput,
@@ -205,12 +200,13 @@ export default function ClassRegisterSession() {
                     placeholder="Chọn khoá"
                     options={trainingCourseOptions}
                     style={{ width: "100%" }}
-                    onChange={(val) =>
+                    onChange={(val) => {
                       setFilters((prev) => ({
                         ...prev,
                         trainingCourseId: val,
                       }))
-                    }
+                      setCurrentPage(1)
+                    }}
                     allowClear
                   />
                 </Col>
