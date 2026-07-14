@@ -5,6 +5,7 @@ import PutFormModal from "@components/commons/put-modal"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import TreeSelect from "@components/commons/tree-select"
+import EditIcon from "@components/icons/edit"
 import { SUBJECT_CLASS_SCHEDULE_TYPE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
@@ -15,7 +16,7 @@ import {
   thongBaoHanNhapDiemThi,
   thongBaoPhanCongGiangDay,
 } from "@lib/thong-bao-giang-vien"
-import type { SubjectClass } from "@workspace/db/client"
+import type { SubjectClass, ClassSchedule, Room } from "@workspace/db/client"
 import LectureTreeSelect from "@components/commons/lecture-select-multi/TreeSelectLecture"
 import {
   useFindManyBuilding,
@@ -27,14 +28,16 @@ import {
   useFindManyTrainingLocation,
   useFindUniqueSubjectClass,
   useUpdateSubjectClass,
+  useUpdateClassSchedule,
+  useFindManyRoom,
 } from "@workspace/db/hooks"
 import { calcFinalScore } from "@workspace/libs/utils"
 import { PERIOD } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
-import { Checkbox, Col, Form, InputNumber, message, Row, Tabs } from "antd"
+import { Checkbox, Col, Form, InputNumber, message, Row, Tabs, Modal, DatePicker as AntDatePicker, Select as AntSelect, Input, Button } from "antd"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 dayjs.locale("vi")
@@ -49,6 +52,15 @@ export type PutOneSubjectClassType = SubjectClass & {
   trainingLocationId: string
   dayOfWeeks?: number[]
   times?: { dayOfWeek: number; startPeriod: number; endPeriod: number }[]
+}
+
+export interface RescheduleScheduleItem {
+  id: string
+  classDate: Date | string
+  roomId: string | null
+  startPeriod: number
+  endPeriod: number
+  notes?: string | null
 }
 
 const PutOneSubjectClassModal = () => {
@@ -365,7 +377,7 @@ const PutOneSubjectClassModal = () => {
     }
   )
 
-  const { data: classSchedules = [] } = useFindManyClassSchedule(
+  const { data: classSchedules = [], refetch: refetchClassSchedules } = useFindManyClassSchedule(
     {
       where: {
         subjectClass: {
@@ -398,6 +410,25 @@ const PutOneSubjectClassModal = () => {
       enabled: !!input?.id,
     }
   )
+
+  const [editingSchedule, setEditingSchedule] = useState<RescheduleScheduleItem | null>(null)
+  const [isChangeScheduleOpen, setIsChangeScheduleOpen] = useState(false)
+  const [activeTab, setActiveTab] = useState("lop-mon-hoc")
+
+  useEffect(() => {
+    if (isOpen) {
+      if (input?.mode === "edit") {
+        setActiveTab("lich-hoc")
+      } else {
+        setActiveTab("lop-mon-hoc")
+      }
+    }
+  }, [isOpen, input])
+
+  const handleOpenChangeSchedule = (record: any) => {
+    setEditingSchedule(record)
+    setIsChangeScheduleOpen(true)
+  }
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
@@ -432,7 +463,8 @@ const PutOneSubjectClassModal = () => {
   }, [subjectClassData])
 
   return (
-    <PutFormModal
+    <>
+      <PutFormModal
       open={isOpen}
       form={form}
       onFinish={onOk}
@@ -457,7 +489,7 @@ const PutOneSubjectClassModal = () => {
       }}
     >
       <Col span={24}>
-        <Tabs defaultActiveKey="lop-mon-hoc">
+        <Tabs activeKey={activeTab} onChange={setActiveTab}>
           <Tabs.TabPane tab={"Lớp môn học"} key="lop-mon-hoc">
             <Row gutter={[8, 8]}>
               <Col span={6}>
@@ -953,12 +985,150 @@ const PutOneSubjectClassModal = () => {
                     )
                   },
                 },
+                {
+                  title: "Phòng học",
+                  align: "center",
+                  render: (_, record) => record.room?.name || "-",
+                },
+                {
+                  title: "Thao tác",
+                  align: "center",
+                  width: 100,
+                  hidden: input?.mode === "view",
+                  render: (_, record) => (
+                    <div className="flex justify-center">
+                      <EditIcon
+                        onClick={() => handleOpenChangeSchedule(record)}
+                        className="text-sm text-blue-700 cursor-pointer"
+                      />
+                    </div>
+                  ),
+                },
               ]}
             />
           </Tabs.TabPane>
         </Tabs>
       </Col>
     </PutFormModal>
+    <ModalChangeClassSchedule
+      visible={isChangeScheduleOpen}
+      onClose={() => setIsChangeScheduleOpen(false)}
+      schedule={editingSchedule}
+      onSuccess={refetchClassSchedules}
+    />
+    </>
+  )
+}
+
+const ModalChangeClassSchedule = ({
+  visible,
+  onClose,
+  schedule,
+  onSuccess,
+}: {
+  visible: boolean
+  onClose: () => void
+  schedule: RescheduleScheduleItem | null
+  onSuccess: () => void
+}) => {
+  const [form] = Form.useForm()
+  const { data: rooms = [] } = useFindManyRoom({
+    where: { active: true, deletedAt: null },
+  })
+  const sortedRooms = useMemo(() => {
+    return [...rooms].sort((a: Room, b: Room) => (a.name || "").localeCompare(b.name || ""))
+  }, [rooms])
+  const { mutateAsync: updateClassSchedule } = useUpdateClassSchedule()
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (visible && schedule) {
+      form.setFieldsValue({
+        classDate: schedule.classDate ? dayjs(schedule.classDate) : null,
+        roomId: schedule.roomId,
+        startPeriod: schedule.startPeriod,
+        endPeriod: schedule.endPeriod,
+      })
+    }
+  }, [visible, schedule, form])
+
+  const handleOk = async () => {
+    if (!schedule) return
+    try {
+      const values = await form.validateFields()
+      setLoading(true)
+      await updateClassSchedule({
+        where: { id: schedule.id },
+        data: {
+          classDate: values.classDate.toDate(),
+          roomId: values.roomId,
+          startPeriod: values.startPeriod,
+          endPeriod: values.endPeriod,
+          isReplacement: true,
+        },
+      })
+      message.success("Thay đổi lịch học thành công")
+      onSuccess()
+      onClose()
+    } catch (error) {
+      console.error(error)
+      message.error("Lỗi khi thay đổi lịch học")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <Modal
+      title="Thay đổi lịch học buổi học"
+      open={visible}
+      onOk={handleOk}
+      onCancel={onClose}
+      confirmLoading={loading}
+      destroyOnClose
+    >
+      <Form form={form} layout="vertical">
+        <Form.Item
+          name="classDate"
+          label="Ngày học mới"
+          rules={[{ required: true, message: "Vui lòng chọn ngày học mới" }]}
+        >
+          <AntDatePicker format="DD/MM/YYYY" className="w-full" />
+        </Form.Item>
+        <Form.Item
+          name="roomId"
+          label="Phòng học mới"
+          rules={[{ required: true, message: "Vui lòng chọn phòng học mới" }]}
+        >
+          <AntSelect
+            showSearch
+            placeholder="Chọn phòng học"
+            optionFilterProp="children"
+            options={sortedRooms.map((r: Room) => ({ label: r.name, value: r.id }))}
+          />
+        </Form.Item>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              name="startPeriod"
+              label="Tiết bắt đầu"
+              rules={[{ required: true, message: "Vui lòng nhập tiết bắt đầu" }]}
+            >
+              <InputNumber min={1} max={16} className="w-full" />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="endPeriod"
+              label="Tiết kết thúc"
+              rules={[{ required: true, message: "Vui lòng nhập tiết kết thúc" }]}
+            >
+              <InputNumber min={1} max={16} className="w-full" />
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
+    </Modal>
   )
 }
 

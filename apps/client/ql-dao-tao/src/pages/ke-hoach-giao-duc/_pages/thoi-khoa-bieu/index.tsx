@@ -3,6 +3,7 @@ import FormItem from "@components/commons/form-item"
 import TableCollapse from "@components/commons/tableCollapse"
 import DeleteIcon from "@components/icons/delete"
 import ViewIcon from "@components/icons/view"
+import EditIcon from "@components/icons/edit"
 import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
@@ -10,8 +11,8 @@ import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { buildOrgFlat, formatDate } from "@lib/utils"
 import { emptyObjectIf } from "@workspace/constant"
-import { $Enums, type Prisma, type SubjectClass } from "@workspace/db/client"
-import { useCountDM_DonVi, useDeleteSubjectClass, useFindManyDM_DonVi } from "@workspace/db/hooks"
+import { $Enums, type Prisma, type SubjectClass, type Room, type ClassSchedule } from "@workspace/db/client"
+import { useCountDM_DonVi, useDeleteSubjectClass, useFindManyDM_DonVi, useFindManyClassSchedule, useUpdateClassSchedule, useFindManyRoom } from "@workspace/db/hooks"
 import { whereOrganization } from "@workspace/libs/constants"
 import { ExportThoiKhoaBieuRequestType } from "@workspace/libs/api/schemas"
 import { useExportTrainingData } from "@workspace/libs/api/export-training-data"
@@ -19,7 +20,7 @@ import { useExportThoiKhoaBieu } from "@workspace/libs/api/training"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { dayjs, useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from "@workspace/ui"
-import { Affix, Button, Col, Divider, Flex, Form, message, Row } from "antd"
+import { Affix, Button, Col, Divider, Flex, Form, message, Row, Modal, DatePicker as AntDatePicker, Select as AntSelect, InputNumber, Input, Table } from "antd"
 import type { Dayjs } from "dayjs"
 import { saveAs } from "file-saver"
 import _ from "lodash"
@@ -52,6 +53,7 @@ export default function ThoiKhoaBieu({
   khoaBoMon?: boolean
 }) {
   const { can } = useAbility()
+
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [filters, setFilters] = useState<FilterProps>({
@@ -883,7 +885,7 @@ export default function ThoiKhoaBieu({
                         title: "Thao tác",
                         width: 120,
                         align: "center" as const,
-                        render: (_: any, record: SubjectClass) => {
+                        render: (_: any, record: any) => {
                           const id = record?.id
                           if (id) {
                             return (
@@ -900,6 +902,25 @@ export default function ThoiKhoaBieu({
                                     className="text-sm text-blue-700 cursor-pointer"
                                   />
                                 )}
+                                {can(
+                                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC,
+                                  "SUA"
+                                ) &&
+                                  record?.status === $Enums.SubjectClassStatus.OFFICIAL &&
+                                  record?.examDate &&
+                                  record?.subjectClassTimes &&
+                                  record?.subjectClassTimes.length > 0 &&
+                                  !["Practice", "Internship", "Project", "Thesis", "Graduation"].includes(
+                                    record.subject?.type || ""
+                                  ) && (
+                                    <EditIcon
+                                      onClick={onOpenEditSubjectClass.bind(null, {
+                                        id,
+                                        mode: "edit",
+                                      })}
+                                      className="text-sm text-blue-700 cursor-pointer"
+                                    />
+                                  )}
                                 {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "XOA") && (
                                   <DeleteIcon
                                     popConfirm={{
