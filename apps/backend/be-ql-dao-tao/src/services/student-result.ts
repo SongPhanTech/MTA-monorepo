@@ -5,6 +5,12 @@ import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
 
 // ${semester}	Name of the semester.
+const formatGpa = (val: any) => {
+  const num = typeof val?.toNumber === "function" ? val.toNumber() : val
+  if (num === null || num === undefined || isNaN(num)) return ""
+  return num.toFixed(2).replace(".", ",")
+}
+
 // ${trainingObjectType}	 Name of the Training Object Type (e.g. Quân sự, Dân sự).
 
 // ${table:data.no}	Sequential number (STT).
@@ -90,12 +96,6 @@ export async function exportStudentSemesterResult({
     },
   })
 
-  const formatGpa = (val: any) => {
-    const num = typeof val?.toNumber === "function" ? val.toNumber() : val
-    if (num === null || num === undefined || isNaN(num)) return ""
-    return num.toFixed(2).replace(".", ",")
-  }
-
   const data = studentSemesterResults.map((result, idx) => {
     const student = result.student
     const userProfile = student.userProfile
@@ -114,8 +114,10 @@ export async function exportStudentSemesterResult({
       semesterIndexInCourse: result.semesterIndexInCourse,
       gpaBase4: formatGpa(result.gpaBase4),
       cumulativeGpaBase4: formatGpa(result.cumulativeGpaBase4),
+      cgpaBase4: formatGpa(result.cgpaBase4),
       gpaBase10: formatGpa(result.gpaBase10),
       cumulativeGpaBase10: formatGpa(result.cumulativeGpaBase10),
+      cgpaBase10: formatGpa(result.cgpaBase10),
       conductScore: formatGpa(result.conductScore),
       studentTrainingType: result.studentTrainingType,
       lowestFinalScore: formatGpa(result.lowestFinalScore),
@@ -266,18 +268,25 @@ export async function exportStudentYearResult({
       trainingCourse: student.fixedClass?.trainingCourse?.name,
       // StudentYearResult Data
       studyYear: result.studyYear,
-      gpaBase4: result.gpaBase4,
-      cumulativeGpaBase4: result.cumulativeGpaBase4,
-      gpaBase10: result.gpaBase10,
-      cumulativeGpaBase10: result.cumulativeGpaBase10,
-      conductScore: result.conductScore,
+      gpaBase4: formatGpa(result.gpaBase4),
+      cumulativeGpaBase4: formatGpa(result.cumulativeGpaBase4),
+      cgpaBase4: formatGpa(result.cgpaBase4),
+      gpaBase10: formatGpa(result.gpaBase10),
+      cumulativeGpaBase10: formatGpa(result.cumulativeGpaBase10),
+      cgpaBase10: formatGpa(result.cgpaBase10),
+      conductScore: formatGpa(result.conductScore),
       studentTrainingType: result.studentTrainingType,
       rank: result.rank?.classification,
-      lowestFinalScore: result.lowestFinalScore,
+      lowestFinalScore: formatGpa(result.lowestFinalScore),
       totalCredits: result.totalCredits,
       retakingCredits: result.retakingCredits,
       reExamCredits: result.reExamCredits,
       failedCredits: result.failedCredits,
+      registeredCredits: result.registeredCredits,
+      passedCredits: result.passedCredits,
+      accumulatedCredits: result.accumulatedCredits,
+      totalCreditsByCurriculum: result.totalCreditsByCurriculum,
+      totalFailedCredits: result.totalFailedCredits,
 
       academicWarningLevel: result.academicWarningLevel,
       disciplinaryWarningLevel: result.disciplinaryWarningLevel,
