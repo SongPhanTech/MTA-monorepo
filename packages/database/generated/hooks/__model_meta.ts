@@ -15409,6 +15409,14 @@ const metadata: ModelMeta = {
                 }, cumulativeGpaBase10: {
                     name: "cumulativeGpaBase10",
                     type: "Decimal",
+                }, cgpaBase4: {
+                    name: "cgpaBase4",
+                    type: "Decimal",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, cgpaBase10: {
+                    name: "cgpaBase10",
+                    type: "Decimal",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, conductScore: {
                     name: "conductScore",
                     type: "Float",
@@ -15611,6 +15619,14 @@ const metadata: ModelMeta = {
                 }, cumulativeGpaBase10: {
                     name: "cumulativeGpaBase10",
                     type: "Decimal",
+                }, cgpaBase4: {
+                    name: "cgpaBase4",
+                    type: "Decimal",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, cgpaBase10: {
+                    name: "cgpaBase10",
+                    type: "Decimal",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, conductScore: {
                     name: "conductScore",
                     type: "Float",

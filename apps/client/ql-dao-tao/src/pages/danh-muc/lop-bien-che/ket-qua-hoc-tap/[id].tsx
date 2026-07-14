@@ -1303,7 +1303,8 @@ export default function StudentScoreClassPage() {
                         {r && (
                           <span className="font-semibold text-xs text-black-500">
                             TBTL10: {r.cumulativeGpaBase10?.toFixed(2)} | TBTL4:{" "}
-                            {r.cumulativeGpaBase4?.toFixed(2)}
+                            {r.cumulativeGpaBase4?.toFixed(2)} | TBCTL10: {r.cgpaBase10?.toFixed(2)}{" "}
+                            | TBCTL4: {r.cgpaBase4?.toFixed(2)}
                           </span>
                         )}
                       </div>
@@ -1324,7 +1325,16 @@ export default function StudentScoreClassPage() {
                   type: "input",
                   fixed: "left",
                   width: 120,
-                  render: (_, record: any) => record?.subject?.code || "",
+                  render: (_, record: any) => {
+                    const isRetakeOrReexam =
+                      record?.type === $Enums.SubjectClassType.RETAKE ||
+                      record?.type === $Enums.SubjectClassType.REEXAM
+                    return (
+                      <span className={isRetakeOrReexam ? "italic text-blue-500" : ""}>
+                        {record?.subject?.code || ""}
+                      </span>
+                    )
+                  },
                 },
                 {
                   title: "Tên môn học",
@@ -1337,22 +1347,29 @@ export default function StudentScoreClassPage() {
                     value: item.name,
                   })),
                   width: 200,
-                  render: (value: string, record: any) => (
-                    <div className="flex flex-row items-center text-left">
-                      <p>
-                        {record?.type === $Enums.SubjectClassType.RETAKE ? (
-                          <Tag color="blue" className="p-0 px-1">
-                            Học lại
-                          </Tag>
-                        ) : record?.type === $Enums.SubjectClassType.REEXAM ? (
-                          <Tag color="yellow" className="p-0 px-1">
-                            Thi lại
-                          </Tag>
-                        ) : null}
-                      </p>
-                      {value}
-                    </div>
-                  ),
+                  render: (value: string, record: any) => {
+                    const isRetakeOrReexam =
+                      record?.type === $Enums.SubjectClassType.RETAKE ||
+                      record?.type === $Enums.SubjectClassType.REEXAM
+                    return (
+                      <div className="flex flex-row items-center text-left">
+                        <p>
+                          {record?.type === $Enums.SubjectClassType.RETAKE ? (
+                            <Tag color="blue" className="p-0 px-1">
+                              Học lại
+                            </Tag>
+                          ) : record?.type === $Enums.SubjectClassType.REEXAM ? (
+                            <Tag color="yellow" className="p-0 px-1">
+                              Thi lại
+                            </Tag>
+                          ) : null}
+                        </p>
+                        <span className={isRetakeOrReexam ? "italic text-blue-500" : ""}>
+                          {value}
+                        </span>
+                      </div>
+                    )
+                  },
                 },
                 {
                   title: "Điểm TX",

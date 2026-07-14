@@ -434,9 +434,19 @@ const DiemTrungBinhKyHoc = () => {
                     : "-",
               },
               {
-                title: "Tích luỹ hệ 4",
+                title: "TB tích luỹ hệ 4",
                 dataIndex: ["studentSemesterResult", "0", "cumulativeGpaBase4"],
                 width: 90,
+                align: "center",
+                render: (value) =>
+                  value !== null && value !== undefined
+                    ? Number(value).toFixed(2).replace(".", ",")
+                    : "-",
+              },
+              {
+                title: "TB chung tích luỹ hệ 4",
+                dataIndex: ["studentSemesterResult", "0", "cgpaBase4"],
+                width: 100,
                 align: "center",
                 render: (value) =>
                   value !== null && value !== undefined
@@ -453,10 +463,22 @@ const DiemTrungBinhKyHoc = () => {
                     ? Number(value).toFixed(2).replace(".", ",")
                     : "-",
               },
+
               {
-                title: "Tích luỹ hệ 10",
+                title: "TB tích luỹ hệ 10",
                 dataIndex: ["studentSemesterResult", "0", "cumulativeGpaBase10"],
                 width: 90,
+                align: "center",
+                render: (value) =>
+                  value !== null && value !== undefined
+                    ? Number(value).toFixed(2).replace(".", ",")
+                    : "-",
+              },
+
+              {
+                title: "TB chung tích luỹ hệ 10",
+                dataIndex: ["studentSemesterResult", "0", "cgpaBase10"],
+                width: 100,
                 align: "center",
                 render: (value) =>
                   value !== null && value !== undefined
@@ -480,16 +502,16 @@ const DiemTrungBinhKyHoc = () => {
                     ? Number(value).toFixed(2).replace(".", ",")
                     : "-",
               },
-              {
-                title: "Điểm học phần thấp nhất",
-                dataIndex: ["studentSemesterResult", "0", "lowestFinalScore"],
-                width: 120,
-                align: "center",
-                render: (value) =>
-                  value !== null && value !== undefined
-                    ? Number(value).toFixed(2).replace(".", ",")
-                    : "-",
-              },
+              // {
+              //   title: "Điểm học phần thấp nhất",
+              //   dataIndex: ["studentSemesterResult", "0", "lowestFinalScore"],
+              //   width: 120,
+              //   align: "center",
+              //   render: (value) =>
+              //     value !== null && value !== undefined
+              //       ? Number(value).toFixed(2).replace(".", ",")
+              //       : "-",
+              // },
               // {
               //   title: "Điểm tốt nghiệp thấp nhất",
               //   dataIndex: ["studentSemesterResult", "0", "lowestGraduationScore"],
@@ -530,6 +552,7 @@ const DiemTrungBinhKyHoc = () => {
                 width: 60,
                 align: "center",
               },
+
               {
                 title: "Số TC không đạt",
                 dataIndex: ["studentSemesterResult", "0", "failedCredits"],

@@ -15719,6 +15719,26 @@
               }
             ]
           },
+          "cgpaBase4": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "cgpaBase10": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
           "conductScore": {
             "type": "number",
             "nullable": true
@@ -15851,6 +15871,8 @@
           "cumulativeGpaBase4",
           "gpaBase10",
           "cumulativeGpaBase10",
+          "cgpaBase4",
+          "cgpaBase10",
           "lowestFinalScore",
           "totalCredits",
           "registeredCredits",
@@ -15968,6 +15990,26 @@
               }
             ]
           },
+          "cgpaBase4": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "cgpaBase10": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
           "conductScore": {
             "type": "number",
             "nullable": true
@@ -16047,6 +16089,8 @@
           "cumulativeGpaBase4",
           "gpaBase10",
           "cumulativeGpaBase10",
+          "cgpaBase4",
+          "cgpaBase10",
           "totalCredits",
           "retakingCredits",
           "reExamCredits",
@@ -47450,6 +47494,26 @@
               }
             ]
           },
+          "cgpaBase4": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "cgpaBase10": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
           "conductScore": {
             "type": "number",
             "nullable": true
@@ -47612,6 +47676,8 @@
           "cumulativeGpaBase4",
           "gpaBase10",
           "cumulativeGpaBase10",
+          "cgpaBase4",
+          "cgpaBase10",
           "lowestFinalScore",
           "totalCredits",
           "registeredCredits",
@@ -47768,6 +47834,26 @@
               }
             ]
           },
+          "cgpaBase4": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "cgpaBase10": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
           "conductScore": {
             "type": "number",
             "nullable": true
@@ -47877,6 +47963,8 @@
           "cumulativeGpaBase4",
           "gpaBase10",
           "cumulativeGpaBase10",
+          "cgpaBase4",
+          "cgpaBase10",
           "totalCredits",
           "retakingCredits",
           "reExamCredits",
@@ -98443,6 +98531,12 @@
           "cumulativeGpaBase10": {
             "type": "integer"
           },
+          "cgpaBase4": {
+            "type": "integer"
+          },
+          "cgpaBase10": {
+            "type": "integer"
+          },
           "conductScore": {
             "type": "integer"
           },
@@ -98547,6 +98641,8 @@
           "cumulativeGpaBase4",
           "gpaBase10",
           "cumulativeGpaBase10",
+          "cgpaBase4",
+          "cgpaBase10",
           "conductScore",
           "studentTrainingType",
           "rankId",
@@ -98622,6 +98718,28 @@
             "nullable": true
           },
           "cumulativeGpaBase10": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase4": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase10": {
             "oneOf": [
               {
                 "type": "string"
@@ -98761,6 +98879,28 @@
             "nullable": true
           },
           "cumulativeGpaBase10": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase4": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase10": {
             "oneOf": [
               {
                 "type": "string"
@@ -98955,6 +99095,28 @@
             "nullable": true
           },
           "cumulativeGpaBase10": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase4": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase10": {
             "oneOf": [
               {
                 "type": "string"
@@ -99203,6 +99365,28 @@
             ],
             "nullable": true
           },
+          "cgpaBase4": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase10": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
           "conductScore": {
             "type": "number",
             "nullable": true
@@ -99385,6 +99569,12 @@
           "cumulativeGpaBase10": {
             "type": "integer"
           },
+          "cgpaBase4": {
+            "type": "integer"
+          },
+          "cgpaBase10": {
+            "type": "integer"
+          },
           "conductScore": {
             "type": "integer"
           },
@@ -99452,6 +99642,8 @@
           "cumulativeGpaBase4",
           "gpaBase10",
           "cumulativeGpaBase10",
+          "cgpaBase4",
+          "cgpaBase10",
           "conductScore",
           "studentTrainingType",
           "rankId",
@@ -99511,6 +99703,28 @@
             "nullable": true
           },
           "cumulativeGpaBase10": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase4": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase10": {
             "oneOf": [
               {
                 "type": "string"
@@ -99600,6 +99814,28 @@
             "nullable": true
           },
           "cumulativeGpaBase10": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase4": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase10": {
             "oneOf": [
               {
                 "type": "string"
@@ -99744,6 +99980,28 @@
             "nullable": true
           },
           "cumulativeGpaBase10": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase4": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase10": {
             "oneOf": [
               {
                 "type": "string"
@@ -99916,6 +100174,28 @@
             "nullable": true
           },
           "cumulativeGpaBase10": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase4": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "nullable": true
+          },
+          "cgpaBase10": {
             "oneOf": [
               {
                 "type": "string"
