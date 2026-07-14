@@ -78,8 +78,7 @@ export default function StudentGraduationApplication() {
               },
             }
           : {}),
-        userProfile: {
-          ...(filters.name && filters.name !== ""
+        userProfile: (filters.name && filters.name !== ""
             ? {
                 fullname: {
                   contains: filters.name,
@@ -87,7 +86,6 @@ export default function StudentGraduationApplication() {
                 },
               }
             : {}),
-        },
         fixedClass: {
           ...(filters.fixedClassName
             ? {

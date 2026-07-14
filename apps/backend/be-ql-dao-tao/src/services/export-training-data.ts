@@ -1,17 +1,14 @@
-import type { $Enums, Prisma } from "@workspace/db"
+import type { Prisma } from "@workspace/db"
 import { Prisma as PrismaNamespace } from "@workspace/db"
 import { prisma } from ".."
 
-export const EXPORT_TRAINING_DATA_VERSION = "1.0.0"
+export const EXPORT_TRAINING_DATA_VERSION = "1.1.0"
 
 export type ExportTrainingDataParams = {
-  semesterId: string
-  trainingObjectTypeId: string
-  trainingCourseId?: string
-  type?: $Enums.SubjectClassType
+  classRegisterSessionId: string
 }
 
-type FixedClassToSubjectClassRow = {
+type JoinRow = {
   A: string
   B: string
 }
@@ -40,48 +37,65 @@ function serializeForJson(value: unknown): unknown {
 async function queryFixedClassToSubjectClass(subjectClassIds: string[]) {
   if (subjectClassIds.length === 0) return []
 
-  return prisma.$queryRaw<FixedClassToSubjectClassRow[]>`
+  return prisma.$queryRaw<JoinRow[]>`
     SELECT "A", "B"
     FROM "ql-dao-tao"."_FixedClassToSubjectClass"
     WHERE "B" IN (${PrismaNamespace.join(subjectClassIds)})
   `
 }
 
-export async function exportTrainingData(params: ExportTrainingDataParams) {
-  const { semesterId, trainingObjectTypeId, trainingCourseId, type } = params
+async function querySessionToTrainingCourse(sessionId: string) {
+  return prisma.$queryRaw<JoinRow[]>`
+    SELECT "A", "B"
+    FROM "ql-dao-tao"."_ClassRegisterSessionToTrainingCourse"
+    WHERE "A" = ${sessionId}
+  `
+}
 
-  const [semester, trainingObjectType] = await Promise.all([
-    prisma.semester.findUniqueOrThrow({
-      where: { id: semesterId },
-      select: { id: true, schoolYearId: true },
-    }),
-    prisma.trainingObjectType.findUniqueOrThrow({
-      where: { id: trainingObjectTypeId },
-      select: { id: true },
-    }),
-  ])
+export async function exportTrainingData(params: ExportTrainingDataParams) {
+  const { classRegisterSessionId } = params
+
+  const session = await prisma.classRegisterSession.findFirst({
+    where: { id: classRegisterSessionId, deletedAt: null },
+    include: {
+      trainingCourses: true,
+      creditLimit: { where: { deletedAt: null } },
+      semester: { include: { schoolYear: true } },
+    },
+  })
+
+  if (!session) {
+    throw new Error("Không tìm thấy đợt đăng ký học")
+  }
+
+  const semesterId = session.semesterId
+  const trainingCourses = session.trainingCourses.filter((tc) => !tc.deletedAt)
+  const trainingCourseIds = uniqueIds(trainingCourses.map((tc) => tc.id))
+  const trainingObjectTypeIds = uniqueIds(trainingCourses.map((tc) => tc.trainingObjectTypeId))
+
+  if (trainingCourseIds.length === 0) {
+    throw new Error("Đợt đăng ký chưa gắn khóa học")
+  }
+
+  const sessionToTrainingCourse = await querySessionToTrainingCourse(classRegisterSessionId)
 
   const subjectClassWhere: Prisma.SubjectClassWhereInput = {
     semesterId,
-    trainingObjectTypeId,
-    ...(type ? { type } : {}),
-    active: true,
     deletedAt: null,
     cancelled: false,
     status: "OFFICIAL",
+    active: true,
+    ...(trainingObjectTypeIds.length > 0
+      ? { trainingObjectTypeId: { in: trainingObjectTypeIds } }
+      : {}),
+    OR: [
+      { fixedClasses: { some: { trainingCourseId: { in: trainingCourseIds } } } },
+      { fixedClasses: { none: {} } },
+    ],
   }
 
-  const subjectClassCourseFilter: Prisma.SubjectClassWhereInput = trainingCourseId
-    ? {
-        OR: [
-          { fixedClasses: { some: { trainingCourseId } } },
-          { fixedClasses: { none: {} } },
-        ],
-      }
-    : {}
-
   const subjectClasses = await prisma.subjectClass.findMany({
-    where: { ...subjectClassWhere, ...subjectClassCourseFilter },
+    where: subjectClassWhere,
     select: {
       id: true,
       subjectId: true,
@@ -94,137 +108,124 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
     },
   })
 
-  if (subjectClasses.length === 0) {
-    throw new Error("Không có dữ liệu lớp học phần để xuất")
-  }
-
   const subjectClassIds = subjectClasses.map((sc) => sc.id)
   const subjectVersionIds = uniqueIds(subjectClasses.map((sc) => sc.subjectId))
 
   const fixedClassToSubjectClass = await queryFixedClassToSubjectClass(subjectClassIds)
-  const fixedClassIdsFromM2m = uniqueIds(fixedClassToSubjectClass.map((row) => row.A))
 
-  const trainingCourseWhere: Prisma.TrainingCourseWhereInput = trainingCourseId
-    ? { id: trainingCourseId, trainingObjectTypeId, deletedAt: null }
-    : {
-        trainingObjectTypeId,
-        deletedAt: null,
-        fixedClass: {
-          some: {
-            deletedAt: null,
-            subjectClasses: { some: { id: { in: subjectClassIds } } },
-          },
-        },
-      }
-
-  const trainingCourses = await prisma.trainingCourse.findMany({
-    where: trainingCourseWhere,
+  const fixedClasses = await prisma.fixedClass.findMany({
+    where: {
+      deletedAt: null,
+      trainingCourseId: { in: trainingCourseIds },
+    },
   })
-  const trainingCourseIds = uniqueIds(trainingCourses.map((tc) => tc.id))
-
-  const fixedClassWhere: Prisma.FixedClassWhereInput = {
-    deletedAt: null,
-    ...(trainingCourseIds.length > 0
-      ? trainingCourseId
-        ? { trainingCourseId: { in: trainingCourseIds } }
-        : {
-            OR: [
-              { id: { in: fixedClassIdsFromM2m } },
-              { subjectClasses: { some: { id: { in: subjectClassIds } } } },
-            ],
-          }
-      : { id: { in: fixedClassIdsFromM2m } }),
-  }
-
-  const fixedClasses = await prisma.fixedClass.findMany({ where: fixedClassWhere })
   const fixedClassIds = uniqueIds(fixedClasses.map((fc) => fc.id))
 
   const [
     subjectClassTimes,
     classSchedules,
-    studentSubjectScores,
     subjectVersions,
-    planTrainings,
-    exams,
+    students,
     schoolYear,
     semesterRecord,
-    trainingObjectTypeRecord,
+    trainingObjectTypes,
   ] = await Promise.all([
-    prisma.subjectClassTime.findMany({
-      where: { subjectClassId: { in: subjectClassIds }, deletedAt: null },
-    }),
-    prisma.classSchedule.findMany({
-      where: { subjectClassId: { in: subjectClassIds }, deletedAt: null },
-    }),
-    prisma.studentSubjectScore.findMany({
-      where: { subjectClassId: { in: subjectClassIds }, deletedAt: null },
-    }),
-    prisma.subjectVersion.findMany({
-      where: { id: { in: subjectVersionIds }, deletedAt: null },
-    }),
-    prisma.planTraining.findMany({
-      where: {
-        semesterId,
-        trainingObjectTypeId,
-        deletedAt: null,
-        ...(trainingCourseId
-          ? { OR: [{ trainingCourseId }, { trainingCourseId: null }] }
-          : {}),
-      },
-    }),
-    prisma.exam.findMany({
-      where: {
-        semesterId,
-        deletedAt: null,
-        OR: [
-          { subjectClass: { some: { id: { in: subjectClassIds } } } },
-          { subjectVersionId: { in: subjectVersionIds } },
-        ],
-      },
-    }),
-    prisma.schoolYear.findUniqueOrThrow({ where: { id: semester.schoolYearId } }),
-    prisma.semester.findUniqueOrThrow({ where: { id: semesterId } }),
-    prisma.trainingObjectType.findUniqueOrThrow({ where: { id: trainingObjectType.id } }),
-  ])
-
-  const subjectIds = uniqueIds(subjectVersions.map((sv) => sv.subjectId))
-  const planTrainingIds = uniqueIds(planTrainings.map((pt) => pt.id))
-  const examIds = uniqueIds([
-    ...exams.map((e) => e.id),
-    ...subjectClasses.map((sc) => sc.examId),
-  ])
-
-  const studentIds = uniqueIds(studentSubjectScores.map((sss) => sss.studentId))
-
-  const studentWhere: Prisma.StudentWhereInput = {
-    deletedAt: null,
-    OR: [
-      ...(fixedClassIds.length > 0 ? [{ fixedClassId: { in: fixedClassIds } }] : []),
-      ...(studentIds.length > 0 ? [{ id: { in: studentIds } }] : []),
-    ],
-  }
-
-  const [
-    subjects,
-    planTrainingSubjects,
-    students,
-    subjectClassRecords,
-    examRecords,
-  ] = await Promise.all([
-    prisma.subject.findMany({ where: { id: { in: subjectIds }, deletedAt: null } }),
-    planTrainingIds.length > 0
-      ? prisma.planTrainingSubject.findMany({
-          where: { planTrainingId: { in: planTrainingIds }, deletedAt: null },
+    subjectClassIds.length > 0
+      ? prisma.subjectClassTime.findMany({
+          where: { subjectClassId: { in: subjectClassIds }, deletedAt: null },
         })
       : Promise.resolve([]),
-    studentWhere.OR && studentWhere.OR.length > 0
-      ? prisma.student.findMany({ where: studentWhere })
+    subjectClassIds.length > 0
+      ? prisma.classSchedule.findMany({
+          where: { subjectClassId: { in: subjectClassIds }, deletedAt: null },
+        })
       : Promise.resolve([]),
-    prisma.subjectClass.findMany({ where: { id: { in: subjectClassIds } } }),
-    examIds.length > 0
-      ? prisma.exam.findMany({ where: { id: { in: examIds }, deletedAt: null } })
-      : Promise.resolve(exams),
+    subjectVersionIds.length > 0
+      ? prisma.subjectVersion.findMany({
+          where: { id: { in: subjectVersionIds }, deletedAt: null },
+        })
+      : Promise.resolve([]),
+    fixedClassIds.length > 0
+      ? prisma.student.findMany({
+          where: {
+            deletedAt: null,
+            fixedClassId: { in: fixedClassIds },
+          },
+        })
+      : Promise.resolve([]),
+    prisma.schoolYear.findUniqueOrThrow({ where: { id: session.semester.schoolYearId } }),
+    prisma.semester.findUniqueOrThrow({ where: { id: semesterId } }),
+    trainingObjectTypeIds.length > 0
+      ? prisma.trainingObjectType.findMany({
+          where: { id: { in: trainingObjectTypeIds } },
+        })
+      : Promise.resolve([]),
   ])
+
+  const studentIds = uniqueIds(students.map((s) => s.id))
+  const subjectIds = uniqueIds(subjectVersions.map((sv) => sv.subjectId))
+
+  const [subjects, subjectClassRecords, studentSubjectScores, studentSemesterResults, exams] =
+    await Promise.all([
+      subjectIds.length > 0
+        ? prisma.subject.findMany({ where: { id: { in: subjectIds }, deletedAt: null } })
+        : Promise.resolve([]),
+      subjectClassIds.length > 0
+        ? prisma.subjectClass.findMany({ where: { id: { in: subjectClassIds } } })
+        : Promise.resolve([]),
+      studentIds.length > 0
+        ? prisma.studentSubjectScore.findMany({
+            where: { studentId: { in: studentIds }, deletedAt: null },
+          })
+        : Promise.resolve([]),
+      studentIds.length > 0
+        ? prisma.studentSemesterResult.findMany({
+            where: { studentId: { in: studentIds }, deletedAt: null },
+          })
+        : Promise.resolve([]),
+      subjectClassIds.length > 0 || subjectVersionIds.length > 0
+        ? prisma.exam.findMany({
+            where: {
+              semesterId,
+              deletedAt: null,
+              OR: [
+                ...(subjectClassIds.length > 0
+                  ? [{ subjectClass: { some: { id: { in: subjectClassIds } } } }]
+                  : []),
+                ...(subjectVersionIds.length > 0
+                  ? [{ subjectVersionId: { in: subjectVersionIds } }]
+                  : []),
+              ],
+            },
+          })
+        : Promise.resolve([]),
+    ])
+
+  // Bổ sung SubjectVersion / Subject còn thiếu từ điểm lịch sử (điều kiện tiên quyết)
+  const scoreSubjectVersionIds = uniqueIds([
+    ...subjectVersionIds,
+    ...studentSubjectScores.map((s) => s.subjectVersionId),
+  ])
+  const missingSubjectVersionIds = scoreSubjectVersionIds.filter(
+    (id) => !subjectVersionIds.includes(id)
+  )
+
+  const extraSubjectVersions =
+    missingSubjectVersionIds.length > 0
+      ? await prisma.subjectVersion.findMany({
+          where: { id: { in: missingSubjectVersionIds }, deletedAt: null },
+        })
+      : []
+
+  const allSubjectVersions = [...subjectVersions, ...extraSubjectVersions]
+  const allSubjectIds = uniqueIds([
+    ...subjectIds,
+    ...extraSubjectVersions.map((sv) => sv.subjectId),
+  ])
+  const allSubjects =
+    allSubjectIds.length === subjectIds.length
+      ? subjects
+      : await prisma.subject.findMany({ where: { id: { in: allSubjectIds }, deletedAt: null } })
 
   const lecturerIds = uniqueIds([
     ...subjectClasses.map((sc) => sc.lecturerId),
@@ -282,15 +283,14 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
   ])
 
   const trainingMajorIds = uniqueIds(curriculums.map((c) => c.trainingMajorId))
-  const trainingLocationIdsFromBuildings = uniqueIds(buildings.map((b) => b.trainingLocationId))
   const allTrainingLocationIds = uniqueIds([
     ...trainingLocationIds,
-    ...trainingLocationIdsFromBuildings,
+    ...buildings.map((b) => b.trainingLocationId),
   ])
 
   const organizationIds = uniqueIds([
-    ...subjects.map((s) => s.managementOrganizationId),
-    ...subjectVersions.map((sv) => sv.managementOrganizationId),
+    ...allSubjects.map((s) => s.managementOrganizationId),
+    ...allSubjectVersions.map((sv) => sv.managementOrganizationId),
     ...fixedClasses.map((fc) => fc.managementOrganizationId),
     ...lecturers.map((l) => l.organizationId),
     ...curriculums.map((c) => c.managementOrganizationId),
@@ -320,9 +320,7 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
 
   const extraDmDonVis =
     dmDonViIdsFromMajors.length > 0
-      ? await prisma.dM_DonVi.findMany({
-          where: { Id: { in: dmDonViIdsFromMajors } },
-        })
+      ? await prisma.dM_DonVi.findMany({ where: { Id: { in: dmDonViIdsFromMajors } } })
       : []
 
   const allDmDonVis = [
@@ -340,17 +338,31 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
       ? await prisma.userProfile.findMany({ where: { id: { in: userProfileIds } } })
       : []
 
+  const examIds = uniqueIds([
+    ...exams.map((e) => e.id),
+    ...subjectClasses.map((sc) => sc.examId),
+  ])
+  const examRecords =
+    examIds.length > 0
+      ? await prisma.exam.findMany({ where: { id: { in: examIds }, deletedAt: null } })
+      : []
+
+  const { creditLimit, semester: _semester, trainingCourses: _tc, ...sessionRecord } = session
+
   const data = {
+    ClassRegisterSession: [sessionRecord],
+    ClassRegisterSessionCredit: creditLimit,
+    _ClassRegisterSessionToTrainingCourse: sessionToTrainingCourse,
     DM_DonVi: allDmDonVis,
     UserProfile: userProfiles,
     LecturerType: lecturerTypes,
     Lecturer: lecturers,
-    TrainingObjectType: [trainingObjectTypeRecord],
+    TrainingObjectType: trainingObjectTypes,
     SchoolYear: [schoolYear],
     Semester: [semesterRecord],
     TrainingCourse: trainingCourses,
-    Subject: subjects,
-    SubjectVersion: subjectVersions,
+    Subject: allSubjects,
+    SubjectVersion: allSubjectVersions,
     SubjectClass: subjectClassRecords,
     SubjectClassTime: subjectClassTimes,
     FixedClass: fixedClasses,
@@ -363,8 +375,7 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
     CurriculumVersion: curriculumVersions,
     Student: students,
     StudentSubjectScore: studentSubjectScores,
-    PlanTraining: planTrainings,
-    PlanTrainingSubject: planTrainingSubjects,
+    StudentSemesterResult: studentSemesterResults,
     Exam: examRecords,
     ClassSchedule: classSchedules,
   }
@@ -377,10 +388,9 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
     version: EXPORT_TRAINING_DATA_VERSION,
     exportedAt: new Date().toISOString(),
     filters: {
+      classRegisterSessionId,
       semesterId,
-      trainingObjectTypeId,
-      trainingCourseId: trainingCourseId ?? null,
-      type: type ?? null,
+      trainingCourseIds,
     },
     counts,
     data,
@@ -388,10 +398,9 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
     version: string
     exportedAt: string
     filters: {
+      classRegisterSessionId: string
       semesterId: string
-      trainingObjectTypeId: string
-      trainingCourseId: string | null
-      type: string | null
+      trainingCourseIds: string[]
     }
     counts: Record<string, number>
     data: typeof data

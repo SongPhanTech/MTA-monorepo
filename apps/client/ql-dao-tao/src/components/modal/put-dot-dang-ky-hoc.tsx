@@ -102,8 +102,7 @@ const PutClassRegisterSession = () => {
         trainingCourses: initialValue?.trainingCourses?.map((item) => item.id),
         startDate: dayjs(initialValue?.startDate),
         endDate: dayjs(initialValue?.endDate),
-        creditLimit: {
-          ...initialValue.creditLimit.reduce(
+        creditLimit: initialValue.creditLimit.reduce(
             (pre, cur) => ({
               ...pre,
               [getClassificationKey(
@@ -121,14 +120,12 @@ const PutClassRegisterSession = () => {
             }),
             {}
           ),
-        },
       })
     } else if (tableData.length > 0) {
       form.setFieldsValue({
         active: true,
         tuitionPerCredit: 350000,
-        creditLimit: {
-          ...tableData.reduce(
+        creditLimit: tableData.reduce(
             (pre, cur) => ({
               ...pre,
               [getClassificationKey(
@@ -146,7 +143,6 @@ const PutClassRegisterSession = () => {
             }),
             {}
           ),
-        },
       })
     }
   }, [initialValue, tableData])

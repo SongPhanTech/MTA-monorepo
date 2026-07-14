@@ -101,8 +101,7 @@ export default function ArchivedAward() {
   const where = useMemo(() => {
     return {
       ...(filters.archivedAwardStatus ? { status: { in: filters.archivedAwardStatus } } : {}),
-      award: {
-        ...(filters.awardName
+      award: (filters.awardName
           ? {
               name: {
                 contains: filters.awardName,
@@ -110,7 +109,6 @@ export default function ArchivedAward() {
               },
             }
           : {}),
-      },
       ...(filters.bonusScoreStatus
         ? {
             studentSubjectScore: {

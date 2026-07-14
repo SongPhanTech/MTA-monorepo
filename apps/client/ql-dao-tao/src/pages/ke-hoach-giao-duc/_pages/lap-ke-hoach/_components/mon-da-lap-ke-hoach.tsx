@@ -107,8 +107,7 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
           },
           where: {
             trainingBlockSubject: {
-              subject: {
-                ...(searchText
+              subject: (searchText
                   ? {
                       name: {
                         contains: searchText,
@@ -116,7 +115,6 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                       },
                     }
                   : {}),
-              },
             },
             subjectClassType: type,
           },

@@ -2,20 +2,16 @@ import { useMutation } from "@tanstack/react-query"
 import { customTrainingFetch } from "./custom-instance"
 
 export type ExportTrainingDataRequest = {
-  semesterId: string
-  trainingObjectTypeId: string
-  trainingCourseId?: string
-  type?: "NORMAL" | "RETAKE" | "REEXAM"
+  classRegisterSessionId: string
 }
 
 export type ExportTrainingDataPayload = {
   version: string
   exportedAt: string
   filters: {
+    classRegisterSessionId: string
     semesterId: string
-    trainingObjectTypeId: string
-    trainingCourseId: string | null
-    type: string | null
+    trainingCourseIds: string[]
   }
   counts: Record<string, number>
   data: Record<string, unknown[]>
@@ -28,7 +24,7 @@ type ExportTrainingDataSuccess = {
 }
 
 type ExportTrainingDataError = {
-  status: Exclude<number, 200>
+  status: number
   data: { message?: string }
   headers: Headers
 }

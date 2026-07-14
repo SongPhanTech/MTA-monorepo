@@ -41,8 +41,7 @@ const PutExpertProfile = () => {
   )
 
   const { data: lecturer = [] } = useFindManyLecturer({
-    where: {
-      ...(search
+    where: (search
         ? {
             OR: [
               { code: { contains: search, mode: "insensitive" } },
@@ -59,7 +58,6 @@ const PutExpertProfile = () => {
             ],
           }
         : {}),
-    },
     include: {
       userProfile: true,
       organization: true,

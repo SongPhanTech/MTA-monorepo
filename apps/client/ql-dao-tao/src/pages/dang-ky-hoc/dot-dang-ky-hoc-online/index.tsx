@@ -1,4 +1,4 @@
-import { EyeOutlined } from "@ant-design/icons"
+import { DownloadOutlined, EyeOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
@@ -13,18 +13,20 @@ import {
   useFindManyTrainingCourse,
   useUpdateClassRegisterSession,
 } from "@workspace/db/hooks"
+import { useExportTrainingData } from "@workspace/libs/api/export-training-data"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
 import { Select, useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Col, Flex, message, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
+import { saveAs } from "file-saver"
 import { BookPlus } from "lucide-react"
 import { useRouter } from "next/router"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 export default function ClassRegisterSession() {
-  const { can, canSome } = useAbility()
+  const { can } = useAbility()
   const router = useRouter()
   const { showSpinner, hideSpinner } = useSpinner()
   const [currentPage, setCurrentPage] = useState(1)
@@ -144,6 +146,8 @@ export default function ClassRegisterSession() {
   })
 
   const { mutateAsync: deleteClassRegisterSession } = useUpdateClassRegisterSession()
+  const { mutateAsync: exportRawData } = useExportTrainingData()
+
   async function handleDeleteClassRegisterSession(id: string) {
     try {
       showSpinner()
@@ -159,6 +163,31 @@ export default function ClassRegisterSession() {
         return
       }
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } finally {
+      hideSpinner()
+    }
+  }
+
+  async function handleExportRawData(sessionId: string, sessionName?: string | null) {
+    try {
+      showSpinner()
+      const res = await exportRawData({ classRegisterSessionId: sessionId })
+
+      if (res.status === 200) {
+        message.success("Xuất dữ liệu thô thành công")
+        const blob = new Blob([JSON.stringify(res.data, null, 2)], {
+          type: "application/json;charset=utf-8",
+        })
+        const safeName = (sessionName || sessionId).replace(/[\\/:*?"<>|]/g, "_")
+        saveAs(blob, `export-dot-dang-ky-${safeName}.json`)
+        return
+      }
+
+      message.error(
+        ("message" in res.data ? res.data.message : undefined) || "Xuất dữ liệu thô thất bại"
+      )
+    } catch {
+      message.error("Đã xảy ra lỗi khi xuất dữ liệu thô")
     } finally {
       hideSpinner()
     }
@@ -310,17 +339,20 @@ export default function ClassRegisterSession() {
               },
               {
                 title: "Thao tác",
-                width: 100,
+                width: 130,
                 align: "center",
                 fixed: "right",
-                hidden: !canSome(
-                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
-                  "XEM_CHI_TIET",
-                  "SUA",
-                  "XOA"
-                ),
-                render: (_, { id }) => (
+                render: (_, record) => (
                   <Row className="justify-center gap-2">
+                    <Tooltip title="Xuất dữ liệu thô" placement="top">
+                      <DownloadOutlined
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleExportRawData(record.id, record.name)
+                        }}
+                        className="text-sm cursor-pointer"
+                      />
+                    </Tooltip>
                     {can(
                       QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
                       "XEM_CHI_TIET"
@@ -331,7 +363,7 @@ export default function ClassRegisterSession() {
                             router.push(
                               ROUTER_PATH.QL_DAO_TAO.DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE_ID.replace(
                                 "[id]",
-                                id
+                                record.id
                               )
                             )
                           }}
@@ -345,7 +377,7 @@ export default function ClassRegisterSession() {
                     ) && (
                       <EditIcon
                         onClick={(e) => {
-                          onOpenPutClassRegisterSession(id)
+                          onOpenPutClassRegisterSession(record.id)
                           e?.stopPropagation()
                         }}
                         className="text-sm text-blue-700 cursor-pointer"
@@ -358,7 +390,7 @@ export default function ClassRegisterSession() {
                       <DeleteIcon
                         popConfirm={{
                           onConfirm: (e) => {
-                            handleDeleteClassRegisterSession(id)
+                            handleDeleteClassRegisterSession(record.id)
                             e?.stopPropagation()
                           },
                           onCancel: (e) => {

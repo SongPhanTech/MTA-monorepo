@@ -96,8 +96,7 @@ const KhoiTaoMon = () => {
               where: {
                 subjectId: subjectVersionId,
                 trainingBlockOnCurriculumVersion: {
-                  curriculumVersion: {
-                    ...(fixedClassIds?.length
+                  curriculumVersion: (fixedClassIds?.length
                       ? {
                           fixedClass: {
                             id: {
@@ -106,7 +105,6 @@ const KhoiTaoMon = () => {
                           },
                         }
                       : {}),
-                  },
                 },
               },
               select: {

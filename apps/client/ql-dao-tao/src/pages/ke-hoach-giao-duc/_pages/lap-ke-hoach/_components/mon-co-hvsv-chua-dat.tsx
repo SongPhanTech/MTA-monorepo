@@ -195,7 +195,7 @@ export default function MonCoHVSVChuaDat({ type }: { type?: $Enums.SubjectClassT
             rowKey="id"
             data={data}
             rowSelection={{
-              selectedRowKeys: [...subjectSelected.map((e) => e.id)],
+              selectedRowKeys: subjectSelected.map((e) => e.id),
               onChange: (_, selectedRows) => {
                 form.setFieldValue(
                   "subjectSelected",

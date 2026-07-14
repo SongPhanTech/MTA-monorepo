@@ -68,8 +68,7 @@ const PutArchivedAwardModal = () => {
   )
   const { data: students = [] } = useFindManyStudent(
     {
-      where: {
-        ...(!!trainingCoursesId || !!fixedClassId
+      where: (!!trainingCoursesId || !!fixedClassId
           ? {
               fixedClass: {
                 trainingCourse: { trainingObjectTypeId },
@@ -80,7 +79,6 @@ const PutArchivedAwardModal = () => {
           : {
               fixedClass: { trainingCourse: { trainingObjectTypeId } },
             }),
-      },
       include: {
         userProfile: true,
         fixedClass: {
@@ -170,8 +168,7 @@ const PutArchivedAwardModal = () => {
                 .filter((existing) => !rest.documentFiles?.some((f) => f.id === existing.id))
                 .map((file) => ({ id: file.id })),
             },
-            studentSubjectScore: {
-              ...(studentSubjectScoreId
+            studentSubjectScore: (studentSubjectScoreId
                 ? {
                     deleteMany: {
                       studentSubjectScoreId: {
@@ -181,7 +178,6 @@ const PutArchivedAwardModal = () => {
                     createMany: { data: { studentSubjectScoreId } },
                   }
                 : {}),
-            },
           },
           where: { id },
         })

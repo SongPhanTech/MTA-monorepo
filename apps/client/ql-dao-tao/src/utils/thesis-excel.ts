@@ -2299,7 +2299,7 @@ const convertToTthdbvData = async (
             existingPaymentId,
           })) as { id?: string } | undefined
           m.payment = {
-            ...(m.payment || {}),
+            ...m.payment,
             id: upserted?.id ?? existingPaymentId,
             amount: defaultAmount,
           }

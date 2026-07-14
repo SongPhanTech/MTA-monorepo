@@ -98,8 +98,7 @@ export default function ThongKe() {
                       },
                     }
                   : {}),
-                userProfile: {
-                  ...(filters.name && filters.name !== ""
+                userProfile: (filters.name && filters.name !== ""
                     ? {
                         fullname: {
                           contains: filters.name,
@@ -107,7 +106,6 @@ export default function ThongKe() {
                         },
                       }
                     : {}),
-                },
               },
               status: StudentThesisRegistrationStatus.ACCEPTED,
             },
@@ -148,8 +146,7 @@ export default function ThongKe() {
                       },
                     }
                   : {}),
-                userProfile: {
-                  ...(filters.name && filters.name !== ""
+                userProfile: (filters.name && filters.name !== ""
                     ? {
                         fullname: {
                           contains: filters.name,
@@ -157,7 +154,6 @@ export default function ThongKe() {
                         },
                       }
                     : {}),
-                },
               },
             },
           },

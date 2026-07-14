@@ -48,8 +48,7 @@ const DefaultLayout = ({
   const breadcrumb = getDynamicBreadcrumb("QL_DAO_TAO", currentPath)
   const listBreadcrumb = useMemo(() => {
     return breadcrumb?.length > 0
-      ? [
-          ...breadcrumb.slice(-2).map((i: { title: string; href?: string }) => {
+      ? breadcrumb.slice(-2).map((i: { title: string; href?: string }) => {
             if (i?.href) {
               return {
                 title: <Link href={i.href}>{i.title}</Link>,
@@ -58,11 +57,9 @@ const DefaultLayout = ({
             return {
               title: i.title,
             }
-          }),
-        ]
+          })
       : breadcrumbList
-        ? [
-            ...breadcrumbList.slice(-2).map((i: { title: string; href?: string }) => {
+        ? breadcrumbList.slice(-2).map((i: { title: string; href?: string }) => {
               if (i?.href) {
                 return {
                   title: <Link href={i.href}>{i.title}</Link>,
@@ -71,8 +68,7 @@ const DefaultLayout = ({
               return {
                 title: i.title,
               }
-            }),
-          ]
+            })
         : []
   }, [breadcrumb, breadcrumbList])
   useEffect(() => {

@@ -89,7 +89,7 @@ const SubjectClassDropItem: React.FC<{
         subjectClasses: {
           ...subjectClasses?.subjectClasses,
           [item?.id]: {
-            ...(subjectClasses?.subjectClasses?.[item?.id] || {}),
+            ...subjectClasses?.subjectClasses?.[item?.id],
             fixedClasses:
               subjectClasses?.subjectClasses?.[item?.id]?.fixedClasses?.filter(
                 (fc) => fc.id !== fixedClassId
@@ -178,7 +178,7 @@ const FixedClassDragItem: React.FC<{
             subjectClasses: {
               ...subjectClasses?.subjectClasses,
               [dropResult?.item?.id]: {
-                ...(subjectClasses?.subjectClasses?.[dropResult?.item?.id] || {}),
+                ...subjectClasses?.subjectClasses?.[dropResult?.item?.id],
                 fixedClasses: [
                   ...(subjectClasses?.subjectClasses?.[dropResult?.item?.id]?.fixedClasses || []),
                   {

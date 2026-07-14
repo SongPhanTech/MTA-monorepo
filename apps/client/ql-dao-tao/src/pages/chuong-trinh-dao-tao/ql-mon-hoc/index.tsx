@@ -71,9 +71,7 @@ export default function Subject() {
     },
     include: {
       subjectVersion: {
-        where: {
-          ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
-        },
+        where: (trainingObjectTypeId ? { trainingObjectTypeId } : {}),
       },
     },
     orderBy: {

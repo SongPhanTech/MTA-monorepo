@@ -291,10 +291,10 @@ export async function ensureSupervisorPaymentForProject(
     project.supervisorPaymentId = newSupId
     project.coSupervisorPaymentId = newCoId
     project.supervisorPayment = newSupId
-      ? { ...(project.supervisorPayment || {}), id: newSupId, amount: amtSup }
+      ? { ...project.supervisorPayment, id: newSupId, amount: amtSup }
       : null
     project.coSupervisorPayment = newCoId
-      ? { ...(project.coSupervisorPayment || {}), id: newCoId, amount: amtCo }
+      ? { ...project.coSupervisorPayment, id: newCoId, amount: amtCo }
       : null
 
     await deletePayments(pendingDeleteIds)
@@ -356,7 +356,7 @@ export async function ensureSupervisorPaymentForProject(
   project.coSupervisorPayment = null
   project.singleSupervisorPaymentId = newSingleId
   project.singleSupervisorPayment = newSingleId
-    ? { ...(project.singleSupervisorPayment || {}), id: newSingleId, amount: amtSingle }
+    ? { ...project.singleSupervisorPayment, id: newSingleId, amount: amtSingle }
     : null
 
   await deletePayments(pendingDeleteIds)

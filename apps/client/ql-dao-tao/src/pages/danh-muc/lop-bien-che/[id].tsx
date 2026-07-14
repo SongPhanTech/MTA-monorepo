@@ -785,14 +785,12 @@ export default function StudentFixedClassPage() {
       const headerRow7Score: TableRow = { cells: headerRow7ScoreCells }
 
       const headerRow8Credit: TableRow = {
-        cells: [
-          ...(subjectsInOrder || []).map((s) => ({
+        cells: (subjectsInOrder || []).map((s) => ({
             value: s.subject.credit ? Number(s.subject.credit).toFixed(1) : "",
             align: "center" as const,
             border: true,
             wrapText: false,
           })),
-        ],
       }
       const headerRow8Score: TableRow = {
         cells: [

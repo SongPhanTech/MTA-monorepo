@@ -1005,7 +1005,7 @@ interface ExportSubjectClassItem {
             const parentOrg = orgPayload.find((e) => e.Id === khoa?.sParentId)
             boMon = khoa
             khoa = parentOrg
-            sheetName = (boMon?.sTKPUCode || boMon?.sMa || boMon?.sTen || "MTA").substring(0, 30).replace(/[:\\/?*\[\]]/g, "_")
+            sheetName = (boMon?.sTKPUCode || boMon?.sMa || boMon?.sTen || "MTA").substring(0, 30).replace(/[:\\/?*[\]]/g, "_")
           } else {
             boMon = orgPayload.find((e) => e.sMa === key)
             khoa = orgPayload.find((e) => e.Id === boMon?.sParentId)

@@ -75,8 +75,7 @@ const PutStudentThesisRegistration = () => {
               AND: [
                 {
                   OR: [
-                    {
-                      ...(searchText
+                    (searchText
                         ? {
                             code: {
                               contains: searchText,
@@ -84,9 +83,7 @@ const PutStudentThesisRegistration = () => {
                             },
                           }
                         : {}),
-                    },
-                    {
-                      ...(searchText
+                    (searchText
                         ? {
                             userProfile: {
                               fullname: {
@@ -96,7 +93,6 @@ const PutStudentThesisRegistration = () => {
                             },
                           }
                         : {}),
-                    },
                   ],
                 },
                 {

@@ -55,8 +55,7 @@ const PutThesisProject = () => {
   const treeData = buildOrgTree(organization)
 
   const { data: expert = [], refetch } = useFindManyExpertProfile({
-    where: {
-      ...(searchExpert
+    where: (searchExpert
         ? {
             OR: [
               {
@@ -72,7 +71,6 @@ const PutThesisProject = () => {
             ],
           }
         : {}),
-    },
     include: {
       lecturer: {
         include: {

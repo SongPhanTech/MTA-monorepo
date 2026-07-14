@@ -1,23 +1,14 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
-import { exportTrainingData } from "../services/export-training-data"
 import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
+import { exportTrainingData } from "../services/export-training-data"
 
 const app = new OpenAPIHono()
 
 const exportTrainingDataRequestSchema = z
   .object({
-    semesterId: z.string().openapi(fieldDesc("ID học kỳ.")),
-    trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
-    trainingCourseId: z
-      .string()
-      .optional()
-      .openapi(fieldDesc("ID khóa học (lọc tùy chọn).")),
-    type: z
-      .enum(["NORMAL", "RETAKE", "REEXAM"])
-      .optional()
-      .openapi(fieldDesc("Loại lớp học phần.")),
+    classRegisterSessionId: z.string().openapi(fieldDesc("ID đợt đăng ký học online.")),
   })
   .openapi("ExportTrainingDataRequest")
 
@@ -26,10 +17,9 @@ const exportTrainingDataResponseSchema = z
     version: z.string(),
     exportedAt: z.string(),
     filters: z.object({
+      classRegisterSessionId: z.string(),
       semesterId: z.string(),
-      trainingObjectTypeId: z.string(),
-      trainingCourseId: z.string().nullable(),
-      type: z.string().nullable(),
+      trainingCourseIds: z.array(z.string()),
     }),
     counts: z.object({}).catchall(z.number()),
     data: z.object({}).catchall(z.array(z.object({}).catchall(z.any()))),
@@ -41,12 +31,12 @@ const exportTrainingDataRoute = createRoute({
   tags: ["Xuất dữ liệu"],
   path: "/export",
   method: "post",
-  summary: "Xuất dữ liệu đào tạo JSON",
-  description: `Xuất gói dữ liệu JSON để migrate/import, lọc theo học kỳ và hệ đào tạo.
+  summary: "Xuất dữ liệu thô theo đợt đăng ký học",
+  description: `Xuất gói JSON theo 1 đợt đăng ký học online để migrate sang môi trường internet.
 
-**Bảng dữ liệu:** DM_DonVi, UserProfile, LecturerType, Lecturer, TrainingObjectType, SchoolYear, Semester, TrainingCourse, Subject, SubjectVersion, SubjectClass, SubjectClassTime, FixedClass, _FixedClassToSubjectClass, Room, Building, TrainingLocation, TrainingMajor, Curriculum, CurriculumVersion, Student, StudentSubjectScore, PlanTraining, PlanTrainingSubject, Exam, ClassSchedule.
+**Bảng dữ liệu:** ClassRegisterSession, ClassRegisterSessionCredit, _ClassRegisterSessionToTrainingCourse, DM_DonVi, UserProfile, LecturerType, Lecturer, TrainingObjectType, SchoolYear, Semester, TrainingCourse, Subject, SubjectVersion, SubjectClass, SubjectClassTime, FixedClass, _FixedClassToSubjectClass, Room, Building, TrainingLocation, TrainingMajor, Curriculum, CurriculumVersion, Student, StudentSubjectScore, StudentSemesterResult, Exam, ClassSchedule.
 
-**Tham số:** semesterId, trainingObjectTypeId, trainingCourseId (tùy chọn), type (NORMAL | RETAKE | REEXAM).`,
+**Tham số:** classRegisterSessionId.`,
   request: {
     body: {
       content: {
@@ -78,16 +68,10 @@ const exportTrainingDataRoute = createRoute({
 })
 
 app.openapi(exportTrainingDataRoute, async (c) => {
-  const { semesterId, trainingObjectTypeId, trainingCourseId, type } = c.req.valid("json")
+  const { classRegisterSessionId } = c.req.valid("json")
 
   try {
-    const result = await exportTrainingData({
-      semesterId,
-      trainingObjectTypeId,
-      trainingCourseId,
-      type,
-    })
-
+    const result = await exportTrainingData({ classRegisterSessionId })
     return c.json(result, 200)
   } catch (error) {
     const message = error instanceof Error ? error.message : "Xuất dữ liệu thất bại"

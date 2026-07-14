@@ -59,8 +59,7 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
               },
             }
           : {}),
-        userProfile: {
-          ...(filters.name && filters.name !== ""
+        userProfile: (filters.name && filters.name !== ""
             ? {
                 fullname: {
                   contains: filters.name,
@@ -68,7 +67,6 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                 },
               }
             : {}),
-        },
         ...(filters.fixedClassId
           ? {
               fixedClassId: {

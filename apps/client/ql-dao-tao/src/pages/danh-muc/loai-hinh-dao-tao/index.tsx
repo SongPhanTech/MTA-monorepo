@@ -26,8 +26,7 @@ export default function TrainingTypePage() {
   })
 
   const { data = [], refetch } = useFindManyTrainingType({
-    where: {
-      ...(filters.name
+    where: (filters.name
         ? {
             name: {
               contains: filters.name,
@@ -35,7 +34,6 @@ export default function TrainingTypePage() {
             },
           }
         : {}),
-    },
     orderBy: {
       name: "asc",
     },
