@@ -443,16 +443,7 @@ const DiemTrungBinhKyHoc = () => {
                     ? Number(value).toFixed(2).replace(".", ",")
                     : "-",
               },
-              {
-                title: "TB chung tích luỹ hệ 4",
-                dataIndex: ["studentSemesterResult", "0", "cgpaBase4"],
-                width: 100,
-                align: "center",
-                render: (value) =>
-                  value !== null && value !== undefined
-                    ? Number(value).toFixed(2).replace(".", ",")
-                    : "-",
-              },
+
               {
                 title: "Trung bình hệ 10",
                 dataIndex: ["studentSemesterResult", "0", "gpaBase10"],
@@ -475,16 +466,6 @@ const DiemTrungBinhKyHoc = () => {
                     : "-",
               },
 
-              {
-                title: "TB chung tích luỹ hệ 10",
-                dataIndex: ["studentSemesterResult", "0", "cgpaBase10"],
-                width: 100,
-                align: "center",
-                render: (value) =>
-                  value !== null && value !== undefined
-                    ? Number(value).toFixed(2).replace(".", ",")
-                    : "-",
-              },
               {
                 title: "Xếp loại học lực",
                 dataIndex: ["studentSemesterResult", "0", "rank"],
