@@ -19,6 +19,7 @@ import KeHoachMoLopMonHoc from "./_pages/ke-hoach-mo-lop-mon-hoc"
 import LapKeHoach from "./_pages/lap-ke-hoach"
 import PhanCongGiangDay from "./_pages/phan-cong-giang-day"
 import ThoiKhoaBieu from "./_pages/thoi-khoa-bieu"
+import ThongKeBuoiHoc from "./_pages/thong-ke-buoi-hoc"
 
 interface TabItem {
   key: string
@@ -63,6 +64,11 @@ export default function KeHoachDaoTao({ type = "NORMAL", role }: KeHoachDaoTaoPa
           key: "thoi-khoa-bieu",
           label: "Thời khoá biểu",
           content: <ThoiKhoaBieu type={type} />,
+        },
+        {
+          key: "thong-ke-buoi-hoc",
+          label: "Thống kê buổi học",
+          content: <ThongKeBuoiHoc />,
         },
       ]
     }
