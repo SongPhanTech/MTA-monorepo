@@ -32,9 +32,14 @@ const baseSchema = z.object({
     lowestFinalScore: z.number().nullish(),
     lowestGraduationScore: z.number().nullish(),
     totalCredits: z.number(),
+    registeredCredits: z.number().default(0),
     retakingCredits: z.number().default(0),
     reExamCredits: z.number().default(0),
+    passedCredits: z.number().default(0),
     failedCredits: z.number(),
+    accumulatedCredits: z.number().default(0),
+    totalCreditsByCurriculum: z.number().default(0),
+    totalFailedCredits: z.number().default(0),
     isClassMonitor: z.boolean(),
     isUnionLeader: z.boolean(),
     academicWarningLevel: z.number().default(0),
@@ -66,9 +71,14 @@ const baseSchemaWithoutDefaults = z.object({
     lowestFinalScore: z.number().nullish(),
     lowestGraduationScore: z.number().nullish(),
     totalCredits: z.number(),
+    registeredCredits: z.number(),
     retakingCredits: z.number(),
     reExamCredits: z.number(),
+    passedCredits: z.number(),
     failedCredits: z.number(),
+    accumulatedCredits: z.number(),
+    totalCreditsByCurriculum: z.number(),
+    totalFailedCredits: z.number(),
     isClassMonitor: z.boolean(),
     isUnionLeader: z.boolean(),
     academicWarningLevel: z.number(),
@@ -136,9 +146,14 @@ export const StudentYearResultPrismaUpdateSchema = z.object({
     lowestFinalScore: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     lowestGraduationScore: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     totalCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    registeredCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
     retakingCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
     reExamCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    passedCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
     failedCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    accumulatedCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    totalCreditsByCurriculum: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    totalFailedCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
     isClassMonitor: z.boolean(),
     isUnionLeader: z.boolean(),
     academicWarningLevel: z.union([z.number(), z.record(z.string(), z.unknown())]),
@@ -152,7 +167,7 @@ export const StudentYearResultPrismaUpdateSchema = z.object({
  * `StudentYearResult` schema for create operations excluding foreign keys and relations.
  */
 export const StudentYearResultCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, cgpaBase4: true, cgpaBase10: true, retakingCredits: true, reExamCredits: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, cgpaBase4: true, cgpaBase10: true, registeredCredits: true, retakingCredits: true, reExamCredits: true, passedCredits: true, accumulatedCredits: true, totalCreditsByCurriculum: true, totalFailedCredits: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true
 });
 
 

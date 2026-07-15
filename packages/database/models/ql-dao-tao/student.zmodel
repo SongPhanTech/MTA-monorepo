@@ -239,10 +239,16 @@ model StudentYearResult extends  Base {
   lowestFinalScore         Float?    // Điểm học phần thấp nhất
   lowestGraduationScore    Float?
 
-  totalCredits             Int      // tổng số tín chỉ tích lũy
+  totalCredits             Int      // tổng số tín chỉ
+  registeredCredits        Int                     @default(0)
   retakingCredits          Int                     @default(0) // Số tín chỉ học lại
   reExamCredits            Int                     @default(0) // Số tín chỉ thi lại
+  passedCredits            Int                     @default(0)
   failedCredits            Int      // tín chỉ nợ tích lũy
+  accumulatedCredits       Int                     @default(0)
+  totalCreditsByCurriculum Int                     @default(0)
+  totalFailedCredits       Int                     @default(0)
+
 
   isClassMonitor           Boolean  // Lớp trưởng
   isUnionLeader            Boolean  // Bí thư đoàn/các chức vụ chính trị

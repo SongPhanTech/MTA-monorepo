@@ -220810,9 +220810,14 @@ export namespace Prisma {
     lowestFinalScore: number | null
     lowestGraduationScore: number | null
     totalCredits: number | null
+    registeredCredits: number | null
     retakingCredits: number | null
     reExamCredits: number | null
+    passedCredits: number | null
     failedCredits: number | null
+    accumulatedCredits: number | null
+    totalCreditsByCurriculum: number | null
+    totalFailedCredits: number | null
     academicWarningLevel: number | null
     disciplinaryWarningLevel: number | null
   }
@@ -220829,9 +220834,14 @@ export namespace Prisma {
     lowestFinalScore: number | null
     lowestGraduationScore: number | null
     totalCredits: number | null
+    registeredCredits: number | null
     retakingCredits: number | null
     reExamCredits: number | null
+    passedCredits: number | null
     failedCredits: number | null
+    accumulatedCredits: number | null
+    totalCreditsByCurriculum: number | null
+    totalFailedCredits: number | null
     academicWarningLevel: number | null
     disciplinaryWarningLevel: number | null
   }
@@ -220862,9 +220872,14 @@ export namespace Prisma {
     lowestFinalScore: number | null
     lowestGraduationScore: number | null
     totalCredits: number | null
+    registeredCredits: number | null
     retakingCredits: number | null
     reExamCredits: number | null
+    passedCredits: number | null
     failedCredits: number | null
+    accumulatedCredits: number | null
+    totalCreditsByCurriculum: number | null
+    totalFailedCredits: number | null
     isClassMonitor: boolean | null
     isUnionLeader: boolean | null
     academicWarningLevel: number | null
@@ -220899,9 +220914,14 @@ export namespace Prisma {
     lowestFinalScore: number | null
     lowestGraduationScore: number | null
     totalCredits: number | null
+    registeredCredits: number | null
     retakingCredits: number | null
     reExamCredits: number | null
+    passedCredits: number | null
     failedCredits: number | null
+    accumulatedCredits: number | null
+    totalCreditsByCurriculum: number | null
+    totalFailedCredits: number | null
     isClassMonitor: boolean | null
     isUnionLeader: boolean | null
     academicWarningLevel: number | null
@@ -220936,9 +220956,14 @@ export namespace Prisma {
     lowestFinalScore: number
     lowestGraduationScore: number
     totalCredits: number
+    registeredCredits: number
     retakingCredits: number
     reExamCredits: number
+    passedCredits: number
     failedCredits: number
+    accumulatedCredits: number
+    totalCreditsByCurriculum: number
+    totalFailedCredits: number
     isClassMonitor: number
     isUnionLeader: number
     academicWarningLevel: number
@@ -220961,9 +220986,14 @@ export namespace Prisma {
     lowestFinalScore?: true
     lowestGraduationScore?: true
     totalCredits?: true
+    registeredCredits?: true
     retakingCredits?: true
     reExamCredits?: true
+    passedCredits?: true
     failedCredits?: true
+    accumulatedCredits?: true
+    totalCreditsByCurriculum?: true
+    totalFailedCredits?: true
     academicWarningLevel?: true
     disciplinaryWarningLevel?: true
   }
@@ -220980,9 +221010,14 @@ export namespace Prisma {
     lowestFinalScore?: true
     lowestGraduationScore?: true
     totalCredits?: true
+    registeredCredits?: true
     retakingCredits?: true
     reExamCredits?: true
+    passedCredits?: true
     failedCredits?: true
+    accumulatedCredits?: true
+    totalCreditsByCurriculum?: true
+    totalFailedCredits?: true
     academicWarningLevel?: true
     disciplinaryWarningLevel?: true
   }
@@ -221013,9 +221048,14 @@ export namespace Prisma {
     lowestFinalScore?: true
     lowestGraduationScore?: true
     totalCredits?: true
+    registeredCredits?: true
     retakingCredits?: true
     reExamCredits?: true
+    passedCredits?: true
     failedCredits?: true
+    accumulatedCredits?: true
+    totalCreditsByCurriculum?: true
+    totalFailedCredits?: true
     isClassMonitor?: true
     isUnionLeader?: true
     academicWarningLevel?: true
@@ -221050,9 +221090,14 @@ export namespace Prisma {
     lowestFinalScore?: true
     lowestGraduationScore?: true
     totalCredits?: true
+    registeredCredits?: true
     retakingCredits?: true
     reExamCredits?: true
+    passedCredits?: true
     failedCredits?: true
+    accumulatedCredits?: true
+    totalCreditsByCurriculum?: true
+    totalFailedCredits?: true
     isClassMonitor?: true
     isUnionLeader?: true
     academicWarningLevel?: true
@@ -221087,9 +221132,14 @@ export namespace Prisma {
     lowestFinalScore?: true
     lowestGraduationScore?: true
     totalCredits?: true
+    registeredCredits?: true
     retakingCredits?: true
     reExamCredits?: true
+    passedCredits?: true
     failedCredits?: true
+    accumulatedCredits?: true
+    totalCreditsByCurriculum?: true
+    totalFailedCredits?: true
     isClassMonitor?: true
     isUnionLeader?: true
     academicWarningLevel?: true
@@ -221211,9 +221261,14 @@ export namespace Prisma {
     lowestFinalScore: number | null
     lowestGraduationScore: number | null
     totalCredits: number
+    registeredCredits: number
     retakingCredits: number
     reExamCredits: number
+    passedCredits: number
     failedCredits: number
+    accumulatedCredits: number
+    totalCreditsByCurriculum: number
+    totalFailedCredits: number
     isClassMonitor: boolean
     isUnionLeader: boolean
     academicWarningLevel: number
@@ -221267,9 +221322,14 @@ export namespace Prisma {
     lowestFinalScore?: boolean
     lowestGraduationScore?: boolean
     totalCredits?: boolean
+    registeredCredits?: boolean
     retakingCredits?: boolean
     reExamCredits?: boolean
+    passedCredits?: boolean
     failedCredits?: boolean
+    accumulatedCredits?: boolean
+    totalCreditsByCurriculum?: boolean
+    totalFailedCredits?: boolean
     isClassMonitor?: boolean
     isUnionLeader?: boolean
     academicWarningLevel?: boolean
@@ -221307,9 +221367,14 @@ export namespace Prisma {
     lowestFinalScore?: boolean
     lowestGraduationScore?: boolean
     totalCredits?: boolean
+    registeredCredits?: boolean
     retakingCredits?: boolean
     reExamCredits?: boolean
+    passedCredits?: boolean
     failedCredits?: boolean
+    accumulatedCredits?: boolean
+    totalCreditsByCurriculum?: boolean
+    totalFailedCredits?: boolean
     isClassMonitor?: boolean
     isUnionLeader?: boolean
     academicWarningLevel?: boolean
@@ -221347,9 +221412,14 @@ export namespace Prisma {
     lowestFinalScore?: boolean
     lowestGraduationScore?: boolean
     totalCredits?: boolean
+    registeredCredits?: boolean
     retakingCredits?: boolean
     reExamCredits?: boolean
+    passedCredits?: boolean
     failedCredits?: boolean
+    accumulatedCredits?: boolean
+    totalCreditsByCurriculum?: boolean
+    totalFailedCredits?: boolean
     isClassMonitor?: boolean
     isUnionLeader?: boolean
     academicWarningLevel?: boolean
@@ -221387,9 +221457,14 @@ export namespace Prisma {
     lowestFinalScore?: boolean
     lowestGraduationScore?: boolean
     totalCredits?: boolean
+    registeredCredits?: boolean
     retakingCredits?: boolean
     reExamCredits?: boolean
+    passedCredits?: boolean
     failedCredits?: boolean
+    accumulatedCredits?: boolean
+    totalCreditsByCurriculum?: boolean
+    totalFailedCredits?: boolean
     isClassMonitor?: boolean
     isUnionLeader?: boolean
     academicWarningLevel?: boolean
@@ -221398,7 +221473,7 @@ export namespace Prisma {
     expelled?: boolean
   }
 
-  export type StudentYearResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "studentId" | "schoolYearId" | "studyYear" | "isLastStudyYear" | "baseScore" | "gpaBase4" | "cumulativeGpaBase4" | "gpaBase10" | "cumulativeGpaBase10" | "cgpaBase4" | "cgpaBase10" | "conductScore" | "studentTrainingType" | "rankId" | "lowestFinalScore" | "lowestGraduationScore" | "totalCredits" | "retakingCredits" | "reExamCredits" | "failedCredits" | "isClassMonitor" | "isUnionLeader" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled", ExtArgs["result"]["studentYearResult"]>
+  export type StudentYearResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "studentId" | "schoolYearId" | "studyYear" | "isLastStudyYear" | "baseScore" | "gpaBase4" | "cumulativeGpaBase4" | "gpaBase10" | "cumulativeGpaBase10" | "cgpaBase4" | "cgpaBase10" | "conductScore" | "studentTrainingType" | "rankId" | "lowestFinalScore" | "lowestGraduationScore" | "totalCredits" | "registeredCredits" | "retakingCredits" | "reExamCredits" | "passedCredits" | "failedCredits" | "accumulatedCredits" | "totalCreditsByCurriculum" | "totalFailedCredits" | "isClassMonitor" | "isUnionLeader" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled", ExtArgs["result"]["studentYearResult"]>
   export type StudentYearResultInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     schoolYear?: boolean | SchoolYearDefaultArgs<ExtArgs>
@@ -221448,9 +221523,14 @@ export namespace Prisma {
       lowestFinalScore: number | null
       lowestGraduationScore: number | null
       totalCredits: number
+      registeredCredits: number
       retakingCredits: number
       reExamCredits: number
+      passedCredits: number
       failedCredits: number
+      accumulatedCredits: number
+      totalCreditsByCurriculum: number
+      totalFailedCredits: number
       isClassMonitor: boolean
       isUnionLeader: boolean
       academicWarningLevel: number
@@ -221908,9 +221988,14 @@ export namespace Prisma {
     readonly lowestFinalScore: FieldRef<"StudentYearResult", 'Float'>
     readonly lowestGraduationScore: FieldRef<"StudentYearResult", 'Float'>
     readonly totalCredits: FieldRef<"StudentYearResult", 'Int'>
+    readonly registeredCredits: FieldRef<"StudentYearResult", 'Int'>
     readonly retakingCredits: FieldRef<"StudentYearResult", 'Int'>
     readonly reExamCredits: FieldRef<"StudentYearResult", 'Int'>
+    readonly passedCredits: FieldRef<"StudentYearResult", 'Int'>
     readonly failedCredits: FieldRef<"StudentYearResult", 'Int'>
+    readonly accumulatedCredits: FieldRef<"StudentYearResult", 'Int'>
+    readonly totalCreditsByCurriculum: FieldRef<"StudentYearResult", 'Int'>
+    readonly totalFailedCredits: FieldRef<"StudentYearResult", 'Int'>
     readonly isClassMonitor: FieldRef<"StudentYearResult", 'Boolean'>
     readonly isUnionLeader: FieldRef<"StudentYearResult", 'Boolean'>
     readonly academicWarningLevel: FieldRef<"StudentYearResult", 'Int'>
@@ -397351,9 +397436,14 @@ export namespace Prisma {
     lowestFinalScore: 'lowestFinalScore',
     lowestGraduationScore: 'lowestGraduationScore',
     totalCredits: 'totalCredits',
+    registeredCredits: 'registeredCredits',
     retakingCredits: 'retakingCredits',
     reExamCredits: 'reExamCredits',
+    passedCredits: 'passedCredits',
     failedCredits: 'failedCredits',
+    accumulatedCredits: 'accumulatedCredits',
+    totalCreditsByCurriculum: 'totalCreditsByCurriculum',
+    totalFailedCredits: 'totalFailedCredits',
     isClassMonitor: 'isClassMonitor',
     isUnionLeader: 'isUnionLeader',
     academicWarningLevel: 'academicWarningLevel',
@@ -422202,9 +422292,14 @@ export namespace Prisma {
     lowestFinalScore?: FloatNullableFilter<"StudentYearResult"> | number | null
     lowestGraduationScore?: FloatNullableFilter<"StudentYearResult"> | number | null
     totalCredits?: IntFilter<"StudentYearResult"> | number
+    registeredCredits?: IntFilter<"StudentYearResult"> | number
     retakingCredits?: IntFilter<"StudentYearResult"> | number
     reExamCredits?: IntFilter<"StudentYearResult"> | number
+    passedCredits?: IntFilter<"StudentYearResult"> | number
     failedCredits?: IntFilter<"StudentYearResult"> | number
+    accumulatedCredits?: IntFilter<"StudentYearResult"> | number
+    totalCreditsByCurriculum?: IntFilter<"StudentYearResult"> | number
+    totalFailedCredits?: IntFilter<"StudentYearResult"> | number
     isClassMonitor?: BoolFilter<"StudentYearResult"> | boolean
     isUnionLeader?: BoolFilter<"StudentYearResult"> | boolean
     academicWarningLevel?: IntFilter<"StudentYearResult"> | number
@@ -422242,9 +422337,14 @@ export namespace Prisma {
     lowestFinalScore?: SortOrderInput | SortOrder
     lowestGraduationScore?: SortOrderInput | SortOrder
     totalCredits?: SortOrder
+    registeredCredits?: SortOrder
     retakingCredits?: SortOrder
     reExamCredits?: SortOrder
+    passedCredits?: SortOrder
     failedCredits?: SortOrder
+    accumulatedCredits?: SortOrder
+    totalCreditsByCurriculum?: SortOrder
+    totalFailedCredits?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
     academicWarningLevel?: SortOrder
@@ -422287,9 +422387,14 @@ export namespace Prisma {
     lowestFinalScore?: FloatNullableFilter<"StudentYearResult"> | number | null
     lowestGraduationScore?: FloatNullableFilter<"StudentYearResult"> | number | null
     totalCredits?: IntFilter<"StudentYearResult"> | number
+    registeredCredits?: IntFilter<"StudentYearResult"> | number
     retakingCredits?: IntFilter<"StudentYearResult"> | number
     reExamCredits?: IntFilter<"StudentYearResult"> | number
+    passedCredits?: IntFilter<"StudentYearResult"> | number
     failedCredits?: IntFilter<"StudentYearResult"> | number
+    accumulatedCredits?: IntFilter<"StudentYearResult"> | number
+    totalCreditsByCurriculum?: IntFilter<"StudentYearResult"> | number
+    totalFailedCredits?: IntFilter<"StudentYearResult"> | number
     isClassMonitor?: BoolFilter<"StudentYearResult"> | boolean
     isUnionLeader?: BoolFilter<"StudentYearResult"> | boolean
     academicWarningLevel?: IntFilter<"StudentYearResult"> | number
@@ -422327,9 +422432,14 @@ export namespace Prisma {
     lowestFinalScore?: SortOrderInput | SortOrder
     lowestGraduationScore?: SortOrderInput | SortOrder
     totalCredits?: SortOrder
+    registeredCredits?: SortOrder
     retakingCredits?: SortOrder
     reExamCredits?: SortOrder
+    passedCredits?: SortOrder
     failedCredits?: SortOrder
+    accumulatedCredits?: SortOrder
+    totalCreditsByCurriculum?: SortOrder
+    totalFailedCredits?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
     academicWarningLevel?: SortOrder
@@ -422372,9 +422482,14 @@ export namespace Prisma {
     lowestFinalScore?: FloatNullableWithAggregatesFilter<"StudentYearResult"> | number | null
     lowestGraduationScore?: FloatNullableWithAggregatesFilter<"StudentYearResult"> | number | null
     totalCredits?: IntWithAggregatesFilter<"StudentYearResult"> | number
+    registeredCredits?: IntWithAggregatesFilter<"StudentYearResult"> | number
     retakingCredits?: IntWithAggregatesFilter<"StudentYearResult"> | number
     reExamCredits?: IntWithAggregatesFilter<"StudentYearResult"> | number
+    passedCredits?: IntWithAggregatesFilter<"StudentYearResult"> | number
     failedCredits?: IntWithAggregatesFilter<"StudentYearResult"> | number
+    accumulatedCredits?: IntWithAggregatesFilter<"StudentYearResult"> | number
+    totalCreditsByCurriculum?: IntWithAggregatesFilter<"StudentYearResult"> | number
+    totalFailedCredits?: IntWithAggregatesFilter<"StudentYearResult"> | number
     isClassMonitor?: BoolWithAggregatesFilter<"StudentYearResult"> | boolean
     isUnionLeader?: BoolWithAggregatesFilter<"StudentYearResult"> | boolean
     academicWarningLevel?: IntWithAggregatesFilter<"StudentYearResult"> | number
@@ -456634,9 +456749,14 @@ export namespace Prisma {
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
+    registeredCredits?: number
     retakingCredits?: number
     reExamCredits?: number
+    passedCredits?: number
     failedCredits: number
+    accumulatedCredits?: number
+    totalCreditsByCurriculum?: number
+    totalFailedCredits?: number
     isClassMonitor: boolean
     isUnionLeader: boolean
     academicWarningLevel?: number
@@ -456674,9 +456794,14 @@ export namespace Prisma {
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
+    registeredCredits?: number
     retakingCredits?: number
     reExamCredits?: number
+    passedCredits?: number
     failedCredits: number
+    accumulatedCredits?: number
+    totalCreditsByCurriculum?: number
+    totalFailedCredits?: number
     isClassMonitor: boolean
     isUnionLeader: boolean
     academicWarningLevel?: number
@@ -456708,9 +456833,14 @@ export namespace Prisma {
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
+    registeredCredits?: IntFieldUpdateOperationsInput | number
     retakingCredits?: IntFieldUpdateOperationsInput | number
     reExamCredits?: IntFieldUpdateOperationsInput | number
+    passedCredits?: IntFieldUpdateOperationsInput | number
     failedCredits?: IntFieldUpdateOperationsInput | number
+    accumulatedCredits?: IntFieldUpdateOperationsInput | number
+    totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
+    totalFailedCredits?: IntFieldUpdateOperationsInput | number
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -456748,9 +456878,14 @@ export namespace Prisma {
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
+    registeredCredits?: IntFieldUpdateOperationsInput | number
     retakingCredits?: IntFieldUpdateOperationsInput | number
     reExamCredits?: IntFieldUpdateOperationsInput | number
+    passedCredits?: IntFieldUpdateOperationsInput | number
     failedCredits?: IntFieldUpdateOperationsInput | number
+    accumulatedCredits?: IntFieldUpdateOperationsInput | number
+    totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
+    totalFailedCredits?: IntFieldUpdateOperationsInput | number
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -456785,9 +456920,14 @@ export namespace Prisma {
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
+    registeredCredits?: number
     retakingCredits?: number
     reExamCredits?: number
+    passedCredits?: number
     failedCredits: number
+    accumulatedCredits?: number
+    totalCreditsByCurriculum?: number
+    totalFailedCredits?: number
     isClassMonitor: boolean
     isUnionLeader: boolean
     academicWarningLevel?: number
@@ -456819,9 +456959,14 @@ export namespace Prisma {
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
+    registeredCredits?: IntFieldUpdateOperationsInput | number
     retakingCredits?: IntFieldUpdateOperationsInput | number
     reExamCredits?: IntFieldUpdateOperationsInput | number
+    passedCredits?: IntFieldUpdateOperationsInput | number
     failedCredits?: IntFieldUpdateOperationsInput | number
+    accumulatedCredits?: IntFieldUpdateOperationsInput | number
+    totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
+    totalFailedCredits?: IntFieldUpdateOperationsInput | number
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -456856,9 +457001,14 @@ export namespace Prisma {
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
+    registeredCredits?: IntFieldUpdateOperationsInput | number
     retakingCredits?: IntFieldUpdateOperationsInput | number
     reExamCredits?: IntFieldUpdateOperationsInput | number
+    passedCredits?: IntFieldUpdateOperationsInput | number
     failedCredits?: IntFieldUpdateOperationsInput | number
+    accumulatedCredits?: IntFieldUpdateOperationsInput | number
+    totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
+    totalFailedCredits?: IntFieldUpdateOperationsInput | number
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -486003,9 +486153,14 @@ export namespace Prisma {
     lowestFinalScore?: SortOrder
     lowestGraduationScore?: SortOrder
     totalCredits?: SortOrder
+    registeredCredits?: SortOrder
     retakingCredits?: SortOrder
     reExamCredits?: SortOrder
+    passedCredits?: SortOrder
     failedCredits?: SortOrder
+    accumulatedCredits?: SortOrder
+    totalCreditsByCurriculum?: SortOrder
+    totalFailedCredits?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
     academicWarningLevel?: SortOrder
@@ -486026,9 +486181,14 @@ export namespace Prisma {
     lowestFinalScore?: SortOrder
     lowestGraduationScore?: SortOrder
     totalCredits?: SortOrder
+    registeredCredits?: SortOrder
     retakingCredits?: SortOrder
     reExamCredits?: SortOrder
+    passedCredits?: SortOrder
     failedCredits?: SortOrder
+    accumulatedCredits?: SortOrder
+    totalCreditsByCurriculum?: SortOrder
+    totalFailedCredits?: SortOrder
     academicWarningLevel?: SortOrder
     disciplinaryWarningLevel?: SortOrder
   }
@@ -486059,9 +486219,14 @@ export namespace Prisma {
     lowestFinalScore?: SortOrder
     lowestGraduationScore?: SortOrder
     totalCredits?: SortOrder
+    registeredCredits?: SortOrder
     retakingCredits?: SortOrder
     reExamCredits?: SortOrder
+    passedCredits?: SortOrder
     failedCredits?: SortOrder
+    accumulatedCredits?: SortOrder
+    totalCreditsByCurriculum?: SortOrder
+    totalFailedCredits?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
     academicWarningLevel?: SortOrder
@@ -486096,9 +486261,14 @@ export namespace Prisma {
     lowestFinalScore?: SortOrder
     lowestGraduationScore?: SortOrder
     totalCredits?: SortOrder
+    registeredCredits?: SortOrder
     retakingCredits?: SortOrder
     reExamCredits?: SortOrder
+    passedCredits?: SortOrder
     failedCredits?: SortOrder
+    accumulatedCredits?: SortOrder
+    totalCreditsByCurriculum?: SortOrder
+    totalFailedCredits?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
     academicWarningLevel?: SortOrder
@@ -486119,9 +486289,14 @@ export namespace Prisma {
     lowestFinalScore?: SortOrder
     lowestGraduationScore?: SortOrder
     totalCredits?: SortOrder
+    registeredCredits?: SortOrder
     retakingCredits?: SortOrder
     reExamCredits?: SortOrder
+    passedCredits?: SortOrder
     failedCredits?: SortOrder
+    accumulatedCredits?: SortOrder
+    totalCreditsByCurriculum?: SortOrder
+    totalFailedCredits?: SortOrder
     academicWarningLevel?: SortOrder
     disciplinaryWarningLevel?: SortOrder
   }
@@ -587403,9 +587578,14 @@ export namespace Prisma {
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
+    registeredCredits?: number
     retakingCredits?: number
     reExamCredits?: number
+    passedCredits?: number
     failedCredits: number
+    accumulatedCredits?: number
+    totalCreditsByCurriculum?: number
+    totalFailedCredits?: number
     isClassMonitor: boolean
     isUnionLeader: boolean
     academicWarningLevel?: number
@@ -587441,9 +587621,14 @@ export namespace Prisma {
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
+    registeredCredits?: number
     retakingCredits?: number
     reExamCredits?: number
+    passedCredits?: number
     failedCredits: number
+    accumulatedCredits?: number
+    totalCreditsByCurriculum?: number
+    totalFailedCredits?: number
     isClassMonitor: boolean
     isUnionLeader: boolean
     academicWarningLevel?: number
@@ -587759,9 +587944,14 @@ export namespace Prisma {
     lowestFinalScore?: FloatNullableFilter<"StudentYearResult"> | number | null
     lowestGraduationScore?: FloatNullableFilter<"StudentYearResult"> | number | null
     totalCredits?: IntFilter<"StudentYearResult"> | number
+    registeredCredits?: IntFilter<"StudentYearResult"> | number
     retakingCredits?: IntFilter<"StudentYearResult"> | number
     reExamCredits?: IntFilter<"StudentYearResult"> | number
+    passedCredits?: IntFilter<"StudentYearResult"> | number
     failedCredits?: IntFilter<"StudentYearResult"> | number
+    accumulatedCredits?: IntFilter<"StudentYearResult"> | number
+    totalCreditsByCurriculum?: IntFilter<"StudentYearResult"> | number
+    totalFailedCredits?: IntFilter<"StudentYearResult"> | number
     isClassMonitor?: BoolFilter<"StudentYearResult"> | boolean
     isUnionLeader?: BoolFilter<"StudentYearResult"> | boolean
     academicWarningLevel?: IntFilter<"StudentYearResult"> | number
@@ -621126,9 +621316,14 @@ export namespace Prisma {
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
+    registeredCredits?: number
     retakingCredits?: number
     reExamCredits?: number
+    passedCredits?: number
     failedCredits: number
+    accumulatedCredits?: number
+    totalCreditsByCurriculum?: number
+    totalFailedCredits?: number
     isClassMonitor: boolean
     isUnionLeader: boolean
     academicWarningLevel?: number
@@ -621164,9 +621359,14 @@ export namespace Prisma {
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
+    registeredCredits?: number
     retakingCredits?: number
     reExamCredits?: number
+    passedCredits?: number
     failedCredits: number
+    accumulatedCredits?: number
+    totalCreditsByCurriculum?: number
+    totalFailedCredits?: number
     isClassMonitor: boolean
     isUnionLeader: boolean
     academicWarningLevel?: number
@@ -654718,9 +654918,14 @@ export namespace Prisma {
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
+    registeredCredits?: number
     retakingCredits?: number
     reExamCredits?: number
+    passedCredits?: number
     failedCredits: number
+    accumulatedCredits?: number
+    totalCreditsByCurriculum?: number
+    totalFailedCredits?: number
     isClassMonitor: boolean
     isUnionLeader: boolean
     academicWarningLevel?: number
@@ -654756,9 +654961,14 @@ export namespace Prisma {
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
+    registeredCredits?: number
     retakingCredits?: number
     reExamCredits?: number
+    passedCredits?: number
     failedCredits: number
+    accumulatedCredits?: number
+    totalCreditsByCurriculum?: number
+    totalFailedCredits?: number
     isClassMonitor: boolean
     isUnionLeader: boolean
     academicWarningLevel?: number
@@ -710542,9 +710752,14 @@ export namespace Prisma {
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
+    registeredCredits?: number
     retakingCredits?: number
     reExamCredits?: number
+    passedCredits?: number
     failedCredits: number
+    accumulatedCredits?: number
+    totalCreditsByCurriculum?: number
+    totalFailedCredits?: number
     isClassMonitor: boolean
     isUnionLeader: boolean
     academicWarningLevel?: number
@@ -710773,9 +710988,14 @@ export namespace Prisma {
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
+    registeredCredits?: IntFieldUpdateOperationsInput | number
     retakingCredits?: IntFieldUpdateOperationsInput | number
     reExamCredits?: IntFieldUpdateOperationsInput | number
+    passedCredits?: IntFieldUpdateOperationsInput | number
     failedCredits?: IntFieldUpdateOperationsInput | number
+    accumulatedCredits?: IntFieldUpdateOperationsInput | number
+    totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
+    totalFailedCredits?: IntFieldUpdateOperationsInput | number
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -710811,9 +711031,14 @@ export namespace Prisma {
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
+    registeredCredits?: IntFieldUpdateOperationsInput | number
     retakingCredits?: IntFieldUpdateOperationsInput | number
     reExamCredits?: IntFieldUpdateOperationsInput | number
+    passedCredits?: IntFieldUpdateOperationsInput | number
     failedCredits?: IntFieldUpdateOperationsInput | number
+    accumulatedCredits?: IntFieldUpdateOperationsInput | number
+    totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
+    totalFailedCredits?: IntFieldUpdateOperationsInput | number
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -710847,9 +711072,14 @@ export namespace Prisma {
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
+    registeredCredits?: IntFieldUpdateOperationsInput | number
     retakingCredits?: IntFieldUpdateOperationsInput | number
     reExamCredits?: IntFieldUpdateOperationsInput | number
+    passedCredits?: IntFieldUpdateOperationsInput | number
     failedCredits?: IntFieldUpdateOperationsInput | number
+    accumulatedCredits?: IntFieldUpdateOperationsInput | number
+    totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
+    totalFailedCredits?: IntFieldUpdateOperationsInput | number
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -727415,9 +727645,14 @@ export namespace Prisma {
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
+    registeredCredits?: number
     retakingCredits?: number
     reExamCredits?: number
+    passedCredits?: number
     failedCredits: number
+    accumulatedCredits?: number
+    totalCreditsByCurriculum?: number
+    totalFailedCredits?: number
     isClassMonitor: boolean
     isUnionLeader: boolean
     academicWarningLevel?: number
@@ -728477,9 +728712,14 @@ export namespace Prisma {
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
+    registeredCredits?: IntFieldUpdateOperationsInput | number
     retakingCredits?: IntFieldUpdateOperationsInput | number
     reExamCredits?: IntFieldUpdateOperationsInput | number
+    passedCredits?: IntFieldUpdateOperationsInput | number
     failedCredits?: IntFieldUpdateOperationsInput | number
+    accumulatedCredits?: IntFieldUpdateOperationsInput | number
+    totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
+    totalFailedCredits?: IntFieldUpdateOperationsInput | number
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -728515,9 +728755,14 @@ export namespace Prisma {
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
+    registeredCredits?: IntFieldUpdateOperationsInput | number
     retakingCredits?: IntFieldUpdateOperationsInput | number
     reExamCredits?: IntFieldUpdateOperationsInput | number
+    passedCredits?: IntFieldUpdateOperationsInput | number
     failedCredits?: IntFieldUpdateOperationsInput | number
+    accumulatedCredits?: IntFieldUpdateOperationsInput | number
+    totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
+    totalFailedCredits?: IntFieldUpdateOperationsInput | number
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -728551,9 +728796,14 @@ export namespace Prisma {
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
+    registeredCredits?: IntFieldUpdateOperationsInput | number
     retakingCredits?: IntFieldUpdateOperationsInput | number
     reExamCredits?: IntFieldUpdateOperationsInput | number
+    passedCredits?: IntFieldUpdateOperationsInput | number
     failedCredits?: IntFieldUpdateOperationsInput | number
+    accumulatedCredits?: IntFieldUpdateOperationsInput | number
+    totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
+    totalFailedCredits?: IntFieldUpdateOperationsInput | number
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -739535,9 +739785,14 @@ export namespace Prisma {
     lowestFinalScore?: number | null
     lowestGraduationScore?: number | null
     totalCredits: number
+    registeredCredits?: number
     retakingCredits?: number
     reExamCredits?: number
+    passedCredits?: number
     failedCredits: number
+    accumulatedCredits?: number
+    totalCreditsByCurriculum?: number
+    totalFailedCredits?: number
     isClassMonitor: boolean
     isUnionLeader: boolean
     academicWarningLevel?: number
@@ -740036,9 +740291,14 @@ export namespace Prisma {
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
+    registeredCredits?: IntFieldUpdateOperationsInput | number
     retakingCredits?: IntFieldUpdateOperationsInput | number
     reExamCredits?: IntFieldUpdateOperationsInput | number
+    passedCredits?: IntFieldUpdateOperationsInput | number
     failedCredits?: IntFieldUpdateOperationsInput | number
+    accumulatedCredits?: IntFieldUpdateOperationsInput | number
+    totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
+    totalFailedCredits?: IntFieldUpdateOperationsInput | number
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -740074,9 +740334,14 @@ export namespace Prisma {
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
+    registeredCredits?: IntFieldUpdateOperationsInput | number
     retakingCredits?: IntFieldUpdateOperationsInput | number
     reExamCredits?: IntFieldUpdateOperationsInput | number
+    passedCredits?: IntFieldUpdateOperationsInput | number
     failedCredits?: IntFieldUpdateOperationsInput | number
+    accumulatedCredits?: IntFieldUpdateOperationsInput | number
+    totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
+    totalFailedCredits?: IntFieldUpdateOperationsInput | number
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -740110,9 +740375,14 @@ export namespace Prisma {
     lowestFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     lowestGraduationScore?: NullableFloatFieldUpdateOperationsInput | number | null
     totalCredits?: IntFieldUpdateOperationsInput | number
+    registeredCredits?: IntFieldUpdateOperationsInput | number
     retakingCredits?: IntFieldUpdateOperationsInput | number
     reExamCredits?: IntFieldUpdateOperationsInput | number
+    passedCredits?: IntFieldUpdateOperationsInput | number
     failedCredits?: IntFieldUpdateOperationsInput | number
+    accumulatedCredits?: IntFieldUpdateOperationsInput | number
+    totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
+    totalFailedCredits?: IntFieldUpdateOperationsInput | number
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
