@@ -1,4 +1,5 @@
 import type { $Enums, Prisma } from "@workspace/db"
+import PizZip from "pizzip"
 import { prisma } from ".."
 import { renderXlsxTemplate } from "./render-xlsx-template"
 
@@ -10,6 +11,7 @@ type SubjectClassExport = Prisma.SubjectClassGetPayload<{
         codeTkb: true
         name: true
         credit: true
+        type: true
       }
     }
     mainLecturer: {
@@ -27,6 +29,8 @@ type SubjectClassExport = Prisma.SubjectClassGetPayload<{
   }
 }>
 
+const SCHEDULE_BY_LECTURER_TYPES: Set<string> = new Set(["Internship", "Project"])
+
 const subjectClassInclude = {
   subject: {
     select: {
@@ -34,6 +38,7 @@ const subjectClassInclude = {
       codeTkb: true,
       name: true,
       credit: true,
+      type: true,
     },
   },
   mainLecturer: {
@@ -68,6 +73,30 @@ function buildExportRows(subjectClasses: SubjectClassExport[]) {
   let rowIndex = 0
   return Object.entries(groupedBySubject).flatMap(([_, classes = []]) => {
     return classes.flatMap((sc) => {
+      const isByLecturer = SCHEDULE_BY_LECTURER_TYPES.has(sc.subject.type)
+
+      if (isByLecturer) {
+        rowIndex++
+        return [
+          {
+            no: rowIndex,
+            subjectCode: sc.subject.codeTkb || sc.subject.code,
+            subjectName: sc.subject.name,
+            credit: sc.subject.credit,
+            classCode: sc.code,
+            lecturers: [sc.mainLecturer, sc.extraLecturer]
+              .map((lecturer) => lecturer?.userProfile?.fullname)
+              .filter(Boolean)
+              .join(", "),
+            weekday: "Theo KH của GV",
+            period: "",
+            room: sc.room?.name || "",
+            maxStudent: sc.maxStudent,
+            mergeWeekdayPeriod: true,
+          },
+        ]
+      }
+
       const uniqueTimes = [
         ...new Map(
           sc.subjectClassTimes.map((time) => [
@@ -95,6 +124,7 @@ function buildExportRows(subjectClasses: SubjectClassExport[]) {
           period: formatPeriod(classTime?.startPeriod, classTime?.endPeriod),
           room: sc.room?.name || "",
           maxStudent: sc.maxStudent,
+          mergeWeekdayPeriod: false,
         }
       })
     })
@@ -115,6 +145,44 @@ function buildSemesterTitle(semesterName: string, schoolYearLabel: string) {
 
 function sanitizeSheetName(name: string) {
   return name.replace(/[\\/?*:[\]]/g, "_").slice(0, 31) || "Khoa"
+}
+
+const DATA_START_ROW = 7
+
+type SheetMergeInfo = { sheetIndex: number; mergeRows: number[] }
+
+function applyWeekdayPeriodMerges(buffer: Buffer, sheetMergeInfos: SheetMergeInfo[]): Buffer {
+  if (sheetMergeInfos.every((s) => s.mergeRows.length === 0)) return buffer
+
+  const zip = new PizZip(buffer)
+
+  for (const { sheetIndex, mergeRows } of sheetMergeInfos) {
+    if (mergeRows.length === 0) continue
+
+    const sheetPath = `xl/worksheets/sheet${sheetIndex}.xml`
+    const sheetFile = zip.file(sheetPath)
+    if (!sheetFile) continue
+
+    let xml = sheetFile.asText()
+    const newRefs = mergeRows.map((r) => `<mergeCell ref="G${r}:H${r}"/>`).join("")
+
+    if (/<mergeCells\s/.test(xml)) {
+      xml = xml.replace(
+        /(<mergeCells\s+count=")(\d+)(")/,
+        (_, pre, count, post) => `${pre}${Number(count) + mergeRows.length}${post}`
+      )
+      xml = xml.replace("</mergeCells>", `${newRefs}</mergeCells>`)
+    } else {
+      xml = xml.replace(
+        "</sheetData>",
+        `</sheetData><mergeCells count="${mergeRows.length}">${newRefs}</mergeCells>`
+      )
+    }
+
+    zip.file(sheetPath, xml)
+  }
+
+  return zip.generate({ type: "nodebuffer", compression: "DEFLATE" }) as Buffer
 }
 
 export async function exportThoiKhoaBieu({
@@ -186,6 +254,7 @@ export async function exportThoiKhoaBieu({
 
   const templatePath = "MAU2_DanSu_template.xlsx"
   const sheets: { sheetName: string; data: Record<string, unknown> }[] = []
+  const sheetMergeInfos: SheetMergeInfo[] = []
 
   for (const trainingCourse of trainingCourses) {
     const subjectClasses = await prisma.subjectClass.findMany({
@@ -204,24 +273,33 @@ export async function exportThoiKhoaBieu({
       continue
     }
 
+    const rows = buildExportRows(subjectClasses)
+    const mergeRows = rows
+      .map((row, idx) => (row.mergeWeekdayPeriod ? DATA_START_ROW + idx : -1))
+      .filter((r) => r > 0)
+
     sheets.push({
       sheetName: sanitizeSheetName(trainingCourse.name),
       data: {
         semesterName: buildSemesterTitle(semester.name, schoolYearLabel),
         courseName: trainingCourse.name.toUpperCase(),
         trainingObjectTypeName: trainingObjectType.name.toUpperCase(),
-        data: buildExportRows(subjectClasses),
+        data: rows,
       },
     })
+
+    sheetMergeInfos.push({ sheetIndex: sheets.length, mergeRows })
   }
 
   if (sheets.length === 0) {
     throw new Error("Không có dữ liệu thời khoá biểu để xuất")
   }
 
-  return renderXlsxTemplate(prisma, {
+  const buffer = await renderXlsxTemplate(prisma, {
     templatePath,
     sheets,
     autoPatchTablePlaceholders: true,
   })
+
+  return applyWeekdayPeriodMerges(buffer, sheetMergeInfos)
 }
