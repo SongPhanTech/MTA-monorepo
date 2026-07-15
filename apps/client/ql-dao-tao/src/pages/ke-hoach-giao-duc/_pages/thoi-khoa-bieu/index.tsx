@@ -33,6 +33,7 @@ import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import {
   dayjs,
+  useFixedClassStore,
   useSemesterStore,
   useTrainingCourseStore,
   useTrainingObjectTypeStore,
@@ -111,6 +112,7 @@ export default function ThoiKhoaBieu({
   const { options, getExamTypeLabel } = useExamTypeOptions()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const { id: trainingCourseId } = useTrainingCourseStore()
+  const { id: fixedClassId } = useFixedClassStore()
   const { mutateAsync: exportToTrinh } = useExportThoiKhoaBieu()
   const canXemTatCa = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "XEM_TAT_CA")
   const orgId = window.contextData?.organizationId
@@ -241,6 +243,10 @@ export default function ThoiKhoaBieu({
         status: "OFFICIAL",
         cancelled: false,
         trainingObjectTypeId,
+        ...(trainingCourseId && type === "NORMAL"
+          ? { fixedClasses: { some: { trainingCourseId } } }
+          : {}),
+        ...(fixedClassId ? { fixedClasses: { some: { id: fixedClassId } } } : {}),
         ...(khoaBoMon
           ? {
               lecturerAssignmentDeadline: {
@@ -250,7 +256,7 @@ export default function ThoiKhoaBieu({
           : {}),
         type: type,
       }) satisfies Prisma.SubjectClassWhereInput,
-    [filters, semesterId, trainingObjectTypeId, khoaBoMon, type]
+    [filters, semesterId, trainingObjectTypeId, trainingCourseId, fixedClassId, khoaBoMon, type]
   )
 
   const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
