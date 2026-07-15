@@ -14,7 +14,15 @@ import ImportTrainingDataApp from "./api/import-training-data"
 import { checkIp } from "./middlewares/check-ip"
 import { setupOpenApi } from "./utils/openapi"
 
-export const prisma: PrismaClient = new PrismaClient()
+const poolSize = parseInt(process.env.DATABASE_POOL_SIZE || "20", 10)
+const dbUrl = process.env.DATABASE_URL || ""
+const urlWithPool = dbUrl.includes("connection_limit")
+  ? dbUrl
+  : `${dbUrl}${dbUrl.includes("?") ? "&" : "?"}connection_limit=${poolSize}`
+
+export const prisma: PrismaClient = new PrismaClient({
+  datasources: { db: { url: urlWithPool } },
+})
 
 const app = new OpenAPIHono({ strict: false })
 

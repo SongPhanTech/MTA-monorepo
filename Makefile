@@ -217,7 +217,7 @@ deploy-cdn:
 	$(SCP) -O cdn.zip $(SERVER_HOST):$(FE_APP_DIR)/
 	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
 	docker compose -f $(FE_COMPOSE_FILE) down; \
-	rm -rf dang-ky-hoc-cdn/ lms-cdn/ ems-cdn/ hrm-cdn/ chatbot-cdn/ cong-giang-vien-cdn/; \
+	rm -rf cong-hoc-vien-cdn/ dang-ky-hoc-cdn/ lms-cdn/ ems-cdn/ hrm-cdn/ chatbot-cdn/ cong-giang-vien-cdn/; \
 	unzip -q cdn.zip && \
 	mv cdn/* . && \
 	docker compose -f $(FE_COMPOSE_FILE) up -d"
@@ -243,7 +243,9 @@ deploy-all-be:
 # 	docker compose up $(IMG_PREFIX)$* -d"
 
 deploy-%:
+	@mkdir -p docker-images
 	$(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$*.tar.gz
+	$(SSH) $(SERVER_HOST) "mkdir -p $(BE_DEPLOY_DIR)/docker-images"
 	$(SCP) docker-images/$(IMG_PREFIX)$*.tar.gz $(SERVER_HOST):$(BE_DEPLOY_DIR)/docker-images/
 	$(SSH) $(SERVER_HOST) "cd $(BE_DEPLOY_DIR) && \
 	docker load -i docker-images/$(IMG_PREFIX)$*.tar.gz && \

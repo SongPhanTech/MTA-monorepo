@@ -2,7 +2,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { models } from "@workspace/db/zod"
 import { prisma } from ".."
 import { findClassRegisterSession } from "../services/register"
-import { $Enums, AcademicRankingBaseType } from "@workspace/db"
+import { $Enums, AcademicRankingBaseType, Prisma } from "@workspace/db"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -701,7 +701,41 @@ app.openapi(classRegister, async (c) => {
     }
   }
 
+  const subjectClassLookup = new Map(subjectClasses.map((sc) => [sc.id, sc]))
+  const sortedClassIds = [...subjectClassIds].sort()
+
   await prisma.$transaction(async (tx) => {
+    // Lock SubjectClass rows (sorted order prevents deadlocks)
+    await tx.$queryRaw`
+      SELECT id FROM "ql-dao-tao"."SubjectClass"
+      WHERE id IN (${Prisma.join(sortedClassIds)})
+      ORDER BY id
+      FOR UPDATE
+    `
+
+    const existingScores = await tx.studentSubjectScore.findMany({
+      where: { studentId, subjectClassId: { in: subjectClassIds } },
+      select: { subjectClassId: true },
+    })
+    if (existingScores.length > 0) {
+      const dupName = subjectClassLookup.get(existingScores[0]!.subjectClassId!)?.subject?.name
+      throw new Error(`Bạn đã đăng ký học phần ${dupName ?? "này"}`)
+    }
+
+    for (const subjectClassId of subjectClassIds) {
+      const sc = subjectClassLookup.get(subjectClassId)
+      if (!sc) throw new Error("Không tìm thấy lớp học phần")
+
+      const currentEnrolled = await tx.studentSubjectScore.count({ where: { subjectClassId } })
+      if ((sc.maxStudent || 0) <= currentEnrolled) {
+        throw new Error(`Lớp ${sc.subject.name} đã đủ số lượng sinh viên`)
+      }
+
+      await tx.studentSubjectScore.create({
+        data: { subjectClassId, studentId, subjectVersionId: sc.subjectId },
+      })
+    }
+
     await tx.classRegisterLogs.createMany({
       data: subjectClassIds.map((subjectClassId) => ({
         classRegisterSessionId: sessionId,
@@ -709,26 +743,6 @@ app.openapi(classRegister, async (c) => {
         subjectClassId,
       })),
     })
-
-    for (const subjectClassId of subjectClassIds) {
-      const isExist = await tx.studentSubjectScore.findFirst({
-        where: { studentId, subjectClassId },
-      })
-      if (isExist) throw new Error("Bạn đã đăng ký học phần này")
-
-      const currentEnrolled = await tx.studentSubjectScore.count({ where: { subjectClassId } })
-      const subjectClass = await tx.subjectClass.findUniqueOrThrow({
-        where: { id: subjectClassId },
-        include: { subject: true },
-      })
-      if ((subjectClass.maxStudent || 0) <= currentEnrolled) {
-        throw new Error("Lớp học đã đủ số lượng sinh viên")
-      }
-
-      await tx.studentSubjectScore.create({
-        data: { subjectClassId, studentId, subjectVersionId: subjectClass.subjectId },
-      })
-    }
   })
 
   return c.json({ message: "success" }, 200)
