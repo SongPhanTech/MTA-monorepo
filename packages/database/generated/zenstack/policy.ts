@@ -28,6 +28,8 @@ import { PeriodType } from "../prisma-client";
 import { SubjectClassType } from "../prisma-client";
 import { SubjectClassStatus } from "../prisma-client";
 import { ScoreCorrectionStatus } from "../prisma-client";
+import { DataSyncType } from "../prisma-client";
+import { DataSyncStatus } from "../prisma-client";
 import { TrainingObjectTypes } from "../prisma-client";
 import { OfficerPosition } from "../prisma-client";
 import { DiplomaTypeEnum } from "../prisma-client";
@@ -2301,6 +2303,26 @@ const policy: PolicyDef = {
                 update: { guard: ScoreCorrectionItem_update, },
                 postUpdate: { guard: ScoreCorrectionItem_postUpdate, },
                 delete: { guard: ScoreCorrectionItem_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        dataSyncHistory: {
+            modelLevel: {
+                read: { guard: DataSyncHistory_read, },
+                create: { guard: DataSyncHistory_create, inputChecker: DataSyncHistory_create_input, },
+                update: { guard: DataSyncHistory_update, },
+                postUpdate: { guard: DataSyncHistory_postUpdate, },
+                delete: { guard: DataSyncHistory_delete, }
             },
             fieldLevel: {
                 read:
@@ -5788,6 +5810,7 @@ const policy: PolicyDef = {
         classSchedule: { hasValidation: false },
         scoreCorrectionTicket: { hasValidation: false },
         scoreCorrectionItem: { hasValidation: false },
+        dataSyncHistory: { hasValidation: false },
         trainingObjectType: { hasValidation: false },
         priorityObject: { hasValidation: false },
         trainingType: { hasValidation: false },
@@ -13213,6 +13236,71 @@ function ScoreCorrectionItem_delete(context: QueryContext, db: CrudContract): an
 }
 
 function $check_ScoreCorrectionItem_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DataSyncHistory_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_DataSyncHistory_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DataSyncHistory_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DataSyncHistory_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DataSyncHistory_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function DataSyncHistory_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DataSyncHistory_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DataSyncHistory_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_DataSyncHistory_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function DataSyncHistory_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DataSyncHistory_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

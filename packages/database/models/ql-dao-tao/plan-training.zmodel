@@ -928,6 +928,7 @@ model ClassRegisterSession extends Base {
   creditLimit       ClassRegisterSessionCredit[] // giới hạn tín chỉ
   trainingCourses   TrainingCourse[]
   classRegisterLogs ClassRegisterLogs[]
+  dataSyncHistories DataSyncHistory[]
   @@schema("ql-dao-tao")
 }
 
@@ -1258,5 +1259,42 @@ model ScoreCorrectionItem extends Base {
   oldExamScore          Float?
 
   @@unique([ticketId, studentSubjectScoreId])
+  @@schema("ql-dao-tao")
+}
+
+enum DataSyncType {
+  IMPORT
+  EXPORT
+
+  @@schema("ql-dao-tao")
+}
+
+enum DataSyncStatus {
+  PENDING
+  SUCCESS
+  FAILED
+
+  @@schema("ql-dao-tao")
+}
+
+/// Lịch sử đồng bộ dữ liệu giữa phần mềm nội bộ và cổng đăng ký học internet
+model DataSyncHistory extends Base {
+  type                   DataSyncType
+  status                 DataSyncStatus      @default(PENDING)
+  sessionName            String
+  classRegisterSession   ClassRegisterSession? @relation(fields: [classRegisterSessionId], references: [id])
+  classRegisterSessionId String?
+  fileName               String?
+  fileVersion            String?
+  sourceExportedAt       DateTime?
+  errorMessage           String?             @db.Text
+  recordCounts           Json?
+  performedBy            UserProfile?        @relation(fields: [performedById], references: [id])
+  performedById          String?             @db.Uuid
+
+  @@index([classRegisterSessionId])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
   @@schema("ql-dao-tao")
 }

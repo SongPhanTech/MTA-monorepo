@@ -40,6 +40,7 @@ const relationSchema = z.object({
     creditLimit: z.array(z.unknown()).optional(),
     trainingCourses: z.array(z.unknown()).optional(),
     classRegisterLogs: z.array(z.unknown()).optional(),
+    dataSyncHistories: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

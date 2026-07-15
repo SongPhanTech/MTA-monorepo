@@ -300,6 +300,7 @@ model UserProfile extends BaseUuid {
   subjectVersionHistory                SubjectVersionHistory[]
   subjectClassHistory                  SubjectClassHistory[]
   changeLog                            ChangeLog[]
+  dataSyncHistories                    DataSyncHistory[]
   surveySession                        SurveySession[]
   evaluationCriterionComments          EvaluationCriterionComment[]
   classSchedules                       ClassSchedule[]

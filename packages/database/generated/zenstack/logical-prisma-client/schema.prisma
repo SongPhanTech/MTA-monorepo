@@ -240,6 +240,21 @@ enum ScoreCorrectionStatus {
   @@schema("ql-dao-tao")
 }
 
+enum DataSyncType {
+  IMPORT
+  EXPORT
+
+  @@schema("ql-dao-tao")
+}
+
+enum DataSyncStatus {
+  PENDING
+  SUCCESS
+  FAILED
+
+  @@schema("ql-dao-tao")
+}
+
 enum TrainingObjectTypes {
   MILITARY
   CIVILIAN
@@ -965,6 +980,7 @@ model UserProfile {
   subjectVersionHistory                SubjectVersionHistory[]
   subjectClassHistory                  SubjectClassHistory[]
   changeLog                            ChangeLog[]
+  dataSyncHistories                    DataSyncHistory[]
   surveySession                        SurveySession[]
   evaluationCriterionComments          EvaluationCriterionComment[]
   classSchedules                       ClassSchedule[]
@@ -3751,6 +3767,7 @@ model ClassRegisterSession {
   creditLimit       ClassRegisterSessionCredit[]
   trainingCourses   TrainingCourse[]
   classRegisterLogs ClassRegisterLogs[]
+  dataSyncHistories DataSyncHistory[]
 
   @@schema("ql-dao-tao")
 }
@@ -4048,6 +4065,39 @@ model ScoreCorrectionItem {
   oldExamScore          Float?
 
   @@unique([ticketId, studentSubjectScoreId])
+  @@schema("ql-dao-tao")
+}
+
+/// Lịch sử đồng bộ dữ liệu giữa phần mềm nội bộ và cổng đăng ký học internet
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model DataSyncHistory {
+  id                     String                @id() @default(cuid())
+  code                   String?               @unique()
+  active                 Boolean               @default(true)
+  description            String?               @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @default(now()) @updatedAt()
+  createdBy              String?               @default("") @db.Uuid()
+  type                   DataSyncType
+  status                 DataSyncStatus        @default(PENDING)
+  sessionName            String
+  classRegisterSession   ClassRegisterSession? @relation(fields: [classRegisterSessionId], references: [id])
+  classRegisterSessionId String?
+  fileName               String?
+  fileVersion            String?
+  sourceExportedAt       DateTime?
+  errorMessage           String?               @db.Text()
+  recordCounts           Json?
+  performedBy            UserProfile?          @relation(fields: [performedById], references: [id])
+  performedById          String?               @db.Uuid()
+
+  @@index([classRegisterSessionId])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
   @@schema("ql-dao-tao")
 }
 

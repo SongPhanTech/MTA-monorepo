@@ -266,6 +266,7 @@ const relationSchema = z.object({
     subjectVersionHistory: z.array(z.unknown()).optional(),
     subjectClassHistory: z.array(z.unknown()).optional(),
     changeLog: z.array(z.unknown()).optional(),
+    dataSyncHistories: z.array(z.unknown()).optional(),
     surveySession: z.array(z.unknown()).optional(),
     evaluationCriterionComments: z.array(z.unknown()).optional(),
     classSchedules: z.array(z.unknown()).optional(),

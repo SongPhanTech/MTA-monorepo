@@ -13,9 +13,32 @@ declare module "hono" {
   }
 }
 
+const layMockUser = () => {
+  const profileId = process.env.MOCK_USER_PROFILE_ID?.trim()
+  if (!profileId || process.env.NODE_ENV === "production") {
+    return null
+  }
+
+  return {
+    userName: process.env.MOCK_USER_NAME?.trim() || "local-dev",
+    fullName: process.env.MOCK_USER_FULL_NAME?.trim() || "Local Dev",
+    sub: profileId,
+    id: profileId,
+    organizationUnitId: process.env.MOCK_ORGANIZATION_ID?.trim() || null,
+  }
+}
+
 export const jwtAuth = (appCode: string): MiddlewareHandler => {
   return async (c, next) => {
     console.log(`[jwtAuth] Checking authentication for appCode: ${appCode}`)
+
+    const mockUser = layMockUser()
+    if (mockUser) {
+      console.log(`[jwtAuth] Using mock user: ${mockUser.fullName} (${mockUser.id})`)
+      c.set("user", mockUser)
+      await next()
+      return
+    }
 
     const headerToken = c.req.header("Authorization")?.split(" ")[1]
     const token = headerToken || getCookie(c, `x-token-${appCode}`)
