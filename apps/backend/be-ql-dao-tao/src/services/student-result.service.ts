@@ -246,6 +246,7 @@ const ThongTinTichLuy = async (
         deletedAt: null,
         active: true,
       },
+      orderBy: { base10Min: "desc" },
       select: {
         trainingCourseId: true,
         letter: true,
@@ -301,11 +302,6 @@ const ThongTinTichLuy = async (
           } else {
             failedCredits += soTinChi
           }
-          // Tính cho Trung bình chung tích lũy (cả qua và rớt)
-          const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, scoreConverts)
-          DSDiemChungHe4.push(diemHe4 * soTinChi)
-          DSDiemChungHe10.push(diemHe10 * soTinChi)
-          TongTinChiChungTichLuy += soTinChi
         }
       }
     }
@@ -319,12 +315,8 @@ const ThongTinTichLuy = async (
       Math.round((DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiTichLuy || 0) * 100) /
       100
 
-    const diemTrungBinhChung4 =
-      Math.round((DSDiemChungHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiChungTichLuy || 0) * 100) /
-      100
-    const diemTrungBinhChung10 =
-      Math.round((DSDiemChungHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiChungTichLuy || 0) * 100) /
-      100
+    const diemTrungBinhChung4 = diemTrungBinh4
+    const diemTrungBinhChung10 = diemTrungBinh10
 
     const MonHocYeuCau = await prisma.trainingBlockOnCurriculumVersion.findMany({
       where: {
@@ -582,6 +574,7 @@ const ThongTinDiemHocKy = async (
         deletedAt: null,
         active: true,
       },
+      orderBy: { base10Min: "desc" },
       select: {
         trainingCourseId: true,
         letter: true,
@@ -870,7 +863,12 @@ export const calculateStudentSemesterResult = async (
       officerBonusScores.map((o) => [o.position, o.bonusScore])
     )
     const scoreConverts = await prisma.scoreConvert.findMany({
-      where: { trainingCourseId, deletedAt: null, active: true },
+      where: {
+        trainingCourseId,
+        deletedAt: null,
+        active: true,
+      },
+      orderBy: { base10Min: "desc" },
       select: {
         trainingCourseId: true,
         letter: true,
@@ -1133,7 +1131,6 @@ export const calculateStudentSemesterResult = async (
     //                 cumulativeGpaBase4: new Decimal(thongTinTichLuy.diemTrungBinh4TichLuy),
     //                 cumulativeGpaBase10: new Decimal(thongTinTichLuy.diemTrungBinh10TichLuy),
 
-
     //                 lowestFinalScore: thongTinDiemHocKy.diemThapNhat,
     //                 lowestGraduationScore: thongTinDiemHocKy.diemThapNhat,
     //                 totalCredits: thongTinTichLuy.tongTinChiMoTrongKy, // Tổng số tín chỉ mở trong kỳ
@@ -1198,7 +1195,6 @@ export const calculateStudentSemesterResult = async (
     //                 gpaBase10: new Decimal(thongTinDiemHocKy.diemTrungBinh10TrongKy),
     //                 cumulativeGpaBase4: new Decimal(thongTinTichLuy.diemTrungBinh4TichLuy),
     //                 cumulativeGpaBase10: new Decimal(thongTinTichLuy.diemTrungBinh10TichLuy),
-
 
     //                 lowestFinalScore: thongTinDiemHocKy.diemThapNhat,
     //                 lowestGraduationScore: thongTinDiemHocKy.diemThapNhat,
@@ -1333,10 +1329,7 @@ export async function calculateStudentYearResult({
         cancelled: false,
         // Lọc điểm của các kỳ học kết thúc trước/trong năm học, HOẶC nằm trong chính năm học này
         semester: {
-          OR: [
-            { id: { in: semesterIds } },
-            { endDate: { lte: schoolYear.endDate || new Date() } },
-          ],
+          OR: [{ id: { in: semesterIds } }, { endDate: { lte: schoolYear.endDate || new Date() } }],
         },
       },
       // Chỉ lấy các môn được dùng để tính điểm tổng kết (loại bỏ GDQP, GDTC nếu cần)
@@ -1376,9 +1369,10 @@ export async function calculateStudentYearResult({
 
   // --- TÍNH TOÁN ---
   function convertScore10to4(score10: number): number {
-    const scoreConvert = student?.fixedClass?.trainingCourse.scoreConverts.find(
-      (c) => c.base10Min <= score10 && c.base10Max >= score10
+    const scoreConverts = [...(student?.fixedClass?.trainingCourse?.scoreConverts || [])].sort(
+      (a, b) => (b.base10Min || 0) - (a.base10Min || 0)
     )
+    const scoreConvert = scoreConverts.find((c) => c.base10Min <= score10 && c.base10Max >= score10)
     if (!scoreConvert) return 0
     return scoreConvert.base4
   }
@@ -1485,17 +1479,7 @@ export async function calculateStudentYearResult({
   let cumulativeTotalScore4 = 0
   let cumulativePassedCredits = 0
   let cumulativeDebtCredits = 0
-
-  let cgpaTotalScore10 = 0
-  let cgpaTotalScore4 = 0
-  let cgpaTotalCredits = 0
-
   uniqueSubjectsMap.forEach((val) => {
-    // Trung bình chung tích luỹ (tính cả đạt và không đạt)
-    cgpaTotalScore10 += val.score10 * val.credit
-    cgpaTotalScore4 += val.score4 * val.credit
-    cgpaTotalCredits += val.credit
-
     if (val.passed) {
       // Trung bình tích luỹ (chỉ tính môn đạt)
       cumulativeTotalScore10 += val.score10 * val.credit
@@ -1515,14 +1499,8 @@ export async function calculateStudentYearResult({
       ? Number.parseFloat((cumulativeTotalScore4 / cumulativePassedCredits).toFixed(2))
       : 0
 
-  const cgpa10 =
-    cgpaTotalCredits > 0
-      ? Number.parseFloat((cgpaTotalScore10 / cgpaTotalCredits).toFixed(2))
-      : 0
-  const cgpa4 =
-    cgpaTotalCredits > 0
-      ? Number.parseFloat((cgpaTotalScore4 / cgpaTotalCredits).toFixed(2))
-      : 0
+  const cgpa10 = cumulativeGpa10
+  const cgpa4 = cumulativeGpa4
 
   // D. Lấy thông tin Cảnh báo & Rèn luyện (ACADEMIC_WARNING & CONDUCT)
 

@@ -1303,8 +1303,7 @@ export default function StudentScoreClassPage() {
                         {r && (
                           <span className="font-semibold text-xs text-black-500">
                             TBTL10: {r.cumulativeGpaBase10?.toFixed(2)} | TBTL4:{" "}
-                            {r.cumulativeGpaBase4?.toFixed(2)} | TBCTL10: {r.cgpaBase10?.toFixed(2)}{" "}
-                            | TBCTL4: {r.cgpaBase4?.toFixed(2)}
+                            {r.cumulativeGpaBase4?.toFixed(2)}
                           </span>
                         )}
                       </div>
