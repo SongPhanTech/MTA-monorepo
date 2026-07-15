@@ -220,13 +220,14 @@ export default function ClassRegisterSession() {
       })
 
       if (res.status === 200) {
-        const warningCount = res.data.warnings?.length ?? 0
+        const payload = res.data as import("@workspace/libs/api/import-training-data").ImportTrainingDataPayload
+        const warningCount = payload.warnings?.length ?? 0
         if (warningCount > 0) {
           message.warning(
-            `${res.data.message || "Nhập thành công"} (${warningCount} cảnh báo)`
+            `${payload.message || "Nhập thành công"} (${warningCount} cảnh báo)`
           )
         } else {
-          message.success(res.data.message || "Nhập dữ liệu đăng ký thành công")
+          message.success(payload.message || "Nhập dữ liệu đăng ký thành công")
         }
         return
       }
