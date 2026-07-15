@@ -230,8 +230,8 @@ deploy-all-be:
 	unzip -o docker-images.zip && \
 	cd docker-images && ls *.tar.gz | xargs -I {} docker load -i {} && \
 	cd $(BE_APP_DIR) && \
-	docker rm -f mta-be-exchange mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared && \
-	docker compose up -d"
+	docker rm -f mta-be-exchange mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared 2>/dev/null; \
+	cd $(BE_APP_DIR) && docker compose up --pull never -d"
 
 # deploy-be-%: build-%
 # 	@mkdir -p docker-images
@@ -247,15 +247,14 @@ deploy-%:
 	$(SCP) docker-images/$(IMG_PREFIX)$*.tar.gz $(SERVER_HOST):$(BE_DEPLOY_DIR)/docker-images/
 	$(SSH) $(SERVER_HOST) "cd $(BE_DEPLOY_DIR) && \
 	docker load -i docker-images/$(IMG_PREFIX)$*.tar.gz && \
-	docker rm -f $(IMG_PREFIX)$* && \
-	docker compose up $(IMG_PREFIX)$* -d"
+	docker rm -f $(IMG_PREFIX)$* 2>/dev/null; \
+	docker compose up --pull never $(IMG_PREFIX)$* -d"
 
 
-# Pattern rule: all-<name> = build + push + deploy
+# Pattern rule: all-<name> = build + deploy
 all-%: build-%
 	@if echo "$(BE_PKGS)" | tr ' ' '\n' | grep -Fxq "$*"; then \
-		$(DOCKER) push $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG); \
-		$(SSH) $(SERVER_HOST) "cd $(BE_APP_DIR) && $(COMPOSE_CMD) $(IMG_PREFIX)$* -d"; \
+		$(MAKE) deploy-$*; \
 	elif echo "$(FE_PKGS)" | tr ' ' '\n' | grep -Fxq "$*"; then \
 		$(MAKE) _deploy-fe PACKAGE=$*; \
 	fi
