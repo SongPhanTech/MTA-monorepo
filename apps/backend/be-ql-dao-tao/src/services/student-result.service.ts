@@ -1586,6 +1586,7 @@ export const listStudentResultInfo = async (
         studentYearResult: { where: { schoolYear: { semesters: { some: { id: semesterId } } } } },
         fixedClass: {
           include: {
+            managementOrganization: true,
             trainingCourse: {
               include: {
                 trainingObjectType: true,
