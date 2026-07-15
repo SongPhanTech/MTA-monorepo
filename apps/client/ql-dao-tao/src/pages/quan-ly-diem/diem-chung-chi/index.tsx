@@ -31,7 +31,7 @@ import { InfoIcon } from "lucide-react"
 import type React from "react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-import EditIcon from "../../../../../dang-ky-hoc/src/components/icons/edit"
+import EditIcon from "@components/icons/edit"
 
 export default function ArchivedCertificate() {
   const { can } = useAbility()
