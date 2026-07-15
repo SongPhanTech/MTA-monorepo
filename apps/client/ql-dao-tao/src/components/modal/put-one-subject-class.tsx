@@ -1060,7 +1060,7 @@ const ModalChangeClassSchedule = ({
       await updateClassSchedule({
         where: { id: schedule.id },
         data: {
-          classDate: values.classDate.toDate(),
+          classDate: values.classDate.hour(12).minute(0).second(0).millisecond(0).toDate(),
           roomId: values.roomId,
           startPeriod: values.startPeriod,
           endPeriod: values.endPeriod,
