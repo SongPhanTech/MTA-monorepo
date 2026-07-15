@@ -1106,7 +1106,7 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
-  apps/client/dang-ky-hoc:
+  apps/client/cong-hoc-vien:
     dependencies:
       '@ant-design/cssinjs':
         specifier: 'catalog:'
