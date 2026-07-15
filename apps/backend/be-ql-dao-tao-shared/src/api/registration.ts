@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
+import { Prisma } from "@workspace/db"
 import { prisma } from ".."
 import { ErrorCode, FailedResponseSchema } from "../dto/base"
 import { RegistrationRequest, RegistrationResponse, TYPE_RES } from "../dto/registration.dto"
@@ -123,7 +124,19 @@ app.openapi(registration, async (c) => {
   const class_valid: string[] = []
   const class_invalid: string[] = []
   const descriptions: string[] = []
+  const sortedClassData = [...class_data].sort()
+
   await prisma.$transaction(async (tx) => {
+    // Lock SubjectClass rows (sorted order prevents deadlocks)
+    if (sortedClassData.length > 0) {
+      await tx.$queryRaw`
+        SELECT id FROM "ql-dao-tao"."SubjectClass"
+        WHERE id IN (${Prisma.join(sortedClassData)})
+        ORDER BY id
+        FOR UPDATE
+      `
+    }
+
     for (const cls of class_data) {
       try {
         const subjectClass = await tx.subjectClass.findFirst({

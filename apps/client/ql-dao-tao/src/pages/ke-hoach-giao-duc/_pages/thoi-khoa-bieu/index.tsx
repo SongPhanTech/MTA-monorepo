@@ -3,6 +3,7 @@ import FormItem from "@components/commons/form-item"
 import TableCollapse from "@components/commons/tableCollapse"
 import DeleteIcon from "@components/icons/delete"
 import ViewIcon from "@components/icons/view"
+import EditIcon from "@components/icons/edit"
 import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
@@ -10,15 +11,49 @@ import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { buildOrgFlat, formatDate } from "@lib/utils"
 import { emptyObjectIf } from "@workspace/constant"
-import { $Enums, type Prisma, type SubjectClass } from "@workspace/db/client"
-import { useCountDM_DonVi, useDeleteSubjectClass, useFindManyDM_DonVi } from "@workspace/db/hooks"
+import {
+  $Enums,
+  type Prisma,
+  type SubjectClass,
+  type Room,
+  type ClassSchedule,
+} from "@workspace/db/client"
+import {
+  useCountDM_DonVi,
+  useDeleteSubjectClass,
+  useFindManyDM_DonVi,
+  useFindManyClassSchedule,
+  useUpdateClassSchedule,
+  useFindManyRoom,
+} from "@workspace/db/hooks"
 import { whereOrganization } from "@workspace/libs/constants"
 import { ExportThoiKhoaBieuRequestType } from "@workspace/libs/api/schemas"
 import { useExportThoiKhoaBieu } from "@workspace/libs/api/training"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
-import { dayjs, useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from "@workspace/ui"
-import { Affix, Button, Col, Divider, Flex, Form, message, Row } from "antd"
+import {
+  dayjs,
+  useFixedClassStore,
+  useSemesterStore,
+  useTrainingCourseStore,
+  useTrainingObjectTypeStore,
+} from "@workspace/ui"
+import {
+  Affix,
+  Button,
+  Col,
+  Divider,
+  Flex,
+  Form,
+  message,
+  Row,
+  Modal,
+  DatePicker as AntDatePicker,
+  Select as AntSelect,
+  InputNumber,
+  Input,
+  Table,
+} from "antd"
 import type { Dayjs } from "dayjs"
 import { saveAs } from "file-saver"
 import _ from "lodash"
@@ -51,6 +86,7 @@ export default function ThoiKhoaBieu({
   khoaBoMon?: boolean
 }) {
   const { can } = useAbility()
+
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [filters, setFilters] = useState<FilterProps>({
@@ -76,6 +112,7 @@ export default function ThoiKhoaBieu({
   const { options, getExamTypeLabel } = useExamTypeOptions()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const { id: trainingCourseId } = useTrainingCourseStore()
+  const { id: fixedClassId } = useFixedClassStore()
   const { mutateAsync: exportToTrinh } = useExportThoiKhoaBieu()
   const canXemTatCa = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "XEM_TAT_CA")
   const orgId = window.contextData?.organizationId
@@ -115,7 +152,9 @@ export default function ThoiKhoaBieu({
             }
           : {}),
         ...(filters.lecturerId?.length === 1
-          ? (filters.lecturerId[0] ? { lecturerId: { not: null } } : { lecturerId: null })
+          ? filters.lecturerId[0]
+            ? { lecturerId: { not: null } }
+            : { lecturerId: null }
           : {}),
         ...(filters.mainLecturer
           ? {
@@ -191,18 +230,23 @@ export default function ThoiKhoaBieu({
               approveLecturerAssignmentAt: null,
             }
           : {}),
-        subject: (filters.organization && filters.organization.length > 0
+        subject:
+          filters.organization && filters.organization.length > 0
             ? {
                 managementOrganizationId: {
                   in: filters.organization,
                 },
               }
-            : {}),
+            : {},
         deletedAt: null,
         active: true,
         status: "OFFICIAL",
         cancelled: false,
         trainingObjectTypeId,
+        ...(trainingCourseId && type === "NORMAL"
+          ? { fixedClasses: { some: { trainingCourseId } } }
+          : {}),
+        ...(fixedClassId ? { fixedClasses: { some: { id: fixedClassId } } } : {}),
         ...(khoaBoMon
           ? {
               lecturerAssignmentDeadline: {
@@ -211,25 +255,8 @@ export default function ThoiKhoaBieu({
             }
           : {}),
         type: type,
-        OR: [
-          {
-            subjectClassTimes: {
-              some: {},
-            },
-          },
-          {
-            subject: {
-              type: {
-                in: ["Practice", "Internship", "Project"],
-              },
-            },
-            lecturerId: {
-              not: null,
-            },
-          },
-        ],
       }) satisfies Prisma.SubjectClassWhereInput,
-    [filters, semesterId, trainingObjectTypeId, khoaBoMon, type]
+    [filters, semesterId, trainingObjectTypeId, trainingCourseId, fixedClassId, khoaBoMon, type]
   )
 
   const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
@@ -543,7 +570,9 @@ export default function ThoiKhoaBieu({
           trainingObjectTypeId,
           ...(trainingCourseId ? { trainingCourseId } : {}),
           ...(type && type in ExportThoiKhoaBieuRequestType
-            ? { type: type as (typeof ExportThoiKhoaBieuRequestType)[keyof typeof ExportThoiKhoaBieuRequestType] }
+            ? {
+                type: type as (typeof ExportThoiKhoaBieuRequestType)[keyof typeof ExportThoiKhoaBieuRequestType],
+              }
             : {}),
         },
       })
@@ -702,7 +731,7 @@ export default function ThoiKhoaBieu({
                   ),
                 },
                 {
-                  title: "Giảng viên 1",
+                  title: "GV 1",
                   align: "center",
                   type: "input",
                   render: (__, record) => (
@@ -718,7 +747,7 @@ export default function ThoiKhoaBieu({
                   ),
                 },
                 {
-                  title: "Giảng viên 2",
+                  title: "GV 2",
                   align: "center",
                   type: "input",
                   render: (__, record) => (
@@ -763,9 +792,11 @@ export default function ThoiKhoaBieu({
                   align: "center",
                   width: 100,
                   render: (_, record) => {
-                    const isPracticeOrInternshipOrProject = ["Practice", "Internship", "Project"].includes(
-                      record.subject?.type || ""
-                    )
+                    const isPracticeOrInternshipOrProject = [
+                      "Practice",
+                      "Internship",
+                      "Project",
+                    ].includes(record.subject?.type || "")
                     if (isPracticeOrInternshipOrProject) {
                       return "Theo KH của giảng viên"
                     }
@@ -789,9 +820,11 @@ export default function ThoiKhoaBieu({
                   width: 150,
                   align: "center",
                   render: (_, record) => {
-                    const isPracticeOrInternshipOrProject = ["Practice", "Internship", "Project"].includes(
-                      record.subject?.type || ""
-                    )
+                    const isPracticeOrInternshipOrProject = [
+                      "Practice",
+                      "Internship",
+                      "Project",
+                    ].includes(record.subject?.type || "")
                     if (isPracticeOrInternshipOrProject) {
                       return "Theo KH của giảng viên"
                     }
@@ -835,7 +868,7 @@ export default function ThoiKhoaBieu({
                         title: "Thao tác",
                         width: 120,
                         align: "center" as const,
-                        render: (_: any, record: SubjectClass) => {
+                        render: (_: any, record: any) => {
                           const id = record?.id
                           if (id) {
                             return (
@@ -852,6 +885,26 @@ export default function ThoiKhoaBieu({
                                     className="text-sm text-blue-700 cursor-pointer"
                                   />
                                 )}
+                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "SUA") &&
+                                  record?.status === $Enums.SubjectClassStatus.OFFICIAL &&
+                                  record?.examDate &&
+                                  record?.subjectClassTimes &&
+                                  record?.subjectClassTimes.length > 0 &&
+                                  ![
+                                    "Practice",
+                                    "Internship",
+                                    "Project",
+                                    "Thesis",
+                                    "Graduation",
+                                  ].includes(record.subject?.type || "") && (
+                                    <EditIcon
+                                      onClick={onOpenEditSubjectClass.bind(null, {
+                                        id,
+                                        mode: "edit",
+                                      })}
+                                      className="text-sm text-blue-700 cursor-pointer"
+                                    />
+                                  )}
                                 {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "XOA") && (
                                   <DeleteIcon
                                     popConfirm={{

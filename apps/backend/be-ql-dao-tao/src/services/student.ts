@@ -1,7 +1,9 @@
 import { TrainingObjectTypes } from "@workspace/db"
+import PizZip from "pizzip"
 import { getTemplateBuffer } from "@workspace/libs/server"
 import dayjs from "dayjs"
 import ExcelJS from "exceljs"
+import type { Alignment } from "exceljs"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
 import {
@@ -9,6 +11,7 @@ import {
   resultCourseStudentAcademicWarning,
   resultCourseStudentScholarship,
 } from "./student-result.service"
+import { renderXlsxTemplate, loadTemplateBuffer } from "./render-xlsx-template"
 
 export async function exportStudentProfile({ trainingCourseId }: { trainingCourseId: string }) {
   const trainingCourse = await prisma.trainingCourse.findUniqueOrThrow({
@@ -185,84 +188,297 @@ export const exportStudentScholarship = async ({
 
   const filteredCourseStudents = await resultCourseStudentScholarship(students, semesterId)
 
-  // Flatten data
-  const rows = []
-  let stt = 1
+  const semester = await prisma.semester.findUnique({
+    where: { id: semesterId },
+    include: { schoolYear: true }
+  })
+  const semesterName = semester?.name || ""
+  const schoolYear = semester?.schoolYear?.name || ""
+
+  const now = dayjs()
+  const reportDate = now.format("D/M/YYYY")
+
+  const mapTrainingType = (type?: string | null) => {
+    if (!type) return ""
+    switch (type) {
+      case "EXCELLENT": return "Xuất sắc"
+      case "GOOD": return "Tốt"
+      case "FAIR": return "Khá"
+      case "MEDIUM": return "Trung bình khá"
+      case "AVERAGE": return "Trung bình"
+      case "POOR": return "Yếu"
+      case "VERY_POOR": return "Kém"
+      default: return type
+    }
+  }
+
+  const getConductLabel = (type?: string | null, score?: number | null) => {
+    if (type) return mapTrainingType(type)
+    if (score !== undefined && score !== null) {
+      const val = score > 10 ? score / 10 : score
+      if (val >= 9) return "Xuất sắc"
+      if (val >= 8) return "Tốt"
+      if (val >= 6.5) return "Khá"
+      if (val >= 5) return "Trung bình"
+      return "Yếu"
+    }
+    return ""
+  }
+
+  const formatScholarshipName = (name: string) => {
+    if (name.includes("Lê Quý Đôn")) return "Lê Quý Đôn"
+    if (name.includes("loại A") || name.includes("Loại A")) return "Loại A"
+    if (name.includes("loại B") || name.includes("Loại B")) return "Loại B"
+    if (name.includes("loại C") || name.includes("Loại C")) return "Loại C"
+    return name
+  }
+
+  const allTypes = new Set<string>()
   for (const courseItem of filteredCourseStudents) {
     for (const student of courseItem.students) {
-      // Check if student has scholarships
-      if (student.hasScholarship && student.scholarship && student.scholarship.length > 0) {
-        // Get general student info
-        const studentName =
-          (student.userProfile as any)?.fullname ||
-          (student.studentSemesterResult as any)?.studentName ||
-          ""
-        const studentCode = student.code || ""
-        const dob = (student.userProfile as any)?.dateOfBirth
-          ? dayjs((student.userProfile as any).dateOfBirth).format("DD/MM/YYYY")
-          : ""
-        const courseName = courseItem.courseName
-        const classCode = student.fixedClass?.code || ""
-
-        const trainingMajor = student.trainingMajor
-
-        // Semester Result info
-        const result: any = student.studentSemesterResult
-        const semester = result?.semesterIndexInCourse || ""
-        const gpaSemester = result?.gpaBase10 || 0
-        // const academicClassification = result?.rank?.classification || ''
-
-        const note = student.reason || ""
-
-        for (const scholarship of student.scholarship) {
-          rows.push({
-            stt: stt++,
-            studentCode,
-            studentName,
-            dob,
-            trainingMajor,
-            courseName,
-            classCode,
-            semester,
-            gpaSemester,
-            // academicClassification,
-            scholarshipName: scholarship.name,
-            note,
-          })
-        }
+      if (student.hasScholarship && student.scholarship?.length > 0) {
+        const firstSchName = student.scholarship[0]?.name || ""
+        const type = formatScholarshipName(firstSchName) || "Khác"
+        allTypes.add(type)
       }
     }
   }
 
-  if (rows.length === 0) {
+  const sortedTypes = Array.from(allTypes).sort((a, b) => {
+    const order: Record<string, number> = { "Lê Quý Đôn": 1, "Loại A": 2, "Loại B": 3, "Loại C": 4 }
+    return (order[a] || 99) - (order[b] || 99)
+  })
+
+  if (sortedTypes.length === 0) {
     throw new Error("Không có dữ liệu học bổng để xuất")
   }
 
+  const rawTemplateBuffer = await loadTemplateBuffer(prisma, "/mta/template/DanhSachDeNghiXetHocBong.xlsx")
+
+  const sheetsInput = []
+  for (const type of sortedTypes) {
+    const rows = []
+    for (const courseItem of filteredCourseStudents) {
+      const groupStudents = courseItem.students.filter((student) => {
+        if (!student.hasScholarship || !student.scholarship || student.scholarship.length === 0) return false
+        const firstSchName = student.scholarship[0]?.name || ""
+        return formatScholarshipName(firstSchName) === type
+      })
+      if (groupStudents.length === 0) continue
+
+      rows.push({
+        stt: courseItem.courseName,
+        studentName: "",
+        classCode: "",
+        department: "",
+        gpa10: "",
+        gpa4: "",
+        bonusPoints: "",
+        conduct: "",
+        foreignLanguageReq: "",
+        foreignLanguageActual: "",
+        scholarshipType: "",
+        note: "",
+      })
+
+      let idx = 1
+      for (const student of groupStudents) {
+        const studentName =
+          (student.userProfile as any)?.fullname ||
+          (student.studentSemesterResult as any)?.studentName ||
+          ""
+        const classCode = student.fixedClass?.code || ""
+        const studentDb = await prisma.student.findUnique({
+          where: { id: student.id },
+          select: {
+            foreignLanguage: true,
+            department: true,
+            studentSemesterResult: {
+              where: { semesterId },
+              select: {
+                studentTrainingType: true,
+                conductScore: true
+              }
+            },
+            fixedClass: {
+              select: {
+                classMonitorId: true,
+                unionSecretaryId: true,
+                unionLeaderId: true,
+                deputyUnionSecretaryId: true,
+                managementOrganization: {
+                  select: { sMa: true }
+                }
+              }
+            }
+          }
+        })
+
+        const department = studentDb?.fixedClass?.managementOrganization?.sMa || studentDb?.department || ""
+        const foreignLanguage = studentDb?.foreignLanguage || ""
+
+        const result: any = student.studentSemesterResult
+        const gpa10 = result?.gpaBase10 ? Number(result.gpaBase10).toFixed(2) : "0.00"
+        const gpa4 = result?.gpaBase4 ? Number(result.gpaBase4).toFixed(2) : "0.00"
+
+        const fixedClass = studentDb?.fixedClass
+        const positions = []
+        if (fixedClass?.classMonitorId === student.id) positions.push("Lt")
+        if (fixedClass?.unionSecretaryId === student.id) positions.push("BTCĐ")
+        if (fixedClass?.unionLeaderId === student.id) positions.push("BTLCĐ")
+        if (fixedClass?.deputyUnionSecretaryId === student.id) positions.push("Phó BTLCĐ")
+        const bonusPoints = positions.join(", ")
+
+        const conduct = getConductLabel(
+          studentDb?.studentSemesterResult?.[0]?.studentTrainingType,
+          studentDb?.studentSemesterResult?.[0]?.conductScore
+        )
+
+        const firstSchName = student.scholarship[0]?.name || ""
+        const scholarshipType = formatScholarshipName(firstSchName)
+        const note = foreignLanguage || student.reason || ""
+
+        rows.push({
+          stt: idx++,
+          studentName,
+          classCode,
+          department,
+          gpa10,
+          gpa4,
+          bonusPoints,
+          conduct,
+          foreignLanguageReq: "",
+          foreignLanguageActual: "",
+          scholarshipType,
+          note,
+        })
+      }
+    }
+
+    if (rows.length > 0) {
+      sheetsInput.push({
+        sheetName: `Học bổng ${type}`,
+        data: {
+          semesterName: semesterName.toUpperCase(),
+          schoolYear: schoolYear,
+          reportDate,
+          data: rows,
+        },
+      })
+    }
+  }
+
+  if (sheetsInput.length === 0) {
+    throw new Error("Không có dữ liệu học bổng để xuất")
+  }
+
+  const templateBuffer = await renderXlsxTemplate(prisma, {
+    templatePath: "/mta/template/DanhSachDeNghiXetHocBong.xlsx",
+    sheets: sheetsInput,
+  })
+
   const workbook = new ExcelJS.Workbook()
-  const worksheet = workbook.addWorksheet("Danh sách học bổng")
+  await workbook.xlsx.load(templateBuffer as any)
 
-  worksheet.columns = [
-    { header: "STT", key: "stt", width: 10 },
-    { header: "Mã học viên", key: "studentCode", width: 15 },
-    { header: "Tên học viên", key: "studentName", width: 25 },
-    { header: "Ngày sinh", key: "dob", width: 15 },
-    { header: "Chuyên ngành", key: "trainingMajor", width: 25 },
-    { header: "Khoá", key: "courseName", width: 15 },
-    { header: "Lớp", key: "classCode", width: 15 },
-    { header: "Kỳ đang học", key: "semester", width: 15 },
-    { header: "Trung bình học kỳ", key: "gpaSemester", width: 18 },
-    // { header: 'Xếp loại học tập', key: 'academicClassification', width: 20 },
-    { header: "Học bổng", key: "scholarshipName", width: 25 },
-    { header: "Ghi chú", key: "note", width: 30 },
-  ]
+  const NOTE_COL_WIDTH = 45
 
-  // Style header
-  worksheet.getRow(1).font = { bold: true }
+  workbook.worksheets.forEach((worksheet) => {
+    worksheet.pageSetup = {
+      ...worksheet.pageSetup,
+      orientation: "landscape",
+      paperSize: 9,
+      fitToPage: true,
+      fitToWidth: 1,
+      fitToHeight: 0,
+      margins: {
+        left: 0.4,
+        right: 0.4,
+        top: 0.75,
+        bottom: 0.75,
+        header: 0.3,
+        footer: 0.3,
+      },
+      printTitlesRow: "1:6",
+    }
 
-  worksheet.addRows(rows)
+    worksheet.getColumn(12).width = NOTE_COL_WIDTH
+
+    const rowCount = worksheet.rowCount
+    for (let rowNumber = 7; rowNumber <= rowCount; rowNumber++) {
+      const row = worksheet.getRow(rowNumber)
+      const valA = row.getCell(1).value
+      const valB = row.getCell(2).value
+      const strA = valA ? valA.toString().trim() : ""
+      const strB = valB ? valB.toString().trim() : ""
+      const valC = row.getCell(3).value
+      const strC = valC ? valC.toString().trim() : ""
+
+      if (strA.startsWith("*") || strA.startsWith("-") || strA.startsWith("Đã")) {
+        continue
+      }
+
+      const isGroupHeader = strA && !strB && !strC
+
+      if (isGroupHeader) {
+        try {
+          worksheet.mergeCells(rowNumber, 1, rowNumber, 12)
+        } catch (err) {
+        }
+        row.height = 24
+
+        for (let col = 1; col <= 12; col++) {
+          const cell = row.getCell(col)
+          cell.border = {
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: col === 1 ? { style: "thin" } : undefined,
+            right: col === 12 ? { style: "thin" } : undefined,
+          }
+          cell.font = { name: "Times New Roman", size: 11, bold: true, italic: true }
+          cell.alignment = { vertical: "middle", horizontal: "left", indent: 1 }
+        }
+      } else {
+        if (strA || strB || strC) {
+          let maxLines = 1
+          for (let col = 1; col <= 12; col++) {
+            const cell = row.getCell(col)
+            let cellAlignment: Partial<Alignment> = { vertical: "middle", horizontal: "center" }
+            
+            if (col === 2) {
+              cellAlignment = { vertical: "middle", horizontal: "left", wrapText: true }
+            } else if (col === 12) {
+              cellAlignment = { vertical: "top", horizontal: "left", wrapText: true }
+              const text = cell.value ? cell.value.toString() : ""
+              if (text) {
+                const segments = text.split("\n")
+                let totalLines = 0
+                for (const seg of segments) {
+                  totalLines += Math.max(1, Math.ceil(seg.length / NOTE_COL_WIDTH))
+                }
+                if (totalLines > maxLines) maxLines = totalLines
+              }
+            }
+
+            cell.style = {
+              font: { name: "Times New Roman", size: 11, bold: false },
+              border: {
+                top: { style: "thin" },
+                bottom: { style: "thin" },
+                left: { style: "thin" },
+                right: { style: "thin" },
+              },
+              alignment: cellAlignment
+            }
+          }
+          row.height = Math.max(22, maxLines * 15)
+        }
+      }
+    }
+  })
 
   const buffer = await workbook.xlsx.writeBuffer()
-  return buffer
+  const finalBuffer = preserveDrawings(rawTemplateBuffer as Buffer, Buffer.from(buffer))
+  return finalBuffer
 }
 
 export const exportStudentAcademicWarning = async ({
@@ -857,4 +1073,131 @@ export const exportStudentsMissingCertificate = async ({
 
   const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
   return result
+}
+
+function ensureContentType(contentTypesXml: string, partName: string, contentType: string) {
+  if (contentTypesXml.includes(`PartName="${partName}"`)) {
+    return contentTypesXml
+  }
+  return contentTypesXml.replace(
+    "</Types>",
+    `<Override PartName="${partName}" ContentType="${contentType}"/></Types>`
+  )
+}
+
+function getMediaContentType(fileName: string) {
+  const ext = fileName.split(".").pop()?.toLowerCase()
+  switch (ext) {
+    case "png": return "image/png"
+    case "jpg":
+    case "jpeg": return "image/jpeg"
+    case "gif": return "image/gif"
+    case "svg": return "image/svg+xml"
+    case "emf": return "image/x-emf"
+    default: return "application/octet-stream"
+  }
+}
+
+function preserveDrawings(templateBuffer: Buffer, outputBuffer: Buffer): Buffer {
+  try {
+    const templateZip = new PizZip(templateBuffer)
+    const outputZip = new PizZip(outputBuffer)
+    let contentTypesXml = outputZip.file("[Content_Types].xml")?.asText() ?? ""
+
+    const sheetRelsFile = templateZip.file("xl/worksheets/_rels/sheet1.xml.rels")
+    if (!sheetRelsFile) return outputBuffer
+
+    const sheetRelsXml = sheetRelsFile.asText()
+    const drawingMatches = [...sheetRelsXml.matchAll(/Target="\.\.\/drawings\/(drawing\d+\.xml)"/g)]
+    if (drawingMatches.length === 0) return outputBuffer
+
+    const allOutputFiles = Object.keys(outputZip.files)
+    const sheetFiles = allOutputFiles.filter((name) => name.match(/^xl\/worksheets\/sheet\d+\.xml$/))
+
+    for (const sheetFile of sheetFiles) {
+      const sheetIndexMatch = sheetFile.match(/sheet(\d+)\.xml/)
+      if (!sheetIndexMatch) continue
+      const idx = sheetIndexMatch[1]
+
+      const outputRelsFileName = `xl/worksheets/_rels/sheet${idx}.xml.rels`
+      const outputRelsFile = outputZip.file(outputRelsFileName)
+      let outputRelsXml = outputRelsFile?.asText() ??
+        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"></Relationships>`
+
+      let maxRid = 0
+      for (const match of outputRelsXml.matchAll(/Id="rId(\d+)"/g)) {
+        maxRid = Math.max(maxRid, Number(match[1]))
+      }
+
+      for (const match of drawingMatches) {
+        const drawingFile = match[1]
+        if (!drawingFile) continue
+        const templateDrawingPath = `xl/drawings/${drawingFile}`
+
+        if (!templateZip.file(templateDrawingPath)) continue
+
+        const targetDrawingFile = `drawing${idx}.xml`
+        const targetDrawingPath = `xl/drawings/${targetDrawingFile}`
+
+        outputZip.file(targetDrawingPath, templateZip.file(templateDrawingPath)!.asUint8Array())
+        const drawingBase = drawingFile.replace(".xml", "")
+        const drawingRelsPath = `xl/drawings/_rels/${drawingBase}.xml.rels`
+        const drawingRelsFile = templateZip.file(drawingRelsPath)
+        if (drawingRelsFile) {
+          const drawingRelsXml = drawingRelsFile.asText()
+          for (const mediaMatch of drawingRelsXml.matchAll(/Target="\.\.\/media\/([^"]+)"/g)) {
+            const mediaFile = mediaMatch[1]
+            if (!mediaFile) continue
+            const mediaPath = `xl/media/${mediaFile}`
+            if (!outputZip.file(mediaPath) && templateZip.file(mediaPath)) {
+              outputZip.file(mediaPath, templateZip.file(mediaPath)!.asUint8Array())
+              contentTypesXml = ensureContentType(
+                contentTypesXml,
+                `/xl/media/${mediaFile}`,
+                getMediaContentType(mediaFile)
+              )
+            }
+          }
+
+          const targetDrawingRelsPath = `xl/drawings/_rels/drawing${idx}.xml.rels`
+          outputZip.file(targetDrawingRelsPath, drawingRelsXml)
+        }
+
+        contentTypesXml = ensureContentType(
+          contentTypesXml,
+          `/${targetDrawingPath}`,
+          "application/vnd.openxmlformats-officedocument.drawing+xml"
+        )
+
+        if (!outputRelsXml.includes("drawing")) {
+          maxRid += 1
+          const newRid = `rId${maxRid}`
+          const newRel = `<Relationship Id="${newRid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing" Target="../drawings/${targetDrawingFile}"/>`
+          outputRelsXml = outputRelsXml.replace("</Relationships>", `${newRel}</Relationships>`)
+          outputZip.file(outputRelsFileName, outputRelsXml)
+
+          const sheetXmlFile = outputZip.file(sheetFile)
+          if (sheetXmlFile) {
+            let outputSheetXml = sheetXmlFile.asText()
+            if (!outputSheetXml.includes("<drawing")) {
+              outputSheetXml = outputSheetXml.replace(
+                "</worksheet>",
+                `<drawing r:id="${newRid}"/></worksheet>`
+              )
+              outputZip.file(sheetFile, outputSheetXml)
+            }
+          }
+        }
+      }
+    }
+
+    if (contentTypesXml) {
+      outputZip.file("[Content_Types].xml", contentTypesXml)
+    }
+
+    return outputZip.generate({ type: "nodebuffer", compression: "DEFLATE" }) as Buffer
+  } catch (err) {
+    console.error("Lỗi khi khôi phục drawing shapes:", err)
+    return outputBuffer
+  }
 }

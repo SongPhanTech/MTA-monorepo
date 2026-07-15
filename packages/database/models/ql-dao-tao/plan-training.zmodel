@@ -951,6 +951,9 @@ model ClassRegisterLogs extends Base {
   status                 ClassRegisterStatus  @default(PENDING)
   reason                 String?
 
+  @@unique([classRegisterSessionId, studentId, subjectClassId])
+  @@index([subjectClassId])
+  @@index([studentId])
   @@schema("ql-dao-tao")
 }
 
