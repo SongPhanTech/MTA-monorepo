@@ -61,6 +61,13 @@ export interface RescheduleScheduleItem {
   startPeriod: number
   endPeriod: number
   notes?: string | null
+  room?: { name: string } | null
+  subjectClass?: {
+    id: string
+    code: string | null
+    name: string | null
+    examDate: Date | string | null
+  } | null
 }
 
 const PutOneSubjectClassModal = () => {
@@ -90,7 +97,7 @@ const PutOneSubjectClassModal = () => {
   const [_dataSubmit, _setDataSubmit] = useState<(SubjectClass & { key: number })[]>([])
 
   const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
-  // const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
+  const { mutateAsync: updateClassSchedule } = useUpdateClassSchedule()
 
   const lecturerId = Form.useWatch("lecturerId", form)
   const extraLecturerId = Form.useWatch("extraLecturerId", form)
@@ -131,6 +138,31 @@ const PutOneSubjectClassModal = () => {
           id: input?.id,
         },
       })
+
+      // Lưu hàng loạt lịch học buổi học đã chỉnh sửa ở local xuống Database
+      for (const sched of localSchedules) {
+        const original = classSchedules.find((c) => c.id === sched.id)
+        if (
+          original &&
+          (original.roomId !== sched.roomId ||
+            original.startPeriod !== sched.startPeriod ||
+            original.endPeriod !== sched.endPeriod ||
+            !dayjs(original.classDate).isSame(sched.classDate, "day"))
+        ) {
+          await updateClassSchedule({
+            where: { id: sched.id },
+            data: {
+              classDate: sched.classDate
+                ? dayjs(sched.classDate).hour(12).minute(0).second(0).millisecond(0).toDate()
+                : undefined,
+              roomId: sched.roomId,
+              startPeriod: sched.startPeriod,
+              endPeriod: sched.endPeriod,
+              isReplacement: true,
+            },
+          })
+        }
+      }
 
       if (input?.id) {
         const gvMoi = layGiangVienPhanCongThayDoi(
@@ -209,6 +241,13 @@ const PutOneSubjectClassModal = () => {
       },
     },
   })
+
+  const { data: rooms = [] } = useFindManyRoom({
+    where: { active: true, deletedAt: null },
+  })
+  const sortedRooms = useMemo(() => {
+    return [...rooms].sort((a: Room, b: Room) => (a.name || "").localeCompare(b.name || ""))
+  }, [rooms])
 
   const { data: lecturerData = [] } = useFindManyLecturer({
     include: {
@@ -377,7 +416,7 @@ const PutOneSubjectClassModal = () => {
     }
   )
 
-  const { data: classSchedules = [], refetch: refetchClassSchedules } = useFindManyClassSchedule(
+  const { data: classSchedules = [] } = useFindManyClassSchedule(
     {
       where: {
         subjectClass: {
@@ -411,8 +450,24 @@ const PutOneSubjectClassModal = () => {
     }
   )
 
-  const [editingSchedule, setEditingSchedule] = useState<RescheduleScheduleItem | null>(null)
-  const [isChangeScheduleOpen, setIsChangeScheduleOpen] = useState(false)
+  const [localSchedules, setLocalSchedules] = useState<RescheduleScheduleItem[]>([])
+
+  useEffect(() => {
+    if (classSchedules) {
+      setLocalSchedules(
+        classSchedules.map((c) => ({
+          id: c.id,
+          classDate: c.classDate,
+          roomId: c.roomId,
+          startPeriod: c.startPeriod,
+          endPeriod: c.endPeriod,
+          room: c.room,
+          subjectClass: c.subjectClass,
+        } as any))
+      )
+    }
+  }, [classSchedules])
+
   const [activeTab, setActiveTab] = useState("lop-mon-hoc")
 
   useEffect(() => {
@@ -425,9 +480,17 @@ const PutOneSubjectClassModal = () => {
     }
   }, [isOpen, input])
 
-  const handleOpenChangeSchedule = (record: any) => {
-    setEditingSchedule(record)
-    setIsChangeScheduleOpen(true)
+  const handleUpdateLocal = (id: string, updated: Partial<RescheduleScheduleItem>) => {
+    setLocalSchedules((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              ...updated,
+            }
+          : item
+      )
+    )
   }
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
@@ -940,7 +1003,7 @@ const PutOneSubjectClassModal = () => {
           </Tabs.TabPane>
           <Tabs.TabPane tab={"Lịch học"} key="lich-hoc">
             <Table
-              data={classSchedules}
+              data={localSchedules}
               className="m-0"
               pagination={false}
               columns={[
@@ -953,56 +1016,79 @@ const PutOneSubjectClassModal = () => {
                 {
                   title: "Ngày học",
                   render: (_, record) => {
+                    const isDisabled = input?.mode === "view"
                     return (
-                      <p
-                        className={cn(
-                          input?.schedules?.some((date) =>
-                            dayjs(record.classDate).isSame(date, "day")
-                          ) && "text-primary font-semibold",
-                          record.subjectClass?.examDate &&
-                            dayjs(record.classDate).isSame(record.subjectClass.examDate, "day")
-                            ? "text-red-600"
-                            : ""
-                        )}
-                      >
-                        {record.subjectClass?.examDate &&
-                        dayjs(record.classDate).isSame(record.subjectClass.examDate, "day")
-                          ? "Ngày thi:"
-                          : ""}{" "}
-                        {dayjs(record.classDate).format("dddd DD/MM/YYYY").titleCase()}
-                      </p>
+                      <AntDatePicker
+                        value={record.classDate ? dayjs(record.classDate) : null}
+                        format="DD/MM/YYYY"
+                        className="w-full"
+                        disabled={isDisabled}
+                        onChange={(date) => {
+                          handleUpdateLocal(record.id, {
+                            classDate: date ? date.toDate() : (null as any),
+                          })
+                        }}
+                      />
                     )
                   },
                 },
                 {
                   title: "Tiết học",
                   align: "center",
+                  width: 180,
                   render: (_, record) => {
+                    const isDisabled = input?.mode === "view"
                     return (
-                      <>
-                        {record.startPeriod} - {record.endPeriod}
-                      </>
+                      <div className="flex gap-1 items-center justify-center">
+                        <InputNumber
+                          min={1}
+                          max={16}
+                          value={record.startPeriod}
+                          disabled={isDisabled}
+                          onChange={(val) => {
+                            handleUpdateLocal(record.id, { startPeriod: val ?? 1 })
+                          }}
+                          style={{ width: 65 }}
+                        />
+                        <span>-</span>
+                        <InputNumber
+                          min={1}
+                          max={16}
+                          value={record.endPeriod}
+                          disabled={isDisabled}
+                          onChange={(val) => {
+                            handleUpdateLocal(record.id, { endPeriod: val ?? 1 })
+                          }}
+                          style={{ width: 65 }}
+                        />
+                      </div>
                     )
                   },
                 },
                 {
                   title: "Phòng học",
                   align: "center",
-                  render: (_, record) => record.room?.name || "-",
-                },
-                {
-                  title: "Thao tác",
-                  align: "center",
-                  width: 100,
-                  hidden: input?.mode === "view",
-                  render: (_, record) => (
-                    <div className="flex justify-center">
-                      <EditIcon
-                        onClick={() => handleOpenChangeSchedule(record)}
-                        className="text-sm text-blue-700 cursor-pointer"
+                  render: (_, record) => {
+                    const isDisabled = input?.mode === "view"
+                    return (
+                      <AntSelect
+                        showSearch
+                        value={record.roomId}
+                        placeholder="Chọn phòng học"
+                        optionFilterProp="children"
+                        disabled={isDisabled}
+                        options={sortedRooms.map((r) => ({ label: r.name, value: r.id }))}
+                        onChange={(val) => {
+                          const roomObj = rooms.find((r) => r.id === val)
+                          handleUpdateLocal(record.id, {
+                            roomId: val,
+                            room: roomObj ? { name: roomObj.name } : null,
+                          })
+                        }}
+                        className="w-full"
                       />
-                    </div>
-                  ),
+                    )
+                  },
                 },
               ]}
             />
@@ -1010,12 +1096,6 @@ const PutOneSubjectClassModal = () => {
         </Tabs>
       </Col>
     </PutFormModal>
-    <ModalChangeClassSchedule
-      visible={isChangeScheduleOpen}
-      onClose={() => setIsChangeScheduleOpen(false)}
-      schedule={editingSchedule}
-      onSuccess={refetchClassSchedules}
-    />
     </>
   )
 }
@@ -1029,7 +1109,7 @@ const ModalChangeClassSchedule = ({
   visible: boolean
   onClose: () => void
   schedule: RescheduleScheduleItem | null
-  onSuccess: () => void
+  onSuccess: (id: string, updated: Partial<RescheduleScheduleItem>) => void
 }) => {
   const [form] = Form.useForm()
   const { data: rooms = [] } = useFindManyRoom({
@@ -1056,25 +1136,15 @@ const ModalChangeClassSchedule = ({
     if (!schedule) return
     try {
       const values = await form.validateFields()
-      setLoading(true)
-      await updateClassSchedule({
-        where: { id: schedule.id },
-        data: {
-          classDate: values.classDate.hour(12).minute(0).second(0).millisecond(0).toDate(),
-          roomId: values.roomId,
-          startPeriod: values.startPeriod,
-          endPeriod: values.endPeriod,
-          isReplacement: true,
-        },
+      onSuccess(schedule.id, {
+        classDate: values.classDate.toDate(),
+        roomId: values.roomId,
+        startPeriod: values.startPeriod,
+        endPeriod: values.endPeriod,
       })
-      message.success("Thay đổi lịch học thành công")
-      onSuccess()
       onClose()
     } catch (error) {
       console.error(error)
-      message.error("Lỗi khi thay đổi lịch học")
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -1084,8 +1154,9 @@ const ModalChangeClassSchedule = ({
       open={visible}
       onOk={handleOk}
       onCancel={onClose}
-      confirmLoading={loading}
       destroyOnClose
+      cancelText="Đóng"
+      okText="Xác nhận"
     >
       <Form form={form} layout="vertical">
         <Form.Item
