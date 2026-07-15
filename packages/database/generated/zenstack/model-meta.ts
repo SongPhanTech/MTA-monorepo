@@ -16606,6 +16606,10 @@ const metadata: ModelMeta = {
                 }, totalCredits: {
                     name: "totalCredits",
                     type: "Int",
+                }, registeredCredits: {
+                    name: "registeredCredits",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, retakingCredits: {
                     name: "retakingCredits",
                     type: "Int",
@@ -16614,9 +16618,25 @@ const metadata: ModelMeta = {
                     name: "reExamCredits",
                     type: "Int",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, passedCredits: {
+                    name: "passedCredits",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, failedCredits: {
                     name: "failedCredits",
                     type: "Int",
+                }, accumulatedCredits: {
+                    name: "accumulatedCredits",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, totalCreditsByCurriculum: {
+                    name: "totalCreditsByCurriculum",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, totalFailedCredits: {
+                    name: "totalFailedCredits",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, isClassMonitor: {
                     name: "isClassMonitor",
                     type: "Boolean",

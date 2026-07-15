@@ -16174,13 +16174,28 @@
           "totalCredits": {
             "type": "integer"
           },
+          "registeredCredits": {
+            "type": "integer"
+          },
           "retakingCredits": {
             "type": "integer"
           },
           "reExamCredits": {
             "type": "integer"
           },
+          "passedCredits": {
+            "type": "integer"
+          },
           "failedCredits": {
+            "type": "integer"
+          },
+          "accumulatedCredits": {
+            "type": "integer"
+          },
+          "totalCreditsByCurriculum": {
+            "type": "integer"
+          },
+          "totalFailedCredits": {
             "type": "integer"
           },
           "isClassMonitor": {
@@ -16221,9 +16236,14 @@
           "cgpaBase4",
           "cgpaBase10",
           "totalCredits",
+          "registeredCredits",
           "retakingCredits",
           "reExamCredits",
+          "passedCredits",
           "failedCredits",
+          "accumulatedCredits",
+          "totalCreditsByCurriculum",
+          "totalFailedCredits",
           "isClassMonitor",
           "isUnionLeader",
           "academicWarningLevel",
@@ -48145,13 +48165,28 @@
           "totalCredits": {
             "type": "integer"
           },
+          "registeredCredits": {
+            "type": "integer"
+          },
           "retakingCredits": {
             "type": "integer"
           },
           "reExamCredits": {
             "type": "integer"
           },
+          "passedCredits": {
+            "type": "integer"
+          },
           "failedCredits": {
+            "type": "integer"
+          },
+          "accumulatedCredits": {
+            "type": "integer"
+          },
+          "totalCreditsByCurriculum": {
+            "type": "integer"
+          },
+          "totalFailedCredits": {
             "type": "integer"
           },
           "isClassMonitor": {
@@ -48230,9 +48265,14 @@
           "cgpaBase4",
           "cgpaBase10",
           "totalCredits",
+          "registeredCredits",
           "retakingCredits",
           "reExamCredits",
+          "passedCredits",
           "failedCredits",
+          "accumulatedCredits",
+          "totalCreditsByCurriculum",
+          "totalFailedCredits",
           "isClassMonitor",
           "isUnionLeader",
           "academicWarningLevel",
@@ -100110,13 +100150,28 @@
           "totalCredits": {
             "type": "integer"
           },
+          "registeredCredits": {
+            "type": "integer"
+          },
           "retakingCredits": {
             "type": "integer"
           },
           "reExamCredits": {
             "type": "integer"
           },
+          "passedCredits": {
+            "type": "integer"
+          },
           "failedCredits": {
+            "type": "integer"
+          },
+          "accumulatedCredits": {
+            "type": "integer"
+          },
+          "totalCreditsByCurriculum": {
+            "type": "integer"
+          },
+          "totalFailedCredits": {
             "type": "integer"
           },
           "isClassMonitor": {
@@ -100167,9 +100222,14 @@
           "lowestFinalScore",
           "lowestGraduationScore",
           "totalCredits",
+          "registeredCredits",
           "retakingCredits",
           "reExamCredits",
+          "passedCredits",
           "failedCredits",
+          "accumulatedCredits",
+          "totalCreditsByCurriculum",
+          "totalFailedCredits",
           "isClassMonitor",
           "isUnionLeader",
           "academicWarningLevel",
@@ -100268,6 +100328,10 @@
             "type": "number",
             "nullable": true
           },
+          "registeredCredits": {
+            "type": "number",
+            "nullable": true
+          },
           "retakingCredits": {
             "type": "number",
             "nullable": true
@@ -100276,7 +100340,23 @@
             "type": "number",
             "nullable": true
           },
+          "passedCredits": {
+            "type": "number",
+            "nullable": true
+          },
           "failedCredits": {
+            "type": "number",
+            "nullable": true
+          },
+          "accumulatedCredits": {
+            "type": "number",
+            "nullable": true
+          },
+          "totalCreditsByCurriculum": {
+            "type": "number",
+            "nullable": true
+          },
+          "totalFailedCredits": {
             "type": "number",
             "nullable": true
           },
@@ -100379,6 +100459,10 @@
             "type": "integer",
             "nullable": true
           },
+          "registeredCredits": {
+            "type": "integer",
+            "nullable": true
+          },
           "retakingCredits": {
             "type": "integer",
             "nullable": true
@@ -100387,7 +100471,23 @@
             "type": "integer",
             "nullable": true
           },
+          "passedCredits": {
+            "type": "integer",
+            "nullable": true
+          },
           "failedCredits": {
+            "type": "integer",
+            "nullable": true
+          },
+          "accumulatedCredits": {
+            "type": "integer",
+            "nullable": true
+          },
+          "totalCreditsByCurriculum": {
+            "type": "integer",
+            "nullable": true
+          },
+          "totalFailedCredits": {
             "type": "integer",
             "nullable": true
           },
@@ -100557,6 +100657,10 @@
             "type": "integer",
             "nullable": true
           },
+          "registeredCredits": {
+            "type": "integer",
+            "nullable": true
+          },
           "retakingCredits": {
             "type": "integer",
             "nullable": true
@@ -100565,7 +100669,23 @@
             "type": "integer",
             "nullable": true
           },
+          "passedCredits": {
+            "type": "integer",
+            "nullable": true
+          },
           "failedCredits": {
+            "type": "integer",
+            "nullable": true
+          },
+          "accumulatedCredits": {
+            "type": "integer",
+            "nullable": true
+          },
+          "totalCreditsByCurriculum": {
+            "type": "integer",
+            "nullable": true
+          },
+          "totalFailedCredits": {
             "type": "integer",
             "nullable": true
           },
@@ -100751,6 +100871,10 @@
             "type": "integer",
             "nullable": true
           },
+          "registeredCredits": {
+            "type": "integer",
+            "nullable": true
+          },
           "retakingCredits": {
             "type": "integer",
             "nullable": true
@@ -100759,7 +100883,23 @@
             "type": "integer",
             "nullable": true
           },
+          "passedCredits": {
+            "type": "integer",
+            "nullable": true
+          },
           "failedCredits": {
+            "type": "integer",
+            "nullable": true
+          },
+          "accumulatedCredits": {
+            "type": "integer",
+            "nullable": true
+          },
+          "totalCreditsByCurriculum": {
+            "type": "integer",
+            "nullable": true
+          },
+          "totalFailedCredits": {
             "type": "integer",
             "nullable": true
           },

@@ -4496,9 +4496,14 @@ model StudentYearResult {
   lowestFinalScore         Float?
   lowestGraduationScore    Float?
   totalCredits             Int
+  registeredCredits        Int                     @default(0)
   retakingCredits          Int                     @default(0)
   reExamCredits            Int                     @default(0)
+  passedCredits            Int                     @default(0)
   failedCredits            Int
+  accumulatedCredits       Int                     @default(0)
+  totalCreditsByCurriculum Int                     @default(0)
+  totalFailedCredits       Int                     @default(0)
   isClassMonitor           Boolean
   isUnionLeader            Boolean
   academicWarningLevel     Int                     @default(0)

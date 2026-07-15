@@ -33,7 +33,7 @@ ifeq ($(SERVER_PROFILE),swan1)
   SERVER_PASSWORD  :=
   BE_DEPLOY_DIR    := ~/mta-be
   BE_APP_DIR       := ~/mta-be
-  FE_APP_DIR       := ~/app
+  FE_APP_DIR       := ~/mta-app
   FE_COMPOSE_FILE  := app-docker-compose.yml
   FE_APP_URL       := https://mta.swantech.vn
   ONLY_OFFICE_ENDPOINT := https://doc.mta.swantech.vn
