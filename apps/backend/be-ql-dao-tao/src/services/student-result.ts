@@ -1,5 +1,6 @@
 import { getTemplateBuffer } from "@workspace/libs/server"
 import dayjs from "dayjs"
+import type { Borders, Font, Alignment } from "exceljs"
 import { HTTPException } from "hono/http-exception"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
@@ -145,8 +146,6 @@ export async function exportStudentSemesterResult({
     }
   })
 
-  // Use 'KET_QUA_HOC_TAP_HK' template or fallback if needed.
-  // Assuming the template exists based on requirements.
   const buffer = await getTemplateBuffer(prisma, "KET_QUA_HOC_TAP_HK.xlsx")
   const template = new XlsxTemplate(buffer)
 
@@ -159,6 +158,265 @@ export async function exportStudentSemesterResult({
   const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
 
   return result
+}
+
+export async function exportStudentSemesterResultV2({
+  semesterId,
+  trainingObjectTypeId,
+  fixedClassId,
+}: {
+  semesterId: string
+  trainingObjectTypeId: string
+  fixedClassId?: string
+}) {
+  const ExcelJS = await import("exceljs")
+
+  const semester = await prisma.semester.findUniqueOrThrow({
+    where: { id: semesterId },
+    include: { schoolYear: true },
+  })
+
+  const fixedClasses = await prisma.fixedClass.findMany({
+    where: {
+      ...(fixedClassId ? { id: fixedClassId } : {}),
+      trainingCourse: { trainingObjectTypeId },
+      deletedAt: null,
+    },
+    select: { id: true, name: true, code: true },
+    orderBy: { code: "asc" },
+  })
+
+  if (fixedClasses.length === 0) {
+    throw new HTTPException(404, { message: "Không tìm thấy lớp quản lý" })
+  }
+
+  const wb = new ExcelJS.Workbook()
+
+  for (const fc of fixedClasses) {
+    const students = await prisma.student.findMany({
+      where: {
+        fixedClassId: fc.id,
+        deletedAt: null,
+        OR: [
+          { subjectClassStudent: { some: { subjectClass: { semesterId } } } },
+          { studentSemesterResult: { some: { semesterId } } },
+        ],
+      },
+      include: {
+        userProfile: {
+          select: {
+            fullname: true,
+            dateOfBirth: true,
+            gender: { select: { sTen: true } },
+          },
+        },
+        studentSemesterResult: {
+          where: { semesterId },
+          take: 1,
+        },
+        subjectClassStudent: {
+          where: {
+            subjectClass: { semesterId, deletedAt: null, active: true },
+            deletedAt: null,
+          },
+          select: {
+            finalScore: true,
+            subjectClass: {
+              select: {
+                id: true,
+                subjectId: true,
+                subject: { select: { code: true, name: true, credit: true } },
+              },
+            },
+          },
+        },
+      },
+      orderBy: [
+        { userProfile: { firstName: "asc" } },
+        { userProfile: { lastName: "asc" } },
+      ],
+    })
+
+    if (students.length === 0) continue
+
+    const subjectMap = new Map<string, { code: string; name: string; credit: number }>()
+    const scoreMap = new Map<string, number | null>()
+
+    for (const student of students) {
+      for (const scs of student.subjectClassStudent) {
+        const sc = scs.subjectClass
+        if (!sc) continue
+        const sv = sc.subject
+        if (!subjectMap.has(sc.subjectId)) {
+          subjectMap.set(sc.subjectId, {
+            code: sv.code,
+            name: sv.name,
+            credit: sv.credit ?? 0,
+          })
+        }
+        scoreMap.set(
+          `${student.id}::${sc.subjectId}`,
+          scs.finalScore != null ? Number(scs.finalScore) : null
+        )
+      }
+    }
+
+    const subjects = [...subjectMap.entries()]
+      .sort((a, b) => a[1].code.localeCompare(b[1].code))
+
+    const subjectCount = subjects.length
+    const FIXED_COLS_BEFORE = 5
+    const FIXED_COLS_AFTER = 4
+    const totalCols = FIXED_COLS_BEFORE + subjectCount + FIXED_COLS_AFTER
+
+    const sheetName = (fc.code || fc.name).replace(/[\\/?*:[\]]/g, "_").slice(0, 31)
+    const ws = wb.addWorksheet(sheetName)
+
+    const baseFont: Partial<Font> = { name: "Times New Roman", size: 12 }
+    const boldFont: Partial<Font> = { ...baseFont, bold: true }
+
+    const thinBorder: Partial<Borders> = {
+      top: { style: "thin" },
+      left: { style: "thin" },
+      bottom: { style: "thin" },
+      right: { style: "thin" },
+    }
+
+    const centerAlign: Partial<Alignment> = {
+      horizontal: "center",
+      vertical: "middle",
+      wrapText: true,
+    }
+
+    ws.views = [{ showGridLines: false }]
+
+    // Row 1: empty
+    ws.addRow([])
+
+    // Row 2: title
+    const titleRow = ws.addRow([`BẢNG ĐIỂM LỚP ${fc.name.toUpperCase()}`])
+    ws.mergeCells(2, 1, 2, totalCols)
+    titleRow.getCell(1).font = { ...boldFont, size: 12 }
+    titleRow.getCell(1).alignment = { horizontal: "center" }
+
+    // Row 3: semester info
+    const schoolYearName = semester.schoolYear?.name || ""
+    const semesterLabel = `${semester.name.toUpperCase()}. NĂM HỌC ${schoolYearName.toUpperCase()}. MÃ HỌC KỲ ${semester.code || ""}`
+    const semesterRow = ws.addRow([semesterLabel])
+    ws.mergeCells(3, 1, 3, totalCols)
+    semesterRow.getCell(1).font = boldFont
+    semesterRow.getCell(1).alignment = { horizontal: "center" }
+
+    // Row 4: empty
+    ws.addRow([])
+
+    // Row 5-6: header (merged vertically)
+    const headerValues: string[] = [
+      "TT",
+      "Mã SV",
+      "Họ tên",
+      "GT",
+      "Ngày sinh",
+      ...subjects.map((_, idx) => String(idx)),
+      "Số TC liệt",
+      "Điểm TBC",
+      "Số TC TL",
+      "TBC TL",
+    ]
+    const headerRow1 = ws.addRow(headerValues)
+    const headerRow2 = ws.addRow(Array(totalCols).fill(""))
+
+    for (let c = 1; c <= totalCols; c++) {
+      ws.mergeCells(5, c, 6, c)
+      const cell = headerRow1.getCell(c)
+      cell.font = boldFont
+      cell.alignment = centerAlign
+      cell.border = thinBorder
+      headerRow2.getCell(c).border = thinBorder
+    }
+
+    // Column widths (from sample file)
+    ws.getColumn(1).width = 5.86    // TT
+    ws.getColumn(2).width = 13.43   // Mã SV
+    ws.getColumn(3).width = 42.14   // Họ tên
+    ws.getColumn(4).width = 7       // GT
+    ws.getColumn(5).width = 15.71   // Ngày sinh
+    for (let i = 0; i < subjectCount; i++) {
+      ws.getColumn(FIXED_COLS_BEFORE + i + 1).width = 13.57
+    }
+    ws.getColumn(FIXED_COLS_BEFORE + subjectCount + 1).width = 14    // Số TC liệt
+    ws.getColumn(FIXED_COLS_BEFORE + subjectCount + 2).width = 15    // Điểm TBC
+    ws.getColumn(FIXED_COLS_BEFORE + subjectCount + 3).width = 13.86 // Số TC TL
+    ws.getColumn(FIXED_COLS_BEFORE + subjectCount + 4).width = 13.29 // TBC TL
+
+    // Data rows
+    for (let si = 0; si < students.length; si++) {
+      const student = students[si]!
+      const semResult = student.studentSemesterResult[0]
+      const dob = student.userProfile?.dateOfBirth
+        ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
+        : ""
+
+      const subjectScores: (number | string)[] = subjects.map(([subjectId]) => {
+        const key = `${student.id}::${subjectId}`
+        const score = scoreMap.get(key)
+        return score != null ? score : ""
+      })
+
+      const failedCredits = semResult?.failedCredits ?? ""
+      const gpa = semResult ? formatGpa(semResult.gpaBase4) : ""
+      const accCredits = semResult?.accumulatedCredits ?? ""
+      const cumGpa = semResult ? formatGpa(semResult.cumulativeGpaBase4) : ""
+
+      const rowValues = [
+        si + 1,
+        student.code,
+        student.userProfile?.fullname || "",
+        student.userProfile?.gender?.sTen || "",
+        dob,
+        ...subjectScores,
+        failedCredits,
+        gpa,
+        accCredits,
+        cumGpa,
+      ]
+
+      const dataRow = ws.addRow(rowValues)
+      for (let c = 1; c <= totalCols; c++) {
+        const cell = dataRow.getCell(c)
+        cell.font = baseFont
+        cell.border = thinBorder
+        cell.alignment =
+          c <= 2 || c >= FIXED_COLS_BEFORE + subjectCount + 1
+            ? { horizontal: "center", vertical: "middle" }
+            : c === 3
+              ? { vertical: "middle" }
+              : { horizontal: "center", vertical: "middle" }
+      }
+    }
+
+    // Footer: subject legend
+    ws.addRow([])
+    const legendPerRow = 2
+    const colsPerLegend = Math.floor(totalCols / legendPerRow)
+
+    for (let i = 0; i < subjects.length; i += legendPerRow) {
+      const row = ws.addRow([])
+      for (let j = 0; j < legendPerRow && i + j < subjects.length; j++) {
+        const entry = subjects[i + j]!
+        const sv = entry[1]
+        const label = `${i + j}_${sv.code}:  STC(${sv.credit})_Tên:${sv.name}`
+        const startCol = j * colsPerLegend + 1
+        const endCol = Math.min(startCol + colsPerLegend - 1, totalCols)
+        row.getCell(startCol).value = label
+        row.getCell(startCol).font = { italic: true, size: 9 }
+        ws.mergeCells(row.number, startCol, row.number, endCol)
+      }
+    }
+  }
+
+  const buffer = await wb.xlsx.writeBuffer()
+  return buffer
 }
 
 // ${schoolYear}	Name of the school year.

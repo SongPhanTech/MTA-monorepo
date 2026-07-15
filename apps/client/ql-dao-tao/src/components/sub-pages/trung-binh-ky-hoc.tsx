@@ -16,6 +16,7 @@ import {
   useCalculateStudentSemesterResultJson,
   useExportStudentSemesterResult,
 } from "@workspace/libs/api/training"
+import { customTrainingFetch } from "@workspace/libs/api/custom-instance"
 import {
   Select,
   SelectTrainingCourseStore,
@@ -23,7 +24,7 @@ import {
   useTrainingCourseStore,
   useTrainingObjectTypeStore,
 } from "@workspace/ui"
-import { Button, Checkbox, Col, Flex, Form, message, Row, Tag, Tooltip } from "antd"
+import { Button, Checkbox, Col, Dropdown, Flex, Form, message, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { saveAs } from "file-saver"
 import "dayjs/locale/vi"
@@ -270,7 +271,7 @@ const DiemTrungBinhKyHoc = () => {
     }
   }
 
-  const handleExportExcel = async () => {
+  const handleExportExcel = async (template: string) => {
     if (!semesterId) {
       message.warning("Vui lòng chọn học kỳ")
       return
@@ -281,13 +282,38 @@ const DiemTrungBinhKyHoc = () => {
       return
     }
 
-    const res = await exportExcel({
-      data: {
-        semesterId,
-        trainingObjectTypeId,
-        ...(filters.fixedClassId ? { fixedClassId: filters.fixedClassId } : {}),
-      },
-    })
+    const body = {
+      semesterId,
+      trainingObjectTypeId,
+      ...(filters.fixedClassId ? { fixedClassId: filters.fixedClassId } : {}),
+    }
+
+    if (template === "2") {
+      try {
+        showSpinner()
+        const res = await customTrainingFetch<{ status: number; data: Blob & { message?: string } }>(
+          "/api/student-result/export-student-semester-result-v2",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          }
+        )
+        if (res.status === 200) {
+          message.success("Xuất file thành công")
+          saveAs(res.data, "KET_QUA_HOC_TAP_HK_MAU2.xlsx")
+        } else {
+          message.error(res.data?.message || "Xuất file thất bại")
+        }
+      } catch {
+        message.error("Xuất file thất bại")
+      } finally {
+        hideSpinner()
+      }
+      return
+    }
+
+    const res = await exportExcel({ data: body })
 
     if (res.status === 200) {
       message.success("Xuất file thành công")
@@ -328,9 +354,17 @@ const DiemTrungBinhKyHoc = () => {
                 <Button type="primary" onClick={handleSummaryClick}>
                   Tổng kết kết quả học kỳ
                 </Button>
-                <Button type="primary" onClick={handleExportExcel}>
-                  Xuất Excel
-                </Button>
+                <Dropdown
+                  menu={{
+                    items: [
+                      { key: "1", label: "Mẫu 1" },
+                      { key: "2", label: "Mẫu 2" },
+                    ],
+                    onClick: ({ key }) => handleExportExcel(key),
+                  }}
+                >
+                  <Button type="primary">Xuất Excel</Button>
+                </Dropdown>
               </Flex>
             </Col>
           </Row>
