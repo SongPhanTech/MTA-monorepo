@@ -86,7 +86,9 @@ const ThongTinTichLuy = async (
   studentId: string,
   curriculumVersionId: string,
   trainingCourseId: string,
-  semesterStartDate: Date
+  semesterStartDate: Date,
+  semesterEndDate?: Date,
+  currentSemesterId?: string
 ) => {
   try {
     // Học kỳ bắt đầu của sinh viên (căn cứ theo khoá)
@@ -171,17 +173,22 @@ const ThongTinTichLuy = async (
         OR: [
           {
             subjectClass: null,
-            createdAt: {
+            createdAt: currentSemesterId && semesterEndDate ? {
+              gte: semesterStartDate,
+              lte: semesterEndDate,
+            } : {
               lte: semesterStartDate, // lấy điểm nhập tay đến thời điểm kỳ đang xét
             },
           },
           {
             subjectClass: {
-              semester: {
-                startDate: {
-                  lte: semesterStartDate, // lấy tất cả các kỳ trước kỳ đang xét
+              ...(currentSemesterId ? { semesterId: currentSemesterId } : {
+                semester: {
+                  startDate: {
+                    lte: semesterStartDate, // lấy tất cả các kỳ trước kỳ đang xét
+                  },
                 },
-              },
+              }),
               cancelled: false,
             },
           },
@@ -897,7 +904,9 @@ export const calculateStudentSemesterResult = async (
             student.id,
             student.curriculumVersionId || student.fixedClass?.curriculumVersionId || "",
             trainingCourseId,
-            hocKyDauVao?.startDate || new Date()
+            hocKyDauVao?.startDate || new Date(),
+            hocKyDauVao?.endDate || new Date(),
+            semesterId
           )
 
           if (!thongTinTichLuy) {
