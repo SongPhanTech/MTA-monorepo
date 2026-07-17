@@ -20,7 +20,8 @@ export function readDecimalAmount(value: unknown): number {
 }
 
 export function formatAmountWithComma(amount: number) {
-  return Number(amount || 0).toLocaleString("vi-VN", { maximumFractionDigits: 0 })
+  if (!amount) return "0"
+  return Math.round(amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
 }
 
 export function getCouncilDefaultPayAmount(

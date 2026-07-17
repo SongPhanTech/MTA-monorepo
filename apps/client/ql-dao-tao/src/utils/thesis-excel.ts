@@ -2165,7 +2165,7 @@ export const exportThanhToanHoiDongBaoVe = async ({
       )
       return
     }
-    downloadFile(exportResponse.data, "ThanhToanHoiDongBaoVe.docx")
+    downloadFile(exportResponse.data, "ThanhToanHoiDongBaoVe.xlsx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")

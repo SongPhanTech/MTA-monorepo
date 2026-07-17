@@ -86,7 +86,7 @@ const excelPreviewSchema = excelTemplateObject
 type ExcelTemplateInput = z.infer<typeof excelTemplateObject>
 
 /** Render template Excel thành workbook buffer (dùng chung cho route export và preview). */
-async function buildExcelWorkbookBuffer(body: ExcelTemplateInput): Promise<Buffer> {
+export async function buildExcelWorkbookBuffer(body: ExcelTemplateInput): Promise<Buffer> {
   const PAGE_BREAK_MARKER = "ngắt trang"
 
   const normalizeCellValue = (value: ExcelJS.CellValue | null | undefined): string => {

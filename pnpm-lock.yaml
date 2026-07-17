@@ -611,6 +611,9 @@ importers:
       minio:
         specifier: 'catalog:'
         version: 8.0.6
+      pizzip:
+        specifier: 'catalog:'
+        version: 3.2.0
       prom-client:
         specifier: 'catalog:'
         version: 15.1.3
