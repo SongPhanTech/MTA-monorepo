@@ -315,9 +315,9 @@ export async function buildSupervisorPaymentExportPayload(params: {
     studentsInSession: projects.length,
     studentsWithSupervisor,
     fileName: "ThanhToanHuongDan",
-    path: "ThanhToanHuongDanTrongHV.docx",
+    path: "ThanhToanHuongDanTrongHV.xlsx",
     prefix: "mta/luan-van",
     data: { items },
-    downloadName: "ThanhToanHuongDan.docx",
+    downloadName: "ThanhToanHuongDan.xlsx",
   }
 }

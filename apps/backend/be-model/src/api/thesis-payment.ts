@@ -1,7 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
-import { docxSuccess, excelSuccess, jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
-import { renderThesisPaymentDocx } from "../services/thesis-docx-render.service"
+import { excelSuccess, jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 import { renderThesisPaymentXlsx } from "../services/thesis-excel-render.service"
 import {
   buildCouncilPaymentExportPayload,
@@ -117,7 +116,7 @@ const exportSupervisorPaymentsRoute = createRoute({
   },
   responses: {
     ...standardErrorResponses(),
-    ...docxSuccess("File DOCX thanh toán hướng dẫn"),
+    ...excelSuccess("File XLSX thanh toán hướng dẫn"),
     400: {
       description: "Chưa có dữ liệu hoặc lỗi xuất file",
       content: { "application/json": { schema: ErrorMessageResponseSchema } },
@@ -196,10 +195,10 @@ app.openapi(exportSupervisorPaymentsRoute, async (c) => {
       }
       return c.json({ message: "Chưa có dữ liệu để xuất thanh toán hướng dẫn" }, 400)
     }
-    const buffer = await renderThesisPaymentDocx(payload)
+    const buffer = await renderThesisPaymentXlsx(payload)
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(payload.downloadName)}`
     return c.body(new Uint8Array(buffer), 200, {
-      "Content-Type": DOCX_CONTENT_TYPE,
+      "Content-Type": XLSX_CONTENT_TYPE,
       "Content-Disposition": disposition,
     })
   } catch (error) {

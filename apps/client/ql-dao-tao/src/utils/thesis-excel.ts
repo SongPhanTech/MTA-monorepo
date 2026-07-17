@@ -771,22 +771,27 @@ export const exportThongKeCbHdlv = async ({
       },
     ]
 
-    const payload = {
-      fileName: "ThongKeCanBoHuongDan",
-      path: "ThongKeCanBoHuongDan.docx",
+    const response = await renderXlsxTemplate({
+      templatePath: "ThongKeCanBoHuongDan.xlsx",
       prefix: "mta/luan-van",
-      data: {
-        items: items,
-      },
-    }
-    const response = await docxTemplate(payload)
+      fileName: "ThongKeCanBoHuongDan.xlsx",
+      mergeBlocksToOneSheet: true,
+      sheets: items.map((item, idx) => ({
+        data: item,
+        pageBreakAfter: idx < items.length - 1,
+      })),
+    })
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
-    downloadFile(blob, "ThongKeCanBoHuongDan.docx")
-    message.success("Xuất file thành công")
+    if (blob instanceof Blob) {
+      downloadFile(blob, "ThongKeCanBoHuongDan.xlsx")
+      message.success("Xuất file thành công")
+    } else {
+      message.error("Đã xảy ra lỗi khi tạo file Excel")
+    }
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
@@ -2562,22 +2567,27 @@ export const exportThongKeCbThamGiaHd = async ({
         thanhToan: formatAmountWithComma(Number(row.thanhToan || 0)),
       })),
     }))
-    const payload = {
-      fileName: "ThongKeCbThamGiaHd",
-      path: "ThongKeCanBoHoiDong.docx",
+    const response = await renderXlsxTemplate({
+      templatePath: "ThongKeCanBoHoiDong.xlsx",
       prefix: "mta/luan-van",
-      data: {
-        items: items,
-      },
-    }
-    const response = await docxTemplate(payload)
+      fileName: "ThongKeCbThamGiaHd.xlsx",
+      mergeBlocksToOneSheet: true,
+      sheets: items.map((item, idx) => ({
+        data: item,
+        pageBreakAfter: idx < items.length - 1,
+      })),
+    })
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
-    downloadFile(blob, "ThongKeCbThamGiaHd.docx")
-    message.success("Xuất file thành công")
+    if (blob instanceof Blob) {
+      downloadFile(blob, "ThongKeCbThamGiaHd.xlsx")
+      message.success("Xuất file thành công")
+    } else {
+      message.error("Đã xảy ra lỗi khi tạo file Excel")
+    }
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
@@ -2760,7 +2770,7 @@ export const exportThanhToanHuongDanTrongHv = async ({
       )
       return []
     }
-    downloadFile(exportResponse.data, "ThanhToanHuongDan.docx")
+    downloadFile(exportResponse.data, "ThanhToanHuongDan.xlsx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
