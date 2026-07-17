@@ -79,6 +79,7 @@ type TeachingAssignmentForm = {
       maxStudent: number | null
       isEdit?: boolean
       cancelled: boolean
+      isLockLecturer: boolean
     }
   >
 }
@@ -214,16 +215,17 @@ export default function PhanCongGiangDay({
               },
             }
           : {}),
-        subject:
-          filters.organization && filters.organization.length > 0
-            ? {
+        ...(filters.organization && filters.organization.length > 0
+          ? {
+              subject: {
                 subject: {
                   managementOrganizationId: {
                     in: filters.organization,
                   },
                 },
-              }
-            : {},
+              },
+            }
+          : {}),
         ...(trainingCourseId && type === "NORMAL"
           ? { fixedClasses: { some: { trainingCourseId } } }
           : {}),
@@ -362,6 +364,14 @@ export default function PhanCongGiangDay({
                     trainingLocation: true,
                     subjectClassStudent: true,
                     subjectClassTimes: true,
+                    subjectClassHistory: {
+                      where: { isLockLecturer: { not: null } },
+                      orderBy: { createdAt: "desc" },
+                      take: 1,
+                      include: {
+                        updatedBy: true,
+                      },
+                    },
                     fixedClasses: {
                       select: {
                         code: true,
@@ -426,7 +436,7 @@ export default function PhanCongGiangDay({
             },
           },
         },
-        Id: !khoaBoMon ? undefined : { in: orgIds },
+        ...(!khoaBoMon ? {} : { Id: { in: orgIds } }),
         ...whereOrganization,
       },
     },
@@ -641,6 +651,7 @@ export default function PhanCongGiangDay({
               roomId: subjectClass.roomId ?? null,
               trainingLocationId: subjectClass.trainingLocationId ?? null,
               maxStudent: subjectClass.maxStudent ?? null,
+              isLockLecturer: subjectClass.isLockLecturer ?? true,
             },
           },
         }))
@@ -692,6 +703,7 @@ export default function PhanCongGiangDay({
               lecturerId: subjectClass.lecturerId ?? null,
               extraLecturerId: subjectClass.extraLecturerId ?? null,
               enterGradeLecturerId: subjectClass.enterGradeLecturerId ?? null,
+              isLockLecturer: subjectClass.isLockLecturer ?? true,
             },
           },
         }))
@@ -1217,6 +1229,7 @@ interface ExportSubjectClassItem {
               maxStudent: curr.maxStudent ?? null,
               isEdit: false,
               cancelled: !!curr.cancelled,
+              isLockLecturer: curr.isLockLecturer ?? true,
             }
             return acc
           },
@@ -2018,6 +2031,70 @@ interface ExportSubjectClassItem {
                   ),
                 },
                 {
+                  title: "Khóa GV",
+                  width: 80,
+                  align: "center",
+                  render: (_, record: any) => {
+                    if (record.$type === "parent" || !record.id || !subjectClassForm?.[record.id]) {
+                      return null
+                    }
+                    const history = record.subjectClassHistory?.[0]
+                    const logText = history
+                      ? `${history.isLockLecturer ? "Khóa" : "Mở"} bởi: ${history.updatedBy?.fullname ?? "-"} lúc ${dayjs(history.createdAt).format("HH:mm DD/MM")}`
+                      : ""
+                    const isLocked = subjectClassForm?.[record.id]?.isLockLecturer ?? true
+                    return (
+                      <Flex vertical align="center" className="gap-1">
+                        <FormItem form={form} name={["subjectClass", record.id, "isLockLecturer"]} valuePropName="checked" className="m-0">
+                          <Tooltip title={logText || "Chưa có lịch sử khóa"}>
+                            <Switch
+                              checkedChildren="Khóa"
+                              unCheckedChildren="Mở"
+                              checked={isLocked}
+                              disabled={subjectClassForm?.[record.id]?.cancelled}
+                              onChange={async (checked) => {
+                                try {
+                                  showSpinner()
+                                  // 1. Lưu ngay trạng thái khóa vào DB
+                                  await sqlTransaction([
+                                    {
+                                      model: "SubjectClass",
+                                      operation: "update",
+                                      data: {
+                                        where: { id: record.id },
+                                        data: { isLockLecturer: checked },
+                                      },
+                                    },
+                                  ])
+                                  message.success(checked ? "Đã khóa phân công giảng viên" : "Đã mở khóa phân công giảng viên")
+                                  
+                                  // 2. Cập nhật cục bộ trong form
+                                  const updated = {
+                                    ...subjectClassForm,
+                                    [record.id]: {
+                                      ...subjectClassForm?.[record.id],
+                                      isLockLecturer: checked,
+                                      isEdit: false,
+                                    }
+                                  }
+                                  form.setFieldValue("subjectClass", updated)
+
+                                  // 3. Tải lại dữ liệu bảng
+                                  refetch()
+                                } catch (err: any) {
+                                  message.error(err?.message || "Không thể cập nhật trạng thái khóa")
+                                } finally {
+                                  hideSpinner()
+                                }
+                              }}
+                            />
+                          </Tooltip>
+                        </FormItem>
+                      </Flex>
+                    )
+                  }
+                },
+                {
                   title: "Giảng viên 1",
                   align: "center",
                   type: "input",
@@ -2040,11 +2117,11 @@ interface ExportSubjectClassItem {
                             ) as string[]
                           }
                           disabled={
-                            khoaBoMon &&
+                            (khoaBoMon &&
                             !!record.lecturerAssignmentDeadline &&
                             dayjs(record.lecturerAssignmentDeadline).isBefore(
                               dayjs().startOf("day")
-                            )
+                            )) || (subjectClassForm?.[record.id]?.isLockLecturer ?? true)
                           }
                           organizationId={record?.subject?.managementOrganizationId ?? ""}
                         />
@@ -2074,11 +2151,11 @@ interface ExportSubjectClassItem {
                             [subjectClassForm?.[record.id]?.lecturerId].filter(Boolean) as string[]
                           }
                           disabled={
-                            khoaBoMon &&
+                            (khoaBoMon &&
                             !!record.lecturerAssignmentDeadline &&
                             dayjs(record.lecturerAssignmentDeadline).isBefore(
                               dayjs().startOf("day")
-                            )
+                            )) || (subjectClassForm?.[record.id]?.isLockLecturer ?? true)
                           }
                           organizationId={record?.subject?.managementOrganizationId}
                         />
@@ -2109,11 +2186,11 @@ interface ExportSubjectClassItem {
                           placeholder="Chọn giảng viên"
                           organizationId={record?.subject?.managementOrganizationId}
                           disabled={
-                            khoaBoMon &&
+                            (khoaBoMon &&
                             !!record.lecturerAssignmentDeadline &&
                             dayjs(record.lecturerAssignmentDeadline).isBefore(
                               dayjs().startOf("day")
-                            )
+                            )) || (subjectClassForm?.[record.id]?.isLockLecturer ?? true)
                           }
                         />
                       </FormItem>

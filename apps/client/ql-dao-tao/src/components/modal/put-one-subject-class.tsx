@@ -681,6 +681,7 @@ const PutOneSubjectClassModal = () => {
                     onChange={(value) => {
                       form.setFieldsValue({ enterGradeLecturerId: value })
                     }}
+                    disabled={subjectClassData?.isLockLecturer ?? true}
                   />
                 </FormItem>
               </Col>
@@ -689,6 +690,7 @@ const PutOneSubjectClassModal = () => {
                   <LectureTreeSelect
                     placeholder="Chọn giảng viên 2"
                     ignoreLectureIds={[lecturerId].filter(Boolean) as string[]}
+                    disabled={subjectClassData?.isLockLecturer ?? true}
                   />
                 </FormItem>
               </Col>
@@ -699,6 +701,7 @@ const PutOneSubjectClassModal = () => {
                     onChange={(value) => {
                       form.setFieldsValue({ lecturerId: value })
                     }}
+                    disabled={subjectClassData?.isLockLecturer ?? true}
                   />
                 </FormItem>
               </Col>

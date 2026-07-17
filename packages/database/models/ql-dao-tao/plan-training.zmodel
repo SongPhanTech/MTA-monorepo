@@ -493,7 +493,7 @@ model TrainingCourse extends Base {
   regulation                 String?
   // Số QĐ trúng tuyển
   admissionDecisionNumber    String?
-  
+
   trainingLanguage           TrainingLanguage?          @relation(fields: [trainingLanguageId], references: [id])
   trainingLanguageId         String?
   /// khoá sửa tham số của "Thông tin chung"
@@ -570,16 +570,16 @@ model FixedClass extends Base {
   graduated                Boolean              @default(false)
 
   classMonitor             Student?             @relation("ClassMonitor", fields: [classMonitorId], references: [id])
-  classMonitorId           String?              
+  classMonitorId           String?
 
   unionLeader              Student?             @relation("UnionLeader", fields: [unionLeaderId], references: [id])
-  unionLeaderId            String?              
+  unionLeaderId            String?
 
   deputyUnionSecretary     Student?             @relation("DeputyUnionSecretary", fields: [deputyUnionSecretaryId], references: [id])
-  deputyUnionSecretaryId   String?              
+  deputyUnionSecretaryId   String?
 
   unionSecretary           Student?             @relation("UnionSecretary", fields: [unionSecretaryId], references: [id])
-  unionSecretaryId         String?             
+  unionSecretaryId         String?
 
   trainingCourse           TrainingCourse       @relation(fields: [trainingCourseId], references: [id]) // Khoá học
   trainingCourseId         String
@@ -620,9 +620,9 @@ model Curriculum extends BaseNoCode {
   managementOrganization   DM_DonVi            @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String              @db.Uuid
 
-  trainingMajor            TrainingMajor?       @relation(fields: [trainingMajorId], references: [id]) // Chuyên ngành đào tạo
+  trainingMajor            TrainingMajor?      @relation(fields: [trainingMajorId], references: [id]) // Chuyên ngành đào tạo
   trainingMajorId          String?
-  trainingField            TrainingField?       @relation(fields: [trainingFieldId], references: [id]) // Chuyên ngành đào tạo
+  trainingField            TrainingField?      @relation(fields: [trainingFieldId], references: [id]) // Chuyên ngành đào tạo
   trainingFieldId          String?
 
   trainingObjectType       TrainingObjectType  @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
@@ -820,7 +820,7 @@ model SubjectVersion extends BaseNoCode {
   exams                    Exam[]
   examFramework            ExamFramework[]
   scoreLinkSubjectVersion  ScoreLinkSubjectVersion[]
-	certificate Certificate[]
+  certificate              Certificate[]
 
   // @@unique([trainingObjectTypeId, name, credit, period, managementOrganizationId])
   // @@unique([trainingObjectTypeId, codeTkb])
@@ -1057,6 +1057,8 @@ model SubjectClass extends BaseNoCode {
   // khoá khi xuất phiếu điểm. (P13 có thể mở khoá)
   /// khoá điểm thi
   isLockExamScore             Boolean                  @default(false)
+  // khoá phân công giảng viên
+  isLockLecturer              Boolean                  @default(true)
 
   // P13 kiểm tra phiếu điểm và gửi
   scoreSubmitted              Boolean                  @default(false)
@@ -1151,6 +1153,7 @@ model SubjectClassHistory extends Base {
 
   isLockScore        Boolean?
   isLockExamScore    Boolean?
+  isLockLecturer     Boolean?
 
   scoreSubmitted     Boolean?
   scoreChecked       Boolean?
@@ -1177,39 +1180,39 @@ model SubjectClassTime extends Base {
 // Bảng thời khoá biểu / Lịch làm việc
 model ClassSchedule extends Base {
   // Liên kết với lớp môn học
-  subjectClass        SubjectClass?  @relation(fields: [subjectClassId], references: [id])
-  subjectClassId      String?
+  subjectClass            SubjectClass?            @relation(fields: [subjectClassId], references: [id])
+  subjectClassId          String?
 
-  periodType          PeriodType     @default(THEORY)
-  startPeriod         Int              // Tiết bắt đầu (1, 2, 3, ...)
-  endPeriod           Int              // Tiết kết thúc (1, 2, 3, ...)
+  periodType              PeriodType               @default(THEORY)
+  startPeriod             Int              // Tiết bắt đầu (1, 2, 3, ...)
+  endPeriod               Int              // Tiết kết thúc (1, 2, 3, ...)
   // Thông tin thời gian cụ thể
-  startTime           DateTime?       // Thời gian bắt đầu cụ thể
-  endTime             DateTime?       // Thời gian kết thúc cụ thể
+  startTime               DateTime?       // Thời gian bắt đầu cụ thể
+  endTime                 DateTime?       // Thời gian kết thúc cụ thể
   // Thông tin ngày học cụ thể
-  classDate           DateTime       @db.Date
+  classDate               DateTime                 @db.Date
 
   // Phòng học và giảng viên
-  room                Room?          @relation(fields: [roomId], references: [id])
-  roomId              String?
-  lecturer            Lecturer?      @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
-  lecturerId          String?
-  extraLecturer       Lecturer?      @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
-  extraLecturerId     String?
+  room                    Room?                    @relation(fields: [roomId], references: [id])
+  roomId                  String?
+  lecturer                Lecturer?                @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
+  lecturerId              String?
+  extraLecturer           Lecturer?                @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
+  extraLecturerId         String?
 
-  userProfiles        UserProfile[]  // Người tham gia thêm
+  userProfiles            UserProfile[]  // Người tham gia thêm
 
-  location            String?        // Địa điểm cụ thể nếu có
+  location                String?        // Địa điểm cụ thể nếu có
 
-  notes               String?
+  notes                   String?
 
   // Thông tin học bù
-  isReplacement       Boolean        @default(false)  // Có phải tiết học bù
-  originalSchedule    ClassSchedule? @relation("ReplacementSchedule", fields: [originalScheduleId], references: [id])
-  originalScheduleId  String?        @unique()
-  replacementSchedule ClassSchedule? @relation("ReplacementSchedule")
+  isReplacement           Boolean                  @default(false)  // Có phải tiết học bù
+  originalSchedule        ClassSchedule?           @relation("ReplacementSchedule", fields: [originalScheduleId], references: [id])
+  originalScheduleId      String?                  @unique()
+  replacementSchedule     ClassSchedule?           @relation("ReplacementSchedule")
 
-  cancelReason        String?          // Lý do hủy
+  cancelReason            String?          // Lý do hủy
 
   subjectClassAttendances SubjectClassAttendance[]
 
@@ -1283,17 +1286,17 @@ enum DataSyncStatus {
 /// Lịch sử đồng bộ dữ liệu giữa phần mềm nội bộ và cổng đăng ký học internet
 model DataSyncHistory extends Base {
   type                   DataSyncType
-  status                 DataSyncStatus      @default(PENDING)
+  status                 DataSyncStatus        @default(PENDING)
   sessionName            String
   classRegisterSession   ClassRegisterSession? @relation(fields: [classRegisterSessionId], references: [id])
   classRegisterSessionId String?
   fileName               String?
   fileVersion            String?
   sourceExportedAt       DateTime?
-  errorMessage           String?             @db.Text
+  errorMessage           String?               @db.Text
   recordCounts           Json?
-  performedBy            UserProfile?        @relation(fields: [performedById], references: [id])
-  performedById          String?             @db.Uuid
+  performedBy            UserProfile?          @relation(fields: [performedById], references: [id])
+  performedById          String?               @db.Uuid
 
   @@index([classRegisterSessionId])
   @@index([type])
