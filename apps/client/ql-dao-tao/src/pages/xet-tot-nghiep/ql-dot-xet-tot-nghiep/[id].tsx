@@ -78,14 +78,15 @@ export default function StudentGraduationApplication() {
               },
             }
           : {}),
-        userProfile: (filters.name && filters.name !== ""
+        userProfile:
+          filters.name && filters.name !== ""
             ? {
                 fullname: {
                   contains: filters.name,
                   mode: "insensitive" as const,
                 },
               }
-            : {}),
+            : {},
         fixedClass: {
           ...(filters.fixedClassName
             ? {

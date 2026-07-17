@@ -99,14 +99,14 @@ export default function Certificate() {
   }
 
   const where = useMemo(() => {
-    return (filters.name && filters.name !== ""
-        ? {
-            name: {
-              contains: filters.name,
-              mode: "insensitive" as const,
-            },
-          }
-        : {})
+    return filters.name && filters.name !== ""
+      ? {
+          name: {
+            contains: filters.name,
+            mode: "insensitive" as const,
+          },
+        }
+      : {}
   }, [filters])
 
   const { data: dataTable = [], refetch } = useFindManyCertificate({

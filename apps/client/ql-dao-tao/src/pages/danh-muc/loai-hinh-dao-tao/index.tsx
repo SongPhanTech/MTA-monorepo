@@ -26,14 +26,14 @@ export default function TrainingTypePage() {
   })
 
   const { data = [], refetch } = useFindManyTrainingType({
-    where: (filters.name
-        ? {
-            name: {
-              contains: filters.name,
-              mode: "insensitive",
-            },
-          }
-        : {}),
+    where: filters.name
+      ? {
+          name: {
+            contains: filters.name,
+            mode: "insensitive",
+          },
+        }
+      : {},
     orderBy: {
       name: "asc",
     },

@@ -101,14 +101,14 @@ export default function ArchivedAward() {
   const where = useMemo(() => {
     return {
       ...(filters.archivedAwardStatus ? { status: { in: filters.archivedAwardStatus } } : {}),
-      award: (filters.awardName
-          ? {
-              name: {
-                contains: filters.awardName,
-                mode: "insensitive" as const,
-              },
-            }
-          : {}),
+      award: filters.awardName
+        ? {
+            name: {
+              contains: filters.awardName,
+              mode: "insensitive" as const,
+            },
+          }
+        : {},
       ...(filters.bonusScoreStatus
         ? {
             studentSubjectScore: {

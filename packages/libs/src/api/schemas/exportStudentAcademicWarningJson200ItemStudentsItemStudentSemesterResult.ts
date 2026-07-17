@@ -111,6 +111,8 @@ export type ExportStudentAcademicWarningJson200ItemStudentsItemStudentSemesterRe
   cumulativeGpaBase4: unknown;
   gpaBase10: unknown;
   cumulativeGpaBase10: unknown;
+  cgpaBase4?: unknown;
+  cgpaBase10?: unknown;
   /** @nullable */
   conductScore?: number | null;
   /** @nullable */

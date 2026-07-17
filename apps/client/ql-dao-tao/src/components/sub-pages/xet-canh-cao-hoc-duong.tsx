@@ -59,14 +59,15 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
               },
             }
           : {}),
-        userProfile: (filters.name && filters.name !== ""
+        userProfile:
+          filters.name && filters.name !== ""
             ? {
                 fullname: {
                   contains: filters.name,
                   mode: "insensitive" as const,
                 },
               }
-            : {}),
+            : {},
         ...(filters.fixedClassId
           ? {
               fixedClassId: {

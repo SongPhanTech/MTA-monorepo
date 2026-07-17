@@ -381,8 +381,8 @@ function DongBoDuLieuPage() {
                           Kéo thả hoặc bấm để chọn file JSON xuất từ đợt đăng ký nội bộ
                         </p>
                         <p className="ant-upload-hint text-gray-500">
-                          Định dạng: export-dot-dang-ky-*.json (phiên bản 1.3.2). File chứa
-                          đầy đủ thông tin đợt đăng ký cần khởi tạo.
+                          Định dạng: export-dot-dang-ky-*.json (phiên bản 1.3.2). File chứa đầy đủ
+                          thông tin đợt đăng ký cần khởi tạo.
                         </p>
                       </Dragger>
                     </div>

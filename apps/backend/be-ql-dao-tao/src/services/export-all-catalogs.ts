@@ -36,7 +36,10 @@ const DM_CATALOG_LOADERS: CatalogEntry[] = [
   { key: "DM_XaPhuong", load: () => prisma.dM_XaPhuong.findMany() },
   { key: "DM_XaPhuong_New", load: () => prisma.dM_XaPhuong_New.findMany() },
   { key: "DM_ViTriCongViec", load: () => prisma.dM_ViTriCongViec.findMany() },
-  { key: "DM_TrinhDoHocVan", load: () => prisma.dM_TrinhDoHocVan.findMany({ where: { deletedAt: null } }) },
+  {
+    key: "DM_TrinhDoHocVan",
+    load: () => prisma.dM_TrinhDoHocVan.findMany({ where: { deletedAt: null } }),
+  },
   {
     key: "DM_TrinhDoLyLuanChinhTri",
     load: () => prisma.dM_TrinhDoLyLuanChinhTri.findMany({ where: { deletedAt: null } }),

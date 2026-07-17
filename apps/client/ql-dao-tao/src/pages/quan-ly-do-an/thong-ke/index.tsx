@@ -98,14 +98,15 @@ export default function ThongKe() {
                       },
                     }
                   : {}),
-                userProfile: (filters.name && filters.name !== ""
+                userProfile:
+                  filters.name && filters.name !== ""
                     ? {
                         fullname: {
                           contains: filters.name,
                           mode: "insensitive" as const,
                         },
                       }
-                    : {}),
+                    : {},
               },
               status: StudentThesisRegistrationStatus.ACCEPTED,
             },
@@ -146,14 +147,15 @@ export default function ThongKe() {
                       },
                     }
                   : {}),
-                userProfile: (filters.name && filters.name !== ""
+                userProfile:
+                  filters.name && filters.name !== ""
                     ? {
                         fullname: {
                           contains: filters.name,
                           mode: "insensitive" as const,
                         },
                       }
-                    : {}),
+                    : {},
               },
             },
           },

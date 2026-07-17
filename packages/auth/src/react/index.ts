@@ -25,7 +25,10 @@ const fetchSession = async (): Promise<{
   console.log("[fetchSession] ========== REQUEST ==========")
   console.log("[fetchSession] url:", url)
   console.log("[fetchSession] appCode:", appCode)
-  console.log("[fetchSession] document.cookie:", typeof document !== "undefined" ? document.cookie : "(ssr)")
+  console.log(
+    "[fetchSession] document.cookie:",
+    typeof document !== "undefined" ? document.cookie : "(ssr)"
+  )
 
   try {
     const response = await fetch(url, {

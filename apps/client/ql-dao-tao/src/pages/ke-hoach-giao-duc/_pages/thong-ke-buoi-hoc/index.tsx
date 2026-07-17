@@ -73,7 +73,8 @@ export default function ThongKeBuoiHoc() {
     const startPeriodObj = PERIOD[schedule.startPeriod as keyof typeof PERIOD]
     const endPeriodObj = PERIOD[schedule.endPeriod as keyof typeof PERIOD]
 
-    if (!startPeriodObj || !endPeriodObj) return { code: "UNKNOWN", label: "Không xác định", color: "gray" }
+    if (!startPeriodObj || !endPeriodObj)
+      return { code: "UNKNOWN", label: "Không xác định", color: "gray" }
 
     const todayStr = dayjs(schedule.classDate).format("YYYY-MM-DD")
     const startTime = dayjs(`${todayStr} ${dayjs(startPeriodObj.startTime).format("HH:mm:ss")}`)
@@ -90,7 +91,7 @@ export default function ThongKeBuoiHoc() {
 
   const groupedByOrg = useMemo(() => {
     const groups: Record<string, { id: string; name: string; schedules: any[] }> = {}
-    
+
     for (const schedule of classSchedules) {
       const org = schedule.subjectClass?.subject?.managementOrganization
       const orgId = org?.Id || "unknown"
@@ -141,38 +142,40 @@ export default function ThongKeBuoiHoc() {
   }, [classSchedules, now])
 
   const roomStatusList = useMemo(() => {
-    return rooms.map((room, idx) => {
-      const schedulesForRoom = classSchedules.filter((s) => {
-        const rId = s.roomId || s.subjectClass?.roomId
-        return rId === room.id
+    return rooms
+      .map((room, idx) => {
+        const schedulesForRoom = classSchedules.filter((s) => {
+          const rId = s.roomId || s.subjectClass?.roomId
+          return rId === room.id
+        })
+        const currentActive = schedulesForRoom.find((s) => getScheduleStatus(s).code === "ONGOING")
+
+        let status = "FREE"
+        let statusLabel = "Trống"
+        let tagColor = "default"
+
+        if (currentActive) {
+          status = "BUSY"
+          statusLabel = "Đang sử dụng"
+          tagColor = "error"
+        } else if (schedulesForRoom.length > 0) {
+          status = "OCCUPIED_LATER"
+          statusLabel = "Sử dụng trong ngày"
+          tagColor = "warning"
+        }
+
+        return {
+          id: room.id,
+          key: room.id || idx.toString(),
+          name: room.name,
+          status,
+          statusLabel,
+          tagColor,
+          activeClass: currentActive,
+          schedules: schedulesForRoom,
+        }
       })
-      const currentActive = schedulesForRoom.find((s) => getScheduleStatus(s).code === "ONGOING")
-
-      let status = "FREE"
-      let statusLabel = "Trống"
-      let tagColor = "default"
-
-      if (currentActive) {
-        status = "BUSY"
-        statusLabel = "Đang sử dụng"
-        tagColor = "error"
-      } else if (schedulesForRoom.length > 0) {
-        status = "OCCUPIED_LATER"
-        statusLabel = "Sử dụng trong ngày"
-        tagColor = "warning"
-      }
-
-      return {
-        id: room.id,
-        key: room.id || idx.toString(),
-        name: room.name,
-        status,
-        statusLabel,
-        tagColor,
-        activeClass: currentActive,
-        schedules: schedulesForRoom,
-      }
-    }).sort((a, b) => (a.name || "").localeCompare(b.name || ""))
+      .sort((a, b) => (a.name || "").localeCompare(b.name || ""))
   }, [rooms, classSchedules, now])
 
   return (
@@ -200,22 +203,35 @@ export default function ThongKeBuoiHoc() {
             />
           </div>
           <TableCollapse
-            data={groupedByOrg.map((org) => ({
-              ...org,
-              schedules: org.schedules.filter((s: any) => {
-                if (!searchClass.trim()) return true
-                const kw = searchClass.toLowerCase()
-                const className = s.subjectClass?.name?.toLowerCase() || ""
-                const classCode = s.subjectClass?.code?.toLowerCase() || ""
-                const subjectName = s.subjectClass?.subject?.name?.toLowerCase() || ""
-                const lecturerName = (s.lecturer?.userProfile?.fullname || s.subjectClass?.mainLecturer?.userProfile?.fullname || "").toLowerCase()
-                const roomName = (s.room?.name || s.subjectClass?.room?.name || "").toLowerCase()
-                const orgName = (s.subjectClass?.managementOrganization?.sTen || "").toLowerCase()
-                const period = `tiết ${s.startPeriod} - ${s.endPeriod}`.toLowerCase()
-                return className.includes(kw) || classCode.includes(kw) || subjectName.includes(kw)
-                  || lecturerName.includes(kw) || roomName.includes(kw) || orgName.includes(kw) || period.includes(kw)
-              }),
-            })).filter((org) => !searchClass.trim() || org.schedules.length > 0)}
+            data={groupedByOrg
+              .map((org) => ({
+                ...org,
+                schedules: org.schedules.filter((s: any) => {
+                  if (!searchClass.trim()) return true
+                  const kw = searchClass.toLowerCase()
+                  const className = s.subjectClass?.name?.toLowerCase() || ""
+                  const classCode = s.subjectClass?.code?.toLowerCase() || ""
+                  const subjectName = s.subjectClass?.subject?.name?.toLowerCase() || ""
+                  const lecturerName = (
+                    s.lecturer?.userProfile?.fullname ||
+                    s.subjectClass?.mainLecturer?.userProfile?.fullname ||
+                    ""
+                  ).toLowerCase()
+                  const roomName = (s.room?.name || s.subjectClass?.room?.name || "").toLowerCase()
+                  const orgName = (s.subjectClass?.managementOrganization?.sTen || "").toLowerCase()
+                  const period = `tiết ${s.startPeriod} - ${s.endPeriod}`.toLowerCase()
+                  return (
+                    className.includes(kw) ||
+                    classCode.includes(kw) ||
+                    subjectName.includes(kw) ||
+                    lecturerName.includes(kw) ||
+                    roomName.includes(kw) ||
+                    orgName.includes(kw) ||
+                    period.includes(kw)
+                  )
+                }),
+              }))
+              .filter((org) => !searchClass.trim() || org.schedules.length > 0)}
             childrenFieldName="schedules"
             headerTitleKey="name"
             pagination={false}
@@ -236,7 +252,10 @@ export default function ThongKeBuoiHoc() {
               },
               {
                 title: "Giảng viên",
-                render: (_, record) => record.lecturer?.userProfile?.fullname || record.subjectClass?.mainLecturer?.userProfile?.fullname || "-",
+                render: (_, record) =>
+                  record.lecturer?.userProfile?.fullname ||
+                  record.subjectClass?.mainLecturer?.userProfile?.fullname ||
+                  "-",
               },
               {
                 title: "Tiết học",
@@ -265,14 +284,32 @@ export default function ThongKeBuoiHoc() {
               .filter((s) => {
                 if (!searchLecturer.trim()) return true
                 const kw = searchLecturer.toLowerCase()
-                const lecturerName = (s.lecturer?.userProfile?.fullname || (s as any).subjectClass?.mainLecturer?.userProfile?.fullname || "").toLowerCase()
-                const orgName = (s.lecturer?.organization?.sTen || (s as any).subjectClass?.mainLecturer?.organization?.sTen || "").toLowerCase()
+                const lecturerName = (
+                  s.lecturer?.userProfile?.fullname ||
+                  (s as any).subjectClass?.mainLecturer?.userProfile?.fullname ||
+                  ""
+                ).toLowerCase()
+                const orgName = (
+                  s.lecturer?.organization?.sTen ||
+                  (s as any).subjectClass?.mainLecturer?.organization?.sTen ||
+                  ""
+                ).toLowerCase()
                 const className = (s as any).subjectClass?.name?.toLowerCase() || ""
                 const classCode = (s as any).subjectClass?.code?.toLowerCase() || ""
-                const roomName = ((s as any).room?.name || (s as any).subjectClass?.room?.name || "").toLowerCase()
+                const roomName = (
+                  (s as any).room?.name ||
+                  (s as any).subjectClass?.room?.name ||
+                  ""
+                ).toLowerCase()
                 const period = `tiết ${s.startPeriod} - ${s.endPeriod}`.toLowerCase()
-                return lecturerName.includes(kw) || orgName.includes(kw) || className.includes(kw)
-                  || classCode.includes(kw) || roomName.includes(kw) || period.includes(kw)
+                return (
+                  lecturerName.includes(kw) ||
+                  orgName.includes(kw) ||
+                  className.includes(kw) ||
+                  classCode.includes(kw) ||
+                  roomName.includes(kw) ||
+                  period.includes(kw)
+                )
               })
               .map((s, idx) => ({ ...s, key: idx.toString() }))}
             pagination={false}
@@ -280,14 +317,18 @@ export default function ThongKeBuoiHoc() {
               {
                 title: "Giảng viên",
                 render: (_, record) => {
-                  const name = record.lecturer?.userProfile?.fullname || record.subjectClass?.mainLecturer?.userProfile?.fullname
+                  const name =
+                    record.lecturer?.userProfile?.fullname ||
+                    record.subjectClass?.mainLecturer?.userProfile?.fullname
                   return <span className="font-semibold">{name || "-"}</span>
                 },
               },
               {
                 title: "Khoa/Bộ môn",
                 render: (_, record) =>
-                  record.lecturer?.organization?.sTen || record.subjectClass?.mainLecturer?.organization?.sTen || "-",
+                  record.lecturer?.organization?.sTen ||
+                  record.subjectClass?.mainLecturer?.organization?.sTen ||
+                  "-",
               },
               {
                 title: "Lớp môn học",
@@ -327,7 +368,10 @@ export default function ThongKeBuoiHoc() {
                   s.subjectClass?.name?.toLowerCase().includes(kw)
                 )
                 const lecturerMatch = allSchedules.some((s: any) => {
-                  const name = s.lecturer?.userProfile?.fullname || s.subjectClass?.mainLecturer?.userProfile?.fullname || ""
+                  const name =
+                    s.lecturer?.userProfile?.fullname ||
+                    s.subjectClass?.mainLecturer?.userProfile?.fullname ||
+                    ""
                   return name.toLowerCase().includes(kw)
                 })
                 return roomName.includes(kw) || classMatch || lecturerMatch
@@ -344,13 +388,19 @@ export default function ThongKeBuoiHoc() {
                 title: "Lớp môn học sử dụng trong ngày",
                 render: (_, record) => {
                   if (record.activeClass) {
-                    return <span className="font-semibold text-red-600">{record.activeClass.subjectClass?.name}</span>
+                    return (
+                      <span className="font-semibold text-red-600">
+                        {record.activeClass.subjectClass?.name}
+                      </span>
+                    )
                   }
                   if (record.schedules.length > 0) {
                     return (
                       <div className="flex flex-col gap-1">
                         {record.schedules.map((s: any, i: number) => (
-                          <span key={i} className="text-orange-600 font-medium">{s.subjectClass?.name || "-"}</span>
+                          <span key={i} className="text-orange-600 font-medium">
+                            {s.subjectClass?.name || "-"}
+                          </span>
                         ))}
                       </div>
                     )
@@ -362,16 +412,20 @@ export default function ThongKeBuoiHoc() {
                 title: "Giảng viên giảng dạy",
                 render: (_, record) => {
                   if (record.activeClass) {
-                    return record.activeClass.lecturer?.userProfile?.fullname
-                      || record.activeClass.subjectClass?.mainLecturer?.userProfile?.fullname
-                      || "-"
+                    return (
+                      record.activeClass.lecturer?.userProfile?.fullname ||
+                      record.activeClass.subjectClass?.mainLecturer?.userProfile?.fullname ||
+                      "-"
+                    )
                   }
                   if (record.schedules.length > 0) {
                     return (
                       <div className="flex flex-col gap-1">
                         {record.schedules.map((s: any, i: number) => (
                           <span key={i}>
-                            {s.lecturer?.userProfile?.fullname || s.subjectClass?.mainLecturer?.userProfile?.fullname || "-"}
+                            {s.lecturer?.userProfile?.fullname ||
+                              s.subjectClass?.mainLecturer?.userProfile?.fullname ||
+                              "-"}
                           </span>
                         ))}
                       </div>
@@ -384,7 +438,9 @@ export default function ThongKeBuoiHoc() {
                 title: "Thời gian sử dụng",
                 render: (_, record) => {
                   if (record.activeClass) {
-                    return <span className="font-semibold text-green-600">{`Tiết ${record.activeClass.startPeriod} - ${record.activeClass.endPeriod} (Đang học)`}</span>
+                    return (
+                      <span className="font-semibold text-green-600">{`Tiết ${record.activeClass.startPeriod} - ${record.activeClass.endPeriod} (Đang học)`}</span>
+                    )
                   }
                   if (record.schedules.length > 0) {
                     return record.schedules

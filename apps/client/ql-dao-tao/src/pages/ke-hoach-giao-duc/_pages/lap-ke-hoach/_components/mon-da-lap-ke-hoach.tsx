@@ -107,14 +107,14 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
           },
           where: {
             trainingBlockSubject: {
-              subject: (searchText
-                  ? {
-                      name: {
-                        contains: searchText,
-                        mode: "insensitive",
-                      },
-                    }
-                  : {}),
+              subject: searchText
+                ? {
+                    name: {
+                      contains: searchText,
+                      mode: "insensitive",
+                    },
+                  }
+                : {},
             },
             subjectClassType: type,
           },

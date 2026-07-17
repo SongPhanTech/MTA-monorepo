@@ -18,7 +18,13 @@ const getDataSyncHistory = createRoute({
   method: "get",
   request: {
     query: z.object({
-      limit: z.coerce.number().int().min(1).max(200).optional().openapi({ description: "Số bản ghi" }),
+      limit: z.coerce
+        .number()
+        .int()
+        .min(1)
+        .max(200)
+        .optional()
+        .openapi({ description: "Số bản ghi" }),
     }),
   },
   responses: {

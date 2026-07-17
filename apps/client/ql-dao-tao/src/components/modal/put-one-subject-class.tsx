@@ -34,7 +34,20 @@ import {
 import { calcFinalScore } from "@workspace/libs/utils"
 import { PERIOD } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
-import { Checkbox, Col, Form, InputNumber, message, Row, Tabs, Modal, DatePicker as AntDatePicker, Select as AntSelect, Input, Button } from "antd"
+import {
+  Checkbox,
+  Col,
+  Form,
+  InputNumber,
+  message,
+  Row,
+  Tabs,
+  Modal,
+  DatePicker as AntDatePicker,
+  Select as AntSelect,
+  Input,
+  Button,
+} from "antd"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
 import { useEffect, useState, useMemo } from "react"
@@ -465,557 +478,563 @@ const PutOneSubjectClassModal = () => {
   return (
     <>
       <PutFormModal
-      open={isOpen}
-      form={form}
-      onFinish={onOk}
-      onCancel={onClose}
-      maskClosable={true}
-      title={
-        input?.mode === "view"
-          ? "Xem lớp môn học"
-          : input?.id
-            ? "Cập nhật lớp môn học"
-            : "Mở lớp môn học"
-      }
-      className="w-[95vw]"
-      formProps={{
-        disabled: input?.mode === "view",
-      }}
-      okButtonProps={{
-        hidden: input?.mode === "view",
-      }}
-      cancelButtonProps={{
-        hidden: input?.mode === "view",
-      }}
-    >
-      <Col span={24}>
-        <Tabs activeKey={activeTab} onChange={setActiveTab}>
-          <Tabs.TabPane tab={"Lớp môn học"} key="lop-mon-hoc">
-            <Row gutter={[8, 8]}>
-              <Col span={6}>
-                <FormItem form={form} name="semesterId" label="Học kỳ" required>
-                  <Select
-                    placeholder="Chọn học kỳ"
-                    showSearch
-                    options={semesterData.map((item) => {
-                      return {
-                        ...item,
-                        label: [item?.name, item?.schoolYear?.name].filter(Boolean).join(" - "),
-                        value: item.id,
-                      }
-                    })}
-                    disabled
-                  />
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem form={form} name="subjectId" label="Môn học" required>
-                  <Select
-                    disabled={true}
-                    placeholder="Chọn môn học"
-                    options={subjectVersionData.map((item) => {
-                      return {
-                        ...item,
-                        label: [item?.code, item?.name].filter(Boolean).join(" - "),
-                        value: item.id,
-                      }
-                    })}
-                    allowClear
-                  />
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem form={form} name="schedule" label="Kíp học">
-                  <Select
-                    placeholder="Chọn kíp học"
-                    options={Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(([key, value_]) => {
-                      return {
-                        label: value_,
-                        value: key,
-                      }
-                    })}
-                    allowClear
-                  />
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem form={form} name="trainingLocationId" label="Địa điểm">
-                  <Select
-                    placeholder="Chọn địa điểm"
-                    options={trainingLocationData.map((item) => {
-                      return {
-                        label: item.name,
-                        value: item.id,
-                      }
-                    })}
-                    onChange={() => {
-                      form.setFieldsValue({
-                        roomId: undefined,
-                      })
-                    }}
-                    allowClear
-                  />
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem form={form} name="roomId" label="Phòng học">
-                  <TreeSelect
-                    treeData={buildingData.map((e) => ({
-                      title: e.name,
-                      label: e.name,
-                      value: e.id,
-                      selectable: false,
-                      children: e.rooms.map((room) => ({
-                        title: (
-                          <span>
-                            {room.name} - Sức chứa: {room.capacity}
-                          </span>
-                        ),
-                        label: room.name,
-                        filterValue: room.name,
-                        value: room.id,
-                        selectable: true,
-                      })),
-                    }))}
-                    onChange={(roomId) => {
-                      const room = buildingData.flatMap((b) => b.rooms).find((r) => r.id === roomId)
-                      form.setFieldsValue({ maxStudent: room?.capacity ?? undefined })
-                    }}
-                    showSearch
-                    allowClear
-                    treeNodeFilterProp="title"
-                    treeNodeLabelProp="label"
-                    filterTreeNode={(input, option) =>
-                      ((option as any)?.filterValue ?? "")
-                        .toLowerCase()
-                        .includes(input?.toLowerCase())
-                    }
-                    multiple={false}
-                    showCheckedStrategy="SHOW_CHILD"
-                    dropdownStyle={{
-                      width: 400,
-                      maxHeight: 400,
-                    }}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem form={form} name="maxStudent" label="Số SV tối đa">
-                  <InputNumber
-                    type="number"
-                    min={1}
-                    step={1}
-                    placeholder="Nhập số SV tối đa"
-                    className="w-full"
-                  />
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem form={form} name="lecturerId" label="Giảng viên 1">
-                  <LectureTreeSelect
-                    placeholder="Chọn giảng viên 1"
-                    ignoreLectureIds={[extraLecturerId].filter(Boolean) as string[]}
-                    onChange={(value) => {
-                      form.setFieldsValue({ enterGradeLecturerId: value })
-                    }}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem form={form} name="extraLecturerId" label="Giảng viên 2">
-                  <LectureTreeSelect
-                    placeholder="Chọn giảng viên 2"
-                    ignoreLectureIds={[lecturerId].filter(Boolean) as string[]}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem form={form} name="enterGradeLecturerId" label="Giảng viên chấm điểm">
-                  <LectureTreeSelect
-                    placeholder="Chọn giảng viên"
-                    onChange={(value) => {
-                      form.setFieldsValue({ lecturerId: value })
-                    }}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem form={form} name="lecturerAssignmentDeadline" label="Hạn PCGD">
-                  <DatePicker
-                    placeholder="DD/MM/YYYY"
-                    format={{
-                      format: "DD/MM/YYYY",
-                      type: "mask",
-                    }}
-                    className="w-full"
-                  />
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem form={form} name="examDate" label="Ngày thi">
-                  <DatePicker
-                    onChange={handleChangeDate}
-                    placeholder="DD/MM/YYYY"
-                    format={{
-                      format: "DD/MM/YYYY",
-                      type: "mask",
-                    }}
-                    className="w-full"
-                  />
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem form={form} name="scoreDeadLineStart" label="Hạn bắt đầu nhập điểm TX/ĐK">
-                  <DatePicker disabled placeholder="DD/MM/YYYY" className="w-full" />
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem form={form} name="scoreDeadline" label="Hạn kết thúc nhập điểm TX/ĐK">
-                  <DatePicker disabled placeholder="DD/MM/YYYY" className="w-full" />
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem form={form} name="examScoreDeadline" label="Hạn nhập điểm thi">
-                  <DatePicker disabled placeholder="DD/MM/YYYY" className="w-full" />
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem form={form} name="examType" label="Hình thức thi">
-                  <Select placeholder="Chọn hình thức thi" options={options} />
-                </FormItem>
-              </Col>
-              <Col span={24}>
-                <FormItem form={form} name="dayOfWeeks" label="Ngày học trong tuần">
-                  <Select
-                    placeholder="Chọn ngày trong tuần"
-                    mode="multiple"
-                    allowClear
-                    options={[
-                      { label: "Thứ 2", value: 2 },
-                      { label: "Thứ 3", value: 3 },
-                      { label: "Thứ 4", value: 4 },
-                      { label: "Thứ 5", value: 5 },
-                      { label: "Thứ 6", value: 6 },
-                      { label: "Thứ 7", value: 7 },
-                      { label: "Chủ nhật", value: 8 },
-                    ]}
-                    onChange={(value) => {
-                      form.setFieldsValue({
-                        times: value.map((dayOfWeek: number) => ({
-                          dayOfWeek,
-                          startPeriod: 1,
-                          endPeriod: 1,
+        open={isOpen}
+        form={form}
+        onFinish={onOk}
+        onCancel={onClose}
+        maskClosable={true}
+        title={
+          input?.mode === "view"
+            ? "Xem lớp môn học"
+            : input?.id
+              ? "Cập nhật lớp môn học"
+              : "Mở lớp môn học"
+        }
+        className="w-[95vw]"
+        formProps={{
+          disabled: input?.mode === "view",
+        }}
+        okButtonProps={{
+          hidden: input?.mode === "view",
+        }}
+        cancelButtonProps={{
+          hidden: input?.mode === "view",
+        }}
+      >
+        <Col span={24}>
+          <Tabs activeKey={activeTab} onChange={setActiveTab}>
+            <Tabs.TabPane tab={"Lớp môn học"} key="lop-mon-hoc">
+              <Row gutter={[8, 8]}>
+                <Col span={6}>
+                  <FormItem form={form} name="semesterId" label="Học kỳ" required>
+                    <Select
+                      placeholder="Chọn học kỳ"
+                      showSearch
+                      options={semesterData.map((item) => {
+                        return {
+                          ...item,
+                          label: [item?.name, item?.schoolYear?.name].filter(Boolean).join(" - "),
+                          value: item.id,
+                        }
+                      })}
+                      disabled
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={6}>
+                  <FormItem form={form} name="subjectId" label="Môn học" required>
+                    <Select
+                      disabled={true}
+                      placeholder="Chọn môn học"
+                      options={subjectVersionData.map((item) => {
+                        return {
+                          ...item,
+                          label: [item?.code, item?.name].filter(Boolean).join(" - "),
+                          value: item.id,
+                        }
+                      })}
+                      allowClear
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={6}>
+                  <FormItem form={form} name="schedule" label="Kíp học">
+                    <Select
+                      placeholder="Chọn kíp học"
+                      options={Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(([key, value_]) => {
+                        return {
+                          label: value_,
+                          value: key,
+                        }
+                      })}
+                      allowClear
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={6}>
+                  <FormItem form={form} name="trainingLocationId" label="Địa điểm">
+                    <Select
+                      placeholder="Chọn địa điểm"
+                      options={trainingLocationData.map((item) => {
+                        return {
+                          label: item.name,
+                          value: item.id,
+                        }
+                      })}
+                      onChange={() => {
+                        form.setFieldsValue({
+                          roomId: undefined,
+                        })
+                      }}
+                      allowClear
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={6}>
+                  <FormItem form={form} name="roomId" label="Phòng học">
+                    <TreeSelect
+                      treeData={buildingData.map((e) => ({
+                        title: e.name,
+                        label: e.name,
+                        value: e.id,
+                        selectable: false,
+                        children: e.rooms.map((room) => ({
+                          title: (
+                            <span>
+                              {room.name} - Sức chứa: {room.capacity}
+                            </span>
+                          ),
+                          label: room.name,
+                          filterValue: room.name,
+                          value: room.id,
+                          selectable: true,
                         })),
-                      })
-                    }}
-                  />
-                </FormItem>
-              </Col>
-              <FormItem form={form} name="times" hidden />
-              <Col span={24}>
-                <Table
-                  pagination={false}
-                  columns={[
-                    {
-                      title: "Thứ",
-                      dataIndex: "dayOfWeek",
-                      key: "dayOfWeek",
-                      align: "center",
-                      render: (value) => {
-                        if (value === 2) return "Thứ 2"
-                        if (value === 3) return "Thứ 3"
-                        if (value === 4) return "Thứ 4"
-                        if (value === 5) return "Thứ 5"
-                        if (value === 6) return "Thứ 6"
-                        if (value === 7) return "Thứ 7"
-                        if (value === 8) return "Chủ nhật"
-                        return ""
-                      },
-                    },
-                    {
-                      title: "Tiết bắt đầu",
-                      dataIndex: "startPeriod",
-                      key: "startPeriod",
-                      align: "center",
-                      render: (value, _record, index) => (
-                        <Select
-                          defaultValue={value}
-                          options={Object.entries(PERIOD).map(([key, val]) => ({
-                            label: `${key} - ${val.startTime.format("HH:mm")}`,
-                            value: Number(key),
-                          }))}
-                          onChange={(val) => {
-                            const newTimes = times.map((time, i) =>
-                              i === index ? { ...time, startPeriod: val } : time
-                            )
-                            form.setFieldsValue({
-                              times: newTimes,
-                            })
-                          }}
-                          className="w-full"
-                        />
-                      ),
-                    },
-                    {
-                      title: "Tiết kết thúc",
-                      dataIndex: "endPeriod",
-                      key: "endPeriod",
-                      align: "center",
-                      render: (value, record, index) => (
-                        <Select
-                          defaultValue={value}
-                          options={Object.entries(PERIOD)
-                            .map(([key, val]) => ({
-                              label: `${key} - ${val.endTime.format("HH:mm")}`,
-                              value: Number(key),
-                            }))
-                            .filter((item) => Number(item.value) >= record.startPeriod)}
-                          onChange={(val) => {
-                            const newTimes = times.map((time, i) =>
-                              i === index ? { ...time, endPeriod: val } : time
-                            )
-                            form.setFieldsValue({
-                              times: newTimes,
-                            })
-                          }}
-                          className="w-full"
-                        />
-                      ),
-                    },
-                  ]}
-                  data={times}
-                />
-              </Col>
-            </Row>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={"Danh sách sinh viên"} key="danh-sach-sinh-vien">
-            <Table
-              filters={filterTable}
-              setFilters={setFilterTable}
-              rowKey="id"
-              className="m-0"
-              onRow={(record) => ({
-                onClick: (e) => {
-                  e.preventDefault()
-                  onOpenDetailStudent(record.student?.id || "")
-                },
-                className: "cursor-pointer hover:text-primary",
-              })}
-              columns={[
-                {
-                  title: "STT",
-                  width: 60,
-                  align: "center",
-                  render: (_, __, index) => index + 1,
-                },
-                {
-                  title: "Mã sinh viên",
-                  dataIndex: "code",
-                  align: "center",
-                  width: 150,
-                  type: "input",
-                  render: (_, record) => record.student?.code || "",
-                },
-                {
-                  title: "Họ và tên",
-                  dataIndex: "fullname",
-                  width: 150,
-                  type: "input",
-                  render: (_, record) => record?.student?.userProfile?.fullname || "",
-                },
-                {
-                  title: "Ngày sinh",
-                  dataIndex: "dateOfBirth",
-                  width: 125,
-                  type: "date",
-                  align: "center",
-                  render: (_, record) =>
-                    record?.student?.userProfile.dateOfBirth
-                      ? dayjs(record?.student?.userProfile.dateOfBirth).format("DD/MM/YYYY")
-                      : "",
-                },
-                {
-                  title: "Lớp",
-                  dataIndex: "fixedClassName",
-                  width: 120,
-                  align: "center",
-                  type: "input",
-                  render: (_, record) => record.student?.fixedClass?.code || "",
-                },
-                // #region Điểm TX
-                {
-                  title: "Điểm TX",
-                  dataIndex: "attendanceScore",
-                  width: 100,
-                  align: "center",
-                  type: "order",
-                  render: (_, record) => record.attendanceScore ?? "",
-                },
-                // #region Điểm ĐK
-                {
-                  title: "Điểm ĐK",
-                  dataIndex: "midtermScore",
-                  width: 100,
-                  align: "center",
-                  type: "order",
-                  render: (_, record) => record.midtermScore ?? "",
-                },
-                // #region Điểm Thi
-                {
-                  title: "Điểm thi",
-                  dataIndex: "examScore",
-                  width: 100,
-                  type: "order",
-                  align: "center",
-                  render: (_, record) => record.examScore ?? "",
-                },
-                {
-                  title: "Điểm HP",
-                  width: 80,
-                  align: "center",
-                  render: (_, record: any) => {
-                    const finalScore = calcFinalScore(
-                      record?.student?.fixedClass?.trainingCourse,
+                      }))}
+                      onChange={(roomId) => {
+                        const room = buildingData
+                          .flatMap((b) => b.rooms)
+                          .find((r) => r.id === roomId)
+                        form.setFieldsValue({ maxStudent: room?.capacity ?? undefined })
+                      }}
+                      showSearch
+                      allowClear
+                      treeNodeFilterProp="title"
+                      treeNodeLabelProp="label"
+                      filterTreeNode={(input, option) =>
+                        ((option as any)?.filterValue ?? "")
+                          .toLowerCase()
+                          .includes(input?.toLowerCase())
+                      }
+                      multiple={false}
+                      showCheckedStrategy="SHOW_CHILD"
+                      dropdownStyle={{
+                        width: 400,
+                        maxHeight: 400,
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={6}>
+                  <FormItem form={form} name="maxStudent" label="Số SV tối đa">
+                    <InputNumber
+                      type="number"
+                      min={1}
+                      step={1}
+                      placeholder="Nhập số SV tối đa"
+                      className="w-full"
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={6}>
+                  <FormItem form={form} name="lecturerId" label="Giảng viên 1">
+                    <LectureTreeSelect
+                      placeholder="Chọn giảng viên 1"
+                      ignoreLectureIds={[extraLecturerId].filter(Boolean) as string[]}
+                      onChange={(value) => {
+                        form.setFieldsValue({ enterGradeLecturerId: value })
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={6}>
+                  <FormItem form={form} name="extraLecturerId" label="Giảng viên 2">
+                    <LectureTreeSelect
+                      placeholder="Chọn giảng viên 2"
+                      ignoreLectureIds={[lecturerId].filter(Boolean) as string[]}
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={6}>
+                  <FormItem form={form} name="enterGradeLecturerId" label="Giảng viên chấm điểm">
+                    <LectureTreeSelect
+                      placeholder="Chọn giảng viên"
+                      onChange={(value) => {
+                        form.setFieldsValue({ lecturerId: value })
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={6}>
+                  <FormItem form={form} name="lecturerAssignmentDeadline" label="Hạn PCGD">
+                    <DatePicker
+                      placeholder="DD/MM/YYYY"
+                      format={{
+                        format: "DD/MM/YYYY",
+                        type: "mask",
+                      }}
+                      className="w-full"
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={6}>
+                  <FormItem form={form} name="examDate" label="Ngày thi">
+                    <DatePicker
+                      onChange={handleChangeDate}
+                      placeholder="DD/MM/YYYY"
+                      format={{
+                        format: "DD/MM/YYYY",
+                        type: "mask",
+                      }}
+                      className="w-full"
+                    />
+                  </FormItem>
+                </Col>
+                <Col span={6}>
+                  <FormItem
+                    form={form}
+                    name="scoreDeadLineStart"
+                    label="Hạn bắt đầu nhập điểm TX/ĐK"
+                  >
+                    <DatePicker disabled placeholder="DD/MM/YYYY" className="w-full" />
+                  </FormItem>
+                </Col>
+                <Col span={6}>
+                  <FormItem form={form} name="scoreDeadline" label="Hạn kết thúc nhập điểm TX/ĐK">
+                    <DatePicker disabled placeholder="DD/MM/YYYY" className="w-full" />
+                  </FormItem>
+                </Col>
+                <Col span={6}>
+                  <FormItem form={form} name="examScoreDeadline" label="Hạn nhập điểm thi">
+                    <DatePicker disabled placeholder="DD/MM/YYYY" className="w-full" />
+                  </FormItem>
+                </Col>
+                <Col span={6}>
+                  <FormItem form={form} name="examType" label="Hình thức thi">
+                    <Select placeholder="Chọn hình thức thi" options={options} />
+                  </FormItem>
+                </Col>
+                <Col span={24}>
+                  <FormItem form={form} name="dayOfWeeks" label="Ngày học trong tuần">
+                    <Select
+                      placeholder="Chọn ngày trong tuần"
+                      mode="multiple"
+                      allowClear
+                      options={[
+                        { label: "Thứ 2", value: 2 },
+                        { label: "Thứ 3", value: 3 },
+                        { label: "Thứ 4", value: 4 },
+                        { label: "Thứ 5", value: 5 },
+                        { label: "Thứ 6", value: 6 },
+                        { label: "Thứ 7", value: 7 },
+                        { label: "Chủ nhật", value: 8 },
+                      ]}
+                      onChange={(value) => {
+                        form.setFieldsValue({
+                          times: value.map((dayOfWeek: number) => ({
+                            dayOfWeek,
+                            startPeriod: 1,
+                            endPeriod: 1,
+                          })),
+                        })
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+                <FormItem form={form} name="times" hidden />
+                <Col span={24}>
+                  <Table
+                    pagination={false}
+                    columns={[
                       {
-                        ...record,
-                        attendanceScore: record?.attendanceScore,
-                        midtermScore: record?.midtermScore,
-                        examScore: record?.examScore,
+                        title: "Thứ",
+                        dataIndex: "dayOfWeek",
+                        key: "dayOfWeek",
+                        align: "center",
+                        render: (value) => {
+                          if (value === 2) return "Thứ 2"
+                          if (value === 3) return "Thứ 3"
+                          if (value === 4) return "Thứ 4"
+                          if (value === 5) return "Thứ 5"
+                          if (value === 6) return "Thứ 6"
+                          if (value === 7) return "Thứ 7"
+                          if (value === 8) return "Chủ nhật"
+                          return ""
+                        },
                       },
-                      record.subjectClass?.type || "NORMAL"
-                    )?.toNumber()
-                    return <div>{finalScore}</div>
+                      {
+                        title: "Tiết bắt đầu",
+                        dataIndex: "startPeriod",
+                        key: "startPeriod",
+                        align: "center",
+                        render: (value, _record, index) => (
+                          <Select
+                            defaultValue={value}
+                            options={Object.entries(PERIOD).map(([key, val]) => ({
+                              label: `${key} - ${val.startTime.format("HH:mm")}`,
+                              value: Number(key),
+                            }))}
+                            onChange={(val) => {
+                              const newTimes = times.map((time, i) =>
+                                i === index ? { ...time, startPeriod: val } : time
+                              )
+                              form.setFieldsValue({
+                                times: newTimes,
+                              })
+                            }}
+                            className="w-full"
+                          />
+                        ),
+                      },
+                      {
+                        title: "Tiết kết thúc",
+                        dataIndex: "endPeriod",
+                        key: "endPeriod",
+                        align: "center",
+                        render: (value, record, index) => (
+                          <Select
+                            defaultValue={value}
+                            options={Object.entries(PERIOD)
+                              .map(([key, val]) => ({
+                                label: `${key} - ${val.endTime.format("HH:mm")}`,
+                                value: Number(key),
+                              }))
+                              .filter((item) => Number(item.value) >= record.startPeriod)}
+                            onChange={(val) => {
+                              const newTimes = times.map((time, i) =>
+                                i === index ? { ...time, endPeriod: val } : time
+                              )
+                              form.setFieldsValue({
+                                times: newTimes,
+                              })
+                            }}
+                            className="w-full"
+                          />
+                        ),
+                      },
+                    ]}
+                    data={times}
+                  />
+                </Col>
+              </Row>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={"Danh sách sinh viên"} key="danh-sach-sinh-vien">
+              <Table
+                filters={filterTable}
+                setFilters={setFilterTable}
+                rowKey="id"
+                className="m-0"
+                onRow={(record) => ({
+                  onClick: (e) => {
+                    e.preventDefault()
+                    onOpenDetailStudent(record.student?.id || "")
                   },
-                },
-                {
-                  title: "Cấm thi",
-                  width: 80,
-                  align: "center",
-                  render: (_, record) => {
-                    return <Checkbox disabled checked={record.examBanned} />
+                  className: "cursor-pointer hover:text-primary",
+                })}
+                columns={[
+                  {
+                    title: "STT",
+                    width: 60,
+                    align: "center",
+                    render: (_, __, index) => index + 1,
                   },
-                },
-                {
-                  title: "Lý do cấm thi",
-                  width: 150,
-                  render: (_, record) => record.examBannedReason || "",
-                },
-                {
-                  title: "Hoãn thi",
-                  width: 80,
-                  align: "center",
-                  render: (_, record) => {
-                    return <Checkbox disabled checked={record.examPostponed} />
+                  {
+                    title: "Mã sinh viên",
+                    dataIndex: "code",
+                    align: "center",
+                    width: 150,
+                    type: "input",
+                    render: (_, record) => record.student?.code || "",
                   },
-                },
-                {
-                  title: "Lý do hoãn thi",
-                  width: 200,
-                  render: (_, record) => record.examPostponedReason || "",
-                },
-                {
-                  title: "Đình chỉ",
-                  width: 80,
-                  align: "center",
-                  render: (_, record) => {
-                    return <Checkbox disabled checked={record.suspended} />
+                  {
+                    title: "Họ và tên",
+                    dataIndex: "fullname",
+                    width: 150,
+                    type: "input",
+                    render: (_, record) => record?.student?.userProfile?.fullname || "",
                   },
-                },
-                {
-                  title: "Lý do đình chỉ",
-                  width: 140,
-                  render: (_, record) => record.suspendedReason || "",
-                },
-                {
-                  title: "Ghi chú",
-                  dataIndex: "description",
-                  width: 150,
-                  align: "center",
-                  render: (_, record) => record.description || "",
-                },
-              ]}
-              data={dataTable}
-              pagination={false}
-            />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={"Lịch học"} key="lich-hoc">
-            <Table
-              data={classSchedules}
-              className="m-0"
-              pagination={false}
-              columns={[
-                {
-                  title: "TT",
-                  width: 35,
-                  align: "center",
-                  render: (_, __, index) => index + 1,
-                },
-                {
-                  title: "Ngày học",
-                  render: (_, record) => {
-                    return (
-                      <p
-                        className={cn(
-                          input?.schedules?.some((date) =>
-                            dayjs(record.classDate).isSame(date, "day")
-                          ) && "text-primary font-semibold",
-                          record.subjectClass?.examDate &&
-                            dayjs(record.classDate).isSame(record.subjectClass.examDate, "day")
-                            ? "text-red-600"
-                            : ""
-                        )}
-                      >
-                        {record.subjectClass?.examDate &&
-                        dayjs(record.classDate).isSame(record.subjectClass.examDate, "day")
-                          ? "Ngày thi:"
-                          : ""}{" "}
-                        {dayjs(record.classDate).format("dddd DD/MM/YYYY").titleCase()}
-                      </p>
-                    )
+                  {
+                    title: "Ngày sinh",
+                    dataIndex: "dateOfBirth",
+                    width: 125,
+                    type: "date",
+                    align: "center",
+                    render: (_, record) =>
+                      record?.student?.userProfile.dateOfBirth
+                        ? dayjs(record?.student?.userProfile.dateOfBirth).format("DD/MM/YYYY")
+                        : "",
                   },
-                },
-                {
-                  title: "Tiết học",
-                  align: "center",
-                  render: (_, record) => {
-                    return (
-                      <>
-                        {record.startPeriod} - {record.endPeriod}
-                      </>
-                    )
+                  {
+                    title: "Lớp",
+                    dataIndex: "fixedClassName",
+                    width: 120,
+                    align: "center",
+                    type: "input",
+                    render: (_, record) => record.student?.fixedClass?.code || "",
                   },
-                },
-                {
-                  title: "Phòng học",
-                  align: "center",
-                  render: (_, record) => record.room?.name || "-",
-                },
-                {
-                  title: "Thao tác",
-                  align: "center",
-                  width: 100,
-                  hidden: input?.mode === "view",
-                  render: (_, record) => (
-                    <div className="flex justify-center">
-                      <EditIcon
-                        onClick={() => handleOpenChangeSchedule(record)}
-                        className="text-sm text-blue-700 cursor-pointer"
-                      />
-                    </div>
-                  ),
-                },
-              ]}
-            />
-          </Tabs.TabPane>
-        </Tabs>
-      </Col>
-    </PutFormModal>
-    <ModalChangeClassSchedule
-      visible={isChangeScheduleOpen}
-      onClose={() => setIsChangeScheduleOpen(false)}
-      schedule={editingSchedule}
-      onSuccess={refetchClassSchedules}
-    />
+                  // #region Điểm TX
+                  {
+                    title: "Điểm TX",
+                    dataIndex: "attendanceScore",
+                    width: 100,
+                    align: "center",
+                    type: "order",
+                    render: (_, record) => record.attendanceScore ?? "",
+                  },
+                  // #region Điểm ĐK
+                  {
+                    title: "Điểm ĐK",
+                    dataIndex: "midtermScore",
+                    width: 100,
+                    align: "center",
+                    type: "order",
+                    render: (_, record) => record.midtermScore ?? "",
+                  },
+                  // #region Điểm Thi
+                  {
+                    title: "Điểm thi",
+                    dataIndex: "examScore",
+                    width: 100,
+                    type: "order",
+                    align: "center",
+                    render: (_, record) => record.examScore ?? "",
+                  },
+                  {
+                    title: "Điểm HP",
+                    width: 80,
+                    align: "center",
+                    render: (_, record: any) => {
+                      const finalScore = calcFinalScore(
+                        record?.student?.fixedClass?.trainingCourse,
+                        {
+                          ...record,
+                          attendanceScore: record?.attendanceScore,
+                          midtermScore: record?.midtermScore,
+                          examScore: record?.examScore,
+                        },
+                        record.subjectClass?.type || "NORMAL"
+                      )?.toNumber()
+                      return <div>{finalScore}</div>
+                    },
+                  },
+                  {
+                    title: "Cấm thi",
+                    width: 80,
+                    align: "center",
+                    render: (_, record) => {
+                      return <Checkbox disabled checked={record.examBanned} />
+                    },
+                  },
+                  {
+                    title: "Lý do cấm thi",
+                    width: 150,
+                    render: (_, record) => record.examBannedReason || "",
+                  },
+                  {
+                    title: "Hoãn thi",
+                    width: 80,
+                    align: "center",
+                    render: (_, record) => {
+                      return <Checkbox disabled checked={record.examPostponed} />
+                    },
+                  },
+                  {
+                    title: "Lý do hoãn thi",
+                    width: 200,
+                    render: (_, record) => record.examPostponedReason || "",
+                  },
+                  {
+                    title: "Đình chỉ",
+                    width: 80,
+                    align: "center",
+                    render: (_, record) => {
+                      return <Checkbox disabled checked={record.suspended} />
+                    },
+                  },
+                  {
+                    title: "Lý do đình chỉ",
+                    width: 140,
+                    render: (_, record) => record.suspendedReason || "",
+                  },
+                  {
+                    title: "Ghi chú",
+                    dataIndex: "description",
+                    width: 150,
+                    align: "center",
+                    render: (_, record) => record.description || "",
+                  },
+                ]}
+                data={dataTable}
+                pagination={false}
+              />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={"Lịch học"} key="lich-hoc">
+              <Table
+                data={classSchedules}
+                className="m-0"
+                pagination={false}
+                columns={[
+                  {
+                    title: "TT",
+                    width: 35,
+                    align: "center",
+                    render: (_, __, index) => index + 1,
+                  },
+                  {
+                    title: "Ngày học",
+                    render: (_, record) => {
+                      return (
+                        <p
+                          className={cn(
+                            input?.schedules?.some((date) =>
+                              dayjs(record.classDate).isSame(date, "day")
+                            ) && "text-primary font-semibold",
+                            record.subjectClass?.examDate &&
+                              dayjs(record.classDate).isSame(record.subjectClass.examDate, "day")
+                              ? "text-red-600"
+                              : ""
+                          )}
+                        >
+                          {record.subjectClass?.examDate &&
+                          dayjs(record.classDate).isSame(record.subjectClass.examDate, "day")
+                            ? "Ngày thi:"
+                            : ""}{" "}
+                          {dayjs(record.classDate).format("dddd DD/MM/YYYY").titleCase()}
+                        </p>
+                      )
+                    },
+                  },
+                  {
+                    title: "Tiết học",
+                    align: "center",
+                    render: (_, record) => {
+                      return (
+                        <>
+                          {record.startPeriod} - {record.endPeriod}
+                        </>
+                      )
+                    },
+                  },
+                  {
+                    title: "Phòng học",
+                    align: "center",
+                    render: (_, record) => record.room?.name || "-",
+                  },
+                  {
+                    title: "Thao tác",
+                    align: "center",
+                    width: 100,
+                    hidden: input?.mode === "view",
+                    render: (_, record) => (
+                      <div className="flex justify-center">
+                        <EditIcon
+                          onClick={() => handleOpenChangeSchedule(record)}
+                          className="text-sm text-blue-700 cursor-pointer"
+                        />
+                      </div>
+                    ),
+                  },
+                ]}
+              />
+            </Tabs.TabPane>
+          </Tabs>
+        </Col>
+      </PutFormModal>
+      <ModalChangeClassSchedule
+        visible={isChangeScheduleOpen}
+        onClose={() => setIsChangeScheduleOpen(false)}
+        schedule={editingSchedule}
+        onSuccess={refetchClassSchedules}
+      />
     </>
   )
 }

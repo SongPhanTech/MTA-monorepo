@@ -12,9 +12,7 @@ function appendSharedStrings(sharedStringsXml: string, placeholders: string[]) {
   const currentUnique = Number(uniqueCountMatch?.[1] ?? 0)
   const currentCount = Number(countMatch?.[1] ?? 0)
 
-  const newItems = placeholders
-    .map((placeholder) => `<si><t>${placeholder}</t></si>`)
-    .join("")
+  const newItems = placeholders.map((placeholder) => `<si><t>${placeholder}</t></si>`).join("")
 
   const updatedXml = sharedStringsXml
     .replace(/uniqueCount="\d+"/, `uniqueCount="${currentUnique + placeholders.length}"`)
@@ -28,7 +26,12 @@ function appendSharedStrings(sharedStringsXml: string, placeholders: string[]) {
   }
 }
 
-function upsertSharedStringCell(sheetXml: string, cellRef: string, sharedStringIndex: number, style?: string) {
+function upsertSharedStringCell(
+  sheetXml: string,
+  cellRef: string,
+  sharedStringIndex: number,
+  style?: string
+) {
   const styleAttr = style ? ` s="${style}"` : ""
   const replacement = `<c r="${cellRef}"${styleAttr} t="s"><v>${sharedStringIndex}</v></c>`
   const selfClosingPattern = new RegExp(`<c r="${cellRef}"([^/>]*)/>`)

@@ -6,8 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const presets = {
   training: {
-    sourceUrl:
-      process.env.TRAINING_OPENAPI_URL ?? "https://mta.swantech.vn/api/lms/openapi",
+    sourceUrl: process.env.TRAINING_OPENAPI_URL ?? "https://mta.swantech.vn/api/lms/openapi",
     outputPath: path.join(__dirname, "../openapi/training.openapi.json"),
   },
   ems: {
@@ -99,10 +98,7 @@ async function prepareOpenApi({ sourceUrl, outputPath }) {
 
 async function main() {
   const target = process.argv[2] ?? "all"
-  const jobs =
-    target === "all"
-      ? Object.values(presets)
-      : [presets[target]].filter(Boolean)
+  const jobs = target === "all" ? Object.values(presets) : [presets[target]].filter(Boolean)
 
   if (jobs.length === 0) {
     throw new Error(`Unknown preset "${target}". Use: training | ems | all`)

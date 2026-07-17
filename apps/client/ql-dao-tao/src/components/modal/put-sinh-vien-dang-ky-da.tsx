@@ -75,24 +75,24 @@ const PutStudentThesisRegistration = () => {
               AND: [
                 {
                   OR: [
-                    (searchText
-                        ? {
-                            code: {
+                    searchText
+                      ? {
+                          code: {
+                            contains: searchText,
+                            mode: "insensitive",
+                          },
+                        }
+                      : {},
+                    searchText
+                      ? {
+                          userProfile: {
+                            fullname: {
                               contains: searchText,
                               mode: "insensitive",
                             },
-                          }
-                        : {}),
-                    (searchText
-                        ? {
-                            userProfile: {
-                              fullname: {
-                                contains: searchText,
-                                mode: "insensitive",
-                              },
-                            },
-                          }
-                        : {}),
+                          },
+                        }
+                      : {},
                   ],
                 },
                 {

@@ -49,6 +49,17 @@ const DefaultLayout = ({
   const listBreadcrumb = useMemo(() => {
     return breadcrumb?.length > 0
       ? breadcrumb.slice(-2).map((i: { title: string; href?: string }) => {
+          if (i?.href) {
+            return {
+              title: <Link href={i.href}>{i.title}</Link>,
+            }
+          }
+          return {
+            title: i.title,
+          }
+        })
+      : breadcrumbList
+        ? breadcrumbList.slice(-2).map((i: { title: string; href?: string }) => {
             if (i?.href) {
               return {
                 title: <Link href={i.href}>{i.title}</Link>,
@@ -58,17 +69,6 @@ const DefaultLayout = ({
               title: i.title,
             }
           })
-      : breadcrumbList
-        ? breadcrumbList.slice(-2).map((i: { title: string; href?: string }) => {
-              if (i?.href) {
-                return {
-                  title: <Link href={i.href}>{i.title}</Link>,
-                }
-              }
-              return {
-                title: i.title,
-              }
-            })
         : []
   }, [breadcrumb, breadcrumbList])
   useEffect(() => {

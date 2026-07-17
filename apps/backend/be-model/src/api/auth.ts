@@ -51,7 +51,10 @@ app.openapi(
     console.log("[get-session] appCode (normalized):", getAppCode)
     console.log("[get-session] cookieKey:", cookieKey)
     console.log("[get-session] tenantCode:", tenantCode)
-    console.log("[get-session] tokenSource:", headerToken ? "Authorization header" : cookieToken ? "cookie" : "none")
+    console.log(
+      "[get-session] tokenSource:",
+      headerToken ? "Authorization header" : cookieToken ? "cookie" : "none"
+    )
     console.log("[get-session] Authorization header:", authHeader ?? "(empty)")
     console.log("[get-session] xToken:", xToken ?? "(empty)")
     console.log("[get-session] reqCookie:", reqCookie || "(empty)")
