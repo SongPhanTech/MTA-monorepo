@@ -7,6 +7,8 @@ import { PERIOD } from "@workspace/ui"
 import Table from "@components/commons/table"
 import TableCollapse from "@components/commons/tableCollapse"
 
+import type { ClassSchedule, Room, Lecturer, UserProfile, SubjectClass, Subject, FixedClass } from "@workspace/db/client"
+
 const { TabPane } = Tabs
 
 export default function ThongKeBuoiHoc() {
@@ -57,10 +59,13 @@ export default function ThongKeBuoiHoc() {
               managementOrganization: true,
             },
           },
+          fixedClasses: true,
         },
       },
     },
   })
+
+  type ClassScheduleData = typeof classSchedules[number]
 
   const { data: rooms = [] } = useFindManyRoom({
     where: {
@@ -69,7 +74,7 @@ export default function ThongKeBuoiHoc() {
     },
   })
 
-  const getScheduleStatus = (schedule: any) => {
+  const getScheduleStatus = (schedule: ClassScheduleData) => {
     const startPeriodObj = PERIOD[schedule.startPeriod as keyof typeof PERIOD]
     const endPeriodObj = PERIOD[schedule.endPeriod as keyof typeof PERIOD]
 
@@ -89,94 +94,201 @@ export default function ThongKeBuoiHoc() {
     }
   }
 
-  const groupedByOrg = useMemo(() => {
-    const groups: Record<string, { id: string; name: string; schedules: any[] }> = {}
+  const getShift = (startPeriod: number) => {
+    if (startPeriod <= 6) return "Sáng"
+    if (startPeriod <= 12) return "Chiều"
+    return "Tối"
+  }
 
-    for (const schedule of classSchedules) {
-      const org = schedule.subjectClass?.subject?.managementOrganization
-      const orgId = org?.Id || "unknown"
-      const orgName = org?.sTen || "Khoa/Bộ môn khác"
+  const getSharedClasses = (fixedClasses: FixedClass[] = []) => {
+    if (fixedClasses.length <= 1) return ""
+    return fixedClasses.map(fc => fc.code || fc.name).join(", ")
+  }
 
-      if (!groups[orgId]) {
-        groups[orgId] = { id: orgId, name: orgName, schedules: [] }
-      }
-      groups[orgId].schedules.push({
-        ...schedule,
-        id: schedule.id,
-      })
-    }
+  const colStt = {
+    title: "STT",
+    width: 50,
+    align: "center" as const,
+    render: (_: unknown, __: unknown, index: number) => index + 1,
+  }
 
-    return Object.values(groups).sort((a, b) => a.name.localeCompare(b.name))
-  }, [classSchedules])
+  const colMaPhong = {
+    title: "Mã phòng",
+    align: "center" as const,
+    render: (_: unknown, record: unknown) => {
+      const item = record as ClassScheduleData
+      return item.room?.name || item.subjectClass?.room?.name || "-"
+    },
+  }
 
-  const stats = useMemo(() => {
-    let ongoing = 0
-    let upcoming = 0
-    let finished = 0
-    const activeLecturerIds = new Set<string>()
-    const activeRoomIds = new Set<string>()
+  const colTenPhong = {
+    title: "Tên phòng",
+    render: (_: unknown, record: unknown) => {
+      const item = record as ClassScheduleData
+      const pName = item.room?.name || item.subjectClass?.room?.name
+      return pName ? `Phòng ${pName}` : "-"
+    },
+  }
 
-    for (const schedule of classSchedules) {
-      const status = getScheduleStatus(schedule).code
-      const rId = schedule.roomId || schedule.subjectClass?.roomId
-      const lId = schedule.lecturerId || schedule.subjectClass?.lecturerId
-      if (status === "ONGOING") {
-        ongoing++
-        if (lId) activeLecturerIds.add(lId)
-        if (rId) activeRoomIds.add(rId)
-      } else if (status === "UPCOMING") {
-        upcoming++
-      } else if (status === "FINISHED") {
-        finished++
-      }
-    }
+  const colMaMon = {
+    title: "Mã môn",
+    align: "center" as const,
+    render: (_: unknown, record: unknown) => {
+      const item = record as ClassScheduleData
+      return item.subjectClass?.subject?.code || "-"
+    },
+  }
 
-    return {
-      total: classSchedules.length,
-      ongoing,
-      upcoming,
-      finished,
-      activeRooms: activeRoomIds.size,
-      activeLecturers: activeLecturerIds.size,
-    }
-  }, [classSchedules, now])
+  const colTenMon = {
+    title: "Tên môn",
+    render: (_: unknown, record: unknown) => {
+      const item = record as ClassScheduleData
+      return item.subjectClass?.subject?.name || "-"
+    },
+  }
 
-  const roomStatusList = useMemo(() => {
-    return rooms
-      .map((room, idx) => {
-        const schedulesForRoom = classSchedules.filter((s) => {
-          const rId = s.roomId || s.subjectClass?.roomId
-          return rId === room.id
-        })
-        const currentActive = schedulesForRoom.find((s) => getScheduleStatus(s).code === "ONGOING")
+  const colMaLop = {
+    title: "Mã lớp",
+    align: "center" as const,
+    render: (_: unknown, record: unknown) => {
+      const item = record as ClassScheduleData
+      return item.subjectClass?.fixedClasses?.map((fc: FixedClass) => fc.code).join(", ") || "-"
+    },
+  }
 
-        let status = "FREE"
-        let statusLabel = "Trống"
-        let tagColor = "default"
+  const colTenLop = {
+    title: "Tên lớp",
+    render: (_: unknown, record: unknown) => {
+      const item = record as ClassScheduleData
+      return item.subjectClass?.fixedClasses?.map((fc: FixedClass) => fc.name).join(", ") || "-"
+    },
+  }
 
-        if (currentActive) {
-          status = "BUSY"
-          statusLabel = "Đang sử dụng"
-          tagColor = "error"
-        } else if (schedulesForRoom.length > 0) {
-          status = "OCCUPIED_LATER"
-          statusLabel = "Sử dụng trong ngày"
-          tagColor = "warning"
-        }
+  const colQuanSo = {
+    title: "Quân số",
+    align: "center" as const,
+    render: (_: unknown, record: unknown) => {
+      const item = record as ClassScheduleData
+      return item.subjectClass?.maxStudent ?? "-"
+    },
+  }
 
-        return {
-          id: room.id,
-          key: room.id || idx.toString(),
-          name: room.name,
-          status,
-          statusLabel,
-          tagColor,
-          activeClass: currentActive,
-          schedules: schedulesForRoom,
-        }
-      })
-      .sort((a, b) => (a.name || "").localeCompare(b.name || ""))
-  }, [rooms, classSchedules, now])
+  const colMaGv = {
+    title: "Mã GV",
+    align: "center" as const,
+    render: (_: unknown, record: unknown) => {
+      const item = record as ClassScheduleData
+      return item.lecturer?.userProfile?.code || item.subjectClass?.mainLecturer?.userProfile?.code || "-"
+    },
+  }
+
+  const colTenGv = {
+    title: "Tên GV",
+    render: (_: unknown, record: unknown) => {
+      const item = record as ClassScheduleData
+      return item.lecturer?.userProfile?.fullname || item.subjectClass?.mainLecturer?.userProfile?.fullname || "-"
+    },
+  }
+
+  const colHtHoc = {
+    title: "HT học",
+    align: "center" as const,
+    render: (_: unknown, record: unknown) => {
+      const item = record as ClassScheduleData
+      return item.periodType || "-"
+    },
+  }
+
+  const colNgay = {
+    title: "Ngày",
+    align: "center" as const,
+    render: (_: unknown, record: unknown) => {
+      const item = record as ClassScheduleData
+      return dayjs(item.classDate).format("DD/MM/YYYY")
+    },
+  }
+
+  const colCaHoc = {
+    title: "Ca học",
+    align: "center" as const,
+    render: (_: unknown, record: unknown) => {
+      const item = record as ClassScheduleData
+      return getShift(item.startPeriod)
+    },
+  }
+
+  const colHocTu = {
+    title: "Học từ",
+    align: "center" as const,
+    render: (_: unknown, record: unknown) => {
+      const item = record as ClassScheduleData
+      return `${item.startPeriod}-${item.endPeriod}`
+    },
+  }
+
+  const colHocChung = {
+    title: "Học chung với lớp",
+    render: (_: unknown, record: unknown) => {
+      const item = record as ClassScheduleData
+      return getSharedClasses(item.subjectClass?.fixedClasses)
+    },
+  }
+
+  const classesColumns = [
+    colStt,
+    colMaLop,
+    colTenLop,
+    colQuanSo,
+    colMaMon,
+    colTenMon,
+    colMaGv,
+    colTenGv,
+    colMaPhong,
+    colTenPhong,
+    colHtHoc,
+    colNgay,
+    colCaHoc,
+    colHocTu,
+    colHocChung,
+  ]
+
+  const lecturersColumns = [
+    colStt,
+    colMaGv,
+    colTenGv,
+    colMaMon,
+    colTenMon,
+    colMaLop,
+    colTenLop,
+    colQuanSo,
+    colMaPhong,
+    colTenPhong,
+    colHtHoc,
+    colNgay,
+    colCaHoc,
+    colHocTu,
+    colHocChung,
+  ]
+
+  const roomsColumns = [
+    colStt,
+    colMaPhong,
+    colTenPhong,
+    colMaMon,
+    colTenMon,
+    colMaLop,
+    colTenLop,
+    colQuanSo,
+    colMaGv,
+    colTenGv,
+    colHtHoc,
+    colNgay,
+    colCaHoc,
+    colHocTu,
+    colHocChung,
+  ]
+
+  const schedulesData = classSchedules as unknown as ClassScheduleData[]
 
   return (
     <div>
@@ -202,70 +314,24 @@ export default function ThongKeBuoiHoc() {
               style={{ maxWidth: 400 }}
             />
           </div>
-          <TableCollapse
-            data={groupedByOrg
-              .map((org) => ({
-                ...org,
-                schedules: org.schedules.filter((s: any) => {
-                  if (!searchClass.trim()) return true
-                  const kw = searchClass.toLowerCase()
-                  const className = s.subjectClass?.name?.toLowerCase() || ""
-                  const classCode = s.subjectClass?.code?.toLowerCase() || ""
-                  const subjectName = s.subjectClass?.subject?.name?.toLowerCase() || ""
-                  const lecturerName = (
-                    s.lecturer?.userProfile?.fullname ||
-                    s.subjectClass?.mainLecturer?.userProfile?.fullname ||
-                    ""
-                  ).toLowerCase()
-                  const roomName = (s.room?.name || s.subjectClass?.room?.name || "").toLowerCase()
-                  const orgName = (s.subjectClass?.managementOrganization?.sTen || "").toLowerCase()
-                  const period = `tiết ${s.startPeriod} - ${s.endPeriod}`.toLowerCase()
-                  return (
-                    className.includes(kw) ||
-                    classCode.includes(kw) ||
-                    subjectName.includes(kw) ||
-                    lecturerName.includes(kw) ||
-                    roomName.includes(kw) ||
-                    orgName.includes(kw) ||
-                    period.includes(kw)
-                  )
-                }),
-              }))
-              .filter((org) => !searchClass.trim() || org.schedules.length > 0)}
-            childrenFieldName="schedules"
-            headerTitleKey="name"
+          <Table
+            data={schedulesData
+              .filter((s: ClassScheduleData) => {
+                if (!searchClass.trim()) return true
+                const kw = searchClass.toLowerCase()
+                const className = s.subjectClass?.name?.toLowerCase() || ""
+                const classCode = s.subjectClass?.code?.toLowerCase() || ""
+                const subjectName = s.subjectClass?.subject?.name?.toLowerCase() || ""
+                const lecturerName = (s.lecturer?.userProfile?.fullname || s.subjectClass?.mainLecturer?.userProfile?.fullname || "").toLowerCase()
+                const roomName = (s.room?.name || s.subjectClass?.room?.name || "").toLowerCase()
+                const orgName = (s.subjectClass?.subject?.managementOrganization?.sTen || "").toLowerCase()
+                const period = `tiết ${s.startPeriod} - ${s.endPeriod}`.toLowerCase()
+                return className.includes(kw) || classCode.includes(kw) || subjectName.includes(kw)
+                  || lecturerName.includes(kw) || roomName.includes(kw) || orgName.includes(kw) || period.includes(kw)
+              })
+              .map((s: ClassScheduleData, idx: number) => ({ ...s, key: s.id || idx.toString() }))}
             pagination={false}
-            columns={[
-              {
-                title: "Mã lớp",
-                dataIndex: ["subjectClass", "code"],
-                width: 120,
-                render: (code) => <span className="font-semibold">{code}</span>,
-              },
-              {
-                title: "Tên lớp môn học",
-                dataIndex: ["subjectClass", "name"],
-              },
-              {
-                title: "Môn học",
-                dataIndex: ["subjectClass", "subject", "name"],
-              },
-              {
-                title: "Giảng viên",
-                render: (_, record) =>
-                  record.lecturer?.userProfile?.fullname ||
-                  record.subjectClass?.mainLecturer?.userProfile?.fullname ||
-                  "-",
-              },
-              {
-                title: "Tiết học",
-                render: (_, record) => `Tiết ${record.startPeriod} - ${record.endPeriod}`,
-              },
-              {
-                title: "Phòng học",
-                render: (_, record) => record.room?.name || record.subjectClass?.room?.name || "-",
-              },
-            ]}
+            columns={classesColumns}
           />
         </TabPane>
         <TabPane tab="Giảng viên đang có lịch dạy" key="lecturers">
@@ -280,27 +346,15 @@ export default function ThongKeBuoiHoc() {
             />
           </div>
           <Table
-            data={classSchedules
-              .filter((s) => {
+            data={schedulesData
+              .filter((s: ClassScheduleData) => {
                 if (!searchLecturer.trim()) return true
                 const kw = searchLecturer.toLowerCase()
-                const lecturerName = (
-                  s.lecturer?.userProfile?.fullname ||
-                  (s as any).subjectClass?.mainLecturer?.userProfile?.fullname ||
-                  ""
-                ).toLowerCase()
-                const orgName = (
-                  s.lecturer?.organization?.sTen ||
-                  (s as any).subjectClass?.mainLecturer?.organization?.sTen ||
-                  ""
-                ).toLowerCase()
-                const className = (s as any).subjectClass?.name?.toLowerCase() || ""
-                const classCode = (s as any).subjectClass?.code?.toLowerCase() || ""
-                const roomName = (
-                  (s as any).room?.name ||
-                  (s as any).subjectClass?.room?.name ||
-                  ""
-                ).toLowerCase()
+                const lecturerName = (s.lecturer?.userProfile?.fullname || s.subjectClass?.mainLecturer?.userProfile?.fullname || "").toLowerCase()
+                const orgName = (s.lecturer?.organization?.sTen || s.subjectClass?.mainLecturer?.organization?.sTen || "").toLowerCase()
+                const className = s.subjectClass?.name?.toLowerCase() || ""
+                const classCode = s.subjectClass?.code?.toLowerCase() || ""
+                const roomName = (s.room?.name || s.subjectClass?.room?.name || "").toLowerCase()
                 const period = `tiết ${s.startPeriod} - ${s.endPeriod}`.toLowerCase()
                 return (
                   lecturerName.includes(kw) ||
@@ -311,38 +365,9 @@ export default function ThongKeBuoiHoc() {
                   period.includes(kw)
                 )
               })
-              .map((s, idx) => ({ ...s, key: idx.toString() }))}
+              .map((s: ClassScheduleData, idx: number) => ({ ...s, key: s.id || idx.toString() }))}
             pagination={false}
-            columns={[
-              {
-                title: "Giảng viên",
-                render: (_, record) => {
-                  const name =
-                    record.lecturer?.userProfile?.fullname ||
-                    record.subjectClass?.mainLecturer?.userProfile?.fullname
-                  return <span className="font-semibold">{name || "-"}</span>
-                },
-              },
-              {
-                title: "Khoa/Bộ môn",
-                render: (_, record) =>
-                  record.lecturer?.organization?.sTen ||
-                  record.subjectClass?.mainLecturer?.organization?.sTen ||
-                  "-",
-              },
-              {
-                title: "Lớp môn học",
-                dataIndex: ["subjectClass", "name"],
-              },
-              {
-                title: "Thời gian",
-                render: (_, record) => `Tiết ${record.startPeriod} - ${record.endPeriod}`,
-              },
-              {
-                title: "Địa điểm",
-                render: (_, record) => record.room?.name || record.subjectClass?.room?.name || "-",
-              },
-            ]}
+            columns={lecturersColumns}
           />
         </TabPane>
         <TabPane tab="Phòng học đang có lịch sử dụng" key="rooms">
@@ -357,100 +382,28 @@ export default function ThongKeBuoiHoc() {
             />
           </div>
           <Table
-            data={roomStatusList
-              .filter((r) => r.status !== "FREE")
-              .filter((r) => {
+            data={schedulesData
+              .filter((s: ClassScheduleData) => {
+                // Chỉ lấy các phòng đang có lịch dạy hoạt động
+                const rId = s.roomId || s.subjectClass?.roomId
+                return !!rId
+              })
+              .filter((s: ClassScheduleData) => {
                 if (!searchRoom.trim()) return true
                 const kw = searchRoom.toLowerCase()
-                const roomName = r.name?.toLowerCase() || ""
-                const allSchedules = r.activeClass ? [r.activeClass, ...r.schedules] : r.schedules
-                const classMatch = allSchedules.some((s: any) =>
-                  s.subjectClass?.name?.toLowerCase().includes(kw)
-                )
-                const lecturerMatch = allSchedules.some((s: any) => {
-                  const name =
-                    s.lecturer?.userProfile?.fullname ||
-                    s.subjectClass?.mainLecturer?.userProfile?.fullname ||
-                    ""
-                  return name.toLowerCase().includes(kw)
-                })
-                return roomName.includes(kw) || classMatch || lecturerMatch
+                const roomName = (s.room?.name || s.subjectClass?.room?.name || "").toLowerCase()
+                const className = s.subjectClass?.name?.toLowerCase() || ""
+                const lecturerName = (s.lecturer?.userProfile?.fullname || s.subjectClass?.mainLecturer?.userProfile?.fullname || "").toLowerCase()
+                return roomName.includes(kw) || className.includes(kw) || lecturerName.includes(kw)
+              })
+              .map((s: ClassScheduleData, idx: number) => ({ ...s, key: s.id || idx.toString() }))
+              .sort((a: ClassScheduleData, b: ClassScheduleData) => {
+                const aName = a.room?.name || a.subjectClass?.room?.name || ""
+                const bName = b.room?.name || b.subjectClass?.room?.name || ""
+                return aName.localeCompare(bName)
               })}
             pagination={false}
-            columns={[
-              {
-                title: "Tên phòng học",
-                dataIndex: "name",
-                width: 150,
-                render: (name) => <span className="font-bold text-gray-800">{name}</span>,
-              },
-              {
-                title: "Lớp môn học sử dụng trong ngày",
-                render: (_, record) => {
-                  if (record.activeClass) {
-                    return (
-                      <span className="font-semibold text-red-600">
-                        {record.activeClass.subjectClass?.name}
-                      </span>
-                    )
-                  }
-                  if (record.schedules.length > 0) {
-                    return (
-                      <div className="flex flex-col gap-1">
-                        {record.schedules.map((s: any, i: number) => (
-                          <span key={i} className="text-orange-600 font-medium">
-                            {s.subjectClass?.name || "-"}
-                          </span>
-                        ))}
-                      </div>
-                    )
-                  }
-                  return "-"
-                },
-              },
-              {
-                title: "Giảng viên giảng dạy",
-                render: (_, record) => {
-                  if (record.activeClass) {
-                    return (
-                      record.activeClass.lecturer?.userProfile?.fullname ||
-                      record.activeClass.subjectClass?.mainLecturer?.userProfile?.fullname ||
-                      "-"
-                    )
-                  }
-                  if (record.schedules.length > 0) {
-                    return (
-                      <div className="flex flex-col gap-1">
-                        {record.schedules.map((s: any, i: number) => (
-                          <span key={i}>
-                            {s.lecturer?.userProfile?.fullname ||
-                              s.subjectClass?.mainLecturer?.userProfile?.fullname ||
-                              "-"}
-                          </span>
-                        ))}
-                      </div>
-                    )
-                  }
-                  return "-"
-                },
-              },
-              {
-                title: "Thời gian sử dụng",
-                render: (_, record) => {
-                  if (record.activeClass) {
-                    return (
-                      <span className="font-semibold text-green-600">{`Tiết ${record.activeClass.startPeriod} - ${record.activeClass.endPeriod} (Đang học)`}</span>
-                    )
-                  }
-                  if (record.schedules.length > 0) {
-                    return record.schedules
-                      .map((s: any) => `Tiết ${s.startPeriod} - ${s.endPeriod}`)
-                      .join(", ")
-                  }
-                  return "-"
-                },
-              },
-            ]}
+            columns={roomsColumns}
           />
         </TabPane>
       </Tabs>

@@ -2154,6 +2154,7 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   issuedScoreAt: 'issuedScoreAt',
   isLockScore: 'isLockScore',
   isLockExamScore: 'isLockExamScore',
+  isLockLecturer: 'isLockLecturer',
   scoreSubmitted: 'scoreSubmitted',
   scoreChecked: 'scoreChecked',
   roomId: 'roomId',
@@ -2210,6 +2211,7 @@ exports.Prisma.SubjectClassHistoryScalarFieldEnum = {
   examScoreDeadline: 'examScoreDeadline',
   isLockScore: 'isLockScore',
   isLockExamScore: 'isLockExamScore',
+  isLockLecturer: 'isLockLecturer',
   scoreSubmitted: 'scoreSubmitted',
   scoreChecked: 'scoreChecked',
   updatedById: 'updatedById'

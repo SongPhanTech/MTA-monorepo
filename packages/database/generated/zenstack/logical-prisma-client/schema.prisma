@@ -13,7 +13,7 @@ generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["multiSchema", "typedSql", "fullTextSearchPostgres"]
   binaryTargets   = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x", "darwin", "darwin-arm64", "windows"]
-  output          = "generated/zenstack/logical-prisma-client"
+  output          = "generated\\zenstack\\logical-prisma-client"
 }
 
 enum ConfigKey {
@@ -3793,6 +3793,9 @@ model ClassRegisterLogs {
   status                 ClassRegisterStatus  @default(PENDING)
   reason                 String?
 
+  @@unique([classRegisterSessionId, studentId, subjectClassId])
+  @@index([subjectClassId])
+  @@index([studentId])
   @@schema("ql-dao-tao")
 }
 
@@ -3844,6 +3847,7 @@ model SubjectClass {
   isLockScore                 Boolean                  @default(false)
   /// khoá điểm thi
   isLockExamScore             Boolean                  @default(false)
+  isLockLecturer              Boolean                  @default(true)
   scoreSubmitted              Boolean                  @default(false)
   scoreChecked                Boolean                  @default(false)
   room                        Room?                    @relation(name: "ClassRoom", fields: [roomId], references: [id])
@@ -3945,6 +3949,7 @@ model SubjectClassHistory {
   examScoreDeadline  DateTime?
   isLockScore        Boolean?
   isLockExamScore    Boolean?
+  isLockLecturer     Boolean?
   scoreSubmitted     Boolean?
   scoreChecked       Boolean?
   updatedBy          UserProfile? @relation(fields: [updatedById], references: [id])

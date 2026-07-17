@@ -3463,6 +3463,9 @@ model ClassRegisterLogs {
   status                 ClassRegisterStatus  @default(PENDING)
   reason                 String?
 
+  @@unique([classRegisterSessionId, studentId, subjectClassId])
+  @@index([subjectClassId])
+  @@index([studentId])
   @@schema("ql-dao-tao")
 }
 
@@ -3511,6 +3514,7 @@ model SubjectClass {
   isLockScore                 Boolean                  @default(false)
   /// khoá điểm thi
   isLockExamScore             Boolean                  @default(false)
+  isLockLecturer              Boolean                  @default(true)
   scoreSubmitted              Boolean                  @default(false)
   scoreChecked                Boolean                  @default(false)
   room                        Room?                    @relation(name: "ClassRoom", fields: [roomId], references: [id])
@@ -3603,6 +3607,7 @@ model SubjectClassHistory {
   examScoreDeadline  DateTime?
   isLockScore        Boolean?
   isLockExamScore    Boolean?
+  isLockLecturer     Boolean?
   scoreSubmitted     Boolean?
   scoreChecked       Boolean?
   updatedBy          UserProfile? @relation(fields: [updatedById], references: [id])

@@ -215,10 +215,10 @@ export async function buildCouncilPaymentExportPayload(params: {
 
   return {
     fileName: "ThanhToanHoiDongBaoVe",
-    path: "ThanhToanHoiDongBV.docx",
+    path: "ThanhToanHoiDongBV.xlsx",
     prefix: "mta/luan-van",
     data: { items },
-    downloadName: "ThanhToanHoiDongBaoVe.docx",
+    downloadName: "ThanhToanHoiDongBaoVe.xlsx",
   }
 }
 
@@ -315,9 +315,9 @@ export async function buildSupervisorPaymentExportPayload(params: {
     studentsInSession: projects.length,
     studentsWithSupervisor,
     fileName: "ThanhToanHuongDan",
-    path: "ThanhToanHuongDanTrongHV.docx",
+    path: "ThanhToanHuongDanTrongHV.xlsx",
     prefix: "mta/luan-van",
     data: { items },
-    downloadName: "ThanhToanHuongDan.docx",
+    downloadName: "ThanhToanHuongDan.xlsx",
   }
 }

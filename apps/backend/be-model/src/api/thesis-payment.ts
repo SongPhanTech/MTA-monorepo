@@ -1,19 +1,17 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
-import { docxSuccess, jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
-import { renderThesisPaymentDocx } from "../services/thesis-docx-render.service"
+import { excelSuccess, jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
+import { renderThesisPaymentXlsx } from "../services/thesis-excel-render.service"
 import {
   buildCouncilPaymentExportPayload,
   buildSupervisorPaymentExportPayload,
 } from "../services/thesis-payment-export.service"
-import {
-  syncCouncilPaymentsForThesisSession,
-  syncSupervisorPaymentsForThesisSession,
-} from "../services/thesis-payment-sync.service"
+import { syncCouncilPaymentsForThesisSession, syncSupervisorPaymentsForThesisSession } from "../services/thesis-payment-sync.service"
 
 const app = new OpenAPIHono({ strict: false })
 
 const DOCX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+const XLSX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 const ThesisPaymentScopeSchema = z.object({
   thesisSessionId: z.string().openapi({ description: "ID đợt xét luận văn." }),
@@ -97,7 +95,7 @@ const exportCouncilPaymentsRoute = createRoute({
   },
   responses: {
     ...standardErrorResponses(),
-    ...docxSuccess("File DOCX thanh toán hội đồng"),
+    ...excelSuccess("File XLSX thanh toán hội đồng"),
     400: {
       description: "Chưa có dữ liệu hoặc lỗi xuất file",
       content: { "application/json": { schema: ErrorMessageResponseSchema } },
@@ -118,7 +116,7 @@ const exportSupervisorPaymentsRoute = createRoute({
   },
   responses: {
     ...standardErrorResponses(),
-    ...docxSuccess("File DOCX thanh toán hướng dẫn"),
+    ...excelSuccess("File XLSX thanh toán hướng dẫn"),
     400: {
       description: "Chưa có dữ liệu hoặc lỗi xuất file",
       content: { "application/json": { schema: ErrorMessageResponseSchema } },
@@ -166,10 +164,11 @@ app.openapi(exportCouncilPaymentsRoute, async (c) => {
     if (!payload) {
       return c.json({ message: "Chưa có dữ liệu để tạo thanh toán hội đồng bảo vệ" }, 400)
     }
-    const buffer = await renderThesisPaymentDocx(payload)
+    const buffer = await renderThesisPaymentXlsx(payload)
+
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(payload.downloadName)}`
     return c.body(new Uint8Array(buffer), 200, {
-      "Content-Type": DOCX_CONTENT_TYPE,
+      "Content-Type": XLSX_CONTENT_TYPE,
       "Content-Disposition": disposition,
     })
   } catch (error) {
@@ -196,10 +195,10 @@ app.openapi(exportSupervisorPaymentsRoute, async (c) => {
       }
       return c.json({ message: "Chưa có dữ liệu để xuất thanh toán hướng dẫn" }, 400)
     }
-    const buffer = await renderThesisPaymentDocx(payload)
+    const buffer = await renderThesisPaymentXlsx(payload)
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(payload.downloadName)}`
     return c.body(new Uint8Array(buffer), 200, {
-      "Content-Type": DOCX_CONTENT_TYPE,
+      "Content-Type": XLSX_CONTENT_TYPE,
       "Content-Disposition": disposition,
     })
   } catch (error) {

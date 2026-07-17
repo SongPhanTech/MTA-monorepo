@@ -171979,6 +171979,7 @@ export namespace Prisma {
     issuedScoreAt: Date | null
     isLockScore: boolean | null
     isLockExamScore: boolean | null
+    isLockLecturer: boolean | null
     scoreSubmitted: boolean | null
     scoreChecked: boolean | null
     roomId: string | null
@@ -172024,6 +172025,7 @@ export namespace Prisma {
     issuedScoreAt: Date | null
     isLockScore: boolean | null
     isLockExamScore: boolean | null
+    isLockLecturer: boolean | null
     scoreSubmitted: boolean | null
     scoreChecked: boolean | null
     roomId: string | null
@@ -172069,6 +172071,7 @@ export namespace Prisma {
     issuedScoreAt: number
     isLockScore: number
     isLockExamScore: number
+    isLockLecturer: number
     scoreSubmitted: number
     scoreChecked: number
     roomId: number
@@ -172124,6 +172127,7 @@ export namespace Prisma {
     issuedScoreAt?: true
     isLockScore?: true
     isLockExamScore?: true
+    isLockLecturer?: true
     scoreSubmitted?: true
     scoreChecked?: true
     roomId?: true
@@ -172169,6 +172173,7 @@ export namespace Prisma {
     issuedScoreAt?: true
     isLockScore?: true
     isLockExamScore?: true
+    isLockLecturer?: true
     scoreSubmitted?: true
     scoreChecked?: true
     roomId?: true
@@ -172214,6 +172219,7 @@ export namespace Prisma {
     issuedScoreAt?: true
     isLockScore?: true
     isLockExamScore?: true
+    isLockLecturer?: true
     scoreSubmitted?: true
     scoreChecked?: true
     roomId?: true
@@ -172346,6 +172352,7 @@ export namespace Prisma {
     issuedScoreAt: Date | null
     isLockScore: boolean
     isLockExamScore: boolean
+    isLockLecturer: boolean
     scoreSubmitted: boolean
     scoreChecked: boolean
     roomId: string | null
@@ -172410,6 +172417,7 @@ export namespace Prisma {
     issuedScoreAt?: boolean
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: boolean
@@ -172479,6 +172487,7 @@ export namespace Prisma {
     issuedScoreAt?: boolean
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: boolean
@@ -172534,6 +172543,7 @@ export namespace Prisma {
     issuedScoreAt?: boolean
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: boolean
@@ -172589,6 +172599,7 @@ export namespace Prisma {
     issuedScoreAt?: boolean
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: boolean
@@ -172599,7 +172610,7 @@ export namespace Prisma {
     scoreLinkSubjectVersionId?: boolean
   }
 
-  export type SubjectClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "code" | "name" | "startDate" | "endDate" | "subjectId" | "schedule" | "maxStudent" | "type" | "status" | "trainingObjectTypeId" | "semesterId" | "cancelled" | "lecturerAssignmentDeadline" | "sendLecturerAssignmentAt" | "submitLecturerAssignmentAt" | "approveLecturerAssignmentAt" | "examDate" | "examType" | "examId" | "scoreDeadLineStart" | "scoreDeadline" | "examScoreDeadline" | "enteredScore" | "enteredExamScore" | "issuedScoreAt" | "isLockScore" | "isLockExamScore" | "scoreSubmitted" | "scoreChecked" | "roomId" | "trainingLocationId" | "lecturerId" | "extraLecturerId" | "enterGradeLecturerId" | "scoreLinkSubjectVersionId", ExtArgs["result"]["subjectClass"]>
+  export type SubjectClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "code" | "name" | "startDate" | "endDate" | "subjectId" | "schedule" | "maxStudent" | "type" | "status" | "trainingObjectTypeId" | "semesterId" | "cancelled" | "lecturerAssignmentDeadline" | "sendLecturerAssignmentAt" | "submitLecturerAssignmentAt" | "approveLecturerAssignmentAt" | "examDate" | "examType" | "examId" | "scoreDeadLineStart" | "scoreDeadline" | "examScoreDeadline" | "enteredScore" | "enteredExamScore" | "issuedScoreAt" | "isLockScore" | "isLockExamScore" | "isLockLecturer" | "scoreSubmitted" | "scoreChecked" | "roomId" | "trainingLocationId" | "lecturerId" | "extraLecturerId" | "enterGradeLecturerId" | "scoreLinkSubjectVersionId", ExtArgs["result"]["subjectClass"]>
   export type SubjectClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subject?: boolean | SubjectVersionDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -172728,6 +172739,7 @@ export namespace Prisma {
        * khoá điểm thi
        */
       isLockExamScore: boolean
+      isLockLecturer: boolean
       scoreSubmitted: boolean
       scoreChecked: boolean
       roomId: string | null
@@ -173216,6 +173228,7 @@ export namespace Prisma {
     readonly issuedScoreAt: FieldRef<"SubjectClass", 'DateTime'>
     readonly isLockScore: FieldRef<"SubjectClass", 'Boolean'>
     readonly isLockExamScore: FieldRef<"SubjectClass", 'Boolean'>
+    readonly isLockLecturer: FieldRef<"SubjectClass", 'Boolean'>
     readonly scoreSubmitted: FieldRef<"SubjectClass", 'Boolean'>
     readonly scoreChecked: FieldRef<"SubjectClass", 'Boolean'>
     readonly roomId: FieldRef<"SubjectClass", 'String'>
@@ -176511,6 +176524,7 @@ export namespace Prisma {
     examScoreDeadline: Date | null
     isLockScore: boolean | null
     isLockExamScore: boolean | null
+    isLockLecturer: boolean | null
     scoreSubmitted: boolean | null
     scoreChecked: boolean | null
     updatedById: string | null
@@ -176531,6 +176545,7 @@ export namespace Prisma {
     examScoreDeadline: Date | null
     isLockScore: boolean | null
     isLockExamScore: boolean | null
+    isLockLecturer: boolean | null
     scoreSubmitted: boolean | null
     scoreChecked: boolean | null
     updatedById: string | null
@@ -176551,6 +176566,7 @@ export namespace Prisma {
     examScoreDeadline: number
     isLockScore: number
     isLockExamScore: number
+    isLockLecturer: number
     scoreSubmitted: number
     scoreChecked: number
     updatedById: number
@@ -176573,6 +176589,7 @@ export namespace Prisma {
     examScoreDeadline?: true
     isLockScore?: true
     isLockExamScore?: true
+    isLockLecturer?: true
     scoreSubmitted?: true
     scoreChecked?: true
     updatedById?: true
@@ -176593,6 +176610,7 @@ export namespace Prisma {
     examScoreDeadline?: true
     isLockScore?: true
     isLockExamScore?: true
+    isLockLecturer?: true
     scoreSubmitted?: true
     scoreChecked?: true
     updatedById?: true
@@ -176613,6 +176631,7 @@ export namespace Prisma {
     examScoreDeadline?: true
     isLockScore?: true
     isLockExamScore?: true
+    isLockLecturer?: true
     scoreSubmitted?: true
     scoreChecked?: true
     updatedById?: true
@@ -176706,6 +176725,7 @@ export namespace Prisma {
     examScoreDeadline: Date | null
     isLockScore: boolean | null
     isLockExamScore: boolean | null
+    isLockLecturer: boolean | null
     scoreSubmitted: boolean | null
     scoreChecked: boolean | null
     updatedById: string | null
@@ -176743,6 +176763,7 @@ export namespace Prisma {
     examScoreDeadline?: boolean
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     updatedById?: boolean
@@ -176765,6 +176786,7 @@ export namespace Prisma {
     examScoreDeadline?: boolean
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     updatedById?: boolean
@@ -176787,6 +176809,7 @@ export namespace Prisma {
     examScoreDeadline?: boolean
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     updatedById?: boolean
@@ -176809,12 +176832,13 @@ export namespace Prisma {
     examScoreDeadline?: boolean
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     updatedById?: boolean
   }
 
-  export type SubjectClassHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "subjectClassId" | "scoreDeadLineStart" | "scoreDeadline" | "examScoreDeadline" | "isLockScore" | "isLockExamScore" | "scoreSubmitted" | "scoreChecked" | "updatedById", ExtArgs["result"]["subjectClassHistory"]>
+  export type SubjectClassHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "subjectClassId" | "scoreDeadLineStart" | "scoreDeadline" | "examScoreDeadline" | "isLockScore" | "isLockExamScore" | "isLockLecturer" | "scoreSubmitted" | "scoreChecked" | "updatedById", ExtArgs["result"]["subjectClassHistory"]>
   export type SubjectClassHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
     updatedBy?: boolean | SubjectClassHistory$updatedByArgs<ExtArgs>
@@ -176849,6 +176873,7 @@ export namespace Prisma {
       examScoreDeadline: Date | null
       isLockScore: boolean | null
       isLockExamScore: boolean | null
+      isLockLecturer: boolean | null
       scoreSubmitted: boolean | null
       scoreChecked: boolean | null
       updatedById: string | null
@@ -177291,6 +177316,7 @@ export namespace Prisma {
     readonly examScoreDeadline: FieldRef<"SubjectClassHistory", 'DateTime'>
     readonly isLockScore: FieldRef<"SubjectClassHistory", 'Boolean'>
     readonly isLockExamScore: FieldRef<"SubjectClassHistory", 'Boolean'>
+    readonly isLockLecturer: FieldRef<"SubjectClassHistory", 'Boolean'>
     readonly scoreSubmitted: FieldRef<"SubjectClassHistory", 'Boolean'>
     readonly scoreChecked: FieldRef<"SubjectClassHistory", 'Boolean'>
     readonly updatedById: FieldRef<"SubjectClassHistory", 'String'>
@@ -396661,6 +396687,7 @@ export namespace Prisma {
     issuedScoreAt: 'issuedScoreAt',
     isLockScore: 'isLockScore',
     isLockExamScore: 'isLockExamScore',
+    isLockLecturer: 'isLockLecturer',
     scoreSubmitted: 'scoreSubmitted',
     scoreChecked: 'scoreChecked',
     roomId: 'roomId',
@@ -396726,6 +396753,7 @@ export namespace Prisma {
     examScoreDeadline: 'examScoreDeadline',
     isLockScore: 'isLockScore',
     isLockExamScore: 'isLockExamScore',
+    isLockLecturer: 'isLockLecturer',
     scoreSubmitted: 'scoreSubmitted',
     scoreChecked: 'scoreChecked',
     updatedById: 'updatedById'
@@ -417789,6 +417817,7 @@ export namespace Prisma {
   export type ClassRegisterLogsWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
+    classRegisterSessionId_studentId_subjectClassId?: ClassRegisterLogsClassRegisterSessionIdStudentIdSubjectClassIdCompoundUniqueInput
     AND?: ClassRegisterLogsWhereInput | ClassRegisterLogsWhereInput[]
     OR?: ClassRegisterLogsWhereInput[]
     NOT?: ClassRegisterLogsWhereInput | ClassRegisterLogsWhereInput[]
@@ -417806,7 +417835,7 @@ export namespace Prisma {
     classRegisterSession?: XOR<ClassRegisterSessionScalarRelationFilter, ClassRegisterSessionWhereInput>
     subjectClass?: XOR<SubjectClassScalarRelationFilter, SubjectClassWhereInput>
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
-  }, "id" | "code">
+  }, "id" | "code" | "classRegisterSessionId_studentId_subjectClassId">
 
   export type ClassRegisterLogsOrderByWithAggregationInput = {
     id?: SortOrder
@@ -417884,6 +417913,7 @@ export namespace Prisma {
     issuedScoreAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
     isLockScore?: BoolFilter<"SubjectClass"> | boolean
     isLockExamScore?: BoolFilter<"SubjectClass"> | boolean
+    isLockLecturer?: BoolFilter<"SubjectClass"> | boolean
     scoreSubmitted?: BoolFilter<"SubjectClass"> | boolean
     scoreChecked?: BoolFilter<"SubjectClass"> | boolean
     roomId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -417952,6 +417982,7 @@ export namespace Prisma {
     issuedScoreAt?: SortOrderInput | SortOrder
     isLockScore?: SortOrder
     isLockExamScore?: SortOrder
+    isLockLecturer?: SortOrder
     scoreSubmitted?: SortOrder
     scoreChecked?: SortOrder
     roomId?: SortOrderInput | SortOrder
@@ -418025,6 +418056,7 @@ export namespace Prisma {
     issuedScoreAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
     isLockScore?: BoolFilter<"SubjectClass"> | boolean
     isLockExamScore?: BoolFilter<"SubjectClass"> | boolean
+    isLockLecturer?: BoolFilter<"SubjectClass"> | boolean
     scoreSubmitted?: BoolFilter<"SubjectClass"> | boolean
     scoreChecked?: BoolFilter<"SubjectClass"> | boolean
     roomId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -418092,6 +418124,7 @@ export namespace Prisma {
     issuedScoreAt?: SortOrderInput | SortOrder
     isLockScore?: SortOrder
     isLockExamScore?: SortOrder
+    isLockLecturer?: SortOrder
     scoreSubmitted?: SortOrder
     scoreChecked?: SortOrder
     roomId?: SortOrderInput | SortOrder
@@ -418145,6 +418178,7 @@ export namespace Prisma {
     issuedScoreAt?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
     isLockScore?: BoolWithAggregatesFilter<"SubjectClass"> | boolean
     isLockExamScore?: BoolWithAggregatesFilter<"SubjectClass"> | boolean
+    isLockLecturer?: BoolWithAggregatesFilter<"SubjectClass"> | boolean
     scoreSubmitted?: BoolWithAggregatesFilter<"SubjectClass"> | boolean
     scoreChecked?: BoolWithAggregatesFilter<"SubjectClass"> | boolean
     roomId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
@@ -418372,6 +418406,7 @@ export namespace Prisma {
     examScoreDeadline?: DateTimeNullableFilter<"SubjectClassHistory"> | Date | string | null
     isLockScore?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     isLockExamScore?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
+    isLockLecturer?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     scoreSubmitted?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     scoreChecked?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     updatedById?: UuidNullableFilter<"SubjectClassHistory"> | string | null
@@ -418394,6 +418429,7 @@ export namespace Prisma {
     examScoreDeadline?: SortOrderInput | SortOrder
     isLockScore?: SortOrderInput | SortOrder
     isLockExamScore?: SortOrderInput | SortOrder
+    isLockLecturer?: SortOrderInput | SortOrder
     scoreSubmitted?: SortOrderInput | SortOrder
     scoreChecked?: SortOrderInput | SortOrder
     updatedById?: SortOrderInput | SortOrder
@@ -418420,6 +418456,7 @@ export namespace Prisma {
     examScoreDeadline?: DateTimeNullableFilter<"SubjectClassHistory"> | Date | string | null
     isLockScore?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     isLockExamScore?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
+    isLockLecturer?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     scoreSubmitted?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     scoreChecked?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     updatedById?: UuidNullableFilter<"SubjectClassHistory"> | string | null
@@ -418442,6 +418479,7 @@ export namespace Prisma {
     examScoreDeadline?: SortOrderInput | SortOrder
     isLockScore?: SortOrderInput | SortOrder
     isLockExamScore?: SortOrderInput | SortOrder
+    isLockLecturer?: SortOrderInput | SortOrder
     scoreSubmitted?: SortOrderInput | SortOrder
     scoreChecked?: SortOrderInput | SortOrder
     updatedById?: SortOrderInput | SortOrder
@@ -418468,6 +418506,7 @@ export namespace Prisma {
     examScoreDeadline?: DateTimeNullableWithAggregatesFilter<"SubjectClassHistory"> | Date | string | null
     isLockScore?: BoolNullableWithAggregatesFilter<"SubjectClassHistory"> | boolean | null
     isLockExamScore?: BoolNullableWithAggregatesFilter<"SubjectClassHistory"> | boolean | null
+    isLockLecturer?: BoolNullableWithAggregatesFilter<"SubjectClassHistory"> | boolean | null
     scoreSubmitted?: BoolNullableWithAggregatesFilter<"SubjectClassHistory"> | boolean | null
     scoreChecked?: BoolNullableWithAggregatesFilter<"SubjectClassHistory"> | boolean | null
     updatedById?: UuidNullableWithAggregatesFilter<"SubjectClassHistory"> | string | null
@@ -451680,6 +451719,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -451742,6 +451782,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -451796,6 +451837,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -451858,6 +451900,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -451916,6 +451959,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -451957,6 +452001,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -451996,6 +452041,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -452236,6 +452282,7 @@ export namespace Prisma {
     examScoreDeadline?: Date | string | null
     isLockScore?: boolean | null
     isLockExamScore?: boolean | null
+    isLockLecturer?: boolean | null
     scoreSubmitted?: boolean | null
     scoreChecked?: boolean | null
     subjectClass: SubjectClassCreateNestedOneWithoutSubjectClassHistoryInput
@@ -452257,6 +452304,7 @@ export namespace Prisma {
     examScoreDeadline?: Date | string | null
     isLockScore?: boolean | null
     isLockExamScore?: boolean | null
+    isLockLecturer?: boolean | null
     scoreSubmitted?: boolean | null
     scoreChecked?: boolean | null
     updatedById?: string | null
@@ -452276,6 +452324,7 @@ export namespace Prisma {
     examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isLockExamScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isLockLecturer?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreSubmitted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreChecked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     subjectClass?: SubjectClassUpdateOneRequiredWithoutSubjectClassHistoryNestedInput
@@ -452297,6 +452346,7 @@ export namespace Prisma {
     examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isLockExamScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isLockLecturer?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreSubmitted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreChecked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -452317,6 +452367,7 @@ export namespace Prisma {
     examScoreDeadline?: Date | string | null
     isLockScore?: boolean | null
     isLockExamScore?: boolean | null
+    isLockLecturer?: boolean | null
     scoreSubmitted?: boolean | null
     scoreChecked?: boolean | null
     updatedById?: string | null
@@ -452336,6 +452387,7 @@ export namespace Prisma {
     examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isLockExamScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isLockLecturer?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreSubmitted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreChecked?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
@@ -452355,6 +452407,7 @@ export namespace Prisma {
     examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isLockExamScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isLockLecturer?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreSubmitted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreChecked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -482954,6 +483007,12 @@ export namespace Prisma {
     search: string
   }
 
+  export type ClassRegisterLogsClassRegisterSessionIdStudentIdSubjectClassIdCompoundUniqueInput = {
+    classRegisterSessionId: string
+    studentId: string
+    subjectClassId: string
+  }
+
   export type ClassRegisterLogsCountOrderByAggregateInput = {
     id?: SortOrder
     code?: SortOrder
@@ -483117,6 +483176,7 @@ export namespace Prisma {
     issuedScoreAt?: SortOrder
     isLockScore?: SortOrder
     isLockExamScore?: SortOrder
+    isLockLecturer?: SortOrder
     scoreSubmitted?: SortOrder
     scoreChecked?: SortOrder
     roomId?: SortOrder
@@ -483166,6 +483226,7 @@ export namespace Prisma {
     issuedScoreAt?: SortOrder
     isLockScore?: SortOrder
     isLockExamScore?: SortOrder
+    isLockLecturer?: SortOrder
     scoreSubmitted?: SortOrder
     scoreChecked?: SortOrder
     roomId?: SortOrder
@@ -483211,6 +483272,7 @@ export namespace Prisma {
     issuedScoreAt?: SortOrder
     isLockScore?: SortOrder
     isLockExamScore?: SortOrder
+    isLockLecturer?: SortOrder
     scoreSubmitted?: SortOrder
     scoreChecked?: SortOrder
     roomId?: SortOrder
@@ -483408,6 +483470,7 @@ export namespace Prisma {
     examScoreDeadline?: SortOrder
     isLockScore?: SortOrder
     isLockExamScore?: SortOrder
+    isLockLecturer?: SortOrder
     scoreSubmitted?: SortOrder
     scoreChecked?: SortOrder
     updatedById?: SortOrder
@@ -483428,6 +483491,7 @@ export namespace Prisma {
     examScoreDeadline?: SortOrder
     isLockScore?: SortOrder
     isLockExamScore?: SortOrder
+    isLockLecturer?: SortOrder
     scoreSubmitted?: SortOrder
     scoreChecked?: SortOrder
     updatedById?: SortOrder
@@ -483448,6 +483512,7 @@ export namespace Prisma {
     examScoreDeadline?: SortOrder
     isLockScore?: SortOrder
     isLockExamScore?: SortOrder
+    isLockLecturer?: SortOrder
     scoreSubmitted?: SortOrder
     scoreChecked?: SortOrder
     updatedById?: SortOrder
@@ -532679,6 +532744,7 @@ export namespace Prisma {
     examScoreDeadline?: Date | string | null
     isLockScore?: boolean | null
     isLockExamScore?: boolean | null
+    isLockLecturer?: boolean | null
     scoreSubmitted?: boolean | null
     scoreChecked?: boolean | null
     subjectClass: SubjectClassCreateNestedOneWithoutSubjectClassHistoryInput
@@ -532699,6 +532765,7 @@ export namespace Prisma {
     examScoreDeadline?: Date | string | null
     isLockScore?: boolean | null
     isLockExamScore?: boolean | null
+    isLockLecturer?: boolean | null
     scoreSubmitted?: boolean | null
     scoreChecked?: boolean | null
   }
@@ -536819,6 +536886,7 @@ export namespace Prisma {
     examScoreDeadline?: DateTimeNullableFilter<"SubjectClassHistory"> | Date | string | null
     isLockScore?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     isLockExamScore?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
+    isLockLecturer?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     scoreSubmitted?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     scoreChecked?: BoolNullableFilter<"SubjectClassHistory"> | boolean | null
     updatedById?: UuidNullableFilter<"SubjectClassHistory"> | string | null
@@ -581853,6 +581921,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -581914,6 +581983,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -582863,6 +582933,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -582924,6 +582995,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -588181,6 +588253,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -588241,6 +588314,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -589325,6 +589399,7 @@ export namespace Prisma {
     issuedScoreAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
     isLockScore?: BoolFilter<"SubjectClass"> | boolean
     isLockExamScore?: BoolFilter<"SubjectClass"> | boolean
+    isLockLecturer?: BoolFilter<"SubjectClass"> | boolean
     scoreSubmitted?: BoolFilter<"SubjectClass"> | boolean
     scoreChecked?: BoolFilter<"SubjectClass"> | boolean
     roomId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -593658,6 +593733,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -593719,6 +593795,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -598979,6 +599056,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutSubjectClassInput
@@ -599039,6 +599117,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -602533,6 +602612,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -602594,6 +602674,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -602873,6 +602954,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -602934,6 +603016,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -604491,6 +604574,7 @@ export namespace Prisma {
     examScoreDeadline?: Date | string | null
     isLockScore?: boolean | null
     isLockExamScore?: boolean | null
+    isLockLecturer?: boolean | null
     scoreSubmitted?: boolean | null
     scoreChecked?: boolean | null
     updatedBy?: UserProfileCreateNestedOneWithoutSubjectClassHistoryInput
@@ -604510,6 +604594,7 @@ export namespace Prisma {
     examScoreDeadline?: Date | string | null
     isLockScore?: boolean | null
     isLockExamScore?: boolean | null
+    isLockLecturer?: boolean | null
     scoreSubmitted?: boolean | null
     scoreChecked?: boolean | null
     updatedById?: string | null
@@ -605661,6 +605746,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -605722,6 +605808,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -606251,6 +606338,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -606312,6 +606400,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -607241,6 +607330,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -607302,6 +607392,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -607732,6 +607823,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -607793,6 +607885,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -608213,6 +608306,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -608274,6 +608368,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -608343,6 +608438,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -608404,6 +608500,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -608457,6 +608554,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -608518,6 +608616,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -609333,6 +609432,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -609394,6 +609494,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -611594,6 +611695,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -611654,6 +611756,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -613715,6 +613818,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -613776,6 +613880,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -614211,6 +614316,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -614272,6 +614378,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     trainingLocationId?: string | null
@@ -614335,6 +614442,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -614396,6 +614504,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -627476,6 +627585,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -627537,6 +627647,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -627600,6 +627711,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -627661,6 +627773,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -627724,6 +627837,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -627785,6 +627899,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -636488,6 +636603,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -636549,6 +636665,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -637603,6 +637720,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -637664,6 +637782,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -640552,6 +640671,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -640613,6 +640733,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -657331,6 +657452,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -657392,6 +657514,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -657645,6 +657768,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -657706,6 +657830,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -666003,6 +666128,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -666063,6 +666189,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -667259,6 +667386,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -667320,6 +667448,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -667507,6 +667636,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -667568,6 +667698,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -669860,6 +669991,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -669921,6 +670053,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -671325,6 +671458,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
@@ -671386,6 +671520,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -671908,6 +672043,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -671969,6 +672105,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -682877,6 +683014,7 @@ export namespace Prisma {
     examScoreDeadline?: Date | string | null
     isLockScore?: boolean | null
     isLockExamScore?: boolean | null
+    isLockLecturer?: boolean | null
     scoreSubmitted?: boolean | null
     scoreChecked?: boolean | null
   }
@@ -684976,6 +685114,7 @@ export namespace Prisma {
     examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isLockExamScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isLockLecturer?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreSubmitted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreChecked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     subjectClass?: SubjectClassUpdateOneRequiredWithoutSubjectClassHistoryNestedInput
@@ -684996,6 +685135,7 @@ export namespace Prisma {
     examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isLockExamScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isLockLecturer?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreSubmitted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreChecked?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
@@ -685015,6 +685155,7 @@ export namespace Prisma {
     examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isLockExamScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isLockLecturer?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreSubmitted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreChecked?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
@@ -711327,6 +711468,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -711712,6 +711854,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -711772,6 +711915,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -711829,6 +711973,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -715013,6 +715158,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -715074,6 +715220,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -715131,6 +715278,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -716936,6 +717084,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -717854,6 +718003,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -717914,6 +718064,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -717971,6 +718122,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -719173,6 +719325,7 @@ export namespace Prisma {
     examScoreDeadline?: Date | string | null
     isLockScore?: boolean | null
     isLockExamScore?: boolean | null
+    isLockLecturer?: boolean | null
     scoreSubmitted?: boolean | null
     scoreChecked?: boolean | null
     updatedById?: string | null
@@ -720078,6 +720231,7 @@ export namespace Prisma {
     examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isLockExamScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isLockLecturer?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreSubmitted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreChecked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedBy?: UserProfileUpdateOneWithoutSubjectClassHistoryNestedInput
@@ -720097,6 +720251,7 @@ export namespace Prisma {
     examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isLockExamScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isLockLecturer?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreSubmitted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreChecked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -720116,6 +720271,7 @@ export namespace Prisma {
     examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isLockExamScore?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isLockLecturer?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreSubmitted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     scoreChecked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     updatedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -721084,6 +721240,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -721817,6 +721974,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -721877,6 +722035,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -721934,6 +722093,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -723526,6 +723686,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -723810,6 +723971,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -723871,6 +724033,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -723928,6 +724091,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -724054,6 +724218,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     trainingLocationId?: string | null
@@ -724193,6 +724358,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -724254,6 +724420,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -724311,6 +724478,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -724351,6 +724519,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -724412,6 +724581,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -724469,6 +724639,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -731209,6 +731380,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -731253,6 +731425,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -731297,6 +731470,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -731802,6 +731976,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -731863,6 +732038,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -731920,6 +732096,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -731960,6 +732137,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -732021,6 +732199,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -732078,6 +732257,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -732118,6 +732298,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -732179,6 +732360,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -732236,6 +732418,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -736617,6 +736800,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -736678,6 +736862,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -736735,6 +736920,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -742969,6 +743155,7 @@ export namespace Prisma {
     issuedScoreAt?: Date | string | null
     isLockScore?: boolean
     isLockExamScore?: boolean
+    isLockLecturer?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
     roomId?: string | null
@@ -743044,6 +743231,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -743104,6 +743292,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -743161,6 +743350,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -744716,6 +744906,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
@@ -744777,6 +744968,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -744834,6 +745026,7 @@ export namespace Prisma {
     issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isLockScore?: BoolFieldUpdateOperationsInput | boolean
     isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockLecturer?: BoolFieldUpdateOperationsInput | boolean
     scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
     scoreChecked?: BoolFieldUpdateOperationsInput | boolean
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
