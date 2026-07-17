@@ -85,5 +85,5 @@ export interface ImportTrainingDataRequest {
   /** ID đợt đăng ký học online. */
   classRegisterSessionId: string;
   /** File JSON kết quả đăng ký từ internet. */
-  file: unknown;
+  file: Blob;
 }
