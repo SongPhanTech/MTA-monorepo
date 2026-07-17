@@ -23,6 +23,7 @@ import {
   syncThesisSupervisorPayments,
 } from "@workspace/libs/api/thesis-payment"
 import { docxTemplate } from "./docx-template"
+import { renderXlsxTemplate } from "@workspace/libs/api/training"
 import { buildSupervisorPaymentRows } from "./thesis-supervisor-payment-export"
 interface ExportOptions {
   thesisSessionId?: string
@@ -3412,28 +3413,29 @@ export const exportDsChuyenGia = async ({
       return []
     }
     showSpinner?.()
-    const items = dataConvert.map((item, idx) => ({
-      ...item.data,
-      "ngắt trang": idx === dataConvert.length - 1 ? "" : "ngắt trang",
-    }))
-    const payload = {
-      fileName: "DsChuyenGia",
-      path: "DanhSachChuyenGia.docx",
+    const response = await renderXlsxTemplate({
+      templatePath: "DanhSachChuyenGia.xlsx",
       prefix: "mta/luan-van",
-      data: {
-        items: items,
-      },
-    }
-    const response = await docxTemplate(payload)
+      fileName: "DsChuyenGia.xlsx",
+      mergeBlocksToOneSheet: true,
+      sheets: dataConvert.map((item, idx) => ({
+        data: item.data as Record<string, unknown>,
+        pageBreakAfter: idx < dataConvert.length - 1,
+      })),
+    })
     if (response.status !== 200) {
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      const errMsg =
+        typeof response.data === "object" && response.data && "message" in response.data
+          ? String((response.data as { message?: string }).message)
+          : ""
+      message.error(errMsg || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return []
     }
-    const blob = response.data
-    downloadFile(blob, "DsChuyenGia.docx")
+    downloadFile(response.data, "DsChuyenGia.xlsx")
     message.success("Xuất file thành công")
   } catch (error) {
-    message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    const errMsg = error instanceof Error ? error.message : ""
+    message.error(errMsg || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
     hideSpinner?.()
   }

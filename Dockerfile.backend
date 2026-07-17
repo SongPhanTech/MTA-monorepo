@@ -14,10 +14,8 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm i
 
 COPY out/full/ .
 ENV NODE_OPTIONS="--max-old-space-size=6144"
-# RUN echo "DATABASE_URL=postgres://root:SwanT3chDB@swantech.luanbt.com:5432/mta" > packages/database/.env
-# RUN pnpm generate
-# RUN pnpm generate:sql
-RUN pnpm build
+ARG CACHEBUST=1
+RUN echo "cachebust=${CACHEBUST}" && pnpm build
 
 # FROM debian:11-alpine AS backend
 # ARG PACKAGE

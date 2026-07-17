@@ -25,6 +25,14 @@ const xlsxTemplateSheetSchema = z
           "Dữ liệu theo cú pháp xlsx-template, ví dụ: { semesterName, courseName, data: [...] }."
         )
       ),
+    pageBreakAfter: z
+      .boolean()
+      .optional()
+      .openapi(
+        fieldDesc(
+          "Chèn ngắt trang sau block này. Chỉ có tác dụng khi mergeBlocksToOneSheet = true."
+        )
+      ),
   })
   .openapi("XlsxTemplateSheetInput")
 
@@ -41,13 +49,39 @@ const renderXlsxTemplateRequestSchema = z
     sheets: z
       .array(xlsxTemplateSheetSchema)
       .min(1)
-      .openapi(fieldDesc("Danh sách sheet cần render. Mỗi phần tử tương ứng 1 sheet output.")),
+      .openapi(
+        fieldDesc(
+          "Danh sách block/sheet cần render. Mỗi phần tử = 1 lần fill template. Khi mergeBlocksToOneSheet=true thì xếp dọc 1 sheet."
+        )
+      ),
     autoPatchTablePlaceholders: z
       .boolean()
       .optional()
       .openapi(
         fieldDesc(
           "Tự động vá placeholder bảng cũ thiếu cột Thứ/Tiết/Giảng đường. Mặc định false."
+        )
+      ),
+    mergeBlocksToOneSheet: z
+      .boolean()
+      .optional()
+      .openapi(
+        fieldDesc(
+          "Ghép nhiều block vào 1 sheet (xếp dọc), giữ shape bằng offset drawing XML. Mặc định false (mỗi block 1 tab)."
+        )
+      ),
+    blockGapRows: z
+      .number()
+      .int()
+      .min(0)
+      .optional()
+      .openapi(fieldDesc("Số dòng trống giữa các block khi ghép dọc. Mặc định 0.")),
+    prefix: z
+      .string()
+      .optional()
+      .openapi(
+        fieldDesc(
+          "Prefix đường dẫn MinIO (ví dụ /mta/template). Không truyền → lấy mặc định từ DB template hoặc /mta/template."
         )
       ),
   })
@@ -65,11 +99,11 @@ const renderXlsxTemplateRoute = createRoute({
 1. \`templatePath\`: path MinIO hoặc mã template.
 2. \`sheets[].data\`: object dữ liệu theo placeholder trong template.
 
-**Placeholder phổ biến:**
-- Header: \`\${semesterName}\`, \`\${courseName}\`, \`\${trainingObjectTypeName}\`
-- Bảng: \`\${table:data.no}\`, \`\${table:data.subjectCode}\`, \`\${table:data.weekday}\`, ...
-
-**Nhiều khóa / nhiều sheet:** truyền nhiều phần tử trong \`sheets\`, mỗi phần tử 1 sheet output.`,
+**Nhiều block 1 sheet (giữ shape):**
+- \`mergeBlocksToOneSheet: true\`
+- Mỗi phần tử \`sheets[]\` = 1 block (header + table + footer)
+- \`sheets[].pageBreakAfter: true\` để ngắt trang sau block (tương đương field "ngắt trang")
+- Hệ thống render từng block rồi ghép dọc, offset drawing XML để shape lặp lại ở mọi block.`,
   request: {
     body: {
       content: {
@@ -108,6 +142,9 @@ app.openapi(renderXlsxTemplateRoute, async (c) => {
       templatePath: body.templatePath,
       sheets: body.sheets,
       autoPatchTablePlaceholders: body.autoPatchTablePlaceholders,
+      mergeBlocksToOneSheet: body.mergeBlocksToOneSheet,
+      blockGapRows: body.blockGapRows,
+      prefix: body.prefix,
     })
 
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(body.fileName)}`
@@ -118,6 +155,7 @@ app.openapi(renderXlsxTemplateRoute, async (c) => {
     })
   } catch (error) {
     const message = error instanceof Error ? error.message : "Xuất template thất bại"
+    console.error("[export-template/render]", message, error)
     return c.json({ message }, 404)
   }
 })

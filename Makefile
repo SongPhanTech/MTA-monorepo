@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= app
+SERVER_PROFILE ?= swan1
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -231,16 +231,31 @@ deploy-all-be:
 	cd docker-images && ls *.tar.gz | xargs -I {} docker load -i {} && \
 	cd $(BE_APP_DIR) && \
 	docker rm -f mta-be-exchange mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared 2>/dev/null; \
-	cd $(BE_APP_DIR) && docker compose up --pull never -d"
-
-# deploy-be-%: build-%
-# 	@mkdir -p docker-images
-# 	$(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$*.tar.gz
-# 	sshpass -p "Bancntt@2025" scp -O docker-images/$(IMG_PREFIX)$*.tar.gz app2:~/Documents/docker-compose/
-# 	sshpass -p "Bancntt@2025" ssh app2 "cd Documents/docker-compose/ && \
-# 	docker load -i $(IMG_PREFIX)$*.tar.gz && \
-# 	docker rm -f $(IMG_PREFIX)$* && \
-# 	docker compose up $(IMG_PREFIX)$* -d"
+	for svc in mta-be-exchange mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared; do \
+	  docker tag $(REGISTRY)/$$svc:$(DEV_TAG) $$svc:local-deploy 2>/dev/null || true; \
+	done && \
+	printf '%s\n' \
+	  'services:' \
+	  '  mta-be-exchange:' \
+	  '    image: mta-be-exchange:local-deploy' \
+	  '    pull_policy: never' \
+	  '  mta-be-khao-thi:' \
+	  '    image: mta-be-khao-thi:local-deploy' \
+	  '    pull_policy: never' \
+	  '  mta-be-model:' \
+	  '    image: mta-be-model:local-deploy' \
+	  '    pull_policy: never' \
+	  '  mta-be-portal:' \
+	  '    image: mta-be-portal:local-deploy' \
+	  '    pull_policy: never' \
+	  '  mta-be-ql-dao-tao:' \
+	  '    image: mta-be-ql-dao-tao:local-deploy' \
+	  '    pull_policy: never' \
+	  '  mta-be-ql-dao-tao-shared:' \
+	  '    image: mta-be-ql-dao-tao-shared:local-deploy' \
+	  '    pull_policy: never' \
+	  > /tmp/mta-pull-never.override.yml && \
+	COMPOSE_PULL_POLICY=never docker compose -f docker-compose.yml -f /tmp/mta-pull-never.override.yml up -d"
 
 deploy-%:
 	@mkdir -p docker-images
@@ -249,8 +264,16 @@ deploy-%:
 	$(SCP) docker-images/$(IMG_PREFIX)$*.tar.gz $(SERVER_HOST):$(BE_DEPLOY_DIR)/docker-images/
 	$(SSH) $(SERVER_HOST) "cd $(BE_DEPLOY_DIR) && \
 	docker load -i docker-images/$(IMG_PREFIX)$*.tar.gz && \
+	docker tag $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG) $(IMG_PREFIX)$*:local-deploy && \
 	docker rm -f $(IMG_PREFIX)$* 2>/dev/null; \
-	docker compose up --pull never $(IMG_PREFIX)$* -d"
+	cd $(BE_APP_DIR) && \
+	printf '%s\n' \
+	  'services:' \
+	  '  $(IMG_PREFIX)$*:' \
+	  '    image: $(IMG_PREFIX)$*:local-deploy' \
+	  '    pull_policy: never' \
+	  > /tmp/mta-pull-never-$*.override.yml && \
+	COMPOSE_PULL_POLICY=never docker compose -f docker-compose.yml -f /tmp/mta-pull-never-$*.override.yml up $(IMG_PREFIX)$* -d"
 
 
 # Pattern rule: all-<name> = build + deploy
@@ -267,6 +290,7 @@ _build-be:
 	$(DOCKER) build -f Dockerfile.backend --platform linux/amd64 \
 		-t $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG) \
 		--build-arg PACKAGE=${PACKAGE} \
+		--build-arg CACHEBUST=$$(date +%s) \
 		. --output type=docker
 	rm -rf out
 
