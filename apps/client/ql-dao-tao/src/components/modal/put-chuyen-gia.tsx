@@ -41,23 +41,23 @@ const PutExpertProfile = () => {
   )
 
   const { data: lecturer = [] } = useFindManyLecturer({
-    where: (search
-        ? {
-            OR: [
-              { code: { contains: search, mode: "insensitive" } },
-              {
-                userProfile: {
-                  fullname: { contains: search, mode: "insensitive" },
-                },
+    where: search
+      ? {
+          OR: [
+            { code: { contains: search, mode: "insensitive" } },
+            {
+              userProfile: {
+                fullname: { contains: search, mode: "insensitive" },
               },
-              {
-                organization: {
-                  sTen: { contains: search, mode: "insensitive" },
-                },
+            },
+            {
+              organization: {
+                sTen: { contains: search, mode: "insensitive" },
               },
-            ],
-          }
-        : {}),
+            },
+          ],
+        }
+      : {},
     include: {
       userProfile: true,
       organization: true,

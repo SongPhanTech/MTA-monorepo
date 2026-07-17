@@ -100,7 +100,9 @@ export async function exportStudentSemesterResult({
   const data = studentSemesterResults.map((result, idx) => {
     const student = result.student
     const userProfile = student.userProfile
-    const dateOfBirth = userProfile.dateOfBirth ? dayjs(userProfile.dateOfBirth) : null
+    const dateOfBirth = userProfile.dateOfBirth
+      ? dayjs(userProfile.dateOfBirth).tz("Asia/Ho_Chi_Minh")
+      : null
 
     return {
       no: idx + 1,
@@ -231,10 +233,7 @@ export async function exportStudentSemesterResultV2({
           },
         },
       },
-      orderBy: [
-        { userProfile: { firstName: "asc" } },
-        { userProfile: { lastName: "asc" } },
-      ],
+      orderBy: [{ userProfile: { firstName: "asc" } }, { userProfile: { lastName: "asc" } }],
     })
 
     if (students.length === 0) continue
@@ -261,8 +260,7 @@ export async function exportStudentSemesterResultV2({
       }
     }
 
-    const subjects = [...subjectMap.entries()]
-      .sort((a, b) => a[1].code.localeCompare(b[1].code))
+    const subjects = [...subjectMap.entries()].sort((a, b) => a[1].code.localeCompare(b[1].code))
 
     const subjectCount = subjects.length
     const FIXED_COLS_BEFORE = 5
@@ -336,16 +334,16 @@ export async function exportStudentSemesterResultV2({
     }
 
     // Column widths (from sample file)
-    ws.getColumn(1).width = 5.86    // TT
-    ws.getColumn(2).width = 13.43   // Mã SV
-    ws.getColumn(3).width = 42.14   // Họ tên
-    ws.getColumn(4).width = 7       // GT
-    ws.getColumn(5).width = 15.71   // Ngày sinh
+    ws.getColumn(1).width = 5.86 // TT
+    ws.getColumn(2).width = 13.43 // Mã SV
+    ws.getColumn(3).width = 42.14 // Họ tên
+    ws.getColumn(4).width = 7 // GT
+    ws.getColumn(5).width = 15.71 // Ngày sinh
     for (let i = 0; i < subjectCount; i++) {
       ws.getColumn(FIXED_COLS_BEFORE + i + 1).width = 13.57
     }
-    ws.getColumn(FIXED_COLS_BEFORE + subjectCount + 1).width = 14    // Số TC liệt
-    ws.getColumn(FIXED_COLS_BEFORE + subjectCount + 2).width = 15    // Điểm TBC
+    ws.getColumn(FIXED_COLS_BEFORE + subjectCount + 1).width = 14 // Số TC liệt
+    ws.getColumn(FIXED_COLS_BEFORE + subjectCount + 2).width = 15 // Điểm TBC
     ws.getColumn(FIXED_COLS_BEFORE + subjectCount + 3).width = 13.86 // Số TC TL
     ws.getColumn(FIXED_COLS_BEFORE + subjectCount + 4).width = 13.29 // TBC TL
 
@@ -354,7 +352,7 @@ export async function exportStudentSemesterResultV2({
       const student = students[si]!
       const semResult = student.studentSemesterResult[0]
       const dob = student.userProfile?.dateOfBirth
-        ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
+        ? dayjs(student.userProfile.dateOfBirth).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")
         : ""
 
       const subjectScores: (number | string)[] = subjects.map(([subjectId]) => {
@@ -448,10 +446,12 @@ export async function exportStudentYearResult({
   semesterId,
   schoolYearId,
   trainingObjectTypeId,
+  fixedClassId,
 }: {
   semesterId?: string
   schoolYearId?: string
   trainingObjectTypeId: string
+  fixedClassId?: string
 }) {
   const schoolYear = await prisma.schoolYear.findFirst({
     where: {
@@ -480,6 +480,7 @@ export async function exportStudentYearResult({
     where: {
       schoolYearId: schoolYear.id,
       student: {
+        ...(fixedClassId ? { fixedClassId } : {}),
         curriculumVersion: {
           trainingObjectTypeId,
         },
@@ -515,7 +516,9 @@ export async function exportStudentYearResult({
   const data = studentYearResults.map((result, idx) => {
     const student = result.student
     const userProfile = student.userProfile
-    const dateOfBirth = userProfile.dateOfBirth ? dayjs(userProfile.dateOfBirth) : null
+    const dateOfBirth = userProfile.dateOfBirth
+      ? dayjs(userProfile.dateOfBirth).tz("Asia/Ho_Chi_Minh")
+      : null
 
     return {
       no: idx + 1,

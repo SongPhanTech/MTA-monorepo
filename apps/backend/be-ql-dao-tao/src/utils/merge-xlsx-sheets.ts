@@ -52,22 +52,23 @@ function parseSharedStrings(xml: string) {
 }
 
 function buildSharedStringsXml(strings: string[]) {
-  const items = strings
-    .map((value) => `<si><t>${escapeXml(value)}</t></si>`)
-    .join("")
+  const items = strings.map((value) => `<si><t>${escapeXml(value)}</t></si>`).join("")
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><sst xmlns="${NS_MAIN}" count="${strings.length}" uniqueCount="${strings.length}">${items}</sst>`
 }
 
 function remapSharedStringIndices(sheetXml: string, indexMap: Map<number, number>) {
-  return sheetXml.replace(/<c([^>]*)\bt="s"([^>]*)>([\s\S]*?)<\/c>/g, (full, before, after, inner) => {
-    const valueMatch = inner.match(/<v>(\d+)<\/v>/)
-    if (!valueMatch) return full
-    const oldIndex = Number(valueMatch[1])
-    const newIndex = indexMap.get(oldIndex)
-    if (newIndex === undefined) return full
-    const updatedInner = inner.replace(/<v>\d+<\/v>/, `<v>${newIndex}</v>`)
-    return `<c${before}t="s"${after}>${updatedInner}</c>`
-  })
+  return sheetXml.replace(
+    /<c([^>]*)\bt="s"([^>]*)>([\s\S]*?)<\/c>/g,
+    (full, before, after, inner) => {
+      const valueMatch = inner.match(/<v>(\d+)<\/v>/)
+      if (!valueMatch) return full
+      const oldIndex = Number(valueMatch[1])
+      const newIndex = indexMap.get(oldIndex)
+      if (newIndex === undefined) return full
+      const updatedInner = inner.replace(/<v>\d+<\/v>/, `<v>${newIndex}</v>`)
+      return `<c${before}t="s"${after}>${updatedInner}</c>`
+    }
+  )
 }
 
 function mergeSharedStrings(masterZip: PizZip, slaveZip: PizZip, slaveSheetXml: string) {
@@ -107,7 +108,10 @@ function updateSheetName(zip: PizZip, sheetIndex: number, name: string) {
   const target = sheetTags[sheetIndex - 1]
   if (!target) return
 
-  const updatedTag = target[0].replace(/name="[^"]*"/, `name="${escapeXml(sanitizeSheetName(name))}"`)
+  const updatedTag = target[0].replace(
+    /name="[^"]*"/,
+    `name="${escapeXml(sanitizeSheetName(name))}"`
+  )
   zip.file(workbookPath, workbookXml.replace(target[0], updatedTag))
 }
 
@@ -195,7 +199,10 @@ function appendSheetFromWorkbook(masterZip: PizZip, slaveBuffer: Buffer, sheetNa
         )
       }
 
-      sheetRelsXml = sheetRelsXml.replace(`../drawings/${drawingFile}`, `../drawings/${newDrawingFile}`)
+      sheetRelsXml = sheetRelsXml.replace(
+        `../drawings/${drawingFile}`,
+        `../drawings/${newDrawingFile}`
+      )
     }
 
     masterZip.file(`xl/worksheets/_rels/${newSheetFile}.rels`, sheetRelsXml)

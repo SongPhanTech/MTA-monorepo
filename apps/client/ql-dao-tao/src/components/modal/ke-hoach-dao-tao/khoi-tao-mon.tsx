@@ -96,15 +96,15 @@ const KhoiTaoMon = () => {
               where: {
                 subjectId: subjectVersionId,
                 trainingBlockOnCurriculumVersion: {
-                  curriculumVersion: (fixedClassIds?.length
-                      ? {
-                          fixedClass: {
-                            id: {
-                              in: fixedClassIds,
-                            },
+                  curriculumVersion: fixedClassIds?.length
+                    ? {
+                        fixedClass: {
+                          id: {
+                            in: fixedClassIds,
                           },
-                        }
-                      : {}),
+                        },
+                      }
+                    : {},
                 },
               },
               select: {

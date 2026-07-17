@@ -32,6 +32,11 @@ import type {
   ClassUnregister400,
   ClassUnregister404,
   ClassUnregisterBody,
+  ExportToInternal200,
+  ExportToInternal400,
+  ExportToInternalBody,
+  FinishDataSync200,
+  FinishDataSyncBody,
   GetClassRegisterSession200Item,
   GetClassRegisterSession400,
   GetClassRegisterSession404,
@@ -39,11 +44,18 @@ import type {
   GetClassesInfo400,
   GetClassesInfo404,
   GetClassesInfoParams,
+  GetDataSyncHistory200Item,
+  GetDataSyncHistoryParams,
   GetSessionParams,
   GetStudentInfo200,
   GetStudentInfo404,
   GetStudentInfoParams,
+  ImportFromInternal200,
+  ImportFromInternal400,
+  ImportFromInternalBody,
   Session,
+  StartDataSync200,
+  StartDataSyncBody,
   Unauthorized
 } from './schemas';
 
@@ -754,3 +766,483 @@ export function useGetStudentInfo<TData = Awaited<ReturnType<typeof getStudentIn
 
   return query;
 }
+
+
+
+
+
+/**
+ * @summary Lấy lịch sử đồng bộ dữ liệu
+ */
+export type getDataSyncHistoryResponse200 = {
+  data: GetDataSyncHistory200Item[]
+  status: 200
+}
+    
+export type getDataSyncHistoryResponseSuccess = (getDataSyncHistoryResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getDataSyncHistoryResponse = (getDataSyncHistoryResponseSuccess)
+
+export const getGetDataSyncHistoryUrl = (params?: GetDataSyncHistoryParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/data-sync/get-data-sync-history?${stringifiedParams}` : `/api/data-sync/get-data-sync-history`
+}
+
+export const getDataSyncHistory = async (params?: GetDataSyncHistoryParams, options?: RequestInit): Promise<getDataSyncHistoryResponse> => {
+  
+  return customPortalFetch<getDataSyncHistoryResponse>(getGetDataSyncHistoryUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetDataSyncHistoryQueryKey = (params?: GetDataSyncHistoryParams,) => {
+    return [
+    `/api/data-sync/get-data-sync-history`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetDataSyncHistoryQueryOptions = <TData = Awaited<ReturnType<typeof getDataSyncHistory>>, TError = unknown>(params?: GetDataSyncHistoryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDataSyncHistory>>, TError, TData>>, request?: SecondParameter<typeof customPortalFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDataSyncHistoryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDataSyncHistory>>> = ({ signal }) => getDataSyncHistory(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDataSyncHistory>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDataSyncHistoryQueryResult = NonNullable<Awaited<ReturnType<typeof getDataSyncHistory>>>
+export type GetDataSyncHistoryQueryError = unknown
+
+
+export function useGetDataSyncHistory<TData = Awaited<ReturnType<typeof getDataSyncHistory>>, TError = unknown>(
+ params: undefined |  GetDataSyncHistoryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDataSyncHistory>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDataSyncHistory>>,
+          TError,
+          Awaited<ReturnType<typeof getDataSyncHistory>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDataSyncHistory<TData = Awaited<ReturnType<typeof getDataSyncHistory>>, TError = unknown>(
+ params?: GetDataSyncHistoryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDataSyncHistory>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDataSyncHistory>>,
+          TError,
+          Awaited<ReturnType<typeof getDataSyncHistory>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDataSyncHistory<TData = Awaited<ReturnType<typeof getDataSyncHistory>>, TError = unknown>(
+ params?: GetDataSyncHistoryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDataSyncHistory>>, TError, TData>>, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lấy lịch sử đồng bộ dữ liệu
+ */
+
+export function useGetDataSyncHistory<TData = Awaited<ReturnType<typeof getDataSyncHistory>>, TError = unknown>(
+ params?: GetDataSyncHistoryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDataSyncHistory>>, TError, TData>>, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetDataSyncHistoryQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * @summary Ghi nhận bắt đầu đồng bộ dữ liệu
+ */
+export type startDataSyncResponse200 = {
+  data: StartDataSync200
+  status: 200
+}
+    
+export type startDataSyncResponseSuccess = (startDataSyncResponse200) & {
+  headers: Headers;
+};
+;
+
+export type startDataSyncResponse = (startDataSyncResponseSuccess)
+
+export const getStartDataSyncUrl = () => {
+
+
+  
+
+  return `/api/data-sync/start-data-sync`
+}
+
+export const startDataSync = async (startDataSyncBody: StartDataSyncBody, options?: RequestInit): Promise<startDataSyncResponse> => {
+  
+  return customPortalFetch<startDataSyncResponse>(getStartDataSyncUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      startDataSyncBody,)
+  }
+);}
+
+
+
+
+export const getStartDataSyncMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startDataSync>>, TError,{data: StartDataSyncBody}, TContext>, request?: SecondParameter<typeof customPortalFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof startDataSync>>, TError,{data: StartDataSyncBody}, TContext> => {
+
+const mutationKey = ['startDataSync'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof startDataSync>>, {data: StartDataSyncBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  startDataSync(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type StartDataSyncMutationResult = NonNullable<Awaited<ReturnType<typeof startDataSync>>>
+    export type StartDataSyncMutationBody = StartDataSyncBody
+    export type StartDataSyncMutationError = unknown
+
+    /**
+ * @summary Ghi nhận bắt đầu đồng bộ dữ liệu
+ */
+export const useStartDataSync = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startDataSync>>, TError,{data: StartDataSyncBody}, TContext>, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof startDataSync>>,
+        TError,
+        {data: StartDataSyncBody},
+        TContext
+      > => {
+
+      const mutationOptions = getStartDataSyncMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * @summary Cập nhật kết quả đồng bộ dữ liệu
+ */
+export type finishDataSyncResponse200 = {
+  data: FinishDataSync200
+  status: 200
+}
+    
+export type finishDataSyncResponseSuccess = (finishDataSyncResponse200) & {
+  headers: Headers;
+};
+;
+
+export type finishDataSyncResponse = (finishDataSyncResponseSuccess)
+
+export const getFinishDataSyncUrl = () => {
+
+
+  
+
+  return `/api/data-sync/finish-data-sync`
+}
+
+export const finishDataSync = async (finishDataSyncBody: FinishDataSyncBody, options?: RequestInit): Promise<finishDataSyncResponse> => {
+  
+  return customPortalFetch<finishDataSyncResponse>(getFinishDataSyncUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      finishDataSyncBody,)
+  }
+);}
+
+
+
+
+export const getFinishDataSyncMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof finishDataSync>>, TError,{data: FinishDataSyncBody}, TContext>, request?: SecondParameter<typeof customPortalFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof finishDataSync>>, TError,{data: FinishDataSyncBody}, TContext> => {
+
+const mutationKey = ['finishDataSync'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof finishDataSync>>, {data: FinishDataSyncBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  finishDataSync(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type FinishDataSyncMutationResult = NonNullable<Awaited<ReturnType<typeof finishDataSync>>>
+    export type FinishDataSyncMutationBody = FinishDataSyncBody
+    export type FinishDataSyncMutationError = unknown
+
+    /**
+ * @summary Cập nhật kết quả đồng bộ dữ liệu
+ */
+export const useFinishDataSync = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof finishDataSync>>, TError,{data: FinishDataSyncBody}, TContext>, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof finishDataSync>>,
+        TError,
+        {data: FinishDataSyncBody},
+        TContext
+      > => {
+
+      const mutationOptions = getFinishDataSyncMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * @summary Nhập dữ liệu từ file JSON xuất bởi phần mềm nội bộ
+ */
+export type importFromInternalResponse200 = {
+  data: ImportFromInternal200
+  status: 200
+}
+
+export type importFromInternalResponse400 = {
+  data: ImportFromInternal400
+  status: 400
+}
+    
+export type importFromInternalResponseSuccess = (importFromInternalResponse200) & {
+  headers: Headers;
+};
+export type importFromInternalResponseError = (importFromInternalResponse400) & {
+  headers: Headers;
+};
+
+export type importFromInternalResponse = (importFromInternalResponseSuccess | importFromInternalResponseError)
+
+export const getImportFromInternalUrl = () => {
+
+
+  
+
+  return `/api/data-sync/import-from-internal`
+}
+
+export const importFromInternal = async (importFromInternalBody: ImportFromInternalBody, options?: RequestInit): Promise<importFromInternalResponse> => {
+    const formData = new FormData();
+formData.append(`file`, importFromInternalBody.file)
+if(importFromInternalBody.syncHistoryId !== undefined) {
+ formData.append(`syncHistoryId`, importFromInternalBody.syncHistoryId)
+ }
+
+  return customPortalFetch<importFromInternalResponse>(getImportFromInternalUrl(),
+  {      
+    ...options,
+    method: 'POST'
+    ,
+    body: 
+      formData,
+  }
+);}
+
+
+
+
+export const getImportFromInternalMutationOptions = <TError = ImportFromInternal400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importFromInternal>>, TError,{data: ImportFromInternalBody}, TContext>, request?: SecondParameter<typeof customPortalFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof importFromInternal>>, TError,{data: ImportFromInternalBody}, TContext> => {
+
+const mutationKey = ['importFromInternal'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importFromInternal>>, {data: ImportFromInternalBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  importFromInternal(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ImportFromInternalMutationResult = NonNullable<Awaited<ReturnType<typeof importFromInternal>>>
+    export type ImportFromInternalMutationBody = ImportFromInternalBody
+    export type ImportFromInternalMutationError = ImportFromInternal400
+
+    /**
+ * @summary Nhập dữ liệu từ file JSON xuất bởi phần mềm nội bộ
+ */
+export const useImportFromInternal = <TError = ImportFromInternal400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importFromInternal>>, TError,{data: ImportFromInternalBody}, TContext>, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof importFromInternal>>,
+        TError,
+        {data: ImportFromInternalBody},
+        TContext
+      > => {
+
+      const mutationOptions = getImportFromInternalMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Xuất ClassRegisterLogs, StudentSubjectScore và dữ liệu liên quan của 1 đợt đăng ký thành file JSON.
+ * @summary Xuất kết quả đăng ký học về phần mềm nội bộ
+ */
+export type exportToInternalResponse200 = {
+  data: ExportToInternal200
+  status: 200
+}
+
+export type exportToInternalResponse400 = {
+  data: ExportToInternal400
+  status: 400
+}
+    
+export type exportToInternalResponseSuccess = (exportToInternalResponse200) & {
+  headers: Headers;
+};
+export type exportToInternalResponseError = (exportToInternalResponse400) & {
+  headers: Headers;
+};
+
+export type exportToInternalResponse = (exportToInternalResponseSuccess | exportToInternalResponseError)
+
+export const getExportToInternalUrl = () => {
+
+
+  
+
+  return `/api/data-sync/export-to-internal`
+}
+
+export const exportToInternal = async (exportToInternalBody: ExportToInternalBody, options?: RequestInit): Promise<exportToInternalResponse> => {
+  
+  return customPortalFetch<exportToInternalResponse>(getExportToInternalUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportToInternalBody,)
+  }
+);}
+
+
+
+
+export const getExportToInternalMutationOptions = <TError = ExportToInternal400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportToInternal>>, TError,{data: ExportToInternalBody}, TContext>, request?: SecondParameter<typeof customPortalFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportToInternal>>, TError,{data: ExportToInternalBody}, TContext> => {
+
+const mutationKey = ['exportToInternal'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportToInternal>>, {data: ExportToInternalBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportToInternal(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportToInternalMutationResult = NonNullable<Awaited<ReturnType<typeof exportToInternal>>>
+    export type ExportToInternalMutationBody = ExportToInternalBody
+    export type ExportToInternalMutationError = ExportToInternal400
+
+    /**
+ * @summary Xuất kết quả đăng ký học về phần mềm nội bộ
+ */
+export const useExportToInternal = <TError = ExportToInternal400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportToInternal>>, TError,{data: ExportToInternalBody}, TContext>, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportToInternal>>,
+        TError,
+        {data: ExportToInternalBody},
+        TContext
+      > => {
+
+      const mutationOptions = getExportToInternalMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }

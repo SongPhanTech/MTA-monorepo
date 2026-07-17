@@ -56,7 +56,12 @@ async function querySessionToTrainingCourse(sessionId: string) {
 async function loadStudents(params: {
   fixedClassIds: string[]
   trainingCourseIds: string[]
-  fixedClasses: { classMonitorId: string | null; unionLeaderId: string | null; deputyUnionSecretaryId: string | null; unionSecretaryId: string | null }[]
+  fixedClasses: {
+    classMonitorId: string | null
+    unionLeaderId: string | null
+    deputyUnionSecretaryId: string | null
+    unionSecretaryId: string | null
+  }[]
   extraStudentIds: string[]
 }) {
   const { fixedClassIds, trainingCourseIds, fixedClasses, extraStudentIds } = params
@@ -189,40 +194,37 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
   const subjectIds = uniqueIds(subjectVersions.map((sv) => sv.subjectId))
 
   const [subjects, subjectClassRecords, studentSubjectScores, exams] = await Promise.all([
-      subjectIds.length > 0
-        ? prisma.subject.findMany({ where: { id: { in: subjectIds }, deletedAt: null } })
-        : Promise.resolve([]),
-      subjectClassIds.length > 0
-        ? prisma.subjectClass.findMany({ where: { id: { in: subjectClassIds } } })
-        : Promise.resolve([]),
-      subjectClassIds.length > 0
-        ? prisma.studentSubjectScore.findMany({
-            where: {
-              deletedAt: null,
-              OR: [
-                { subjectClassId: { in: subjectClassIds } },
-                { semesterId },
-              ],
-            },
-          })
-        : Promise.resolve([]),
-      subjectClassIds.length > 0 || subjectVersionIds.length > 0
-        ? prisma.exam.findMany({
-            where: {
-              semesterId,
-              deletedAt: null,
-              OR: [
-                ...(subjectClassIds.length > 0
-                  ? [{ subjectClass: { some: { id: { in: subjectClassIds } } } }]
-                  : []),
-                ...(subjectVersionIds.length > 0
-                  ? [{ subjectVersionId: { in: subjectVersionIds } }]
-                  : []),
-              ],
-            },
-          })
-        : Promise.resolve([]),
-    ])
+    subjectIds.length > 0
+      ? prisma.subject.findMany({ where: { id: { in: subjectIds }, deletedAt: null } })
+      : Promise.resolve([]),
+    subjectClassIds.length > 0
+      ? prisma.subjectClass.findMany({ where: { id: { in: subjectClassIds } } })
+      : Promise.resolve([]),
+    subjectClassIds.length > 0
+      ? prisma.studentSubjectScore.findMany({
+          where: {
+            deletedAt: null,
+            OR: [{ subjectClassId: { in: subjectClassIds } }, { semesterId }],
+          },
+        })
+      : Promise.resolve([]),
+    subjectClassIds.length > 0 || subjectVersionIds.length > 0
+      ? prisma.exam.findMany({
+          where: {
+            semesterId,
+            deletedAt: null,
+            OR: [
+              ...(subjectClassIds.length > 0
+                ? [{ subjectClass: { some: { id: { in: subjectClassIds } } } }]
+                : []),
+              ...(subjectVersionIds.length > 0
+                ? [{ subjectVersionId: { in: subjectVersionIds } }]
+                : []),
+            ],
+          },
+        })
+      : Promise.resolve([]),
+  ])
 
   const scoreStudentIds = uniqueIds(studentSubjectScores.map((s) => s.studentId))
 

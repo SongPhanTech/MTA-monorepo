@@ -78,7 +78,8 @@ export default function ThongKeBuoiHoc() {
     const startPeriodObj = PERIOD[schedule.startPeriod as keyof typeof PERIOD]
     const endPeriodObj = PERIOD[schedule.endPeriod as keyof typeof PERIOD]
 
-    if (!startPeriodObj || !endPeriodObj) return { code: "UNKNOWN", label: "Không xác định", color: "gray" }
+    if (!startPeriodObj || !endPeriodObj)
+      return { code: "UNKNOWN", label: "Không xác định", color: "gray" }
 
     const todayStr = dayjs(schedule.classDate).format("YYYY-MM-DD")
     const startTime = dayjs(`${todayStr} ${dayjs(startPeriodObj.startTime).format("HH:mm:ss")}`)
@@ -355,8 +356,14 @@ export default function ThongKeBuoiHoc() {
                 const classCode = s.subjectClass?.code?.toLowerCase() || ""
                 const roomName = (s.room?.name || s.subjectClass?.room?.name || "").toLowerCase()
                 const period = `tiết ${s.startPeriod} - ${s.endPeriod}`.toLowerCase()
-                return lecturerName.includes(kw) || orgName.includes(kw) || className.includes(kw)
-                  || classCode.includes(kw) || roomName.includes(kw) || period.includes(kw)
+                return (
+                  lecturerName.includes(kw) ||
+                  orgName.includes(kw) ||
+                  className.includes(kw) ||
+                  classCode.includes(kw) ||
+                  roomName.includes(kw) ||
+                  period.includes(kw)
+                )
               })
               .map((s: ClassScheduleData, idx: number) => ({ ...s, key: s.id || idx.toString() }))}
             pagination={false}

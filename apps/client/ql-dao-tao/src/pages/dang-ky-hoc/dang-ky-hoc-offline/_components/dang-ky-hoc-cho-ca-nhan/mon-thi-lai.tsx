@@ -288,9 +288,11 @@ export default function MonThiLai() {
 
   useEffect(() => {
     if (subjectClassData && studentId) {
-      setSubjectVersionIds(subjectClassData
+      setSubjectVersionIds(
+        subjectClassData
           .filter((item) => item.subjectClassStudent.length > 0)
-          .map((item) => item.subject.id))
+          .map((item) => item.subject.id)
+      )
       setSelectedSubjectClassRowKeys(
         subjectClassData
           .filter((item) => item.subjectClassStudent.length > 0)

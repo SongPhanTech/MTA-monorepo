@@ -291,14 +291,14 @@ const DiemTrungBinhKyHoc = () => {
     if (template === "2") {
       try {
         showSpinner()
-        const res = await customTrainingFetch<{ status: number; data: Blob & { message?: string } }>(
-          "/api/student-result/export-student-semester-result-v2",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-          }
-        )
+        const res = await customTrainingFetch<{
+          status: number
+          data: Blob & { message?: string }
+        }>("/api/student-result/export-student-semester-result-v2", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        })
         if (res.status === 200) {
           message.success("Xuất file thành công")
           saveAs(res.data, "KET_QUA_HOC_TAP_HK_MAU2.xlsx")

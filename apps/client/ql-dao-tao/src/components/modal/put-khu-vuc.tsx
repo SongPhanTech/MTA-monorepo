@@ -58,7 +58,7 @@ const PutTrainingLocationModal = () => {
                 where: {
                   trainingLocationId: value?.id,
                 },
-                data: (value.active === false ? { active: false } : { active: true }),
+                data: value.active === false ? { active: false } : { active: true },
               },
             },
           },

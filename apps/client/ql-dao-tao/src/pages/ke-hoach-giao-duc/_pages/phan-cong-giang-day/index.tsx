@@ -764,66 +764,66 @@ export default function PhanCongGiangDay({
     }
   }
 
-interface ExportOrgItem {
-  sMa: string | null
-  sTKPUCode: string | null
-  Id: string
-  sTen: string
-  sParentId: string | null
-}
-
-interface ExportSemesterItem {
-  semesterType: $Enums.SemesterType
-  schoolYear: {
-    startDate: Date | string
-    endDate: Date | string
+  interface ExportOrgItem {
+    sMa: string | null
+    sTKPUCode: string | null
+    Id: string
+    sTen: string
+    sParentId: string | null
   }
-}
 
-interface ExportSubjectClassItem {
-  submitLecturerAssignmentAt: Date | null
-  sendLecturerAssignmentAt: Date | null
-  schedule: string | null
-  examType: $Enums.ExamType | null
-  mainLecturer?: {
-    userProfile?: {
-      fullname: string
-    } | null
-  } | null
-  subject: {
-    code: string
-    codeTkb?: string | null
-    name: string
-    credit: number
-    period: number
-    subject?: {
-      managementOrganization?: {
-        sTen: string
-        sMa: string | null
-        sTKPUCode: string | null
-        sParentId: string | null
+  interface ExportSemesterItem {
+    semesterType: $Enums.SemesterType
+    schoolYear: {
+      startDate: Date | string
+      endDate: Date | string
+    }
+  }
+
+  interface ExportSubjectClassItem {
+    submitLecturerAssignmentAt: Date | null
+    sendLecturerAssignmentAt: Date | null
+    schedule: string | null
+    examType: $Enums.ExamType | null
+    mainLecturer?: {
+      userProfile?: {
+        fullname: string
       } | null
     } | null
-  }
-  extraLecturer?: {
-    userProfile?: {
-      fullname: string
-    } | null
-  } | null
-  fixedClasses: Array<{
-    code: string
-    _count: {
-      students: number
+    subject: {
+      code: string
+      codeTkb?: string | null
+      name: string
+      credit: number
+      period: number
+      subject?: {
+        managementOrganization?: {
+          sTen: string
+          sMa: string | null
+          sTKPUCode: string | null
+          sParentId: string | null
+        } | null
+      } | null
     }
-  }>
-  room?: {
-    code: string
-    name: string
-  } | null
-  trainingLocation?: {
-    name: string
-  } | null
-}
+    extraLecturer?: {
+      userProfile?: {
+        fullname: string
+      } | null
+    } | null
+    fixedClasses: Array<{
+      code: string
+      _count: {
+        students: number
+      }
+    }>
+    room?: {
+      code: string
+      name: string
+    } | null
+    trainingLocation?: {
+      name: string
+    } | null
+  }
 
   const handleExportExcel = async (groupType: "department" | "faculty") => {
     try {
@@ -958,7 +958,8 @@ interface ExportSubjectClassItem {
         if (semesterPayload.semesterType === $Enums.SemesterType.SECOND) return "2"
         if (semesterPayload.semesterType === $Enums.SemesterType.SUMMER) return "Hè"
         if (semesterPayload.semesterType === $Enums.SemesterType.FIRST_SUPPLEMENTARY) return "Phụ 1"
-        if (semesterPayload.semesterType === $Enums.SemesterType.SECOND_SUPPLEMENTARY) return "Phụ 2"
+        if (semesterPayload.semesterType === $Enums.SemesterType.SECOND_SUPPLEMENTARY)
+          return "Phụ 2"
         return ""
       })()
 
@@ -986,7 +987,10 @@ interface ExportSubjectClassItem {
           }
           return "MTA"
         }
-        groupedPayload = Object.groupBy(payload, (item) => getFacultyMa(item)) as Record<string, any[]>
+        groupedPayload = Object.groupBy(payload, (item) => getFacultyMa(item)) as Record<
+          string,
+          any[]
+        >
       } else {
         groupedPayload = Object.groupBy(
           payload,
@@ -1002,10 +1006,18 @@ interface ExportSubjectClassItem {
         fontSize: 9,
         sheets: Object.entries(groupedPayload).map(([key, items = []]) => {
           const ngayGui = dayjs.unix(
-            Math.min(...items.map((i) => dayjs(i.sendLecturerAssignmentAt).unix() ?? Number.POSITIVE_INFINITY))
+            Math.min(
+              ...items.map(
+                (i) => dayjs(i.sendLecturerAssignmentAt).unix() ?? Number.POSITIVE_INFINITY
+              )
+            )
           )
           const ngayNhan = dayjs.unix(
-            Math.max(...items.map((i) => dayjs(i.sendLecturerAssignmentAt).unix() ?? Number.NEGATIVE_INFINITY))
+            Math.max(
+              ...items.map(
+                (i) => dayjs(i.sendLecturerAssignmentAt).unix() ?? Number.NEGATIVE_INFINITY
+              )
+            )
           )
 
           let khoa: ExportOrgItem | undefined
@@ -1017,7 +1029,9 @@ interface ExportSubjectClassItem {
             const parentOrg = orgPayload.find((e) => e.Id === khoa?.sParentId)
             boMon = khoa
             khoa = parentOrg
-            sheetName = (boMon?.sTKPUCode || boMon?.sMa || boMon?.sTen || "MTA").substring(0, 30).replace(/[:\\/?*[\]]/g, "_")
+            sheetName = (boMon?.sTKPUCode || boMon?.sMa || boMon?.sTen || "MTA")
+              .substring(0, 30)
+              .replace(/[:\\/?*[\]]/g, "_")
           } else {
             boMon = orgPayload.find((e) => e.sMa === key)
             khoa = orgPayload.find((e) => e.Id === boMon?.sParentId)
@@ -1042,60 +1056,66 @@ interface ExportSubjectClassItem {
               hoc_ky: hocKy,
               nam_hoc: namHoc,
             },
-            rows: Object.entries(itemBySubjectCode).flatMap(([_, subjectItems = []], idxOfSubject) => {
-              return subjectItems.map((item, index) => {
-                const rowSpan = index === 0 ? subjectItems.length : 1
-                return {
-                  cells: [
-                    { value: idxOfSubject + 1, rowSpan, align: "center" },
-                    {
-                      value: item.subject?.codeTkb || item.subject?.code,
-                      rowSpan,
-                    },
-                    { value: item.subject?.name, rowSpan },
-                    { value: item.subject?.credit, rowSpan, align: "right" },
-                    {
-                      value: Math.floor((item.subject?.period ?? 0) / 15),
-                      rowSpan,
-                      align: "right",
-                    },
-                    { value: item.subject?.period ?? 0, rowSpan, align: "right" },
-                    { value: subjectItems.length, rowSpan, align: "right" },
-                    {
-                      value: item.schedule
-                        ? SUBJECT_CLASS_SCHEDULE_TYPE[item.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE]
-                        : "",
-                      align: "center",
-                    },
-                    {
-                      value: item.fixedClasses.reduce(
-                        (acc: number, curr: { code: string; _count: { students: number } }) =>
-                          acc + curr._count.students,
-                        0
-                      ),
-                    },
-                    {
-                      value: item.fixedClasses.map((fc: { code: string; _count: { students: number } }) => fc?.code).join(", "),
-                    },
-                    { value: item.trainingLocation?.name ?? "" },
-                    { value: item.mainLecturer?.userProfile?.fullname || "" },
-                    {
-                      value: item.extraLecturer?.userProfile?.fullname || "",
-                    },
-                    {
-                      value: item.room ? item.room.code || item.room.name : "",
-                    },
-                    {
-                      value: item.examType
-                        ? getExamTypeLabel(item?.examType, {
-                            exportPCGD: true,
-                          })
-                        : "",
-                    },
-                  ],
-                }
-              })
-            }),
+            rows: Object.entries(itemBySubjectCode).flatMap(
+              ([_, subjectItems = []], idxOfSubject) => {
+                return subjectItems.map((item, index) => {
+                  const rowSpan = index === 0 ? subjectItems.length : 1
+                  return {
+                    cells: [
+                      { value: idxOfSubject + 1, rowSpan, align: "center" },
+                      {
+                        value: item.subject?.codeTkb || item.subject?.code,
+                        rowSpan,
+                      },
+                      { value: item.subject?.name, rowSpan },
+                      { value: item.subject?.credit, rowSpan, align: "right" },
+                      {
+                        value: Math.floor((item.subject?.period ?? 0) / 15),
+                        rowSpan,
+                        align: "right",
+                      },
+                      { value: item.subject?.period ?? 0, rowSpan, align: "right" },
+                      { value: subjectItems.length, rowSpan, align: "right" },
+                      {
+                        value: item.schedule
+                          ? SUBJECT_CLASS_SCHEDULE_TYPE[
+                              item.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                            ]
+                          : "",
+                        align: "center",
+                      },
+                      {
+                        value: item.fixedClasses.reduce(
+                          (acc: number, curr: { code: string; _count: { students: number } }) =>
+                            acc + curr._count.students,
+                          0
+                        ),
+                      },
+                      {
+                        value: item.fixedClasses
+                          .map((fc: { code: string; _count: { students: number } }) => fc?.code)
+                          .join(", "),
+                      },
+                      { value: item.trainingLocation?.name ?? "" },
+                      { value: item.mainLecturer?.userProfile?.fullname || "" },
+                      {
+                        value: item.extraLecturer?.userProfile?.fullname || "",
+                      },
+                      {
+                        value: item.room ? item.room.code || item.room.name : "",
+                      },
+                      {
+                        value: item.examType
+                          ? getExamTypeLabel(item?.examType, {
+                              exportPCGD: true,
+                            })
+                          : "",
+                      },
+                    ],
+                  }
+                })
+              }
+            ),
             sheet: sheetName,
           }
         }),

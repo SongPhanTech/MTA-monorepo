@@ -83,10 +83,7 @@ const BangLichCaNhan = ({
     align: "center",
     fixed: "right",
     render: (_, row) => (
-      <div
-        className="flex items-center justify-center gap-2"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="flex items-center justify-center gap-2" onClick={(e) => e.stopPropagation()}>
         <EditIcon className="text-blue-600" title="Sửa" onClick={() => onSua?.(row.id)} />
         <DeleteIcon
           title="Xóa"

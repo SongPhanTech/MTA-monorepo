@@ -58,9 +58,7 @@ const renderXlsxTemplateRequestSchema = z
       .boolean()
       .optional()
       .openapi(
-        fieldDesc(
-          "Tự động vá placeholder bảng cũ thiếu cột Thứ/Tiết/Giảng đường. Mặc định false."
-        )
+        fieldDesc("Tự động vá placeholder bảng cũ thiếu cột Thứ/Tiết/Giảng đường. Mặc định false.")
       ),
     mergeBlocksToOneSheet: z
       .boolean()

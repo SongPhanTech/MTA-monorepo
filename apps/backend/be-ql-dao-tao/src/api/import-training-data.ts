@@ -9,7 +9,11 @@ const app = new OpenAPIHono({ strict: false })
 const importTrainingDataRequestSchema = z
   .object({
     classRegisterSessionId: z.string().openapi(fieldDesc("ID đợt đăng ký học online.")),
-    file: z.instanceof(File).openapi(fieldDesc("File JSON kết quả đăng ký từ internet.")),
+    file: z.instanceof(File).openapi({
+      type: "string",
+      format: "binary",
+      description: "File JSON kết quả đăng ký từ internet.",
+    }),
   })
   .openapi("ImportTrainingDataRequest")
 

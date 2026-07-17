@@ -152,11 +152,14 @@ import type {
   ExportStudentScholarshipJson200Item,
   ExportStudentScholarshipJsonParams,
   ExportStudentSemesterResultRequest,
+  ExportStudentSemesterResultV2Request,
   ExportStudentYearResultRequest,
   ExportStudentsMissingCertificateExcelParams,
   ExportSubjectClassListExcelParams,
   ExportSubjectClassScoreParams,
   ExportThoiKhoaBieuRequest,
+  ExportTrainingDataRequest,
+  ExportTrainingDataResponse,
   FailureBooleanResponse,
   FixedClassStudentCountParams,
   GenExamListCodeResult,
@@ -186,6 +189,8 @@ import type {
   ImportPhienBanCTDT,
   ImportPhienBanCTDTSubjectBody,
   ImportStudentRequest,
+  ImportTrainingDataRequest,
+  ImportTrainingDataResponse,
   MergeExamBadResponse,
   MergeExamRequest,
   MergeExamResponse,
@@ -15468,11 +15473,122 @@ export const useExportStudentSemesterResult = <TError = ErrorMessageResponse,
     }
     
 /**
+ * Xuất file Excel kết quả học tập học kỳ theo mẫu 2.
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, Semester, TrainingObjectType.
+
+**Tham số:** semesterId, trainingObjectTypeId.
+ * @summary Xuất KQHT theo học kỳ - Mẫu 2
+ */
+export type exportStudentSemesterResultV2Response200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportStudentSemesterResultV2Response400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type exportStudentSemesterResultV2Response404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type exportStudentSemesterResultV2Response409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type exportStudentSemesterResultV2Response500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type exportStudentSemesterResultV2ResponseSuccess = (exportStudentSemesterResultV2Response200) & {
+  headers: Headers;
+};
+export type exportStudentSemesterResultV2ResponseError = (exportStudentSemesterResultV2Response400 | exportStudentSemesterResultV2Response404 | exportStudentSemesterResultV2Response409 | exportStudentSemesterResultV2Response500) & {
+  headers: Headers;
+};
+
+export type exportStudentSemesterResultV2Response = (exportStudentSemesterResultV2ResponseSuccess | exportStudentSemesterResultV2ResponseError)
+
+export const getExportStudentSemesterResultV2Url = () => {
+
+
+  
+
+  return `/api/student-result/export-student-semester-result-v2`
+}
+
+export const exportStudentSemesterResultV2 = async (exportStudentSemesterResultV2Request: ExportStudentSemesterResultV2Request, options?: RequestInit): Promise<exportStudentSemesterResultV2Response> => {
+  
+  return customTrainingFetch<exportStudentSemesterResultV2Response>(getExportStudentSemesterResultV2Url(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportStudentSemesterResultV2Request,)
+  }
+);}
+
+
+
+
+export const getExportStudentSemesterResultV2MutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportStudentSemesterResultV2>>, TError,{data: ExportStudentSemesterResultV2Request}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportStudentSemesterResultV2>>, TError,{data: ExportStudentSemesterResultV2Request}, TContext> => {
+
+const mutationKey = ['exportStudentSemesterResultV2'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportStudentSemesterResultV2>>, {data: ExportStudentSemesterResultV2Request}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportStudentSemesterResultV2(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportStudentSemesterResultV2MutationResult = NonNullable<Awaited<ReturnType<typeof exportStudentSemesterResultV2>>>
+    export type ExportStudentSemesterResultV2MutationBody = ExportStudentSemesterResultV2Request
+    export type ExportStudentSemesterResultV2MutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xuất KQHT theo học kỳ - Mẫu 2
+ */
+export const useExportStudentSemesterResultV2 = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportStudentSemesterResultV2>>, TError,{data: ExportStudentSemesterResultV2Request}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportStudentSemesterResultV2>>,
+        TError,
+        {data: ExportStudentSemesterResultV2Request},
+        TContext
+      > => {
+
+      const mutationOptions = getExportStudentSemesterResultV2MutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
  * Xuất file Excel kết quả học tập cả năm học.
 
 **Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SchoolYear, Semester.
 
-**Tham số:** semesterId (tùy chọn), schoolYearId (tùy chọn), trainingObjectTypeId.
+**Tham số:** semesterId (tùy chọn), schoolYearId (tùy chọn), trainingObjectTypeId, fixedClassId (tùy chọn).
  * @summary Xuất KQHT theo năm học
  */
 export type exportStudentYearResultResponse200 = {
@@ -15696,11 +15812,11 @@ export const useExportThoiKhoaBieu = <TError = ErrorMessageResponse,
 1. `templatePath`: path MinIO hoặc mã template.
 2. `sheets[].data`: object dữ liệu theo placeholder trong template.
 
-**Placeholder phổ biến:**
-- Header: `${semesterName}`, `${courseName}`, `${trainingObjectTypeName}`
-- Bảng: `${table:data.no}`, `${table:data.subjectCode}`, `${table:data.weekday}`, ...
-
-**Nhiều khóa / nhiều sheet:** truyền nhiều phần tử trong `sheets`, mỗi phần tử 1 sheet output.
+**Nhiều block 1 sheet (giữ shape):**
+- `mergeBlocksToOneSheet: true`
+- Mỗi phần tử `sheets[]` = 1 block (header + table + footer)
+- `sheets[].pageBreakAfter: true` để ngắt trang sau block (tương đương field "ngắt trang")
+- Hệ thống render từng block rồi ghép dọc, offset drawing XML để shape lặp lại ở mọi block.
  * @summary Xuất Excel từ template (giữ shape)
  */
 export type renderXlsxTemplateResponse200 = {
@@ -15802,6 +15918,233 @@ export const useRenderXlsxTemplate = <TError = ErrorMessageResponse,
       > => {
 
       const mutationOptions = getRenderXlsxTemplateMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Xuất gói JSON theo 1 đợt đăng ký học online để migrate sang môi trường internet.
+
+**Bảng danh mục:** toàn bộ bảng DM_* (mta, ql-ho-so), LecturerType, StaffType, StaffPosition, TrainingLanguage, TrainingType, TrainingLevel, TrainingForm, TrainingTime, DiplomaType, PriorityObject, TrainingField, AcademicRankingConvert, SubjectVersionCategory, LoadCategory, TemplateFile.
+
+**Bảng nghiệp vụ:** ClassRegisterSession, ClassRegisterSessionCredit, _ClassRegisterSessionToTrainingCourse, Student, UserProfile, Lecturer, TrainingObjectType, SchoolYear, Semester, TrainingCourse, Subject, SubjectVersion, SubjectClass, SubjectClassTime, FixedClass, _FixedClassToSubjectClass, Room, Building, TrainingLocation, TrainingMajor, Curriculum, CurriculumVersion, StudentSubjectScore, StudentSemesterResult, Exam, ClassSchedule.
+
+**Tham số:** classRegisterSessionId.
+ * @summary Xuất dữ liệu thô theo đợt đăng ký học
+ */
+export type exportTrainingDataResponse200 = {
+  data: ExportTrainingDataResponse
+  status: 200
+}
+
+export type exportTrainingDataResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type exportTrainingDataResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type exportTrainingDataResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type exportTrainingDataResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type exportTrainingDataResponseSuccess = (exportTrainingDataResponse200) & {
+  headers: Headers;
+};
+export type exportTrainingDataResponseError = (exportTrainingDataResponse400 | exportTrainingDataResponse404 | exportTrainingDataResponse409 | exportTrainingDataResponse500) & {
+  headers: Headers;
+};
+
+export type exportTrainingDataResponse = (exportTrainingDataResponseSuccess | exportTrainingDataResponseError)
+
+export const getExportTrainingDataUrl = () => {
+
+
+  
+
+  return `/api/export-training-data/export`
+}
+
+export const exportTrainingData = async (exportTrainingDataRequest: ExportTrainingDataRequest, options?: RequestInit): Promise<exportTrainingDataResponse> => {
+  
+  return customTrainingFetch<exportTrainingDataResponse>(getExportTrainingDataUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportTrainingDataRequest,)
+  }
+);}
+
+
+
+
+export const getExportTrainingDataMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportTrainingData>>, TError,{data: ExportTrainingDataRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportTrainingData>>, TError,{data: ExportTrainingDataRequest}, TContext> => {
+
+const mutationKey = ['exportTrainingData'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportTrainingData>>, {data: ExportTrainingDataRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportTrainingData(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportTrainingDataMutationResult = NonNullable<Awaited<ReturnType<typeof exportTrainingData>>>
+    export type ExportTrainingDataMutationBody = ExportTrainingDataRequest
+    export type ExportTrainingDataMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xuất dữ liệu thô theo đợt đăng ký học
+ */
+export const useExportTrainingData = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportTrainingData>>, TError,{data: ExportTrainingDataRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportTrainingData>>,
+        TError,
+        {data: ExportTrainingDataRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getExportTrainingDataMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Nhập file JSON (type registration-results) xuất từ cổng đăng ký học vào 1 đợt đăng ký online nội bộ.
+
+**Import:** ClassRegisterLogs, StudentSubjectScore.
+
+**Đồng bộ:** đăng ký có trên nội bộ nhưng không còn trong file sẽ bị gỡ (score trống, chưa phát sinh điểm).
+ * @summary Nhập kết quả đăng ký từ internet
+ */
+export type importTrainingDataResponse200 = {
+  data: ImportTrainingDataResponse
+  status: 200
+}
+
+export type importTrainingDataResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type importTrainingDataResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type importTrainingDataResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type importTrainingDataResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type importTrainingDataResponseSuccess = (importTrainingDataResponse200) & {
+  headers: Headers;
+};
+export type importTrainingDataResponseError = (importTrainingDataResponse400 | importTrainingDataResponse404 | importTrainingDataResponse409 | importTrainingDataResponse500) & {
+  headers: Headers;
+};
+
+export type importTrainingDataResponse = (importTrainingDataResponseSuccess | importTrainingDataResponseError)
+
+export const getImportTrainingDataUrl = () => {
+
+
+  
+
+  return `/api/import-training-data/import`
+}
+
+export const importTrainingData = async (importTrainingDataRequest: ImportTrainingDataRequest, options?: RequestInit): Promise<importTrainingDataResponse> => {
+    const formData = new FormData();
+formData.append(`classRegisterSessionId`, importTrainingDataRequest.classRegisterSessionId)
+formData.append(`file`, importTrainingDataRequest.file)
+
+  return customTrainingFetch<importTrainingDataResponse>(getImportTrainingDataUrl(),
+  {      
+    ...options,
+    method: 'POST'
+    ,
+    body: 
+      formData,
+  }
+);}
+
+
+
+
+export const getImportTrainingDataMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importTrainingData>>, TError,{data: ImportTrainingDataRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof importTrainingData>>, TError,{data: ImportTrainingDataRequest}, TContext> => {
+
+const mutationKey = ['importTrainingData'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importTrainingData>>, {data: ImportTrainingDataRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  importTrainingData(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ImportTrainingDataMutationResult = NonNullable<Awaited<ReturnType<typeof importTrainingData>>>
+    export type ImportTrainingDataMutationBody = ImportTrainingDataRequest
+    export type ImportTrainingDataMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Nhập kết quả đăng ký từ internet
+ */
+export const useImportTrainingData = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importTrainingData>>, TError,{data: ImportTrainingDataRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof importTrainingData>>,
+        TError,
+        {data: ImportTrainingDataRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getImportTrainingDataMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

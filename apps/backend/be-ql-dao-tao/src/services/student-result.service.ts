@@ -173,22 +173,27 @@ const ThongTinTichLuy = async (
         OR: [
           {
             subjectClass: null,
-            createdAt: currentSemesterId && semesterEndDate ? {
-              gte: semesterStartDate,
-              lte: semesterEndDate,
-            } : {
-              lte: semesterStartDate, // lấy điểm nhập tay đến thời điểm kỳ đang xét
-            },
+            createdAt:
+              currentSemesterId && semesterEndDate
+                ? {
+                    gte: semesterStartDate,
+                    lte: semesterEndDate,
+                  }
+                : {
+                    lte: semesterStartDate, // lấy điểm nhập tay đến thời điểm kỳ đang xét
+                  },
           },
           {
             subjectClass: {
-              ...(currentSemesterId ? { semesterId: currentSemesterId } : {
-                semester: {
-                  startDate: {
-                    lte: semesterStartDate, // lấy tất cả các kỳ trước kỳ đang xét
-                  },
-                },
-              }),
+              ...(currentSemesterId
+                ? { semesterId: currentSemesterId }
+                : {
+                    semester: {
+                      startDate: {
+                        lte: semesterStartDate, // lấy tất cả các kỳ trước kỳ đang xét
+                      },
+                    },
+                  }),
               cancelled: false,
             },
           },

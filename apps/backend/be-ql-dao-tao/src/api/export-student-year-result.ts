@@ -16,7 +16,7 @@ const exportStudentYearResultRoute = createRoute({
 
 **Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SchoolYear, Semester.
 
-**Tham số:** semesterId (tùy chọn), schoolYearId (tùy chọn), trainingObjectTypeId.`,
+**Tham số:** semesterId (tùy chọn), schoolYearId (tùy chọn), trainingObjectTypeId, fixedClassId (tùy chọn).`,
   request: {
     body: {
       content: {
@@ -26,6 +26,7 @@ const exportStudentYearResultRoute = createRoute({
               semesterId: z.string().optional().openapi(fieldDesc("ID học kỳ (nếu lọc theo HK).")),
               schoolYearId: z.string().optional().openapi(fieldDesc("ID năm học (SchoolYear).")),
               trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
+              fixedClassId: z.string().optional().openapi(fieldDesc("ID lớp học (FixedClass).")),
             })
             .openapi("ExportStudentYearResultRequest"),
         },
@@ -54,13 +55,14 @@ const exportStudentYearResultRoute = createRoute({
 })
 
 app.openapi(exportStudentYearResultRoute, async (c) => {
-  const { semesterId, schoolYearId, trainingObjectTypeId } = c.req.valid("json")
+  const { semesterId, schoolYearId, trainingObjectTypeId, fixedClassId } = c.req.valid("json")
 
   try {
     const result = await exportStudentYearResult({
       semesterId,
       schoolYearId,
       trainingObjectTypeId,
+      fixedClassId,
     })
 
     const fileName = "KET_QUA_HOC_TAP_NAM.xlsx"

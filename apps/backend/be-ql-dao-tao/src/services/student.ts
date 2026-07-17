@@ -190,7 +190,7 @@ export const exportStudentScholarship = async ({
 
   const semester = await prisma.semester.findUnique({
     where: { id: semesterId },
-    include: { schoolYear: true }
+    include: { schoolYear: true },
   })
   const semesterName = semester?.name || ""
   const schoolYear = semester?.schoolYear?.name || ""
@@ -201,14 +201,22 @@ export const exportStudentScholarship = async ({
   const mapTrainingType = (type?: string | null) => {
     if (!type) return ""
     switch (type) {
-      case "EXCELLENT": return "Xuất sắc"
-      case "GOOD": return "Tốt"
-      case "FAIR": return "Khá"
-      case "MEDIUM": return "Trung bình khá"
-      case "AVERAGE": return "Trung bình"
-      case "POOR": return "Yếu"
-      case "VERY_POOR": return "Kém"
-      default: return type
+      case "EXCELLENT":
+        return "Xuất sắc"
+      case "GOOD":
+        return "Tốt"
+      case "FAIR":
+        return "Khá"
+      case "MEDIUM":
+        return "Trung bình khá"
+      case "AVERAGE":
+        return "Trung bình"
+      case "POOR":
+        return "Yếu"
+      case "VERY_POOR":
+        return "Kém"
+      default:
+        return type
     }
   }
 
@@ -253,14 +261,18 @@ export const exportStudentScholarship = async ({
     throw new Error("Không có dữ liệu học bổng để xuất")
   }
 
-  const rawTemplateBuffer = await loadTemplateBuffer(prisma, "/mta/template/DanhSachDeNghiXetHocBong.xlsx")
+  const rawTemplateBuffer = await loadTemplateBuffer(
+    prisma,
+    "/mta/template/DanhSachDeNghiXetHocBong.xlsx"
+  )
 
   const sheetsInput = []
   for (const type of sortedTypes) {
     const rows = []
     for (const courseItem of filteredCourseStudents) {
       const groupStudents = courseItem.students.filter((student) => {
-        if (!student.hasScholarship || !student.scholarship || student.scholarship.length === 0) return false
+        if (!student.hasScholarship || !student.scholarship || student.scholarship.length === 0)
+          return false
         const firstSchName = student.scholarship[0]?.name || ""
         return formatScholarshipName(firstSchName) === type
       })
@@ -297,8 +309,8 @@ export const exportStudentScholarship = async ({
               where: { semesterId },
               select: {
                 studentTrainingType: true,
-                conductScore: true
-              }
+                conductScore: true,
+              },
             },
             fixedClass: {
               select: {
@@ -307,14 +319,15 @@ export const exportStudentScholarship = async ({
                 unionLeaderId: true,
                 deputyUnionSecretaryId: true,
                 managementOrganization: {
-                  select: { sMa: true }
-                }
-              }
-            }
-          }
+                  select: { sMa: true },
+                },
+              },
+            },
+          },
         })
 
-        const department = studentDb?.fixedClass?.managementOrganization?.sMa || studentDb?.department || ""
+        const department =
+          studentDb?.fixedClass?.managementOrganization?.sMa || studentDb?.department || ""
         const foreignLanguage = studentDb?.foreignLanguage || ""
 
         const result: any = student.studentSemesterResult
@@ -422,8 +435,7 @@ export const exportStudentScholarship = async ({
       if (isGroupHeader) {
         try {
           worksheet.mergeCells(rowNumber, 1, rowNumber, 12)
-        } catch (err) {
-        }
+        } catch (err) {}
         row.height = 24
 
         for (let col = 1; col <= 12; col++) {
@@ -443,7 +455,7 @@ export const exportStudentScholarship = async ({
           for (let col = 1; col <= 12; col++) {
             const cell = row.getCell(col)
             let cellAlignment: Partial<Alignment> = { vertical: "middle", horizontal: "center" }
-            
+
             if (col === 2) {
               cellAlignment = { vertical: "middle", horizontal: "left", wrapText: true }
             } else if (col === 12) {
@@ -467,7 +479,7 @@ export const exportStudentScholarship = async ({
                 left: { style: "thin" },
                 right: { style: "thin" },
               },
-              alignment: cellAlignment
+              alignment: cellAlignment,
             }
           }
           row.height = Math.max(22, maxLines * 15)
@@ -578,64 +590,70 @@ export const exportStudentAcademicWarning = async ({
 export async function _generateStudentImportTemplate(
   trainingObjectTypeId: string
 ): Promise<ArrayBuffer> {
-  const [fixedClasses, curricula, organizations, trainingMajors, trainingFields, trainingObjectType] =
-    await Promise.all([
-      prisma.fixedClass.findMany({
-        where: {
+  const [
+    fixedClasses,
+    curricula,
+    organizations,
+    trainingMajors,
+    trainingFields,
+    trainingObjectType,
+  ] = await Promise.all([
+    prisma.fixedClass.findMany({
+      where: {
+        active: true,
+        trainingCourse: {
+          trainingObjectTypeId,
           active: true,
-          trainingCourse: {
+          deletedAt: null,
+        },
+        deletedAt: null,
+      },
+      select: { code: true, name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.curriculumVersion.findMany({
+      where: { trainingObjectTypeId, active: true, deletedAt: null },
+      select: { name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.dM_DonVi.findMany({
+      where: { bActive: true, bDeleted: false },
+      select: { sTen: true },
+      orderBy: { sTen: "asc" },
+    }),
+    prisma.trainingMajor.findMany({
+      where: {
+        trainingObjectTypes: {
+          some: {
             trainingObjectTypeId,
-            active: true,
             deletedAt: null,
+            active: true,
           },
-          deletedAt: null,
         },
-        select: { code: true, name: true },
-        orderBy: { name: "asc" },
-      }),
-      prisma.curriculumVersion.findMany({
-        where: { trainingObjectTypeId, active: true, deletedAt: null },
-        select: { name: true },
-        orderBy: { name: "asc" },
-      }),
-      prisma.dM_DonVi.findMany({
-        where: { bActive: true, bDeleted: false },
-        select: { sTen: true },
-        orderBy: { sTen: "asc" },
-      }),
-      prisma.trainingMajor.findMany({
-        where: {
-          trainingObjectTypes: {
-            some: {
-              trainingObjectTypeId,
-              deletedAt: null,
-              active: true,
-            },
+        deletedAt: null,
+      },
+      select: { name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.trainingField.findMany({
+      where: {
+        trainingObjectTypes: {
+          some: {
+            trainingObjectTypeId,
+            deletedAt: null,
+            active: true,
           },
-          deletedAt: null,
         },
-        select: { name: true },
-        orderBy: { name: "asc" },
-      }),
-      prisma.trainingField.findMany({
-        where: {
-          trainingObjectTypes: {
-            some: {
-              trainingObjectTypeId,
-              deletedAt: null,
-              active: true,
-            },
-          },
-          deletedAt: null,
-        },
-        select: { name: true },
-        orderBy: { name: "asc" },
-      }),
-      prisma.trainingObjectType.findUniqueOrThrow({
-        where: { id: trainingObjectTypeId },
-        select: { name: true },
-      }),
-    ])
+        deletedAt: null,
+      },
+      select: { name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.trainingObjectType.findUniqueOrThrow({
+      where: { id: trainingObjectTypeId },
+      select: { name: true },
+    }),
+  ])
 
   const buffer = await getTemplateBuffer(prisma, "MauImportDSHV_v4.xlsx")
   const template = new XlsxTemplate(buffer)
@@ -1088,13 +1106,19 @@ function ensureContentType(contentTypesXml: string, partName: string, contentTyp
 function getMediaContentType(fileName: string) {
   const ext = fileName.split(".").pop()?.toLowerCase()
   switch (ext) {
-    case "png": return "image/png"
+    case "png":
+      return "image/png"
     case "jpg":
-    case "jpeg": return "image/jpeg"
-    case "gif": return "image/gif"
-    case "svg": return "image/svg+xml"
-    case "emf": return "image/x-emf"
-    default: return "application/octet-stream"
+    case "jpeg":
+      return "image/jpeg"
+    case "gif":
+      return "image/gif"
+    case "svg":
+      return "image/svg+xml"
+    case "emf":
+      return "image/x-emf"
+    default:
+      return "application/octet-stream"
   }
 }
 
@@ -1112,7 +1136,9 @@ function preserveDrawings(templateBuffer: Buffer, outputBuffer: Buffer): Buffer 
     if (drawingMatches.length === 0) return outputBuffer
 
     const allOutputFiles = Object.keys(outputZip.files)
-    const sheetFiles = allOutputFiles.filter((name) => name.match(/^xl\/worksheets\/sheet\d+\.xml$/))
+    const sheetFiles = allOutputFiles.filter((name) =>
+      name.match(/^xl\/worksheets\/sheet\d+\.xml$/)
+    )
 
     for (const sheetFile of sheetFiles) {
       const sheetIndexMatch = sheetFile.match(/sheet(\d+)\.xml/)
@@ -1121,7 +1147,8 @@ function preserveDrawings(templateBuffer: Buffer, outputBuffer: Buffer): Buffer 
 
       const outputRelsFileName = `xl/worksheets/_rels/sheet${idx}.xml.rels`
       const outputRelsFile = outputZip.file(outputRelsFileName)
-      let outputRelsXml = outputRelsFile?.asText() ??
+      let outputRelsXml =
+        outputRelsFile?.asText() ??
         `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"></Relationships>`
 
       let maxRid = 0

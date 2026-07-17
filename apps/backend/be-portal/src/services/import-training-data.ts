@@ -176,10 +176,17 @@ function coerceValue(value: unknown): unknown {
   return value
 }
 
-function prepareRow(modelName: string, row: JsonRecord, options?: { nullFields?: string[] }): JsonRecord {
+function prepareRow(
+  modelName: string,
+  row: JsonRecord,
+  options?: { nullFields?: string[] }
+): JsonRecord {
   const allowed = getScalarFields(modelName)
   const risky = NULLABLE_RISKY_FIELDS[modelName] ?? []
-  const nullSet = new Set([...(options?.nullFields ?? []), ...risky.filter((f) => !(f in row) || row[f] == null)])
+  const nullSet = new Set([
+    ...(options?.nullFields ?? []),
+    ...risky.filter((f) => !(f in row) || row[f] == null),
+  ])
 
   const out: JsonRecord = {}
   for (const [key, value] of Object.entries(row)) {
@@ -206,15 +213,19 @@ function getDelegate(modelName: string) {
     throw new Error(`Không tìm thấy Prisma model: ${modelName} (${name})`)
   }
   return delegate as {
-    createMany: (args: { data: JsonRecord[]; skipDuplicates?: boolean }) => Promise<{ count: number }>
+    createMany: (args: {
+      data: JsonRecord[]
+      skipDuplicates?: boolean
+    }) => Promise<{ count: number }>
     upsert: (args: {
       where: Record<string, unknown>
       create: JsonRecord
       update: JsonRecord
     }) => Promise<unknown>
-    findMany: (args: { where: Record<string, unknown>; select: Record<string, boolean> }) => Promise<
-      JsonRecord[]
-    >
+    findMany: (args: {
+      where: Record<string, unknown>
+      select: Record<string, boolean>
+    }) => Promise<JsonRecord[]>
     update: (args: { where: Record<string, unknown>; data: JsonRecord }) => Promise<unknown>
   }
 }
@@ -475,7 +486,11 @@ export async function importTrainingDataFromJson(
   for (const table of BUSINESS_UPSERT_ORDER) {
     const rows = asRows(data, table)
     const nullFields =
-      table === "FixedClass" ? [...FIXED_CLASS_ROLE_FIELDS] : table === "ClassSchedule" ? ["originalScheduleId"] : []
+      table === "FixedClass"
+        ? [...FIXED_CLASS_ROLE_FIELDS]
+        : table === "ClassSchedule"
+          ? ["originalScheduleId"]
+          : []
     const count = await importUpsert(table, rows, warnings, { nullFields })
     if (count > 0 || rows.length > 0) {
       steps.push({ table, count })

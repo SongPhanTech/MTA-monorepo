@@ -178,6 +178,7 @@ export const SqlTransactionItemModel = {
   ClassSchedule: 'ClassSchedule',
   ScoreCorrectionTicket: 'ScoreCorrectionTicket',
   ScoreCorrectionItem: 'ScoreCorrectionItem',
+  DataSyncHistory: 'DataSyncHistory',
   TrainingObjectType: 'TrainingObjectType',
   PriorityObject: 'PriorityObject',
   TrainingType: 'TrainingType',

@@ -280,9 +280,7 @@ export async function importRegistrationResultsFromJson(
 
         if (existing) {
           if (hasGradeData(existing)) {
-            warnings.push(
-              `StudentSubjectScore/${existing.id}: đã có điểm, giữ nguyên không ghi đè`
-            )
+            warnings.push(`StudentSubjectScore/${existing.id}: đã có điểm, giữ nguyên không ghi đè`)
             scoresImported += 1
             continue
           }

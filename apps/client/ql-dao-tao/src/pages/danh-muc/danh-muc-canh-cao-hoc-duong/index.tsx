@@ -28,14 +28,15 @@ export default function DisciplinaryWarningReason() {
     severityLevel: undefined,
   })
   const { data = [] } = useFindManyDisciplinaryWarningReason({
-    where: (filters.name && filters.name !== ""
+    where:
+      filters.name && filters.name !== ""
         ? {
             name: {
               contains: filters.name,
               mode: "insensitive",
             },
           }
-        : {}),
+        : {},
     orderBy: [
       ...emptyObjectIf(
         [

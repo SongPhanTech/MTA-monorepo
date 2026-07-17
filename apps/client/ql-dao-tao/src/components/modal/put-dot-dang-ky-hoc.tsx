@@ -103,46 +103,46 @@ const PutClassRegisterSession = () => {
         startDate: dayjs(initialValue?.startDate),
         endDate: dayjs(initialValue?.endDate),
         creditLimit: initialValue.creditLimit.reduce(
-            (pre, cur) => ({
-              ...pre,
-              [getClassificationKey(
-                cur.baseScore === "Base10" ? cur.base10Min : cur.base4Min,
-                cur.baseScore === "Base4" ? cur.base10Max : cur.base4Max
-              )]: {
-                minCredit: cur.minCredit,
-                maxCredit: cur.maxCredit,
-                baseScore: cur.baseScore,
-                base10Min: cur.base10Min,
-                base10Max: cur.base10Max,
-                base4Min: cur.base4Min,
-                base4Max: cur.base4Max,
-              },
-            }),
-            {}
-          ),
+          (pre, cur) => ({
+            ...pre,
+            [getClassificationKey(
+              cur.baseScore === "Base10" ? cur.base10Min : cur.base4Min,
+              cur.baseScore === "Base4" ? cur.base10Max : cur.base4Max
+            )]: {
+              minCredit: cur.minCredit,
+              maxCredit: cur.maxCredit,
+              baseScore: cur.baseScore,
+              base10Min: cur.base10Min,
+              base10Max: cur.base10Max,
+              base4Min: cur.base4Min,
+              base4Max: cur.base4Max,
+            },
+          }),
+          {}
+        ),
       })
     } else if (tableData.length > 0) {
       form.setFieldsValue({
         active: true,
         tuitionPerCredit: 350000,
         creditLimit: tableData.reduce(
-            (pre, cur) => ({
-              ...pre,
-              [getClassificationKey(
-                cur.baseScore === "Base10" ? cur.base10Min : cur.base4Min,
-                cur.baseScore === "Base4" ? cur.base10Max : cur.base4Max
-              )]: {
-                minCredit: 0,
-                maxCredit: 25,
-                baseScore: cur.baseScore,
-                base10Min: cur.base10Min,
-                base10Max: cur.base10Max,
-                base4Min: cur.base4Min,
-                base4Max: cur.base4Max,
-              },
-            }),
-            {}
-          ),
+          (pre, cur) => ({
+            ...pre,
+            [getClassificationKey(
+              cur.baseScore === "Base10" ? cur.base10Min : cur.base4Min,
+              cur.baseScore === "Base4" ? cur.base10Max : cur.base4Max
+            )]: {
+              minCredit: 0,
+              maxCredit: 25,
+              baseScore: cur.baseScore,
+              base10Min: cur.base10Min,
+              base10Max: cur.base10Max,
+              base4Min: cur.base4Min,
+              base4Max: cur.base4Max,
+            },
+          }),
+          {}
+        ),
       })
     }
   }, [initialValue, tableData])
