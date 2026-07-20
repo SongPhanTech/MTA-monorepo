@@ -59,6 +59,7 @@ import { CircleMinus, SquarePen } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { SqlTransactionBodyItem } from "@workspace/libs/api/schemas"
+import { exportPhuLucHuongDanDoAn } from "../../../utils/thesis-excel"
 
 dayjs.extend(utc)
 interface DoAnForm {
@@ -77,6 +78,92 @@ const { TextArea } = Input
 const FORM_ITEM_LAYOUT = {
   labelCol: { flex: "0 0 150px" },
   wrapperCol: { flex: "1" },
+}
+
+const THESIS_PROJECT_INCLUDE = {
+  subjectClass: { include: { subject: true } },
+  primarySupervisor: {
+    include: {
+      userProfile: {
+        include: {
+          academicRankType: true,
+          academicDegreeType: true,
+          level: true,
+          rank: true,
+          positionCPV: true,
+        },
+      },
+      organization: true,
+    },
+  },
+  secondarySupervisor: {
+    include: {
+      userProfile: {
+        include: {
+          academicRankType: true,
+          academicDegreeType: true,
+          level: true,
+          positionCPV: true,
+        },
+      },
+      organization: true,
+    },
+  },
+  thirdSupervisor: {
+    include: {
+      lecturer: {
+        include: {
+          userProfile: {
+            include: {
+              academicRankType: true,
+              academicDegreeType: true,
+              level: true,
+              rank: true,
+              positionCPV: true,
+            },
+          },
+          organization: true,
+        },
+      },
+    },
+  },
+  registrations: {
+    include: {
+      student: {
+        include: {
+          userProfile: true,
+          fixedClass: true,
+        },
+      },
+      studentSubjectScore: true,
+    },
+  },
+  room: true,
+  defenseSession: true,
+  defenseRecord: true,
+  council: {
+    include: {
+      members: {
+        include: {
+          expert: {
+            include: {
+              lecturer: {
+                include: {
+                  userProfile: true,
+                },
+              },
+            },
+          },
+          payment: true,
+        },
+      },
+    },
+  },
+  librarySubmission: {
+    include: {
+      documentFile: true,
+    },
+  },
 }
 
 export default function DanhMucDoAn() {
@@ -173,93 +260,14 @@ export default function DanhMucDoAn() {
     isPending,
   } = useFindManyThesisProject({
     where,
-    include: {
-      subjectClass: { include: { subject: true } },
-      primarySupervisor: {
-        include: {
-          userProfile: {
-            include: {
-              academicRankType: true,
-              academicDegreeType: true,
-              level: true,
-              rank: true,
-              positionCPV: true,
-            },
-          },
-          organization: true,
-        },
-      },
-      secondarySupervisor: {
-        include: {
-          userProfile: {
-            include: {
-              academicRankType: true,
-              academicDegreeType: true,
-              level: true,
-              positionCPV: true,
-            },
-          },
-          organization: true,
-        },
-      },
-      thirdSupervisor: {
-        include: {
-          lecturer: {
-            include: {
-              userProfile: {
-                include: {
-                  academicRankType: true,
-                  academicDegreeType: true,
-                  level: true,
-                  rank: true,
-                  positionCPV: true,
-                },
-              },
-              organization: true,
-            },
-          },
-        },
-      },
-      registrations: {
-        include: {
-          student: {
-            include: {
-              userProfile: true,
-              fixedClass: true,
-            },
-          },
-          studentSubjectScore: true,
-        },
-      },
-      room: true,
-      defenseSession: true,
-      defenseRecord: true,
-      council: {
-        include: {
-          members: {
-            include: {
-              expert: {
-                include: {
-                  lecturer: {
-                    include: {
-                      userProfile: true,
-                    },
-                  },
-                },
-              },
-              payment: true,
-            },
-          },
-        },
-      },
-      librarySubmission: {
-        include: {
-          documentFile: true,
-        },
-      },
-    },
+    include: THESIS_PROJECT_INCLUDE,
     take: numberOfPages,
     skip: (currentPage - 1) * numberOfPages,
+  })
+
+  const { data: allThesisProjects = [] } = useFindManyThesisProject({
+    where,
+    include: THESIS_PROJECT_INCLUDE,
   })
   const { data: defenseSessionData = [] } = useFindManyDefenseSession()
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
@@ -610,6 +618,19 @@ export default function DanhMucDoAn() {
     }
   }
 
+  const handleExportPhuLucHuongDan = async () => {
+    const projectsToExport = selectedRowKeys.length > 0
+      ? allThesisProjects.filter((p: any) => selectedRowKeys.includes(p.id))
+      : allThesisProjects
+
+    await exportPhuLucHuongDanDoAn({
+      projects: projectsToExport,
+      showSpinner,
+      hideSpinner,
+      message,
+    })
+  }
+
   return (
     <Row gutter={[16, 0]}>
       <Col span={24}>
@@ -717,6 +738,13 @@ export default function DanhMucDoAn() {
                       )}
                     </>
                   )}
+                  <Button
+                    type="primary"
+                    disabled={thesisProjectDataCount === 0}
+                    onClick={handleExportPhuLucHuongDan}
+                  >
+                    Xuất Excel
+                  </Button>
                 </div>
               </Form.Item>
             </Form>
