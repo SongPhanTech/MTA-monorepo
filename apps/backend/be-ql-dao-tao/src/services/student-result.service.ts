@@ -309,8 +309,8 @@ const ThongTinTichLuy = async (
           ) {
             TongTinChiTichLuy += soTinChi // chỉ tính môn đã qua
             const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, scoreConverts)
-            DSDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ (chỉ môn đạt)
-            DSDiemHe10.push(diemHe10 * soTinChi) // Nhân điểm hệ 10 với số tín chỉ (chỉ môn đạt)
+            DSDiemHe4.push(new Decimal(diemHe4).mul(soTinChi).toNumber()) // Nhân điểm hệ 4 với số tín chỉ (chỉ môn đạt)
+            DSDiemHe10.push(new Decimal(diemHe10).mul(soTinChi).toNumber()) // Nhân điểm hệ 10 với số tín chỉ (chỉ môn đạt)
           } else {
             failedCredits += soTinChi
           }
@@ -319,13 +319,12 @@ const ThongTinTichLuy = async (
     }
 
     // GPA hệ 4
+    // GPA hệ 4
     // Làm tròn đến 2 số thập phân (chỉ tính môn đạt, không tính môn trượt)
-    const diemTrungBinh4 =
-      Math.round((DSDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiTichLuy || 0) * 100) /
-      100
-    const diemTrungBinh10 =
-      Math.round((DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiTichLuy || 0) * 100) /
-      100
+    const sumGPA4 = DSDiemHe4.reduce((sum, val) => new Decimal(sum).plus(val).toNumber(), 0);
+    const diemTrungBinh4 = TongTinChiTichLuy > 0 ? new Decimal(sumGPA4).dividedBy(TongTinChiTichLuy).toDecimalPlaces(2, Decimal.ROUND_HALF_UP).toNumber() : 0;
+    const sumGPA10 = DSDiemHe10.reduce((sum, val) => new Decimal(sum).plus(val).toNumber(), 0);
+    const diemTrungBinh10 = TongTinChiTichLuy > 0 ? new Decimal(sumGPA10).dividedBy(TongTinChiTichLuy).toDecimalPlaces(2, Decimal.ROUND_HALF_UP).toNumber() : 0;
 
     const diemTrungBinhChung4 = diemTrungBinh4
     const diemTrungBinhChung10 = diemTrungBinh10
@@ -663,8 +662,8 @@ const ThongTinDiemHocKy = async (
             soTinChiDat += soTinChi // Cộng dồn số tín chỉ đạt
           }
           const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, scoreConverts)
-          DsDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ (tất cả môn)
-          DSDiemHe10.push(diemHe10 * soTinChi) // Nhân điểm hệ 10 với số tín chỉ (tất cả môn)
+          DsDiemHe4.push(new Decimal(diemHe4).mul(soTinChi).toNumber()) // Nhân điểm hệ 4 với số tín chỉ (tất cả môn)
+          DSDiemHe10.push(new Decimal(diemHe10).mul(soTinChi).toNumber()) // Nhân điểm hệ 10 với số tín chỉ (tất cả môn)
         }
       }
     })
@@ -684,11 +683,11 @@ const ThongTinDiemHocKy = async (
     }
 
     // Tính điểm trung bình hệ 4 trong kỳ (tính chung tất cả)
-    const diemTrungBinh4 =
-      Math.round((DsDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiGpa || 0) * 100) / 100
+    const sumGPA4 = DsDiemHe4.reduce((sum, val) => new Decimal(sum).plus(val).toNumber(), 0);
+    const diemTrungBinh4 = TongTinChiGpa > 0 ? new Decimal(sumGPA4).dividedBy(TongTinChiGpa).toDecimalPlaces(2, Decimal.ROUND_HALF_UP).toNumber() : 0;
     // Tính điểm trung bình hệ 10 trong kỳ (tính chung tất cả)
-    const diemTrungBinh10 =
-      Math.round((DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiGpa || 0) * 100) / 100
+    const sumGPA10 = DSDiemHe10.reduce((sum, val) => new Decimal(sum).plus(val).toNumber(), 0);
+    const diemTrungBinh10 = TongTinChiGpa > 0 ? new Decimal(sumGPA10).dividedBy(TongTinChiGpa).toDecimalPlaces(2, Decimal.ROUND_HALF_UP).toNumber() : 0;
     // Điểm thấp nhất
     return {
       diemTrungBinh4TrongKy: diemTrungBinh4,

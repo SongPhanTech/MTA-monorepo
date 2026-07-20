@@ -10,8 +10,7 @@ export type MergeBlocksOptions = {
 }
 
 const NS_MAIN = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
-const REL_DRAWING =
-  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"
+const REL_DRAWING = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"
 
 function escapeXml(value: string) {
   return value
@@ -63,22 +62,21 @@ function buildSharedStringsXml(strings: string[]) {
 }
 
 function remapSharedStringIndices(sheetXml: string, indexMap: Map<number, number>) {
-  return sheetXml.replace(/<c([^>]*)\bt="s"([^>]*)>([\s\S]*?)<\/c>/g, (full, before, after, inner) => {
-    const valueMatch = inner.match(/<v>(\d+)<\/v>/)
-    if (!valueMatch) return full
-    const oldIndex = Number(valueMatch[1])
-    const newIndex = indexMap.get(oldIndex)
-    if (newIndex === undefined) return full
-    const updatedInner = inner.replace(/<v>\d+<\/v>/, `<v>${newIndex}</v>`)
-    return `<c${before}t="s"${after}>${updatedInner}</c>`
-  })
+  return sheetXml.replace(
+    /<c([^>]*)\bt="s"([^>]*)>([\s\S]*?)<\/c>/g,
+    (full, before, after, inner) => {
+      const valueMatch = inner.match(/<v>(\d+)<\/v>/)
+      if (!valueMatch) return full
+      const oldIndex = Number(valueMatch[1])
+      const newIndex = indexMap.get(oldIndex)
+      if (newIndex === undefined) return full
+      const updatedInner = inner.replace(/<v>\d+<\/v>/, `<v>${newIndex}</v>`)
+      return `<c${before}t="s"${after}>${updatedInner}</c>`
+    }
+  )
 }
 
-function mergeSharedStringsIntoMaster(
-  masterZip: PizZip,
-  slaveZip: PizZip,
-  slaveSheetXml: string
-) {
+function mergeSharedStringsIntoMaster(masterZip: PizZip, slaveZip: PizZip, slaveSheetXml: string) {
   const masterSharedPath = "xl/sharedStrings.xml"
   const slaveSharedFile = slaveZip.file(masterSharedPath)
   if (!slaveSharedFile) return slaveSheetXml
@@ -381,10 +379,9 @@ function insertOrReplaceMergeCells(sheetXml: string, mergeTags: string[]) {
   if (!mergeTags.length) return sheetXml
 
   if (/<mergeCells[\s>]/.test(sheetXml)) {
-    return sheetXml
-      .replace(/<mergeCells[^>]*>[\s\S]*?<\/mergeCells>/, () => {
-        return `<mergeCells count="${mergeTags.length}">${mergeTags.join("")}</mergeCells>`
-      })
+    return sheetXml.replace(/<mergeCells[^>]*>[\s\S]*?<\/mergeCells>/, () => {
+      return `<mergeCells count="${mergeTags.length}">${mergeTags.join("")}</mergeCells>`
+    })
   }
 
   return sheetXml.replace(
@@ -417,13 +414,7 @@ function upsertRowBreaks(sheetXml: string, breakRows: number[]) {
 
   let xml = sheetXml.replace(/<rowBreaks\b[^>]*>[\s\S]*?<\/rowBreaks>/g, "")
 
-  const anchors = [
-    /<drawing\b/,
-    /<legacyDrawing\b/,
-    /<picture\b/,
-    /<tableParts\b/,
-    /<\/worksheet>/,
-  ]
+  const anchors = [/<drawing\b/, /<legacyDrawing\b/, /<picture\b/, /<tableParts\b/, /<\/worksheet>/]
 
   for (const re of anchors) {
     const idx = xml.search(re)
@@ -589,10 +580,7 @@ function pruneWorkbookToSingleSheet(zip: PizZip) {
 
   const first = sheetTags[0]
   if (!first) return
-  workbookXml = workbookXml.replace(
-    /<sheets>[\s\S]*?<\/sheets>/,
-    `<sheets>${first}</sheets>`
-  )
+  workbookXml = workbookXml.replace(/<sheets>[\s\S]*?<\/sheets>/, `<sheets>${first}</sheets>`)
   zip.file(workbookPath, workbookXml)
 
   for (const f of zip.file(/xl\/worksheets\/sheet\d+\.xml$/)) {
