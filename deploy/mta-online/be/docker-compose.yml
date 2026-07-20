@@ -1,0 +1,128 @@
+name: mta-be-infra
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    hostname: postgres
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-mta}
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-root} -d ${POSTGRES_DB:-mta}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - mta-net
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    hostname: minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    env_file:
+      - .env
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Set MINIO_ROOT_PASSWORD in .env}
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      - "${MINIO_API_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - mta-net
+
+  # Image do `make all-be-* SERVER_PROFILE=mta_online` load + tag *:local-deploy
+  mta-be-model:
+    image: mta-be-model:local-deploy
+    pull_policy: never
+    container_name: mta-be-model
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3041:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - mta-net
+
+  mta-be-ql-dao-tao:
+    image: mta-be-ql-dao-tao:local-deploy
+    pull_policy: never
+    container_name: mta-be-ql-dao-tao
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3042:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - mta-net
+
+  mta-be-portal:
+    image: mta-be-portal:local-deploy
+    pull_policy: never
+    container_name: mta-be-portal
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3044:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - mta-net
+
+  mta-be-ql-dao-tao-shared:
+    image: mta-be-ql-dao-tao-shared:local-deploy
+    pull_policy: never
+    container_name: mta-be-ql-dao-tao-shared
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3045:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - mta-net
+
+volumes:
+  postgres_data:
+  minio_data:
+
+networks:
+  mta-net:
+    name: mta-net
+    driver: bridge
