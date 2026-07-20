@@ -1,0 +1,31 @@
+version: "3"
+
+# Path trên server: ~/mta-app/fe/docker-compose.yml
+# make all-cong-hoc-vien sẽ: unzip cong-hoc-vien-cdn + up 2 service dưới đây
+
+services:
+  mta-cong-hoc-vien-cdn:
+    image: swantech-cdn:latest
+    container_name: mta-cong-hoc-vien-cdn
+    restart: always
+    ports:
+      - "6009:80"
+    volumes:
+      - ./cong-hoc-vien-cdn:/usr/share/nginx/html
+      - ./nginx-config-cdn/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx-config-cdn/default.conf:/etc/nginx/conf.d/default.conf
+
+  router-cong-hoc-vien-api:
+    image: mta.router.api
+    container_name: router-cong-hoc-vien-api
+    restart: always
+    ports:
+      - "5188:5182"
+    environment:
+      - ROOT_FOLDER=/app
+      - ApplicationName=MTA.Router.CongHocVien.Api
+      - ASPNETCORE_HTTP_PORTS=5182
+    volumes:
+      - ./Configs:/app/Configs
+    depends_on:
+      - mta-cong-hoc-vien-cdn
