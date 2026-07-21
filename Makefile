@@ -143,7 +143,18 @@ APP_URL_SUFFIX_cong-giang-vien = /conggiangvien/home
 
 # Targets
 .PHONY: all clean push deploy release all-be build-all-be build-all-fe ship-fe \
-	build-% all-% save-docker-images package-cdn _package-fe-cdn-copy
+	build-% all-% save-docker-images package-cdn _package-fe-cdn-copy \
+	_load-be-images-on-server _recreate-be-containers
+
+# Docker image refs (ghcr.io/songphantech/mta-be-model:latest, ...)
+BE_IMAGE_TAGS = $(foreach pkg,$(BE_PKGS),$(REGISTRY)/$(IMG_PREFIX)$(pkg):$(DEV_TAG))
+BE_CONTAINER_NAMES = $(foreach pkg,$(BE_PKGS),$(IMG_PREFIX)$(pkg))
+
+# Optional: make build-all-be NO_CACHE=1
+DOCKER_BUILD_FLAGS ?=
+ifeq ($(NO_CACHE),1)
+  DOCKER_BUILD_FLAGS := --no-cache
+endif
 
 help:
 	@echo "Available targets:"
@@ -208,11 +219,61 @@ all-clients:
 save-docker-images:
 	@mkdir -p docker-images
 	@for pkg in $(BE_PKGS); do \
-		echo "Saving $$pkg..."; \
-		($(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$$pkg:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$$pkg.tar.gz) & \
+		img="$(REGISTRY)/$(IMG_PREFIX)$$pkg:$(DEV_TAG)"; \
+		if ! $(DOCKER) image inspect "$$img" >/dev/null 2>&1; then \
+			echo "ERROR: Image not found: $$img (run make build-$$pkg first)"; \
+			exit 1; \
+		fi; \
+		echo "Saving $$pkg ($$($(DOCKER) image inspect "$$img" --format '{{.Id}}'))..."; \
+		($(DOCKER) save "$$img" | gzip > docker-images/$(IMG_PREFIX)$$pkg.tar.gz) & \
 	done; \
 	wait; \
 	echo "All images saved."
+
+# Server-side: remove old :latest tags so docker load always assigns tag to new image.
+_load-be-images-on-server:
+	$(SSH) $(SERVER_HOST) 'set -eu; \
+	cd "$(BE_DEPLOY_DIR)/docker-images"; \
+	for f in *.tar.gz; do \
+		[ -f "$$f" ] || continue; \
+		echo "Loading $$f..."; \
+		docker load -i "$$f"; \
+	done; \
+	echo "Loaded images:"; \
+	for img in $(BE_IMAGE_TAGS); do \
+		docker image inspect "$$img" --format "  {{.Id}} {{.RepoTags}}" 2>/dev/null || echo "  MISSING $$img"; \
+	done'
+
+_recreate-be-containers:
+	$(SSH) $(SERVER_HOST) 'set -eu; \
+	cd "$(BE_APP_DIR)"; \
+	echo "Recreating BE containers..."; \
+	COMPOSE_PULL_POLICY=never docker compose up -d --force-recreate --no-build $(BE_CONTAINER_NAMES)'
+
+deploy-cdn:
+	$(SCP) -O cdn.zip $(SERVER_HOST):$(FE_APP_DIR)/
+	$(SSH) $(SERVER_HOST) "set -eu; cd $(FE_APP_DIR) && \
+	rm -rf cong-hoc-vien-cdn/ dang-ky-hoc-cdn/ lms-cdn/ ems-cdn/ hrm-cdn/ chatbot-cdn/ cong-giang-vien-cdn/ && \
+	unzip -oq cdn.zip && \
+	mv cdn/* . && \
+	rmdir cdn 2>/dev/null || true && \
+	COMPOSE_PULL_POLICY=never docker compose -f $(FE_COMPOSE_FILE) up -d --force-recreate --no-build"
+
+deploy-all-be:
+	@rm -f docker-images.zip
+	@zip -r docker-images.zip docker-images
+	$(SCP) -O docker-images.zip $(SERVER_HOST):$(BE_DEPLOY_DIR)/
+	$(SSH) $(SERVER_HOST) 'set -eu; \
+	cd "$(BE_DEPLOY_DIR)" && unzip -oq docker-images.zip; \
+	cd "$(BE_APP_DIR)" && \
+	echo "Stopping BE containers..." && \
+	docker compose stop $(BE_CONTAINER_NAMES) 2>/dev/null || true; \
+	docker rm -f $(BE_CONTAINER_NAMES) 2>/dev/null || true; \
+	echo "Removing old image tags..." && \
+	for img in $(BE_IMAGE_TAGS); do docker rmi "$$img" 2>/dev/null || true; done; \
+	docker image prune -f >/dev/null'
+	@$(MAKE) _load-be-images-on-server
+	@$(MAKE) _recreate-be-containers
 
 package-cdn:
 	@rm -rf cdn cdn.zip
@@ -222,36 +283,30 @@ package-cdn:
 	done
 	@zip -r -q cdn.zip cdn
 
-deploy-cdn:
-	$(SCP) -O cdn.zip $(SERVER_HOST):$(FE_APP_DIR)/
-	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
-	docker compose -f $(FE_COMPOSE_FILE) down; \
-	rm -rf cong-hoc-vien-cdn/ dang-ky-hoc-cdn/ lms-cdn/ ems-cdn/ hrm-cdn/ chatbot-cdn/ cong-giang-vien-cdn/; \
-	unzip -q cdn.zip && \
-	mv cdn/* . && \
-	docker compose -f $(FE_COMPOSE_FILE) up -d"
-
-deploy-all-be:
-	@rm -rf docker-images.zip
-	@zip -r docker-images.zip docker-images
-	$(SCP) -O docker-images.zip $(SERVER_HOST):$(BE_DEPLOY_DIR)
-	$(SSH) $(SERVER_HOST) 'cd $(BE_DEPLOY_DIR) && \
-	unzip -o docker-images.zip && \
-	cd docker-images && ls *.tar.gz | xargs -I {} docker load -i {} && \
-	cd $(BE_APP_DIR) && \
-	docker rm -f mta-be-exchange mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared 2>/dev/null; \
-	COMPOSE_PULL_POLICY=never docker compose up -d'
-
 deploy-%:
 	@mkdir -p docker-images
-	$(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$*.tar.gz
+	@img="$(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG)"; \
+	if ! $(DOCKER) image inspect "$$img" >/dev/null 2>&1; then \
+		echo "ERROR: Image not found: $$img (run make build-$* first)"; \
+		exit 1; \
+	fi; \
+	echo "Saving $* ($$($(DOCKER) image inspect "$$img" --format '{{.Id}}'))..."; \
+	$(DOCKER) save "$$img" | gzip > docker-images/$(IMG_PREFIX)$*.tar.gz
 	$(SSH) $(SERVER_HOST) "mkdir -p $(BE_DEPLOY_DIR)/docker-images"
-	$(SCP) docker-images/$(IMG_PREFIX)$*.tar.gz $(SERVER_HOST):$(BE_DEPLOY_DIR)/docker-images/
-	$(SSH) $(SERVER_HOST) 'cd $(BE_DEPLOY_DIR) && \
-	docker load -i docker-images/$(IMG_PREFIX)$*.tar.gz && \
-	docker rm -f $(IMG_PREFIX)$* 2>/dev/null; \
-	cd $(BE_APP_DIR) && \
-	COMPOSE_PULL_POLICY=never docker compose up $(IMG_PREFIX)$* -d'
+	$(SCP) -O docker-images/$(IMG_PREFIX)$*.tar.gz $(SERVER_HOST):$(BE_DEPLOY_DIR)/docker-images/
+	$(SSH) $(SERVER_HOST) 'set -eu; \
+	svc="$(IMG_PREFIX)$*"; img="$(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG)"; \
+	cd "$(BE_APP_DIR)" && \
+	echo "Stopping $$svc..." && \
+	docker compose stop "$$svc" 2>/dev/null || true; \
+	docker rm -f "$$svc" 2>/dev/null || true; \
+	echo "Removing old tag $$img..." && \
+	docker rmi "$$img" 2>/dev/null || true; \
+	echo "Loading new image..." && \
+	docker load -i "$(BE_DEPLOY_DIR)/docker-images/$(IMG_PREFIX)$*.tar.gz"; \
+	docker image inspect "$$img" --format "Loaded {{.Id}}"; \
+	cd "$(BE_APP_DIR)" && \
+	COMPOSE_PULL_POLICY=never docker compose up -d --force-recreate --no-build "$$svc"'
 
 
 # Pattern rule: all-<name> = build + deploy
@@ -266,10 +321,12 @@ all-%: build-%
 _build-be:
 	pnpm turbo prune @backend/${PACKAGE} --docker
 	$(DOCKER) build -f Dockerfile.backend --platform linux/amd64 \
+		$(DOCKER_BUILD_FLAGS) \
 		-t $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG) \
 		--build-arg PACKAGE=${PACKAGE} \
 		--build-arg CACHEBUST=$$(date +%s) \
 		. --output type=docker
+	@echo "Built $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG) -> $$($(DOCKER) image inspect $(REGISTRY)/$(IMG_PREFIX)${PACKAGE}:$(DEV_TAG) --format '{{.Id}}')"
 	rm -rf out
 
 # Internal frontend build
@@ -293,11 +350,12 @@ _deploy-fe:
 	@echo "Deploying FE package $(PACKAGE) -> cdn:$(CDN_NAME), router:$(ROUTER_NAME)"
 	cd apps/client/$(PACKAGE) && \
 	$(SCP) $(CDN_NAME).zip $(SERVER_HOST):$(FE_APP_DIR)/ && \
-	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
-		docker compose -f $(FE_COMPOSE_FILE) rm -sf mta-$(CDN_NAME) router-$(ROUTER_NAME)-api && \
+	$(SSH) $(SERVER_HOST) "set -eu; cd $(FE_APP_DIR) && \
+		docker compose -f $(FE_COMPOSE_FILE) stop mta-$(CDN_NAME) router-$(ROUTER_NAME)-api 2>/dev/null || true; \
+		docker compose -f $(FE_COMPOSE_FILE) rm -sf mta-$(CDN_NAME) router-$(ROUTER_NAME)-api 2>/dev/null || true; \
 		rm -rf $(CDN_NAME) && \
-		unzip -o $(CDN_NAME).zip && \
-		COMPOSE_PULL_POLICY=never docker compose -f $(FE_COMPOSE_FILE) up mta-$(CDN_NAME) router-$(ROUTER_NAME)-api -d"
+		unzip -oq $(CDN_NAME).zip && \
+		COMPOSE_PULL_POLICY=never docker compose -f $(FE_COMPOSE_FILE) up -d --force-recreate --no-build mta-$(CDN_NAME) router-$(ROUTER_NAME)-api"
 
 _package-fe-cdn-copy:
 	$(eval CDN_NAME := $(CDN_NAME_$(PACKAGE)))
