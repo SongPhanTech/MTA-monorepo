@@ -132,7 +132,24 @@ const THESIS_PROJECT_INCLUDE = {
       student: {
         include: {
           userProfile: true,
-          fixedClass: true,
+          fixedClass: {
+            include: {
+              trainingCourse: {
+                include: {
+                  trainingObjectType: true,
+                },
+              },
+              curriculumVersion: {
+                include: {
+                  curriculum: {
+                    include: {
+                      trainingMajor: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       },
       studentSubjectScore: true,

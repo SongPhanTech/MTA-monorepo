@@ -4031,14 +4031,16 @@ export const exportPhuLucHuongDanDoAn = async ({
     const firstProj = projects[0]
     const firstStudent = firstProj?.registrations?.[0]?.student
 
-    const dtType =
+    const dtType = (
       tenDoiTuong[
         firstStudent?.fixedClass?.trainingCourse?.trainingObjectType?.type as keyof typeof tenDoiTuong
       ]?.fullname || "Quân sự"
+    ).toUpperCase()
 
-    const khoa = firstStudent?.fixedClass?.trainingCourse?.name || ""
-    const chuyenNganh =
+    const khoa = (firstStudent?.fixedClass?.trainingCourse?.name || "").toUpperCase()
+    const chuyenNganh = (
       firstStudent?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
+    ).toUpperCase()
 
     const soQD = firstProj?.thesisSession?.decisionNumber || "......"
     const ngayQD = firstProj?.thesisSession?.decisionDate
