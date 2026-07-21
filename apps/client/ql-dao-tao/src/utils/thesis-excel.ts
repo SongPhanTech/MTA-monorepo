@@ -6,6 +6,7 @@ import {
 } from "@workspace/db/client"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
+import PizZip from "pizzip"
 import { excelTemplate } from "@workspace/libs/api/model"
 import type { ExcelTemplateBody } from "@workspace/libs/api/schemas"
 import { exportFromTemplate, type TableRow } from "@workspace/libs/template-excel"
@@ -3951,3 +3952,349 @@ export const exportThongKeCoQuanDonViCanBoNgoaiHv = async ({
     hideSpinner()
   }
 }
+
+export interface UserProfile {
+  fullname?: string | null
+  dateOfBirth?: string | Date | null
+  rank?: { sMa?: string | null } | null
+  academicRankType?: { sMa?: string | null } | null
+  level?: { sMa?: string | null } | null
+  academicDegreeType?: { sMa?: string | null } | null
+  positionCPV?: { sTen?: string | null } | null
+}
+
+export interface Lecturer {
+  id: string
+  userProfile?: UserProfile | null
+  organization?: { sCode?: string | null; sTen?: string | null } | null
+}
+
+export interface StudentRegistration {
+  student?: {
+    code?: string | null
+    userProfile?: UserProfile | null
+    fixedClass?: {
+      name?: string | null
+      trainingCourse?: {
+        name?: string | null
+        trainingObjectType?: { type?: string | null } | null
+      } | null
+      curriculumVersion?: {
+        curriculum?: {
+          trainingMajor?: { name?: string | null } | null
+        } | null
+      } | null
+    } | null
+  } | null
+}
+
+export interface ThesisProjectExportData {
+  id: string
+  title?: string | null
+  isLanguage?: boolean | null
+  isProductProject?: boolean | null
+  subjectClass?: {
+    code?: string | null
+    name?: string | null
+  } | null
+  thesisSession?: {
+    decisionNumber?: string | null
+    decisionDate?: string | Date | null
+  } | null
+  registrations?: StudentRegistration[] | null
+  primarySupervisor?: Lecturer | null
+  secondarySupervisor?: Lecturer | null
+  thirdSupervisor?: {
+    lecturer?: Lecturer | null
+    name?: string | null
+  } | null
+}
+
+export const exportPhuLucHuongDanDoAn = async ({
+  projects,
+  showSpinner,
+  hideSpinner,
+  message,
+}: {
+  projects: ThesisProjectExportData[]
+  showSpinner: () => void
+  hideSpinner: () => void
+  message: any
+}) => {
+  if (!projects?.length) {
+    message.error("Không có dữ liệu để xuất phụ lục hướng dẫn đồ án")
+    return
+  }
+
+  showSpinner()
+  try {
+    const firstProj = projects[0]
+    const firstStudent = firstProj?.registrations?.[0]?.student
+
+    const dtType = (
+      tenDoiTuong[
+        firstStudent?.fixedClass?.trainingCourse?.trainingObjectType?.type as keyof typeof tenDoiTuong
+      ]?.fullname || "Quân sự"
+    ).toUpperCase()
+
+    const khoa = (firstStudent?.fixedClass?.trainingCourse?.name || "").toUpperCase()
+    const chuyenNganh = (
+      firstStudent?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
+    ).toUpperCase()
+
+    const soQD = firstProj?.thesisSession?.decisionNumber || "......"
+    const ngayQD = firstProj?.thesisSession?.decisionDate
+      ? dayjs(firstProj.thesisSession.decisionDate).format("DD/MM/YYYY")
+      : ".... / .... /...."
+
+    const tableData: any[] = []
+    let sttCounter = 1
+    const mergeRanges: { startRow: number; endRow: number }[] = []
+    let currentRowIndex = 8
+    const rowHeightsMap = new Map<number, number>()
+    const breakRows: number[] = []
+    let currentPageHeight = 176 // Page 1 starts with header height (176 points)
+    const maxPageHeight = 505 // Printable page budget for landscape A4 (approx 505 points)
+
+    const estimateLines = (text: string, charsPerLine: number) => {
+      if (!text) return 1
+      const paragraphs = text.split("\n")
+      let total = 0
+      paragraphs.forEach((p) => {
+        total += Math.max(1, Math.ceil(p.length / charsPerLine))
+      })
+      return total
+    }
+
+    projects.forEach((proj, idx) => {
+      const studentName =
+        proj.registrations
+          ?.map((r: any) => r.student?.userProfile?.fullname)
+          .filter(Boolean)
+          .join(", ") || ""
+      const title = proj.title || ""
+      const note = proj.isLanguage
+        ? "ĐA viết và bảo vệ bằng tiếng Anh"
+        : proj.isProductProject
+        ? "ĐA có sản phẩm"
+        : ""
+
+      interface FormattedSupervisor {
+        supervisor: string
+        position: string
+        unit: string
+      }
+
+      const supervisorsList: FormattedSupervisor[] = []
+
+      const formatSup = (supervisor: Lecturer | null | undefined, prefix: string) => {
+        if (!supervisor) return null
+        const profile = supervisor.userProfile
+        const rank = profile?.rank?.sMa || ""
+        const academicRank = profile?.academicRankType?.sMa || ""
+        const level = profile?.level?.sMa || ""
+        const academicDegree = profile?.academicDegreeType?.sMa || ""
+        const fullname = profile?.fullname || ""
+
+        const titleParts = [academicRank, level, academicDegree].filter(Boolean).join(".")
+        const namePart = titleParts ? `${titleParts} ${fullname}` : fullname
+        const formattedName = [rank, namePart].filter(Boolean).join(", ")
+
+        return {
+          supervisor: prefix + formattedName,
+          position: profile?.positionCPV?.sTen || "",
+          unit: supervisor.organization?.sTen || supervisor.organization?.sCode || "",
+        }
+      }
+
+      const hd1 = formatSup(proj.primarySupervisor, "HD 1: ")
+      const hd2 = formatSup(proj.secondarySupervisor, "HD 2: ")
+      const hd3 = formatSup(proj.thirdSupervisor?.lecturer, "HD 3: ")
+
+      if (hd1) supervisorsList.push(hd1)
+      if (hd2) supervisorsList.push(hd2)
+      if (hd3) supervisorsList.push(hd3)
+
+      if (supervisorsList.length === 0) {
+        tableData.push({
+          stt: sttCounter,
+          student: studentName,
+          title,
+          supervisor: "",
+          position: "",
+          unit: "",
+          note,
+        })
+        const maxLines = Math.max(
+          estimateLines(studentName, 18),
+          estimateLines(title, 28),
+          estimateLines(note, 15)
+        )
+        rowHeightsMap.set(currentRowIndex, 16 + maxLines * 14)
+        sttCounter++
+        currentRowIndex++
+      } else {
+        supervisorsList.forEach((sup, idx) => {
+          tableData.push({
+            stt: idx === 0 ? sttCounter : "",
+            student: idx === 0 ? studentName : "",
+            title: idx === 0 ? title : "",
+            supervisor: sup.supervisor,
+            position: sup.position,
+            unit: sup.unit,
+            note: idx === 0 ? note : "",
+          })
+
+          const supLines = estimateLines(sup.supervisor, 25)
+          const posLines = estimateLines(sup.position, 15)
+          const uniLines = estimateLines(sup.unit, 25)
+
+          let maxLines = Math.max(supLines, posLines, uniLines)
+          if (idx === 0) {
+            maxLines = Math.max(maxLines, estimateLines(studentName, 18), estimateLines(title, 28))
+          }
+
+          rowHeightsMap.set(currentRowIndex + idx, 16 + maxLines * 14)
+        })
+
+        if (supervisorsList.length > 1) {
+          mergeRanges.push({
+            startRow: currentRowIndex,
+            endRow: currentRowIndex + supervisorsList.length - 1,
+          })
+        }
+
+        sttCounter++
+        currentRowIndex += supervisorsList.length
+      }
+
+      // Track page breaks: dynamically calculate cumulative row heights to fit landscape A4
+      let projectHeight = 0
+      const totalRowsForProject = supervisorsList.length || 1
+      for (let rOffset = 0; rOffset < totalRowsForProject; rOffset++) {
+        projectHeight += rowHeightsMap.get(currentRowIndex - totalRowsForProject + rOffset) || 26
+      }
+
+      if (currentPageHeight + projectHeight > maxPageHeight && idx > 0) {
+        const previousProjectEndRow = currentRowIndex - totalRowsForProject - 1
+        breakRows.push(previousProjectEndRow)
+        currentPageHeight = 64 // New page starts with repeated header (rows 6 & 7 = 64pt)
+      }
+      currentPageHeight += projectHeight
+    })
+
+    const dataPayload = {
+      dtType,
+      khoa,
+      chuyenNganh,
+      soQD,
+      ngayQD,
+      data: tableData,
+    }
+
+    const response = await renderXlsxTemplate({
+      templatePath: "PhanCongHuongDanDoAn.xlsx",
+      prefix: "mta/luan-van",
+      fileName: "PhanCongHuongDanDoAn.xlsx",
+      mergeBlocksToOneSheet: false,
+      sheets: [
+        {
+          data: dataPayload,
+        },
+      ],
+    })
+
+    if (response.status !== 200) {
+      message.error("Đã xảy ra lỗi khi tạo file Excel từ template")
+      return
+    }
+
+    const renderedBlob = response.data
+    if (renderedBlob instanceof Blob) {
+      const arrayBuffer = await renderedBlob.arrayBuffer()
+      const zip = new PizZip(arrayBuffer)
+      const sheetPath = "xl/worksheets/sheet1.xml"
+      const sheetFile = zip.file(sheetPath)
+      if (sheetFile) {
+        let sheetXml = sheetFile.asText()
+        sheetXml = sheetXml.replace(/<row\b([^>]*)>/g, (match, attrs) => {
+          const rMatch = attrs.match(/r="(\d+)"/)
+          if (rMatch) {
+            const rVal = parseInt(rMatch[1], 10)
+            if (rowHeightsMap.has(rVal)) {
+              const targetHeight = rowHeightsMap.get(rVal)
+              let cleanedAttrs = attrs
+                .replace(/\bht="[^"]*"/g, "")
+                .replace(/\bcustomHeight="[^"]*"/g, "")
+              return `<row${cleanedAttrs} ht="${targetHeight}" customHeight="1">`
+            }
+          }
+          return match
+        })
+
+        // Inject merged cell tags dynamically for columns A, B, C, G
+        if (mergeRanges.length > 0) {
+          const mergeTags: string[] = []
+          mergeRanges.forEach((range) => {
+            mergeTags.push(`<mergeCell ref="A${range.startRow}:A${range.endRow}"/>`)
+            mergeTags.push(`<mergeCell ref="B${range.startRow}:B${range.endRow}"/>`)
+            mergeTags.push(`<mergeCell ref="C${range.startRow}:C${range.endRow}"/>`)
+            mergeTags.push(`<mergeCell ref="G${range.startRow}:G${range.endRow}"/>`)
+          })
+
+          const mergeCellsMatch = sheetXml.match(/<mergeCells\b([^>]*)>([\s\S]*?)<\/mergeCells>/)
+          if (mergeCellsMatch) {
+            const attrs = mergeCellsMatch[1]
+            const existingBody = mergeCellsMatch[2]
+            const countMatch = attrs.match(/count="(\d+)"/)
+            let newCount = mergeTags.length
+            let newAttrs = attrs
+            if (countMatch) {
+              const currentCount = parseInt(countMatch[1], 10)
+              newCount += currentCount
+              newAttrs = attrs.replace(/count="\d+"/, `count="${newCount}"`)
+            } else {
+              newAttrs += ` count="${newCount}"`
+            }
+            const updatedMergeCells = `<mergeCells${newAttrs}>${existingBody}${mergeTags.join("")}</mergeCells>`
+            sheetXml = sheetXml.replace(/<mergeCells\b[^>]*>[\s\S]*?<\/mergeCells>/, updatedMergeCells)
+          } else {
+            const mergeCellsTag = `<mergeCells count="${mergeTags.length}">${mergeTags.join("")}</mergeCells>`
+            sheetXml = sheetXml.replace("</worksheet>", `${mergeCellsTag}</worksheet>`)
+          }
+        }
+
+        // Inject rowBreaks dynamically
+        if (breakRows.length > 0) {
+          const brkTags = breakRows.map((rNum) => `<brk id="${rNum}" max="16383" man="1"/>`)
+          const rowBreaksXml = `<rowBreaks count="${breakRows.length}" manualBreakCount="${breakRows.length}">${brkTags.join("")}</rowBreaks>`
+          if (sheetXml.includes("</headerFooter>")) {
+            sheetXml = sheetXml.replace("</headerFooter>", `</headerFooter>${rowBreaksXml}`)
+          } else if (sheetXml.includes("<pageSetup")) {
+            sheetXml = sheetXml.replace(/(<pageSetup[^>]*\/>)/, `$1${rowBreaksXml}`)
+          } else {
+            sheetXml = sheetXml.replace("</worksheet>", `${rowBreaksXml}</worksheet>`)
+          }
+        }
+
+        zip.file(sheetPath, sheetXml)
+      }
+
+      const finalBuffer = zip.generate({ type: "arraybuffer" })
+      const finalBlob = new Blob([finalBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      })
+
+      downloadFile(finalBlob, "PhanCongHuongDanDoAn.xlsx")
+      message.success("Xuất file thành công")
+    } else {
+      message.error("Đã xảy ra lỗi khi tạo file Excel")
+    }
+  } catch (error) {
+    console.error("Lỗi xuất file:", error)
+    message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+  } finally {
+    hideSpinner()
+  }
+}
+
