@@ -12407,6 +12407,9 @@
           "isLockExamScore": {
             "type": "boolean"
           },
+          "isLockLecturer": {
+            "type": "boolean"
+          },
           "scoreSubmitted": {
             "type": "boolean"
           },
@@ -12586,6 +12589,7 @@
           "enteredExamScore",
           "isLockScore",
           "isLockExamScore",
+          "isLockLecturer",
           "scoreSubmitted",
           "scoreChecked"
         ]
@@ -12805,6 +12809,10 @@
             "nullable": true
           },
           "isLockExamScore": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isLockLecturer": {
             "type": "boolean",
             "nullable": true
           },
@@ -42826,6 +42834,9 @@
           "isLockExamScore": {
             "type": "boolean"
           },
+          "isLockLecturer": {
+            "type": "boolean"
+          },
           "scoreSubmitted": {
             "type": "boolean"
           },
@@ -42916,6 +42927,7 @@
           "enteredExamScore",
           "isLockScore",
           "isLockExamScore",
+          "isLockLecturer",
           "scoreSubmitted",
           "scoreChecked"
         ]
@@ -43233,6 +43245,10 @@
             "nullable": true
           },
           "isLockExamScore": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isLockLecturer": {
             "type": "boolean",
             "nullable": true
           },
@@ -91318,6 +91334,9 @@
           "isLockExamScore": {
             "type": "integer"
           },
+          "isLockLecturer": {
+            "type": "integer"
+          },
           "scoreSubmitted": {
             "type": "integer"
           },
@@ -91381,6 +91400,7 @@
           "issuedScoreAt",
           "isLockScore",
           "isLockExamScore",
+          "isLockLecturer",
           "scoreSubmitted",
           "scoreChecked",
           "roomId",
@@ -91576,6 +91596,10 @@
             "nullable": true
           },
           "isLockExamScore": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isLockLecturer": {
             "type": "boolean",
             "nullable": true
           },
@@ -91779,6 +91803,10 @@
             "nullable": true
           },
           "isLockExamScore": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isLockLecturer": {
             "type": "boolean",
             "nullable": true
           },
@@ -92225,6 +92253,9 @@
           "isLockExamScore": {
             "type": "integer"
           },
+          "isLockLecturer": {
+            "type": "integer"
+          },
           "scoreSubmitted": {
             "type": "integer"
           },
@@ -92253,6 +92284,7 @@
           "examScoreDeadline",
           "isLockScore",
           "isLockExamScore",
+          "isLockLecturer",
           "scoreSubmitted",
           "scoreChecked",
           "updatedById",
@@ -92321,6 +92353,10 @@
             "nullable": true
           },
           "isLockExamScore": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isLockLecturer": {
             "type": "boolean",
             "nullable": true
           },
@@ -92400,6 +92436,10 @@
             "nullable": true
           },
           "isLockExamScore": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isLockLecturer": {
             "type": "boolean",
             "nullable": true
           },

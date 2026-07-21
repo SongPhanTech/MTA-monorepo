@@ -11575,6 +11575,9 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, classRegisterSessionId_studentId_subjectClassId: {
+                    name: "classRegisterSessionId_studentId_subjectClassId",
+                    fields: ["classRegisterSessionId", "studentId", "subjectClassId"]
                 },
             },
         },
@@ -11749,6 +11752,10 @@ const metadata: ModelMeta = {
                     name: "isLockExamScore",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isLockLecturer: {
+                    name: "isLockLecturer",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, scoreSubmitted: {
                     name: "scoreSubmitted",
                     type: "Boolean",
@@ -12181,6 +12188,10 @@ const metadata: ModelMeta = {
                     isOptional: true,
                 }, isLockExamScore: {
                     name: "isLockExamScore",
+                    type: "Boolean",
+                    isOptional: true,
+                }, isLockLecturer: {
+                    name: "isLockLecturer",
                     type: "Boolean",
                     isOptional: true,
                 }, scoreSubmitted: {

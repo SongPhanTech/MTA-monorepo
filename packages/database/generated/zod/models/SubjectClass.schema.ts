@@ -41,6 +41,7 @@ const baseSchema = z.object({
     issuedScoreAt: z.coerce.date().nullish(),
     isLockScore: z.boolean().default(false),
     isLockExamScore: z.boolean().default(false),
+    isLockLecturer: z.boolean().default(true),
     scoreSubmitted: z.boolean().default(false),
     scoreChecked: z.boolean().default(false),
 }
@@ -76,6 +77,7 @@ const baseSchemaWithoutDefaults = z.object({
     issuedScoreAt: z.coerce.date().nullish(),
     isLockScore: z.boolean(),
     isLockExamScore: z.boolean(),
+    isLockLecturer: z.boolean(),
     scoreSubmitted: z.boolean(),
     scoreChecked: z.boolean(),
 }
@@ -174,6 +176,7 @@ export const SubjectClassPrismaUpdateSchema = z.object({
     issuedScoreAt: z.coerce.date().nullish(),
     isLockScore: z.boolean(),
     isLockExamScore: z.boolean(),
+    isLockLecturer: z.boolean(),
     scoreSubmitted: z.boolean(),
     scoreChecked: z.boolean()
 }).partial().passthrough();
@@ -183,7 +186,7 @@ export const SubjectClassPrismaUpdateSchema = z.object({
  * `SubjectClass` schema for create operations excluding foreign keys and relations.
  */
 export const SubjectClassCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, type: true, status: true, cancelled: true, enteredScore: true, enteredExamScore: true, isLockScore: true, isLockExamScore: true, scoreSubmitted: true, scoreChecked: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, type: true, status: true, cancelled: true, enteredScore: true, enteredExamScore: true, isLockScore: true, isLockExamScore: true, isLockLecturer: true, scoreSubmitted: true, scoreChecked: true
 });
 
 

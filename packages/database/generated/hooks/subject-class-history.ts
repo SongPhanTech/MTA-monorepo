@@ -327,7 +327,7 @@ export function useSuspenseCountSubjectClassHistory<TArgs extends Prisma.Subject
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('SubjectClassHistory', `${endpoint}/subjectClassHistory/count`, args, options, fetch);
 }
 
-export function useCheckSubjectClassHistory<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; subjectClassId?: string; isLockScore?: boolean; isLockExamScore?: boolean; scoreSubmitted?: boolean; scoreChecked?: boolean; updatedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSubjectClassHistory<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; subjectClassId?: string; isLockScore?: boolean; isLockExamScore?: boolean; isLockLecturer?: boolean; scoreSubmitted?: boolean; scoreChecked?: boolean; updatedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SubjectClassHistory', `${endpoint}/subjectClassHistory/check`, args, options, fetch);
 }

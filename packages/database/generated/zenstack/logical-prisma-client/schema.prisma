@@ -13,7 +13,7 @@ generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["multiSchema", "typedSql", "fullTextSearchPostgres"]
   binaryTargets   = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x", "darwin", "darwin-arm64", "windows"]
-  output          = "generated\\zenstack\\logical-prisma-client"
+  output          = "generated/zenstack/logical-prisma-client"
 }
 
 enum ConfigKey {

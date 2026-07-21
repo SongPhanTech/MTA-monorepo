@@ -12175,9 +12175,12 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, classRegisterSessionId_studentId_subjectClassId: {
+                    name: "classRegisterSessionId_studentId_subjectClassId",
+                    fields: ["classRegisterSessionId", "studentId", "subjectClassId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         subjectClass: {
             name: 'SubjectClass', fields: {
@@ -12355,6 +12358,10 @@ const metadata = {
                     name: "isLockExamScore",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isLockLecturer: {
+                    name: "isLockLecturer",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, scoreSubmitted: {
                     name: "scoreSubmitted",
                     type: "Boolean",
@@ -12811,6 +12818,10 @@ const metadata = {
                     isOptional: true,
                 }, isLockExamScore: {
                     name: "isLockExamScore",
+                    type: "Boolean",
+                    isOptional: true,
+                }, isLockLecturer: {
+                    name: "isLockLecturer",
                     type: "Boolean",
                     isOptional: true,
                 }, scoreSubmitted: {
