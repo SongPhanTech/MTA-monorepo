@@ -85,9 +85,10 @@ model CriterionCatalog extends Base {
 
 /// Nhóm minh chứng - require code
 model EvidenceCategory extends Base {
-  name      String
+  name       String
+  objectType StandardCatalogType @default(PROGRAM)
 
-  evidences Evidence[]
+  evidences  Evidence[]
 
   @@schema("khao-thi")
 }

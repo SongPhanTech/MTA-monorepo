@@ -57,9 +57,9 @@ services:
     networks:
       - mta-net
 
-  # Image do `make all-be-* SERVER_PROFILE=mta_online` load + tag *:local-deploy
+  # Image: make all-be-* → docker load ghcr.io/songphantech/mta-be-*:latest
   mta-be-model:
-    image: mta-be-model:local-deploy
+    image: ghcr.io/songphantech/mta-be-model:latest
     pull_policy: never
     container_name: mta-be-model
     restart: unless-stopped
@@ -74,7 +74,7 @@ services:
       - mta-net
 
   mta-be-ql-dao-tao:
-    image: mta-be-ql-dao-tao:local-deploy
+    image: ghcr.io/songphantech/mta-be-ql-dao-tao:latest
     pull_policy: never
     container_name: mta-be-ql-dao-tao
     restart: unless-stopped
@@ -89,7 +89,7 @@ services:
       - mta-net
 
   mta-be-portal:
-    image: mta-be-portal:local-deploy
+    image: ghcr.io/songphantech/mta-be-portal:latest
     pull_policy: never
     container_name: mta-be-portal
     restart: unless-stopped
@@ -104,7 +104,7 @@ services:
       - mta-net
 
   mta-be-ql-dao-tao-shared:
-    image: mta-be-ql-dao-tao-shared:local-deploy
+    image: ghcr.io/songphantech/mta-be-ql-dao-tao-shared:latest
     pull_policy: never
     container_name: mta-be-ql-dao-tao-shared
     restart: unless-stopped

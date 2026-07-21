@@ -20,6 +20,59 @@ import { PaginatedDataResponseSchema, PaginationQuerySchema } from "../zod/base"
 
 const app = new OpenAPIHono({ strict: false })
 
+/** Phạm vi đối tượng KS dùng để lọc học viên theo lớp / khóa / ngành / lĩnh vực. */
+type SurveyObjectTypeStudentScope = {
+  fixedClasses: { id: string }[]
+  trainingCourses: { id: string }[]
+  trainingMajors: { id: string }[]
+  trainingFields: { id: string }[]
+  subjectClasses: { id: string }[]
+}
+
+/**
+ * Filter ngành/lĩnh vực trên FixedClass.
+ * - Đã chọn lớp QL → bỏ qua (lớp là scope cụ thể; nhiều CTĐT thiếu trainingMajorId).
+ * - Có khóa/lớp HP mà CTĐT chưa gắn ngành → vẫn nhận (OR trainingMajorId null).
+ */
+function buildStudentMajorFieldFixedClassFilter(
+  objectType: SurveyObjectTypeStudentScope,
+  q: { fixedClassIds?: string[]; trainingCourseIds?: string[] },
+): Prisma.FixedClassWhereInput {
+  const hasFixedClassScope =
+    objectType.fixedClasses.length > 0 || (q.fixedClassIds?.length ?? 0) > 0
+  const hasMajorFieldConfig =
+    objectType.trainingMajors.length > 0 || objectType.trainingFields.length > 0
+
+  if (!hasMajorFieldConfig || hasFixedClassScope) {
+    return {}
+  }
+
+  const matchingMajor: Prisma.TrainingMajorWhereInput = {
+    ...(objectType.trainingMajors.length
+      ? { id: { in: objectType.trainingMajors.map((tm) => tm.id) } }
+      : {}),
+    ...(objectType.trainingFields.length
+      ? { trainingFieldId: { in: objectType.trainingFields.map((tf) => tf.id) } }
+      : {}),
+  }
+
+  const hasOtherStudentScope =
+    objectType.trainingCourses.length > 0 ||
+    (q.trainingCourseIds?.length ?? 0) > 0 ||
+    objectType.subjectClasses.length > 0
+
+  return {
+    curriculumVersion: {
+      curriculum: {
+        OR: [
+          { trainingMajor: matchingMajor },
+          ...(hasOtherStudentScope ? [{ trainingMajorId: null }] : []),
+        ],
+      },
+    },
+  }
+}
+
 const exportReportSurvey = createRoute({
   operationId: "export-report-survey",
   path: "/export-report-survey",
@@ -665,30 +718,7 @@ app.openapi(getSurveyObjects, async (c) => {
                             },
                           }
                         : {}),
-                      ...(objectType.trainingMajors.length || objectType.trainingFields.length
-                        ? {
-                            curriculumVersion: {
-                              curriculum: {
-                                trainingMajor: {
-                                  ...(objectType.trainingMajors.length
-                                    ? {
-                                        id: {
-                                          in: objectType.trainingMajors.map((tm) => tm.id),
-                                        },
-                                      }
-                                    : {}),
-                                  ...(objectType.trainingFields.length
-                                    ? {
-                                        trainingFieldId: {
-                                          in: objectType.trainingFields.map((tf) => tf.id),
-                                        },
-                                      }
-                                    : {}),
-                                },
-                              },
-                            },
-                          }
-                        : {}),
+                      ...buildStudentMajorFieldFixedClassFilter(objectType, q),
                     },
                     ...(objectType.subjectClasses.length
                       ? {
@@ -915,31 +945,7 @@ app.openapi(getSurveyObjectCount, async (c) => {
                               },
                             }
                           : {}),
-                        ...(surveyObjectType.trainingMajors.length ||
-                        surveyObjectType.trainingFields.length
-                          ? {
-                              curriculumVersion: {
-                                curriculum: {
-                                  trainingMajor: {
-                                    ...(surveyObjectType.trainingMajors.length
-                                      ? {
-                                          id: {
-                                            in: surveyObjectType.trainingMajors.map((tm) => tm.id),
-                                          },
-                                        }
-                                      : {}),
-                                    ...(surveyObjectType.trainingFields.length
-                                      ? {
-                                          trainingFieldId: {
-                                            in: surveyObjectType.trainingFields.map((tf) => tf.id),
-                                          },
-                                        }
-                                      : {}),
-                                  },
-                                },
-                              },
-                            }
-                          : {}),
+                        ...buildStudentMajorFieldFixedClassFilter(surveyObjectType, q),
                       },
                       ...(surveyObjectType.subjectClasses.length
                         ? {

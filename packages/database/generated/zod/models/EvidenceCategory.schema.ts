@@ -5,6 +5,8 @@
 /* eslint-disable */
 
 import { z } from 'zod/v3';
+import { StandardCatalogType } from '../../zenstack/models';
+import { StandardCatalogTypeSchema } from '../enums/StandardCatalogType.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -15,6 +17,7 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
+    objectType: StandardCatalogTypeSchema,
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -27,6 +30,7 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
+    objectType: StandardCatalogTypeSchema,
 }
 ).strict();
 const relationSchema = z.object({
@@ -66,7 +70,8 @@ export const EvidenceCategoryPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    name: z.string()
+    name: z.string(),
+    objectType: StandardCatalogTypeSchema
 }).partial().passthrough();
 
 
@@ -74,7 +79,7 @@ export const EvidenceCategoryPrismaUpdateSchema = z.object({
  * `EvidenceCategory` schema for create operations excluding foreign keys and relations.
  */
 export const EvidenceCategoryCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, objectType: true
 });
 
 
@@ -82,7 +87,7 @@ export const EvidenceCategoryCreateScalarSchema = baseSchemaWithoutDefaults.part
  * `EvidenceCategory` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const EvidenceCategoryCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, objectType: true
 });
 
 

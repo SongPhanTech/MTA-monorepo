@@ -19,6 +19,7 @@ const baseSchema = z.object({
     examScoreDeadline: z.coerce.date().nullish(),
     isLockScore: z.boolean().nullish(),
     isLockExamScore: z.boolean().nullish(),
+    isLockLecturer: z.boolean().nullish(),
     scoreSubmitted: z.boolean().nullish(),
     scoreChecked: z.boolean().nullish(),
 }
@@ -37,6 +38,7 @@ const baseSchemaWithoutDefaults = z.object({
     examScoreDeadline: z.coerce.date().nullish(),
     isLockScore: z.boolean().nullish(),
     isLockExamScore: z.boolean().nullish(),
+    isLockLecturer: z.boolean().nullish(),
     scoreSubmitted: z.boolean().nullish(),
     scoreChecked: z.boolean().nullish(),
 }
@@ -89,6 +91,7 @@ export const SubjectClassHistoryPrismaUpdateSchema = z.object({
     examScoreDeadline: z.coerce.date().nullish(),
     isLockScore: z.boolean().nullish(),
     isLockExamScore: z.boolean().nullish(),
+    isLockLecturer: z.boolean().nullish(),
     scoreSubmitted: z.boolean().nullish(),
     scoreChecked: z.boolean().nullish()
 }).partial().passthrough();

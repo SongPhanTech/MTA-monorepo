@@ -1,22 +1,28 @@
-version: "3"
-
-# Path trên server: ~/mta-app/fe/docker-compose.yml
-# make all-cong-hoc-vien sẽ: unzip cong-hoc-vien-cdn + up 2 service dưới đây
+# ~/mta-app/fe/docker-compose.yml
+#
+# CDN: dùng nginx:alpine (public) — không phụ thuộc swantech-cdn
+# Router: phải docker load sẵn mta.router.api (pull_policy: never)
+#
+#   docker save mta.router.api | gzip > mta.router.api.tar.gz
+#   scp mta.router.api.tar.gz mta_online:~/mta-app/fe/docker-images/
+#   docker load -i docker-images/mta.router.api.tar.gz
 
 services:
   mta-cong-hoc-vien-cdn:
-    image: swantech-cdn:latest
+    image: nginx:alpine
+    pull_policy: missing
     container_name: mta-cong-hoc-vien-cdn
     restart: always
     ports:
       - "6009:80"
     volumes:
-      - ./cong-hoc-vien-cdn:/usr/share/nginx/html
-      - ./nginx-config-cdn/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx-config-cdn/default.conf:/etc/nginx/conf.d/default.conf
+      - ./cong-hoc-vien-cdn:/usr/share/nginx/html:ro
+      - ./nginx-config-cdn/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx-config-cdn/default.conf:/etc/nginx/conf.d/default.conf:ro
 
   router-cong-hoc-vien-api:
     image: mta.router.api
+    pull_policy: never
     container_name: router-cong-hoc-vien-api
     restart: always
     ports:

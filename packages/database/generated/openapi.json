@@ -12407,6 +12407,9 @@
           "isLockExamScore": {
             "type": "boolean"
           },
+          "isLockLecturer": {
+            "type": "boolean"
+          },
           "scoreSubmitted": {
             "type": "boolean"
           },
@@ -12586,6 +12589,7 @@
           "enteredExamScore",
           "isLockScore",
           "isLockExamScore",
+          "isLockLecturer",
           "scoreSubmitted",
           "scoreChecked"
         ]
@@ -12805,6 +12809,10 @@
             "nullable": true
           },
           "isLockExamScore": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isLockLecturer": {
             "type": "boolean",
             "nullable": true
           },
@@ -22619,6 +22627,9 @@
           "name": {
             "type": "string"
           },
+          "objectType": {
+            "$ref": "#/components/schemas/StandardCatalogType"
+          },
           "evidences": {
             "type": "array",
             "items": {
@@ -22631,7 +22642,8 @@
           "active",
           "createdAt",
           "updatedAt",
-          "name"
+          "name",
+          "objectType"
         ]
       },
       "Evidence": {
@@ -42826,6 +42838,9 @@
           "isLockExamScore": {
             "type": "boolean"
           },
+          "isLockLecturer": {
+            "type": "boolean"
+          },
           "scoreSubmitted": {
             "type": "boolean"
           },
@@ -42916,6 +42931,7 @@
           "enteredExamScore",
           "isLockScore",
           "isLockExamScore",
+          "isLockLecturer",
           "scoreSubmitted",
           "scoreChecked"
         ]
@@ -43233,6 +43249,10 @@
             "nullable": true
           },
           "isLockExamScore": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isLockLecturer": {
             "type": "boolean",
             "nullable": true
           },
@@ -57491,6 +57511,9 @@
           "name": {
             "type": "string"
           },
+          "objectType": {
+            "$ref": "#/components/schemas/StandardCatalogType"
+          },
           "_count": {
             "allOf": [
               {
@@ -57521,7 +57544,8 @@
           "active",
           "createdAt",
           "updatedAt",
-          "name"
+          "name",
+          "objectType"
         ]
       },
       "AggregateEvidence": {
@@ -91318,6 +91342,9 @@
           "isLockExamScore": {
             "type": "integer"
           },
+          "isLockLecturer": {
+            "type": "integer"
+          },
           "scoreSubmitted": {
             "type": "integer"
           },
@@ -91381,6 +91408,7 @@
           "issuedScoreAt",
           "isLockScore",
           "isLockExamScore",
+          "isLockLecturer",
           "scoreSubmitted",
           "scoreChecked",
           "roomId",
@@ -91576,6 +91604,10 @@
             "nullable": true
           },
           "isLockExamScore": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isLockLecturer": {
             "type": "boolean",
             "nullable": true
           },
@@ -91779,6 +91811,10 @@
             "nullable": true
           },
           "isLockExamScore": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isLockLecturer": {
             "type": "boolean",
             "nullable": true
           },
@@ -92225,6 +92261,9 @@
           "isLockExamScore": {
             "type": "integer"
           },
+          "isLockLecturer": {
+            "type": "integer"
+          },
           "scoreSubmitted": {
             "type": "integer"
           },
@@ -92253,6 +92292,7 @@
           "examScoreDeadline",
           "isLockScore",
           "isLockExamScore",
+          "isLockLecturer",
           "scoreSubmitted",
           "scoreChecked",
           "updatedById",
@@ -92321,6 +92361,10 @@
             "nullable": true
           },
           "isLockExamScore": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isLockLecturer": {
             "type": "boolean",
             "nullable": true
           },
@@ -92400,6 +92444,10 @@
             "nullable": true
           },
           "isLockExamScore": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isLockLecturer": {
             "type": "boolean",
             "nullable": true
           },
@@ -116123,6 +116171,9 @@
           "name": {
             "type": "integer"
           },
+          "objectType": {
+            "type": "integer"
+          },
           "_all": {
             "type": "integer"
           }
@@ -116137,6 +116188,7 @@
           "updatedAt",
           "createdBy",
           "name",
+          "objectType",
           "_all"
         ]
       },
@@ -116181,6 +116233,14 @@
           "name": {
             "type": "string",
             "nullable": true
+          },
+          "objectType": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/StandardCatalogType"
+              }
+            ],
+            "nullable": true
           }
         }
       },
@@ -116224,6 +116284,14 @@
           },
           "name": {
             "type": "string",
+            "nullable": true
+          },
+          "objectType": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/StandardCatalogType"
+              }
+            ],
             "nullable": true
           }
         }

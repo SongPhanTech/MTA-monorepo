@@ -49,6 +49,7 @@ const PutCertificateScoreModal = () => {
           data: {
             name: rest.name,
             isUsingScore: rest.isUsingScore,
+            scoreThreshold: rest.scoreThreshold,
             subjectVersions: subjectVersionsData,
           },
           where: { id },
@@ -94,7 +95,7 @@ const PutCertificateScoreModal = () => {
   const { data: subjectVersionData = [] } = useFindManySubjectVersion({
     where: { trainingObjectTypeId },
     orderBy: { name: "asc" },
-    take: 500,
+    take: 5000,
   })
 
   useEffect(() => {

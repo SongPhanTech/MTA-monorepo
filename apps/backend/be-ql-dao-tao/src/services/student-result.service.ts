@@ -321,10 +321,22 @@ const ThongTinTichLuy = async (
     // GPA hệ 4
     // GPA hệ 4
     // Làm tròn đến 2 số thập phân (chỉ tính môn đạt, không tính môn trượt)
-    const sumGPA4 = DSDiemHe4.reduce((sum, val) => new Decimal(sum).plus(val).toNumber(), 0);
-    const diemTrungBinh4 = TongTinChiTichLuy > 0 ? new Decimal(sumGPA4).dividedBy(TongTinChiTichLuy).toDecimalPlaces(2, Decimal.ROUND_HALF_UP).toNumber() : 0;
-    const sumGPA10 = DSDiemHe10.reduce((sum, val) => new Decimal(sum).plus(val).toNumber(), 0);
-    const diemTrungBinh10 = TongTinChiTichLuy > 0 ? new Decimal(sumGPA10).dividedBy(TongTinChiTichLuy).toDecimalPlaces(2, Decimal.ROUND_HALF_UP).toNumber() : 0;
+    const sumGPA4 = DSDiemHe4.reduce((sum, val) => new Decimal(sum).plus(val).toNumber(), 0)
+    const diemTrungBinh4 =
+      TongTinChiTichLuy > 0
+        ? new Decimal(sumGPA4)
+            .dividedBy(TongTinChiTichLuy)
+            .toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
+            .toNumber()
+        : 0
+    const sumGPA10 = DSDiemHe10.reduce((sum, val) => new Decimal(sum).plus(val).toNumber(), 0)
+    const diemTrungBinh10 =
+      TongTinChiTichLuy > 0
+        ? new Decimal(sumGPA10)
+            .dividedBy(TongTinChiTichLuy)
+            .toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
+            .toNumber()
+        : 0
 
     const diemTrungBinhChung4 = diemTrungBinh4
     const diemTrungBinhChung10 = diemTrungBinh10
@@ -471,8 +483,8 @@ const phanLoaiDiemHe4 = async (
   const rank = rankingConvert.find(
     (item) =>
       item.trainingCourseId === trainingCourseId &&
-      item.base4Max &&
-      item.base4Min &&
+      item.base4Max !== null &&
+      item.base4Min !== null &&
       diemHe4 <= item.base4Max &&
       diemHe4 >= item.base4Min
   )
@@ -488,8 +500,8 @@ const phanLoaiDiemHe10 = async (
   const rank = rankingConvert.find(
     (item) =>
       item.trainingCourseId === trainingCourseId &&
-      item.base10Max &&
-      item.base10Min &&
+      item.base10Max !== null &&
+      item.base10Min !== null &&
       diemHe10 <= item.base10Max &&
       diemHe10 >= item.base10Min
   )
@@ -683,11 +695,23 @@ const ThongTinDiemHocKy = async (
     }
 
     // Tính điểm trung bình hệ 4 trong kỳ (tính chung tất cả)
-    const sumGPA4 = DsDiemHe4.reduce((sum, val) => new Decimal(sum).plus(val).toNumber(), 0);
-    const diemTrungBinh4 = TongTinChiGpa > 0 ? new Decimal(sumGPA4).dividedBy(TongTinChiGpa).toDecimalPlaces(2, Decimal.ROUND_HALF_UP).toNumber() : 0;
+    const sumGPA4 = DsDiemHe4.reduce((sum, val) => new Decimal(sum).plus(val).toNumber(), 0)
+    const diemTrungBinh4 =
+      TongTinChiGpa > 0
+        ? new Decimal(sumGPA4)
+            .dividedBy(TongTinChiGpa)
+            .toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
+            .toNumber()
+        : 0
     // Tính điểm trung bình hệ 10 trong kỳ (tính chung tất cả)
-    const sumGPA10 = DSDiemHe10.reduce((sum, val) => new Decimal(sum).plus(val).toNumber(), 0);
-    const diemTrungBinh10 = TongTinChiGpa > 0 ? new Decimal(sumGPA10).dividedBy(TongTinChiGpa).toDecimalPlaces(2, Decimal.ROUND_HALF_UP).toNumber() : 0;
+    const sumGPA10 = DSDiemHe10.reduce((sum, val) => new Decimal(sum).plus(val).toNumber(), 0)
+    const diemTrungBinh10 =
+      TongTinChiGpa > 0
+        ? new Decimal(sumGPA10)
+            .dividedBy(TongTinChiGpa)
+            .toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
+            .toNumber()
+        : 0
     // Điểm thấp nhất
     return {
       diemTrungBinh4TrongKy: diemTrungBinh4,
@@ -891,6 +915,15 @@ export const calculateStudentSemesterResult = async (
       },
     })
 
+    const rankingConvert = await prisma.academicRankingConvert.findMany({
+      where: {
+        trainingCourseId,
+        context: RankingContext.STUDYING,
+        deletedAt: null,
+        active: true,
+      },
+    })
+
     await pMap(
       studentsIDs,
       async (student) => {
@@ -992,6 +1025,11 @@ export const calculateStudentSemesterResult = async (
               ? layGiaTriDiem4(gpaBase10WithBonus, trainingCourseId, scoreConverts) || gpaBase4Goc
               : gpaBase4Goc
 
+          const semesterRank =
+            baseType === AcademicRankingBaseType.Base10
+              ? await phanLoaiDiemHe10(gpaBase10WithBonus, trainingCourseId, rankingConvert)
+              : await phanLoaiDiemHe4(gpaBase4WithBonus, trainingCourseId, rankingConvert)
+
           const result: Prisma.StudentSemesterResultUncheckedCreateInput = {
             studentId: student.id,
             conductScore: conductScore?.score || 10,
@@ -1000,8 +1038,7 @@ export const calculateStudentSemesterResult = async (
             semesterIndexInCourse: thongTinTichLuy.kyDangHoc, // Kỳ đang học
             isLastSemester: thongTinTichLuy.kyCuoi, // Kỳ cuối hay không
 
-            baseScore:
-              student.fixedClass?.trainingCourse?.baseScore || AcademicRankingBaseType.Base10, // Lấy baseScore từ đối tượng đào tạo, nếu không có thì mặc định là Base10
+            baseScore: baseType, // Lấy baseScore từ đối tượng đào tạo, nếu không có thì mặc định là Base10
             gpaBase4: new Decimal(thongTinDiemHocKy.diemTrungBinh4TrongKy),
             gpaBase10: new Decimal(thongTinDiemHocKy.diemTrungBinh10TrongKy),
             cumulativeGpaBase4: new Decimal(thongTinTichLuy.diemTrungBinh4TichLuy),
@@ -1017,7 +1054,7 @@ export const calculateStudentSemesterResult = async (
             accumulatedCredits: thongTinTichLuy.tongTinChiDaTichLuy, // Số tín chỉ đã tích lũy
             totalCreditsByCurriculum: thongTinTichLuy.tongTinChiYeuCauDenThoiDiemHienTai, // Số tín chỉ yêu cầu theo CTDT
             totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ nợ tích lũy
-            rankId: thongTinTichLuy.rank?.id ?? null,
+            rankId: semesterRank?.id ?? null,
             foreignLangPass: student.foreignLangPass, // Đạt trình độ ngoại nsgữ theo quy định
             isClassMonitor: student.id === student.fixedClass?.classMonitorId,
             isUnionLeader: student.id === student.fixedClass?.unionLeaderId,
