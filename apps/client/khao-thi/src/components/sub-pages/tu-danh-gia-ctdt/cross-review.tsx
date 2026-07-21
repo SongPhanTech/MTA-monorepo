@@ -141,6 +141,8 @@ export default function CrossReviewSubPage({
       ])
 
       if (
+        Array.isArray(totalCriteria.data) &&
+        Array.isArray(submittedEvaluationCriterion.data) &&
         (totalCriteria.data[0] as number) > 0 &&
         totalCriteria.data[0] === submittedEvaluationCriterion.data[0]
       ) {

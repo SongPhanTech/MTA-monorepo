@@ -156,6 +156,10 @@ ifeq ($(NO_CACHE),1)
   DOCKER_BUILD_FLAGS := --no-cache
 endif
 
+# Expand leading ~ → $HOME for remote SSH (quoted "~" does not expand in bash).
+# Example: ~/mta-be → $HOME/mta-be
+remote_home = $(patsubst ~%,$$HOME%,$(1))
+
 help:
 	@echo "Available targets:"
 	@echo "  all-$(PKG_BE_MODEL)"
@@ -233,7 +237,9 @@ save-docker-images:
 # Server-side: remove old :latest tags so docker load always assigns tag to new image.
 _load-be-images-on-server:
 	$(SSH) $(SERVER_HOST) 'set -eu; \
-	cd "$(BE_DEPLOY_DIR)/docker-images"; \
+	img_dir="$(call remote_home,$(BE_DEPLOY_DIR))/docker-images"; \
+	mkdir -p "$$img_dir"; \
+	cd "$$img_dir"; \
 	for f in *.tar.gz; do \
 		[ -f "$$f" ] || continue; \
 		echo "Loading $$f..."; \
@@ -246,26 +252,30 @@ _load-be-images-on-server:
 
 _recreate-be-containers:
 	$(SSH) $(SERVER_HOST) 'set -eu; \
-	cd "$(BE_APP_DIR)"; \
+	cd "$(call remote_home,$(BE_APP_DIR))"; \
 	echo "Recreating BE containers..."; \
 	COMPOSE_PULL_POLICY=never docker compose up -d --force-recreate --no-build $(BE_CONTAINER_NAMES)'
 
 deploy-cdn:
 	$(SCP) -O cdn.zip $(SERVER_HOST):$(FE_APP_DIR)/
-	$(SSH) $(SERVER_HOST) "set -eu; cd $(FE_APP_DIR) && \
+	$(SSH) $(SERVER_HOST) 'set -eu; cd "$(call remote_home,$(FE_APP_DIR))" && \
 	rm -rf cong-hoc-vien-cdn/ dang-ky-hoc-cdn/ lms-cdn/ ems-cdn/ hrm-cdn/ chatbot-cdn/ cong-giang-vien-cdn/ && \
 	unzip -oq cdn.zip && \
 	mv cdn/* . && \
 	rmdir cdn 2>/dev/null || true && \
-	COMPOSE_PULL_POLICY=never docker compose -f $(FE_COMPOSE_FILE) up -d --force-recreate --no-build"
+	COMPOSE_PULL_POLICY=never docker compose -f $(FE_COMPOSE_FILE) up -d --force-recreate --no-build'
 
 deploy-all-be:
 	@rm -f docker-images.zip
 	@zip -r docker-images.zip docker-images
 	$(SCP) -O docker-images.zip $(SERVER_HOST):$(BE_DEPLOY_DIR)/
 	$(SSH) $(SERVER_HOST) 'set -eu; \
-	cd "$(BE_DEPLOY_DIR)" && unzip -oq docker-images.zip; \
-	cd "$(BE_APP_DIR)" && \
+	be_dir="$(call remote_home,$(BE_DEPLOY_DIR))"; \
+	app_dir="$(call remote_home,$(BE_APP_DIR))"; \
+	mkdir -p "$$be_dir" "$$app_dir"; \
+	cd "$$be_dir" && unzip -oq docker-images.zip; \
+	mkdir -p "$$be_dir/docker-images"; \
+	cd "$$app_dir" && \
 	echo "Stopping BE containers..." && \
 	docker compose stop $(BE_CONTAINER_NAMES) 2>/dev/null || true; \
 	docker rm -f $(BE_CONTAINER_NAMES) 2>/dev/null || true; \
@@ -296,16 +306,18 @@ deploy-%:
 	$(SCP) -O docker-images/$(IMG_PREFIX)$*.tar.gz $(SERVER_HOST):$(BE_DEPLOY_DIR)/docker-images/
 	$(SSH) $(SERVER_HOST) 'set -eu; \
 	svc="$(IMG_PREFIX)$*"; img="$(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG)"; \
-	cd "$(BE_APP_DIR)" && \
+	app_dir="$(call remote_home,$(BE_APP_DIR))"; \
+	img_file="$(call remote_home,$(BE_DEPLOY_DIR))/docker-images/$(IMG_PREFIX)$*.tar.gz"; \
+	cd "$$app_dir" && \
 	echo "Stopping $$svc..." && \
 	docker compose stop "$$svc" 2>/dev/null || true; \
 	docker rm -f "$$svc" 2>/dev/null || true; \
 	echo "Removing old tag $$img..." && \
 	docker rmi "$$img" 2>/dev/null || true; \
 	echo "Loading new image..." && \
-	docker load -i "$(BE_DEPLOY_DIR)/docker-images/$(IMG_PREFIX)$*.tar.gz"; \
+	docker load -i "$$img_file"; \
 	docker image inspect "$$img" --format "Loaded {{.Id}}"; \
-	cd "$(BE_APP_DIR)" && \
+	cd "$$app_dir" && \
 	COMPOSE_PULL_POLICY=never docker compose up -d --force-recreate --no-build "$$svc"'
 
 
@@ -350,12 +362,12 @@ _deploy-fe:
 	@echo "Deploying FE package $(PACKAGE) -> cdn:$(CDN_NAME), router:$(ROUTER_NAME)"
 	cd apps/client/$(PACKAGE) && \
 	$(SCP) $(CDN_NAME).zip $(SERVER_HOST):$(FE_APP_DIR)/ && \
-	$(SSH) $(SERVER_HOST) "set -eu; cd $(FE_APP_DIR) && \
+	$(SSH) $(SERVER_HOST) 'set -eu; cd "$(call remote_home,$(FE_APP_DIR))" && \
 		docker compose -f $(FE_COMPOSE_FILE) stop mta-$(CDN_NAME) router-$(ROUTER_NAME)-api 2>/dev/null || true; \
 		docker compose -f $(FE_COMPOSE_FILE) rm -sf mta-$(CDN_NAME) router-$(ROUTER_NAME)-api 2>/dev/null || true; \
 		rm -rf $(CDN_NAME) && \
 		unzip -oq $(CDN_NAME).zip && \
-		COMPOSE_PULL_POLICY=never docker compose -f $(FE_COMPOSE_FILE) up -d --force-recreate --no-build mta-$(CDN_NAME) router-$(ROUTER_NAME)-api"
+		COMPOSE_PULL_POLICY=never docker compose -f $(FE_COMPOSE_FILE) up -d --force-recreate --no-build mta-$(CDN_NAME) router-$(ROUTER_NAME)-api'
 
 _package-fe-cdn-copy:
 	$(eval CDN_NAME := $(CDN_NAME_$(PACKAGE)))

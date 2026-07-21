@@ -9020,11 +9020,11 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Users/minhah/code/MTA-monorepo/packages/database/logical-1784630834944.prisma",
+    "sourceFilePath": "/Users/minhah/code/MTA-monorepo/packages/database/logical-1784657574203.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../..",

@@ -443,6 +443,15 @@ const ThemTaiLieu = () => {
               extension: file.file.name.split(".").pop() || "",
             })
 
+            if (
+              !resPresignedUrl ||
+              typeof resPresignedUrl !== "object" ||
+              !("fileName" in resPresignedUrl) ||
+              !("url" in resPresignedUrl)
+            ) {
+              throw new Error("Không lấy được URL upload")
+            }
+
             // Lưu lại MinIO path để sử dụng sau
             const minioPath = resPresignedUrl.fileName
 

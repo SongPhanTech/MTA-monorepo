@@ -160,10 +160,14 @@ export default function CrossReviewNoCouncilSubPage({
         },
       ])
 
-      if (
-        (totalCriteria.data[0] as number) > 0 &&
-        totalCriteria.data[0] === submittedEvaluationCriterion.data[0]
-      ) {
+      const totalCount = Array.isArray(totalCriteria.data)
+        ? (totalCriteria.data[0] as number)
+        : 0
+      const submittedCount = Array.isArray(submittedEvaluationCriterion.data)
+        ? (submittedEvaluationCriterion.data[0] as number)
+        : 0
+
+      if (totalCount > 0 && totalCount === submittedCount) {
         await updateEvaluationPeriod({
           where: {
             id: selectedEvaluationPeriodId,
