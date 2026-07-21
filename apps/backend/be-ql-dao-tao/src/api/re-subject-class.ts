@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
-import { $Enums, Prisma } from "@workspace/db"
+import { $Enums, Prisma, Prisma as PrismaNamespace } from "@workspace/db"
 import { prisma } from ".."
 import {
   DataListResponseSchema,
@@ -288,8 +288,26 @@ app.openapi(openSubjectClassRetake, async (c) => {
   })
   const subjectAlreadyInPlan =
     planTraining?.planTrainingSubjects?.map((e) => e.trainingBlockSubjectId) || []
-  const res = await prisma.$queryRaw`
-        with mon_no as (select sv.id,
+  const conditions = [
+    PrismaNamespace.sql`TBS."subjectId" = sv.id`,
+  ]
+  if (trainingObjectTypeId) {
+    conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
+  }
+  if (trainingCourseId) {
+    conditions.push(PrismaNamespace.sql`TC.id = ${trainingCourseId}`)
+  }
+  if (typeof viewAll !== 'undefined' && viewAll === 0 && subjectAlreadyInPlan.length) {
+    conditions.push(PrismaNamespace.sql`TBS.id not in (${PrismaNamespace.join(subjectAlreadyInPlan)})`)
+  }
+  if (trainingMajorId) {
+    conditions.push(PrismaNamespace.sql`C."trainingMajorId" = ${trainingMajorId}`)
+  }
+  if (search) {
+    conditions.push(PrismaNamespace.sql`(sv.code ILIKE ${`%${search}%`} OR sv.name ILIKE ${`%${search}%`})`)
+  }
+  const whereClause = PrismaNamespace.join(conditions, " and ")
+  const res = await prisma.$queryRaw`\n        with mon_no as (select sv.id,
                                sv.code,
                                sv.name,
                                sv."trainingObjectTypeId",
@@ -333,7 +351,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        where TBS."subjectId" = sv.id and TBS.id not in (${viewAll === 0 && subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : "0"}))
+                        where ${whereClause})
         select id, code, name, trainingBlockSubjectId as "trainingBlockSubjectId", count("studentId") ::INTEGER as count
         from mon_no
         where rn = 1
@@ -347,19 +365,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
           -- only exclude on first attempt: if they already did a ReExam but still fail → belongs in Retake
           and not ("isRetakeExam" = true and attempt_count = 1 and first_attempt_exam_banned = false
                    and truot_mon = true and cam_thi = false and dinh_chi = false)
-          and (${trainingObjectTypeId}::TEXT IS NULL
-            OR "trainingObjectTypeId" = ${trainingObjectTypeId}
-            )
-          and (${trainingMajorId}::TEXT IS NULL
-            OR "trainingMajorId" = ${trainingMajorId}
-            )
-          and (${trainingCourseId}::TEXT IS NULL
-            OR trainingCourseId = ${trainingCourseId}
-            )
-          and (${search}::TEXT IS NULL
-            OR code ILIKE ${`%${search}%`}
-            OR name ILIKE ${`%${search}%`}
-            )
+          
         group by id, code, name, trainingBlockSubjectId
         order by code
         limit ${limit} offset ${limit} * (${page} - 1)
@@ -409,7 +415,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        where TBS."subjectId" = sv.id and TBS.id not in (${viewAll === 0 && subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : "0"}))
+                        where ${whereClause})
         select count(DISTINCT id) ::INTEGER as count
         from mon_no
         where rn = 1
@@ -423,19 +429,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
           -- only exclude on first attempt: if they already did a ReExam but still fail → belongs in Retake
           and not ("isRetakeExam" = true and attempt_count = 1 and first_attempt_exam_banned = false
                    and truot_mon = true and cam_thi = false and dinh_chi = false)
-          and (${trainingObjectTypeId}::TEXT IS NULL
-            OR "trainingObjectTypeId" = ${trainingObjectTypeId}
-            )
-          and (${trainingMajorId}::TEXT IS NULL
-            OR "trainingMajorId" = ${trainingMajorId}
-            )
-          and (${trainingCourseId}::TEXT IS NULL
-            OR trainingCourseId = ${trainingCourseId}
-            )
-          and (${search}::TEXT IS NULL
-            OR code ILIKE ${`%${search}%`}
-            OR name ILIKE ${`%${search}%`}
-            )
+          
     `
   return c.json({ data: res, count: countRaw[0]?.count }, 200)
 })
@@ -480,6 +474,25 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
     attempt_count: number
   }[]
 
+  const conditions = [
+    PrismaNamespace.sql`TBS."subjectId" = sv.id`,
+  ]
+  if (trainingObjectTypeId) {
+    conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
+  }
+  if (trainingCourseId) {
+    conditions.push(PrismaNamespace.sql`TC.id = ${trainingCourseId}`)
+  }
+  if (fixedClassId) {
+    conditions.push(PrismaNamespace.sql`FC.id = ${fixedClassId}`)
+  }
+  if (search) {
+    conditions.push(PrismaNamespace.sql`(S.code ILIKE ${`%${search}%`} OR "UP"."fullname" ILIKE ${`%${search}%`})`)
+  }
+  if (subjectVersionId) {
+    conditions.push(PrismaNamespace.sql`sv.id = ${subjectVersionId}`)
+  }
+  const whereClause = PrismaNamespace.join(conditions, " and ")
   const res = await prisma.$queryRaw<Result>`
         with mon_no as (select sv.id,
                                S.code,
@@ -535,7 +548,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        where TBS."subjectId" = sv.id)
+                        where ${whereClause})
         select "studentId",
                thuong_xuyen,
                dinh_ky,
@@ -562,24 +575,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
           -- only exclude on first attempt: if they already did a ReExam but still fail → belongs in Retake
           and not ("isRetakeExam" = true and attempt_count = 1 and first_attempt_exam_banned = false
                    and truot_mon = true and cam_thi = false and dinh_chi = false)
-          and (
-            ${trainingObjectTypeId}::TEXT IS NULL
-                OR "trainingObjectTypeId" = ${trainingObjectTypeId}
-            )
-          and (
-            ${trainingCourseId}::TEXT IS NULL
-                OR trainingCourseId = ${trainingCourseId}
-            )
-          and (
-            ${fixedClassId}::TEXT IS NULL
-                OR fixedClassId = ${fixedClassId}
-            )
-          and (
-            ${search}::TEXT IS NULL
-                OR code ILIKE ${`%${search}%`}
-                OR "fullname" ILIKE ${`%${search}%`}
-            )
-          and id = ${subjectVersionId}
+          
         limit ${pageSize} offset ${pageSize} * (${page} - 1)
     `
 
@@ -712,6 +708,25 @@ app.openapi(openSubjectClassReExam, async (c) => {
   })
   const subjectAlreadyInPlan =
     planTraining?.planTrainingSubjects?.map((e) => e.trainingBlockSubjectId) || []
+  const conditions = [
+    PrismaNamespace.sql`TBS."subjectId" = sv.id`,
+  ]
+  if (trainingObjectTypeId) {
+    conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
+  }
+  if (trainingCourseId) {
+    conditions.push(PrismaNamespace.sql`TC.id = ${trainingCourseId}`)
+  }
+  if (typeof viewAll !== 'undefined' && viewAll === 0 && subjectAlreadyInPlan.length) {
+    conditions.push(PrismaNamespace.sql`TBS.id not in (${PrismaNamespace.join(subjectAlreadyInPlan)})`)
+  }
+  if (trainingMajorId) {
+    conditions.push(PrismaNamespace.sql`C."trainingMajorId" = ${trainingMajorId}`)
+  }
+  if (search) {
+    conditions.push(PrismaNamespace.sql`(sv.code ILIKE ${`%${search}%`} OR sv.name ILIKE ${`%${search}%`})`)
+  }
+  const whereClause = PrismaNamespace.join(conditions, " and ")
   const res = await prisma.$queryRaw`
         with mon_no as (select sv.id,
                                sv.code,
@@ -753,7 +768,7 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        where TBS."subjectId" = sv.id and TBS.id not in (${viewAll === 0 && subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : "0"}))
+                        where ${whereClause})
         select id, code, name, trainingBlockSubjectId as "trainingBlockSubjectId", count("studentId") ::INTEGER as count
         from mon_no
         where rn = 1
@@ -763,19 +778,7 @@ app.openapi(openSubjectClassReExam, async (c) => {
           and attempt_count = 1      -- only first attempt: if they failed ReExam, they belong in Retake
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
-          and (${trainingObjectTypeId}::TEXT IS NULL
-            OR "trainingObjectTypeId" = ${trainingObjectTypeId}
-            )
-          and (${trainingMajorId}::TEXT IS NULL
-            OR "trainingMajorId" = ${trainingMajorId}
-            )
-          and (${trainingCourseId}::TEXT IS NULL
-            OR trainingCourseId = ${trainingCourseId}
-            )
-          and (${search}::TEXT IS NULL
-            OR code ILIKE ${`%${search}%`}
-            OR name ILIKE ${`%${search}%`}
-            )
+          
         group by id, code, name, trainingBlockSubjectId
         order by code
         limit ${limit} offset ${limit} * (${page} - 1)
@@ -819,7 +822,7 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        where TBS."subjectId" = sv.id and TBS.id not in (${viewAll === 0 && subjectAlreadyInPlan.length ? Prisma.join(subjectAlreadyInPlan) : "0"}))
+                        where ${whereClause})
         select count(DISTINCT id) ::INTEGER as count
         from mon_no
         where rn = 1
@@ -829,19 +832,7 @@ app.openapi(openSubjectClassReExam, async (c) => {
           and attempt_count = 1      -- only first attempt: if they failed ReExam, they belong in Retake
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
-          and (${trainingObjectTypeId}::TEXT IS NULL
-            OR "trainingObjectTypeId" = ${trainingObjectTypeId}
-            )
-          and (${trainingMajorId}::TEXT IS NULL
-            OR "trainingMajorId" = ${trainingMajorId}
-            )
-          and (${trainingCourseId}::TEXT IS NULL
-            OR trainingCourseId = ${trainingCourseId}
-            )
-          and (${search}::TEXT IS NULL
-            OR code ILIKE ${`%${search}%`}
-            OR name ILIKE ${`%${search}%`}
-            )
+          
     `
   return c.json({ data: res || [], count: countRaw[0]?.count || 0 }, 200)
 })
@@ -873,6 +864,25 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
     truot_mon: boolean
   }[]
 
+  const conditions = [
+    PrismaNamespace.sql`TBS."subjectId" = sv.id`,
+  ]
+  if (trainingObjectTypeId) {
+    conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
+  }
+  if (trainingCourseId) {
+    conditions.push(PrismaNamespace.sql`TC.id = ${trainingCourseId}`)
+  }
+  if (fixedClassId) {
+    conditions.push(PrismaNamespace.sql`FC.id = ${fixedClassId}`)
+  }
+  if (search) {
+    conditions.push(PrismaNamespace.sql`(S.code ILIKE ${`%${search}%`} OR "UP"."fullname" ILIKE ${`%${search}%`})`)
+  }
+  if (subjectVersionId) {
+    conditions.push(PrismaNamespace.sql`sv.id = ${subjectVersionId}`)
+  }
+  const whereClause = PrismaNamespace.join(conditions, " and ")
   const res = await prisma.$queryRaw<Result>`
         with mon_no as (select sv.id,
                                S.code,
@@ -920,7 +930,7 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        where TBS."subjectId" = sv.id)
+                        where ${whereClause})
         select "studentId",
                diem_cuoi,
                withdrew,
@@ -940,24 +950,7 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
           and attempt_count = 1      -- only first attempt: if they failed ReExam, they belong in Retake
           and withdrew = false -- rút khỏi lớp
           and mien_thi = false -- miễn học
-          and (
-            ${trainingObjectTypeId}::TEXT IS NULL
-                OR "trainingObjectTypeId" = ${trainingObjectTypeId}
-            )
-          and (
-            ${trainingCourseId}::TEXT IS NULL
-                OR trainingCourseId = ${trainingCourseId}
-            )
-          and (
-            ${fixedClassId}::TEXT IS NULL
-                OR fixedClassId = ${fixedClassId}
-            )
-          and (
-            ${search}::TEXT IS NULL
-                OR code ILIKE ${`%${search}%`}
-                OR "fullname" ILIKE ${`%${search}%`}
-            )
-          and id = ${subjectVersionId}
+          
         limit ${pageSize} offset ${pageSize} * (${page} - 1)
     `
 

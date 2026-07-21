@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
-import { AcademicActionType, StudentStatus } from "@workspace/db"
+import { AcademicActionType, StudentStatus, Prisma as PrismaNamespace } from "@workspace/db"
 import { getTemplateBuffer } from "@workspace/libs/server"
 import dayjs from "dayjs"
 import XlsxTemplate from "xlsx-template"
@@ -687,84 +687,108 @@ app.openapi(debtStatistics, async (c) => {
     examBannedReason: string | null
   }[]
 
-  const res = await prisma.$queryRaw<Result>`
-                    select
-                        SSS."studentId",
-                        S."code" as "studentCode",
-                        "UP"."fullname" as "fullname",
-                        "UP"."dateOfBirth" as "dateOfBirth",
-                        FC.code as "fixedClassCode",
-                        sv.code as "subjectCode",
-                        sv.name as "subjectName",
-                        sv.credit as "subjectCredit",
-                        SEM.code as "semesterCode",
-                        SSS."finalScore" as "finalScore",
-                        SSS."examBanned" as "examBanned",
-                        SSS."examBannedReason" as "examBannedReason"
-                    from "ql-dao-tao"."StudentSubjectScore" as SSS
-                        inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
-                        inner join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
-                        inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
-                        inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                        inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
-                        inner join "ql-dao-tao"."Semester" SEM on SEM.id = SC."semesterId"
-                        inner join "ql-dao-tao"."SubjectVersion" sv on sv.id = SSS."subjectVersionId"
-                        inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
-                        inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV on CV.id = TBOCV."curriculumVersionId"
-                        inner join "ql-dao-tao"."TrainingBlockSubject" TBS on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId" and TBS."subjectId" = sv.id
-                    where
-                        SC.cancelled = false and
-                        SEM."endDate" <= ${date} and
-                        (
-                            SSS."finalScore" is null or
-                            (TBS.graduation = true and SSS."finalScore" < TC."scoreToPassGraduation") or
-                            (TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
-                            (TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
-                            SSS."examBanned" = true or
-                            SSS.suspended = true
-                        )
-                        and SSS.withdrew = false
-                        and SSS.exempted = false
-                        and SSS."examPostponed" = false
-                        and (
-                            ${trainingObjectTypeId}::TEXT IS NULL
-                            OR sv."trainingObjectTypeId" = ${trainingObjectTypeId}
-                        )
-                        and (
-                            ${trainingCourseId}::TEXT IS NULL
-                            OR TC.id = ${trainingCourseId}
-                        )
-                        and not exists (
-                            select 1
-                            from "ql-dao-tao"."StudentSubjectScore" as SSS_pass
-                                inner join "ql-dao-tao"."Student" S_pass on S_pass.id = SSS_pass."studentId"
-                                inner join "ql-dao-tao"."SubjectVersion" sv_pass on sv_pass.id = SSS_pass."subjectVersionId"
-                                inner join "ql-dao-tao"."FixedClass" FC_pass on FC_pass.id = S_pass."fixedClassId"
-                                inner join "ql-dao-tao"."TrainingCourse" TC_pass on TC_pass.id = FC_pass."trainingCourseId"
-                                inner join "ql-dao-tao"."CurriculumVersion" CV_pass on CV_pass.id = S_pass."curriculumVersionId"
-                                inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV_pass on CV_pass.id = TBOCV_pass."curriculumVersionId"
-                                inner join "ql-dao-tao"."TrainingBlockSubject" TBS_pass on TBOCV_pass.id = TBS_pass."trainingBlockOnCurriculumVersionId" and TBS_pass."subjectId" = sv_pass.id
-                            where
-                                SSS_pass."studentId" = SSS."studentId" and sv_pass.id = sv.id
-                                and SSS_pass.withdrew = false
-                                and SSS_pass.exempted = false
-                                and SSS_pass."examPostponed" = false
-                                and SSS_pass."examBanned" = false
-                                and SSS_pass.suspended = false
-                                and (
-                                    (TBS_pass.graduation = true and SSS_pass."finalScore" >= TC_pass."scoreToPassGraduation" or SSS_pass."manualFinalScore" >= TC_pass."scoreToPassGraduation") or
-                                    (TBS_pass."useForFinalScore" = true and SSS_pass."finalScore" >= TC_pass."scoreToPass" or SSS_pass."manualFinalScore" >= TC_pass."scoreToPass") or
-                                    (TBS_pass."useForFinalScore" = false and SSS_pass."finalScore" >= TC_pass."scoreToPassConditional" or SSS_pass."manualFinalScore" >= TC_pass."scoreToPassConditional")
-                                )
-                        )
-                    order by SSS."studentId", sv.id
-                    `
+  const trainingCourses = await prisma.trainingCourse.findMany()
+  const coursesMap = Object.fromEntries(trainingCourses.map((c) => [c.id, c]))
+
+  const tbSubjects = await prisma.trainingBlockSubject.findMany({
+    select: {
+      subjectId: true,
+      graduation: true,
+      useForFinalScore: true,
+      trainingBlockOnCurriculumVersion: {
+        select: {
+          curriculumVersionId: true,
+        },
+      },
+    },
+  })
+
+  const tbsMap: Record<string, Record<string, typeof tbSubjects[0]>> = {}
+  for (const tbs of tbSubjects) {
+    const cvId = tbs.trainingBlockOnCurriculumVersion.curriculumVersionId
+    if (!tbsMap[cvId]) tbsMap[cvId] = {}
+    tbsMap[cvId][tbs.subjectId] = tbs
+  }
+
+  const scores = await prisma.studentSubjectScore.findMany({
+    where: {
+      withdrew: false,
+      exempted: false,
+      examPostponed: false,
+      subjectVersion: {
+        trainingObjectTypeId,
+      },
+      student: trainingCourseId
+        ? {
+            fixedClass: {
+              trainingCourseId,
+            },
+          }
+        : undefined,
+    },
+    select: {
+      studentId: true,
+      finalScore: true,
+      manualFinalScore: true,
+      examBanned: true,
+      examBannedReason: true,
+      suspended: true,
+      subjectVersionId: true,
+      subjectClass: {
+        select: {
+          cancelled: true,
+          semester: {
+            select: {
+              code: true,
+              endDate: true,
+            },
+          },
+        },
+      },
+      subjectVersion: {
+        select: {
+          code: true,
+          name: true,
+          credit: true,
+        },
+      },
+      student: {
+        select: {
+          code: true,
+          curriculumVersionId: true,
+          userProfile: {
+            select: {
+              fullname: true,
+              dateOfBirth: true,
+            },
+          },
+          fixedClass: {
+            select: {
+              code: true,
+              trainingCourseId: true,
+            },
+          },
+        },
+      },
+    },
+    orderBy: [
+      { studentId: "asc" },
+      { subjectVersionId: "asc" },
+      { subjectClass: { semester: { endDate: "asc" } } },
+    ],
+  })
 
   type SubjectAttempt = {
     semesterCode: string
+    semesterEndDate: Date | null
     finalScore: number | null
+    manualFinalScore: number | null
     examBanned: boolean
     examBannedReason: string | null
+    suspended: boolean
+    cancelled: boolean
+    isPassed: boolean
+    isFailed: boolean
   }
 
   type DebtSubject = {
@@ -772,72 +796,132 @@ app.openapi(debtStatistics, async (c) => {
     subjectName: string
     subjectCredit: number
     attempts: SubjectAttempt[]
+    hasPassed: boolean
+    hasFailed: boolean
   }
 
   type StudentDebtSummary = {
     studentId: string
     studentCode: string
     fullname: string
-    dateOfBirth: string
+    dateOfBirth: string | null
     fixedClassCode: string
     subjects: Record<string, DebtSubject>
   }
 
-  const studentDebtMap = res.reduce(
-    (acc, record) => {
-      const {
+  const studentDebtMap: Record<string, StudentDebtSummary> = {}
+
+  for (const score of scores) {
+    const studentId = score.studentId
+    const subjectId = score.subjectVersionId
+    const cvId = score.student.curriculumVersionId
+    const courseId = score.student.fixedClass?.trainingCourseId
+
+    if (!courseId) continue
+    const tc = coursesMap[courseId]
+    const tbs = tbsMap[cvId]?.[subjectId]
+
+    if (!tc || !tbs) continue
+
+    const finalScore = score.finalScore ? Number(score.finalScore) : null
+    const manualFinalScore = score.manualFinalScore
+
+    let isPassed = false
+    if (!score.examBanned && !score.suspended) {
+      if (tbs.graduation) {
+        isPassed =
+          (finalScore !== null && finalScore >= tc.scoreToPassGraduation) ||
+          (manualFinalScore !== null && manualFinalScore >= tc.scoreToPassGraduation)
+      } else if (tbs.useForFinalScore) {
+        isPassed =
+          (finalScore !== null && finalScore >= tc.scoreToPass) ||
+          (manualFinalScore !== null && manualFinalScore >= tc.scoreToPass)
+      } else {
+        isPassed =
+          (finalScore !== null && finalScore >= tc.scoreToPassConditional) ||
+          (manualFinalScore !== null && manualFinalScore >= tc.scoreToPassConditional)
+      }
+    }
+
+    const endDate = score.subjectClass?.semester?.endDate
+    const isBeforeOrOnDate = !endDate || endDate <= date
+    const cancelled = score.subjectClass?.cancelled ?? false
+
+    let isFailed = false
+    if (!cancelled && isBeforeOrOnDate) {
+      if (score.examBanned || score.suspended) {
+        isFailed = true
+      } else {
+        if (tbs.graduation) {
+          isFailed =
+            (finalScore === null || finalScore < tc.scoreToPassGraduation) &&
+            (manualFinalScore === null || manualFinalScore < tc.scoreToPassGraduation)
+        } else if (tbs.useForFinalScore) {
+          isFailed =
+            (finalScore === null || finalScore < tc.scoreToPass) &&
+            (manualFinalScore === null || manualFinalScore < tc.scoreToPass)
+        } else {
+          isFailed =
+            (finalScore === null || finalScore < tc.scoreToPassConditional) &&
+            (manualFinalScore === null || manualFinalScore < tc.scoreToPassConditional)
+        }
+      }
+    }
+
+    if (!studentDebtMap[studentId]) {
+      studentDebtMap[studentId] = {
         studentId,
-        studentCode,
-        fullname,
-        dateOfBirth,
-        fixedClassCode,
-        subjectCode,
-        subjectName,
-        subjectCredit,
-        semesterCode,
-        finalScore,
-        examBanned,
-        examBannedReason,
-      } = record
-
-      if (!acc[studentId]) {
-        acc[studentId] = {
-          studentId,
-          studentCode,
-          fullname,
-          dateOfBirth,
-          fixedClassCode,
-          subjects: {},
-        }
+        studentCode: score.student.code || "",
+        fullname: score.student.userProfile?.fullname || "",
+        dateOfBirth: score.student.userProfile?.dateOfBirth
+          ? score.student.userProfile.dateOfBirth.toISOString()
+          : null,
+        fixedClassCode: score.student.fixedClass?.code || "",
+        subjects: {},
       }
+    }
 
-      if (!acc[studentId].subjects[subjectCode]) {
-        acc[studentId].subjects[subjectCode] = {
-          subjectCode,
-          subjectName,
-          subjectCredit,
-          attempts: [],
-        }
+    if (!studentDebtMap[studentId].subjects[subjectId]) {
+      studentDebtMap[studentId].subjects[subjectId] = {
+        subjectCode: score.subjectVersion.code || "",
+        subjectName: score.subjectVersion.name || "",
+        subjectCredit: score.subjectVersion.credit,
+        attempts: [],
+        hasPassed: false,
+        hasFailed: false,
       }
+    }
 
-      acc[studentId].subjects[subjectCode].attempts.push({
-        semesterCode,
+    const subj = studentDebtMap[studentId].subjects[subjectId]
+    if (isPassed) subj.hasPassed = true
+
+    if (isFailed) {
+      subj.hasFailed = true
+      subj.attempts.push({
+        semesterCode: score.subjectClass?.semester?.code || "",
+        semesterEndDate: endDate || null,
         finalScore,
-        examBanned,
-        examBannedReason,
+        manualFinalScore,
+        examBanned: score.examBanned,
+        examBannedReason: score.examBannedReason,
+        suspended: score.suspended,
+        cancelled,
+        isPassed,
+        isFailed,
       })
-
-      return acc
-    },
-    {} as Record<string, StudentDebtSummary>
-  )
+    }
+  }
 
   const rows = Object.values(studentDebtMap).flatMap((s) => {
-    const subjectsArray = Object.values(s.subjects)
-    const totalDebtSubject = subjectsArray.length
-    const totalDebtCredit = subjectsArray.reduce((sum, sub) => sum + sub.subjectCredit, 0)
+    const debtSubjects = Object.values(s.subjects).filter(
+      (sub) => sub.hasFailed && !sub.hasPassed
+    )
+    if (debtSubjects.length === 0) return []
 
-    return subjectsArray.map((subject) => {
+    const totalDebtSubject = debtSubjects.length
+    const totalDebtCredit = debtSubjects.reduce((sum, sub) => sum + sub.subjectCredit, 0)
+
+    return debtSubjects.map((subject) => {
       const lastAttempt = subject.attempts[subject.attempts.length - 1]
 
       let type = "THI LẠI"
