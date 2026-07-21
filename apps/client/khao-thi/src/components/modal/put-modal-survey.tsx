@@ -548,7 +548,7 @@ const PutSurveyModal = () => {
           ]
         : []),
       {
-        title: "Cấu hình sinh đề",
+        title: "Thông tin câu hỏi",
         content: (
           <ConfigSurveyExam
             surveyTopicId={surveyTopicId}
