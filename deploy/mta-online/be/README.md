@@ -41,7 +41,7 @@ make all-be-model SERVER_PROFILE=mta_online
 make all-be-portal SERVER_PROFILE=mta_online
 make all-be-ql-dao-tao-shared SERVER_PROFILE=mta_online
 ```
-Mỗi lệnh: build → scp tar.gz → `docker load` → tag `*:local-deploy` → `compose up` service đó.
+Mỗi lệnh: build → scp tar.gz → `docker load` → `compose up` service đó (image `ghcr.io/...:latest`).
 
 ### 4. Kiểm tra trên server
 ```bash

@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= swan1
+SERVER_PROFILE ?= app
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -235,54 +235,23 @@ deploy-all-be:
 	@rm -rf docker-images.zip
 	@zip -r docker-images.zip docker-images
 	$(SCP) -O docker-images.zip $(SERVER_HOST):$(BE_DEPLOY_DIR)
-	$(SSH) $(SERVER_HOST) "cd $(BE_DEPLOY_DIR) && \
+	$(SSH) $(SERVER_HOST) 'cd $(BE_DEPLOY_DIR) && \
 	unzip -o docker-images.zip && \
 	cd docker-images && ls *.tar.gz | xargs -I {} docker load -i {} && \
 	cd $(BE_APP_DIR) && \
 	docker rm -f mta-be-exchange mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared 2>/dev/null; \
-	for svc in mta-be-exchange mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared; do \
-	  docker tag $(REGISTRY)/$$svc:$(DEV_TAG) $$svc:local-deploy 2>/dev/null || true; \
-	done && \
-	printf '%s\n' \
-	  'services:' \
-	  '  mta-be-exchange:' \
-	  '    image: mta-be-exchange:local-deploy' \
-	  '    pull_policy: never' \
-	  '  mta-be-khao-thi:' \
-	  '    image: mta-be-khao-thi:local-deploy' \
-	  '    pull_policy: never' \
-	  '  mta-be-model:' \
-	  '    image: mta-be-model:local-deploy' \
-	  '    pull_policy: never' \
-	  '  mta-be-portal:' \
-	  '    image: mta-be-portal:local-deploy' \
-	  '    pull_policy: never' \
-	  '  mta-be-ql-dao-tao:' \
-	  '    image: mta-be-ql-dao-tao:local-deploy' \
-	  '    pull_policy: never' \
-	  '  mta-be-ql-dao-tao-shared:' \
-	  '    image: mta-be-ql-dao-tao-shared:local-deploy' \
-	  '    pull_policy: never' \
-	  > /tmp/mta-pull-never.override.yml && \
-	COMPOSE_PULL_POLICY=never docker compose -f docker-compose.yml -f /tmp/mta-pull-never.override.yml up -d"
+	COMPOSE_PULL_POLICY=never docker compose up -d'
 
 deploy-%:
 	@mkdir -p docker-images
 	$(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$*.tar.gz
 	$(SSH) $(SERVER_HOST) "mkdir -p $(BE_DEPLOY_DIR)/docker-images"
 	$(SCP) docker-images/$(IMG_PREFIX)$*.tar.gz $(SERVER_HOST):$(BE_DEPLOY_DIR)/docker-images/
-	$(SSH) $(SERVER_HOST) "cd $(BE_DEPLOY_DIR) && \
+	$(SSH) $(SERVER_HOST) 'cd $(BE_DEPLOY_DIR) && \
 	docker load -i docker-images/$(IMG_PREFIX)$*.tar.gz && \
-	docker tag $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG) $(IMG_PREFIX)$*:local-deploy && \
 	docker rm -f $(IMG_PREFIX)$* 2>/dev/null; \
 	cd $(BE_APP_DIR) && \
-	printf '%s\n' \
-	  'services:' \
-	  '  $(IMG_PREFIX)$*:' \
-	  '    image: $(IMG_PREFIX)$*:local-deploy' \
-	  '    pull_policy: never' \
-	  > /tmp/mta-pull-never-$*.override.yml && \
-	COMPOSE_PULL_POLICY=never docker compose -f docker-compose.yml -f /tmp/mta-pull-never-$*.override.yml up $(IMG_PREFIX)$* -d"
+	COMPOSE_PULL_POLICY=never docker compose up $(IMG_PREFIX)$* -d'
 
 
 # Pattern rule: all-<name> = build + deploy
@@ -328,7 +297,7 @@ _deploy-fe:
 		docker compose -f $(FE_COMPOSE_FILE) rm -sf mta-$(CDN_NAME) router-$(ROUTER_NAME)-api && \
 		rm -rf $(CDN_NAME) && \
 		unzip -o $(CDN_NAME).zip && \
-		docker compose -f $(FE_COMPOSE_FILE) up mta-$(CDN_NAME) router-$(ROUTER_NAME)-api -d"
+		COMPOSE_PULL_POLICY=never docker compose -f $(FE_COMPOSE_FILE) up mta-$(CDN_NAME) router-$(ROUTER_NAME)-api -d"
 
 _package-fe-cdn-copy:
 	$(eval CDN_NAME := $(CDN_NAME_$(PACKAGE)))
