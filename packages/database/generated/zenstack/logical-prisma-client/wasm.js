@@ -3971,7 +3971,8 @@ exports.Prisma.EvaluationPeriodScalarFieldEnum = {
   overviewProblem: 'overviewProblem',
   overviewGeneral: 'overviewGeneral',
   overviewResults: 'overviewResults',
-  conclude: 'conclude'
+  conclude: 'conclude',
+  evidenceCategoryIds: 'evidenceCategoryIds'
 };
 
 exports.Prisma.EvaluationStandardSetScalarFieldEnum = {
@@ -7470,7 +7471,8 @@ exports.Prisma.EvaluationPeriodOrderByRelevanceFieldEnum = {
   overviewProblem: 'overviewProblem',
   overviewGeneral: 'overviewGeneral',
   overviewResults: 'overviewResults',
-  conclude: 'conclude'
+  conclude: 'conclude',
+  evidenceCategoryIds: 'evidenceCategoryIds'
 };
 
 exports.Prisma.EvaluationStandardSetOrderByRelevanceFieldEnum = {

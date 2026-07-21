@@ -23900,6 +23900,10 @@ const metadata = {
                     name: "conclude",
                     type: "String",
                     isOptional: true,
+                }, evidenceCategoryIds: {
+                    name: "evidenceCategoryIds",
+                    type: "String",
+                    isArray: true,
                 },
             }, uniqueConstraints: {
                 id: {

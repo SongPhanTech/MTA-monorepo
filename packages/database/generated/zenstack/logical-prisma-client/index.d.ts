@@ -10351,7 +10351,8 @@ export namespace Prisma {
         overviewProblem: 'overviewProblem',
         overviewGeneral: 'overviewGeneral',
         overviewResults: 'overviewResults',
-        conclude: 'conclude'
+        conclude: 'conclude',
+        evidenceCategoryIds: 'evidenceCategoryIds'
     };
     export const EvaluationStandardSetScalarFieldEnum: {
         id: 'id',
@@ -13564,7 +13565,8 @@ export namespace Prisma {
         overviewProblem: 'overviewProblem',
         overviewGeneral: 'overviewGeneral',
         overviewResults: 'overviewResults',
-        conclude: 'conclude'
+        conclude: 'conclude',
+        evidenceCategoryIds: 'evidenceCategoryIds'
     };
     export const EvaluationStandardSetOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -93674,6 +93676,7 @@ export namespace Prisma {
         readonly overviewGeneral: FieldRef<"EvaluationPeriod", 'String'>;
         readonly overviewResults: FieldRef<"EvaluationPeriod", 'String'>;
         readonly conclude: FieldRef<"EvaluationPeriod", 'String'>;
+        readonly evidenceCategoryIds: FieldRef<"EvaluationPeriod", 'String[]'>;
     }
 
     export interface EvaluationStandardSetDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -318743,6 +318746,7 @@ export namespace Prisma {
         overviewGeneral: number
         overviewResults: number
         conclude: number
+        evidenceCategoryIds: number
         _all: number
     };
     export type EvaluationPeriodMinAggregateInputType = {
@@ -318801,6 +318805,7 @@ export namespace Prisma {
         overviewGeneral?: true
         overviewResults?: true
         conclude?: true
+        evidenceCategoryIds?: true
         _all?: true
     };
     export type EvaluationPeriodAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -318887,6 +318892,7 @@ export namespace Prisma {
         overviewGeneral: string | null
         overviewResults: string | null
         conclude: string | null
+        evidenceCategoryIds: string[]
         _count: EvaluationPeriodCountAggregateOutputType | null
         _min: EvaluationPeriodMinAggregateOutputType | null
         _max: EvaluationPeriodMaxAggregateOutputType | null
@@ -318921,6 +318927,7 @@ export namespace Prisma {
         overviewGeneral?: boolean
         overviewResults?: boolean
         conclude?: boolean
+        evidenceCategoryIds?: boolean
         schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
         standards?: boolean | EvaluationPeriod$standardsArgs<ExtArgs>
         council?: boolean | EvaluationPeriod$councilArgs<ExtArgs>
@@ -318945,6 +318952,7 @@ export namespace Prisma {
         overviewGeneral?: boolean
         overviewResults?: boolean
         conclude?: boolean
+        evidenceCategoryIds?: boolean
         schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
     }, ExtArgs["result"]["evaluationPeriod"]>;
     export type EvaluationPeriodSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -318965,6 +318973,7 @@ export namespace Prisma {
         overviewGeneral?: boolean
         overviewResults?: boolean
         conclude?: boolean
+        evidenceCategoryIds?: boolean
         schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
     }, ExtArgs["result"]["evaluationPeriod"]>;
     export type EvaluationPeriodSelectScalar = {
@@ -318985,8 +318994,9 @@ export namespace Prisma {
         overviewGeneral?: boolean
         overviewResults?: boolean
         conclude?: boolean
+        evidenceCategoryIds?: boolean
     };
-    export type EvaluationPeriodOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "status" | "schoolYearId" | "overviewProblem" | "overviewGeneral" | "overviewResults" | "conclude", ExtArgs["result"]["evaluationPeriod"]>;
+    export type EvaluationPeriodOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "status" | "schoolYearId" | "overviewProblem" | "overviewGeneral" | "overviewResults" | "conclude" | "evidenceCategoryIds", ExtArgs["result"]["evaluationPeriod"]>;
     export type EvaluationPeriodInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
         standards?: boolean | EvaluationPeriod$standardsArgs<ExtArgs>
@@ -319026,6 +319036,7 @@ export namespace Prisma {
             overviewGeneral: string | null
             overviewResults: string | null
             conclude: string | null
+            evidenceCategoryIds: string[]
         }, ExtArgs["result"]["evaluationPeriod"]>
         composites: {}
     };
@@ -399857,6 +399868,7 @@ export namespace Prisma {
         overviewGeneral?: StringNullableFilter<"EvaluationPeriod"> | string | null
         overviewResults?: StringNullableFilter<"EvaluationPeriod"> | string | null
         conclude?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        evidenceCategoryIds?: StringNullableListFilter<"EvaluationPeriod">
         schoolYear?: XOR<SchoolYearNullableScalarRelationFilter, SchoolYearWhereInput> | null
         standards?: StandardPeriodListRelationFilter
         council?: XOR<EvaluationCouncilNullableScalarRelationFilter, EvaluationCouncilWhereInput> | null
@@ -399880,6 +399892,7 @@ export namespace Prisma {
         overviewGeneral?: SortOrderInput | SortOrder
         overviewResults?: SortOrderInput | SortOrder
         conclude?: SortOrderInput | SortOrder
+        evidenceCategoryIds?: SortOrder
         schoolYear?: SchoolYearOrderByWithRelationInput
         standards?: StandardPeriodOrderByRelationAggregateInput
         council?: EvaluationCouncilOrderByWithRelationInput
@@ -399907,6 +399920,7 @@ export namespace Prisma {
         overviewGeneral?: StringNullableFilter<"EvaluationPeriod"> | string | null
         overviewResults?: StringNullableFilter<"EvaluationPeriod"> | string | null
         conclude?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        evidenceCategoryIds?: StringNullableListFilter<"EvaluationPeriod">
         schoolYear?: XOR<SchoolYearNullableScalarRelationFilter, SchoolYearWhereInput> | null
         standards?: StandardPeriodListRelationFilter
         council?: XOR<EvaluationCouncilNullableScalarRelationFilter, EvaluationCouncilWhereInput> | null
@@ -399930,6 +399944,7 @@ export namespace Prisma {
         overviewGeneral?: SortOrderInput | SortOrder
         overviewResults?: SortOrderInput | SortOrder
         conclude?: SortOrderInput | SortOrder
+        evidenceCategoryIds?: SortOrder
         _count?: EvaluationPeriodCountOrderByAggregateInput
         _max?: EvaluationPeriodMaxOrderByAggregateInput
         _min?: EvaluationPeriodMinOrderByAggregateInput
@@ -399955,6 +399970,7 @@ export namespace Prisma {
         overviewGeneral?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
         overviewResults?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
         conclude?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
+        evidenceCategoryIds?: StringNullableListFilter<"EvaluationPeriod">
     };
     export type EvaluationStandardSetWhereInput = {
         AND?: EvaluationStandardSetWhereInput | EvaluationStandardSetWhereInput[]
@@ -433523,6 +433539,7 @@ export namespace Prisma {
         overviewGeneral?: string | null
         overviewResults?: string | null
         conclude?: string | null
+        evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
         schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
@@ -433546,6 +433563,7 @@ export namespace Prisma {
         overviewGeneral?: string | null
         overviewResults?: string | null
         conclude?: string | null
+        evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
@@ -433567,6 +433585,7 @@ export namespace Prisma {
         overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
         overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
         conclude?: NullableStringFieldUpdateOperationsInput | string | null
+        evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
         schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
@@ -433590,6 +433609,7 @@ export namespace Prisma {
         overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
         overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
         conclude?: NullableStringFieldUpdateOperationsInput | string | null
+        evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
@@ -433612,6 +433632,7 @@ export namespace Prisma {
         overviewGeneral?: string | null
         overviewResults?: string | null
         conclude?: string | null
+        evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
     };
     export type EvaluationPeriodUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -433630,6 +433651,7 @@ export namespace Prisma {
         overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
         overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
         conclude?: NullableStringFieldUpdateOperationsInput | string | null
+        evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
     };
     export type EvaluationPeriodUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -433649,6 +433671,7 @@ export namespace Prisma {
         overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
         overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
         conclude?: NullableStringFieldUpdateOperationsInput | string | null
+        evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
     };
     export type EvaluationStandardSetCreateInput = {
         id?: string
@@ -457484,6 +457507,7 @@ export namespace Prisma {
         overviewGeneral?: SortOrder
         overviewResults?: SortOrder
         conclude?: SortOrder
+        evidenceCategoryIds?: SortOrder
     };
     export type EvaluationPeriodMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -484016,6 +484040,9 @@ export namespace Prisma {
         connect?: NoteWhereUniqueInput
         update?: XOR<XOR<NoteUpdateToOneWithWhereWithoutRemindersInput, NoteUpdateWithoutRemindersInput>, NoteUncheckedUpdateWithoutRemindersInput>
     };
+    export type EvaluationPeriodCreateevidenceCategoryIdsInput = {
+        set: string[]
+    };
     export type SchoolYearCreateNestedOneWithoutEvaluationPeriodInput = {
         create?: XOR<SchoolYearCreateWithoutEvaluationPeriodInput, SchoolYearUncheckedCreateWithoutEvaluationPeriodInput>
         connectOrCreate?: SchoolYearCreateOrConnectWithoutEvaluationPeriodInput
@@ -484057,6 +484084,10 @@ export namespace Prisma {
     };
     export type EnumEvaluationPeriodStatusFieldUpdateOperationsInput = {
         set?: $Enums.EvaluationPeriodStatus
+    };
+    export type EvaluationPeriodUpdateevidenceCategoryIdsInput = {
+        set?: string[]
+        push?: string | string[]
     };
     export type SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput = {
         create?: XOR<SchoolYearCreateWithoutEvaluationPeriodInput, SchoolYearUncheckedCreateWithoutEvaluationPeriodInput>
@@ -547722,6 +547753,7 @@ export namespace Prisma {
         overviewGeneral?: string | null
         overviewResults?: string | null
         conclude?: string | null
+        evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
@@ -547743,6 +547775,7 @@ export namespace Prisma {
         overviewGeneral?: string | null
         overviewResults?: string | null
         conclude?: string | null
+        evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
@@ -548012,6 +548045,7 @@ export namespace Prisma {
         overviewGeneral?: StringNullableFilter<"EvaluationPeriod"> | string | null
         overviewResults?: StringNullableFilter<"EvaluationPeriod"> | string | null
         conclude?: StringNullableFilter<"EvaluationPeriod"> | string | null
+        evidenceCategoryIds?: StringNullableListFilter<"EvaluationPeriod">
     };
     export type SchoolYearTrainingScoreUpsertWithWhereUniqueWithoutSchoolYearInput = {
         where: SchoolYearTrainingScoreWhereUniqueInput
@@ -602034,6 +602068,7 @@ export namespace Prisma {
         overviewGeneral?: string | null
         overviewResults?: string | null
         conclude?: string | null
+        evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
         schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
@@ -602056,6 +602091,7 @@ export namespace Prisma {
         overviewGeneral?: string | null
         overviewResults?: string | null
         conclude?: string | null
+        evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
     };
@@ -603336,6 +603372,7 @@ export namespace Prisma {
         overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
         overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
         conclude?: NullableStringFieldUpdateOperationsInput | string | null
+        evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
         schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
@@ -603358,6 +603395,7 @@ export namespace Prisma {
         overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
         overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
         conclude?: NullableStringFieldUpdateOperationsInput | string | null
+        evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
     };
@@ -617548,6 +617586,7 @@ export namespace Prisma {
         overviewGeneral?: string | null
         overviewResults?: string | null
         conclude?: string | null
+        evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
         schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
         council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
@@ -617570,6 +617609,7 @@ export namespace Prisma {
         overviewGeneral?: string | null
         overviewResults?: string | null
         conclude?: string | null
+        evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
         council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
     };
@@ -617639,6 +617679,7 @@ export namespace Prisma {
         overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
         overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
         conclude?: NullableStringFieldUpdateOperationsInput | string | null
+        evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
         schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
@@ -617661,6 +617702,7 @@ export namespace Prisma {
         overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
         overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
         conclude?: NullableStringFieldUpdateOperationsInput | string | null
+        evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
     };
@@ -619098,6 +619140,7 @@ export namespace Prisma {
         overviewGeneral?: string | null
         overviewResults?: string | null
         conclude?: string | null
+        evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
         schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
         standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
         documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
@@ -619120,6 +619163,7 @@ export namespace Prisma {
         overviewGeneral?: string | null
         overviewResults?: string | null
         conclude?: string | null
+        evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
         standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
     };
@@ -619189,6 +619233,7 @@ export namespace Prisma {
         overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
         overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
         conclude?: NullableStringFieldUpdateOperationsInput | string | null
+        evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
         schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
@@ -619211,6 +619256,7 @@ export namespace Prisma {
         overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
         overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
         conclude?: NullableStringFieldUpdateOperationsInput | string | null
+        evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
     };
@@ -665160,6 +665206,7 @@ export namespace Prisma {
         overviewGeneral?: string | null
         overviewResults?: string | null
         conclude?: string | null
+        evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
     };
     export type SchoolYearTrainingScoreCreateManySchoolYearInput = {
         id?: string
@@ -665507,6 +665554,7 @@ export namespace Prisma {
         overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
         overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
         conclude?: NullableStringFieldUpdateOperationsInput | string | null
+        evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
         standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
@@ -665528,6 +665576,7 @@ export namespace Prisma {
         overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
         overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
         conclude?: NullableStringFieldUpdateOperationsInput | string | null
+        evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
         standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
         council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
@@ -665549,6 +665598,7 @@ export namespace Prisma {
         overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
         overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
         conclude?: NullableStringFieldUpdateOperationsInput | string | null
+        evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
     };
     export type SchoolYearTrainingScoreUpdateWithoutSchoolYearInput = {
         id?: StringFieldUpdateOperationsInput | string
