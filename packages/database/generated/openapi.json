@@ -22627,6 +22627,9 @@
           "name": {
             "type": "string"
           },
+          "objectType": {
+            "$ref": "#/components/schemas/StandardCatalogType"
+          },
           "evidences": {
             "type": "array",
             "items": {
@@ -22639,7 +22642,8 @@
           "active",
           "createdAt",
           "updatedAt",
-          "name"
+          "name",
+          "objectType"
         ]
       },
       "Evidence": {
@@ -57507,6 +57511,9 @@
           "name": {
             "type": "string"
           },
+          "objectType": {
+            "$ref": "#/components/schemas/StandardCatalogType"
+          },
           "_count": {
             "allOf": [
               {
@@ -57537,7 +57544,8 @@
           "active",
           "createdAt",
           "updatedAt",
-          "name"
+          "name",
+          "objectType"
         ]
       },
       "AggregateEvidence": {
@@ -116163,6 +116171,9 @@
           "name": {
             "type": "integer"
           },
+          "objectType": {
+            "type": "integer"
+          },
           "_all": {
             "type": "integer"
           }
@@ -116177,6 +116188,7 @@
           "updatedAt",
           "createdBy",
           "name",
+          "objectType",
           "_all"
         ]
       },
@@ -116221,6 +116233,14 @@
           "name": {
             "type": "string",
             "nullable": true
+          },
+          "objectType": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/StandardCatalogType"
+              }
+            ],
+            "nullable": true
           }
         }
       },
@@ -116264,6 +116284,14 @@
           },
           "name": {
             "type": "string",
+            "nullable": true
+          },
+          "objectType": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/StandardCatalogType"
+              }
+            ],
             "nullable": true
           }
         }

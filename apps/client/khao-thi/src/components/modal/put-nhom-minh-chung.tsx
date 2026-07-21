@@ -1,8 +1,11 @@
 import { queryClient } from "@api/index"
 import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
+import Select from "@components/commons/select"
+import { STANDARD_CATALOG_TYPE_OPTIONS } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import type { EvidenceCategory } from "@workspace/db"
+import { $Enums } from "@workspace/db/client"
 import {
   useCreateEvidenceCategory,
   useFindUniqueEvidenceCategory,
@@ -33,6 +36,7 @@ const PutEvidenceCategory = () => {
       const data = {
         name: output.name.trim(),
         code: output.code,
+        objectType: output.objectType,
       }
       if (id) {
         await updateEvidenceCategory({
@@ -49,7 +53,7 @@ const PutEvidenceCategory = () => {
         message.success("Thêm mới thành công")
       }
       queryClient.invalidateQueries({
-        queryKey: ["EvidenceCategory"],
+        queryKey: ["zenstack", "EvidenceCategory"],
       })
       onClose()
     } catch (error: any) {
@@ -76,8 +80,12 @@ const PutEvidenceCategory = () => {
   useEffect(() => {
     if (initialValue) {
       form.setFieldsValue({ ...initialValue })
+    } else if (isOpen) {
+      form.setFieldsValue({
+        objectType: $Enums.StandardCatalogType.PROGRAM,
+      })
     }
-  }, [initialValue])
+  }, [initialValue, isOpen])
 
   return (
     <PutFormModal
@@ -97,6 +105,15 @@ const PutEvidenceCategory = () => {
       <Col span={24}>
         <FormItem form={form} name="name" label="Tên nhóm minh chứng" required>
           <Input placeholder="Nhập tên nhóm minh chứng" />
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem form={form} name="objectType" label="Loại nhóm minh chứng" required>
+          <Select
+            allowClear={false}
+            placeholder="Chọn loại nhóm minh chứng"
+            options={STANDARD_CATALOG_TYPE_OPTIONS}
+          />
         </FormItem>
       </Col>
     </PutFormModal>

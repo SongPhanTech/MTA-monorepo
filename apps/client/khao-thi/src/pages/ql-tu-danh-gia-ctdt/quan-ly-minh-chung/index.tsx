@@ -1,4 +1,5 @@
 import { queryClient } from "@api/index"
+import Select from "@components/commons/select"
 import TableCollapse from "@components/commons/tableCollapse"
 import type { FilterProps } from "@components/commons/typeFilter"
 import CreateIcon from "@components/icons/create"
@@ -9,6 +10,7 @@ import EvaluateLayout from "@layouts/evaluate-layout"
 import { DownloadOutlined, EyeOutlined, PaperClipOutlined } from "@ant-design/icons"
 import { useDeleteEvidenceCategory, useFindManyEvidenceCategory } from "@workspace/db/hooks"
 import type { EvidenceFile } from "@workspace/db"
+import { $Enums } from "@workspace/db/client"
 import type { XemBangChungFilesInput } from "@components/modal/xem-bang-chung-files-modal"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { getMinioUrl, getRuntimeEnv } from "@workspace/libs/utils"
@@ -18,7 +20,7 @@ import { Button, Col, Flex, Input, message, Row, Tooltip } from "antd"
 import { BookPlus } from "lucide-react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-import { FILE_SHOW_LIMIT } from "@constants/constants"
+import { FILE_SHOW_LIMIT, STANDARD_CATALOG_TYPE_OPTIONS } from "@constants/constants"
 
 function FileItem({
   file,
@@ -77,6 +79,15 @@ export default function EvidenceCategory() {
     evidenceName: "",
     issuer: "",
   })
+  const [objectTypeFilter, setObjectTypeFilter] = useState<$Enums.StandardCatalogType>()
+
+  const categoryWhere = useMemo(
+    () => ({
+      deletedAt: null,
+      ...(objectTypeFilter ? { objectType: objectTypeFilter } : {}),
+    }),
+    [objectTypeFilter]
+  )
 
   const where = useMemo(
     () => ({
@@ -102,6 +113,7 @@ export default function EvidenceCategory() {
   )
 
   const { data } = useFindManyEvidenceCategory({
+    where: categoryWhere,
     include: {
       evidences: {
         where,
@@ -208,17 +220,27 @@ export default function EvidenceCategory() {
       <Row gutter={[16, 0]}>
         <Col span={24} className="mb-2">
           <Flex justify="space-between" align="center">
-            <Input
-              className="w-[27rem]"
-              placeholder="Nhập tên minh chứng,nơi ban hành"
-              allowClear
-              onChange={(e) =>
-                setFilters({
-                  ...filters,
-                  evidenceName: e.target.value,
-                })
-              }
-            />
+            <Flex gap={12}>
+              <Input
+                className="w-[27rem]"
+                placeholder="Nhập tên minh chứng,nơi ban hành"
+                allowClear
+                onChange={(e) =>
+                  setFilters({
+                    ...filters,
+                    evidenceName: e.target.value,
+                  })
+                }
+              />
+              <Select
+                className="w-[16rem]"
+                allowClear
+                placeholder="Loại nhóm minh chứng"
+                options={STANDARD_CATALOG_TYPE_OPTIONS}
+                value={objectTypeFilter}
+                onChange={(value) => setObjectTypeFilter(value)}
+              />
+            </Flex>
             {can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG, "THEM") && (
               <Button
                 type="primary"
@@ -236,7 +258,13 @@ export default function EvidenceCategory() {
         <Col span={24}>
           <TableCollapse
             rowKey="id"
-            headerTitleKey="name"
+            headerTitleKey={(record) => {
+              const objectTypeLabel = STANDARD_CATALOG_TYPE_OPTIONS.find(
+                (option) => option.value === record.objectType
+              )?.label
+
+              return [record.name, objectTypeLabel].filter(Boolean).join(" - ")
+            }}
             childrenFieldName="evidences"
             defaultExpandAll
             className="w-full"

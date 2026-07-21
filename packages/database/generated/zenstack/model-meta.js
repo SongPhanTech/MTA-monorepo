@@ -24181,6 +24181,10 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, objectType: {
+                    name: "objectType",
+                    type: "StandardCatalogType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, evidences: {
                     name: "evidences",
                     type: "Evidence",
