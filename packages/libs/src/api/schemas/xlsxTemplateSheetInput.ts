@@ -90,6 +90,4 @@ export interface XlsxTemplateSheetInput {
   sheet?: XlsxTemplateSheetInputSheet;
   /** Dữ liệu theo cú pháp xlsx-template, ví dụ: { semesterName, courseName, data: [...] }. */
   data: XlsxTemplateSheetInputData;
-  /** Chèn ngắt trang sau block này. Chỉ có tác dụng khi mergeBlocksToOneSheet = true. */
-  pageBreakAfter?: boolean;
 }

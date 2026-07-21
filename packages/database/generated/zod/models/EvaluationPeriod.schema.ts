@@ -24,6 +24,7 @@ const baseSchema = z.object({
     overviewGeneral: z.string().nullish(),
     overviewResults: z.string().nullish(),
     conclude: z.string().nullish(),
+    evidenceCategoryIds: z.array(z.string()),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -43,6 +44,7 @@ const baseSchemaWithoutDefaults = z.object({
     overviewGeneral: z.string().nullish(),
     overviewResults: z.string().nullish(),
     conclude: z.string().nullish(),
+    evidenceCategoryIds: z.array(z.string()),
 }
 ).strict();
 const relationSchema = z.object({
@@ -96,7 +98,8 @@ export const EvaluationPeriodPrismaUpdateSchema = z.object({
     overviewProblem: z.string().nullish(),
     overviewGeneral: z.string().nullish(),
     overviewResults: z.string().nullish(),
-    conclude: z.string().nullish()
+    conclude: z.string().nullish(),
+    evidenceCategoryIds: z.array(z.string())
 }).partial().passthrough();
 
 
@@ -104,7 +107,7 @@ export const EvaluationPeriodPrismaUpdateSchema = z.object({
  * `EvaluationPeriod` schema for create operations excluding foreign keys and relations.
  */
 export const EvaluationPeriodCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, startDate: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, startDate: true, status: true, evidenceCategoryIds: true
 });
 
 

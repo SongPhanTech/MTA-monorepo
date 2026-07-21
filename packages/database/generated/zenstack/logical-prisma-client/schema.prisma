@@ -6744,27 +6744,28 @@ model NoteReminder {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model EvaluationPeriod {
-  id              String                 @id() @default(cuid())
-  code            String?                @unique()
-  active          Boolean                @default(true)
-  description     String?                @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime               @default(now())
-  updatedAt       DateTime               @default(now()) @updatedAt()
-  createdBy       String?                @default("") @db.Uuid()
-  name            String
-  startDate       DateTime               @default(now())
-  endDate         DateTime?
-  status          EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
-  schoolYear      SchoolYear?            @relation(fields: [schoolYearId], references: [id])
-  schoolYearId    String?
-  standards       StandardPeriod[]
-  council         EvaluationCouncil?
-  documentFiles   DocumentFile[]
-  overviewProblem String?
-  overviewGeneral String?
-  overviewResults String?
-  conclude        String?
+  id                  String                 @id() @default(cuid())
+  code                String?                @unique()
+  active              Boolean                @default(true)
+  description         String?                @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @default(now()) @updatedAt()
+  createdBy           String?                @default("") @db.Uuid()
+  name                String
+  startDate           DateTime               @default(now())
+  endDate             DateTime?
+  status              EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
+  schoolYear          SchoolYear?            @relation(fields: [schoolYearId], references: [id])
+  schoolYearId        String?
+  standards           StandardPeriod[]
+  council             EvaluationCouncil?
+  documentFiles       DocumentFile[]
+  overviewProblem     String?
+  overviewGeneral     String?
+  overviewResults     String?
+  conclude            String?
+  evidenceCategoryIds String[]
 
   @@schema("khao-thi")
 }
