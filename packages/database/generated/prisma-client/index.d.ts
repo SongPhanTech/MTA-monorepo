@@ -305276,6 +305276,7 @@ export namespace Prisma {
     updatedAt: Date | null
     createdBy: string | null
     name: string | null
+    objectType: $Enums.StandardCatalogType | null
   }
 
   export type EvidenceCategoryMaxAggregateOutputType = {
@@ -305288,6 +305289,7 @@ export namespace Prisma {
     updatedAt: Date | null
     createdBy: string | null
     name: string | null
+    objectType: $Enums.StandardCatalogType | null
   }
 
   export type EvidenceCategoryCountAggregateOutputType = {
@@ -305300,6 +305302,7 @@ export namespace Prisma {
     updatedAt: number
     createdBy: number
     name: number
+    objectType: number
     _all: number
   }
 
@@ -305314,6 +305317,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    objectType?: true
   }
 
   export type EvidenceCategoryMaxAggregateInputType = {
@@ -305326,6 +305330,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    objectType?: true
   }
 
   export type EvidenceCategoryCountAggregateInputType = {
@@ -305338,6 +305343,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    objectType?: true
     _all?: true
   }
 
@@ -305423,6 +305429,7 @@ export namespace Prisma {
     updatedAt: Date
     createdBy: string | null
     name: string
+    objectType: $Enums.StandardCatalogType
     _count: EvidenceCategoryCountAggregateOutputType | null
     _min: EvidenceCategoryMinAggregateOutputType | null
     _max: EvidenceCategoryMaxAggregateOutputType | null
@@ -305452,6 +305459,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    objectType?: boolean
     evidences?: boolean | EvidenceCategory$evidencesArgs<ExtArgs>
     _count?: boolean | EvidenceCategoryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["evidenceCategory"]>
@@ -305466,6 +305474,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    objectType?: boolean
   }, ExtArgs["result"]["evidenceCategory"]>
 
   export type EvidenceCategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -305478,6 +305487,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    objectType?: boolean
   }, ExtArgs["result"]["evidenceCategory"]>
 
   export type EvidenceCategorySelectScalar = {
@@ -305490,9 +305500,10 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    objectType?: boolean
   }
 
-  export type EvidenceCategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name", ExtArgs["result"]["evidenceCategory"]>
+  export type EvidenceCategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "objectType", ExtArgs["result"]["evidenceCategory"]>
   export type EvidenceCategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     evidences?: boolean | EvidenceCategory$evidencesArgs<ExtArgs>
     _count?: boolean | EvidenceCategoryCountOutputTypeDefaultArgs<ExtArgs>
@@ -305515,6 +305526,7 @@ export namespace Prisma {
       updatedAt: Date
       createdBy: string | null
       name: string
+      objectType: $Enums.StandardCatalogType
     }, ExtArgs["result"]["evidenceCategory"]>
     composites: {}
   }
@@ -305948,6 +305960,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"EvidenceCategory", 'DateTime'>
     readonly createdBy: FieldRef<"EvidenceCategory", 'String'>
     readonly name: FieldRef<"EvidenceCategory", 'String'>
+    readonly objectType: FieldRef<"EvidenceCategory", 'StandardCatalogType'>
   }
     
 
@@ -398864,7 +398877,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
-    name: 'name'
+    name: 'name',
+    objectType: 'objectType'
   };
 
   export type EvidenceCategoryScalarFieldEnum = (typeof EvidenceCategoryScalarFieldEnum)[keyof typeof EvidenceCategoryScalarFieldEnum]
@@ -430139,6 +430153,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"EvidenceCategory"> | Date | string
     createdBy?: UuidNullableFilter<"EvidenceCategory"> | string | null
     name?: StringFilter<"EvidenceCategory"> | string
+    objectType?: EnumStandardCatalogTypeFilter<"EvidenceCategory"> | $Enums.StandardCatalogType
     evidences?: EvidenceListRelationFilter
   }
 
@@ -430152,6 +430167,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
+    objectType?: SortOrder
     evidences?: EvidenceOrderByRelationAggregateInput
     _relevance?: EvidenceCategoryOrderByRelevanceInput
   }
@@ -430169,6 +430185,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"EvidenceCategory"> | Date | string
     createdBy?: UuidNullableFilter<"EvidenceCategory"> | string | null
     name?: StringFilter<"EvidenceCategory"> | string
+    objectType?: EnumStandardCatalogTypeFilter<"EvidenceCategory"> | $Enums.StandardCatalogType
     evidences?: EvidenceListRelationFilter
   }, "id" | "code">
 
@@ -430182,6 +430199,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
+    objectType?: SortOrder
     _count?: EvidenceCategoryCountOrderByAggregateInput
     _max?: EvidenceCategoryMaxOrderByAggregateInput
     _min?: EvidenceCategoryMinOrderByAggregateInput
@@ -430200,6 +430218,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"EvidenceCategory"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"EvidenceCategory"> | string | null
     name?: StringWithAggregatesFilter<"EvidenceCategory"> | string
+    objectType?: EnumStandardCatalogTypeWithAggregatesFilter<"EvidenceCategory"> | $Enums.StandardCatalogType
   }
 
   export type EvidenceWhereInput = {
@@ -465671,6 +465690,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    objectType?: $Enums.StandardCatalogType
     evidences?: EvidenceCreateNestedManyWithoutCategoryInput
   }
 
@@ -465684,6 +465704,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    objectType?: $Enums.StandardCatalogType
     evidences?: EvidenceUncheckedCreateNestedManyWithoutCategoryInput
   }
 
@@ -465697,6 +465718,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
     evidences?: EvidenceUpdateManyWithoutCategoryNestedInput
   }
 
@@ -465710,6 +465732,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
     evidences?: EvidenceUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
@@ -465723,6 +465746,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    objectType?: $Enums.StandardCatalogType
   }
 
   export type EvidenceCategoryUpdateManyMutationInput = {
@@ -465735,6 +465759,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
   }
 
   export type EvidenceCategoryUncheckedUpdateManyInput = {
@@ -465747,6 +465772,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
   }
 
   export type EvidenceCreateInput = {
@@ -491736,6 +491762,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    objectType?: SortOrder
   }
 
   export type EvidenceCategoryMaxOrderByAggregateInput = {
@@ -491748,6 +491775,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    objectType?: SortOrder
   }
 
   export type EvidenceCategoryMinOrderByAggregateInput = {
@@ -491760,6 +491788,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    objectType?: SortOrder
   }
 
   export type EvidenceCategoryScalarRelationFilter = {
@@ -660371,6 +660400,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    objectType?: $Enums.StandardCatalogType
   }
 
   export type EvidenceCategoryUncheckedCreateWithoutEvidencesInput = {
@@ -660383,6 +660413,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    objectType?: $Enums.StandardCatalogType
   }
 
   export type EvidenceCategoryCreateOrConnectWithoutEvidencesInput = {
@@ -660489,6 +660520,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
   }
 
   export type EvidenceCategoryUncheckedUpdateWithoutEvidencesInput = {
@@ -660501,6 +660533,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
   }
 
   export type EvidenceFileUpsertWithWhereUniqueWithoutEvidenceInput = {

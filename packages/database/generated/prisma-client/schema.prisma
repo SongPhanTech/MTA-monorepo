@@ -6191,15 +6191,16 @@ model CriterionCatalog {
 
 /// Nhóm minh chứng - require code
 model EvidenceCategory {
-  id          String     @id() @default(cuid())
-  code        String?    @unique()
-  active      Boolean    @default(true)
-  description String?    @db.Text()
+  id          String              @id() @default(cuid())
+  code        String?             @unique()
+  active      Boolean             @default(true)
+  description String?             @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @default(now()) @updatedAt()
-  createdBy   String?    @db.Uuid()
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @default(now()) @updatedAt()
+  createdBy   String?             @db.Uuid()
   name        String
+  objectType  StandardCatalogType @default(PROGRAM)
   evidences   Evidence[]
 
   @@schema("khao-thi")

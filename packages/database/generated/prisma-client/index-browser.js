@@ -4025,7 +4025,8 @@ exports.Prisma.EvidenceCategoryScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  name: 'name'
+  name: 'name',
+  objectType: 'objectType'
 };
 
 exports.Prisma.EvidenceScalarFieldEnum = {
