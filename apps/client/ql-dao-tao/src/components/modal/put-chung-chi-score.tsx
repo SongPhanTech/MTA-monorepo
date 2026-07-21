@@ -49,6 +49,7 @@ const PutCertificateScoreModal = () => {
           data: {
             name: rest.name,
             isUsingScore: rest.isUsingScore,
+            scoreThreshold: rest.scoreThreshold,
             subjectVersions: subjectVersionsData,
           },
           where: { id },
