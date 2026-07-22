@@ -20,7 +20,11 @@ const importFromInternal = createRoute({
       content: {
         "multipart/form-data": {
           schema: z.object({
-            file: z.instanceof(File).openapi({ description: "File JSON export từ QL đào tạo" }),
+            file: z.instanceof(File).openapi({
+              type: "string",
+              format: "binary",
+              description: "File JSON export từ QL đào tạo",
+            }),
             syncHistoryId: z.string().optional().openapi({
               description: "ID bản ghi DataSyncHistory đã tạo từ FE (optional)",
             }),

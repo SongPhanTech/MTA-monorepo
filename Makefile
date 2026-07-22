@@ -366,6 +366,7 @@ _deploy-fe:
 	$(SSH) $(SERVER_HOST) 'set -eu; cd "$(call remote_home,$(FE_APP_DIR))" && \
 		docker compose -f $(FE_COMPOSE_FILE) stop mta-$(CDN_NAME) router-$(ROUTER_NAME)-api 2>/dev/null || true; \
 		docker compose -f $(FE_COMPOSE_FILE) rm -sf mta-$(CDN_NAME) router-$(ROUTER_NAME)-api 2>/dev/null || true; \
+		docker rm -f mta-$(CDN_NAME) router-$(ROUTER_NAME)-api 2>/dev/null || true; \
 		rm -rf $(CDN_NAME) && \
 		unzip -oq $(CDN_NAME).zip && \
 		COMPOSE_PULL_POLICY=never docker compose -f $(FE_COMPOSE_FILE) up -d --force-recreate --no-build mta-$(CDN_NAME) router-$(ROUTER_NAME)-api'
