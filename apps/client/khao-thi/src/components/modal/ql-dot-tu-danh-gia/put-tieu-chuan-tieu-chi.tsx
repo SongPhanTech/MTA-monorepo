@@ -9,8 +9,10 @@ import { createId } from "@workspace/db"
 import { $Enums } from "@workspace/db/client"
 import {
   useFindManyEvaluationStandardSet,
+  useFindManyEvidenceCategory,
   useFindManyStandardCatalog,
   useFindManyStandardPeriod,
+  useFindUniqueEvaluationPeriod,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { Button, Col, Form, message, Tree } from "antd"
@@ -51,6 +53,7 @@ const PutTieuChuanTieuChi = () => {
   const [form] = Form.useForm<{
     standardSetId: string
     objectType: $Enums.StandardCatalogType
+    evidenceCategoryIds: string[]
   }>()
 
   const standardSetWatch = Form.useWatch("standardSetId", form)
@@ -135,6 +138,38 @@ const PutTieuChuanTieuChi = () => {
     }
   )
 
+  const { data: evidenceCategories = [] } = useFindManyEvidenceCategory(
+    {
+      where: {
+        objectType: objectTypeWatch,
+      },
+      orderBy: {
+        name: "asc",
+      },
+    },
+    {
+      enabled: !!objectTypeWatch,
+    }
+  )
+
+  const { data: evaluationPeriod } = useFindUniqueEvaluationPeriod(
+    {
+      where: {
+        id: selectedEvaluationPeriodId,
+      },
+      select: {
+        evidenceCategories: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    },
+    {
+      enabled: !!selectedEvaluationPeriodId && isOpen,
+    }
+  )
+
   const treeData = useMemo(() => {
     return (
       dataCatalog?.map(({ criteria, ...standard }) => ({
@@ -188,6 +223,13 @@ const PutTieuChuanTieuChi = () => {
     }
   }, [treeData, id, existingStandards, dataCatalog])
 
+  useEffect(() => {
+    if (!evaluationPeriod) return
+    form.setFieldsValue({
+      evidenceCategoryIds: evaluationPeriod.evidenceCategories?.map((item) => item.id) ?? [],
+    })
+  }, [evaluationPeriod, form])
+
   // Reset tree khi đổi loại kho
   useEffect(() => {
     setCheckedKeys([])
@@ -216,6 +258,12 @@ const PutTieuChuanTieuChi = () => {
     // Validate: Bắt buộc phải chọn kho tiêu chuẩn
     if (!objectTypeWatch) {
       message.error("Vui lòng chọn kho tiêu chuẩn")
+      return
+    }
+
+    const evidenceCategoryIds: string[] = form.getFieldValue("evidenceCategoryIds") ?? []
+    if (evidenceCategoryIds.length === 0) {
+      message.error("Vui lòng chọn ít nhất một nhóm minh chứng")
       return
     }
 
@@ -331,6 +379,9 @@ const PutTieuChuanTieuChi = () => {
             },
             data: {
               status: $Enums.EvaluationPeriodStatus.ASSIGNMENT,
+              evidenceCategories: {
+                set: evidenceCategoryIds.map((id) => ({ id })),
+              },
             },
           },
         },
@@ -441,6 +492,14 @@ const PutTieuChuanTieuChi = () => {
               value: option.value,
             }))}
             allowClear
+            onChange={() => {
+              form.setFieldsValue({
+                standardSetId: undefined,
+                evidenceCategoryIds: [],
+              })
+              setCheckedKeys([])
+              setCatalogSelected([])
+            }}
           />
         </FormItem>
       </Col>
@@ -452,6 +511,27 @@ const PutTieuChuanTieuChi = () => {
             options={evaluationStandardSets.map((set) => ({
               label: set.name,
               value: set.id,
+            }))}
+            disabled={!objectTypeWatch}
+            allowClear
+          />
+        </FormItem>
+      </Col>
+
+      <Col span={24}>
+        <FormItem
+          form={form}
+          name="evidenceCategoryIds"
+          label="Chọn nhóm minh chứng"
+          required
+        >
+          <Select
+            mode="multiple"
+            maxTagCount="responsive"
+            placeholder="Chọn nhóm minh chứng"
+            options={evidenceCategories.map((cat) => ({
+              label: cat.name,
+              value: cat.id,
             }))}
             disabled={!objectTypeWatch}
             allowClear
