@@ -519,12 +519,7 @@ const PutTieuChuanTieuChi = () => {
       </Col>
 
       <Col span={24}>
-        <FormItem
-          form={form}
-          name="evidenceCategoryIds"
-          label="Chọn nhóm minh chứng"
-          required
-        >
+        <FormItem form={form} name="evidenceCategoryIds" label="Chọn nhóm minh chứng" required>
           <Select
             mode="multiple"
             maxTagCount="responsive"

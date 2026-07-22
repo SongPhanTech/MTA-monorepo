@@ -4033,7 +4033,8 @@ export const exportPhuLucHuongDanDoAn = async ({
 
     const dtType = (
       tenDoiTuong[
-        firstStudent?.fixedClass?.trainingCourse?.trainingObjectType?.type as keyof typeof tenDoiTuong
+        firstStudent?.fixedClass?.trainingCourse?.trainingObjectType
+          ?.type as keyof typeof tenDoiTuong
       ]?.fullname || "Quân sự"
     ).toUpperCase()
 
@@ -4076,8 +4077,8 @@ export const exportPhuLucHuongDanDoAn = async ({
       const note = proj.isLanguage
         ? "ĐA viết và bảo vệ bằng tiếng Anh"
         : proj.isProductProject
-        ? "ĐA có sản phẩm"
-        : ""
+          ? "ĐA có sản phẩm"
+          : ""
 
       interface FormattedSupervisor {
         supervisor: string
@@ -4257,7 +4258,10 @@ export const exportPhuLucHuongDanDoAn = async ({
               newAttrs += ` count="${newCount}"`
             }
             const updatedMergeCells = `<mergeCells${newAttrs}>${existingBody}${mergeTags.join("")}</mergeCells>`
-            sheetXml = sheetXml.replace(/<mergeCells\b[^>]*>[\s\S]*?<\/mergeCells>/, updatedMergeCells)
+            sheetXml = sheetXml.replace(
+              /<mergeCells\b[^>]*>[\s\S]*?<\/mergeCells>/,
+              updatedMergeCells
+            )
           } else {
             const mergeCellsTag = `<mergeCells count="${mergeTags.length}">${mergeTags.join("")}</mergeCells>`
             sheetXml = sheetXml.replace("</worksheet>", `${mergeCellsTag}</worksheet>`)
@@ -4297,4 +4301,3 @@ export const exportPhuLucHuongDanDoAn = async ({
     hideSpinner()
   }
 }
-

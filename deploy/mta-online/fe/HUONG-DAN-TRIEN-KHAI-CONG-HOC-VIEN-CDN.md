@@ -65,10 +65,10 @@ Không có Configs → router `:5188` có thể không proxy đúng BE.
 
 ### A3. docker-compose.yml (tóm tắt)
 
-| Service | Image | Port host |
-|---------|-------|-----------|
-| `mta-cong-hoc-vien-cdn` | `nginx:alpine` | **6009** |
-| `router-cong-hoc-vien-api` | `mta.router.api` (local load) | **5188** |
+| Service                    | Image                         | Port host |
+| -------------------------- | ----------------------------- | --------- |
+| `mta-cong-hoc-vien-cdn`    | `nginx:alpine`                | **6009**  |
+| `router-cong-hoc-vien-api` | `mta.router.api` (local load) | **5188**  |
 
 File mẫu: `deploy/mta-online/fe/docker-compose.yml`
 
@@ -238,14 +238,14 @@ DevTools → Network: JS/CSS load từ `/cong-hoc-vien/cdn/_next/...`; API gọi
 
 ## Lỗi thường gặp
 
-| Triệu chứng | Nguyên nhân | Cách xử lý |
-|-------------|-------------|------------|
-| `No such image: swantech-cdn` | Compose cũ | Dùng `nginx:alpine` trong compose mới |
-| `No such image: mta.router.api` | Chưa load | `docker load`; hoặc tạm chỉ up CDN |
-| Trang trắng, JS 404 | Sai `FE_APP_URL` / `ASSET_PREFIX` | Sửa Makefile + `.env`, **build lại** |
-| `/cong-hoc-vien` → Next.js portal | Thiếu `cong-hoc-vien-fe.conf` | Include snippet trước `location /` |
-| API 502 | BE down | `docker ps`, `curl :3044` |
-| Login SSO lỗi | `AUTH_ISSUER` sai domain | `.env` → `https://mta.edu.vn/api/sso-id` |
+| Triệu chứng                       | Nguyên nhân                       | Cách xử lý                               |
+| --------------------------------- | --------------------------------- | ---------------------------------------- |
+| `No such image: swantech-cdn`     | Compose cũ                        | Dùng `nginx:alpine` trong compose mới    |
+| `No such image: mta.router.api`   | Chưa load                         | `docker load`; hoặc tạm chỉ up CDN       |
+| Trang trắng, JS 404               | Sai `FE_APP_URL` / `ASSET_PREFIX` | Sửa Makefile + `.env`, **build lại**     |
+| `/cong-hoc-vien` → Next.js portal | Thiếu `cong-hoc-vien-fe.conf`     | Include snippet trước `location /`       |
+| API 502                           | BE down                           | `docker ps`, `curl :3044`                |
+| Login SSO lỗi                     | `AUTH_ISSUER` sai domain          | `.env` → `https://mta.edu.vn/api/sso-id` |
 
 ---
 

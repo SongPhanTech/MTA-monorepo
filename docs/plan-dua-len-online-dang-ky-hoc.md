@@ -8,14 +8,14 @@
 
 ## Tổng quan các giai đoạn
 
-| Giai đoạn | Tên | Kết quả khi “xong” |
-|-----------|-----|---------------------|
-| **G0** | Chuẩn bị & gate | Checklist môi trường, backup, cửa sổ bảo trì đã thống nhất |
-| **G1** | Đưa lên server online | FE + BE portal chạy ổn trên server online |
-| **G2** | Đưa dữ liệu lên | Import đợt ĐK từ nội bộ thành công, SV thấy đúng lớp/môn |
-| **G3** | Cấp tài khoản | SV (và cán bộ vận hành) đăng nhập được, đúng quyền |
-| **G4** | Vận hành thử | Có biên bản thử: đăng ký / hủy / export về nội bộ |
-| **G5** | Cải tiến chịu tải 500 SV | Có số liệu load test + cấu hình/ tối ưu đạt tiêu chí |
+| Giai đoạn | Tên                      | Kết quả khi “xong”                                         |
+| --------- | ------------------------ | ---------------------------------------------------------- |
+| **G0**    | Chuẩn bị & gate          | Checklist môi trường, backup, cửa sổ bảo trì đã thống nhất |
+| **G1**    | Đưa lên server online    | FE + BE portal chạy ổn trên server online                  |
+| **G2**    | Đưa dữ liệu lên          | Import đợt ĐK từ nội bộ thành công, SV thấy đúng lớp/môn   |
+| **G3**    | Cấp tài khoản            | SV (và cán bộ vận hành) đăng nhập được, đúng quyền         |
+| **G4**    | Vận hành thử             | Có biên bản thử: đăng ký / hủy / export về nội bộ          |
+| **G5**    | Cải tiến chịu tải 500 SV | Có số liệu load test + cấu hình/ tối ưu đạt tiêu chí       |
 
 Có thể chạy **G1** trước; **G2–G3** thường đi cùng (import đã kéo theo UserProfile/Student). **G5** nên có baseline đo trong/sau **G4**.
 
@@ -43,12 +43,12 @@ Mọi người liên quan biết: giờ go-live thử, ai trực, làm gì khi l
 
 ### Phạm vi triển khai tối thiểu (đăng ký học)
 
-| Thành phần | Gói / service | Ghi chú |
-|------------|---------------|---------|
-| Backend | `be-portal` | API `class-register`, import/export đồng bộ |
-| Frontend | `cong-hoc-vien` | `/dang-ky-hoc`, `/dong-bo-du-lieu` |
-| DB | Postgres schema `ql-dao-tao` (portal) | Migration unique + index đã apply |
-| Auth | Session/cookie theo stack hiện tại | Cùng nguồn tài khoản với import UserProfile |
+| Thành phần | Gói / service                         | Ghi chú                                     |
+| ---------- | ------------------------------------- | ------------------------------------------- |
+| Backend    | `be-portal`                           | API `class-register`, import/export đồng bộ |
+| Frontend   | `cong-hoc-vien`                       | `/dang-ky-hoc`, `/dong-bo-du-lieu`          |
+| DB         | Postgres schema `ql-dao-tao` (portal) | Migration unique + index đã apply           |
+| Auth       | Session/cookie theo stack hiện tại    | Cùng nguồn tài khoản với import UserProfile |
 
 ### Việc cần làm
 
@@ -127,12 +127,12 @@ make all-cong-hoc-vien
 
 ### Rủi ro & xử lý
 
-| Rủi ro | Cách xử lý |
-|--------|------------|
+| Rủi ro                    | Cách xử lý                                                                          |
+| ------------------------- | ----------------------------------------------------------------------------------- |
 | Import trùng / import lại | Chốt quy tắc: 1 đợt = 1 lần import chính; re-import chỉ khi đã thống nhất xóa/reset |
-| File sai version | Dừng lại, export lại từ nội bộ đúng version |
-| Đợt không hiện | Check `active`, `startDate/endDate`, SV thuộc `trainingCourses` của đợt |
-| Timeout file lớn | Import ngoài giờ cao điểm; tăng timeout proxy nếu cần |
+| File sai version          | Dừng lại, export lại từ nội bộ đúng version                                         |
+| Đợt không hiện            | Check `active`, `startDate/endDate`, SV thuộc `trainingCourses` của đợt             |
+| Timeout file lớn          | Import ngoài giờ cao điểm; tăng timeout proxy nếu cần                               |
 
 ### Tiêu chí đạt
 
@@ -181,16 +181,16 @@ Chạy một đợt “thử” (có thể giới hạn số SV / khung giờ ng
 
 ### Kịch bản thử đề xuất
 
-| # | Kịch bản | Ai | Pass khi |
-|---|----------|-----|----------|
-| 1 | Login → vào `/dang-ky-hoc` thấy đợt | SV | UI đúng hạn đăng ký |
-| 2 | Đăng ký 1 lớp còn chỗ | SV | Toast OK, hiện trên TKB |
-| 3 | Đăng ký lớp đã đủ sĩ số | SV | Báo đủ sĩ số, không vào lớp |
-| 4 | Đăng ký vượt trần TC / thiếu tiên quyết | SV | BE trả lỗi đúng message |
-| 5 | Hủy đăng ký lớp vừa ĐK | SV | Hủy OK, TKB cập nhật |
-| 6 | 2 SV tranh 1 chỗ cuối (thử tay hoặc script) | KT | Chỉ 1 người thắng |
-| 7 | Export kết quả về nội bộ | CB | JSON tải được; import QLĐT OK |
-| 8 | Đóng đợt (`active=false` hoặc hết `endDate`) | CB | Không ĐK/hủy được |
+| #   | Kịch bản                                     | Ai  | Pass khi                      |
+| --- | -------------------------------------------- | --- | ----------------------------- |
+| 1   | Login → vào `/dang-ky-hoc` thấy đợt          | SV  | UI đúng hạn đăng ký           |
+| 2   | Đăng ký 1 lớp còn chỗ                        | SV  | Toast OK, hiện trên TKB       |
+| 3   | Đăng ký lớp đã đủ sĩ số                      | SV  | Báo đủ sĩ số, không vào lớp   |
+| 4   | Đăng ký vượt trần TC / thiếu tiên quyết      | SV  | BE trả lỗi đúng message       |
+| 5   | Hủy đăng ký lớp vừa ĐK                       | SV  | Hủy OK, TKB cập nhật          |
+| 6   | 2 SV tranh 1 chỗ cuối (thử tay hoặc script)  | KT  | Chỉ 1 người thắng             |
+| 7   | Export kết quả về nội bộ                     | CB  | JSON tải được; import QLĐT OK |
+| 8   | Đóng đợt (`active=false` hoặc hết `endDate`) | CB  | Không ĐK/hủy được             |
 
 ### Tổ chức vận hành thử
 
@@ -216,12 +216,12 @@ Chạy một đợt “thử” (có thể giới hạn số SV / khung giờ ng
 - Bottleneck chính đã biết: **DB transaction + `FOR UPDATE` theo từng SubjectClass** (đúng sĩ số nhưng xếp hàng ở lớp “hot”).
 - Mục tiêu chất lượng gợi ý (chỉnh theo SLA thật của nhà trường):
 
-| Chỉ tiêu | Mục tiêu đề xuất |
-|----------|------------------|
-| Tỷ lệ đăng ký thành công (request hợp lệ) | ≥ 99% không lỗi 5xx |
-| p95 `POST class-register` | ≤ 2–3s khi tải cao |
-| Overbook sĩ số | **= 0** |
-| Lỗi timeout / pool exhausted | ≈ 0 trong kịch bản 500 |
+| Chỉ tiêu                                  | Mục tiêu đề xuất       |
+| ----------------------------------------- | ---------------------- |
+| Tỷ lệ đăng ký thành công (request hợp lệ) | ≥ 99% không lỗi 5xx    |
+| p95 `POST class-register`                 | ≤ 2–3s khi tải cao     |
+| Overbook sĩ số                            | **= 0**                |
+| Lỗi timeout / pool exhausted              | ≈ 0 trong kịch bản 500 |
 
 ### 5.1. Đobaseline (bắt buộc trước khi tối ưu thêm)
 
@@ -234,13 +234,13 @@ Chạy một đợt “thử” (có thể giới hạn số SV / khung giờ ng
 
 ### 5.2. Tối ưu cấu hình (nhanh, ít đụng code)
 
-| Hạng mục | Hành động | Ghi chú |
-|----------|-----------|---------|
-| Pool Prisma | `DATABASE_POOL_SIZE` 30–50 (tinh theo max_connections Postgres) | Đã hỗ trợ trong `be-portal` |
-| Postgres | `max_connections`, `shared_buffers`; theo dõi `pg_stat_activity` | Tránh pool app > DB |
-| Container | CPU/RAM limit `mta-be-portal` đủ cho burst | Scale vertical trước |
-| Proxy timeout | Tăng timeout body/API đăng ký nếu file/proxy cắt sớm | Chỉ phần cần |
-| Index | Đã có index `ClassRegisterLogs(studentId/subjectClassId)` — verify trên prod | |
+| Hạng mục      | Hành động                                                                    | Ghi chú                     |
+| ------------- | ---------------------------------------------------------------------------- | --------------------------- |
+| Pool Prisma   | `DATABASE_POOL_SIZE` 30–50 (tinh theo max_connections Postgres)              | Đã hỗ trợ trong `be-portal` |
+| Postgres      | `max_connections`, `shared_buffers`; theo dõi `pg_stat_activity`             | Tránh pool app > DB         |
+| Container     | CPU/RAM limit `mta-be-portal` đủ cho burst                                   | Scale vertical trước        |
+| Proxy timeout | Tăng timeout body/API đăng ký nếu file/proxy cắt sớm                         | Chỉ phần cần                |
+| Index         | Đã có index `ClassRegisterLogs(studentId/subjectClassId)` — verify trên prod |                             |
 
 ### 5.3. Tối ưu ứng dụng (theo mức ưu tiên)
 
@@ -275,13 +275,13 @@ Chạy một đợt “thử” (có thể giới hạn số SV / khung giờ ng
 
 ### 5.4. Kế hoạch cải tiến theo tuần (gợi ý)
 
-| Tuần | Việc | Output |
-|------|------|--------|
-| T1 | Deploy online + import pilot + account sample | G1–G3 xong |
-| T2 | Vận hành thử 30–50 SV + sửa P0/P1 | Biên bản G4 |
-| T2–T3 | Load test 100 → 300 → 500 + chỉnh pool/DB | Báo cáo số liệu |
-| T3 | Tối ưu giữ lock ngắn + truyền thông lệch sóng | p95 đạt mục tiêu |
-| T4 | Dress rehearsal gần giờ thật + checklist go-live | Quyết định mở rộng |
+| Tuần  | Việc                                             | Output             |
+| ----- | ------------------------------------------------ | ------------------ |
+| T1    | Deploy online + import pilot + account sample    | G1–G3 xong         |
+| T2    | Vận hành thử 30–50 SV + sửa P0/P1                | Biên bản G4        |
+| T2–T3 | Load test 100 → 300 → 500 + chỉnh pool/DB        | Báo cáo số liệu    |
+| T3    | Tối ưu giữ lock ngắn + truyền thông lệch sóng    | p95 đạt mục tiêu   |
+| T4    | Dress rehearsal gần giờ thật + checklist go-live | Quyết định mở rộng |
 
 ### Tiêu chí đạt G5
 
@@ -319,21 +319,21 @@ Chạy một đợt “thử” (có thể giới hạn số SV / khung giờ ng
 
 ## Phân công gợi ý (điền tên thật khi vận hành)
 
-| Vai trò | Trách nhiệm |
-|---------|-------------|
-| Kỹ thuật / DevOps | Deploy, migrate, backup, monitor, load test |
-| Backend | Transaction, pool, hotfix API đăng ký |
+| Vai trò             | Trách nhiệm                                         |
+| ------------------- | --------------------------------------------------- |
+| Kỹ thuật / DevOps   | Deploy, migrate, backup, monitor, load test         |
+| Backend             | Transaction, pool, hotfix API đăng ký               |
 | Đào tạo / nghiệp vụ | Chốt đợt, file export, quy định ĐK, truyền thông SV |
-| Hỗ trợ SV | Reset TK, FAQ, tiếp nhận lỗi UI |
-| QA | Chạy checklist G4, xác nhận tiêu chí pass |
+| Hỗ trợ SV           | Reset TK, FAQ, tiếp nhận lỗi UI                     |
+| QA                  | Chạy checklist G4, xác nhận tiêu chí pass           |
 
 ---
 
 ## Tài liệu liên quan trong repo
 
-- `docs/bao-cao-giai-phap-transaction-dang-ky-hoc.md` — giải pháp Transaction cũ vs mới  
-- Trang đồng bộ: `apps/client/cong-hoc-vien/src/pages/dong-bo-du-lieu/index.tsx`  
-- API đăng ký: `apps/backend/be-portal/src/api/class-register.ts`  
+- `docs/bao-cao-giai-phap-transaction-dang-ky-hoc.md` — giải pháp Transaction cũ vs mới
+- Trang đồng bộ: `apps/client/cong-hoc-vien/src/pages/dong-bo-du-lieu/index.tsx`
+- API đăng ký: `apps/backend/be-portal/src/api/class-register.ts`
 - Deploy: `Makefile` (`deploy-*`, `local-deploy`, `DATABASE_POOL_SIZE` trong `be-portal`)
 
 ---
@@ -342,8 +342,8 @@ Chạy một đợt “thử” (có thể giới hạn số SV / khung giờ ng
 
 Plan được coi là hoàn thành khi:
 
-1. Cổng online chạy ổn định với bản có lock sĩ số.  
-2. Có quy trình khép kín: **nội bộ → import → SV ĐK → export → nội bộ**.  
-3. Tài khoản pilot + quy trình cấp/reset rõ ràng.  
-4. Có biên bản vận hành thử.  
+1. Cổng online chạy ổn định với bản có lock sĩ số.
+2. Có quy trình khép kín: **nội bộ → import → SV ĐK → export → nội bộ**.
+3. Tài khoản pilot + quy trình cấp/reset rõ ràng.
+4. Có biên bản vận hành thử.
 5. Có kết quả load test / cấu hình chứng minh chịu được kịch bản **~500 SV** theo SLA đã chốt với nhà trường.

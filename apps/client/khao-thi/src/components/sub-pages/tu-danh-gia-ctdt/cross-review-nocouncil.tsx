@@ -160,9 +160,7 @@ export default function CrossReviewNoCouncilSubPage({
         },
       ])
 
-      const totalCount = Array.isArray(totalCriteria.data)
-        ? (totalCriteria.data[0] as number)
-        : 0
+      const totalCount = Array.isArray(totalCriteria.data) ? (totalCriteria.data[0] as number) : 0
       const submittedCount = Array.isArray(submittedEvaluationCriterion.data)
         ? (submittedEvaluationCriterion.data[0] as number)
         : 0
