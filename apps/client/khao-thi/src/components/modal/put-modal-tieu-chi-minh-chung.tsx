@@ -6,7 +6,9 @@ import PutFormModal from "@components/commons/put-modal"
 import Select from "@components/commons/select"
 import TreeSelect from "@components/commons/tree-select"
 import useSpinner from "@hooks/spinner"
+import { evaluationPeriodStore } from "@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia"
 import { useSession } from "@workspace/auth/react"
+import { useStore } from "@tanstack/react-store"
 import {
   createId,
   type Evidence,
@@ -17,6 +19,7 @@ import {
   useCreateEvidence,
   useFindManyEvidence,
   useFindManyEvidenceCategory,
+  useFindUniqueEvaluationPeriod,
   useFindUniqueRequirementCriterion,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
@@ -55,6 +58,7 @@ const PutTieuChiMinhChungModal = () => {
   const [document, setDocument] = useState<EvidenceFile[]>([])
 
   const { data: dataUser } = useSession()
+  const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
   const { isOpen, onClose, input } = useDisclosure<{
     id?: string
@@ -75,8 +79,53 @@ const PutTieuChiMinhChungModal = () => {
 
   const lastInputRef = useRef<InputRef | null>(null)
 
-  const { data: listEvidence } = useFindManyEvidence()
-  const { data: listEvidenceCategory } = useFindManyEvidenceCategory()
+  const { data: evaluationPeriod } = useFindUniqueEvaluationPeriod(
+    {
+      where: {
+        id: selectedEvaluationPeriodId,
+      },
+      select: {
+        evidenceCategories: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    },
+    {
+      enabled: !!selectedEvaluationPeriodId,
+    }
+  )
+
+  const allowedCategoryIds =
+    evaluationPeriod?.evidenceCategories?.map((item) => item.id) ?? []
+  const hasAllowedCategories = allowedCategoryIds.length > 0
+
+  // Chỉ list minh chứng thuộc nhóm đã chọn ở đợt; chưa chọn → list rỗng (không load hết)
+  const { data: listEvidence } = useFindManyEvidence(
+    {
+      where: {
+        categoryId: {
+          in: allowedCategoryIds,
+        },
+      },
+    },
+    {
+      enabled: hasAllowedCategories,
+    }
+  )
+  const { data: listEvidenceCategory } = useFindManyEvidenceCategory(
+    {
+      where: {
+        id: {
+          in: allowedCategoryIds,
+        },
+      },
+    },
+    {
+      enabled: hasAllowedCategories,
+    }
+  )
   const { mutateAsync: createEvidence } = useCreateEvidence()
 
   const treeData = useMemo(() => {

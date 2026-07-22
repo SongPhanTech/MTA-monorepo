@@ -43,7 +43,7 @@ model EvaluationPeriod extends Base {
   overviewGeneral String? // Tổng quan chung
   overviewResults String? // Kết quả rà soát việc đáp ứng
   conclude        String? // Kết luận
-  evidenceCategoryIds String[]  // Nhóm minh chứng áp dụng cho đợt đánh giá
+  evidenceCategories EvidenceCategory[]
 
   @@schema("khao-thi")
 }
@@ -89,7 +89,8 @@ model EvidenceCategory extends Base {
   name       String
   objectType StandardCatalogType @default(PROGRAM)
 
-  evidences  Evidence[]
+  evidences          Evidence[]
+  evaluationPeriods  EvaluationPeriod[]
 
   @@schema("khao-thi")
 }
