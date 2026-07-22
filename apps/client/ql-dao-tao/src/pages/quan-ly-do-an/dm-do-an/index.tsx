@@ -636,9 +636,10 @@ export default function DanhMucDoAn() {
   }
 
   const handleExportPhuLucHuongDan = async () => {
-    const projectsToExport = selectedRowKeys.length > 0
-      ? allThesisProjects.filter((p: any) => selectedRowKeys.includes(p.id))
-      : allThesisProjects
+    const projectsToExport =
+      selectedRowKeys.length > 0
+        ? allThesisProjects.filter((p: any) => selectedRowKeys.includes(p.id))
+        : allThesisProjects
 
     await exportPhuLucHuongDanDoAn({
       projects: projectsToExport,

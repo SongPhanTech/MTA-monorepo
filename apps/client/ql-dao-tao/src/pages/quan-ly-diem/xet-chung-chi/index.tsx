@@ -13,6 +13,8 @@ import { useState, useMemo } from "react"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import dayjs from "dayjs"
+import { saveAs } from "file-saver"
+import { useExportXetChungChi } from "@workspace/libs/api/training"
 
 export default function AutoCheckCertificate() {
   const [form] = Form.useForm()
@@ -26,6 +28,7 @@ export default function AutoCheckCertificate() {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
   const { mutateAsync: createManyArchivedCertificate } = useCreateManyArchivedCertificate()
+  const { mutateAsync: exportExcel } = useExportXetChungChi()
 
   const { data: certificates = [] } = useFindManyCertificate({
     where: { subjectVersions: { some: {} } },
@@ -172,6 +175,32 @@ export default function AutoCheckCertificate() {
         }
       },
     })
+  }
+
+  const handleExport = async () => {
+    if (!certificateId || !trainingCourseId) {
+      return message.warning("Vui lòng chọn chứng chỉ và khóa học!")
+    }
+
+    try {
+      message.loading({ content: "Đang xuất file...", key: "export-excel" })
+      const res = await exportExcel({
+        data: {
+          certificateId,
+          trainingCourseId,
+          fixedClassIds,
+        },
+      })
+
+      if (res.status === 200) {
+        message.success({ content: "Xuất file thành công!", key: "export-excel" })
+        saveAs(res.data, "DANH_SACH_XET_CHUNG_CHI.xlsx")
+      } else {
+        message.error({ content: res.data?.message || "Xuất file thất bại", key: "export-excel" })
+      }
+    } catch (error) {
+      message.error({ content: "Có lỗi xảy ra khi xuất file", key: "export-excel" })
+    }
   }
 
   const columns = useMemo(() => {
@@ -360,6 +389,13 @@ export default function AutoCheckCertificate() {
               disabled={!hasSearched || students.length === 0}
             >
               Phê duyệt
+            </Button>
+            <Button
+              type="primary"
+              onClick={handleExport}
+              disabled={!hasSearched || students.length === 0}
+            >
+              Xuất Excel
             </Button>
           </Col>
         </Row>

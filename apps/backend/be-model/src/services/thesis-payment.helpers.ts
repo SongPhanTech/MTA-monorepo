@@ -21,7 +21,9 @@ export function readDecimalAmount(value: unknown): number {
 
 export function formatAmountWithComma(amount: number) {
   if (!amount) return "0"
-  return Math.round(amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+  return Math.round(amount)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
 }
 
 export function getCouncilDefaultPayAmount(

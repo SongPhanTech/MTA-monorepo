@@ -703,7 +703,7 @@ app.openapi(debtStatistics, async (c) => {
     },
   })
 
-  const tbsMap: Record<string, Record<string, typeof tbSubjects[0]>> = {}
+  const tbsMap: Record<string, Record<string, (typeof tbSubjects)[0]>> = {}
   for (const tbs of tbSubjects) {
     const cvId = tbs.trainingBlockOnCurriculumVersion.curriculumVersionId
     if (!tbsMap[cvId]) tbsMap[cvId] = {}
@@ -913,9 +913,7 @@ app.openapi(debtStatistics, async (c) => {
   }
 
   const rows = Object.values(studentDebtMap).flatMap((s) => {
-    const debtSubjects = Object.values(s.subjects).filter(
-      (sub) => sub.hasFailed && !sub.hasPassed
-    )
+    const debtSubjects = Object.values(s.subjects).filter((sub) => sub.hasFailed && !sub.hasPassed)
     if (debtSubjects.length === 0) return []
 
     const totalDebtSubject = debtSubjects.length

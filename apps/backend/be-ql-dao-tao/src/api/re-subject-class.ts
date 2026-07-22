@@ -288,23 +288,25 @@ app.openapi(openSubjectClassRetake, async (c) => {
   })
   const subjectAlreadyInPlan =
     planTraining?.planTrainingSubjects?.map((e) => e.trainingBlockSubjectId) || []
-  const conditions = [
-    PrismaNamespace.sql`TBS."subjectId" = sv.id`,
-  ]
+  const conditions = [PrismaNamespace.sql`TBS."subjectId" = sv.id`]
   if (trainingObjectTypeId) {
     conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
   }
   if (trainingCourseId) {
     conditions.push(PrismaNamespace.sql`TC.id = ${trainingCourseId}`)
   }
-  if (typeof viewAll !== 'undefined' && viewAll === 0 && subjectAlreadyInPlan.length) {
-    conditions.push(PrismaNamespace.sql`TBS.id not in (${PrismaNamespace.join(subjectAlreadyInPlan)})`)
+  if (typeof viewAll !== "undefined" && viewAll === 0 && subjectAlreadyInPlan.length) {
+    conditions.push(
+      PrismaNamespace.sql`TBS.id not in (${PrismaNamespace.join(subjectAlreadyInPlan)})`
+    )
   }
   if (trainingMajorId) {
     conditions.push(PrismaNamespace.sql`C."trainingMajorId" = ${trainingMajorId}`)
   }
   if (search) {
-    conditions.push(PrismaNamespace.sql`(sv.code ILIKE ${`%${search}%`} OR sv.name ILIKE ${`%${search}%`})`)
+    conditions.push(
+      PrismaNamespace.sql`(sv.code ILIKE ${`%${search}%`} OR sv.name ILIKE ${`%${search}%`})`
+    )
   }
   const whereClause = PrismaNamespace.join(conditions, " and ")
   const res = await prisma.$queryRaw`\n        with mon_no as (select sv.id,
@@ -474,9 +476,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
     attempt_count: number
   }[]
 
-  const conditions = [
-    PrismaNamespace.sql`TBS."subjectId" = sv.id`,
-  ]
+  const conditions = [PrismaNamespace.sql`TBS."subjectId" = sv.id`]
   if (trainingObjectTypeId) {
     conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
   }
@@ -487,7 +487,9 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
     conditions.push(PrismaNamespace.sql`FC.id = ${fixedClassId}`)
   }
   if (search) {
-    conditions.push(PrismaNamespace.sql`(S.code ILIKE ${`%${search}%`} OR "UP"."fullname" ILIKE ${`%${search}%`})`)
+    conditions.push(
+      PrismaNamespace.sql`(S.code ILIKE ${`%${search}%`} OR "UP"."fullname" ILIKE ${`%${search}%`})`
+    )
   }
   if (subjectVersionId) {
     conditions.push(PrismaNamespace.sql`sv.id = ${subjectVersionId}`)
@@ -708,23 +710,25 @@ app.openapi(openSubjectClassReExam, async (c) => {
   })
   const subjectAlreadyInPlan =
     planTraining?.planTrainingSubjects?.map((e) => e.trainingBlockSubjectId) || []
-  const conditions = [
-    PrismaNamespace.sql`TBS."subjectId" = sv.id`,
-  ]
+  const conditions = [PrismaNamespace.sql`TBS."subjectId" = sv.id`]
   if (trainingObjectTypeId) {
     conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
   }
   if (trainingCourseId) {
     conditions.push(PrismaNamespace.sql`TC.id = ${trainingCourseId}`)
   }
-  if (typeof viewAll !== 'undefined' && viewAll === 0 && subjectAlreadyInPlan.length) {
-    conditions.push(PrismaNamespace.sql`TBS.id not in (${PrismaNamespace.join(subjectAlreadyInPlan)})`)
+  if (typeof viewAll !== "undefined" && viewAll === 0 && subjectAlreadyInPlan.length) {
+    conditions.push(
+      PrismaNamespace.sql`TBS.id not in (${PrismaNamespace.join(subjectAlreadyInPlan)})`
+    )
   }
   if (trainingMajorId) {
     conditions.push(PrismaNamespace.sql`C."trainingMajorId" = ${trainingMajorId}`)
   }
   if (search) {
-    conditions.push(PrismaNamespace.sql`(sv.code ILIKE ${`%${search}%`} OR sv.name ILIKE ${`%${search}%`})`)
+    conditions.push(
+      PrismaNamespace.sql`(sv.code ILIKE ${`%${search}%`} OR sv.name ILIKE ${`%${search}%`})`
+    )
   }
   const whereClause = PrismaNamespace.join(conditions, " and ")
   const res = await prisma.$queryRaw`
@@ -864,9 +868,7 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
     truot_mon: boolean
   }[]
 
-  const conditions = [
-    PrismaNamespace.sql`TBS."subjectId" = sv.id`,
-  ]
+  const conditions = [PrismaNamespace.sql`TBS."subjectId" = sv.id`]
   if (trainingObjectTypeId) {
     conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
   }
@@ -877,7 +879,9 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
     conditions.push(PrismaNamespace.sql`FC.id = ${fixedClassId}`)
   }
   if (search) {
-    conditions.push(PrismaNamespace.sql`(S.code ILIKE ${`%${search}%`} OR "UP"."fullname" ILIKE ${`%${search}%`})`)
+    conditions.push(
+      PrismaNamespace.sql`(S.code ILIKE ${`%${search}%`} OR "UP"."fullname" ILIKE ${`%${search}%`})`
+    )
   }
   if (subjectVersionId) {
     conditions.push(PrismaNamespace.sql`sv.id = ${subjectVersionId}`)

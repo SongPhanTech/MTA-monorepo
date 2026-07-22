@@ -6,7 +6,10 @@ import {
   buildCouncilPaymentExportPayload,
   buildSupervisorPaymentExportPayload,
 } from "../services/thesis-payment-export.service"
-import { syncCouncilPaymentsForThesisSession, syncSupervisorPaymentsForThesisSession } from "../services/thesis-payment-sync.service"
+import {
+  syncCouncilPaymentsForThesisSession,
+  syncSupervisorPaymentsForThesisSession,
+} from "../services/thesis-payment-sync.service"
 
 const app = new OpenAPIHono({ strict: false })
 

@@ -97,8 +97,7 @@ const PutTieuChiMinhChungModal = () => {
     }
   )
 
-  const allowedCategoryIds =
-    evaluationPeriod?.evidenceCategories?.map((item) => item.id) ?? []
+  const allowedCategoryIds = evaluationPeriod?.evidenceCategories?.map((item) => item.id) ?? []
   const hasAllowedCategories = allowedCategoryIds.length > 0
 
   // Chỉ list minh chứng thuộc nhóm đã chọn ở đợt; chưa chọn → list rỗng (không load hết)
