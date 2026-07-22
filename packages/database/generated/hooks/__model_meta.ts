@@ -22646,10 +22646,13 @@ const metadata: ModelMeta = {
                     name: "conclude",
                     type: "String",
                     isOptional: true,
-                }, evidenceCategoryIds: {
-                    name: "evidenceCategoryIds",
-                    type: "String",
+                }, evidenceCategories: {
+                    name: "evidenceCategories",
+                    type: "EvidenceCategory",
+                    isDataModel: true,
                     isArray: true,
+                    backLink: 'evaluationPeriods',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -22926,6 +22929,13 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'category',
+                }, evaluationPeriods: {
+                    name: "evaluationPeriods",
+                    type: "EvaluationPeriod",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'evidenceCategories',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {

@@ -22387,10 +22387,10 @@
             "type": "string",
             "nullable": true
           },
-          "evidenceCategoryIds": {
+          "evidenceCategories": {
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/EvidenceCategory"
             }
           }
         },
@@ -22401,8 +22401,7 @@
           "updatedAt",
           "name",
           "startDate",
-          "status",
-          "evidenceCategoryIds"
+          "status"
         ]
       },
       "EvaluationStandardSet": {
@@ -22641,6 +22640,12 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Evidence"
+            }
+          },
+          "evaluationPeriods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EvaluationPeriod"
             }
           }
         },
@@ -57031,13 +57036,6 @@
           "conclude": {
             "type": "string",
             "nullable": true
-          },
-          "evidenceCategoryIds": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "nullable": true
-            }
           },
           "_count": {
             "allOf": [
@@ -115437,9 +115435,6 @@
           "conclude": {
             "type": "integer"
           },
-          "evidenceCategoryIds": {
-            "type": "integer"
-          },
           "_all": {
             "type": "integer"
           }
@@ -115462,7 +115457,6 @@
           "overviewGeneral",
           "overviewResults",
           "conclude",
-          "evidenceCategoryIds",
           "_all"
         ]
       },

@@ -33667,11 +33667,13 @@ export namespace Prisma {
   export type EvaluationPeriodCountOutputType = {
     standards: number
     documentFiles: number
+    evidenceCategories: number
   }
 
   export type EvaluationPeriodCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     standards?: boolean | EvaluationPeriodCountOutputTypeCountStandardsArgs
     documentFiles?: boolean | EvaluationPeriodCountOutputTypeCountDocumentFilesArgs
+    evidenceCategories?: boolean | EvaluationPeriodCountOutputTypeCountEvidenceCategoriesArgs
   }
 
   // Custom InputTypes
@@ -33697,6 +33699,13 @@ export namespace Prisma {
    */
   export type EvaluationPeriodCountOutputTypeCountDocumentFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DocumentFileWhereInput
+  }
+
+  /**
+   * EvaluationPeriodCountOutputType without action
+   */
+  export type EvaluationPeriodCountOutputTypeCountEvidenceCategoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EvidenceCategoryWhereInput
   }
 
 
@@ -33799,10 +33808,12 @@ export namespace Prisma {
 
   export type EvidenceCategoryCountOutputType = {
     evidences: number
+    evaluationPeriods: number
   }
 
   export type EvidenceCategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     evidences?: boolean | EvidenceCategoryCountOutputTypeCountEvidencesArgs
+    evaluationPeriods?: boolean | EvidenceCategoryCountOutputTypeCountEvaluationPeriodsArgs
   }
 
   // Custom InputTypes
@@ -33821,6 +33832,13 @@ export namespace Prisma {
    */
   export type EvidenceCategoryCountOutputTypeCountEvidencesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EvidenceWhereInput
+  }
+
+  /**
+   * EvidenceCategoryCountOutputType without action
+   */
+  export type EvidenceCategoryCountOutputTypeCountEvaluationPeriodsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EvaluationPeriodWhereInput
   }
 
 
@@ -300443,7 +300461,6 @@ export namespace Prisma {
     overviewGeneral: number
     overviewResults: number
     conclude: number
-    evidenceCategoryIds: number
     _all: number
   }
 
@@ -300506,7 +300523,6 @@ export namespace Prisma {
     overviewGeneral?: true
     overviewResults?: true
     conclude?: true
-    evidenceCategoryIds?: true
     _all?: true
   }
 
@@ -300600,7 +300616,6 @@ export namespace Prisma {
     overviewGeneral: string | null
     overviewResults: string | null
     conclude: string | null
-    evidenceCategoryIds: string[]
     _count: EvaluationPeriodCountAggregateOutputType | null
     _min: EvaluationPeriodMinAggregateOutputType | null
     _max: EvaluationPeriodMaxAggregateOutputType | null
@@ -300638,11 +300653,11 @@ export namespace Prisma {
     overviewGeneral?: boolean
     overviewResults?: boolean
     conclude?: boolean
-    evidenceCategoryIds?: boolean
     schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
     standards?: boolean | EvaluationPeriod$standardsArgs<ExtArgs>
     council?: boolean | EvaluationPeriod$councilArgs<ExtArgs>
     documentFiles?: boolean | EvaluationPeriod$documentFilesArgs<ExtArgs>
+    evidenceCategories?: boolean | EvaluationPeriod$evidenceCategoriesArgs<ExtArgs>
     _count?: boolean | EvaluationPeriodCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["evaluationPeriod"]>
 
@@ -300664,7 +300679,6 @@ export namespace Prisma {
     overviewGeneral?: boolean
     overviewResults?: boolean
     conclude?: boolean
-    evidenceCategoryIds?: boolean
     schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
   }, ExtArgs["result"]["evaluationPeriod"]>
 
@@ -300686,7 +300700,6 @@ export namespace Prisma {
     overviewGeneral?: boolean
     overviewResults?: boolean
     conclude?: boolean
-    evidenceCategoryIds?: boolean
     schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
   }, ExtArgs["result"]["evaluationPeriod"]>
 
@@ -300708,15 +300721,15 @@ export namespace Prisma {
     overviewGeneral?: boolean
     overviewResults?: boolean
     conclude?: boolean
-    evidenceCategoryIds?: boolean
   }
 
-  export type EvaluationPeriodOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "status" | "schoolYearId" | "overviewProblem" | "overviewGeneral" | "overviewResults" | "conclude" | "evidenceCategoryIds", ExtArgs["result"]["evaluationPeriod"]>
+  export type EvaluationPeriodOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "status" | "schoolYearId" | "overviewProblem" | "overviewGeneral" | "overviewResults" | "conclude", ExtArgs["result"]["evaluationPeriod"]>
   export type EvaluationPeriodInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     schoolYear?: boolean | EvaluationPeriod$schoolYearArgs<ExtArgs>
     standards?: boolean | EvaluationPeriod$standardsArgs<ExtArgs>
     council?: boolean | EvaluationPeriod$councilArgs<ExtArgs>
     documentFiles?: boolean | EvaluationPeriod$documentFilesArgs<ExtArgs>
+    evidenceCategories?: boolean | EvaluationPeriod$evidenceCategoriesArgs<ExtArgs>
     _count?: boolean | EvaluationPeriodCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EvaluationPeriodIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -300733,6 +300746,7 @@ export namespace Prisma {
       standards: Prisma.$StandardPeriodPayload<ExtArgs>[]
       council: Prisma.$EvaluationCouncilPayload<ExtArgs> | null
       documentFiles: Prisma.$DocumentFilePayload<ExtArgs>[]
+      evidenceCategories: Prisma.$EvidenceCategoryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -300752,7 +300766,6 @@ export namespace Prisma {
       overviewGeneral: string | null
       overviewResults: string | null
       conclude: string | null
-      evidenceCategoryIds: string[]
     }, ExtArgs["result"]["evaluationPeriod"]>
     composites: {}
   }
@@ -301151,6 +301164,7 @@ export namespace Prisma {
     standards<T extends EvaluationPeriod$standardsArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationPeriod$standardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StandardPeriodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     council<T extends EvaluationPeriod$councilArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationPeriod$councilArgs<ExtArgs>>): Prisma__EvaluationCouncilClient<$Result.GetResult<Prisma.$EvaluationCouncilPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     documentFiles<T extends EvaluationPeriod$documentFilesArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationPeriod$documentFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    evidenceCategories<T extends EvaluationPeriod$evidenceCategoriesArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationPeriod$evidenceCategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvidenceCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -301197,7 +301211,6 @@ export namespace Prisma {
     readonly overviewGeneral: FieldRef<"EvaluationPeriod", 'String'>
     readonly overviewResults: FieldRef<"EvaluationPeriod", 'String'>
     readonly conclude: FieldRef<"EvaluationPeriod", 'String'>
-    readonly evidenceCategoryIds: FieldRef<"EvaluationPeriod", 'String[]'>
   }
     
 
@@ -301677,6 +301690,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DocumentFileScalarFieldEnum | DocumentFileScalarFieldEnum[]
+  }
+
+  /**
+   * EvaluationPeriod.evidenceCategories
+   */
+  export type EvaluationPeriod$evidenceCategoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvidenceCategory
+     */
+    select?: EvidenceCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvidenceCategory
+     */
+    omit?: EvidenceCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvidenceCategoryInclude<ExtArgs> | null
+    where?: EvidenceCategoryWhereInput
+    orderBy?: EvidenceCategoryOrderByWithRelationInput | EvidenceCategoryOrderByWithRelationInput[]
+    cursor?: EvidenceCategoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EvidenceCategoryScalarFieldEnum | EvidenceCategoryScalarFieldEnum[]
   }
 
   /**
@@ -305470,6 +305507,7 @@ export namespace Prisma {
     name?: boolean
     objectType?: boolean
     evidences?: boolean | EvidenceCategory$evidencesArgs<ExtArgs>
+    evaluationPeriods?: boolean | EvidenceCategory$evaluationPeriodsArgs<ExtArgs>
     _count?: boolean | EvidenceCategoryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["evidenceCategory"]>
 
@@ -305515,6 +305553,7 @@ export namespace Prisma {
   export type EvidenceCategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "objectType", ExtArgs["result"]["evidenceCategory"]>
   export type EvidenceCategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     evidences?: boolean | EvidenceCategory$evidencesArgs<ExtArgs>
+    evaluationPeriods?: boolean | EvidenceCategory$evaluationPeriodsArgs<ExtArgs>
     _count?: boolean | EvidenceCategoryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EvidenceCategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -305524,6 +305563,7 @@ export namespace Prisma {
     name: "EvidenceCategory"
     objects: {
       evidences: Prisma.$EvidencePayload<ExtArgs>[]
+      evaluationPeriods: Prisma.$EvaluationPeriodPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -305931,6 +305971,7 @@ export namespace Prisma {
   export interface Prisma__EvidenceCategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     evidences<T extends EvidenceCategory$evidencesArgs<ExtArgs> = {}>(args?: Subset<T, EvidenceCategory$evidencesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvidencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    evaluationPeriods<T extends EvidenceCategory$evaluationPeriodsArgs<ExtArgs> = {}>(args?: Subset<T, EvidenceCategory$evaluationPeriodsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationPeriodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -306379,6 +306420,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: EvidenceScalarFieldEnum | EvidenceScalarFieldEnum[]
+  }
+
+  /**
+   * EvidenceCategory.evaluationPeriods
+   */
+  export type EvidenceCategory$evaluationPeriodsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvaluationPeriod
+     */
+    select?: EvaluationPeriodSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EvaluationPeriod
+     */
+    omit?: EvaluationPeriodOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EvaluationPeriodInclude<ExtArgs> | null
+    where?: EvaluationPeriodWhereInput
+    orderBy?: EvaluationPeriodOrderByWithRelationInput | EvaluationPeriodOrderByWithRelationInput[]
+    cursor?: EvaluationPeriodWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EvaluationPeriodScalarFieldEnum | EvaluationPeriodScalarFieldEnum[]
   }
 
   /**
@@ -398820,8 +398885,7 @@ export namespace Prisma {
     overviewProblem: 'overviewProblem',
     overviewGeneral: 'overviewGeneral',
     overviewResults: 'overviewResults',
-    conclude: 'conclude',
-    evidenceCategoryIds: 'evidenceCategoryIds'
+    conclude: 'conclude'
   };
 
   export type EvaluationPeriodScalarFieldEnum = (typeof EvaluationPeriodScalarFieldEnum)[keyof typeof EvaluationPeriodScalarFieldEnum]
@@ -403178,8 +403242,7 @@ export namespace Prisma {
     overviewProblem: 'overviewProblem',
     overviewGeneral: 'overviewGeneral',
     overviewResults: 'overviewResults',
-    conclude: 'conclude',
-    evidenceCategoryIds: 'evidenceCategoryIds'
+    conclude: 'conclude'
   };
 
   export type EvaluationPeriodOrderByRelevanceFieldEnum = (typeof EvaluationPeriodOrderByRelevanceFieldEnum)[keyof typeof EvaluationPeriodOrderByRelevanceFieldEnum]
@@ -429778,11 +429841,11 @@ export namespace Prisma {
     overviewGeneral?: StringNullableFilter<"EvaluationPeriod"> | string | null
     overviewResults?: StringNullableFilter<"EvaluationPeriod"> | string | null
     conclude?: StringNullableFilter<"EvaluationPeriod"> | string | null
-    evidenceCategoryIds?: StringNullableListFilter<"EvaluationPeriod">
     schoolYear?: XOR<SchoolYearNullableScalarRelationFilter, SchoolYearWhereInput> | null
     standards?: StandardPeriodListRelationFilter
     council?: XOR<EvaluationCouncilNullableScalarRelationFilter, EvaluationCouncilWhereInput> | null
     documentFiles?: DocumentFileListRelationFilter
+    evidenceCategories?: EvidenceCategoryListRelationFilter
   }
 
   export type EvaluationPeriodOrderByWithRelationInput = {
@@ -429803,11 +429866,11 @@ export namespace Prisma {
     overviewGeneral?: SortOrderInput | SortOrder
     overviewResults?: SortOrderInput | SortOrder
     conclude?: SortOrderInput | SortOrder
-    evidenceCategoryIds?: SortOrder
     schoolYear?: SchoolYearOrderByWithRelationInput
     standards?: StandardPeriodOrderByRelationAggregateInput
     council?: EvaluationCouncilOrderByWithRelationInput
     documentFiles?: DocumentFileOrderByRelationAggregateInput
+    evidenceCategories?: EvidenceCategoryOrderByRelationAggregateInput
     _relevance?: EvaluationPeriodOrderByRelevanceInput
   }
 
@@ -429832,11 +429895,11 @@ export namespace Prisma {
     overviewGeneral?: StringNullableFilter<"EvaluationPeriod"> | string | null
     overviewResults?: StringNullableFilter<"EvaluationPeriod"> | string | null
     conclude?: StringNullableFilter<"EvaluationPeriod"> | string | null
-    evidenceCategoryIds?: StringNullableListFilter<"EvaluationPeriod">
     schoolYear?: XOR<SchoolYearNullableScalarRelationFilter, SchoolYearWhereInput> | null
     standards?: StandardPeriodListRelationFilter
     council?: XOR<EvaluationCouncilNullableScalarRelationFilter, EvaluationCouncilWhereInput> | null
     documentFiles?: DocumentFileListRelationFilter
+    evidenceCategories?: EvidenceCategoryListRelationFilter
   }, "id" | "code">
 
   export type EvaluationPeriodOrderByWithAggregationInput = {
@@ -429857,7 +429920,6 @@ export namespace Prisma {
     overviewGeneral?: SortOrderInput | SortOrder
     overviewResults?: SortOrderInput | SortOrder
     conclude?: SortOrderInput | SortOrder
-    evidenceCategoryIds?: SortOrder
     _count?: EvaluationPeriodCountOrderByAggregateInput
     _max?: EvaluationPeriodMaxOrderByAggregateInput
     _min?: EvaluationPeriodMinOrderByAggregateInput
@@ -429884,7 +429946,6 @@ export namespace Prisma {
     overviewGeneral?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
     overviewResults?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
     conclude?: StringNullableWithAggregatesFilter<"EvaluationPeriod"> | string | null
-    evidenceCategoryIds?: StringNullableListFilter<"EvaluationPeriod">
   }
 
   export type EvaluationStandardSetWhereInput = {
@@ -430171,6 +430232,7 @@ export namespace Prisma {
     name?: StringFilter<"EvidenceCategory"> | string
     objectType?: EnumStandardCatalogTypeFilter<"EvidenceCategory"> | $Enums.StandardCatalogType
     evidences?: EvidenceListRelationFilter
+    evaluationPeriods?: EvaluationPeriodListRelationFilter
   }
 
   export type EvidenceCategoryOrderByWithRelationInput = {
@@ -430185,6 +430247,7 @@ export namespace Prisma {
     name?: SortOrder
     objectType?: SortOrder
     evidences?: EvidenceOrderByRelationAggregateInput
+    evaluationPeriods?: EvaluationPeriodOrderByRelationAggregateInput
     _relevance?: EvidenceCategoryOrderByRelevanceInput
   }
 
@@ -430203,6 +430266,7 @@ export namespace Prisma {
     name?: StringFilter<"EvidenceCategory"> | string
     objectType?: EnumStandardCatalogTypeFilter<"EvidenceCategory"> | $Enums.StandardCatalogType
     evidences?: EvidenceListRelationFilter
+    evaluationPeriods?: EvaluationPeriodListRelationFilter
   }, "id" | "code">
 
   export type EvidenceCategoryOrderByWithAggregationInput = {
@@ -465258,11 +465322,11 @@ export namespace Prisma {
     overviewGeneral?: string | null
     overviewResults?: string | null
     conclude?: string | null
-    evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
     schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
     standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
     council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
     documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
+    evidenceCategories?: EvidenceCategoryCreateNestedManyWithoutEvaluationPeriodsInput
   }
 
   export type EvaluationPeriodUncheckedCreateInput = {
@@ -465283,10 +465347,10 @@ export namespace Prisma {
     overviewGeneral?: string | null
     overviewResults?: string | null
     conclude?: string | null
-    evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
     standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
     council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
+    evidenceCategories?: EvidenceCategoryUncheckedCreateNestedManyWithoutEvaluationPeriodsInput
   }
 
   export type EvaluationPeriodUpdateInput = {
@@ -465306,11 +465370,11 @@ export namespace Prisma {
     overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
     overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
     conclude?: NullableStringFieldUpdateOperationsInput | string | null
-    evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
     schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
     standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
     council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
+    evidenceCategories?: EvidenceCategoryUpdateManyWithoutEvaluationPeriodsNestedInput
   }
 
   export type EvaluationPeriodUncheckedUpdateInput = {
@@ -465331,10 +465395,10 @@ export namespace Prisma {
     overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
     overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
     conclude?: NullableStringFieldUpdateOperationsInput | string | null
-    evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
     standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
     council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
+    evidenceCategories?: EvidenceCategoryUncheckedUpdateManyWithoutEvaluationPeriodsNestedInput
   }
 
   export type EvaluationPeriodCreateManyInput = {
@@ -465355,7 +465419,6 @@ export namespace Prisma {
     overviewGeneral?: string | null
     overviewResults?: string | null
     conclude?: string | null
-    evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
   }
 
   export type EvaluationPeriodUpdateManyMutationInput = {
@@ -465375,7 +465438,6 @@ export namespace Prisma {
     overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
     overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
     conclude?: NullableStringFieldUpdateOperationsInput | string | null
-    evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
   }
 
   export type EvaluationPeriodUncheckedUpdateManyInput = {
@@ -465396,7 +465458,6 @@ export namespace Prisma {
     overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
     overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
     conclude?: NullableStringFieldUpdateOperationsInput | string | null
-    evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
   }
 
   export type EvaluationStandardSetCreateInput = {
@@ -465715,6 +465776,7 @@ export namespace Prisma {
     name: string
     objectType?: $Enums.StandardCatalogType
     evidences?: EvidenceCreateNestedManyWithoutCategoryInput
+    evaluationPeriods?: EvaluationPeriodCreateNestedManyWithoutEvidenceCategoriesInput
   }
 
   export type EvidenceCategoryUncheckedCreateInput = {
@@ -465729,6 +465791,7 @@ export namespace Prisma {
     name: string
     objectType?: $Enums.StandardCatalogType
     evidences?: EvidenceUncheckedCreateNestedManyWithoutCategoryInput
+    evaluationPeriods?: EvaluationPeriodUncheckedCreateNestedManyWithoutEvidenceCategoriesInput
   }
 
   export type EvidenceCategoryUpdateInput = {
@@ -465743,6 +465806,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
     evidences?: EvidenceUpdateManyWithoutCategoryNestedInput
+    evaluationPeriods?: EvaluationPeriodUpdateManyWithoutEvidenceCategoriesNestedInput
   }
 
   export type EvidenceCategoryUncheckedUpdateInput = {
@@ -465757,6 +465821,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
     evidences?: EvidenceUncheckedUpdateManyWithoutCategoryNestedInput
+    evaluationPeriods?: EvaluationPeriodUncheckedUpdateManyWithoutEvidenceCategoriesNestedInput
   }
 
   export type EvidenceCategoryCreateManyInput = {
@@ -491457,7 +491522,17 @@ export namespace Prisma {
     isNot?: EvaluationCouncilWhereInput | null
   }
 
+  export type EvidenceCategoryListRelationFilter = {
+    every?: EvidenceCategoryWhereInput
+    some?: EvidenceCategoryWhereInput
+    none?: EvidenceCategoryWhereInput
+  }
+
   export type StandardPeriodOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EvidenceCategoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -491485,7 +491560,6 @@ export namespace Prisma {
     overviewGeneral?: SortOrder
     overviewResults?: SortOrder
     conclude?: SortOrder
-    evidenceCategoryIds?: SortOrder
   }
 
   export type EvaluationPeriodMaxOrderByAggregateInput = {
@@ -521196,10 +521270,6 @@ export namespace Prisma {
     update?: XOR<XOR<NoteUpdateToOneWithWhereWithoutRemindersInput, NoteUpdateWithoutRemindersInput>, NoteUncheckedUpdateWithoutRemindersInput>
   }
 
-  export type EvaluationPeriodCreateevidenceCategoryIdsInput = {
-    set: string[]
-  }
-
   export type SchoolYearCreateNestedOneWithoutEvaluationPeriodInput = {
     create?: XOR<SchoolYearCreateWithoutEvaluationPeriodInput, SchoolYearUncheckedCreateWithoutEvaluationPeriodInput>
     connectOrCreate?: SchoolYearCreateOrConnectWithoutEvaluationPeriodInput
@@ -521226,6 +521296,12 @@ export namespace Prisma {
     connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
   }
 
+  export type EvidenceCategoryCreateNestedManyWithoutEvaluationPeriodsInput = {
+    create?: XOR<EvidenceCategoryCreateWithoutEvaluationPeriodsInput, EvidenceCategoryUncheckedCreateWithoutEvaluationPeriodsInput> | EvidenceCategoryCreateWithoutEvaluationPeriodsInput[] | EvidenceCategoryUncheckedCreateWithoutEvaluationPeriodsInput[]
+    connectOrCreate?: EvidenceCategoryCreateOrConnectWithoutEvaluationPeriodsInput | EvidenceCategoryCreateOrConnectWithoutEvaluationPeriodsInput[]
+    connect?: EvidenceCategoryWhereUniqueInput | EvidenceCategoryWhereUniqueInput[]
+  }
+
   export type StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput = {
     create?: XOR<StandardPeriodCreateWithoutPeriodInput, StandardPeriodUncheckedCreateWithoutPeriodInput> | StandardPeriodCreateWithoutPeriodInput[] | StandardPeriodUncheckedCreateWithoutPeriodInput[]
     connectOrCreate?: StandardPeriodCreateOrConnectWithoutPeriodInput | StandardPeriodCreateOrConnectWithoutPeriodInput[]
@@ -521246,13 +521322,14 @@ export namespace Prisma {
     connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
   }
 
-  export type EnumEvaluationPeriodStatusFieldUpdateOperationsInput = {
-    set?: $Enums.EvaluationPeriodStatus
+  export type EvidenceCategoryUncheckedCreateNestedManyWithoutEvaluationPeriodsInput = {
+    create?: XOR<EvidenceCategoryCreateWithoutEvaluationPeriodsInput, EvidenceCategoryUncheckedCreateWithoutEvaluationPeriodsInput> | EvidenceCategoryCreateWithoutEvaluationPeriodsInput[] | EvidenceCategoryUncheckedCreateWithoutEvaluationPeriodsInput[]
+    connectOrCreate?: EvidenceCategoryCreateOrConnectWithoutEvaluationPeriodsInput | EvidenceCategoryCreateOrConnectWithoutEvaluationPeriodsInput[]
+    connect?: EvidenceCategoryWhereUniqueInput | EvidenceCategoryWhereUniqueInput[]
   }
 
-  export type EvaluationPeriodUpdateevidenceCategoryIdsInput = {
-    set?: string[]
-    push?: string | string[]
+  export type EnumEvaluationPeriodStatusFieldUpdateOperationsInput = {
+    set?: $Enums.EvaluationPeriodStatus
   }
 
   export type SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput = {
@@ -521303,6 +521380,19 @@ export namespace Prisma {
     deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
   }
 
+  export type EvidenceCategoryUpdateManyWithoutEvaluationPeriodsNestedInput = {
+    create?: XOR<EvidenceCategoryCreateWithoutEvaluationPeriodsInput, EvidenceCategoryUncheckedCreateWithoutEvaluationPeriodsInput> | EvidenceCategoryCreateWithoutEvaluationPeriodsInput[] | EvidenceCategoryUncheckedCreateWithoutEvaluationPeriodsInput[]
+    connectOrCreate?: EvidenceCategoryCreateOrConnectWithoutEvaluationPeriodsInput | EvidenceCategoryCreateOrConnectWithoutEvaluationPeriodsInput[]
+    upsert?: EvidenceCategoryUpsertWithWhereUniqueWithoutEvaluationPeriodsInput | EvidenceCategoryUpsertWithWhereUniqueWithoutEvaluationPeriodsInput[]
+    set?: EvidenceCategoryWhereUniqueInput | EvidenceCategoryWhereUniqueInput[]
+    disconnect?: EvidenceCategoryWhereUniqueInput | EvidenceCategoryWhereUniqueInput[]
+    delete?: EvidenceCategoryWhereUniqueInput | EvidenceCategoryWhereUniqueInput[]
+    connect?: EvidenceCategoryWhereUniqueInput | EvidenceCategoryWhereUniqueInput[]
+    update?: EvidenceCategoryUpdateWithWhereUniqueWithoutEvaluationPeriodsInput | EvidenceCategoryUpdateWithWhereUniqueWithoutEvaluationPeriodsInput[]
+    updateMany?: EvidenceCategoryUpdateManyWithWhereWithoutEvaluationPeriodsInput | EvidenceCategoryUpdateManyWithWhereWithoutEvaluationPeriodsInput[]
+    deleteMany?: EvidenceCategoryScalarWhereInput | EvidenceCategoryScalarWhereInput[]
+  }
+
   export type StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput = {
     create?: XOR<StandardPeriodCreateWithoutPeriodInput, StandardPeriodUncheckedCreateWithoutPeriodInput> | StandardPeriodCreateWithoutPeriodInput[] | StandardPeriodUncheckedCreateWithoutPeriodInput[]
     connectOrCreate?: StandardPeriodCreateOrConnectWithoutPeriodInput | StandardPeriodCreateOrConnectWithoutPeriodInput[]
@@ -521339,6 +521429,19 @@ export namespace Prisma {
     update?: DocumentFileUpdateWithWhereUniqueWithoutEvaluationPeriodInput | DocumentFileUpdateWithWhereUniqueWithoutEvaluationPeriodInput[]
     updateMany?: DocumentFileUpdateManyWithWhereWithoutEvaluationPeriodInput | DocumentFileUpdateManyWithWhereWithoutEvaluationPeriodInput[]
     deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
+  }
+
+  export type EvidenceCategoryUncheckedUpdateManyWithoutEvaluationPeriodsNestedInput = {
+    create?: XOR<EvidenceCategoryCreateWithoutEvaluationPeriodsInput, EvidenceCategoryUncheckedCreateWithoutEvaluationPeriodsInput> | EvidenceCategoryCreateWithoutEvaluationPeriodsInput[] | EvidenceCategoryUncheckedCreateWithoutEvaluationPeriodsInput[]
+    connectOrCreate?: EvidenceCategoryCreateOrConnectWithoutEvaluationPeriodsInput | EvidenceCategoryCreateOrConnectWithoutEvaluationPeriodsInput[]
+    upsert?: EvidenceCategoryUpsertWithWhereUniqueWithoutEvaluationPeriodsInput | EvidenceCategoryUpsertWithWhereUniqueWithoutEvaluationPeriodsInput[]
+    set?: EvidenceCategoryWhereUniqueInput | EvidenceCategoryWhereUniqueInput[]
+    disconnect?: EvidenceCategoryWhereUniqueInput | EvidenceCategoryWhereUniqueInput[]
+    delete?: EvidenceCategoryWhereUniqueInput | EvidenceCategoryWhereUniqueInput[]
+    connect?: EvidenceCategoryWhereUniqueInput | EvidenceCategoryWhereUniqueInput[]
+    update?: EvidenceCategoryUpdateWithWhereUniqueWithoutEvaluationPeriodsInput | EvidenceCategoryUpdateWithWhereUniqueWithoutEvaluationPeriodsInput[]
+    updateMany?: EvidenceCategoryUpdateManyWithWhereWithoutEvaluationPeriodsInput | EvidenceCategoryUpdateManyWithWhereWithoutEvaluationPeriodsInput[]
+    deleteMany?: EvidenceCategoryScalarWhereInput | EvidenceCategoryScalarWhereInput[]
   }
 
   export type StandardCatalogCreateNestedManyWithoutStandardSetInput = {
@@ -521508,11 +521611,23 @@ export namespace Prisma {
     connect?: EvidenceWhereUniqueInput | EvidenceWhereUniqueInput[]
   }
 
+  export type EvaluationPeriodCreateNestedManyWithoutEvidenceCategoriesInput = {
+    create?: XOR<EvaluationPeriodCreateWithoutEvidenceCategoriesInput, EvaluationPeriodUncheckedCreateWithoutEvidenceCategoriesInput> | EvaluationPeriodCreateWithoutEvidenceCategoriesInput[] | EvaluationPeriodUncheckedCreateWithoutEvidenceCategoriesInput[]
+    connectOrCreate?: EvaluationPeriodCreateOrConnectWithoutEvidenceCategoriesInput | EvaluationPeriodCreateOrConnectWithoutEvidenceCategoriesInput[]
+    connect?: EvaluationPeriodWhereUniqueInput | EvaluationPeriodWhereUniqueInput[]
+  }
+
   export type EvidenceUncheckedCreateNestedManyWithoutCategoryInput = {
     create?: XOR<EvidenceCreateWithoutCategoryInput, EvidenceUncheckedCreateWithoutCategoryInput> | EvidenceCreateWithoutCategoryInput[] | EvidenceUncheckedCreateWithoutCategoryInput[]
     connectOrCreate?: EvidenceCreateOrConnectWithoutCategoryInput | EvidenceCreateOrConnectWithoutCategoryInput[]
     createMany?: EvidenceCreateManyCategoryInputEnvelope
     connect?: EvidenceWhereUniqueInput | EvidenceWhereUniqueInput[]
+  }
+
+  export type EvaluationPeriodUncheckedCreateNestedManyWithoutEvidenceCategoriesInput = {
+    create?: XOR<EvaluationPeriodCreateWithoutEvidenceCategoriesInput, EvaluationPeriodUncheckedCreateWithoutEvidenceCategoriesInput> | EvaluationPeriodCreateWithoutEvidenceCategoriesInput[] | EvaluationPeriodUncheckedCreateWithoutEvidenceCategoriesInput[]
+    connectOrCreate?: EvaluationPeriodCreateOrConnectWithoutEvidenceCategoriesInput | EvaluationPeriodCreateOrConnectWithoutEvidenceCategoriesInput[]
+    connect?: EvaluationPeriodWhereUniqueInput | EvaluationPeriodWhereUniqueInput[]
   }
 
   export type EvidenceUpdateManyWithoutCategoryNestedInput = {
@@ -521529,6 +521644,19 @@ export namespace Prisma {
     deleteMany?: EvidenceScalarWhereInput | EvidenceScalarWhereInput[]
   }
 
+  export type EvaluationPeriodUpdateManyWithoutEvidenceCategoriesNestedInput = {
+    create?: XOR<EvaluationPeriodCreateWithoutEvidenceCategoriesInput, EvaluationPeriodUncheckedCreateWithoutEvidenceCategoriesInput> | EvaluationPeriodCreateWithoutEvidenceCategoriesInput[] | EvaluationPeriodUncheckedCreateWithoutEvidenceCategoriesInput[]
+    connectOrCreate?: EvaluationPeriodCreateOrConnectWithoutEvidenceCategoriesInput | EvaluationPeriodCreateOrConnectWithoutEvidenceCategoriesInput[]
+    upsert?: EvaluationPeriodUpsertWithWhereUniqueWithoutEvidenceCategoriesInput | EvaluationPeriodUpsertWithWhereUniqueWithoutEvidenceCategoriesInput[]
+    set?: EvaluationPeriodWhereUniqueInput | EvaluationPeriodWhereUniqueInput[]
+    disconnect?: EvaluationPeriodWhereUniqueInput | EvaluationPeriodWhereUniqueInput[]
+    delete?: EvaluationPeriodWhereUniqueInput | EvaluationPeriodWhereUniqueInput[]
+    connect?: EvaluationPeriodWhereUniqueInput | EvaluationPeriodWhereUniqueInput[]
+    update?: EvaluationPeriodUpdateWithWhereUniqueWithoutEvidenceCategoriesInput | EvaluationPeriodUpdateWithWhereUniqueWithoutEvidenceCategoriesInput[]
+    updateMany?: EvaluationPeriodUpdateManyWithWhereWithoutEvidenceCategoriesInput | EvaluationPeriodUpdateManyWithWhereWithoutEvidenceCategoriesInput[]
+    deleteMany?: EvaluationPeriodScalarWhereInput | EvaluationPeriodScalarWhereInput[]
+  }
+
   export type EvidenceUncheckedUpdateManyWithoutCategoryNestedInput = {
     create?: XOR<EvidenceCreateWithoutCategoryInput, EvidenceUncheckedCreateWithoutCategoryInput> | EvidenceCreateWithoutCategoryInput[] | EvidenceUncheckedCreateWithoutCategoryInput[]
     connectOrCreate?: EvidenceCreateOrConnectWithoutCategoryInput | EvidenceCreateOrConnectWithoutCategoryInput[]
@@ -521541,6 +521669,19 @@ export namespace Prisma {
     update?: EvidenceUpdateWithWhereUniqueWithoutCategoryInput | EvidenceUpdateWithWhereUniqueWithoutCategoryInput[]
     updateMany?: EvidenceUpdateManyWithWhereWithoutCategoryInput | EvidenceUpdateManyWithWhereWithoutCategoryInput[]
     deleteMany?: EvidenceScalarWhereInput | EvidenceScalarWhereInput[]
+  }
+
+  export type EvaluationPeriodUncheckedUpdateManyWithoutEvidenceCategoriesNestedInput = {
+    create?: XOR<EvaluationPeriodCreateWithoutEvidenceCategoriesInput, EvaluationPeriodUncheckedCreateWithoutEvidenceCategoriesInput> | EvaluationPeriodCreateWithoutEvidenceCategoriesInput[] | EvaluationPeriodUncheckedCreateWithoutEvidenceCategoriesInput[]
+    connectOrCreate?: EvaluationPeriodCreateOrConnectWithoutEvidenceCategoriesInput | EvaluationPeriodCreateOrConnectWithoutEvidenceCategoriesInput[]
+    upsert?: EvaluationPeriodUpsertWithWhereUniqueWithoutEvidenceCategoriesInput | EvaluationPeriodUpsertWithWhereUniqueWithoutEvidenceCategoriesInput[]
+    set?: EvaluationPeriodWhereUniqueInput | EvaluationPeriodWhereUniqueInput[]
+    disconnect?: EvaluationPeriodWhereUniqueInput | EvaluationPeriodWhereUniqueInput[]
+    delete?: EvaluationPeriodWhereUniqueInput | EvaluationPeriodWhereUniqueInput[]
+    connect?: EvaluationPeriodWhereUniqueInput | EvaluationPeriodWhereUniqueInput[]
+    update?: EvaluationPeriodUpdateWithWhereUniqueWithoutEvidenceCategoriesInput | EvaluationPeriodUpdateWithWhereUniqueWithoutEvidenceCategoriesInput[]
+    updateMany?: EvaluationPeriodUpdateManyWithWhereWithoutEvidenceCategoriesInput | EvaluationPeriodUpdateManyWithWhereWithoutEvidenceCategoriesInput[]
+    deleteMany?: EvaluationPeriodScalarWhereInput | EvaluationPeriodScalarWhereInput[]
   }
 
   export type EvidenceCategoryCreateNestedOneWithoutEvidencesInput = {
@@ -587850,10 +587991,10 @@ export namespace Prisma {
     overviewGeneral?: string | null
     overviewResults?: string | null
     conclude?: string | null
-    evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
     standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
     council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
     documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
+    evidenceCategories?: EvidenceCategoryCreateNestedManyWithoutEvaluationPeriodsInput
   }
 
   export type EvaluationPeriodUncheckedCreateWithoutSchoolYearInput = {
@@ -587873,10 +588014,10 @@ export namespace Prisma {
     overviewGeneral?: string | null
     overviewResults?: string | null
     conclude?: string | null
-    evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
     standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
     council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
+    evidenceCategories?: EvidenceCategoryUncheckedCreateNestedManyWithoutEvaluationPeriodsInput
   }
 
   export type EvaluationPeriodCreateOrConnectWithoutSchoolYearInput = {
@@ -588173,7 +588314,6 @@ export namespace Prisma {
     overviewGeneral?: StringNullableFilter<"EvaluationPeriod"> | string | null
     overviewResults?: StringNullableFilter<"EvaluationPeriod"> | string | null
     conclude?: StringNullableFilter<"EvaluationPeriod"> | string | null
-    evidenceCategoryIds?: StringNullableListFilter<"EvaluationPeriod">
   }
 
   export type SchoolYearTrainingScoreUpsertWithWhereUniqueWithoutSchoolYearInput = {
@@ -645319,10 +645459,10 @@ export namespace Prisma {
     overviewGeneral?: string | null
     overviewResults?: string | null
     conclude?: string | null
-    evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
     schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
     standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
     council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
+    evidenceCategories?: EvidenceCategoryCreateNestedManyWithoutEvaluationPeriodsInput
   }
 
   export type EvaluationPeriodUncheckedCreateWithoutDocumentFilesInput = {
@@ -645343,9 +645483,9 @@ export namespace Prisma {
     overviewGeneral?: string | null
     overviewResults?: string | null
     conclude?: string | null
-    evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
     standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
     council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
+    evidenceCategories?: EvidenceCategoryUncheckedCreateNestedManyWithoutEvaluationPeriodsInput
   }
 
   export type EvaluationPeriodCreateOrConnectWithoutDocumentFilesInput = {
@@ -646715,10 +646855,10 @@ export namespace Prisma {
     overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
     overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
     conclude?: NullableStringFieldUpdateOperationsInput | string | null
-    evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
     schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
     standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
     council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
+    evidenceCategories?: EvidenceCategoryUpdateManyWithoutEvaluationPeriodsNestedInput
   }
 
   export type EvaluationPeriodUncheckedUpdateWithoutDocumentFilesInput = {
@@ -646739,9 +646879,9 @@ export namespace Prisma {
     overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
     overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
     conclude?: NullableStringFieldUpdateOperationsInput | string | null
-    evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
     standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
     council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
+    evidenceCategories?: EvidenceCategoryUncheckedUpdateManyWithoutEvaluationPeriodsNestedInput
   }
 
   export type KnowledgeBlockUpsertWithoutDocumentFilesInput = {
@@ -659851,6 +659991,39 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EvidenceCategoryCreateWithoutEvaluationPeriodsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    objectType?: $Enums.StandardCatalogType
+    evidences?: EvidenceCreateNestedManyWithoutCategoryInput
+  }
+
+  export type EvidenceCategoryUncheckedCreateWithoutEvaluationPeriodsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    objectType?: $Enums.StandardCatalogType
+    evidences?: EvidenceUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type EvidenceCategoryCreateOrConnectWithoutEvaluationPeriodsInput = {
+    where: EvidenceCategoryWhereUniqueInput
+    create: XOR<EvidenceCategoryCreateWithoutEvaluationPeriodsInput, EvidenceCategoryUncheckedCreateWithoutEvaluationPeriodsInput>
+  }
+
   export type SchoolYearUpsertWithoutEvaluationPeriodInput = {
     update: XOR<SchoolYearUpdateWithoutEvaluationPeriodInput, SchoolYearUncheckedUpdateWithoutEvaluationPeriodInput>
     create: XOR<SchoolYearCreateWithoutEvaluationPeriodInput, SchoolYearUncheckedCreateWithoutEvaluationPeriodInput>
@@ -659988,6 +660161,38 @@ export namespace Prisma {
   export type DocumentFileUpdateManyWithWhereWithoutEvaluationPeriodInput = {
     where: DocumentFileScalarWhereInput
     data: XOR<DocumentFileUpdateManyMutationInput, DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodInput>
+  }
+
+  export type EvidenceCategoryUpsertWithWhereUniqueWithoutEvaluationPeriodsInput = {
+    where: EvidenceCategoryWhereUniqueInput
+    update: XOR<EvidenceCategoryUpdateWithoutEvaluationPeriodsInput, EvidenceCategoryUncheckedUpdateWithoutEvaluationPeriodsInput>
+    create: XOR<EvidenceCategoryCreateWithoutEvaluationPeriodsInput, EvidenceCategoryUncheckedCreateWithoutEvaluationPeriodsInput>
+  }
+
+  export type EvidenceCategoryUpdateWithWhereUniqueWithoutEvaluationPeriodsInput = {
+    where: EvidenceCategoryWhereUniqueInput
+    data: XOR<EvidenceCategoryUpdateWithoutEvaluationPeriodsInput, EvidenceCategoryUncheckedUpdateWithoutEvaluationPeriodsInput>
+  }
+
+  export type EvidenceCategoryUpdateManyWithWhereWithoutEvaluationPeriodsInput = {
+    where: EvidenceCategoryScalarWhereInput
+    data: XOR<EvidenceCategoryUpdateManyMutationInput, EvidenceCategoryUncheckedUpdateManyWithoutEvaluationPeriodsInput>
+  }
+
+  export type EvidenceCategoryScalarWhereInput = {
+    AND?: EvidenceCategoryScalarWhereInput | EvidenceCategoryScalarWhereInput[]
+    OR?: EvidenceCategoryScalarWhereInput[]
+    NOT?: EvidenceCategoryScalarWhereInput | EvidenceCategoryScalarWhereInput[]
+    id?: StringFilter<"EvidenceCategory"> | string
+    code?: StringNullableFilter<"EvidenceCategory"> | string | null
+    active?: BoolFilter<"EvidenceCategory"> | boolean
+    description?: StringNullableFilter<"EvidenceCategory"> | string | null
+    deletedAt?: DateTimeNullableFilter<"EvidenceCategory"> | Date | string | null
+    createdAt?: DateTimeFilter<"EvidenceCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"EvidenceCategory"> | Date | string
+    createdBy?: UuidNullableFilter<"EvidenceCategory"> | string | null
+    name?: StringFilter<"EvidenceCategory"> | string
+    objectType?: EnumStandardCatalogTypeFilter<"EvidenceCategory"> | $Enums.StandardCatalogType
   }
 
   export type StandardCatalogCreateWithoutStandardSetInput = {
@@ -660395,6 +660600,57 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EvaluationPeriodCreateWithoutEvidenceCategoriesInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    startDate?: Date | string
+    endDate?: Date | string | null
+    status?: $Enums.EvaluationPeriodStatus
+    overviewProblem?: string | null
+    overviewGeneral?: string | null
+    overviewResults?: string | null
+    conclude?: string | null
+    schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
+    standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
+    council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
+  }
+
+  export type EvaluationPeriodUncheckedCreateWithoutEvidenceCategoriesInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    startDate?: Date | string
+    endDate?: Date | string | null
+    status?: $Enums.EvaluationPeriodStatus
+    schoolYearId?: string | null
+    overviewProblem?: string | null
+    overviewGeneral?: string | null
+    overviewResults?: string | null
+    conclude?: string | null
+    standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
+    council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
+  }
+
+  export type EvaluationPeriodCreateOrConnectWithoutEvidenceCategoriesInput = {
+    where: EvaluationPeriodWhereUniqueInput
+    create: XOR<EvaluationPeriodCreateWithoutEvidenceCategoriesInput, EvaluationPeriodUncheckedCreateWithoutEvidenceCategoriesInput>
+  }
+
   export type EvidenceUpsertWithWhereUniqueWithoutCategoryInput = {
     where: EvidenceWhereUniqueInput
     update: XOR<EvidenceUpdateWithoutCategoryInput, EvidenceUncheckedUpdateWithoutCategoryInput>
@@ -660430,6 +660686,22 @@ export namespace Prisma {
     suffix?: StringNullableFilter<"Evidence"> | string | null
   }
 
+  export type EvaluationPeriodUpsertWithWhereUniqueWithoutEvidenceCategoriesInput = {
+    where: EvaluationPeriodWhereUniqueInput
+    update: XOR<EvaluationPeriodUpdateWithoutEvidenceCategoriesInput, EvaluationPeriodUncheckedUpdateWithoutEvidenceCategoriesInput>
+    create: XOR<EvaluationPeriodCreateWithoutEvidenceCategoriesInput, EvaluationPeriodUncheckedCreateWithoutEvidenceCategoriesInput>
+  }
+
+  export type EvaluationPeriodUpdateWithWhereUniqueWithoutEvidenceCategoriesInput = {
+    where: EvaluationPeriodWhereUniqueInput
+    data: XOR<EvaluationPeriodUpdateWithoutEvidenceCategoriesInput, EvaluationPeriodUncheckedUpdateWithoutEvidenceCategoriesInput>
+  }
+
+  export type EvaluationPeriodUpdateManyWithWhereWithoutEvidenceCategoriesInput = {
+    where: EvaluationPeriodScalarWhereInput
+    data: XOR<EvaluationPeriodUpdateManyMutationInput, EvaluationPeriodUncheckedUpdateManyWithoutEvidenceCategoriesInput>
+  }
+
   export type EvidenceCategoryCreateWithoutEvidencesInput = {
     id?: string
     code?: string | null
@@ -660441,6 +660713,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     objectType?: $Enums.StandardCatalogType
+    evaluationPeriods?: EvaluationPeriodCreateNestedManyWithoutEvidenceCategoriesInput
   }
 
   export type EvidenceCategoryUncheckedCreateWithoutEvidencesInput = {
@@ -660454,6 +660727,7 @@ export namespace Prisma {
     createdBy?: string | null
     name: string
     objectType?: $Enums.StandardCatalogType
+    evaluationPeriods?: EvaluationPeriodUncheckedCreateNestedManyWithoutEvidenceCategoriesInput
   }
 
   export type EvidenceCategoryCreateOrConnectWithoutEvidencesInput = {
@@ -660561,6 +660835,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
+    evaluationPeriods?: EvaluationPeriodUpdateManyWithoutEvidenceCategoriesNestedInput
   }
 
   export type EvidenceCategoryUncheckedUpdateWithoutEvidencesInput = {
@@ -660574,6 +660849,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
+    evaluationPeriods?: EvaluationPeriodUncheckedUpdateManyWithoutEvidenceCategoriesNestedInput
   }
 
   export type EvidenceFileUpsertWithWhereUniqueWithoutEvidenceInput = {
@@ -661722,10 +661998,10 @@ export namespace Prisma {
     overviewGeneral?: string | null
     overviewResults?: string | null
     conclude?: string | null
-    evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
     schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
     council?: EvaluationCouncilCreateNestedOneWithoutPeriodInput
     documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
+    evidenceCategories?: EvidenceCategoryCreateNestedManyWithoutEvaluationPeriodsInput
   }
 
   export type EvaluationPeriodUncheckedCreateWithoutStandardsInput = {
@@ -661746,9 +662022,9 @@ export namespace Prisma {
     overviewGeneral?: string | null
     overviewResults?: string | null
     conclude?: string | null
-    evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
     council?: EvaluationCouncilUncheckedCreateNestedOneWithoutPeriodInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
+    evidenceCategories?: EvidenceCategoryUncheckedCreateNestedManyWithoutEvaluationPeriodsInput
   }
 
   export type EvaluationPeriodCreateOrConnectWithoutStandardsInput = {
@@ -661824,10 +662100,10 @@ export namespace Prisma {
     overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
     overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
     conclude?: NullableStringFieldUpdateOperationsInput | string | null
-    evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
     schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
     council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
+    evidenceCategories?: EvidenceCategoryUpdateManyWithoutEvaluationPeriodsNestedInput
   }
 
   export type EvaluationPeriodUncheckedUpdateWithoutStandardsInput = {
@@ -661848,9 +662124,9 @@ export namespace Prisma {
     overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
     overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
     conclude?: NullableStringFieldUpdateOperationsInput | string | null
-    evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
     council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
+    evidenceCategories?: EvidenceCategoryUncheckedUpdateManyWithoutEvaluationPeriodsNestedInput
   }
 
   export type CriterionPeriodUpsertWithWhereUniqueWithoutEvaluationStandardInput = {
@@ -663410,10 +663686,10 @@ export namespace Prisma {
     overviewGeneral?: string | null
     overviewResults?: string | null
     conclude?: string | null
-    evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
     schoolYear?: SchoolYearCreateNestedOneWithoutEvaluationPeriodInput
     standards?: StandardPeriodCreateNestedManyWithoutPeriodInput
     documentFiles?: DocumentFileCreateNestedManyWithoutEvaluationPeriodInput
+    evidenceCategories?: EvidenceCategoryCreateNestedManyWithoutEvaluationPeriodsInput
   }
 
   export type EvaluationPeriodUncheckedCreateWithoutCouncilInput = {
@@ -663434,9 +663710,9 @@ export namespace Prisma {
     overviewGeneral?: string | null
     overviewResults?: string | null
     conclude?: string | null
-    evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
     standards?: StandardPeriodUncheckedCreateNestedManyWithoutPeriodInput
     documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutEvaluationPeriodInput
+    evidenceCategories?: EvidenceCategoryUncheckedCreateNestedManyWithoutEvaluationPeriodsInput
   }
 
   export type EvaluationPeriodCreateOrConnectWithoutCouncilInput = {
@@ -663512,10 +663788,10 @@ export namespace Prisma {
     overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
     overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
     conclude?: NullableStringFieldUpdateOperationsInput | string | null
-    evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
     schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
     standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
+    evidenceCategories?: EvidenceCategoryUpdateManyWithoutEvaluationPeriodsNestedInput
   }
 
   export type EvaluationPeriodUncheckedUpdateWithoutCouncilInput = {
@@ -663536,9 +663812,9 @@ export namespace Prisma {
     overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
     overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
     conclude?: NullableStringFieldUpdateOperationsInput | string | null
-    evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
     standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
+    evidenceCategories?: EvidenceCategoryUncheckedUpdateManyWithoutEvaluationPeriodsNestedInput
   }
 
   export type EvaluationCouncilMemberUpsertWithWhereUniqueWithoutEvaluationCouncilInput = {
@@ -711027,7 +711303,6 @@ export namespace Prisma {
     overviewGeneral?: string | null
     overviewResults?: string | null
     conclude?: string | null
-    evidenceCategoryIds?: EvaluationPeriodCreateevidenceCategoryIdsInput | string[]
   }
 
   export type SchoolYearTrainingScoreCreateManySchoolYearInput = {
@@ -711390,10 +711665,10 @@ export namespace Prisma {
     overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
     overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
     conclude?: NullableStringFieldUpdateOperationsInput | string | null
-    evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
     standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
     council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
     documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
+    evidenceCategories?: EvidenceCategoryUpdateManyWithoutEvaluationPeriodsNestedInput
   }
 
   export type EvaluationPeriodUncheckedUpdateWithoutSchoolYearInput = {
@@ -711413,10 +711688,10 @@ export namespace Prisma {
     overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
     overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
     conclude?: NullableStringFieldUpdateOperationsInput | string | null
-    evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
     standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
     council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
+    evidenceCategories?: EvidenceCategoryUncheckedUpdateManyWithoutEvaluationPeriodsNestedInput
   }
 
   export type EvaluationPeriodUncheckedUpdateManyWithoutSchoolYearInput = {
@@ -711436,7 +711711,6 @@ export namespace Prisma {
     overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
     overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
     conclude?: NullableStringFieldUpdateOperationsInput | string | null
-    evidenceCategoryIds?: EvaluationPeriodUpdateevidenceCategoryIdsInput | string[]
   }
 
   export type SchoolYearTrainingScoreUpdateWithoutSchoolYearInput = {
@@ -741863,6 +742137,47 @@ export namespace Prisma {
     knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type EvidenceCategoryUpdateWithoutEvaluationPeriodsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
+    evidences?: EvidenceUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type EvidenceCategoryUncheckedUpdateWithoutEvaluationPeriodsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
+    evidences?: EvidenceUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type EvidenceCategoryUncheckedUpdateManyWithoutEvaluationPeriodsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    objectType?: EnumStandardCatalogTypeFieldUpdateOperationsInput | $Enums.StandardCatalogType
+  }
+
   export type StandardCatalogCreateManyStandardSetInput = {
     id?: string
     code?: string | null
@@ -742093,6 +742408,72 @@ export namespace Prisma {
     information?: StringFieldUpdateOperationsInput | string
     issuer?: StringFieldUpdateOperationsInput | string
     suffix?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EvaluationPeriodUpdateWithoutEvidenceCategoriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+    overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+    overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+    overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+    conclude?: NullableStringFieldUpdateOperationsInput | string | null
+    schoolYear?: SchoolYearUpdateOneWithoutEvaluationPeriodNestedInput
+    standards?: StandardPeriodUpdateManyWithoutPeriodNestedInput
+    council?: EvaluationCouncilUpdateOneWithoutPeriodNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutEvaluationPeriodNestedInput
+  }
+
+  export type EvaluationPeriodUncheckedUpdateWithoutEvidenceCategoriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+    schoolYearId?: NullableStringFieldUpdateOperationsInput | string | null
+    overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+    overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+    overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+    conclude?: NullableStringFieldUpdateOperationsInput | string | null
+    standards?: StandardPeriodUncheckedUpdateManyWithoutPeriodNestedInput
+    council?: EvaluationCouncilUncheckedUpdateOneWithoutPeriodNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutEvaluationPeriodNestedInput
+  }
+
+  export type EvaluationPeriodUncheckedUpdateManyWithoutEvidenceCategoriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumEvaluationPeriodStatusFieldUpdateOperationsInput | $Enums.EvaluationPeriodStatus
+    schoolYearId?: NullableStringFieldUpdateOperationsInput | string | null
+    overviewProblem?: NullableStringFieldUpdateOperationsInput | string | null
+    overviewGeneral?: NullableStringFieldUpdateOperationsInput | string | null
+    overviewResults?: NullableStringFieldUpdateOperationsInput | string | null
+    conclude?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EvidenceFileCreateManyEvidenceInput = {

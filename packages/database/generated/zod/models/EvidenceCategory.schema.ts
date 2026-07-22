@@ -35,6 +35,7 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     evidences: z.array(z.unknown()).optional(),
+    evaluationPeriods: z.array(z.unknown()).optional(),
 }
 );
 
