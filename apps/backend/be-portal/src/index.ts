@@ -14,7 +14,7 @@ import ImportTrainingDataApp from "./api/import-training-data"
 import { checkIp } from "./middlewares/check-ip"
 import { setupOpenApi } from "./utils/openapi"
 
-const poolSize = parseInt(process.env.DATABASE_POOL_SIZE || "20", 10)
+const poolSize = parseInt(process.env.DATABASE_POOL_SIZE || "40", 10)
 const dbUrl = process.env.DATABASE_URL || ""
 const urlWithPool = dbUrl.includes("connection_limit")
   ? dbUrl

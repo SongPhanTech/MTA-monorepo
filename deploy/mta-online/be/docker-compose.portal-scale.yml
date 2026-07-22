@@ -1,0 +1,42 @@
+# Bật instance portal thứ 2 (:3046) — dùng cùng lúc với docker-compose.yml
+#
+#   cd ~/mta-app/be
+#   docker compose -f docker-compose.yml -f docker-compose.portal-scale.yml up -d mta-be-portal mta-be-portal-2
+#
+# Ngân sách DB: 2 × DATABASE_POOL_SIZE + các BE khác ≤ POSTGRES_MAX_CONNECTIONS
+
+services:
+  mta-be-portal-2:
+    image: ghcr.io/songphantech/mta-be-portal:latest
+    pull_policy: never
+    container_name: mta-be-portal-2
+    restart: unless-stopped
+    env_file:
+      - .env
+      - .env.be-portal
+    environment:
+      DATABASE_POOL_SIZE: ${DATABASE_POOL_SIZE_2:-40}
+      PORT: "3000"
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      REDIS_CACHE_ENABLED: ${REDIS_CACHE_ENABLED:-true}
+      REDIS_TTL_SESSION: ${REDIS_TTL_SESSION:-60}
+      REDIS_TTL_STUDENT: ${REDIS_TTL_STUDENT:-60}
+      REDIS_TTL_CLASSES_INFO: ${REDIS_TTL_CLASSES_INFO:-5}
+      REDIS_RATE_LIMIT_ENABLED: ${REDIS_RATE_LIMIT_ENABLED:-true}
+      REDIS_RL_REGISTER_MAX: ${REDIS_RL_REGISTER_MAX:-20}
+      REDIS_RL_REGISTER_WINDOW: ${REDIS_RL_REGISTER_WINDOW:-60}
+      REDIS_RL_UNREGISTER_MAX: ${REDIS_RL_UNREGISTER_MAX:-20}
+      REDIS_RL_UNREGISTER_WINDOW: ${REDIS_RL_UNREGISTER_WINDOW:-60}
+      REDIS_RL_READ_MAX: ${REDIS_RL_READ_MAX:-120}
+      REDIS_RL_READ_WINDOW: ${REDIS_RL_READ_WINDOW:-60}
+    ports:
+      - "3046:3000"
+    cpus: ${PORTAL_CPU_LIMIT:-2}
+    mem_limit: ${PORTAL_MEM_LIMIT:-2g}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - mta-net
