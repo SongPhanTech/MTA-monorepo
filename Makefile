@@ -76,8 +76,8 @@ else ifeq ($(SERVER_PROFILE),mta_online)
   SERVER_PASSWORD  := 5Qaz@106186
   BE_DEPLOY_DIR    := ~/mta-app/be
   BE_APP_DIR       := ~/mta-app/be
-  FE_APP_DIR       := ~/mta-app/fe
-  FE_COMPOSE_FILE  := docker-compose.yml
+  FE_APP_DIR       := ~/mta-app-sso
+  FE_COMPOSE_FILE  := app-docker-compose.yml
   FE_APP_URL       := https://mta.edu.vn
   ONLY_OFFICE_ENDPOINT := 
 
