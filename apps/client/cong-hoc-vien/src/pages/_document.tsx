@@ -11,10 +11,6 @@ export default class MyDocument extends NextDocument {
             rel="stylesheet"
             href={`${getRuntimeEnv("NEXT_PUBLIC_ASSET_PREFIX")}/mta-components.css`}
           />
-          <script
-            src={`${getRuntimeEnv("NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT")}/web-apps/apps/api/documents/api.js`}
-            async
-          />
         </Head>
         <body>
           <Main />

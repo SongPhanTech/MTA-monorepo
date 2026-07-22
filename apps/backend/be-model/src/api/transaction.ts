@@ -49,7 +49,7 @@ app.openapi(
       for (const element of data) {
         const key = (element.model.charAt(0).toLowerCase() +
           element.model.slice(1)) as keyof Prisma.TransactionClient
-        
+
         if (!tx[key]) {
           throw new Error(`Model ${element.model} not found in transaction`)
         }
@@ -59,7 +59,10 @@ app.openapi(
         }
 
         // Intercept updates to SubjectClass to validate locking and log changes
-        if (element.model === "SubjectClass" && (operation === "update" || operation === "updateMany")) {
+        if (
+          element.model === "SubjectClass" &&
+          (operation === "update" || operation === "updateMany")
+        ) {
           const classId = element.data?.where?.id
           if (classId) {
             const currData = await tx.subjectClass.findUnique({
@@ -73,25 +76,32 @@ app.openapi(
               // 1. Check if lecturer fields are modified when locked
               const isLecturerChanging =
                 (newData.lecturerId !== undefined && newData.lecturerId !== currData.lecturerId) ||
-                (newData.extraLecturerId !== undefined && newData.extraLecturerId !== currData.extraLecturerId) ||
-                (newData.enterGradeLecturerId !== undefined && newData.enterGradeLecturerId !== currData.enterGradeLecturerId)
+                (newData.extraLecturerId !== undefined &&
+                  newData.extraLecturerId !== currData.extraLecturerId) ||
+                (newData.enterGradeLecturerId !== undefined &&
+                  newData.enterGradeLecturerId !== currData.enterGradeLecturerId)
 
               if (isLocked && isLecturerChanging) {
                 throw new Error("Lớp học phần đang bị khoá phân công giảng viên")
               }
 
               // 2. Create history log if lecturer or lock status changes
-              const isLockStatusChanging = newData.isLockLecturer !== undefined && newData.isLockLecturer !== currData.isLockLecturer
-              
+              const isLockStatusChanging =
+                newData.isLockLecturer !== undefined &&
+                newData.isLockLecturer !== currData.isLockLecturer
+
               if (isLecturerChanging || isLockStatusChanging) {
                 await tx.subjectClassHistory.create({
                   data: {
                     subjectClassId: classId,
-                    isLockLecturer: newData.isLockLecturer !== undefined ? newData.isLockLecturer : currData.isLockLecturer,
+                    isLockLecturer:
+                      newData.isLockLecturer !== undefined
+                        ? newData.isLockLecturer
+                        : currData.isLockLecturer,
                     isLockScore: currData.isLockScore,
                     isLockExamScore: currData.isLockExamScore,
                     updatedById: updatedById,
-                  }
+                  },
                 })
               }
             }

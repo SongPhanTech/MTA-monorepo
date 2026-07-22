@@ -83,14 +83,37 @@ Copy từ repo:
 Chỉnh mật khẩu / OIDC cho đúng.  
 **Quan trọng:** trong env BE dùng `postgres` và `minio` (hostname Docker), không dùng IP host.
 
+<<<<<<< HEAD
+=======
+Giữ Postgres/MinIO đang chạy:
+
+>>>>>>> 739545e75263a60b6681a4e6dbeef7136528cc56
 ```bash
 cd ~/mta-app/be
 docker compose up -d postgres minio redis
 ```
 
 ### 2. Migrate schema (máy local)
+<<<<<<< HEAD
 
 Trong `packages/database/.env` trỏ DB online rồi migrate theo quy trình dự án.
+=======
+
+Trong `packages/database/.env`:
+
+```
+DATABASE_URL="postgres://root:123456654321@27.71.20.109:5432/mta"
+```
+
+Rồi chạy migrate Prisma/ZenStack theo quy trình dự án (ví dụ `pnpm` script migrate trong `packages/database`).
+
+Verify:
+
+```bash
+docker exec -it mta-postgres psql -U root -d mta -c '\dn'
+# kỳ vọng có schema ql-dao-tao, ...
+```
+>>>>>>> 739545e75263a60b6681a4e6dbeef7136528cc56
 
 ### 3. Build + đẩy image (máy local)
 
@@ -98,6 +121,11 @@ Trong `packages/database/.env` trỏ DB online rồi migrate theo quy trình d�
 make all-be-portal SERVER_PROFILE=mta_online
 # …
 ```
+<<<<<<< HEAD
+=======
+
+Mỗi lệnh: build → scp tar.gz → `docker load` → `compose up` service đó (image `ghcr.io/...:latest`).
+>>>>>>> 739545e75263a60b6681a4e6dbeef7136528cc56
 
 ### 4. Kiểm tra trên server
 
@@ -109,6 +137,7 @@ curl -sS http://127.0.0.1:3044/api/
 
 | Service                  | Host port |
 | ------------------------ | --------- |
+<<<<<<< HEAD
 | mta-be-model             | 3041      |
 | mta-be-ql-dao-tao        | 3042      |
 | mta-be-portal            | 3044      |
@@ -127,3 +156,22 @@ Map domain → port trên; rồi `make all-cong-hoc-vien SERVER_PROFILE=…`.
 | `too many clients already`             | Tổng pool BE > `max_connections`          |
 | Image not found                        | Chưa `docker load` / deploy               |
 | Scale portal nhưng nginx vẫn 1 backend | Chưa bật `:3046` trong upstream           |
+=======
+| mta-be-model             | 3000      |
+| mta-be-portal            | 3003      |
+| mta-be-ql-dao-tao-shared | 3004      |
+
+### 5. (Sau) Nginx / FE
+
+Map domain → các port trên; rồi mới `make all-cong-hoc-vien SERVER_PROFILE=mta_online`.
+
+## Lỗi thường gặp
+
+| Triệu chứng                             | Nguyên nhân                                     |
+| --------------------------------------- | ----------------------------------------------- |
+| `compose up` không có service mta-be-\* | Chưa cập nhật compose (vẫn chỉ postgres/minio)  |
+| BE không kết nối DB                     | `DATABASE_URL` dùng IP thay vì `postgres`       |
+| MinIO SSL error                         | `MINIO_USE_SSL=true` với `http://` → để `false` |
+| `pull` / image not found                | Chưa `make deploy` / chưa `docker load`         |
+| Schema empty                            | Chưa migrate                                    |
+>>>>>>> 739545e75263a60b6681a4e6dbeef7136528cc56

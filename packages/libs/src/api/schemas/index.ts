@@ -399,6 +399,7 @@ export * from './exportTrainingDataResponseCounts';
 export * from './exportTrainingDataResponseData';
 export * from './exportTrainingDataResponseDataItem';
 export * from './exportTrainingDataResponseFilters';
+export * from './exportXetChungChiRequest';
 export * from './failureBooleanResponse';
 export * from './finishDataSync200';
 export * from './finishDataSyncBody';

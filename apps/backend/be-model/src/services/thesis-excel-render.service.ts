@@ -33,7 +33,7 @@ export async function renderThesisPaymentXlsx(payload: ExcelTemplatePayload): Pr
     const template = new XlsxTemplate(templateBuffer)
     template.substitute(1, item)
     const sheetBuffer = await template.generate({ type: "nodebuffer" })
-    
+
     generatedSheets.push({
       buffer: Buffer.from(sheetBuffer as any),
       pageBreakAfter: index < payload.data.items.length - 1,

@@ -88,4 +88,6 @@ export interface ExportStudentYearResultRequest {
   schoolYearId?: string;
   /** ID hệ đào tạo. */
   trainingObjectTypeId: string;
+  /** ID lớp học (FixedClass). */
+  fixedClassId?: string;
 }

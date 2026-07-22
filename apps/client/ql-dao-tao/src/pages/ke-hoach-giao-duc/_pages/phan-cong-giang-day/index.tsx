@@ -2065,7 +2065,12 @@ export default function PhanCongGiangDay({
                     const isLocked = subjectClassForm?.[record.id]?.isLockLecturer ?? true
                     return (
                       <Flex vertical align="center" className="gap-1">
-                        <FormItem form={form} name={["subjectClass", record.id, "isLockLecturer"]} valuePropName="checked" className="m-0">
+                        <FormItem
+                          form={form}
+                          name={["subjectClass", record.id, "isLockLecturer"]}
+                          valuePropName="checked"
+                          className="m-0"
+                        >
                           <Tooltip title={logText || "Chưa có lịch sử khóa"}>
                             <Switch
                               checkedChildren="Khóa"
@@ -2086,8 +2091,12 @@ export default function PhanCongGiangDay({
                                       },
                                     },
                                   ])
-                                  message.success(checked ? "Đã khóa phân công giảng viên" : "Đã mở khóa phân công giảng viên")
-                                  
+                                  message.success(
+                                    checked
+                                      ? "Đã khóa phân công giảng viên"
+                                      : "Đã mở khóa phân công giảng viên"
+                                  )
+
                                   // 2. Cập nhật cục bộ trong form
                                   const updated = {
                                     ...subjectClassForm,
@@ -2095,14 +2104,16 @@ export default function PhanCongGiangDay({
                                       ...subjectClassForm?.[record.id],
                                       isLockLecturer: checked,
                                       isEdit: false,
-                                    }
+                                    },
                                   }
                                   form.setFieldValue("subjectClass", updated)
 
                                   // 3. Tải lại dữ liệu bảng
                                   refetch()
                                 } catch (err: any) {
-                                  message.error(err?.message || "Không thể cập nhật trạng thái khóa")
+                                  message.error(
+                                    err?.message || "Không thể cập nhật trạng thái khóa"
+                                  )
                                 } finally {
                                   hideSpinner()
                                 }
@@ -2112,7 +2123,7 @@ export default function PhanCongGiangDay({
                         </FormItem>
                       </Flex>
                     )
-                  }
+                  },
                 },
                 {
                   title: "Giảng viên 1",
@@ -2138,10 +2149,11 @@ export default function PhanCongGiangDay({
                           }
                           disabled={
                             (khoaBoMon &&
-                            !!record.lecturerAssignmentDeadline &&
-                            dayjs(record.lecturerAssignmentDeadline).isBefore(
-                              dayjs().startOf("day")
-                            )) || (subjectClassForm?.[record.id]?.isLockLecturer ?? true)
+                              !!record.lecturerAssignmentDeadline &&
+                              dayjs(record.lecturerAssignmentDeadline).isBefore(
+                                dayjs().startOf("day")
+                              )) ||
+                            (subjectClassForm?.[record.id]?.isLockLecturer ?? true)
                           }
                           organizationId={record?.subject?.managementOrganizationId ?? ""}
                         />
@@ -2172,10 +2184,11 @@ export default function PhanCongGiangDay({
                           }
                           disabled={
                             (khoaBoMon &&
-                            !!record.lecturerAssignmentDeadline &&
-                            dayjs(record.lecturerAssignmentDeadline).isBefore(
-                              dayjs().startOf("day")
-                            )) || (subjectClassForm?.[record.id]?.isLockLecturer ?? true)
+                              !!record.lecturerAssignmentDeadline &&
+                              dayjs(record.lecturerAssignmentDeadline).isBefore(
+                                dayjs().startOf("day")
+                              )) ||
+                            (subjectClassForm?.[record.id]?.isLockLecturer ?? true)
                           }
                           organizationId={record?.subject?.managementOrganizationId}
                         />
@@ -2207,10 +2220,11 @@ export default function PhanCongGiangDay({
                           organizationId={record?.subject?.managementOrganizationId}
                           disabled={
                             (khoaBoMon &&
-                            !!record.lecturerAssignmentDeadline &&
-                            dayjs(record.lecturerAssignmentDeadline).isBefore(
-                              dayjs().startOf("day")
-                            )) || (subjectClassForm?.[record.id]?.isLockLecturer ?? true)
+                              !!record.lecturerAssignmentDeadline &&
+                              dayjs(record.lecturerAssignmentDeadline).isBefore(
+                                dayjs().startOf("day")
+                              )) ||
+                            (subjectClassForm?.[record.id]?.isLockLecturer ?? true)
                           }
                         />
                       </FormItem>
