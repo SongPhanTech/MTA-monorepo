@@ -57,7 +57,12 @@ export default defineConfig({
   },
   portal_api: {
     // input: 'http://localhost:3002/openapi',
-    input: "https://mta.swantech.vn/api/portal/openapi",
+    input: {
+      target: "https://mta.swantech.vn/api/portal/openapi",
+      override: {
+        transformer: "./scripts/openapi-transformer.mjs",
+      },
+    },
     output: {
       client: "react-query",
       httpClient: "fetch",

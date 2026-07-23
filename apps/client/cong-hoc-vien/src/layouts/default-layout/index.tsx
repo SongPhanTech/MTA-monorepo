@@ -111,7 +111,7 @@ const DefaultLayout = ({
       localStorage.setItem("collapsed", newValue.toString())
     }
   }
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+
   useEffect(() => {
     handleCollapsed()
   }, [])
