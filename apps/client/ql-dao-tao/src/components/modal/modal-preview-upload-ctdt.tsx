@@ -263,21 +263,21 @@ const ModalPreviewUpload = () => {
               render: (_, record) => record.credit,
             },
             {
-              title: "Số tiết",
+              title: <Tooltip title="Số tiết chương trình đào tạo">Số tiết</Tooltip>,
               // dataIndex: 'period',
               // key: 'periodCtdt',
               width: 60,
               align: "center",
               render: (_, record) => record.period,
             },
-            // {
-            //     title: 'Số tiết TKB',
-            //     // dataIndex: 'period',
-            //     key: 'periodTkb',
-            //     width: 120,
-            //     align: 'center',
-            //     render: (_, record) => record.period
-            // },
+            {
+              title: <Tooltip title="Số tiết thời khoá biểu">Số tiết TKB</Tooltip>,
+              // dataIndex: 'schedulePeriod',
+              key: "periodTkb",
+              width: 90,
+              align: "center",
+              render: (_, record) => record.schedulePeriod,
+            },
             {
               title: "LT",
               width: 60,
