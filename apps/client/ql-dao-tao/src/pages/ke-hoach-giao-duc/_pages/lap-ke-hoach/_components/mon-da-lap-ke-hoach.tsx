@@ -24,7 +24,7 @@ type MonDaLapKeHoachForm = {
 
 export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassType }) {
   const [currentPage, setCurrentPage] = useState(1)
-  const [numberOfPages, setNumberOfPages] = useState(100)
+  const [numberOfPages, setNumberOfPages] = useState(300)
   const { id: semesterId } = useSemesterStore()
   const [form] = Form.useForm<MonDaLapKeHoachForm>()
   const searchText = Form.useWatch("searchText", form)
