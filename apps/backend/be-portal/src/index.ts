@@ -62,7 +62,7 @@ const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
 const jwksUri = `${issuer}/protocol/openid-connect/certs`
 const audience = config.keycloak.clientId
 
-app.use("/api/*", jwtAuth("conghocvien"))
+app.use("/api/*", jwtAuth("congsinhvien"))
 
 app.route("/api/class-register", ClassRegisterApp)
 app.route("/api/data-sync", DataSyncHistoryApp)

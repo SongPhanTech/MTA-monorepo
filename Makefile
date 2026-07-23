@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= swan1
+SERVER_PROFILE ?= app
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -122,8 +122,8 @@ FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_CONG_HOC_
 # Client App Mappings
 CDN_NAME_ql-dao-tao = lms-cdn
 ROUTER_NAME_ql-dao-tao = lms
-CDN_NAME_cong-hoc-vien = cong-hoc-vien-cdn
-ROUTER_NAME_cong-hoc-vien = cong-hoc-vien
+CDN_NAME_cong-sinh-vien = cong-sinh-vien-cdn
+ROUTER_NAME_cong-sinh-vien = cong-sinh-vien
 CDN_NAME_tro-ly-ao = chatbot-cdn
 ROUTER_NAME_tro-ly-ao = chatbot
 CDN_NAME_ql-ho-so = hrm-cdn
@@ -137,7 +137,7 @@ ROUTER_NAME_cong-giang-vien = cong-giang-vien
 # Format: <domain from profile><suffix below>  e.g. https://mta.swantech.vn/lms/home
 APP_URL_SUFFIX_ql-dao-tao   = /lms/home
 APP_URL_SUFFIX_khao-thi     = /ems/home
-APP_URL_SUFFIX_cong-hoc-vien  = /cong-hoc-vien/home
+APP_URL_SUFFIX_cong-sinh-vien  = /cong-sinh-vien/home
 APP_URL_SUFFIX_ql-ho-so     = /hrm/home
 APP_URL_SUFFIX_tro-ly-ao    = /chatbot/?mode=tro-ly-ao
 APP_URL_SUFFIX_cong-giang-vien = /conggiangvien/home
