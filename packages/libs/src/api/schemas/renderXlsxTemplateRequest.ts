@@ -94,4 +94,10 @@ export interface RenderXlsxTemplateRequest {
   sheets: XlsxTemplateSheetInput[];
   /** Tự động vá placeholder bảng cũ thiếu cột Thứ/Tiết/Giảng đường. Mặc định false. */
   autoPatchTablePlaceholders?: boolean;
+  /** Ghép nhiều block vào 1 sheet (xếp dọc). Mặc định false. */
+  mergeBlocksToOneSheet?: boolean;
+  /** Số dòng trống giữa các block khi ghép dọc. Mặc định 0. */
+  blockGapRows?: number;
+  /** Prefix đường dẫn MinIO (ví dụ mta/luan-van). */
+  prefix?: string;
 }
