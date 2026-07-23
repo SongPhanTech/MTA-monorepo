@@ -922,9 +922,7 @@ app.openapi(debtStatistics, async (c) => {
   }
 
   const rows = Object.values(studentDebtMap).flatMap((s) => {
-    const debtSubjects = Object.values(s.subjects).filter(
-      (sub) => sub.hasFailed && !sub.hasPassed
-    )
+    const debtSubjects = Object.values(s.subjects).filter((sub) => sub.hasFailed && !sub.hasPassed)
     if (debtSubjects.length === 0) return []
 
     const totalDebtSubject = debtSubjects.length

@@ -2,7 +2,7 @@
 
 **Hệ thống:** Cổng học viên (cong-hoc-vien) / Backend portal (`be-portal`)  
 **Phạm vi:** API `POST /api/class-register/class-register`  
-**Commit tham chiếu:** `fa1132f67` — *fix logic chịu tải* (15/07/2026)  
+**Commit tham chiếu:** `fa1132f67` — _fix logic chịu tải_ (15/07/2026)  
 **Mục đích tài liệu:** Trình bày giải pháp đã từng dùng, hạn chế, và giải pháp đã thay thế hiện tại.
 
 ---
@@ -46,23 +46,23 @@ Dùng `prisma.$transaction` để gói các thao tác ghi vào một đơn vị 
 
 ### 2.4. Hạn chế / rủi ro
 
-| Rủi ro | Mô tả |
-|--------|--------|
-| **Race condition sĩ số** | Hai request cùng đọc `count` trước khi phía kia `create` → cả hai đều thấy “còn chỗ” → vượt `maxStudent`. |
-| **Không có row lock** | Transaction không khóa dòng `SubjectClass` nên các session DB vẫn đọc/ghi song song trên cùng lớp. |
-| **Thứ tự ghi chưa tối ưu** | Tạo `ClassRegisterLogs` trước `StudentSubjectScore` → nếu fail ở bước score, trạng thái trung gian khó diễn giải hơn. |
-| **Trùng nhật ký** | Chưa có unique `(session, student, subjectClass)` trên `ClassRegisterLogs` → có thể sinh log trùng khi gửi request lặp. |
-| **Deadlock tiềm ẩn** | Khi đăng ký nhiều lớp, nếu các transaction khóa/cập nhật theo thứ tự khác nhau (khi bổ sung lock sau này) dễ deadlock nếu không chuẩn hóa thứ tự. |
+| Rủi ro                     | Mô tả                                                                                                                                             |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Race condition sĩ số**   | Hai request cùng đọc `count` trước khi phía kia `create` → cả hai đều thấy “còn chỗ” → vượt `maxStudent`.                                         |
+| **Không có row lock**      | Transaction không khóa dòng `SubjectClass` nên các session DB vẫn đọc/ghi song song trên cùng lớp.                                                |
+| **Thứ tự ghi chưa tối ưu** | Tạo `ClassRegisterLogs` trước `StudentSubjectScore` → nếu fail ở bước score, trạng thái trung gian khó diễn giải hơn.                             |
+| **Trùng nhật ký**          | Chưa có unique `(session, student, subjectClass)` trên `ClassRegisterLogs` → có thể sinh log trùng khi gửi request lặp.                           |
+| **Deadlock tiềm ẩn**       | Khi đăng ký nhiều lớp, nếu các transaction khóa/cập nhật theo thứ tự khác nhau (khi bổ sung lock sau này) dễ deadlock nếu không chuẩn hóa thứ tự. |
 
 ### 2.5. Minh họa race condition
 
 Giả sử lớp có `maxStudent = 40`, đang có 39 SV:
 
-| Thời điểm | Request A | Request B |
-|-----------|-----------|-----------|
-| T1 | `count = 39` → còn chỗ | `count = 39` → còn chỗ |
-| T2 | `create` score thành công | `create` score thành công |
-| Kết quả | Lớp có **41** SV — vượt sĩ số | |
+| Thời điểm | Request A                     | Request B                 |
+| --------- | ----------------------------- | ------------------------- |
+| T1        | `count = 39` → còn chỗ        | `count = 39` → còn chỗ    |
+| T2        | `create` score thành công     | `create` score thành công |
+| Kết quả   | Lớp có **41** SV — vượt sĩ số |                           |
 
 **Kết luận giai đoạn cũ:** Transaction đảm bảo atomicity cho từng request, **nhưng không đảm bảo isolation đúng mức** cho bài toán tranh chấp sĩ số giữa nhiều request.
 
@@ -93,23 +93,23 @@ Giữ `$transaction`, bổ sung **khóa bi quan (pessimistic lock)** trên dòng
 
 ### 3.3. Các thay đổi kèm theo
 
-| Hạng mục | Nội dung | Mục đích |
-|----------|----------|----------|
-| **Row lock** | `SELECT … FOR UPDATE` trên `SubjectClass` | Tuần tự hóa đăng ký cùng lớp → tránh overbook |
-| **Thứ tự khóa** | Sort `id` trước khi lock | Tránh deadlock khi 2 TX khóa nhiều lớp theo thứ tự khác nhau |
-| **Thứ tự ghi** | Score trước, Log sau | Chỉ ghi nhật ký khi đã vào lớp thành công |
-| **Unique constraint** | `ClassRegisterLogs(sessionId, studentId, subjectClassId)` | DB chặn log trùng (kèm migration dọn duplicate cũ) |
-| **Unique sẵn có** | `StudentSubjectScore(subjectClassId, studentId)` | Lớp phòng thủ thứ hai ở DB |
-| **Pool size** | `DATABASE_POOL_SIZE` (mặc định 20) trên Prisma portal | Chịu tải nhiều connection khi đợt đăng ký đông |
-| **Đồng bộ pattern** | Cùng `FOR UPDATE` ở API registration shared (`be-ql-dao-tao-shared`) | Hành vi sĩ số thống nhất giữa portal và đăng ký nội bộ |
+| Hạng mục              | Nội dung                                                             | Mục đích                                                     |
+| --------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------ |
+| **Row lock**          | `SELECT … FOR UPDATE` trên `SubjectClass`                            | Tuần tự hóa đăng ký cùng lớp → tránh overbook                |
+| **Thứ tự khóa**       | Sort `id` trước khi lock                                             | Tránh deadlock khi 2 TX khóa nhiều lớp theo thứ tự khác nhau |
+| **Thứ tự ghi**        | Score trước, Log sau                                                 | Chỉ ghi nhật ký khi đã vào lớp thành công                    |
+| **Unique constraint** | `ClassRegisterLogs(sessionId, studentId, subjectClassId)`            | DB chặn log trùng (kèm migration dọn duplicate cũ)           |
+| **Unique sẵn có**     | `StudentSubjectScore(subjectClassId, studentId)`                     | Lớp phòng thủ thứ hai ở DB                                   |
+| **Pool size**         | `DATABASE_POOL_SIZE` (mặc định 20) trên Prisma portal                | Chịu tải nhiều connection khi đợt đăng ký đông               |
+| **Đồng bộ pattern**   | Cùng `FOR UPDATE` ở API registration shared (`be-ql-dao-tao-shared`) | Hành vi sĩ số thống nhất giữa portal và đăng ký nội bộ       |
 
 ### 3.4. Hành vi sau khi sửa (cùng ví dụ 39/40)
 
-| Thời điểm | Request A | Request B |
-|-----------|-----------|-----------|
-| T1 | `FOR UPDATE` lấy lock lớp | Chờ lock |
-| T2 | `count = 39` → create → commit | — |
-| T3 | — | Nhận lock, `count = 40` → reject “đã đủ số lượng” |
+| Thời điểm | Request A                      | Request B                                         |
+| --------- | ------------------------------ | ------------------------------------------------- |
+| T1        | `FOR UPDATE` lấy lock lớp      | Chờ lock                                          |
+| T2        | `count = 39` → create → commit | —                                                 |
+| T3        | —                              | Nhận lock, `count = 40` → reject “đã đủ số lượng” |
 
 Chỉ **một** sinh viên nhận chỗ cuối; sinh viên còn lại nhận lỗi nghiệp vụ rõ ràng.
 
@@ -122,26 +122,26 @@ Chỉ **một** sinh viên nhận chỗ cuối; sinh viên còn lại nhận l�
 
 ### 3.6. Lưu ý / trade-off
 
-| Điểm | Giải thích |
-|------|------------|
-| **Lock contention** | Nhiều SV đổ vào cùng 1 lớp sẽ xếp hàng theo lock → độ trễ request tăng nhẹ ở “chỗ nóng”, đổi lấy đúng sĩ số. |
-| **Phạm vi lock** | Chỉ khóa các `SubjectClass` trong request; không khóa toàn bảng. |
-| **Validate ngoài TX** | Tiên quyết / tín chỉ vẫn kiểm trước transaction; phần tranh chấp tài nguyên (sĩ số, trùng lớp) nằm trong TX có lock. |
-| **Unregister** | Transaction hủy đăng ký riêng (xóa log → history → attendance → score); không dùng `FOR UPDATE` vì không tranh sĩ số khi hủy; vẫn chặn hủy nếu đã phát sinh điểm/điểm danh/thi. |
+| Điểm                  | Giải thích                                                                                                                                                                      |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Lock contention**   | Nhiều SV đổ vào cùng 1 lớp sẽ xếp hàng theo lock → độ trễ request tăng nhẹ ở “chỗ nóng”, đổi lấy đúng sĩ số.                                                                    |
+| **Phạm vi lock**      | Chỉ khóa các `SubjectClass` trong request; không khóa toàn bảng.                                                                                                                |
+| **Validate ngoài TX** | Tiên quyết / tín chỉ vẫn kiểm trước transaction; phần tranh chấp tài nguyên (sĩ số, trùng lớp) nằm trong TX có lock.                                                            |
+| **Unregister**        | Transaction hủy đăng ký riêng (xóa log → history → attendance → score); không dùng `FOR UPDATE` vì không tranh sĩ số khi hủy; vẫn chặn hủy nếu đã phát sinh điểm/điểm danh/thi. |
 
 ---
 
 ## 4. Bảng so sánh tổng hợp
 
-| Tiêu chí | Giải pháp cũ | Giải pháp hiện tại |
-|----------|--------------|-------------------|
-| Atomic ghi Score + Log | Có (`$transaction`) | Có (`$transaction`) |
-| Chống overbook khi concurrent | Không đảm bảo | Đảm bảo bằng `FOR UPDATE` |
-| Thứ tự ghi | Log → Score | Score → Log |
-| Chống log trùng | Yếu | Unique constraint DB |
-| Deadlock khi đăng ký nhiều lớp | Chưa đặt ra (vì chưa lock) | Phòng bằng sort `id` trước lock |
-| Khả năng chịu tải đăng ký đồng thời | Hạn chế | Phù hợp đợt đăng ký đông |
-| Connection pool cấu hình được | Chưa nhấn mạnh | `DATABASE_POOL_SIZE` |
+| Tiêu chí                            | Giải pháp cũ               | Giải pháp hiện tại              |
+| ----------------------------------- | -------------------------- | ------------------------------- |
+| Atomic ghi Score + Log              | Có (`$transaction`)        | Có (`$transaction`)             |
+| Chống overbook khi concurrent       | Không đảm bảo              | Đảm bảo bằng `FOR UPDATE`       |
+| Thứ tự ghi                          | Log → Score                | Score → Log                     |
+| Chống log trùng                     | Yếu                        | Unique constraint DB            |
+| Deadlock khi đăng ký nhiều lớp      | Chưa đặt ra (vì chưa lock) | Phòng bằng sort `id` trước lock |
+| Khả năng chịu tải đăng ký đồng thời | Hạn chế                    | Phù hợp đợt đăng ký đông        |
+| Connection pool cấu hình được       | Chưa nhấn mạnh             | `DATABASE_POOL_SIZE`            |
 
 ---
 
@@ -179,13 +179,13 @@ Chỉ **một** sinh viên nhận chỗ cuối; sinh viên còn lại nhận l�
 
 ## 7. Phụ lục kỹ thuật (tham chiếu mã nguồn)
 
-| Thành phần | Đường dẫn |
-|------------|-----------|
-| API đăng ký portal | `apps/backend/be-portal/src/api/class-register.ts` |
-| Pool Prisma portal | `apps/backend/be-portal/src/index.ts` |
-| Registration shared | `apps/backend/be-ql-dao-tao-shared/src/api/registration.ts` |
+| Thành phần           | Đường dẫn                                                                                     |
+| -------------------- | --------------------------------------------------------------------------------------------- |
+| API đăng ký portal   | `apps/backend/be-portal/src/api/class-register.ts`                                            |
+| Pool Prisma portal   | `apps/backend/be-portal/src/index.ts`                                                         |
+| Registration shared  | `apps/backend/be-ql-dao-tao-shared/src/api/registration.ts`                                   |
 | Migration unique log | `packages/database/prisma/migrations/20260715140000_class_register_logs_unique/migration.sql` |
-| FE soft-gate | `apps/client/cong-hoc-vien/src/components/commons/registered-courses-list/helper.tsx` |
+| FE soft-gate         | `apps/client/cong-hoc-vien/src/components/commons/registered-courses-list/helper.tsx`         |
 
 **Lệnh xem diff gốc (nếu cần đính kèm slide):**
 

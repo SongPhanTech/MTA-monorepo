@@ -7,7 +7,15 @@ import { PERIOD } from "@workspace/ui"
 import Table from "@components/commons/table"
 import TableCollapse from "@components/commons/tableCollapse"
 
-import type { ClassSchedule, Room, Lecturer, UserProfile, SubjectClass, Subject, FixedClass } from "@workspace/db/client"
+import type {
+  ClassSchedule,
+  Room,
+  Lecturer,
+  UserProfile,
+  SubjectClass,
+  Subject,
+  FixedClass,
+} from "@workspace/db/client"
 
 const { TabPane } = Tabs
 
@@ -65,7 +73,7 @@ export default function ThongKeBuoiHoc() {
     },
   })
 
-  type ClassScheduleData = typeof classSchedules[number]
+  type ClassScheduleData = (typeof classSchedules)[number]
 
   const { data: rooms = [] } = useFindManyRoom({
     where: {
@@ -102,7 +110,7 @@ export default function ThongKeBuoiHoc() {
 
   const getSharedClasses = (fixedClasses: FixedClass[] = []) => {
     if (fixedClasses.length <= 1) return ""
-    return fixedClasses.map(fc => fc.code || fc.name).join(", ")
+    return fixedClasses.map((fc) => fc.code || fc.name).join(", ")
   }
 
   const colStt = {
@@ -178,7 +186,11 @@ export default function ThongKeBuoiHoc() {
     align: "center" as const,
     render: (_: unknown, record: unknown) => {
       const item = record as ClassScheduleData
-      return item.lecturer?.userProfile?.code || item.subjectClass?.mainLecturer?.userProfile?.code || "-"
+      return (
+        item.lecturer?.userProfile?.code ||
+        item.subjectClass?.mainLecturer?.userProfile?.code ||
+        "-"
+      )
     },
   }
 
@@ -186,7 +198,11 @@ export default function ThongKeBuoiHoc() {
     title: "Tên GV",
     render: (_: unknown, record: unknown) => {
       const item = record as ClassScheduleData
-      return item.lecturer?.userProfile?.fullname || item.subjectClass?.mainLecturer?.userProfile?.fullname || "-"
+      return (
+        item.lecturer?.userProfile?.fullname ||
+        item.subjectClass?.mainLecturer?.userProfile?.fullname ||
+        "-"
+      )
     },
   }
 
@@ -322,12 +338,25 @@ export default function ThongKeBuoiHoc() {
                 const className = s.subjectClass?.name?.toLowerCase() || ""
                 const classCode = s.subjectClass?.code?.toLowerCase() || ""
                 const subjectName = s.subjectClass?.subject?.name?.toLowerCase() || ""
-                const lecturerName = (s.lecturer?.userProfile?.fullname || s.subjectClass?.mainLecturer?.userProfile?.fullname || "").toLowerCase()
+                const lecturerName = (
+                  s.lecturer?.userProfile?.fullname ||
+                  s.subjectClass?.mainLecturer?.userProfile?.fullname ||
+                  ""
+                ).toLowerCase()
                 const roomName = (s.room?.name || s.subjectClass?.room?.name || "").toLowerCase()
-                const orgName = (s.subjectClass?.subject?.managementOrganization?.sTen || "").toLowerCase()
+                const orgName = (
+                  s.subjectClass?.subject?.managementOrganization?.sTen || ""
+                ).toLowerCase()
                 const period = `tiết ${s.startPeriod} - ${s.endPeriod}`.toLowerCase()
-                return className.includes(kw) || classCode.includes(kw) || subjectName.includes(kw)
-                  || lecturerName.includes(kw) || roomName.includes(kw) || orgName.includes(kw) || period.includes(kw)
+                return (
+                  className.includes(kw) ||
+                  classCode.includes(kw) ||
+                  subjectName.includes(kw) ||
+                  lecturerName.includes(kw) ||
+                  roomName.includes(kw) ||
+                  orgName.includes(kw) ||
+                  period.includes(kw)
+                )
               })
               .map((s: ClassScheduleData, idx: number) => ({ ...s, key: s.id || idx.toString() }))}
             pagination={false}
@@ -350,8 +379,16 @@ export default function ThongKeBuoiHoc() {
               .filter((s: ClassScheduleData) => {
                 if (!searchLecturer.trim()) return true
                 const kw = searchLecturer.toLowerCase()
-                const lecturerName = (s.lecturer?.userProfile?.fullname || s.subjectClass?.mainLecturer?.userProfile?.fullname || "").toLowerCase()
-                const orgName = (s.lecturer?.organization?.sTen || s.subjectClass?.mainLecturer?.organization?.sTen || "").toLowerCase()
+                const lecturerName = (
+                  s.lecturer?.userProfile?.fullname ||
+                  s.subjectClass?.mainLecturer?.userProfile?.fullname ||
+                  ""
+                ).toLowerCase()
+                const orgName = (
+                  s.lecturer?.organization?.sTen ||
+                  s.subjectClass?.mainLecturer?.organization?.sTen ||
+                  ""
+                ).toLowerCase()
                 const className = s.subjectClass?.name?.toLowerCase() || ""
                 const classCode = s.subjectClass?.code?.toLowerCase() || ""
                 const roomName = (s.room?.name || s.subjectClass?.room?.name || "").toLowerCase()
@@ -393,7 +430,11 @@ export default function ThongKeBuoiHoc() {
                 const kw = searchRoom.toLowerCase()
                 const roomName = (s.room?.name || s.subjectClass?.room?.name || "").toLowerCase()
                 const className = s.subjectClass?.name?.toLowerCase() || ""
-                const lecturerName = (s.lecturer?.userProfile?.fullname || s.subjectClass?.mainLecturer?.userProfile?.fullname || "").toLowerCase()
+                const lecturerName = (
+                  s.lecturer?.userProfile?.fullname ||
+                  s.subjectClass?.mainLecturer?.userProfile?.fullname ||
+                  ""
+                ).toLowerCase()
                 return roomName.includes(kw) || className.includes(kw) || lecturerName.includes(kw)
               })
               .map((s: ClassScheduleData, idx: number) => ({ ...s, key: s.id || idx.toString() }))

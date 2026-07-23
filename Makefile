@@ -70,6 +70,7 @@ else ifeq ($(SERVER_PROFILE),app)
   FE_COMPOSE_FILE  := docker-compose.yml
   FE_APP_URL       := http://192.168.100.134
   ONLY_OFFICE_ENDPOINT := http://192.168.100.133:3100
+
 else ifeq ($(SERVER_PROFILE),mta_online)
   SERVER_HOST      := mta_online
   SERVER_PASSWORD  := 5Qaz@106186
@@ -77,8 +78,8 @@ else ifeq ($(SERVER_PROFILE),mta_online)
   BE_APP_DIR       := ~/mta-app/be
   FE_APP_DIR       := ~/mta-app/fe
   FE_COMPOSE_FILE  := docker-compose.yml
-  FE_APP_URL       := http://27.71.20.109
-  ONLY_OFFICE_ENDPOINT := http://27.71.20.109:3100
+  FE_APP_URL       := https://mta.edu.vn
+  ONLY_OFFICE_ENDPOINT := 
 
 # ── Fallback: unknown profile ─────────────────────────────────────────────────
 else

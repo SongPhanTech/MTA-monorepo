@@ -6108,28 +6108,28 @@ model NoteReminder {
 
 /// Đợt đánh giá CTDT
 model EvaluationPeriod {
-  id                  String                 @id() @default(cuid())
-  code                String?                @unique()
-  active              Boolean                @default(true)
-  description         String?                @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime               @default(now())
-  updatedAt           DateTime               @default(now()) @updatedAt()
-  createdBy           String?                @db.Uuid()
-  name                String
-  startDate           DateTime               @default(now())
-  endDate             DateTime?
-  status              EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
-  schoolYear          SchoolYear?            @relation(fields: [schoolYearId], references: [id])
-  schoolYearId        String?
-  standards           StandardPeriod[]
-  council             EvaluationCouncil?
-  documentFiles       DocumentFile[]
-  overviewProblem     String?
-  overviewGeneral     String?
-  overviewResults     String?
-  conclude            String?
-  evidenceCategoryIds String[]
+  id                 String                 @id() @default(cuid())
+  code               String?                @unique()
+  active             Boolean                @default(true)
+  description        String?                @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @default(now()) @updatedAt()
+  createdBy          String?                @db.Uuid()
+  name               String
+  startDate          DateTime               @default(now())
+  endDate            DateTime?
+  status             EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
+  schoolYear         SchoolYear?            @relation(fields: [schoolYearId], references: [id])
+  schoolYearId       String?
+  standards          StandardPeriod[]
+  council            EvaluationCouncil?
+  documentFiles      DocumentFile[]
+  overviewProblem    String?
+  overviewGeneral    String?
+  overviewResults    String?
+  conclude           String?
+  evidenceCategories EvidenceCategory[]
 
   @@schema("khao-thi")
 }
@@ -6192,17 +6192,18 @@ model CriterionCatalog {
 
 /// Nhóm minh chứng - require code
 model EvidenceCategory {
-  id          String              @id() @default(cuid())
-  code        String?             @unique()
-  active      Boolean             @default(true)
-  description String?             @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @default(now()) @updatedAt()
-  createdBy   String?             @db.Uuid()
-  name        String
-  objectType  StandardCatalogType @default(PROGRAM)
-  evidences   Evidence[]
+  id                String              @id() @default(cuid())
+  code              String?             @unique()
+  active            Boolean             @default(true)
+  description       String?             @db.Text()
+  deletedAt         DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @default(now()) @updatedAt()
+  createdBy         String?             @db.Uuid()
+  name              String
+  objectType        StandardCatalogType @default(PROGRAM)
+  evidences         Evidence[]
+  evaluationPeriods EvaluationPeriod[]
 
   @@schema("khao-thi")
 }

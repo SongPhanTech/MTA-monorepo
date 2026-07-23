@@ -2,13 +2,14 @@
 
 ## Tổng quan
 
-| Thành phần | Vai trò |
-|------------|---------|
-| `cong-hoc-vien-cdn/` | Static export Next.js (HTML/JS/CSS) |
-| `mta-cong-hoc-vien-cdn` | Container nginx serve thư mục CDN |
+| Thành phần                 | Vai trò                                           |
+| -------------------------- | ------------------------------------------------- |
+| `cong-hoc-vien-cdn/`       | Static export Next.js (HTML/JS/CSS)               |
+| `mta-cong-hoc-vien-cdn`    | Container nginx serve thư mục CDN                 |
 | `router-cong-hoc-vien-api` | Proxy `/cong-hoc-vien/api/*` → BE (portal/model…) |
 
 Makefile profile `mta_online`:
+
 - `FE_APP_DIR` = `~/mta-app/fe`
 - `FE_COMPOSE_FILE` = `docker-compose.yml`
 - Build inject: `NEXT_PUBLIC_APP_URL=$(FE_APP_URL)/cong-hoc-vien/home`
@@ -57,14 +58,14 @@ services:
       - ./cong-hoc-vien-cdn:/usr/share/nginx/html:ro
       # optional: ./nginx-cong-hoc-vien.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
-      - "3081:80"   # đổi port nếu cần
+      - "3081:80" # đổi port nếu cần
     networks:
       - mta-fe-net
 
   # Router API — image tùy hạ tầng hiện có trên các server khác.
   # Tên service PHẢI khớp Makefile: router-cong-hoc-vien-api
   router-cong-hoc-vien-api:
-    image: nginx:alpine   # TODO: thay bằng image router thật nếu team dùng image riêng
+    image: nginx:alpine # TODO: thay bằng image router thật nếu team dùng image riêng
     container_name: router-cong-hoc-vien-api
     restart: unless-stopped
     volumes:
@@ -73,7 +74,7 @@ services:
       - "3082:80"
     networks:
       - mta-fe-net
-      - mta-net      # để proxy tới be-portal trên network BE
+      - mta-net # để proxy tới be-portal trên network BE
 
 networks:
   mta-fe-net:
@@ -167,13 +168,13 @@ make _deploy-fe PACKAGE=cong-hoc-vien SERVER_PROFILE=mta_online
 
 Ports hiện tại trên host:
 
-| Service | Port |
-|---------|------|
-| be-model | 3041 |
-| be-ql-dao-tao | 3042 |
-| be-portal | 3044 |
-| be-ql-dao-tao-shared | 3045 |
-| minio | 9000 / 9001 |
+| Service              | Port        |
+| -------------------- | ----------- |
+| be-model             | 3041        |
+| be-ql-dao-tao        | 3042        |
+| be-portal            | 3044        |
+| be-ql-dao-tao-shared | 3045        |
+| minio                | 9000 / 9001 |
 
 File: `nginx-mta-be-apis.conf` → path `/api/portal|model|lms|shared|lms-shared/` + `/minio/`.
 
@@ -205,10 +206,10 @@ HTTP 404/401 từ API vẫn OK (nginx đã proxy tới BE). 502 = BE chưa chạ
 
 Trên host hoặc container nginx chính, map path công khai:
 
-| Path công khai | Upstream |
-|----------------|----------|
-| `/cong-hoc-vien/` hoặc `/cong-hoc-vien/cdn/` | `mta-cong-hoc-vien-cdn:80` (hoặc `127.0.0.1:3081`) |
-| `/cong-hoc-vien/api/` | `router-cong-hoc-vien-api` hoặc thẳng `127.0.0.1:3044` |
+| Path công khai                               | Upstream                                               |
+| -------------------------------------------- | ------------------------------------------------------ |
+| `/cong-hoc-vien/` hoặc `/cong-hoc-vien/cdn/` | `mta-cong-hoc-vien-cdn:80` (hoặc `127.0.0.1:3081`)     |
+| `/cong-hoc-vien/api/`                        | `router-cong-hoc-vien-api` hoặc thẳng `127.0.0.1:3044` |
 
 Ví dụ host nginx:
 
@@ -244,24 +245,24 @@ Trình duyệt: `http://<FE_APP_URL>/cong-hoc-vien/home` (đúng URL đã bake).
 
 ## Lỗi thường gặp
 
-| Triệu chứng | Nguyên nhân |
-|-------------|-------------|
-| `compose` không biết service `mta-cong-hoc-vien-cdn` | Chưa tạo compose FE / sai tên service |
-| Trang trắng / JS 404 | Sai `FE_APP_URL` / basePath / asset prefix → **build lại** |
-| API CORS / 401 | Router chưa proxy đúng; OIDC chưa cấu hình domain mới |
-| `Permission denied` SSH | Giống lỗi deploy BE — sửa SSH trước |
-| `deploy-cdn` xóa hết CDN khác | Đừng dùng `deploy-cdn` nếu chỉ muốn 1 app; dùng `all-cong-hoc-vien` |
+| Triệu chứng                                          | Nguyên nhân                                                         |
+| ---------------------------------------------------- | ------------------------------------------------------------------- |
+| `compose` không biết service `mta-cong-hoc-vien-cdn` | Chưa tạo compose FE / sai tên service                               |
+| Trang trắng / JS 404                                 | Sai `FE_APP_URL` / basePath / asset prefix → **build lại**          |
+| API CORS / 401                                       | Router chưa proxy đúng; OIDC chưa cấu hình domain mới               |
+| `Permission denied` SSH                              | Giống lỗi deploy BE — sửa SSH trước                                 |
+| `deploy-cdn` xóa hết CDN khác                        | Đừng dùng `deploy-cdn` nếu chỉ muốn 1 app; dùng `all-cong-hoc-vien` |
 
 ---
 
 ## Thứ tự khuyến nghị với stack hiện tại
 
-1. BE portal (+ model nếu cần) đã chạy ổn  
-2. Sửa `FE_APP_URL` trong Makefile  
-3. Tạo `~/mta-app/fe/docker-compose.yml` (copy từ server mẫu)  
-4. `make all-cong-hoc-vien SERVER_PROFILE=mta_online`  
-5. Cấu hình nginx host + mở firewall  
-6. Test login / trang đăng ký học  
+1. BE portal (+ model nếu cần) đã chạy ổn
+2. Sửa `FE_APP_URL` trong Makefile
+3. Tạo `~/mta-app/fe/docker-compose.yml` (copy từ server mẫu)
+4. `make all-cong-hoc-vien SERVER_PROFILE=mta_online`
+5. Cấu hình nginx host + mở firewall
+6. Test login / trang đăng ký học
 
 ---
 

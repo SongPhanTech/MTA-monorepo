@@ -36,7 +36,7 @@ type SurveyObjectTypeStudentScope = {
  */
 function buildStudentMajorFieldFixedClassFilter(
   objectType: SurveyObjectTypeStudentScope,
-  q: { fixedClassIds?: string[]; trainingCourseIds?: string[] },
+  q: { fixedClassIds?: string[]; trainingCourseIds?: string[] }
 ): Prisma.FixedClassWhereInput {
   const hasFixedClassScope =
     objectType.fixedClasses.length > 0 || (q.fixedClassIds?.length ?? 0) > 0

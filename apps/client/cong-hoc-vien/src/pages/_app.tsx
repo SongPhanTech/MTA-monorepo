@@ -25,7 +25,7 @@ import { ReactHookModalProvider } from "react-hook-disclosure-modal"
 import LoadingBar from "react-top-loading-bar"
 import "@assets/css/custom.css"
 import { getRuntimeEnv } from "@workspace/libs/utils"
-import { lightThemeCustom, WidgetChatbot } from "@workspace/ui"
+import { lightThemeCustom } from "@workspace/ui"
 import "@workspace/libs"
 import { fetchInstance } from "@workspace/libs/api/custom-instance"
 dayjs.locale("vi")
@@ -101,7 +101,6 @@ function App({ Component, pageProps }: AppProps) {
             >
               <ReactHookModalProvider modals={modals}>
                 {getLayout(<Component {...pageProps} />)}
-                <WidgetChatbot src={getRuntimeEnv("NEXT_PUBLIC_CHATBOT_SRC")} />
                 <Spinner />
               </ReactHookModalProvider>
             </ZenStackHooksProvider>
