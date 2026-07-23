@@ -3,7 +3,6 @@ import { useScoreConverter } from "@hooks/scoreConverter"
 import DefaultLayout from "@layouts/default-layout"
 import { useSession } from "@workspace/auth/react"
 import { useFindUniqueCurriculumVersion, useFindUniqueUserProfile } from "@workspace/db/hooks"
-import { useAcademicRankingConverter } from "@workspace/libs/hook/academicRankingConvert"
 import { LichCongTac } from "@workspace/ui"
 import { DanhSachThongBao } from "@components/commons/thong-bao"
 import { Col, Divider, Row, Typography } from "antd"
@@ -22,6 +21,19 @@ function Page() {
             id: true,
             curriculumVersionId: true,
             fixedClassId: true,
+            studentSemesterResult: {
+              select: {
+                rank: {
+                  select: {
+                    classification: true,
+                  },
+                },
+              },
+              orderBy: {
+                semesterIndexInCourse: "desc",
+              },
+              take: 1,
+            },
           },
         },
       },
@@ -33,6 +45,8 @@ function Page() {
   const curriculumVersionId = userProfile?.educationAndTraining?.[0]?.curriculumVersionId ?? ""
   const studentId = userProfile?.educationAndTraining?.[0]?.id ?? ""
   const fixedClassId = userProfile?.educationAndTraining?.[0]?.fixedClassId ?? ""
+  const academicRanking =
+    userProfile?.educationAndTraining?.[0]?.studentSemesterResult?.[0]?.rank?.classification
   const { data: curriculumVersion } = useFindUniqueCurriculumVersion(
     {
       where: {
@@ -47,7 +61,6 @@ function Page() {
             trainingCourse: {
               include: {
                 scoreConverts: true,
-                academicRankingConvert: true,
               },
             },
           },
@@ -78,10 +91,6 @@ function Page() {
     curriculumVersion?.fixedClass?.trainingCourse?.scoreConverts
   )
 
-  const { convertAcademicRanking } = useAcademicRankingConverter(
-    curriculumVersion?.fixedClass?.trainingCourse?.academicRankingConvert,
-    curriculumVersion?.fixedClass?.trainingCourse?.baseScore
-  )
   const gpaScore = useMemo(() => {
     const validSubjects =
       curriculumVersion?.trainingBlocks
@@ -134,7 +143,7 @@ function Page() {
               requiredCredits: curriculumVersion?.requiredCredits ?? 0,
               electiveCredits: curriculumVersion?.electiveCredits ?? 0,
             }}
-            academicRanking={convertAcademicRanking(gpaScore.gpa).classification || "-"}
+            academicRanking={academicRanking || "-"}
           />
           <div className="bg-white rounded-sm border border-gray-200 h-[500px] overflow-hidden flex flex-col mt-2">
             <div className="px-4 py-2 border-b border-gray-200 bg-green-700">

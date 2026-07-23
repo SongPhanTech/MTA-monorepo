@@ -127,7 +127,7 @@ const DefaultLayout = ({
           logo2={
             <div className="flex items-center justify-center text-center">
               <Image src={logo_mta} alt="logo MTA" className="w-10 h-10 mr-3" />
-              <span className="text-base font-bold color text-primary">Cổng Học Viên</span>
+              <span className="text-base font-bold color text-primary">Cổng Sinh Viên</span>
             </div>
           }
           items={menus}

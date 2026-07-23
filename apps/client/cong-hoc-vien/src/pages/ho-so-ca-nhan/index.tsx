@@ -236,7 +236,7 @@ const HoSoCaNhan = () => {
   const tabItems = [
     {
       key: "thong-tin-co-ban",
-      label: "Thông tin cơ bản",
+      label: "1. Thông tin cơ bản",
       children: (
         <div className="space-y-4">
           <Descriptions bordered column={2} size="small">
@@ -256,28 +256,15 @@ const HoSoCaNhan = () => {
             <Descriptions.Item label="Số điện thoại">
               {studentData?.userProfile?.phoneNumber}
             </Descriptions.Item>
-            <Descriptions.Item label="Cấp bậc">
-              {studentData?.userProfile?.rank?.sTen}
-            </Descriptions.Item>
             <Descriptions.Item label="Trạng thái">
               {getStatusTag(studentData?.status || "")}
             </Descriptions.Item>
-            <Descriptions.Item label="Số báo danh">{studentData?.registerNumber}</Descriptions.Item>
-            <Descriptions.Item label="Mã hồ sơ tiến sĩ">
-              {studentData?.doctoralCode}
-            </Descriptions.Item>
-            <Descriptions.Item label="Tổ hợp xét tuyển">
-              {studentData?.admissionCombination}
-            </Descriptions.Item>
-            <Descriptions.Item label="Điểm xét tuyển">{studentData?.entryScore}</Descriptions.Item>
             <Descriptions.Item label="Điểm đánh giá năng lực">
               {studentData?.competencyScore}
             </Descriptions.Item>
             <Descriptions.Item label="Đối tượng đào tạo">
               {studentData?.fixedClass?.trainingCourse?.trainingObjectType?.name}
             </Descriptions.Item>
-            <Descriptions.Item label="Điểm cơ bản/Môn 1">{studentData?.basic}</Descriptions.Item>
-            <Descriptions.Item label="Điểm cơ sở/Môn 2">{studentData?.facility}</Descriptions.Item>
             <Descriptions.Item label="Lớp quản lý">
               {studentData?.fixedClass?.code} - {studentData?.fixedClass?.name}
             </Descriptions.Item>
@@ -302,16 +289,6 @@ const HoSoCaNhan = () => {
             <Descriptions.Item label="Địa điểm đào tạo">
               {studentData?.trainingLocation?.name}
             </Descriptions.Item>
-            <Descriptions.Item label="Cơ quan, đơn vị">{studentData?.department}</Descriptions.Item>
-            <Descriptions.Item label="Địa chỉ cơ quan">
-              {studentData?.departmentAddress}
-            </Descriptions.Item>
-            <Descriptions.Item label="Năm bắt đầu vào nghề">
-              {studentData?.careerYear}
-            </Descriptions.Item>
-            <Descriptions.Item label="Trường đại học">
-              {studentData?.universitySchool}
-            </Descriptions.Item>
             <Descriptions.Item label="Hệ đào tạo">
               {studentData?.universityTrainingType}
             </Descriptions.Item>
@@ -325,18 +302,6 @@ const HoSoCaNhan = () => {
               {studentData?.universityRank}
             </Descriptions.Item>
             <Descriptions.Item label="Ngoại ngữ">{studentData?.foreignLanguage}</Descriptions.Item>
-            <Descriptions.Item label="Lý do ưu tiên">
-              {studentData?.priorityReason}
-            </Descriptions.Item>
-            <Descriptions.Item label="Từ ngày">
-              {studentData?.from ? dayjs(studentData.from).format("DD/MM/YYYY") : ""}
-            </Descriptions.Item>
-            <Descriptions.Item label="Đến ngày">
-              {studentData?.to ? dayjs(studentData.to).format("DD/MM/YYYY") : ""}
-            </Descriptions.Item>
-            <Descriptions.Item label="Lãnh đạo đoàn">
-              {studentData?.unionLeader || ""}
-            </Descriptions.Item>
           </Descriptions>
 
           <div>
@@ -402,7 +367,7 @@ const HoSoCaNhan = () => {
     },
     {
       key: "diem-mon-hoc",
-      label: `Điểm môn học (${studentData?.subjectClassStudent?.length || 0})`,
+      label: `2. Điểm môn học (${studentData?.subjectClassStudent?.length || 0})`,
       children: (
         <Table
           dataSource={studentData?.subjectClassStudent || []}
@@ -472,7 +437,7 @@ const HoSoCaNhan = () => {
     },
     {
       key: "ket-qua-hoc-ky",
-      label: `Kết quả học kỳ (${studentData?.studentSemesterResult?.length || 0})`,
+      label: `3. Kết quả học kỳ (${studentData?.studentSemesterResult?.length || 0})`,
       children: (
         <Table
           dataSource={studentData?.studentSemesterResult || []}
@@ -527,7 +492,7 @@ const HoSoCaNhan = () => {
               render: (val) => (val ? Number(val).toFixed(2) : ""),
             },
             {
-              title: "GPA(4)",
+              title: "CPA (4)",
               dataIndex: "cumulativeGpaBase4",
               width: 90,
               align: "center",
@@ -541,7 +506,7 @@ const HoSoCaNhan = () => {
               render: (val) => (val ? Number(val).toFixed(2) : ""),
             },
             {
-              title: "GPA(10)",
+              title: "CPA (10)",
               dataIndex: "cumulativeGpaBase10",
               width: 90,
               align: "center",
@@ -695,7 +660,7 @@ const HoSoCaNhan = () => {
     },
     {
       key: "ket-qua-nam-hoc",
-      label: `Kết quả năm học (${studentData?.studentYearResult?.length || 0})`,
+      label: `4. Kết quả năm học (${studentData?.studentYearResult?.length || 0})`,
       children: (
         <Table
           dataSource={studentData?.studentYearResult || []}
@@ -735,7 +700,7 @@ const HoSoCaNhan = () => {
               render: (val) => val?.toString(),
             },
             {
-              title: "GPA(4)",
+              title: "CPA (4)",
               dataIndex: "cumulativeGpaBase4",
               width: 90,
               align: "center",
@@ -749,7 +714,7 @@ const HoSoCaNhan = () => {
               render: (val) => val?.toString(),
             },
             {
-              title: "GPA(10)",
+              title: "CPA (10)",
               dataIndex: "cumulativeGpaBase10",
               width: 90,
               align: "center",
@@ -851,7 +816,7 @@ const HoSoCaNhan = () => {
     },
     {
       key: "hoc-bong",
-      label: `Học bổng (${studentData?.scholarshipAwards?.length || 0})`,
+      label: `5. Học bổng (${studentData?.scholarshipAwards?.length || 0})`,
       children: (
         <Table
           dataSource={studentData?.scholarshipAwards || []}
@@ -919,7 +884,7 @@ const HoSoCaNhan = () => {
     },
     {
       key: "chung-chi",
-      label: `Chứng chỉ (${studentData?.archivedCertificate?.length || 0})`,
+      label: `6. Chứng chỉ (${studentData?.archivedCertificate?.length || 0})`,
       children: (
         <Table
           dataSource={studentData?.archivedCertificate || []}
@@ -1009,7 +974,7 @@ const HoSoCaNhan = () => {
     },
     {
       key: "giai-thuong",
-      label: `Giải thưởng (${studentData?.archivedAward?.length || 0})`,
+      label: `7. Giải thưởng (${studentData?.archivedAward?.length || 0})`,
       children: (
         <Table
           dataSource={studentData?.archivedAward || []}
@@ -1080,7 +1045,7 @@ const HoSoCaNhan = () => {
     },
     {
       key: "canh-cao-hoc-tap",
-      label: `Cảnh báo học tập (${studentData?.academicWarning?.length || 0})`,
+      label: `8. Cảnh báo học tập (${studentData?.academicWarning?.length || 0})`,
       children: (
         <Table
           dataSource={studentData?.academicWarning || []}
@@ -1142,7 +1107,7 @@ const HoSoCaNhan = () => {
     },
     {
       key: "canh-cao-hoc-duong",
-      label: `Cảnh cáo học đường (${studentData?.disciplinaryWarning?.length || 0})`,
+      label: `9. Cảnh cáo học đường (${studentData?.disciplinaryWarning?.length || 0})`,
       children: (
         <Table
           dataSource={studentData?.disciplinaryWarning || []}
@@ -1197,102 +1162,8 @@ const HoSoCaNhan = () => {
       ),
     },
     {
-      key: "quyet-dinh-hoc-vu",
-      label: `Quyết định học vụ (${studentData?.studentAcademicDecision?.length || 0})`,
-      children: (
-        <Table
-          dataSource={studentData?.studentAcademicDecision || []}
-          rowKey="id"
-          size="small"
-          bordered
-          pagination={{ pageSize: 10 }}
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              render: (_, __, index) => index + 1,
-            },
-            {
-              title: "Mã",
-              dataIndex: "code",
-              width: 150,
-            },
-            {
-              title: "Mô tả",
-              dataIndex: "description",
-              width: 300,
-            },
-            {
-              title: "Trạng thái",
-              dataIndex: "active",
-              width: 100,
-              render: (active) => (
-                <Tag color={active ? "green" : "red"}>
-                  {active ? "Kích hoạt" : "Không kích hoạt"}
-                </Tag>
-              ),
-            },
-            {
-              title: "Ngày tạo",
-              dataIndex: "createdAt",
-              width: 150,
-              render: (date) => (date ? dayjs(date).format("DD/MM/YYYY HH:mm") : ""),
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      key: "don-xet-tot-nghiep",
-      label: `Đơn xét tốt nghiệp (${studentData?.graduationApplications?.length || 0})`,
-      children: (
-        <Table
-          dataSource={studentData?.graduationApplications || []}
-          rowKey="id"
-          size="small"
-          bordered
-          pagination={{ pageSize: 10 }}
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              render: (_, __, index) => index + 1,
-            },
-            {
-              title: "Mã",
-              dataIndex: "code",
-              width: 150,
-            },
-            {
-              title: "Mô tả",
-              dataIndex: "description",
-              width: 300,
-            },
-            {
-              title: "Trạng thái",
-              dataIndex: "active",
-              width: 100,
-              render: (active) => (
-                <Tag color={active ? "green" : "red"}>
-                  {active ? "Kích hoạt" : "Không kích hoạt"}
-                </Tag>
-              ),
-            },
-            {
-              title: "Ngày tạo",
-              dataIndex: "createdAt",
-              width: 150,
-              render: (date) => (date ? dayjs(date).format("DD/MM/YYYY HH:mm") : ""),
-            },
-          ]}
-        />
-      ),
-    },
-    {
       key: "quyet-dinh-tot-nghiep",
-      label: "Quyết định tốt nghiệp",
+      label: "12. Quyết định tốt nghiệp",
       children: studentData?.graduationDecision ? (
         <Descriptions bordered column={2} size="small">
           <Descriptions.Item label="Mã">{studentData.graduationDecision.code}</Descriptions.Item>
@@ -1315,102 +1186,8 @@ const HoSoCaNhan = () => {
       ),
     },
     {
-      key: "dang-ky-nghien-cuu",
-      label: `Đăng ký nghiên cứu (${studentData?.researchRegistrations?.length || 0})`,
-      children: (
-        <Table
-          dataSource={studentData?.researchRegistrations || []}
-          rowKey="id"
-          size="small"
-          bordered
-          pagination={{ pageSize: 10 }}
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              render: (_, __, index) => index + 1,
-            },
-            {
-              title: "Mã",
-              dataIndex: "code",
-              width: 150,
-            },
-            {
-              title: "Mô tả",
-              dataIndex: "description",
-              width: 300,
-            },
-            {
-              title: "Trạng thái",
-              dataIndex: "active",
-              width: 100,
-              render: (active) => (
-                <Tag color={active ? "green" : "red"}>
-                  {active ? "Kích hoạt" : "Không kích hoạt"}
-                </Tag>
-              ),
-            },
-            {
-              title: "Ngày tạo",
-              dataIndex: "createdAt",
-              width: 150,
-              render: (date) => (date ? dayjs(date).format("DD/MM/YYYY HH:mm") : ""),
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      key: "dang-ky-luan-van",
-      label: `Đăng ký luận văn (${studentData?.thesisRegistrations?.length || 0})`,
-      children: (
-        <Table
-          dataSource={studentData?.thesisRegistrations || []}
-          rowKey="id"
-          size="small"
-          bordered
-          pagination={{ pageSize: 10 }}
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              render: (_, __, index) => index + 1,
-            },
-            {
-              title: "Mã",
-              dataIndex: "code",
-              width: 150,
-            },
-            {
-              title: "Mô tả",
-              dataIndex: "description",
-              width: 300,
-            },
-            {
-              title: "Trạng thái",
-              dataIndex: "active",
-              width: 100,
-              render: (active) => (
-                <Tag color={active ? "green" : "red"}>
-                  {active ? "Kích hoạt" : "Không kích hoạt"}
-                </Tag>
-              ),
-            },
-            {
-              title: "Ngày tạo",
-              dataIndex: "createdAt",
-              width: 150,
-              render: (date) => (date ? dayjs(date).format("DD/MM/YYYY HH:mm") : ""),
-            },
-          ]}
-        />
-      ),
-    },
-    {
       key: "tra-cuu-van-bang",
-      label: `Tra cứu văn bằng (${studentData?.diplomaVerificationApplication?.length || 0})`,
+      label: `15. Tra cứu văn bằng (${studentData?.diplomaVerificationApplication?.length || 0})`,
       children: (
         <Table
           dataSource={studentData?.diplomaVerificationApplication || []}
@@ -1457,7 +1234,7 @@ const HoSoCaNhan = () => {
     },
     {
       key: "diem-ren-luyen",
-      label: `Điểm rèn luyện (${studentData?.studentTrainingScore?.length || 0})`,
+      label: `16. Điểm rèn luyện (${studentData?.studentTrainingScore?.length || 0})`,
       children: (
         <Table
           dataSource={studentData?.studentTrainingScore || []}
@@ -1533,141 +1310,6 @@ const HoSoCaNhan = () => {
               dataIndex: "createdAt",
               width: 150,
               render: (date) => (date ? dayjs(date).format("DD/MM/YYYY") : ""),
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      key: "chuyen-doi-diem",
-      label: `Chuyển đổi điểm (${studentData?.studentScoreConvert?.length || 0})`,
-      children: (
-        <Table
-          dataSource={studentData?.studentScoreConvert || []}
-          rowKey="id"
-          size="small"
-          bordered
-          pagination={{ pageSize: 10 }}
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              render: (_, __, index) => index + 1,
-            },
-            {
-              title: "Mã",
-              dataIndex: "code",
-              width: 150,
-            },
-            {
-              title: "Mô tả",
-              dataIndex: "description",
-              width: 300,
-            },
-            {
-              title: "Trạng thái",
-              dataIndex: "status",
-              width: 120,
-              align: "center",
-              render: (status) => {
-                const colorMap: Record<string, string> = {
-                  PENDING: "orange",
-                  APPROVED: "green",
-                  REJECTED: "red",
-                  PARTIAL: "blue",
-                }
-                return (
-                  <Tag color={colorMap[status] || "default"}>
-                    {SCORE_CONVERT_STATUS[status as keyof typeof SCORE_CONVERT_STATUS] || status}
-                  </Tag>
-                )
-              },
-            },
-            {
-              title: "Ngày tạo",
-              dataIndex: "createdAt",
-              width: 150,
-              render: (date) => (date ? dayjs(date).format("DD/MM/YYYY HH:mm") : ""),
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      key: "lich-su-dang-ky-lop",
-      label: `Lịch sử đăng ký lớp (${studentData?.classRegisterLogs?.length || 0})`,
-      children: (
-        <Table
-          dataSource={studentData?.classRegisterLogs || []}
-          rowKey="id"
-          size="small"
-          bordered
-          pagination={{ pageSize: 10 }}
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              render: (_, __, index) => index + 1,
-            },
-            {
-              title: "Lớp học phần",
-              dataIndex: ["subjectClass", "name"],
-              width: 200,
-            },
-            {
-              title: "Môn học",
-              dataIndex: ["subjectClass", "subject", "name"],
-              width: 250,
-            },
-            {
-              title: "Mã",
-              dataIndex: "code",
-              width: 150,
-            },
-            {
-              title: "Ngày thực hiện",
-              dataIndex: "createdAt",
-              width: 150,
-              render: (date) => (date ? dayjs(date).format("DD/MM/YYYY HH:mm") : ""),
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      key: "ghi-chu",
-      label: `Ghi chú (${studentData?.notes?.length || 0})`,
-      children: (
-        <Table
-          dataSource={studentData?.notes || []}
-          rowKey="id"
-          size="small"
-          bordered
-          pagination={{ pageSize: 10 }}
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              render: (_, __, index) => index + 1,
-            },
-            {
-              title: "Tiêu đề",
-              dataIndex: "title",
-              width: 200,
-            },
-            {
-              title: "Nội dung",
-              dataIndex: "content",
-              width: 400,
-            },
-            {
-              title: "Ngày tạo",
-              dataIndex: "createdAt",
-              width: 150,
-              render: (date) => (date ? dayjs(date).format("DD/MM/YYYY HH:mm") : ""),
             },
           ]}
         />

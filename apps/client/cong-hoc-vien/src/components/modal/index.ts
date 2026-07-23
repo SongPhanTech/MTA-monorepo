@@ -5,6 +5,7 @@ import ModalChiTietLopBienChe from "./modal-chi-tiet-lop-bien-che"
 import ModalChiTietMonHoc from "./modal-chi-tiet-mon-hoc"
 import ModalChiTietSinhVien from "./modal-chi-tiet-sinh-vien"
 import ModalLearningResult from "./modal-ket-qua-hoc-tap-ctdt"
+import ModalLamKhaoSat from "./modal-lam-khao-sat"
 import ModalPrintToKQHT from "./modal-print-ket-qua-hoc-tap"
 import PutOneSubjectClassModal from "./put-one-subject-class"
 import PutUpdateProfileModal from "./put-update-profile"
@@ -17,6 +18,7 @@ export {
   ThongTinBaoCaoModal,
   ModalPrintToKQHT,
   ModalLearningResult,
+  ModalLamKhaoSat,
   ModalChiTietGiangVien,
   ModalChiTietLopBienChe,
   ModalChiTietMonHoc,
