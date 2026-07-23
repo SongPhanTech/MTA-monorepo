@@ -14,7 +14,7 @@ import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import dayjs from "dayjs"
 import { saveAs } from "file-saver"
-import { useExportXetChungChi } from "@workspace/libs/api/training"
+import ExcelJS from "exceljs"
 
 export default function AutoCheckCertificate() {
   const [form] = Form.useForm()
@@ -28,7 +28,6 @@ export default function AutoCheckCertificate() {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
   const { mutateAsync: createManyArchivedCertificate } = useCreateManyArchivedCertificate()
-  const { mutateAsync: exportExcel } = useExportXetChungChi()
 
   const { data: certificates = [] } = useFindManyCertificate({
     where: { subjectVersions: { some: {} } },
@@ -182,23 +181,105 @@ export default function AutoCheckCertificate() {
       return message.warning("Vui lòng chọn chứng chỉ và khóa học!")
     }
 
+    if (!selectedCertificate || students.length === 0) {
+      return message.warning("Không có dữ liệu để xuất!")
+    }
+
     try {
       message.loading({ content: "Đang xuất file...", key: "export-excel" })
-      const res = await exportExcel({
-        data: {
-          certificateId,
-          trainingCourseId,
-          fixedClassIds,
-        },
+
+      const workbook = new ExcelJS.Workbook()
+      const sheet = workbook.addWorksheet("Danh Sach")
+
+      const centerStyle = {
+        alignment: { horizontal: "center" as const, vertical: "middle" as const },
+      }
+
+      const svCols =
+        selectedCertificate.subjectVersions?.map((sv) => ({
+          header: `${sv.code} (${sv.credit} TC)`,
+          key: `sub_${sv.id}`,
+          width: 15,
+          style: centerStyle,
+        })) || []
+
+      const allCols = [
+        { header: "STT", key: "stt", width: 10, style: centerStyle },
+        { header: "Mã SV", key: "code", width: 15 },
+        { header: "Họ và tên", key: "fullname", width: 25 },
+        { header: "Ngày sinh", key: "dob", width: 15 },
+        { header: "CCCD/CMND", key: "cccd", width: 20 },
+        { header: "Lớp", key: "classCode", width: 15, style: centerStyle },
+        ...svCols,
+        { header: "Điểm TBC", key: "tbc", width: 15, style: centerStyle },
+        { header: "Kết quả", key: "result", width: 15, style: centerStyle },
+      ]
+
+      sheet.columns = allCols
+
+      const headerRow = sheet.getRow(1)
+      allCols.forEach((col, index) => {
+        headerRow.getCell(index + 1).value = col.header
+      })
+      headerRow.font = { bold: true, size: 12, name: "Times New Roman" }
+      headerRow.alignment = { horizontal: "center", vertical: "middle", wrapText: true }
+
+      students.forEach((record, index) => {
+        const { tbc, isPassed } = getStudentResult(record)
+
+        const rowData: any = {
+          stt: index + 1,
+          code: record.code,
+          fullname: record.userProfile?.fullname || "",
+          dob: record.userProfile?.dateOfBirth
+            ? dayjs(record.userProfile.dateOfBirth).format("DD/MM/YYYY")
+            : "",
+          cccd: record.userProfile?.idCardNumber || "",
+          classCode: record.fixedClass?.code || "",
+          tbc: tbc ? tbc.toFixed(2) : "",
+        }
+
+        selectedCertificate.subjectVersions?.forEach((sv) => {
+          const scoreRecord = record.subjectClassStudent?.find(
+            (s: any) => s.subjectVersionId === sv.id
+          )
+          const rawScore = scoreRecord?.manualFinalScore ?? scoreRecord?.finalScore
+          const score =
+            rawScore != null
+              ? typeof rawScore === "object" && typeof rawScore.toNumber === "function"
+                ? rawScore.toNumber()
+                : rawScore
+              : null
+          rowData[`sub_${sv.id}`] = score ?? ""
+        })
+
+        if (record.archivedCertificate && record.archivedCertificate.length > 0) {
+          rowData.result = "Đã cấp"
+        } else {
+          rowData.result = isPassed ? "Đạt" : "Không đạt"
+        }
+
+        const row = sheet.addRow(rowData)
+
+        const resultCell = row.getCell("result")
+        resultCell.font = {
+          name: "Times New Roman",
+          bold: true,
+          color: {
+            argb: rowData.result === "Đạt" || rowData.result === "Đã cấp" ? "FF008000" : "FFFF0000",
+          },
+        }
       })
 
-      if (res.status === 200) {
-        message.success({ content: "Xuất file thành công!", key: "export-excel" })
-        saveAs(res.data, "DANH_SACH_XET_CHUNG_CHI.xlsx")
-      } else {
-        message.error({ content: res.data?.message || "Xuất file thất bại", key: "export-excel" })
-      }
+      const buffer = await workbook.xlsx.writeBuffer()
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      })
+      saveAs(blob, "DANH_SACH_XET_CHUNG_CHI.xlsx")
+
+      message.success({ content: "Xuất file thành công!", key: "export-excel" })
     } catch (error) {
+      console.error(error)
       message.error({ content: "Có lỗi xảy ra khi xuất file", key: "export-excel" })
     }
   }
