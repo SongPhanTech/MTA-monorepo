@@ -105,7 +105,7 @@ model DM_DanToc extends CoreBase {
 model DM_DonVi extends CoreBase {
   sCode                String?
   /// mã TKBU
-  sTKPUCode            String?
+  sTKBUCode            String?
   sTenVietTat          String?
   sParentId            String?            @db.Uuid
   sTruongDonVi         String?            @db.Uuid

@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const DM_DonViOrderByRelevanceFieldEnumSchema = z.enum(["Id", "sMa", "sTen", "sGhiChu", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "sCode", "sTKPUCode", "sTenVietTat", "sParentId", "sTruongDonVi", "sChucNangNhiemVu", "sDiaChi"])
+export const DM_DonViOrderByRelevanceFieldEnumSchema = z.enum(["Id", "sMa", "sTen", "sGhiChu", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "sCode", "sTKBUCode", "sTenVietTat", "sParentId", "sTruongDonVi", "sChucNangNhiemVu", "sDiaChi"])

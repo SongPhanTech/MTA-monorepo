@@ -2149,7 +2149,7 @@ model DM_DonVi {
   sThietBiSua           String?
   sCode                 String?
   /// mã TKBU
-  sTKPUCode             String?
+  sTKBUCode             String?
   sTenVietTat           String?
   sParentId             String?                @db.Uuid()
   sTruongDonVi          String?                @db.Uuid()

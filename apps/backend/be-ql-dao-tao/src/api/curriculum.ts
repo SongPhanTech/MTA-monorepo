@@ -353,14 +353,14 @@ app.openapi(exportCurriculumVersion, async (c) => {
 
   const organizations = await prisma.dM_DonVi.findMany({
     where: { bActive: true, bDeleted: false, iLoaiDonVi: { in: [5, 6, 7] } },
-    select: { sMa: true, sTKPUCode: true, sTen: true },
+    select: { sMa: true, sTKBUCode: true, sTen: true },
     orderBy: { sTen: "asc" },
   })
 
   template.substitute("DON_VI", {
     team: organizations.map((o) => ({
       ma: o.sMa || "",
-      maTkpu: o.sTKPUCode || "",
+      maTkpu: o.sTKBUCode || "",
       name: o.sTen || "",
     })),
   })

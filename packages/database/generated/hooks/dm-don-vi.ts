@@ -327,7 +327,7 @@ export function useSuspenseCountDM_DonVi<TArgs extends Prisma.DM_DonViCountArgs,
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DM_DonVi', `${endpoint}/dM_DonVi/count`, args, options, fetch);
 }
 
-export function useCheckDM_DonVi<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { Id?: string; sMa?: string; sTen?: string; sGhiChu?: string; iSTT?: number; bActive?: boolean; bDeleted?: boolean; bSystem?: boolean; iDictionaryKey?: number; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; sCode?: string; sTKPUCode?: string; sTenVietTat?: string; sParentId?: string; sTruongDonVi?: string; sChucNangNhiemVu?: string; sDiaChi?: string; iNhomDonVi?: number; iCapDonVi?: number; iLoaiDonVi?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDM_DonVi<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { Id?: string; sMa?: string; sTen?: string; sGhiChu?: string; iSTT?: number; bActive?: boolean; bDeleted?: boolean; bSystem?: boolean; iDictionaryKey?: number; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; sCode?: string; sTKBUCode?: string; sTenVietTat?: string; sParentId?: string; sTruongDonVi?: string; sChucNangNhiemVu?: string; sDiaChi?: string; iNhomDonVi?: number; iCapDonVi?: number; iLoaiDonVi?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('DM_DonVi', `${endpoint}/dM_DonVi/check`, args, options, fetch);
 }

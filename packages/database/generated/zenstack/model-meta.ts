@@ -6128,8 +6128,8 @@ const metadata: ModelMeta = {
                     name: "sCode",
                     type: "String",
                     isOptional: true,
-                }, sTKPUCode: {
-                    name: "sTKPUCode",
+                }, sTKBUCode: {
+                    name: "sTKBUCode",
                     type: "String",
                     isOptional: true,
                 }, sTenVietTat: {

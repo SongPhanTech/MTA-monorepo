@@ -38,7 +38,7 @@ export type GetSurveysOfProfile200AllOfAllOfDataItemLectureOrganization = {
   /** @nullable */
   sCode?: string | null;
   /** @nullable */
-  sTKPUCode?: string | null;
+  sTKBUCode?: string | null;
   /** @nullable */
   sTenVietTat?: string | null;
   /** @nullable */

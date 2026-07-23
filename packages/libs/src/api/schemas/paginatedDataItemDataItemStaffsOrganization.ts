@@ -88,7 +88,7 @@ export type PaginatedDataItemDataItemStaffsOrganization = {
   /** @nullable */
   sCode?: string | null;
   /** @nullable */
-  sTKPUCode?: string | null;
+  sTKBUCode?: string | null;
   /** @nullable */
   sTenVietTat?: string | null;
   /** @nullable */

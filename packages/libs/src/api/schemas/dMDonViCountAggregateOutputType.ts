@@ -98,7 +98,7 @@ export interface DMDonViCountAggregateOutputType {
   sThietBiTao: number;
   sThietBiSua: number;
   sCode: number;
-  sTKPUCode: number;
+  sTKBUCode: number;
   sTenVietTat: number;
   sParentId: number;
   sTruongDonVi: number;
