@@ -1,0 +1,86 @@
+import { Card, Col, Row } from "antd"
+import { CalendarCheck, ClipboardCheck, ClipboardList, FileClock } from "lucide-react"
+import type React from "react"
+
+interface ThongKeKhaoSat {
+  tongSo: number
+  dangDienRa: number
+  sapDienRa: number
+  daKetThuc: number
+}
+
+interface StatCardsKhaoSatProps {
+  thongKe: ThongKeKhaoSat
+}
+
+interface ItemThongKe {
+  key: string
+  icon: React.ReactNode
+  soLuong: number
+  nhan: React.ReactNode
+  bgIcon: string
+  mauChu: string
+}
+
+const StatCardsKhaoSat = ({ thongKe }: StatCardsKhaoSatProps) => {
+  const items: ItemThongKe[] = [
+    {
+      key: "tat-ca",
+      icon: <ClipboardList size={22} />,
+      soLuong: thongKe.tongSo,
+      nhan: "Tất cả khảo sát",
+      bgIcon: "bg-green-100",
+      mauChu: "text-green-700",
+    },
+    {
+      key: "dang-dien-ra",
+      icon: <ClipboardCheck size={22} />,
+      soLuong: thongKe.dangDienRa,
+      nhan: "Đang diễn ra",
+      bgIcon: "bg-blue-100",
+      mauChu: "text-blue-600",
+    },
+    {
+      key: "sap-dien-ra",
+      icon: <FileClock size={22} />,
+      soLuong: thongKe.sapDienRa,
+      nhan: "Sắp diễn ra",
+      bgIcon: "bg-orange-100",
+      mauChu: "text-orange-500",
+    },
+    {
+      key: "da-ket-thuc",
+      icon: <CalendarCheck size={22} />,
+      soLuong: thongKe.daKetThuc,
+      nhan: "Đã kết thúc",
+      bgIcon: "bg-purple-100",
+      mauChu: "text-purple-600",
+    },
+  ]
+
+  return (
+    <Row gutter={[16, 16]} className="my-4">
+      {items.map((item) => (
+        <Col key={item.key} xs={24} sm={12} lg={6}>
+          <Card size="small" className="h-full" styles={{ body: { padding: 12 } }}>
+            <div className="flex items-center gap-3">
+              <div
+                className={`flex h-10 w-10 min-w-10 items-center justify-center rounded-xl ${item.bgIcon} ${item.mauChu}`}
+              >
+                {item.icon}
+              </div>
+              <div className="flex flex-col">
+                <span className={`text-2xl font-bold leading-tight ${item.mauChu}`}>
+                  {item.soLuong}
+                </span>
+                <span className="text-sm text-gray-500">{item.nhan}</span>
+              </div>
+            </div>
+          </Card>
+        </Col>
+      ))}
+    </Row>
+  )
+}
+
+export default StatCardsKhaoSat
