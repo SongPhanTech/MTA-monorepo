@@ -690,26 +690,6 @@ app.openapi(debtStatistics, async (c) => {
   const trainingCourses = await prisma.trainingCourse.findMany()
   const coursesMap = Object.fromEntries(trainingCourses.map((c) => [c.id, c]))
 
-  const tbSubjects = await prisma.trainingBlockSubject.findMany({
-    select: {
-      subjectId: true,
-      graduation: true,
-      useForFinalScore: true,
-      trainingBlockOnCurriculumVersion: {
-        select: {
-          curriculumVersionId: true,
-        },
-      },
-    },
-  })
-
-  const tbsMap: Record<string, Record<string, typeof tbSubjects[0]>> = {}
-  for (const tbs of tbSubjects) {
-    const cvId = tbs.trainingBlockOnCurriculumVersion.curriculumVersionId
-    if (!tbsMap[cvId]) tbsMap[cvId] = {}
-    tbsMap[cvId][tbs.subjectId] = tbs
-  }
-
   const scores = await prisma.studentSubjectScore.findMany({
     where: {
       withdrew: false,
@@ -778,6 +758,35 @@ app.openapi(debtStatistics, async (c) => {
     ],
   })
 
+  const cvIds = Array.from(new Set(scores.map((s) => s.student.curriculumVersionId).filter(Boolean))) as string[]
+
+  const tbSubjects = await prisma.trainingBlockSubject.findMany({
+    where: {
+      trainingBlockOnCurriculumVersion: {
+        curriculumVersionId: { in: cvIds }
+      }
+    },
+    select: {
+      subjectId: true,
+      graduation: true,
+      useForFinalScore: true,
+      trainingBlockOnCurriculumVersion: {
+        select: {
+          curriculumVersionId: true,
+        },
+      },
+    },
+  })
+
+  const tbsMap: Record<string, Record<string, typeof tbSubjects[0]>> = {}
+  for (const tbs of tbSubjects) {
+    const cvId = tbs.trainingBlockOnCurriculumVersion.curriculumVersionId
+    if (!cvId) continue
+    if (!tbsMap[cvId]) tbsMap[cvId] = {}
+    tbsMap[cvId][tbs.subjectId] = tbs
+  }
+
+
   type SubjectAttempt = {
     semesterCode: string
     semesterEndDate: Date | null
@@ -817,7 +826,7 @@ app.openapi(debtStatistics, async (c) => {
     const cvId = score.student.curriculumVersionId
     const courseId = score.student.fixedClass?.trainingCourseId
 
-    if (!courseId) continue
+    if (!courseId || !cvId) continue
     const tc = coursesMap[courseId]
     const tbs = tbsMap[cvId]?.[subjectId]
 
