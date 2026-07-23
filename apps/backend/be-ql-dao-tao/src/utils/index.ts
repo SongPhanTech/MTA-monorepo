@@ -460,11 +460,7 @@ export const buildTrainingBlockMapOrThrow = async (
   names: string[]
 ) => {
   const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
-
-  // await prisma.trainingBlock.createMany({
-  //     data: uniqNames.map((name) => ({ name })),
-  //     skipDuplicates: true,
-  // })
+  if (uniqNames.length === 0) return new Map<string, string>()
 
   const existing = await prisma.trainingBlock.findMany({
     where: {
@@ -479,26 +475,35 @@ export const buildTrainingBlockMapOrThrow = async (
   )
 
   if (missing.length) {
-    throw new HTTPException(400, {
-      message: `Khối kiến thức không tồn tại: ${missing.join(", ")}`,
+    // Tự tạo khối kiến thức theo đối tượng đào tạo của CTĐT đang import
+    await prisma.trainingBlock.createMany({
+      data: missing.map((name, index) => ({
+        name,
+        trainingObjectTypeId,
+        priority: existing.length + index + 1,
+      })),
+      skipDuplicates: true,
     })
   }
 
-  return new Map(existing.map(({ name, id }) => [name, id]))
+  const all = await prisma.trainingBlock.findMany({
+    where: {
+      name: { in: uniqNames, mode: "insensitive" },
+      trainingObjectTypeId,
+    },
+    select: { name: true, id: true },
+  })
 
-  // // Normalize existing names to lowercase for case-insensitive matching
-  // const existingMap = new Map(existing.map(({ name, id }) => [name.toLowerCase(), id]))
+  const byLower = new Map(all.map(({ name, id }) => [name.toUpperCase(), id]))
+  const stillMissing = uniqNames.filter((name) => !byLower.has(name.toUpperCase()))
+  if (stillMissing.length) {
+    throw new HTTPException(400, {
+      message: `Không tạo được khối kiến thức: ${stillMissing.join(", ")}`,
+    })
+  }
 
-  // // Build result map using the original uniqNames
-  // const result = new Map<string, string>()
-  // for (const name of uniqNames) {
-  //     const id = existingMap.get(name.toLowerCase())
-  //     if (id) {
-  //         result.set(name, id)
-  //     }
-  // }
-
-  // return result
+  // Key theo tên trong file Excel để caller `.get(excelName)` luôn khớp
+  return new Map(uniqNames.map((name) => [name, byLower.get(name.toUpperCase()) as string]))
 }
 
 type SubjectData = {
@@ -528,38 +533,43 @@ export const buildSubjectMapOrThrow = async (
   // const subjectSet = new Set<string>(subjects.map((s) => JSON.stringify(s)))
   // const uniqueSubject = Array.from(subjectSet).map((s) => JSON.parse(s) as SubjectData)
 
-  const orgMap = await buildOrgCodeMapOrThrow(
+  const { map: orgMap, unmappedCodes: unmappedOrgCodes } = await buildOrgCodeMapOrThrow(
     prisma,
     subjects.map((s) => s.organizationCode || null)
   )
+  const unmappedOrgSet = new Set(unmappedOrgCodes)
+  const warnings: string[] = []
 
   const subjectsWithCode = subjects.filter((s): s is SubjectData & { code: string } =>
     Boolean(s.code)
   )
-  const existingCode = await prisma.subjectVersion.findMany({
-    where: {
-      OR: subjectsWithCode.map((s) => ({
-        code: s.code,
-      })),
-    },
-    include: { managementOrganization: { select: { sMa: true } } },
-  })
+  const existingCode = subjectsWithCode.length
+    ? await prisma.subjectVersion.findMany({
+        where: {
+          OR: subjectsWithCode.map((s) => ({
+            code: s.code,
+          })),
+        },
+        include: { managementOrganization: { select: { sMa: true } } },
+      })
+    : []
+
+  const existingByCode = new Map(existingCode.map((e) => [e.code as string, e]))
 
   const codeConflicts = subjects
     .map((s) => {
       if (!s.code) return null
-      const existing = existingCode.find((e) => e.code === s.code)
+      const existing = existingByCode.get(s.code)
       if (!existing) return null
 
       const diffs: string[] = []
-      // if (existing.name !== s.name) {
-      //   console.log(existing.name, s.name)
-
-      //   diffs.push("tên học phần")
-      // }
       if (existing.credit !== s.credit) diffs.push("số tín chỉ")
       if (existing.period !== s.period) diffs.push("số tiết")
-      if ((existing.managementOrganization?.sMa || null) !== (s.organizationCode || null)) {
+      if (
+        s.organizationCode &&
+        !unmappedOrgSet.has(s.organizationCode) &&
+        (existing.managementOrganization?.sMa || null) !== s.organizationCode
+      ) {
         diffs.push("đơn vị quản lý")
       }
 
@@ -583,10 +593,9 @@ export const buildSubjectMapOrThrow = async (
     const conflictMessages = Array.from(
       new Map(codeConflicts.map((c) => [c.code, `${c.code} (${c.diffs.join(", ")})`])).values()
     )
-
-    throw new HTTPException(400, {
-      message: `Mã học phần đã tồn tại với thông tin khác: ${conflictMessages.join("; ")}`,
-    })
+    warnings.push(
+      `Mã học phần đã tồn tại với thông tin khác (giữ bản trong hệ thống, vui lòng kiểm tra lại): ${conflictMessages.join("; ")}`
+    )
   }
 
   const existingCombination = await prisma.subjectVersion.findMany({
@@ -602,13 +611,15 @@ export const buildSubjectMapOrThrow = async (
   })
 
   const combinationConflicts = subjects.filter((s) => {
+    const excelOrg =
+      s.organizationCode && !unmappedOrgSet.has(s.organizationCode) ? s.organizationCode : null
     const existing = existingCombination.find(
       (e) =>
         e.trainingObjectTypeId === s.trainingObjectTypeId &&
         e.name === s.name &&
         e.credit === s.credit &&
         e.period === s.period &&
-        (e.managementOrganization?.sMa || null) === (s.organizationCode || null) &&
+        (e.managementOrganization?.sMa || null) === excelOrg &&
         e.code !== null &&
         e.code !== s.code
     )
@@ -616,11 +627,17 @@ export const buildSubjectMapOrThrow = async (
   })
 
   if (combinationConflicts.length > 0) {
-    throw new HTTPException(400, {
-      message: `Học phần đã tồn tại với mã khác: ${Array.from(
+    warnings.push(
+      `Học phần đã tồn tại với mã khác (vui lòng kiểm tra lại): ${Array.from(
         new Set(combinationConflicts.map((s) => s.name))
-      ).join(", ")}`,
-    })
+      ).join(", ")}`
+    )
+  }
+
+  // Ưu tiên map theo mã đã có trong hệ thống (kể cả khi lệch TC/tiết/đơn vị)
+  const resolved = new Map<string, string>()
+  for (const [code, row] of existingByCode) {
+    resolved.set(code, row.id)
   }
 
   const existing = await prisma.subjectVersion.findMany({
@@ -629,33 +646,30 @@ export const buildSubjectMapOrThrow = async (
         name: s.name,
         trainingObjectTypeId: s.trainingObjectTypeId,
         ...(s.code ? { code: s.code } : {}),
-        ...(orgMap.get(s.organizationCode || null)
+        ...(s.organizationCode &&
+        !unmappedOrgSet.has(s.organizationCode) &&
+        orgMap.get(s.organizationCode)
           ? { managementOrganization: { sMa: s.organizationCode } }
           : {}),
         credit: s.credit,
         OR: [{ period: s.period }, { period: null }],
-        // examType: s.examType,
-        // type: s.type,
-        // schedulePeriod: s.schedulePeriod,
-        // ...(s.numberOfTheory ? { numberOfTheory: s.numberOfTheory } : {}),
-        // ...(s.numberOfPractical ? { numberOfPractical: s.numberOfPractical } : {}),
-        // ...(s.numberOfSelfStudy ? { numberOfSelfStudy: s.numberOfSelfStudy } : {}),
-        // ...(s.numberOfPractice ? { numberOfPractice: s.numberOfPractice } : {}),
-        // ...(s.numberOfReview ? { numberOfReview: s.numberOfReview } : {}),
-        // ...(s.numberOfExam ? { numberOfExam: s.numberOfExam } : {}),
       })),
     },
     select: { id: true, code: true },
   })
 
-  const missing = subjects.filter(({ code }) => !existing.some((version) => version.code === code))
+  for (const row of existing) {
+    if (row.code) resolved.set(row.code, row.id)
+  }
+
+  const missing = subjects.filter(({ code }) => Boolean(code) && !resolved.has(code))
 
   if (missing.length && createNewSubject) {
     const newSubjects = await prisma.$transaction(async (tx) => {
       await tx.subject.createMany({
         data: missing.map((s) => ({
           name: s.name,
-          managementOrganizationId: orgMap.get(s.organizationCode || null),
+          managementOrganizationId: orgMap.get(s.organizationCode || "") ?? undefined,
         })),
         skipDuplicates: true,
       })
@@ -664,42 +678,53 @@ export const buildSubjectMapOrThrow = async (
         where: {
           OR: missing.map((s) => ({
             name: s.name,
-            managementOrganizationId: orgMap.get(s.organizationCode || null),
+            managementOrganizationId: orgMap.get(s.organizationCode || "") ?? null,
           })),
         },
         select: { id: true, name: true, managementOrganizationId: true },
       })
 
-      const groupMap = new Map(subjectGroup.map((s) => [s.name + s.managementOrganizationId, s.id]))
+      const groupMap = new Map(
+        subjectGroup.map((s) => [s.name + (s.managementOrganizationId ?? ""), s.id])
+      )
 
       return await tx.subjectVersion.createManyAndReturn({
-        data: missing.map((subject) => ({
-          name: subject.name,
-          trainingObjectTypeId: subject.trainingObjectTypeId,
-          credit: subject.credit,
-          code: subject.code,
-          codeTkb: subject.code,
-          examType: subject.examType || $Enums.ExamType.Oral,
-          type: subject.type,
-          onePoint: subject.onePoint,
-          period: subject.period,
-          schedulePeriod: subject.schedulePeriod,
-          numberOfTheory: subject.numberOfTheory,
-          numberOfPractical: subject.numberOfPractical,
-          numberOfSelfStudy: subject.numberOfSelfStudy,
-          numberOfPractice: subject.numberOfPractice,
-          numberOfReview: subject.numberOfReview,
-          numberOfExam: subject.numberOfExam,
-          managementOrganizationId: orgMap.get(subject.organizationCode || null),
-          subjectId: groupMap.get(
-            subject.name + orgMap.get(subject.organizationCode || null)
-          ) as string,
-        })),
+        data: missing.map((subject) => {
+          const orgId = orgMap.get(subject.organizationCode || "")
+          return {
+            name: subject.name,
+            trainingObjectTypeId: subject.trainingObjectTypeId,
+            credit: subject.credit,
+            code: subject.code,
+            codeTkb: subject.code,
+            examType: subject.examType || $Enums.ExamType.Oral,
+            type: subject.type,
+            onePoint: subject.onePoint,
+            period: subject.period,
+            schedulePeriod: subject.schedulePeriod,
+            numberOfTheory: subject.numberOfTheory,
+            numberOfPractical: subject.numberOfPractical,
+            numberOfSelfStudy: subject.numberOfSelfStudy,
+            numberOfPractice: subject.numberOfPractice,
+            numberOfReview: subject.numberOfReview,
+            numberOfExam: subject.numberOfExam,
+            managementOrganizationId: orgId,
+            subjectId: groupMap.get(subject.name + (orgId ?? "")) as string,
+          }
+        }),
         select: { id: true, code: true },
       })
     })
 
-    return new Map([...existing, ...newSubjects].map(({ code, id }) => [code, id]))
+    for (const row of newSubjects) {
+      if (row.code) resolved.set(row.code, row.id)
+    }
+
+    return {
+      map: resolved,
+      unmappedOrgCodes,
+      warnings,
+    }
   }
   if (missing.length && !createNewSubject) {
     const missingDetails = missing
@@ -712,9 +737,14 @@ export const buildSubjectMapOrThrow = async (
         "Một hoặc nhiều phiên bản môn học không tồn tại trong hệ thống. Vui lòng kiểm tra lại dữ liệu.",
     })
   }
-  return new Map(existing.map(({ code, id }) => [code, id]))
+  return {
+    map: resolved,
+    unmappedOrgCodes,
+    warnings,
+  }
 }
 
+/** Map mã đơn vị (sMa). Mã chưa có trong DM_DonVi → bỏ qua, trả về unmappedCodes. */
 export const buildOrgCodeMapOrThrow = async (prisma: PrismaClient, codes: (string | null)[]) => {
   const uniqCodes = Array.from(new Set(codes.filter((code): code is string => Boolean(code))))
 
@@ -723,15 +753,12 @@ export const buildOrgCodeMapOrThrow = async (prisma: PrismaClient, codes: (strin
     select: { sMa: true, Id: true },
   })
 
-  const missing = uniqCodes.filter((code) => !existing.some(({ sMa }) => sMa === code))
+  const unmappedCodes = uniqCodes.filter((code) => !existing.some(({ sMa }) => sMa === code))
 
-  if (missing.length) {
-    throw new HTTPException(400, {
-      message: `Đơn vị không tồn tại: ${missing.join(", ")}`,
-    })
+  return {
+    map: new Map(existing.map(({ sMa, Id }) => [sMa, Id])),
+    unmappedCodes,
   }
-
-  return new Map(existing.map(({ sMa, Id }) => [sMa, Id]))
 }
 
 export const buildOrgNameMapOrThrow = async (

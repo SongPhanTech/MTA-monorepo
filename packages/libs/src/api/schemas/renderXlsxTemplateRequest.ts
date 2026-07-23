@@ -88,19 +88,16 @@ export interface RenderXlsxTemplateRequest {
   /** Tên file tải về. */
   fileName: string;
   /**
-   * Danh sách block/sheet cần render. Mỗi phần tử = 1 lần fill template. Khi mergeBlocksToOneSheet=true thì xếp dọc 1 sheet.
+   * Danh sách sheet cần render. Mỗi phần tử tương ứng 1 sheet output.
    * @minItems 1
    */
   sheets: XlsxTemplateSheetInput[];
   /** Tự động vá placeholder bảng cũ thiếu cột Thứ/Tiết/Giảng đường. Mặc định false. */
   autoPatchTablePlaceholders?: boolean;
-  /** Ghép nhiều block vào 1 sheet (xếp dọc), giữ shape bằng offset drawing XML. Mặc định false (mỗi block 1 tab). */
+  /** Ghép nhiều block vào 1 sheet (xếp dọc). Mặc định false. */
   mergeBlocksToOneSheet?: boolean;
-  /**
-   * Số dòng trống giữa các block khi ghép dọc. Mặc định 0.
-   * @minimum 0
-   */
+  /** Số dòng trống giữa các block khi ghép dọc. Mặc định 0. */
   blockGapRows?: number;
-  /** Prefix đường dẫn MinIO (ví dụ /mta/template). Không truyền → lấy mặc định từ DB template hoặc /mta/template. */
+  /** Prefix đường dẫn MinIO (ví dụ mta/luan-van). */
   prefix?: string;
 }

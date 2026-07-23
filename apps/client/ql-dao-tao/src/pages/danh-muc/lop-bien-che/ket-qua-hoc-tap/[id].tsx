@@ -474,17 +474,31 @@ export default function StudentScoreClassPage() {
         item.subjectClasses.forEach((subjectClass) => {
           subjectClass.subjectClassStudent.forEach((subjectClassStudent) => {
             const rawScore =
-              subjectClassStudent?.manualFinalScore ||
-              subjectClassStudent?.finalScore?.toNumber() ||
-              0
+              subjectClassStudent?.manualFinalScore != null
+                ? Number(subjectClassStudent.manualFinalScore)
+                : subjectClassStudent?.finalScore != null
+                  ? Number(subjectClassStudent.finalScore)
+                  : 0
 
             const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
             const converted = convertScoreWithGraduation(rawScore, isGraduation)
 
             monhoc.push({
               TenMonhoc: subjectClass.subject.name,
-              MaMH: subjectClass.subject.code?.slice(0, 2) ?? "",
+              MaMH: subjectClass.subject.code ?? "",
               soTC: subjectClass.subject.credit,
+              diem01:
+                subjectClassStudent?.attendanceScore != null
+                  ? Number(subjectClassStudent.attendanceScore)
+                  : undefined,
+              diem02:
+                subjectClassStudent?.midtermScore != null
+                  ? Number(subjectClassStudent.midtermScore)
+                  : undefined,
+              diem07:
+                subjectClassStudent?.examScore != null
+                  ? Number(subjectClassStudent.examScore)
+                  : undefined,
               diemhe10: rawScore,
               diemhe4: converted?.base4 ?? 0,
               diemchu: converted?.letter ?? "",
@@ -493,7 +507,11 @@ export default function StudentScoreClassPage() {
           })
         })
 
-        const tongSoTinChi = monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
+        const semesterResult = item.studentSemesterResult?.[0]
+
+        const tongSoTinChi =
+          semesterResult?.registeredCredits ??
+          monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
         const tongDiemNhanTinChiHe10 = monhoc.reduce(
           (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
           0
@@ -502,12 +520,18 @@ export default function StudentScoreClassPage() {
           (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
           0
         )
-        const diemTBHe10 = Number.parseFloat(
-          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi).toFixed(2)
-        )
-        const diemTBHe4 = Number.parseFloat(
-          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi).toFixed(2)
-        )
+        const diemTBHe10 =
+          semesterResult?.gpaBase10 != null
+            ? Number(semesterResult.gpaBase10)
+            : Number.parseFloat(
+                (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi).toFixed(2)
+              )
+        const diemTBHe4 =
+          semesterResult?.gpaBase4 != null
+            ? Number(semesterResult.gpaBase4)
+            : Number.parseFloat(
+                (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi).toFixed(2)
+              )
 
         hocKis.push({
           TenHocKi: `${item.name}`,
@@ -552,13 +576,13 @@ export default function StudentScoreClassPage() {
             { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
             { value: monHoc.MaMH ?? "" },
             { value: monHoc.soTC, align: "center" },
-            { value: monHoc.diem01 ?? 0, align: "right", numFmt: "0.00" },
-            { value: monHoc.diem02 ?? 0, align: "right", numFmt: "0.00" },
-            { value: monHoc.diem07 ?? 0, align: "right", numFmt: "0.00" },
+            { value: monHoc.diem01 ?? null, align: "right", numFmt: "0.00" },
+            { value: monHoc.diem02 ?? null, align: "right", numFmt: "0.00" },
+            { value: monHoc.diem07 ?? null, align: "right", numFmt: "0.00" },
             { value: null },
             { value: null },
-            { value: monHoc.diemhe10 ?? 0, align: "right", numFmt: "0.00" },
-            { value: monHoc.diemhe4 ?? 0, align: "right", numFmt: "0.00" },
+            { value: monHoc.diemhe10 ?? null, align: "right", numFmt: "0.00" },
+            { value: monHoc.diemhe4 ?? null, align: "right", numFmt: "0.00" },
             { value: monHoc.diemchu ?? "", align: "center" },
             { value: null },
             { value: monHoc.ghichu ?? "" },
@@ -578,7 +602,7 @@ export default function StudentScoreClassPage() {
           { value: "Điểm trung bình học kỳ:", colSpan: 6, bold: true, align: "center" },
           { value: null },
           {
-            value: hasMon ? { formula: sumStcFormula, result: hocKi.SoTinChiKy ?? 0 } : 0,
+            value: hasMon ? (hocKi.SoTinChiKy ?? 0) : 0,
             bold: true,
             align: "center",
           },
@@ -588,13 +612,13 @@ export default function StudentScoreClassPage() {
           { value: null },
           { value: null },
           {
-            value: hasMon ? { formula: tbHe10Formula, result: hocKi.DiemTBKyHe10 ?? 0 } : 0,
+            value: hasMon ? (hocKi.DiemTBKyHe10 ?? 0) : 0,
             bold: true,
             align: "right",
             numFmt: "0.00",
           },
           {
-            value: hasMon ? { formula: tbHe4Formula, result: hocKi.DiemTBKyHe4 ?? 0 } : 0,
+            value: hasMon ? (hocKi.DiemTBKyHe4 ?? 0) : 0,
             bold: true,
             align: "right",
             numFmt: "0.00",
@@ -608,10 +632,13 @@ export default function StudentScoreClassPage() {
     }
 
     const gapRow: TableRow = { cells: [{ value: null, colSpan: 19, border: false }] }
-    const tongtinchi = sampleStudentData.hocKis.reduce(
-      (acc, curr) => acc + (curr.SoTinChiKy ?? 0),
-      0
-    )
+
+    const lastSemesterResult = [...data].reverse().find((d) => d.studentSemesterResult?.length > 0)
+      ?.studentSemesterResult?.[0]
+
+    const tongtinchi =
+      lastSemesterResult?.accumulatedCredits ??
+      sampleStudentData.hocKis.reduce((acc, curr) => acc + (curr.SoTinChiKy ?? 0), 0)
     const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
       (acc, curr) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
       0
@@ -621,9 +648,17 @@ export default function StudentScoreClassPage() {
       0
     )
     const tongdiemhe10 =
-      tongtinchi === 0 ? 0 : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1))
+      lastSemesterResult?.cumulativeGpaBase10 != null
+        ? Number(lastSemesterResult.cumulativeGpaBase10)
+        : tongtinchi === 0
+          ? 0
+          : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(2))
     const tongdiemhe4 =
-      tongtinchi === 0 ? 0 : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1))
+      lastSemesterResult?.cumulativeGpaBase4 != null
+        ? Number(lastSemesterResult.cumulativeGpaBase4)
+        : tongtinchi === 0
+          ? 0
+          : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(2))
 
     const xeploai = convertScore(tongdiemhe10).classification
 
@@ -730,17 +765,31 @@ export default function StudentScoreClassPage() {
         item.subjectClasses.forEach((subjectClass) => {
           subjectClass.subjectClassStudent.forEach((subjectClassStudent) => {
             const rawScore =
-              subjectClassStudent?.manualFinalScore ||
-              subjectClassStudent?.finalScore?.toNumber() ||
-              0
+              subjectClassStudent?.manualFinalScore != null
+                ? Number(subjectClassStudent.manualFinalScore)
+                : subjectClassStudent?.finalScore != null
+                  ? Number(subjectClassStudent.finalScore)
+                  : 0
 
             const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
             const converted = convertScoreWithGraduation(rawScore, isGraduation)
 
             monhoc.push({
               TenMonhoc: subjectClass.subject.name,
-              MaMH: subjectClass.subject.code?.slice(0, 2) ?? "",
+              MaMH: subjectClass.subject.code ?? "",
               soTC: subjectClass.subject.credit,
+              diem01:
+                subjectClassStudent?.attendanceScore != null
+                  ? Number(subjectClassStudent.attendanceScore)
+                  : undefined,
+              diem02:
+                subjectClassStudent?.midtermScore != null
+                  ? Number(subjectClassStudent.midtermScore)
+                  : undefined,
+              diem07:
+                subjectClassStudent?.examScore != null
+                  ? Number(subjectClassStudent.examScore)
+                  : undefined,
               diemhe10: rawScore,
               diemhe4: converted?.base4 ?? 0,
               diemchu: converted?.letter ?? "",
@@ -749,7 +798,11 @@ export default function StudentScoreClassPage() {
           })
         })
 
-        const tongSoTinChi = monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
+        const semesterResult = item.studentSemesterResult?.[0]
+
+        const tongSoTinChi =
+          semesterResult?.registeredCredits ??
+          monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
         const tongDiemNhanTinChiHe10 = monhoc.reduce(
           (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
           0
@@ -758,12 +811,18 @@ export default function StudentScoreClassPage() {
           (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
           0
         )
-        const diemTBHe10 = Number.parseFloat(
-          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi).toFixed(2)
-        )
-        const diemTBHe4 = Number.parseFloat(
-          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi).toFixed(2)
-        )
+        const diemTBHe10 =
+          semesterResult?.gpaBase10 != null
+            ? Number(semesterResult.gpaBase10)
+            : Number.parseFloat(
+                (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi).toFixed(2)
+              )
+        const diemTBHe4 =
+          semesterResult?.gpaBase4 != null
+            ? Number(semesterResult.gpaBase4)
+            : Number.parseFloat(
+                (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi).toFixed(2)
+              )
 
         hocKis.push({
           TenHocKi: `${item.name}`,
@@ -808,13 +867,13 @@ export default function StudentScoreClassPage() {
             { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
             { value: monHoc.MaMH ?? "" },
             { value: monHoc.soTC, align: "center" },
-            { value: monHoc.diem01 ?? 0, align: "right", numFmt: "0.00" },
-            { value: monHoc.diem02 ?? 0, align: "right", numFmt: "0.00" },
-            { value: monHoc.diem07 ?? 0, align: "right", numFmt: "0.00" },
+            { value: monHoc.diem01 ?? null, align: "right", numFmt: "0.00" },
+            { value: monHoc.diem02 ?? null, align: "right", numFmt: "0.00" },
+            { value: monHoc.diem07 ?? null, align: "right", numFmt: "0.00" },
             { value: null },
             { value: null },
-            { value: monHoc.diemhe10 ?? 0, align: "right", numFmt: "0.00" },
-            { value: monHoc.diemhe4 ?? 0, align: "right", numFmt: "0.00" },
+            { value: monHoc.diemhe10 ?? null, align: "right", numFmt: "0.00" },
+            { value: monHoc.diemhe4 ?? null, align: "right", numFmt: "0.00" },
             { value: monHoc.diemchu ?? "", align: "center" },
             { value: null },
             { value: monHoc.ghichu ?? "" },
@@ -834,7 +893,7 @@ export default function StudentScoreClassPage() {
           { value: "Điểm trung bình học kỳ:", colSpan: 6, bold: true, align: "center" },
           { value: null },
           {
-            value: hasMon ? { formula: sumStcFormula, result: hocKi.SoTinChiKy ?? 0 } : 0,
+            value: hasMon ? (hocKi.SoTinChiKy ?? 0) : 0,
             bold: true,
             align: "center",
           },
@@ -844,13 +903,13 @@ export default function StudentScoreClassPage() {
           { value: null },
           { value: null },
           {
-            value: hasMon ? { formula: tbHe10Formula, result: hocKi.DiemTBKyHe10 ?? 0 } : 0,
+            value: hasMon ? (hocKi.DiemTBKyHe10 ?? 0) : 0,
             bold: true,
             align: "right",
             numFmt: "0.00",
           },
           {
-            value: hasMon ? { formula: tbHe4Formula, result: hocKi.DiemTBKyHe4 ?? 0 } : 0,
+            value: hasMon ? (hocKi.DiemTBKyHe4 ?? 0) : 0,
             bold: true,
             align: "right",
             numFmt: "0.00",
@@ -864,10 +923,13 @@ export default function StudentScoreClassPage() {
     }
 
     const gapRow: TableRow = { cells: [{ value: null, colSpan: 19, border: false }] }
-    const tongtinchi = sampleStudentData.hocKis.reduce(
-      (acc, curr) => acc + (curr.SoTinChiKy ?? 0),
-      0
-    )
+
+    const lastSemesterResult = [...data].reverse().find((d) => d.studentSemesterResult?.length > 0)
+      ?.studentSemesterResult?.[0]
+
+    const tongtinchi =
+      lastSemesterResult?.accumulatedCredits ??
+      sampleStudentData.hocKis.reduce((acc, curr) => acc + (curr.SoTinChiKy ?? 0), 0)
     const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
       (acc, curr) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
       0
@@ -877,9 +939,17 @@ export default function StudentScoreClassPage() {
       0
     )
     const tongdiemhe10 =
-      tongtinchi === 0 ? 0 : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1))
+      lastSemesterResult?.cumulativeGpaBase10 != null
+        ? Number(lastSemesterResult.cumulativeGpaBase10)
+        : tongtinchi === 0
+          ? 0
+          : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(2))
     const tongdiemhe4 =
-      tongtinchi === 0 ? 0 : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1))
+      lastSemesterResult?.cumulativeGpaBase4 != null
+        ? Number(lastSemesterResult.cumulativeGpaBase4)
+        : tongtinchi === 0
+          ? 0
+          : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(2))
 
     const xeploai = convertScore(tongdiemhe10).classification
 
@@ -1001,9 +1071,11 @@ export default function StudentScoreClassPage() {
     orderedSubjectClasses.forEach((subjectClass) => {
       subjectClass.subjectClassStudent.forEach((subjectClassStudent: any) => {
         const rawScore =
-          subjectClassStudent?.manualFinalScore ??
-          subjectClassStudent?.finalScore?.toNumber() ??
-          null
+          subjectClassStudent?.manualFinalScore != null
+            ? Number(subjectClassStudent.manualFinalScore)
+            : subjectClassStudent?.finalScore != null
+              ? Number(subjectClassStudent.finalScore)
+              : null
 
         const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
         const converted = convertScoreWithGraduation(rawScore, isGraduation)
@@ -1463,7 +1535,11 @@ export default function StudentScoreClassPage() {
                   width: 100,
                   render: (_, record) => {
                     const s = record?.subjectClassStudent?.[0]
-                    return s?.manualFinalScore ?? s?.finalScore?.toNumber() ?? ""
+                    return s?.manualFinalScore != null
+                      ? Number(s.manualFinalScore)
+                      : s?.finalScore != null
+                        ? Number(s.finalScore)
+                        : ""
                   },
                 },
                 {
@@ -1474,7 +1550,12 @@ export default function StudentScoreClassPage() {
                   render: (_, record: any) => {
                     if (record.$isSummary) return null
                     const s = record?.subjectClassStudent?.[0]
-                    const score = s?.manualFinalScore ?? s?.finalScore?.toNumber()
+                    const score =
+                      s?.manualFinalScore != null
+                        ? Number(s.manualFinalScore)
+                        : s?.finalScore != null
+                          ? Number(s.finalScore)
+                          : undefined
                     if (score == null) return null
                     const isGraduation = record?.subject?.trainingBlocks?.[0]?.graduation === true
                     return convertScoreWithGraduation(score, isGraduation)?.base4 ?? ""
@@ -1489,7 +1570,12 @@ export default function StudentScoreClassPage() {
                       return <b>{record.semesterResult.rank?.name || ""}</b>
                     }
                     const s = record?.subjectClassStudent?.[0]
-                    const score = s?.manualFinalScore ?? s?.finalScore?.toNumber()
+                    const score =
+                      s?.manualFinalScore != null
+                        ? Number(s.manualFinalScore)
+                        : s?.finalScore != null
+                          ? Number(s.finalScore)
+                          : undefined
                     if (score == null) return null
                     const isGraduation = record?.subject?.trainingBlocks?.[0]?.graduation === true
                     return convertScoreWithGraduation(score, isGraduation)?.letter ?? ""
@@ -1501,7 +1587,12 @@ export default function StudentScoreClassPage() {
                   width: 100,
                   render: (_: any, record) => {
                     const s = record.subjectClassStudent?.[0]
-                    const score = s?.manualFinalScore ?? s?.finalScore?.toNumber()
+                    const score =
+                      s?.manualFinalScore != null
+                        ? Number(s.manualFinalScore)
+                        : s?.finalScore != null
+                          ? Number(s.finalScore)
+                          : undefined
                     if (score == null) return null
                     const isGraduation = record?.subject?.trainingBlocks?.[0]?.graduation === true
                     const result = convertScoreWithGraduation(score, isGraduation)
