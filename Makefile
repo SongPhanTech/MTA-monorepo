@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= app
+SERVER_PROFILE ?= mta_online
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -113,11 +113,12 @@ PKG_HO_SO := ql-ho-so
 PKG_AI := tro-ly-ao
 PKG_CONG_HOC_VIEN := cong-hoc-vien
 PKG_CONG_GIANG_VIEN := cong-giang-vien
+PKG_CONG_SINH_VIEN := cong-sinh-vien
 
 # Maps for build types (backend/frontend)
 BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL) $(PKG_BE_DAO_TAO_SHARED) $(PKG_BE_EXCHANGE)
 # FE_PKGS := $(PKG_DAO_TAO) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_DANG_KY_HOC)
-FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_CONG_HOC_VIEN) $(PKG_CONG_GIANG_VIEN)
+FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_CONG_HOC_VIEN) $(PKG_CONG_GIANG_VIEN) $(PKG_CONG_SINH_VIEN)
 
 # Client App Mappings
 CDN_NAME_ql-dao-tao = lms-cdn
