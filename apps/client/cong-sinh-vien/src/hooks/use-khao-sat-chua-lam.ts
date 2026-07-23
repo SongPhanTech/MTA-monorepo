@@ -18,8 +18,11 @@ const useKhaoSatChuaLam = () => {
     const map = new Map<string, string>()
     if (data?.status !== 200) return map
 
+    const danhSachApi = data.data?.data
+    if (!Array.isArray(danhSachApi)) return map
+
     const now = dayjs()
-    for (const ks of data.data.data) {
+    for (const ks of danhSachApi) {
       if (ks.surveyTopic?.type !== $Enums.SurveyType.CLUSTER) continue
 
       const lopHocPhanId = ks.subjectClass?.id

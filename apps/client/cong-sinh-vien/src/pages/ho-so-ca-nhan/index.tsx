@@ -1,7 +1,7 @@
 import { Descriptions, Table, Tabs, Tag } from "antd"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
-import { FIXED_CLASS_STUDENT_STATUS, SCORE_CONVERT_STATUS } from "@constants/constants"
+import { FIXED_CLASS_STUDENT_STATUS } from "@constants/constants"
 import { useAcademicRankingBaseTypeOptions } from "@hooks/academicRankingBaseType"
 import { useStudentTrainingTypeOptions } from "@hooks/studentTrainingType"
 import DefaultLayout from "@layouts/default-layout"
@@ -38,7 +38,6 @@ const HoSoCaNhan = () => {
       include: {
         userProfile: {
           include: {
-            rank: true,
             gender: true,
           },
         },
@@ -64,23 +63,9 @@ const HoSoCaNhan = () => {
             },
           },
         },
-        curriculumVersion: {
-          include: {
-            trainingLevel: true,
-            curriculum: {
-              include: {
-                trainingMajor: {
-                  include: {
-                    trainingField: true,
-                  },
-                },
-              },
-            },
-          },
-        },
+        curriculumVersion: true,
         curriculumVersionParallel: true,
         trainingLocation: true,
-        priorityObject: true,
         subjectClassStudent: {
           where: {
             subjectClassId: { not: null },
@@ -155,71 +140,7 @@ const HoSoCaNhan = () => {
             createdAt: "desc",
           },
         },
-        studentAcademicDecision: {
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
-        graduationApplications: {
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
         graduationDecision: true,
-        researchRegistrations: {
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
-        thesisRegistrations: {
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
-        diplomaVerificationApplication: {
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
-        studentTrainingScore: {
-          include: {
-            trainingScoreSession: {
-              include: {
-                semester: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
-        studentScoreConvert: {
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
-        classRegisterLogs: {
-          include: {
-            subjectClass: {
-              include: {
-                subject: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
-        notes: {
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
-        noteFolders: {
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
       },
     },
     { enabled: !!studentId }
@@ -341,16 +262,6 @@ const HoSoCaNhan = () => {
               <Descriptions.Item label="Mức cảnh cáo học đường">
                 <Tag color={studentData?.disciplinaryWarningLevel ? "orange" : "green"}>
                   {studentData?.disciplinaryWarningLevel || 0}
-                </Tag>
-              </Descriptions.Item>
-              <Descriptions.Item label="Đình chỉ học">
-                <Tag color={studentData?.suspended ? "red" : "green"}>
-                  {studentData?.suspended ? "Có" : "Không"}
-                </Tag>
-              </Descriptions.Item>
-              <Descriptions.Item label="Đuổi học">
-                <Tag color={studentData?.expelled ? "red" : "green"}>
-                  {studentData?.expelled ? "Có" : "Không"}
                 </Tag>
               </Descriptions.Item>
             </Descriptions>
@@ -1155,160 +1066,6 @@ const HoSoCaNhan = () => {
               dataIndex: "createdAt",
               width: 120,
               align: "center",
-              render: (date) => (date ? dayjs(date).format("DD/MM/YYYY") : ""),
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      key: "quyet-dinh-tot-nghiep",
-      label: "12. Quyết định tốt nghiệp",
-      children: studentData?.graduationDecision ? (
-        <Descriptions bordered column={2} size="small">
-          <Descriptions.Item label="Mã">{studentData.graduationDecision.code}</Descriptions.Item>
-          <Descriptions.Item label="Mô tả">
-            {studentData.graduationDecision.description}
-          </Descriptions.Item>
-          <Descriptions.Item label="Trạng thái">
-            <Tag color={studentData.graduationDecision.active ? "green" : "red"}>
-              {studentData.graduationDecision.active ? "Kích hoạt" : "Không kích hoạt"}
-            </Tag>
-          </Descriptions.Item>
-          <Descriptions.Item label="Ngày tạo">
-            {studentData.graduationDecision.createdAt
-              ? dayjs(studentData.graduationDecision.createdAt).format("DD/MM/YYYY HH:mm")
-              : ""}
-          </Descriptions.Item>
-        </Descriptions>
-      ) : (
-        <div className="text-center text-gray-500 py-8">Chưa có quyết định tốt nghiệp</div>
-      ),
-    },
-    {
-      key: "tra-cuu-van-bang",
-      label: `15. Tra cứu văn bằng (${studentData?.diplomaVerificationApplication?.length || 0})`,
-      children: (
-        <Table
-          dataSource={studentData?.diplomaVerificationApplication || []}
-          rowKey="id"
-          size="small"
-          bordered
-          pagination={{ pageSize: 10 }}
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              render: (_, __, index) => index + 1,
-            },
-            {
-              title: "Mã",
-              dataIndex: "code",
-              width: 150,
-            },
-            {
-              title: "Mô tả",
-              dataIndex: "description",
-              width: 300,
-            },
-            {
-              title: "Trạng thái",
-              dataIndex: "active",
-              width: 100,
-              render: (active) => (
-                <Tag color={active ? "green" : "red"}>
-                  {active ? "Kích hoạt" : "Không kích hoạt"}
-                </Tag>
-              ),
-            },
-            {
-              title: "Ngày tạo",
-              dataIndex: "createdAt",
-              width: 150,
-              render: (date) => (date ? dayjs(date).format("DD/MM/YYYY HH:mm") : ""),
-            },
-          ]}
-        />
-      ),
-    },
-    {
-      key: "diem-ren-luyen",
-      label: `16. Điểm rèn luyện (${studentData?.studentTrainingScore?.length || 0})`,
-      children: (
-        <Table
-          dataSource={studentData?.studentTrainingScore || []}
-          rowKey="id"
-          bordered
-          size="small"
-          pagination={{ pageSize: 10 }}
-          scroll={{ x: 800 }}
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              render: (_, __, index) => index + 1,
-            },
-            {
-              title: "Học kỳ",
-              dataIndex: ["trainingScoreSession", "semester", "name"],
-              width: 150,
-            },
-            {
-              title: "Đợt đánh giá",
-              dataIndex: ["trainingScoreSession", "name"],
-              width: 180,
-            },
-            {
-              title: "Điểm rèn luyện",
-              dataIndex: "score",
-              width: 120,
-              align: "center",
-              render: (score) => (score ? Number(score).toFixed(1) : ""),
-            },
-            {
-              title: "Xếp loại",
-              dataIndex: "studentTrainingType",
-              width: 150,
-              align: "center",
-              render: (type) => {
-                const colorMap: Record<string, string> = {
-                  EXCELLENT: "green",
-                  GOOD: "blue",
-                  FAIR: "cyan",
-                  MEDIUM: "geekblue",
-                  AVERAGE: "orange",
-                  POOR: "red",
-                  VERY_POOR: "volcano",
-                }
-                const labelMap: Record<string, string> = {
-                  EXCELLENT: "Xuất sắc",
-                  GOOD: "Tốt",
-                  FAIR: "Khá",
-                  MEDIUM: "Trung bình khá",
-                  AVERAGE: "Trung bình",
-                  POOR: "Yếu",
-                  VERY_POOR: "Kém",
-                }
-                return <Tag color={colorMap[type] || "default"}>{labelMap[type] || type}</Tag>
-              },
-            },
-            {
-              title: "Trạng thái",
-              dataIndex: "status",
-              width: 120,
-              align: "center",
-              render: (status) => (
-                <Tag color={status === "APPROVED" ? "green" : "orange"}>
-                  {status === "APPROVED" ? "Đã duyệt" : "Chờ duyệt"}
-                </Tag>
-              ),
-            },
-            {
-              title: "Ngày tạo",
-              dataIndex: "createdAt",
-              width: 150,
               render: (date) => (date ? dayjs(date).format("DD/MM/YYYY") : ""),
             },
           ]}
