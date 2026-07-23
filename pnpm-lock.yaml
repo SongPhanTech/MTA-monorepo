@@ -1109,7 +1109,7 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
-  apps/client/cong-hoc-vien:
+  apps/client/cong-sinh-vien:
     dependencies:
       '@ant-design/cssinjs':
         specifier: 'catalog:'

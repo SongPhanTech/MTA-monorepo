@@ -80,22 +80,18 @@ const useKhaoSatGiangVien = ({
   }, [schoolYears])
 
   const danhSach = useMemo<KhaoSatItem[]>(() => {
-    const raw = data?.status === 200 ? (data.data.data as KhaoSatItem[]) : []
-    return (
-      raw
-        // Chỉ lấy khảo sát đánh giá giảng viên: khảo sát có giảng viên được đánh giá
-        // (lecture != null) HOẶC chủ đề loại CLUSTER. Không chỉ dựa vào surveyTopic.type
-        // vì field này optional (có thể null) nên dễ loại nhầm khảo sát cụm.
-        .filter((ks) => ks.lecture != null || ks.surveyTopic?.type === $Enums.SurveyType.CLUSTER)
-        .map((ks) => {
-          const tenHocKyNamHoc = ks.semesterId ? mapNamHoc.get(ks.semesterId) : undefined
-          return {
-            ...ks,
-            tenHocKy: tenHocKyNamHoc?.tenHocKy,
-            tenNamHoc: tenHocKyNamHoc?.tenNamHoc,
-          }
-        })
-    )
+    const danhSachApi = data?.status === 200 ? data.data?.data : undefined
+    const raw = Array.isArray(danhSachApi) ? (danhSachApi as KhaoSatItem[]) : []
+    return raw
+      .filter((ks) => ks.lecture != null || ks.surveyTopic?.type === $Enums.SurveyType.CLUSTER)
+      .map((ks) => {
+        const tenHocKyNamHoc = ks.semesterId ? mapNamHoc.get(ks.semesterId) : undefined
+        return {
+          ...ks,
+          tenHocKy: tenHocKyNamHoc?.tenHocKy,
+          tenNamHoc: tenHocKyNamHoc?.tenNamHoc,
+        }
+      })
   }, [data, mapNamHoc])
 
   const tongSo = danhSach.length
