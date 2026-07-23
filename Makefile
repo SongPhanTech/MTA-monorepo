@@ -254,8 +254,17 @@ _load-be-images-on-server:
 _recreate-be-containers:
 	$(SSH) $(SERVER_HOST) 'set -eu; \
 	cd "$(call remote_home,$(BE_APP_DIR))"; \
-	echo "Recreating BE containers..."; \
-	COMPOSE_PULL_POLICY=never docker compose up -d --force-recreate --no-build $(BE_CONTAINER_NAMES)'
+	echo "Recreating BE containers (no registry pull)..."; \
+	base=docker-compose.yml; \
+	[ -f compose.yaml ] && base=compose.yaml; \
+	[ -f docker-compose.yaml ] && base=docker-compose.yaml; \
+	ov=/tmp/mta-compose-pull-never.yml; \
+	{ echo "services:"; for svc in $(BE_CONTAINER_NAMES); do \
+	  echo "  $$svc:"; echo "    pull_policy: never"; \
+	done; } > "$$ov"; \
+	COMPOSE_PULL_POLICY=never docker compose -f "$$base" -f "$$ov" \
+	  up -d --pull never --force-recreate --no-build $(BE_CONTAINER_NAMES); \
+	rm -f "$$ov"'
 
 deploy-cdn:
 	$(SCP) -O cdn.zip $(SERVER_HOST):$(FE_APP_DIR)/
@@ -264,7 +273,7 @@ deploy-cdn:
 	unzip -oq cdn.zip && \
 	mv cdn/* . && \
 	rmdir cdn 2>/dev/null || true && \
-	COMPOSE_PULL_POLICY=never docker compose -f $(FE_COMPOSE_FILE) up -d --force-recreate --no-build'
+	COMPOSE_PULL_POLICY=never docker compose -f $(FE_COMPOSE_FILE) up -d --pull never --force-recreate --no-build'
 
 deploy-all-be:
 	@rm -f docker-images.zip
@@ -317,10 +326,27 @@ deploy-%:
 	docker rmi "$$img" 2>/dev/null || true; \
 	echo "Loading new image..." && \
 	docker load -i "$$img_file"; \
-	docker image inspect "$$img" --format "Loaded {{.Id}}"; \
-	cd "$$app_dir" && \
-	COMPOSE_PULL_POLICY=never docker compose up -d --force-recreate --no-build "$$svc"'
-
+	loaded_id=$$(docker image inspect "$$img" --format "{{.Id}}"); \
+	echo "Loaded $$loaded_id"; \
+	base=docker-compose.yml; \
+	[ -f compose.yaml ] && base=compose.yaml; \
+	[ -f docker-compose.yaml ] && base=docker-compose.yaml; \
+	ov=/tmp/mta-compose-pull-never-$$svc.yml; \
+	printf "services:\n  %s:\n    pull_policy: never\n" "$$svc" > "$$ov"; \
+	echo "Starting $$svc without registry pull (base=$$base)..."; \
+	COMPOSE_PULL_POLICY=never docker compose -f "$$base" -f "$$ov" \
+	  up -d --pull never --force-recreate --no-build "$$svc"; \
+	rm -f "$$ov"; \
+	running_id=$$(docker inspect "$$svc" --format "{{.Image}}"); \
+	echo "Container $$svc -> $$running_id"; \
+	if [ "$$running_id" != "$$loaded_id" ]; then \
+	  echo "ERROR: container không dùng image vừa load (compose đã pull đè từ registry)."; \
+	  echo "  expected: $$loaded_id"; \
+	  echo "  actual:   $$running_id"; \
+	  echo "  → kiểm tra pull_policy trong $$app_dir/docker-compose.yml"; \
+	  exit 1; \
+	fi; \
+	echo "OK: $$svc đang chạy đúng image vừa deploy."'
 
 # Pattern rule: all-<name> = build + deploy
 all-%: build-%
@@ -368,7 +394,7 @@ _deploy-fe:
 		docker compose -f $(FE_COMPOSE_FILE) rm -sf mta-$(CDN_NAME) router-$(ROUTER_NAME)-api 2>/dev/null || true; \
 		rm -rf $(CDN_NAME) && \
 		unzip -oq $(CDN_NAME).zip && \
-		COMPOSE_PULL_POLICY=never docker compose -f $(FE_COMPOSE_FILE) up -d --force-recreate --no-build mta-$(CDN_NAME) router-$(ROUTER_NAME)-api'
+		COMPOSE_PULL_POLICY=never docker compose -f $(FE_COMPOSE_FILE) up -d --pull never --force-recreate --no-build mta-$(CDN_NAME) router-$(ROUTER_NAME)-api'
 
 _package-fe-cdn-copy:
 	$(eval CDN_NAME := $(CDN_NAME_$(PACKAGE)))
