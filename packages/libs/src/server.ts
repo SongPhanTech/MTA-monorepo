@@ -1,7 +1,13 @@
 import type { PrismaClient } from "@workspace/db"
 import { getMinioUrl } from "./utils"
 
+const templateCache: Record<string, Buffer> = {}
+
 export const getTemplateBuffer = async (prisma: PrismaClient, templateCode: string) => {
+  if (templateCache[templateCode]) {
+    return templateCache[templateCode]
+  }
+
   const templateFile = await prisma.templateFile.findUnique({
     where: { code: templateCode },
   })
@@ -24,10 +30,16 @@ export const getTemplateBuffer = async (prisma: PrismaClient, templateCode: stri
   const buffer = await res.arrayBuffer()
   const nodeBuffer: Buffer<ArrayBuffer> = Buffer.from(buffer)
 
+  templateCache[templateCode] = nodeBuffer
   return nodeBuffer
 }
 
 export const getLuanVanTemplateBuffer = async (prisma: PrismaClient, templateCode: string) => {
+  const cacheKey = `luan-van-${templateCode}`
+  if (templateCache[cacheKey]) {
+    return templateCache[cacheKey]
+  }
+
   const templateFile = await prisma.templateFile.findUnique({
     where: { code: templateCode },
   })
@@ -47,5 +59,6 @@ export const getLuanVanTemplateBuffer = async (prisma: PrismaClient, templateCod
   const buffer = await res.arrayBuffer()
   const nodeBuffer: Buffer<ArrayBuffer> = Buffer.from(buffer)
 
+  templateCache[cacheKey] = nodeBuffer
   return nodeBuffer
 }

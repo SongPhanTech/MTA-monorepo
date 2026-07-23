@@ -112,7 +112,7 @@ app.openapi(importCurriculumVersion, async (c) => {
     data.trainingBlocks.map(({ name }) => name)
   )
 
-  const subjectMap = await buildSubjectMapOrThrow(
+  const { map: subjectMap, unmappedOrgCodes, warnings } = await buildSubjectMapOrThrow(
     prisma,
     data.trainingBlocks.flatMap(({ subjects }) =>
       subjects.map((s) => ({
@@ -164,9 +164,17 @@ app.openapi(importCurriculumVersion, async (c) => {
     { timeout: timeout * 1000 }
   )
 
+  const noticeParts = [`Import thành công: ${data.trainingBlocks.length} khối kiến thức`]
+  if (unmappedOrgCodes.length) {
+    noticeParts.push(`Có các đơn vị mã chưa map được: ${unmappedOrgCodes.join(", ")}`)
+  }
+  if (warnings.length) {
+    noticeParts.push(...warnings)
+  }
+
   return c.json(
     {
-      message: `Import training blocks successfully: ${data.trainingBlocks.length}`,
+      message: noticeParts.join(". "),
     },
     200
   )
