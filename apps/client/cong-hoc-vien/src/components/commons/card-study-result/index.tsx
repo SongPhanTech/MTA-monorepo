@@ -32,7 +32,7 @@ const CardStudyResult = (props: CardStudyResultProps) => {
           </div>
           <div className="border border-gray-200 h-10" />
           <div className="flex flex-col items-start flex-1 gap-2 w-full justify-center">
-            <div className="uppercase font-medium">Xếp hạng</div>
+            <div className="uppercase font-medium">Xếp loại học lực</div>
             <span className="text-xl font-semibold">{academicRanking}</span>
           </div>
         </div>
