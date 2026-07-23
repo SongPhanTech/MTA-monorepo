@@ -80,12 +80,9 @@ Một số endpoint đặc biệt:
 - Ngày giờ theo chuẩn **ISO 8601** (UTC) khi có trong response.
  * OpenAPI spec version: 1.0.0
  */
-import type { ImportTrainingDataResponseDetails } from './importTrainingDataResponseDetails';
 
 export interface ImportTrainingDataResponse {
   message: string;
   imported?: number;
   failed?: number;
-  details?: ImportTrainingDataResponseDetails;
-  warnings?: string[];
 }
