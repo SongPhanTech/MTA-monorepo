@@ -952,6 +952,7 @@ app.openapi(debtStatistics, async (c) => {
         studentCode: s.studentCode,
         fullname: s.fullname,
         birthday: s.dateOfBirth ? dayjs(s.dateOfBirth).format("DD/MM/YYYY") : "",
+        dateOfBirth: s.dateOfBirth ? dayjs(s.dateOfBirth).format("DD/MM/YYYY") : "",
         fixedClassCode: s.fixedClassCode,
         totalDebtSubject,
         totalDebtCredit,
@@ -970,7 +971,7 @@ app.openapi(debtStatistics, async (c) => {
     })
   })
 
-  const buffer = await getTemplateBuffer(prisma, "THONG_KE_NO")
+  const buffer = await getTemplateBuffer(prisma, "thong_ke_no")
   const template = new XlsxTemplate(buffer)
   const sheetName = "DS HV nợ môn"
 
