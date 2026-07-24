@@ -485,66 +485,116 @@ export default function KeHoachGhepLopMonHoc() {
         .map(([key]) => key)
 
       const res = await sqlTransaction([
-        ...allSubjectVersionIds.flatMap((subjectVersionId) => [
-          {
-            model: "ClassRegisterLogs" as const,
-            operation: "deleteMany",
-            data: {
-              where: {
-                subjectClass: {
-                  semesterId,
-                  trainingObjectTypeId,
-                  subjectId: subjectVersionId,
-                  type: $Enums.SubjectClassType.NORMAL,
-                  subjectClassStudent: { none: {} },
+        ...allSubjectVersionIds.flatMap((subjectVersionId) => {
+          const emptyClassWhere = {
+            semesterId,
+            trainingObjectTypeId,
+            subjectId: subjectVersionId,
+            type: $Enums.SubjectClassType.NORMAL,
+            subjectClassStudent: { none: {} },
+          }
+          return [
+            // Gỡ FK / xóa con trước khi xóa lớp trống (tránh P2003 → 400)
+            {
+              model: "SubjectClassAttendanceStudent" as const,
+              operation: "deleteMany",
+              data: {
+                where: {
+                  subjectClassAttendance: {
+                    subjectClass: emptyClassWhere,
+                  },
                 },
               },
             },
-          },
-          {
-            model: "SubjectClassTime" as const,
-            operation: "deleteMany",
-            data: {
-              where: {
-                subjectClass: {
-                  semesterId,
-                  trainingObjectTypeId,
-                  subjectId: subjectVersionId,
-                  type: $Enums.SubjectClassType.NORMAL,
-                  subjectClassStudent: { none: {} },
+            {
+              model: "SubjectClassAttendance" as const,
+              operation: "deleteMany",
+              data: {
+                where: {
+                  subjectClass: emptyClassWhere,
                 },
               },
             },
-          },
-          {
-            model: "ClassSchedule" as const,
-            operation: "deleteMany",
-            data: {
-              where: {
-                subjectClass: {
-                  semesterId,
-                  trainingObjectTypeId,
-                  subjectId: subjectVersionId,
-                  type: $Enums.SubjectClassType.NORMAL,
-                  subjectClassStudent: { none: {} },
+            {
+              model: "SubjectClassHistory" as const,
+              operation: "deleteMany",
+              data: {
+                where: {
+                  subjectClass: emptyClassWhere,
                 },
               },
             },
-          },
-          {
-            model: "SubjectClass" as const,
-            operation: "deleteMany",
-            data: {
-              where: {
-                subjectId: subjectVersionId,
-                semesterId: semesterId,
-                trainingObjectTypeId: trainingObjectTypeId,
-                type: $Enums.SubjectClassType.NORMAL,
-                subjectClassStudent: { none: {} },
+            {
+              model: "ClassRegisterLogs" as const,
+              operation: "deleteMany",
+              data: {
+                where: {
+                  subjectClass: emptyClassWhere,
+                },
               },
             },
-          },
-        ]),
+            {
+              model: "SubjectClassTime" as const,
+              operation: "deleteMany",
+              data: {
+                where: {
+                  subjectClass: emptyClassWhere,
+                },
+              },
+            },
+            {
+              model: "ClassSchedule" as const,
+              operation: "updateMany",
+              data: {
+                where: {
+                  subjectClass: emptyClassWhere,
+                  originalScheduleId: { not: null },
+                },
+                data: { originalScheduleId: null },
+              },
+            },
+            {
+              model: "ClassSchedule" as const,
+              operation: "deleteMany",
+              data: {
+                where: {
+                  subjectClass: emptyClassWhere,
+                },
+              },
+            },
+            {
+              model: "ExamBank" as const,
+              operation: "updateMany",
+              data: {
+                where: { subjectClass: emptyClassWhere },
+                data: { subjectClassId: null },
+              },
+            },
+            {
+              model: "Survey" as const,
+              operation: "updateMany",
+              data: {
+                where: { subjectClass: emptyClassWhere },
+                data: { subjectClassId: null },
+              },
+            },
+            {
+              model: "ThesisProject" as const,
+              operation: "updateMany",
+              data: {
+                where: { subjectClass: emptyClassWhere },
+                data: { subjectClassId: null },
+              },
+            },
+            {
+              model: "SubjectClass" as const,
+              operation: "deleteMany",
+              data: {
+                where: emptyClassWhere,
+              },
+            },
+          ]
+        }),
         ...payload.map((e) => ({
           model: "SubjectClass" as const,
           operation: "upsert",
@@ -585,12 +635,16 @@ export default function KeHoachGhepLopMonHoc() {
           },
         })),
       ])
-      if (res.status !== 200) throw new Error("Lưu ghép lớp thất bại")
+      if (res.status !== 200) {
+        const msg =
+          (res.data as { message?: string } | undefined)?.message || "Lưu ghép lớp thất bại"
+        throw new Error(msg)
+      }
       message.success("Lưu ghép lớp thành công")
       form.resetFields()
       debouncedRefetch()
-    } catch (error) {
-      message.error("Lưu ghép lớp thất bại")
+    } catch (error: any) {
+      message.error(error?.message || error?.info?.message || "Lưu ghép lớp thất bại")
       console.error(error)
     }
     hideSpinner()
