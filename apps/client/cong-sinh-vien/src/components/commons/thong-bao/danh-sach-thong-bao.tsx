@@ -3,11 +3,24 @@ import { Empty } from "antd"
 import dayjs from "dayjs"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import notificationHelpers from "./helper"
+import { $Enums } from "@workspace/db/client"
 
 function DanhSachThongBao() {
   const today = dayjs().endOf("day").toDate()
   const { data = [] } = useFindManyNotification({
     where: {
+      type: {
+        in: [
+          $Enums.NotificationType.GENERAL,
+          $Enums.NotificationType.URGENT,
+          $Enums.NotificationType.MAINTENANCE,
+          $Enums.NotificationType.ACADEMIC,
+          $Enums.NotificationType.EXAM,
+          $Enums.NotificationType.EVENT,
+          $Enums.NotificationType.SCHOLARSHIP,
+          $Enums.NotificationType.TUITION,
+        ],
+      },
       active: true,
       publishedAt: {
         lte: today,
