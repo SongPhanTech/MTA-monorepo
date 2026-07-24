@@ -387492,7 +387492,7 @@ export namespace Prisma {
     export type SubjectWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
-        name_managementOrganizationId?: SubjectNameManagementOrganizationIdCompoundUniqueInput
+        code_name_managementOrganizationId?: SubjectCodeNameManagementOrganizationIdCompoundUniqueInput
         AND?: SubjectWhereInput | SubjectWhereInput[]
         OR?: SubjectWhereInput[]
         NOT?: SubjectWhereInput | SubjectWhereInput[]
@@ -387510,7 +387510,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionListRelationFilter
         certificateOnSubject?: CertificateOnSubjectListRelationFilter
         awardOnSubject?: AwardListRelationFilter
-    }, "id" | "code" | "name_managementOrganizationId">;
+    }, "id" | "code" | "code_name_managementOrganizationId">;
     export type SubjectOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -449195,7 +449195,8 @@ export namespace Prisma {
         sort: SortOrder
         search: string
     };
-    export type SubjectNameManagementOrganizationIdCompoundUniqueInput = {
+    export type SubjectCodeNameManagementOrganizationIdCompoundUniqueInput = {
+        code: string
         name: string
         managementOrganizationId: string
     };

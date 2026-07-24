@@ -3226,7 +3226,7 @@ model Subject {
   certificateOnSubject     CertificateOnSubject[]
   awardOnSubject           Award[]
 
-  @@unique([name, managementOrganizationId])
+  @@unique([code, name, managementOrganizationId])
   @@schema("ql-dao-tao")
 }
 
