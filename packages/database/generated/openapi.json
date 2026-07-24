@@ -6961,7 +6961,7 @@
             "type": "string",
             "nullable": true
           },
-          "sTKPUCode": {
+          "sTKBUCode": {
             "type": "string",
             "nullable": true
           },
@@ -34887,7 +34887,7 @@
             "type": "string",
             "nullable": true
           },
-          "sTKPUCode": {
+          "sTKBUCode": {
             "type": "string",
             "nullable": true
           },
@@ -78018,7 +78018,7 @@
           "sCode": {
             "type": "integer"
           },
-          "sTKPUCode": {
+          "sTKBUCode": {
             "type": "integer"
           },
           "sTenVietTat": {
@@ -78066,7 +78066,7 @@
           "sThietBiTao",
           "sThietBiSua",
           "sCode",
-          "sTKPUCode",
+          "sTKBUCode",
           "sTenVietTat",
           "sParentId",
           "sTruongDonVi",
@@ -78197,7 +78197,7 @@
             "type": "string",
             "nullable": true
           },
-          "sTKPUCode": {
+          "sTKBUCode": {
             "type": "string",
             "nullable": true
           },
@@ -78304,7 +78304,7 @@
             "type": "string",
             "nullable": true
           },
-          "sTKPUCode": {
+          "sTKBUCode": {
             "type": "string",
             "nullable": true
           },

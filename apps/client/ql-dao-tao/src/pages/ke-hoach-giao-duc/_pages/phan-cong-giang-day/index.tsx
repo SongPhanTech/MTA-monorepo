@@ -766,7 +766,7 @@ export default function PhanCongGiangDay({
 
   interface ExportOrgItem {
     sMa: string | null
-    sTKPUCode: string | null
+    sTKBUCode: string | null
     Id: string
     sTen: string
     sParentId: string | null
@@ -800,7 +800,7 @@ export default function PhanCongGiangDay({
         managementOrganization?: {
           sTen: string
           sMa: string | null
-          sTKPUCode: string | null
+          sTKBUCode: string | null
           sParentId: string | null
         } | null
       } | null
@@ -863,7 +863,7 @@ export default function PhanCongGiangDay({
                         select: {
                           sTen: true,
                           sMa: true,
-                          sTKPUCode: true,
+                          sTKBUCode: true,
                           sParentId: true,
                         },
                       },
@@ -936,7 +936,7 @@ export default function PhanCongGiangDay({
             },
             select: {
               sMa: true,
-              sTKPUCode: true,
+              sTKBUCode: true,
               Id: true,
               sTen: true,
               sParentId: true,
@@ -1029,13 +1029,13 @@ export default function PhanCongGiangDay({
             const parentOrg = orgPayload.find((e) => e.Id === khoa?.sParentId)
             boMon = khoa
             khoa = parentOrg
-            sheetName = (boMon?.sTKPUCode || boMon?.sMa || boMon?.sTen || "MTA")
+            sheetName = (boMon?.sTKBUCode || boMon?.sMa || boMon?.sTen || "MTA")
               .substring(0, 30)
               .replace(/[:\\/?*[\]]/g, "_")
           } else {
             boMon = orgPayload.find((e) => e.sMa === key)
             khoa = orgPayload.find((e) => e.Id === boMon?.sParentId)
-            sheetName = `BM_${boMon?.sTKPUCode || boMon?.sMa}`
+            sheetName = `BM_${boMon?.sTKBUCode || boMon?.sMa}`
           }
 
           const itemBySubjectCode = Object.groupBy(

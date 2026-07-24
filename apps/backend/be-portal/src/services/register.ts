@@ -1,6 +1,17 @@
 import { prisma } from ".."
+import { CACHE_TTL, cacheGet, cacheSet, classRegisterCache } from "./redis-cache"
 
 export const findClassRegisterSession = async (userId: string) => {
+  const cacheKey = classRegisterCache.sessionKey(userId)
+  const cached = await cacheGet<Awaited<ReturnType<typeof loadClassRegisterSession>>>(cacheKey)
+  if (cached) return cached
+
+  const sessions = await loadClassRegisterSession(userId)
+  await cacheSet(cacheKey, sessions, CACHE_TTL.session)
+  return sessions
+}
+
+const loadClassRegisterSession = async (userId: string) => {
   const profile = await prisma.userProfile.findUniqueOrThrow({
     where: { id: userId },
     include: {

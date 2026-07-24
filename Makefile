@@ -76,8 +76,8 @@ else ifeq ($(SERVER_PROFILE),mta_online)
   SERVER_PASSWORD  := 5Qaz@106186
   BE_DEPLOY_DIR    := ~/mta-app/be
   BE_APP_DIR       := ~/mta-app/be
-  FE_APP_DIR       := ~/mta-app/fe
-  FE_COMPOSE_FILE  := docker-compose.yml
+  FE_APP_DIR       := ~/mta-app-sso
+  FE_COMPOSE_FILE  := app-docker-compose.yml
   FE_APP_URL       := https://mta.edu.vn
   ONLY_OFFICE_ENDPOINT := 
 
@@ -113,17 +113,18 @@ PKG_HO_SO := ql-ho-so
 PKG_AI := tro-ly-ao
 PKG_CONG_HOC_VIEN := cong-hoc-vien
 PKG_CONG_GIANG_VIEN := cong-giang-vien
+PKG_CONG_SINH_VIEN := cong-sinh-vien
 
 # Maps for build types (backend/frontend)
 BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL) $(PKG_BE_DAO_TAO_SHARED) $(PKG_BE_EXCHANGE)
 # FE_PKGS := $(PKG_DAO_TAO) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_DANG_KY_HOC)
-FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_CONG_HOC_VIEN) $(PKG_CONG_GIANG_VIEN)
+FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_CONG_HOC_VIEN) $(PKG_CONG_GIANG_VIEN) $(PKG_CONG_SINH_VIEN)
 
 # Client App Mappings
 CDN_NAME_ql-dao-tao = lms-cdn
 ROUTER_NAME_ql-dao-tao = lms
-CDN_NAME_cong-hoc-vien = cong-hoc-vien-cdn
-ROUTER_NAME_cong-hoc-vien = cong-hoc-vien
+CDN_NAME_cong-sinh-vien = cong-sinh-vien-cdn
+ROUTER_NAME_cong-sinh-vien = cong-sinh-vien
 CDN_NAME_tro-ly-ao = chatbot-cdn
 ROUTER_NAME_tro-ly-ao = chatbot
 CDN_NAME_ql-ho-so = hrm-cdn
@@ -137,7 +138,7 @@ ROUTER_NAME_cong-giang-vien = cong-giang-vien
 # Format: <domain from profile><suffix below>  e.g. https://mta.swantech.vn/lms/home
 APP_URL_SUFFIX_ql-dao-tao   = /lms/home
 APP_URL_SUFFIX_khao-thi     = /ems/home
-APP_URL_SUFFIX_cong-hoc-vien  = /cong-hoc-vien/home
+APP_URL_SUFFIX_cong-sinh-vien  = /cong-sinh-vien/home
 APP_URL_SUFFIX_ql-ho-so     = /hrm/home
 APP_URL_SUFFIX_tro-ly-ao    = /chatbot/?mode=tro-ly-ao
 APP_URL_SUFFIX_cong-giang-vien = /conggiangvien/home

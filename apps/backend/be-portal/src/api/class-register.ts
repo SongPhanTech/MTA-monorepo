@@ -2,6 +2,15 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { models } from "@workspace/db/zod"
 import { prisma } from ".."
 import { findClassRegisterSession } from "../services/register"
+import {
+  CACHE_TTL,
+  RATE_LIMIT,
+  cacheGet,
+  cacheSet,
+  classRegisterCache,
+  rateLimitConsume,
+  rateLimitKey,
+} from "../services/redis-cache"
 import { $Enums, AcademicRankingBaseType, Prisma } from "@workspace/db"
 
 const app = new OpenAPIHono({ strict: false })
@@ -186,11 +195,55 @@ const getClassesInfo = createRoute({
         },
       },
     },
+    429: {
+      description: "Too many requests",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+            retryAfterSec: z.number().optional(),
+          }),
+        },
+      },
+    },
   },
 })
 
 app.openapi(getClassesInfo, async (c) => {
   const session = c.get("user")
+  const { sessionId, curriculumVersionId, byCurriculum, isRegistered } = c.req.valid("query")
+
+  const rl = await rateLimitConsume(
+    rateLimitKey("read", session.id),
+    RATE_LIMIT.read.max,
+    RATE_LIMIT.read.windowSec
+  )
+  if (!rl.allowed) {
+    c.header("Retry-After", String(rl.retryAfterSec))
+    return c.json(
+      {
+        message: "Quá nhiều yêu cầu. Vui lòng thử lại sau.",
+        retryAfterSec: rl.retryAfterSec,
+      },
+      429
+    )
+  }
+
+  const byCurriculumBool = `${byCurriculum}`.toLowerCase() === "true"
+  const isRegisteredBool = `${isRegistered}`.toLowerCase() === "true"
+
+  const cacheKey = await classRegisterCache.classesInfoKey(
+    session.id,
+    sessionId,
+    curriculumVersionId,
+    byCurriculumBool,
+    isRegisteredBool
+  )
+  const cached = await cacheGet<unknown>(cacheKey)
+  if (cached) {
+    return c.json(cached, 200)
+  }
+
   const profile = await prisma.userProfile.findUniqueOrThrow({
     where: { id: session.id },
     include: {
@@ -218,11 +271,6 @@ app.openapi(getClassesInfo, async (c) => {
       trainingCourseId: profile.educationAndTraining[0]?.fixedClass?.trainingCourseId,
     },
   })
-
-  const { sessionId, curriculumVersionId, byCurriculum, isRegistered } = c.req.valid("query")
-
-  const byCurriculumBool = `${byCurriculum}`.toLowerCase() === "true"
-  const isRegisteredBool = `${isRegistered}`.toLowerCase() === "true"
 
   const now = new Date()
   const registerSession = await prisma.classRegisterSession.findUniqueOrThrow({
@@ -472,6 +520,7 @@ app.openapi(getClassesInfo, async (c) => {
       return true
     })
 
+  await cacheSet(cacheKey, data, CACHE_TTL.classesInfo)
   return c.json(data, 200)
 })
 
@@ -508,12 +557,39 @@ const classRegister = createRoute({
       description: "Not found",
       content: { "application/json": { schema: z.object({ message: z.string() }) } },
     },
+    429: {
+      description: "Too many requests",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+            retryAfterSec: z.number().optional(),
+          }),
+        },
+      },
+    },
   },
 })
 
 app.openapi(classRegister, async (c) => {
   const session = c.get("user")
   const { sessionId, subjectClassIds, curriculumVersionId } = c.req.valid("json")
+
+  const rl = await rateLimitConsume(
+    rateLimitKey("register", session.id),
+    RATE_LIMIT.register.max,
+    RATE_LIMIT.register.windowSec
+  )
+  if (!rl.allowed) {
+    c.header("Retry-After", String(rl.retryAfterSec))
+    return c.json(
+      {
+        message: "Bạn thao tác đăng ký quá nhanh. Vui lòng thử lại sau.",
+        retryAfterSec: rl.retryAfterSec,
+      },
+      429
+    )
+  }
 
   const registerSession = await prisma.classRegisterSession.findUniqueOrThrow({
     where: { id: sessionId },
@@ -745,6 +821,8 @@ app.openapi(classRegister, async (c) => {
     })
   })
 
+  await classRegisterCache.invalidateUser(session.id, sessionId)
+
   return c.json({ message: "success" }, 200)
 })
 
@@ -781,12 +859,39 @@ const classUnregister = createRoute({
       description: "Not found",
       content: { "application/json": { schema: z.object({ message: z.string() }) } },
     },
+    429: {
+      description: "Too many requests",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+            retryAfterSec: z.number().optional(),
+          }),
+        },
+      },
+    },
   },
 })
 
 app.openapi(classUnregister, async (c) => {
   const session = c.get("user")
   const { sessionId, subjectClassIds, curriculumVersionId } = c.req.valid("json")
+
+  const rl = await rateLimitConsume(
+    rateLimitKey("unregister", session.id),
+    RATE_LIMIT.unregister.max,
+    RATE_LIMIT.unregister.windowSec
+  )
+  if (!rl.allowed) {
+    c.header("Retry-After", String(rl.retryAfterSec))
+    return c.json(
+      {
+        message: "Bạn thao tác hủy đăng ký quá nhanh. Vui lòng thử lại sau.",
+        retryAfterSec: rl.retryAfterSec,
+      },
+      429
+    )
+  }
 
   const registerSession = await prisma.classRegisterSession.findUniqueOrThrow({
     where: { id: sessionId },
@@ -892,6 +997,8 @@ app.openapi(classUnregister, async (c) => {
     }
   })
 
+  await classRegisterCache.invalidateUser(session.id, sessionId)
+
   return c.json({ message: "success" }, 200)
 })
 const getStudentInfo = createRoute({
@@ -945,6 +1052,17 @@ const getStudentInfo = createRoute({
 app.openapi(getStudentInfo, async (c) => {
   const session = c.get("user")
   const { sessionId } = c.req.valid("query")
+
+  const cacheKey = classRegisterCache.studentKey(session.id, sessionId || "_")
+  const cached = await cacheGet<{
+    userProfile: unknown
+    student: unknown
+    latestSemesterResult: unknown
+    creditLimit: { maxCredit: number } | null
+  }>(cacheKey)
+  if (cached) {
+    return c.json(cached, 200)
+  }
 
   const profile = await prisma.userProfile.findUniqueOrThrow({
     where: { id: session.id },
@@ -1012,26 +1130,26 @@ app.openapi(getStudentInfo, async (c) => {
     }
   }
 
-  return c.json(
-    {
-      userProfile: profile,
-      student: student,
-      latestSemesterResult: latestSemesterResult
-        ? {
-            rank: latestSemesterResult.rank,
-            baseScore: latestSemesterResult.baseScore,
-            cumulativeGpaBase4: latestSemesterResult.cumulativeGpaBase4
-              ? Number(latestSemesterResult.cumulativeGpaBase4)
-              : null,
-            cumulativeGpaBase10: latestSemesterResult.cumulativeGpaBase10
-              ? Number(latestSemesterResult.cumulativeGpaBase10)
-              : null,
-          }
-        : null,
-      creditLimit: maxCredit != null ? { maxCredit } : null,
-    },
-    200
-  )
+  const payload = {
+    userProfile: profile,
+    student: student,
+    latestSemesterResult: latestSemesterResult
+      ? {
+          rank: latestSemesterResult.rank,
+          baseScore: latestSemesterResult.baseScore,
+          cumulativeGpaBase4: latestSemesterResult.cumulativeGpaBase4
+            ? Number(latestSemesterResult.cumulativeGpaBase4)
+            : null,
+          cumulativeGpaBase10: latestSemesterResult.cumulativeGpaBase10
+            ? Number(latestSemesterResult.cumulativeGpaBase10)
+            : null,
+        }
+      : null,
+    creditLimit: maxCredit != null ? { maxCredit } : null,
+  }
+
+  await cacheSet(cacheKey, payload, CACHE_TTL.student)
+  return c.json(payload, 200)
 })
 
 export default app

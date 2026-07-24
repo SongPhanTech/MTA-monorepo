@@ -13,6 +13,19 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
       POSTGRES_DB: ${POSTGRES_DB:-mta}
       TZ: Asia/Ho_Chi_Minh
+    # Chịu tải đợt ĐK ~500 SV: pool các BE + connection admin
+    command:
+      - postgres
+      - -c
+      - max_connections=${POSTGRES_MAX_CONNECTIONS:-300}
+      - -c
+      - shared_buffers=${POSTGRES_SHARED_BUFFERS:-256MB}
+      - -c
+      - effective_cache_size=${POSTGRES_EFFECTIVE_CACHE_SIZE:-1GB}
+      - -c
+      - work_mem=${POSTGRES_WORK_MEM:-8MB}
+      - -c
+      - idle_in_transaction_session_timeout=60000
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
@@ -53,6 +66,31 @@ services:
     networks:
       - mta-net
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    hostname: redis
+    restart: unless-stopped
+    command:
+      - redis-server
+      - --maxmemory
+      - ${REDIS_MAXMEMORY:-256mb}
+      - --maxmemory-policy
+      - allkeys-lru
+      - --save
+      - ""
+      - --appendonly
+      - "no"
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - mta-net
+
   # Image: make all-be-* → docker load ghcr.io/songphantech/mta-be-*:latest
   mta-be-model:
     image: ghcr.io/songphantech/mta-be-model:latest
@@ -61,6 +99,7 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+      - .env.be-model
     ports:
       - "3041:3000"
     depends_on:
@@ -91,10 +130,30 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+      - .env.be-portal
+    environment:
+      DATABASE_POOL_SIZE: ${DATABASE_POOL_SIZE:-40}
+      PORT: "3000"
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      REDIS_CACHE_ENABLED: ${REDIS_CACHE_ENABLED:-true}
+      REDIS_TTL_SESSION: ${REDIS_TTL_SESSION:-60}
+      REDIS_TTL_STUDENT: ${REDIS_TTL_STUDENT:-60}
+      REDIS_TTL_CLASSES_INFO: ${REDIS_TTL_CLASSES_INFO:-5}
+      REDIS_RATE_LIMIT_ENABLED: ${REDIS_RATE_LIMIT_ENABLED:-true}
+      REDIS_RL_REGISTER_MAX: ${REDIS_RL_REGISTER_MAX:-20}
+      REDIS_RL_REGISTER_WINDOW: ${REDIS_RL_REGISTER_WINDOW:-60}
+      REDIS_RL_UNREGISTER_MAX: ${REDIS_RL_UNREGISTER_MAX:-20}
+      REDIS_RL_UNREGISTER_WINDOW: ${REDIS_RL_UNREGISTER_WINDOW:-60}
+      REDIS_RL_READ_MAX: ${REDIS_RL_READ_MAX:-120}
+      REDIS_RL_READ_WINDOW: ${REDIS_RL_READ_WINDOW:-60}
     ports:
       - "3044:3000"
+    cpus: ${PORTAL_CPU_LIMIT:-2}
+    mem_limit: ${PORTAL_MEM_LIMIT:-2g}
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     networks:
       - mta-net
@@ -106,6 +165,7 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+      - .env.be-ql-dao-tao-shared
     ports:
       - "3045:3000"
     depends_on:

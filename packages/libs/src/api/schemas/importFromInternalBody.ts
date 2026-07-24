@@ -7,7 +7,7 @@
 
 export type ImportFromInternalBody = {
   /** File JSON export từ QL đào tạo */
-  file: unknown;
+  file: Blob;
   /** ID bản ghi DataSyncHistory đã tạo từ FE (optional) */
   syncHistoryId?: string;
 };

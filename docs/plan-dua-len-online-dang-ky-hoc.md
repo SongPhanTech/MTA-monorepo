@@ -59,7 +59,10 @@ Mọi người liên quan biết: giờ go-live thử, ai trực, làm gì khi l
    - Build `cong-hoc-vien`, `package-cdn` / `deploy-cdn` (hoặc `all-cong-hoc-vien`).
 3. **Cấu hình môi trường trên server**
    - `DATABASE_URL` portal đúng instance online.
-   - `DATABASE_POOL_SIZE` (khuyến nghị bắt đầu **20–40**; tinh chỉnh ở G5).
+   - `DATABASE_POOL_SIZE` (khuyến nghị **40**; scale 2 instance → cân `POSTGRES_MAX_CONNECTIONS`).
+   - Postgres: `POSTGRES_MAX_CONNECTIONS=300` (xem `deploy/mta-online/be/.env.example`).
+   - Scale portal: `docker-compose.portal-scale.yml` + nginx upstream `:3044,:3046`.
+   - Load test: `scripts/load-test/class-register/` (k6).
    - URL CORS / public API portal khớp domain FE.
    - IP allowlist middleware (`check-ip`) nếu đang bật — mở đúng dải mạng vận hành / SV.
 4. **Migrate DB**

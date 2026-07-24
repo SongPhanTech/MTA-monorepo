@@ -14,7 +14,7 @@ import ImportTrainingDataApp from "./api/import-training-data"
 import { checkIp } from "./middlewares/check-ip"
 import { setupOpenApi } from "./utils/openapi"
 
-const poolSize = parseInt(process.env.DATABASE_POOL_SIZE || "20", 10)
+const poolSize = parseInt(process.env.DATABASE_POOL_SIZE || "40", 10)
 const dbUrl = process.env.DATABASE_URL || ""
 const urlWithPool = dbUrl.includes("connection_limit")
   ? dbUrl
@@ -62,7 +62,7 @@ const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
 const jwksUri = `${issuer}/protocol/openid-connect/certs`
 const audience = config.keycloak.clientId
 
-app.use("/api/*", jwtAuth("conghocvien"))
+app.use("/api/*", jwtAuth("congsinhvien"))
 
 app.route("/api/class-register", ClassRegisterApp)
 app.route("/api/data-sync", DataSyncHistoryApp)
