@@ -324,9 +324,10 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                SSS."examBannedReason" as ly_do_cam_thi,
                                SSS.suspended as dinh_chi,
                                SSS."suspendedReason" as ly_do_dinh_chi,
-                               TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
-                               TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
-                               TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional"
+                               (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
+                               SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam"
                                     as truot_mon,
                                TBS.id                         as trainingBlockSubjectId,
                                TC."isRetakeExam",
@@ -389,10 +390,10 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                SSS."examBannedReason"                                                                   as ly_do_cam_thi,
                                SSS.suspended                                                                            as dinh_chi,
                                SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
-                               TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
-                               TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
-                               TBS."useForFinalScore" = false and SSS."finalScore" <
-                                                                  TC."scoreToPassConditional"                           as truot_mon,
+                               (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
+                               SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam" as truot_mon,
                                TC."isRetakeExam",
                                FIRST_VALUE(SSS."examBanned") OVER (
                                  PARTITION BY SSS."studentId", SSS."subjectVersionId"
@@ -461,6 +462,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
   type Result = {
     studentId: string
     diem_cuoi: number | null
+    diem_thi: number | null
     withdrew: boolean
     exempted: boolean
     hoan_thi: boolean
@@ -507,6 +509,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                SSS."studentId",
                                SSS."attendanceScore"                                                                              as thuong_xuyen,
                                SSS."midtermScore"                                                                                 as dinh_ky,
+                               SSS."examScore"                                                                                    as diem_thi,
                                SSS."finalScore"                                                                                  as diem_cuoi,
                                SSS.withdrew,
                                SSS.exempted                                                                                      as mien_thi,
@@ -516,10 +519,10 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                SSS."examBannedReason"                                                                            as ly_do_cam_thi,
                                SSS.suspended                                                                                     as dinh_chi,
                                SSS."suspendedReason"                                                                             as ly_do_dinh_chi,
-                               TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
-                               TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
-                               TBS."useForFinalScore" = false and SSS."finalScore" <
-                                                                  TC."scoreToPassConditional"                                    as truot_mon,
+                               (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
+                               SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam" as truot_mon,
                                TC."isRetakeExam",
                                FIRST_VALUE(SSS."examBanned") OVER (
                                  PARTITION BY SSS."studentId", SSS."subjectVersionId"
@@ -554,6 +557,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
         select "studentId",
                thuong_xuyen,
                dinh_ky,
+               diem_thi,
                diem_cuoi,
                withdrew,
                mien_thi,
@@ -749,10 +753,10 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                SSS."examBannedReason"                                                                   as ly_do_cam_thi,
                                SSS.suspended                                                                            as dinh_chi,
                                SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
-                               TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
-                               TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
-                               TBS."useForFinalScore" = false and SSS."finalScore" <
-                                                                  TC."scoreToPassConditional"                           as truot_mon,
+                               (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
+                               SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam" as truot_mon,
                                TBS.id                         as trainingBlockSubjectId,
                                (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
                                 WHERE s2."studentId" = SSS."studentId"
@@ -804,10 +808,10 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                SSS."examBannedReason"                                                                   as ly_do_cam_thi,
                                SSS.suspended                                                                            as dinh_chi,
                                SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
-                               TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
-                               TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
-                               TBS."useForFinalScore" = false and SSS."finalScore" <
-                                                                  TC."scoreToPassConditional"                           as truot_mon,
+                               (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
+                               SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam" as truot_mon,
                                (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
                                 WHERE s2."studentId" = SSS."studentId"
                                   AND s2."subjectVersionId" = SSS."subjectVersionId"
@@ -861,6 +865,9 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
   type Result = {
     studentId: string
     diem_cuoi: number | null
+    diem_thi: number | null
+    thuong_xuyen: number | null
+    dinh_ky: number | null
     withdrew: boolean
     exempted: boolean
     hoan_thi: boolean
@@ -897,6 +904,9 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
                                TC.id                                                                                             as trainingCourseId,
                                FC.id                                                                                             as fixedClassId,
                                SSS."studentId",
+                               SSS."attendanceScore"                                                                              as thuong_xuyen,
+                               SSS."midtermScore"                                                                                 as dinh_ky,
+                               SSS."examScore"                                                                                    as diem_thi,
                                SSS."finalScore"                                                                                  as diem_cuoi,
                                SSS.withdrew,
                                SSS.exempted                                                                                      as mien_thi,
@@ -906,10 +916,10 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
                                SSS."examBannedReason"                                                                            as ly_do_cam_thi,
                                SSS.suspended                                                                                     as dinh_chi,
                                SSS."suspendedReason"                                                                             as ly_do_dinh_chi,
-                               TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
-                               TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
-                               TBS."useForFinalScore" = false and SSS."finalScore" <
-                                                                  TC."scoreToPassConditional"                                    as truot_mon,
+                               (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
+                               SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam" as truot_mon,
                                SC."code"                                                                                         as ma_lop_mon_hoc,
                                Sem."name"                                                                                        as ky_hoc,
                                Sch."name"                                                                                        as nam_hoc,
@@ -936,6 +946,9 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
                         where ${whereClause})
         select "studentId",
+               thuong_xuyen,
+               dinh_ky,
+               diem_thi,
                diem_cuoi,
                withdrew,
                mien_thi,
