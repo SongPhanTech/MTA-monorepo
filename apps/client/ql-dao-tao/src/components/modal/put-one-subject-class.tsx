@@ -17,6 +17,7 @@ import {
   thongBaoPhanCongGiangDay,
 } from "@lib/thong-bao-giang-vien"
 import type { SubjectClass, ClassSchedule, Room } from "@workspace/db/client"
+import { createId } from "@workspace/db"
 import LectureTreeSelect from "@components/commons/lecture-select-multi/TreeSelectLecture"
 import {
   useFindManyBuilding,
@@ -29,6 +30,8 @@ import {
   useFindUniqueSubjectClass,
   useUpdateSubjectClass,
   useUpdateClassSchedule,
+  useCreateClassSchedule,
+  useDeleteClassSchedule,
   useFindManyRoom,
 } from "@workspace/db/hooks"
 import { calcFinalScore } from "@workspace/libs/utils"
@@ -37,6 +40,7 @@ import { cn } from "@workspace/ui/lib/utils"
 import {
   Checkbox,
   Col,
+  Flex,
   Form,
   InputNumber,
   message,
@@ -69,11 +73,12 @@ export type PutOneSubjectClassType = SubjectClass & {
 
 export interface RescheduleScheduleItem {
   id: string
-  classDate: Date | string
+  classDate: Date | string | null
   roomId: string | null
   startPeriod: number
   endPeriod: number
   notes?: string | null
+  isNew?: boolean
   room?: { name: string } | null
   subjectClass?: {
     id: string
@@ -111,6 +116,8 @@ const PutOneSubjectClassModal = () => {
 
   const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
   const { mutateAsync: updateClassSchedule } = useUpdateClassSchedule()
+  const { mutateAsync: createClassSchedule } = useCreateClassSchedule()
+  const { mutateAsync: deleteClassSchedule } = useDeleteClassSchedule()
 
   const lecturerId = Form.useWatch("lecturerId", form)
   const extraLecturerId = Form.useWatch("extraLecturerId", form)
@@ -118,6 +125,14 @@ const PutOneSubjectClassModal = () => {
     if (!output) return
     try {
       showSpinner()
+
+      const invalidNew = localSchedules.find((s) => s.isNew && !s.classDate)
+      if (invalidNew) {
+        message.warning("Vui lòng chọn ngày học cho các buổi mới thêm")
+        hideSpinner()
+        return
+      }
+
       await updateSubjectClass({
         data: { subjectClassTimes: { deleteMany: {} } },
         where: { id: input?.id },
@@ -152,8 +167,35 @@ const PutOneSubjectClassModal = () => {
         },
       })
 
-      // Lưu hàng loạt lịch học buổi học đã chỉnh sửa ở local xuống Database
+      // Xóa buổi đã bỏ khỏi danh sách local
+      for (const removedId of removedScheduleIds) {
+        await deleteClassSchedule({ where: { id: removedId } })
+      }
+
+      // Lưu lịch học: tạo mới / cập nhật
       for (const sched of localSchedules) {
+        if (sched.isNew) {
+          if (!input?.id || !sched.classDate) continue
+          await createClassSchedule({
+            data: {
+              subjectClassId: input.id,
+              classDate: dayjs(sched.classDate)
+                .hour(12)
+                .minute(0)
+                .second(0)
+                .millisecond(0)
+                .toDate(),
+              roomId: sched.roomId,
+              startPeriod: sched.startPeriod,
+              endPeriod: sched.endPeriod,
+              lecturerId: output.lecturerId || subjectClassData?.lecturerId || undefined,
+              extraLecturerId:
+                output.extraLecturerId || subjectClassData?.extraLecturerId || undefined,
+            },
+          })
+          continue
+        }
+
         const original = classSchedules.find((c) => c.id === sched.id)
         if (
           original &&
@@ -205,10 +247,13 @@ const PutOneSubjectClassModal = () => {
         }
       }
 
-      // refetch() lại danh sách level
       queryClient.invalidateQueries({
         queryKey: ["SubjectClass"],
       })
+      queryClient.invalidateQueries({
+        queryKey: ["ClassSchedule"],
+      })
+      setRemovedScheduleIds([])
       onClose()
     } catch (error: any) {
       if (error?.info?.message) {
@@ -464,6 +509,7 @@ const PutOneSubjectClassModal = () => {
   )
 
   const [localSchedules, setLocalSchedules] = useState<RescheduleScheduleItem[]>([])
+  const [removedScheduleIds, setRemovedScheduleIds] = useState<string[]>([])
 
   useEffect(() => {
     if (classSchedules) {
@@ -478,9 +524,11 @@ const PutOneSubjectClassModal = () => {
               endPeriod: c.endPeriod,
               room: c.room,
               subjectClass: c.subjectClass,
-            }) as any
+              isNew: false,
+            }) as RescheduleScheduleItem
         )
       )
+      setRemovedScheduleIds([])
     }
   }, [classSchedules])
 
@@ -507,6 +555,40 @@ const PutOneSubjectClassModal = () => {
           : item
       )
     )
+  }
+
+  const handleAddSchedule = () => {
+    const defaultTime = times?.[0]
+    const roomId = form.getFieldValue("roomId") || subjectClassData?.roomId || null
+    const roomObj = rooms.find((r) => r.id === roomId)
+    setLocalSchedules((prev) => [
+      ...prev,
+      {
+        id: createId(),
+        classDate: null,
+        roomId,
+        startPeriod: defaultTime?.startPeriod ?? 1,
+        endPeriod: defaultTime?.endPeriod ?? 1,
+        isNew: true,
+        room: roomObj ? { name: roomObj.name } : null,
+        subjectClass: subjectClassData
+          ? {
+              id: subjectClassData.id,
+              code: subjectClassData.code,
+              name: subjectClassData.name,
+              examDate: subjectClassData.examDate,
+            }
+          : null,
+      },
+    ])
+    setActiveTab("lich-hoc")
+  }
+
+  const handleRemoveSchedule = (id: string, isNew?: boolean) => {
+    setLocalSchedules((prev) => prev.filter((item) => item.id !== id))
+    if (!isNew) {
+      setRemovedScheduleIds((prev) => [...prev, id])
+    }
   }
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
@@ -1027,6 +1109,13 @@ const PutOneSubjectClassModal = () => {
               />
             </Tabs.TabPane>
             <Tabs.TabPane tab={"Lịch học"} key="lich-hoc">
+              {input?.mode !== "view" && (
+                <Flex justify="end" className="mb-2">
+                  <Button type="primary" onClick={handleAddSchedule}>
+                    Thêm buổi học
+                  </Button>
+                </Flex>
+              )}
               <Table
                 data={localSchedules}
                 className="m-0"
@@ -1048,9 +1137,10 @@ const PutOneSubjectClassModal = () => {
                           format="DD/MM/YYYY"
                           className="w-full"
                           disabled={isDisabled}
+                          status={record.isNew && !record.classDate ? "error" : undefined}
                           onChange={(date) => {
                             handleUpdateLocal(record.id, {
-                              classDate: date ? date.toDate() : (null as any),
+                              classDate: date ? date.toDate() : null,
                             })
                           }}
                         />
@@ -1102,11 +1192,12 @@ const PutOneSubjectClassModal = () => {
                           placeholder="Chọn phòng học"
                           optionFilterProp="children"
                           disabled={isDisabled}
+                          allowClear
                           options={sortedRooms.map((r) => ({ label: r.name, value: r.id }))}
                           onChange={(val) => {
                             const roomObj = rooms.find((r) => r.id === val)
                             handleUpdateLocal(record.id, {
-                              roomId: val,
+                              roomId: val ?? null,
                               room: roomObj ? { name: roomObj.name } : null,
                             })
                           }}
@@ -1115,6 +1206,24 @@ const PutOneSubjectClassModal = () => {
                       )
                     },
                   },
+                  ...(input?.mode !== "view"
+                    ? [
+                        {
+                          title: "Thao tác",
+                          width: 80,
+                          align: "center" as const,
+                          render: (record: RescheduleScheduleItem) => (
+                            <Button
+                              type="link"
+                              danger
+                              onClick={() => handleRemoveSchedule(record.id, record.isNew)}
+                            >
+                              Xóa
+                            </Button>
+                          ),
+                        },
+                      ]
+                    : []),
                 ]}
               />
             </Tabs.TabPane>
