@@ -58,7 +58,6 @@ const fetchUserInfo = async (
   cookie: string,
   opts?: { referer?: string; origin?: string }
 ) => {
-  // Cloudrity chặn User-Agent Bun/Node; browser same-origin thì pass → giả lập header browser
   const headers: Record<string, string> = {
     Cookie: cookie,
     "K-AppCode": appCode,
@@ -105,12 +104,48 @@ const layMockUser = () => {
   }
 }
 
-export const jwtAuth = (appCode: string): MiddlewareHandler => {
+const normalizeAppCodes = (appCode: string | string[]) => {
+  const list = (Array.isArray(appCode) ? appCode : [appCode])
+    .flatMap((c) => c.split(","))
+    .map((c) => c.trim())
+    .filter(Boolean)
+  return [...new Set(list)]
+}
+
+/**
+ * Chọn appCode + token:
+ * 1) Authorization Bearer → dùng K-AppCode header (nếu hợp lệ) hoặc appCode đầu
+ * 2) Cookie x-token-{appCode} theo thứ tự ưu tiên
+ */
+const resolveAuth = (
+  c: Parameters<MiddlewareHandler>[0],
+  appCodes: string[]
+): { appCode: string; token: string; tokenSource: string } | null => {
+  const headerToken = c.req.header("Authorization")?.split(" ")[1]
+  if (headerToken) {
+    const headerApp = c.req.header("K-AppCode")?.trim()
+    const appCode =
+      headerApp && appCodes.includes(headerApp) ? headerApp : (appCodes[0] as string)
+    return { appCode, token: headerToken, tokenSource: "Authorization" }
+  }
+
+  for (const code of appCodes) {
+    const cookieName = `x-token-${code}`
+    const token = getCookie(c, cookieName)
+    if (token) {
+      return { appCode: code, token, tokenSource: `cookie:${cookieName}` }
+    }
+  }
+  return null
+}
+
+export const jwtAuth = (appCode: string | string[]): MiddlewareHandler => {
+  const appCodes = normalizeAppCodes(appCode)
+
   return async (c, next) => {
     const path = c.req.path
     const method = c.req.method
-    const expectedCookie = `x-token-${appCode}`
-    console.log(`[jwtAuth] ${method} ${path} | appCode=${appCode}`)
+    console.log(`[jwtAuth] ${method} ${path} | appCodes=[${appCodes.join(", ")}]`)
 
     const mockUser = layMockUser()
     if (mockUser) {
@@ -120,28 +155,27 @@ export const jwtAuth = (appCode: string): MiddlewareHandler => {
       return
     }
 
-    const authHeader = c.req.header("Authorization")
-    const headerToken = authHeader?.split(" ")[1]
-    const cookieToken = getCookie(c, expectedCookie)
-    const token = headerToken || cookieToken
-    const tokenSource = headerToken ? "Authorization" : cookieToken ? `cookie:${expectedCookie}` : "none"
-
     const reqCookie = c.req.header("Cookie") || ""
     const names = cookieNames(reqCookie)
+    const resolved = resolveAuth(c, appCodes)
 
     console.log(
-      `[jwtAuth] tokenSource=${tokenSource} token=${maskToken(token)} ` +
-        `hasAuthHeader=${Boolean(authHeader)} cookieNames=[${names.join(", ")}] ` +
-        `hasExpectedCookie=${names.includes(expectedCookie)}`
+      `[jwtAuth] tokenSource=${resolved?.tokenSource ?? "none"} token=${maskToken(resolved?.token)} ` +
+        `resolvedAppCode=${resolved?.appCode ?? "-"} ` +
+        `hasAuthHeader=${Boolean(c.req.header("Authorization"))} cookieNames=[${names.join(", ")}]`
     )
 
-    if (!token) {
+    if (!resolved) {
+      const expected = appCodes.map((code) => `x-token-${code}`).join(" | ")
       console.warn(
-        `[jwtAuth] 401 No token | expected cookie "${expectedCookie}" or Authorization Bearer | ` +
+        `[jwtAuth] 401 No token | expected ${expected} or Authorization Bearer | ` +
           `path=${path} origin=${c.req.header("Origin") || "-"} referer=${c.req.header("Referer") || "-"}`
       )
       return c.text("Unauthorized: No token provided", 401)
     }
+
+    const { appCode: selectedAppCode, token } = resolved
+    const expectedCookie = `x-token-${selectedAppCode}`
 
     const systemBaseUrl = process.env.SYSTEM_BASE_URL
     if (!systemBaseUrl) {
@@ -150,22 +184,24 @@ export const jwtAuth = (appCode: string): MiddlewareHandler => {
     }
 
     const userInfoUrl = `${systemBaseUrl}/api/system/share/users/user-info`
-    let cookie = headerToken ? `x-tenantcode=dev; ${expectedCookie}=${token}` : reqCookie
+    let cookie =
+      resolved.tokenSource === "Authorization"
+        ? `x-tenantcode=dev; ${expectedCookie}=${token}`
+        : reqCookie
     const browserLike = {
       referer: c.req.header("Referer") || `${systemBaseUrl}/`,
       origin: c.req.header("Origin") || systemBaseUrl,
     }
 
     try {
-      console.log(`[jwtAuth] verifying via ${userInfoUrl} K-AppCode=${appCode}`)
+      console.log(`[jwtAuth] verifying via ${userInfoUrl} K-AppCode=${selectedAppCode}`)
       let { response, rawText, contentType } = await fetchUserInfo(
         userInfoUrl,
-        appCode,
+        selectedAppCode,
         cookie,
         browserLike
       )
 
-      // WAF (Cloudrity) chặn server-side fetch → HTML set D1N; thử lại 1 lần với cookie mới
       if (isWafChallengeHtml(rawText, contentType)) {
         const d1n = extractWafD1N(rawText)
         console.warn(
@@ -177,7 +213,7 @@ export const jwtAuth = (appCode: string): MiddlewareHandler => {
           cookie = upsertCookie(cookie, "D1N", d1n)
           ;({ response, rawText, contentType } = await fetchUserInfo(
             userInfoUrl,
-            appCode,
+            selectedAppCode,
             cookie,
             browserLike
           ))
@@ -233,7 +269,7 @@ export const jwtAuth = (appCode: string): MiddlewareHandler => {
       })
       console.log(
         `[jwtAuth] OK user=${sessionData.preferred_username} id=${sessionData.sDM_NhanVienId} ` +
-          `org=${sessionData.sDM_DonViId || "-"} path=${path}`
+          `org=${sessionData.sDM_DonViId || "-"} appCode=${selectedAppCode} path=${path}`
       )
       await next()
     } catch (err) {

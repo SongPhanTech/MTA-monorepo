@@ -62,7 +62,16 @@ const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
 const jwksUri = `${issuer}/protocol/openid-connect/certs`
 const audience = config.keycloak.clientId
 
-app.use("/api/*", jwtAuth("congsinhvien"))
+const portalAppCodes = (
+  process.env.PORTAL_APP_CODES ||
+  process.env.PORTAL_APP_CODE ||
+  "congsinhvien,conghocvien"
+)
+  .split(",")
+  .map((c) => c.trim())
+  .filter(Boolean)
+
+app.use("/api/*", jwtAuth(portalAppCodes))
 
 app.route("/api/class-register", ClassRegisterApp)
 app.route("/api/data-sync", DataSyncHistoryApp)
