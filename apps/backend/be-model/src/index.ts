@@ -231,12 +231,18 @@ app.onError((err, c) => {
     if (err.code === "P2025") status = 404
     if (err.code === "P2002") status = 409
     if (err.code === "P2003") status = 400
+    if (err.code === "P2028") status = 400 // transaction timeout
 
     if (status === 500) {
       return c.json({ message: "Internal Server Error" }, status)
     }
 
-    return c.json({ message: err.meta?.cause }, status)
+    const cause =
+      (typeof err.meta?.cause === "string" && err.meta.cause) ||
+      (typeof err.meta?.field_name === "string" && `Vi phạm ràng buộc: ${err.meta.field_name}`) ||
+      err.message
+
+    return c.json({ message: cause }, status)
   }
 
   return c.json({ message: err.message }, 500)

@@ -710,6 +710,7 @@ app.openapi(debtStatistics, async (c) => {
       studentId: true,
       finalScore: true,
       manualFinalScore: true,
+      examScore: true,
       examBanned: true,
       examBannedReason: true,
       suspended: true,
@@ -792,6 +793,7 @@ app.openapi(debtStatistics, async (c) => {
     semesterEndDate: Date | null
     finalScore: number | null
     manualFinalScore: number | null
+    examScore: number | null
     examBanned: boolean
     examBannedReason: string | null
     suspended: boolean
@@ -911,6 +913,7 @@ app.openapi(debtStatistics, async (c) => {
         semesterEndDate: endDate || null,
         finalScore,
         manualFinalScore,
+        examScore: score.examScore ? Number(score.examScore) : null,
         examBanned: score.examBanned,
         examBannedReason: score.examBannedReason,
         suspended: score.suspended,
@@ -963,6 +966,11 @@ app.openapi(debtStatistics, async (c) => {
         finalScores: subject.attempts
           .map((attempt) =>
             attempt.finalScore === null ? "Chưa có điểm" : String(attempt.finalScore)
+          )
+          .join("/"),
+        examScores: subject.attempts
+          .map((attempt) =>
+            attempt.examScore === null ? "Chưa có" : String(attempt.examScore)
           )
           .join("/"),
         type,

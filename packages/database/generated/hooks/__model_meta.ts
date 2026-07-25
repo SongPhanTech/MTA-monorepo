@@ -10641,9 +10641,9 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, name_managementOrganizationId: {
-                    name: "name_managementOrganizationId",
-                    fields: ["name", "managementOrganizationId"]
+                }, code_name_managementOrganizationId: {
+                    name: "code_name_managementOrganizationId",
+                    fields: ["code", "name", "managementOrganizationId"]
                 },
             },
         },

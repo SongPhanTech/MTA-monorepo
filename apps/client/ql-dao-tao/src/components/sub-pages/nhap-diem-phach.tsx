@@ -54,7 +54,7 @@ export default function NhapDiemPhach() {
         examCode: "asc",
       },
     },
-    { enabled: !!examId }
+    { enabled: !!examId, refetchOnWindowFocus: false }
   )
 
   const { data: subjectClasses = [] } = useFindManySubjectClass(

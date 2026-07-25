@@ -168,6 +168,12 @@ export default function HSSVThiLai({ subjectVersionId, viewOnly }: RegisterClass
             {
               title: "Điểm thi",
               align: "center",
+              dataIndex: "diem_thi",
+              width: 80,
+            },
+            {
+              title: "Điểm TB",
+              align: "center",
               dataIndex: "diem_cuoi",
               width: 80,
             },
