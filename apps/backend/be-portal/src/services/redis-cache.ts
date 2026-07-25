@@ -43,32 +43,69 @@ function jsonReviver(_key: string, value: unknown) {
 }
 
 let client: RedisClient | null = null
+let connecting: Promise<RedisClient | null> | null = null
 
-function getClient(): RedisClient | null {
+function redisHostHint() {
+  try {
+    return REDIS_URL ? new URL(REDIS_URL).host : "(none)"
+  } catch {
+    return "(invalid REDIS_URL)"
+  }
+}
+
+async function getClient(): Promise<RedisClient | null> {
   if (!REDIS_URL) return null
   if (client) return client
-  try {
-    client = new RedisClient(REDIS_URL, {
-      connectionTimeout: 2000,
-      autoReconnect: true,
-      maxRetries: 3,
-      enableOfflineQueue: false,
-    })
-    return client
-  } catch (e) {
-    console.warn("[redis-cache] init failed", e)
-    return null
-  }
+  if (connecting) return connecting
+
+  connecting = (async () => {
+    try {
+      // Remote Redis: timeout dài hơn, queue khi đang reconnect (tránh ERR_REDIS_CONNECTION_CLOSED sớm)
+      const redis = new RedisClient(REDIS_URL, {
+        connectionTimeout: Number(process.env.REDIS_CONNECTION_TIMEOUT || 8000),
+        autoReconnect: true,
+        maxRetries: Number(process.env.REDIS_MAX_RETRIES || 20),
+        enableOfflineQueue: process.env.REDIS_OFFLINE_QUEUE !== "false",
+      })
+      await redis.connect()
+      client = redis
+      console.log(`[redis-cache] connected ${redisHostHint()}`)
+      return client
+    } catch (e) {
+      console.warn(`[redis-cache] connect failed host=${redisHostHint()}`, e)
+      client = null
+      return null
+    } finally {
+      connecting = null
+    }
+  })()
+
+  return connecting
 }
 
 async function withRedis<T>(fn: (redis: RedisClient) => Promise<T>): Promise<T | null> {
   if (!ENABLED && !RATE_LIMIT_ENABLED) return null
-  const redis = getClient()
+  const redis = await getClient()
   if (!redis) return null
   try {
     return await fn(redis)
   } catch (e) {
-    console.warn("[redis-cache] op failed", e)
+    const msg = e instanceof Error ? e.message : String(e)
+    console.warn(`[redis-cache] op failed host=${redisHostHint()}`, e)
+    if (
+      msg.includes("Connection is closed") ||
+      msg.includes("ECONNREFUSED") ||
+      msg.includes("ECONNRESET") ||
+      msg.includes("ETIMEDOUT") ||
+      msg.includes("Connection timed out")
+    ) {
+      try {
+        client?.close()
+      } catch {
+        /* ignore */
+      }
+      client = null
+    }
     return null
   }
 }

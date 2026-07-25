@@ -65,7 +65,13 @@ const getClassRegisterSession = createRoute({
 
 app.openapi(getClassRegisterSession, async (c) => {
   const session = c.get("user")
+  console.log(
+    `[class-register] get-class-register-session user=${session?.userName} id=${session?.id}`
+  )
   const registerSessions = await findClassRegisterSession(session.id)
+  console.log(
+    `[class-register] get-class-register-session ok id=${session?.id} sessions=${registerSessions?.length ?? 0}`
+  )
   return c.json(registerSessions, 200)
 })
 

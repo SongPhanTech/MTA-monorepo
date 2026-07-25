@@ -13,6 +13,83 @@ declare module "hono" {
   }
 }
 
+const maskToken = (token?: string | null) => {
+  if (!token) return "(empty)"
+  if (token.length <= 12) return `${token.slice(0, 4)}…(len=${token.length})`
+  return `${token.slice(0, 6)}…${token.slice(-4)}(len=${token.length})`
+}
+
+const cookieNames = (cookieHeader: string) =>
+  cookieHeader
+    .split(";")
+    .map((part) => part.trim().split("=")[0])
+    .filter(Boolean)
+
+/** Cloudrity / WAF challenge: HTML set cookie D1N rồi reload */
+const extractWafD1N = (body: string): string | null => {
+  const match = body.match(/document\.cookie\s*=\s*["']D1N=([^"';]+)/i)
+  return match?.[1] ?? null
+}
+
+const isWafChallengeHtml = (body: string, contentType?: string | null) => {
+  const looksHtml =
+    contentType?.includes("text/html") ||
+    body.trimStart().startsWith("<html") ||
+    body.includes("document.cookie")
+  return looksHtml && (body.includes("D1N=") || body.includes("Cloudrity") || body.includes("window.location.reload"))
+}
+
+const upsertCookie = (cookieHeader: string, name: string, value: string) => {
+  const parts = cookieHeader
+    .split(";")
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .filter((p) => !p.toLowerCase().startsWith(`${name.toLowerCase()}=`))
+  parts.push(`${name}=${value}`)
+  return parts.join("; ")
+}
+
+const BROWSER_UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+const fetchUserInfo = async (
+  url: string,
+  appCode: string,
+  cookie: string,
+  opts?: { referer?: string; origin?: string }
+) => {
+  // Cloudrity chặn User-Agent Bun/Node; browser same-origin thì pass → giả lập header browser
+  const headers: Record<string, string> = {
+    Cookie: cookie,
+    "K-AppCode": appCode,
+    "K-TenantCode": "dev",
+    Accept: "application/json",
+    "Accept-Language": "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7",
+    "User-Agent": BROWSER_UA,
+    "Cache-Control": "no-cache",
+    Pragma: "no-cache",
+  }
+  if (opts?.referer) headers.Referer = opts.referer
+  if (opts?.origin) headers.Origin = opts.origin
+
+  const response = await fetch(url, {
+    method: "GET",
+    credentials: "include",
+    headers,
+  })
+  const rawText = await response.text()
+  const contentType = response.headers.get("content-type")
+  return { response, rawText, contentType }
+}
+
+const parseUserInfoJson = (rawText: string) => {
+  try {
+    return rawText ? JSON.parse(rawText) : null
+  } catch {
+    return null
+  }
+}
+
 const layMockUser = () => {
   const profileId = process.env.MOCK_USER_PROFILE_ID?.trim()
   if (!profileId || process.env.NODE_ENV === "production") {
@@ -30,41 +107,123 @@ const layMockUser = () => {
 
 export const jwtAuth = (appCode: string): MiddlewareHandler => {
   return async (c, next) => {
-    console.log(`[jwtAuth] Checking authentication for appCode: ${appCode}`)
+    const path = c.req.path
+    const method = c.req.method
+    const expectedCookie = `x-token-${appCode}`
+    console.log(`[jwtAuth] ${method} ${path} | appCode=${appCode}`)
 
     const mockUser = layMockUser()
     if (mockUser) {
-      console.log(`[jwtAuth] Using mock user: ${mockUser.fullName} (${mockUser.id})`)
+      console.log(`[jwtAuth] OK mock user: ${mockUser.fullName} (${mockUser.id})`)
       c.set("user", mockUser)
       await next()
       return
     }
 
-    const headerToken = c.req.header("Authorization")?.split(" ")[1]
-    const token = headerToken || getCookie(c, `x-token-${appCode}`)
+    const authHeader = c.req.header("Authorization")
+    const headerToken = authHeader?.split(" ")[1]
+    const cookieToken = getCookie(c, expectedCookie)
+    const token = headerToken || cookieToken
+    const tokenSource = headerToken ? "Authorization" : cookieToken ? `cookie:${expectedCookie}` : "none"
 
     const reqCookie = c.req.header("Cookie") || ""
+    const names = cookieNames(reqCookie)
+
+    console.log(
+      `[jwtAuth] tokenSource=${tokenSource} token=${maskToken(token)} ` +
+        `hasAuthHeader=${Boolean(authHeader)} cookieNames=[${names.join(", ")}] ` +
+        `hasExpectedCookie=${names.includes(expectedCookie)}`
+    )
 
     if (!token) {
+      console.warn(
+        `[jwtAuth] 401 No token | expected cookie "${expectedCookie}" or Authorization Bearer | ` +
+          `path=${path} origin=${c.req.header("Origin") || "-"} referer=${c.req.header("Referer") || "-"}`
+      )
       return c.text("Unauthorized: No token provided", 401)
     }
-    const cookie = headerToken ? `x-tenantcode=dev; x-token-${appCode}=${token}` : reqCookie
+
+    const systemBaseUrl = process.env.SYSTEM_BASE_URL
+    if (!systemBaseUrl) {
+      console.error(`[jwtAuth] 401 Invalid token | SYSTEM_BASE_URL is not set`)
+      return c.text("Unauthorized: Invalid token", 401)
+    }
+
+    const userInfoUrl = `${systemBaseUrl}/api/system/share/users/user-info`
+    let cookie = headerToken ? `x-tenantcode=dev; ${expectedCookie}=${token}` : reqCookie
+    const browserLike = {
+      referer: c.req.header("Referer") || `${systemBaseUrl}/`,
+      origin: c.req.header("Origin") || systemBaseUrl,
+    }
+
     try {
-      const response = await fetch(
-        `${process.env.SYSTEM_BASE_URL}/api/system/share/users/user-info`,
-        {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            Cookie: cookie,
-            "K-AppCode": appCode,
-            "K-TenantCode": "dev",
-          },
-        }
+      console.log(`[jwtAuth] verifying via ${userInfoUrl} K-AppCode=${appCode}`)
+      let { response, rawText, contentType } = await fetchUserInfo(
+        userInfoUrl,
+        appCode,
+        cookie,
+        browserLike
       )
-      const data = await response.json()
-      const sessionData = data.Data
-      // Attach user info to context
+
+      // WAF (Cloudrity) chặn server-side fetch → HTML set D1N; thử lại 1 lần với cookie mới
+      if (isWafChallengeHtml(rawText, contentType)) {
+        const d1n = extractWafD1N(rawText)
+        console.warn(
+          `[jwtAuth] WAF challenge HTML from ${userInfoUrl} (Server may be Cloudrity). ` +
+            `D1N=${d1n ? "present" : "missing"}. Retrying once… ` +
+            `Hint: set SYSTEM_BASE_URL to internal URL (e.g. https://mta.swantech.vn) instead of public WAF domain.`
+        )
+        if (d1n) {
+          cookie = upsertCookie(cookie, "D1N", d1n)
+          ;({ response, rawText, contentType } = await fetchUserInfo(
+            userInfoUrl,
+            appCode,
+            cookie,
+            browserLike
+          ))
+        }
+      }
+
+      if (isWafChallengeHtml(rawText, contentType)) {
+        console.error(
+          `[jwtAuth] 401 WAF blocked user-info | SYSTEM_BASE_URL=${systemBaseUrl} still returns HTML challenge. ` +
+            `Token is OK; change SYSTEM_BASE_URL to bypass WAF (internal/swantech). body=${rawText.slice(0, 180)}`
+        )
+        return c.text("Unauthorized: Invalid token", 401)
+      }
+
+      const data = parseUserInfoJson(rawText)
+      if (!data) {
+        console.warn(
+          `[jwtAuth] user-info non-JSON body status=${response.status} contentType=${contentType} body=${rawText.slice(0, 200)}`
+        )
+      }
+
+      if (!response.ok) {
+        console.warn(
+          `[jwtAuth] 401 Invalid token | user-info HTTP ${response.status} ` +
+            `body=${rawText.slice(0, 300)}`
+        )
+        return c.text("Unauthorized: Invalid token", 401)
+      }
+
+      const sessionData = data?.Data
+      if (!sessionData) {
+        console.warn(
+          `[jwtAuth] 401 Invalid token | user-info missing Data | ` +
+            `keys=${data ? Object.keys(data).join(",") : "(null)"} body=${rawText.slice(0, 300)}`
+        )
+        return c.text("Unauthorized: Invalid token", 401)
+      }
+
+      if (!sessionData.sDM_NhanVienId) {
+        console.warn(
+          `[jwtAuth] 401 Invalid token | missing sDM_NhanVienId | ` +
+            `preferred_username=${sessionData.preferred_username || "-"} name=${sessionData.name || "-"}`
+        )
+        return c.text("Unauthorized: Invalid token", 401)
+      }
+
       c.set("user", {
         userName: sessionData.preferred_username,
         fullName: sessionData.name,
@@ -72,9 +231,13 @@ export const jwtAuth = (appCode: string): MiddlewareHandler => {
         id: sessionData.sDM_NhanVienId,
         organizationUnitId: sessionData.sDM_DonViId,
       })
+      console.log(
+        `[jwtAuth] OK user=${sessionData.preferred_username} id=${sessionData.sDM_NhanVienId} ` +
+          `org=${sessionData.sDM_DonViId || "-"} path=${path}`
+      )
       await next()
     } catch (err) {
-      console.error("JWT verification failed:", err)
+      console.error(`[jwtAuth] 401 Invalid token | fetch/parse error path=${path}`, err)
       return c.text("Unauthorized: Invalid token", 401)
     }
   }
