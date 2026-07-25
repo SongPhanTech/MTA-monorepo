@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= swan1
+SERVER_PROFILE ?= mta_online
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -111,7 +111,7 @@ PKG_KHAO_THI := khao-thi
 PKG_DAO_TAO := ql-dao-tao
 PKG_HO_SO := ql-ho-so
 PKG_AI := tro-ly-ao
-PKG_CONG_HOC_VIEN := cong-hoc-vien
+# PKG_CONG_HOC_VIEN := cong-hoc-vien
 PKG_CONG_GIANG_VIEN := cong-giang-vien
 PKG_CONG_SINH_VIEN := cong-sinh-vien
 
