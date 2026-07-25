@@ -103,7 +103,7 @@ const DefaultLayout = ({
                 <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
               ) : (
                 <div
-                  className={cn("rounded-lg bg-white p-4 shadow-sm", className)}
+                  className={cn("overflow-auto rounded-lg bg-white p-4 shadow-sm", className)}
                   style={{
                     minHeight: `calc(100vh - ${CONTENT_VERTICAL_OFFSET}px)`,
                   }}
