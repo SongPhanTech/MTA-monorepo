@@ -94,6 +94,7 @@ const Table = <T extends AnyObject>({
   ...rest
 }: TableProps<T>) => {
   const [filtersTable, setFiltersTable] = useState<FilterProps>(filters || {})
+  const { scroll: scrollProp, className: restClassName, onRow: onRowFromRest, ...tableRest } = rest
 
   const onCheckAllChange = (item: ColumnTypeProps, e: CheckboxChangeEvent) => {
     if (e.target.checked) {
@@ -813,7 +814,7 @@ const Table = <T extends AnyObject>({
   }
 
   return (
-    <div className={clsx("flex flex-col", rest?.className)}>
+    <div className={clsx("flex flex-col", restClassName)}>
       {header && (
         <div className="mt-5 border-gray-200 border border-b-0 px-2.5 py-2.5">{header}</div>
       )}
@@ -833,7 +834,6 @@ const Table = <T extends AnyObject>({
             ...genFilter(column as ColumnTypeProps),
           })) as ColumnsType<T>
         }
-        scroll={{ x: "100%", y: scrollable ? maxHeight : undefined }}
         bordered
         dataSource={data}
         locale={{
@@ -855,7 +855,12 @@ const Table = <T extends AnyObject>({
             : false
         }
         expandable={expandable}
-        {...rest}
+        {...tableRest}
+        scroll={{
+          x: "max-content",
+          ...(scrollable && maxHeight != null ? { y: maxHeight } : {}),
+          ...scrollProp,
+        }}
         onRow={(record) => ({
           onClick: () => {
             if (onRowClick) {
@@ -869,7 +874,7 @@ const Table = <T extends AnyObject>({
           },
           style: { cursor: "pointer" },
           className: cn(record.id && selectedRow && record.id === selectedRow ? "bg-blue-200" : ""),
-          ...rest.onRow?.(record),
+          ...onRowFromRest?.(record),
         })}
       />
     </div>

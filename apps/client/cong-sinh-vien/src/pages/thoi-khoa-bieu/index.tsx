@@ -299,29 +299,34 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
             columns={[
               {
                 title: "Mã LMH",
-                width: 100,
+                width: 110,
                 align: "center",
                 type: "input",
+                onCell: () => ({ style: { whiteSpace: "nowrap" } }),
                 render: (_, record) => record?.code || "",
               },
               {
                 title: "Tên môn",
+                width: 260,
                 align: "center",
                 type: "input",
+                onCell: () => ({
+                  style: { minWidth: 200, whiteSpace: "normal", wordBreak: "normal" },
+                }),
                 render: (_, record) => (
-                  <p className="text-left">
+                  <p className="mb-0 text-left">
                     {record?.name} ({record.subject?.credit} TC)
                   </p>
                 ),
               },
               {
                 title: "Số SV",
-                width: 80,
+                width: 72,
                 align: "center",
                 type: "order",
                 distinctFilters: ["maxStudent"],
                 render: (_, record) => (
-                  <p>
+                  <p className="mb-0">
                     {record?.fixedClasses?.reduce(
                       (acc: number, curr: any) => acc + (curr?._count?.students ?? 0),
                       0
@@ -331,20 +336,28 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
               },
               {
                 title: "Giảng viên 1",
+                width: 150,
                 align: "center",
                 type: "input",
+                onCell: () => ({
+                  style: { minWidth: 120, whiteSpace: "normal", wordBreak: "normal" },
+                }),
                 render: (__, record) => record?.mainLecturer?.userProfile?.fullname ?? "-",
               },
               {
                 title: "Giảng viên 2",
+                width: 150,
                 align: "center",
                 type: "input",
+                onCell: () => ({
+                  style: { minWidth: 120, whiteSpace: "normal", wordBreak: "normal" },
+                }),
                 render: (__, record) => record?.extraLecturer?.userProfile?.fullname ?? "-",
               },
               {
                 title: "Hình thức thi",
                 align: "center",
-                width: 150,
+                width: 120,
                 type: "select",
                 options: options,
                 render: (__, record) => <div>{getExamTypeLabel(record?.examType)}</div>,
@@ -352,8 +365,9 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
               {
                 title: "Khu vực",
                 align: "center",
-                width: 120,
+                width: 110,
                 type: "input",
+                ellipsis: true,
                 render: (_, record) =>
                   record.trainingLocation ? record.trainingLocation?.name : "-",
               },
@@ -361,12 +375,14 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                 title: "Phòng học",
                 align: "center",
                 width: 120,
-                render: (_, record) => record?.room?.name || "",
+                ellipsis: true,
+                render: (_, record) => record?.room?.name || "-",
               },
               {
                 title: "Thời khoá biểu",
                 width: 120,
                 align: "center",
+                onCell: () => ({ style: { whiteSpace: "nowrap" } }),
                 render: (_, record) =>
                   record.subjectClassTimes
                     ?.uniqueByKeys?.(["dayOfWeek", "startPeriod", "endPeriod"])
@@ -375,7 +391,10 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                         a.dayOfWeek - b.dayOfWeek || a.startPeriod - b.startPeriod
                     )
                     ?.map?.((tkb: SubjectClassTime) => (
-                      <p key={`${tkb.dayOfWeek}-${tkb.startPeriod}-${tkb.endPeriod}`}>
+                      <p
+                        key={`${tkb.dayOfWeek}-${tkb.startPeriod}-${tkb.endPeriod}`}
+                        className="mb-0"
+                      >
                         {tkb.dayOfWeek === 8 ? "CN" : `T${tkb.dayOfWeek}`} - {tkb.startPeriod} -{" "}
                         {tkb.endPeriod}
                       </p>
@@ -384,13 +403,14 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
               {
                 title: "Ngày thi",
                 align: "center",
-                width: 100,
-                render: (_, record) => (record.examDate ? formatDate(record.examDate) : ""),
+                width: 110,
+                render: (_, record) => (record.examDate ? formatDate(record.examDate) : "-"),
               },
               {
                 title: "Thao tác",
-                width: 90,
+                width: 100,
                 align: "center",
+                fixed: "right",
                 render: (_, record) => (
                   <div className="flex items-center justify-center">
                     <ViewIcon
@@ -400,6 +420,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                 ),
               },
             ]}
+            scroll={{ x: 1420 }}
             data={subjectClasses}
             maxHeight={"calc(100vh - 250px)"}
             pagination={{

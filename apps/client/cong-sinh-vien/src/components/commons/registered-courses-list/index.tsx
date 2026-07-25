@@ -290,24 +290,29 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
         <TableCollapse
           header={<b className="text-sm uppercase">Danh sách môn học mở đăng ký</b>}
           defaultExpandAll
-          scroll={{ y: 400 }}
-          className="!mt-0 !rounded-0 not-print"
+          scroll={{ x: 1480, y: 400 }}
+          className="!mt-0 !rounded-0 not-print register-open-courses-table"
           columns={[
             {
               title: "Mã học phần",
               dataIndex: "code",
               align: "center",
-              width: 120,
+              width: 100,
+              ellipsis: true,
             },
             {
               title: "Tên học phần",
               dataIndex: "name",
+              width: 220,
+              onCell: () => ({
+                style: { minWidth: 180, whiteSpace: "normal", wordBreak: "normal" },
+              }),
             },
             {
               title: "Số TC",
               dataIndex: "credit",
               align: "center",
-              width: 60,
+              width: 64,
             },
             {
               title: "Bắt buộc",
@@ -322,6 +327,10 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
             },
             {
               title: "Giảng viên",
+              width: 180,
+              onCell: () => ({
+                style: { minWidth: 140, whiteSpace: "normal", wordBreak: "normal" },
+              }),
               render: (_, record) =>
                 [
                   record.mainLecturer?.userProfile?.fullname,
@@ -333,7 +342,8 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
             {
               title: "Phòng học",
               align: "center",
-              width: 150,
+              width: 110,
+              ellipsis: true,
               render: (_, record) => record?.room?.name,
             },
             {
@@ -345,12 +355,12 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
             },
             {
               title: "Thời khoá biểu",
-              width: 150,
+              width: 110,
               align: "center",
               render: (_, record) => {
                 return record?.subjectClassTimes?.map?.((tkb) => {
                   return (
-                    <p>
+                    <p key={`${tkb?.dayOfWeek}-${tkb?.startPeriod}-${tkb?.endPeriod}`} className="mb-0 whitespace-nowrap">
                       {tkb?.dayOfWeek === 8 ? "CN" : `T${tkb?.dayOfWeek}`} - {tkb?.startPeriod} -{" "}
                       {tkb?.endPeriod}
                     </p>
@@ -361,7 +371,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
             {
               title: "Học phí",
               align: "center",
-              width: 120,
+              width: 110,
               render: (_, record) =>
                 tuitionPerCredit
                   ? `${((record?.credit || 0) * tuitionPerCredit).formatVND()}`
@@ -370,7 +380,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
             {
               title: "Tiên quyết / Học trước",
               align: "center",
-              width: 180,
+              width: 140,
               render: (_, record) => {
                 const parent = record.$type === "child" ? classToParentMap.get(record.id) : record
 
@@ -413,7 +423,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
             {
               title: "Môn học tương đương",
               align: "center",
-              width: 180,
+              width: 140,
               render: (_, record) => {
                 const parent = record.$type === "child" ? classToParentMap.get(record.id) : record
 
@@ -451,7 +461,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
             {
               title: "Thao tác",
               align: "center",
-              width: 120,
+              width: 110,
               fixed: "right",
               render: (_, record) => {
                 const totalCredit =
