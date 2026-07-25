@@ -486,15 +486,22 @@ export default function KeHoachGhepLopMonHoc() {
 
       const res = await sqlTransaction([
         ...allSubjectVersionIds.flatMap((subjectVersionId) => {
+          // Chỉ xóa lớp trống KHÔNG còn trong payload — giữ lớp đang upsert
+          // để không mất PCGD / SubjectClassHistory (tránh P2003)
+          const keepIds = payload
+            .filter((e) => e.subjectVersionId === subjectVersionId)
+            .map((e) => e.subjectClassId)
+
           const emptyClassWhere = {
             semesterId,
             trainingObjectTypeId,
             subjectId: subjectVersionId,
             type: $Enums.SubjectClassType.NORMAL,
             subjectClassStudent: { none: {} },
+            ...(keepIds.length > 0 ? { id: { notIn: keepIds } } : {}),
           }
           return [
-            // Gỡ FK / xóa con trước khi xóa lớp trống (tránh P2003 → 400)
+            // Gỡ FK / xóa con trước khi xóa lớp trống thừa
             {
               model: "SubjectClassAttendanceStudent" as const,
               operation: "deleteMany",
