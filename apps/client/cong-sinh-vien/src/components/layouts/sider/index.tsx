@@ -1,114 +1,72 @@
+import {
+  buildMenuItems,
+  findMatchingKey,
+  findOpenKeys,
+} from "@components/layouts/sider/utils"
 import type { MenuItem } from "@workspace/router"
-import { Layout, Menu, Tooltip } from "antd"
-import type { ItemType, MenuItemType } from "antd/es/menu/interface"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { type ReactNode, useState } from "react"
+import { Layout, Menu } from "antd"
+import { useRouter } from "next/router"
+import { useEffect, useMemo, useState } from "react"
 
 const { Sider } = Layout
 
+const SIDER_WIDTH = 250
+const SIDER_COLLAPSED_WIDTH = 80
+const HEADER_HEIGHT = 64
+
 interface SiderDefaultLayoutProps {
   collapsed: boolean
-  theme: "light" | "dark"
   items: MenuItem[]
-  onCollapse?: (collapsed: boolean) => void
-  logo1: ReactNode
-  logo2: ReactNode
+  menuBadges?: Record<string, number>
 }
 
-function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
-  return menus.map((item) => ({
-    label: item.children ? (
-      item.label
-    ) : (
-      <Tooltip title={item.label} placement="right" mouseEnterDelay={0.5}>
-        <div>
-          <Link href={item.path || "#"} className="block truncate">
-            {item.label}
-          </Link>
-        </div>
-      </Tooltip>
-    ),
-    key: item.path || item.id,
-    icon: item.icon ? <item.icon /> : undefined,
-    children: item.children
-      ? item.children.map((child) => ({
-          label: (
-            <Tooltip title={child.label} placement="right" mouseEnterDelay={0.5}>
-              <Link href={child.path || "#"} className="block truncate">
-                {child.label}
-              </Link>
-            </Tooltip>
-          ),
-          key: child.path || child.id,
-        }))
-      : undefined,
-  }))
-}
+const SiderDefaultLayout = ({ collapsed, items, menuBadges }: SiderDefaultLayoutProps) => {
+  const router = useRouter()
+  const pathname = router.pathname
+  const [openKeys, setOpenKeys] = useState<string[]>(() => findOpenKeys(items, pathname))
 
-const findOpenKeys = (menus: MenuItem[], currentPath: string | null): string[] => {
-  for (const item of menus) {
-    if (item.children) {
-      const childKeys = findOpenKeys(item.children, currentPath)
-      if (childKeys.length > 0) {
-        return [item.path || item.id, ...childKeys]
-      }
+  const selectedKeys = useMemo(() => {
+    const cleanPathname = pathname?.split("?")[0].split("#")[0] || "/"
+    const matched = findMatchingKey(items, cleanPathname)
+    return matched ? [matched] : [cleanPathname]
+  }, [items, pathname])
+
+  useEffect(() => {
+    if (collapsed) {
+      setOpenKeys([])
+      return
     }
-    if (item.path === currentPath) {
-      return [item.path || item.id]
-    }
-  }
-  return []
-}
+    setOpenKeys(findOpenKeys(items, pathname))
+  }, [collapsed, items, pathname])
 
-const SiderDefaultLayout = ({
-  collapsed,
-  theme,
-  items,
-  onCollapse,
-  logo1,
-  logo2,
-}: SiderDefaultLayoutProps) => {
-  const pathname = usePathname()
-
-  const [openKeys, setOpenKeys] = useState<string[]>(findOpenKeys(items, pathname))
   return (
     <Sider
+      className="sinh-vien-sider"
       style={{
         overflow: "auto",
-        height: "100vh",
+        height: `calc(100vh - ${HEADER_HEIGHT}px)`,
         position: "fixed",
         insetInlineStart: 0,
-        top: 0,
+        top: HEADER_HEIGHT,
         bottom: 0,
-        scrollbarWidth: "none",
+        scrollbarWidth: "thin",
       }}
       collapsible
-      onCollapse={onCollapse}
+      trigger={null}
       collapsed={collapsed}
-      theme={theme}
-      width={230}
+      theme="light"
+      width={SIDER_WIDTH}
+      collapsedWidth={SIDER_COLLAPSED_WIDTH}
     >
-      <div
-        className={`flex items-center px-5 border-b border-r border-gray-200 bg-white justify-start h-16 fixed z-[100] top-[0px] left-[0px] ${collapsed ? "w-[80px]" : "w-[230px]"}`}
-      >
-        {collapsed ? logo1 : logo2}
-      </div>
       <Menu
-        className="pb-20 pt-[64px] px-4 mt-2"
-        theme={"light"}
+        className="sinh-vien-sider-menu"
+        theme="light"
         mode="inline"
-        inlineIndent={10}
-        selectedKeys={pathname ? [pathname] : []}
+        inlineCollapsed={collapsed}
+        selectedKeys={selectedKeys}
         openKeys={openKeys}
         onOpenChange={setOpenKeys}
-        items={getMenus(items)}
-        style={{
-          background: "transparent",
-          borderTop: "1px solid #f1f1f1",
-          marginBlock: "0",
-          marginInline: "0",
-        }}
+        items={buildMenuItems(items, { menuBadges, collapsed })}
       />
     </Sider>
   )

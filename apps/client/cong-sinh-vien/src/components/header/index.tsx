@@ -4,10 +4,10 @@ import { getRuntimeEnv } from "@workspace/libs/utils"
 import type React from "react"
 import { useEffect } from "react"
 
-const HeaderApp: React.FC = () => {
+const HeaderApp: React.FC<{ className?: string }> = ({ className }) => {
   useEffect(() => {
     try {
-      window.MTAMenuComponents.default.createPlugin("pluginContainer", {
+      window.MTAMenuComponents?.default?.createPlugin("pluginContainer", {
         menuAppId: "menuContainer",
         notificationAppId: "notificationContainer",
         userAppId: "userContainer",
@@ -19,7 +19,7 @@ const HeaderApp: React.FC = () => {
     }
   }, [])
 
-  return <div id="pluginContainer" />
+  return <div id="pluginContainer" className={className} />
 }
 
 export default HeaderApp
