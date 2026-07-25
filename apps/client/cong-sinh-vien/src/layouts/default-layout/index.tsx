@@ -98,14 +98,14 @@ const DefaultLayout = ({
               overflow: "hidden",
             }}
           >
-            <Content className="flex h-full flex-col overflow-y-auto px-2 py-2">
+            <Content className="flex h-full flex-col px-2 py-2">
               {unLayout ? (
                 <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
               ) : (
                 <div
-                  className={cn("overflow-auto rounded-lg bg-white p-4 shadow-sm", className)}
+                  className={cn("overflow-y-auto rounded-lg bg-white p-4 shadow-sm", className)}
                   style={{
-                    minHeight: `calc(100vh - ${CONTENT_VERTICAL_OFFSET}px)`,
+                    height: `calc(100vh - ${CONTENT_VERTICAL_OFFSET}px)`,
                   }}
                 >
                   {children}
