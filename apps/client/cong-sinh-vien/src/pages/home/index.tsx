@@ -145,13 +145,13 @@ function Page() {
             }}
             academicRanking={academicRanking || "-"}
           />
-          <div className="bg-white rounded-sm border border-gray-200 h-[500px] overflow-hidden flex flex-col mt-2">
-            <div className="px-4 py-2 border-b border-gray-200 bg-green-700">
-              <Title className="mb-0 uppercase font-medium text-white" level={4}>
+          <div className="flex min-h-0 flex-col rounded-lg bg-white border border-gray-200 shadow-sm h-[500px] overflow-hidden mt-2">
+            <div className="flex shrink-0 items-center justify-between gap-2 border-b border-gray-100 px-4 py-3 bg-white">
+              <span className="text-sm font-bold uppercase tracking-wide text-[#004725]">
                 Thông báo
-              </Title>
+              </span>
             </div>
-            <div className="flex-1 overflow-y-auto mb-2 p-2">
+            <div className="flex-1 overflow-y-auto p-2 bg-[#f9fafb]">
               <DanhSachThongBao />
             </div>
           </div>

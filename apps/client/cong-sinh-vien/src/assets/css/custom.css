@@ -24,3 +24,232 @@
 .ant-table-expanded-row:hover {
   background-color: aliceblue;
 }
+
+.sinh-vien-header {
+  background: #004725 !important;
+  height: 64px !important;
+  line-height: normal !important;
+  padding-inline: 16px !important;
+}
+
+.sinh-vien-header-menu-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  line-height: 0 !important;
+  border-radius: 8px !important;
+  color: #fff !important;
+  background: rgba(0, 0, 0, 0.22) !important;
+}
+
+.sinh-vien-header-menu-btn .ant-btn-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  line-height: 0 !important;
+}
+
+.sinh-vien-header-menu-btn:hover {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+}
+
+.sinh-vien-header-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.14);
+  flex-shrink: 0;
+}
+
+.sinh-vien-header-app {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sinh-vien-sider {
+  background: #f3f4f6 !important;
+  border-right: 1px solid #e5e7eb;
+}
+
+.sinh-vien-sider .ant-layout-sider-children {
+  background: #f3f4f6;
+}
+
+.sinh-vien-sider-menu.ant-menu {
+  background: transparent !important;
+  border-inline-end: none !important;
+  padding: 8px;
+}
+
+.sinh-vien-sider-menu:not(.ant-menu-inline-collapsed) .ant-menu-item,
+.sinh-vien-sider-menu:not(.ant-menu-inline-collapsed) .ant-menu-submenu-title {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #111827 !important;
+  border-radius: 8px !important;
+  margin: 2px 0 !important;
+  width: 100%;
+  height: 44px !important;
+  line-height: 44px !important;
+}
+
+.sinh-vien-sider-menu.ant-menu-inline-collapsed {
+  padding: 8px !important;
+  width: 100% !important;
+}
+
+.sinh-vien-sider-menu.ant-menu-inline-collapsed > .ant-menu-item,
+.sinh-vien-sider-menu.ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title {
+  display: block !important;
+  height: 48px !important;
+  line-height: 48px !important;
+  padding-inline: calc(50% - 12px) !important;
+  padding-block: 0 !important;
+  margin: 2px 0 !important;
+  width: 100% !important;
+  inset-inline-start: 0 !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+.sinh-vien-sider-menu.ant-menu-inline-collapsed .ant-menu-item .ant-menu-item-icon,
+.sinh-vien-sider-menu.ant-menu-inline-collapsed .ant-menu-submenu-title .ant-menu-item-icon {
+  position: static !important;
+  inset: auto !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  margin: 0 !important;
+  line-height: 0 !important;
+  font-size: 18px !important;
+  transform: none !important;
+}
+
+.sinh-vien-sider-menu.ant-menu-inline-collapsed .sinh-vien-menu-icon,
+.sinh-vien-sider-menu.ant-menu-inline-collapsed .sinh-vien-menu-icon svg {
+  display: block !important;
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.sinh-vien-sider-menu.ant-menu-inline-collapsed .ant-menu-title-content {
+  display: inline-block !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  vertical-align: middle !important;
+}
+
+.sinh-vien-sider-menu.ant-menu-inline-collapsed .ant-menu-submenu-arrow {
+  display: none !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+}
+
+.sinh-vien-sider-menu.ant-menu-inline-collapsed
+  .ant-menu-submenu-selected
+  > .ant-menu-submenu-title {
+  background: #3f9468 !important;
+  color: #ffffff !important;
+}
+
+.sinh-vien-sider-menu.ant-menu-inline-collapsed
+  .ant-menu-submenu-selected
+  > .ant-menu-submenu-title
+  .ant-menu-item-icon,
+.sinh-vien-sider-menu.ant-menu-inline-collapsed
+  .ant-menu-submenu-selected
+  > .ant-menu-submenu-title
+  .sinh-vien-menu-icon {
+  color: #ffffff !important;
+}
+
+.sinh-vien-sider-menu .ant-menu-item a,
+.sinh-vien-sider-menu .ant-menu-title-content {
+  color: #111827 !important;
+}
+
+.sinh-vien-sider-menu .ant-menu-item .ant-menu-item-icon,
+.sinh-vien-sider-menu .ant-menu-submenu-title .ant-menu-item-icon,
+.sinh-vien-sider-menu .sinh-vien-menu-icon {
+  color: #111827 !important;
+}
+
+.sinh-vien-sider-menu .ant-menu-item:hover,
+.sinh-vien-sider-menu .ant-menu-submenu-title:hover {
+  background: #4a9468 !important;
+  color: #ffffff !important;
+}
+
+.sinh-vien-sider-menu .ant-menu-item:hover .ant-menu-item-icon,
+.sinh-vien-sider-menu .ant-menu-submenu-title:hover .ant-menu-item-icon,
+.sinh-vien-sider-menu .ant-menu-item:hover a,
+.sinh-vien-sider-menu .ant-menu-item:hover .ant-menu-title-content,
+.sinh-vien-sider-menu .ant-menu-submenu-title:hover .ant-menu-title-content,
+.sinh-vien-sider-menu .ant-menu-item:hover .sinh-vien-menu-icon {
+  color: #ffffff !important;
+}
+
+.sinh-vien-sider-menu .ant-menu-item-selected {
+  background: #3f9468 !important;
+  color: #ffffff !important;
+}
+
+.sinh-vien-sider-menu .ant-menu-item-selected .ant-menu-item-icon,
+.sinh-vien-sider-menu .ant-menu-item-selected a {
+  color: #ffffff !important;
+}
+
+.sinh-vien-sider-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
+  color: #111827 !important;
+}
+
+.sinh-vien-sider-menu .ant-menu-sub.ant-menu-inline {
+  background: transparent !important;
+}
+
+.sinh-vien-sider-menu .ant-menu-sub .ant-menu-item {
+  text-transform: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #111827 !important;
+  padding-left: 44px !important;
+  height: 38px !important;
+  line-height: 38px !important;
+}
+
+.sinh-vien-sider-menu .ant-menu-sub .ant-menu-item a {
+  color: #111827 !important;
+}
+
+.sinh-vien-sider-menu .ant-menu-sub .ant-menu-item:hover {
+  background: #4a9468 !important;
+  color: #ffffff !important;
+}
+
+.sinh-vien-sider-menu .ant-menu-sub .ant-menu-item:hover a {
+  color: #ffffff !important;
+}
+
+.sinh-vien-menu-badge .ant-badge-count {
+  box-shadow: none;
+}
