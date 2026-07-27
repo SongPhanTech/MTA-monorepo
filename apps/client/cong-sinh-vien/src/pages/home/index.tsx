@@ -6,6 +6,7 @@ import { useFindUniqueCurriculumVersion, useFindUniqueUserProfile } from "@works
 import { LichCongTac } from "@workspace/ui"
 import { DanhSachThongBao } from "@components/commons/thong-bao"
 import { Col, Divider, Row, Typography } from "antd"
+import { $Enums } from "@workspace/db/client"
 import { useMemo } from "react"
 
 const { Title } = Typography
@@ -95,7 +96,11 @@ function Page() {
     const validSubjects =
       curriculumVersion?.trainingBlocks
         .flatMap((block) => block.subjects)
-        .filter((subjectItem) => subjectItem.useForFinalScore === true) || []
+        .filter(
+          (subjectItem) =>
+            subjectItem.useForFinalScore === true &&
+            subjectItem.type === $Enums.SubjectRequirementType.Mandatory
+        ) || []
 
     let totalWeightedScore = 0
     let totalCredits = 0
