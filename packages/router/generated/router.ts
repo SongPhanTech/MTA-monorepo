@@ -12,6 +12,7 @@ export default {
     "LOP_GIANG_DAY_NHAP_DIEM_QUA_TRINH": "/lop-giang-day/nhap-diem-qua-trinh",
     "LOP_GIANG_DAY_NHAP_DIEM_THI": "/lop-giang-day/nhap-diem-thi",
     "LOP_GIANG_DAY_TAI_GIANG_VIEN": "/lop-giang-day/tai-giang-vien",
+    "LOP_GIANG_DAY_THONG_KE_LOP": "/lop-giang-day/thong-ke-lop",
     "LOP_QUAN_LY_ID": "/lop-quan-ly/[id]",
     "LOP_QUAN_LY_ID_SINH_VIEN_STUDENTID": "/lop-quan-ly/[id]/sinh-vien/[studentId]",
     "LOP_QUAN_LY_ID_SINH_VIEN_STUDENTID_KET_QUA_HOC_TAP": "/lop-quan-ly/[id]/sinh-vien/[studentId]/ket-qua-hoc-tap",
@@ -22,7 +23,8 @@ export default {
     "NGHIEN_CUU": "/nghien-cuu",
     "THONG_BAO": "/thong-bao"
   },
-  "DANG_KY_HOC": {
+  "CONG_HOC_VIEN": {},
+  "CONG_SINH_VIEN": {
     "CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao",
     "DANG_KY_HOC": "/dang-ky-hoc",
     "DONG_BO_DU_LIEU": "/dong-bo-du-lieu",
@@ -33,6 +35,7 @@ export default {
     "KHAO_SAT": "/khao-sat",
     "THOI_KHOA_BIEU": "/thoi-khoa-bieu"
   },
+  "DANG_KY_HOC": {},
   "KHAO_THI": {
     "BAO_CAO_KHAO_SAT_GIANG_VIEN": "/bao-cao-khao-sat-giang-vien",
     "HOME": "/home",
@@ -215,6 +218,7 @@ export default {
     "QUAN_LY_HO_SO_ME": "/quan-ly-ho-so/me",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
+  "QL_LICH_CONG_TAC": {},
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",
     "HOI_THOAI_ID": "/hoi-thoai/[id]",

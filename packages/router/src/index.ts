@@ -1116,6 +1116,13 @@ const NAVIGATION: NavigationType = {
             description: "Danh sách lớp",
           },
           {
+            id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_LOP_GIANG_DAY_THONG_KE_LOP,
+            label: "Thống kê giảng dạy",
+            icon: GraduationCap,
+            path: ROUTER_PATH.CONG_GIANG_VIEN.LOP_GIANG_DAY_THONG_KE_LOP,
+            description: "Thống kê giảng dạy",
+          },
+          {
             id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_LOP_GIANG_DAY_TAI_GIANG_VIEN,
             label: "Tải giảng dạy",
             icon: GraduationCap,
