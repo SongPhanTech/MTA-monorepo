@@ -31,6 +31,7 @@ export default {
     "INDEX": "/",
     "KET_QUA_HOC_TAP": "/ket-qua-hoc-tap",
     "KHAO_SAT": "/khao-sat",
+    "LICH_SU_DANG_KY_HOC": "/lich-su-dang-ky-hoc",
     "THOI_KHOA_BIEU": "/thoi-khoa-bieu"
   },
   "KHAO_THI": {

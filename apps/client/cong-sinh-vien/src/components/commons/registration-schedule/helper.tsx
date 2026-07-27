@@ -167,11 +167,64 @@ const buildScheduleMap = (registeredClasses: GetClassesInfo200ItemSubjectClassIt
   return { scheduleMap }
 }
 
+export type ScheduleConflictSummary = {
+  courseId: string
+  courseLabel: string
+  conflictsWith: string[]
+}
+
+/** Collect unique subjects that have overlapping periods with other subjects. */
+const getConflictSummaries = (
+  registeredClasses: GetClassesInfo200ItemSubjectClassItem[]
+): ScheduleConflictSummary[] => {
+  const { scheduleMap } = buildScheduleMap(registeredClasses)
+  const byId = new Map<string, ScheduleConflictSummary>()
+
+  scheduleMap.forEach((dayMap) => {
+    dayMap.forEach((stacks) => {
+      stacks.forEach((stack) => {
+        stack.forEach((course) => {
+          if (!course.isConflict || !course.conflictsWith?.length) return
+          const existing = byId.get(course.id)
+          if (existing) {
+            course.conflictsWith.forEach((label) => {
+              if (!existing.conflictsWith.includes(label)) {
+                existing.conflictsWith.push(label)
+              }
+            })
+          } else {
+            byId.set(course.id, {
+              courseId: course.id,
+              courseLabel: `${course.code} - ${course.name}`,
+              conflictsWith: [...course.conflictsWith],
+            })
+          }
+        })
+      })
+    })
+  })
+
+  return Array.from(byId.values())
+}
+
+/** Whether adding `candidate` to current registrations would create a schedule overlap. */
+const wouldConflictWithRegistered = (
+  candidate: GetClassesInfo200ItemSubjectClassItem,
+  registeredClasses: GetClassesInfo200ItemSubjectClassItem[]
+) => {
+  if (!candidate?.id) return false
+  const already = registeredClasses.some((c) => c.id === candidate.id)
+  const combined = already ? registeredClasses : [...registeredClasses, candidate]
+  return getConflictSummaries(combined).some((c) => c.courseId === candidate.id)
+}
+
 const registrationScheduleHelper = {
   DAYS,
   PERIODS,
   SESSIONS,
   buildScheduleMap,
+  getConflictSummaries,
+  wouldConflictWithRegistered,
 }
 
 export default registrationScheduleHelper

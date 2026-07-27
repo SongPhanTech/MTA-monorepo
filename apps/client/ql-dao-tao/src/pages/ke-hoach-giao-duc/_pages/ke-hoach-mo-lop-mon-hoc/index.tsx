@@ -495,6 +495,26 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                       )
 
                       const res = await sqlTransaction([
+                        // Cập nhật maxStudent/examType cho LMH đã mở (kể cả OFFICIAL)
+                        ...Object.entries(values.subjectVersions || {})
+                          .filter(([_, v]) => v.isEdit)
+                          .map(([subjectId, v]) => ({
+                            model: "SubjectClass" as const,
+                            operation: "updateMany" as const,
+                            data: {
+                              where: {
+                                semesterId,
+                                trainingObjectTypeId,
+                                type: type,
+                                subjectId,
+                                cancelled: false,
+                              },
+                              data: {
+                                maxStudent: v.maxStudent || 0,
+                                examType: v.examType,
+                              },
+                            },
+                          })),
                         {
                           model: "SubjectClass" as const,
                           operation: "deleteMany",
@@ -539,7 +559,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                         throw new Error("Lỗi khi mở LMH")
                       }
                       debouncedRefetch()
-                      message.success("Mở LMH thành công")
+                      message.success("Lưu thành công")
                     } catch (error: any) {
                       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
                     } finally {

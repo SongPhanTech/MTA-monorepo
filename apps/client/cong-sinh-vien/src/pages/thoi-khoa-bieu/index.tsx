@@ -321,7 +321,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
               },
               {
                 title: "Số SV",
-                width: 72,
+                width: 100,
                 align: "center",
                 type: "order",
                 distinctFilters: ["maxStudent"],
@@ -420,7 +420,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                 ),
               },
             ]}
-            scroll={{ x: 1420 }}
+            scroll={{ x: 1450 }}
             data={subjectClasses}
             maxHeight={"calc(100vh - 250px)"}
             pagination={{

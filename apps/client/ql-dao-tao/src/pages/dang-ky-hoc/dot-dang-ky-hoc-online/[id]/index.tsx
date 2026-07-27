@@ -3,6 +3,7 @@ import Table from "@components/commons/table"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useClassRegisterStatus } from "@hooks/classRegisterStatus"
+import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { ClassRegisterStatus } from "@workspace/db"
 import {
@@ -10,9 +11,10 @@ import {
   useFindManyClassRegisterLogs,
   useFindManySubjectClass,
   useFindUniqueClassRegisterSession,
+  useUpdateManyClassRegisterLogs,
 } from "@workspace/db/hooks"
 import { ROUTER_PATH } from "@workspace/router"
-import { Col, Divider, Row, Tag, Tooltip } from "antd"
+import { Button, Col, Divider, Flex, Form, Input, Modal, Row, Select, Tag, Tooltip, message } from "antd"
 import dayjs from "dayjs"
 import { TriangleAlert } from "lucide-react"
 import { useRouter } from "next/router"
@@ -23,8 +25,13 @@ export default function ClassRegisterLogs() {
   const id = router.query.id as string
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+  const [statusModalOpen, setStatusModalOpen] = useState(false)
+  const [form] = Form.useForm<{ status: ClassRegisterStatus; reason?: string }>()
+  const { showSpinner, hideSpinner } = useSpinner()
   const { classRegisterStatusOptions, getClassRegisterStatusColor, getClassRegisterStatusLabel } =
     useClassRegisterStatus()
+  const { mutateAsync: updateManyClassRegisterLogs } = useUpdateManyClassRegisterLogs()
   const [filters, setFilters] = useState<FilterProps>({
     name: "",
     code: "",
@@ -48,11 +55,12 @@ export default function ClassRegisterLogs() {
   const where = useMemo(
     () => ({
       classRegisterSessionId: id,
+      deletedAt: null,
       ...(filters.code
         ? {
             student: {
               code: {
-                contains: filters.name,
+                contains: filters.code,
                 mode: "insensitive" as const,
               },
             },
@@ -88,10 +96,9 @@ export default function ClassRegisterLogs() {
     [id, filters.name, filters.code, filters.subjectClassId, filters.classRegisterStatus]
   )
 
-  const { data } = useFindManyClassRegisterLogs(
+  const { data, refetch } = useFindManyClassRegisterLogs(
     {
       where,
-
       include: {
         student: {
           include: {
@@ -101,6 +108,8 @@ export default function ClassRegisterLogs() {
         subjectClass: true,
       },
       orderBy: [{ student: { userProfile: { firstName: "asc" } } }, { createdAt: "desc" }],
+      take: numberOfPages,
+      skip: (currentPage - 1) * numberOfPages,
     },
     {
       enabled: !!id,
@@ -109,10 +118,7 @@ export default function ClassRegisterLogs() {
 
   const { data: count } = useCountClassRegisterLogs(
     {
-      where: {
-        ...where,
-        deletedAt: null,
-      },
+      where,
     },
     {
       enabled: !!id,
@@ -135,6 +141,51 @@ export default function ClassRegisterLogs() {
     }
   )
 
+  const selectedStatus = Form.useWatch("status", form)
+
+  function handleOpenStatusModal() {
+    if (selectedRowKeys.length === 0) {
+      message.warning("Vui lòng chọn ít nhất một đơn đăng ký")
+      return
+    }
+    form.setFieldsValue({
+      status: ClassRegisterStatus.SUCCESS,
+      reason: undefined,
+    })
+    setStatusModalOpen(true)
+  }
+
+  async function handleUpdateStatus() {
+    try {
+      const values = await form.validateFields()
+      showSpinner()
+      await updateManyClassRegisterLogs({
+        where: {
+          id: { in: selectedRowKeys as string[] },
+          classRegisterSessionId: id,
+          deletedAt: null,
+        },
+        data: {
+          status: values.status,
+          reason:
+            values.status === ClassRegisterStatus.FAILED
+              ? values.reason?.trim() || null
+              : null,
+        },
+      })
+      message.success(`Đã cập nhật trạng thái cho ${selectedRowKeys.length} đơn đăng ký`)
+      setStatusModalOpen(false)
+      setSelectedRowKeys([])
+      form.resetFields()
+      await refetch()
+    } catch (error: any) {
+      if (error?.errorFields) return
+      message.error(error?.info?.message || error?.message || "Cập nhật trạng thái thất bại")
+    } finally {
+      hideSpinner()
+    }
+  }
+
   return (
     <div>
       <Divider orientation="left" orientationMargin={0}>
@@ -149,13 +200,28 @@ export default function ClassRegisterLogs() {
           .filter(Boolean)
           .join(" - ")}
       </Divider>
-      <Row gutter={[16, 0]}>
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Flex justify="end" gap={8} wrap>
+            <Button type="primary" disabled={selectedRowKeys.length === 0} onClick={handleOpenStatusModal}>
+              Cập nhật trạng thái
+              {selectedRowKeys.length > 0 ? ` (${selectedRowKeys.length})` : ""}
+            </Button>
+          </Flex>
+        </Col>
         <Col span={24}>
           <Table
+            rowKey="id"
             filters={filters}
             setFilters={(value) => {
               setFilters(value)
               setCurrentPage(1)
+              setSelectedRowKeys([])
+            }}
+            rowSelection={{
+              selectedRowKeys,
+              onChange: setSelectedRowKeys,
+              preserveSelectedRowKeys: true,
             }}
             columns={[
               {
@@ -256,6 +322,43 @@ export default function ClassRegisterLogs() {
           />
         </Col>
       </Row>
+
+      <Modal
+        title={`Cập nhật trạng thái (${selectedRowKeys.length} đơn)`}
+        open={statusModalOpen}
+        onOk={handleUpdateStatus}
+        onCancel={() => {
+          setStatusModalOpen(false)
+          form.resetFields()
+        }}
+        okText="Cập nhật"
+        cancelText="Hủy"
+        destroyOnClose
+      >
+        <Form form={form} layout="vertical" initialValues={{ status: ClassRegisterStatus.SUCCESS }}>
+          <Form.Item
+            name="status"
+            label="Trạng thái"
+            rules={[{ required: true, message: "Vui lòng chọn trạng thái" }]}
+          >
+            <Select
+              options={classRegisterStatusOptions.map((o) => ({
+                value: o.value,
+                label: o.label,
+              }))}
+            />
+          </Form.Item>
+          {selectedStatus === ClassRegisterStatus.FAILED && (
+            <Form.Item
+              name="reason"
+              label="Lý do từ chối"
+              rules={[{ required: true, message: "Vui lòng nhập lý do từ chối" }]}
+            >
+              <Input.TextArea rows={3} placeholder="Áp dụng cho tất cả đơn đã chọn" />
+            </Form.Item>
+          )}
+        </Form>
+      </Modal>
     </div>
   )
 }

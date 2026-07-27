@@ -1,7 +1,7 @@
 import { classUnregister } from "@workspace/libs/api/portal"
 import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem"
 import { useMutation } from "@tanstack/react-query"
-import { Badge, message, Popover } from "antd"
+import { Alert, Badge, message } from "antd"
 import { useMemo, useState } from "react"
 import registrationScheduleHelper, { DAYS, SESSIONS } from "./helper"
 import "./registration-schedule.css"
@@ -26,10 +26,20 @@ const ThoiKhoaBieuDangKy = (props: ISubjectClassTime) => {
 
   const [removedIds, setRemovedIds] = useState<Set<string>>(new Set())
 
-  const { scheduleMap } = useMemo(() => {
-    const displayClasses = registeredClasses.filter((c) => !removedIds.has(c.id ?? ""))
-    return registrationScheduleHelper.buildScheduleMap(displayClasses)
-  }, [registeredClasses, removedIds])
+  const displayClasses = useMemo(
+    () => registeredClasses.filter((c) => !removedIds.has(c.id ?? "")),
+    [registeredClasses, removedIds]
+  )
+
+  const { scheduleMap } = useMemo(
+    () => registrationScheduleHelper.buildScheduleMap(displayClasses),
+    [displayClasses]
+  )
+
+  const conflictSummaries = useMemo(
+    () => registrationScheduleHelper.getConflictSummaries(displayClasses),
+    [displayClasses]
+  )
 
   const { mutate: unregisterMutate, isPending: isUnregistering } = useMutation({
     mutationFn: async (subjectClassId: string) => {
@@ -68,6 +78,31 @@ const ThoiKhoaBieuDangKy = (props: ISubjectClassTime) => {
 
   return (
     <div className="timetable-container" id="print-timetable">
+      {conflictSummaries.length > 0 && (
+        <Alert
+          type="error"
+          showIcon
+          className="mb-3 not-print"
+          message="Cảnh báo trùng lịch học"
+          description={
+            <div className="text-sm">
+              <p className="mb-2">
+                Bạn đang đăng ký các học phần bị trùng tiết. Vui lòng hủy đăng ký hoặc chọn lớp khác
+                để thay đổi lịch học.
+              </p>
+              <ul className="mb-0 list-disc pl-4">
+                {conflictSummaries.map((item) => (
+                  <li key={item.courseId}>
+                    <span className="font-medium">{item.courseLabel}</span>
+                    {" trùng với "}
+                    {item.conflictsWith.join(", ")}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          }
+        />
+      )}
       <table className="timetable">
         <thead>
           <tr>

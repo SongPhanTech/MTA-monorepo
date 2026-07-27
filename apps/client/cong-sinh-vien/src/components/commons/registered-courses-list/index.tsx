@@ -1,4 +1,5 @@
 import ThoiKhoaBieuDangKy from "@components/commons/registration-schedule"
+import registrationScheduleHelper from "@components/commons/registration-schedule/helper"
 import Select from "@components/commons/select"
 import TableCollapse from "@components/commons/tableCollapse"
 import { cn } from "@lib/utils"
@@ -141,10 +142,33 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
 
       return res
     },
-    onSuccess: (res) => {
+    onSuccess: (res, subjectClassIds) => {
       if (res?.status === 200) {
         refetchClassesInfo()
         message.success("Đăng ký thành công")
+
+        const registeredIds = new Set(
+          (registeredClasses ?? []).map((c) => c.id).filter((id): id is string => Boolean(id))
+        )
+        const newlyRegistered =
+          classesInfo?.status === 200
+            ? (classesInfo.data
+                ?.flatMap((e) => e?.subjectClass ?? [])
+                ?.filter((sc) => subjectClassIds.includes(sc?.id ?? "")) ?? [])
+            : []
+
+        const nextRegistered = [
+          ...(registeredClasses ?? []),
+          ...newlyRegistered.filter((sc) => sc?.id && !registeredIds.has(sc.id)),
+        ]
+
+        const conflicts = registrationScheduleHelper.getConflictSummaries(nextRegistered)
+        if (conflicts.some((c) => subjectClassIds.includes(c.courseId))) {
+          message.warning(
+            "Lịch học bị trùng tiết với môn đã đăng ký. Vui lòng hủy đăng ký hoặc chọn lớp khác để thay đổi.",
+            6
+          )
+        }
       } else {
         message.error(res.data?.message || "Đăng ký thất bại")
       }
@@ -212,6 +236,12 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
           <div className="flex items-center gap-2 rounded-sm mx-5 my-3 p-1.5 bg-green-50/50 border border-green-400">
             <p className="text-[11px] font-medium text-green-600">
               Môn học đã đăng ký sẽ được tô màu xanh lá
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 rounded-sm mx-5 mb-3 p-1.5 bg-red-50/50 border border-red-300">
+            <p className="text-[11px] font-medium text-red-600">
+              Học phần trùng tiết sẽ hiện màu đỏ kèm cảnh báo — vui lòng hủy hoặc chọn lớp khác
             </p>
           </div>
 
@@ -478,11 +508,26 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
 
                 const handleConfirm = () => handleClassRegister([record?.id])
 
+                const willConflict = registrationScheduleHelper.wouldConflictWithRegistered(
+                  record as GetClassesInfo200ItemSubjectClassItem,
+                  registeredClasses ?? []
+                )
+
                 return (
                   <Popconfirm
-                    title="Xác nhận đăng ký học phần?"
+                    title={
+                      willConflict
+                        ? "Lớp này trùng tiết với môn đã đăng ký. Vẫn đăng ký?"
+                        : "Xác nhận đăng ký học phần?"
+                    }
+                    description={
+                      willConflict
+                        ? "Sau khi đăng ký, vui lòng hủy một trong các lớp trùng lịch hoặc chọn lớp khác."
+                        : undefined
+                    }
                     okText="Đăng ký"
                     cancelText="Đóng"
+                    okButtonProps={willConflict ? { danger: true } : undefined}
                     disabled={isDisabled}
                     onConfirm={handleConfirm}
                   >

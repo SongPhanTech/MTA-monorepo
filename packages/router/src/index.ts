@@ -108,6 +108,12 @@ const NAVIGATION: NavigationType = {
         icon: CalendarRange,
         path: ROUTER_PATH.DANG_KY_HOC.DANG_KY_HOC,
       },
+      {
+        id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_LICH_SU_DANG_KY_HOC,
+        label: "Lịch sử đăng ký học",
+        icon: ScrollText,
+        path: ROUTER_PATH.DANG_KY_HOC.LICH_SU_DANG_KY_HOC,
+      },
       // {
       //   id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_DONG_BO_DU_LIEU,
       //   label: "Đồng bộ dữ liệu",

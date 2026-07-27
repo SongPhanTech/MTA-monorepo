@@ -159,6 +159,7 @@ export type FilterProps = {
   subjectClassId?: string
   decisionNo?: string
   classRegisterStatus?: ClassRegisterStatus[]
+  classRegisterSessionId?: string | string[]
   isTeaching?: boolean[]
   subjectClassIds?: string[]
   trainingObjectTypeId?: string
