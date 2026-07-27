@@ -253,3 +253,120 @@
 .sinh-vien-menu-badge .ant-badge-count {
   box-shadow: none;
 }
+
+.ant-table-wrapper .ant-table,
+.ant-table-wrapper .ant-table-container,
+.ant-table-wrapper .ant-table-content {
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th:first-child {
+  border-top-left-radius: 8px !important;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th:last-child {
+  border-top-right-radius: 8px !important;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th {
+  background-color: #f3f4f6 !important;
+  color: #111827 !important;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+.ant-table-wrapper .ant-table-container {
+  border: 1px solid #e5e7eb !important;
+}
+
+.ant-table-tbody > tr > td {
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr:hover > td {
+  background-color: #f8fafc !important;
+}
+
+.ant-table {
+  height: calc(100% - 24px);
+}
+
+.ant-table-wrapper div {
+  height: 100%;
+}
+
+.ant-pagination-options .ant-select-dropdown {
+  bottom: 100% !important;
+  top: auto !important;
+  min-height: 150px;
+}
+
+.ant-table-empty .ant-table-wrapper .ant-table-tbody > tr > td {
+  border-bottom: 0px solid #f0f0f0;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-page-enter {
+  animation: pageEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.ant-card {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.ant-btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.35);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-up-delay-1 {
+  animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-up-delay-2 {
+  animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+  opacity: 0;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+

@@ -84,6 +84,11 @@ const useLopGiangDayGiangVien = () => {
         managementOrganization: { select: { sMa: true } },
       },
     },
+    _count: {
+      select: {
+        subjectClassStudent: true,
+      },
+    },
     mainLecturer: {
       select: {
         code: true,
@@ -134,6 +139,7 @@ const useLopGiangDayGiangVien = () => {
           tenMonHoc: item.subject?.name ?? "",
           soTinChi: item.subject?.credit ?? null,
           loaiLop: item.type ?? null,
+          soSinhVien: item._count?.subjectClassStudent ?? 0,
           hinhThucThi: item.examType ? getExamTypeLabel(item.examType) : "",
           trangThaiNhapDiem: trangThai.label,
           trangThaiNhapDiemColor: trangThai.color,

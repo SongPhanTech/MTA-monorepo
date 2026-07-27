@@ -252,43 +252,38 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
   }
 
   return (
-    <div>
+    <div className="animate-page-enter">
       <Row gutter={[8, 8]}>
         <Col span={24}>
-          <Col span={24}>
-            <Divider
-              orientation="center"
-              className="
-    uppercase !my-0 text-lg font-semibold
-    [&::before]:border-gray-950
-    [&::after]:border-gray-950
-  "
-              orientationMargin={0}
-            >
-              Thời khoá biểu{" "}
-              {displaySemester
-                ? `${displaySemester.name} - ${displaySemester.schoolYear?.name}`
-                : ""}
-            </Divider>
-          </Col>
-          <Table
-            header={
-              <Row gutter={[8, 8]} justify="end" align="middle">
-                <Col span={12} md={8} lg={6}>
-                  <Select
-                    style={{ width: "100%" }}
-                    placeholder="Chọn học kỳ"
-                    value={selectedSemesterId}
-                    onChange={handleSemesterChange}
-                    options={allSemesters.map((s) => ({
-                      label: `${s.name} - ${s.schoolYear?.name}`,
-                      value: s.id,
-                    }))}
-                    allowClear={false}
-                  />
-                </Col>
-              </Row>
-            }
+          <div className="bg-white rounded-xl border border-gray-200/80 shadow-sm flex flex-col overflow-hidden">
+            <div className="px-5 py-3.5 border-b border-gray-100 bg-slate-50/80 flex items-center justify-between">
+              <span className="font-semibold uppercase tracking-wide text-sm text-[#004725] flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#028850] animate-pulse-glow" />
+                Thời khoá biểu{" "}
+                {displaySemester
+                  ? `${displaySemester.name} - ${displaySemester.schoolYear?.name}`
+                  : ""}
+              </span>
+            </div>
+            <div className="p-4">
+              <Table
+                header={
+                  <Row gutter={[8, 8]} justify="end" align="middle">
+                    <Col span={12} md={8} lg={6}>
+                      <Select
+                        style={{ width: "100%" }}
+                        placeholder="Chọn học kỳ"
+                        value={selectedSemesterId}
+                        onChange={handleSemesterChange}
+                        options={allSemesters.map((s) => ({
+                          label: `${s.name} - ${s.schoolYear?.name}`,
+                          value: s.id,
+                        }))}
+                        allowClear={false}
+                      />
+                    </Col>
+                  </Row>
+                }
             rowKey="id"
             scrollable
             filters={filters}
@@ -437,6 +432,8 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
               },
             }}
           />
+            </div>
+          </div>
         </Col>
       </Row>
     </div>

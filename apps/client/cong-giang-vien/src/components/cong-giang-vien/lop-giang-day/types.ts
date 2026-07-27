@@ -20,6 +20,7 @@ export interface LopGiangDayRow {
   tenMonHoc: string
   soTinChi: number | null
   loaiLop: SubjectClassType | null
+  soSinhVien: number
   hinhThucThi: string
   trangThaiNhapDiem: string
   trangThaiNhapDiemColor: string

@@ -119,39 +119,41 @@ function Page() {
   }, [curriculumVersion, convertScore])
 
   return (
-    <div>
-      <Row gutter={[24, 24]}>
+    <div className="flex flex-col gap-6">
+      <Row gutter={[20, 20]}>
         <Col xs={24} lg={18}>
-          <div className="bg-white rounded border-gray-200 border h-full flex flex-col">
-            <div className="p-4">
-              <Divider
-                orientation="center"
-                className="font-semibold uppercase my-0 mt-2.5 text-2xl after:border-t-gray-500 before:border-t-gray-500"
-              >
+          <div className="bg-white rounded-xl border border-gray-200/80 shadow-sm h-full flex flex-col overflow-hidden animate-fade-in-up">
+            <div className="px-5 py-3.5 border-b border-gray-100 bg-slate-50/80 flex items-center justify-between">
+              <span className="font-semibold uppercase tracking-wide text-sm text-[#004725] flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#028850] animate-pulse-glow" />
                 Thời khoá biểu
-              </Divider>
+              </span>
             </div>
-            <div className="flex-1 px-4 py-1.5">
+            <div className="flex-1 p-4">
               <LichCongTac onlyMySchedule />
             </div>
           </div>
         </Col>
-        <Col xs={24} md={6} className="flex flex-col gap-4">
-          <CardStudyResult
-            gpaScore={gpaScore}
-            curriculumVersion={{
-              requiredCredits: curriculumVersion?.requiredCredits ?? 0,
-              electiveCredits: curriculumVersion?.electiveCredits ?? 0,
-            }}
-            academicRanking={academicRanking || "-"}
-          />
-          <div className="flex min-h-0 flex-col rounded-lg bg-white border border-gray-200 shadow-sm h-[500px] overflow-hidden mt-2">
-            <div className="flex shrink-0 items-center justify-between gap-2 border-b border-gray-100 px-4 py-3 bg-white">
-              <span className="text-sm font-bold uppercase tracking-wide text-[#004725]">
+
+        <Col xs={24} lg={6} className="flex flex-col gap-5">
+          <div className="animate-fade-in-up-delay-1 rounded-xl overflow-hidden">
+            <CardStudyResult
+              gpaScore={gpaScore}
+              curriculumVersion={{
+                requiredCredits: curriculumVersion?.requiredCredits ?? 0,
+                electiveCredits: curriculumVersion?.electiveCredits ?? 0,
+              }}
+              academicRanking={academicRanking || "-"}
+            />
+          </div>
+          <div className="flex min-h-0 flex-col rounded-xl bg-white border border-gray-200/80 shadow-sm h-[500px] overflow-hidden animate-fade-in-up-delay-2">
+            <div className="flex shrink-0 items-center justify-between gap-2 border-b border-gray-100 px-4 py-3 bg-slate-50/80">
+              <span className="text-xs font-semibold uppercase tracking-wide text-[#004725] flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#028850] animate-pulse-glow" />
                 Thông báo
               </span>
             </div>
-            <div className="flex-1 overflow-y-auto p-2 bg-[#f9fafb]">
+            <div className="flex-1 overflow-y-auto p-2.5 bg-[#f9fafb]">
               <DanhSachThongBao />
             </div>
           </div>
