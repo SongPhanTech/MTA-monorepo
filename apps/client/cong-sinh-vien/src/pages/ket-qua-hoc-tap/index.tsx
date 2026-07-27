@@ -580,7 +580,7 @@ export default function StudentScoreClassPage() {
   )
 
   return (
-    <div>
+    <div className="animate-page-enter">
       <Row gutter={[8, 8]}>
         <Col span={24}>
           {/* Row nút thêm */}
@@ -907,7 +907,6 @@ export default function StudentScoreClassPage() {
                 width: 250,
               },
             ]}
-            data={manualScoreData}
             pagination={false}
           />
         </Col>

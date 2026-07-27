@@ -18,7 +18,7 @@ const CardStudyResult = (props: CardStudyResultProps) => {
   const { gpaScore, curriculumVersion, academicRanking } = props
 
   return (
-    <div className="bg-white rounded-md overflow-hidden border border-gray-200 border-solid flex flex-col">
+    <div className="bg-white rounded-xl overflow-hidden border border-gray-200/80 shadow-sm flex flex-col">
       <div className="px-4 py-2 border-b border-gray-200 bg-green-700">
         <Title className="mb-0 uppercase font-medium text-white" level={4}>
           Kết quả học tập
@@ -58,12 +58,13 @@ const CardStudyResult = (props: CardStudyResultProps) => {
           <Progress
             type="circle"
             size={"small"}
+            strokeColor="#319c68ff"
             percent={
               (gpaScore.totalCredits /
                 ((curriculumVersion?.requiredCredits ?? 0) +
                   (curriculumVersion?.electiveCredits ?? 0)) || 1) * 100
             }
-            format={() => <span>{gpaScore.totalCredits}</span>}
+            format={() => <span className="text-[#004725] font-semibold">{gpaScore.totalCredits}</span>}
           />
 
           <div className="flex flex-col justify-between items-start gap-1">

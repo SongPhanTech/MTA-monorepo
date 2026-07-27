@@ -361,21 +361,18 @@ export default function TrainingProgramSubjects() {
   const treeData = buildOrgTree(manageOrgData)
 
   return (
-    <Fragment>
-      <Divider
-        orientation="center"
-        orientationMargin={0}
-        className="
-    uppercase !my-0 text-lg font-semibold
-    [&::before]:border-gray-950
-    [&::after]:border-gray-950
-  "
-      >
-        CTĐT toàn khoá: {[initialValue?.code, initialValue?.name].filter(Boolean).join(" - ")}
-      </Divider>
+    <div className="animate-page-enter">
       <Row gutter={[16, 0]}>
         <Col span={24}>
-          <TableCollapse
+          <div className="bg-white rounded-xl border border-gray-200/80 shadow-sm flex flex-col overflow-hidden">
+            <div className="px-5 py-3.5 border-b border-gray-100 bg-slate-50/80 flex items-center justify-between">
+              <span className="font-semibold uppercase tracking-wide text-sm text-[#004725] flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#028850] animate-pulse-glow" />
+                CTĐT toàn khoá: {[initialValue?.code, initialValue?.name].filter(Boolean).join(" - ")}
+              </span>
+            </div>
+            <div className="p-4">
+              <TableCollapse
             header={
               <div className="flex gap-2">
                 <p className="flex gap-2 items-center">
@@ -817,9 +814,11 @@ export default function TrainingProgramSubjects() {
             // )}
             pagination={false}
           />
+            </div>
+          </div>
         </Col>
       </Row>
-    </Fragment>
+    </div>
   )
 }
 TrainingProgramSubjects.getLayout = function getLayout(page: React.ReactElement) {
