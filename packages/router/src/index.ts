@@ -36,7 +36,7 @@ import {
   Users,
   ArrowLeftRight,
 } from "lucide-react"
-import { DANG_KY_HOC_PERMISSION } from "../generated/dang-ky-hoc"
+import { CONG_SINH_VIEN_PERMISSION } from "../generated/cong-sinh-vien"
 import { KHAO_THI_PERMISSION } from "../generated/khao-thi"
 import { QL_DAO_TAO_PERMISSION } from "../generated/ql-dao-tao"
 import { QL_HO_SO_PERMISSION } from "../generated/ql-ho-so"
@@ -68,64 +68,64 @@ type NavigationType = Record<
 >
 
 const NAVIGATION: NavigationType = {
-  DANG_KY_HOC: {
+  CONG_SINH_VIEN: {
     label: "Cổng thông tin sinh viên",
     menus: [
       {
-        id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_HOME,
+        id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_HOME,
         label: "Trang chủ",
         icon: House,
-        path: ROUTER_PATH.DANG_KY_HOC.HOME,
+        path: ROUTER_PATH.CONG_SINH_VIEN.HOME,
         description: "Thông tin thời khoá biểu, lịch thi, thông báo...",
       },
       {
-        id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_HO_SO_CA_NHAN,
+        id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_HO_SO_CA_NHAN,
         label: "Hồ sơ cá nhân",
         icon: User2Icon,
-        path: ROUTER_PATH.DANG_KY_HOC.HO_SO_CA_NHAN,
+        path: ROUTER_PATH.CONG_SINH_VIEN.HO_SO_CA_NHAN,
       },
       {
-        id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_THOI_KHOA_BIEU,
+        id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_THOI_KHOA_BIEU,
         label: "Thời khoá biểu",
         icon: CalendarRange,
-        path: ROUTER_PATH.DANG_KY_HOC.THOI_KHOA_BIEU,
+        path: ROUTER_PATH.CONG_SINH_VIEN.THOI_KHOA_BIEU,
       },
       {
-        id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_CHUONG_TRINH_DAO_TAO,
+        id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_CHUONG_TRINH_DAO_TAO,
         label: "Chương trình đào tạo",
         icon: Library,
-        path: ROUTER_PATH.DANG_KY_HOC.CHUONG_TRINH_DAO_TAO,
+        path: ROUTER_PATH.CONG_SINH_VIEN.CHUONG_TRINH_DAO_TAO,
       },
       {
-        id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_KET_QUA_HOC_TAP,
+        id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_KET_QUA_HOC_TAP,
         label: "Kết quả học tập",
         icon: AwardIcon,
-        path: ROUTER_PATH.DANG_KY_HOC.KET_QUA_HOC_TAP,
+        path: ROUTER_PATH.CONG_SINH_VIEN.KET_QUA_HOC_TAP,
       },
       {
-        id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_DANG_KY_HOC,
+        id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_DANG_KY_HOC,
         label: "Đăng ký học",
         icon: CalendarRange,
-        path: ROUTER_PATH.DANG_KY_HOC.DANG_KY_HOC,
+        path: ROUTER_PATH.CONG_SINH_VIEN.DANG_KY_HOC,
       },
       {
-        id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_LICH_SU_DANG_KY_HOC,
+        id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_LICH_SU_DANG_KY_HOC,
         label: "Lịch sử đăng ký học",
         icon: ScrollText,
-        path: ROUTER_PATH.DANG_KY_HOC.LICH_SU_DANG_KY_HOC,
+        path: ROUTER_PATH.CONG_SINH_VIEN.LICH_SU_DANG_KY_HOC,
       },
       // {
-      //   id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_DONG_BO_DU_LIEU,
+      //   id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_DONG_BO_DU_LIEU,
       //   label: "Đồng bộ dữ liệu",
       //   icon: ArrowLeftRight,
-      //   path: ROUTER_PATH.DANG_KY_HOC.DONG_BO_DU_LIEU,
+      //   path: ROUTER_PATH.CONG_SINH_VIEN.DONG_BO_DU_LIEU,
       //   description: "Nhập/xuất dữ liệu giữa phần mềm nội bộ và cổng đăng ký học",
       // },
       {
-        id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_KHAO_SAT,
+        id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_KHAO_SAT,
         label: "Khảo sát",
         icon: BinocularsIcon,
-        path: ROUTER_PATH.DANG_KY_HOC.KHAO_SAT,
+        path: ROUTER_PATH.CONG_SINH_VIEN.KHAO_SAT,
       },
     ],
   },
@@ -1194,7 +1194,7 @@ const NAVIGATION: NavigationType = {
 const PUBLIC_ROUTER = [ROUTER_PATH.KHAO_THI.LAM_KHAO_SAT_ID.replace("[id]", "")]
 
 export {
-  DANG_KY_HOC_PERMISSION,
+  CONG_SINH_VIEN_PERMISSION,
   KHAO_THI_PERMISSION,
   CONG_GIANG_VIEN_PERMISSION,
   PUBLIC_ROUTER,

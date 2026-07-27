@@ -1,6 +1,6 @@
 import NAVIGATION, {
   type CONG_GIANG_VIEN_PERMISSION,
-  type DANG_KY_HOC_PERMISSION,
+  type CONG_SINH_VIEN_PERMISSION,
   type KHAO_THI_PERMISSION,
   type MenuItem,
   type QL_DAO_TAO_PERMISSION,
@@ -55,7 +55,7 @@ const useAbility = () => {
     can: (
       subject:
         | KHAO_THI_PERMISSION
-        | DANG_KY_HOC_PERMISSION
+        | CONG_SINH_VIEN_PERMISSION
         | QL_DAO_TAO_PERMISSION
         | TRO_LY_AO_PERMISSION
         | QL_HO_SO_PERMISSION
@@ -77,7 +77,7 @@ const useAbility = () => {
     canSome: (
       subject:
         | KHAO_THI_PERMISSION
-        | DANG_KY_HOC_PERMISSION
+        | CONG_SINH_VIEN_PERMISSION
         | QL_DAO_TAO_PERMISSION
         | TRO_LY_AO_PERMISSION
         | QL_HO_SO_PERMISSION
