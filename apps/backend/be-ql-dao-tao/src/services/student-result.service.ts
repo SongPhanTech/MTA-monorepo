@@ -114,6 +114,9 @@ const ThongTinTichLuy = async (
           },
           orderBy: { rankOrder: "asc" },
         },
+        trainingObjectType: {
+          select: { type: true },
+        },
       },
     })
 
@@ -166,6 +169,9 @@ const ThongTinTichLuy = async (
       },
     })
 
+    const isCivilian = trainingCourse.trainingObjectType?.type === "CIVILIAN"
+    const shouldFilterByCurrentSemester = currentSemesterId && isCivilian
+
     // Kiểm tra tổng tích lũy tín chỉ của sinh viên đến kỳ xác định
     // Lấy tất cả điểm (kể cả lớp học lại), sau đó tự nhóm + lấy điểm cao nhất theo môn
     const allSubjectScores = await prisma.studentSubjectScore.findMany({
@@ -174,7 +180,7 @@ const ThongTinTichLuy = async (
           {
             subjectClass: null,
             createdAt:
-              currentSemesterId && semesterEndDate
+              shouldFilterByCurrentSemester && semesterEndDate
                 ? {
                     gte: semesterStartDate,
                     lte: semesterEndDate,
@@ -185,7 +191,7 @@ const ThongTinTichLuy = async (
           },
           {
             subjectClass: {
-              ...(currentSemesterId
+              ...(shouldFilterByCurrentSemester
                 ? { semesterId: currentSemesterId }
                 : {
                     semester: {
