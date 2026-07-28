@@ -39,55 +39,47 @@ const CardStudyResult = (props: CardStudyResultProps) => {
       </div>
       <hr />
       <div className="flex flex-col px-4 pb-4 py-2.5 gap-2.5">
-        <div className="flex flex-row justify-between items-center h-full">
-          <div className="uppercase">Tín chỉ tích luỹ</div>
-          <div className="text-sm text-blue-600">
-            {Math.min(
-              100,
-              Number(
-                ((gpaScore.totalCredits || 0) /
-                  ((curriculumVersion?.requiredCredits ?? 0) +
-                    (curriculumVersion?.electiveCredits ?? 0) || 1)) *
-                  100
-              )
-            ).toFixed(1)}
-            % Hoàn thành
-          </div>
-        </div>
-        <div className="flex flex-row justify-start items-center gap-4">
-          <Progress
-            type="circle"
-            size={"small"}
-            strokeColor="#319c68ff"
-            percent={
-              (gpaScore.totalCredits /
-                ((curriculumVersion?.requiredCredits ?? 0) +
-                  (curriculumVersion?.electiveCredits ?? 0)) || 1) * 100
-            }
-            format={() => <span className="text-[#004725] font-semibold">{gpaScore.totalCredits}</span>}
-          />
+        {(() => {
+          const totalTargetCredits = curriculumVersion?.requiredCredits ?? 0
+          const earnedCredits = gpaScore.totalCredits || 0
+          const percent = Math.min(
+            100,
+            Number((earnedCredits / (totalTargetCredits || 1)) * 100)
+          ).toFixed(1)
+          const remainingCredits = totalTargetCredits - earnedCredits
 
-          <div className="flex flex-col justify-between items-start gap-1">
-            <div className="text-sm font-semibold">
-              {gpaScore.totalCredits}/
-              {(curriculumVersion?.requiredCredits ?? 0) +
-                (curriculumVersion?.electiveCredits ?? 0)}
-            </div>
+          return (
+            <>
+              <div className="flex flex-row justify-between items-center h-full">
+                <div className="uppercase">Tín chỉ tích luỹ</div>
+                <div className="text-sm text-blue-600">{percent}% Hoàn thành</div>
+              </div>
+              <div className="flex flex-row justify-start items-center gap-4">
+                <Progress
+                  type="circle"
+                  size={"small"}
+                  strokeColor="#319c68ff"
+                  percent={(earnedCredits / (totalTargetCredits || 1)) * 100}
+                  format={() => (
+                    <span className="text-[#004725] font-semibold">{earnedCredits}</span>
+                  )}
+                />
 
-            <div className="text-xs text-gray-400">
-              {(curriculumVersion?.requiredCredits ?? 0) +
-                (curriculumVersion?.electiveCredits ?? 0) -
-                (gpaScore.totalCredits || 0) <=
-              0
-                ? "Đã đủ điều kiện để xét tốt nghiệp"
-                : `Còn lại ${
-                    (curriculumVersion?.requiredCredits ?? 0) +
-                    (curriculumVersion?.electiveCredits ?? 0) -
-                    (gpaScore.totalCredits || 0)
-                  } tín chỉ để đạt điều kiện xét tốt nghiệp`}
-            </div>
-          </div>
-        </div>
+                <div className="flex flex-col justify-between items-start gap-1">
+                  <div className="text-sm font-semibold">
+                    {earnedCredits}/{totalTargetCredits}
+                  </div>
+
+                  <div className="text-xs text-gray-400">
+                    {remainingCredits <= 0
+                      ? "Đã đủ điều kiện để xét tốt nghiệp"
+                      : `Còn lại ${remainingCredits} tín chỉ để đạt điều kiện xét tốt nghiệp`}
+                  </div>
+                </div>
+              </div>
+            </>
+          )
+        })()}
       </div>
     </div>
   )
