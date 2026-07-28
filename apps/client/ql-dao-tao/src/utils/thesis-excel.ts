@@ -4301,3 +4301,207 @@ export const exportPhuLucHuongDanDoAn = async ({
     hideSpinner()
   }
 }
+
+export interface ProgressReportTableRow {
+  stt: number | string
+  studentName: string
+  thesisTitle: string
+  progressPercent: string
+  note: string
+}
+
+export interface ThesisProjectProgressExportItem {
+  id?: string
+  title?: string | null
+  firstCheckProgress?: number | null
+  secondCheckProgress?: number | null
+  isLanguage?: boolean | null
+  isProductProject?: boolean | null
+  subjectClass?: {
+    subject?: {
+      name?: string | null
+      managementOrganization?: {
+        sTen?: string | null
+      } | null
+    } | null
+  } | null
+  primarySupervisor?: {
+    organization?: {
+      sTen?: string | null
+    } | null
+  } | null
+  registrations?: Array<{
+    student?: {
+      userProfile?: {
+        fullname?: string | null
+      } | null
+      fixedClass?: {
+        name?: string | null
+        trainingCourse?: {
+          name?: string | null
+        } | null
+        curriculumVersion?: {
+          curriculum?: {
+            trainingMajor?: {
+              name?: string | null
+            } | null
+          } | null
+        } | null
+      } | null
+    } | null
+  }> | null
+}
+
+export interface ExportBaoCaoTienDoOptions {
+  projects: ThesisProjectProgressExportItem[]
+  checkTimes: "1" | "2"
+  showSpinner: () => void
+  hideSpinner: () => void
+  message: {
+    error: (content: string) => void
+    success: (content: string) => void
+    info?: (content: string) => void
+  }
+}
+
+export const exportBaoCaoTienDoDoAnTotNghiep = async ({
+  projects,
+  checkTimes,
+  showSpinner,
+  hideSpinner,
+  message,
+}: ExportBaoCaoTienDoOptions) => {
+  if (!projects?.length) {
+    message.error("Không có dữ liệu để xuất báo cáo tiến độ đồ án")
+    return
+  }
+
+  showSpinner()
+  try {
+    const firstProj = projects[0]
+    const firstStudent = firstProj?.registrations?.[0]?.student
+
+    const khoaVienRaw =
+      firstProj?.subjectClass?.subject?.managementOrganization?.sTen || "................"
+    const khoaVien = khoaVienRaw.replace(/^(Khoa|Viện)\s+/i, "")
+
+    const boMonRaw =
+      firstProj?.primarySupervisor?.organization?.sTen ||
+      firstProj?.subjectClass?.subject?.managementOrganization?.sTen ||
+      "................"
+    const boMon = boMonRaw.replace(/^Bộ môn\s+/i, "")
+    let chuyenNganh = ""
+    let khoa = ""
+
+    for (const proj of projects) {
+      if (!chuyenNganh) {
+        chuyenNganh =
+          proj.registrations?.[0]?.student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+          ""
+      }
+      if (!khoa) {
+        khoa =
+          proj.registrations?.[0]?.student?.fixedClass?.trainingCourse?.name ||
+          proj.registrations?.[0]?.student?.fixedClass?.name ||
+          ""
+      }
+      if (chuyenNganh && khoa) break
+    }
+
+    chuyenNganh = chuyenNganh.toUpperCase()
+    khoa = khoa.toUpperCase()
+
+    const table1Data: ProgressReportTableRow[] = []
+    const table2Data: ProgressReportTableRow[] = []
+    let stt1 = 1
+    let stt2 = 1
+
+    const threshold = checkTimes === "1" ? 50 : 90
+
+    projects.forEach((proj) => {
+      const studentName =
+        proj.registrations
+          ?.map((r) => r.student?.userProfile?.fullname)
+          .filter(Boolean)
+          .join(", ") || "Học viên"
+      const thesisTitle = proj.title || "Chưa có tên đề tài"
+      const rawProgress =
+        checkTimes === "1" ? proj.firstCheckProgress : proj.secondCheckProgress
+      const progressVal = Number(rawProgress || 0)
+      const progressPercent = `${progressVal}%`
+      const note = proj.isLanguage
+        ? "Tiếng Anh"
+        : proj.isProductProject
+          ? "Có sản phẩm"
+          : ""
+
+      const item = {
+        studentName,
+        thesisTitle,
+        progressPercent,
+        note,
+      }
+
+      if (progressVal >= threshold) {
+        table1Data.push({ stt: `${stt1++}.`, ...item })
+      } else {
+        table2Data.push({ stt: `${stt2++}.`, ...item })
+      }
+    })
+
+    const chuyenNganhVal = chuyenNganh && chuyenNganh.trim() ? chuyenNganh : "                                "
+    const khoaVal = khoa && khoa.trim() ? khoa : "            "
+
+    const tieuDePhu = `(CHUYÊN NGÀNH: ${chuyenNganhVal} , KHÓA: ${khoaVal})`
+
+    const dataPayload = {
+      khoaVien,
+      boMon,
+      checkTimes: checkTimes === "1" ? "1" : "2",
+      tieuDePhu,
+      chuyenNganh: chuyenNganhVal,
+      khoa: khoaVal,
+      table1:
+        table1Data.length > 0
+          ? table1Data
+          : [{ stt: "", studentName: "-", thesisTitle: "-", progressPercent: "-", note: "" }],
+      table2:
+        table2Data.length > 0
+          ? table2Data
+          : [{ stt: "", studentName: "-", thesisTitle: "-", progressPercent: "-", note: "" }],
+      kienNghi: "",
+    }
+
+    const response = await renderXlsxTemplate({
+      templatePath: "BaoCaoTienDoDoAnTotNghiep.xlsx",
+      prefix: "mta/luan-van",
+      fileName: `BaoCaoTienDoDoAnTotNghiep_Lan${checkTimes}.xlsx`,
+      mergeBlocksToOneSheet: false,
+      sheets: [
+        {
+          data: dataPayload,
+        },
+      ],
+    })
+
+    if (response.status !== 200) {
+      message.error("Đã xảy ra lỗi khi tạo file Excel từ template (Mẫu 02)")
+      return
+    }
+
+    const renderedBlob = response.data
+    if (renderedBlob instanceof Blob) {
+      downloadFile(renderedBlob, `BaoCaoTienDoDoAnTotNghiep_Lan${checkTimes}.xlsx`)
+      message.success("Xuất báo cáo kiểm tra tiến độ thành công")
+    } else {
+      message.error("Đã xảy ra lỗi khi tạo file Excel")
+    }
+  } catch (error) {
+    console.error("Lỗi xuất file Mẫu 02:", error)
+    message.error("Đã xảy ra lỗi khi xuất báo cáo Mẫu 02")
+  } finally {
+    hideSpinner()
+  }
+}
+
+
