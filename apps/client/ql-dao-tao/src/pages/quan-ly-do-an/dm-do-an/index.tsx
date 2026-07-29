@@ -63,6 +63,7 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import { SqlTransactionBodyItem } from "@workspace/libs/api/schemas"
 import {
   exportBaoCaoTienDoDoAnTotNghiep,
+  exportDanhSachTieuBanChamDATN,
   exportPhuLucHuongDanDoAn,
 } from "../../../utils/thesis-excel"
 
@@ -214,6 +215,20 @@ export default function DanhMucDoAn() {
     await exportBaoCaoTienDoDoAnTotNghiep({
       projects: projectsToExport,
       checkTimes,
+      showSpinner,
+      hideSpinner,
+      message,
+    })
+  }
+
+  const handleExportDanhSachTieuBan = async () => {
+    const projectsToExport =
+      selectedRowKeys.length > 0
+        ? allThesisProjects.filter((p: any) => selectedRowKeys.includes(p.id))
+        : allThesisProjects
+
+    await exportDanhSachTieuBanChamDATN({
+      projects: projectsToExport,
       showSpinner,
       hideSpinner,
       message,
@@ -791,6 +806,11 @@ export default function DanhMucDoAn() {
                           key: "2",
                           label: "Báo cáo kiểm tra tiến độ ĐATN",
                           onClick: () => setIsProgressModalOpen(true),
+                        },
+                        {
+                          key: "3",
+                          label: "Danh sách tiểu ban chấm ĐATN",
+                          onClick: handleExportDanhSachTieuBan,
                         },
                       ],
                     }}

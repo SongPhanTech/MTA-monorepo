@@ -4317,6 +4317,7 @@ export interface ThesisProjectProgressExportItem {
   secondCheckProgress?: number | null
   isLanguage?: boolean | null
   isProductProject?: boolean | null
+  council?: ThesisCouncil | null
   subjectClass?: {
     subject?: {
       name?: string | null
@@ -4337,8 +4338,14 @@ export interface ThesisProjectProgressExportItem {
       } | null
       fixedClass?: {
         name?: string | null
+        trainingMajor?: {
+          name?: string | null
+        } | null
         trainingCourse?: {
           name?: string | null
+          trainingObjectType?: {
+            name?: string | null
+          } | null
         } | null
         curriculumVersion?: {
           curriculum?: {
@@ -4501,6 +4508,355 @@ export const exportBaoCaoTienDoDoAnTotNghiep = async ({
   } catch (error) {
     console.error("Lỗi xuất file Mẫu 02:", error)
     message.error("Đã xảy ra lỗi khi xuất báo cáo Mẫu 02")
+  } finally {
+    hideSpinner()
+  }
+}
+
+export interface ThesisCouncilMemberProfile {
+  fullname?: string | null
+  rank?: { sTen?: string | null; name?: string | null; sMa?: string | null } | null
+  academicDegreeType?: {
+    sMa?: string | null
+    abbreviation?: string | null
+    name?: string | null
+    sTen?: string | null
+  } | null
+  academicRankType?: {
+    sMa?: string | null
+    abbreviation?: string | null
+    name?: string | null
+    sTen?: string | null
+  } | null
+  positionCPV?: { sTen?: string | null; name?: string | null } | null
+}
+
+export interface ThesisCouncilMemberExpert {
+  name?: string | null
+  position?: string | null
+  organization?: string | { sTen?: string | null; name?: string | null } | null
+  lecturer?: {
+    userProfile?: ThesisCouncilMemberProfile | null
+    organization?: string | { sTen?: string | null; name?: string | null } | null
+  } | null
+}
+
+export interface ThesisCouncilMember {
+  role: string
+  expert?: ThesisCouncilMemberExpert | null
+}
+
+export interface ThesisCouncil {
+  id?: string | null
+  name?: string | null
+  members?: ThesisCouncilMember[] | null
+}
+
+export interface ExportDanhSachTieuBanOptions {
+  projects: any[]
+  showSpinner: () => void
+  hideSpinner: () => void
+  message: {
+    error: (content: string) => void
+    success: (content: string) => void
+    info?: (content: string) => void
+  }
+}
+
+export const exportDanhSachTieuBanChamDATN = async ({
+  projects,
+  showSpinner,
+  hideSpinner,
+  message,
+}: ExportDanhSachTieuBanOptions) => {
+  if (!projects?.length) {
+    message.error("Không có dữ liệu để xuất danh sách tiểu ban")
+    return
+  }
+
+  showSpinner()
+  try {
+    const firstProj = projects[0]
+
+    const khoaVienRaw =
+      firstProj?.subjectClass?.subject?.managementOrganization?.sTen || "................"
+    const khoaVien = khoaVienRaw.replace(/^(Khoa|Viện)\s+/i, "")
+
+    const boMonRaw =
+      firstProj?.primarySupervisor?.organization?.sTen ||
+      firstProj?.subjectClass?.subject?.managementOrganization?.sTen ||
+      "................"
+    const boMon = boMonRaw.replace(/^Bộ môn\s+/i, "")
+
+    let khoa = ""
+    let doiTuong = "KỸ SƯ QUÂN SỰ"
+
+    for (const proj of projects) {
+      if (!khoa) {
+        khoa =
+          proj.registrations?.[0]?.student?.fixedClass?.trainingCourse?.name ||
+          proj.registrations?.[0]?.student?.fixedClass?.name ||
+          ""
+      }
+      const objName = proj.registrations?.[0]?.student?.fixedClass?.trainingCourse?.trainingObjectType?.name
+      if (objName) {
+        doiTuong = objName.toUpperCase()
+      }
+      if (khoa) break
+    }
+
+    const majorMap = new Map<
+      string,
+      Map<string, { council?: ThesisCouncil | null; projects: ThesisProjectProgressExportItem[] }>
+    >()
+
+    projects.forEach((proj) => {
+      const student = proj.registrations?.[0]?.student
+      const majorName =
+        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+        student?.fixedClass?.trainingMajor?.name ||
+        proj.subjectClass?.subject?.name ||
+        "..............."
+
+      if (!majorMap.has(majorName)) {
+        majorMap.set(majorName, new Map())
+      }
+      const councilMap = majorMap.get(majorName)!
+
+      const councilId = proj.council?.id || "NO_COUNCIL"
+      if (!councilMap.has(councilId)) {
+        councilMap.set(councilId, {
+          council: proj.council,
+          projects: [],
+        })
+      }
+      councilMap.get(councilId)!.projects.push(proj)
+    })
+
+    let majorStt = 1
+    const tieuBans: Array<{
+      majorTitle: string
+      name: string
+      truongTieuBan: string
+      phoTruongTieuBan: string
+      thuKy: string
+      uyVien1: string
+      uyVien2: string
+    }> = []
+
+    majorMap.forEach((councilMap, majorName) => {
+      let majorStudentCount = 0
+      let tieuBanStt = 1
+      const tieuBanCount = councilMap.size
+
+      councilMap.forEach(({ projects: projList }) => {
+        const studentCountInCouncil = projList.reduce(
+          (sum: number, p: ThesisProjectProgressExportItem) => sum + (p.registrations?.length || 0),
+          0
+        )
+        majorStudentCount += studentCountInCouncil
+      })
+
+      const majorTitleStr = `${majorStt++}. Chuyên ngành ${majorName}: ${tieuBanCount.toString().padStart(2, "0")} tiểu ban (${majorStudentCount} học viên)`
+      let isFirstSubcommitteeInMajor = true
+
+      councilMap.forEach(({ council }) => {
+        const tieuBanName = council?.name || `Tiểu ban ${tieuBanStt}`
+        tieuBanStt++
+
+        let truongTieuBan = ""
+        let phoTruongTieuBan = ""
+        let thuKy = ""
+        let uyVien1 = ""
+        let uyVien2 = ""
+
+        if (council?.members?.length) {
+          const roleOrder: Record<string, number> = {
+            CHAIRMAN: 1,
+            VICE_CHAIRMAN: 2,
+            SECRETARY: 3,
+            REVIEWER_1: 4,
+            REVIEWER_2: 5,
+            MEMBER: 6,
+          }
+
+          const sortedMembers = [...council.members].sort(
+            (a, b) => (roleOrder[a.role] || 99) - (roleOrder[b.role] || 99)
+          )
+
+          const formatMember = (m: ThesisCouncilMember) => {
+            const profile = m.expert?.lecturer?.userProfile
+            const rank = profile?.rank?.sTen || profile?.rank?.name || profile?.rank?.sMa || ""
+            let degree = profile?.academicDegreeType?.sMa || profile?.academicDegreeType?.abbreviation || profile?.academicDegreeType?.name || profile?.academicDegreeType?.sTen || ""
+            let academicRank = profile?.academicRankType?.sMa || profile?.academicRankType?.abbreviation || profile?.academicRankType?.name || profile?.academicRankType?.sTen || ""
+            const nameStr = profile?.fullname || m.expert?.name || "Chưa có tên"
+            const posStr = profile?.positionCPV?.sTen || profile?.positionCPV?.name || m.expert?.position || "Giảng viên"
+            const rawLecOrg = m.expert?.lecturer?.organization
+            const rawExpOrg = m.expert?.organization
+            const orgStr =
+              typeof rawLecOrg === "string"
+                ? rawLecOrg
+                : rawLecOrg?.sTen ||
+                  rawLecOrg?.name ||
+                  (typeof rawExpOrg === "string" ? rawExpOrg : rawExpOrg?.sTen || rawExpOrg?.name) ||
+                  "V2"
+
+            if (academicRank && !academicRank.endsWith(".")) academicRank += "."
+            if (degree && !degree.endsWith(".")) degree += "."
+
+            const titleDegreeStr = [rank, academicRank, degree].filter(Boolean).join(", ")
+            const fullTitleName = `${titleDegreeStr} ${nameStr}`.trim().replace(/\s+/g, " ")
+            return `${fullTitleName} - ${posStr}/${orgStr}`
+          }
+
+          const chair = sortedMembers.find((m) => m.role === "CHAIRMAN")
+          const viceChair = sortedMembers.find((m) => m.role === "VICE_CHAIRMAN" || m.role === "REVIEWER_1")
+          const sec = sortedMembers.find((m) => m.role === "SECRETARY")
+
+          if (chair) truongTieuBan = formatMember(chair)
+          if (viceChair) phoTruongTieuBan = formatMember(viceChair)
+          if (sec) thuKy = formatMember(sec)
+
+          const remainingMembers = sortedMembers.filter(
+            (m) => m !== chair && m !== viceChair && m !== sec
+          )
+
+          if (remainingMembers[0]) uyVien1 = formatMember(remainingMembers[0])
+          if (remainingMembers[1]) uyVien2 = formatMember(remainingMembers[1])
+        } else {
+          truongTieuBan = "Chưa phân công hội đồng"
+        }
+
+        tieuBans.push({
+          majorTitle: isFirstSubcommitteeInMajor ? majorTitleStr : "",
+          name: tieuBanName,
+          truongTieuBan,
+          phoTruongTieuBan,
+          thuKy,
+          uyVien1,
+          uyVien2,
+        })
+
+        isFirstSubcommitteeInMajor = false
+      })
+    })
+
+    const items: Array<{ label: string; info: string }> = []
+    const majorRowOffsets: number[] = []
+
+    for (const tb of tieuBans) {
+      if (tb.majorTitle) {
+        majorRowOffsets.push(items.length)
+        items.push({ label: tb.majorTitle, info: "" })
+      }
+      items.push({ label: `- ${tb.name}`, info: "" })
+      if (tb.truongTieuBan) items.push({ label: "Trưởng Tiểu ban:", info: tb.truongTieuBan })
+      if (tb.phoTruongTieuBan) items.push({ label: "Phó trưởng Tiểu ban:", info: tb.phoTruongTieuBan })
+      if (tb.thuKy) items.push({ label: "Thư ký:", info: tb.thuKy })
+      if (tb.uyVien1) items.push({ label: "Ủy viên:", info: tb.uyVien1 })
+      if (tb.uyVien2) items.push({ label: "", info: tb.uyVien2 })
+    }
+
+    const majorRowIndices = majorRowOffsets.map((offset) => 9 + offset)
+
+    const cleanKhoa = khoa.replace(/^Khó?a\s+/i, "").trim()
+
+    const dataPayload = {
+      khoaVien,
+      boMon,
+      khoa: cleanKhoa || "................",
+      doiTuong: doiTuong || "KỸ SƯ QUÂN SỰ",
+      items,
+    }
+
+    const response = await renderXlsxTemplate({
+      templatePath: "DanhSachTieuBanChamDATN.xlsx",
+      prefix: "mta/luan-van",
+      fileName: `DanhSachTieuBanChamDATN.xlsx`,
+      mergeBlocksToOneSheet: true,
+      sheets: [
+        {
+          data: dataPayload,
+        },
+      ],
+    })
+
+    if (response.status !== 200) {
+      message.error("Đã xảy ra lỗi khi tạo file Excel từ template (Mẫu 03)")
+      return
+    }
+
+    const renderedBlob = response.data
+    if (renderedBlob instanceof Blob) {
+      if (majorRowIndices.length > 0) {
+        try {
+          const arrayBuffer = await renderedBlob.arrayBuffer()
+          const zip = new PizZip(arrayBuffer)
+          let sheetXml = zip.file("xl/worksheets/sheet1.xml")?.asText()
+
+          if (sheetXml) {
+            const mergeTags = majorRowIndices.map((r) => `<mergeCell ref="B${r}:C${r}"/>`).join("")
+            if (sheetXml.includes("<mergeCells")) {
+              sheetXml = sheetXml.replace(/<mergeCells count="(\d+)">/, (_m, countStr) => {
+                const newCount = parseInt(countStr, 10) + majorRowIndices.length
+                return `<mergeCells count="${newCount}">${mergeTags}`
+              })
+            } else {
+              sheetXml = sheetXml.replace("</worksheet>", `<mergeCells count="${majorRowIndices.length}">${mergeTags}</mergeCells></worksheet>`)
+            }
+
+            let stylesXml = zip.file("xl/styles.xml")?.asText()
+            if (stylesXml) {
+              const boldFontTag = '<font><b/><sz val="12"/><name val="Times New Roman"/></font>'
+              let newFontIndex = 0
+              const fontCountMatch = stylesXml.match(/<fonts count="(\d+)"/)
+              if (fontCountMatch) {
+                newFontIndex = parseInt(fontCountMatch[1], 10)
+                stylesXml = stylesXml.replace(/<fonts count="(\d+)"/, `<fonts count="${newFontIndex + 1}"`)
+                stylesXml = stylesXml.replace("</fonts>", `${boldFontTag}</fonts>`)
+              }
+
+              const newXfTag = `<xf numFmtId="0" fontId="${newFontIndex}" fillId="0" borderId="0" xfId="0" applyFont="1"><alignment horizontal="left" vertical="center"/></xf>`
+              let newStyleIndex = 0
+              const xfCountMatch = stylesXml.match(/<cellXfs count="(\d+)"/)
+              if (xfCountMatch) {
+                newStyleIndex = parseInt(xfCountMatch[1], 10)
+                stylesXml = stylesXml.replace(/<cellXfs count="(\d+)"/, `<cellXfs count="${newStyleIndex + 1}"`)
+                stylesXml = stylesXml.replace("</cellXfs>", `${newXfTag}</cellXfs>`)
+              }
+
+              zip.file("xl/styles.xml", stylesXml)
+
+              for (const rowIdx of majorRowIndices) {
+                const cellBPattern = new RegExp(`<c r="B${rowIdx}"([^>]*)>`)
+                const cellBMatch: RegExpMatchArray | null = sheetXml.match(cellBPattern)
+                if (cellBMatch && cellBMatch[1] !== undefined) {
+                  const oldAttrs: string = cellBMatch[1]
+                  const newAttrs: string = oldAttrs.replace(/s="\d+"/, `s="${newStyleIndex}"`)
+                  sheetXml = sheetXml.replace(cellBPattern, `<c r="B${rowIdx}"${oldAttrs.includes('s=') ? newAttrs : oldAttrs + ` s="${newStyleIndex}"`}>`)
+                }
+              }
+            }
+            zip.file("xl/worksheets/sheet1.xml", sheetXml)
+            const modifiedBuffer = zip.generate({ type: "arraybuffer" })
+            const outBlob = new Blob([modifiedBuffer], { type: renderedBlob.type })
+            downloadFile(outBlob, `DanhSachTieuBanChamDATN.xlsx`)
+            message.success("Xuất danh sách tiểu ban thành công")
+            return
+          }
+        } catch (err) {
+          console.error("Lỗi PizZip merge:", err)
+        }
+      }
+
+      downloadFile(renderedBlob, `DanhSachTieuBanChamDATN.xlsx`)
+      message.success("Xuất danh sách tiểu ban thành công")
+    } else {
+      message.error("Đã xảy ra lỗi khi tạo file Excel")
+    }
+  } catch (error) {
+    console.error("Lỗi xuất file Mẫu 03:", error)
+    message.error("Đã xảy ra lỗi khi xuất báo cáo Mẫu 03")
   } finally {
     hideSpinner()
   }
