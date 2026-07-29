@@ -4424,7 +4424,8 @@ export const exportBaoCaoTienDoDoAnTotNghiep = async ({
           ?.map((r) => r.student?.userProfile?.fullname)
           .filter(Boolean)
           .join(", ") || "Học viên"
-      const thesisTitle = proj.title || "Chưa có tên đề tài"
+      const rawTitle = proj.title || "Chưa có tên đề tài"
+      const thesisTitle = rawTitle.replace(/\s*-\s*Sinh viên\s+.*$/gi, "").trim()
       const rawProgress =
         checkTimes === "1" ? proj.firstCheckProgress : proj.secondCheckProgress
       const progressVal = Number(rawProgress || 0)
@@ -4449,10 +4450,11 @@ export const exportBaoCaoTienDoDoAnTotNghiep = async ({
       }
     })
 
+    const cleanKhoa = khoa.replace(/^Khó?a\s+/i, "").trim()
     const chuyenNganhVal = chuyenNganh && chuyenNganh.trim() ? chuyenNganh : "                                "
-    const khoaVal = khoa && khoa.trim() ? khoa : "            "
+    const khoaVal = cleanKhoa ? cleanKhoa : "            "
 
-    const tieuDePhu = `(CHUYÊN NGÀNH: ${chuyenNganhVal} , KHÓA: ${khoaVal})`
+    const tieuDePhu = `(CHUYÊN NGÀNH: ${chuyenNganhVal}, KHÓA: ${khoaVal})`
 
     const dataPayload = {
       khoaVien,
