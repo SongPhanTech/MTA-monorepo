@@ -646,7 +646,7 @@ const PutQuestionModal = () => {
               </Col>
               {storageType === "khung" && (
                 <Col span={12}>
-                  <FormItem form={form} name="knowledgeBlockId" label="Chuẩn đầu ra" required>
+                  <FormItem form={form} name="knowledgeBlockId" label="Chuẩn đầu ra">
                     <Select
                       maxTagCount={"responsive"}
                       placeholder="Chọn chuẩn đầu ra"

@@ -1,0 +1,6 @@
+[
+  {
+    "file": "K21/01 Đại học/05 Bộ môn GCAL/Thiết bị phân xưởng rèn dập - dùng cho lớp CNCT Đạn - 22.06.26 - 30 phút/Nhom 1 - Cau hoi 3 diem.doc",
+    "error": "Word convert failed: Command failed: osascript /Users/minhah/code/MTA-monorepo/packages/database/scripts/word-extract-text.applescript /tmp/nhch-convert/word_in_1785394070716_27hvsx5mypoj.doc /tmp/nhch-convert/word_out_1785394070716_27hvsx5mypoj.txt"
+  }
+]

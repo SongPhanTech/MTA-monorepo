@@ -20,7 +20,7 @@ const useMenuList = () => {
     setIsUpdateAbility(true)
   }, [permissions])
 
-  const menus = NAVIGATION.DANG_KY_HOC.menus
+  const menus = NAVIGATION.CONG_SINH_VIEN.menus
 
   return menus
 }
