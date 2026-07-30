@@ -45,9 +45,16 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
     curriculumVersions.length > 0 ? curriculumVersions[0].id : ""
   )
   const [byCurriculum, setByCurriculum] = useState(1)
-  const { data: classStudentData } = useGetStudentInfo({
-    sessionId: sessionId,
-  })
+  const { data: classStudentData } = useGetStudentInfo(
+    {
+      sessionId: sessionId,
+    },
+    {
+      query: {
+        refetchOnWindowFocus: false,
+      },
+    }
+  )
 
   const studentData = useMemo(() => {
     if (classStudentData?.status !== 200) return null
@@ -87,12 +94,19 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
     },
   ].filter((item) => item.value)
 
-  const { data: classesInfo, refetch: refetchClassesInfo } = useGetClassesInfo({
-    sessionId,
-    curriculumVersionId,
-    byCurriculum: byCurriculum === 1 ? "true" : "false",
-    isRegistered: "false",
-  })
+  const { data: classesInfo, refetch: refetchClassesInfo } = useGetClassesInfo(
+    {
+      sessionId,
+      curriculumVersionId,
+      byCurriculum: byCurriculum === 1 ? "true" : "false",
+      isRegistered: "false",
+    },
+    {
+      query: {
+        refetchOnWindowFocus: false,
+      },
+    }
+  )
 
   const registeredClasses =
     classesInfo?.status === 200
@@ -143,7 +157,8 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
       return res
     },
     onSuccess: (res, subjectClassIds) => {
-      if (res?.status === 200) {
+      const status = Number(res?.status)
+      if (status === 200) {
         refetchClassesInfo()
         message.success("Đăng ký thành công")
 
@@ -169,8 +184,15 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
             6
           )
         }
+      } else if (status === 429 || status === 503) {
+        const data = (res as { data?: { message?: string } }).data
+        message.warning(
+          data?.message || "Hệ thống đang quá tải. Vui lòng đợi vài giây rồi thử lại.",
+          5
+        )
       } else {
-        message.error(res.data?.message || "Đăng ký thất bại")
+        const data = (res as { data?: { message?: string } }).data
+        message.error(data?.message || "Đăng ký thất bại")
       }
     },
     onError: (error: any) => {
@@ -179,6 +201,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
   })
 
   const handleClassRegister = (subjectClassIds: string[]) => {
+    if (isPendingClassRegister) return
     classRegisterMutate(subjectClassIds)
   }
 

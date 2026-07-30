@@ -12,6 +12,7 @@ import {
   rateLimitKey,
 } from "../services/redis-cache"
 import { $Enums, AcademicRankingBaseType, Prisma } from "@workspace/db"
+import { HTTPException } from "hono/http-exception"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -264,7 +265,11 @@ app.openapi(getClassesInfo, async (c) => {
               },
             },
           },
-          studentSemesterResult: true,
+          studentSemesterResult: {
+            take: 1,
+            orderBy: { semesterIndexInCourse: "desc" },
+            select: { totalFailedCredits: true },
+          },
         },
         orderBy: { createdAt: "desc" },
       },
@@ -574,6 +579,16 @@ const classRegister = createRoute({
         },
       },
     },
+    503: {
+      description: "Service overloaded",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+    },
   },
 })
 
@@ -646,7 +661,6 @@ app.openapi(classRegister, async (c) => {
     },
     where: {
       studentId,
-      semesterId: registerSession.semesterId,
       semester: { startDate: { lt: semester.startDate } },
     },
     orderBy: { semester: { startDate: "desc" } },
@@ -777,55 +791,107 @@ app.openapi(classRegister, async (c) => {
           registeredCredit + newClasses.reduce((acc, curr) => acc + (curr.subject?.credit ?? 0), 0)
 
         if (creditLimit.maxCredit && newTotalCredit > creditLimit.maxCredit) {
-          throw new Error(`Số tín chỉ tối đa là ${creditLimit.maxCredit}`)
+          return c.json({ message: `Số tín chỉ tối đa là ${creditLimit.maxCredit}` }, 400)
         }
       }
     }
   }
 
   const subjectClassLookup = new Map(subjectClasses.map((sc) => [sc.id, sc]))
-  const sortedClassIds = [...subjectClassIds].sort()
+  const sortedClassIds = [...new Set(subjectClassIds)].sort()
 
-  await prisma.$transaction(async (tx) => {
-    // Lock SubjectClass rows (sorted order prevents deadlocks)
-    await tx.$queryRaw`
-      SELECT id FROM "ql-dao-tao"."SubjectClass"
-      WHERE id IN (${Prisma.join(sortedClassIds)})
-      ORDER BY id
-      FOR UPDATE
-    `
+  if (sortedClassIds.length === 0) {
+    return c.json({ message: "Danh sách lớp đăng ký trống" }, 400)
+  }
 
-    const existingScores = await tx.studentSubjectScore.findMany({
-      where: { studentId, subjectClassId: { in: subjectClassIds } },
-      select: { subjectClassId: true },
-    })
-    if (existingScores.length > 0) {
-      const dupName = subjectClassLookup.get(existingScores[0]!.subjectClassId!)?.subject?.name
-      throw new Error(`Bạn đã đăng ký học phần ${dupName ?? "này"}`)
+  for (const id of sortedClassIds) {
+    if (!subjectClassLookup.has(id)) {
+      return c.json({ message: "Không tìm thấy lớp học phần" }, 400)
     }
+  }
 
-    for (const subjectClassId of subjectClassIds) {
-      const sc = subjectClassLookup.get(subjectClassId)
-      if (!sc) throw new Error("Không tìm thấy lớp học phần")
+  try {
+    // Giữ lock ngắn: 1 query lock + 2 query kiểm tra + 2 createMany (không N+1 trong transaction)
+    await prisma.$transaction(
+      async (tx) => {
+        await tx.$queryRaw`
+          SELECT id FROM "ql-dao-tao"."SubjectClass"
+          WHERE id IN (${Prisma.join(sortedClassIds)})
+          ORDER BY id
+          FOR UPDATE
+        `
 
-      const currentEnrolled = await tx.studentSubjectScore.count({ where: { subjectClassId } })
-      if ((sc.maxStudent || 0) <= currentEnrolled) {
-        throw new Error(`Lớp ${sc.subject.name} đã đủ số lượng sinh viên`)
+        const existingScores = await tx.studentSubjectScore.findMany({
+          where: { studentId, subjectClassId: { in: sortedClassIds } },
+          select: { subjectClassId: true },
+        })
+        if (existingScores.length > 0) {
+          const dupName = subjectClassLookup.get(existingScores[0]!.subjectClassId!)?.subject?.name
+          throw new HTTPException(400, {
+            message: `Bạn đã đăng ký học phần ${dupName ?? "này"}`,
+          })
+        }
+
+        const enrolledRows = await tx.studentSubjectScore.groupBy({
+          by: ["subjectClassId"],
+          where: { subjectClassId: { in: sortedClassIds } },
+          _count: { _all: true },
+        })
+        const enrolledMap = new Map(
+          enrolledRows.map((r) => [r.subjectClassId as string, r._count._all])
+        )
+
+        for (const subjectClassId of sortedClassIds) {
+          const sc = subjectClassLookup.get(subjectClassId)!
+          const currentEnrolled = enrolledMap.get(subjectClassId) || 0
+          if ((sc.maxStudent || 0) <= currentEnrolled) {
+            throw new HTTPException(400, {
+              message: `Lớp ${sc.subject.name} đã đủ số lượng sinh viên`,
+            })
+          }
+        }
+
+        await tx.studentSubjectScore.createMany({
+          data: sortedClassIds.map((subjectClassId) => ({
+            subjectClassId,
+            studentId,
+            subjectVersionId: subjectClassLookup.get(subjectClassId)!.subjectId,
+          })),
+        })
+
+        await tx.classRegisterLogs.createMany({
+          data: sortedClassIds.map((subjectClassId) => ({
+            classRegisterSessionId: sessionId,
+            studentId,
+            subjectClassId,
+          })),
+        })
+      },
+      {
+        // Tránh giữ connection/lock quá lâu khi DB nghẽn (~500 SV đồng thời)
+        maxWait: 5_000,
+        timeout: 10_000,
       }
-
-      await tx.studentSubjectScore.create({
-        data: { subjectClassId, studentId, subjectVersionId: sc.subjectId },
-      })
+    )
+  } catch (err) {
+    if (err instanceof HTTPException) {
+      return c.json({ message: err.message }, err.status)
     }
-
-    await tx.classRegisterLogs.createMany({
-      data: subjectClassIds.map((subjectClassId) => ({
-        classRegisterSessionId: sessionId,
-        studentId,
-        subjectClassId,
-      })),
-    })
-  })
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
+      return c.json({ message: "Bạn đã đăng ký học phần này" }, 409)
+    }
+    const msg = err instanceof Error ? err.message : String(err)
+    if (/timed out|timeout|P2024|Unable to start a transaction/i.test(msg)) {
+      return c.json(
+        {
+          message:
+            "Hệ thống đang quá tải do nhiều sinh viên đăng ký cùng lúc. Vui lòng thử lại sau vài giây.",
+        },
+        503
+      )
+    }
+    throw err
+  }
 
   await classRegisterCache.invalidateUser(session.id, sessionId)
 
@@ -1089,20 +1155,58 @@ app.openapi(getStudentInfo, async (c) => {
     where: { id: studentId },
   })
 
-  const latestSemesterResult = await prisma.studentSemesterResult.findFirst({
-    where: { studentId },
-    orderBy: { semesterIndexInCourse: "desc" },
-    select: {
-      rank: {
-        select: {
-          classification: true,
+  let latestSemesterResult: {
+    rank: { classification: string | null } | null
+    baseScore: AcademicRankingBaseType | null
+    cumulativeGpaBase4: Prisma.Decimal | null
+    cumulativeGpaBase10: Prisma.Decimal | null
+  } | null = null
+
+  if (sessionId) {
+    const registerSession = await prisma.classRegisterSession.findUnique({
+      where: { id: sessionId },
+      select: { semester: { select: { startDate: true } } },
+    })
+
+    if (registerSession?.semester?.startDate) {
+      // GPA/xếp loại hiển thị khi đăng ký học phải dựa trên kỳ đã hoàn thành gần nhất,
+      // không lấy dữ liệu kỳ hiện tại (có thể đang provisional/chưa chốt điểm).
+      latestSemesterResult = await prisma.studentSemesterResult.findFirst({
+        where: {
+          studentId,
+          semester: { startDate: { lt: registerSession.semester.startDate } },
         },
+        orderBy: { semester: { startDate: "desc" } },
+        select: {
+          rank: {
+            select: {
+              classification: true,
+            },
+          },
+          baseScore: true,
+          cumulativeGpaBase4: true,
+          cumulativeGpaBase10: true,
+        },
+      })
+    }
+  }
+
+  if (!latestSemesterResult) {
+    latestSemesterResult = await prisma.studentSemesterResult.findFirst({
+      where: { studentId },
+      orderBy: { semesterIndexInCourse: "desc" },
+      select: {
+        rank: {
+          select: {
+            classification: true,
+          },
+        },
+        baseScore: true,
+        cumulativeGpaBase4: true,
+        cumulativeGpaBase10: true,
       },
-      baseScore: true,
-      cumulativeGpaBase4: true,
-      cumulativeGpaBase10: true,
-    },
-  })
+    })
+  }
 
   let maxCredit = null
 

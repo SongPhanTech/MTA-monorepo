@@ -12,9 +12,13 @@ export default function DangKyHocPage() {
   const [_filters, _setFilters] = useState({
     searchText: "",
   })
-  const { data: classRegisterSession, isFetching, isLoading } = useGetClassRegisterSession()
+  const { data: classRegisterSession, isLoading } = useGetClassRegisterSession({
+    query: {
+      refetchOnWindowFocus: false,
+    },
+  })
 
-  if (isFetching || isLoading) {
+  if (isLoading && !classRegisterSession) {
     return <Loading />
   }
 

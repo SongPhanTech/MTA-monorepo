@@ -15,8 +15,8 @@ export const CACHE_TTL = {
   session: Number(process.env.REDIS_TTL_SESSION || 60),
   /** Info SV + maxCredit */
   student: Number(process.env.REDIS_TTL_STUDENT || 60),
-  /** get-classes-info — short TTL vì sĩ số thay đổi liên tục */
-  classesInfo: Number(process.env.REDIS_TTL_CLASSES_INFO || 5),
+  /** get-classes-info — short TTL vì sĩ số thay đổi; tăng mặc định để chịu tải đợt ĐK */
+  classesInfo: Number(process.env.REDIS_TTL_CLASSES_INFO || 20),
 } as const
 
 const PREFIX = "portal:crs"

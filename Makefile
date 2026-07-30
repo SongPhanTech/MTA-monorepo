@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= swan1
+SERVER_PROFILE ?= mta_online
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -226,10 +226,11 @@ package-cdn:
 deploy-cdn:
 	$(SCP) -O cdn.zip $(SERVER_HOST):$(FE_APP_DIR)/
 	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
-	docker compose -f $(FE_COMPOSE_FILE) down; \
-	rm -rf dang-ky-hoc-cdn/ lms-cdn/ ems-cdn/ hrm-cdn/ cong-giang-vien-cdn/; \
-	unzip -q cdn.zip && \
-	mv cdn/* . && \
+	docker compose -f $(FE_COMPOSE_FILE) down && \
+	rm -rf ./*-cdn cdn && \
+	unzip -q -o cdn.zip && \
+	mv -f cdn/* . && \
+	rm -rf cdn && \
 	docker compose -f $(FE_COMPOSE_FILE) up -d"
 
 deploy-all-be:
