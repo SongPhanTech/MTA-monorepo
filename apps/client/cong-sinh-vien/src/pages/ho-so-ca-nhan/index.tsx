@@ -375,27 +375,6 @@ const HoSoCaNhan = () => {
               width: 150,
             },
             {
-              title: "Năm học thứ",
-              dataIndex: "studyYear",
-              width: 100,
-              align: "center",
-            },
-            {
-              title: "HK thứ",
-              dataIndex: "semesterIndexInCourse",
-              width: 80,
-              align: "center",
-            },
-            {
-              title: "HK cuối",
-              dataIndex: "isLastSemester",
-              width: 80,
-              align: "center",
-              render: (isLast) => (
-                <Tag color={isLast ? "green" : "default"}>{isLast ? "Có" : "Không"}</Tag>
-              ),
-            },
-            {
               title: "GPA (4)",
               dataIndex: "gpaBase4",
               width: 90,
@@ -743,11 +722,6 @@ const HoSoCaNhan = () => {
               render: (_, __, index) => index + 1,
             },
             {
-              title: "Mã",
-              dataIndex: "code",
-              width: 120,
-            },
-            {
               title: "Tên học bổng",
               dataIndex: ["scholarship", "name"],
               width: 250,
@@ -765,9 +739,9 @@ const HoSoCaNhan = () => {
               render: (amount) =>
                 amount
                   ? new Intl.NumberFormat("vi-VN", {
-                      style: "currency",
-                      currency: "VND",
-                    }).format(amount)
+                    style: "currency",
+                    currency: "VND",
+                  }).format(amount)
                   : "",
             },
             {
@@ -809,11 +783,6 @@ const HoSoCaNhan = () => {
               width: 50,
               align: "center",
               render: (_, __, index) => index + 1,
-            },
-            {
-              title: "Mã",
-              dataIndex: "code",
-              width: 120,
             },
             {
               title: "Tên chứng chỉ",
@@ -901,11 +870,6 @@ const HoSoCaNhan = () => {
               render: (_, __, index) => index + 1,
             },
             {
-              title: "Mã",
-              dataIndex: "code",
-              width: 120,
-            },
-            {
               title: "Tên giải thưởng",
               dataIndex: ["award", "name"],
               width: 200,
@@ -972,11 +936,6 @@ const HoSoCaNhan = () => {
               render: (_, __, index) => index + 1,
             },
             {
-              title: "Mã",
-              dataIndex: "code",
-              width: 120,
-            },
-            {
               title: "Học kỳ",
               dataIndex: ["semester", "name"],
               width: 150,
@@ -1032,11 +991,6 @@ const HoSoCaNhan = () => {
               width: 50,
               align: "center",
               render: (_, __, index) => index + 1,
-            },
-            {
-              title: "Mã",
-              dataIndex: "code",
-              width: 120,
             },
             {
               title: "Học kỳ",
