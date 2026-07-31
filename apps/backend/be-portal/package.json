@@ -18,6 +18,7 @@
     "docxtemplater": "catalog:",
     "exceljs": "catalog:",
     "hono": "catalog:",
+    "kafkajs": "^2.2.4",
     "pizzip": "catalog:",
     "prom-client": "catalog:",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",

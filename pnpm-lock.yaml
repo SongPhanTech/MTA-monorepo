@@ -663,6 +663,9 @@ importers:
       hono:
         specifier: 'catalog:'
         version: 4.10.6
+      kafkajs:
+        specifier: ^2.2.4
+        version: 2.2.4
       pizzip:
         specifier: 'catalog:'
         version: 3.2.0
@@ -7183,6 +7186,10 @@ packages:
   jwt-decode@4.0.0:
     resolution: {integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==}
     engines: {node: '>=18'}
+
+  kafkajs@2.2.4:
+    resolution: {integrity: sha512-j/YeapB1vfPT2iOIUn/vxdyKEuhuY2PxMBvf5JWux6iSaukAccrMtXEY/Lb7OvavDhOWME589bpLrEdnVHjfjA==}
+    engines: {node: '>=14.0.0'}
 
   katex@0.16.25:
     resolution: {integrity: sha512-woHRUZ/iF23GBP1dkDQMh1QBad9dmr8/PAwNA54VrSOVYgI12MAcE14TqnDdQOdzyEonGzMepYnqBMYdsoAr8Q==}
@@ -15094,6 +15101,8 @@ snapshots:
       setimmediate: 1.0.5
 
   jwt-decode@4.0.0: {}
+
+  kafkajs@2.2.4: {}
 
   katex@0.16.25:
     dependencies:

@@ -13,9 +13,13 @@ import ExportRegistrationResultsApp from "./api/export-registration-results"
 import ImportTrainingDataApp from "./api/import-training-data"
 import { createPrismaClient } from "./config/database"
 import { checkIp } from "./middlewares/check-ip"
+import { startRegistrationWorker } from "./services/class-registration/worker"
 import { setupOpenApi } from "./utils/openapi"
 
 export const prisma: PrismaClient = createPrismaClient()
+
+// Background worker tiêu thụ course_registration_queue (Kafka) — chạy nền, không block server
+startRegistrationWorker(prisma)
 
 const app = new OpenAPIHono({ strict: false })
 

@@ -13,11 +13,10 @@ import {
   seatCache,
 } from "../services/redis-cache"
 import { $Enums, AcademicRankingBaseType, Prisma } from "@workspace/db"
-import {
-  assertNoScheduleConflict,
-  registerClasses,
-  toRegistrationError,
-} from "../services/class-registration"
+import { toRegistrationError } from "../services/class-registration"
+import { getJobStatus, setJobStatus } from "../services/class-registration/job-store"
+import { KAFKA_ENABLED, enqueueRegistration } from "../services/class-registration/kafka-queue"
+import { processRegistration } from "../services/class-registration/process"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -605,8 +604,16 @@ const classRegister = createRoute({
   },
   responses: {
     200: {
-      description: "Đăng ký thành công",
+      description: "Đăng ký thành công (xử lý đồng bộ — fallback khi queue không khả dụng)",
       content: { "application/json": { schema: z.object({ message: z.string() }) } },
+    },
+    202: {
+      description: "Yêu cầu đã vào hàng đợi — FE poll /registration-status/{jobId} để lấy kết quả",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string(), jobId: z.string() }),
+        },
+      },
     },
     400: {
       description: "Bad request",
@@ -664,231 +671,49 @@ app.openapi(classRegister, async (c) => {
     )
   }
 
-  const registerSession = await prisma.classRegisterSession.findUniqueOrThrow({
-    where: { id: sessionId },
-  })
-
-  if (
-    !registerSession.active ||
-    registerSession.startDate > new Date() ||
-    registerSession.endDate < new Date()
-  ) {
-    return c.json({ message: "Đợt đăng ký đã đóng" }, 404)
-  }
-
-  const profile = await prisma.userProfile.findUniqueOrThrow({
-    where: { id: session.id },
-    include: {
-      educationAndTraining: {
-        include: {
-          fixedClass: {
-            include: {
-              trainingCourse: true,
-            },
-          },
-        },
-        orderBy: { createdAt: "desc" },
-      },
-    },
-  })
-
-  if (profile.educationAndTraining.length === 0) {
-    return c.json({ message: "Bạn không có thông tin học vụ" }, 404)
-  }
-
-  const studentId =
-    profile.educationAndTraining.find(
-      (item) => curriculumVersionId && item.curriculumVersionId === curriculumVersionId
-    )?.id ?? (profile.educationAndTraining[0]?.id as string)
-
-  const semester = await prisma.semester.findUniqueOrThrow({
-    where: { id: registerSession.semesterId },
-    select: { startDate: true },
-  })
-
-  const nearestSemesterResult = await prisma.studentSemesterResult.findFirst({
-    select: {
-      gpaBase10: true,
-      gpaBase4: true,
-    },
-    where: {
-      studentId,
-      semester: { startDate: { lt: semester.startDate } },
-    },
-    orderBy: { semester: { startDate: "desc" } },
-  })
-  // TODO: check session => student trainingCourse
-
-  const subjectClasses = await prisma.subjectClass.findMany({
-    where: { id: { in: subjectClassIds } },
-    include: {
-      subject: {
-        include: {
-          prerequisiteSubject: true,
-          coRequisiteSubject: true,
-        },
-      },
-    },
-  })
-
-  const allPrerequisiteIds = [
-    ...new Set(subjectClasses.flatMap((sc) => sc.subject.prerequisiteSubject.map((p) => p.id))),
-  ]
-  const allCoRequisiteIds = [
-    ...new Set(subjectClasses.flatMap((sc) => sc.subject.coRequisiteSubject.map((p) => p.id))),
-  ]
-
-  if (allPrerequisiteIds.length > 0 || allCoRequisiteIds.length > 0) {
-    const passedPrerequisites = await prisma.studentSubjectScore.findMany({
-      where: {
-        studentId,
-        subjectVersionId: { in: allPrerequisiteIds },
-        finalScore: { gt: 4.0 },
-      },
-      select: { subjectVersionId: true },
-    })
-    const passedPrerequisiteIds = new Set(passedPrerequisites.map((h) => h.subjectVersionId))
-
-    const registeredCoRequisites = await prisma.classRegisterLogs.findMany({
-      where: {
-        studentId,
-        subjectClass: {
-          subjectId: { in: allCoRequisiteIds },
-        },
-      },
-      select: { subjectClass: { select: { subjectId: true } } },
-    })
-    const enrolledCoRequisites = await prisma.studentSubjectScore.findMany({
-      where: {
-        studentId,
-        subjectVersionId: { in: allCoRequisiteIds },
-      },
-      select: { subjectVersionId: true },
-    })
-
-    const registeredCoRequisiteSubjectIds = new Set([
-      ...registeredCoRequisites.map((r) => r.subjectClass.subjectId).filter(Boolean),
-      ...enrolledCoRequisites.map((r) => r.subjectVersionId),
-      ...subjectClasses.map((sc) => sc.subjectId),
-    ])
-
-    for (const sc of subjectClasses) {
-      const missingPrerequisites = sc.subject.prerequisiteSubject.filter(
-        (p) => !passedPrerequisiteIds.has(p.id)
-      )
-
-      const missingCoRequisites = sc.subject.coRequisiteSubject.filter(
-        (p) => !registeredCoRequisiteSubjectIds.has(p.id)
-      )
-
-      if (missingPrerequisites.length > 0) {
-        return c.json(
-          {
-            message: `Bạn chưa hoàn thành môn tiên quyết của môn ${sc.subject.name}: ${missingPrerequisites.map((p) => p.name).join(", ")}`,
-          },
-          400
-        )
-      }
-
-      if (missingCoRequisites.length > 0) {
-        return c.json(
-          {
-            message: `Bạn chưa đăng ký môn trước của môn ${sc.subject.name}: ${missingCoRequisites.map((p) => p.name).join(", ")}`,
-          },
-          400
-        )
-      }
-    }
-  }
-
-  if (nearestSemesterResult) {
-    const creditLimits = await prisma.classRegisterSessionCredit.findMany({
-      where: { classRegisterSessionId: sessionId },
-    })
-
-    if (creditLimits.length > 0) {
-      const creditLimit = creditLimits.find((item) => {
-        const gpa = (
-          item.baseScore === AcademicRankingBaseType.Base10
-            ? nearestSemesterResult.gpaBase10
-            : nearestSemesterResult.gpaBase4
-        ).toNumber()
-        const minGpa =
-          (item.baseScore === AcademicRankingBaseType.Base10 ? item.base10Min : item.base4Min) || 0
-        const maxGpa =
-          (item.baseScore === AcademicRankingBaseType.Base10 ? item.base10Max : item.base4Max) || 10
-        return gpa >= minGpa && gpa <= maxGpa
-      })
-
-      if (creditLimit) {
-        const registeredScores = await prisma.studentSubjectScore.findMany({
-          where: {
-            studentId,
-            subjectClass: { semesterId: registerSession.semesterId },
-          },
-          select: { subjectVersion: { select: { credit: true } } },
-        })
-
-        const registeredCredit = registeredScores.reduce(
-          (acc, curr) => acc + (curr.subjectVersion?.credit ?? 0),
-          0
-        )
-
-        const newClasses = await prisma.subjectClass.findMany({
-          where: { id: { in: subjectClassIds } },
-          select: { subject: { select: { credit: true } } },
-        })
-
-        const newTotalCredit =
-          registeredCredit + newClasses.reduce((acc, curr) => acc + (curr.subject?.credit ?? 0), 0)
-
-        if (creditLimit.maxCredit && newTotalCredit > creditLimit.maxCredit) {
-          return c.json({ message: `Số tín chỉ tối đa là ${creditLimit.maxCredit}` }, 400)
-        }
-      }
-    }
-  }
-
-  const subjectClassLookup = new Map(subjectClasses.map((sc) => [sc.id, sc]))
-  const sortedClassIds = [...new Set(subjectClassIds)].sort()
-
-  if (sortedClassIds.length === 0) {
+  if (subjectClassIds.length === 0) {
     return c.json({ message: "Danh sách lớp đăng ký trống" }, 400)
   }
 
-  for (const id of sortedClassIds) {
-    if (!subjectClassLookup.has(id)) {
-      return c.json({ message: "Không tìm thấy lớp học phần" }, 400)
-    }
-  }
-
-  try {
-    // Check trùng lịch ngoài transaction (chỉ dữ liệu của chính sinh viên → không cần lock)
-    await assertNoScheduleConflict(prisma, {
-      studentId,
-      semesterId: registerSession.semesterId,
-      newClassIds: sortedClassIds,
+  // ===== PRODUCER: không ghi DB trực tiếp — đẩy vào Kafka rồi trả 202 ngay =====
+  // Điều kiện trả 202: lưu được job status vào Redis (để FE poll) VÀ produce Kafka thành công.
+  // Thiếu một trong hai → fallback xử lý đồng bộ bên dưới (hệ thống không sập vì queue lỗi).
+  if (KAFKA_ENABLED) {
+    const jobId = crypto.randomUUID()
+    const statusStored = await setJobStatus({
+      jobId,
+      userId: session.id,
+      status: "pending",
+      message: "Yêu cầu đã được tiếp nhận và đang xử lý",
+      attempts: 0,
+      updatedAt: new Date().toISOString(),
     })
 
-    // Ghi danh với concurrency control — chống overselling.
-    // Phương án chọn qua env CLASS_REGISTER_LOCK_STRATEGY (optimistic | pessimistic)
-    await registerClasses(prisma, {
+    if (statusStored) {
+      const enqueued = await enqueueRegistration({
+        jobId,
+        userId: session.id,
+        sessionId,
+        subjectClassIds,
+        curriculumVersionId,
+        timestamp: new Date().toISOString(),
+        attempts: 0,
+      })
+
+      if (enqueued) {
+        return c.json({ message: "Yêu cầu đã được tiếp nhận và đang xử lý", jobId }, 202)
+      }
+    }
+    console.warn("[class-register] queue không khả dụng → fallback xử lý đồng bộ")
+  }
+
+  // ===== FALLBACK SYNC: chạy pipeline đăng ký trực tiếp (có DB Locking) =====
+  try {
+    await processRegistration(prisma, {
+      userId: session.id,
       sessionId,
-      studentId,
-      classIds: sortedClassIds,
-      classLookup: new Map(
-        sortedClassIds.map((id) => {
-          const sc = subjectClassLookup.get(id)!
-          return [
-            id,
-            {
-              subjectVersionId: sc.subjectId,
-              subjectName: sc.subject.name,
-              maxStudent: sc.maxStudent || 0,
-            },
-          ]
-        })
-      ),
+      subjectClassIds,
+      curriculumVersionId,
     })
   } catch (err) {
     const regErr = toRegistrationError(err)
@@ -901,16 +726,62 @@ app.openapi(classRegister, async (c) => {
     throw err
   }
 
-  await classRegisterCache.invalidateUser(session.id, sessionId)
-
-  // DB ghi thành công → trừ chỗ trống trên Redis bằng HINCRBY (atomic):
-  // sinh viên khác thấy sĩ số mới realtime, không cần query lại DB
-  await seatCache.adjust(
-    sessionId,
-    sortedClassIds.map((subjectClassId) => ({ subjectClassId, delta: 1 }))
-  )
-
   return c.json({ message: "success" }, 200)
+})
+
+// ===== API POLLING: FE gọi mỗi 2 giây tới khi nhận success/failed =====
+const registrationStatus = createRoute({
+  operationId: "get-registration-status",
+  path: "/registration-status/{jobId}",
+  tags: ["ClassRegister"],
+  summary: "Tra cứu kết quả đăng ký theo jobId",
+  description: "Đọc trạng thái job đăng ký từ Redis (pending | processing | success | failed)",
+  method: "get",
+  request: {
+    params: z.object({
+      jobId: z.string().openapi({ description: "jobId nhận được từ response 202" }),
+    }),
+  },
+  responses: {
+    200: {
+      description: "Trạng thái job",
+      content: {
+        "application/json": {
+          schema: z.object({
+            jobId: z.string(),
+            status: z.enum(["pending", "processing", "success", "failed"]),
+            message: z.string(),
+            attempts: z.number(),
+          }),
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy job (sai id, hết hạn, hoặc của người khác)",
+      content: { "application/json": { schema: z.object({ message: z.string() }) } },
+    },
+  },
+})
+
+app.openapi(registrationStatus, async (c) => {
+  const session = c.get("user")
+  const { jobId } = c.req.valid("param")
+
+  const job = await getJobStatus(jobId)
+  // Chỉ chủ job xem được kết quả
+  if (!job || job.userId !== session.id) {
+    return c.json({ message: "Không tìm thấy yêu cầu đăng ký" }, 404)
+  }
+
+  return c.json(
+    {
+      jobId: job.jobId,
+      status: job.status,
+      message: job.message,
+      attempts: job.attempts,
+    },
+    200
+  )
 })
 
 const classUnregister = createRoute({

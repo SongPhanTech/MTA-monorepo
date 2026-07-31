@@ -5,6 +5,7 @@ import TableCollapse from "@components/commons/tableCollapse"
 import { cn } from "@lib/utils"
 import { useMutation } from "@tanstack/react-query"
 import { $Enums } from "@workspace/db"
+import { customPortalFetch } from "@workspace/libs/api/custom-instance"
 import { classRegister, useGetClassesInfo, useGetStudentInfo } from "@workspace/libs/api/portal"
 import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem"
 import type { GetClassRegisterSession200ItemCreditLimitItem } from "@workspace/libs/api/schemas/getClassRegisterSession200ItemCreditLimitItem"
@@ -38,6 +39,54 @@ const BY_CURRICULUM_OPTIONS = [
     value: 0,
   },
 ]
+
+/** Đăng ký bất đồng bộ: BE trả 202 + jobId, FE poll trạng thái mỗi 2s tới khi có kết quả */
+const POLL_INTERVAL_MS = 2000
+const POLL_MAX_TRIES = 30 // ~60 giây
+
+type RegistrationJobResponse = {
+  status: number
+  data?: { status?: string; message?: string }
+}
+
+async function pollRegistrationResult(jobId: string): Promise<Awaited<ReturnType<typeof classRegister>>> {
+  for (let attempt = 0; attempt < POLL_MAX_TRIES; attempt++) {
+    await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS))
+
+    let job: RegistrationJobResponse | null = null
+    try {
+      job = await customPortalFetch<RegistrationJobResponse>(
+        `/api/class-register/registration-status/${jobId}`,
+        { method: "GET" }
+      )
+    } catch {
+      continue // lỗi mạng tạm thời -> poll tiếp
+    }
+
+    if (job?.status !== 200) continue
+    const jobStatus = job.data?.status
+
+    if (jobStatus === "success") {
+      return { status: 200, data: { message: "success" } } as unknown as Awaited<
+        ReturnType<typeof classRegister>
+      >
+    }
+    if (jobStatus === "failed") {
+      return { status: 400, data: { message: job.data?.message || "Đăng ký thất bại" } } as unknown as Awaited<
+        ReturnType<typeof classRegister>
+      >
+    }
+    // pending / processing -> tiếp tục chờ
+  }
+
+  return {
+    status: 503,
+    data: {
+      message:
+        "Yêu cầu đang được xử lý, vui lòng kiểm tra lại danh sách đã đăng ký sau ít phút.",
+    },
+  } as unknown as Awaited<ReturnType<typeof classRegister>>
+}
 
 const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
   const { sessionId, curriculumVersions, endDate, creditLimit, tuitionPerCredit } = props
@@ -153,6 +202,14 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
         subjectClassIds,
         curriculumVersionId,
       })
+
+      // 202: yêu cầu đã vào hàng đợi -> poll kết quả thật (isPending giữ nút disabled suốt lúc chờ)
+      if (Number(res?.status) === 202) {
+        const jobId = (res as { data?: { jobId?: string } }).data?.jobId
+        if (jobId) {
+          return await pollRegistrationResult(jobId)
+        }
+      }
 
       return res
     },

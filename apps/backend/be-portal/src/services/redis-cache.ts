@@ -87,8 +87,12 @@ async function getClient(): Promise<RedisClient | null> {
   return connecting
 }
 
-async function withRedis<T>(fn: (redis: RedisClient) => Promise<T>): Promise<T | null> {
-  if (!ENABLED && !RATE_LIMIT_ENABLED) return null
+/**
+ * Bọc mọi thao tác Redis: lỗi/timeout → log + trả null (fail-open), caller tự fallback.
+ * Export cho job-store của hàng đợi đăng ký học dùng chung kết nối.
+ */
+export async function withRedis<T>(fn: (redis: RedisClient) => Promise<T>): Promise<T | null> {
+  if (!REDIS_URL) return null
   const redis = await getClient()
   if (!redis) return null
   try {
