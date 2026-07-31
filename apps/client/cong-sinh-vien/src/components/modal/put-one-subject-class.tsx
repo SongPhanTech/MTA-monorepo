@@ -21,6 +21,7 @@ import {
   useFindUniqueSubjectClass,
   useUpdateSubjectClass,
 } from "@workspace/db/hooks"
+import { useSession } from "@workspace/auth/react"
 import { calcFinalScore } from "@workspace/libs/utils"
 import { PERIOD } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
@@ -45,6 +46,8 @@ export type PutOneSubjectClassType = SubjectClass & {
 }
 
 const PutOneSubjectClassModal = () => {
+  const { data: session } = useSession()
+  const currentUserId = session?.sDM_NhanVienId || ""
   const [form] = Form.useForm<PutOneSubjectClassType>()
   const [filterTable, setFilterTable] = useState<FilterTable>({
     fullname: "",
@@ -726,13 +729,19 @@ const PutOneSubjectClassModal = () => {
               setFilters={setFilterTable}
               rowKey="id"
               className="m-0"
-              onRow={(record) => ({
-                onClick: (e) => {
-                  e.preventDefault()
-                  onOpenDetailStudent(record.student?.id || "")
-                },
-                className: "cursor-pointer hover:text-primary",
-              })}
+              onRow={(record) => {
+                const isSelf =
+                  (record.student?.userProfileId && record.student.userProfileId === currentUserId) ||
+                  (record.student?.id && record.student.id === currentUserId)
+                if (!isSelf) return {}
+                return {
+                  onClick: (e) => {
+                    e.preventDefault()
+                    onOpenDetailStudent(record.student?.id || "")
+                  },
+                  className: "cursor-pointer hover:text-primary",
+                }
+              }}
               columns={[
                 {
                   title: "STT",

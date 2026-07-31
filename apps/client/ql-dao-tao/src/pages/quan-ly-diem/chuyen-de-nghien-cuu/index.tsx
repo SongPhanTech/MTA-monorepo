@@ -17,12 +17,14 @@ import {
   useFindManyTrainingCourse,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
+import { renderXlsxTemplate } from "@workspace/libs/api/training"
 import { whereOrganization } from "@workspace/libs/constants"
 import { previewExcelTemplate } from "../../../utils/excel-template"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
 import { Button, Col, Flex, Form, Modal, message, Row, Tooltip } from "antd"
 import dayjs from "dayjs"
+import { saveAs } from "file-saver"
 import ExcelJS from "exceljs"
 import { SquarePen } from "lucide-react"
 import { useMemo, useState } from "react"
@@ -1239,6 +1241,182 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                     }}
                   >
                     TK Số lượng CĐ HV
+                  </Button>
+                  <Button
+                    type="primary"
+                    icon={<FileOutlined />}
+                    onClick={async () => {
+                      if (!trainingCourseId) {
+                        return message.warning("Vui lòng chọn khoá học trước khi xuất thanh toán!")
+                      }
+
+                      if (!semesterId) {
+                        return message.warning("Vui lòng chọn kỳ học trước khi xuất thanh toán!")
+                      }
+
+                      interface SupervisorPayAmountRecord {
+                        role: string
+                        inAcademy: boolean
+                        amount?: number | string | null
+                      }
+
+                      interface ResearchTopicRecord {
+                        code?: string | null
+                        reportDate?: Date | string | null
+                        decisionNumber?: string | null
+                        decisionDate?: Date | string | null
+                      }
+
+                      const khoaVaKy = await sqlTransaction([
+                        {
+                          model: "TrainingCourse",
+                          operation: "findUnique",
+                          data: {
+                            where: { id: trainingCourseId },
+                            select: { name: true },
+                          },
+                        },
+                        {
+                          model: "Semester",
+                          operation: "findUnique",
+                          data: {
+                            where: { id: semesterId },
+                            select: { name: true },
+                          },
+                        },
+                        {
+                          model: "DefaultSupervisorPayAmount",
+                          operation: "findMany",
+                          data: {},
+                        },
+                        {
+                          model: "ThesisSession",
+                          operation: "findFirst",
+                          data: {
+                            where: {
+                              trainingCourses: {
+                                some: { id: trainingCourseId },
+                              },
+                              deletedAt: null,
+                            },
+                            select: { chief: true },
+                            orderBy: { createdAt: "desc" },
+                          },
+                        },
+                      ])
+                      const khoaVaKyData = khoaVaKy.data as [
+                        { name: string },
+                        { name: string },
+                        SupervisorPayAmountRecord[],
+                        { chief?: string } | null
+                      ]
+                      const khoaName = khoaVaKyData?.[0]?.name || ""
+                      const kyName = khoaVaKyData?.[1]?.name || ""
+                      const payAmounts = khoaVaKyData?.[2] || []
+                      const chiefName = khoaVaKyData?.[3]?.chief || "Lê Quốc Long"
+
+                      const getPayAmount = (role: string, inAcademy: boolean) => {
+                        const found = payAmounts.find(
+                          (item: SupervisorPayAmountRecord) =>
+                            item.role === role && item.inAcademy === inAcademy
+                        )
+                        if (found && found.amount) return Number(found.amount)
+                        if (role === "SINGLE" || role === "PRIMARY_SUPERVISOR") return 250000
+                        return 225000
+                      }
+
+                      let totalAmount = 0
+                      const tableRows = studentResearchTopicData.map((e, idx) => {
+                        const studentName =
+                          e.studentSubjectScore.student?.userProfile?.fullname || ""
+                        const studentCourse =
+                          e.studentSubjectScore.student?.fixedClass?.trainingCourse?.name || khoaName
+
+                        const supName =
+                          (getSupervisorName(e.supervisor, false, true) as string) || ""
+                        const coSupName =
+                          (getSupervisorName(e.coSupervisor, false, true) as string) || ""
+
+                        const isDual = !!(supName && coSupName)
+                        const supInAcademy = !!(e.supervisor?.lecturerId || e.supervisor?.lecturer)
+                        const coSupInAcademy = !!(e.coSupervisor?.lecturerId || e.coSupervisor?.lecturer)
+
+                        let cbhdText = ""
+                        let moneyText = ""
+
+                        if (isDual) {
+                          cbhdText = `1. ${supName}\n2. ${coSupName}`
+                          const supAmt = getPayAmount("PRIMARY_SUPERVISOR", supInAcademy)
+                          const coSupAmt = getPayAmount("CO_SUPERVISOR", coSupInAcademy)
+                          totalAmount += supAmt + coSupAmt
+                          moneyText = `${supAmt.toLocaleString("en-US")}\n${coSupAmt.toLocaleString("en-US")}`
+                        } else if (supName) {
+                          cbhdText = `1. ${supName}`
+                          const supAmt = getPayAmount("SINGLE", supInAcademy)
+                          totalAmount += supAmt
+                          moneyText = `${supAmt.toLocaleString("en-US")}`
+                        } else if (coSupName) {
+                          cbhdText = `1. ${coSupName}`
+                          const coSupAmt = getPayAmount("SINGLE", coSupInAcademy)
+                          totalAmount += coSupAmt
+                          moneyText = `${coSupAmt.toLocaleString("en-US")}`
+                        }
+
+                        const item = e as unknown as ResearchTopicRecord
+                        const decisionNum = item.decisionNumber || item.code || ""
+                        const decisionDate = item.decisionDate
+                          ? dayjs(item.decisionDate).format("DD/MM/YYYY")
+                          : item.reportDate
+                          ? dayjs(item.reportDate).format("DD/MM/YYYY")
+                          : ""
+                        const quyetDinhText = decisionNum
+                          ? `${decisionNum}${decisionDate ? ` ngày ${decisionDate}` : ""}`
+                          : ""
+
+                        return {
+                          stt: idx + 1,
+                          quyet_dinh: quyetDinhText,
+                          cbhd: cbhdText,
+                          hoc_vien: studentName,
+                          khoa: studentCourse,
+                          so_tien: moneyText,
+                          ky_nhan: "",
+                        }
+                      })
+
+                      const res = await previewExcelTemplate({
+                        previewKey: `cdnc-thanh-toan-kinh-phi-${trainingCourseId}-${semesterId}`,
+                        fileName: "ThanhToanKinhPhiHuongDanChuyenDe.xlsx",
+                        path: "ThanhToanKinhPhiHuongDanChuyenDe.xlsx",
+                        showGridLines: true,
+                        wrapText: true,
+                        prefix: "mta/luan-van",
+                        payload: [
+                          {
+                            data: {
+                              ngay: dayjs().format("DD"),
+                              thang: dayjs().format("MM"),
+                              nam: dayjs().format("YYYY"),
+                              tieu_de: "KINH PHÍ HƯỚNG DẪN CHUYÊN ĐỀ NGHỊÊN CỨU",
+                              dot_bao_ve: `Khoá: ${khoaName} - ${kyName}`,
+                              don_vi: `Chưa có đơn vị (${tableRows.length} học viên)`,
+                              tong_tien: totalAmount.toLocaleString("en-US").replace(/,/g, " "),
+                              tong_tien_chu: totalAmount.toVndWord("", false),
+                              nguoi_ky: chiefName,
+                              data: tableRows,
+                            },
+                          },
+                        ],
+                      })
+
+                      openXemTaiLieu({
+                        uri: res.data.path,
+                        name: "ThanhToanKinhPhiHuongDanChuyenDe.xlsx",
+                        mimeType: "xlsx",
+                      })
+                    }}
+                  >
+                    Thanh toán kinh phí HD
                   </Button>
                 </div>
               </Form.Item>
