@@ -1,6 +1,7 @@
 import { Descriptions, Table, Tabs, Tag } from "antd"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
+import { useMemo } from "react"
 import { FIXED_CLASS_STUDENT_STATUS } from "@constants/constants"
 import { useAcademicRankingBaseTypeOptions } from "@hooks/academicRankingBaseType"
 import { useStudentTrainingTypeOptions } from "@hooks/studentTrainingType"
@@ -9,6 +10,14 @@ import { useSession } from "@workspace/auth/react"
 import { useFindUniqueStudent, useFindUniqueUserProfile } from "@workspace/db/hooks"
 
 dayjs.locale("vi")
+
+const getRowSTT = (dataSource: any[] | undefined, record: any, fallbackIndex: number) => {
+  if (dataSource && Array.isArray(dataSource)) {
+    const idx = dataSource.indexOf(record)
+    if (idx !== -1) return idx + 1
+  }
+  return fallbackIndex + 1
+}
 
 const HoSoCaNhan = () => {
   const { data: me } = useSession()
@@ -140,6 +149,26 @@ const HoSoCaNhan = () => {
             createdAt: "desc",
           },
         },
+        semesterTrainingScore: {
+          include: {
+            semester: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        studentTrainingScore: {
+          include: {
+            trainingScoreSession: {
+              include: {
+                semester: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
         graduationDecision: true,
       },
     },
@@ -153,6 +182,30 @@ const HoSoCaNhan = () => {
 
     return <Tag color={statusConfig.color}>{statusConfig.label}</Tag>
   }
+
+  const combinedTrainingScores = useMemo(() => {
+    const list1 = (studentData?.semesterTrainingScore || []).map((item) => ({
+      id: item.id,
+      semesterName: item.semester?.name || "",
+      sessionName: "Điểm rèn luyện học kỳ",
+      score: item.score,
+      studentTrainingType: (item as any).studentTrainingType,
+      status: item.status,
+      createdAt: item.createdAt,
+    }))
+
+    const list2 = (studentData?.studentTrainingScore || []).map((item) => ({
+      id: item.id,
+      semesterName: item.trainingScoreSession?.semester?.name || "",
+      sessionName: item.trainingScoreSession?.name || "Đợt đánh giá",
+      score: item.score,
+      studentTrainingType: item.studentTrainingType,
+      status: item.status,
+      createdAt: item.createdAt,
+    }))
+
+    return [...list1, ...list2]
+  }, [studentData])
 
   const tabItems = [
     {
@@ -292,7 +345,7 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, __, index) => index + 1,
+              render: (_, record, index) => getRowSTT(studentData?.subjectClassStudent, record, index),
             },
             {
               title: "Mã môn",
@@ -362,7 +415,7 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, __, index) => index + 1,
+              render: (_, record, index) => getRowSTT(studentData?.studentSemesterResult, record, index),
             },
             {
               title: "Mã",
@@ -564,7 +617,7 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, __, index) => index + 1,
+              render: (_, record, index) => getRowSTT(studentData?.studentYearResult, record, index),
             },
             {
               title: "Mã",
@@ -719,7 +772,7 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, __, index) => index + 1,
+              render: (_, record, index) => getRowSTT(studentData?.scholarshipAwards, record, index),
             },
             {
               title: "Tên học bổng",
@@ -782,7 +835,7 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, __, index) => index + 1,
+              render: (_, record, index) => getRowSTT(studentData?.archivedCertificate, record, index),
             },
             {
               title: "Tên chứng chỉ",
@@ -895,7 +948,7 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, __, index) => index + 1,
+              render: (_, record, index) => getRowSTT(studentData?.archivedAward, record, index),
             },
             {
               title: "Tên giải thưởng",
@@ -961,7 +1014,7 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, __, index) => index + 1,
+              render: (_, record, index) => getRowSTT(studentData?.academicWarning, record, index),
             },
             {
               title: "Học kỳ",
@@ -1018,7 +1071,7 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, __, index) => index + 1,
+              render: (_, record, index) => getRowSTT(studentData?.disciplinaryWarning, record, index),
             },
             {
               title: "Học kỳ",
@@ -1048,6 +1101,106 @@ const HoSoCaNhan = () => {
               dataIndex: "createdAt",
               width: 120,
               align: "center",
+              render: (date) => (date ? dayjs(date).format("DD/MM/YYYY") : ""),
+            },
+          ]}
+        />
+      ),
+    },
+    {
+      key: "diem-ren-luyen",
+      label: `10. Điểm rèn luyện (${combinedTrainingScores.length})`,
+      children: (
+        <Table
+          dataSource={combinedTrainingScores}
+          rowKey="id"
+          bordered
+          size="small"
+          pagination={{ pageSize: 10 }}
+          scroll={{ x: 800 }}
+          columns={[
+            {
+              title: "STT",
+              width: 50,
+              align: "center",
+              render: (_, record, index) => getRowSTT(combinedTrainingScores, record, index),
+            },
+            {
+              title: "Học kỳ",
+              dataIndex: "semesterName",
+              width: 150,
+            },
+            {
+              title: "Đợt đánh giá",
+              dataIndex: "sessionName",
+              width: 180,
+            },
+            {
+              title: "Điểm rèn luyện",
+              dataIndex: "score",
+              width: 120,
+              align: "center",
+              render: (score) => (score != null ? Number(score).toFixed(1) : ""),
+            },
+            {
+              title: "Xếp loại",
+              dataIndex: "studentTrainingType",
+              width: 150,
+              align: "center",
+              render: (type, record) => {
+                let resolvedType = type
+                if (!resolvedType && record.score != null) {
+                  const score = Number(record.score)
+                  if (score >= 90) resolvedType = "EXCELLENT"
+                  else if (score >= 80) resolvedType = "GOOD"
+                  else if (score >= 65) resolvedType = "FAIR"
+                  else if (score >= 50) resolvedType = "MEDIUM"
+                  else if (score >= 35) resolvedType = "POOR"
+                  else resolvedType = "VERY_POOR"
+                }
+
+                const colorMap: Record<string, string> = {
+                  EXCELLENT: "green",
+                  GOOD: "blue",
+                  FAIR: "cyan",
+                  MEDIUM: "geekblue",
+                  AVERAGE: "orange",
+                  POOR: "red",
+                  VERY_POOR: "volcano",
+                }
+                const labelMap: Record<string, string> = {
+                  EXCELLENT: "Xuất sắc",
+                  GOOD: "Tốt",
+                  FAIR: "Khá",
+                  MEDIUM: "Trung bình khá",
+                  AVERAGE: "Trung bình",
+                  POOR: "Yếu",
+                  VERY_POOR: "Kém",
+                }
+                return resolvedType ? (
+                  <Tag color={colorMap[resolvedType] || "default"}>
+                    {labelMap[resolvedType] || resolvedType}
+                  </Tag>
+                ) : (
+                  "-"
+                )
+              },
+            },
+            {
+              title: "Trạng thái",
+              dataIndex: "status",
+              width: 120,
+              align: "center",
+              render: (status) => (
+                <Tag color={status === "APPROVED" ? "green" : "orange"}>
+                  {status === "APPROVED" ? "Đã duyệt" : "Chờ duyệt"}
+                </Tag>
+              ),
+            },
+            {
+              title: "Ngày tạo",
+              dataIndex: "createdAt",
+              width: 150,
               render: (date) => (date ? dayjs(date).format("DD/MM/YYYY") : ""),
             },
           ]}
