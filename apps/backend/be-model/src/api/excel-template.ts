@@ -155,6 +155,21 @@ export async function buildExcelWorkbookBuffer(body: ExcelTemplateInput): Promis
   const buffer = await res.arrayBuffer()
   const nodeBuffer = Buffer.from(buffer)
 
+  const isSingleSimpleSheet =
+    !head?.data &&
+    !tail?.data &&
+    (!sheets || sheets.length === 0) &&
+    Array.isArray(payload) &&
+    payload.length === 1 &&
+    (!payload[0]?.mergeCells || payload[0]?.mergeCells.length === 0)
+
+  if (isSingleSimpleSheet && payload[0]?.data) {
+    const template = new XlsxTemplate(nodeBuffer)
+    template.substitute(1, payload[0].data)
+    const sheetBuffer = await template.generate({ type: "nodebuffer" })
+    return Buffer.from(sheetBuffer as any)
+  }
+
   let headSheet: ExcelJS.Worksheet | undefined
   if (head?.data) {
     const headTemplate = new XlsxTemplate(nodeBuffer)

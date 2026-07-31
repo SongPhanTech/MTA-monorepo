@@ -1,4 +1,4 @@
-import { LockOutlined, UnlockOutlined } from "@ant-design/icons"
+import { DownOutlined, LockOutlined, UnlockOutlined } from "@ant-design/icons"
 import { queryClient } from "@api/index"
 import DocumentPaths from "@components/commons/documentPaths"
 import LectureTreeSelect from "@components/commons/lecture-select-multi/TreeSelectLecture"
@@ -42,16 +42,18 @@ import {
   Checkbox,
   Col,
   DatePicker,
+  Dropdown,
   Form,
   Input,
   InputNumber,
   Modal,
-  message,
   Popconfirm,
+  Radio,
   Row,
   Tabs,
   Tag,
   Tooltip,
+  message,
 } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
 import utc from "dayjs/plugin/utc"
@@ -59,7 +61,11 @@ import { CircleMinus, SquarePen } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { SqlTransactionBodyItem } from "@workspace/libs/api/schemas"
-import { exportPhuLucHuongDanDoAn } from "../../../utils/thesis-excel"
+import {
+  exportBaoCaoTienDoDoAnTotNghiep,
+  exportDanhSachTieuBanChamDATN,
+  exportPhuLucHuongDanDoAn,
+} from "../../../utils/thesis-excel"
 
 dayjs.extend(utc)
 interface DoAnForm {
@@ -196,6 +202,38 @@ export default function DanhMucDoAn() {
   const [editingRowKeys, setEditingRowKeys] = useState<string[]>([])
   const [editingValues, setEditingValues] = useState<Record<string, Record<string, any>>>({})
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+  const [isProgressModalOpen, setIsProgressModalOpen] = useState<boolean>(false)
+  const [checkTimes, setCheckTimes] = useState<"1" | "2">("1")
+
+  const handleExportProgressReport = async () => {
+    setIsProgressModalOpen(false)
+    const projectsToExport =
+      selectedRowKeys.length > 0
+        ? allThesisProjects.filter((p: any) => selectedRowKeys.includes(p.id))
+        : allThesisProjects
+
+    await exportBaoCaoTienDoDoAnTotNghiep({
+      projects: projectsToExport,
+      checkTimes,
+      showSpinner,
+      hideSpinner,
+      message,
+    })
+  }
+
+  const handleExportDanhSachTieuBan = async () => {
+    const projectsToExport =
+      selectedRowKeys.length > 0
+        ? allThesisProjects.filter((p: any) => selectedRowKeys.includes(p.id))
+        : allThesisProjects
+
+    await exportDanhSachTieuBanChamDATN({
+      projects: projectsToExport,
+      showSpinner,
+      hideSpinner,
+      message,
+    })
+  }
 
   const { can } = useAbility()
 
@@ -756,18 +794,62 @@ export default function DanhMucDoAn() {
                       )}
                     </>
                   )}
-                  <Button
-                    type="primary"
+                  <Dropdown
+                    menu={{
+                      items: [
+                        {
+                          key: "1",
+                          label: "Danh sách phân công HĐ ĐATN",
+                          onClick: handleExportPhuLucHuongDan,
+                        },
+                        {
+                          key: "2",
+                          label: "Báo cáo kiểm tra tiến độ ĐATN",
+                          onClick: () => setIsProgressModalOpen(true),
+                        },
+                        {
+                          key: "3",
+                          label: "Danh sách tiểu ban chấm ĐATN",
+                          onClick: handleExportDanhSachTieuBan,
+                        },
+                      ],
+                    }}
                     disabled={thesisProjectDataCount === 0}
-                    onClick={handleExportPhuLucHuongDan}
                   >
-                    Xuất Excel
-                  </Button>
+                    <Button type="primary">
+                      Xuất Excel <DownOutlined />
+                    </Button>
+                  </Dropdown>
                 </div>
               </Form.Item>
             </Form>
           </Col>
         </Row>
+
+        <Modal
+          title="Xuất báo cáo kiểm tra tiến độ ĐATN (Mẫu 02)"
+          open={isProgressModalOpen}
+          onOk={handleExportProgressReport}
+          onCancel={() => setIsProgressModalOpen(false)}
+          okText="Xuất báo cáo"
+          cancelText="Hủy"
+        >
+          <div className="py-4 flex flex-col gap-3">
+            <div className="font-semibold text-gray-700">Chọn đợt kiểm tra tiến độ đồ án:</div>
+            <Radio.Group
+              onChange={(e) => setCheckTimes(e.target.value as "1" | "2")}
+              value={checkTimes}
+              className="flex flex-col gap-2"
+            >
+              <Radio value="1">
+                <strong>Lần 1</strong>
+              </Radio>
+              <Radio value="2">
+                <strong>Lần 2</strong>
+              </Radio>
+            </Radio.Group>
+          </div>
+        </Modal>
         <Table
           rowKey="id"
           columns={[

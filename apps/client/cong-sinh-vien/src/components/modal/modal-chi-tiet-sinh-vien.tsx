@@ -1,5 +1,6 @@
 import { Descriptions, Modal, Table, Tabs, Tag } from "antd"
 import dayjs from "dayjs"
+import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
 import { FIXED_CLASS_STUDENT_STATUS, SCORE_CONVERT_STATUS } from "@constants/constants"
@@ -8,6 +9,14 @@ import { useStudentTrainingTypeOptions } from "@hooks/studentTrainingType"
 import { useFindUniqueStudent } from "@workspace/db/hooks"
 
 dayjs.locale("vi")
+
+const getRowSTT = (dataSource: any[] | undefined, record: any, fallbackIndex: number) => {
+  if (dataSource && Array.isArray(dataSource)) {
+    const idx = dataSource.indexOf(record)
+    if (idx !== -1) return idx + 1
+  }
+  return fallbackIndex + 1
+}
 
 const ModalChiTietSinhVien = () => {
   const {
@@ -169,6 +178,14 @@ const ModalChiTietSinhVien = () => {
             createdAt: "desc",
           },
         },
+        semesterTrainingScore: {
+          include: {
+            semester: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
         studentTrainingScore: {
           include: {
             trainingScoreSession: {
@@ -220,6 +237,30 @@ const ModalChiTietSinhVien = () => {
 
     return <Tag color={statusConfig.color}>{statusConfig.label}</Tag>
   }
+
+  const combinedTrainingScores = useMemo(() => {
+    const list1 = (studentData?.semesterTrainingScore || []).map((item) => ({
+      id: item.id,
+      semesterName: item.semester?.name || "",
+      sessionName: "Điểm rèn luyện học kỳ",
+      score: item.score,
+      studentTrainingType: (item as any).studentTrainingType,
+      status: item.status,
+      createdAt: item.createdAt,
+    }))
+
+    const list2 = (studentData?.studentTrainingScore || []).map((item) => ({
+      id: item.id,
+      semesterName: item.trainingScoreSession?.semester?.name || "",
+      sessionName: item.trainingScoreSession?.name || "Đợt đánh giá",
+      score: item.score,
+      studentTrainingType: item.studentTrainingType,
+      status: item.status,
+      createdAt: item.createdAt,
+    }))
+
+    return [...list1, ...list2]
+  }, [studentData])
 
   const tabItems = [
     {
@@ -403,7 +444,7 @@ const ModalChiTietSinhVien = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, __, index) => index + 1,
+              render: (_, record, index) => getRowSTT(studentData?.subjectClassStudent, record, index),
             },
             {
               title: "Mã môn",
@@ -472,7 +513,7 @@ const ModalChiTietSinhVien = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, __, index) => index + 1,
+              render: (_, record, index) => getRowSTT(studentData?.studentSemesterResult, record, index),
             },
             {
               title: "Mã",
@@ -694,7 +735,7 @@ const ModalChiTietSinhVien = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, __, index) => index + 1,
+              render: (_, record, index) => getRowSTT(studentData?.studentYearResult, record, index),
             },
             {
               title: "Mã",
@@ -933,6 +974,34 @@ const ModalChiTietSinhVien = () => {
               width: 100,
               align: "center",
               render: (val) => val?.toFixed(2),
+            },
+            {
+              title: "Nghe",
+              dataIndex: "listeningScore",
+              width: 80,
+              align: "center",
+              render: (val?: number | null) => (val != null ? val : "-"),
+            },
+            {
+              title: "Nói",
+              dataIndex: "speakingScore",
+              width: 80,
+              align: "center",
+              render: (val?: number | null) => (val != null ? val : "-"),
+            },
+            {
+              title: "Đọc",
+              dataIndex: "readingScore",
+              width: 80,
+              align: "center",
+              render: (val?: number | null) => (val != null ? val : "-"),
+            },
+            {
+              title: "Viết",
+              dataIndex: "writingScore",
+              width: 80,
+              align: "center",
+              render: (val?: number | null) => (val != null ? val : "-"),
             },
             {
               title: "Điểm chứng chỉ",
@@ -1432,10 +1501,10 @@ const ModalChiTietSinhVien = () => {
     },
     {
       key: "diem-ren-luyen",
-      label: `Điểm rèn luyện (${studentData?.studentTrainingScore?.length || 0})`,
+      label: `Điểm rèn luyện (${combinedTrainingScores.length})`,
       children: (
         <Table
-          dataSource={studentData?.studentTrainingScore || []}
+          dataSource={combinedTrainingScores}
           rowKey="id"
           size="small"
           pagination={{ pageSize: 10 }}
@@ -1445,16 +1514,16 @@ const ModalChiTietSinhVien = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, __, index) => index + 1,
+              render: (_, record, index) => getRowSTT(combinedTrainingScores, record, index),
             },
             {
               title: "Học kỳ",
-              dataIndex: ["trainingScoreSession", "semester", "name"],
+              dataIndex: "semesterName",
               width: 150,
             },
             {
               title: "Đợt đánh giá",
-              dataIndex: ["trainingScoreSession", "name"],
+              dataIndex: "sessionName",
               width: 180,
             },
             {
@@ -1462,14 +1531,25 @@ const ModalChiTietSinhVien = () => {
               dataIndex: "score",
               width: 120,
               align: "center",
-              render: (score) => (score ? Number(score).toFixed(1) : ""),
+              render: (score) => (score != null ? Number(score).toFixed(1) : ""),
             },
             {
               title: "Xếp loại",
               dataIndex: "studentTrainingType",
               width: 150,
               align: "center",
-              render: (type) => {
+              render: (type, record) => {
+                let resolvedType = type
+                if (!resolvedType && record.score != null) {
+                  const score = Number(record.score)
+                  if (score >= 90) resolvedType = "EXCELLENT"
+                  else if (score >= 80) resolvedType = "GOOD"
+                  else if (score >= 65) resolvedType = "FAIR"
+                  else if (score >= 50) resolvedType = "MEDIUM"
+                  else if (score >= 35) resolvedType = "POOR"
+                  else resolvedType = "VERY_POOR"
+                }
+
                 const colorMap: Record<string, string> = {
                   EXCELLENT: "green",
                   GOOD: "blue",
@@ -1488,7 +1568,13 @@ const ModalChiTietSinhVien = () => {
                   POOR: "Yếu",
                   VERY_POOR: "Kém",
                 }
-                return <Tag color={colorMap[type] || "default"}>{labelMap[type] || type}</Tag>
+                return resolvedType ? (
+                  <Tag color={colorMap[resolvedType] || "default"}>
+                    {labelMap[resolvedType] || resolvedType}
+                  </Tag>
+                ) : (
+                  "-"
+                )
               },
             },
             {

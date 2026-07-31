@@ -206,12 +206,24 @@ export default function ThongKeBuoiHoc() {
     },
   }
 
+  const periodTypeLabels: Record<string, string> = {
+    THEORY: "Lý thuyết",
+    PRACTICE: "Thực hành",
+    LAB: "Thí nghiệm",
+    SEMINAR: "Seminar",
+    EXAM: "Thi/kiểm tra",
+    MAKEUP: "Học bù",
+    REVIEW: "Ôn tập",
+    CHECK: "Kiểm tra giảng dạy",
+    WEEK: "Lịch tuần/tháng học viện",
+  }
+
   const colHtHoc = {
     title: "HT học",
     align: "center" as const,
     render: (_: unknown, record: unknown) => {
       const item = record as ClassScheduleData
-      return item.periodType || "-"
+      return periodTypeLabels[item.periodType] || item.periodType || "-"
     },
   }
 

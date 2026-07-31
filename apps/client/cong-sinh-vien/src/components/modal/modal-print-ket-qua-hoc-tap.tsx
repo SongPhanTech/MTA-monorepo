@@ -76,6 +76,8 @@ const ModalPrintToKQHT = () => {
     subjectScoreData?.fixedClass?.trainingCourse?.baseScore
   )
 
+  const baseScore = subjectScoreData?.fixedClass?.trainingCourse?.baseScore || "Base4"
+
   const handlePrint = useReactToPrint({
     contentRef: printRef,
     pageStyle: `
@@ -186,14 +188,16 @@ const ModalPrintToKQHT = () => {
         const score10 = score.manualFinalScore || score.finalScore || 0
         const score4 = convertScore(score10).base4 || 0
 
-        totalWeightedScore += score4 * credits
+        const finalScore = baseScore === "Base10" ? score10 : score4
+
+        totalWeightedScore += finalScore * credits
         totalCredits += credits
       }
     })
 
     const gpa = totalCredits > 0 ? totalWeightedScore / totalCredits : 0
     setGpaScore(Number(gpa.toFixed(2)))
-  }, [subjectScoreData, convertScore])
+  }, [subjectScoreData, convertScore, baseScore])
 
   return (
     <Modal
@@ -345,8 +349,8 @@ const ModalPrintToKQHT = () => {
                   )
                 })
 
-                // Render các môn tốt nghiệp sau (sử dụng flatMap)
-                const graduationRows = graduationSubjects?.flatMap(
+                // Render các môn tốt nghiệp sau
+                const graduationRows = graduationSubjects?.map(
                   ({ subjectItem }, originalIndex) => {
                     const subject = subjectItem.subject
                     const score = subject.studentSubjectScore?.[0]
@@ -357,12 +361,7 @@ const ModalPrintToKQHT = () => {
                     const score4 = convertScore(score10).base4
                     const letterGrade = convertScore(score10).letter
 
-                    return [
-                      <tr key={`graduation-header-${subject.id}`}>
-                        <td colSpan={6} className="border border-black px-1 py-1 font-semibold">
-                          Học phần tốt nghiệp
-                        </td>
-                      </tr>,
+                    return (
                       <tr key={subject.id}>
                         <td className="border border-black px-1 py-1 text-center">
                           {originalIndex + 1}
@@ -385,13 +384,22 @@ const ModalPrintToKQHT = () => {
                         <td className="border border-black px-1 py-1 text-center">
                           {String(letterGrade)}
                         </td>
-                      </tr>,
-                    ]
+                      </tr>
+                    )
                   }
                 )
 
+                const graduationSection = graduationSubjects?.length > 0 ? [
+                  <tr key="graduation-header">
+                    <td colSpan={6} className="border border-black px-1 py-1 font-semibold">
+                      Học phần tốt nghiệp
+                    </td>
+                  </tr>,
+                  ...graduationRows
+                ] : []
+
                 // Kết hợp cả 2 và giữ nguyên STT
-                return [...regularRows, ...graduationRows]
+                return [...regularRows, ...graduationSection]
               })()}
             </tbody>
           </table>
@@ -421,7 +429,9 @@ const ModalPrintToKQHT = () => {
               </span>
             </div>
             <div>
-              <span>Điểm trung bình chung tích lũy toàn khoá (Thanh điểm 4): </span>
+              <span>
+                Điểm trung bình chung tích lũy toàn khoá (Thang điểm {baseScore === "Base10" ? "10" : "4"}):{" "}
+              </span>
               <span className="font-bold">{gpaScore.toFixed(2)}</span>
             </div>
             <div className="flex">
@@ -495,14 +505,18 @@ const ModalPrintToKQHT = () => {
           </div>
 
           <p className="mt-2">
-            - Phân hạng tốt nghiệp theo thang điểm 4:{" "}
+            - Phân hạng tốt nghiệp theo thang điểm {baseScore === "Base10" ? "10" : "4"}:{" "}
             {(() => {
               const rankingData =
                 subjectScoreData?.fixedClass?.trainingCourse?.academicRankingConvert || []
 
               const sortedRankings = rankingData
                 .filter((item: any) => item.graduated)
-                .sort((a: any, b: any) => b.base4Min - a.base4Min)
+                .sort((a: any, b: any) =>
+                  baseScore === "Base10"
+                    ? (b.base10Min || 0) - (a.base10Min || 0)
+                    : (b.base4Min || 0) - (a.base4Min || 0)
+                )
 
               return sortedRankings.map((item: any, index: number) => {
                 const displayName = item.classification
@@ -519,7 +533,10 @@ const ModalPrintToKQHT = () => {
                   return num ? num?.toString() : ""
                 }
 
-                const range = `${formatNumber(item.base4Min)}-${formatNumber(item.base4Max)}`
+                const min = baseScore === "Base10" ? item.base10Min : item.base4Min
+                const max = baseScore === "Base10" ? item.base10Max : item.base4Max
+
+                const range = `${formatNumber(min)}-${formatNumber(max)}`
 
                 return (
                   <span key={item.id || index}>

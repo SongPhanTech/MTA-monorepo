@@ -1,3 +1,4 @@
+import { useSession } from "@workspace/auth/react"
 import { useExamTypeOptions } from "@hooks/examType"
 import { useSubjectClassStatusOptions } from "@hooks/subjectClassStatus"
 import { useSubjectClassTypeOptions } from "@hooks/subjectClassType"
@@ -10,6 +11,8 @@ import "dayjs/locale/vi"
 dayjs.locale("vi")
 
 export default function ModalChiTietLopBienChe() {
+  const { data: session } = useSession()
+  const currentUserId = session?.sDM_NhanVienId || ""
   const { isOpen, onClose, input } = useDisclosure<{
     fixedClassId: string
   }>({
@@ -260,6 +263,10 @@ export default function ModalChiTietLopBienChe() {
           scroll={{ x: 2400, y: 400 }}
           pagination={false}
           onRow={(record) => {
+            const isSelf =
+              (record.userProfileId && record.userProfileId === currentUserId) ||
+              (record.id && record.id === currentUserId)
+            if (!isSelf) return {}
             return {
               onClick: (e) => {
                 e.preventDefault()
