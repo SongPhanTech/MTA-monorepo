@@ -1,6 +1,6 @@
 import { OpenAPIHono } from "@hono/zod-openapi"
 import { jwtAuth } from "@workspace/auth/hono"
-import { Prisma, PrismaClient } from "@workspace/db"
+import { Prisma, type PrismaClient } from "@workspace/db"
 import { contextStorage } from "hono/context-storage"
 import { cors } from "hono/cors"
 import { showRoutes } from "hono/dev"
@@ -11,18 +11,11 @@ import ClassRegisterApp from "./api/class-register"
 import DataSyncHistoryApp from "./api/data-sync-history"
 import ExportRegistrationResultsApp from "./api/export-registration-results"
 import ImportTrainingDataApp from "./api/import-training-data"
+import { createPrismaClient } from "./config/database"
 import { checkIp } from "./middlewares/check-ip"
 import { setupOpenApi } from "./utils/openapi"
 
-const poolSize = parseInt(process.env.DATABASE_POOL_SIZE || "80", 10)
-const dbUrl = process.env.DATABASE_URL || ""
-const urlWithPool = dbUrl.includes("connection_limit")
-  ? dbUrl
-  : `${dbUrl}${dbUrl.includes("?") ? "&" : "?"}connection_limit=${poolSize}&pool_timeout=20`
-
-export const prisma: PrismaClient = new PrismaClient({
-  datasources: { db: { url: urlWithPool } },
-})
+export const prisma: PrismaClient = createPrismaClient()
 
 const app = new OpenAPIHono({ strict: false })
 

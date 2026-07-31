@@ -2134,6 +2134,8 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   subjectId: 'subjectId',
   schedule: 'schedule',
   maxStudent: 'maxStudent',
+  enrolledCount: 'enrolledCount',
+  version: 'version',
   type: 'type',
   status: 'status',
   trainingObjectTypeId: 'trainingObjectTypeId',

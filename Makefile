@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= mta_online
+SERVER_PROFILE ?= app
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -227,7 +227,7 @@ deploy-cdn:
 	$(SCP) -O cdn.zip $(SERVER_HOST):$(FE_APP_DIR)/
 	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
 	docker compose -f $(FE_COMPOSE_FILE) down && \
-	rm -rf ./*-cdn cdn && \
+	rm -rf chatbot-cdn cong-giang-vien-cdn cong-sinh-vien-cdn lms-cdn ems-cdn hrm-cdn  && \
 	unzip -q -o cdn.zip && \
 	mv -f cdn/* . && \
 	rm -rf cdn && \
@@ -243,7 +243,7 @@ deploy-all-be:
 	cd $(BE_APP_DIR) && \
 	docker rm -f mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared $(IMG_PREFIX)be-exchange $(IMG_PREFIX)be-khao-thi $(IMG_PREFIX)be-model $(IMG_PREFIX)be-portal $(IMG_PREFIX)be-ql-dao-tao $(IMG_PREFIX)be-ql-dao-tao-shared && \
 	docker compose up -d"
-	# deploy-be-%: build-%
+# deploy-be-%: build-%
 # 	@mkdir -p docker-images
 # 	$(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$*.tar.gz
 # 	sshpass -p "Bancntt@2025" scp -O docker-images/$(IMG_PREFIX)$*.tar.gz app2:~/Documents/docker-compose/

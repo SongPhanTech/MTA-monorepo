@@ -10,11 +10,46 @@ import {
   classRegisterCache,
   rateLimitConsume,
   rateLimitKey,
+  seatCache,
 } from "../services/redis-cache"
 import { $Enums, AcademicRankingBaseType, Prisma } from "@workspace/db"
-import { HTTPException } from "hono/http-exception"
+import {
+  assertNoScheduleConflict,
+  registerClasses,
+  toRegistrationError,
+} from "../services/class-registration"
 
 const app = new OpenAPIHono({ strict: false })
+
+/** Cấu trúc tối thiểu của payload get-classes-info cần cho overlay sĩ số */
+type ClassesInfoPayload = Array<{
+  subjectClass: Array<{
+    id: string
+    enrolledCount?: number
+    _count: { subjectClassStudent: number }
+  }>
+}>
+
+/**
+ * Ghi đè sĩ số realtime từ Redis hash lên payload (cache hit).
+ * seatCache lỗi/miss → giữ nguyên số từ payload (fallback DB, không chặn response).
+ */
+async function overlaySeats<T extends ClassesInfoPayload>(sessionId: string, data: T): Promise<T> {
+  const seats = await seatCache.getAll(sessionId)
+  if (!seats) return data
+  for (const version of data) {
+    for (const subjectClass of version.subjectClass) {
+      const enrolled = seats.get(subjectClass.id)
+      if (enrolled != null) {
+        subjectClass._count.subjectClassStudent = enrolled
+        if (typeof subjectClass.enrolledCount === "number") {
+          subjectClass.enrolledCount = enrolled
+        }
+      }
+    }
+  }
+  return data
+}
 
 const getClassRegisterSession = createRoute({
   operationId: "get-class-register-session",
@@ -246,8 +281,11 @@ app.openapi(getClassesInfo, async (c) => {
     byCurriculumBool,
     isRegisteredBool
   )
+  // CACHE-ASIDE: kiểm tra Redis trước — hit thì overlay sĩ số realtime rồi trả ngay,
+  // miss (hoặc Redis lỗi → cacheGet trả null) thì rơi xuống query DB bên dưới
   const cached = await cacheGet<unknown>(cacheKey)
   if (cached) {
+    await overlaySeats(sessionId, cached as ClassesInfoPayload)
     return c.json(cached, 200)
   }
 
@@ -531,7 +569,17 @@ app.openapi(getClassesInfo, async (c) => {
       return true
     })
 
+  // Cache miss: lưu payload (TTL 3 phút) + seed hash sĩ số từ số liệu DB (nguồn chuẩn)
   await cacheSet(cacheKey, data, CACHE_TTL.classesInfo)
+  await seatCache.seed(
+    sessionId,
+    data.flatMap((version) =>
+      version.subjectClass.map((sc) => ({
+        subjectClassId: sc.id,
+        enrolled: sc._count.subjectClassStudent,
+      }))
+    )
+  )
   return c.json(data, 200)
 })
 
@@ -566,6 +614,10 @@ const classRegister = createRoute({
     },
     404: {
       description: "Not found",
+      content: { "application/json": { schema: z.object({ message: z.string() }) } },
+    },
+    409: {
+      description: "Conflict (đã đăng ký / xung đột phiên bản dữ liệu)",
       content: { "application/json": { schema: z.object({ message: z.string() }) } },
     },
     429: {
@@ -811,89 +863,52 @@ app.openapi(classRegister, async (c) => {
   }
 
   try {
-    // Giữ lock ngắn: 1 query lock + 2 query kiểm tra + 2 createMany (không N+1 trong transaction)
-    await prisma.$transaction(
-      async (tx) => {
-        await tx.$queryRaw`
-          SELECT id FROM "ql-dao-tao"."SubjectClass"
-          WHERE id IN (${Prisma.join(sortedClassIds)})
-          ORDER BY id
-          FOR UPDATE
-        `
+    // Check trùng lịch ngoài transaction (chỉ dữ liệu của chính sinh viên → không cần lock)
+    await assertNoScheduleConflict(prisma, {
+      studentId,
+      semesterId: registerSession.semesterId,
+      newClassIds: sortedClassIds,
+    })
 
-        const existingScores = await tx.studentSubjectScore.findMany({
-          where: { studentId, subjectClassId: { in: sortedClassIds } },
-          select: { subjectClassId: true },
+    // Ghi danh với concurrency control — chống overselling.
+    // Phương án chọn qua env CLASS_REGISTER_LOCK_STRATEGY (optimistic | pessimistic)
+    await registerClasses(prisma, {
+      sessionId,
+      studentId,
+      classIds: sortedClassIds,
+      classLookup: new Map(
+        sortedClassIds.map((id) => {
+          const sc = subjectClassLookup.get(id)!
+          return [
+            id,
+            {
+              subjectVersionId: sc.subjectId,
+              subjectName: sc.subject.name,
+              maxStudent: sc.maxStudent || 0,
+            },
+          ]
         })
-        if (existingScores.length > 0) {
-          const dupName = subjectClassLookup.get(existingScores[0]!.subjectClassId!)?.subject?.name
-          throw new HTTPException(400, {
-            message: `Bạn đã đăng ký học phần ${dupName ?? "này"}`,
-          })
-        }
-
-        const enrolledRows = await tx.studentSubjectScore.groupBy({
-          by: ["subjectClassId"],
-          where: { subjectClassId: { in: sortedClassIds } },
-          _count: { _all: true },
-        })
-        const enrolledMap = new Map(
-          enrolledRows.map((r) => [r.subjectClassId as string, r._count._all])
-        )
-
-        for (const subjectClassId of sortedClassIds) {
-          const sc = subjectClassLookup.get(subjectClassId)!
-          const currentEnrolled = enrolledMap.get(subjectClassId) || 0
-          if ((sc.maxStudent || 0) <= currentEnrolled) {
-            throw new HTTPException(400, {
-              message: `Lớp ${sc.subject.name} đã đủ số lượng sinh viên`,
-            })
-          }
-        }
-
-        await tx.studentSubjectScore.createMany({
-          data: sortedClassIds.map((subjectClassId) => ({
-            subjectClassId,
-            studentId,
-            subjectVersionId: subjectClassLookup.get(subjectClassId)!.subjectId,
-          })),
-        })
-
-        await tx.classRegisterLogs.createMany({
-          data: sortedClassIds.map((subjectClassId) => ({
-            classRegisterSessionId: sessionId,
-            studentId,
-            subjectClassId,
-          })),
-        })
-      },
-      {
-        // Tránh giữ connection/lock quá lâu khi DB nghẽn (~500 SV đồng thời)
-        maxWait: 5_000,
-        timeout: 10_000,
-      }
-    )
+      ),
+    })
   } catch (err) {
-    if (err instanceof HTTPException) {
-      return c.json({ message: err.message }, err.status)
-    }
-    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
-      return c.json({ message: "Bạn đã đăng ký học phần này" }, 409)
-    }
-    const msg = err instanceof Error ? err.message : String(err)
-    if (/timed out|timeout|P2024|Unable to start a transaction/i.test(msg)) {
-      return c.json(
-        {
-          message:
-            "Hệ thống đang quá tải do nhiều sinh viên đăng ký cùng lúc. Vui lòng thử lại sau vài giây.",
-        },
-        503
+    const regErr = toRegistrationError(err)
+    if (regErr) {
+      console.warn(
+        `[class-register] register rejected user=${session.id} code=${regErr.code} status=${regErr.status}`
       )
+      return c.json({ message: regErr.message }, regErr.status)
     }
     throw err
   }
 
   await classRegisterCache.invalidateUser(session.id, sessionId)
+
+  // DB ghi thành công → trừ chỗ trống trên Redis bằng HINCRBY (atomic):
+  // sinh viên khác thấy sĩ số mới realtime, không cần query lại DB
+  await seatCache.adjust(
+    sessionId,
+    sortedClassIds.map((subjectClassId) => ({ subjectClassId, delta: 1 }))
+  )
 
   return c.json({ message: "success" }, 200)
 })
@@ -1036,6 +1051,8 @@ app.openapi(classUnregister, async (c) => {
       400
     )
   }
+  const seatDeltas: Array<{ subjectClassId: string; delta: number }> = []
+
   await prisma.$transaction(async (tx) => {
     await tx.classRegisterLogs.deleteMany({
       where: {
@@ -1063,13 +1080,27 @@ app.openapi(classUnregister, async (c) => {
           },
         },
       })
-      await tx.studentSubjectScore.deleteMany({
+      const removed = await tx.studentSubjectScore.deleteMany({
         where: { subjectClassId, studentId: { in: studentIds } },
       })
+
+      // Trả chỗ: giảm sĩ số denormalized + tăng version (đồng bộ với luồng đăng ký)
+      if (removed.count > 0) {
+        await tx.$executeRaw`
+          UPDATE "ql-dao-tao"."SubjectClass"
+          SET "enrolledCount" = GREATEST("enrolledCount" - ${removed.count}, 0),
+              "version" = "version" + 1
+          WHERE id = ${subjectClassId}
+        `
+        seatDeltas.push({ subjectClassId, delta: -removed.count })
+      }
     }
   })
 
   await classRegisterCache.invalidateUser(session.id, sessionId)
+
+  // Trả chỗ trống realtime trên Redis (HINCRBY âm) sau khi DB xóa thành công
+  await seatCache.adjust(sessionId, seatDeltas)
 
   return c.json({ message: "success" }, 200)
 })

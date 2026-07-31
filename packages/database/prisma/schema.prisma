@@ -3486,6 +3486,10 @@ model SubjectClass {
   subjectId                   String
   schedule                    SubjectClassSchedule?
   maxStudent                  Int
+  /// Sĩ số đã đăng ký (denormalized) — cập nhật atomic khi đăng ký/hủy đăng ký
+  enrolledCount               Int                      @default(0)
+  /// Optimistic-locking version — tăng mỗi lần cập nhật sĩ số, dùng chống race condition
+  version                     Int                      @default(0)
   type                        SubjectClassType         @default(NORMAL)
   status                      SubjectClassStatus       @default(DRAFT)
   trainingObjectType          TrainingObjectType       @relation(fields: [trainingObjectTypeId], references: [id])

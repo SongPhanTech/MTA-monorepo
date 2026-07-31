@@ -24,6 +24,8 @@ const baseSchema = z.object({
     endDate: z.coerce.date().nullish(),
     schedule: SubjectClassScheduleSchema.nullish(),
     maxStudent: z.number(),
+    enrolledCount: z.number().default(0),
+    version: z.number().default(0),
     type: SubjectClassTypeSchema,
     status: SubjectClassStatusSchema,
     cancelled: z.boolean().default(false),
@@ -60,6 +62,8 @@ const baseSchemaWithoutDefaults = z.object({
     endDate: z.coerce.date().nullish(),
     schedule: SubjectClassScheduleSchema.nullish(),
     maxStudent: z.number(),
+    enrolledCount: z.number(),
+    version: z.number(),
     type: SubjectClassTypeSchema,
     status: SubjectClassStatusSchema,
     cancelled: z.boolean(),
@@ -159,6 +163,8 @@ export const SubjectClassPrismaUpdateSchema = z.object({
     endDate: z.coerce.date().nullish(),
     schedule: SubjectClassScheduleSchema.nullish(),
     maxStudent: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    enrolledCount: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    version: z.union([z.number(), z.record(z.string(), z.unknown())]),
     type: SubjectClassTypeSchema,
     status: SubjectClassStatusSchema,
     cancelled: z.boolean(),
@@ -186,7 +192,7 @@ export const SubjectClassPrismaUpdateSchema = z.object({
  * `SubjectClass` schema for create operations excluding foreign keys and relations.
  */
 export const SubjectClassCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, type: true, status: true, cancelled: true, enteredScore: true, enteredExamScore: true, isLockScore: true, isLockExamScore: true, isLockLecturer: true, scoreSubmitted: true, scoreChecked: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, enrolledCount: true, version: true, type: true, status: true, cancelled: true, enteredScore: true, enteredExamScore: true, isLockScore: true, isLockExamScore: true, isLockLecturer: true, scoreSubmitted: true, scoreChecked: true
 });
 
 

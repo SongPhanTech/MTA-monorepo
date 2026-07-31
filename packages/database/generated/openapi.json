@@ -12314,6 +12314,12 @@
           "maxStudent": {
             "type": "integer"
           },
+          "enrolledCount": {
+            "type": "integer"
+          },
+          "version": {
+            "type": "integer"
+          },
           "type": {
             "$ref": "#/components/schemas/SubjectClassType"
           },
@@ -12577,6 +12583,8 @@
           "subject",
           "subjectId",
           "maxStudent",
+          "enrolledCount",
+          "version",
           "type",
           "status",
           "trainingObjectType",
@@ -42771,6 +42779,12 @@
           "maxStudent": {
             "type": "integer"
           },
+          "enrolledCount": {
+            "type": "integer"
+          },
+          "version": {
+            "type": "integer"
+          },
           "type": {
             "$ref": "#/components/schemas/SubjectClassType"
           },
@@ -42933,6 +42947,8 @@
           "name",
           "subjectId",
           "maxStudent",
+          "enrolledCount",
+          "version",
           "type",
           "status",
           "trainingObjectTypeId",
@@ -91294,6 +91310,12 @@
           "maxStudent": {
             "type": "integer"
           },
+          "enrolledCount": {
+            "type": "integer"
+          },
+          "version": {
+            "type": "integer"
+          },
           "type": {
             "type": "integer"
           },
@@ -91400,6 +91422,8 @@
           "subjectId",
           "schedule",
           "maxStudent",
+          "enrolledCount",
+          "version",
           "type",
           "status",
           "trainingObjectTypeId",
@@ -91438,6 +91462,14 @@
           "maxStudent": {
             "type": "number",
             "nullable": true
+          },
+          "enrolledCount": {
+            "type": "number",
+            "nullable": true
+          },
+          "version": {
+            "type": "number",
+            "nullable": true
           }
         }
       },
@@ -91445,6 +91477,14 @@
         "type": "object",
         "properties": {
           "maxStudent": {
+            "type": "integer",
+            "nullable": true
+          },
+          "enrolledCount": {
+            "type": "integer",
+            "nullable": true
+          },
+          "version": {
             "type": "integer",
             "nullable": true
           }
@@ -91515,6 +91555,14 @@
             "nullable": true
           },
           "maxStudent": {
+            "type": "integer",
+            "nullable": true
+          },
+          "enrolledCount": {
+            "type": "integer",
+            "nullable": true
+          },
+          "version": {
             "type": "integer",
             "nullable": true
           },
@@ -91722,6 +91770,14 @@
             "nullable": true
           },
           "maxStudent": {
+            "type": "integer",
+            "nullable": true
+          },
+          "enrolledCount": {
+            "type": "integer",
+            "nullable": true
+          },
+          "version": {
             "type": "integer",
             "nullable": true
           },

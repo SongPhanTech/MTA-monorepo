@@ -11647,6 +11647,14 @@ const metadata: ModelMeta = {
                 }, maxStudent: {
                     name: "maxStudent",
                     type: "Int",
+                }, enrolledCount: {
+                    name: "enrolledCount",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, version: {
+                    name: "version",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, type: {
                     name: "type",
                     type: "SubjectClassType",

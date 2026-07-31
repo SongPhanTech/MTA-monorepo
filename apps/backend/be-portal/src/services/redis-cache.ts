@@ -6,8 +6,7 @@ import { RedisClient } from "bun"
 
 const REDIS_URL = process.env.REDIS_URL?.trim()
 const ENABLED = Boolean(REDIS_URL) && process.env.REDIS_CACHE_ENABLED !== "false"
-const RATE_LIMIT_ENABLED =
-  Boolean(REDIS_URL) && process.env.REDIS_RATE_LIMIT_ENABLED !== "false"
+const RATE_LIMIT_ENABLED = Boolean(REDIS_URL) && process.env.REDIS_RATE_LIMIT_ENABLED !== "false"
 
 /** TTL giây */
 export const CACHE_TTL = {
@@ -15,8 +14,13 @@ export const CACHE_TTL = {
   session: Number(process.env.REDIS_TTL_SESSION || 60),
   /** Info SV + maxCredit */
   student: Number(process.env.REDIS_TTL_STUDENT || 60),
-  /** get-classes-info — short TTL vì sĩ số thay đổi; tăng mặc định để chịu tải đợt ĐK */
-  classesInfo: Number(process.env.REDIS_TTL_CLASSES_INFO || 20),
+  /**
+   * get-classes-info — cache-aside TTL 3 phút.
+   * Sĩ số KHÔNG bị stale theo TTL này: được overlay realtime từ seatCache (hash HINCRBY).
+   */
+  classesInfo: Number(process.env.REDIS_TTL_CLASSES_INFO || 180),
+  /** Hash sĩ số realtime theo kỳ học — reseed mỗi lần cache miss */
+  seats: Number(process.env.REDIS_TTL_SEATS || 600),
 } as const
 
 const PREFIX = "portal:crs"
@@ -232,6 +236,81 @@ export const classRegisterCache = {
     if (sessionId) {
       await cacheDel(this.studentKey(userId, sessionId))
     }
+  },
+}
+
+/**
+ * Sĩ số realtime trên Redis (hash theo đợt đăng ký): field = subjectClassId, value = số SV đã ghi danh.
+ *
+ * - Cache miss get-classes-info → seed lại từ DB (HSET, tự sửa drift nếu có).
+ * - Đăng ký/hủy ghi DB thành công → adjust() dùng HINCRBY (atomic) ±1 ngay trên Redis,
+ *   sinh viên khác thấy sĩ số mới realtime mà không cần query lại DB.
+ * - Mọi lệnh qua withRedis: Redis lỗi/timeout → trả null, hệ thống fallback về DB (fail-open).
+ */
+export const seatCache = {
+  key: (sessionId: string) => `${PREFIX}:seats:${sessionId}`,
+
+  /** Seed/refresh sĩ số từ DB khi cache miss — nguồn chuẩn, tự chữa lệch số. */
+  async seed(
+    sessionId: string,
+    entries: Array<{ subjectClassId: string; enrolled: number }>
+  ): Promise<void> {
+    if (!ENABLED || entries.length === 0) return
+    const key = this.key(sessionId)
+    await withRedis(async (redis) => {
+      const args: string[] = [key]
+      for (const entry of entries) {
+        args.push(entry.subjectClassId, String(entry.enrolled))
+      }
+      await redis.send("HSET", args)
+      await redis.send("EXPIRE", [key, String(CACHE_TTL.seats)])
+    })
+  },
+
+  /**
+   * Atomic HINCRBY sau khi DB ghi thành công (delta +1 đăng ký / -1 hủy).
+   * Chỉ tăng/giảm field đã được seed — field chưa tồn tại thì bỏ qua,
+   * tránh tạo counter sai gốc (sẽ đúng lại ở lần seed kế tiếp).
+   */
+  async adjust(
+    sessionId: string,
+    deltas: Array<{ subjectClassId: string; delta: number }>
+  ): Promise<void> {
+    if (!ENABLED || deltas.length === 0) return
+    const key = this.key(sessionId)
+    await withRedis(async (redis) => {
+      const hashExists = Number(await redis.send("EXISTS", [key]))
+      if (hashExists !== 1) return
+      for (const { subjectClassId, delta } of deltas) {
+        if (delta === 0) continue
+        const fieldExists = Number(await redis.send("HEXISTS", [key, subjectClassId]))
+        if (fieldExists === 1) {
+          await redis.send("HINCRBY", [key, subjectClassId, String(delta)])
+        }
+      }
+    })
+  },
+
+  /** HGETALL → map sĩ số hiện tại. null = Redis lỗi/chưa có dữ liệu → dùng số từ DB. */
+  async getAll(sessionId: string): Promise<Map<string, number> | null> {
+    if (!ENABLED) return null
+    const result = await withRedis((redis) => redis.send("HGETALL", [this.key(sessionId)]))
+    if (result == null) return null
+
+    const seats = new Map<string, number>()
+    if (Array.isArray(result)) {
+      // RESP trả mảng phẳng [field, value, field, value, ...]
+      for (let i = 0; i + 1 < result.length; i += 2) {
+        const value = Number(result[i + 1])
+        if (Number.isFinite(value)) seats.set(String(result[i]), value)
+      }
+    } else if (typeof result === "object") {
+      for (const [field, raw] of Object.entries(result as Record<string, unknown>)) {
+        const value = Number(raw)
+        if (Number.isFinite(value)) seats.set(field, value)
+      }
+    }
+    return seats.size > 0 ? seats : null
   },
 }
 
