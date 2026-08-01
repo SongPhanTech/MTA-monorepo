@@ -14,64 +14,15 @@ import {
   SurveyStatisticSchema,
   SurveyStatisticsByFieldResponseSchema,
 } from "../dto/survey-statistic.dto"
+import {
+  SURVEY_OBJECT_TYPE_INCLUDE,
+  buildSurveyObjectTypeProfileOrClauses,
+} from "../lib/survey-audience"
 import { getBufferFromUrl } from "../services/template.service"
 import { getCurrentDateForReport } from "../utils"
 import { PaginatedDataResponseSchema, PaginationQuerySchema } from "../zod/base"
 
 const app = new OpenAPIHono({ strict: false })
-
-/** Phạm vi đối tượng KS dùng để lọc học viên theo lớp / khóa / ngành / lĩnh vực. */
-type SurveyObjectTypeStudentScope = {
-  fixedClasses: { id: string }[]
-  trainingCourses: { id: string }[]
-  trainingMajors: { id: string }[]
-  trainingFields: { id: string }[]
-  subjectClasses: { id: string }[]
-}
-
-/**
- * Filter ngành/lĩnh vực trên FixedClass.
- * - Đã chọn lớp QL → bỏ qua (lớp là scope cụ thể; nhiều CTĐT thiếu trainingMajorId).
- * - Có khóa/lớp HP mà CTĐT chưa gắn ngành → vẫn nhận (OR trainingMajorId null).
- */
-function buildStudentMajorFieldFixedClassFilter(
-  objectType: SurveyObjectTypeStudentScope,
-  q: { fixedClassIds?: string[]; trainingCourseIds?: string[] }
-): Prisma.FixedClassWhereInput {
-  const hasFixedClassScope =
-    objectType.fixedClasses.length > 0 || (q.fixedClassIds?.length ?? 0) > 0
-  const hasMajorFieldConfig =
-    objectType.trainingMajors.length > 0 || objectType.trainingFields.length > 0
-
-  if (!hasMajorFieldConfig || hasFixedClassScope) {
-    return {}
-  }
-
-  const matchingMajor: Prisma.TrainingMajorWhereInput = {
-    ...(objectType.trainingMajors.length
-      ? { id: { in: objectType.trainingMajors.map((tm) => tm.id) } }
-      : {}),
-    ...(objectType.trainingFields.length
-      ? { trainingFieldId: { in: objectType.trainingFields.map((tf) => tf.id) } }
-      : {}),
-  }
-
-  const hasOtherStudentScope =
-    objectType.trainingCourses.length > 0 ||
-    (q.trainingCourseIds?.length ?? 0) > 0 ||
-    objectType.subjectClasses.length > 0
-
-  return {
-    curriculumVersion: {
-      curriculum: {
-        OR: [
-          { trainingMajor: matchingMajor },
-          ...(hasOtherStudentScope ? [{ trainingMajorId: null }] : []),
-        ],
-      },
-    },
-  }
-}
 
 const exportReportSurvey = createRoute({
   operationId: "export-report-survey",
@@ -613,14 +564,7 @@ app.openapi(getSurveyObjects, async (c) => {
     where: { id },
     include: {
       surveyObjectType: {
-        include: {
-          organizations: { select: { Id: true } },
-          trainingFields: { select: { id: true } },
-          trainingMajors: { select: { id: true } },
-          trainingCourses: { select: { id: true } },
-          fixedClasses: { select: { id: true } },
-          subjectClasses: { select: { id: true } },
-        },
+        include: SURVEY_OBJECT_TYPE_INCLUDE,
       },
     },
   })
@@ -632,110 +576,16 @@ app.openapi(getSurveyObjects, async (c) => {
   const profileIds = new Set<string>()
 
   for (const objectType of survey.surveyObjectType) {
+    const orClauses = buildSurveyObjectTypeProfileOrClauses(objectType, q)
+    if (orClauses.length === 0) continue
+
     const objectTypeProfiles = await prisma.userProfile.findMany({
       select: { id: true },
       where: {
         deletedAt: null,
         active: true,
         ...(q.fullname ? { fullname: { contains: q.fullname, mode: "insensitive" } } : {}),
-        OR: [
-          q?.isStudent !== "student"
-            ? {
-                lecturer: {
-                  ...(q.lecturerCode
-                    ? {
-                        code: {
-                          contains: q.lecturerCode,
-                          mode: "insensitive",
-                        },
-                      }
-                    : {}),
-                  organizationId: {
-                    in:
-                      q?.organizationId && q?.organizationId?.length > 0
-                        ? q.organizationId
-                        : objectType.organizations.map((org) => org.Id),
-                  },
-                },
-              }
-            : {},
-          q?.isStudent !== "student"
-            ? {
-                staffs: {
-                  ...(q.staffCode
-                    ? {
-                        code: {
-                          contains: q.staffCode,
-                          mode: "insensitive",
-                        },
-                      }
-                    : {}),
-                  organizationId: {
-                    in:
-                      q?.organizationId && q?.organizationId?.length > 0
-                        ? q.organizationId
-                        : objectType.organizations.map((org) => org.Id),
-                  },
-                },
-              }
-            : {},
-          q?.isStudent !== "lecturer"
-            ? {
-                educationAndTraining: {
-                  some: {
-                    ...(q.studentCode
-                      ? {
-                          code: {
-                            contains: q.studentCode,
-                            mode: "insensitive",
-                          },
-                        }
-                      : {}),
-                    fixedClass: {
-                      ...(objectType.fixedClasses.length
-                        ? {
-                            id: {
-                              in: objectType.fixedClasses.map((fc) => fc.id),
-                            },
-                          }
-                        : {}),
-                      ...(q.fixedClassIds
-                        ? {
-                            id: { in: q.fixedClassIds },
-                          }
-                        : {}),
-                      ...(objectType.trainingCourses.length
-                        ? {
-                            trainingCourseId: {
-                              in: objectType.trainingCourses.map((tc) => tc.id),
-                            },
-                          }
-                        : {}),
-                      ...(q.trainingCourseIds
-                        ? {
-                            trainingCourseId: {
-                              in: q.trainingCourseIds,
-                            },
-                          }
-                        : {}),
-                      ...buildStudentMajorFieldFixedClassFilter(objectType, q),
-                    },
-                    ...(objectType.subjectClasses.length
-                      ? {
-                          subjectClassStudent: {
-                            some: {
-                              subjectClassId: {
-                                in: objectType.subjectClasses.map((sc) => sc.id),
-                              },
-                            },
-                          },
-                        }
-                      : {}),
-                  },
-                },
-              }
-            : {},
-        ],
+        OR: orClauses,
       },
     })
 
@@ -841,14 +691,7 @@ app.openapi(getSurveyObjectCount, async (c) => {
     where: { id },
     include: {
       surveyObjectType: {
-        include: {
-          organizations: { select: { Id: true } },
-          trainingFields: { select: { id: true } },
-          trainingMajors: { select: { id: true } },
-          trainingCourses: { select: { id: true } },
-          fixedClasses: { select: { id: true } },
-          subjectClasses: { select: { id: true } },
-        },
+        include: SURVEY_OBJECT_TYPE_INCLUDE,
       },
     },
   })
@@ -859,112 +702,19 @@ app.openapi(getSurveyObjectCount, async (c) => {
 
   const data = await Promise.all(
     survey.surveyObjectType.map(async (surveyObjectType) => {
-      const objectTypeProfiles = await prisma.userProfile.findMany({
-        select: { id: true },
-        where: {
-          deletedAt: null,
-          active: true,
-          ...(q.fullname ? { fullname: { contains: q.fullname, mode: "insensitive" } } : {}),
-          OR: [
-            q?.isStudent !== "student"
-              ? {
-                  lecturer: {
-                    ...(q.lecturerCode
-                      ? {
-                          code: {
-                            contains: q.lecturerCode,
-                            mode: "insensitive",
-                          },
-                        }
-                      : {}),
-                    organizationId: {
-                      in:
-                        q?.organizationId && q?.organizationId?.length > 0
-                          ? q.organizationId
-                          : surveyObjectType.organizations.map((org) => org.Id),
-                    },
-                  },
-                }
-              : {},
-            q?.isStudent !== "student"
-              ? {
-                  staffs: {
-                    ...(q.staffCode
-                      ? {
-                          code: {
-                            contains: q.staffCode,
-                            mode: "insensitive",
-                          },
-                        }
-                      : {}),
-                    organizationId: {
-                      in:
-                        q?.organizationId && q?.organizationId?.length > 0
-                          ? q.organizationId
-                          : surveyObjectType.organizations.map((org) => org.Id),
-                    },
-                  },
-                }
-              : {},
-            q?.isStudent !== "lecturer"
-              ? {
-                  educationAndTraining: {
-                    some: {
-                      ...(q.studentCode
-                        ? {
-                            code: {
-                              contains: q.studentCode,
-                              mode: "insensitive",
-                            },
-                          }
-                        : {}),
-                      fixedClass: {
-                        ...(surveyObjectType.fixedClasses.length
-                          ? {
-                              id: {
-                                in: surveyObjectType.fixedClasses.map((fc) => fc.id),
-                              },
-                            }
-                          : {}),
-                        ...(q.fixedClassIds
-                          ? {
-                              id: { in: q.fixedClassIds },
-                            }
-                          : {}),
-                        ...(surveyObjectType.trainingCourses.length
-                          ? {
-                              trainingCourseId: {
-                                in: surveyObjectType.trainingCourses.map((tc) => tc.id),
-                              },
-                            }
-                          : {}),
-                        ...(q.trainingCourseIds
-                          ? {
-                              trainingCourseId: {
-                                in: q.trainingCourseIds,
-                              },
-                            }
-                          : {}),
-                        ...buildStudentMajorFieldFixedClassFilter(surveyObjectType, q),
-                      },
-                      ...(surveyObjectType.subjectClasses.length
-                        ? {
-                            subjectClassStudent: {
-                              some: {
-                                subjectClassId: {
-                                  in: surveyObjectType.subjectClasses.map((sc) => sc.id),
-                                },
-                              },
-                            },
-                          }
-                        : {}),
-                    },
-                  },
-                }
-              : {},
-          ],
-        },
-      })
+      const orClauses = buildSurveyObjectTypeProfileOrClauses(surveyObjectType, q)
+
+      const objectTypeProfiles = orClauses.length
+        ? await prisma.userProfile.findMany({
+            select: { id: true },
+            where: {
+              deletedAt: null,
+              active: true,
+              ...(q.fullname ? { fullname: { contains: q.fullname, mode: "insensitive" } } : {}),
+              OR: orClauses,
+            },
+          })
+        : []
 
       const taken = await prisma.surveySession.count({
         where: {
