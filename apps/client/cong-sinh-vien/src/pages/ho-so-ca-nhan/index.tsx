@@ -523,13 +523,13 @@ const HoSoCaNhan = () => {
             onChange={(e) => setSearchDiemMonHoc(e.target.value)}
             style={{ maxWidth: 360 }}
           />
-          <Table
-            dataSource={filteredDiemMonHoc}
-            rowKey="id"
-            size="small"
-            pagination={{ pageSize: 10 }}
-            bordered
-            scroll={{ x: 1200 }}
+            <Table
+              dataSource={filteredDiemMonHoc}
+              rowKey="id"
+              size="small"
+              pagination={{ pageSize: 10 }}
+              bordered
+              scroll={{ x: 1200 }}
           columns={[
             {
               title: "STT",
@@ -587,7 +587,7 @@ const HoSoCaNhan = () => {
             },
           ]}
           />
-        </div>
+          </div>
       ),
     },
     {
@@ -633,13 +633,13 @@ const HoSoCaNhan = () => {
               ]}
             />
           </div>
-          <Table
-            dataSource={filteredKetQuaHocKy}
-            rowKey="id"
-            size="small"
-            bordered
-            pagination={{ pageSize: 10 }}
-            scroll={{ x: 2400 }}
+            <Table
+              dataSource={filteredKetQuaHocKy}
+              rowKey="id"
+              size="small"
+              bordered
+              pagination={{ pageSize: 10 }}
+              scroll={{ x: 2400 }}
           columns={[
             {
               title: "STT",
@@ -649,15 +649,9 @@ const HoSoCaNhan = () => {
                 getRowSTT(studentData?.studentSemesterResult, record, index),
             },
             {
-              title: "Mã",
-              width: 120,
-              render: (_: unknown, record: StudentSemesterResultWithRelations) =>
-                record.code || record.semester?.code || record.semester?.name || "-",
-            },
-            {
               title: "Học kỳ",
               dataIndex: ["semester", "name"],
-              width: 150,
+              width: 120,
             },
             {
               title: "GPA (4)",
@@ -696,7 +690,7 @@ const HoSoCaNhan = () => {
             },
             {
               title: "Xếp loại RL",
-              width: 120,
+              width: 90,
               align: "center",
               render: (_: unknown, record: StudentSemesterResultWithRelations) => {
                 const type = resolveTrainingType(record.studentTrainingType, record.conductScore)
@@ -705,14 +699,14 @@ const HoSoCaNhan = () => {
             },
             {
               title: "Xếp loại HT",
-              width: 120,
+              width: 90,
               render: (_: unknown, record: StudentSemesterResultWithRelations) =>
                 record.rank?.classification || "-",
             },
             {
               title: "TC đăng ký",
               dataIndex: "registeredCredits",
-              width: 100,
+              width: 90,
               align: "center",
             },
             {
@@ -730,19 +724,19 @@ const HoSoCaNhan = () => {
             {
               title: "TC tích lũy",
               dataIndex: "accumulatedCredits",
-              width: 100,
+              width: 90,
               align: "center",
             },
             {
               title: "TC học lại",
               dataIndex: "retakingCredits",
-              width: 100,
+              width: 90,
               align: "center",
             },
             {
               title: "TC theo CTDT",
               dataIndex: "totalCreditsByCurriculum",
-              width: 110,
+              width: 100,
               align: "center",
             },
             {
@@ -856,13 +850,13 @@ const HoSoCaNhan = () => {
               ]}
             />
           </div>
-          <Table
-            dataSource={filteredKetQuaNamHoc}
-            rowKey="id"
-            size="small"
-            bordered
-            pagination={{ pageSize: 10 }}
-            scroll={{ x: 1400 }}
+            <Table
+              dataSource={filteredKetQuaNamHoc}
+              rowKey="id"
+              size="small"
+              bordered
+              pagination={{ pageSize: 10 }}
+              scroll={{ x: 1400 }}
           columns={[
             {
               title: "STT",
@@ -870,12 +864,6 @@ const HoSoCaNhan = () => {
               align: "center",
               render: (_: unknown, record: StudentYearResultWithRelations, index: number) =>
                 getRowSTT(studentData?.studentYearResult, record, index),
-            },
-            {
-              title: "Mã",
-              width: 120,
-              render: (_: unknown, record: StudentYearResultWithRelations) =>
-                record.code || record.schoolYear?.code || record.schoolYear?.name || "-",
             },
             {
               title: "Năm học",
@@ -1028,12 +1016,12 @@ const HoSoCaNhan = () => {
             onChange={(e) => setSearchHocBong(e.target.value)}
             style={{ maxWidth: 360 }}
           />
-          <Table
-            dataSource={filteredHocBong}
-            rowKey="id"
-            size="small"
-            bordered
-            pagination={{ pageSize: 10 }}
+            <Table
+              dataSource={filteredHocBong}
+              rowKey="id"
+              size="small"
+              bordered
+              pagination={{ pageSize: 10 }}
           columns={[
             {
               title: "STT",
@@ -1100,12 +1088,12 @@ const HoSoCaNhan = () => {
             onChange={(e) => setSearchChungChi(e.target.value)}
             style={{ maxWidth: 360 }}
           />
-          <Table
-            dataSource={filteredChungChi}
-            rowKey="id"
-            size="small"
-            bordered
-            pagination={{ pageSize: 10 }}
+            <Table
+              dataSource={filteredChungChi}
+              rowKey="id"
+              size="small"
+              bordered
+              pagination={{ pageSize: 10 }}
           columns={[
             {
               title: "STT",
@@ -1222,12 +1210,12 @@ const HoSoCaNhan = () => {
             onChange={(e) => setSearchGiaiThuong(e.target.value)}
             style={{ maxWidth: 360 }}
           />
-          <Table
-            dataSource={filteredGiaiThuong}
-            rowKey="id"
-            size="small"
-            bordered
-            pagination={{ pageSize: 10 }}
+            <Table
+              dataSource={filteredGiaiThuong}
+              rowKey="id"
+              size="small"
+              bordered
+              pagination={{ pageSize: 10 }}
           columns={[
             {
               title: "STT",
@@ -1297,12 +1285,12 @@ const HoSoCaNhan = () => {
             onChange={(e) => setSearchCanhBaoHocTap(e.target.value)}
             style={{ maxWidth: 360 }}
           />
-          <Table
-            dataSource={filteredCanhBaoHocTap}
-            rowKey="id"
-            size="small"
-            bordered
-            pagination={{ pageSize: 10 }}
+            <Table
+              dataSource={filteredCanhBaoHocTap}
+              rowKey="id"
+              size="small"
+              bordered
+              pagination={{ pageSize: 10 }}
           columns={[
             {
               title: "STT",
@@ -1363,12 +1351,12 @@ const HoSoCaNhan = () => {
             onChange={(e) => setSearchCanhCaoHocDuong(e.target.value)}
             style={{ maxWidth: 360 }}
           />
-          <Table
-            dataSource={filteredCanhCaoHocDuong}
-            rowKey="id"
-            bordered
-            size="small"
-            pagination={{ pageSize: 10 }}
+            <Table
+              dataSource={filteredCanhCaoHocDuong}
+              rowKey="id"
+              bordered
+              size="small"
+              pagination={{ pageSize: 10 }}
           columns={[
             {
               title: "STT",
@@ -1435,13 +1423,13 @@ const HoSoCaNhan = () => {
               ]}
             />
           </div>
-          <Table
-            dataSource={filteredDiemRenLuyen}
-            rowKey="id"
-            bordered
-            size="small"
-            pagination={{ pageSize: 10 }}
-            scroll={{ x: 800 }}
+            <Table
+              dataSource={filteredDiemRenLuyen}
+              rowKey="id"
+              bordered
+              size="small"
+              pagination={{ pageSize: 10 }}
+              scroll={{ x: 800 }}
           columns={[
             {
               title: "STT",

@@ -630,12 +630,12 @@ const ModalChiTietSinhVien = () => {
             onChange={(e) => setSearchDiemMonHoc(e.target.value)}
             style={{ maxWidth: 360 }}
           />
-          <Table
-            dataSource={filteredDiemMonHoc}
-            rowKey="id"
-            size="small"
-            pagination={{ pageSize: 10 }}
-            scroll={{ x: 1200 }}
+            <Table
+              dataSource={filteredDiemMonHoc}
+              rowKey="id"
+              size="small"
+              pagination={{ pageSize: 10 }}
+              scroll={{ x: 1200 }}
           columns={[
             {
               title: "STT",
@@ -739,12 +739,12 @@ const ModalChiTietSinhVien = () => {
               ]}
             />
           </div>
-          <Table
-            dataSource={filteredKetQuaHocKy}
-            rowKey="id"
-            size="small"
-            pagination={{ pageSize: 10 }}
-            scroll={{ x: 2400 }}
+            <Table
+              dataSource={filteredKetQuaHocKy}
+              rowKey="id"
+              size="small"
+              pagination={{ pageSize: 10 }}
+              scroll={{ x: 2400 }}
           columns={[
             {
               title: "STT",
@@ -752,11 +752,7 @@ const ModalChiTietSinhVien = () => {
               align: "center",
               render: (_, record, index) => getRowSTT(studentData?.studentSemesterResult, record, index),
             },
-            {
-              title: "Mã",
-              dataIndex: "code",
-              width: 100,
-            },
+
             {
               title: "Học kỳ",
               dataIndex: ["semester", "name"],
@@ -1001,12 +997,12 @@ const ModalChiTietSinhVien = () => {
               ]}
             />
           </div>
-          <Table
-            dataSource={filteredKetQuaNamHoc}
-            rowKey="id"
-            size="small"
-            pagination={{ pageSize: 10 }}
-            scroll={{ x: 1400 }}
+            <Table
+              dataSource={filteredKetQuaNamHoc}
+              rowKey="id"
+              size="small"
+              pagination={{ pageSize: 10 }}
+              scroll={{ x: 1400 }}
           columns={[
             {
               title: "STT",
@@ -1014,11 +1010,7 @@ const ModalChiTietSinhVien = () => {
               align: "center",
               render: (_, record, index) => getRowSTT(studentData?.studentYearResult, record, index),
             },
-            {
-              title: "Mã",
-              dataIndex: "code",
-              width: 100,
-            },
+
             {
               title: "Năm học",
               dataIndex: ["schoolYear", "name"],
