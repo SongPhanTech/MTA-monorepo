@@ -645,8 +645,12 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_: unknown, record: StudentSemesterResultWithRelations, index: number) =>
-                getRowSTT(studentData?.studentSemesterResult, record, index),
+              render: (_, record, index) => getRowSTT(studentData?.studentSemesterResult, record, index),
+            },
+            {
+              title: "Mã",
+              dataIndex: ["semester", "code"],
+              width: 100,
             },
             {
               title: "Học kỳ",
@@ -682,26 +686,9 @@ const HoSoCaNhan = () => {
               render: (val) => (val ? Number(val).toFixed(2) : ""),
             },
             {
-              title: "Điểm RL",
-              dataIndex: "conductScore",
-              width: 90,
-              align: "center",
-              render: (score) => (score ? Number(score).toFixed(1) : ""),
-            },
-            {
-              title: "Xếp loại RL",
-              width: 90,
-              align: "center",
-              render: (_: unknown, record: StudentSemesterResultWithRelations) => {
-                const type = resolveTrainingType(record.studentTrainingType, record.conductScore)
-                return type ? <Tag color={TRAINING_TYPE_COLOR_MAP[type]}>{TRAINING_TYPE_LABEL_MAP[type]}</Tag> : "-"
-              },
-            },
-            {
               title: "Xếp loại HT",
-              width: 90,
-              render: (_: unknown, record: StudentSemesterResultWithRelations) =>
-                record.rank?.classification || "-",
+              dataIndex: ["rank", "classification"],
+              width: 120,
             },
             {
               title: "TC đăng ký",
@@ -905,12 +892,6 @@ const HoSoCaNhan = () => {
               render: (val) => val?.toString(),
             },
             {
-              title: "Điểm RL",
-              dataIndex: "conductScore",
-              width: 90,
-              align: "center",
-            },
-            {
               title: "Xếp loại RL",
               width: 120,
               align: "center",
@@ -1107,7 +1088,7 @@ const HoSoCaNhan = () => {
               width: 200,
             },
             {
-              title: "Điểm cuối kỳ",
+              title: "Điểm quy đổi",
               dataIndex: "finalScore",
               width: 100,
               align: "center",
@@ -1463,11 +1444,11 @@ const HoSoCaNhan = () => {
                 let resolvedType = type
                 if (!resolvedType && record.score != null) {
                   const score = Number(record.score)
-                  if (score >= 90) resolvedType = "EXCELLENT"
-                  else if (score >= 80) resolvedType = "GOOD"
-                  else if (score >= 65) resolvedType = "FAIR"
-                  else if (score >= 50) resolvedType = "MEDIUM"
-                  else if (score >= 35) resolvedType = "POOR"
+                  if (score >= 9) resolvedType = "EXCELLENT"
+                  else if (score >= 8) resolvedType = "GOOD"
+                  else if (score >= 6.5) resolvedType = "FAIR"
+                  else if (score >= 5) resolvedType = "MEDIUM"
+                  else if (score >= 3.5) resolvedType = "POOR"
                   else resolvedType = "VERY_POOR"
                 }
 
