@@ -455,6 +455,44 @@ const HoSoCaNhan = () => {
               align: "center",
               render: (val) => (val ? Number(val).toFixed(2) : ""),
             },
+                {
+              title: "Điểm RL",
+              dataIndex: "conductScore",
+              width: 90,
+              align: "center",
+              render: (score) => (score ? Number(score).toFixed(1) : ""),
+            },
+            {
+              title: "Xếp loại RL",
+              dataIndex: "studentTrainingType",
+              width: 120,
+              align: "center",
+              render: (type) => {
+                const colorMap: Record<string, string> = {
+                  EXCELLENT: "green",
+                  GOOD: "blue",
+                  FAIR: "cyan",
+                  MEDIUM: "geekblue",
+                  AVERAGE: "orange",
+                  POOR: "red",
+                  VERY_POOR: "volcano",
+                }
+                const labelMap: Record<string, string> = {
+                  EXCELLENT: "Xuất sắc",
+                  GOOD: "Tốt",
+                  FAIR: "Khá",
+                  MEDIUM: "TB Khá",
+                  AVERAGE: "Trung bình",
+                  POOR: "Yếu",
+                  VERY_POOR: "Kém",
+                }
+                return type ? (
+                  <Tag color={colorMap[type] || "default"}>{labelMap[type] || type}</Tag>
+                ) : (
+                  ""
+                )
+              },
+            },
             {
               title: "Xếp loại HT",
               dataIndex: ["rank", "classification"],

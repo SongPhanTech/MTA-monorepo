@@ -1,5 +1,5 @@
 import CardStudyResult from "@components/commons/card-study-result"
-import { useScoreConverter } from "@hooks/scoreConverter"
+
 import DefaultLayout from "@layouts/default-layout"
 import { useSession } from "@workspace/auth/react"
 import { useFindUniqueCurriculumVersion, useFindUniqueUserProfile } from "@workspace/db/hooks"
@@ -22,6 +22,21 @@ function Page() {
             id: true,
             curriculumVersionId: true,
             fixedClassId: true,
+            studentYearResult: {
+              select: {
+                rank: {
+                  select: {
+                    classification: true,
+                  },
+                },
+                cumulativeGpaBase4: true,
+                accumulatedCredits: true,
+              },
+              orderBy: {
+                studyYear: "desc",
+              },
+              take: 1,
+            },
             studentSemesterResult: {
               select: {
                 rank: {
@@ -47,7 +62,7 @@ function Page() {
   const studentId = userProfile?.educationAndTraining?.[0]?.id ?? ""
   const fixedClassId = userProfile?.educationAndTraining?.[0]?.fixedClassId ?? ""
   const academicRanking =
-    userProfile?.educationAndTraining?.[0]?.studentSemesterResult?.[0]?.rank?.classification
+    userProfile?.educationAndTraining?.[0]?.studentYearResult?.[0]?.rank?.classification
   const { data: curriculumVersion } = useFindUniqueCurriculumVersion(
     {
       where: {
@@ -88,10 +103,6 @@ function Page() {
     { enabled: !!curriculumVersionId && !!studentId && !!fixedClassId }
   )
 
-  const { convertScore } = useScoreConverter(
-    curriculumVersion?.fixedClass?.trainingCourse?.scoreConverts
-  )
-
   const totalCurriculumCredits = useMemo(() => {
     let required = 0
     let elective = 0
@@ -114,72 +125,14 @@ function Page() {
     return required + elective
   }, [curriculumVersion])
 
+  const latestYearResult = userProfile?.educationAndTraining?.[0]?.studentYearResult?.[0]
+
   const gpaScore = useMemo(() => {
-    let totalWeightedScore = 0
-    let totalCredits = 0
-
-    curriculumVersion?.trainingBlocks?.forEach((block) => {
-      const passedOptionalSubjects: { credits: number; score4: number }[] = []
-
-      block.subjects?.forEach((subjectItem: any) => {
-        if (!subjectItem.useForFinalScore) return
-
-        const subject = subjectItem.subject
-        const scores = subject.studentSubjectScore || []
-        const credits = subject.credit || 0
-
-        if (scores.length > 0) {
-          // Lấy điểm cao nhất trong số các lần học lại/thi lại
-          let bestScore10 = 0
-          let bestScoreResult: any = null
-
-          scores.forEach((score: any) => {
-            const score10 = score.manualFinalScore ?? score.finalScore?.toNumber() ?? 0
-            const scoreResult = convertScore(score10)
-
-            if (!bestScoreResult || score10 > bestScore10) {
-              bestScore10 = score10
-              bestScoreResult = scoreResult
-            }
-          })
-
-          // Chỉ tính môn đạt
-          if (bestScoreResult?.pass) {
-            const score4 = bestScoreResult.base4 || 0
-
-            if (subjectItem.type === $Enums.SubjectRequirementType.Mandatory) {
-              totalWeightedScore += score4 * credits
-              totalCredits += credits
-            } else {
-              passedOptionalSubjects.push({ credits, score4 })
-            }
-          }
-        }
-      })
-
-      const maxElective = block.electiveCreditsRequired
-
-      if (passedOptionalSubjects.length > 0 && maxElective != null && maxElective > 0) {
-        // Lấy ưu tiên các môn tự chọn có điểm cao nhất
-        passedOptionalSubjects.sort((a, b) => b.score4 - a.score4)
-
-        let blockElectiveCredits = 0
-
-        for (const opt of passedOptionalSubjects) {
-          const creditsToTake = Math.min(opt.credits, maxElective - blockElectiveCredits)
-          if (creditsToTake > 0) {
-            totalCredits += creditsToTake
-            totalWeightedScore += opt.score4 * creditsToTake
-            blockElectiveCredits += creditsToTake
-          }
-          if (blockElectiveCredits >= maxElective) break
-        }
-      }
-    })
-
-    const gpa = totalCredits > 0 ? totalWeightedScore / totalCredits : 0
-    return { gpa, totalCredits }
-  }, [curriculumVersion, convertScore])
+    return {
+      gpa: Number(latestYearResult?.cumulativeGpaBase4 ?? 0),
+      totalCredits: Number(latestYearResult?.accumulatedCredits ?? 0),
+    }
+  }, [latestYearResult])
 
   return (
     <div className="flex flex-col gap-6">
