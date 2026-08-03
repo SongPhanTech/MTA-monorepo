@@ -1858,7 +1858,7 @@ export const exportKiemTraTienDo = async ({
       ],
     }
     await exportFromTemplate({
-      templateUrl: getMinioUrl("mta/luan-van/KiemTraTienDoLuanVan.xlsx"),
+      templateUrl: getMinioUrl("mta/template/KiemTraTienDoLuanVan.xlsx"),
       sheets: [
         {
           sheet: "Detai",
@@ -4195,7 +4195,7 @@ export const exportPhuLucHuongDanDoAn = async ({
 
     const response = await renderXlsxTemplate({
       templatePath: "PhanCongHuongDanDoAn.xlsx",
-      prefix: "mta/luan-van",
+      prefix: "mta/template",
       fileName: "PhanCongHuongDanDoAn.xlsx",
       mergeBlocksToOneSheet: false,
       sheets: [
@@ -4771,7 +4771,7 @@ export const exportDanhSachTieuBanChamDATN = async ({
 
     const response = await renderXlsxTemplate({
       templatePath: "DanhSachTieuBanChamDATN.xlsx",
-      prefix: "mta/luan-van",
+      prefix: "mta/template",
       fileName: `DanhSachTieuBanChamDATN.xlsx`,
       mergeBlocksToOneSheet: true,
       sheets: [
