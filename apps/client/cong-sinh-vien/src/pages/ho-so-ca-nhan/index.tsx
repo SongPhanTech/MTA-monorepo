@@ -419,7 +419,7 @@ const HoSoCaNhan = () => {
             },
             {
               title: "Mã",
-              dataIndex: "code",
+              dataIndex: ["semester", "code"],
               width: 100,
             },
             {
@@ -456,46 +456,8 @@ const HoSoCaNhan = () => {
               render: (val) => (val ? Number(val).toFixed(2) : ""),
             },
             {
-              title: "Điểm RL",
-              dataIndex: "conductScore",
-              width: 90,
-              align: "center",
-              render: (score) => (score ? Number(score).toFixed(1) : ""),
-            },
-            {
-              title: "Xếp loại RL",
-              dataIndex: "studentTrainingType",
-              width: 120,
-              align: "center",
-              render: (type) => {
-                const colorMap: Record<string, string> = {
-                  EXCELLENT: "green",
-                  GOOD: "blue",
-                  FAIR: "cyan",
-                  MEDIUM: "geekblue",
-                  AVERAGE: "orange",
-                  POOR: "red",
-                  VERY_POOR: "volcano",
-                }
-                const labelMap: Record<string, string> = {
-                  EXCELLENT: "Xuất sắc",
-                  GOOD: "Tốt",
-                  FAIR: "Khá",
-                  MEDIUM: "TB Khá",
-                  AVERAGE: "Trung bình",
-                  POOR: "Yếu",
-                  VERY_POOR: "Kém",
-                }
-                return type ? (
-                  <Tag color={colorMap[type] || "default"}>{labelMap[type] || type}</Tag>
-                ) : (
-                  ""
-                )
-              },
-            },
-            {
               title: "Xếp loại HT",
-              dataIndex: ["rank", "name"],
+              dataIndex: ["rank", "classification"],
               width: 120,
             },
             {
@@ -662,12 +624,6 @@ const HoSoCaNhan = () => {
               width: 90,
               align: "center",
               render: (val) => val?.toString(),
-            },
-            {
-              title: "Điểm RL",
-              dataIndex: "conductScore",
-              width: 90,
-              align: "center",
             },
             {
               title: "Xếp loại RL",
@@ -843,7 +799,7 @@ const HoSoCaNhan = () => {
               width: 200,
             },
             {
-              title: "Điểm cuối kỳ",
+              title: "Điểm quy đổi",
               dataIndex: "finalScore",
               width: 100,
               align: "center",
@@ -1151,11 +1107,11 @@ const HoSoCaNhan = () => {
                 let resolvedType = type
                 if (!resolvedType && record.score != null) {
                   const score = Number(record.score)
-                  if (score >= 90) resolvedType = "EXCELLENT"
-                  else if (score >= 80) resolvedType = "GOOD"
-                  else if (score >= 65) resolvedType = "FAIR"
-                  else if (score >= 50) resolvedType = "MEDIUM"
-                  else if (score >= 35) resolvedType = "POOR"
+                  if (score >= 9) resolvedType = "EXCELLENT"
+                  else if (score >= 8) resolvedType = "GOOD"
+                  else if (score >= 6.5) resolvedType = "FAIR"
+                  else if (score >= 5) resolvedType = "MEDIUM"
+                  else if (score >= 3.5) resolvedType = "POOR"
                   else resolvedType = "VERY_POOR"
                 }
 
