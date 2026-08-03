@@ -1112,6 +1112,268 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
+  apps/client/cong-hoc-vien:
+    dependencies:
+      '@ant-design/cssinjs':
+        specifier: 'catalog:'
+        version: 1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@ant-design/icons':
+        specifier: 'catalog:'
+        version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@ant-design/nextjs-registry':
+        specifier: 'catalog:'
+        version: 1.2.0(@ant-design/cssinjs@1.24.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@ant-design/plots':
+        specifier: 'catalog:'
+        version: 2.6.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@casl/ability':
+        specifier: 'catalog:'
+        version: 6.7.3
+      '@casl/react':
+        specifier: 'catalog:'
+        version: 4.0.0(@casl/ability@6.7.3)(react@18.3.1)
+      '@t3-oss/env-nextjs':
+        specifier: 'catalog:'
+        version: 0.12.0(typescript@5.9.3)(zod@3.25.76)
+      '@tanstack/react-query':
+        specifier: 'catalog:'
+        version: 5.90.5(react@18.3.1)
+      '@tiptap/extension-color':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/extension-text-style@3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5)))
+      '@tiptap/extension-highlight':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))
+      '@tiptap/extension-image':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))
+      '@tiptap/extension-mathematics':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)(katex@0.16.25)
+      '@tiptap/extension-mention':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)(@tiptap/suggestion@3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5))
+      '@tiptap/extension-table':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)
+      '@tiptap/extension-table-cell':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/extension-table@3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5))
+      '@tiptap/extension-table-header':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/extension-table@3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5))
+      '@tiptap/extension-table-row':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/extension-table@3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5))
+      '@tiptap/extension-text-align':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))
+      '@tiptap/extension-text-style':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))
+      '@tiptap/extension-underline':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))
+      '@tiptap/pm':
+        specifier: 'catalog:'
+        version: 3.10.5
+      '@tiptap/react':
+        specifier: 'catalog:'
+        version: 3.10.5(@floating-ui/dom@1.7.4)(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tiptap/starter-kit':
+        specifier: 'catalog:'
+        version: 3.10.5
+      '@tiptap/suggestion':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)
+      '@workspace/auth':
+        specifier: workspace:*
+        version: link:../../../packages/auth
+      '@workspace/constant':
+        specifier: workspace:*
+        version: link:../../../packages/constant
+      '@workspace/db':
+        specifier: workspace:*
+        version: link:../../../packages/database
+      '@workspace/permissions':
+        specifier: workspace:*
+        version: link:../../../packages/permissions
+      '@workspace/router':
+        specifier: workspace:*
+        version: link:../../../packages/router
+      '@workspace/ui':
+        specifier: workspace:*
+        version: link:../../../packages/ui
+      antd:
+        specifier: 'catalog:'
+        version: 5.29.1(date-fns@3.6.0)(luxon@3.7.2)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      axios:
+        specifier: 'catalog:'
+        version: 1.7.9
+      chart.js:
+        specifier: 'catalog:'
+        version: 4.5.1
+      class-variance-authority:
+        specifier: 'catalog:'
+        version: 0.7.1
+      clsx:
+        specifier: 'catalog:'
+        version: 2.1.1
+      dayjs:
+        specifier: 'catalog:'
+        version: 1.11.19
+      decimal.js:
+        specifier: 'catalog:'
+        version: 10.6.0
+      easy-peasy:
+        specifier: 'catalog:'
+        version: 6.0.5(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      exceljs:
+        specifier: 'catalog:'
+        version: 4.4.0
+      file-saver:
+        specifier: 'catalog:'
+        version: 2.0.5
+      katex:
+        specifier: 'catalog:'
+        version: 0.16.25
+      lodash:
+        specifier: 'catalog:'
+        version: 4.17.21
+      lucide-react:
+        specifier: 'catalog:'
+        version: 0.468.0(react@18.3.1)
+      minio:
+        specifier: 'catalog:'
+        version: 8.0.6
+      next:
+        specifier: 'catalog:'
+        version: 15.0.4(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      qs:
+        specifier: 'catalog:'
+        version: 6.14.0
+      react:
+        specifier: 'catalog:'
+        version: 18.3.1
+      react-chartjs-2:
+        specifier: 'catalog:'
+        version: 5.3.1(chart.js@4.5.1)(react@18.3.1)
+      react-day-picker:
+        specifier: 'catalog:'
+        version: 8.10.1(date-fns@3.6.0)(react@18.3.1)
+      react-dnd:
+        specifier: 'catalog:'
+        version: 16.0.1(@types/node@20.19.25)(@types/react@18.3.24)(react@18.3.1)
+      react-dnd-html5-backend:
+        specifier: 'catalog:'
+        version: 16.0.1
+      react-dom:
+        specifier: 'catalog:'
+        version: 18.3.1(react@18.3.1)
+      react-hook-disclosure-modal:
+        specifier: 'catalog:'
+        version: 2.0.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-icons:
+        specifier: 'catalog:'
+        version: 5.4.0(react@18.3.1)
+      react-idle-timer:
+        specifier: 'catalog:'
+        version: 5.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-images-viewer:
+        specifier: 'catalog:'
+        version: 1.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-to-print:
+        specifier: 'catalog:'
+        version: 3.2.0(react@18.3.1)
+      react-top-loading-bar:
+        specifier: 'catalog:'
+        version: 2.3.1(react@18.3.1)
+      read-excel-file:
+        specifier: 'catalog:'
+        version: 5.8.8
+      tailwind-merge:
+        specifier: 'catalog:'
+        version: 2.6.0
+      tippy.js:
+        specifier: 'catalog:'
+        version: 6.3.7
+      xlsx:
+        specifier: 'catalog:'
+        version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
+      zod:
+        specifier: 'catalog:'
+        version: 3.25.76
+    devDependencies:
+      '@types/file-saver':
+        specifier: 'catalog:'
+        version: 2.0.7
+      '@types/lodash':
+        specifier: 'catalog:'
+        version: 4.17.20
+      '@types/minio':
+        specifier: 'catalog:'
+        version: 7.1.1
+      '@types/node':
+        specifier: 'catalog:'
+        version: 20.19.25
+      '@types/qs':
+        specifier: 'catalog:'
+        version: 6.14.0
+      '@types/react':
+        specifier: 'catalog:'
+        version: 18.3.24
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 18.3.7(@types/react@18.3.24)
+      '@types/react-image-fallback':
+        specifier: 'catalog:'
+        version: 8.0.6
+      '@workspace/libs':
+        specifier: workspace:*
+        version: link:../../../packages/libs
+      autoprefixer:
+        specifier: 'catalog:'
+        version: 10.4.22(postcss@8.5.6)
+      cross-env:
+        specifier: 'catalog:'
+        version: 7.0.3
+      crypto-browserify:
+        specifier: 'catalog:'
+        version: 3.12.1
+      dotenv:
+        specifier: 'catalog:'
+        version: 16.6.1
+      glob:
+        specifier: 'catalog:'
+        version: 11.1.0
+      next-remove-imports:
+        specifier: 'catalog:'
+        version: 1.0.12(webpack@5.103.0(@swc/core@1.15.3)(esbuild@0.24.2))
+      patch-package:
+        specifier: 'catalog:'
+        version: 8.0.1
+      path-browserify:
+        specifier: 'catalog:'
+        version: 1.0.1
+      postcss:
+        specifier: 'catalog:'
+        version: 8.5.6
+      stream-browserify:
+        specifier: 'catalog:'
+        version: 3.0.0
+      tailwindcss:
+        specifier: 'catalog:'
+        version: 3.4.18(yaml@2.8.1)
+      terser-webpack-plugin:
+        specifier: 'catalog:'
+        version: 5.3.14(@swc/core@1.15.3)(esbuild@0.24.2)(webpack@5.103.0(@swc/core@1.15.3)(esbuild@0.24.2))
+      ts-node:
+        specifier: 'catalog:'
+        version: 10.9.2(@swc/core@1.15.3)(@types/node@20.19.25)(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
   apps/client/cong-sinh-vien:
     dependencies:
       '@ant-design/cssinjs':

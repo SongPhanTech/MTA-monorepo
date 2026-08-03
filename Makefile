@@ -111,7 +111,7 @@ PKG_KHAO_THI := khao-thi
 PKG_DAO_TAO := ql-dao-tao
 PKG_HO_SO := ql-ho-so
 PKG_AI := tro-ly-ao
-# PKG_CONG_HOC_VIEN := cong-hoc-vien
+PKG_CONG_HOC_VIEN := cong-hoc-vien
 PKG_CONG_GIANG_VIEN := cong-giang-vien
 PKG_CONG_SINH_VIEN := cong-sinh-vien
 
@@ -125,6 +125,8 @@ CDN_NAME_ql-dao-tao = lms-cdn
 ROUTER_NAME_ql-dao-tao = lms
 CDN_NAME_cong-sinh-vien = cong-sinh-vien-cdn
 ROUTER_NAME_cong-sinh-vien = cong-sinh-vien
+CDN_NAME_cong-hoc-vien = cong-hoc-vien-cdn
+ROUTER_NAME_cong-hoc-vien = cong-hoc-vien
 CDN_NAME_tro-ly-ao = chatbot-cdn
 ROUTER_NAME_tro-ly-ao = chatbot
 CDN_NAME_ql-ho-so = hrm-cdn
@@ -142,6 +144,7 @@ APP_URL_SUFFIX_cong-sinh-vien  = /cong-sinh-vien/home
 APP_URL_SUFFIX_ql-ho-so     = /hrm/home
 APP_URL_SUFFIX_tro-ly-ao    = /chatbot/?mode=tro-ly-ao
 APP_URL_SUFFIX_cong-giang-vien = /conggiangvien/home
+APP_URL_SUFFIX_cong-hoc-vien = /conghocvien/home
 
 # Targets
 .PHONY: all clean push deploy release all-be build-all-be build-all-fe ship-fe \
