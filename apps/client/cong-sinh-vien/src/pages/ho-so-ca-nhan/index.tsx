@@ -1,7 +1,7 @@
-import { Descriptions, Table, Tabs, Tag } from "antd"
+import { Descriptions, Input, Select, Table, Tabs, Tag } from "antd"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { FIXED_CLASS_STUDENT_STATUS } from "@constants/constants"
 import { useAcademicRankingBaseTypeOptions } from "@hooks/academicRankingBaseType"
 import { useStudentTrainingTypeOptions } from "@hooks/studentTrainingType"
@@ -9,9 +9,63 @@ import DefaultLayout from "@layouts/default-layout"
 import { useSession } from "@workspace/auth/react"
 import { useFindUniqueStudent, useFindUniqueUserProfile } from "@workspace/db/hooks"
 
+import type {
+  AcademicRankingConvert,
+  SchoolYear,
+  Semester,
+  StudentSemesterResult,
+  StudentTrainingType,
+  StudentYearResult,
+} from "@workspace/db"
+
 dayjs.locale("vi")
 
-const getRowSTT = (dataSource: any[] | undefined, record: any, fallbackIndex: number) => {
+type StudentSemesterResultWithRelations = StudentSemesterResult & {
+  semester?: Semester | null
+  rank?: AcademicRankingConvert | null
+}
+
+type StudentYearResultWithRelations = StudentYearResult & {
+  schoolYear?: SchoolYear | null
+  rank?: AcademicRankingConvert | null
+}
+
+const TRAINING_TYPE_COLOR_MAP: Record<StudentTrainingType, string> = {
+  EXCELLENT: "green",
+  GOOD: "blue",
+  FAIR: "cyan",
+  MEDIUM: "geekblue",
+  AVERAGE: "orange",
+  POOR: "red",
+  VERY_POOR: "volcano",
+}
+
+const TRAINING_TYPE_LABEL_MAP: Record<StudentTrainingType, string> = {
+  EXCELLENT: "Xuất sắc",
+  GOOD: "Tốt",
+  FAIR: "Khá",
+  MEDIUM: "TB Khá",
+  AVERAGE: "Trung bình",
+  POOR: "Yếu",
+  VERY_POOR: "Kém",
+}
+
+function resolveTrainingType(
+  trainingType: StudentTrainingType | null | undefined,
+  conductScore: number | null | undefined,
+): StudentTrainingType | null {
+  if (trainingType) return trainingType
+  if (conductScore == null) return null
+  const score = Number(conductScore)
+  if (score >= 90) return "EXCELLENT"
+  if (score >= 80) return "GOOD"
+  if (score >= 65) return "FAIR"
+  if (score >= 50) return "MEDIUM"
+  if (score >= 35) return "POOR"
+  return "VERY_POOR"
+}
+
+const getRowSTT = <T,>(dataSource: T[] | undefined, record: T, fallbackIndex: number): number => {
   if (dataSource && Array.isArray(dataSource)) {
     const idx = dataSource.indexOf(record)
     if (idx !== -1) return idx + 1
@@ -207,6 +261,134 @@ const HoSoCaNhan = () => {
     return [...list1, ...list2]
   }, [studentData])
 
+  // ── Search states per tab ──────────────────────────────────────────────────
+  const [searchDiemMonHoc, setSearchDiemMonHoc] = useState("")
+  const [searchKetQuaHocKy, setSearchKetQuaHocKy] = useState("")
+  const [filterXepLoaiRLHocKy, setFilterXepLoaiRLHocKy] = useState<string>("ALL")
+  const [filterXepLoaiHTHocKy, setFilterXepLoaiHTHocKy] = useState<string>("ALL")
+  const [searchKetQuaNamHoc, setSearchKetQuaNamHoc] = useState("")
+  const [filterXepLoaiRLNamHoc, setFilterXepLoaiRLNamHoc] = useState<string>("ALL")
+  const [filterXepLoaiHTNamHoc, setFilterXepLoaiHTNamHoc] = useState<string>("ALL")
+  const [searchHocBong, setSearchHocBong] = useState("")
+  const [searchChungChi, setSearchChungChi] = useState("")
+  const [searchGiaiThuong, setSearchGiaiThuong] = useState("")
+  const [searchCanhBaoHocTap, setSearchCanhBaoHocTap] = useState("")
+  const [searchCanhCaoHocDuong, setSearchCanhCaoHocDuong] = useState("")
+  const [searchDiemRenLuyen, setSearchDiemRenLuyen] = useState("")
+  const [filterStatusDiemRenLuyen, setFilterStatusDiemRenLuyen] = useState<string>("ALL")
+
+  // ── Filtered data per tab ──────────────────────────────────────────────────
+  const filteredDiemMonHoc = useMemo(() => {
+    const q = searchDiemMonHoc.toLowerCase().trim()
+    if (!q) return studentData?.subjectClassStudent || []
+    return (studentData?.subjectClassStudent || []).filter((r) => {
+      const subj = r.subjectClass?.subject
+      return [
+        subj?.code,
+        subj?.name,
+      ].some((v) => String(v ?? "").toLowerCase().includes(q))
+    })
+  }, [studentData, searchDiemMonHoc])
+
+  const filteredKetQuaHocKy = useMemo(() => {
+    const q = searchKetQuaHocKy.toLowerCase().trim()
+    let list = (studentData?.studentSemesterResult || []) as StudentSemesterResultWithRelations[]
+    
+    if (filterXepLoaiRLHocKy !== "ALL") {
+      list = list.filter((r) => resolveTrainingType(r.studentTrainingType, r.conductScore) === filterXepLoaiRLHocKy)
+    }
+    if (filterXepLoaiHTHocKy !== "ALL") {
+      list = list.filter((r) => r.rank?.classification === filterXepLoaiHTHocKy)
+    }
+    if (!q) return list
+    return list.filter((r) => [
+      r.code,
+      r.semester?.code,
+      r.semester?.name,
+      r.rank?.classification,
+      TRAINING_TYPE_LABEL_MAP[resolveTrainingType(r.studentTrainingType, r.conductScore) ?? ("" as StudentTrainingType)] ?? "",
+    ].some((v) => String(v ?? "").toLowerCase().includes(q)))
+  }, [studentData, searchKetQuaHocKy, filterXepLoaiRLHocKy, filterXepLoaiHTHocKy])
+
+  const filteredKetQuaNamHoc = useMemo(() => {
+    const q = searchKetQuaNamHoc.toLowerCase().trim()
+    let list = (studentData?.studentYearResult || []) as StudentYearResultWithRelations[]
+
+    if (filterXepLoaiRLNamHoc !== "ALL") {
+      list = list.filter((r) => resolveTrainingType(r.studentTrainingType, r.conductScore) === filterXepLoaiRLNamHoc)
+    }
+    if (filterXepLoaiHTNamHoc !== "ALL") {
+      list = list.filter((r) => r.rank?.classification === filterXepLoaiHTNamHoc)
+    }
+    if (!q) return list
+    return list.filter((r) => [
+      r.code,
+      r.schoolYear?.code,
+      r.schoolYear?.name,
+      r.rank?.classification,
+      TRAINING_TYPE_LABEL_MAP[resolveTrainingType(r.studentTrainingType, r.conductScore) ?? ("" as StudentTrainingType)] ?? "",
+    ].some((v) => String(v ?? "").toLowerCase().includes(q)))
+  }, [studentData, searchKetQuaNamHoc, filterXepLoaiRLNamHoc, filterXepLoaiHTNamHoc])
+
+  const filteredHocBong = useMemo(() => {
+    const q = searchHocBong.toLowerCase().trim()
+    if (!q) return studentData?.scholarshipAwards || []
+    return (studentData?.scholarshipAwards || []).filter((r) => [
+      r.scholarship?.name,
+      r.semester?.name,
+    ].some((v) => String(v ?? "").toLowerCase().includes(q)))
+  }, [studentData, searchHocBong])
+
+  const filteredChungChi = useMemo(() => {
+    const q = searchChungChi.toLowerCase().trim()
+    if (!q) return studentData?.archivedCertificate || []
+    return (studentData?.archivedCertificate || []).filter((r) => [
+      r.certificate?.name,
+      r.certificate?.code,
+      r.issuedBy,
+    ].some((v) => String(v ?? "").toLowerCase().includes(q)))
+  }, [studentData, searchChungChi])
+
+  const filteredGiaiThuong = useMemo(() => {
+    const q = searchGiaiThuong.toLowerCase().trim()
+    if (!q) return studentData?.archivedAward || []
+    return (studentData?.archivedAward || []).filter((r) => [
+      r.award?.name,
+    ].some((v) => String(v ?? "").toLowerCase().includes(q)))
+  }, [studentData, searchGiaiThuong])
+
+  const filteredCanhBaoHocTap = useMemo(() => {
+    const q = searchCanhBaoHocTap.toLowerCase().trim()
+    if (!q) return studentData?.academicWarning || []
+    return (studentData?.academicWarning || []).filter((r) => [
+      r.semester?.name,
+      r.description,
+    ].some((v) => String(v ?? "").toLowerCase().includes(q)))
+  }, [studentData, searchCanhBaoHocTap])
+
+  const filteredCanhCaoHocDuong = useMemo(() => {
+    const q = searchCanhCaoHocDuong.toLowerCase().trim()
+    if (!q) return studentData?.disciplinaryWarning || []
+    return (studentData?.disciplinaryWarning || []).filter((r) => [
+      r.semester?.name,
+      r.description,
+    ].some((v) => String(v ?? "").toLowerCase().includes(q)))
+  }, [studentData, searchCanhCaoHocDuong])
+
+  const filteredDiemRenLuyen = useMemo(() => {
+    const q = searchDiemRenLuyen.toLowerCase().trim()
+    let list = combinedTrainingScores
+    if (filterStatusDiemRenLuyen !== "ALL") {
+      list = list.filter((r) => r.status === filterStatusDiemRenLuyen)
+    }
+    if (!q) return list
+    return list.filter((r) => [
+      r.semesterName,
+      r.sessionName,
+      r.status,
+    ].some((v) => String(v ?? "").toLowerCase().includes(q)))
+  }, [combinedTrainingScores, searchDiemRenLuyen, filterStatusDiemRenLuyen])
+
   const tabItems = [
     {
       key: "thong-tin-co-ban",
@@ -333,13 +515,21 @@ const HoSoCaNhan = () => {
       key: "diem-mon-hoc",
       label: `2. Điểm môn học (${studentData?.subjectClassStudent?.length || 0})`,
       children: (
-        <Table
-          dataSource={studentData?.subjectClassStudent || []}
-          rowKey="id"
-          size="small"
-          pagination={{ pageSize: 10 }}
-          bordered
-          scroll={{ x: 1200 }}
+        <div className="space-y-3">
+          <Input.Search
+            placeholder="Tìm theo mã môn, tên môn học..."
+            allowClear
+            value={searchDiemMonHoc}
+            onChange={(e) => setSearchDiemMonHoc(e.target.value)}
+            style={{ maxWidth: 360 }}
+          />
+            <Table
+              dataSource={filteredDiemMonHoc}
+              rowKey="id"
+              size="small"
+              pagination={{ pageSize: 10 }}
+              bordered
+              scroll={{ x: 1200 }}
           columns={[
             {
               title: "STT",
@@ -396,20 +586,60 @@ const HoSoCaNhan = () => {
               ),
             },
           ]}
-        />
+          />
+          </div>
       ),
     },
     {
       key: "ket-qua-hoc-ky",
       label: `3. Kết quả học kỳ (${studentData?.studentSemesterResult?.length || 0})`,
       children: (
-        <Table
-          dataSource={studentData?.studentSemesterResult || []}
-          rowKey="id"
-          size="small"
-          bordered
-          pagination={{ pageSize: 10 }}
-          scroll={{ x: 2400 }}
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-2">
+            <Input.Search
+              placeholder="Tìm theo mã, học kỳ, xếp loại..."
+              allowClear
+              value={searchKetQuaHocKy}
+              onChange={(e) => setSearchKetQuaHocKy(e.target.value)}
+              style={{ width: 300 }}
+            />
+            <Select
+              value={filterXepLoaiRLHocKy}
+              onChange={setFilterXepLoaiRLHocKy}
+              style={{ width: 160 }}
+              options={[
+                { value: "ALL", label: "Tất cả xếp loại RL" },
+                { value: "EXCELLENT", label: "Xuất sắc" },
+                { value: "GOOD", label: "Tốt" },
+                { value: "FAIR", label: "Khá" },
+                { value: "MEDIUM", label: "TB Khá" },
+                { value: "AVERAGE", label: "Trung bình" },
+                { value: "POOR", label: "Yếu" },
+                { value: "VERY_POOR", label: "Kém" },
+              ]}
+            />
+            <Select
+              value={filterXepLoaiHTHocKy}
+              onChange={setFilterXepLoaiHTHocKy}
+              style={{ width: 160 }}
+              options={[
+                { value: "ALL", label: "Tất cả xếp loại HT" },
+                { value: "Xuất sắc", label: "Xuất sắc" },
+                { value: "Giỏi", label: "Giỏi" },
+                { value: "Khá", label: "Khá" },
+                { value: "Trung bình", label: "Trung bình" },
+                { value: "Yếu", label: "Yếu" },
+                { value: "Kém", label: "Kém" },
+              ]}
+            />
+          </div>
+            <Table
+              dataSource={filteredKetQuaHocKy}
+              rowKey="id"
+              size="small"
+              bordered
+              pagination={{ pageSize: 10 }}
+              scroll={{ x: 2400 }}
           columns={[
             {
               title: "STT",
@@ -417,15 +647,11 @@ const HoSoCaNhan = () => {
               align: "center",
               render: (_, record, index) => getRowSTT(studentData?.studentSemesterResult, record, index),
             },
-            {
-              title: "Mã",
-              dataIndex: ["semester", "code"],
-              width: 100,
-            },
+
             {
               title: "Học kỳ",
               dataIndex: ["semester", "name"],
-              width: 150,
+              width: 120,
             },
             {
               title: "GPA (4)",
@@ -501,7 +727,7 @@ const HoSoCaNhan = () => {
             {
               title: "TC đăng ký",
               dataIndex: "registeredCredits",
-              width: 100,
+              width: 90,
               align: "center",
             },
             {
@@ -519,19 +745,19 @@ const HoSoCaNhan = () => {
             {
               title: "TC tích lũy",
               dataIndex: "accumulatedCredits",
-              width: 100,
+              width: 90,
               align: "center",
             },
             {
               title: "TC học lại",
               dataIndex: "retakingCredits",
-              width: 100,
+              width: 90,
               align: "center",
             },
             {
               title: "TC theo CTDT",
               dataIndex: "totalCreditsByCurriculum",
-              width: 110,
+              width: 100,
               align: "center",
             },
             {
@@ -598,31 +824,67 @@ const HoSoCaNhan = () => {
               render: (level) => <Tag color={level > 0 ? "orange" : "green"}>{level}</Tag>,
             },
           ]}
-        />
+          />
+        </div>
       ),
     },
     {
       key: "ket-qua-nam-hoc",
       label: `4. Kết quả năm học (${studentData?.studentYearResult?.length || 0})`,
       children: (
-        <Table
-          dataSource={studentData?.studentYearResult || []}
-          rowKey="id"
-          size="small"
-          bordered
-          pagination={{ pageSize: 10 }}
-          scroll={{ x: 1400 }}
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-2">
+            <Input.Search
+              placeholder="Tìm theo mã, năm học, xếp loại..."
+              allowClear
+              value={searchKetQuaNamHoc}
+              onChange={(e) => setSearchKetQuaNamHoc(e.target.value)}
+              style={{ width: 300 }}
+            />
+            <Select
+              value={filterXepLoaiRLNamHoc}
+              onChange={setFilterXepLoaiRLNamHoc}
+              style={{ width: 160 }}
+              options={[
+                { value: "ALL", label: "Tất cả xếp loại RL" },
+                { value: "EXCELLENT", label: "Xuất sắc" },
+                { value: "GOOD", label: "Tốt" },
+                { value: "FAIR", label: "Khá" },
+                { value: "MEDIUM", label: "TB Khá" },
+                { value: "AVERAGE", label: "Trung bình" },
+                { value: "POOR", label: "Yếu" },
+                { value: "VERY_POOR", label: "Kém" },
+              ]}
+            />
+            <Select
+              value={filterXepLoaiHTNamHoc}
+              onChange={setFilterXepLoaiHTNamHoc}
+              style={{ width: 160 }}
+              options={[
+                { value: "ALL", label: "Tất cả xếp loại HT" },
+                { value: "Xuất sắc", label: "Xuất sắc" },
+                { value: "Giỏi", label: "Giỏi" },
+                { value: "Khá", label: "Khá" },
+                { value: "Trung bình", label: "Trung bình" },
+                { value: "Yếu", label: "Yếu" },
+                { value: "Kém", label: "Kém" },
+              ]}
+            />
+          </div>
+            <Table
+              dataSource={filteredKetQuaNamHoc}
+              rowKey="id"
+              size="small"
+              bordered
+              pagination={{ pageSize: 10 }}
+              scroll={{ x: 1400 }}
           columns={[
             {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, record, index) => getRowSTT(studentData?.studentYearResult, record, index),
-            },
-            {
-              title: "Mã",
-              dataIndex: "code",
-              width: 100,
+              render: (_: unknown, record: StudentYearResultWithRelations, index: number) =>
+                getRowSTT(studentData?.studentYearResult, record, index),
             },
             {
               title: "Năm học",
@@ -665,19 +927,24 @@ const HoSoCaNhan = () => {
             },
             {
               title: "Xếp loại RL",
-              dataIndex: "studentTrainingType",
               width: 120,
               align: "center",
-              render: (type) => (
-                <Tag color={getStudentTrainingTypeColor(type)}>
-                  {getStudentTrainingTypeLabel(type)}
-                </Tag>
-              ),
+              render: (_: unknown, record: StudentYearResultWithRelations) => {
+                const type = resolveTrainingType(record.studentTrainingType, record.conductScore)
+                return type ? (
+                  <Tag color={TRAINING_TYPE_COLOR_MAP[type]}>
+                    {TRAINING_TYPE_LABEL_MAP[type]}
+                  </Tag>
+                ) : (
+                  "-"
+                )
+              },
             },
             {
               title: "Xếp loại HT",
-              dataIndex: ["rank", "name"],
               width: 120,
+              render: (_: unknown, record: StudentYearResultWithRelations) =>
+                record.rank?.classification || "-",
             },
             {
               title: "Tổng TC",
@@ -748,19 +1015,28 @@ const HoSoCaNhan = () => {
               render: (val) => <Tag color={val ? "red" : "default"}>{val ? "Có" : "Không"}</Tag>,
             },
           ]}
-        />
+          />
+        </div>
       ),
     },
     {
       key: "hoc-bong",
       label: `5. Học bổng (${studentData?.scholarshipAwards?.length || 0})`,
       children: (
-        <Table
-          dataSource={studentData?.scholarshipAwards || []}
-          rowKey="id"
-          size="small"
-          bordered
-          pagination={{ pageSize: 10 }}
+        <div className="space-y-3">
+          <Input.Search
+            placeholder="Tìm theo tên học bổng, học kỳ..."
+            allowClear
+            value={searchHocBong}
+            onChange={(e) => setSearchHocBong(e.target.value)}
+            style={{ maxWidth: 360 }}
+          />
+            <Table
+              dataSource={filteredHocBong}
+              rowKey="id"
+              size="small"
+              bordered
+              pagination={{ pageSize: 10 }}
           columns={[
             {
               title: "STT",
@@ -811,19 +1087,28 @@ const HoSoCaNhan = () => {
               render: (date) => (date ? dayjs(date).format("DD/MM/YYYY") : ""),
             },
           ]}
-        />
+          />
+        </div>
       ),
     },
     {
       key: "chung-chi",
       label: `6. Chứng chỉ (${studentData?.archivedCertificate?.length || 0})`,
       children: (
-        <Table
-          dataSource={studentData?.archivedCertificate || []}
-          rowKey="id"
-          size="small"
-          bordered
-          pagination={{ pageSize: 10 }}
+        <div className="space-y-3">
+          <Input.Search
+            placeholder="Tìm theo tên chứng chỉ, nơi cấp..."
+            allowClear
+            value={searchChungChi}
+            onChange={(e) => setSearchChungChi(e.target.value)}
+            style={{ maxWidth: 360 }}
+          />
+            <Table
+              dataSource={filteredChungChi}
+              rowKey="id"
+              size="small"
+              bordered
+              pagination={{ pageSize: 10 }}
           columns={[
             {
               title: "STT",
@@ -924,19 +1209,28 @@ const HoSoCaNhan = () => {
               width: 200,
             },
           ]}
-        />
+          />
+        </div>
       ),
     },
     {
       key: "giai-thuong",
       label: `7. Giải thưởng (${studentData?.archivedAward?.length || 0})`,
       children: (
-        <Table
-          dataSource={studentData?.archivedAward || []}
-          rowKey="id"
-          size="small"
-          bordered
-          pagination={{ pageSize: 10 }}
+        <div className="space-y-3">
+          <Input.Search
+            placeholder="Tìm theo tên giải thưởng..."
+            allowClear
+            value={searchGiaiThuong}
+            onChange={(e) => setSearchGiaiThuong(e.target.value)}
+            style={{ maxWidth: 360 }}
+          />
+            <Table
+              dataSource={filteredGiaiThuong}
+              rowKey="id"
+              size="small"
+              bordered
+              pagination={{ pageSize: 10 }}
           columns={[
             {
               title: "STT",
@@ -990,19 +1284,28 @@ const HoSoCaNhan = () => {
               width: 200,
             },
           ]}
-        />
+          />
+        </div>
       ),
     },
     {
       key: "canh-cao-hoc-tap",
       label: `8. Cảnh báo học tập (${studentData?.academicWarning?.length || 0})`,
       children: (
-        <Table
-          dataSource={studentData?.academicWarning || []}
-          rowKey="id"
-          size="small"
-          bordered
-          pagination={{ pageSize: 10 }}
+        <div className="space-y-3">
+          <Input.Search
+            placeholder="Tìm theo học kỳ, mô tả..."
+            allowClear
+            value={searchCanhBaoHocTap}
+            onChange={(e) => setSearchCanhBaoHocTap(e.target.value)}
+            style={{ maxWidth: 360 }}
+          />
+            <Table
+              dataSource={filteredCanhBaoHocTap}
+              rowKey="id"
+              size="small"
+              bordered
+              pagination={{ pageSize: 10 }}
           columns={[
             {
               title: "STT",
@@ -1047,19 +1350,28 @@ const HoSoCaNhan = () => {
               render: (date) => (date ? dayjs(date).format("DD/MM/YYYY") : ""),
             },
           ]}
-        />
+          />
+        </div>
       ),
     },
     {
       key: "canh-cao-hoc-duong",
       label: `9. Cảnh cáo học đường (${studentData?.disciplinaryWarning?.length || 0})`,
       children: (
-        <Table
-          dataSource={studentData?.disciplinaryWarning || []}
-          rowKey="id"
-          bordered
-          size="small"
-          pagination={{ pageSize: 10 }}
+        <div className="space-y-3">
+          <Input.Search
+            placeholder="Tìm theo học kỳ, mô tả..."
+            allowClear
+            value={searchCanhCaoHocDuong}
+            onChange={(e) => setSearchCanhCaoHocDuong(e.target.value)}
+            style={{ maxWidth: 360 }}
+          />
+            <Table
+              dataSource={filteredCanhCaoHocDuong}
+              rowKey="id"
+              bordered
+              size="small"
+              pagination={{ pageSize: 10 }}
           columns={[
             {
               title: "STT",
@@ -1098,20 +1410,41 @@ const HoSoCaNhan = () => {
               render: (date) => (date ? dayjs(date).format("DD/MM/YYYY") : ""),
             },
           ]}
-        />
+          />
+        </div>
       ),
     },
     {
       key: "diem-ren-luyen",
       label: `10. Điểm rèn luyện (${combinedTrainingScores.length})`,
       children: (
-        <Table
-          dataSource={combinedTrainingScores}
-          rowKey="id"
-          bordered
-          size="small"
-          pagination={{ pageSize: 10 }}
-          scroll={{ x: 800 }}
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-2">
+            <Input.Search
+              placeholder="Tìm theo học kỳ, đợt đánh giá..."
+              allowClear
+              value={searchDiemRenLuyen}
+              onChange={(e) => setSearchDiemRenLuyen(e.target.value)}
+              style={{ width: 300 }}
+            />
+            <Select
+              value={filterStatusDiemRenLuyen}
+              onChange={setFilterStatusDiemRenLuyen}
+              style={{ width: 160 }}
+              options={[
+                { value: "ALL", label: "Tất cả trạng thái" },
+                { value: "APPROVED", label: "Đã duyệt" },
+                { value: "PENDING", label: "Chờ duyệt" },
+              ]}
+            />
+          </div>
+            <Table
+              dataSource={filteredDiemRenLuyen}
+              rowKey="id"
+              bordered
+              size="small"
+              pagination={{ pageSize: 10 }}
+              scroll={{ x: 800 }}
           columns={[
             {
               title: "STT",
@@ -1198,7 +1531,8 @@ const HoSoCaNhan = () => {
               render: (date) => (date ? dayjs(date).format("DD/MM/YYYY") : ""),
             },
           ]}
-        />
+          />
+        </div>
       ),
     },
   ]
