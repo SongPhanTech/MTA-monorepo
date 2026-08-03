@@ -647,11 +647,7 @@ const HoSoCaNhan = () => {
               align: "center",
               render: (_, record, index) => getRowSTT(studentData?.studentSemesterResult, record, index),
             },
-            {
-              title: "Mã",
-              dataIndex: ["semester", "code"],
-              width: 100,
-            },
+
             {
               title: "Học kỳ",
               dataIndex: ["semester", "name"],
