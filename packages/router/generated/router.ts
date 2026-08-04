@@ -23,8 +23,7 @@ export default {
     "NGHIEN_CUU": "/nghien-cuu",
     "THONG_BAO": "/thong-bao"
   },
-  
-  "CONG_SINH_VIEN": {
+  "CONG_HOC_VIEN": {
     "CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao",
     "DANG_KY_HOC": "/dang-ky-hoc",
     "DONG_BO_DU_LIEU": "/dong-bo-du-lieu",
@@ -35,6 +34,19 @@ export default {
     "KHAO_SAT": "/khao-sat",
     "LICH_SU_DANG_KY_HOC": "/lich-su-dang-ky-hoc",
     "THOI_KHOA_BIEU": "/thoi-khoa-bieu"
+  },
+  "CONG_SINH_VIEN": {
+    "CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao",
+    "DANG_KY_HOC": "/dang-ky-hoc",
+    "DONG_BO_DU_LIEU": "/dong-bo-du-lieu",
+    "HO_SO_CA_NHAN": "/ho-so-ca-nhan",
+    "HOME": "/home",
+    "INDEX": "/",
+    "KET_QUA_HOC_TAP": "/ket-qua-hoc-tap",
+    "KHAO_SAT": "/khao-sat",
+    "LICH_SU_DANG_KY_HOC": "/lich-su-dang-ky-hoc",
+    "THOI_KHOA_BIEU": "/thoi-khoa-bieu",
+    "THONG_KE_DANG_KY": "/thong-ke-dang-ky"
   },
   "KHAO_THI": {
     "BAO_CAO_KHAO_SAT_GIANG_VIEN": "/bao-cao-khao-sat-giang-vien",

@@ -17,6 +17,8 @@ import { toRegistrationError } from "../services/class-registration"
 import { getJobStatus, setJobStatus } from "../services/class-registration/job-store"
 import { KAFKA_ENABLED, enqueueRegistration } from "../services/class-registration/kafka-queue"
 import { processRegistration } from "../services/class-registration/process"
+import { recordRegistrationFailure } from "../services/class-registration/record-failure"
+import { getRegistrationStats } from "../services/class-registration/registration-stats"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -721,6 +723,14 @@ app.openapi(classRegister, async (c) => {
       console.warn(
         `[class-register] register rejected user=${session.id} code=${regErr.code} status=${regErr.status}`
       )
+      await recordRegistrationFailure(prisma, {
+        userId: session.id,
+        sessionId,
+        subjectClassIds,
+        code: regErr.code,
+        message: regErr.message,
+        attempts: 0,
+      })
       return c.json({ message: regErr.message }, regErr.status)
     }
     throw err
@@ -1162,6 +1172,121 @@ app.openapi(getStudentInfo, async (c) => {
 
   await cacheSet(cacheKey, payload, CACHE_TTL.student)
   return c.json(payload, 200)
+})
+
+const registrationStats = createRoute({
+  operationId: "registration-stats",
+  path: "/registration-stats",
+  tags: ["ClassRegister"],
+  summary: "Thống kê đăng ký học theo đợt và khoảng thời gian",
+  description:
+    "Trả về số SV đã đăng ký / chưa đăng ký / lỗi, kèm danh sách chi tiết lần đăng ký lỗi (SV, lớp môn, thời gian).",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            classRegisterSessionId: z.string(),
+            from: z.string().min(1),
+            to: z.string().min(1),
+            page: z.number().int().min(1).optional(),
+            pageSize: z.number().int().min(1).max(100).optional(),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Thống kê đăng ký",
+      content: {
+        "application/json": {
+          schema: z.object({
+            summary: z.object({
+              eligibleCount: z.number(),
+              registeredCount: z.number(),
+              notRegisteredCount: z.number(),
+              failedCount: z.number(),
+            }),
+            failures: z.object({
+              total: z.number(),
+              page: z.number(),
+              pageSize: z.number(),
+              items: z.array(
+                z.object({
+                  id: z.string(),
+                  occurredAt: z.string(),
+                  code: z.string().nullable(),
+                  message: z.string(),
+                  student: z.object({
+                    id: z.string().nullable(),
+                    studentCode: z.string().nullable(),
+                    fullName: z.string().nullable(),
+                    fixedClassName: z.string().nullable(),
+                  }),
+                  subjectClasses: z.array(
+                    z.object({
+                      id: z.string(),
+                      classCode: z.string(),
+                      subjectName: z.string(),
+                    })
+                  ),
+                })
+              ),
+            }),
+            from: z.string(),
+            to: z.string(),
+          }),
+        },
+      },
+    },
+    400: {
+      description: "Bad Request",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+    404: {
+      description: "Not Found",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(registrationStats, async (c) => {
+  const body = c.req.valid("json")
+  const from = new Date(body.from)
+  const to = new Date(body.to)
+  if (Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) {
+    return c.json({ message: "from/to không hợp lệ" }, 400)
+  }
+  if (from > to) {
+    return c.json({ message: "from phải nhỏ hơn hoặc bằng to" }, 400)
+  }
+
+  try {
+    const result = await getRegistrationStats(prisma, {
+      classRegisterSessionId: body.classRegisterSessionId,
+      from,
+      to,
+      page: body.page,
+      pageSize: body.pageSize,
+    })
+    return c.json(result, 200)
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Lấy thống kê thất bại"
+    if (message.includes("Không tìm thấy")) {
+      return c.json({ message }, 404)
+    }
+    return c.json({ message }, 400)
+  }
 })
 
 export default app

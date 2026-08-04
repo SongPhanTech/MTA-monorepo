@@ -1070,6 +1070,16 @@ export type ClassRegisterSession = $Result.DefaultSelection<Prisma.$ClassRegiste
  */
 export type ClassRegisterLogs = $Result.DefaultSelection<Prisma.$ClassRegisterLogsPayload>;
 /**
+ * Model ClassRegisterAttempt
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type ClassRegisterAttempt = $Result.DefaultSelection<Prisma.$ClassRegisterAttemptPayload>;
+/**
  * Model SubjectClass
  * Lớp môn học
  * @
@@ -2958,6 +2968,7 @@ export type SubjectVersionType = $Enums.SubjectVersionType;
 export type EquivalencySide = $Enums.EquivalencySide;
 export type SubjectRequirementType = $Enums.SubjectRequirementType;
 export type ClassRegisterStatus = $Enums.ClassRegisterStatus;
+export type ClassRegisterAttemptStatus = $Enums.ClassRegisterAttemptStatus;
 export type SubjectClassSchedule = $Enums.SubjectClassSchedule;
 export type AttendanceStatus = $Enums.AttendanceStatus;
 export type PeriodType = $Enums.PeriodType;
@@ -3979,6 +3990,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      * ```
      */
     get classRegisterLogs(): Prisma.ClassRegisterLogsDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.classRegisterAttempt`: Exposes CRUD operations for the **ClassRegisterAttempt** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more ClassRegisterAttempts
+     * const classRegisterAttempts = await prisma.classRegisterAttempt.findMany()
+     * ```
+     */
+    get classRegisterAttempt(): Prisma.ClassRegisterAttemptDelegate<ExtArgs, ClientOptions>;
     /**
      * `prisma.subjectClass`: Exposes CRUD operations for the **SubjectClass** model.
      * Example usage:
@@ -5673,6 +5693,7 @@ export const SubjectVersionType: typeof $Enums.SubjectVersionType;
 export const EquivalencySide: typeof $Enums.EquivalencySide;
 export const SubjectRequirementType: typeof $Enums.SubjectRequirementType;
 export const ClassRegisterStatus: typeof $Enums.ClassRegisterStatus;
+export const ClassRegisterAttemptStatus: typeof $Enums.ClassRegisterAttemptStatus;
 export const SubjectClassSchedule: typeof $Enums.SubjectClassSchedule;
 export const AttendanceStatus: typeof $Enums.AttendanceStatus;
 export const PeriodType: typeof $Enums.PeriodType;
@@ -5857,6 +5878,10 @@ export namespace $Enums {
         FAILED: 'FAILED'
     };
     export type ClassRegisterStatus = (typeof ClassRegisterStatus)[keyof typeof ClassRegisterStatus];
+    export const ClassRegisterAttemptStatus: {
+        FAILED: 'FAILED'
+    };
+    export type ClassRegisterAttemptStatus = (typeof ClassRegisterAttemptStatus)[keyof typeof ClassRegisterAttemptStatus];
     export const SubjectClassSchedule: {
         MORNING: 'MORNING',
         AFTERNOON: 'AFTERNOON',
@@ -6514,6 +6539,7 @@ export namespace Prisma {
         ClassRegisterSessionCredit: 'ClassRegisterSessionCredit',
         ClassRegisterSession: 'ClassRegisterSession',
         ClassRegisterLogs: 'ClassRegisterLogs',
+        ClassRegisterAttempt: 'ClassRegisterAttempt',
         SubjectClass: 'SubjectClass',
         SubjectClassAttendance: 'SubjectClassAttendance',
         SubjectClassAttendanceStudent: 'SubjectClassAttendanceStudent',
@@ -8596,6 +8622,26 @@ export namespace Prisma {
         studentId: 'studentId',
         status: 'status',
         reason: 'reason'
+    };
+    export const ClassRegisterAttemptScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        classRegisterSessionId: 'classRegisterSessionId',
+        studentId: 'studentId',
+        userProfileId: 'userProfileId',
+        jobId: 'jobId',
+        status: 'status',
+        errorCode: 'errorCode',
+        message: 'message',
+        subjectClassIds: 'subjectClassIds',
+        occurredAt: 'occurredAt',
+        attempts: 'attempts'
     };
     export const SubjectClassScalarFieldEnum: {
         id: 'id',
@@ -12581,6 +12627,19 @@ export namespace Prisma {
         subjectClassId: 'subjectClassId',
         studentId: 'studentId',
         reason: 'reason'
+    };
+    export const ClassRegisterAttemptOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        createdBy: 'createdBy',
+        classRegisterSessionId: 'classRegisterSessionId',
+        studentId: 'studentId',
+        userProfileId: 'userProfileId',
+        jobId: 'jobId',
+        errorCode: 'errorCode',
+        message: 'message',
+        subjectClassIds: 'subjectClassIds'
     };
     export const SubjectClassOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -54531,6 +54590,7 @@ export namespace Prisma {
         creditLimit<T extends ClassRegisterSession$creditLimitArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterSession$creditLimitArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         trainingCourses<T extends ClassRegisterSession$trainingCoursesArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterSession$trainingCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingCoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         classRegisterLogs<T extends ClassRegisterSession$classRegisterLogsArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterSession$classRegisterLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        classRegisterAttempts<T extends ClassRegisterSession$classRegisterAttemptsArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterSession$classRegisterAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         dataSyncHistories<T extends ClassRegisterSession$dataSyncHistoriesArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterSession$dataSyncHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DataSyncHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -54958,6 +55018,397 @@ export namespace Prisma {
         readonly studentId: FieldRef<"ClassRegisterLogs", 'String'>;
         readonly status: FieldRef<"ClassRegisterLogs", 'ClassRegisterStatus'>;
         readonly reason: FieldRef<"ClassRegisterLogs", 'String'>;
+    }
+
+    export interface ClassRegisterAttemptDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClassRegisterAttempt'], meta: { name: 'ClassRegisterAttempt' } };
+        /**
+         * Fields of the ClassRegisterAttempt model
+         */
+        readonly fields: ClassRegisterAttemptFieldRefs;
+        /**
+         * Find zero or one ClassRegisterAttempt that matches the filter.
+         * @param {ClassRegisterAttemptFindUniqueArgs} args - Arguments to find a ClassRegisterAttempt
+         * @example
+         * // Get one ClassRegisterAttempt
+         * const classRegisterAttempt = await prisma.classRegisterAttempt.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends ClassRegisterAttemptFindUniqueArgs>(args: SelectSubset<T, ClassRegisterAttemptFindUniqueArgs<ExtArgs>>): Prisma__ClassRegisterAttemptClient<$Result.GetResult<Prisma.$ClassRegisterAttemptPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one ClassRegisterAttempt that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {ClassRegisterAttemptFindUniqueOrThrowArgs} args - Arguments to find a ClassRegisterAttempt
+         * @example
+         * // Get one ClassRegisterAttempt
+         * const classRegisterAttempt = await prisma.classRegisterAttempt.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends ClassRegisterAttemptFindUniqueOrThrowArgs>(args: SelectSubset<T, ClassRegisterAttemptFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClassRegisterAttemptClient<$Result.GetResult<Prisma.$ClassRegisterAttemptPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ClassRegisterAttempt that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterAttemptFindFirstArgs} args - Arguments to find a ClassRegisterAttempt
+         * @example
+         * // Get one ClassRegisterAttempt
+         * const classRegisterAttempt = await prisma.classRegisterAttempt.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends ClassRegisterAttemptFindFirstArgs>(args?: SelectSubset<T, ClassRegisterAttemptFindFirstArgs<ExtArgs>>): Prisma__ClassRegisterAttemptClient<$Result.GetResult<Prisma.$ClassRegisterAttemptPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ClassRegisterAttempt that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterAttemptFindFirstOrThrowArgs} args - Arguments to find a ClassRegisterAttempt
+         * @example
+         * // Get one ClassRegisterAttempt
+         * const classRegisterAttempt = await prisma.classRegisterAttempt.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends ClassRegisterAttemptFindFirstOrThrowArgs>(args?: SelectSubset<T, ClassRegisterAttemptFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClassRegisterAttemptClient<$Result.GetResult<Prisma.$ClassRegisterAttemptPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more ClassRegisterAttempts that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterAttemptFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all ClassRegisterAttempts
+         * const classRegisterAttempts = await prisma.classRegisterAttempt.findMany()
+         *
+         * // Get first 10 ClassRegisterAttempts
+         * const classRegisterAttempts = await prisma.classRegisterAttempt.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const classRegisterAttemptWithIdOnly = await prisma.classRegisterAttempt.findMany({ select: { id: true } })
+         */
+        findMany<T extends ClassRegisterAttemptFindManyArgs>(args?: SelectSubset<T, ClassRegisterAttemptFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a ClassRegisterAttempt.
+         * @param {ClassRegisterAttemptCreateArgs} args - Arguments to create a ClassRegisterAttempt.
+         * @example
+         * // Create one ClassRegisterAttempt
+         * const ClassRegisterAttempt = await prisma.classRegisterAttempt.create({
+         *   data: {
+         *     // ... data to create a ClassRegisterAttempt
+         *   }
+         * })
+         */
+        create<T extends ClassRegisterAttemptCreateArgs>(args: SelectSubset<T, ClassRegisterAttemptCreateArgs<ExtArgs>>): Prisma__ClassRegisterAttemptClient<$Result.GetResult<Prisma.$ClassRegisterAttemptPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many ClassRegisterAttempts.
+         * @param {ClassRegisterAttemptCreateManyArgs} args - Arguments to create many ClassRegisterAttempts.
+         * @example
+         * // Create many ClassRegisterAttempts
+         * const classRegisterAttempt = await prisma.classRegisterAttempt.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends ClassRegisterAttemptCreateManyArgs>(args?: SelectSubset<T, ClassRegisterAttemptCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many ClassRegisterAttempts and returns the data saved in the database.
+         * @param {ClassRegisterAttemptCreateManyAndReturnArgs} args - Arguments to create many ClassRegisterAttempts.
+         * @example
+         * // Create many ClassRegisterAttempts
+         * const classRegisterAttempt = await prisma.classRegisterAttempt.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many ClassRegisterAttempts and only return the `id`
+         * const classRegisterAttemptWithIdOnly = await prisma.classRegisterAttempt.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends ClassRegisterAttemptCreateManyAndReturnArgs>(args?: SelectSubset<T, ClassRegisterAttemptCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterAttemptPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a ClassRegisterAttempt.
+         * @param {ClassRegisterAttemptDeleteArgs} args - Arguments to delete one ClassRegisterAttempt.
+         * @example
+         * // Delete one ClassRegisterAttempt
+         * const ClassRegisterAttempt = await prisma.classRegisterAttempt.delete({
+         *   where: {
+         *     // ... filter to delete one ClassRegisterAttempt
+         *   }
+         * })
+         */
+        delete<T extends ClassRegisterAttemptDeleteArgs>(args: SelectSubset<T, ClassRegisterAttemptDeleteArgs<ExtArgs>>): Prisma__ClassRegisterAttemptClient<$Result.GetResult<Prisma.$ClassRegisterAttemptPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one ClassRegisterAttempt.
+         * @param {ClassRegisterAttemptUpdateArgs} args - Arguments to update one ClassRegisterAttempt.
+         * @example
+         * // Update one ClassRegisterAttempt
+         * const classRegisterAttempt = await prisma.classRegisterAttempt.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends ClassRegisterAttemptUpdateArgs>(args: SelectSubset<T, ClassRegisterAttemptUpdateArgs<ExtArgs>>): Prisma__ClassRegisterAttemptClient<$Result.GetResult<Prisma.$ClassRegisterAttemptPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more ClassRegisterAttempts.
+         * @param {ClassRegisterAttemptDeleteManyArgs} args - Arguments to filter ClassRegisterAttempts to delete.
+         * @example
+         * // Delete a few ClassRegisterAttempts
+         * const { count } = await prisma.classRegisterAttempt.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends ClassRegisterAttemptDeleteManyArgs>(args?: SelectSubset<T, ClassRegisterAttemptDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ClassRegisterAttempts.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterAttemptUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many ClassRegisterAttempts
+         * const classRegisterAttempt = await prisma.classRegisterAttempt.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends ClassRegisterAttemptUpdateManyArgs>(args: SelectSubset<T, ClassRegisterAttemptUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ClassRegisterAttempts and returns the data updated in the database.
+         * @param {ClassRegisterAttemptUpdateManyAndReturnArgs} args - Arguments to update many ClassRegisterAttempts.
+         * @example
+         * // Update many ClassRegisterAttempts
+         * const classRegisterAttempt = await prisma.classRegisterAttempt.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more ClassRegisterAttempts and only return the `id`
+         * const classRegisterAttemptWithIdOnly = await prisma.classRegisterAttempt.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends ClassRegisterAttemptUpdateManyAndReturnArgs>(args: SelectSubset<T, ClassRegisterAttemptUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterAttemptPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one ClassRegisterAttempt.
+         * @param {ClassRegisterAttemptUpsertArgs} args - Arguments to update or create a ClassRegisterAttempt.
+         * @example
+         * // Update or create a ClassRegisterAttempt
+         * const classRegisterAttempt = await prisma.classRegisterAttempt.upsert({
+         *   create: {
+         *     // ... data to create a ClassRegisterAttempt
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the ClassRegisterAttempt we want to update
+         *   }
+         * })
+         */
+        upsert<T extends ClassRegisterAttemptUpsertArgs>(args: SelectSubset<T, ClassRegisterAttemptUpsertArgs<ExtArgs>>): Prisma__ClassRegisterAttemptClient<$Result.GetResult<Prisma.$ClassRegisterAttemptPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of ClassRegisterAttempts.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterAttemptCountArgs} args - Arguments to filter ClassRegisterAttempts to count.
+         * @example
+         * // Count the number of ClassRegisterAttempts
+         * const count = await prisma.classRegisterAttempt.count({
+         *   where: {
+         *     // ... the filter for the ClassRegisterAttempts we want to count
+         *   }
+         * })
+         */
+        count<T extends ClassRegisterAttemptCountArgs>(args?: Subset<T, ClassRegisterAttemptCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], ClassRegisterAttemptCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a ClassRegisterAttempt.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterAttemptAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends ClassRegisterAttemptAggregateArgs>(args: Subset<T, ClassRegisterAttemptAggregateArgs>): Prisma.PrismaPromise<GetClassRegisterAttemptAggregateType<T>>;
+        /**
+         * Group by ClassRegisterAttempt.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterAttemptGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends ClassRegisterAttemptGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClassRegisterAttemptGroupByArgs['orderBy'] }
+        : { orderBy?: ClassRegisterAttemptGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, ClassRegisterAttemptGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClassRegisterAttemptGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for ClassRegisterAttempt.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__ClassRegisterAttemptClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        classRegisterSession<T extends ClassRegisterSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterSessionDefaultArgs<ExtArgs>>): Prisma__ClassRegisterSessionClient<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        student<T extends ClassRegisterAttempt$studentArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterAttempt$studentArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the ClassRegisterAttempt model
+     */
+    interface ClassRegisterAttemptFieldRefs {
+        readonly id: FieldRef<"ClassRegisterAttempt", 'String'>;
+        readonly code: FieldRef<"ClassRegisterAttempt", 'String'>;
+        readonly active: FieldRef<"ClassRegisterAttempt", 'Boolean'>;
+        readonly description: FieldRef<"ClassRegisterAttempt", 'String'>;
+        readonly deletedAt: FieldRef<"ClassRegisterAttempt", 'DateTime'>;
+        readonly createdAt: FieldRef<"ClassRegisterAttempt", 'DateTime'>;
+        readonly updatedAt: FieldRef<"ClassRegisterAttempt", 'DateTime'>;
+        readonly createdBy: FieldRef<"ClassRegisterAttempt", 'String'>;
+        readonly classRegisterSessionId: FieldRef<"ClassRegisterAttempt", 'String'>;
+        readonly studentId: FieldRef<"ClassRegisterAttempt", 'String'>;
+        readonly userProfileId: FieldRef<"ClassRegisterAttempt", 'String'>;
+        readonly jobId: FieldRef<"ClassRegisterAttempt", 'String'>;
+        readonly status: FieldRef<"ClassRegisterAttempt", 'ClassRegisterAttemptStatus'>;
+        readonly errorCode: FieldRef<"ClassRegisterAttempt", 'String'>;
+        readonly message: FieldRef<"ClassRegisterAttempt", 'String'>;
+        readonly subjectClassIds: FieldRef<"ClassRegisterAttempt", 'String[]'>;
+        readonly occurredAt: FieldRef<"ClassRegisterAttempt", 'DateTime'>;
+        readonly attempts: FieldRef<"ClassRegisterAttempt", 'Int'>;
     }
 
     export interface SubjectClassDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -68543,6 +68994,7 @@ export namespace Prisma {
         studentScoreConvert<T extends Student$studentScoreConvertArgs<ExtArgs> = {}>(args?: Subset<T, Student$studentScoreConvertArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentScoreConvertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         scoreLinkStudent<T extends Student$scoreLinkStudentArgs<ExtArgs> = {}>(args?: Subset<T, Student$scoreLinkStudentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreLinkStudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         classRegisterLogs<T extends Student$classRegisterLogsArgs<ExtArgs> = {}>(args?: Subset<T, Student$classRegisterLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        classRegisterAttempts<T extends Student$classRegisterAttemptsArgs<ExtArgs> = {}>(args?: Subset<T, Student$classRegisterAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         notes<T extends Student$notesArgs<ExtArgs> = {}>(args?: Subset<T, Student$notesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         noteFolders<T extends Student$noteFoldersArgs<ExtArgs> = {}>(args?: Subset<T, Student$noteFoldersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoteFolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         semesterTrainingScore<T extends Student$semesterTrainingScoreArgs<ExtArgs> = {}>(args?: Subset<T, Student$semesterTrainingScoreArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemesterTrainingScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -123903,7 +124355,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "dataSyncHistory" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "officerBonusScore" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "personalWorkTag" | "individualSchedule" | "lecturer" | "lecturerHistory" | "guestTeachingRateConfig" | "guestTeachingRate" | "guestTeachingPayment" | "lecturerType" | "staffType" | "staffPosition" | "staff" | "staffHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "configPaymentSession" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "classRegisterAttempt" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "dataSyncHistory" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "officerBonusScore" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "personalWorkTag" | "individualSchedule" | "lecturer" | "lecturerHistory" | "guestTeachingRateConfig" | "guestTeachingRate" | "guestTeachingPayment" | "lecturerType" | "staffType" | "staffPosition" | "staff" | "staffHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "configPaymentSession" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -131600,6 +132052,80 @@ export namespace Prisma {
                     count: {
                         args: Prisma.ClassRegisterLogsCountArgs<ExtArgs>
                         result: $Utils.Optional<ClassRegisterLogsCountAggregateOutputType> | number
+                    }
+                }
+            }
+            ClassRegisterAttempt: {
+                payload: Prisma.$ClassRegisterAttemptPayload<ExtArgs>
+                fields: Prisma.ClassRegisterAttemptFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.ClassRegisterAttemptFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterAttemptPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.ClassRegisterAttemptFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterAttemptPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.ClassRegisterAttemptFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterAttemptPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.ClassRegisterAttemptFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterAttemptPayload>
+                    }
+                    findMany: {
+                        args: Prisma.ClassRegisterAttemptFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterAttemptPayload>[]
+                    }
+                    create: {
+                        args: Prisma.ClassRegisterAttemptCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterAttemptPayload>
+                    }
+                    createMany: {
+                        args: Prisma.ClassRegisterAttemptCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.ClassRegisterAttemptCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterAttemptPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.ClassRegisterAttemptDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterAttemptPayload>
+                    }
+                    update: {
+                        args: Prisma.ClassRegisterAttemptUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterAttemptPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.ClassRegisterAttemptDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.ClassRegisterAttemptUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.ClassRegisterAttemptUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterAttemptPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.ClassRegisterAttemptUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterAttemptPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.ClassRegisterAttemptAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateClassRegisterAttempt>
+                    }
+                    groupBy: {
+                        args: Prisma.ClassRegisterAttemptGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<ClassRegisterAttemptGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.ClassRegisterAttemptCountArgs<ExtArgs>
+                        result: $Utils.Optional<ClassRegisterAttemptCountAggregateOutputType> | number
                     }
                 }
             }
@@ -144836,6 +145362,7 @@ export namespace Prisma {
         classRegisterSessionCredit?: ClassRegisterSessionCreditOmit
         classRegisterSession?: ClassRegisterSessionOmit
         classRegisterLogs?: ClassRegisterLogsOmit
+        classRegisterAttempt?: ClassRegisterAttemptOmit
         subjectClass?: SubjectClassOmit
         subjectClassAttendance?: SubjectClassAttendanceOmit
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentOmit
@@ -147634,12 +148161,14 @@ export namespace Prisma {
         creditLimit: number
         trainingCourses: number
         classRegisterLogs: number
+        classRegisterAttempts: number
         dataSyncHistories: number
     };
     export type ClassRegisterSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         creditLimit?: boolean | ClassRegisterSessionCountOutputTypeCountCreditLimitArgs
         trainingCourses?: boolean | ClassRegisterSessionCountOutputTypeCountTrainingCoursesArgs
         classRegisterLogs?: boolean | ClassRegisterSessionCountOutputTypeCountClassRegisterLogsArgs
+        classRegisterAttempts?: boolean | ClassRegisterSessionCountOutputTypeCountClassRegisterAttemptsArgs
         dataSyncHistories?: boolean | ClassRegisterSessionCountOutputTypeCountDataSyncHistoriesArgs
     };
     /**
@@ -147668,6 +148197,12 @@ export namespace Prisma {
      */
     export type ClassRegisterSessionCountOutputTypeCountClassRegisterLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: ClassRegisterLogsWhereInput
+    };
+    /**
+     * ClassRegisterSessionCountOutputType without action
+     */
+    export type ClassRegisterSessionCountOutputTypeCountClassRegisterAttemptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ClassRegisterAttemptWhereInput
     };
     /**
      * ClassRegisterSessionCountOutputType without action
@@ -148647,6 +149182,7 @@ export namespace Prisma {
         studentScoreConvert: number
         scoreLinkStudent: number
         classRegisterLogs: number
+        classRegisterAttempts: number
         notes: number
         noteFolders: number
         semesterTrainingScore: number
@@ -148679,6 +149215,7 @@ export namespace Prisma {
         studentScoreConvert?: boolean | StudentCountOutputTypeCountStudentScoreConvertArgs
         scoreLinkStudent?: boolean | StudentCountOutputTypeCountScoreLinkStudentArgs
         classRegisterLogs?: boolean | StudentCountOutputTypeCountClassRegisterLogsArgs
+        classRegisterAttempts?: boolean | StudentCountOutputTypeCountClassRegisterAttemptsArgs
         notes?: boolean | StudentCountOutputTypeCountNotesArgs
         noteFolders?: boolean | StudentCountOutputTypeCountNoteFoldersArgs
         semesterTrainingScore?: boolean | StudentCountOutputTypeCountSemesterTrainingScoreArgs
@@ -148838,6 +149375,12 @@ export namespace Prisma {
      */
     export type StudentCountOutputTypeCountClassRegisterLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: ClassRegisterLogsWhereInput
+    };
+    /**
+     * StudentCountOutputType without action
+     */
+    export type StudentCountOutputTypeCountClassRegisterAttemptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ClassRegisterAttemptWhereInput
     };
     /**
      * StudentCountOutputType without action
@@ -236430,6 +236973,7 @@ export namespace Prisma {
         creditLimit?: boolean | ClassRegisterSession$creditLimitArgs<ExtArgs>
         trainingCourses?: boolean | ClassRegisterSession$trainingCoursesArgs<ExtArgs>
         classRegisterLogs?: boolean | ClassRegisterSession$classRegisterLogsArgs<ExtArgs>
+        classRegisterAttempts?: boolean | ClassRegisterSession$classRegisterAttemptsArgs<ExtArgs>
         dataSyncHistories?: boolean | ClassRegisterSession$dataSyncHistoriesArgs<ExtArgs>
         _count?: boolean | ClassRegisterSessionCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["classRegisterSession"]>;
@@ -236486,6 +237030,7 @@ export namespace Prisma {
         creditLimit?: boolean | ClassRegisterSession$creditLimitArgs<ExtArgs>
         trainingCourses?: boolean | ClassRegisterSession$trainingCoursesArgs<ExtArgs>
         classRegisterLogs?: boolean | ClassRegisterSession$classRegisterLogsArgs<ExtArgs>
+        classRegisterAttempts?: boolean | ClassRegisterSession$classRegisterAttemptsArgs<ExtArgs>
         dataSyncHistories?: boolean | ClassRegisterSession$dataSyncHistoriesArgs<ExtArgs>
         _count?: boolean | ClassRegisterSessionCountOutputTypeDefaultArgs<ExtArgs>
     };
@@ -236502,6 +237047,7 @@ export namespace Prisma {
             creditLimit: Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>[]
             trainingCourses: Prisma.$TrainingCoursePayload<ExtArgs>[]
             classRegisterLogs: Prisma.$ClassRegisterLogsPayload<ExtArgs>[]
+            classRegisterAttempts: Prisma.$ClassRegisterAttemptPayload<ExtArgs>[]
             dataSyncHistories: Prisma.$DataSyncHistoryPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -236973,6 +237519,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: ClassRegisterLogsScalarFieldEnum | ClassRegisterLogsScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterSession.classRegisterAttempts
+     */
+    export type ClassRegisterSession$classRegisterAttemptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterAttempt
+         */
+        select?: ClassRegisterAttemptSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterAttempt
+         */
+        omit?: ClassRegisterAttemptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterAttemptInclude<ExtArgs> | null
+        where?: ClassRegisterAttemptWhereInput
+        orderBy?: ClassRegisterAttemptOrderByWithRelationInput | ClassRegisterAttemptOrderByWithRelationInput[]
+        cursor?: ClassRegisterAttemptWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ClassRegisterAttemptScalarFieldEnum | ClassRegisterAttemptScalarFieldEnum[]
     };
     /**
      * ClassRegisterSession.dataSyncHistories
@@ -237716,6 +238285,809 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: ClassRegisterLogsInclude<ExtArgs> | null
+    };
+    /**
+     * Model ClassRegisterAttempt
+     */
+    export type AggregateClassRegisterAttempt = {
+        _count: ClassRegisterAttemptCountAggregateOutputType | null
+        _avg: ClassRegisterAttemptAvgAggregateOutputType | null
+        _sum: ClassRegisterAttemptSumAggregateOutputType | null
+        _min: ClassRegisterAttemptMinAggregateOutputType | null
+        _max: ClassRegisterAttemptMaxAggregateOutputType | null
+    };
+    export type ClassRegisterAttemptAvgAggregateOutputType = {
+        attempts: number | null
+    };
+    export type ClassRegisterAttemptSumAggregateOutputType = {
+        attempts: number | null
+    };
+    export type ClassRegisterAttemptMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        classRegisterSessionId: string | null
+        studentId: string | null
+        userProfileId: string | null
+        jobId: string | null
+        status: $Enums.ClassRegisterAttemptStatus | null
+        errorCode: string | null
+        message: string | null
+        occurredAt: Date | null
+        attempts: number | null
+    };
+    export type ClassRegisterAttemptMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        classRegisterSessionId: string | null
+        studentId: string | null
+        userProfileId: string | null
+        jobId: string | null
+        status: $Enums.ClassRegisterAttemptStatus | null
+        errorCode: string | null
+        message: string | null
+        occurredAt: Date | null
+        attempts: number | null
+    };
+    export type ClassRegisterAttemptCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        classRegisterSessionId: number
+        studentId: number
+        userProfileId: number
+        jobId: number
+        status: number
+        errorCode: number
+        message: number
+        subjectClassIds: number
+        occurredAt: number
+        attempts: number
+        _all: number
+    };
+    export type ClassRegisterAttemptAvgAggregateInputType = {
+        attempts?: true
+    };
+    export type ClassRegisterAttemptSumAggregateInputType = {
+        attempts?: true
+    };
+    export type ClassRegisterAttemptMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        classRegisterSessionId?: true
+        studentId?: true
+        userProfileId?: true
+        jobId?: true
+        status?: true
+        errorCode?: true
+        message?: true
+        occurredAt?: true
+        attempts?: true
+    };
+    export type ClassRegisterAttemptMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        classRegisterSessionId?: true
+        studentId?: true
+        userProfileId?: true
+        jobId?: true
+        status?: true
+        errorCode?: true
+        message?: true
+        occurredAt?: true
+        attempts?: true
+    };
+    export type ClassRegisterAttemptCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        classRegisterSessionId?: true
+        studentId?: true
+        userProfileId?: true
+        jobId?: true
+        status?: true
+        errorCode?: true
+        message?: true
+        subjectClassIds?: true
+        occurredAt?: true
+        attempts?: true
+        _all?: true
+    };
+    export type ClassRegisterAttemptAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ClassRegisterAttempt to aggregate.
+         */
+        where?: ClassRegisterAttemptWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterAttempts to fetch.
+         */
+        orderBy?: ClassRegisterAttemptOrderByWithRelationInput | ClassRegisterAttemptOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: ClassRegisterAttemptWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterAttempts from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterAttempts.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned ClassRegisterAttempts
+        **/
+        _count?: true | ClassRegisterAttemptCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: ClassRegisterAttemptAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: ClassRegisterAttemptSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: ClassRegisterAttemptMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: ClassRegisterAttemptMaxAggregateInputType
+    };
+    export type GetClassRegisterAttemptAggregateType<T extends ClassRegisterAttemptAggregateArgs> = {
+        [P in keyof T & keyof AggregateClassRegisterAttempt]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClassRegisterAttempt[P]>
+        : GetScalarType<T[P], AggregateClassRegisterAttempt[P]>
+    };
+    export type ClassRegisterAttemptGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ClassRegisterAttemptWhereInput
+        orderBy?: ClassRegisterAttemptOrderByWithAggregationInput | ClassRegisterAttemptOrderByWithAggregationInput[]
+        by: ClassRegisterAttemptScalarFieldEnum[] | ClassRegisterAttemptScalarFieldEnum
+        having?: ClassRegisterAttemptScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: ClassRegisterAttemptCountAggregateInputType | true
+        _avg?: ClassRegisterAttemptAvgAggregateInputType
+        _sum?: ClassRegisterAttemptSumAggregateInputType
+        _min?: ClassRegisterAttemptMinAggregateInputType
+        _max?: ClassRegisterAttemptMaxAggregateInputType
+    };
+    export type ClassRegisterAttemptGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        classRegisterSessionId: string
+        studentId: string | null
+        userProfileId: string
+        jobId: string | null
+        status: $Enums.ClassRegisterAttemptStatus
+        errorCode: string | null
+        message: string
+        subjectClassIds: string[]
+        occurredAt: Date
+        attempts: number
+        _count: ClassRegisterAttemptCountAggregateOutputType | null
+        _avg: ClassRegisterAttemptAvgAggregateOutputType | null
+        _sum: ClassRegisterAttemptSumAggregateOutputType | null
+        _min: ClassRegisterAttemptMinAggregateOutputType | null
+        _max: ClassRegisterAttemptMaxAggregateOutputType | null
+    };
+    type GetClassRegisterAttemptGroupByPayload<T extends ClassRegisterAttemptGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<ClassRegisterAttemptGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof ClassRegisterAttemptGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], ClassRegisterAttemptGroupByOutputType[P]>
+                : GetScalarType<T[P], ClassRegisterAttemptGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type ClassRegisterAttemptSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        classRegisterSessionId?: boolean
+        studentId?: boolean
+        userProfileId?: boolean
+        jobId?: boolean
+        status?: boolean
+        errorCode?: boolean
+        message?: boolean
+        subjectClassIds?: boolean
+        occurredAt?: boolean
+        attempts?: boolean
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+        student?: boolean | ClassRegisterAttempt$studentArgs<ExtArgs>
+    }, ExtArgs["result"]["classRegisterAttempt"]>;
+    export type ClassRegisterAttemptSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        classRegisterSessionId?: boolean
+        studentId?: boolean
+        userProfileId?: boolean
+        jobId?: boolean
+        status?: boolean
+        errorCode?: boolean
+        message?: boolean
+        subjectClassIds?: boolean
+        occurredAt?: boolean
+        attempts?: boolean
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+        student?: boolean | ClassRegisterAttempt$studentArgs<ExtArgs>
+    }, ExtArgs["result"]["classRegisterAttempt"]>;
+    export type ClassRegisterAttemptSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        classRegisterSessionId?: boolean
+        studentId?: boolean
+        userProfileId?: boolean
+        jobId?: boolean
+        status?: boolean
+        errorCode?: boolean
+        message?: boolean
+        subjectClassIds?: boolean
+        occurredAt?: boolean
+        attempts?: boolean
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+        student?: boolean | ClassRegisterAttempt$studentArgs<ExtArgs>
+    }, ExtArgs["result"]["classRegisterAttempt"]>;
+    export type ClassRegisterAttemptSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        classRegisterSessionId?: boolean
+        studentId?: boolean
+        userProfileId?: boolean
+        jobId?: boolean
+        status?: boolean
+        errorCode?: boolean
+        message?: boolean
+        subjectClassIds?: boolean
+        occurredAt?: boolean
+        attempts?: boolean
+    };
+    export type ClassRegisterAttemptOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "classRegisterSessionId" | "studentId" | "userProfileId" | "jobId" | "status" | "errorCode" | "message" | "subjectClassIds" | "occurredAt" | "attempts", ExtArgs["result"]["classRegisterAttempt"]>;
+    export type ClassRegisterAttemptInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+        student?: boolean | ClassRegisterAttempt$studentArgs<ExtArgs>
+    };
+    export type ClassRegisterAttemptIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+        student?: boolean | ClassRegisterAttempt$studentArgs<ExtArgs>
+    };
+    export type ClassRegisterAttemptIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+        student?: boolean | ClassRegisterAttempt$studentArgs<ExtArgs>
+    };
+    export type $ClassRegisterAttemptPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "ClassRegisterAttempt"
+        objects: {
+            classRegisterSession: Prisma.$ClassRegisterSessionPayload<ExtArgs>
+            student: Prisma.$StudentPayload<ExtArgs> | null
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            classRegisterSessionId: string
+            studentId: string | null
+            userProfileId: string
+            jobId: string | null
+            status: $Enums.ClassRegisterAttemptStatus
+            /**
+             * Mã lỗi nghiệp vụ (CLASS_FULL, MISSING_PREREQUISITE, ...)
+             */
+            errorCode: string | null
+            message: string
+            subjectClassIds: string[]
+            occurredAt: Date
+            attempts: number
+        }, ExtArgs["result"]["classRegisterAttempt"]>
+        composites: {}
+    };
+    type ClassRegisterAttemptGetPayload<S extends boolean | null | undefined | ClassRegisterAttemptDefaultArgs> = $Result.GetResult<Prisma.$ClassRegisterAttemptPayload, S>;
+    type ClassRegisterAttemptCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<ClassRegisterAttemptFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: ClassRegisterAttemptCountAggregateInputType | true
+    };
+    /**
+     * ClassRegisterAttempt findUnique
+     */
+    export type ClassRegisterAttemptFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterAttempt
+         */
+        select?: ClassRegisterAttemptSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterAttempt
+         */
+        omit?: ClassRegisterAttemptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterAttemptInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterAttempt to fetch.
+         */
+        where: ClassRegisterAttemptWhereUniqueInput
+    };
+    /**
+     * ClassRegisterAttempt findUniqueOrThrow
+     */
+    export type ClassRegisterAttemptFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterAttempt
+         */
+        select?: ClassRegisterAttemptSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterAttempt
+         */
+        omit?: ClassRegisterAttemptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterAttemptInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterAttempt to fetch.
+         */
+        where: ClassRegisterAttemptWhereUniqueInput
+    };
+    /**
+     * ClassRegisterAttempt findFirst
+     */
+    export type ClassRegisterAttemptFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterAttempt
+         */
+        select?: ClassRegisterAttemptSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterAttempt
+         */
+        omit?: ClassRegisterAttemptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterAttemptInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterAttempt to fetch.
+         */
+        where?: ClassRegisterAttemptWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterAttempts to fetch.
+         */
+        orderBy?: ClassRegisterAttemptOrderByWithRelationInput | ClassRegisterAttemptOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ClassRegisterAttempts.
+         */
+        cursor?: ClassRegisterAttemptWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterAttempts from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterAttempts.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ClassRegisterAttempts.
+         */
+        distinct?: ClassRegisterAttemptScalarFieldEnum | ClassRegisterAttemptScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterAttempt findFirstOrThrow
+     */
+    export type ClassRegisterAttemptFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterAttempt
+         */
+        select?: ClassRegisterAttemptSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterAttempt
+         */
+        omit?: ClassRegisterAttemptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterAttemptInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterAttempt to fetch.
+         */
+        where?: ClassRegisterAttemptWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterAttempts to fetch.
+         */
+        orderBy?: ClassRegisterAttemptOrderByWithRelationInput | ClassRegisterAttemptOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ClassRegisterAttempts.
+         */
+        cursor?: ClassRegisterAttemptWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterAttempts from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterAttempts.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ClassRegisterAttempts.
+         */
+        distinct?: ClassRegisterAttemptScalarFieldEnum | ClassRegisterAttemptScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterAttempt findMany
+     */
+    export type ClassRegisterAttemptFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterAttempt
+         */
+        select?: ClassRegisterAttemptSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterAttempt
+         */
+        omit?: ClassRegisterAttemptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterAttemptInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterAttempts to fetch.
+         */
+        where?: ClassRegisterAttemptWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterAttempts to fetch.
+         */
+        orderBy?: ClassRegisterAttemptOrderByWithRelationInput | ClassRegisterAttemptOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing ClassRegisterAttempts.
+         */
+        cursor?: ClassRegisterAttemptWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterAttempts from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterAttempts.
+         */
+        skip?: number
+        distinct?: ClassRegisterAttemptScalarFieldEnum | ClassRegisterAttemptScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterAttempt create
+     */
+    export type ClassRegisterAttemptCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterAttempt
+         */
+        select?: ClassRegisterAttemptSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterAttempt
+         */
+        omit?: ClassRegisterAttemptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterAttemptInclude<ExtArgs> | null
+        /**
+         * The data needed to create a ClassRegisterAttempt.
+         */
+        data: XOR<ClassRegisterAttemptCreateInput, ClassRegisterAttemptUncheckedCreateInput>
+    };
+    /**
+     * ClassRegisterAttempt createMany
+     */
+    export type ClassRegisterAttemptCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many ClassRegisterAttempts.
+         */
+        data: ClassRegisterAttemptCreateManyInput | ClassRegisterAttemptCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * ClassRegisterAttempt createManyAndReturn
+     */
+    export type ClassRegisterAttemptCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterAttempt
+         */
+        select?: ClassRegisterAttemptSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterAttempt
+         */
+        omit?: ClassRegisterAttemptOmit<ExtArgs> | null
+        /**
+         * The data used to create many ClassRegisterAttempts.
+         */
+        data: ClassRegisterAttemptCreateManyInput | ClassRegisterAttemptCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterAttemptIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ClassRegisterAttempt update
+     */
+    export type ClassRegisterAttemptUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterAttempt
+         */
+        select?: ClassRegisterAttemptSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterAttempt
+         */
+        omit?: ClassRegisterAttemptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterAttemptInclude<ExtArgs> | null
+        /**
+         * The data needed to update a ClassRegisterAttempt.
+         */
+        data: XOR<ClassRegisterAttemptUpdateInput, ClassRegisterAttemptUncheckedUpdateInput>
+        /**
+         * Choose, which ClassRegisterAttempt to update.
+         */
+        where: ClassRegisterAttemptWhereUniqueInput
+    };
+    /**
+     * ClassRegisterAttempt updateMany
+     */
+    export type ClassRegisterAttemptUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update ClassRegisterAttempts.
+         */
+        data: XOR<ClassRegisterAttemptUpdateManyMutationInput, ClassRegisterAttemptUncheckedUpdateManyInput>
+        /**
+         * Filter which ClassRegisterAttempts to update
+         */
+        where?: ClassRegisterAttemptWhereInput
+        /**
+         * Limit how many ClassRegisterAttempts to update.
+         */
+        limit?: number
+    };
+    /**
+     * ClassRegisterAttempt updateManyAndReturn
+     */
+    export type ClassRegisterAttemptUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterAttempt
+         */
+        select?: ClassRegisterAttemptSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterAttempt
+         */
+        omit?: ClassRegisterAttemptOmit<ExtArgs> | null
+        /**
+         * The data used to update ClassRegisterAttempts.
+         */
+        data: XOR<ClassRegisterAttemptUpdateManyMutationInput, ClassRegisterAttemptUncheckedUpdateManyInput>
+        /**
+         * Filter which ClassRegisterAttempts to update
+         */
+        where?: ClassRegisterAttemptWhereInput
+        /**
+         * Limit how many ClassRegisterAttempts to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterAttemptIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ClassRegisterAttempt upsert
+     */
+    export type ClassRegisterAttemptUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterAttempt
+         */
+        select?: ClassRegisterAttemptSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterAttempt
+         */
+        omit?: ClassRegisterAttemptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterAttemptInclude<ExtArgs> | null
+        /**
+         * The filter to search for the ClassRegisterAttempt to update in case it exists.
+         */
+        where: ClassRegisterAttemptWhereUniqueInput
+        /**
+         * In case the ClassRegisterAttempt found by the `where` argument doesn't exist, create a new ClassRegisterAttempt with this data.
+         */
+        create: XOR<ClassRegisterAttemptCreateInput, ClassRegisterAttemptUncheckedCreateInput>
+        /**
+         * In case the ClassRegisterAttempt was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<ClassRegisterAttemptUpdateInput, ClassRegisterAttemptUncheckedUpdateInput>
+    };
+    /**
+     * ClassRegisterAttempt delete
+     */
+    export type ClassRegisterAttemptDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterAttempt
+         */
+        select?: ClassRegisterAttemptSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterAttempt
+         */
+        omit?: ClassRegisterAttemptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterAttemptInclude<ExtArgs> | null
+        /**
+         * Filter which ClassRegisterAttempt to delete.
+         */
+        where: ClassRegisterAttemptWhereUniqueInput
+    };
+    /**
+     * ClassRegisterAttempt deleteMany
+     */
+    export type ClassRegisterAttemptDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ClassRegisterAttempts to delete
+         */
+        where?: ClassRegisterAttemptWhereInput
+        /**
+         * Limit how many ClassRegisterAttempts to delete.
+         */
+        limit?: number
+    };
+    /**
+     * ClassRegisterAttempt.student
+     */
+    export type ClassRegisterAttempt$studentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Student
+         */
+        select?: StudentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Student
+         */
+        omit?: StudentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInclude<ExtArgs> | null
+        where?: StudentWhereInput
+    };
+    /**
+     * ClassRegisterAttempt without action
+     */
+    export type ClassRegisterAttemptDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterAttempt
+         */
+        select?: ClassRegisterAttemptSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterAttempt
+         */
+        omit?: ClassRegisterAttemptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterAttemptInclude<ExtArgs> | null
     };
     /**
      * Model SubjectClass
@@ -265146,6 +266518,7 @@ export namespace Prisma {
         studentScoreConvert?: boolean | Student$studentScoreConvertArgs<ExtArgs>
         scoreLinkStudent?: boolean | Student$scoreLinkStudentArgs<ExtArgs>
         classRegisterLogs?: boolean | Student$classRegisterLogsArgs<ExtArgs>
+        classRegisterAttempts?: boolean | Student$classRegisterAttemptsArgs<ExtArgs>
         notes?: boolean | Student$notesArgs<ExtArgs>
         noteFolders?: boolean | Student$noteFoldersArgs<ExtArgs>
         semesterTrainingScore?: boolean | Student$semesterTrainingScoreArgs<ExtArgs>
@@ -265343,6 +266716,7 @@ export namespace Prisma {
         studentScoreConvert?: boolean | Student$studentScoreConvertArgs<ExtArgs>
         scoreLinkStudent?: boolean | Student$scoreLinkStudentArgs<ExtArgs>
         classRegisterLogs?: boolean | Student$classRegisterLogsArgs<ExtArgs>
+        classRegisterAttempts?: boolean | Student$classRegisterAttemptsArgs<ExtArgs>
         notes?: boolean | Student$notesArgs<ExtArgs>
         noteFolders?: boolean | Student$noteFoldersArgs<ExtArgs>
         semesterTrainingScore?: boolean | Student$semesterTrainingScoreArgs<ExtArgs>
@@ -265407,6 +266781,7 @@ export namespace Prisma {
             studentScoreConvert: Prisma.$StudentScoreConvertPayload<ExtArgs>[]
             scoreLinkStudent: Prisma.$ScoreLinkStudentPayload<ExtArgs>[]
             classRegisterLogs: Prisma.$ClassRegisterLogsPayload<ExtArgs>[]
+            classRegisterAttempts: Prisma.$ClassRegisterAttemptPayload<ExtArgs>[]
             notes: Prisma.$NotePayload<ExtArgs>[]
             noteFolders: Prisma.$NoteFolderPayload<ExtArgs>[]
             semesterTrainingScore: Prisma.$SemesterTrainingScorePayload<ExtArgs>[]
@@ -266572,6 +267947,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: ClassRegisterLogsScalarFieldEnum | ClassRegisterLogsScalarFieldEnum[]
+    };
+    /**
+     * Student.classRegisterAttempts
+     */
+    export type Student$classRegisterAttemptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterAttempt
+         */
+        select?: ClassRegisterAttemptSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterAttempt
+         */
+        omit?: ClassRegisterAttemptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterAttemptInclude<ExtArgs> | null
+        where?: ClassRegisterAttemptWhereInput
+        orderBy?: ClassRegisterAttemptOrderByWithRelationInput | ClassRegisterAttemptOrderByWithRelationInput[]
+        cursor?: ClassRegisterAttemptWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ClassRegisterAttemptScalarFieldEnum | ClassRegisterAttemptScalarFieldEnum[]
     };
     /**
      * Student.notes
@@ -375308,6 +376706,7 @@ export namespace Prisma {
     export type ClassRegisterSessionCreditScalarFieldEnum = (typeof ClassRegisterSessionCreditScalarFieldEnum)[keyof typeof ClassRegisterSessionCreditScalarFieldEnum];
     export type ClassRegisterSessionScalarFieldEnum = (typeof ClassRegisterSessionScalarFieldEnum)[keyof typeof ClassRegisterSessionScalarFieldEnum];
     export type ClassRegisterLogsScalarFieldEnum = (typeof ClassRegisterLogsScalarFieldEnum)[keyof typeof ClassRegisterLogsScalarFieldEnum];
+    export type ClassRegisterAttemptScalarFieldEnum = (typeof ClassRegisterAttemptScalarFieldEnum)[keyof typeof ClassRegisterAttemptScalarFieldEnum];
     export type SubjectClassScalarFieldEnum = (typeof SubjectClassScalarFieldEnum)[keyof typeof SubjectClassScalarFieldEnum];
     export type SubjectClassAttendanceScalarFieldEnum = (typeof SubjectClassAttendanceScalarFieldEnum)[keyof typeof SubjectClassAttendanceScalarFieldEnum];
     export type SubjectClassAttendanceStudentScalarFieldEnum = (typeof SubjectClassAttendanceStudentScalarFieldEnum)[keyof typeof SubjectClassAttendanceStudentScalarFieldEnum];
@@ -375594,6 +376993,7 @@ export namespace Prisma {
     export type ClassRegisterSessionCreditOrderByRelevanceFieldEnum = (typeof ClassRegisterSessionCreditOrderByRelevanceFieldEnum)[keyof typeof ClassRegisterSessionCreditOrderByRelevanceFieldEnum];
     export type ClassRegisterSessionOrderByRelevanceFieldEnum = (typeof ClassRegisterSessionOrderByRelevanceFieldEnum)[keyof typeof ClassRegisterSessionOrderByRelevanceFieldEnum];
     export type ClassRegisterLogsOrderByRelevanceFieldEnum = (typeof ClassRegisterLogsOrderByRelevanceFieldEnum)[keyof typeof ClassRegisterLogsOrderByRelevanceFieldEnum];
+    export type ClassRegisterAttemptOrderByRelevanceFieldEnum = (typeof ClassRegisterAttemptOrderByRelevanceFieldEnum)[keyof typeof ClassRegisterAttemptOrderByRelevanceFieldEnum];
     export type SubjectClassOrderByRelevanceFieldEnum = (typeof SubjectClassOrderByRelevanceFieldEnum)[keyof typeof SubjectClassOrderByRelevanceFieldEnum];
     export type SubjectClassAttendanceOrderByRelevanceFieldEnum = (typeof SubjectClassAttendanceOrderByRelevanceFieldEnum)[keyof typeof SubjectClassAttendanceOrderByRelevanceFieldEnum];
     export type SubjectClassAttendanceStudentOrderByRelevanceFieldEnum = (typeof SubjectClassAttendanceStudentOrderByRelevanceFieldEnum)[keyof typeof SubjectClassAttendanceStudentOrderByRelevanceFieldEnum];
@@ -375962,6 +377362,14 @@ export namespace Prisma {
      * Reference to a field of type 'ClassRegisterStatus[]'
      */
     export type ListEnumClassRegisterStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClassRegisterStatus[]'>;
+    /**
+     * Reference to a field of type 'ClassRegisterAttemptStatus'
+     */
+    export type EnumClassRegisterAttemptStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClassRegisterAttemptStatus'>;
+    /**
+     * Reference to a field of type 'ClassRegisterAttemptStatus[]'
+     */
+    export type ListEnumClassRegisterAttemptStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClassRegisterAttemptStatus[]'>;
     /**
      * Reference to a field of type 'SubjectClassSchedule'
      */
@@ -388399,6 +389807,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditListRelationFilter
         trainingCourses?: TrainingCourseListRelationFilter
         classRegisterLogs?: ClassRegisterLogsListRelationFilter
+        classRegisterAttempts?: ClassRegisterAttemptListRelationFilter
         dataSyncHistories?: DataSyncHistoryListRelationFilter
     };
     export type ClassRegisterSessionOrderByWithRelationInput = {
@@ -388419,6 +389828,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditOrderByRelationAggregateInput
         trainingCourses?: TrainingCourseOrderByRelationAggregateInput
         classRegisterLogs?: ClassRegisterLogsOrderByRelationAggregateInput
+        classRegisterAttempts?: ClassRegisterAttemptOrderByRelationAggregateInput
         dataSyncHistories?: DataSyncHistoryOrderByRelationAggregateInput
         _relevance?: ClassRegisterSessionOrderByRelevanceInput
     };
@@ -388443,6 +389853,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditListRelationFilter
         trainingCourses?: TrainingCourseListRelationFilter
         classRegisterLogs?: ClassRegisterLogsListRelationFilter
+        classRegisterAttempts?: ClassRegisterAttemptListRelationFilter
         dataSyncHistories?: DataSyncHistoryListRelationFilter
     }, "id" | "code">;
     export type ClassRegisterSessionOrderByWithAggregationInput = {
@@ -388580,6 +389991,127 @@ export namespace Prisma {
         studentId?: StringWithAggregatesFilter<"ClassRegisterLogs"> | string
         status?: EnumClassRegisterStatusWithAggregatesFilter<"ClassRegisterLogs"> | $Enums.ClassRegisterStatus
         reason?: StringNullableWithAggregatesFilter<"ClassRegisterLogs"> | string | null
+    };
+    export type ClassRegisterAttemptWhereInput = {
+        AND?: ClassRegisterAttemptWhereInput | ClassRegisterAttemptWhereInput[]
+        OR?: ClassRegisterAttemptWhereInput[]
+        NOT?: ClassRegisterAttemptWhereInput | ClassRegisterAttemptWhereInput[]
+        id?: StringFilter<"ClassRegisterAttempt"> | string
+        code?: StringNullableFilter<"ClassRegisterAttempt"> | string | null
+        active?: BoolFilter<"ClassRegisterAttempt"> | boolean
+        description?: StringNullableFilter<"ClassRegisterAttempt"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ClassRegisterAttempt"> | Date | string | null
+        createdAt?: DateTimeFilter<"ClassRegisterAttempt"> | Date | string
+        updatedAt?: DateTimeFilter<"ClassRegisterAttempt"> | Date | string
+        createdBy?: UuidNullableFilter<"ClassRegisterAttempt"> | string | null
+        classRegisterSessionId?: StringFilter<"ClassRegisterAttempt"> | string
+        studentId?: StringNullableFilter<"ClassRegisterAttempt"> | string | null
+        userProfileId?: UuidFilter<"ClassRegisterAttempt"> | string
+        jobId?: StringNullableFilter<"ClassRegisterAttempt"> | string | null
+        status?: EnumClassRegisterAttemptStatusFilter<"ClassRegisterAttempt"> | $Enums.ClassRegisterAttemptStatus
+        errorCode?: StringNullableFilter<"ClassRegisterAttempt"> | string | null
+        message?: StringFilter<"ClassRegisterAttempt"> | string
+        subjectClassIds?: StringNullableListFilter<"ClassRegisterAttempt">
+        occurredAt?: DateTimeFilter<"ClassRegisterAttempt"> | Date | string
+        attempts?: IntFilter<"ClassRegisterAttempt"> | number
+        classRegisterSession?: XOR<ClassRegisterSessionScalarRelationFilter, ClassRegisterSessionWhereInput>
+        student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
+    };
+    export type ClassRegisterAttemptOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        classRegisterSessionId?: SortOrder
+        studentId?: SortOrderInput | SortOrder
+        userProfileId?: SortOrder
+        jobId?: SortOrderInput | SortOrder
+        status?: SortOrder
+        errorCode?: SortOrderInput | SortOrder
+        message?: SortOrder
+        subjectClassIds?: SortOrder
+        occurredAt?: SortOrder
+        attempts?: SortOrder
+        classRegisterSession?: ClassRegisterSessionOrderByWithRelationInput
+        student?: StudentOrderByWithRelationInput
+        _relevance?: ClassRegisterAttemptOrderByRelevanceInput
+    };
+    export type ClassRegisterAttemptWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        jobId?: string
+        AND?: ClassRegisterAttemptWhereInput | ClassRegisterAttemptWhereInput[]
+        OR?: ClassRegisterAttemptWhereInput[]
+        NOT?: ClassRegisterAttemptWhereInput | ClassRegisterAttemptWhereInput[]
+        active?: BoolFilter<"ClassRegisterAttempt"> | boolean
+        description?: StringNullableFilter<"ClassRegisterAttempt"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ClassRegisterAttempt"> | Date | string | null
+        createdAt?: DateTimeFilter<"ClassRegisterAttempt"> | Date | string
+        updatedAt?: DateTimeFilter<"ClassRegisterAttempt"> | Date | string
+        createdBy?: UuidNullableFilter<"ClassRegisterAttempt"> | string | null
+        classRegisterSessionId?: StringFilter<"ClassRegisterAttempt"> | string
+        studentId?: StringNullableFilter<"ClassRegisterAttempt"> | string | null
+        userProfileId?: UuidFilter<"ClassRegisterAttempt"> | string
+        status?: EnumClassRegisterAttemptStatusFilter<"ClassRegisterAttempt"> | $Enums.ClassRegisterAttemptStatus
+        errorCode?: StringNullableFilter<"ClassRegisterAttempt"> | string | null
+        message?: StringFilter<"ClassRegisterAttempt"> | string
+        subjectClassIds?: StringNullableListFilter<"ClassRegisterAttempt">
+        occurredAt?: DateTimeFilter<"ClassRegisterAttempt"> | Date | string
+        attempts?: IntFilter<"ClassRegisterAttempt"> | number
+        classRegisterSession?: XOR<ClassRegisterSessionScalarRelationFilter, ClassRegisterSessionWhereInput>
+        student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
+    }, "id" | "code" | "jobId">;
+    export type ClassRegisterAttemptOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        classRegisterSessionId?: SortOrder
+        studentId?: SortOrderInput | SortOrder
+        userProfileId?: SortOrder
+        jobId?: SortOrderInput | SortOrder
+        status?: SortOrder
+        errorCode?: SortOrderInput | SortOrder
+        message?: SortOrder
+        subjectClassIds?: SortOrder
+        occurredAt?: SortOrder
+        attempts?: SortOrder
+        _count?: ClassRegisterAttemptCountOrderByAggregateInput
+        _avg?: ClassRegisterAttemptAvgOrderByAggregateInput
+        _max?: ClassRegisterAttemptMaxOrderByAggregateInput
+        _min?: ClassRegisterAttemptMinOrderByAggregateInput
+        _sum?: ClassRegisterAttemptSumOrderByAggregateInput
+    };
+    export type ClassRegisterAttemptScalarWhereWithAggregatesInput = {
+        AND?: ClassRegisterAttemptScalarWhereWithAggregatesInput | ClassRegisterAttemptScalarWhereWithAggregatesInput[]
+        OR?: ClassRegisterAttemptScalarWhereWithAggregatesInput[]
+        NOT?: ClassRegisterAttemptScalarWhereWithAggregatesInput | ClassRegisterAttemptScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"ClassRegisterAttempt"> | string
+        code?: StringNullableWithAggregatesFilter<"ClassRegisterAttempt"> | string | null
+        active?: BoolWithAggregatesFilter<"ClassRegisterAttempt"> | boolean
+        description?: StringNullableWithAggregatesFilter<"ClassRegisterAttempt"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"ClassRegisterAttempt"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"ClassRegisterAttempt"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"ClassRegisterAttempt"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"ClassRegisterAttempt"> | string | null
+        classRegisterSessionId?: StringWithAggregatesFilter<"ClassRegisterAttempt"> | string
+        studentId?: StringNullableWithAggregatesFilter<"ClassRegisterAttempt"> | string | null
+        userProfileId?: UuidWithAggregatesFilter<"ClassRegisterAttempt"> | string
+        jobId?: StringNullableWithAggregatesFilter<"ClassRegisterAttempt"> | string | null
+        status?: EnumClassRegisterAttemptStatusWithAggregatesFilter<"ClassRegisterAttempt"> | $Enums.ClassRegisterAttemptStatus
+        errorCode?: StringNullableWithAggregatesFilter<"ClassRegisterAttempt"> | string | null
+        message?: StringWithAggregatesFilter<"ClassRegisterAttempt"> | string
+        subjectClassIds?: StringNullableListFilter<"ClassRegisterAttempt">
+        occurredAt?: DateTimeWithAggregatesFilter<"ClassRegisterAttempt"> | Date | string
+        attempts?: IntWithAggregatesFilter<"ClassRegisterAttempt"> | number
     };
     export type SubjectClassWhereInput = {
         AND?: SubjectClassWhereInput | SubjectClassWhereInput[]
@@ -392192,6 +393724,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertListRelationFilter
         scoreLinkStudent?: ScoreLinkStudentListRelationFilter
         classRegisterLogs?: ClassRegisterLogsListRelationFilter
+        classRegisterAttempts?: ClassRegisterAttemptListRelationFilter
         notes?: NoteListRelationFilter
         noteFolders?: NoteFolderListRelationFilter
         semesterTrainingScore?: SemesterTrainingScoreListRelationFilter
@@ -392277,6 +393810,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertOrderByRelationAggregateInput
         scoreLinkStudent?: ScoreLinkStudentOrderByRelationAggregateInput
         classRegisterLogs?: ClassRegisterLogsOrderByRelationAggregateInput
+        classRegisterAttempts?: ClassRegisterAttemptOrderByRelationAggregateInput
         notes?: NoteOrderByRelationAggregateInput
         noteFolders?: NoteFolderOrderByRelationAggregateInput
         semesterTrainingScore?: SemesterTrainingScoreOrderByRelationAggregateInput
@@ -392366,6 +393900,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertListRelationFilter
         scoreLinkStudent?: ScoreLinkStudentListRelationFilter
         classRegisterLogs?: ClassRegisterLogsListRelationFilter
+        classRegisterAttempts?: ClassRegisterAttemptListRelationFilter
         notes?: NoteListRelationFilter
         noteFolders?: NoteFolderListRelationFilter
         semesterTrainingScore?: SemesterTrainingScoreListRelationFilter
@@ -420597,6 +422132,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditCreateNestedManyWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutClassRegisterSessionInput
         dataSyncHistories?: DataSyncHistoryCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionUncheckedCreateInput = {
@@ -420616,6 +422152,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         dataSyncHistories?: DataSyncHistoryUncheckedCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionUpdateInput = {
@@ -420635,6 +422172,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditUpdateManyWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutClassRegisterSessionNestedInput
         dataSyncHistories?: DataSyncHistoryUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type ClassRegisterSessionUncheckedUpdateInput = {
@@ -420654,6 +422192,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         dataSyncHistories?: DataSyncHistoryUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type ClassRegisterSessionCreateManyInput = {
@@ -420801,6 +422340,144 @@ export namespace Prisma {
         studentId?: StringFieldUpdateOperationsInput | string
         status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ClassRegisterAttemptCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        userProfileId: string
+        jobId?: string | null
+        status?: $Enums.ClassRegisterAttemptStatus
+        errorCode?: string | null
+        message: string
+        subjectClassIds?: ClassRegisterAttemptCreatesubjectClassIdsInput | string[]
+        occurredAt: Date | string
+        attempts?: number
+        classRegisterSession: ClassRegisterSessionCreateNestedOneWithoutClassRegisterAttemptsInput
+        student?: StudentCreateNestedOneWithoutClassRegisterAttemptsInput
+    };
+    export type ClassRegisterAttemptUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        classRegisterSessionId: string
+        studentId?: string | null
+        userProfileId: string
+        jobId?: string | null
+        status?: $Enums.ClassRegisterAttemptStatus
+        errorCode?: string | null
+        message: string
+        subjectClassIds?: ClassRegisterAttemptCreatesubjectClassIdsInput | string[]
+        occurredAt: Date | string
+        attempts?: number
+    };
+    export type ClassRegisterAttemptUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        jobId?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumClassRegisterAttemptStatusFieldUpdateOperationsInput | $Enums.ClassRegisterAttemptStatus
+        errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+        message?: StringFieldUpdateOperationsInput | string
+        subjectClassIds?: ClassRegisterAttemptUpdatesubjectClassIdsInput | string[]
+        occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attempts?: IntFieldUpdateOperationsInput | number
+        classRegisterSession?: ClassRegisterSessionUpdateOneRequiredWithoutClassRegisterAttemptsNestedInput
+        student?: StudentUpdateOneWithoutClassRegisterAttemptsNestedInput
+    };
+    export type ClassRegisterAttemptUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+        studentId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        jobId?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumClassRegisterAttemptStatusFieldUpdateOperationsInput | $Enums.ClassRegisterAttemptStatus
+        errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+        message?: StringFieldUpdateOperationsInput | string
+        subjectClassIds?: ClassRegisterAttemptUpdatesubjectClassIdsInput | string[]
+        occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attempts?: IntFieldUpdateOperationsInput | number
+    };
+    export type ClassRegisterAttemptCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        classRegisterSessionId: string
+        studentId?: string | null
+        userProfileId: string
+        jobId?: string | null
+        status?: $Enums.ClassRegisterAttemptStatus
+        errorCode?: string | null
+        message: string
+        subjectClassIds?: ClassRegisterAttemptCreatesubjectClassIdsInput | string[]
+        occurredAt: Date | string
+        attempts?: number
+    };
+    export type ClassRegisterAttemptUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        jobId?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumClassRegisterAttemptStatusFieldUpdateOperationsInput | $Enums.ClassRegisterAttemptStatus
+        errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+        message?: StringFieldUpdateOperationsInput | string
+        subjectClassIds?: ClassRegisterAttemptUpdatesubjectClassIdsInput | string[]
+        occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attempts?: IntFieldUpdateOperationsInput | number
+    };
+    export type ClassRegisterAttemptUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+        studentId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        jobId?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumClassRegisterAttemptStatusFieldUpdateOperationsInput | $Enums.ClassRegisterAttemptStatus
+        errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+        message?: StringFieldUpdateOperationsInput | string
+        subjectClassIds?: ClassRegisterAttemptUpdatesubjectClassIdsInput | string[]
+        occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attempts?: IntFieldUpdateOperationsInput | number
     };
     export type SubjectClassCreateInput = {
         id?: string
@@ -424836,6 +426513,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -424914,6 +426592,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -424992,6 +426671,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -425070,6 +426750,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -449901,10 +451582,18 @@ export namespace Prisma {
         some?: ClassRegisterLogsWhereInput
         none?: ClassRegisterLogsWhereInput
     };
+    export type ClassRegisterAttemptListRelationFilter = {
+        every?: ClassRegisterAttemptWhereInput
+        some?: ClassRegisterAttemptWhereInput
+        none?: ClassRegisterAttemptWhereInput
+    };
     export type ClassRegisterSessionCreditOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type ClassRegisterLogsOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type ClassRegisterAttemptOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type ClassRegisterSessionOrderByRelevanceInput = {
@@ -450036,6 +451725,97 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumClassRegisterStatusFilter<$PrismaModel>
         _max?: NestedEnumClassRegisterStatusFilter<$PrismaModel>
+    };
+    export type EnumClassRegisterAttemptStatusFilter<$PrismaModel = never> = {
+        equals?: $Enums.ClassRegisterAttemptStatus | EnumClassRegisterAttemptStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.ClassRegisterAttemptStatus[] | ListEnumClassRegisterAttemptStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ClassRegisterAttemptStatus[] | ListEnumClassRegisterAttemptStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumClassRegisterAttemptStatusFilter<$PrismaModel> | $Enums.ClassRegisterAttemptStatus
+    };
+    export type StringNullableListFilter<$PrismaModel = never> = {
+        equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+        has?: string | StringFieldRefInput<$PrismaModel> | null
+        hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+        hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+        isEmpty?: boolean
+    };
+    export type ClassRegisterAttemptOrderByRelevanceInput = {
+        fields: ClassRegisterAttemptOrderByRelevanceFieldEnum | ClassRegisterAttemptOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type ClassRegisterAttemptCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        classRegisterSessionId?: SortOrder
+        studentId?: SortOrder
+        userProfileId?: SortOrder
+        jobId?: SortOrder
+        status?: SortOrder
+        errorCode?: SortOrder
+        message?: SortOrder
+        subjectClassIds?: SortOrder
+        occurredAt?: SortOrder
+        attempts?: SortOrder
+    };
+    export type ClassRegisterAttemptAvgOrderByAggregateInput = {
+        attempts?: SortOrder
+    };
+    export type ClassRegisterAttemptMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        classRegisterSessionId?: SortOrder
+        studentId?: SortOrder
+        userProfileId?: SortOrder
+        jobId?: SortOrder
+        status?: SortOrder
+        errorCode?: SortOrder
+        message?: SortOrder
+        occurredAt?: SortOrder
+        attempts?: SortOrder
+    };
+    export type ClassRegisterAttemptMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        classRegisterSessionId?: SortOrder
+        studentId?: SortOrder
+        userProfileId?: SortOrder
+        jobId?: SortOrder
+        status?: SortOrder
+        errorCode?: SortOrder
+        message?: SortOrder
+        occurredAt?: SortOrder
+        attempts?: SortOrder
+    };
+    export type ClassRegisterAttemptSumOrderByAggregateInput = {
+        attempts?: SortOrder
+    };
+    export type EnumClassRegisterAttemptStatusWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.ClassRegisterAttemptStatus | EnumClassRegisterAttemptStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.ClassRegisterAttemptStatus[] | ListEnumClassRegisterAttemptStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ClassRegisterAttemptStatus[] | ListEnumClassRegisterAttemptStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumClassRegisterAttemptStatusWithAggregatesFilter<$PrismaModel> | $Enums.ClassRegisterAttemptStatus
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumClassRegisterAttemptStatusFilter<$PrismaModel>
+        _max?: NestedEnumClassRegisterAttemptStatusFilter<$PrismaModel>
     };
     export type EnumSubjectClassScheduleNullableFilter<$PrismaModel = never> = {
         equals?: $Enums.SubjectClassSchedule | EnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
@@ -450878,13 +452658,6 @@ export namespace Prisma {
         in?: $Enums.TrainingObjectTypes[] | ListEnumTrainingObjectTypesFieldRefInput<$PrismaModel>
         notIn?: $Enums.TrainingObjectTypes[] | ListEnumTrainingObjectTypesFieldRefInput<$PrismaModel>
         not?: NestedEnumTrainingObjectTypesFilter<$PrismaModel> | $Enums.TrainingObjectTypes
-    };
-    export type StringNullableListFilter<$PrismaModel = never> = {
-        equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-        has?: string | StringFieldRefInput<$PrismaModel> | null
-        hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-        hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-        isEmpty?: boolean
     };
     export type TrainingFormNullableScalarRelationFilter = {
         is?: TrainingFormWhereInput | null
@@ -473071,6 +474844,12 @@ export namespace Prisma {
         createMany?: ClassRegisterLogsCreateManyClassRegisterSessionInputEnvelope
         connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
     };
+    export type ClassRegisterAttemptCreateNestedManyWithoutClassRegisterSessionInput = {
+        create?: XOR<ClassRegisterAttemptCreateWithoutClassRegisterSessionInput, ClassRegisterAttemptUncheckedCreateWithoutClassRegisterSessionInput> | ClassRegisterAttemptCreateWithoutClassRegisterSessionInput[] | ClassRegisterAttemptUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: ClassRegisterAttemptCreateOrConnectWithoutClassRegisterSessionInput | ClassRegisterAttemptCreateOrConnectWithoutClassRegisterSessionInput[]
+        createMany?: ClassRegisterAttemptCreateManyClassRegisterSessionInputEnvelope
+        connect?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+    };
     export type DataSyncHistoryCreateNestedManyWithoutClassRegisterSessionInput = {
         create?: XOR<DataSyncHistoryCreateWithoutClassRegisterSessionInput, DataSyncHistoryUncheckedCreateWithoutClassRegisterSessionInput> | DataSyncHistoryCreateWithoutClassRegisterSessionInput[] | DataSyncHistoryUncheckedCreateWithoutClassRegisterSessionInput[]
         connectOrCreate?: DataSyncHistoryCreateOrConnectWithoutClassRegisterSessionInput | DataSyncHistoryCreateOrConnectWithoutClassRegisterSessionInput[]
@@ -473093,6 +474872,12 @@ export namespace Prisma {
         connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutClassRegisterSessionInput | ClassRegisterLogsCreateOrConnectWithoutClassRegisterSessionInput[]
         createMany?: ClassRegisterLogsCreateManyClassRegisterSessionInputEnvelope
         connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    };
+    export type ClassRegisterAttemptUncheckedCreateNestedManyWithoutClassRegisterSessionInput = {
+        create?: XOR<ClassRegisterAttemptCreateWithoutClassRegisterSessionInput, ClassRegisterAttemptUncheckedCreateWithoutClassRegisterSessionInput> | ClassRegisterAttemptCreateWithoutClassRegisterSessionInput[] | ClassRegisterAttemptUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: ClassRegisterAttemptCreateOrConnectWithoutClassRegisterSessionInput | ClassRegisterAttemptCreateOrConnectWithoutClassRegisterSessionInput[]
+        createMany?: ClassRegisterAttemptCreateManyClassRegisterSessionInputEnvelope
+        connect?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
     };
     export type DataSyncHistoryUncheckedCreateNestedManyWithoutClassRegisterSessionInput = {
         create?: XOR<DataSyncHistoryCreateWithoutClassRegisterSessionInput, DataSyncHistoryUncheckedCreateWithoutClassRegisterSessionInput> | DataSyncHistoryCreateWithoutClassRegisterSessionInput[] | DataSyncHistoryUncheckedCreateWithoutClassRegisterSessionInput[]
@@ -473145,6 +474930,19 @@ export namespace Prisma {
         updateMany?: ClassRegisterLogsUpdateManyWithWhereWithoutClassRegisterSessionInput | ClassRegisterLogsUpdateManyWithWhereWithoutClassRegisterSessionInput[]
         deleteMany?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
     };
+    export type ClassRegisterAttemptUpdateManyWithoutClassRegisterSessionNestedInput = {
+        create?: XOR<ClassRegisterAttemptCreateWithoutClassRegisterSessionInput, ClassRegisterAttemptUncheckedCreateWithoutClassRegisterSessionInput> | ClassRegisterAttemptCreateWithoutClassRegisterSessionInput[] | ClassRegisterAttemptUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: ClassRegisterAttemptCreateOrConnectWithoutClassRegisterSessionInput | ClassRegisterAttemptCreateOrConnectWithoutClassRegisterSessionInput[]
+        upsert?: ClassRegisterAttemptUpsertWithWhereUniqueWithoutClassRegisterSessionInput | ClassRegisterAttemptUpsertWithWhereUniqueWithoutClassRegisterSessionInput[]
+        createMany?: ClassRegisterAttemptCreateManyClassRegisterSessionInputEnvelope
+        set?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        disconnect?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        delete?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        connect?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        update?: ClassRegisterAttemptUpdateWithWhereUniqueWithoutClassRegisterSessionInput | ClassRegisterAttemptUpdateWithWhereUniqueWithoutClassRegisterSessionInput[]
+        updateMany?: ClassRegisterAttemptUpdateManyWithWhereWithoutClassRegisterSessionInput | ClassRegisterAttemptUpdateManyWithWhereWithoutClassRegisterSessionInput[]
+        deleteMany?: ClassRegisterAttemptScalarWhereInput | ClassRegisterAttemptScalarWhereInput[]
+    };
     export type DataSyncHistoryUpdateManyWithoutClassRegisterSessionNestedInput = {
         create?: XOR<DataSyncHistoryCreateWithoutClassRegisterSessionInput, DataSyncHistoryUncheckedCreateWithoutClassRegisterSessionInput> | DataSyncHistoryCreateWithoutClassRegisterSessionInput[] | DataSyncHistoryUncheckedCreateWithoutClassRegisterSessionInput[]
         connectOrCreate?: DataSyncHistoryCreateOrConnectWithoutClassRegisterSessionInput | DataSyncHistoryCreateOrConnectWithoutClassRegisterSessionInput[]
@@ -473195,6 +474993,19 @@ export namespace Prisma {
         update?: ClassRegisterLogsUpdateWithWhereUniqueWithoutClassRegisterSessionInput | ClassRegisterLogsUpdateWithWhereUniqueWithoutClassRegisterSessionInput[]
         updateMany?: ClassRegisterLogsUpdateManyWithWhereWithoutClassRegisterSessionInput | ClassRegisterLogsUpdateManyWithWhereWithoutClassRegisterSessionInput[]
         deleteMany?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
+    };
+    export type ClassRegisterAttemptUncheckedUpdateManyWithoutClassRegisterSessionNestedInput = {
+        create?: XOR<ClassRegisterAttemptCreateWithoutClassRegisterSessionInput, ClassRegisterAttemptUncheckedCreateWithoutClassRegisterSessionInput> | ClassRegisterAttemptCreateWithoutClassRegisterSessionInput[] | ClassRegisterAttemptUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: ClassRegisterAttemptCreateOrConnectWithoutClassRegisterSessionInput | ClassRegisterAttemptCreateOrConnectWithoutClassRegisterSessionInput[]
+        upsert?: ClassRegisterAttemptUpsertWithWhereUniqueWithoutClassRegisterSessionInput | ClassRegisterAttemptUpsertWithWhereUniqueWithoutClassRegisterSessionInput[]
+        createMany?: ClassRegisterAttemptCreateManyClassRegisterSessionInputEnvelope
+        set?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        disconnect?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        delete?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        connect?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        update?: ClassRegisterAttemptUpdateWithWhereUniqueWithoutClassRegisterSessionInput | ClassRegisterAttemptUpdateWithWhereUniqueWithoutClassRegisterSessionInput[]
+        updateMany?: ClassRegisterAttemptUpdateManyWithWhereWithoutClassRegisterSessionInput | ClassRegisterAttemptUpdateManyWithWhereWithoutClassRegisterSessionInput[]
+        deleteMany?: ClassRegisterAttemptScalarWhereInput | ClassRegisterAttemptScalarWhereInput[]
     };
     export type DataSyncHistoryUncheckedUpdateManyWithoutClassRegisterSessionNestedInput = {
         create?: XOR<DataSyncHistoryCreateWithoutClassRegisterSessionInput, DataSyncHistoryUncheckedCreateWithoutClassRegisterSessionInput> | DataSyncHistoryCreateWithoutClassRegisterSessionInput[] | DataSyncHistoryUncheckedCreateWithoutClassRegisterSessionInput[]
@@ -473247,6 +475058,42 @@ export namespace Prisma {
         upsert?: StudentUpsertWithoutClassRegisterLogsInput
         connect?: StudentWhereUniqueInput
         update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutClassRegisterLogsInput, StudentUpdateWithoutClassRegisterLogsInput>, StudentUncheckedUpdateWithoutClassRegisterLogsInput>
+    };
+    export type ClassRegisterAttemptCreatesubjectClassIdsInput = {
+        set: string[]
+    };
+    export type ClassRegisterSessionCreateNestedOneWithoutClassRegisterAttemptsInput = {
+        create?: XOR<ClassRegisterSessionCreateWithoutClassRegisterAttemptsInput, ClassRegisterSessionUncheckedCreateWithoutClassRegisterAttemptsInput>
+        connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutClassRegisterAttemptsInput
+        connect?: ClassRegisterSessionWhereUniqueInput
+    };
+    export type StudentCreateNestedOneWithoutClassRegisterAttemptsInput = {
+        create?: XOR<StudentCreateWithoutClassRegisterAttemptsInput, StudentUncheckedCreateWithoutClassRegisterAttemptsInput>
+        connectOrCreate?: StudentCreateOrConnectWithoutClassRegisterAttemptsInput
+        connect?: StudentWhereUniqueInput
+    };
+    export type EnumClassRegisterAttemptStatusFieldUpdateOperationsInput = {
+        set?: $Enums.ClassRegisterAttemptStatus
+    };
+    export type ClassRegisterAttemptUpdatesubjectClassIdsInput = {
+        set?: string[]
+        push?: string | string[]
+    };
+    export type ClassRegisterSessionUpdateOneRequiredWithoutClassRegisterAttemptsNestedInput = {
+        create?: XOR<ClassRegisterSessionCreateWithoutClassRegisterAttemptsInput, ClassRegisterSessionUncheckedCreateWithoutClassRegisterAttemptsInput>
+        connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutClassRegisterAttemptsInput
+        upsert?: ClassRegisterSessionUpsertWithoutClassRegisterAttemptsInput
+        connect?: ClassRegisterSessionWhereUniqueInput
+        update?: XOR<XOR<ClassRegisterSessionUpdateToOneWithWhereWithoutClassRegisterAttemptsInput, ClassRegisterSessionUpdateWithoutClassRegisterAttemptsInput>, ClassRegisterSessionUncheckedUpdateWithoutClassRegisterAttemptsInput>
+    };
+    export type StudentUpdateOneWithoutClassRegisterAttemptsNestedInput = {
+        create?: XOR<StudentCreateWithoutClassRegisterAttemptsInput, StudentUncheckedCreateWithoutClassRegisterAttemptsInput>
+        connectOrCreate?: StudentCreateOrConnectWithoutClassRegisterAttemptsInput
+        upsert?: StudentUpsertWithoutClassRegisterAttemptsInput
+        disconnect?: StudentWhereInput | boolean
+        delete?: StudentWhereInput | boolean
+        connect?: StudentWhereUniqueInput
+        update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutClassRegisterAttemptsInput, StudentUpdateWithoutClassRegisterAttemptsInput>, StudentUncheckedUpdateWithoutClassRegisterAttemptsInput>
     };
     export type SubjectVersionCreateNestedOneWithoutSubjectClassInput = {
         create?: XOR<SubjectVersionCreateWithoutSubjectClassInput, SubjectVersionUncheckedCreateWithoutSubjectClassInput>
@@ -477051,6 +478898,12 @@ export namespace Prisma {
         createMany?: ClassRegisterLogsCreateManyStudentInputEnvelope
         connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
     };
+    export type ClassRegisterAttemptCreateNestedManyWithoutStudentInput = {
+        create?: XOR<ClassRegisterAttemptCreateWithoutStudentInput, ClassRegisterAttemptUncheckedCreateWithoutStudentInput> | ClassRegisterAttemptCreateWithoutStudentInput[] | ClassRegisterAttemptUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ClassRegisterAttemptCreateOrConnectWithoutStudentInput | ClassRegisterAttemptCreateOrConnectWithoutStudentInput[]
+        createMany?: ClassRegisterAttemptCreateManyStudentInputEnvelope
+        connect?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+    };
     export type NoteCreateNestedManyWithoutStudentInput = {
         create?: XOR<NoteCreateWithoutStudentInput, NoteUncheckedCreateWithoutStudentInput> | NoteCreateWithoutStudentInput[] | NoteUncheckedCreateWithoutStudentInput[]
         connectOrCreate?: NoteCreateOrConnectWithoutStudentInput | NoteCreateOrConnectWithoutStudentInput[]
@@ -477233,6 +479086,12 @@ export namespace Prisma {
         connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutStudentInput | ClassRegisterLogsCreateOrConnectWithoutStudentInput[]
         createMany?: ClassRegisterLogsCreateManyStudentInputEnvelope
         connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    };
+    export type ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput = {
+        create?: XOR<ClassRegisterAttemptCreateWithoutStudentInput, ClassRegisterAttemptUncheckedCreateWithoutStudentInput> | ClassRegisterAttemptCreateWithoutStudentInput[] | ClassRegisterAttemptUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ClassRegisterAttemptCreateOrConnectWithoutStudentInput | ClassRegisterAttemptCreateOrConnectWithoutStudentInput[]
+        createMany?: ClassRegisterAttemptCreateManyStudentInputEnvelope
+        connect?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
     };
     export type NoteUncheckedCreateNestedManyWithoutStudentInput = {
         create?: XOR<NoteCreateWithoutStudentInput, NoteUncheckedCreateWithoutStudentInput> | NoteCreateWithoutStudentInput[] | NoteUncheckedCreateWithoutStudentInput[]
@@ -477653,6 +479512,19 @@ export namespace Prisma {
         updateMany?: ClassRegisterLogsUpdateManyWithWhereWithoutStudentInput | ClassRegisterLogsUpdateManyWithWhereWithoutStudentInput[]
         deleteMany?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
     };
+    export type ClassRegisterAttemptUpdateManyWithoutStudentNestedInput = {
+        create?: XOR<ClassRegisterAttemptCreateWithoutStudentInput, ClassRegisterAttemptUncheckedCreateWithoutStudentInput> | ClassRegisterAttemptCreateWithoutStudentInput[] | ClassRegisterAttemptUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ClassRegisterAttemptCreateOrConnectWithoutStudentInput | ClassRegisterAttemptCreateOrConnectWithoutStudentInput[]
+        upsert?: ClassRegisterAttemptUpsertWithWhereUniqueWithoutStudentInput | ClassRegisterAttemptUpsertWithWhereUniqueWithoutStudentInput[]
+        createMany?: ClassRegisterAttemptCreateManyStudentInputEnvelope
+        set?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        disconnect?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        delete?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        connect?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        update?: ClassRegisterAttemptUpdateWithWhereUniqueWithoutStudentInput | ClassRegisterAttemptUpdateWithWhereUniqueWithoutStudentInput[]
+        updateMany?: ClassRegisterAttemptUpdateManyWithWhereWithoutStudentInput | ClassRegisterAttemptUpdateManyWithWhereWithoutStudentInput[]
+        deleteMany?: ClassRegisterAttemptScalarWhereInput | ClassRegisterAttemptScalarWhereInput[]
+    };
     export type NoteUpdateManyWithoutStudentNestedInput = {
         create?: XOR<NoteCreateWithoutStudentInput, NoteUncheckedCreateWithoutStudentInput> | NoteCreateWithoutStudentInput[] | NoteUncheckedCreateWithoutStudentInput[]
         connectOrCreate?: NoteCreateOrConnectWithoutStudentInput | NoteCreateOrConnectWithoutStudentInput[]
@@ -478049,6 +479921,19 @@ export namespace Prisma {
         update?: ClassRegisterLogsUpdateWithWhereUniqueWithoutStudentInput | ClassRegisterLogsUpdateWithWhereUniqueWithoutStudentInput[]
         updateMany?: ClassRegisterLogsUpdateManyWithWhereWithoutStudentInput | ClassRegisterLogsUpdateManyWithWhereWithoutStudentInput[]
         deleteMany?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
+    };
+    export type ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput = {
+        create?: XOR<ClassRegisterAttemptCreateWithoutStudentInput, ClassRegisterAttemptUncheckedCreateWithoutStudentInput> | ClassRegisterAttemptCreateWithoutStudentInput[] | ClassRegisterAttemptUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ClassRegisterAttemptCreateOrConnectWithoutStudentInput | ClassRegisterAttemptCreateOrConnectWithoutStudentInput[]
+        upsert?: ClassRegisterAttemptUpsertWithWhereUniqueWithoutStudentInput | ClassRegisterAttemptUpsertWithWhereUniqueWithoutStudentInput[]
+        createMany?: ClassRegisterAttemptCreateManyStudentInputEnvelope
+        set?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        disconnect?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        delete?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        connect?: ClassRegisterAttemptWhereUniqueInput | ClassRegisterAttemptWhereUniqueInput[]
+        update?: ClassRegisterAttemptUpdateWithWhereUniqueWithoutStudentInput | ClassRegisterAttemptUpdateWithWhereUniqueWithoutStudentInput[]
+        updateMany?: ClassRegisterAttemptUpdateManyWithWhereWithoutStudentInput | ClassRegisterAttemptUpdateManyWithWhereWithoutStudentInput[]
+        deleteMany?: ClassRegisterAttemptScalarWhereInput | ClassRegisterAttemptScalarWhereInput[]
     };
     export type NoteUncheckedUpdateManyWithoutStudentNestedInput = {
         create?: XOR<NoteCreateWithoutStudentInput, NoteUncheckedCreateWithoutStudentInput> | NoteCreateWithoutStudentInput[] | NoteUncheckedCreateWithoutStudentInput[]
@@ -489685,6 +491570,21 @@ export namespace Prisma {
         _min?: NestedEnumClassRegisterStatusFilter<$PrismaModel>
         _max?: NestedEnumClassRegisterStatusFilter<$PrismaModel>
     };
+    export type NestedEnumClassRegisterAttemptStatusFilter<$PrismaModel = never> = {
+        equals?: $Enums.ClassRegisterAttemptStatus | EnumClassRegisterAttemptStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.ClassRegisterAttemptStatus[] | ListEnumClassRegisterAttemptStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ClassRegisterAttemptStatus[] | ListEnumClassRegisterAttemptStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumClassRegisterAttemptStatusFilter<$PrismaModel> | $Enums.ClassRegisterAttemptStatus
+    };
+    export type NestedEnumClassRegisterAttemptStatusWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.ClassRegisterAttemptStatus | EnumClassRegisterAttemptStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.ClassRegisterAttemptStatus[] | ListEnumClassRegisterAttemptStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ClassRegisterAttemptStatus[] | ListEnumClassRegisterAttemptStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumClassRegisterAttemptStatusWithAggregatesFilter<$PrismaModel> | $Enums.ClassRegisterAttemptStatus
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumClassRegisterAttemptStatusFilter<$PrismaModel>
+        _max?: NestedEnumClassRegisterAttemptStatusFilter<$PrismaModel>
+    };
     export type NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel = never> = {
         equals?: $Enums.SubjectClassSchedule | EnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
         in?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
@@ -494163,6 +496063,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -494240,6 +496141,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -530931,6 +532833,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -531008,6 +532911,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -541587,6 +543491,7 @@ export namespace Prisma {
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -541664,6 +543569,7 @@ export namespace Prisma {
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -541868,6 +543774,7 @@ export namespace Prisma {
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -541945,6 +543852,7 @@ export namespace Prisma {
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -542629,6 +544537,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -542706,6 +544615,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -543606,6 +545516,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -543683,6 +545594,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -546498,6 +548410,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -546575,6 +548488,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -546818,6 +548732,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -546895,6 +548810,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -547276,6 +549192,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -547353,6 +549270,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -547592,6 +549510,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -547669,6 +549588,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -548928,6 +550848,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditCreateNestedManyWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutClassRegisterSessionInput
         dataSyncHistories?: DataSyncHistoryCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionUncheckedCreateWithoutSemesterInput = {
@@ -548946,6 +550867,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         dataSyncHistories?: DataSyncHistoryUncheckedCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionCreateOrConnectWithoutSemesterInput = {
@@ -551121,6 +553043,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutClassRegisterSessionInput
         creditLimit?: ClassRegisterSessionCreditCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutClassRegisterSessionInput
         dataSyncHistories?: DataSyncHistoryCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput = {
@@ -551139,6 +553062,7 @@ export namespace Prisma {
         tuitionPerCredit?: number
         creditLimit?: ClassRegisterSessionCreditUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         dataSyncHistories?: DataSyncHistoryUncheckedCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionCreateOrConnectWithoutTrainingCoursesInput = {
@@ -552360,6 +554284,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -552437,6 +554362,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -552518,6 +554444,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -552595,6 +554522,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -552676,6 +554604,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -552753,6 +554682,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -552834,6 +554764,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -552911,6 +554842,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -553318,6 +555250,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -553395,6 +555328,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -553867,6 +555801,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -553944,6 +555879,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -554030,6 +555966,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -554107,6 +556044,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -554193,6 +556131,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -554270,6 +556209,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -554356,6 +556296,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -554433,6 +556374,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -556373,6 +558315,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -556450,6 +558393,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -556535,6 +558479,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -556612,6 +558557,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -561298,6 +563244,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutClassRegisterSessionInput
         dataSyncHistories?: DataSyncHistoryCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionUncheckedCreateWithoutCreditLimitInput = {
@@ -561316,6 +563263,7 @@ export namespace Prisma {
         tuitionPerCredit?: number
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         dataSyncHistories?: DataSyncHistoryUncheckedCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionCreateOrConnectWithoutCreditLimitInput = {
@@ -561347,6 +563295,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutClassRegisterSessionNestedInput
         dataSyncHistories?: DataSyncHistoryUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type ClassRegisterSessionUncheckedUpdateWithoutCreditLimitInput = {
@@ -561365,6 +563314,7 @@ export namespace Prisma {
         tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         dataSyncHistories?: DataSyncHistoryUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type SemesterCreateWithoutClassRegisterSessionInput = {
@@ -561637,6 +563587,52 @@ export namespace Prisma {
         data: ClassRegisterLogsCreateManyClassRegisterSessionInput | ClassRegisterLogsCreateManyClassRegisterSessionInput[]
         skipDuplicates?: boolean
     };
+    export type ClassRegisterAttemptCreateWithoutClassRegisterSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        userProfileId: string
+        jobId?: string | null
+        status?: $Enums.ClassRegisterAttemptStatus
+        errorCode?: string | null
+        message: string
+        subjectClassIds?: ClassRegisterAttemptCreatesubjectClassIdsInput | string[]
+        occurredAt: Date | string
+        attempts?: number
+        student?: StudentCreateNestedOneWithoutClassRegisterAttemptsInput
+    };
+    export type ClassRegisterAttemptUncheckedCreateWithoutClassRegisterSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        studentId?: string | null
+        userProfileId: string
+        jobId?: string | null
+        status?: $Enums.ClassRegisterAttemptStatus
+        errorCode?: string | null
+        message: string
+        subjectClassIds?: ClassRegisterAttemptCreatesubjectClassIdsInput | string[]
+        occurredAt: Date | string
+        attempts?: number
+    };
+    export type ClassRegisterAttemptCreateOrConnectWithoutClassRegisterSessionInput = {
+        where: ClassRegisterAttemptWhereUniqueInput
+        create: XOR<ClassRegisterAttemptCreateWithoutClassRegisterSessionInput, ClassRegisterAttemptUncheckedCreateWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterAttemptCreateManyClassRegisterSessionInputEnvelope = {
+        data: ClassRegisterAttemptCreateManyClassRegisterSessionInput | ClassRegisterAttemptCreateManyClassRegisterSessionInput[]
+        skipDuplicates?: boolean
+    };
     export type DataSyncHistoryCreateWithoutClassRegisterSessionInput = {
         id?: string
         code?: string | null
@@ -561836,6 +563832,42 @@ export namespace Prisma {
         status?: EnumClassRegisterStatusFilter<"ClassRegisterLogs"> | $Enums.ClassRegisterStatus
         reason?: StringNullableFilter<"ClassRegisterLogs"> | string | null
     };
+    export type ClassRegisterAttemptUpsertWithWhereUniqueWithoutClassRegisterSessionInput = {
+        where: ClassRegisterAttemptWhereUniqueInput
+        update: XOR<ClassRegisterAttemptUpdateWithoutClassRegisterSessionInput, ClassRegisterAttemptUncheckedUpdateWithoutClassRegisterSessionInput>
+        create: XOR<ClassRegisterAttemptCreateWithoutClassRegisterSessionInput, ClassRegisterAttemptUncheckedCreateWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterAttemptUpdateWithWhereUniqueWithoutClassRegisterSessionInput = {
+        where: ClassRegisterAttemptWhereUniqueInput
+        data: XOR<ClassRegisterAttemptUpdateWithoutClassRegisterSessionInput, ClassRegisterAttemptUncheckedUpdateWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterAttemptUpdateManyWithWhereWithoutClassRegisterSessionInput = {
+        where: ClassRegisterAttemptScalarWhereInput
+        data: XOR<ClassRegisterAttemptUpdateManyMutationInput, ClassRegisterAttemptUncheckedUpdateManyWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterAttemptScalarWhereInput = {
+        AND?: ClassRegisterAttemptScalarWhereInput | ClassRegisterAttemptScalarWhereInput[]
+        OR?: ClassRegisterAttemptScalarWhereInput[]
+        NOT?: ClassRegisterAttemptScalarWhereInput | ClassRegisterAttemptScalarWhereInput[]
+        id?: StringFilter<"ClassRegisterAttempt"> | string
+        code?: StringNullableFilter<"ClassRegisterAttempt"> | string | null
+        active?: BoolFilter<"ClassRegisterAttempt"> | boolean
+        description?: StringNullableFilter<"ClassRegisterAttempt"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ClassRegisterAttempt"> | Date | string | null
+        createdAt?: DateTimeFilter<"ClassRegisterAttempt"> | Date | string
+        updatedAt?: DateTimeFilter<"ClassRegisterAttempt"> | Date | string
+        createdBy?: UuidNullableFilter<"ClassRegisterAttempt"> | string | null
+        classRegisterSessionId?: StringFilter<"ClassRegisterAttempt"> | string
+        studentId?: StringNullableFilter<"ClassRegisterAttempt"> | string | null
+        userProfileId?: UuidFilter<"ClassRegisterAttempt"> | string
+        jobId?: StringNullableFilter<"ClassRegisterAttempt"> | string | null
+        status?: EnumClassRegisterAttemptStatusFilter<"ClassRegisterAttempt"> | $Enums.ClassRegisterAttemptStatus
+        errorCode?: StringNullableFilter<"ClassRegisterAttempt"> | string | null
+        message?: StringFilter<"ClassRegisterAttempt"> | string
+        subjectClassIds?: StringNullableListFilter<"ClassRegisterAttempt">
+        occurredAt?: DateTimeFilter<"ClassRegisterAttempt"> | Date | string
+        attempts?: IntFilter<"ClassRegisterAttempt"> | number
+    };
     export type DataSyncHistoryUpsertWithWhereUniqueWithoutClassRegisterSessionInput = {
         where: DataSyncHistoryWhereUniqueInput
         update: XOR<DataSyncHistoryUpdateWithoutClassRegisterSessionInput, DataSyncHistoryUncheckedUpdateWithoutClassRegisterSessionInput>
@@ -561865,6 +563897,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutClassRegisterSessionInput
         creditLimit?: ClassRegisterSessionCreditCreateNestedManyWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutClassRegisterSessionInput
         dataSyncHistories?: DataSyncHistoryCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionUncheckedCreateWithoutClassRegisterLogsInput = {
@@ -561883,6 +563916,7 @@ export namespace Prisma {
         tuitionPerCredit?: number
         creditLimit?: ClassRegisterSessionCreditUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         dataSyncHistories?: DataSyncHistoryUncheckedCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionCreateOrConnectWithoutClassRegisterLogsInput = {
@@ -562081,6 +564115,7 @@ export namespace Prisma {
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -562158,6 +564193,7 @@ export namespace Prisma {
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -562194,6 +564230,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutClassRegisterSessionNestedInput
         creditLimit?: ClassRegisterSessionCreditUpdateManyWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutClassRegisterSessionNestedInput
         dataSyncHistories?: DataSyncHistoryUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type ClassRegisterSessionUncheckedUpdateWithoutClassRegisterLogsInput = {
@@ -562212,6 +564249,7 @@ export namespace Prisma {
         tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
         creditLimit?: ClassRegisterSessionCreditUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         dataSyncHistories?: DataSyncHistoryUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type SubjectClassUpsertWithoutClassRegisterLogsInput = {
@@ -562420,6 +564458,7 @@ export namespace Prisma {
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -562497,6 +564536,421 @@ export namespace Prisma {
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
+        notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
+        noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
+        semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
+    };
+    export type ClassRegisterSessionCreateWithoutClassRegisterAttemptsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        tuitionPerCredit?: number
+        semester: SemesterCreateNestedOneWithoutClassRegisterSessionInput
+        creditLimit?: ClassRegisterSessionCreditCreateNestedManyWithoutClassRegisterSessionInput
+        trainingCourses?: TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutClassRegisterSessionInput
+        dataSyncHistories?: DataSyncHistoryCreateNestedManyWithoutClassRegisterSessionInput
+    };
+    export type ClassRegisterSessionUncheckedCreateWithoutClassRegisterAttemptsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        semesterId: string
+        tuitionPerCredit?: number
+        creditLimit?: ClassRegisterSessionCreditUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+        trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+        dataSyncHistories?: DataSyncHistoryUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+    };
+    export type ClassRegisterSessionCreateOrConnectWithoutClassRegisterAttemptsInput = {
+        where: ClassRegisterSessionWhereUniqueInput
+        create: XOR<ClassRegisterSessionCreateWithoutClassRegisterAttemptsInput, ClassRegisterSessionUncheckedCreateWithoutClassRegisterAttemptsInput>
+    };
+    export type StudentCreateWithoutClassRegisterAttemptsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        note?: string | null
+        from?: Date | string | null
+        to?: Date | string | null
+        registerNumber?: string | null
+        doctoralCode?: string | null
+        admissionCombination?: string | null
+        entryScore?: number | null
+        competencyScore?: number | null
+        department?: string | null
+        departmentAddress?: string | null
+        careerYear?: number | null
+        universitySchool?: string | null
+        universityTrainingType?: string | null
+        universityGraduationYear?: number | null
+        universityMajor?: string | null
+        universityRank?: string | null
+        basic?: number | null
+        facility?: number | null
+        foreignLanguage?: string | null
+        priorityReason?: string | null
+        unionLeader?: string | null
+        status?: $Enums.StudentStatus
+        academicWarningLevel?: number
+        disciplinaryWarningLevel?: number
+        suspended?: boolean
+        expelled?: boolean
+        foreignLangPass?: boolean
+        ITCertificationPass?: boolean
+        strengthTrainingPass?: boolean
+        militaryTrainingPass?: boolean
+        trainingField?: TrainingFieldCreateNestedOneWithoutStudentsInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
+        priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
+        fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
+        subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
+        userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
+        registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
+        curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
+        curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
+        studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
+        studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
+        studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
+        scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
+        academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
+        disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
+        studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
+        graduationApplications?: StudentGraduationApplicationCreateNestedManyWithoutStudentInput
+        graduationDecision?: GraduationDecisionCreateNestedOneWithoutStudentInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutStudentInput
+        notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
+        researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
+        thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
+        scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        notes?: NoteCreateNestedManyWithoutStudentInput
+        noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
+        semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
+    };
+    export type StudentUncheckedCreateWithoutClassRegisterAttemptsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        note?: string | null
+        from?: Date | string | null
+        to?: Date | string | null
+        trainingFieldId?: string | null
+        registerNumber?: string | null
+        doctoralCode?: string | null
+        admissionCombination?: string | null
+        entryScore?: number | null
+        competencyScore?: number | null
+        department?: string | null
+        departmentAddress?: string | null
+        careerYear?: number | null
+        universitySchool?: string | null
+        universityTrainingType?: string | null
+        universityGraduationYear?: number | null
+        universityMajor?: string | null
+        universityRank?: string | null
+        basic?: number | null
+        facility?: number | null
+        foreignLanguage?: string | null
+        priorityReason?: string | null
+        trainingLocationId?: string | null
+        unionLeader?: string | null
+        status?: $Enums.StudentStatus
+        fixedClassId?: string | null
+        userProfileId: string
+        registrationAreaId?: string | null
+        curriculumVersionId?: string | null
+        curriculumVersionParallelId?: string | null
+        academicWarningLevel?: number
+        disciplinaryWarningLevel?: number
+        suspended?: boolean
+        expelled?: boolean
+        foreignLangPass?: boolean
+        ITCertificationPass?: boolean
+        strengthTrainingPass?: boolean
+        militaryTrainingPass?: boolean
+        priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
+        subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
+        studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
+        studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
+        scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
+        academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
+        graduationApplications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        graduationDecision?: GraduationDecisionUncheckedCreateNestedOneWithoutStudentInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutStudentInput
+        notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
+        researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
+        thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
+        scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
+        noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
+        semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
+    };
+    export type StudentCreateOrConnectWithoutClassRegisterAttemptsInput = {
+        where: StudentWhereUniqueInput
+        create: XOR<StudentCreateWithoutClassRegisterAttemptsInput, StudentUncheckedCreateWithoutClassRegisterAttemptsInput>
+    };
+    export type ClassRegisterSessionUpsertWithoutClassRegisterAttemptsInput = {
+        update: XOR<ClassRegisterSessionUpdateWithoutClassRegisterAttemptsInput, ClassRegisterSessionUncheckedUpdateWithoutClassRegisterAttemptsInput>
+        create: XOR<ClassRegisterSessionCreateWithoutClassRegisterAttemptsInput, ClassRegisterSessionUncheckedCreateWithoutClassRegisterAttemptsInput>
+        where?: ClassRegisterSessionWhereInput
+    };
+    export type ClassRegisterSessionUpdateToOneWithWhereWithoutClassRegisterAttemptsInput = {
+        where?: ClassRegisterSessionWhereInput
+        data: XOR<ClassRegisterSessionUpdateWithoutClassRegisterAttemptsInput, ClassRegisterSessionUncheckedUpdateWithoutClassRegisterAttemptsInput>
+    };
+    export type ClassRegisterSessionUpdateWithoutClassRegisterAttemptsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
+        semester?: SemesterUpdateOneRequiredWithoutClassRegisterSessionNestedInput
+        creditLimit?: ClassRegisterSessionCreditUpdateManyWithoutClassRegisterSessionNestedInput
+        trainingCourses?: TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutClassRegisterSessionNestedInput
+        dataSyncHistories?: DataSyncHistoryUpdateManyWithoutClassRegisterSessionNestedInput
+    };
+    export type ClassRegisterSessionUncheckedUpdateWithoutClassRegisterAttemptsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        semesterId?: StringFieldUpdateOperationsInput | string
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
+        creditLimit?: ClassRegisterSessionCreditUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+        trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+        dataSyncHistories?: DataSyncHistoryUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+    };
+    export type StudentUpsertWithoutClassRegisterAttemptsInput = {
+        update: XOR<StudentUpdateWithoutClassRegisterAttemptsInput, StudentUncheckedUpdateWithoutClassRegisterAttemptsInput>
+        create: XOR<StudentCreateWithoutClassRegisterAttemptsInput, StudentUncheckedCreateWithoutClassRegisterAttemptsInput>
+        where?: StudentWhereInput
+    };
+    export type StudentUpdateToOneWithWhereWithoutClassRegisterAttemptsInput = {
+        where?: StudentWhereInput
+        data: XOR<StudentUpdateWithoutClassRegisterAttemptsInput, StudentUncheckedUpdateWithoutClassRegisterAttemptsInput>
+    };
+    export type StudentUpdateWithoutClassRegisterAttemptsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+        admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        department?: NullableStringFieldUpdateOperationsInput | string | null
+        departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+        universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+        universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+        universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+        basic?: NullableFloatFieldUpdateOperationsInput | number | null
+        facility?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+        priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+        academicWarningLevel?: IntFieldUpdateOperationsInput | number
+        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        expelled?: BoolFieldUpdateOperationsInput | boolean
+        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
+        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        trainingField?: TrainingFieldUpdateOneWithoutStudentsNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
+        priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
+        fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
+        subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
+        userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
+        registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
+        curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
+        curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
+        studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
+        studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
+        studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
+        scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
+        academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
+        graduationApplications?: StudentGraduationApplicationUpdateManyWithoutStudentNestedInput
+        graduationDecision?: GraduationDecisionUpdateOneWithoutStudentNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutStudentNestedInput
+        notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
+        researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
+        thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
+        scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        notes?: NoteUpdateManyWithoutStudentNestedInput
+        noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
+        semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
+    };
+    export type StudentUncheckedUpdateWithoutClassRegisterAttemptsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
+        registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+        admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        department?: NullableStringFieldUpdateOperationsInput | string | null
+        departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+        universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+        universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+        universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+        basic?: NullableFloatFieldUpdateOperationsInput | number | null
+        facility?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+        priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+        fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicWarningLevel?: IntFieldUpdateOperationsInput | number
+        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        expelled?: BoolFieldUpdateOperationsInput | boolean
+        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
+        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
+        subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
+        studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
+        studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
+        scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
+        academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
+        graduationApplications?: StudentGraduationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        graduationDecision?: GraduationDecisionUncheckedUpdateOneWithoutStudentNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutStudentNestedInput
+        notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
+        researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+        thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
+        scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -566113,6 +568567,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -566190,6 +568645,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -566319,6 +568775,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -566396,6 +568853,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -569436,6 +571894,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditCreateNestedManyWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionUncheckedCreateWithoutDataSyncHistoriesInput = {
         id?: string
@@ -569454,6 +571913,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionCreateOrConnectWithoutDataSyncHistoriesInput = {
         where: ClassRegisterSessionWhereUniqueInput
@@ -569843,6 +572303,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditUpdateManyWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type ClassRegisterSessionUncheckedUpdateWithoutDataSyncHistoriesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -569861,6 +572322,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type UserProfileUpsertWithoutDataSyncHistoriesInput = {
         update: XOR<UserProfileUpdateWithoutDataSyncHistoriesInput, UserProfileUncheckedUpdateWithoutDataSyncHistoriesInput>
@@ -571800,6 +574262,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -571877,6 +574340,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -572481,6 +574945,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -572558,6 +575023,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -574086,6 +576552,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -574163,6 +576630,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -580607,6 +583075,52 @@ export namespace Prisma {
         data: ClassRegisterLogsCreateManyStudentInput | ClassRegisterLogsCreateManyStudentInput[]
         skipDuplicates?: boolean
     };
+    export type ClassRegisterAttemptCreateWithoutStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        userProfileId: string
+        jobId?: string | null
+        status?: $Enums.ClassRegisterAttemptStatus
+        errorCode?: string | null
+        message: string
+        subjectClassIds?: ClassRegisterAttemptCreatesubjectClassIdsInput | string[]
+        occurredAt: Date | string
+        attempts?: number
+        classRegisterSession: ClassRegisterSessionCreateNestedOneWithoutClassRegisterAttemptsInput
+    };
+    export type ClassRegisterAttemptUncheckedCreateWithoutStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        classRegisterSessionId: string
+        userProfileId: string
+        jobId?: string | null
+        status?: $Enums.ClassRegisterAttemptStatus
+        errorCode?: string | null
+        message: string
+        subjectClassIds?: ClassRegisterAttemptCreatesubjectClassIdsInput | string[]
+        occurredAt: Date | string
+        attempts?: number
+    };
+    export type ClassRegisterAttemptCreateOrConnectWithoutStudentInput = {
+        where: ClassRegisterAttemptWhereUniqueInput
+        create: XOR<ClassRegisterAttemptCreateWithoutStudentInput, ClassRegisterAttemptUncheckedCreateWithoutStudentInput>
+    };
+    export type ClassRegisterAttemptCreateManyStudentInputEnvelope = {
+        data: ClassRegisterAttemptCreateManyStudentInput | ClassRegisterAttemptCreateManyStudentInput[]
+        skipDuplicates?: boolean
+    };
     export type NoteCreateWithoutStudentInput = {
         id?: string
         code?: string | null
@@ -582061,6 +584575,19 @@ export namespace Prisma {
         where: ClassRegisterLogsScalarWhereInput
         data: XOR<ClassRegisterLogsUpdateManyMutationInput, ClassRegisterLogsUncheckedUpdateManyWithoutStudentInput>
     };
+    export type ClassRegisterAttemptUpsertWithWhereUniqueWithoutStudentInput = {
+        where: ClassRegisterAttemptWhereUniqueInput
+        update: XOR<ClassRegisterAttemptUpdateWithoutStudentInput, ClassRegisterAttemptUncheckedUpdateWithoutStudentInput>
+        create: XOR<ClassRegisterAttemptCreateWithoutStudentInput, ClassRegisterAttemptUncheckedCreateWithoutStudentInput>
+    };
+    export type ClassRegisterAttemptUpdateWithWhereUniqueWithoutStudentInput = {
+        where: ClassRegisterAttemptWhereUniqueInput
+        data: XOR<ClassRegisterAttemptUpdateWithoutStudentInput, ClassRegisterAttemptUncheckedUpdateWithoutStudentInput>
+    };
+    export type ClassRegisterAttemptUpdateManyWithWhereWithoutStudentInput = {
+        where: ClassRegisterAttemptScalarWhereInput
+        data: XOR<ClassRegisterAttemptUpdateManyMutationInput, ClassRegisterAttemptUncheckedUpdateManyWithoutStudentInput>
+    };
     export type NoteUpsertWithWhereUniqueWithoutStudentInput = {
         where: NoteWhereUniqueInput
         update: XOR<NoteUpdateWithoutStudentInput, NoteUncheckedUpdateWithoutStudentInput>
@@ -582262,6 +584789,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -582339,6 +584867,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -582429,6 +584958,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -582506,6 +585036,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -582582,6 +585113,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -582659,6 +585191,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -582877,6 +585410,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -582954,6 +585488,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -583169,6 +585704,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -583246,6 +585782,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -583436,6 +585973,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -583513,6 +586051,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -583884,6 +586423,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -583961,6 +586501,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -592903,6 +595444,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -592980,6 +595522,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -593206,6 +595749,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -593283,6 +595827,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -596255,6 +598800,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -596332,6 +598878,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -596750,6 +599297,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -596827,6 +599375,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -604384,6 +606933,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -604461,6 +607011,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -604775,6 +607326,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -604852,6 +607404,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -605468,6 +608021,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -605545,6 +608099,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -605672,6 +608227,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -605749,6 +608305,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -605897,6 +608454,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
@@ -605974,6 +608532,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -606139,6 +608698,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -606216,6 +608776,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -606335,6 +608896,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -606412,6 +608974,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -606549,6 +609112,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -606626,6 +609190,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -607160,6 +609725,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -607237,6 +609803,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -607437,6 +610004,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -607514,6 +610082,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -608265,6 +610834,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -608342,6 +610912,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -608930,6 +611501,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -609007,6 +611579,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -610196,6 +612769,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -610273,6 +612847,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -610758,6 +613333,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -610835,6 +613411,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -612739,6 +615316,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -612816,6 +615394,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -613081,6 +615660,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -613158,6 +615738,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -614424,6 +617005,7 @@ export namespace Prisma {
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -614501,6 +617083,7 @@ export namespace Prisma {
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -614626,6 +617209,7 @@ export namespace Prisma {
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -614703,6 +617287,7 @@ export namespace Prisma {
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -614781,6 +617366,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
@@ -614858,6 +617444,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -615132,6 +617719,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -615209,6 +617797,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -615401,6 +617990,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
@@ -615478,6 +618068,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -615684,6 +618275,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -615761,6 +618353,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -629198,6 +631791,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -629275,6 +631869,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -629869,6 +632464,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -629946,6 +632542,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -630610,6 +633207,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -630687,6 +633285,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -630889,6 +633488,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -630966,6 +633566,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -631131,6 +633732,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
@@ -631208,6 +633810,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
@@ -631396,6 +633999,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -631473,6 +634077,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -639606,6 +642211,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -639683,6 +642289,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -649530,6 +652137,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -649607,6 +652215,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -667222,6 +669831,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditUpdateManyWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutClassRegisterSessionNestedInput
         dataSyncHistories?: DataSyncHistoryUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type ClassRegisterSessionUncheckedUpdateWithoutSemesterInput = {
@@ -667240,6 +669850,7 @@ export namespace Prisma {
         creditLimit?: ClassRegisterSessionCreditUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         dataSyncHistories?: DataSyncHistoryUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type ClassRegisterSessionUncheckedUpdateManyWithoutSemesterInput = {
@@ -669008,6 +671619,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutClassRegisterSessionNestedInput
         creditLimit?: ClassRegisterSessionCreditUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutClassRegisterSessionNestedInput
         dataSyncHistories?: DataSyncHistoryUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type ClassRegisterSessionUncheckedUpdateWithoutTrainingCoursesInput = {
@@ -669026,6 +671638,7 @@ export namespace Prisma {
         tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
         creditLimit?: ClassRegisterSessionCreditUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         dataSyncHistories?: DataSyncHistoryUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesInput = {
@@ -669560,6 +672173,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -669637,6 +672251,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -670739,6 +673354,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -670816,6 +673432,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -670939,6 +673556,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -671016,6 +673634,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -673250,6 +675869,25 @@ export namespace Prisma {
         status?: $Enums.ClassRegisterStatus
         reason?: string | null
     };
+    export type ClassRegisterAttemptCreateManyClassRegisterSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        studentId?: string | null
+        userProfileId: string
+        jobId?: string | null
+        status?: $Enums.ClassRegisterAttemptStatus
+        errorCode?: string | null
+        message: string
+        subjectClassIds?: ClassRegisterAttemptCreatesubjectClassIdsInput | string[]
+        occurredAt: Date | string
+        attempts?: number
+    };
     export type DataSyncHistoryCreateManyClassRegisterSessionInput = {
         id?: string
         code?: string | null
@@ -673523,6 +676161,63 @@ export namespace Prisma {
         studentId?: StringFieldUpdateOperationsInput | string
         status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ClassRegisterAttemptUpdateWithoutClassRegisterSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        jobId?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumClassRegisterAttemptStatusFieldUpdateOperationsInput | $Enums.ClassRegisterAttemptStatus
+        errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+        message?: StringFieldUpdateOperationsInput | string
+        subjectClassIds?: ClassRegisterAttemptUpdatesubjectClassIdsInput | string[]
+        occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attempts?: IntFieldUpdateOperationsInput | number
+        student?: StudentUpdateOneWithoutClassRegisterAttemptsNestedInput
+    };
+    export type ClassRegisterAttemptUncheckedUpdateWithoutClassRegisterSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        studentId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        jobId?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumClassRegisterAttemptStatusFieldUpdateOperationsInput | $Enums.ClassRegisterAttemptStatus
+        errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+        message?: StringFieldUpdateOperationsInput | string
+        subjectClassIds?: ClassRegisterAttemptUpdatesubjectClassIdsInput | string[]
+        occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attempts?: IntFieldUpdateOperationsInput | number
+    };
+    export type ClassRegisterAttemptUncheckedUpdateManyWithoutClassRegisterSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        studentId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        jobId?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumClassRegisterAttemptStatusFieldUpdateOperationsInput | $Enums.ClassRegisterAttemptStatus
+        errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+        message?: StringFieldUpdateOperationsInput | string
+        subjectClassIds?: ClassRegisterAttemptUpdatesubjectClassIdsInput | string[]
+        occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attempts?: IntFieldUpdateOperationsInput | number
     };
     export type DataSyncHistoryUpdateWithoutClassRegisterSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -677238,6 +679933,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -677315,6 +680011,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -678055,6 +680752,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -678132,6 +680830,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -679763,6 +682462,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -679840,6 +682540,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
@@ -682250,6 +684951,25 @@ export namespace Prisma {
         status?: $Enums.ClassRegisterStatus
         reason?: string | null
     };
+    export type ClassRegisterAttemptCreateManyStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        classRegisterSessionId: string
+        userProfileId: string
+        jobId?: string | null
+        status?: $Enums.ClassRegisterAttemptStatus
+        errorCode?: string | null
+        message: string
+        subjectClassIds?: ClassRegisterAttemptCreatesubjectClassIdsInput | string[]
+        occurredAt: Date | string
+        attempts?: number
+    };
     export type NoteCreateManyStudentInput = {
         id?: string
         code?: string | null
@@ -683954,6 +686674,63 @@ export namespace Prisma {
         status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
         reason?: NullableStringFieldUpdateOperationsInput | string | null
     };
+    export type ClassRegisterAttemptUpdateWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        jobId?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumClassRegisterAttemptStatusFieldUpdateOperationsInput | $Enums.ClassRegisterAttemptStatus
+        errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+        message?: StringFieldUpdateOperationsInput | string
+        subjectClassIds?: ClassRegisterAttemptUpdatesubjectClassIdsInput | string[]
+        occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attempts?: IntFieldUpdateOperationsInput | number
+        classRegisterSession?: ClassRegisterSessionUpdateOneRequiredWithoutClassRegisterAttemptsNestedInput
+    };
+    export type ClassRegisterAttemptUncheckedUpdateWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        jobId?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumClassRegisterAttemptStatusFieldUpdateOperationsInput | $Enums.ClassRegisterAttemptStatus
+        errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+        message?: StringFieldUpdateOperationsInput | string
+        subjectClassIds?: ClassRegisterAttemptUpdatesubjectClassIdsInput | string[]
+        occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attempts?: IntFieldUpdateOperationsInput | number
+    };
+    export type ClassRegisterAttemptUncheckedUpdateManyWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        jobId?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumClassRegisterAttemptStatusFieldUpdateOperationsInput | $Enums.ClassRegisterAttemptStatus
+        errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+        message?: StringFieldUpdateOperationsInput | string
+        subjectClassIds?: ClassRegisterAttemptUpdatesubjectClassIdsInput | string[]
+        occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attempts?: IntFieldUpdateOperationsInput | number
+    };
     export type NoteUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -684552,6 +687329,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
@@ -684629,6 +687407,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterAttempts?: ClassRegisterAttemptUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput

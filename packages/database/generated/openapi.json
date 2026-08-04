@@ -422,6 +422,10 @@
       "description": "ClassRegisterLogs operations"
     },
     {
+      "name": "classRegisterAttempt",
+      "description": "ClassRegisterAttempt operations"
+    },
+    {
       "name": "subjectClass",
       "description": "SubjectClass operations"
     },
@@ -1294,6 +1298,12 @@
           "PENDING",
           "CANCELLED",
           "SUCCESS",
+          "FAILED"
+        ]
+      },
+      "ClassRegisterAttemptStatus": {
+        "type": "string",
+        "enum": [
           "FAILED"
         ]
       },
@@ -12157,6 +12167,12 @@
               "$ref": "#/components/schemas/ClassRegisterLogs"
             }
           },
+          "classRegisterAttempts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassRegisterAttempt"
+            }
+          },
           "dataSyncHistories": {
             "type": "array",
             "items": {
@@ -12249,6 +12265,104 @@
           "student",
           "studentId",
           "status"
+        ]
+      },
+      "ClassRegisterAttempt": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "classRegisterSession": {
+            "$ref": "#/components/schemas/ClassRegisterSession"
+          },
+          "classRegisterSessionId": {
+            "type": "string"
+          },
+          "student": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Student"
+              }
+            ],
+            "nullable": true
+          },
+          "studentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "userProfileId": {
+            "type": "string"
+          },
+          "jobId": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/ClassRegisterAttemptStatus"
+          },
+          "errorCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string"
+          },
+          "subjectClassIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "attempts": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "active",
+          "createdAt",
+          "updatedAt",
+          "classRegisterSession",
+          "classRegisterSessionId",
+          "userProfileId",
+          "status",
+          "message",
+          "subjectClassIds",
+          "occurredAt",
+          "attempts"
         ]
       },
       "SubjectClass": {
@@ -15646,6 +15760,12 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ClassRegisterLogs"
+            }
+          },
+          "classRegisterAttempts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassRegisterAttempt"
             }
           },
           "notes": {
@@ -42672,6 +42792,177 @@
           "subjectClassId",
           "studentId",
           "status"
+        ]
+      },
+      "AggregateClassRegisterAttempt": {
+        "type": "object",
+        "properties": {
+          "_count": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClassRegisterAttemptCountAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_avg": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClassRegisterAttemptAvgAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_sum": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClassRegisterAttemptSumAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_min": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClassRegisterAttemptMinAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_max": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClassRegisterAttemptMaxAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
+      "ClassRegisterAttemptGroupByOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "classRegisterSessionId": {
+            "type": "string"
+          },
+          "studentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "userProfileId": {
+            "type": "string"
+          },
+          "jobId": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/ClassRegisterAttemptStatus"
+          },
+          "errorCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string"
+          },
+          "subjectClassIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "attempts": {
+            "type": "integer"
+          },
+          "_count": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClassRegisterAttemptCountAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_avg": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClassRegisterAttemptAvgAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_sum": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClassRegisterAttemptSumAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_min": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClassRegisterAttemptMinAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_max": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClassRegisterAttemptMaxAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "active",
+          "createdAt",
+          "updatedAt",
+          "classRegisterSessionId",
+          "userProfileId",
+          "status",
+          "message",
+          "occurredAt",
+          "attempts"
         ]
       },
       "AggregateSubjectClass": {
@@ -91261,6 +91552,269 @@
           },
           "reason": {
             "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ClassRegisterAttemptCountAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "code": {
+            "type": "integer"
+          },
+          "active": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "integer"
+          },
+          "deletedAt": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "integer"
+          },
+          "updatedAt": {
+            "type": "integer"
+          },
+          "createdBy": {
+            "type": "integer"
+          },
+          "classRegisterSessionId": {
+            "type": "integer"
+          },
+          "studentId": {
+            "type": "integer"
+          },
+          "userProfileId": {
+            "type": "integer"
+          },
+          "jobId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "errorCode": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "integer"
+          },
+          "subjectClassIds": {
+            "type": "integer"
+          },
+          "occurredAt": {
+            "type": "integer"
+          },
+          "attempts": {
+            "type": "integer"
+          },
+          "_all": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "active",
+          "description",
+          "deletedAt",
+          "createdAt",
+          "updatedAt",
+          "createdBy",
+          "classRegisterSessionId",
+          "studentId",
+          "userProfileId",
+          "jobId",
+          "status",
+          "errorCode",
+          "message",
+          "subjectClassIds",
+          "occurredAt",
+          "attempts",
+          "_all"
+        ]
+      },
+      "ClassRegisterAttemptAvgAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "attempts": {
+            "type": "number",
+            "nullable": true
+          }
+        }
+      },
+      "ClassRegisterAttemptSumAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "attempts": {
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "ClassRegisterAttemptMinAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "classRegisterSessionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "studentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "userProfileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "jobId": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClassRegisterAttemptStatus"
+              }
+            ],
+            "nullable": true
+          },
+          "errorCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "attempts": {
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "ClassRegisterAttemptMaxAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "classRegisterSessionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "studentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "userProfileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "jobId": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClassRegisterAttemptStatus"
+              }
+            ],
+            "nullable": true
+          },
+          "errorCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "attempts": {
+            "type": "integer",
             "nullable": true
           }
         }
@@ -162459,6 +163013,337 @@
             "$ref": "#/components/schemas/_AnyObject"
           },
           "_max": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ClassRegisterAttemptCreateArgs": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "data": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ClassRegisterAttemptCreateManyArgs": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/_AnyObject"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/_AnyObject"
+                }
+              }
+            ]
+          },
+          "skipDuplicates": {
+            "type": "boolean",
+            "description": "Do not insert records with unique fields or ID fields that already exist."
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ClassRegisterAttemptFindUniqueArgs": {
+        "type": "object",
+        "required": [
+          "where"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ClassRegisterAttemptFindFirstArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ClassRegisterAttemptFindManyArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "orderBy": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/_AnyObject"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/_AnyObject"
+                }
+              }
+            ]
+          },
+          "cursor": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "take": {
+            "type": "integer"
+          },
+          "skip": {
+            "type": "integer"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ClassRegisterAttemptUpdateArgs": {
+        "type": "object",
+        "required": [
+          "where",
+          "data"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "data": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ClassRegisterAttemptUpdateManyArgs": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "data": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ClassRegisterAttemptUpsertArgs": {
+        "type": "object",
+        "required": [
+          "create",
+          "update",
+          "where"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "create": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "update": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ClassRegisterAttemptDeleteUniqueArgs": {
+        "type": "object",
+        "required": [
+          "where"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ClassRegisterAttemptDeleteManyArgs": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ClassRegisterAttemptCountArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ClassRegisterAttemptAggregateArgs": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "orderBy": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "cursor": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "take": {
+            "type": "integer"
+          },
+          "skip": {
+            "type": "integer"
+          },
+          "_count": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/_AnyObject"
+              }
+            ]
+          },
+          "_min": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "_sum": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "_avg": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ClassRegisterAttemptGroupByArgs": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "orderBy": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "by": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "having": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "take": {
+            "type": "integer"
+          },
+          "skip": {
+            "type": "integer"
+          },
+          "_count": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/_AnyObject"
+              }
+            ]
+          },
+          "_min": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "_sum": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "_avg": {
             "$ref": "#/components/schemas/_AnyObject"
           },
           "meta": {
@@ -333098,6 +333983,1096 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ClassRegisterLogsGroupByArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/classRegisterAttempt/create": {
+      "post": {
+        "operationId": "createClassRegisterAttempt",
+        "description": "Create a new ClassRegisterAttempt",
+        "tags": [
+          "classRegisterAttempt"
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ClassRegisterAttempt",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassRegisterAttemptCreateArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/classRegisterAttempt/createMany": {
+      "post": {
+        "operationId": "createManyClassRegisterAttempt",
+        "description": "Create several ClassRegisterAttempt",
+        "tags": [
+          "classRegisterAttempt"
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BatchPayload",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassRegisterAttemptCreateManyArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/classRegisterAttempt/findUnique": {
+      "get": {
+        "operationId": "findUniqueClassRegisterAttempt",
+        "description": "Find one unique ClassRegisterAttempt",
+        "tags": [
+          "classRegisterAttempt"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ClassRegisterAttempt",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassRegisterAttemptFindUniqueArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/classRegisterAttempt/findFirst": {
+      "get": {
+        "operationId": "findFirstClassRegisterAttempt",
+        "description": "Find the first ClassRegisterAttempt matching the given condition",
+        "tags": [
+          "classRegisterAttempt"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ClassRegisterAttempt",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassRegisterAttemptFindFirstArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/classRegisterAttempt/findMany": {
+      "get": {
+        "operationId": "findManyClassRegisterAttempt",
+        "description": "Find a list of ClassRegisterAttempt",
+        "tags": [
+          "classRegisterAttempt"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ClassRegisterAttempt"
+                      },
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassRegisterAttemptFindManyArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/classRegisterAttempt/update": {
+      "patch": {
+        "operationId": "updateClassRegisterAttempt",
+        "description": "Update a ClassRegisterAttempt",
+        "tags": [
+          "classRegisterAttempt"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ClassRegisterAttempt",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassRegisterAttemptUpdateArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/classRegisterAttempt/updateMany": {
+      "patch": {
+        "operationId": "updateManyClassRegisterAttempt",
+        "description": "Update ClassRegisterAttempts matching the given condition",
+        "tags": [
+          "classRegisterAttempt"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BatchPayload",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassRegisterAttemptUpdateManyArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/classRegisterAttempt/upsert": {
+      "post": {
+        "operationId": "upsertClassRegisterAttempt",
+        "description": "Upsert a ClassRegisterAttempt",
+        "tags": [
+          "classRegisterAttempt"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ClassRegisterAttempt",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassRegisterAttemptUpsertArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/classRegisterAttempt/delete": {
+      "delete": {
+        "operationId": "deleteClassRegisterAttempt",
+        "description": "Delete one unique ClassRegisterAttempt",
+        "tags": [
+          "classRegisterAttempt"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ClassRegisterAttempt",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassRegisterAttemptDeleteUniqueArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/classRegisterAttempt/deleteMany": {
+      "delete": {
+        "operationId": "deleteManyClassRegisterAttempt",
+        "description": "Delete ClassRegisterAttempts matching the given condition",
+        "tags": [
+          "classRegisterAttempt"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BatchPayload",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassRegisterAttemptDeleteManyArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/classRegisterAttempt/count": {
+      "get": {
+        "operationId": "countClassRegisterAttempt",
+        "description": "Find a list of ClassRegisterAttempt",
+        "tags": [
+          "classRegisterAttempt"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "oneOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "$ref": "#/components/schemas/ClassRegisterAttemptCountAggregateOutputType"
+                        }
+                      ],
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassRegisterAttemptCountArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/classRegisterAttempt/aggregate": {
+      "get": {
+        "operationId": "aggregateClassRegisterAttempt",
+        "description": "Aggregate ClassRegisterAttempts",
+        "tags": [
+          "classRegisterAttempt"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AggregateClassRegisterAttempt",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassRegisterAttemptAggregateArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/classRegisterAttempt/groupBy": {
+      "get": {
+        "operationId": "groupByClassRegisterAttempt",
+        "description": "Group ClassRegisterAttempts by fields",
+        "tags": [
+          "classRegisterAttempt"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ClassRegisterAttemptGroupByOutputType"
+                      },
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassRegisterAttemptGroupByArgs"
                 }
               }
             }

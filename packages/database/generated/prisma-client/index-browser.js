@@ -2119,6 +2119,27 @@ exports.Prisma.ClassRegisterLogsScalarFieldEnum = {
   reason: 'reason'
 };
 
+exports.Prisma.ClassRegisterAttemptScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  classRegisterSessionId: 'classRegisterSessionId',
+  studentId: 'studentId',
+  userProfileId: 'userProfileId',
+  jobId: 'jobId',
+  status: 'status',
+  errorCode: 'errorCode',
+  message: 'message',
+  subjectClassIds: 'subjectClassIds',
+  occurredAt: 'occurredAt',
+  attempts: 'attempts'
+};
+
 exports.Prisma.SubjectClassScalarFieldEnum = {
   id: 'id',
   active: 'active',
@@ -6390,6 +6411,20 @@ exports.Prisma.ClassRegisterLogsOrderByRelevanceFieldEnum = {
   reason: 'reason'
 };
 
+exports.Prisma.ClassRegisterAttemptOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  classRegisterSessionId: 'classRegisterSessionId',
+  studentId: 'studentId',
+  userProfileId: 'userProfileId',
+  jobId: 'jobId',
+  errorCode: 'errorCode',
+  message: 'message',
+  subjectClassIds: 'subjectClassIds'
+};
+
 exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
@@ -8309,6 +8344,10 @@ exports.ClassRegisterStatus = exports.$Enums.ClassRegisterStatus = {
   FAILED: 'FAILED'
 };
 
+exports.ClassRegisterAttemptStatus = exports.$Enums.ClassRegisterAttemptStatus = {
+  FAILED: 'FAILED'
+};
+
 exports.SubjectClassSchedule = exports.$Enums.SubjectClassSchedule = {
   MORNING: 'MORNING',
   AFTERNOON: 'AFTERNOON',
@@ -8805,6 +8844,7 @@ exports.Prisma.ModelName = {
   ClassRegisterSessionCredit: 'ClassRegisterSessionCredit',
   ClassRegisterSession: 'ClassRegisterSession',
   ClassRegisterLogs: 'ClassRegisterLogs',
+  ClassRegisterAttempt: 'ClassRegisterAttempt',
   SubjectClass: 'SubjectClass',
   SubjectClassAttendance: 'SubjectClassAttendance',
   SubjectClassAttendanceStudent: 'SubjectClassAttendanceStudent',

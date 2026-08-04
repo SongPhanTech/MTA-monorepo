@@ -928,6 +928,7 @@ model ClassRegisterSession extends Base {
   creditLimit       ClassRegisterSessionCredit[] // giới hạn tín chỉ
   trainingCourses   TrainingCourse[]
   classRegisterLogs ClassRegisterLogs[]
+  classRegisterAttempts ClassRegisterAttempt[]
   dataSyncHistories DataSyncHistory[]
   @@schema("ql-dao-tao")
 }
@@ -954,6 +955,34 @@ model ClassRegisterLogs extends Base {
   @@unique([classRegisterSessionId, studentId, subjectClassId])
   @@index([subjectClassId])
   @@index([studentId])
+  @@schema("ql-dao-tao")
+}
+
+/// Lưu lần đăng ký thất bại (từ Kafka events / sync fallback) phục vụ thống kê
+enum ClassRegisterAttemptStatus {
+  FAILED
+
+  @@schema("ql-dao-tao")
+}
+
+model ClassRegisterAttempt extends Base {
+  classRegisterSession   ClassRegisterSession         @relation(fields: [classRegisterSessionId], references: [id])
+  classRegisterSessionId String
+  student                Student?                     @relation(fields: [studentId], references: [id])
+  studentId              String?
+  userProfileId          String                       @db.Uuid
+  jobId                  String?                      @unique
+  status                 ClassRegisterAttemptStatus   @default(FAILED)
+  /// Mã lỗi nghiệp vụ (CLASS_FULL, MISSING_PREREQUISITE, ...)
+  errorCode              String?
+  message                String                       @db.Text
+  subjectClassIds        String[]
+  occurredAt             DateTime
+  attempts               Int                          @default(0)
+
+  @@index([classRegisterSessionId, occurredAt])
+  @@index([studentId])
+  @@index([userProfileId])
   @@schema("ql-dao-tao")
 }
 

@@ -13,6 +13,7 @@ import ExportRegistrationResultsApp from "./api/export-registration-results"
 import ImportTrainingDataApp from "./api/import-training-data"
 import { createPrismaClient } from "./config/database"
 import { checkIp } from "./middlewares/check-ip"
+import { startRegistrationEventsWorker } from "./services/class-registration/events-worker"
 import { startRegistrationWorker } from "./services/class-registration/worker"
 import { setupOpenApi } from "./utils/openapi"
 
@@ -20,6 +21,8 @@ export const prisma: PrismaClient = createPrismaClient()
 
 // Background worker tiêu thụ course_registration_queue (Kafka) — chạy nền, không block server
 startRegistrationWorker(prisma)
+// Consumer ghi ClassRegisterAttempt từ topic events (thống kê lỗi đăng ký)
+startRegistrationEventsWorker(prisma)
 
 const app = new OpenAPIHono({ strict: false })
 

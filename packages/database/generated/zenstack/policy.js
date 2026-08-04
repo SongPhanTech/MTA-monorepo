@@ -1357,6 +1357,19 @@ const policy = {
                 update: {},
             },
         },
+        classRegisterAttempt: {
+            modelLevel: {
+                read: { guard: ClassRegisterAttempt_read, },
+                create: { guard: ClassRegisterAttempt_create, inputChecker: ClassRegisterAttempt_create_input, },
+                update: { guard: ClassRegisterAttempt_update, },
+                postUpdate: { guard: ClassRegisterAttempt_postUpdate, },
+                delete: { guard: ClassRegisterAttempt_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         subjectClass: {
             modelLevel: {
                 read: { guard: SubjectClass_read, },
@@ -3764,6 +3777,7 @@ const policy = {
         classRegisterSessionCredit: { hasValidation: false },
         classRegisterSession: { hasValidation: false },
         classRegisterLogs: { hasValidation: false },
+        classRegisterAttempt: { hasValidation: false },
         subjectClass: { hasValidation: false },
         subjectClassAttendance: { hasValidation: false },
         subjectClassAttendanceStudent: { hasValidation: false },
@@ -12003,6 +12017,84 @@ function ClassRegisterLogs_delete(context, db) {
     return { OR: [] };
 }
 function $check_ClassRegisterLogs_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterAttempt_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ClassRegisterAttempt_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterAttempt_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterAttempt_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterAttempt_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ClassRegisterAttempt_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterAttempt_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterAttempt_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ClassRegisterAttempt_postUpdate(input, context) {
+    return true;
+}
+function ClassRegisterAttempt_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterAttempt_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

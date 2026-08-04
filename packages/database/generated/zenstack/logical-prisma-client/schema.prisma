@@ -183,6 +183,13 @@ enum ClassRegisterStatus {
   @@schema("ql-dao-tao")
 }
 
+/// Lưu lần đăng ký thất bại (từ Kafka events / sync fallback) phục vụ thống kê
+enum ClassRegisterAttemptStatus {
+  FAILED
+
+  @@schema("ql-dao-tao")
+}
+
 enum SubjectClassSchedule {
   MORNING
   AFTERNOON
@@ -3749,25 +3756,26 @@ model ClassRegisterSessionCredit {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model ClassRegisterSession {
-  id                String                       @id() @default(cuid())
-  code              String?                      @unique()
-  active            Boolean                      @default(true)
-  description       String?                      @db.Text()
-  deletedAt         DateTime?
-  createdAt         DateTime                     @default(now())
-  updatedAt         DateTime                     @default(now()) @updatedAt()
-  createdBy         String?                      @default("") @db.Uuid()
-  name              String
-  startDate         DateTime
-  endDate           DateTime
-  semester          Semester                     @relation(fields: [semesterId], references: [id])
-  semesterId        String
+  id                    String                       @id() @default(cuid())
+  code                  String?                      @unique()
+  active                Boolean                      @default(true)
+  description           String?                      @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime                     @default(now())
+  updatedAt             DateTime                     @default(now()) @updatedAt()
+  createdBy             String?                      @default("") @db.Uuid()
+  name                  String
+  startDate             DateTime
+  endDate               DateTime
+  semester              Semester                     @relation(fields: [semesterId], references: [id])
+  semesterId            String
   /// học phí/tín chỉ
-  tuitionPerCredit  Float                        @default(0)
-  creditLimit       ClassRegisterSessionCredit[]
-  trainingCourses   TrainingCourse[]
-  classRegisterLogs ClassRegisterLogs[]
-  dataSyncHistories DataSyncHistory[]
+  tuitionPerCredit      Float                        @default(0)
+  creditLimit           ClassRegisterSessionCredit[]
+  trainingCourses       TrainingCourse[]
+  classRegisterLogs     ClassRegisterLogs[]
+  classRegisterAttempts ClassRegisterAttempt[]
+  dataSyncHistories     DataSyncHistory[]
 
   @@schema("ql-dao-tao")
 }
@@ -3796,6 +3804,38 @@ model ClassRegisterLogs {
   @@unique([classRegisterSessionId, studentId, subjectClassId])
   @@index([subjectClassId])
   @@index([studentId])
+  @@schema("ql-dao-tao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ClassRegisterAttempt {
+  id                     String                     @id() @default(cuid())
+  code                   String?                    @unique()
+  active                 Boolean                    @default(true)
+  description            String?                    @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime                   @default(now())
+  updatedAt              DateTime                   @default(now()) @updatedAt()
+  createdBy              String?                    @default("") @db.Uuid()
+  classRegisterSession   ClassRegisterSession       @relation(fields: [classRegisterSessionId], references: [id])
+  classRegisterSessionId String
+  student                Student?                   @relation(fields: [studentId], references: [id])
+  studentId              String?
+  userProfileId          String                     @db.Uuid()
+  jobId                  String?                    @unique()
+  status                 ClassRegisterAttemptStatus @default(FAILED)
+  /// Mã lỗi nghiệp vụ (CLASS_FULL, MISSING_PREREQUISITE, ...)
+  errorCode              String?
+  message                String                     @db.Text()
+  subjectClassIds        String[]
+  occurredAt             DateTime
+  attempts               Int                        @default(0)
+
+  @@index([classRegisterSessionId, occurredAt])
+  @@index([studentId])
+  @@index([userProfileId])
   @@schema("ql-dao-tao")
 }
 
@@ -4828,6 +4868,7 @@ model Student {
   studentScoreConvert            StudentScoreConvert[]
   scoreLinkStudent               ScoreLinkStudent[]
   classRegisterLogs              ClassRegisterLogs[]
+  classRegisterAttempts          ClassRegisterAttempt[]
   notes                          Note[]
   noteFolders                    NoteFolder[]
   semesterTrainingScore          SemesterTrainingScore[]

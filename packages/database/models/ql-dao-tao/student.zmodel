@@ -127,6 +127,7 @@ model Student extends Base {
   scoreLinkStudent               ScoreLinkStudent[]
 
   classRegisterLogs              ClassRegisterLogs[]
+  classRegisterAttempts          ClassRegisterAttempt[]
   notes                          Note[]
   noteFolders                    NoteFolder[]
   semesterTrainingScore          SemesterTrainingScore[]

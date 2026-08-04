@@ -22,6 +22,7 @@ import {
   type RegistrationJobMessage,
 } from "./kafka-queue"
 import { processRegistration } from "./process"
+import { recordRegistrationFailure } from "./record-failure"
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max)
@@ -100,16 +101,27 @@ async function handleMessage(prisma: PrismaClient, value: Buffer | null): Promis
 
       // Quá số lần retry → Dead Letter Queue
       await sendToDeadLetterQueue({ ...job, attempts })
+      const overloadMessage =
+        "Hệ thống đang quá tải, yêu cầu đăng ký chưa thực hiện được. Vui lòng thử lại sau ít phút."
       console.error(
         `[register-worker] job=${job.jobId} user=${job.userId} vào DLQ sau ${attempts} lần thử: ${regErr?.message}`
       )
       await setJobStatus({
         ...baseStatus,
         status: "failed",
-        message:
-          "Hệ thống đang quá tải, yêu cầu đăng ký chưa thực hiện được. Vui lòng thử lại sau ít phút.",
+        message: overloadMessage,
         attempts,
         updatedAt: new Date().toISOString(),
+      })
+      await recordRegistrationFailure(prisma, {
+        jobId: job.jobId,
+        userId: job.userId,
+        sessionId: job.sessionId,
+        subjectClassIds: job.subjectClassIds,
+        code: regErr?.code ?? "LOCK_TIMEOUT",
+        message: overloadMessage,
+        attempts,
+        occurredAt: job.timestamp || new Date().toISOString(),
       })
       return
     }
@@ -122,15 +134,36 @@ async function handleMessage(prisma: PrismaClient, value: Buffer | null): Promis
         message: regErr.message,
         updatedAt: new Date().toISOString(),
       })
+      await recordRegistrationFailure(prisma, {
+        jobId: job.jobId,
+        userId: job.userId,
+        sessionId: job.sessionId,
+        subjectClassIds: job.subjectClassIds,
+        code: regErr.code,
+        message: regErr.message,
+        attempts: job.attempts,
+        occurredAt: job.timestamp || new Date().toISOString(),
+      })
       return
     }
 
     console.error(`[register-worker] job=${job.jobId} lỗi không xác định`, err)
+    const systemMessage = "Lỗi hệ thống. Vui lòng thử lại."
     await setJobStatus({
       ...baseStatus,
       status: "failed",
-      message: "Lỗi hệ thống. Vui lòng thử lại.",
+      message: systemMessage,
       updatedAt: new Date().toISOString(),
+    })
+    await recordRegistrationFailure(prisma, {
+      jobId: job.jobId,
+      userId: job.userId,
+      sessionId: job.sessionId,
+      subjectClassIds: job.subjectClassIds,
+      code: "SYSTEM_ERROR",
+      message: systemMessage,
+      attempts: job.attempts,
+      occurredAt: job.timestamp || new Date().toISOString(),
     })
   }
 }

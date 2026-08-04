@@ -108,6 +108,7 @@ export * from './training-block-subject';
 export * from './class-register-session-credit';
 export * from './class-register-session';
 export * from './class-register-logs';
+export * from './class-register-attempt';
 export * from './subject-class';
 export * from './subject-class-attendance';
 export * from './subject-class-attendance-student';

@@ -115,6 +115,12 @@ const NAVIGATION: NavigationType = {
         path: ROUTER_PATH.CONG_SINH_VIEN.LICH_SU_DANG_KY_HOC,
       },
       // {
+      //   id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_THONG_KE_DANG_KY,
+      //   label: "Thống kê đăng ký học",
+      //   icon: BarChart3,
+      //   path: ROUTER_PATH.CONG_SINH_VIEN.THONG_KE_DANG_KY,
+      // },
+      // {
       //   id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_DONG_BO_DU_LIEU,
       //   label: "Đồng bộ dữ liệu",
       //   icon: ArrowLeftRight,

@@ -3,6 +3,7 @@
  *
  * - Topic chính:  course_registration_queue      — producer (API) đẩy vào, worker tiêu thụ
  * - Topic DLQ:    course_registration_queue_dlq  — message fail quá CLASS_REGISTER_MAX_ATTEMPTS lần
+ * - Topic events: course_registration_events     — sự kiện fail để thống kê / analytics
  *
  * Message được key theo userId → các yêu cầu của cùng một sinh viên vào cùng partition,
  * đảm bảo xử lý đúng thứ tự bấm của sinh viên đó.
@@ -11,11 +12,16 @@
  * xử lý đồng bộ (registration vẫn hoạt động, chỉ mất tính năng hàng đợi).
  */
 import { Kafka, Partitioners, logLevel, type Producer } from "kafkajs"
+import type { RegistrationFailedEvent } from "./persist-attempt"
 
 export const REGISTRATION_TOPIC = "course_registration_queue"
 export const REGISTRATION_DLQ_TOPIC = "course_registration_queue_dlq"
+export const REGISTRATION_EVENTS_TOPIC =
+  process.env.CLASS_REGISTER_EVENTS_TOPIC || "course_registration_events"
 export const REGISTRATION_CONSUMER_GROUP =
   process.env.CLASS_REGISTER_CONSUMER_GROUP || "be-portal-class-register-worker"
+export const REGISTRATION_EVENTS_CONSUMER_GROUP =
+  process.env.CLASS_REGISTER_EVENTS_CONSUMER_GROUP || "be-portal-class-register-events"
 
 const BROKERS = (process.env.KAFKA_BROKERS || "")
   .split(",")
@@ -36,6 +42,8 @@ export type RegistrationJobMessage = {
   /** Số lần đã xử lý thất bại (retry counter) */
   attempts: number
 }
+
+export type { RegistrationFailedEvent }
 
 let kafka: Kafka | null = null
 
@@ -85,18 +93,17 @@ async function getProducer(): Promise<Producer | null> {
   return producerConnecting
 }
 
-async function produce(topic: string, message: RegistrationJobMessage): Promise<boolean> {
+async function produce(topic: string, key: string, value: unknown): Promise<boolean> {
   try {
     const p = await getProducer()
     if (!p) return false
     await p.send({
       topic,
-      messages: [{ key: message.userId, value: JSON.stringify(message) }],
+      messages: [{ key, value: JSON.stringify(value) }],
     })
     return true
   } catch (e) {
     console.warn(`[kafka-queue] produce failed topic=${topic}`, e)
-    // Connection hỏng → reset để lần sau reconnect
     try {
       await producer?.disconnect()
     } catch {
@@ -109,15 +116,24 @@ async function produce(topic: string, message: RegistrationJobMessage): Promise<
 
 /** Producer (API đăng ký): đẩy job vào queue. false = Kafka lỗi → caller fallback sync. */
 export async function enqueueRegistration(message: RegistrationJobMessage): Promise<boolean> {
-  return produce(REGISTRATION_TOPIC, message)
+  return produce(REGISTRATION_TOPIC, message.userId, message)
 }
 
 /** NACK: trả message về queue để retry (attempts đã tăng). */
 export async function requeueRegistration(message: RegistrationJobMessage): Promise<boolean> {
-  return produce(REGISTRATION_TOPIC, message)
+  return produce(REGISTRATION_TOPIC, message.userId, message)
 }
 
 /** Quá số lần retry → đẩy vào Dead Letter Queue để xử lý thủ công/giám sát. */
 export async function sendToDeadLetterQueue(message: RegistrationJobMessage): Promise<boolean> {
-  return produce(REGISTRATION_DLQ_TOPIC, message)
+  return produce(REGISTRATION_DLQ_TOPIC, message.userId, message)
+}
+
+/**
+ * Phát sự kiện đăng ký thất bại lên topic events.
+ * Trả false nếu Kafka tắt / lỗi — caller phải fallback ghi DB trực tiếp.
+ */
+export async function publishRegistrationEvent(event: RegistrationFailedEvent): Promise<boolean> {
+  if (!KAFKA_ENABLED) return false
+  return produce(REGISTRATION_EVENTS_TOPIC, event.userId, event)
 }

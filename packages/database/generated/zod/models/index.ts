@@ -108,6 +108,7 @@ export * from './TrainingBlockSubject.schema';
 export * from './ClassRegisterSessionCredit.schema';
 export * from './ClassRegisterSession.schema';
 export * from './ClassRegisterLogs.schema';
+export * from './ClassRegisterAttempt.schema';
 export * from './SubjectClass.schema';
 export * from './SubjectClassAttendance.schema';
 export * from './SubjectClassAttendanceStudent.schema';

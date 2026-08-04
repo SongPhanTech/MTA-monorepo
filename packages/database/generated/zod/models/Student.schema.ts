@@ -122,6 +122,7 @@ const relationSchema = z.object({
     studentScoreConvert: z.array(z.unknown()).optional(),
     scoreLinkStudent: z.array(z.unknown()).optional(),
     classRegisterLogs: z.array(z.unknown()).optional(),
+    classRegisterAttempts: z.array(z.unknown()).optional(),
     notes: z.array(z.unknown()).optional(),
     noteFolders: z.array(z.unknown()).optional(),
     semesterTrainingScore: z.array(z.unknown()).optional(),
