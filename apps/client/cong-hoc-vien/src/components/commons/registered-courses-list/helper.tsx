@@ -1,4 +1,4 @@
-import { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas"
+import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas"
 
 type GetRegisterStateParams = {
   record: GetClassesInfo200ItemSubjectClassItem
@@ -6,7 +6,8 @@ type GetRegisterStateParams = {
   totalRegisteredCredit: number
   classToSubjectCodeMap: Map<string, string>
   registeredSubjectCodes: Set<string>
-  isPending: boolean
+  /** Chỉ khóa đúng dòng đang chờ job — không khóa cả bảng */
+  isRowPending?: boolean
 }
 
 const getRegisterState = (args: GetRegisterStateParams) => {
@@ -16,7 +17,7 @@ const getRegisterState = (args: GetRegisterStateParams) => {
     totalRegisteredCredit,
     classToSubjectCodeMap,
     registeredSubjectCodes,
-    isPending,
+    isRowPending = false,
   } = args
   const isMaxed = (record?.maxStudent || 0) <= (record?._count?.subjectClassStudent || 0)
 
@@ -31,7 +32,7 @@ const getRegisterState = (args: GetRegisterStateParams) => {
     !isRegistered && !!parentSubjectCode && registeredSubjectCodes.has(parentSubjectCode)
 
   const isDisabled =
-    isMaxed || isRegistered || isPending || isOverMaxCredit || siblingAlreadyRegistered
+    isMaxed || isRegistered || isRowPending || isOverMaxCredit || siblingAlreadyRegistered
 
   return {
     isDisabled,
@@ -39,6 +40,7 @@ const getRegisterState = (args: GetRegisterStateParams) => {
     isRegistered,
     isOverMaxCredit,
     siblingAlreadyRegistered,
+    isRowPending,
   }
 }
 const registeredCoursesListHelper = { getRegisterState }

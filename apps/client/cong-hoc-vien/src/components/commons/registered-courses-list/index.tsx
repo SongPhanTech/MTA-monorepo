@@ -2,20 +2,20 @@ import ThoiKhoaBieuDangKy from "@components/commons/registration-schedule"
 import registrationScheduleHelper from "@components/commons/registration-schedule/helper"
 import Select from "@components/commons/select"
 import TableCollapse from "@components/commons/tableCollapse"
+import { pollRegistrationJob } from "@hooks/use-registration-job-poll"
 import { cn } from "@lib/utils"
 import { useMutation } from "@tanstack/react-query"
 import { $Enums } from "@workspace/db"
-import { customPortalFetch } from "@workspace/libs/api/custom-instance"
+import { EquivalencySide } from "@workspace/db/client"
 import { classRegister, useGetClassesInfo, useGetStudentInfo } from "@workspace/libs/api/portal"
 import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem"
 import type { GetClassRegisterSession200ItemCreditLimitItem } from "@workspace/libs/api/schemas/getClassRegisterSession200ItemCreditLimitItem"
-import { Button, Checkbox, message, Popconfirm } from "antd"
+import { Button, Checkbox, message, Popconfirm, Spin } from "antd"
+import clsx from "clsx"
 import dayjs from "dayjs"
 import { CircleAlertIcon, LogOutIcon } from "lucide-react"
-import { useMemo, useState } from "react"
-import clsx from "clsx"
+import { useMemo, useRef, useState } from "react"
 import registeredCoursesListHelper from "./helper"
-import { EquivalencySide } from "@workspace/db/client"
 
 export interface ClassRegisterSessionProps {
   sessionId: string
@@ -40,60 +40,17 @@ const BY_CURRICULUM_OPTIONS = [
   },
 ]
 
-/** Đăng ký bất đồng bộ: BE trả 202 + jobId, FE poll trạng thái mỗi 2s tới khi có kết quả */
-const POLL_INTERVAL_MS = 2000
-const POLL_MAX_TRIES = 30 // ~60 giây
-
-type RegistrationJobResponse = {
-  status: number
-  data?: { status?: string; message?: string }
-}
-
-async function pollRegistrationResult(jobId: string): Promise<Awaited<ReturnType<typeof classRegister>>> {
-  for (let attempt = 0; attempt < POLL_MAX_TRIES; attempt++) {
-    await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS))
-
-    let job: RegistrationJobResponse | null = null
-    try {
-      job = await customPortalFetch<RegistrationJobResponse>(
-        `/api/class-register/registration-status/${jobId}`,
-        { method: "GET" }
-      )
-    } catch {
-      continue // lỗi mạng tạm thời -> poll tiếp
-    }
-
-    if (job?.status !== 200) continue
-    const jobStatus = job.data?.status
-
-    if (jobStatus === "success") {
-      return { status: 200, data: { message: "success" } } as unknown as Awaited<
-        ReturnType<typeof classRegister>
-      >
-    }
-    if (jobStatus === "failed") {
-      return { status: 400, data: { message: job.data?.message || "Đăng ký thất bại" } } as unknown as Awaited<
-        ReturnType<typeof classRegister>
-      >
-    }
-    // pending / processing -> tiếp tục chờ
-  }
-
-  return {
-    status: 503,
-    data: {
-      message:
-        "Yêu cầu đang được xử lý, vui lòng kiểm tra lại danh sách đã đăng ký sau ít phút.",
-    },
-  } as unknown as Awaited<ReturnType<typeof classRegister>>
-}
-
 const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
   const { sessionId, curriculumVersions, endDate, creditLimit, tuitionPerCredit } = props
   const [curriculumVersionId, setCurriculumVersionId] = useState(
     curriculumVersions.length > 0 ? curriculumVersions[0].id : ""
   )
   const [byCurriculum, setByCurriculum] = useState(1)
+  /** Chỉ khóa đúng dòng lớp đang chờ job — không overlay toàn trang */
+  const [pendingSubjectClassIds, setPendingSubjectClassIds] = useState<Set<string>>(
+    () => new Set()
+  )
+  const pendingLockRef = useRef<Set<string>>(new Set())
   const { data: classStudentData } = useGetStudentInfo(
     {
       sessionId: sessionId,
@@ -195,7 +152,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
     }
   }, [classesInfo])
 
-  const { mutateAsync: classRegisterMutate, isPending: isPendingClassRegister } = useMutation({
+  const { mutateAsync: classRegisterMutate } = useMutation({
     mutationFn: async (subjectClassIds: string[]) => {
       const res = await classRegister({
         sessionId,
@@ -203,12 +160,33 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
         curriculumVersionId,
       })
 
-      // 202: yêu cầu đã vào hàng đợi -> poll kết quả thật (isPending giữ nút disabled suốt lúc chờ)
+      // 202 Accepted: đã vào queue → poll /registration-status/:jobId mỗi 2s (timeout 30s)
       if (Number(res?.status) === 202) {
         const jobId = (res as { data?: { jobId?: string } }).data?.jobId
-        if (jobId) {
-          return await pollRegistrationResult(jobId)
+        if (!jobId) {
+          return {
+            status: 500,
+            data: { message: "Không nhận được jobId từ hệ thống. Vui lòng thử lại." },
+          } as unknown as Awaited<ReturnType<typeof classRegister>>
         }
+
+        const poll = await pollRegistrationJob(jobId)
+        if (poll.outcome === "success") {
+          return {
+            status: 200,
+            data: { message: poll.message || "success" },
+          } as unknown as Awaited<ReturnType<typeof classRegister>>
+        }
+        if (poll.outcome === "failed") {
+          return {
+            status: 400,
+            data: { message: poll.message },
+          } as unknown as Awaited<ReturnType<typeof classRegister>>
+        }
+        return {
+          status: 503,
+          data: { message: poll.message },
+        } as unknown as Awaited<ReturnType<typeof classRegister>>
       }
 
       return res
@@ -255,11 +233,30 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
     onError: (error: any) => {
       message.error(error?.message || "Đăng ký thất bại")
     },
+    onSettled: (_data, _error, subjectClassIds) => {
+      const subjectClassId = subjectClassIds[0]
+      if (!subjectClassId) return
+      pendingLockRef.current.delete(subjectClassId)
+      setPendingSubjectClassIds((prev) => {
+        if (!prev.has(subjectClassId)) return prev
+        const next = new Set(prev)
+        next.delete(subjectClassId)
+        return next
+      })
+    },
   })
 
   const handleClassRegister = (subjectClassIds: string[]) => {
-    if (isPendingClassRegister) return
-    classRegisterMutate(subjectClassIds)
+    const subjectClassId = subjectClassIds[0]
+    // Chặn double-click cùng một dòng trước khi React state cập nhật
+    if (!subjectClassId || pendingLockRef.current.has(subjectClassId)) return
+    pendingLockRef.current.add(subjectClassId)
+    setPendingSubjectClassIds((prev) => {
+      const next = new Set(prev)
+      next.add(subjectClassId)
+      return next
+    })
+    void classRegisterMutate(subjectClassIds)
   }
 
   return (
@@ -576,6 +573,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               render: (_, record) => {
                 const totalCredit =
                   registeredClasses?.reduce((acc, curr) => acc + (curr?.credit || 0), 0) ?? 0
+                const isRowPending = pendingSubjectClassIds.has(record?.id ?? "")
 
                 const { isDisabled } = registeredCoursesListHelper.getRegisterState({
                   record,
@@ -583,15 +581,31 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                   totalRegisteredCredit: totalCredit,
                   classToSubjectCodeMap,
                   registeredSubjectCodes,
-                  isPending: isPendingClassRegister,
+                  isRowPending,
                 })
 
-                const handleConfirm = () => handleClassRegister([record?.id])
+                const handleConfirm = () => {
+                  if (!record?.id || isDisabled || pendingLockRef.current.has(record.id)) return
+                  handleClassRegister([record.id])
+                }
 
                 const willConflict = registrationScheduleHelper.wouldConflictWithRegistered(
                   record as GetClassesInfo200ItemSubjectClassItem,
                   registeredClasses ?? []
                 )
+
+                if (isRowPending) {
+                  return (
+                    <Button
+                      disabled
+                      type="text"
+                      className="flex items-center justify-center gap-1.5 text-primary opacity-80"
+                    >
+                      <Spin size="small" />
+                      Đang xếp hàng...
+                    </Button>
+                  )
+                }
 
                 return (
                   <Popconfirm
@@ -629,11 +643,15 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
           ]}
           onRow={(record) => {
             const r = record as unknown as GetClassesInfo200ItemSubjectClassItem
+            const isRegistered = (r?.classRegisterLogs?.length || 0) > 0
+            const isRowPending = !!r?.id && pendingSubjectClassIds.has(r.id)
             return {
-              className:
-                (r?.classRegisterLogs?.length || 0) > 0
-                  ? "bg-green-200 [&>td]:!bg-green-200 [&>td]:hover:!bg-green-200"
-                  : "",
+              className: cn(
+                isRegistered && "bg-green-200 [&>td]:!bg-green-200 [&>td]:hover:!bg-green-200",
+                isRowPending &&
+                  !isRegistered &&
+                  "bg-amber-50 [&>td]:!bg-amber-50 [&>td]:hover:!bg-amber-50"
+              ),
             }
           }}
           headerTitleKey={(record) => [record?.code, record?.name].filter(Boolean).join(" - ")}
