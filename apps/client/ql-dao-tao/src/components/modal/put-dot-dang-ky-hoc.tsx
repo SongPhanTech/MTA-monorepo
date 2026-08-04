@@ -13,6 +13,7 @@ import {
   useUpdateClassRegisterSession,
 } from "@workspace/db/hooks"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
+import { invalidateRegistrationCaches } from "@workspace/libs/api/invalidate-class-register-cache"
 import { Col, Form, Input, InputNumber, message, Radio, Select } from "antd"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
@@ -107,7 +108,7 @@ const PutClassRegisterSession = () => {
             ...pre,
             [getClassificationKey(
               cur.baseScore === "Base10" ? cur.base10Min : cur.base4Min,
-              cur.baseScore === "Base4" ? cur.base10Max : cur.base4Max
+              cur.baseScore === "Base10" ? cur.base10Max : cur.base4Max
             )]: {
               minCredit: cur.minCredit,
               maxCredit: cur.maxCredit,
@@ -130,7 +131,7 @@ const PutClassRegisterSession = () => {
             ...pre,
             [getClassificationKey(
               cur.baseScore === "Base10" ? cur.base10Min : cur.base4Min,
-              cur.baseScore === "Base4" ? cur.base10Max : cur.base4Max
+              cur.baseScore === "Base10" ? cur.base10Max : cur.base4Max
             )]: {
               minCredit: 0,
               maxCredit: 25,
@@ -171,6 +172,28 @@ const PutClassRegisterSession = () => {
         await deleteManyClassRegisterSessionCredit({
           where: { classRegisterSessionId: id },
         })
+        // Ghép lại metadata xếp loại (baseScore, min/max) từ bảng xếp loại —
+        // Form chỉ bind maxCredit nên submit có thể thiếu field → match GPA sai / cache cũ.
+        const creditLimitCreates = Object.entries(output.creditLimit || {}).map(
+          ([key, item]) => {
+            const fromTable = tableData.find((row) => {
+              const rowKey = getClassificationKey(
+                row.baseScore === "Base10" ? row.base10Min : row.base4Min,
+                row.baseScore === "Base10" ? row.base10Max : row.base4Max
+              )
+              return rowKey === key
+            })
+            return {
+              baseScore: item.baseScore ?? fromTable?.baseScore ?? $Enums.AcademicRankingBaseType.Base10,
+              base10Min: item.base10Min ?? fromTable?.base10Min ?? null,
+              base10Max: item.base10Max ?? fromTable?.base10Max ?? null,
+              base4Min: item.base4Min ?? fromTable?.base4Min ?? null,
+              base4Max: item.base4Max ?? fromTable?.base4Max ?? null,
+              minCredit: item.minCredit ?? 0,
+              maxCredit: item.maxCredit ?? 25,
+            }
+          }
+        )
         await updateClassRegisterSession({
           data: {
             ...data,
@@ -181,16 +204,39 @@ const PutClassRegisterSession = () => {
                   : [],
             },
             creditLimit: {
-              create: Object.values(output.creditLimit).map((item) => ({
-                ...item,
-              })),
+              create: creditLimitCreates,
             },
           },
           where: { id },
         })
+        try {
+          await invalidateRegistrationCaches(id)
+        } catch (cacheErr) {
+          console.warn("Không reset được cache cổng đăng ký", cacheErr)
+        }
         message.success("Cập nhật thành công")
       } else {
-        await createClassRegisterSession({
+        const creditLimitCreates = Object.entries(output.creditLimit || {}).map(
+          ([key, item]) => {
+            const fromTable = tableData.find((row) => {
+              const rowKey = getClassificationKey(
+                row.baseScore === "Base10" ? row.base10Min : row.base4Min,
+                row.baseScore === "Base10" ? row.base10Max : row.base4Max
+              )
+              return rowKey === key
+            })
+            return {
+              baseScore: item.baseScore ?? fromTable?.baseScore ?? $Enums.AcademicRankingBaseType.Base10,
+              base10Min: item.base10Min ?? fromTable?.base10Min ?? null,
+              base10Max: item.base10Max ?? fromTable?.base10Max ?? null,
+              base4Min: item.base4Min ?? fromTable?.base4Min ?? null,
+              base4Max: item.base4Max ?? fromTable?.base4Max ?? null,
+              minCredit: item.minCredit ?? 0,
+              maxCredit: item.maxCredit ?? 25,
+            }
+          }
+        )
+        const created = await createClassRegisterSession({
           data: {
             ...data,
             trainingCourses: {
@@ -200,12 +246,17 @@ const PutClassRegisterSession = () => {
                   : [],
             },
             creditLimit: {
-              create: Object.values(output.creditLimit).map((item) => ({
-                ...item,
-              })),
+              create: creditLimitCreates,
             },
           },
         })
+        if (created?.id) {
+          try {
+            await invalidateRegistrationCaches(created.id)
+          } catch (cacheErr) {
+            console.warn("Không reset được cache cổng đăng ký", cacheErr)
+          }
+        }
         message.success("Thêm mới thành công")
       }
       queryClient.invalidateQueries({
@@ -370,7 +421,7 @@ const PutClassRegisterSession = () => {
                     "creditLimit",
                     getClassificationKey(
                       record.baseScore === "Base10" ? record.base10Min : record.base4Min,
-                      record.baseScore === "Base4" ? record.base10Max : record.base4Max
+                      record.baseScore === "Base10" ? record.base10Max : record.base4Max
                     ),
                     "maxCredit",
                   ]}

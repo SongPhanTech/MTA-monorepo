@@ -57,7 +57,8 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
     },
     {
       query: {
-        refetchOnWindowFocus: false,
+        refetchOnWindowFocus: true,
+        staleTime: 0,
       },
     }
   )

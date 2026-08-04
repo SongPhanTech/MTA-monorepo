@@ -79,13 +79,15 @@ export default function ThongKeDangKyHocPage() {
           page: nextPage,
           pageSize: nextPageSize,
         })
-        if (res.status === 200) {
+        if (res.status === 200 && "summary" in res.data) {
           setStats(res.data)
           return
         }
-        message.error(
-          ("message" in res.data ? res.data.message : undefined) || "Không lấy được thống kê"
-        )
+        const errMsg =
+          res.data && typeof res.data === "object" && "message" in res.data
+            ? (res.data as { message?: string }).message
+            : undefined
+        message.error(errMsg || "Không lấy được thống kê")
       } catch {
         message.error("Không lấy được thống kê")
       }

@@ -115,10 +115,15 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    environment:
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      REDIS_CACHE_ENABLED: ${REDIS_CACHE_ENABLED:-true}
     ports:
       - "3042:3000"
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     networks:
       - mta-net

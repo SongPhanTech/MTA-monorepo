@@ -57,7 +57,8 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
     },
     {
       query: {
-        refetchOnWindowFocus: false,
+        refetchOnWindowFocus: true,
+        staleTime: 0,
       },
     }
   )
@@ -85,7 +86,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
       value: studentData?.studentCode,
     },
     {
-      label: "Xếp loại",
+      label: "Xếp loại kỳ gần nhất",
       value: studentData?.classification,
     },
     {

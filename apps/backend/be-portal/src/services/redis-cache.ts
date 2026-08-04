@@ -143,6 +143,26 @@ export async function cacheDel(...keys: string[]): Promise<void> {
   })
 }
 
+/** SCAN + DEL theo pattern (vd. portal:crs:session:*). Trả về số key đã xóa. */
+export async function cacheDelByPattern(pattern: string): Promise<number> {
+  if (!ENABLED || !pattern) return 0
+  let deleted = 0
+  await withRedis(async (redis) => {
+    let cursor = "0"
+    do {
+      const raw = await redis.send("SCAN", [cursor, "MATCH", pattern, "COUNT", "200"])
+      const next = Array.isArray(raw) ? String(raw[0] ?? "0") : "0"
+      const keys = Array.isArray(raw) && Array.isArray(raw[1]) ? (raw[1] as string[]) : []
+      cursor = next
+      for (const key of keys) {
+        await redis.del(key)
+        deleted += 1
+      }
+    } while (cursor !== "0")
+  })
+  return deleted
+}
+
 export async function cacheIncr(key: string): Promise<number> {
   if (!ENABLED) return Date.now()
   const n = await withRedis((redis) => redis.incr(key))
@@ -217,8 +237,10 @@ export function rateLimitKey(action: "register" | "unregister" | "read", userId:
 export const classRegisterCache = {
   sessionKey: (userId: string) => `${PREFIX}:session:${userId}`,
 
-  studentKey: (userId: string, sessionId: string) =>
-    `${PREFIX}:student:${userId}:${sessionId || "_"}`,
+  studentKey: (userId: string, sessionId: string, sessionVersion?: string | number) =>
+    sessionVersion != null && sessionVersion !== ""
+      ? `${PREFIX}:student:${userId}:${sessionId || "_"}:v${sessionVersion}`
+      : `${PREFIX}:student:${userId}:${sessionId || "_"}`,
 
   userVersionKey: (userId: string) => `${PREFIX}:uver:${userId}`,
 
@@ -240,6 +262,28 @@ export const classRegisterCache = {
     if (sessionId) {
       await cacheDel(this.studentKey(userId, sessionId))
     }
+  },
+
+  /**
+   * Sau khi admin sửa/đóng đợt đăng ký: xóa cache liên quan toàn hệ thống
+   * (danh sách đợt theo user, student info, classes-info, sĩ số seats).
+   */
+  async invalidateSession(sessionId: string): Promise<{ deleted: number }> {
+    if (!sessionId) return { deleted: 0 }
+    let deleted = 0
+    // Danh sách đợt theo user chứa metadata đợt (ngày, active, creditLimit...)
+    deleted += await cacheDelByPattern(`${PREFIX}:session:*`)
+    // Info SV + maxCredit theo đợt (kể cả key có version updatedAt)
+    deleted += await cacheDelByPattern(`${PREFIX}:student:*:${sessionId}*`)
+    // get-classes-info: portal:crs:classes:{userId}:v{n}:{sessionId}:...
+    deleted += await cacheDelByPattern(`${PREFIX}:classes:*:${sessionId}:*`)
+    // Sĩ số realtime
+    await cacheDel(`${PREFIX}:seats:${sessionId}`)
+    deleted += 1
+    console.log(
+      `[redis-cache] invalidateSession sessionId=${sessionId} deleted≈${deleted}`
+    )
+    return { deleted }
   },
 }
 

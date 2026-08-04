@@ -1037,7 +1037,26 @@ app.openapi(getStudentInfo, async (c) => {
   const session = c.get("user")
   const { sessionId } = c.req.valid("query")
 
-  const cacheKey = classRegisterCache.studentKey(session.id, sessionId || "_")
+  // Lấy updatedAt đợt sớm để bust cache khi admin sửa creditLimit / ngày mở đóng
+  let sessionUpdatedAtMs = 0
+  let registerSessionSemesterStart: Date | null = null
+  if (sessionId) {
+    const registerSessionMeta = await prisma.classRegisterSession.findUnique({
+      where: { id: sessionId },
+      select: {
+        updatedAt: true,
+        semester: { select: { startDate: true } },
+      },
+    })
+    sessionUpdatedAtMs = registerSessionMeta?.updatedAt?.getTime() ?? 0
+    registerSessionSemesterStart = registerSessionMeta?.semester?.startDate ?? null
+  }
+
+  const cacheKey = classRegisterCache.studentKey(
+    session.id,
+    sessionId || "_",
+    sessionUpdatedAtMs || undefined
+  )
   const cached = await cacheGet<{
     userProfile: unknown
     student: unknown
@@ -1070,37 +1089,35 @@ app.openapi(getStudentInfo, async (c) => {
   let latestSemesterResult: {
     rank: { classification: string | null } | null
     baseScore: AcademicRankingBaseType | null
+    gpaBase4: Prisma.Decimal | null
+    gpaBase10: Prisma.Decimal | null
     cumulativeGpaBase4: Prisma.Decimal | null
     cumulativeGpaBase10: Prisma.Decimal | null
   } | null = null
 
-  if (sessionId) {
-    const registerSession = await prisma.classRegisterSession.findUnique({
-      where: { id: sessionId },
-      select: { semester: { select: { startDate: true } } },
-    })
-
-    if (registerSession?.semester?.startDate) {
-      // GPA/xếp loại hiển thị khi đăng ký học phải dựa trên kỳ đã hoàn thành gần nhất,
-      // không lấy dữ liệu kỳ hiện tại (có thể đang provisional/chưa chốt điểm).
-      latestSemesterResult = await prisma.studentSemesterResult.findFirst({
-        where: {
-          studentId,
-          semester: { startDate: { lt: registerSession.semester.startDate } },
-        },
-        orderBy: { semester: { startDate: "desc" } },
-        select: {
-          rank: {
-            select: {
-              classification: true,
-            },
+  if (sessionId && registerSessionSemesterStart) {
+    // Lấy đúng kỳ gần nhất đã hoàn thành trước kỳ đăng ký.
+    // Credit limit phải dựa trên GPA kỳ gần nhất (theo màn kết quả học tập),
+    // không dùng điểm tích lũy toàn khóa.
+    latestSemesterResult = await prisma.studentSemesterResult.findFirst({
+      where: {
+        studentId,
+        semester: { startDate: { lt: registerSessionSemesterStart } },
+      },
+      orderBy: { semester: { startDate: "desc" } },
+      select: {
+        rank: {
+          select: {
+            classification: true,
           },
-          baseScore: true,
-          cumulativeGpaBase4: true,
-          cumulativeGpaBase10: true,
         },
-      })
-    }
+        baseScore: true,
+        gpaBase4: true,
+        gpaBase10: true,
+        cumulativeGpaBase4: true,
+        cumulativeGpaBase10: true,
+      },
+    })
   }
 
   if (!latestSemesterResult) {
@@ -1114,6 +1131,8 @@ app.openapi(getStudentInfo, async (c) => {
           },
         },
         baseScore: true,
+        gpaBase4: true,
+        gpaBase10: true,
         cumulativeGpaBase4: true,
         cumulativeGpaBase10: true,
       },
@@ -1124,7 +1143,8 @@ app.openapi(getStudentInfo, async (c) => {
 
   if (sessionId && latestSemesterResult) {
     const maxCreditsSetting = await prisma.classRegisterSessionCredit.findMany({
-      where: { classRegisterSessionId: sessionId },
+      where: { classRegisterSessionId: sessionId, deletedAt: null },
+      orderBy: [{ base10Min: "asc" }, { base4Min: "asc" }],
     })
 
     if (maxCreditsSetting.length > 0) {
@@ -1132,14 +1152,16 @@ app.openapi(getStudentInfo, async (c) => {
         if (limit.baseScore !== latestSemesterResult.baseScore) return false
 
         if (limit.baseScore === AcademicRankingBaseType.Base10) {
-          const gpaBase10 = Number(latestSemesterResult.cumulativeGpaBase10) || 0
+          const gpaBase10 =
+            Number(latestSemesterResult.gpaBase10 ?? latestSemesterResult.cumulativeGpaBase10) || 0
           return (
             (limit.base10Min == null || gpaBase10 >= limit.base10Min) &&
             (limit.base10Max == null || gpaBase10 <= limit.base10Max)
           )
         }
 
-        const gpaBase4 = Number(latestSemesterResult.cumulativeGpaBase4) || 0
+        const gpaBase4 =
+          Number(latestSemesterResult.gpaBase4 ?? latestSemesterResult.cumulativeGpaBase4) || 0
         return (
           (limit.base4Min == null || gpaBase4 >= limit.base4Min) &&
           (limit.base4Max == null || gpaBase4 <= limit.base4Max)
@@ -1159,12 +1181,19 @@ app.openapi(getStudentInfo, async (c) => {
       ? {
           rank: latestSemesterResult.rank,
           baseScore: latestSemesterResult.baseScore,
-          cumulativeGpaBase4: latestSemesterResult.cumulativeGpaBase4
-            ? Number(latestSemesterResult.cumulativeGpaBase4)
-            : null,
-          cumulativeGpaBase10: latestSemesterResult.cumulativeGpaBase10
-            ? Number(latestSemesterResult.cumulativeGpaBase10)
-            : null,
+          // Giữ shape cũ cho FE, nhưng trả về GPA kỳ gần nhất.
+          cumulativeGpaBase4:
+            latestSemesterResult.gpaBase4 != null
+              ? Number(latestSemesterResult.gpaBase4)
+              : latestSemesterResult.cumulativeGpaBase4 != null
+                ? Number(latestSemesterResult.cumulativeGpaBase4)
+                : null,
+          cumulativeGpaBase10:
+            latestSemesterResult.gpaBase10 != null
+              ? Number(latestSemesterResult.gpaBase10)
+              : latestSemesterResult.cumulativeGpaBase10 != null
+                ? Number(latestSemesterResult.cumulativeGpaBase10)
+                : null,
         }
       : null,
     creditLimit: maxCredit != null ? { maxCredit } : null,
@@ -1287,6 +1316,57 @@ app.openapi(registrationStats, async (c) => {
     }
     return c.json({ message }, 400)
   }
+})
+
+const invalidateRegistrationCache = createRoute({
+  operationId: "invalidate-registration-cache",
+  path: "/invalidate-cache",
+  tags: ["ClassRegister"],
+  summary: "Xóa cache đăng ký học theo đợt",
+  description:
+    "Gọi sau khi admin sửa/đóng đợt đăng ký để SV thấy ngay ngày mở/đóng, khóa, creditLimit mới.",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            classRegisterSessionId: z.string().min(1),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Đã xóa cache",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+            deleted: z.number(),
+          }),
+        },
+      },
+    },
+    400: {
+      description: "Bad Request",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(invalidateRegistrationCache, async (c) => {
+  const { classRegisterSessionId } = c.req.valid("json")
+  if (!classRegisterSessionId) {
+    return c.json({ message: "Thiếu classRegisterSessionId" }, 400)
+  }
+  const { deleted } = await classRegisterCache.invalidateSession(classRegisterSessionId)
+  return c.json({ message: "Đã reset cache đăng ký học", deleted }, 200)
 })
 
 export default app

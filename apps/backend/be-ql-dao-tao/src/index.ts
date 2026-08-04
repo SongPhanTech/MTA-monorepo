@@ -23,6 +23,7 @@ import ExportThoiKhoaBieuApp from "./api/export-thoi-khoa-bieu"
 import ExportTemplateApp from "./api/export-template"
 import ExportTrainingDataApp from "./api/export-training-data"
 import ImportTrainingDataApp from "./api/import-training-data"
+import InvalidateClassRegisterCacheApp from "./api/invalidate-class-register-cache"
 import FixedClassApp from "./api/fixed-class"
 import GraduationApp from "./api/graduation"
 import GuestTeachingPaymentApp from "./api/guest-teaching-payment"
@@ -124,6 +125,7 @@ app.route("/api/thoi-khoa-bieu", ExportThoiKhoaBieuApp)
 app.route("/api/export-template", ExportTemplateApp)
 app.route("/api/export-training-data", ExportTrainingDataApp)
 app.route("/api/import-training-data", ImportTrainingDataApp)
+app.route("/api/class-register-session", InvalidateClassRegisterCacheApp)
 app.route("/api/version", VersionApp)
 const nv = await prisma.userProfile.findFirstOrThrow()
 

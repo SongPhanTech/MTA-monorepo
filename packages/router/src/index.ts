@@ -37,6 +37,7 @@ import {
   ArrowLeftRight,
 } from "lucide-react"
 import { CONG_SINH_VIEN_PERMISSION } from "../generated/cong-sinh-vien"
+import { CONG_HOC_VIEN_PERMISSION } from "../generated/cong-hoc-vien"
 import { KHAO_THI_PERMISSION } from "../generated/khao-thi"
 import { QL_DAO_TAO_PERMISSION } from "../generated/ql-dao-tao"
 import { QL_HO_SO_PERMISSION } from "../generated/ql-ho-so"
@@ -132,6 +133,67 @@ const NAVIGATION: NavigationType = {
         label: "Khảo sát",
         icon: BinocularsIcon,
         path: ROUTER_PATH.CONG_SINH_VIEN.KHAO_SAT,
+      },
+    ],
+  },
+  CONG_HOC_VIEN: {
+    label: "Cổng thông tin học viên",
+    menus: [
+      {
+        id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_HOME,
+        label: "Trang chủ",
+        icon: House,
+        path: ROUTER_PATH.CONG_HOC_VIEN.HOME,
+        description: "Thông tin thời khoá biểu, lịch thi, thông báo...",
+      },
+      {
+        id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_HO_SO_CA_NHAN,
+        label: "Hồ sơ cá nhân",
+        icon: User2Icon,
+        path: ROUTER_PATH.CONG_HOC_VIEN.HO_SO_CA_NHAN,
+      },
+      {
+        id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_THOI_KHOA_BIEU,
+        label: "Thời khoá biểu",
+        icon: CalendarRange,
+        path: ROUTER_PATH.CONG_HOC_VIEN.THOI_KHOA_BIEU,
+      },
+      {
+        id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_CHUONG_TRINH_DAO_TAO,
+        label: "Chương trình đào tạo",
+        icon: Library,
+        path: ROUTER_PATH.CONG_HOC_VIEN.CHUONG_TRINH_DAO_TAO,
+      },
+      {
+        id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_KET_QUA_HOC_TAP,
+        label: "Kết quả học tập",
+        icon: AwardIcon,
+        path: ROUTER_PATH.CONG_HOC_VIEN.KET_QUA_HOC_TAP,
+      },
+      {
+        id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_DANG_KY_HOC,
+        label: "Đăng ký học",
+        icon: CalendarRange,
+        path: ROUTER_PATH.CONG_HOC_VIEN.DANG_KY_HOC,
+      },
+      {
+        id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_LICH_SU_DANG_KY_HOC,
+        label: "Lịch sử đăng ký học",
+        icon: ScrollText,
+        path: ROUTER_PATH.CONG_HOC_VIEN.LICH_SU_DANG_KY_HOC,
+      },
+      // {
+      //   id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_DONG_BO_DU_LIEU,
+      //   label: "Đồng bộ dữ liệu",
+      //   icon: ArrowLeftRight,
+      //   path: ROUTER_PATH.CONG_HOC_VIEN.DONG_BO_DU_LIEU,
+      //   description: "Nhập/xuất dữ liệu giữa phần mềm nội bộ và cổng đăng ký học",
+      // },
+      {
+        id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_KHAO_SAT,
+        label: "Khảo sát",
+        icon: BinocularsIcon,
+        path: ROUTER_PATH.CONG_HOC_VIEN.KHAO_SAT,
       },
     ],
   },
@@ -1201,6 +1263,7 @@ const PUBLIC_ROUTER = [ROUTER_PATH.KHAO_THI.LAM_KHAO_SAT_ID.replace("[id]", "")]
 
 export {
   CONG_SINH_VIEN_PERMISSION,
+  CONG_HOC_VIEN_PERMISSION,
   KHAO_THI_PERMISSION,
   CONG_GIANG_VIEN_PERMISSION,
   PUBLIC_ROUTER,

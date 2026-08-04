@@ -15,6 +15,7 @@ import {
 } from "@workspace/db/hooks"
 import { useExportTrainingData } from "@workspace/libs/api/export-training-data"
 import { useImportTrainingData } from "@workspace/libs/api/import-training-data"
+import { invalidateRegistrationCaches } from "@workspace/libs/api/invalidate-class-register-cache"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
 import { Select, useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
@@ -156,6 +157,12 @@ export default function ClassRegisterSession() {
           deletedAt: new Date(),
         },
       })
+      try {
+        await invalidateRegistrationCaches(id)
+      } catch (cacheErr) {
+        console.warn("Không reset được cache cổng đăng ký", cacheErr)
+      }
+      message.success("Xóa thành công")
     } catch (error: any) {
       if (error?.info?.message) {
         message.error(error?.info?.message)
