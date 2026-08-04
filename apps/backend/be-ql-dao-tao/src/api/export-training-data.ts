@@ -32,11 +32,11 @@ const exportTrainingDataRoute = createRoute({
   path: "/export",
   method: "post",
   summary: "Xuất dữ liệu thô theo đợt đăng ký học",
-  description: `Xuất gói JSON theo 1 đợt đăng ký học online để migrate sang môi trường internet.
+  description: `Xuất gói JSON theo 1 đợt đăng ký học online để migrate sang môi trường internet (version 1.3.3).
 
 **Bảng danh mục:** toàn bộ bảng DM_* (mta, ql-ho-so), LecturerType, StaffType, StaffPosition, TrainingLanguage, TrainingType, TrainingLevel, TrainingForm, TrainingTime, DiplomaType, PriorityObject, TrainingField, AcademicRankingConvert, SubjectVersionCategory, LoadCategory, TemplateFile.
 
-**Bảng nghiệp vụ:** ClassRegisterSession, ClassRegisterSessionCredit, _ClassRegisterSessionToTrainingCourse, Student, UserProfile, Lecturer, TrainingObjectType, SchoolYear, Semester, TrainingCourse, Subject, SubjectVersion, SubjectClass, SubjectClassTime, FixedClass, _FixedClassToSubjectClass, Room, Building, TrainingLocation, TrainingMajor, Curriculum, CurriculumVersion, StudentSubjectScore, StudentSemesterResult, Exam, ClassSchedule.
+**Bảng nghiệp vụ:** ClassRegisterSession, ClassRegisterSessionCredit, _ClassRegisterSessionToTrainingCourse, Student, UserProfile, Lecturer, Staff, TrainingObjectType, SchoolYear, Semester (HK đợt + điểm/kết quả + semesterStart khóa), TrainingCourse, TrainingCourseRegulation, Subject, SubjectVersion, _PrerequisiteSubject, _CoRequisiteSubject, EquivalencyGroup, SubjectInGroup, TrainingBlock, TrainingBlockOnCurriculumVersion, TrainingBlockSubject, SubjectClass (kèm enrolledCount/version), SubjectClassTime, FixedClass, _FixedClassToSubjectClass, Room, Building, TrainingLocation, TrainingMajor, Curriculum, CurriculumVersion, StudentSubjectScore (điểm lịch sử SV khóa — null subjectClassId nếu lớp ngoài gói), StudentSemesterResult, Exam, ClassSchedule.
 
 **Tham số:** classRegisterSessionId.`,
   request: {

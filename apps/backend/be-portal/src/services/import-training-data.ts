@@ -1,7 +1,7 @@
 import { Prisma, type PrismaClient } from "@workspace/db"
 import { prisma } from ".."
 
-export const SUPPORTED_IMPORT_VERSIONS = ["1.3.0", "1.3.1", "1.3.2"] as const
+export const SUPPORTED_IMPORT_VERSIONS = ["1.3.0", "1.3.1", "1.3.2", "1.3.3"] as const
 
 type JsonRecord = Record<string, unknown>
 type ExportPayload = {
@@ -36,6 +36,8 @@ const NULLABLE_RISKY_FIELDS: Record<string, string[]> = {
   FixedClass: ["staffManagementId", "lecturerManagementId", ...FIXED_CLASS_ROLE_FIELDS],
   Student: ["trainingFieldId", "curriculumVersionParallelId"],
   ClassSchedule: ["originalScheduleId"],
+  StudentSubjectScore: ["subjectClassId", "examId"],
+  Staff: [],
   Lecturer: [],
 }
 
@@ -122,16 +124,23 @@ const BUSINESS_UPSERT_ORDER = [
   "SchoolYear",
   "Semester",
   "TrainingCourse",
+  "TrainingCourseRegulation",
   "TrainingLocation",
   "Building",
   "Room",
   "TrainingMajor",
   "Curriculum",
   "CurriculumVersion",
+  "TrainingBlock",
+  "TrainingBlockOnCurriculumVersion",
   "Subject",
   "SubjectVersion",
+  "TrainingBlockSubject",
+  "EquivalencyGroup",
+  "SubjectInGroup",
   "UserProfile",
   "Lecturer",
+  "Staff",
   "FixedClass",
   "Student",
   "Exam",
@@ -401,7 +410,11 @@ async function patchFixedClassRoles(rows: JsonRecord[], warnings: string[]): Pro
 }
 
 async function importJoinTable(
-  table: "_ClassRegisterSessionToTrainingCourse" | "_FixedClassToSubjectClass",
+  table:
+    | "_ClassRegisterSessionToTrainingCourse"
+    | "_FixedClassToSubjectClass"
+    | "_PrerequisiteSubject"
+    | "_CoRequisiteSubject",
   rows: Array<{ A?: string; B?: string }>,
   warnings: string[]
 ): Promise<number> {
@@ -541,6 +554,24 @@ export async function importTrainingDataFromJson(
   )
   if (fixedJoin > 0 || asRows(data, "_FixedClassToSubjectClass").length > 0) {
     steps.push({ table: "_FixedClassToSubjectClass", count: fixedJoin })
+  }
+
+  const prereqJoin = await importJoinTable(
+    "_PrerequisiteSubject",
+    asRows(data, "_PrerequisiteSubject") as Array<{ A?: string; B?: string }>,
+    warnings
+  )
+  if (prereqJoin > 0 || asRows(data, "_PrerequisiteSubject").length > 0) {
+    steps.push({ table: "_PrerequisiteSubject", count: prereqJoin })
+  }
+
+  const coreqJoin = await importJoinTable(
+    "_CoRequisiteSubject",
+    asRows(data, "_CoRequisiteSubject") as Array<{ A?: string; B?: string }>,
+    warnings
+  )
+  if (coreqJoin > 0 || asRows(data, "_CoRequisiteSubject").length > 0) {
+    steps.push({ table: "_CoRequisiteSubject", count: coreqJoin })
   }
 
   return {
