@@ -183,7 +183,7 @@ export function getCouncilExpertIdsExcludingField(
   return excluded
 }
 
-export function getCouncilMemberName(record: any, role: CouncilRole, thesisSessionId?: string) {
+export function getCouncilMemberName(record: any, role: CouncilRole, thesisSessionId?: string, rawText = false) {
   const member = getThesisProjectForSession(record, thesisSessionId)?.council?.members?.find(
     (m: CouncilMember) => m.role === role
   )
@@ -200,6 +200,7 @@ export function getCouncilMemberName(record: any, role: CouncilRole, thesisSessi
   const workplace = expert?.workplace || ""
   const text = [title, fullname].filter(Boolean).join(" ").trim()
   const textWithWorkplace = [text, workplace].filter(Boolean).join(", ")
+  if (rawText) return textWithWorkplace
   return (
     <span
       title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
@@ -419,6 +420,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       andConditions.push({
         OR: [
           { userProfile: { fullname: { contains: debouncedNameKeyword, mode: "insensitive" } } },
+          { code: { contains: debouncedNameKeyword, mode: "insensitive" } },
+          { fixedClass: { name: { contains: debouncedNameKeyword, mode: "insensitive" } } },
           {
             thesisRegistrations: {
               some: {
@@ -428,6 +431,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   thesisSessionId: searchParams.thesisSessionId,
                   thesisType: ThesisType.THESIS,
                   OR: [
+                    { title: { contains: debouncedNameKeyword, mode: "insensitive" } },
+                    { researchTopicAssociated: { contains: debouncedNameKeyword, mode: "insensitive" } },
                     {
                       supervisor: { name: { contains: debouncedNameKeyword, mode: "insensitive" } },
                     },
@@ -477,6 +482,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     }
     if (debouncedNameKeyword) {
       thesisProjectWhere.OR = [
+        { title: { contains: debouncedNameKeyword, mode: "insensitive" } },
+        { researchTopicAssociated: { contains: debouncedNameKeyword, mode: "insensitive" } },
         {
           supervisor: {
             name: { contains: debouncedNameKeyword, mode: "insensitive" },
@@ -524,6 +531,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
             fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
           },
         },
+        { code: { contains: debouncedNameKeyword, mode: "insensitive" } },
+        { fixedClass: { name: { contains: debouncedNameKeyword, mode: "insensitive" } } },
         {
           thesisRegistrations: {
             some: {
@@ -611,6 +620,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     skip: (currentPage - 1) * numberOfPages,
     take: numberOfPages,
   })
+  type StudentRow = (typeof students)[number]
   const { data: allStudentsInClasses = [], refetch: refetchAllStudentsInClasses } =
     useFindManyStudent({
       where: allStudentWhere,
@@ -862,7 +872,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     await Promise.all([refetchStudents(), refetchCount(), refetchAllStudentsInClasses()])
   }, [refetchStudents, refetchCount, refetchAllStudentsInClasses])
 
-  const handleDeleteStudentThesis = async (record: { id: string }) => {
+ const handleDeleteStudentThesis = async (record: StudentRow) => {
     const thesisSessionId = searchParams.thesisSessionId?.trim()
     if (!thesisSessionId) {
       message.warning("Vui lòng chọn đợt luận văn trước khi xóa.")
@@ -1774,15 +1784,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       }}
                     />
                   </Form.Item>
-                  {/* <Form.Item label="Tìm kiếm">
-                    <Input
-                      className="w-48"
+                  <Form.Item label="Tìm kiếm">
+                    <Input.Search
+                      className="w-64"
                       allowClear
+                      enterButton="Tìm kiếm"
                       value={nameKeyword}
-                      placeholder="Tên học viên / GVHD"
+                      placeholder=""
                       onChange={(e) => setNameKeyword(e.target.value)}
+                      onSearch={(val) => setNameKeyword(val)}
                     />
-                  </Form.Item> */}
+                  </Form.Item>
 
                   <Form.Item className="flex justify-end gap-3">
                     {role === "P7" && (
@@ -1980,7 +1992,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         </Col>
 
         <Col span={24}>
-          <Table
+          <Table<StudentRow>
             bordered
             scroll={{ x: "max-content" }}
             className={"mt-2"}
@@ -1993,6 +2005,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
             columns={[
               {
                 title: "Khoa quản lí",
+                sorter: (a: StudentRow, b: StudentRow) =>
+                  (getThesisProjectForSession(a, searchParams.thesisSessionId)?.organization?.sMa || "").localeCompare(
+                    getThesisProjectForSession(b, searchParams.thesisSessionId)?.organization?.sMa || ""
+                  ),
                 dataIndex: "organization",
                 width: 100,
                 fixed: "left",
@@ -2034,6 +2050,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Mã sinh viên",
+                sorter: (a: StudentRow, b: StudentRow) => (a?.code || "").localeCompare(b?.code || ""),
                 width: 120,
                 fixed: "left",
                 dataIndex: "code",
@@ -2044,6 +2061,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Họ tên học viên",
+                sorter: (a: StudentRow, b: StudentRow) => (a?.userProfile?.fullname || "").localeCompare(b?.userProfile?.fullname || ""),
                 width: 180,
                 fixed: "left",
                 dataIndex: "name",
@@ -2054,6 +2072,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Ngày sinh",
+                sorter: (a: StudentRow, b: StudentRow) => {
+                  const dateA = a?.userProfile?.dateOfBirth ? new Date(a.userProfile.dateOfBirth).getTime() : 0;
+                  const dateB = b?.userProfile?.dateOfBirth ? new Date(b.userProfile.dateOfBirth).getTime() : 0;
+                  return dateA - dateB;
+                },
                 width: 120,
                 dataIndex: "dateOfBirth",
                 align: "center",
@@ -2065,6 +2088,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Lớp quản lí ",
+                sorter: (a: StudentRow, b: StudentRow) => (a?.fixedClass?.name || "").localeCompare(b?.fixedClass?.name || ""),
                 width: 250,
                 dataIndex: "fixedClass",
                 align: "center",
@@ -2074,6 +2098,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Đề tài",
+                sorter: (a: StudentRow, b: StudentRow) => (getThesisProjectForSession(a, searchParams.thesisSessionId)?.title || "").localeCompare(getThesisProjectForSession(b, searchParams.thesisSessionId)?.title || ""),
                 width: 350,
                 // fixed: "left",
                 type: "input",
@@ -2109,6 +2134,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "GVHD 1",
+                sorter: (a: StudentRow, b: StudentRow) => {
+                  const valA = getSupervisorName(getThesisProjectForSession(a, searchParams.thesisSessionId)?.supervisor, false, false);
+                  const valB = getSupervisorName(getThesisProjectForSession(b, searchParams.thesisSessionId)?.supervisor, false, false);
+                  return String(valA || "").localeCompare(String(valB || ""));
+                },
                 width: 200,
                 type: "input",
                 dataIndex: "supervisor",
@@ -2180,6 +2210,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "GVHD 2",
+                sorter: (a: StudentRow, b: StudentRow) => {
+                  const valA = getSupervisorName(getThesisProjectForSession(a, searchParams.thesisSessionId)?.coSupervisor, false, false);
+                  const valB = getSupervisorName(getThesisProjectForSession(b, searchParams.thesisSessionId)?.coSupervisor, false, false);
+                  return String(valA || "").localeCompare(String(valB || ""));
+                },
                 width: 200,
                 // fixed: "left",
                 type: "input",
@@ -2251,6 +2286,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Gán với đề tài nghiên cứu",
+                sorter: (a: StudentRow, b: StudentRow)=> (getThesisProjectForSession(a, searchParams.thesisSessionId)?.researchTopicAssociated || "").localeCompare(getThesisProjectForSession(b, searchParams.thesisSessionId)?.researchTopicAssociated || ""),
                 width: 350,
                 dataIndex: "researchTopicAssociated",
                 render: (_, record) => {
@@ -2284,6 +2320,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Ngôn ngữ",
+                sorter: (a: StudentRow, b: StudentRow) => {
+                  const valA = getThesisProjectForSession(a, searchParams.thesisSessionId)?.language;
+                  const valB = getThesisProjectForSession(b, searchParams.thesisSessionId)?.language;
+                  const strA = typeof valA === 'object' ? (valA as any)?.language : valA;
+                  const strB = typeof valB === 'object' ? (valB as any)?.language : valB;
+                  return String(strA || "").localeCompare(String(strB || ""));
+                },
                 width: 100,
                 dataIndex: "language",
                 render: (_, record) => {
@@ -2309,6 +2352,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Luận văn/Đề án",
+                sorter: (a: StudentRow, b: StudentRow)=> (getThesisProjectForSession(a, searchParams.thesisSessionId)?.type || "").localeCompare(getThesisProjectForSession(b, searchParams.thesisSessionId)?.type || ""),
                 width: 130,
                 dataIndex: "type",
                 render: (_, record) => {
@@ -2340,6 +2384,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
               {
                 title: "Chủ tịch ",
+                sorter:(a: StudentRow, b: StudentRow) => String(getCouncilMemberName(a, CouncilRole.CHAIRMAN, searchParams.thesisSessionId, true)).localeCompare(String(getCouncilMemberName(b, CouncilRole.CHAIRMAN, searchParams.thesisSessionId, true))),
                 width: 200,
                 dataIndex: "councilChairman",
                 render: (_, record) => {
@@ -2410,6 +2455,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Thư ký",
+                sorter: (a: StudentRow, b: StudentRow) => String(getCouncilMemberName(a, CouncilRole.SECRETARY, searchParams.thesisSessionId, true)).localeCompare(String(getCouncilMemberName(b, CouncilRole.SECRETARY, searchParams.thesisSessionId, true))),
                 width: 200,
                 dataIndex: "councilSecretary",
                 render: (_, record) => {
@@ -2480,6 +2526,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Phản biện 1",
+                sorter: (a: StudentRow, b: StudentRow) => String(getCouncilMemberName(a, CouncilRole.REVIEWER_1, searchParams.thesisSessionId, true)).localeCompare(String(getCouncilMemberName(b, CouncilRole.REVIEWER_1, searchParams.thesisSessionId, true))),
                 width: 200,
                 dataIndex: "reviewer1",
                 render: (_, record) => {
@@ -2547,6 +2594,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Phản biện 2",
+                sorter: (a: StudentRow, b: StudentRow) => String(getCouncilMemberName(a, CouncilRole.REVIEWER_2, searchParams.thesisSessionId, true)).localeCompare(String(getCouncilMemberName(b, CouncilRole.REVIEWER_2, searchParams.thesisSessionId, true))),
                 width: 200,
                 dataIndex: "reviewer2",
                 render: (_, record) => {
@@ -2614,6 +2662,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Ủy viên",
+                sorter: (a: StudentRow, b: StudentRow) => String(getCouncilMemberName(a, CouncilRole.MEMBER, searchParams.thesisSessionId, true)).localeCompare(String(getCouncilMemberName(b, CouncilRole.MEMBER, searchParams.thesisSessionId, true))),
                 width: 200,
                 dataIndex: "councilMember",
                 render: (_, record) => {
@@ -2681,6 +2730,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Phòng bảo vệ",
+                sorter: (a: StudentRow, b: StudentRow) => (getThesisProjectForSession(a, searchParams.thesisSessionId)?.room?.name || "").localeCompare(getThesisProjectForSession(b, searchParams.thesisSessionId)?.room?.name || ""),
                 width: 150,
                 dataIndex: "room",
                 render: (text: string, record: any) => {
@@ -2722,6 +2772,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Ngày bảo vệ",
+                sorter: (a: StudentRow, b: StudentRow) => {
+                  const dateA = getThesisProjectForSession(a, searchParams.thesisSessionId)?.defenseDate ? new Date(getThesisProjectForSession(a, searchParams.thesisSessionId)!.defenseDate).getTime() : 0;
+                  const dateB = getThesisProjectForSession(b, searchParams.thesisSessionId)?.defenseDate ? new Date(getThesisProjectForSession(b, searchParams.thesisSessionId)!.defenseDate).getTime() : 0;
+                  return dateA - dateB;
+                },
                 width: 150,
                 dataIndex: "defenseDate",
                 render: (_, record) => {
@@ -2757,6 +2812,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
               {
                 title: "Thời gian bảo vệ",
+                sorter: (a: StudentRow, b: StudentRow) => formatDefenseSessionClock(getThesisProjectForSession(a, searchParams.thesisSessionId)?.defenseSession?.startTime).localeCompare(formatDefenseSessionClock(getThesisProjectForSession(b, searchParams.thesisSessionId)?.defenseSession?.startTime)),
                 width: 120,
                 dataIndex: "defenseSession",
                 render: (_, record) => {
@@ -2803,6 +2859,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Điểm",
+                sorter: (a: StudentRow, b: StudentRow) => (Number(getThesisProjectForSession(a, searchParams.thesisSessionId)?.defenseRecord?.finalScore) || 0) - (Number(getThesisProjectForSession(b, searchParams.thesisSessionId)?.defenseRecord?.finalScore) || 0),
                 width: 100,
                 align: "center",
                 dataIndex: "score",
@@ -2988,7 +3045,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             popConfirm={{
                               title: "Xóa luận văn/đề án",
                               description: "Xóa luận văn/đề án . Thao tác không thể hoàn tác.",
-                              onConfirm: () => handleDeleteStudentThesis(record),
+                              onConfirm: () => handleDeleteStudentThesis(record as StudentRow),
                             }}
                           />
                         </div>
