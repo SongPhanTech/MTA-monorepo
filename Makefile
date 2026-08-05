@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= mta_online
+SERVER_PROFILE ?= swan1
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
