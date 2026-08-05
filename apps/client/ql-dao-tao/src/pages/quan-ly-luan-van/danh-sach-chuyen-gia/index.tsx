@@ -38,6 +38,13 @@ export default function ExpertProfile() {
   const where = useMemo(
     () => ({
       thesisExpert: true,
+      deletedAt: null,
+      active: true,
+      AND: [
+        {
+          OR: [{ lecturerId: null }, { lecturer: { active: true } }],
+        },
+      ],
       ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" as const } } : {}),
       ...(filters.name ? { name: { contains: filters.name, mode: "insensitive" as const } } : {}),
       ...(filters.academicRank
@@ -132,10 +139,7 @@ export default function ExpertProfile() {
   })
 
   const { data: count } = useCountExpertProfile({
-    where: {
-      ...where,
-      deletedAt: null,
-    },
+    where,
   })
 
   const { onOpen } = useDisclosure<PutExpertProfileProps>({
