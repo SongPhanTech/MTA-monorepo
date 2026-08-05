@@ -256,6 +256,10 @@ app.openapi(getClassesInfo, async (c) => {
   const session = c.get("user")
   const { sessionId, curriculumVersionId, byCurriculum, isRegistered } = c.req.valid("query")
 
+  if (!sessionId?.trim() || !curriculumVersionId?.trim()) {
+    return c.json({ message: "Thiếu sessionId hoặc curriculumVersionId" }, 400)
+  }
+
   const rl = await rateLimitConsume(
     rateLimitKey("read", session.id),
     RATE_LIMIT.read.max,
@@ -283,9 +287,9 @@ app.openapi(getClassesInfo, async (c) => {
     isRegisteredBool
   )
   // CACHE-ASIDE: kiểm tra Redis trước — hit thì overlay sĩ số realtime rồi trả ngay,
-  // miss (hoặc Redis lỗi → cacheGet trả null) thì rơi xuống query DB bên dưới
+  // miss (hoặc Redis lỗi / payload lệch shape → cacheGet trả null) thì rơi xuống query DB
   const cached = await cacheGet<unknown>(cacheKey)
-  if (cached) {
+  if (Array.isArray(cached)) {
     await overlaySeats(sessionId, cached as ClassesInfoPayload)
     return c.json(cached, 200)
   }

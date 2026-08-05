@@ -4,7 +4,7 @@ import { CACHE_TTL, cacheGet, cacheSet, classRegisterCache } from "./redis-cache
 export const findClassRegisterSession = async (userId: string) => {
   const cacheKey = classRegisterCache.sessionKey(userId)
   const cached = await cacheGet<Awaited<ReturnType<typeof loadClassRegisterSession>>>(cacheKey)
-  if (cached) return cached
+  if (Array.isArray(cached)) return cached
 
   const sessions = await loadClassRegisterSession(userId)
   await cacheSet(cacheKey, sessions, CACHE_TTL.session)

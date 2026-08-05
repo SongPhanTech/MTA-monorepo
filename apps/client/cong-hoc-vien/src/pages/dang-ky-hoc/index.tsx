@@ -22,9 +22,14 @@ export default function DangKyHocPage() {
     return <Loading />
   }
 
+  const sessions =
+    classRegisterSession?.status === 200 && Array.isArray(classRegisterSession.data)
+      ? classRegisterSession.data
+      : []
+
   return (
     <div>
-      {classRegisterSession?.status !== 200 || classRegisterSession.data.length === 0 ? (
+      {sessions.length === 0 ? (
         <center>
           <b className="text-lg">{"Tạm ngừng đăng ký học. Vui lòng quay lại sau!"}</b>
         </center>
@@ -32,29 +37,29 @@ export default function DangKyHocPage() {
         <Tabs
           hideAdd
           type="card"
-          items={
-            classRegisterSession?.data?.map((session) => ({
-              label: [
-                session?.name,
-                session?.semester?.name,
-                session?.semester?.schoolYear?.name,
-              ].join(" - "),
-              key: session?.id,
-              children: (
-                <DanhSachMonDangKy
-                  sessionId={session?.id}
-                  curriculumVersions={session?.curriculumVersions?.map((cv) => ({
-                    id: cv?.id ?? "",
-                    name: cv?.name ?? "",
-                    code: cv?.code ?? "",
+          items={sessions.map((session) => ({
+            label: [
+              session?.name,
+              session?.semester?.name,
+              session?.semester?.schoolYear?.name,
+            ].join(" - "),
+            key: session?.id,
+            children: (
+              <DanhSachMonDangKy
+                sessionId={session?.id}
+                curriculumVersions={(session?.curriculumVersions ?? [])
+                  .filter((cv): cv is NonNullable<typeof cv> => Boolean(cv?.id))
+                  .map((cv) => ({
+                    id: cv.id ?? "",
+                    name: cv.name ?? "",
+                    code: cv.code ?? "",
                   }))}
-                  endDate={session?.endDate}
-                  creditLimit={session?.creditLimit}
-                  tuitionPerCredit={session?.tuitionPerCredit}
-                />
-              ),
-            })) || []
-          }
+                endDate={session?.endDate}
+                creditLimit={session?.creditLimit ?? []}
+                tuitionPerCredit={session?.tuitionPerCredit}
+              />
+            ),
+          }))}
         />
       )}
     </div>
