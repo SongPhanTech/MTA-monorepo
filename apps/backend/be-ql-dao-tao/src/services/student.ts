@@ -62,6 +62,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
               sTen: true,
             },
           },
+          provinceOfBirth: { select: { sTen: true } },
           nationality: { select: { sTen: true } },
           officerNumber: true,
           rank: { select: { sTen: true } },
@@ -165,7 +166,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
       officerNumber: student.userProfile.officerNumber,
       rank: student.userProfile.rank?.sTen,
       chucvu: student.userProfile.chucVuChinhQuyen?.sTen,
-
+      provinceOfBirth: student.userProfile.provinceOfBirth?.sTen,
       department: student.department,
       departmentAddress: student.departmentAddress,
       priorityReason: student.priorityReason,
