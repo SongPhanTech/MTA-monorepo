@@ -76,6 +76,7 @@ import {
   exportThongKeCoQuanDonViCanBoNgoaiHv,
 } from "@/utils/thesis-excel"
 import type { FilterProps } from "@constants/type"
+import type { ExpertProfileLike, PersonLike } from "@/utils/thesis-profile"
 
 export function formatDefenseSessionClock(startTime: Date | string | null | undefined): string {
   if (startTime === null || startTime === undefined) {
@@ -100,9 +101,43 @@ export interface DanhMucLuanVanProps {
   role?: "P7" | "Khoa"
 }
 
-export function getThesisRegistrationForSession(studentOrRecord: any, thesisSessionId?: string) {
+/** StudentRow: shape tối thiểu cần thiết cho các hàm helper trong trang này */
+export type StudentRow = {
+  id?: string
+  thesisRegistrations?: Array<{
+    deletedAt?: string | Date | null
+    thesisProject?: {
+      deletedAt?: string | Date | null
+      thesisSessionId?: string | null
+      thesisSession?: { id?: string | null } | null
+      supervisor?: PersonLike | null
+      supervisorName?: string | null
+      primarySupervisor?: PersonLike | null
+      coSupervisor?: PersonLike | null
+      coSupervisorName?: string | null
+      secondarySupervisor?: PersonLike | null
+      thirdSupervisor?: PersonLike | null
+      council?: {
+        members?: Array<{
+          role?: string | null
+          expert?: PersonLike | null
+        }> | null
+      } | null
+      CHUTICH?: string | null
+      THUKY?: string | null
+      PHANBIEN1?: string | null
+      PHANBIEN2?: string | null
+      UYVIEN3?: string | null
+      [key: string]: unknown
+    } | null
+    [key: string]: unknown
+  }> | null
+  [key: string]: unknown
+}
+
+export function getThesisRegistrationForSession(studentOrRecord: StudentRow, thesisSessionId?: string) {
   if (!thesisSessionId) return undefined
-  return studentOrRecord?.thesisRegistrations?.find((reg: any) => {
+  return studentOrRecord?.thesisRegistrations?.find((reg) => {
     if (reg?.deletedAt) return false
     const project = reg?.thesisProject
     if (!project || project.deletedAt) return false
@@ -112,7 +147,7 @@ export function getThesisRegistrationForSession(studentOrRecord: any, thesisSess
   })
 }
 
-export function getThesisProjectForSession(studentOrRecord: any, thesisSessionId?: string) {
+export function getThesisProjectForSession(studentOrRecord: StudentRow, thesisSessionId?: string) {
   return getThesisRegistrationForSession(studentOrRecord, thesisSessionId)?.thesisProject
 }
 
@@ -183,37 +218,96 @@ export function getCouncilExpertIdsExcludingField(
   return excluded
 }
 
+export function formatPersonNameWithWorkplace(
+  person: ExpertProfileLike | PersonLike | string | null | undefined,
+  allExperts: ExpertProfileLike[] = []
+): { textWithWorkplace: string; inAcademy: boolean } {
+  if (!person) return { textWithWorkplace: "", inAcademy: true }
+
+  const cleanTitle = (str: string) =>
+    str.replace(/^(GS|PGS|TS|ThS|KS|CN|BS|Thạc sĩ|Tiến sĩ|Giáo sư|Phó giáo sư)\.?:?\s*/gi, "").trim().toLowerCase()
+
+  if (typeof person === "string") {
+    const trimmed = person.trim()
+    if (!trimmed) return { textWithWorkplace: "", inAcademy: true }
+    const cleanedTrimmed = cleanTitle(trimmed)
+
+    const matched = allExperts.find((e) => {
+      const p = e?.lecturer?.userProfile
+      const rank = p?.academicRankType?.sMa || e?.academicRankType?.sMa || ""
+      const degree = p?.academicDegreeType?.sMa || e?.academicDegreeType?.sMa || ""
+      const title = [rank, degree].filter(Boolean).join(".")
+      const fullname = e?.name || p?.fullname || ""
+      const fullStr = [title, fullname].filter(Boolean).join(" ").trim()
+      const cleanedFullname = cleanTitle(fullname)
+      return (
+        fullname.toLowerCase() === trimmed.toLowerCase() ||
+        fullStr.toLowerCase() === trimmed.toLowerCase() ||
+        (cleanedFullname && cleanedTrimmed === cleanedFullname) ||
+        (fullname.length > 3 && trimmed.toLowerCase().includes(fullname.toLowerCase()))
+      )
+    })
+
+    if (matched) {
+      const inAcad = !!(matched as ExpertProfileLike).lecturerId
+      const wp = matched.workplace || ""
+      const textWithWp = [trimmed, wp].filter(Boolean).join(", ")
+      return { textWithWorkplace: textWithWp, inAcademy: inAcad }
+    }
+
+    return { textWithWorkplace: trimmed, inAcademy: true }
+  }
+
+  const expertPerson = person as ExpertProfileLike
+  const profile = expertPerson?.lecturer?.userProfile
+  const rank = profile?.academicRankType?.sMa || expertPerson?.academicRankType?.sMa || ""
+  const degree = profile?.academicDegreeType?.sMa || expertPerson?.academicDegreeType?.sMa || ""
+  const title = [rank, degree].filter(Boolean).join(".")
+  const fullname = expertPerson?.name || profile?.fullname || ""
+  const inAcademy = !!expertPerson?.lecturerId
+  let workplace = expertPerson?.workplace || ""
+
+  if (!inAcademy && !workplace && allExperts.length) {
+    const cleanedFullname = cleanTitle(fullname)
+    const matched = allExperts.find((e) => {
+      if (e.id === expertPerson.id) return true
+      const eName = e.name || e?.lecturer?.userProfile?.fullname || ""
+      return eName === fullname || (cleanedFullname && cleanTitle(eName) === cleanedFullname)
+    })
+    if (matched?.workplace) workplace = matched.workplace
+  }
+
+  const text = [title, fullname].filter(Boolean).join(" ").trim() || fullname
+  const textWithWorkplace = [text, workplace].filter(Boolean).join(", ")
+
+  return { textWithWorkplace, inAcademy }
+}
+
 export function getCouncilMemberName(
-  record: any,
+  record: StudentRow,
   role: CouncilRole,
   thesisSessionId?: string,
   rawText = false,
-  searchKeyword = ""
+  searchKeyword = "",
+  allExperts: ExpertProfileLike[] = []
 ) {
   const project = getThesisProjectForSession(record, thesisSessionId)
-  const member = project?.council?.members?.find((m: CouncilMember) => m.role === role)
+  const member = project?.council?.members?.find((m) => m.role === role)
 
-  let textWithWorkplace = ""
-  let inAcademy = false
-
-  if (member) {
-    const expert = member.expert
-    const profile = expert?.lecturer?.userProfile
-    const rank = profile?.academicRankType?.sMa || expert?.academicRankType?.sMa || ""
-    const degree = profile?.academicDegreeType?.sMa || expert?.academicDegreeType?.sMa || ""
-    const title = [rank, degree].filter(Boolean).join(".")
-    const fullname = expert?.name || profile?.fullname || ""
-    inAcademy = expert?.lecturerId ? true : false
-    const workplace = expert?.workplace || ""
-    const text = [title, fullname].filter(Boolean).join(" ").trim()
-    textWithWorkplace = [text, workplace].filter(Boolean).join(", ")
+  let personTarget: PersonLike | string | null = null
+  if (member?.expert) {
+    personTarget = member.expert
   } else if (project) {
-    if (role === CouncilRole.CHAIRMAN) textWithWorkplace = project.CHUTICH || ""
-    else if (role === CouncilRole.SECRETARY) textWithWorkplace = project.THUKY || ""
-    else if (role === CouncilRole.REVIEWER_1) textWithWorkplace = project.PHANBIEN1 || ""
-    else if (role === CouncilRole.REVIEWER_2) textWithWorkplace = project.PHANBIEN2 || ""
-    else if (role === CouncilRole.MEMBER) textWithWorkplace = project.UYVIEN3 || ""
+    if (role === CouncilRole.CHAIRMAN) personTarget = project.CHUTICH ?? null
+    else if (role === CouncilRole.SECRETARY) personTarget = project.THUKY ?? null
+    else if (role === CouncilRole.REVIEWER_1) personTarget = project.PHANBIEN1 ?? null
+    else if (role === CouncilRole.REVIEWER_2) personTarget = project.PHANBIEN2 ?? null
+    else if (role === CouncilRole.MEMBER) personTarget = project.UYVIEN3 ?? null
   }
+
+  if (!personTarget) return ""
+
+  const { textWithWorkplace, inAcademy } = formatPersonNameWithWorkplace(personTarget, allExperts)
 
   if (!textWithWorkplace) return ""
   if (rawText) return textWithWorkplace
@@ -235,24 +329,19 @@ export function getCouncilMemberName(
     </span>
   )
 }
+
 export function getSupervisorName(
-  record: any,
+  record: ExpertProfileLike | PersonLike | null | undefined,
   htmlRender = false,
   showWorkplace = false,
-  searchKeyword = ""
+  searchKeyword = "",
+  allExperts: ExpertProfileLike[] = []
 ) {
-  const expert = record
-  if (!expert) return ""
+  if (!record) return ""
 
-  const profile = expert?.lecturer?.userProfile
-  const rank = profile?.academicRankType?.sMa || expert?.academicRankType?.sMa || ""
-  const degree = profile?.academicDegreeType?.sMa || expert?.academicDegreeType?.sMa || ""
-  const title = [rank, degree].filter(Boolean).join(".")
-  const fullname = expert?.name || profile?.fullname || ""
-  const inAcademy = expert?.lecturerId ? true : false
-  const workplace = expert?.workplace || ""
-  const text = [title, fullname].filter(Boolean).join(" ").trim()
-  const textWithWorkplace = [text, showWorkplace ? workplace : ""].filter(Boolean).join(", ")
+  const { textWithWorkplace, inAcademy } = formatPersonNameWithWorkplace(record, allExperts)
+
+  if (!textWithWorkplace) return ""
   if (!htmlRender) return textWithWorkplace
 
   const kw = searchKeyword ? searchKeyword.trim().toLowerCase() : ""
@@ -274,7 +363,7 @@ export function getSupervisorName(
 }
 
 export function getMatchedLecturerRoles(
-  record: any,
+  record: StudentRow,
   thesisSessionId: string | undefined,
   keyword: string
 ): string[] {
@@ -290,11 +379,11 @@ export function getMatchedLecturerRoles(
     return str.toLowerCase().includes(kw)
   }
 
-  const isPersonMatch = (personAny?: any, fallbackName?: string | null) => {
+  const isPersonMatch = (person?: PersonLike | null, fallbackName?: string | null) => {
     if (fallbackName && isMatch(fallbackName)) return true
-    if (!personAny) return false
-    if (isMatch(personAny.name)) return true
-    const profile = personAny.lecturer?.userProfile || personAny.userProfile
+    if (!person) return false
+    if (isMatch(person.name)) return true
+    const profile = person.lecturer?.userProfile || person.userProfile
     if (isMatch(profile?.fullname)) return true
     const combined = `${profile?.lastName || ""} ${profile?.firstName || ""}`.trim()
     if (combined && isMatch(combined)) return true
@@ -2321,7 +2410,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     searchParams.thesisSessionId
                   )?.supervisor
 
-                  return getSupervisorName(supervisor, true, true, debouncedNameKeyword)
+                  return getSupervisorName(supervisor, true, true, debouncedNameKeyword, expertProfileData)
                 },
               },
               {
@@ -2397,7 +2486,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     record,
                     searchParams.thesisSessionId
                   )?.coSupervisor
-                  return getSupervisorName(coSupervisor, true, true, debouncedNameKeyword)
+                  return getSupervisorName(coSupervisor, true, true, debouncedNameKeyword, expertProfileData)
                 },
               },
               {
@@ -2567,7 +2656,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     CouncilRole.CHAIRMAN,
                     searchParams.thesisSessionId,
                     false,
-                    debouncedNameKeyword
+                    debouncedNameKeyword,
+                    expertProfileData
                   )
                 },
               },
@@ -2640,7 +2730,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     CouncilRole.SECRETARY,
                     searchParams.thesisSessionId,
                     false,
-                    debouncedNameKeyword
+                    debouncedNameKeyword,
+                    expertProfileData
                   )
                 },
               },
@@ -2710,7 +2801,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     CouncilRole.REVIEWER_1,
                     searchParams.thesisSessionId,
                     false,
-                    debouncedNameKeyword
+                    debouncedNameKeyword,
+                    expertProfileData
                   )
                 },
               },
@@ -2780,7 +2872,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     CouncilRole.REVIEWER_2,
                     searchParams.thesisSessionId,
                     false,
-                    debouncedNameKeyword
+                    debouncedNameKeyword,
+                    expertProfileData
                   )
                 },
               },
@@ -2850,7 +2943,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     CouncilRole.MEMBER,
                     searchParams.thesisSessionId,
                     false,
-                    debouncedNameKeyword
+                    debouncedNameKeyword,
+                    expertProfileData
                   )
                 },
               },

@@ -30,6 +30,11 @@ export interface PersonLike {
   [key: string]: unknown
 }
 
+export interface ExpertProfileLike extends PersonLike {
+  id?: string | null
+  lecturerId?: string | null
+}
+
 export interface CouncilMemberLike {
   role?: CouncilRole | string | null
   expert?: PersonLike | null
