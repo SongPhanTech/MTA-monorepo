@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= swan1
+SERVER_PROFILE ?= app
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -117,8 +117,11 @@ PKG_CONG_SINH_VIEN := cong-sinh-vien
 
 # Maps for build types (backend/frontend)
 BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL) $(PKG_BE_DAO_TAO_SHARED) $(PKG_BE_EXCHANGE)
+BE_SERVICES := $(foreach pkg,$(BE_PKGS),$(IMG_PREFIX)$(pkg))
 # FE_PKGS := $(PKG_DAO_TAO) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_DANG_KY_HOC)
 FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_CONG_HOC_VIEN) $(PKG_CONG_GIANG_VIEN) $(PKG_CONG_SINH_VIEN)
+# App có build/package nhưng chưa có service trên docker-compose server (vd. cong-hoc-vien)
+FE_DEPLOY_PKGS := $(filter-out $(PKG_CONG_HOC_VIEN),$(FE_PKGS))
 
 # Client App Mappings
 CDN_NAME_ql-dao-tao = lms-cdn
@@ -135,6 +138,10 @@ CDN_NAME_khao-thi = ems-cdn
 ROUTER_NAME_khao-thi = ems
 CDN_NAME_cong-giang-vien = cong-giang-vien-cdn
 ROUTER_NAME_cong-giang-vien = cong-giang-vien
+
+# Danh sách thư mục CDN + service compose (dùng cho deploy-cdn, tránh docker compose down xóa fe_default)
+FE_CDN_DIRS := $(foreach pkg,$(FE_PKGS),$(CDN_NAME_$(pkg)))
+FE_CDN_SERVICES := $(foreach pkg,$(FE_DEPLOY_PKGS),mta-$(CDN_NAME_$(pkg)) router-$(ROUTER_NAME_$(pkg))-api)
 
 # Per-app URL suffix appended to FE_APP_URL → NEXT_PUBLIC_APP_URL
 # Format: <domain from profile><suffix below>  e.g. https://mta.swantech.vn/lms/home
@@ -229,12 +236,13 @@ package-cdn:
 deploy-cdn:
 	$(SCP) -O cdn.zip $(SERVER_HOST):$(FE_APP_DIR)/
 	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
-	docker compose -f $(FE_COMPOSE_FILE) down && \
-	rm -rf chatbot-cdn cong-giang-vien-cdn cong-sinh-vien-cdn cong-hoc-vien-cdn lms-cdn ems-cdn hrm-cdn  && \
+	docker compose -f $(FE_COMPOSE_FILE) stop $(FE_CDN_SERVICES) 2>/dev/null || true && \
+	docker compose -f $(FE_COMPOSE_FILE) rm -f $(FE_CDN_SERVICES) 2>/dev/null || true && \
+	rm -rf $(FE_CDN_DIRS) && \
 	unzip -q -o cdn.zip && \
 	mv -f cdn/* . && \
 	rm -rf cdn && \
-	docker compose -f $(FE_COMPOSE_FILE) up -d"
+	docker compose -f $(FE_COMPOSE_FILE) up -d $(FE_CDN_SERVICES)"
 
 deploy-all-be:
 	@rm -rf docker-images.zip
@@ -244,8 +252,7 @@ deploy-all-be:
 	unzip -o docker-images.zip && \
 	cd docker-images && ls *.tar.gz | xargs -I {} docker load -i {} && \
 	cd $(BE_APP_DIR) && \
-	docker rm -f mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared $(IMG_PREFIX)be-exchange $(IMG_PREFIX)be-khao-thi $(IMG_PREFIX)be-model $(IMG_PREFIX)be-portal $(IMG_PREFIX)be-ql-dao-tao $(IMG_PREFIX)be-ql-dao-tao-shared && \
-	docker compose up -d"
+	docker compose up -d --force-recreate $(BE_SERVICES)"
 # deploy-be-%: build-%
 # 	@mkdir -p docker-images
 # 	$(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$*.tar.gz

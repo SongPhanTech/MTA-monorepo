@@ -23,6 +23,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
       },
     },
   })
+  console.log("test log export ")
 
   const students = await prisma.student.findMany({
     where: { fixedClass: { trainingCourseId } },
