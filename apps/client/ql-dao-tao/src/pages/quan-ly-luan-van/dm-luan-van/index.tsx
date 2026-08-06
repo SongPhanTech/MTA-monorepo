@@ -32,7 +32,7 @@ import {
   importCouncilFromExcel,
 } from "@workspace/libs/api/thesis"
 import { whereOrganization } from "@workspace/libs/constants"
-import { WalletOutlined } from "@ant-design/icons"
+import { SearchOutlined, WalletOutlined } from "@ant-design/icons"
 import { dayjs, useTrainingObjectTypeStore } from "@workspace/ui"
 import {
   Button,
@@ -183,34 +183,64 @@ export function getCouncilExpertIdsExcludingField(
   return excluded
 }
 
-export function getCouncilMemberName(record: any, role: CouncilRole, thesisSessionId?: string, rawText = false) {
-  const member = getThesisProjectForSession(record, thesisSessionId)?.council?.members?.find(
-    (m: CouncilMember) => m.role === role
-  )
+export function getCouncilMemberName(
+  record: any,
+  role: CouncilRole,
+  thesisSessionId?: string,
+  rawText = false,
+  searchKeyword = ""
+) {
+  const project = getThesisProjectForSession(record, thesisSessionId)
+  const member = project?.council?.members?.find((m: CouncilMember) => m.role === role)
 
-  if (!member) return ""
+  let textWithWorkplace = ""
+  let inAcademy = false
 
-  const expert = member.expert
-  const profile = expert?.lecturer?.userProfile
-  const rank = profile?.academicRankType?.sMa || expert?.academicRankType?.sMa || ""
-  const degree = profile?.academicDegreeType?.sMa || expert?.academicDegreeType?.sMa || ""
-  const title = [rank, degree].filter(Boolean).join(".")
-  const fullname = expert?.name || profile?.fullname || ""
-  const inAcademy = expert?.lecturerId ? true : false
-  const workplace = expert?.workplace || ""
-  const text = [title, fullname].filter(Boolean).join(" ").trim()
-  const textWithWorkplace = [text, workplace].filter(Boolean).join(", ")
+  if (member) {
+    const expert = member.expert
+    const profile = expert?.lecturer?.userProfile
+    const rank = profile?.academicRankType?.sMa || expert?.academicRankType?.sMa || ""
+    const degree = profile?.academicDegreeType?.sMa || expert?.academicDegreeType?.sMa || ""
+    const title = [rank, degree].filter(Boolean).join(".")
+    const fullname = expert?.name || profile?.fullname || ""
+    inAcademy = expert?.lecturerId ? true : false
+    const workplace = expert?.workplace || ""
+    const text = [title, fullname].filter(Boolean).join(" ").trim()
+    textWithWorkplace = [text, workplace].filter(Boolean).join(", ")
+  } else if (project) {
+    if (role === CouncilRole.CHAIRMAN) textWithWorkplace = project.CHUTICH || ""
+    else if (role === CouncilRole.SECRETARY) textWithWorkplace = project.THUKY || ""
+    else if (role === CouncilRole.REVIEWER_1) textWithWorkplace = project.PHANBIEN1 || ""
+    else if (role === CouncilRole.REVIEWER_2) textWithWorkplace = project.PHANBIEN2 || ""
+    else if (role === CouncilRole.MEMBER) textWithWorkplace = project.UYVIEN3 || ""
+  }
+
+  if (!textWithWorkplace) return ""
   if (rawText) return textWithWorkplace
+
+  const kw = searchKeyword ? searchKeyword.trim().toLowerCase() : ""
+  const isMatched = kw ? textWithWorkplace.toLowerCase().includes(kw) : false
+
   return (
     <span
       title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
-      style={{ color: inAcademy ? "#000000" : "#16a34a" }}
+      className={
+        isMatched
+          ? "bg-yellow-200 border border-yellow-400 text-yellow-950 font-bold px-2 py-0.5 rounded shadow-sm inline-block"
+          : undefined
+      }
+      style={!isMatched ? { color: inAcademy ? "#000000" : "#16a34a" } : undefined}
     >
       {textWithWorkplace}
     </span>
   )
 }
-export function getSupervisorName(record: any, htmlRender = false, showWorkplace = false) {
+export function getSupervisorName(
+  record: any,
+  htmlRender = false,
+  showWorkplace = false,
+  searchKeyword = ""
+) {
   const expert = record
   if (!expert) return ""
 
@@ -223,16 +253,91 @@ export function getSupervisorName(record: any, htmlRender = false, showWorkplace
   const workplace = expert?.workplace || ""
   const text = [title, fullname].filter(Boolean).join(" ").trim()
   const textWithWorkplace = [text, showWorkplace ? workplace : ""].filter(Boolean).join(", ")
-  return htmlRender ? (
+  if (!htmlRender) return textWithWorkplace
+
+  const kw = searchKeyword ? searchKeyword.trim().toLowerCase() : ""
+  const isMatched = kw ? textWithWorkplace.toLowerCase().includes(kw) : false
+
+  return (
     <span
       title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
-      style={{ color: inAcademy ? "#000000" : "#16a34a" }}
+      className={
+        isMatched
+          ? "bg-yellow-200 border border-yellow-400 text-yellow-950 font-bold px-2 py-0.5 rounded shadow-sm inline-block"
+          : undefined
+      }
+      style={!isMatched ? { color: inAcademy ? "#000000" : "#16a34a" } : undefined}
     >
       {textWithWorkplace}
     </span>
-  ) : (
-    textWithWorkplace
   )
+}
+
+export function getMatchedLecturerRoles(
+  record: any,
+  thesisSessionId: string | undefined,
+  keyword: string
+): string[] {
+  if (!keyword || !keyword.trim()) return []
+  const kw = keyword.trim().toLowerCase()
+  const project = getThesisProjectForSession(record, thesisSessionId)
+  if (!project) return []
+
+  const roles: string[] = []
+
+  const isMatch = (str?: string | null) => {
+    if (!str) return false
+    return str.toLowerCase().includes(kw)
+  }
+
+  const isPersonMatch = (personAny?: any, fallbackName?: string | null) => {
+    if (fallbackName && isMatch(fallbackName)) return true
+    if (!personAny) return false
+    if (isMatch(personAny.name)) return true
+    const profile = personAny.lecturer?.userProfile || personAny.userProfile
+    if (isMatch(profile?.fullname)) return true
+    const combined = `${profile?.lastName || ""} ${profile?.firstName || ""}`.trim()
+    if (combined && isMatch(combined)) return true
+    return false
+  }
+
+  if (
+    isPersonMatch(project.supervisor, project.supervisorName) ||
+    isPersonMatch(project.primarySupervisor)
+  ) {
+    roles.push("GVHD 1")
+  }
+
+  if (
+    isPersonMatch(project.coSupervisor, project.coSupervisorName) ||
+    isPersonMatch(project.secondarySupervisor)
+  ) {
+    roles.push("GVHD 2")
+  }
+
+  if (isPersonMatch(project.thirdSupervisor)) {
+    roles.push("CBHD khác")
+  }
+
+  if (project.council?.members?.length) {
+    for (const m of project.council.members) {
+      if (isPersonMatch(m.expert)) {
+        if (m.role === CouncilRole.CHAIRMAN) roles.push("Chủ tịch HĐ")
+        else if (m.role === CouncilRole.SECRETARY) roles.push("Thư ký HĐ")
+        else if (m.role === CouncilRole.REVIEWER_1) roles.push("Phản biện 1")
+        else if (m.role === CouncilRole.REVIEWER_2) roles.push("Phản biện 2")
+        else if (m.role === CouncilRole.MEMBER) roles.push("Ủy viên HĐ")
+      }
+    }
+  }
+
+  if (isMatch(project.CHUTICH) && !roles.includes("Chủ tịch HĐ")) roles.push("Chủ tịch HĐ")
+  if (isMatch(project.THUKY) && !roles.includes("Thư ký HĐ")) roles.push("Thư ký HĐ")
+  if (isMatch(project.PHANBIEN1) && !roles.includes("Phản biện 1")) roles.push("Phản biện 1")
+  if (isMatch(project.PHANBIEN2) && !roles.includes("Phản biện 2")) roles.push("Phản biện 2")
+  if (isMatch(project.UYVIEN3) && !roles.includes("Ủy viên HĐ")) roles.push("Ủy viên HĐ")
+
+  return Array.from(new Set(roles))
 }
 const { TextArea } = Input
 
@@ -417,11 +522,48 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     })
 
     if (debouncedNameKeyword) {
+      const containsKw = { contains: debouncedNameKeyword, mode: "insensitive" }
+      const expertKwFilter = {
+        OR: [
+          { name: containsKw },
+          { lecturer: { userProfile: { fullname: containsKw } } },
+        ],
+      }
+      const lecturerKwFilter = {
+        userProfile: { fullname: containsKw },
+      }
+
+      const thesisProjectKeywordConditions = [
+        { title: containsKw },
+        { researchTopicAssociated: containsKw },
+        { supervisorName: containsKw },
+        { coSupervisorName: containsKw },
+        { supervisor: expertKwFilter },
+        { coSupervisor: expertKwFilter },
+        { thirdSupervisor: expertKwFilter },
+        { primarySupervisor: lecturerKwFilter },
+        { secondarySupervisor: lecturerKwFilter },
+        { CHUTICH: containsKw },
+        { THUKY: containsKw },
+        { PHANBIEN1: containsKw },
+        { PHANBIEN2: containsKw },
+        { UYVIEN3: containsKw },
+        {
+          council: {
+            members: {
+              some: {
+                expert: expertKwFilter,
+              },
+            },
+          },
+        },
+      ]
+
       andConditions.push({
         OR: [
-          { userProfile: { fullname: { contains: debouncedNameKeyword, mode: "insensitive" } } },
-          { code: { contains: debouncedNameKeyword, mode: "insensitive" } },
-          { fixedClass: { name: { contains: debouncedNameKeyword, mode: "insensitive" } } },
+          { userProfile: { fullname: containsKw } },
+          { code: containsKw },
+          { fixedClass: { name: containsKw } },
           {
             thesisRegistrations: {
               some: {
@@ -430,36 +572,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   deletedAt: null,
                   thesisSessionId: searchParams.thesisSessionId,
                   thesisType: ThesisType.THESIS,
-                  OR: [
-                    { title: { contains: debouncedNameKeyword, mode: "insensitive" } },
-                    { researchTopicAssociated: { contains: debouncedNameKeyword, mode: "insensitive" } },
-                    {
-                      supervisor: { name: { contains: debouncedNameKeyword, mode: "insensitive" } },
-                    },
-                    {
-                      supervisor: {
-                        lecturer: {
-                          userProfile: {
-                            fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
-                          },
-                        },
-                      },
-                    },
-                    {
-                      coSupervisor: {
-                        name: { contains: debouncedNameKeyword, mode: "insensitive" },
-                      },
-                    },
-                    {
-                      coSupervisor: {
-                        lecturer: {
-                          userProfile: {
-                            fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
-                          },
-                        },
-                      },
-                    },
-                  ],
+                  OR: thesisProjectKeywordConditions,
                 },
               },
             },
@@ -474,6 +587,16 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   // biome-ignore lint/correctness/useExhaustiveDependencies: dùng cho searchParams
   const allStudentWhere = useMemo(() => {
     if (!searchParams.thesisSessionId) return { id: { in: [] } }
+    const containsKw = { contains: debouncedNameKeyword, mode: "insensitive" }
+    const expertKwFilter = {
+      OR: [
+        { name: containsKw },
+        { lecturer: { userProfile: { fullname: containsKw } } },
+      ],
+    }
+    const lecturerKwFilter = {
+      userProfile: { fullname: containsKw },
+    }
     const thesisProjectWhere: Record<string, any> = {
       deletedAt: null,
       thesisSessionId: searchParams.thesisSessionId,
@@ -482,32 +605,25 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     }
     if (debouncedNameKeyword) {
       thesisProjectWhere.OR = [
-        { title: { contains: debouncedNameKeyword, mode: "insensitive" } },
-        { researchTopicAssociated: { contains: debouncedNameKeyword, mode: "insensitive" } },
+        { title: containsKw },
+        { researchTopicAssociated: containsKw },
+        { supervisorName: containsKw },
+        { coSupervisorName: containsKw },
+        { supervisor: expertKwFilter },
+        { coSupervisor: expertKwFilter },
+        { thirdSupervisor: expertKwFilter },
+        { primarySupervisor: lecturerKwFilter },
+        { secondarySupervisor: lecturerKwFilter },
+        { CHUTICH: containsKw },
+        { THUKY: containsKw },
+        { PHANBIEN1: containsKw },
+        { PHANBIEN2: containsKw },
+        { UYVIEN3: containsKw },
         {
-          supervisor: {
-            name: { contains: debouncedNameKeyword, mode: "insensitive" },
-          },
-        },
-        {
-          supervisor: {
-            lecturer: {
-              userProfile: {
-                fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
-              },
-            },
-          },
-        },
-        {
-          coSupervisor: {
-            name: { contains: debouncedNameKeyword, mode: "insensitive" },
-          },
-        },
-        {
-          coSupervisor: {
-            lecturer: {
-              userProfile: {
-                fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+          council: {
+            members: {
+              some: {
+                expert: expertKwFilter,
               },
             },
           },
@@ -528,11 +644,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       OR: [
         {
           userProfile: {
-            fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+            fullname: containsKw,
           },
         },
-        { code: { contains: debouncedNameKeyword, mode: "insensitive" } },
-        { fixedClass: { name: { contains: debouncedNameKeyword, mode: "insensitive" } } },
+        { code: containsKw },
+        { fixedClass: { name: containsKw } },
         {
           thesisRegistrations: {
             some: {
@@ -1784,17 +1900,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       }}
                     />
                   </Form.Item>
-                  <Form.Item label="Tìm kiếm">
-                    <Input.Search
-                      className="w-64"
-                      allowClear
-                      enterButton="Tìm kiếm"
-                      value={nameKeyword}
-                      placeholder=""
-                      onChange={(e) => setNameKeyword(e.target.value)}
-                      onSearch={(val) => setNameKeyword(val)}
-                    />
-                  </Form.Item>
+
 
                   <Form.Item className="flex justify-end gap-3">
                     {role === "P7" && (
@@ -1952,6 +2058,16 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       Gán ngày
                     </Button>
                   )}
+                  <Form.Item className="mb-0" style={{ marginBottom: 0 }}>
+                    <Input
+                      className="w-64"
+                      allowClear
+                      prefix={<SearchOutlined className="text-gray-400" />}
+                      value={nameKeyword}
+                      placeholder="Tìm kiếm..."
+                      onChange={(e) => setNameKeyword(e.target.value)}
+                    />
+                  </Form.Item>
 
                   {role === "Khoa" && (
                     <Button
@@ -2205,7 +2321,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     searchParams.thesisSessionId
                   )?.supervisor
 
-                  return getSupervisorName(supervisor, true, true)
+                  return getSupervisorName(supervisor, true, true, debouncedNameKeyword)
                 },
               },
               {
@@ -2281,7 +2397,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     record,
                     searchParams.thesisSessionId
                   )?.coSupervisor
-                  return getSupervisorName(coSupervisor, true, true)
+                  return getSupervisorName(coSupervisor, true, true, debouncedNameKeyword)
                 },
               },
               {
@@ -2449,7 +2565,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   return getCouncilMemberName(
                     record,
                     CouncilRole.CHAIRMAN,
-                    searchParams.thesisSessionId
+                    searchParams.thesisSessionId,
+                    false,
+                    debouncedNameKeyword
                   )
                 },
               },
@@ -2520,7 +2638,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   return getCouncilMemberName(
                     record,
                     CouncilRole.SECRETARY,
-                    searchParams.thesisSessionId
+                    searchParams.thesisSessionId,
+                    false,
+                    debouncedNameKeyword
                   )
                 },
               },
@@ -2588,7 +2708,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   return getCouncilMemberName(
                     record,
                     CouncilRole.REVIEWER_1,
-                    searchParams.thesisSessionId
+                    searchParams.thesisSessionId,
+                    false,
+                    debouncedNameKeyword
                   )
                 },
               },
@@ -2656,7 +2778,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   return getCouncilMemberName(
                     record,
                     CouncilRole.REVIEWER_2,
-                    searchParams.thesisSessionId
+                    searchParams.thesisSessionId,
+                    false,
+                    debouncedNameKeyword
                   )
                 },
               },
@@ -2724,7 +2848,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   return getCouncilMemberName(
                     record,
                     CouncilRole.MEMBER,
-                    searchParams.thesisSessionId
+                    searchParams.thesisSessionId,
+                    false,
+                    debouncedNameKeyword
                   )
                 },
               },
