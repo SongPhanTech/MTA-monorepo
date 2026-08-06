@@ -132,11 +132,18 @@ export const ModalVanBang = () => {
                   Phôi mặt trước
                 </strong>
               </div>
-              <img
-                src={`${getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT")}/${data?.graduationDecision?.diplomaFront?.path}`}
-                alt={data?.graduationDecision?.diplomaFront?.name}
-                className={`w-full ${!checkedItems.front ? "print:hidden" : ""}`}
-              />
+              {data?.graduationDecision?.diplomaFront?.path ? (
+                <img
+                  src={`${getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT")}/${data.graduationDecision.diplomaFront.path}`}
+                  alt={data.graduationDecision.diplomaFront.name}
+                  className={`max-w-full h-auto mx-auto object-contain block ${!checkedItems.front ? "print:hidden" : ""}`}
+                  style={{ maxHeight: "25vh" }}
+                />
+              ) : (
+                <div className={`w-full h-24 flex items-center justify-center border border-dashed rounded text-gray-400 my-2 print:hidden ${!checkedItems.front ? "print:hidden" : ""}`}>
+                  Chưa tải lên phôi mặt trước
+                </div>
+              )}
             </div>
             <div className="flex flex-col">
               <div className="flex gap-2 w-full items-center">
@@ -154,11 +161,18 @@ export const ModalVanBang = () => {
                   Phôi mặt sau
                 </strong>
               </div>
-              <img
-                src={`${getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT")}/${data?.graduationDecision?.diplomaBack?.path}`}
-                alt={data?.graduationDecision?.diplomaBack?.name}
-                className={`w-full ${!checkedItems.back ? "print:hidden" : ""}`}
-              />
+              {data?.graduationDecision?.diplomaBack?.path ? (
+                <img
+                  src={`${getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT")}/${data.graduationDecision.diplomaBack.path}`}
+                  alt={data.graduationDecision.diplomaBack.name}
+                  className={`max-w-full h-auto mx-auto object-contain block ${!checkedItems.back ? "print:hidden" : ""}`}
+                  style={{ maxHeight: "25vh" }}
+                />
+              ) : (
+                <div className={`w-full h-24 flex items-center justify-center border border-dashed rounded text-gray-400 my-2 print:hidden ${!checkedItems.back ? "print:hidden" : ""}`}>
+                  Chưa tải lên phôi mặt sau
+                </div>
+              )}
             </div>
           </div>
 
