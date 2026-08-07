@@ -21,6 +21,7 @@ import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import {
   Alert,
   Button,
+  Checkbox,
   Col,
   Form,
   Input,
@@ -177,6 +178,7 @@ const PutSurveyModal = () => {
             endDate: output?.endDate ? output?.endDate.toISOString() : null,
             isPublic: output.isPublic,
             anonymous: output.anonymous,
+            targetEnrollStudentOnly: output.targetEnrollStudentOnly ?? false,
             subjectClassIds: output.subjectClassIds.length ? output.subjectClassIds : [],
             surveyChoices: output.surveyChoice,
             surveyQuestionIds: output.surveyQuestionIds,
@@ -534,6 +536,18 @@ const PutSurveyModal = () => {
                     </FormItem>
                   </Col>
                 )}
+                {input?.type === "multiple" && (
+                  <Col span={12}>
+                    <FormItem
+                      form={form}
+                      name="targetEnrollStudentOnly"
+                      valuePropName="checked"
+                      label="Giới hạn học viên làm khảo sát không?"
+                    >
+                      <Checkbox />
+                    </FormItem>
+                  </Col>
+                )}
               </Row>
             </Col>
           </Row>
@@ -610,6 +624,7 @@ const PutSurveyModal = () => {
         semesterId: semesterIdStore,
         isPublic: false,
         anonymous: false,
+        targetEnrollStudentOnly: false,
         surveyChoice: choices,
       })
     }

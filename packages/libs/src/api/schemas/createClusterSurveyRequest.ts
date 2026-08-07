@@ -66,6 +66,7 @@ export interface CreateClusterSurveyRequest {
   endDate?: string | null;
   isPublic?: boolean;
   anonymous?: boolean;
+  targetEnrollStudentOnly?: boolean;
   surveyTopicId: string;
   surveyObjectTypeIds?: string[];
   /** @minItems 1 */

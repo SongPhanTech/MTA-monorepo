@@ -296,15 +296,5 @@ export default function DetailSurveyPage() {
   )
 }
 DetailSurveyPage.getLayout = function getLayout(page: React.ReactNode) {
-  return (
-    <DefaultLayout
-      breadcrumbList={[
-        { title: "Thiết lập khảo sát" },
-        { title: "Đợt khảo sát", href: "thiet-lap-khao-sat/dot-khao-sat" },
-        { title: "Chi tiết khảo sát cụm" },
-      ]}
-    >
-      {page}
-    </DefaultLayout>
-  )
+  return <DefaultLayout>{page}</DefaultLayout>
 }
