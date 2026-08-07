@@ -288,7 +288,7 @@ export default function KeHoachGhepLopMonHoc() {
               select: {
                 curriculumVersion: {
                   select: {
-                    fixedClass: {
+                    fixedClasses: {
                       select: {
                         id: true,
                         code: true,
@@ -773,21 +773,18 @@ export default function KeHoachGhepLopMonHoc() {
                               </Tooltip>
                             </div>
                             <div className="flex h-fit">
-                              {record?.trainingBlocks?.map(
+                              {record?.trainingBlocks?.flatMap(
                                 // @ts-expect-error
-                                (block) => {
-                                  const fixedClass =
-                                    block.trainingBlockOnCurriculumVersion?.curriculumVersion
-                                      ?.fixedClass
-                                  return (
-                                    <FixedClassDragItem
-                                      subjectVersionId={record.id}
-                                      item={fixedClass}
-                                      key={fixedClass?.id}
-                                    />
-                                  )
-                                }
-                              )}
+                                (block) =>
+                                  block.trainingBlockOnCurriculumVersion?.curriculumVersion
+                                    ?.fixedClasses ?? []
+                              ).map((fixedClass) => (
+                                <FixedClassDragItem
+                                  subjectVersionId={record.id}
+                                  item={fixedClass}
+                                  key={fixedClass?.id}
+                                />
+                              ))}
                               {/* {record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map?.(
                                                                 (e: FixedClass) => (
                                                                     <FixedClassDragItem
@@ -808,10 +805,11 @@ export default function KeHoachGhepLopMonHoc() {
                       width: 80,
                       align: "center",
                       render: (_: any, record: any) => {
-                        const fixedClasses = record?.trainingBlocks.map(
+                        const fixedClasses = record?.trainingBlocks.flatMap(
                           // @ts-expect-error
                           (block) =>
-                            block?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClass
+                            block?.trainingBlockOnCurriculumVersion?.curriculumVersion
+                              ?.fixedClasses ?? []
                         )
                         return (
                           fixedClasses?.reduce(

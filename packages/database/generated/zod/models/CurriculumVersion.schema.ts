@@ -83,7 +83,7 @@ const relationSchema = z.object({
     outputStandardOnCurriculum: z.array(z.unknown()).optional(),
     documentFiles: z.array(z.unknown()).optional(),
     trainingBlocks: z.array(z.unknown()).optional(),
-    fixedClass: z.record(z.string(), z.unknown()).optional(),
+    fixedClasses: z.array(z.unknown()).optional(),
     students: z.array(z.unknown()).optional(),
     studentCurriculumVersionParallel: z.array(z.unknown()).optional(),
 }

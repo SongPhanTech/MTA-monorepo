@@ -86,10 +86,10 @@ const PutFixedClassModal = () => {
           trainingObjectTypeId,
           OR: [
             {
-              fixedClass: { is: null },
+              fixedClasses: { none: {} },
             },
             {
-              fixedClass: { id: id ?? undefined },
+              fixedClasses: { some: { id: id ?? undefined } },
             },
           ],
         },
@@ -101,14 +101,10 @@ const PutFixedClassModal = () => {
           trainingObjectTypeId,
           OR: [
             {
-              fixedClass: {
-                is: null,
-              },
+              fixedClasses: { none: {} },
             },
             {
-              fixedClass: {
-                id: id ?? undefined,
-              },
+              fixedClasses: { some: { id: id ?? undefined } },
             },
           ],
         },

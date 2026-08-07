@@ -68,7 +68,7 @@ export default function StudentFixedClassPage() {
               some: {
                 OR: [
                   {
-                    fixedClass: { id: fixedClassId },
+                    fixedClasses: { some: { id: fixedClassId } },
                   },
                   {
                     students: { some: { fixedClassId } },
@@ -97,7 +97,7 @@ export default function StudentFixedClassPage() {
                   some: {
                     OR: [
                       {
-                        fixedClass: { id: fixedClassId },
+                        fixedClasses: { some: { id: fixedClassId } },
                       },
                       {
                         students: { some: { fixedClassId } },
@@ -125,7 +125,7 @@ export default function StudentFixedClassPage() {
             students: { some: { fixedClassId } },
           },
           {
-            fixedClass: { id: fixedClassId },
+            fixedClasses: { some: { id: fixedClassId } },
           },
         ],
       },

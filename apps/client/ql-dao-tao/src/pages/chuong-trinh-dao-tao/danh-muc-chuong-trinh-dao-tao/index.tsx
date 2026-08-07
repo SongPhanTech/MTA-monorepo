@@ -159,8 +159,10 @@ export default function TrainingProgramCatalog() {
       }),
       ...(filters.trainingCourses &&
         filters.trainingCourses.length > 0 && {
-          fixedClass: {
-            trainingCourseId: { in: filters.trainingCourses },
+          fixedClasses: {
+            some: {
+              trainingCourseId: { in: filters.trainingCourses },
+            },
           },
         }),
       ...(filters.trainingTime && {
@@ -277,9 +279,11 @@ export default function TrainingProgramCatalog() {
           trainingObjectTypeId,
           ...(filters.trainingCourses && filters.trainingCourses.length > 0
             ? {
-                fixedClass: {
-                  trainingCourseId: {
-                    in: filters.trainingCourses,
+                fixedClasses: {
+                  some: {
+                    trainingCourseId: {
+                      in: filters.trainingCourses,
+                    },
                   },
                 },
               }
@@ -325,7 +329,7 @@ export default function TrainingProgramCatalog() {
           },
           trainingObjectType: true,
           documentFiles: true,
-          fixedClass: {
+          fixedClasses: {
             include: {
               trainingCourse: true,
             },
@@ -678,7 +682,14 @@ export default function TrainingProgramCatalog() {
                 align: "center",
                 width: 120,
                 render: (__, record) => {
-                  return record?.fixedClass?.trainingCourse?.name
+                  const courses = [
+                    ...new Set(
+                      record?.fixedClasses
+                        ?.map((fc) => fc?.trainingCourse?.name)
+                        .filter(Boolean) ?? []
+                    ),
+                  ]
+                  return courses.join(", ")
                 },
               },
               {

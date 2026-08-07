@@ -668,6 +668,8 @@ enum SurveyQuestionType {
 enum SurveyObject {
   MILITARY_STUDENT
   CIVILIAN_STUDENT
+  MILITARY_GRADUATE_STUDENT
+  CIVILIAN_GRADUATE_STUDENT
   LECTURER
   STAFF
 
@@ -3410,7 +3412,7 @@ model FixedClass {
   staffManagementId        String?
   students                 Student[]
   curriculumVersion        CurriculumVersion?   @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId      String?              @unique()
+  curriculumVersionId      String?
   classType                FixedClassType       @default(NORMAL)
   subjectClasses           SubjectClass[]
   notifications            Notification[]
@@ -3507,7 +3509,7 @@ model CurriculumVersion {
   outputStandardOnCurriculum       OutputStandardOnCurriculum[]
   documentFiles                    DocumentFile[]
   trainingBlocks                   TrainingBlockOnCurriculumVersion[]
-  fixedClass                       FixedClass?
+  fixedClasses                     FixedClass[]
   students                         Student[]                          @relation("CurriculumVersion")
   studentCurriculumVersionParallel Student[]                          @relation("CurriculumVersionParallel")
 

@@ -1751,6 +1751,8 @@
         "enum": [
           "MILITARY_STUDENT",
           "CIVILIAN_STUDENT",
+          "MILITARY_GRADUATE_STUDENT",
+          "CIVILIAN_GRADUATE_STUDENT",
           "LECTURER",
           "STAFF"
         ]
@@ -11310,13 +11312,11 @@
               "$ref": "#/components/schemas/TrainingBlockOnCurriculumVersion"
             }
           },
-          "fixedClass": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/FixedClass"
-              }
-            ],
-            "nullable": true
+          "fixedClasses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FixedClass"
+            }
           },
           "students": {
             "type": "array",
