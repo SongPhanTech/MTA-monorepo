@@ -6,7 +6,7 @@ import DefaultLayout from "@layouts/default-layout"
 import { useSession } from "@workspace/auth/react"
 import { useGetSurveysOfProfile } from "@workspace/libs/api/exam"
 import { useSemesterStore } from "@workspace/ui"
-import { Col, Row, Tag, Tooltip } from "antd"
+import { Col, Pagination, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { ArrowRight } from "lucide-react"
 import { useRouter } from "next/router"
@@ -91,19 +91,36 @@ export default function DetailSurveyPage() {
   //     }
   // )
 
-  const { data } = useGetSurveysOfProfile(profileId as string, {
-    page: currentPage,
-    limit: numberOfPages,
+  const filterParams = {
     name: filters.name,
     code: filters.code,
     subjectClassName: filters.subjectClassName,
     lecturerName: filters.lecturerName,
     semesterId,
+  }
+
+  const { data } = useGetSurveysOfProfile(profileId as string, {
+    page: currentPage,
+    limit: numberOfPages,
+    ...filterParams,
   })
+
+  const { data: statsData } = useGetSurveysOfProfile(
+    profileId as string,
+    { page: 1, limit: 100, ...filterParams },
+    { query: { enabled: !!profileId } }
+  )
 
   const { onOpen } = useDisclosure<{ userId: string; surveyId: string }>({
     tag: "ReviewSurveyModal",
   })
+
+  const totalCount = (data?.status === 200 && data?.data?.count) || 0
+  const doneCount = (
+    ((statsData?.status === 200 && statsData?.data?.data) || []) as {
+      surveySessions?: unknown[]
+    }[]
+  ).filter((item) => (item.surveySessions?.length ?? 0) > 0).length
 
   // const { data: count } = useCountSurvey({
   //     where: {
@@ -118,7 +135,7 @@ export default function DetailSurveyPage() {
             </Col> */}
       <Col span={24}>
         <Table
-          className="h-[calc(100vh-150px)]"
+          className="h-[calc(100vh-200px)]"
           filters={filters}
           setFilters={(value) => {
             setFilters(value)
@@ -255,6 +272,27 @@ export default function DetailSurveyPage() {
             },
           }}
         />
+        <div
+          className="mt-14 px-3 py-1 border rounded-md"
+          style={{
+            backgroundColor: "#f4fbf7",
+            borderColor: "#e1f2e8",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <span style={{ color: "#666" }}>Tổng số dòng:</span>{" "}
+            <strong style={{ color: "#111", fontWeight: "bold" }}>{totalCount}</strong>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ color: "#666" }}>Tổng đã làm:</span>{" "}
+            <strong style={{ color: "#009a5c", fontSize: 16, fontWeight: "bold" }}>
+              {doneCount}
+            </strong>
+          </div>
+        </div>
       </Col>
     </Row>
   )
