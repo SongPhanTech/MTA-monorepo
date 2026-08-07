@@ -175,6 +175,132 @@ const ModalChiTietSinhVien = () => {
           },
         },
         thesisRegistrations: {
+          where: { deletedAt: null },
+          include: {
+            thesisProject: {
+              include: {
+                primarySupervisor: {
+                  include: {
+                    userProfile: {
+                      include: {
+                        academicRankType: true,
+                        academicDegreeType: true,
+                      },
+                    },
+                  },
+                },
+                secondarySupervisor: {
+                  include: {
+                    userProfile: {
+                      include: {
+                        academicRankType: true,
+                        academicDegreeType: true,
+                      },
+                    },
+                  },
+                },
+                supervisor: {
+                  include: {
+                    academicRankType: true,
+                    academicDegreeType: true,
+                    lecturer: {
+                      include: {
+                        userProfile: {
+                          include: {
+                            academicRankType: true,
+                            academicDegreeType: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                coSupervisor: {
+                  include: {
+                    academicRankType: true,
+                    academicDegreeType: true,
+                    lecturer: {
+                      include: {
+                        userProfile: {
+                          include: {
+                            academicRankType: true,
+                            academicDegreeType: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                thirdSupervisor: {
+                  include: {
+                    academicRankType: true,
+                    academicDegreeType: true,
+                    lecturer: {
+                      include: {
+                        userProfile: {
+                          include: {
+                            academicRankType: true,
+                            academicDegreeType: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                thesisSession: true,
+                defenseSession: true,
+                room: true,
+                council: {
+                  include: {
+                    members: {
+                      include: {
+                        expert: {
+                          include: {
+                            academicRankType: true,
+                            academicDegreeType: true,
+                            lecturer: {
+                              include: {
+                                userProfile: {
+                                  include: {
+                                    academicRankType: true,
+                                    academicDegreeType: true,
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            council: {
+              include: {
+                members: {
+                  include: {
+                    expert: {
+                      include: {
+                        academicRankType: true,
+                        academicDegreeType: true,
+                        lecturer: {
+                          include: {
+                            userProfile: {
+                              include: {
+                                academicRankType: true,
+                                academicDegreeType: true,
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
           orderBy: {
             createdAt: "desc",
           },

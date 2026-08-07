@@ -30,7 +30,8 @@ import { whereOrganization } from "@workspace/libs/constants"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from "@workspace/ui"
-import { Col, Flex, Form, Row, Tooltip } from "antd"
+import { Col, Flex, Form, Row, Tooltip, Image } from "antd"
+import { getRuntimeEnv } from "@workspace/libs/utils"
 import dayjs from "dayjs"
 import _ from "lodash"
 import { BookCheckIcon } from "lucide-react"
@@ -215,6 +216,8 @@ export default function GraduationDecisionDiploma() {
       trainingMajor: true,
       diplomaType: true,
       finalRanking: true,
+      diplomaFront: true,
+      diplomaBack: true,
     },
     orderBy: [
       ...emptyObjectIf(
@@ -225,7 +228,6 @@ export default function GraduationDecisionDiploma() {
         ],
         !!filters.finalGpa
       ),
-      { originalDiplomaNumber: "asc" },
       { student: { userProfile: { firstName: "asc" } } },
     ],
     take: numberOfPages,
