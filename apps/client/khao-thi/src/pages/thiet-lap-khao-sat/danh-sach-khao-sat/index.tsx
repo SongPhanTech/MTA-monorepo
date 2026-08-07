@@ -258,40 +258,38 @@ export default function DetailSurveyPage() {
             },
           ]}
           data={(data?.status === 200 && data?.data?.data) || []}
-          pagination={{
-            current: currentPage,
-            pageSize: numberOfPages,
-            total: (data?.status === 200 && data?.data?.count) || 0,
-            onChange: (page, pageSize) => {
+          pagination={false}
+        />
+        <div
+          className="mt-2 px-3 py-1 flex flex-wrap items-center justify-between gap-x-4 gap-y-2"
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ color: "#666" }}>Tổng đã làm:</span>{" "}
+            <strong style={{ color: "#009a5c", fontSize: 16, fontWeight: "bold" }}>
+              {doneCount}/{totalCount}
+            </strong>
+          </div>
+          <Pagination
+            size="small"
+            current={currentPage}
+            pageSize={numberOfPages}
+            total={totalCount}
+            showSizeChanger={{
+              labelRender: ({ value }) => `${value} / trang`,
+              optionRender: (oriOption) => `${oriOption.value} / trang`,
+            }}
+            showTotal={(total, range) =>
+              `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`
+            }
+            onChange={(page, pageSize) => {
               if (numberOfPages === pageSize) {
                 setCurrentPage(page)
               } else {
                 setCurrentPage(1)
                 setNumberOfPages(pageSize)
               }
-            },
-          }}
-        />
-        <div
-          className="mt-14 px-3 py-1 border rounded-md"
-          style={{
-            backgroundColor: "#f4fbf7",
-            borderColor: "#e1f2e8",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <div>
-            <span style={{ color: "#666" }}>Tổng số dòng:</span>{" "}
-            <strong style={{ color: "#111", fontWeight: "bold" }}>{totalCount}</strong>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ color: "#666" }}>Tổng đã làm:</span>{" "}
-            <strong style={{ color: "#009a5c", fontSize: 16, fontWeight: "bold" }}>
-              {doneCount}
-            </strong>
-          </div>
+            }}
+          />
         </div>
       </Col>
     </Row>
