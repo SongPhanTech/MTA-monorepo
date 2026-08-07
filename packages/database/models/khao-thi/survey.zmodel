@@ -84,7 +84,7 @@ model ClusterSurvey extends Base {
   lecturers        Lecturer[] // DS giảng viên => sinh ra Survey cho từng giảng viên
   surveyChoice     SurveyChoice[] // lựa chọn
   surveyQuestion   SurveyQuestion[] // câu hỏi
-
+  targetEnrollStudentOnly Boolean   @default(false)
   surveys          Survey[]
 
   @@schema("khao-thi")
@@ -128,7 +128,7 @@ model Survey extends Base {
   // thuộc khảo sát cụm
   clusterSurvey        ClusterSurvey?      @relation(fields: [clusterSurveyId], references: [id])
   clusterSurveyId      String?
-
+ targetEnrollStudentOnly Boolean   @default(false)
   @@schema("khao-thi")
 }
 
