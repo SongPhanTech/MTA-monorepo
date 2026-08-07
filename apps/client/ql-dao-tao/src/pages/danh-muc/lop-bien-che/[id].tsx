@@ -20,7 +20,7 @@ import {
   useUpdateManyStudent,
   useUpdateStudent,
 } from "@workspace/db/hooks"
-import { sqlTransaction } from "@workspace/libs/api/model"
+import { sqlTransaction, type sqlTransactionResponse200 } from "@workspace/libs/api/model"
 import { Docxtemplater, exportFile, loadFile } from "@workspace/libs/docxjs"
 import { exportFromTemplate, type TableRow } from "@workspace/libs/template-excel"
 import { getMinioUrl } from "@workspace/libs/utils"
@@ -520,9 +520,132 @@ export default function StudentFixedClassPage() {
     setOpen(true)
   }
   const handleExportDiemLop = async () => {
+    const trainingCourseId = fixedClass?.trainingCourseId
+    if (!trainingCourseId) {
+      message.error("Không xác định được khóa học")
+      return
+    }
     showSpinner()
     try {
-      const toNumericScore = (value: unknown) => {
+      // ── Types nội bộ cho export bảng điểm ──────────────────────────────
+      type ScoreValue = string | number | null
+
+      interface SubjectExport {
+        semester: number | null
+        graduation: boolean | null
+        subject: {
+          id: string
+          name: string
+          credit: number | null
+        }
+      }
+
+      interface SubjectClassStudentExport {
+        subjectVersionId: string
+        exempted: boolean | null
+        examPostponed: boolean | null
+        examBanned: boolean | null
+        suspended: boolean | null
+        manualFinalScore: number | null
+        finalScore: number | null
+      }
+
+      interface UserProfileExport {
+        fullname: string
+        dateOfBirth: Date | string | null
+      }
+
+      interface ThesisDefenseRecord {
+        finalScore: number | null
+      }
+
+      interface ThesisProject {
+        defenseRecord: ThesisDefenseRecord | null
+      }
+
+      interface ThesisRegistration {
+        thesisProject: ThesisProject | null
+      }
+
+      interface StudentExport {
+        foreignLangPass: boolean | null
+        userProfile: UserProfileExport
+        thesisRegistrations: ThesisRegistration[]
+        subjectClassStudent: SubjectClassStudentExport[]
+      }
+
+      interface SchoolYearExport {
+        startDate: string | Date | null
+        endDate: string | Date | null
+      }
+
+      interface SemesterExport {
+        schoolYear: SchoolYearExport | null
+      }
+
+      interface TrainingObjectTypeExport {
+        name: string
+      }
+
+      interface TrainingCourseExport {
+        id: string
+        name: string
+        trainingObjectType: TrainingObjectTypeExport | null
+        semesterStart: SemesterExport | null
+      }
+
+      interface TrainingMajorExport {
+        code: string | null
+        name: string | null
+      }
+
+      interface CurriculumExport {
+        trainingMajor: TrainingMajorExport | null
+      }
+
+      interface TrainingBlockExport {
+        subjects: SubjectExport[]
+      }
+
+      interface CurriculumVersionExport {
+        curriculum: CurriculumExport | null
+        trainingBlocks: TrainingBlockExport[]
+      }
+
+      interface FixedClassDetail {
+        id: string
+        name: string
+        trainingCourse: TrainingCourseExport
+        curriculumVersion: CurriculumVersionExport | null
+        students: StudentExport[]
+      }
+
+      // ── Fetch danh sách lớp trong cùng khóa ──────────────────────────
+      const classListRes = await sqlTransaction([
+        {
+          model: "FixedClass",
+          operation: "findMany",
+          data: {
+            where: { trainingCourseId, deletedAt: null, active: true },
+            select: { id: true, name: true },
+            orderBy: { name: "asc" },
+          },
+        },
+      ])
+
+      if (classListRes.status !== 200) {
+        message.warning("Không tải được danh sách lớp")
+        return
+      }
+
+      const allClassIds = (classListRes.data[0] ?? []) as { id: string; name: string }[]
+
+      if (!allClassIds.length) {
+        message.warning("Không tìm thấy lớp biên chế nào trong khóa học")
+        return
+      }
+
+      const toNumericScore = (value: unknown): number | null => {
         if (typeof value === "number") return Number.isFinite(value) ? value : null
         if (typeof value === "string") {
           const normalized = value.trim().replace(",", ".")
@@ -533,7 +656,6 @@ export default function StudentFixedClassPage() {
         if (value && typeof value === "object") {
           const maybeNumber = (value as { toNumber?: () => number }).toNumber?.()
           if (typeof maybeNumber === "number" && Number.isFinite(maybeNumber)) return maybeNumber
-
           const text = String(value).trim().replace(",", ".")
           if (text && text !== "[object Object]") {
             const parsed = Number(text)
@@ -543,421 +665,365 @@ export default function StudentFixedClassPage() {
         return null
       }
 
-      const subjectsInOrder = fixedClass?.curriculumVersion?.trainingBlocks
-        .flatMap((block) => block.subjects)
-        .sort((a, b) => (a.semester || 0) - (b.semester || 0))
-      type SubjectInOrder = NonNullable<typeof subjectsInOrder>[number]
-      type NumericLike = {
-        toNumber?: () => number
-        toString: () => string
-      }
-      type ScoreExportValue = string | number | NumericLike | null
-      const tongSoHP = subjectsInOrder?.length
-      const tongSoTC = subjectsInOrder?.reduce((sum, s) => sum + (s.subject.credit || 0), 0)
+      const allSheets: Parameters<typeof exportFromTemplate>[0]["sheets"] = []
 
-      const chuthichMonHoc = subjectsInOrder?.map((s, index) => `M${index + 1}. ${s.subject.name}`)
+      for (const cls of allClassIds) {
+        const res = await sqlTransaction([
+          {
+            model: "FixedClass" as Parameters<typeof sqlTransaction>[0][number]["model"],
+            operation: "findUnique" as Parameters<typeof sqlTransaction>[0][number]["operation"],
+            data: {
+              where: { id: cls.id },
+              include: {
+                trainingCourse: {
+                  include: {
+                    trainingObjectType: true,
+                    semesterStart: { include: { schoolYear: true } },
+                  },
+                },
+                curriculumVersion: {
+                  include: {
+                    curriculum: {
+                      include: {
+                        trainingMajor: { include: { trainingField: true } },
+                      },
+                    },
+                    trainingBlocks: {
+                      include: {
+                        subjects: {
+                          include: { subject: { include: { managementOrganization: true } } },
+                          orderBy: { semester: "asc" },
+                        },
+                      },
+                      orderBy: { priority: "asc" },
+                    },
+                  },
+                },
+                students: {
+                  where: { active: true, status: "ENROLLED", deletedAt: null },
+                  include: {
+                    userProfile: true,
+                    fixedClass: {
+                      include: { trainingCourse: { include: { trainingObjectType: true } } },
+                    },
+                    thesisRegistrations: {
+                      where: { deletedAt: null },
+                      include: { thesisProject: { include: { defenseRecord: true } } },
+                    },
+                    subjectClassStudent: {
+                      include: {
+                        subjectVersion: {
+                          include: {
+                            trainingBlocks: { select: { graduation: true }, take: 1 },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ])
 
-      const studentRows: TableRow[] = data.map((student, index) => {
-        const thesisReg = student.thesisRegistrations?.[0]
-        const defenseScore = thesisReg?.thesisProject?.defenseRecord?.finalScore
+        if (res.status !== 200 || !res.data[0]) continue
+        const detail = res.data[0] as FixedClassDetail
 
-        const diem: ScoreExportValue[] = (subjectsInOrder || []).map((subjectInfo) => {
-          const scoreData = student.subjectClassStudent?.find(
-            (score) => score.subjectVersionId === subjectInfo.subject.id
-          )
+        const students = detail.students
+        if (!students.length) continue
 
-          if (!scoreData) return " "
-          if (scoreData.exempted) return "Miễn"
-          if (scoreData.examPostponed) return "HT"
-          if (scoreData.examBanned) return "CT"
-          if (scoreData.suspended) return "ĐCT"
+        const subjectsInOrder: SubjectExport[] = (detail.curriculumVersion?.trainingBlocks ?? [])
+          .flatMap((block) => block.subjects)
+          .sort((a, b) => (a.semester ?? 0) - (b.semester ?? 0))
 
-          const final = scoreData.manualFinalScore ?? scoreData.finalScore
-          if (final !== null && final !== undefined) {
-            return final
-          }
+        if (!subjectsInOrder.length) continue
 
-          return "Null"
-        })
-        const ccta = student.foreignLangPass ? "Đạt" : ""
+        const tongSoHP = subjectsInOrder.length
+        const tongSoTC = subjectsInOrder.reduce((s, sub) => s + (sub.subject.credit ?? 0), 0)
+        const chuthichMonHoc: string[] = subjectsInOrder.map(
+          (s, idx) => `M${idx + 1}. ${s.subject.name}`
+        )
 
-        let totalWeightedScore = 0
-        let totalCredits = 0
+        const studentRows: TableRow[] = students.map((student, index) => {
+          const thesisReg = student.thesisRegistrations[0]
+          const defenseScore = thesisReg?.thesisProject?.defenseRecord?.finalScore ?? null
 
-        ;(subjectsInOrder || []).forEach((subjectInfo, i) => {
-          const numericD = toNumericScore(diem[i])
-          const credit = Number(subjectInfo.subject.credit || 0)
-
-          if (numericD != null && Number.isFinite(numericD) && credit > 0) {
-            totalWeightedScore += numericD * credit
-            totalCredits += credit
-          }
-        })
-
-        const tbcCalculated =
-          totalCredits > 0 ? Number((totalWeightedScore / totalCredits).toFixed(2)) : null
-        const tbcDisplay = tbcCalculated
-
-        let dlv: number | null = null
-        const parsedDefenseScore = toNumericScore(defenseScore)
-        if (parsedDefenseScore != null && Number.isFinite(parsedDefenseScore)) {
-          dlv = parsedDefenseScore
-        } else {
-          const thesisSubjectIndex = (subjectsInOrder || []).findIndex((s) => {
-            const name = s.subject.name.toLowerCase()
-            return name.includes("luận văn") || name.includes("đề án")
+          const diem: ScoreValue[] = subjectsInOrder.map((subjectInfo) => {
+            const scoreData = student.subjectClassStudent.find(
+              (score) => score.subjectVersionId === subjectInfo.subject.id
+            )
+            if (!scoreData) return " "
+            if (scoreData.exempted) return "Miễn"
+            if (scoreData.examPostponed) return "HT"
+            if (scoreData.examBanned) return "CT"
+            if (scoreData.suspended) return "ĐCT"
+            const final = scoreData.manualFinalScore ?? scoreData.finalScore
+            return final !== null && final !== undefined ? final : "Null"
           })
-          if (thesisSubjectIndex >= 0) {
-            const numericD = toNumericScore(diem[thesisSubjectIndex])
-            if (numericD != null && Number.isFinite(numericD)) dlv = numericD
+
+          const ccta = student.foreignLangPass ? "Đạt" : ""
+          let totalWeightedScore = 0
+          let totalCredits = 0
+
+          subjectsInOrder.forEach((subjectInfo, i) => {
+            const numericD = toNumericScore(diem[i])
+            const credit = Number(subjectInfo.subject.credit ?? 0)
+            if (numericD != null && Number.isFinite(numericD) && credit > 0) {
+              totalWeightedScore += numericD * credit
+              totalCredits += credit
+            }
+          })
+
+          const tbcDisplay = totalCredits > 0 ? Number((totalWeightedScore / totalCredits).toFixed(2)) : null
+          let dlv: number | null = null
+          const parsedDefenseScore = toNumericScore(defenseScore)
+          if (parsedDefenseScore != null && Number.isFinite(parsedDefenseScore)) {
+            dlv = parsedDefenseScore
+          } else {
+            const thesisIdx = subjectsInOrder.findIndex((s) => {
+              const name = s.subject.name.toLowerCase()
+              return name.includes("luận văn") || name.includes("đề án")
+            })
+            if (thesisIdx >= 0) {
+              const numericD = toNumericScore(diem[thesisIdx])
+              if (numericD != null && Number.isFinite(numericD)) dlv = numericD
+            }
           }
-        }
 
-        return {
-          cells: [
-            { value: index + 1, align: "center" as const, border: true },
-            { value: student.userProfile.fullname, border: true, align: "center" as const },
-            {
-              value: student.userProfile.dateOfBirth
-                ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
-                : "",
-              align: "center" as const,
-              border: true,
-            },
-            {
-              value: student.fixedClass?.trainingCourse?.trainingObjectType?.name || "",
-              align: "center" as const,
-              border: true,
-            },
-            ...(subjectsInOrder || []).map((subjectInfo, i) => {
-              const scoreValue = diem[i]
-              const isGraduation = subjectInfo.graduation === true
-              const passThreshold = isGraduation ? scoreToPassGraduation : 4.0
-              const numericScore = toNumericScore(scoreValue)
-              const isFailed =
-                numericScore != null && Number.isFinite(numericScore)
-                  ? numericScore < passThreshold
-                  : false
-
-              return {
-                value: scoreValue !== undefined && scoreValue !== null ? String(scoreValue) : null,
+          return {
+            cells: [
+              { value: index + 1, align: "center" as const, border: true },
+              { value: student.userProfile.fullname, border: true, align: "center" as const },
+              {
+                value: student.userProfile.dateOfBirth
+                  ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
+                  : "",
                 align: "center" as const,
                 border: true,
-                color: isFailed ? "FFFF0000" : undefined,
-              }
-            }),
-            {
-              value: ccta !== null ? String(ccta) : null,
-              align: "center" as const,
-              border: true,
-            },
-            {
-              value: tbcDisplay !== null ? String(tbcDisplay) : null,
-              align: "center" as const,
-              border: true,
-              bold: true,
-            },
-            {
-              value: dlv !== null ? String(dlv) : null,
-              align: "center" as const,
-              border: true,
-              bold: true,
-            },
-          ],
-        }
-      })
-      type SemesterGroup = { semesterNum: number; subjects: SubjectInOrder[] }
-      const semesterGroups: SemesterGroup[] = []
-      ;(subjectsInOrder || []).forEach((s) => {
-        const semNum = s.semester || 0
-        let group = semesterGroups.find((g) => g.semesterNum === semNum)
-        if (!group) {
-          group = { semesterNum: semNum, subjects: [] }
-          semesterGroups.push(group)
-        }
-        group.subjects.push(s)
-      })
-      semesterGroups.sort((a, b) => a.semesterNum - b.semesterNum)
-
-      const getSemesterLabel = (semNum: number): string => {
-        const courseStartSchoolYear = fixedClass?.trainingCourse?.semesterStart?.schoolYear
-        const semesterIndexInYear = ((semNum - 1) % 2) + 1
-        const schoolYearOffset = Math.floor((semNum - 1) / 2)
-        const semesterName = `Học kỳ ${semesterIndexInYear}`
-
-        if (!courseStartSchoolYear?.startDate) return semesterName
-
-        const startYear = dayjs(courseStartSchoolYear.startDate).year() + schoolYearOffset
-        const endYear = courseStartSchoolYear.endDate
-          ? dayjs(courseStartSchoolYear.endDate).year() + schoolYearOffset
-          : startYear + 1
-
-        return `${semesterName} (năm học ${startYear}-${endYear})`
-      }
-
-      const totalSubjectCols = subjectsInOrder?.length || 0
-      const totalTableCols = 4 + totalSubjectCols + 3
-
-      const headerRow5: TableRow = {
-        cells: [
-          { value: null, border: true, rowSpan: 2 },
-          {
-            value: `Lớp: ${fixedClass?.name || ""}`,
-            align: "center",
-            bold: true,
-            border: true,
-            colSpan: 2,
-            rowSpan: 2,
-            wrapText: true,
-          },
-          {
-            value: "Bảng điểm các học phần cơ sở và chuyên ngành",
-            align: "center",
-            bold: true,
-            border: true,
-            colSpan: totalTableCols - 3,
-            wrapText: true,
-          },
-        ],
-      }
-
-      const headerRow6Cells: TableRow["cells"] = [
-        {
-          value: "Đối tượng",
-          align: "center",
-          bold: true,
-          border: true,
-          rowSpan: 3,
-          wrapText: true,
-        },
-      ]
-      semesterGroups.forEach((group) => {
-        const label = getSemesterLabel(group.semesterNum)
-        headerRow6Cells.push({
-          value: label,
-          align: "center",
-          bold: true,
-          border: true,
-          colSpan: group.subjects.length,
-          wrapText: true,
-        })
-      })
-      headerRow6Cells.push(
-        { value: null, border: true },
-        { value: null, border: true },
-        { value: null, border: true }
-      )
-      const headerRow6: TableRow = { cells: headerRow6Cells }
-
-      const headerRow7Left: TableRow = {
-        cells: [
-          { value: "STT", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
-          {
-            value: "Họ và tên",
-            align: "center",
-            bold: true,
-            border: true,
-            rowSpan: 2,
-            wrapText: true,
-          },
-          {
-            value: "Ngày sinh",
-            align: "center",
-            bold: true,
-            border: true,
-            rowSpan: 2,
-            wrapText: true,
-          },
-        ],
-      }
-
-      const headerRow7ScoreCells: TableRow["cells"] = [
-        ...(subjectsInOrder || []).map((_, i) => ({
-          value: `M${i + 1}`,
-          align: "center" as const,
-          bold: true,
-          border: true,
-          wrapText: false,
-        })),
-        { value: "CCTA", align: "center", bold: true, border: true, rowSpan: 2, wrapText: false },
-        { value: "Điểm", align: "center", bold: true, border: true, colSpan: 2, wrapText: false },
-      ]
-      const headerRow7Score: TableRow = { cells: headerRow7ScoreCells }
-
-      const headerRow8Credit: TableRow = {
-        cells: (subjectsInOrder || []).map((s) => ({
-          value: s.subject.credit ? Number(s.subject.credit).toFixed(1) : "",
-          align: "center" as const,
-          border: true,
-          wrapText: false,
-        })),
-      }
-      const headerRow8Score: TableRow = {
-        cells: [
-          { value: "TBC", align: "center", bold: true, border: true, wrapText: false },
-          { value: "ĐLV", align: "center", bold: true, border: true, wrapText: false },
-        ],
-      }
-
-      const columnFooterRows: TableRow[] = []
-      const chuthichPerRow = 3
-      const totalChuthich = chuthichMonHoc?.length || 0
-      const maxRowsPerColumn = Math.ceil(totalChuthich / chuthichPerRow)
-      const footerColSpan = Math.ceil(totalTableCols / chuthichPerRow)
-
-      for (let i = 0; i < maxRowsPerColumn; i++) {
-        const rowCells: TableRow["cells"] = []
-        for (let col = 0; col < chuthichPerRow; col++) {
-          const idx = i + col * maxRowsPerColumn
-          rowCells.push(
-            chuthichMonHoc?.[idx]
-              ? {
-                  value: chuthichMonHoc[idx],
-                  border: false,
-                  colSpan: footerColSpan,
-                  wrapText: false,
+              },
+              {
+                value: detail.trainingCourse.trainingObjectType?.name ?? "",
+                align: "center" as const,
+                border: true,
+              },
+              ...subjectsInOrder.map((subjectInfo, i) => {
+                const scoreValue = diem[i]
+                const isGraduation = subjectInfo.graduation === true
+                const passThreshold = isGraduation ? scoreToPassGraduation : 4.0
+                const numericScore = toNumericScore(scoreValue)
+                const isFailed =
+                  numericScore != null && Number.isFinite(numericScore) ? numericScore < passThreshold : false
+                return {
+                  value: scoreValue !== undefined && scoreValue !== null ? String(scoreValue) : null,
+                  align: "center" as const,
+                  border: true,
+                  color: isFailed ? "FFFF0000" : undefined,
                 }
-              : { value: null, border: false, colSpan: footerColSpan, wrapText: false }
-          )
-        }
-        const usedCols = footerColSpan * chuthichPerRow
-        const missingCols = Math.max(0, totalTableCols - usedCols)
-        if (missingCols > 0) {
-          rowCells.push({ value: null, border: false, colSpan: missingCols })
-        }
-        columnFooterRows.push({
-          cells: rowCells,
+              }),
+              { value: ccta || null, align: "center" as const, border: true },
+              {
+                value: tbcDisplay !== null ? String(tbcDisplay) : null,
+                align: "center" as const,
+                border: true,
+                bold: true,
+              },
+              { value: dlv !== null ? String(dlv) : null, align: "center" as const, border: true, bold: true },
+            ],
+          }
         })
-      }
 
-      const thongKeRows: TableRow[] = [
-        {
+        type SemesterGroup = { semesterNum: number; subjects: SubjectExport[] }
+        const semesterGroups: SemesterGroup[] = []
+        subjectsInOrder.forEach((s) => {
+          const semNum = s.semester ?? 0
+          let group = semesterGroups.find((g) => g.semesterNum === semNum)
+          if (!group) {
+            group = { semesterNum: semNum, subjects: [] }
+            semesterGroups.push(group)
+          }
+          group.subjects.push(s)
+        })
+        semesterGroups.sort((a, b) => a.semesterNum - b.semesterNum)
+
+        const getSemesterLabel = (semNum: number): string => {
+          const schoolYear = detail.trainingCourse.semesterStart?.schoolYear
+          const semesterIndexInYear = ((semNum - 1) % 2) + 1
+          const schoolYearOffset = Math.floor((semNum - 1) / 2)
+          const semesterName = `Học kỳ ${semesterIndexInYear}`
+          if (!schoolYear?.startDate) return semesterName
+          const startYear = dayjs(schoolYear.startDate).year() + schoolYearOffset
+          const endYear = schoolYear.endDate
+            ? dayjs(schoolYear.endDate).year() + schoolYearOffset
+            : startYear + 1
+          return `${semesterName} (năm học ${startYear}-${endYear})`
+        }
+
+        const totalSubjectCols = subjectsInOrder.length
+        const totalTableCols = 4 + totalSubjectCols + 3
+
+        const headerRow5: TableRow = {
           cells: [
+            { value: null, border: true, rowSpan: 2 },
             {
-              value: `Tổng số học phần: ${tongSoHP} HP, tổng số tín chỉ: ${tongSoTC} TC`,
-              border: false,
-              colSpan: totalTableCols,
+              value: `Lớp: ${detail.name}`,
+              align: "center",
               bold: true,
+              border: true,
+              colSpan: 2,
+              rowSpan: 2,
+              wrapText: true,
             },
-          ],
-        },
-      ]
-
-      const ghiChuRows: TableRow[] = [
-        { cells: [{ value: null, border: false }] },
-        {
-          cells: [
-            { value: null, border: false },
-            { value: "GHI CHÚ:", border: false, bold: true, colSpan: 29 },
-          ],
-        },
-        {
-          cells: [
-            { value: null, border: false },
             {
-              value:
-                "1. 'Null': Môn đã lên danh sách thi nhưng chưa thi hoặc giảng viên chưa nhập điểm",
-              border: false,
-              colSpan: 29,
+              value: "Bảng điểm các học phần cơ sở và chuyên ngành",
+              align: "center",
+              bold: true,
+              border: true,
+              colSpan: totalTableCols - 3,
+              wrapText: true,
             },
           ],
-        },
-        {
-          cells: [
-            { value: null, border: false },
-            { value: "2. ' ': Môn chưa lên danh sách thi", border: false, colSpan: 29 },
-          ],
-        },
-        {
-          cells: [
-            { value: null, border: false },
-            { value: "3. 'Miễn': Môn miễn học", border: false, colSpan: 29 },
-          ],
-        },
-        {
-          cells: [
-            { value: null, border: false },
-            { value: "4. 'HT': Môn hoãn thi", border: false, colSpan: 29 },
-          ],
-        },
-        {
-          cells: [
-            { value: null, border: false },
-            { value: "4. 'CT': Môn cấm thi", border: false, colSpan: 29 },
-          ],
-        },
-        {
-          cells: [
-            { value: null, border: false },
-            { value: "5. 'ĐCT': Môn đình chỉ thi", border: false, colSpan: 29 },
-          ],
-        },
-        {
-          cells: [
-            { value: null, border: false },
-            {
-              value:
-                "6. Điểm TBC: Tính điểm trung bình cộng của tất cả các môn đã có điểm ở thời điểm xuất file excel điểm (Không tính điểm môn chưa thi, không tính điểm môn hoãn thi, miễn thi)",
-              border: false,
-              colSpan: 29,
-            },
-          ],
-        },
-      ]
+        }
 
-      const bodyRows = [...studentRows, ...thongKeRows, ...columnFooterRows, ...ghiChuRows]
-      const curriculum = fixedClass?.curriculumVersion?.curriculum
-      const nganhHoacChuyenNganh =
-        curriculum?.trainingMajor ?? curriculum?.trainingMajor?.trainingField
-      const chuyenNganhText = [nganhHoacChuyenNganh?.code, nganhHoacChuyenNganh?.name]
-        .filter(Boolean)
-        .join(" - ")
+        const headerRow6Cells: TableRow["cells"] = [
+          { value: "Đối tượng", align: "center", bold: true, border: true, rowSpan: 3, wrapText: true },
+        ]
+        semesterGroups.forEach((group) => {
+          headerRow6Cells.push({
+            value: getSemesterLabel(group.semesterNum),
+            align: "center",
+            bold: true,
+            border: true,
+            colSpan: group.subjects.length,
+            wrapText: true,
+          })
+        })
+        headerRow6Cells.push(
+          { value: null, border: true },
+          { value: null, border: true },
+          { value: null, border: true }
+        )
+        const headerRow6: TableRow = { cells: headerRow6Cells }
 
-      await exportFromTemplate({
-        templateUrl: getMinioUrl("/mta/template/BangdiemTheoLop_v3.xlsx"),
-        sheets: [
+        const headerRow7Left: TableRow = {
+          cells: [
+            { value: "STT", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
+            { value: "Họ và tên", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
+            { value: "Ngày sinh", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
+          ],
+        }
+
+        const headerRow7Score: TableRow = {
+          cells: [
+            ...subjectsInOrder.map((_, i) => ({
+              value: `M${i + 1}`,
+              align: "center" as const,
+              bold: true,
+              border: true,
+              wrapText: false,
+            })),
+            { value: "CCTA", align: "center", bold: true, border: true, rowSpan: 2, wrapText: false },
+            { value: "Điểm", align: "center", bold: true, border: true, colSpan: 2, wrapText: false },
+          ],
+        }
+
+        const headerRow8Credit: TableRow = {
+          cells: subjectsInOrder.map((s) => ({
+            value: s.subject.credit ? Number(s.subject.credit).toFixed(1) : "",
+            align: "center" as const,
+            border: true,
+            wrapText: false,
+          })),
+        }
+
+        const headerRow8Score: TableRow = {
+          cells: [
+            { value: "TBC", align: "center", bold: true, border: true, wrapText: false },
+            { value: "ĐLV", align: "center", bold: true, border: true, wrapText: false },
+          ],
+        }
+
+        const thongKeRows: TableRow[] = [
           {
-            sheet: "BaoCaoDiem",
+            cells: [
+              {
+                value: `Tổng số học phần: ${tongSoHP} HP, tổng số tín chỉ: ${tongSoTC} TC`,
+                border: false,
+                colSpan: totalTableCols,
+                bold: true,
+              },
+            ],
+          },
+        ]
+
+        const chuthichPerRow = 3
+        const maxRowsPerColumn = Math.ceil(chuthichMonHoc.length / chuthichPerRow)
+        const footerColSpan = Math.ceil(totalTableCols / chuthichPerRow)
+        const columnFooterRows: TableRow[] = []
+
+        for (let i = 0; i < maxRowsPerColumn; i++) {
+          const rowCells: TableRow["cells"] = []
+          for (let col = 0; col < chuthichPerRow; col++) {
+            const idx = i + col * maxRowsPerColumn
+            rowCells.push(
+              chuthichMonHoc[idx]
+                ? { value: chuthichMonHoc[idx], border: false, colSpan: footerColSpan, wrapText: false }
+                : { value: null, border: false, colSpan: footerColSpan, wrapText: false }
+            )
+          }
+          columnFooterRows.push({ cells: rowCells })
+        }
+
+        const ghiChuRows: TableRow[] = [
+          { cells: [{ value: null, border: false }] },
+          { cells: [{ value: null, border: false }, { value: "GHI CHÚ:", border: false, bold: true, colSpan: 29 }] },
+          { cells: [{ value: null, border: false }, { value: "1. 'Null': Môn đã lên danh sách thi nhưng chưa thi hoặc giảng viên chưa nhập điểm", border: false, colSpan: 29 }] },
+          { cells: [{ value: null, border: false }, { value: "2. ' ': Môn chưa lên danh sách thi", border: false, colSpan: 29 }] },
+          { cells: [{ value: null, border: false }, { value: "3. 'Miễn': Môn miễn học", border: false, colSpan: 29 }] },
+          { cells: [{ value: null, border: false }, { value: "4. 'HT': Môn hoãn thi", border: false, colSpan: 29 }] },
+          { cells: [{ value: null, border: false }, { value: "4. 'CT': Môn cấm thi", border: false, colSpan: 29 }] },
+          { cells: [{ value: null, border: false }, { value: "5. 'ĐCT': Môn đình chỉ thi", border: false, colSpan: 29 }] },
+          { cells: [{ value: null, border: false }, { value: "6. Điểm TBC: Tính điểm trung bình cộng của tất cả các môn đã có điểm ở thời điểm xuất file excel điểm (Không tính điểm môn chưa thi, không tính điểm môn hoãn thi, miễn thi)", border: false, colSpan: 29 }] },
+        ]
+
+        const bodyRows = [...studentRows, ...thongKeRows, ...columnFooterRows, ...ghiChuRows]
+
+        const curriculum = detail.curriculumVersion?.curriculum
+        const nganhHoacChuyenNganh = curriculum?.trainingMajor
+        const chuyenNganhText = [nganhHoacChuyenNganh?.code, nganhHoacChuyenNganh?.name]
+          .filter(Boolean)
+          .join(" - ")
+
+        const sheetName = detail.name.replace(/[\\/?:*[\]]/g, "_").slice(0, 31)
+
+        allSheets.push(
+          {
+            sheet: sheetName,
             data: {
-              khoa: fixedClass?.trainingCourse.name?.toUpperCase() || "",
+              khoa: detail.trainingCourse.name.toUpperCase(),
               chuyenNganh: chuyenNganhText,
-              lop: fixedClass?.name || null,
+              lop: detail.name,
             },
             tableStartCell: { row: 5, col: 1 },
             rows: [headerRow5],
           },
-          {
-            sheet: "BaoCaoDiem",
-            tableStartCell: { row: 6, col: 4 },
-            rows: [headerRow6],
-          },
-          {
-            sheet: "BaoCaoDiem",
-            tableStartCell: { row: 7, col: 1 },
-            rows: [headerRow7Left],
-          },
-          {
-            sheet: "BaoCaoDiem",
-            tableStartCell: { row: 7, col: 5 },
-            rows: [headerRow7Score],
-          },
-          {
-            sheet: "BaoCaoDiem",
-            tableStartCell: { row: 8, col: 5 },
-            rows: [headerRow8Credit],
-          },
-          {
-            sheet: "BaoCaoDiem",
-            tableStartCell: { row: 8, col: 5 + totalSubjectCols + 1 },
-            rows: [headerRow8Score],
-          },
-          {
-            sheet: "BaoCaoDiem",
-            tableStartCell: { row: 9, col: 1 },
-            rows: bodyRows,
-          },
-        ],
-        fileName: `BangDiem-${fixedClass?.name}.xlsx`,
+          { sheet: sheetName, tableStartCell: { row: 6, col: 4 }, rows: [headerRow6] },
+          { sheet: sheetName, tableStartCell: { row: 7, col: 1 }, rows: [headerRow7Left] },
+          { sheet: sheetName, tableStartCell: { row: 7, col: 5 }, rows: [headerRow7Score] },
+          { sheet: sheetName, tableStartCell: { row: 8, col: 5 }, rows: [headerRow8Credit] },
+          { sheet: sheetName, tableStartCell: { row: 8, col: 5 + totalSubjectCols + 1 }, rows: [headerRow8Score] },
+          { sheet: sheetName, tableStartCell: { row: 9, col: 1 }, rows: bodyRows }
+        )
+      }
+
+      if (!allSheets.length) {
+        message.warning("Không có dữ liệu điểm để xuất")
+        return
+      }
+
+      await exportFromTemplate({
+        templateUrl: getMinioUrl("/mta/template/BangdiemTheoLop_v3.xlsx"),
+        sheets: allSheets,
+        fileName: `BangDiemToanKhoa-${fixedClass?.trainingCourse?.name ?? "KhoaHoc"}.xlsx`,
       })
     } catch (error) {
       console.error("Export failed:", error)

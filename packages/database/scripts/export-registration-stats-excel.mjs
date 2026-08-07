@@ -25,15 +25,30 @@ const prisma = new PrismaClient({
   },
 })
 
-const FROM = new Date(process.env.FROM || "2026-08-04T10:00:00+07:00")
-const TO = new Date(process.env.TO || "2026-08-04T15:50:00+07:00")
+const FROM = new Date(process.env.FROM || "2026-08-04T16:00:00+07:00")
+const TO = new Date(process.env.TO || "2026-08-05T16:50:00+07:00")
 const SESSION_ID = process.env.SESSION_ID || "cmse0eu6t0001sh3d0h9yfidl"
 const OUT =
   process.env.OUT ||
-  join(__dirname, "../../../ThongKeDangKyHoc_2026-08-04_10h-15h50.xlsx")
+  join(__dirname, "../../../ThongKeDangKyHoc_2026-08-04_16h-2026-08-05_16h50.xlsx")
 
 const fmtVN = (d) =>
   new Date(d).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh", hour12: false })
+
+const fmtRangeLabel = (from, to) => {
+  const opts = {
+    timeZone: "Asia/Ho_Chi_Minh",
+    hour12: false,
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }
+  const a = new Date(from).toLocaleString("vi-VN", opts)
+  const b = new Date(to).toLocaleString("vi-VN", opts)
+  return `${a} → ${b} (GMT+7)`
+}
 
 const headerStyle = {
   font: { bold: true, color: { argb: "FFFFFFFF" } },
@@ -278,7 +293,7 @@ wb.created = new Date()
       "Học kỳ",
       [session?.semester?.name, session?.semester?.schoolYear?.name].filter(Boolean).join(" - "),
     ],
-    ["Khoảng thời gian thống kê", "10:00 04/08/2026 → 15:50 04/08/2026 (GMT+7)"],
+    ["Khoảng thời gian thống kê", fmtRangeLabel(FROM, TO)],
     ["Thời gian xuất báo cáo", fmtVN(new Date())],
     ["", ""],
     ["Số SV đăng ký thành công (distinct)", successByStudent.size],

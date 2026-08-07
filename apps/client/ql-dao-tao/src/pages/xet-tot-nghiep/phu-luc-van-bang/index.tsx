@@ -1334,8 +1334,8 @@ export default function StudentGradeSystem() {
     const session = thesisSessionData.find((s) => s.id === selectedSessionId)
 
     let effectiveSignerName = signerName
-    if (!effectiveSignerName && session?.graduationDecisionMaker) {
-      effectiveSignerName = session.graduationDecisionMaker
+    if (!effectiveSignerName) {
+      effectiveSignerName = session?.graduationDecisionSigner || session?.graduationDecisionMaker || ""
     }
 
     const parts = (effectiveSignerName || "").split(",").map((s) => s.trim())
@@ -1386,7 +1386,7 @@ export default function StudentGradeSystem() {
     const thangTS = String(dateTS.month() + 1)
     const namTS = String(dateTS.year())
 
-    let soToTrinh = session?.graduationReport || ""
+    let soToTrinh = session?.proposalGraduation || session?.graduationReport || ""
     let ngayToTrinh = ""
     if (soToTrinh.toLowerCase().includes(" ngày ")) {
       const reportParts = soToTrinh.split(/ ngày /i)
@@ -1422,7 +1422,7 @@ export default function StudentGradeSystem() {
         path: "QuyetDinhCongNhanTotNghiep.docx",
         prefix: "/mta/template",
         data: {
-          soQD: session?.graduationNumber || "",
+          soQD: session?.graduationDecisionNumber || session?.graduationNumber || "",
           ngayQD,
           thangQD,
           namQD,

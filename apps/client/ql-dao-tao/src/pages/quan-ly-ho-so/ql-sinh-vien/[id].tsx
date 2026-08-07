@@ -5,6 +5,12 @@ import { useStudentTrainingTypeOptions } from "@hooks/studentTrainingType"
 import DefaultLayout from "@layouts/default-layout"
 import { useFindUniqueStudent } from "@workspace/db/hooks"
 import { ROUTER_PATH } from "@workspace/router"
+import {
+  getThesisTitle,
+  getSupervisorsFormatted,
+  getDefenseSessionInfo,
+  getCouncilMembersFormatted,
+} from "@/utils/thesis-profile"
 import { Descriptions, Tabs, Tag } from "antd"
 import dayjs from "dayjs"
 import { useRouter } from "next/router"
@@ -171,6 +177,132 @@ export default function StudentDetailV2Page() {
           },
         },
         thesisRegistrations: {
+          where: { deletedAt: null },
+          include: {
+            thesisProject: {
+              include: {
+                primarySupervisor: {
+                  include: {
+                    userProfile: {
+                      include: {
+                        academicRankType: true,
+                        academicDegreeType: true,
+                      },
+                    },
+                  },
+                },
+                secondarySupervisor: {
+                  include: {
+                    userProfile: {
+                      include: {
+                        academicRankType: true,
+                        academicDegreeType: true,
+                      },
+                    },
+                  },
+                },
+                supervisor: {
+                  include: {
+                    academicRankType: true,
+                    academicDegreeType: true,
+                    lecturer: {
+                      include: {
+                        userProfile: {
+                          include: {
+                            academicRankType: true,
+                            academicDegreeType: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                coSupervisor: {
+                  include: {
+                    academicRankType: true,
+                    academicDegreeType: true,
+                    lecturer: {
+                      include: {
+                        userProfile: {
+                          include: {
+                            academicRankType: true,
+                            academicDegreeType: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                thirdSupervisor: {
+                  include: {
+                    academicRankType: true,
+                    academicDegreeType: true,
+                    lecturer: {
+                      include: {
+                        userProfile: {
+                          include: {
+                            academicRankType: true,
+                            academicDegreeType: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                thesisSession: true,
+                defenseSession: true,
+                room: true,
+                council: {
+                  include: {
+                    members: {
+                      include: {
+                        expert: {
+                          include: {
+                            academicRankType: true,
+                            academicDegreeType: true,
+                            lecturer: {
+                              include: {
+                                userProfile: {
+                                  include: {
+                                    academicRankType: true,
+                                    academicDegreeType: true,
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            council: {
+              include: {
+                members: {
+                  include: {
+                    expert: {
+                      include: {
+                        academicRankType: true,
+                        academicDegreeType: true,
+                        lecturer: {
+                          include: {
+                            userProfile: {
+                              include: {
+                                academicRankType: true,
+                                academicDegreeType: true,
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
           orderBy: {
             createdAt: "desc",
           },
@@ -1358,6 +1490,7 @@ export default function StudentDetailV2Page() {
           rowKey="id"
           size="small"
           pagination={{ pageSize: 10 }}
+          scroll={{ x: 1300 }}
           columns={[
             {
               title: "STT",
@@ -1366,30 +1499,82 @@ export default function StudentDetailV2Page() {
               render: (_, __, index) => index + 1,
             },
             {
-              title: "Mã",
-              dataIndex: "code",
-              width: 150,
+              title: "Tên đề tài",
+              width: 280,
+              render: (_, record) => {
+                const titleInfo = getThesisTitle(record.thesisProject)
+                return (
+                  <div>
+                    <div className="font-medium text-gray-900">{titleInfo.title || record.description || "—"}</div>
+                    {titleInfo.titleEN && (
+                      <div className="text-xs text-gray-500 italic mt-0.5">{titleInfo.titleEN}</div>
+                    )}
+                  </div>
+                )
+              },
             },
             {
-              title: "Mô tả",
-              dataIndex: "description",
-              width: 300,
+              title: "Cán bộ hướng dẫn",
+              width: 250,
+              render: (_, record) => {
+                const supervisors = getSupervisorsFormatted(record.thesisProject)
+                if (!supervisors.length) return "—"
+                return (
+                  <div className="space-y-1">
+                    {supervisors.map((sup, i) => (
+                      <div key={i} className="text-xs">
+                        <span className="font-medium text-gray-700">{sup.role}: </span>
+                        <span className="text-gray-900">{sup.fullText}</span>
+                      </div>
+                    ))}
+                  </div>
+                )
+              },
+            },
+            {
+              title: "Đợt bảo vệ",
+              width: 220,
+              render: (_, record) => {
+                const info = getDefenseSessionInfo(record.thesisProject)
+                if (!info.fullText) return "—"
+                return (
+                  <div className="text-xs space-y-0.5">
+                    {info.sessionName && <div className="font-medium text-gray-800">{info.sessionName}</div>}
+                    {info.defenseDate && <div className="text-gray-600">Ngày BV: {info.defenseDate}</div>}
+                    {info.roomName && <div className="text-gray-600">Phòng: {info.roomName}</div>}
+                    {info.defenseTime && <div className="text-gray-600">Ca BV: {info.defenseTime}</div>}
+                  </div>
+                )
+              },
+            },
+            {
+              title: "Thành viên Hội đồng",
+              width: 280,
+              render: (_, record) => {
+                const members = getCouncilMembersFormatted(record.council, record.thesisProject)
+                if (!members.length) return "—"
+                return (
+                  <div className="space-y-1">
+                    {members.map((m, i) => (
+                      <div key={i} className="text-xs">
+                        <span className="font-medium text-blue-800">{m.roleLabel}: </span>
+                        <span className="text-gray-900">{m.fullText}</span>
+                      </div>
+                    ))}
+                  </div>
+                )
+              },
             },
             {
               title: "Trạng thái",
               dataIndex: "active",
-              width: 100,
+              width: 110,
+              align: "center",
               render: (active) => (
                 <Tag color={active ? "green" : "red"}>
                   {active ? "Kích hoạt" : "Không kích hoạt"}
                 </Tag>
               ),
-            },
-            {
-              title: "Ngày tạo",
-              dataIndex: "createdAt",
-              width: 150,
-              render: (date) => (date ? dayjs(date).format("DD/MM/YYYY HH:mm") : ""),
             },
           ]}
         />

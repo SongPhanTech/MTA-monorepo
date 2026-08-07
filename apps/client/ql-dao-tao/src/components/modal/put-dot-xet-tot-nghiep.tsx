@@ -20,6 +20,8 @@ import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } f
 import { useEffect } from "react"
 export type PutGraduationSession = GraduationSession & {
   outputStandardIds?: string[]
+  graduationDecisionMakerRole?: "PGĐ" | "GĐ"
+  graduationDecisionMakerName?: string
 }
 dayjs.locale("vi")
 
@@ -62,6 +64,14 @@ const PutGraduationSession = () => {
 
   useEffect(() => {
     if (graduationSession) {
+      const graduationDecisionMakerRaw = graduationSession.graduationDecisionSigner?.trim() ?? ""
+      const [gradFirst, ...gradRest] = graduationDecisionMakerRaw.split(" ")
+      const graduationDecisionMakerRole =
+        gradFirst === "PGĐ" || gradFirst === "GĐ" ? gradFirst : undefined
+      const graduationDecisionMakerName = graduationDecisionMakerRole
+        ? gradRest.join(" ").trim()
+        : graduationDecisionMakerRaw
+
       form.setFieldsValue({
         ...graduationSession,
         sessionDate: graduationSession.sessionDate
@@ -73,6 +83,11 @@ const PutGraduationSession = () => {
         applicationEnd: graduationSession.applicationEnd
           ? dayjs(graduationSession.applicationEnd)
           : undefined,
+        graduationDecisionDate: graduationSession.graduationDecisionDate
+          ? dayjs(graduationSession.graduationDecisionDate)
+          : undefined,
+        graduationDecisionMakerRole,
+        graduationDecisionMakerName,
         outputStandardIds: graduationSession.outputStandard?.map((item) => item.id) || [],
       })
     } else {
@@ -80,6 +95,8 @@ const PutGraduationSession = () => {
         status: GraduationSessionStatus.IN_REVIEW,
         trainingObjectTypeId: selectedTrainingObjectTypeId,
         outputStandardIds: [],
+        graduationDecisionMakerRole: undefined,
+        graduationDecisionMakerName: undefined,
       })
     }
   }, [graduationSession, form, selectedTrainingObjectTypeId])
@@ -94,6 +111,12 @@ const PutGraduationSession = () => {
     try {
       showSpinner()
       const outputStandardIds = output.outputStandardIds ?? []
+      const graduationDecisionMakerRole = output.graduationDecisionMakerRole
+      const graduationDecisionMakerName = output.graduationDecisionMakerName?.trim() ?? ""
+      const graduationDecisionSigner = graduationDecisionMakerRole
+        ? `${graduationDecisionMakerRole} ${graduationDecisionMakerName}`.trim()
+        : graduationDecisionMakerName
+
       const payload = {
         name: output.name.trim(),
         sessionDate: output.sessionDate,
@@ -101,6 +124,12 @@ const PutGraduationSession = () => {
         applicationEnd: output.applicationEnd,
         status: output.status,
         trainingObjectTypeId: output.trainingObjectTypeId,
+        graduationDecisionSigner: graduationDecisionSigner || undefined,
+        graduationDecisionNumber: output.graduationDecisionNumber?.trim() || undefined,
+        graduationDecisionDate: output.graduationDecisionDate
+          ? dayjs(output.graduationDecisionDate).toDate()
+          : undefined,
+        proposalGraduation: output.proposalGraduation?.trim() || undefined,
       }
 
       if (id) {
@@ -252,6 +281,47 @@ const PutGraduationSession = () => {
             mode="multiple"
             allowClear
           />
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <Form.Item label="Người ký quyết định tốt nghiệp" className="mb-0">
+          <div className="flex gap-2">
+            <Form.Item name="graduationDecisionMakerRole" noStyle>
+              <Select
+                className="w-24"
+                placeholder="PGĐ/GĐ"
+                options={[
+                  { label: "PGĐ", value: "PGĐ" },
+                  { label: "GĐ", value: "GĐ" },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item name="graduationDecisionMakerName" noStyle>
+              <Input placeholder="Nhập tên người ký quyết định tốt nghiệp" />
+            </Form.Item>
+          </div>
+        </Form.Item>
+      </Col>
+      <Col span={12}>
+        <FormItem form={form} name="graduationDecisionNumber" label="Số quyết định tốt nghiệp">
+          <Input placeholder="Nhập số quyết định tốt nghiệp" />
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <FormItem form={form} name="graduationDecisionDate" label="Ngày quyết định tốt nghiệp">
+          <DatePicker
+            format={{
+              format: "DD/MM/YYYY",
+              type: "mask",
+            }}
+            className="w-full"
+            placeholder="Chọn ngày quyết định tốt nghiệp"
+          />
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <FormItem form={form} name="proposalGraduation" label="Tờ trình tốt nghiệp">
+          <Input placeholder="số 581/TTr-SĐH ngày 27/6/2025" />
         </FormItem>
       </Col>
     </PutFormModal>

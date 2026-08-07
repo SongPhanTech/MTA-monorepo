@@ -195,14 +195,26 @@ const ModalTraCuuVanBang = () => {
                 </Col>
                 <Col span={15}>
                   <div className="flex w-full gap-4">
-                    <Image
-                      src={`${getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT")}/${item?.diplomaFront?.path}`}
-                      className="w-full object-contain"
-                    />
-                    <Image
-                      src={`${getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT")}/${item?.diplomaBack?.path}`}
-                      className="w-full object-contain"
-                    />
+                    {item?.diplomaFront?.path ? (
+                      <Image
+                        src={`${getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT")}/${item.diplomaFront.path}`}
+                        className="w-full object-contain"
+                      />
+                    ) : (
+                      <div className="w-full h-32 flex items-center justify-center border border-dashed rounded text-gray-400 bg-gray-50">
+                        Chưa có phôi mặt trước
+                      </div>
+                    )}
+                    {item?.diplomaBack?.path ? (
+                      <Image
+                        src={`${getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT")}/${item.diplomaBack.path}`}
+                        className="w-full object-contain"
+                      />
+                    ) : (
+                      <div className="w-full h-32 flex items-center justify-center border border-dashed rounded text-gray-400 bg-gray-50">
+                        Chưa có phôi mặt sau
+                      </div>
+                    )}
                   </div>
                 </Col>
               </div>
