@@ -107,6 +107,7 @@ export type StudentRow = {
   thesisRegistrations?: Array<{
     deletedAt?: string | Date | null
     thesisProject?: {
+      id?: string | null
       deletedAt?: string | Date | null
       thesisSessionId?: string | null
       thesisSession?: { id?: string | null } | null
@@ -128,6 +129,16 @@ export type StudentRow = {
       PHANBIEN1?: string | null
       PHANBIEN2?: string | null
       UYVIEN3?: string | null
+      defenseDate?: string | Date | null
+      defenseSession?: { id?: string | null; startTime?: string | Date | null } | null
+      defenseRecord?: any
+      room?: { id?: string | null; name?: string | null } | null
+      title?: string | null
+      researchTopicAssociated?: string | null
+      language?: any
+      type?: string | null
+      status?: string | null
+      organization?: { Id?: string | null; sMa?: string | null; sTen?: string | null } | null
       [key: string]: unknown
     } | null
     [key: string]: unknown
@@ -135,8 +146,8 @@ export type StudentRow = {
   [key: string]: unknown
 }
 
-export function getThesisRegistrationForSession(studentOrRecord: StudentRow, thesisSessionId?: string) {
-  if (!thesisSessionId) return undefined
+export function getThesisRegistrationForSession(studentOrRecord?: StudentRow | null, thesisSessionId?: string) {
+  if (!studentOrRecord || !thesisSessionId) return undefined
   return studentOrRecord?.thesisRegistrations?.find((reg) => {
     if (reg?.deletedAt) return false
     const project = reg?.thesisProject
@@ -147,7 +158,8 @@ export function getThesisRegistrationForSession(studentOrRecord: StudentRow, the
   })
 }
 
-export function getThesisProjectForSession(studentOrRecord: StudentRow, thesisSessionId?: string) {
+export function getThesisProjectForSession(studentOrRecord?: StudentRow | null, thesisSessionId?: string) {
+  if (!studentOrRecord) return undefined
   return getThesisRegistrationForSession(studentOrRecord, thesisSessionId)?.thesisProject
 }
 
@@ -284,8 +296,8 @@ export function formatPersonNameWithWorkplace(
 }
 
 export function getCouncilMemberName(
-  record: StudentRow,
-  role: CouncilRole,
+  record: StudentRow | null | undefined,
+  role?: CouncilRole,
   thesisSessionId?: string,
   rawText = false,
   searchKeyword = "",
@@ -363,7 +375,7 @@ export function getSupervisorName(
 }
 
 export function getMatchedLecturerRoles(
-  record: StudentRow,
+  record: StudentRow | null | undefined,
   thesisSessionId: string | undefined,
   keyword: string
 ): string[] {
@@ -474,7 +486,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     tag: "ModalCauHinhLuanVan",
   })
   const { onOpen: openModalChuyenDiemLopMonHoc } = useDisclosure<{
-    allStudentsInClasses: any[]
+    allStudentsInClasses: StudentRow[]
   }>({
     tag: "ModalChuyenDiemLopMonHoc",
   })
@@ -544,7 +556,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const studentWhere = useMemo(() => {
     if (!searchParams.thesisSessionId) return { id: { in: [] } }
 
-    const andConditions: any[] = []
+    const andConditions: Record<string, unknown>[] = []
 
     andConditions.push({
       fixedClassId: {
@@ -564,7 +576,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       })
     }
 
-    const thesisProjectConditions: any = {
+    const thesisProjectConditions: Record<string, unknown> = {
       deletedAt: null,
       thesisSessionId: searchParams.thesisSessionId,
       thesisType: ThesisType.THESIS,
@@ -637,6 +649,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         { PHANBIEN1: containsKw },
         { PHANBIEN2: containsKw },
         { UYVIEN3: containsKw },
+        { language: containsKw },
+        { type: containsKw },
+        { room: { name: containsKw } },
         {
           council: {
             members: {
@@ -708,6 +723,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         { PHANBIEN1: containsKw },
         { PHANBIEN2: containsKw },
         { UYVIEN3: containsKw },
+        { language: containsKw },
+        { type: containsKw },
+        { room: { name: containsKw } },
         {
           council: {
             members: {
@@ -1333,24 +1351,24 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           defenseSession: thesisProject.defenseSession?.id || "",
           room: thesisProject.room?.id || "",
           councilChairman:
-            thesisProject.council?.members.find(
-              (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
+            thesisProject.council?.members?.find(
+              (member: { role?: string | null }) => member.role === CouncilRole.CHAIRMAN
             )?.expert?.id || "",
           councilSecretary:
-            thesisProject.council?.members.find(
-              (member: CouncilMember) => member.role === CouncilRole.SECRETARY
+            thesisProject.council?.members?.find(
+              (member: { role?: string | null }) => member.role === CouncilRole.SECRETARY
             )?.expert?.id || "",
           reviewer1:
-            thesisProject.council?.members.find(
-              (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
+            thesisProject.council?.members?.find(
+              (member: { role?: string | null }) => member.role === CouncilRole.REVIEWER_1
             )?.expert?.id || "",
           reviewer2:
-            thesisProject.council?.members.find(
-              (member: CouncilMember) => member.role === CouncilRole.REVIEWER_2
+            thesisProject.council?.members?.find(
+              (member: { role?: string | null }) => member.role === CouncilRole.REVIEWER_2
             )?.expert?.id || "",
           councilMember:
-            thesisProject.council?.members.find(
-              (member: CouncilMember) => member.role === CouncilRole.MEMBER
+            thesisProject.council?.members?.find(
+              (member: { role?: string | null }) => member.role === CouncilRole.MEMBER
             )?.expert?.id || "",
           organization: thesisProject.organization?.Id ?? "",
           score: thesisProject.defenseRecord?.finalScore?.toString() || "",
@@ -2147,17 +2165,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       Gán ngày
                     </Button>
                   )}
-                  <Form.Item className="mb-0" style={{ marginBottom: 0 }}>
-                    <Input
-                      className="w-64"
-                      allowClear
-                      prefix={<SearchOutlined className="text-gray-400" />}
-                      value={nameKeyword}
-                      placeholder="Tìm kiếm..."
-                      onChange={(e) => setNameKeyword(e.target.value)}
-                    />
-                  </Form.Item>
-
                   {role === "Khoa" && (
                     <Button
                       type="primary"
@@ -2190,6 +2197,16 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       Kiểm tra tiến độ
                     </Button>
                   )}
+                  <Form.Item className="mb-0" style={{ marginBottom: 0 }}>
+                    <Input
+                      className="w-64"
+                      allowClear
+                      prefix={<SearchOutlined className="text-gray-400" />}
+                      value={nameKeyword}
+                      placeholder="Tìm kiếm..."
+                      onChange={(e) => setNameKeyword(e.target.value)}
+                    />
+                  </Form.Item>
                 </Space>
               </Col>
             </Row>
@@ -2203,7 +2220,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
             className={"mt-2"}
             rowKey="id"
             filters={filters}
-            setFilters={(value: any) => {
+            setFilters={(value: FilterProps) => {
               setFilters(value)
               setCurrentPage(1)
             }}
@@ -2259,7 +2276,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 120,
                 fixed: "left",
                 dataIndex: "code",
-                type: "input",
                 render: (_, record) => {
                   return record?.code
                 },
@@ -2270,7 +2286,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 180,
                 fixed: "left",
                 dataIndex: "name",
-                type: "input",
                 render: (_, record) => {
                   return record?.userProfile?.fullname
                 },
@@ -2306,7 +2321,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 sorter: (a: StudentRow, b: StudentRow) => (getThesisProjectForSession(a, searchParams.thesisSessionId)?.title || "").localeCompare(getThesisProjectForSession(b, searchParams.thesisSessionId)?.title || ""),
                 width: 350,
                 // fixed: "left",
-                type: "input",
                 dataIndex: "title",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -2345,7 +2359,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   return String(valA || "").localeCompare(String(valB || ""));
                 },
                 width: 200,
-                type: "input",
                 dataIndex: "supervisor",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -2422,7 +2435,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 },
                 width: 200,
                 // fixed: "left",
-                type: "input",
                 dataIndex: "coSupervisor",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -2528,31 +2540,32 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 sorter: (a: StudentRow, b: StudentRow) => {
                   const valA = getThesisProjectForSession(a, searchParams.thesisSessionId)?.language;
                   const valB = getThesisProjectForSession(b, searchParams.thesisSessionId)?.language;
-                  const strA = typeof valA === 'object' ? (valA as any)?.language : valA;
-                  const strB = typeof valB === 'object' ? (valB as any)?.language : valB;
+                  const strA = typeof valA === 'object' ? (valA as Record<string, unknown>)?.language : valA;
+                  const strB = typeof valB === 'object' ? (valB as Record<string, unknown>)?.language : valB;
                   return String(strA || "").localeCompare(String(strB || ""));
                 },
                 width: 100,
                 dataIndex: "language",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
+                    const rawLang = getThesisProjectForSession(record, searchParams.thesisSessionId)?.language
+                    const langStr = typeof rawLang === 'object' ? rawLang?.language : rawLang
                     const currentValue =
                       editingValues[record?.id]?.language !== undefined
                         ? editingValues[record?.id]?.language
-                        : getThesisProjectForSession(record, searchParams.thesisSessionId)?.language
-                            ?.language || ""
+                        : langStr || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Input
-                          value={currentValue || ""}
+                          value={String(currentValue || "")}
                           onChange={(e) => handleEditChange(record?.id, "language", e.target.value)}
                         />
                       </div>
                     )
                   }
-                  return (
-                    getThesisProjectForSession(record, searchParams.thesisSessionId)?.language || ""
-                  )
+                  const rawLang = getThesisProjectForSession(record, searchParams.thesisSessionId)?.language
+                  const langStr = typeof rawLang === 'object' ? rawLang?.language : rawLang
+                  return String(langStr || "")
                 },
               },
               {
@@ -2604,7 +2617,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           record,
                           searchParams.thesisSessionId
                         )?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
+                          (member: { role?: string | null }) => member.role === CouncilRole.CHAIRMAN
                         )?.expert?.id || ""
                     const councilRow = editingValues[record?.id] || {}
                     const excludedCouncilIds = getCouncilExpertIdsExcludingField(
@@ -2678,7 +2691,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           record,
                           searchParams.thesisSessionId
                         )?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.SECRETARY
+                          (member: { role?: string | null }) => member.role === CouncilRole.SECRETARY
                         )?.expert?.id || ""
                     const councilRow = editingValues[record?.id] || {}
                     const excludedCouncilIds = getCouncilExpertIdsExcludingField(
@@ -2752,7 +2765,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           record,
                           searchParams.thesisSessionId
                         )?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
+                          (member: { role?: string | null }) => member.role === CouncilRole.REVIEWER_1
                         )?.expert?.id || ""
                     const councilRow = editingValues[record?.id] || {}
                     const excludedCouncilIds = getCouncilExpertIdsExcludingField(
@@ -2823,7 +2836,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           record,
                           searchParams.thesisSessionId
                         )?.council?.members?.find(
-                          (member: any) => member.role === CouncilRole.REVIEWER_2
+                          (member: { role?: string | null }) => member.role === CouncilRole.REVIEWER_2
                         )?.expert?.id || ""
                     const councilRow = editingValues[record?.id] || {}
                     const excludedCouncilIds = getCouncilExpertIdsExcludingField(
@@ -2894,7 +2907,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           record,
                           searchParams.thesisSessionId
                         )?.council?.members?.find(
-                          (member: any) => member.role === CouncilRole.MEMBER
+                          (member: { role?: string | null }) => member.role === CouncilRole.MEMBER
                         )?.expert?.id || ""
                     const councilRow = editingValues[record?.id] || {}
                     const excludedCouncilIds = getCouncilExpertIdsExcludingField(
@@ -2953,7 +2966,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 sorter: (a: StudentRow, b: StudentRow) => (getThesisProjectForSession(a, searchParams.thesisSessionId)?.room?.name || "").localeCompare(getThesisProjectForSession(b, searchParams.thesisSessionId)?.room?.name || ""),
                 width: 150,
                 dataIndex: "room",
-                render: (text: string, record: any) => {
+                render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
                     const hasEditedRoom = Object.prototype.hasOwnProperty.call(
                       editingValues[record?.id] || {},
@@ -2993,9 +3006,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               {
                 title: "Ngày bảo vệ",
                 sorter: (a: StudentRow, b: StudentRow) => {
-                  const dateA = getThesisProjectForSession(a, searchParams.thesisSessionId)?.defenseDate ? new Date(getThesisProjectForSession(a, searchParams.thesisSessionId)!.defenseDate).getTime() : 0;
-                  const dateB = getThesisProjectForSession(b, searchParams.thesisSessionId)?.defenseDate ? new Date(getThesisProjectForSession(b, searchParams.thesisSessionId)!.defenseDate).getTime() : 0;
-                  return dateA - dateB;
+                  const projA = getThesisProjectForSession(a, searchParams.thesisSessionId)
+                  const projB = getThesisProjectForSession(b, searchParams.thesisSessionId)
+                  const dateA = projA?.defenseDate ? new Date(projA.defenseDate as string | Date).getTime() : 0
+                  const dateB = projB?.defenseDate ? new Date(projB.defenseDate as string | Date).getTime() : 0
+                  return dateA - dateB
                 },
                 width: 150,
                 dataIndex: "defenseDate",
@@ -3105,12 +3120,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  return (
-                    getThesisProjectForSession(
-                      record,
-                      searchParams.thesisSessionId
-                    )?.defenseRecord?.finalScore?.toString() || ""
-                  )
+                  const finalScore = getThesisProjectForSession(
+                    record,
+                    searchParams.thesisSessionId
+                  )?.defenseRecord?.finalScore
+                  return (finalScore as any)?.toString() || ""
                 },
               },
               // {
@@ -3175,24 +3189,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               className="text-lg font-bold text-green-700"
                               size={24}
                               onClick={async () => {
-                                let status =
-                                  getThesisProjectForSession(record, searchParams.thesisSessionId)
-                                    ?.status || ""
-                                switch (status) {
-                                  case ThesisProjectStatus.APPROVED_BY_DEPT:
-                                    status = ThesisProjectStatus.IN_PROGRESS
-                                    break
-                                }
-                                const payload = {
-                                  status: status,
+                                let newStatus: ThesisProjectStatus = ThesisProjectStatus.IN_PROGRESS
+                                const currentStatus = getThesisProjectForSession(
+                                  record,
+                                  searchParams.thesisSessionId
+                                )?.status
+                                if (currentStatus === ThesisProjectStatus.APPROVED_BY_DEPT) {
+                                  newStatus = ThesisProjectStatus.IN_PROGRESS
                                 }
                                 await updateThesisProject({
-                                  data: payload,
+                                  data: { status: newStatus },
                                   where: {
-                                    id: getThesisProjectForSession(
-                                      record,
-                                      searchParams.thesisSessionId
-                                    )?.id,
+                                    id:
+                                      getThesisProjectForSession(
+                                        record,
+                                        searchParams.thesisSessionId
+                                      )?.id || "",
                                   },
                                 })
                               }}
@@ -3204,16 +3216,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               className="text-lg font-bold text-green-700"
                               size={24}
                               onClick={async () => {
-                                const payload = {
-                                  status: ThesisProjectStatus.DEFENSE_ELIGIBLE,
-                                }
                                 await updateThesisProject({
-                                  data: payload,
+                                  data: { status: ThesisProjectStatus.DEFENSE_ELIGIBLE },
                                   where: {
-                                    id: getThesisProjectForSession(
-                                      record,
-                                      searchParams.thesisSessionId
-                                    )?.id,
+                                    id:
+                                      getThesisProjectForSession(
+                                        record,
+                                        searchParams.thesisSessionId
+                                      )?.id || "",
                                   },
                                 })
                               }}
@@ -3236,7 +3246,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                     return
                                   }
                                   openModalChuyenDotXetLuanVan({
-                                    thesisProjectId: thesisProject.id,
+                                    thesisProjectId: String(thesisProject.id),
                                     thesisSessionId: searchParams.thesisSessionId || "",
                                     onSuccess: refetchThesisTableData,
                                   })
@@ -3250,10 +3260,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             onClick={(e) => {
                               e.stopPropagation()
                               openModalCauHinhLuanVan({
-                                thesisProjectId: getThesisProjectForSession(
-                                  record,
-                                  searchParams.thesisSessionId
-                                )?.id,
+                                thesisProjectId: String(
+                                  getThesisProjectForSession(
+                                    record,
+                                    searchParams.thesisSessionId
+                                  )?.id || ""
+                                ),
                                 thesisSessionId: searchParams?.thesisSessionId || "",
                               })
                             }}
