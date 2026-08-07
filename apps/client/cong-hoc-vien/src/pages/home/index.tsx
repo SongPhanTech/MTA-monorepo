@@ -54,7 +54,7 @@ function Page() {
         id: curriculumVersionId,
       },
       include: {
-        fixedClass: {
+        fixedClasses: {
           where: {
             id: fixedClassId,
           },
@@ -89,7 +89,7 @@ function Page() {
   )
 
   const { convertScore } = useScoreConverter(
-    curriculumVersion?.fixedClass?.trainingCourse?.scoreConverts
+    curriculumVersion?.fixedClasses?.[0]?.trainingCourse?.scoreConverts
   )
 
   const totalCurriculumCredits = useMemo(() => {

@@ -1574,13 +1574,35 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
         ...(managementOrganizationId && { managementOrganizationId }),
       },
       ...(thesisSessionIds?.length && {
-        thesisRegistrations: {
-          some: {
-            thesisProject: {
-              thesisSessionId: { in: thesisSessionIds },
+        OR: [
+          {
+            thesisRegistrations: {
+              some: {
+                thesisProject: {
+                  thesisSessionId: { in: thesisSessionIds },
+                },
+              },
             },
           },
-        },
+          {
+            graduationApplications: {
+              some: {
+                sessionId: { in: thesisSessionIds },
+              },
+            },
+          },
+          {
+            fixedClass: {
+              trainingCourse: {
+                graduationSessions: {
+                  some: {
+                    id: { in: thesisSessionIds },
+                  },
+                },
+              },
+            },
+          },
+        ],
       }),
       deletedAt: null,
     },
@@ -1819,9 +1841,19 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     for (let i = 1; i <= sourceSheet.columnCount; i++) {
       const srcCol = sourceSheet.getColumn(i)
       const destCol = destSheet.getColumn(i)
-      if (srcCol.width) {
-        destCol.width = srcCol.width
-      }
+      let maxLen = srcCol.width || 8
+      sourceSheet.eachRow({ includeEmpty: false }, (row, rowNum) => {
+        if (rowNum >= 10) {
+          const cell = row.getCell(i)
+          if (cell.value) {
+            const str = String(cell.value)
+            if (!str.includes("\n")) {
+              maxLen = Math.max(maxLen, str.length + 3)
+            }
+          }
+        }
+      })
+      destCol.width = Math.min(Math.max(maxLen, 12), 45)
     }
 
     sourceSheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
@@ -1836,7 +1868,13 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
         }
 
         if (cell.style) {
-          destCell.style = JSON.parse(JSON.stringify(cell.style))
+          const styleObj = JSON.parse(JSON.stringify(cell.style))
+          if (styleObj.font) {
+            styleObj.font.name = "Times New Roman"
+          } else {
+            styleObj.font = { name: "Times New Roman" }
+          }
+          destCell.style = styleObj
         }
       })
     })
@@ -1940,13 +1978,35 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
         ...(managementOrganizationId && { managementOrganizationId }),
       },
       ...(thesisSessionIds?.length && {
-        thesisRegistrations: {
-          some: {
-            thesisProject: {
-              thesisSessionId: { in: thesisSessionIds },
+        OR: [
+          {
+            thesisRegistrations: {
+              some: {
+                thesisProject: {
+                  thesisSessionId: { in: thesisSessionIds },
+                },
+              },
             },
           },
-        },
+          {
+            graduationApplications: {
+              some: {
+                sessionId: { in: thesisSessionIds },
+              },
+            },
+          },
+          {
+            fixedClass: {
+              trainingCourse: {
+                graduationSessions: {
+                  some: {
+                    id: { in: thesisSessionIds },
+                  },
+                },
+              },
+            },
+          },
+        ],
       }),
       deletedAt: null,
       active: true,
@@ -2115,13 +2175,35 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
         ...(managementOrganizationId && { managementOrganizationId }),
       },
       ...(thesisSessionIds?.length && {
-        thesisRegistrations: {
-          some: {
-            thesisProject: {
-              thesisSessionId: { in: thesisSessionIds },
+        OR: [
+          {
+            thesisRegistrations: {
+              some: {
+                thesisProject: {
+                  thesisSessionId: { in: thesisSessionIds },
+                },
+              },
             },
           },
-        },
+          {
+            graduationApplications: {
+              some: {
+                sessionId: { in: thesisSessionIds },
+              },
+            },
+          },
+          {
+            fixedClass: {
+              trainingCourse: {
+                graduationSessions: {
+                  some: {
+                    id: { in: thesisSessionIds },
+                  },
+                },
+              },
+            },
+          },
+        ],
       }),
       deletedAt: null,
       active: true,
@@ -2358,13 +2440,35 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         ...(managementOrganizationId && { managementOrganizationId }),
       },
       ...(thesisSessionIds?.length && {
-        thesisRegistrations: {
-          some: {
-            thesisProject: {
-              thesisSessionId: { in: thesisSessionIds },
+        OR: [
+          {
+            thesisRegistrations: {
+              some: {
+                thesisProject: {
+                  thesisSessionId: { in: thesisSessionIds },
+                },
+              },
             },
           },
-        },
+          {
+            graduationApplications: {
+              some: {
+                sessionId: { in: thesisSessionIds },
+              },
+            },
+          },
+          {
+            fixedClass: {
+              trainingCourse: {
+                graduationSessions: {
+                  some: {
+                    id: { in: thesisSessionIds },
+                  },
+                },
+              },
+            },
+          },
+        ],
       }),
       deletedAt: null,
       active: true,
@@ -2776,13 +2880,35 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
         ...(managementOrganizationId && { managementOrganizationId }),
       },
       ...(thesisSessionIds?.length && {
-        thesisRegistrations: {
-          some: {
-            thesisProject: {
-              thesisSessionId: { in: thesisSessionIds },
+        OR: [
+          {
+            thesisRegistrations: {
+              some: {
+                thesisProject: {
+                  thesisSessionId: { in: thesisSessionIds },
+                },
+              },
             },
           },
-        },
+          {
+            graduationApplications: {
+              some: {
+                sessionId: { in: thesisSessionIds },
+              },
+            },
+          },
+          {
+            fixedClass: {
+              trainingCourse: {
+                graduationSessions: {
+                  some: {
+                    id: { in: thesisSessionIds },
+                  },
+                },
+              },
+            },
+          },
+        ],
       }),
       deletedAt: null,
       active: true,

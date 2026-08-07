@@ -2,7 +2,7 @@ import { queryClient } from "@api/index"
 import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import Select from "@components/commons/select"
-import { SUBJECT_OBJECT } from "@constants/constants"
+import { SUBJECT_OBJECT, hasSurveyStudentObjectType } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import { buildOrgTree } from "@lib/utils"
 import type {
@@ -61,7 +61,7 @@ const PutSurveyObjectTypeModal = () => {
   const selectedTrainingMajors = Form.useWatch("TrainingMajors", form) || []
   const selectedTrainingCourses = Form.useWatch("TrainingCourses", form) || []
   const selectedFixedClasses = Form.useWatch("FixedClasses", form) || []
-  const isStudentType = type.includes("MILITARY_STUDENT") || type.includes("CIVILIAN_STUDENT")
+  const isStudentType = hasSurveyStudentObjectType(type)
 
   async function onOk(output?: PutSurveyObjectType) {
     if (!output) return
@@ -349,7 +349,7 @@ const PutSurveyObjectTypeModal = () => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   const items = useMemo(() => {
     const result = []
-    if (type.includes("MILITARY_STUDENT") || type.includes("CIVILIAN_STUDENT")) {
+    if (hasSurveyStudentObjectType(type)) {
       result.push({
         key: "STUDENT",
         label: "Sinh viên, học viên",
@@ -511,10 +511,7 @@ const PutSurveyObjectTypeModal = () => {
         FixedClasses: surveyObjectType.fixedClasses.map((item) => item.id),
         SubjectClasses: surveyObjectType.subjectClasses.map((item) => item.id),
       })
-      if (
-        surveyObjectType?.type.includes("MILITARY_STUDENT") ||
-        surveyObjectType?.type.includes("CIVILIAN_STUDENT")
-      ) {
+      if (hasSurveyStudentObjectType(surveyObjectType?.type)) {
         setActiveKey("STUDENT")
       } else if (
         surveyObjectType?.type.includes("LECTURER") ||
@@ -567,7 +564,7 @@ const PutSurveyObjectTypeModal = () => {
             placeholder="Chọn chủ đề khảo sát"
             options={SUBJECT_OBJECT}
             onChange={(value) => {
-              if (value.includes("MILITARY_STUDENT") || value.includes("CIVILIAN_STUDENT")) {
+              if (hasSurveyStudentObjectType(value)) {
                 setActiveKey("STUDENT")
               } else if (value.includes("LECTURER") || value.includes("STAFF")) {
                 setActiveKey("LECTURER")

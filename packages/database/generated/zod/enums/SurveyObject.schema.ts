@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const SurveyObjectSchema = z.enum(["MILITARY_STUDENT", "CIVILIAN_STUDENT", "LECTURER", "STAFF"])
+export const SurveyObjectSchema = z.enum(["MILITARY_STUDENT", "CIVILIAN_STUDENT", "MILITARY_GRADUATE_STUDENT", "CIVILIAN_GRADUATE_STUDENT", "LECTURER", "STAFF"])

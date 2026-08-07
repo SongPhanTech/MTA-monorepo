@@ -10611,14 +10611,13 @@ const metadata = {
                     isDataModel: true,
                     isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'fixedClass',
+                    backLink: 'fixedClasses',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "curriculumVersionId" },
                 }, curriculumVersionId: {
                     name: "curriculumVersionId",
                     type: "String",
                     isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'curriculumVersion',
                 }, classType: {
@@ -10675,9 +10674,6 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, curriculumVersionId: {
-                    name: "curriculumVersionId",
-                    fields: ["curriculumVersionId"]
                 }, name_trainingCourseId_curriculumVersionId: {
                     name: "name_trainingCourseId_curriculumVersionId",
                     fields: ["name", "trainingCourseId", "curriculumVersionId"]
@@ -11071,11 +11067,11 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'curriculumVersion',
-                }, fixedClass: {
-                    name: "fixedClass",
+                }, fixedClasses: {
+                    name: "fixedClasses",
                     type: "FixedClass",
                     isDataModel: true,
-                    isOptional: true,
+                    isArray: true,
                     backLink: 'curriculumVersion',
                 }, students: {
                     name: "students",
@@ -27301,6 +27297,10 @@ const metadata = {
                     isArray: true,
                     backLink: 'clusterSurvey',
                     isRelationOwner: true,
+                }, targetEnrollStudentOnly: {
+                    name: "targetEnrollStudentOnly",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, surveys: {
                     name: "surveys",
                     type: "Survey",
@@ -27491,6 +27491,10 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'clusterSurvey',
+                }, targetEnrollStudentOnly: {
+                    name: "targetEnrollStudentOnly",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 },
             }, uniqueConstraints: {
                 id: {

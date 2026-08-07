@@ -69,7 +69,7 @@ function Page() {
         id: curriculumVersionId,
       },
       include: {
-        fixedClass: {
+        fixedClasses: {
           where: {
             id: fixedClassId,
           },
