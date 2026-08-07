@@ -25238,6 +25238,9 @@
               "$ref": "#/components/schemas/SurveyQuestion"
             }
           },
+          "targetEnrollStudentOnly": {
+            "type": "boolean"
+          },
           "surveys": {
             "type": "array",
             "items": {
@@ -25255,7 +25258,8 @@
           "isPublic",
           "anonymous",
           "surveyTopic",
-          "surveyTopicId"
+          "surveyTopicId",
+          "targetEnrollStudentOnly"
         ]
       },
       "Survey": {
@@ -25399,6 +25403,9 @@
           "clusterSurveyId": {
             "type": "string",
             "nullable": true
+          },
+          "targetEnrollStudentOnly": {
+            "type": "boolean"
           }
         },
         "required": [
@@ -25411,7 +25418,8 @@
           "isPublic",
           "anonymous",
           "surveyTopic",
-          "surveyTopicId"
+          "surveyTopicId",
+          "targetEnrollStudentOnly"
         ]
       },
       "SurveyQuestion": {
@@ -61915,6 +61923,9 @@
           "surveyTopicId": {
             "type": "string"
           },
+          "targetEnrollStudentOnly": {
+            "type": "boolean"
+          },
           "_count": {
             "allOf": [
               {
@@ -61949,7 +61960,8 @@
           "startDate",
           "isPublic",
           "anonymous",
-          "surveyTopicId"
+          "surveyTopicId",
+          "targetEnrollStudentOnly"
         ]
       },
       "AggregateSurvey": {
@@ -62056,6 +62068,9 @@
             "type": "string",
             "nullable": true
           },
+          "targetEnrollStudentOnly": {
+            "type": "boolean"
+          },
           "_count": {
             "allOf": [
               {
@@ -62090,7 +62105,8 @@
           "startDate",
           "isPublic",
           "anonymous",
-          "surveyTopicId"
+          "surveyTopicId",
+          "targetEnrollStudentOnly"
         ]
       },
       "AggregateSurveyQuestion": {
@@ -122645,6 +122661,9 @@
           "surveyTopicId": {
             "type": "integer"
           },
+          "targetEnrollStudentOnly": {
+            "type": "integer"
+          },
           "_all": {
             "type": "integer"
           }
@@ -122664,6 +122683,7 @@
           "isPublic",
           "anonymous",
           "surveyTopicId",
+          "targetEnrollStudentOnly",
           "_all"
         ]
       },
@@ -122729,6 +122749,10 @@
           },
           "surveyTopicId": {
             "type": "string",
+            "nullable": true
+          },
+          "targetEnrollStudentOnly": {
+            "type": "boolean",
             "nullable": true
           }
         }
@@ -122796,6 +122820,10 @@
           "surveyTopicId": {
             "type": "string",
             "nullable": true
+          },
+          "targetEnrollStudentOnly": {
+            "type": "boolean",
+            "nullable": true
           }
         }
       },
@@ -122859,6 +122887,9 @@
           "clusterSurveyId": {
             "type": "integer"
           },
+          "targetEnrollStudentOnly": {
+            "type": "integer"
+          },
           "_all": {
             "type": "integer"
           }
@@ -122883,6 +122914,7 @@
           "surveyTopicId",
           "trainingObjectTypeId",
           "clusterSurveyId",
+          "targetEnrollStudentOnly",
           "_all"
         ]
       },
@@ -122969,6 +123001,10 @@
           "clusterSurveyId": {
             "type": "string",
             "nullable": true
+          },
+          "targetEnrollStudentOnly": {
+            "type": "boolean",
+            "nullable": true
           }
         }
       },
@@ -123054,6 +123090,10 @@
           },
           "clusterSurveyId": {
             "type": "string",
+            "nullable": true
+          },
+          "targetEnrollStudentOnly": {
+            "type": "boolean",
             "nullable": true
           }
         }

@@ -7661,26 +7661,27 @@ model SurveyQuestionGroup {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model ClusterSurvey {
-  id               String             @id() @default(cuid())
-  code             String?            @unique()
-  active           Boolean            @default(true)
-  description      String?            @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now()) @updatedAt()
-  createdBy        String?            @default("") @db.Uuid()
-  name             String
-  startDate        DateTime
-  endDate          DateTime?
-  isPublic         Boolean            @default(false)
-  anonymous        Boolean            @default(true)
-  surveyTopic      SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId    String
-  surveyObjectType SurveyObjectType[]
-  lecturers        Lecturer[]
-  surveyChoice     SurveyChoice[]
-  surveyQuestion   SurveyQuestion[]
-  surveys          Survey[]
+  id                      String             @id() @default(cuid())
+  code                    String?            @unique()
+  active                  Boolean            @default(true)
+  description             String?            @db.Text()
+  deletedAt               DateTime?
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @default(now()) @updatedAt()
+  createdBy               String?            @default("") @db.Uuid()
+  name                    String
+  startDate               DateTime
+  endDate                 DateTime?
+  isPublic                Boolean            @default(false)
+  anonymous               Boolean            @default(true)
+  surveyTopic             SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId           String
+  surveyObjectType        SurveyObjectType[]
+  lecturers               Lecturer[]
+  surveyChoice            SurveyChoice[]
+  surveyQuestion          SurveyQuestion[]
+  targetEnrollStudentOnly Boolean            @default(false)
+  surveys                 Survey[]
 
   @@schema("khao-thi")
 }
@@ -7689,35 +7690,36 @@ model ClusterSurvey {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model Survey {
-  id                   String              @id() @default(cuid())
-  code                 String?             @unique()
-  active               Boolean             @default(true)
-  description          String?             @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @default(now()) @updatedAt()
-  createdBy            String?             @default("") @db.Uuid()
-  name                 String
-  startDate            DateTime
-  endDate              DateTime?
-  isPublic             Boolean             @default(false)
-  anonymous            Boolean             @default(true)
-  surveyObjectType     SurveyObjectType[]
-  lecture              Lecturer?           @relation(fields: [lectureId], references: [id])
-  lectureId            String?
-  subjectClass         SubjectClass?       @relation(fields: [subjectClassId], references: [id])
-  subjectClassId       String?
-  semester             Semester?           @relation(fields: [semesterId], references: [id])
-  semesterId           String?
-  surveyTopic          SurveyTopic         @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId        String
-  trainingObjectType   TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId String?
-  surveyChoice         SurveyChoice[]
-  surveyQuestion       SurveyQuestion[]
-  surveySessions       SurveySession[]
-  clusterSurvey        ClusterSurvey?      @relation(fields: [clusterSurveyId], references: [id])
-  clusterSurveyId      String?
+  id                      String              @id() @default(cuid())
+  code                    String?             @unique()
+  active                  Boolean             @default(true)
+  description             String?             @db.Text()
+  deletedAt               DateTime?
+  createdAt               DateTime            @default(now())
+  updatedAt               DateTime            @default(now()) @updatedAt()
+  createdBy               String?             @default("") @db.Uuid()
+  name                    String
+  startDate               DateTime
+  endDate                 DateTime?
+  isPublic                Boolean             @default(false)
+  anonymous               Boolean             @default(true)
+  surveyObjectType        SurveyObjectType[]
+  lecture                 Lecturer?           @relation(fields: [lectureId], references: [id])
+  lectureId               String?
+  subjectClass            SubjectClass?       @relation(fields: [subjectClassId], references: [id])
+  subjectClassId          String?
+  semester                Semester?           @relation(fields: [semesterId], references: [id])
+  semesterId              String?
+  surveyTopic             SurveyTopic         @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId           String
+  trainingObjectType      TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId    String?
+  surveyChoice            SurveyChoice[]
+  surveyQuestion          SurveyQuestion[]
+  surveySessions          SurveySession[]
+  clusterSurvey           ClusterSurvey?      @relation(fields: [clusterSurveyId], references: [id])
+  clusterSurveyId         String?
+  targetEnrollStudentOnly Boolean             @default(false)
 
   @@schema("khao-thi")
 }

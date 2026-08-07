@@ -27301,6 +27301,10 @@ const metadata = {
                     isArray: true,
                     backLink: 'clusterSurvey',
                     isRelationOwner: true,
+                }, targetEnrollStudentOnly: {
+                    name: "targetEnrollStudentOnly",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, surveys: {
                     name: "surveys",
                     type: "Survey",
@@ -27491,6 +27495,10 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'clusterSurvey',
+                }, targetEnrollStudentOnly: {
+                    name: "targetEnrollStudentOnly",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 },
             }, uniqueConstraints: {
                 id: {

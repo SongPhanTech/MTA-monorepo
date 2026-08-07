@@ -19,6 +19,7 @@ const baseSchema = z.object({
     endDate: z.coerce.date().nullish(),
     isPublic: z.boolean().default(false),
     anonymous: z.boolean().default(true),
+    targetEnrollStudentOnly: z.boolean().default(false),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -35,6 +36,7 @@ const baseSchemaWithoutDefaults = z.object({
     endDate: z.coerce.date().nullish(),
     isPublic: z.boolean(),
     anonymous: z.boolean(),
+    targetEnrollStudentOnly: z.boolean(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -87,7 +89,8 @@ export const ClusterSurveyPrismaUpdateSchema = z.object({
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish(),
     isPublic: z.boolean(),
-    anonymous: z.boolean()
+    anonymous: z.boolean(),
+    targetEnrollStudentOnly: z.boolean()
 }).partial().passthrough();
 
 
@@ -95,7 +98,7 @@ export const ClusterSurveyPrismaUpdateSchema = z.object({
  * `ClusterSurvey` schema for create operations excluding foreign keys and relations.
  */
 export const ClusterSurveyCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isPublic: true, anonymous: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isPublic: true, anonymous: true, targetEnrollStudentOnly: true
 });
 
 

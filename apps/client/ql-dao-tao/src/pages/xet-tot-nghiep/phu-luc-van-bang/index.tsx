@@ -26,6 +26,7 @@ import {
   useCountStudent,
   useFindManyDM_DonVi,
   useFindManyFixedClass,
+  useFindManyGraduationSession,
   useFindManyStudent,
   useFindManyThesisSession,
   useFindManyTrainingCourse,
@@ -110,6 +111,19 @@ type TGraduationDecision = {
     | null
 }
 
+export interface SessionSignerInfo {
+  chief?: string | null
+  deputy?: string | null
+  graduationDecisionSigner?: string | null
+  graduationDecisionNumber?: string | null
+  graduationNumber?: string | null
+  graduationDecisionDate?: Date | string | null
+  proposalGraduation?: string | null
+  graduationReport?: string | null
+  graduationDecisionMaker?: string | null
+  name?: string | null
+}
+
 type TExportPayload = {
   trainingObjectTypeId: string
   trainingCourseIds?: string[]
@@ -120,7 +134,12 @@ type TExportPayload = {
   signerName?: string
 }
 
-type TExportApi = (payload: TExportPayload) => Promise<any>
+type TExportApiResponse = {
+  status: number
+  data: Blob | { message?: string }
+}
+
+type TExportApi = (payload: TExportPayload) => Promise<TExportApiResponse>
 
 type TExportConfig = {
   api: TExportApi
@@ -275,20 +294,21 @@ export default function StudentGradeSystem() {
     }
   )
 
-  const { data: thesisSessionData = [] } = useFindManyThesisSession(
+  const { data: thesisSessionData = [] } = useFindManyGraduationSession(
     {
       where: {
         active: true,
-        trainingObjectTypeId,
+        deletedAt: null,
+        ...(trainingObjectTypeId && { trainingObjectTypeId }),
         ...(trainingCourseIds?.length && {
-          trainingCourses: {
-            some: {
-              id: {
-                in: trainingCourseIds,
-              },
-            },
-          },
+          OR: [
+            { trainingCourseId: { in: trainingCourseIds } },
+            { trainingCourseId: null },
+          ],
         }),
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     },
     {
@@ -337,6 +357,30 @@ export default function StudentGradeSystem() {
         },
       }),
     },
+    ...(thesisSessionIds?.length > 0 && {
+      OR: [
+        {
+          graduationApplications: {
+            some: {
+              sessionId: {
+                in: thesisSessionIds,
+              },
+            },
+          },
+        },
+        {
+          thesisRegistrations: {
+            some: {
+              thesisProject: {
+                thesisSessionId: {
+                  in: thesisSessionIds,
+                },
+              },
+            },
+          },
+        },
+      ],
+    }),
   }
 
   const { data: count } = useCountStudent(
@@ -1262,16 +1306,17 @@ export default function StudentGradeSystem() {
 
     try {
       showSpinner()
-      const res = await config.api(payload as any)
+      const res = await config.api(payload)
 
       if (res.status === 200) {
-        saveAs(res.data, config.fileName)
+        saveAs(res.data as Blob, config.fileName)
       } else {
-        const errorMsg = res.data?.message || "Đã xảy ra lỗi khi xuất file"
+        const errorMsg = (res.data as { message?: string })?.message || "Đã xảy ra lỗi khi xuất file"
         message.error(errorMsg)
       }
-    } catch (error: any) {
-      message.error(error.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } catch (error: unknown) {
+      const err = error as { message?: string }
+      message.error(err.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()
     }
@@ -1299,13 +1344,14 @@ export default function StudentGradeSystem() {
     }
 
     const selectedSessionId = thesisSessionIds?.[0]
-    const session = thesisSessionData.find((s) => s.id === selectedSessionId)
+    const session = thesisSessionData.find((s) => s.id === selectedSessionId) as SessionSignerInfo | undefined
     if (!session) {
       message.warning("Vui lòng chọn đợt xét trước khi xuất file.")
       return
     }
 
-    setSignRole(session.chief?.trim() ? "chief" : "deputy")
+    const chiefName = session.chief?.trim() || session.graduationDecisionSigner?.trim() || ""
+    setSignRole(chiefName ? "chief" : "deputy")
     const sidebarDate = form.getFieldValue("date")
     setSigningDate(sidebarDate ? dayjs(sidebarDate) : dayjs())
     setSignModalOpen(true)
@@ -1313,10 +1359,12 @@ export default function StudentGradeSystem() {
 
   const handleConfirmSignExport = async () => {
     const selectedSessionId = thesisSessionIds?.[0]
-    const session = thesisSessionData.find((s) => s.id === selectedSessionId)
+    const session = thesisSessionData.find((s) => s.id === selectedSessionId) as SessionSignerInfo | undefined
     if (!session) return
 
-    const signerNameTS = signRole === "chief" ? session.chief || "" : session.deputy || ""
+    const chiefName = session.chief?.trim() || session.graduationDecisionSigner?.trim() || ""
+    const deputyName = session.deputy?.trim() || ""
+    const signerNameTS = signRole === "chief" ? chiefName : deputyName
     if (!signerNameTS.trim()) {
       message.warning(
         `Chưa có họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó phòng"} sau đại học trong đợt xét.`
@@ -1394,6 +1442,13 @@ export default function StudentGradeSystem() {
       ngayToTrinh = reportParts[1].trim()
     }
 
+    const firstStudentCourse = studentsWithSemesters?.[0]?.fixedClass?.trainingCourse
+    const namHocStr =
+      firstStudentCourse?.academicYear ||
+      (firstStudentCourse?.startYear && firstStudentCourse?.endYear
+        ? `${firstStudentCourse.startYear} - ${firstStudentCourse.endYear}`
+        : `${dayjs().year()} - ${dayjs().year() + 1}`)
+
     const items = studentsWithSemesters.map((student) => {
       const course = student.fixedClass?.trainingCourse
       let nienKhoaStr = ""
@@ -1427,7 +1482,7 @@ export default function StudentGradeSystem() {
           thangQD,
           namQD,
           dot: session?.name || "",
-          namHoc: "",
+          namHoc: namHocStr,
           ngayHop: session?.graduationDecisionDate
             ? formatSpecialDate(session.graduationDecisionDate.toString())
             : "",
@@ -1621,14 +1676,14 @@ export default function StudentGradeSystem() {
               <FormItem
                 form={form}
                 name="thesisSessionIds"
-                label="Đợt xét"
+                label="Đợt xét "
                 labelAlign="left"
                 {...formItemLayout}
               >
                 <Select
                   mode="multiple"
                   className="flex-1 w-64"
-                  placeholder="Chọn Đợt xét"
+                  placeholder="Chọn đợt xét tốt nghiệp"
                   maxTagCount={2}
                   maxTagPlaceholder={(omittedValues) => `+${omittedValues.length}`}
                   options={thesisSessionData?.map((e) => ({
@@ -1907,11 +1962,17 @@ export default function StudentGradeSystem() {
         >
           <Radio value="chief">
             Trưởng phòng sau đại học:{" "}
-            <strong>{selectedThesisSession?.chief?.trim() || "(chưa nhập)"}</strong>
+            <strong>
+              {(selectedThesisSession as SessionSignerInfo | undefined)?.chief?.trim() ||
+                selectedThesisSession?.graduationDecisionSigner?.trim() ||
+                "(chưa nhập)"}
+            </strong>
           </Radio>
           <Radio value="deputy">
             Phó phòng sau đại học:{" "}
-            <strong>{selectedThesisSession?.deputy?.trim() || "(chưa nhập)"}</strong>
+            <strong>
+              {(selectedThesisSession as SessionSignerInfo | undefined)?.deputy?.trim() || "(chưa nhập)"}
+            </strong>
           </Radio>
         </Radio.Group>
         <div className="mt-4">
