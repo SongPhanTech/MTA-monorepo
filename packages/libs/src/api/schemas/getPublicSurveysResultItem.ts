@@ -77,4 +77,5 @@ export type GetPublicSurveysResultItem = {
   endDate?: string | null;
   isPublic?: boolean;
   anonymous?: boolean;
+  targetEnrollStudentOnly?: boolean;
 };

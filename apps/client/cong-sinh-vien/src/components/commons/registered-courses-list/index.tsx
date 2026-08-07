@@ -41,21 +41,13 @@ const BY_CURRICULUM_OPTIONS = [
 ]
 
 const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
-  const {
-    sessionId,
-    curriculumVersions = [],
-    endDate,
-    creditLimit = [],
-    tuitionPerCredit,
-  } = props
+  const { sessionId, curriculumVersions = [], endDate, creditLimit = [], tuitionPerCredit } = props
   const [curriculumVersionId, setCurriculumVersionId] = useState(
     curriculumVersions.length > 0 ? curriculumVersions[0].id : ""
   )
   const [byCurriculum, setByCurriculum] = useState(1)
   /** Chỉ khóa đúng dòng lớp đang chờ job — không overlay toàn trang */
-  const [pendingSubjectClassIds, setPendingSubjectClassIds] = useState<Set<string>>(
-    () => new Set()
-  )
+  const [pendingSubjectClassIds, setPendingSubjectClassIds] = useState<Set<string>>(() => new Set())
   const pendingLockRef = useRef<Set<string>>(new Set())
   const { data: classStudentData } = useGetStudentInfo(
     {
@@ -472,7 +464,10 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               render: (_, record) => {
                 return record?.subjectClassTimes?.map?.((tkb) => {
                   return (
-                    <p key={`${tkb?.dayOfWeek}-${tkb?.startPeriod}-${tkb?.endPeriod}`} className="mb-0 whitespace-nowrap">
+                    <p
+                      key={`${tkb?.dayOfWeek}-${tkb?.startPeriod}-${tkb?.endPeriod}`}
+                      className="mb-0 whitespace-nowrap"
+                    >
                       {tkb?.dayOfWeek === 8 ? "CN" : `T${tkb?.dayOfWeek}`} - {tkb?.startPeriod} -{" "}
                       {tkb?.endPeriod}
                     </p>

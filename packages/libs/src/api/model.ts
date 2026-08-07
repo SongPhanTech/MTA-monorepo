@@ -57,10 +57,7 @@ Hầu hết lỗi trả về JSON:
 **Lưu ý:** một số endpoint APIM logs bắt lỗi nội bộ và vẫn trả HTTP 200 với `false`, `[]` hoặc `{ ok: false }` thay vì mã lỗi HTTP.
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query"
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -73,8 +70,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query"
 
 import type {
   AccessRequestsParams,
@@ -151,18 +148,15 @@ import type {
   UnauthorizedResponse,
   UpdateConfigLogs200Item,
   UrlDto,
-  Wso2Application
-} from './schemas';
+  Wso2Application,
+} from "./schemas"
 
-import { customModelFetch } from './custom-instance';
-type AwaitedInput<T> = PromiseLike<T> | T;
+import { customModelFetch } from "./custom-instance"
+type AwaitedInput<T> = PromiseLike<T> | T
 
-      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 /**
  * @summary Lấy thông tin phiên đăng nhập
@@ -201,120 +195,154 @@ export type getSessionResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type getSessionResponseSuccess = (getSessionResponse200) & {
-  headers: Headers;
-};
-export type getSessionResponseError = (getSessionResponse400 | getSessionResponse401 | getSessionResponse403 | getSessionResponse404 | getSessionResponse409 | getSessionResponse500) & {
-  headers: Headers;
-};
 
-export type getSessionResponse = (getSessionResponseSuccess | getSessionResponseError)
-
-export const getGetSessionUrl = (params: GetSessionParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/auth/get-session?${stringifiedParams}` : `/api/auth/get-session`
+export type getSessionResponseSuccess = getSessionResponse200 & {
+  headers: Headers
+}
+export type getSessionResponseError = (
+  | getSessionResponse400
+  | getSessionResponse401
+  | getSessionResponse403
+  | getSessionResponse404
+  | getSessionResponse409
+  | getSessionResponse500
+) & {
+  headers: Headers
 }
 
-export const getSession = async (params: GetSessionParams, options?: RequestInit): Promise<getSessionResponse> => {
-  
-  return customModelFetch<getSessionResponse>(getGetSessionUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getSessionResponse = getSessionResponseSuccess | getSessionResponseError
 
+export const getGetSessionUrl = (params: GetSessionParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getGetSessionQueryKey = (params?: GetSessionParams,) => {
-    return [
-    `/api/auth/get-session`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getGetSessionQueryOptions = <TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: GetSessionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/auth/get-session?${stringifiedParams}`
+    : `/api/auth/get-session`
+}
+
+export const getSession = async (
+  params: GetSessionParams,
+  options?: RequestInit
+): Promise<getSessionResponse> => {
+  return customModelFetch<getSessionResponse>(getGetSessionUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getGetSessionQueryKey = (params?: GetSessionParams) => {
+  return [`/api/auth/get-session`, ...(params ? [params] : [])] as const
+}
+
+export const getGetSessionQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetSessionParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetSessionQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSessionQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) =>
+    getSession(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) => getSession(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSession>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetSessionQueryResult = NonNullable<Awaited<ReturnType<typeof getSession>>>
 export type GetSessionQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useGetSession<TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetSessionParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> & Pick<
+export function useGetSession<
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetSessionParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSession>>,
           TError,
           Awaited<ReturnType<typeof getSession>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSession<TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetSessionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSession<
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetSessionParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSession>>,
           TError,
           Awaited<ReturnType<typeof getSession>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSession<TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetSessionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSession<
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetSessionParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy thông tin phiên đăng nhập
  */
 
-export function useGetSession<TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetSessionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetSession<
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetSessionParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetSessionQueryOptions(params, options)
 
-  const queryOptions = getGetSessionQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Kiểm tra cấu hình log FULL cho API
@@ -353,120 +381,154 @@ export type getConfigLogsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type getConfigLogsResponseSuccess = (getConfigLogsResponse200) & {
-  headers: Headers;
-};
-export type getConfigLogsResponseError = (getConfigLogsResponse400 | getConfigLogsResponse401 | getConfigLogsResponse403 | getConfigLogsResponse404 | getConfigLogsResponse409 | getConfigLogsResponse500) & {
-  headers: Headers;
-};
 
-export type getConfigLogsResponse = (getConfigLogsResponseSuccess | getConfigLogsResponseError)
-
-export const getGetConfigLogsUrl = (params: GetConfigLogsParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/apim-logs/config-logs?${stringifiedParams}` : `/api/apim-logs/config-logs`
+export type getConfigLogsResponseSuccess = getConfigLogsResponse200 & {
+  headers: Headers
+}
+export type getConfigLogsResponseError = (
+  | getConfigLogsResponse400
+  | getConfigLogsResponse401
+  | getConfigLogsResponse403
+  | getConfigLogsResponse404
+  | getConfigLogsResponse409
+  | getConfigLogsResponse500
+) & {
+  headers: Headers
 }
 
-export const getConfigLogs = async (params: GetConfigLogsParams, options?: RequestInit): Promise<getConfigLogsResponse> => {
-  
-  return customModelFetch<getConfigLogsResponse>(getGetConfigLogsUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getConfigLogsResponse = getConfigLogsResponseSuccess | getConfigLogsResponseError
 
+export const getGetConfigLogsUrl = (params: GetConfigLogsParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getGetConfigLogsQueryKey = (params?: GetConfigLogsParams,) => {
-    return [
-    `/api/apim-logs/config-logs`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getGetConfigLogsQueryOptions = <TData = Awaited<ReturnType<typeof getConfigLogs>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: GetConfigLogsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/apim-logs/config-logs?${stringifiedParams}`
+    : `/api/apim-logs/config-logs`
+}
+
+export const getConfigLogs = async (
+  params: GetConfigLogsParams,
+  options?: RequestInit
+): Promise<getConfigLogsResponse> => {
+  return customModelFetch<getConfigLogsResponse>(getGetConfigLogsUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getGetConfigLogsQueryKey = (params?: GetConfigLogsParams) => {
+  return [`/api/apim-logs/config-logs`, ...(params ? [params] : [])] as const
+}
+
+export const getGetConfigLogsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getConfigLogs>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetConfigLogsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetConfigLogsQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetConfigLogsQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getConfigLogs>>> = ({ signal }) =>
+    getConfigLogs(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getConfigLogs>>> = ({ signal }) => getConfigLogs(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getConfigLogs>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetConfigLogsQueryResult = NonNullable<Awaited<ReturnType<typeof getConfigLogs>>>
 export type GetConfigLogsQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useGetConfigLogs<TData = Awaited<ReturnType<typeof getConfigLogs>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetConfigLogsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>> & Pick<
+export function useGetConfigLogs<
+  TData = Awaited<ReturnType<typeof getConfigLogs>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetConfigLogsParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getConfigLogs>>,
           TError,
           Awaited<ReturnType<typeof getConfigLogs>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetConfigLogs<TData = Awaited<ReturnType<typeof getConfigLogs>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetConfigLogsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetConfigLogs<
+  TData = Awaited<ReturnType<typeof getConfigLogs>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetConfigLogsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getConfigLogs>>,
           TError,
           Awaited<ReturnType<typeof getConfigLogs>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetConfigLogs<TData = Awaited<ReturnType<typeof getConfigLogs>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetConfigLogsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetConfigLogs<
+  TData = Awaited<ReturnType<typeof getConfigLogs>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetConfigLogsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra cấu hình log FULL cho API
  */
 
-export function useGetConfigLogs<TData = Awaited<ReturnType<typeof getConfigLogs>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetConfigLogsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetConfigLogs<
+  TData = Awaited<ReturnType<typeof getConfigLogs>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetConfigLogsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getConfigLogs>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetConfigLogsQueryOptions(params, options)
 
-  const queryOptions = getGetConfigLogsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Bật/tắt log FULL cho tất cả resource của API
@@ -505,85 +567,111 @@ export type updateConfigLogsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type updateConfigLogsResponseSuccess = (updateConfigLogsResponse200) & {
-  headers: Headers;
-};
-export type updateConfigLogsResponseError = (updateConfigLogsResponse400 | updateConfigLogsResponse401 | updateConfigLogsResponse403 | updateConfigLogsResponse404 | updateConfigLogsResponse409 | updateConfigLogsResponse500) & {
-  headers: Headers;
-};
 
-export type updateConfigLogsResponse = (updateConfigLogsResponseSuccess | updateConfigLogsResponseError)
+export type updateConfigLogsResponseSuccess = updateConfigLogsResponse200 & {
+  headers: Headers
+}
+export type updateConfigLogsResponseError = (
+  | updateConfigLogsResponse400
+  | updateConfigLogsResponse401
+  | updateConfigLogsResponse403
+  | updateConfigLogsResponse404
+  | updateConfigLogsResponse409
+  | updateConfigLogsResponse500
+) & {
+  headers: Headers
+}
+
+export type updateConfigLogsResponse =
+  | updateConfigLogsResponseSuccess
+  | updateConfigLogsResponseError
 
 export const getUpdateConfigLogsUrl = () => {
-
-
-  
-
   return `/api/apim-logs/config-logs`
 }
 
-export const updateConfigLogs = async (apimConfigLogsUpdate: ApimConfigLogsUpdate, options?: RequestInit): Promise<updateConfigLogsResponse> => {
-  
-  return customModelFetch<updateConfigLogsResponse>(getUpdateConfigLogsUrl(),
-  {      
+export const updateConfigLogs = async (
+  apimConfigLogsUpdate: ApimConfigLogsUpdate,
+  options?: RequestInit
+): Promise<updateConfigLogsResponse> => {
+  return customModelFetch<updateConfigLogsResponse>(getUpdateConfigLogsUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      apimConfigLogsUpdate,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(apimConfigLogsUpdate),
+  })
+}
+
+export const getUpdateConfigLogsMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateConfigLogs>>,
+    TError,
+    { data: ApimConfigLogsUpdate },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateConfigLogs>>,
+  TError,
+  { data: ApimConfigLogsUpdate },
+  TContext
+> => {
+  const mutationKey = ["updateConfigLogs"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateConfigLogs>>,
+    { data: ApimConfigLogsUpdate }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return updateConfigLogs(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type UpdateConfigLogsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateConfigLogs>>
+>
+export type UpdateConfigLogsMutationBody = ApimConfigLogsUpdate
+export type UpdateConfigLogsMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getUpdateConfigLogsMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateConfigLogs>>, TError,{data: ApimConfigLogsUpdate}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateConfigLogs>>, TError,{data: ApimConfigLogsUpdate}, TContext> => {
-
-const mutationKey = ['updateConfigLogs'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateConfigLogs>>, {data: ApimConfigLogsUpdate}> = (props) => {
-          const {data} = props ?? {};
-
-          return  updateConfigLogs(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateConfigLogsMutationResult = NonNullable<Awaited<ReturnType<typeof updateConfigLogs>>>
-    export type UpdateConfigLogsMutationBody = ApimConfigLogsUpdate
-    export type UpdateConfigLogsMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Bật/tắt log FULL cho tất cả resource của API
  */
-export const useUpdateConfigLogs = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateConfigLogs>>, TError,{data: ApimConfigLogsUpdate}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateConfigLogs>>,
-        TError,
-        {data: ApimConfigLogsUpdate},
-        TContext
-      > => {
+export const useUpdateConfigLogs = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof updateConfigLogs>>,
+      TError,
+      { data: ApimConfigLogsUpdate },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof updateConfigLogs>>,
+  TError,
+  { data: ApimConfigLogsUpdate },
+  TContext
+> => {
+  const mutationOptions = getUpdateConfigLogsMutationOptions(options)
 
-      const mutationOptions = getUpdateConfigLogsMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Truy vấn log request/response APIM
  */
@@ -621,120 +709,154 @@ export type accessRequestsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type accessRequestsResponseSuccess = (accessRequestsResponse200) & {
-  headers: Headers;
-};
-export type accessRequestsResponseError = (accessRequestsResponse400 | accessRequestsResponse401 | accessRequestsResponse403 | accessRequestsResponse404 | accessRequestsResponse409 | accessRequestsResponse500) & {
-  headers: Headers;
-};
 
-export type accessRequestsResponse = (accessRequestsResponseSuccess | accessRequestsResponseError)
-
-export const getAccessRequestsUrl = (params: AccessRequestsParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/apim-logs/access-requests?${stringifiedParams}` : `/api/apim-logs/access-requests`
+export type accessRequestsResponseSuccess = accessRequestsResponse200 & {
+  headers: Headers
+}
+export type accessRequestsResponseError = (
+  | accessRequestsResponse400
+  | accessRequestsResponse401
+  | accessRequestsResponse403
+  | accessRequestsResponse404
+  | accessRequestsResponse409
+  | accessRequestsResponse500
+) & {
+  headers: Headers
 }
 
-export const accessRequests = async (params: AccessRequestsParams, options?: RequestInit): Promise<accessRequestsResponse> => {
-  
-  return customModelFetch<accessRequestsResponse>(getAccessRequestsUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type accessRequestsResponse = accessRequestsResponseSuccess | accessRequestsResponseError
 
+export const getAccessRequestsUrl = (params: AccessRequestsParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getAccessRequestsQueryKey = (params?: AccessRequestsParams,) => {
-    return [
-    `/api/apim-logs/access-requests`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getAccessRequestsQueryOptions = <TData = Awaited<ReturnType<typeof accessRequests>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: AccessRequestsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/apim-logs/access-requests?${stringifiedParams}`
+    : `/api/apim-logs/access-requests`
+}
+
+export const accessRequests = async (
+  params: AccessRequestsParams,
+  options?: RequestInit
+): Promise<accessRequestsResponse> => {
+  return customModelFetch<accessRequestsResponse>(getAccessRequestsUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getAccessRequestsQueryKey = (params?: AccessRequestsParams) => {
+  return [`/api/apim-logs/access-requests`, ...(params ? [params] : [])] as const
+}
+
+export const getAccessRequestsQueryOptions = <
+  TData = Awaited<ReturnType<typeof accessRequests>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: AccessRequestsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getAccessRequestsQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getAccessRequestsQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof accessRequests>>> = ({ signal }) =>
+    accessRequests(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof accessRequests>>> = ({ signal }) => accessRequests(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof accessRequests>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type AccessRequestsQueryResult = NonNullable<Awaited<ReturnType<typeof accessRequests>>>
 export type AccessRequestsQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useAccessRequests<TData = Awaited<ReturnType<typeof accessRequests>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: AccessRequestsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>> & Pick<
+export function useAccessRequests<
+  TData = Awaited<ReturnType<typeof accessRequests>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: AccessRequestsParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof accessRequests>>,
           TError,
           Awaited<ReturnType<typeof accessRequests>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useAccessRequests<TData = Awaited<ReturnType<typeof accessRequests>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: AccessRequestsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useAccessRequests<
+  TData = Awaited<ReturnType<typeof accessRequests>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: AccessRequestsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof accessRequests>>,
           TError,
           Awaited<ReturnType<typeof accessRequests>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useAccessRequests<TData = Awaited<ReturnType<typeof accessRequests>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: AccessRequestsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useAccessRequests<
+  TData = Awaited<ReturnType<typeof accessRequests>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: AccessRequestsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Truy vấn log request/response APIM
  */
 
-export function useAccessRequests<TData = Awaited<ReturnType<typeof accessRequests>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: AccessRequestsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useAccessRequests<
+  TData = Awaited<ReturnType<typeof accessRequests>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: AccessRequestsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof accessRequests>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getAccessRequestsQueryOptions(params, options)
 
-  const queryOptions = getAccessRequestsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Đếm request theo API
@@ -773,120 +895,154 @@ export type countRequestsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type countRequestsResponseSuccess = (countRequestsResponse200) & {
-  headers: Headers;
-};
-export type countRequestsResponseError = (countRequestsResponse400 | countRequestsResponse401 | countRequestsResponse403 | countRequestsResponse404 | countRequestsResponse409 | countRequestsResponse500) & {
-  headers: Headers;
-};
 
-export type countRequestsResponse = (countRequestsResponseSuccess | countRequestsResponseError)
-
-export const getCountRequestsUrl = (params: CountRequestsParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/apim-logs/count-requests?${stringifiedParams}` : `/api/apim-logs/count-requests`
+export type countRequestsResponseSuccess = countRequestsResponse200 & {
+  headers: Headers
+}
+export type countRequestsResponseError = (
+  | countRequestsResponse400
+  | countRequestsResponse401
+  | countRequestsResponse403
+  | countRequestsResponse404
+  | countRequestsResponse409
+  | countRequestsResponse500
+) & {
+  headers: Headers
 }
 
-export const countRequests = async (params: CountRequestsParams, options?: RequestInit): Promise<countRequestsResponse> => {
-  
-  return customModelFetch<countRequestsResponse>(getCountRequestsUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type countRequestsResponse = countRequestsResponseSuccess | countRequestsResponseError
 
+export const getCountRequestsUrl = (params: CountRequestsParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getCountRequestsQueryKey = (params?: CountRequestsParams,) => {
-    return [
-    `/api/apim-logs/count-requests`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getCountRequestsQueryOptions = <TData = Awaited<ReturnType<typeof countRequests>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: CountRequestsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/apim-logs/count-requests?${stringifiedParams}`
+    : `/api/apim-logs/count-requests`
+}
+
+export const countRequests = async (
+  params: CountRequestsParams,
+  options?: RequestInit
+): Promise<countRequestsResponse> => {
+  return customModelFetch<countRequestsResponse>(getCountRequestsUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getCountRequestsQueryKey = (params?: CountRequestsParams) => {
+  return [`/api/apim-logs/count-requests`, ...(params ? [params] : [])] as const
+}
+
+export const getCountRequestsQueryOptions = <
+  TData = Awaited<ReturnType<typeof countRequests>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: CountRequestsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getCountRequestsQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getCountRequestsQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof countRequests>>> = ({ signal }) =>
+    countRequests(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof countRequests>>> = ({ signal }) => countRequests(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof countRequests>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type CountRequestsQueryResult = NonNullable<Awaited<ReturnType<typeof countRequests>>>
 export type CountRequestsQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useCountRequests<TData = Awaited<ReturnType<typeof countRequests>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: CountRequestsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>> & Pick<
+export function useCountRequests<
+  TData = Awaited<ReturnType<typeof countRequests>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: CountRequestsParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof countRequests>>,
           TError,
           Awaited<ReturnType<typeof countRequests>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCountRequests<TData = Awaited<ReturnType<typeof countRequests>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: CountRequestsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCountRequests<
+  TData = Awaited<ReturnType<typeof countRequests>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: CountRequestsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof countRequests>>,
           TError,
           Awaited<ReturnType<typeof countRequests>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCountRequests<TData = Awaited<ReturnType<typeof countRequests>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: CountRequestsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCountRequests<
+  TData = Awaited<ReturnType<typeof countRequests>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: CountRequestsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Đếm request theo API
  */
 
-export function useCountRequests<TData = Awaited<ReturnType<typeof countRequests>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: CountRequestsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useCountRequests<
+  TData = Awaited<ReturnType<typeof countRequests>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: CountRequestsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof countRequests>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getCountRequestsQueryOptions(params, options)
 
-  const queryOptions = getCountRequestsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Thống kê độ trễ trung bình theo API
@@ -925,120 +1081,154 @@ export type latencyAverageResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type latencyAverageResponseSuccess = (latencyAverageResponse200) & {
-  headers: Headers;
-};
-export type latencyAverageResponseError = (latencyAverageResponse400 | latencyAverageResponse401 | latencyAverageResponse403 | latencyAverageResponse404 | latencyAverageResponse409 | latencyAverageResponse500) & {
-  headers: Headers;
-};
 
-export type latencyAverageResponse = (latencyAverageResponseSuccess | latencyAverageResponseError)
-
-export const getLatencyAverageUrl = (params: LatencyAverageParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/apim-logs/latency-average?${stringifiedParams}` : `/api/apim-logs/latency-average`
+export type latencyAverageResponseSuccess = latencyAverageResponse200 & {
+  headers: Headers
+}
+export type latencyAverageResponseError = (
+  | latencyAverageResponse400
+  | latencyAverageResponse401
+  | latencyAverageResponse403
+  | latencyAverageResponse404
+  | latencyAverageResponse409
+  | latencyAverageResponse500
+) & {
+  headers: Headers
 }
 
-export const latencyAverage = async (params: LatencyAverageParams, options?: RequestInit): Promise<latencyAverageResponse> => {
-  
-  return customModelFetch<latencyAverageResponse>(getLatencyAverageUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type latencyAverageResponse = latencyAverageResponseSuccess | latencyAverageResponseError
 
+export const getLatencyAverageUrl = (params: LatencyAverageParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getLatencyAverageQueryKey = (params?: LatencyAverageParams,) => {
-    return [
-    `/api/apim-logs/latency-average`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getLatencyAverageQueryOptions = <TData = Awaited<ReturnType<typeof latencyAverage>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: LatencyAverageParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/apim-logs/latency-average?${stringifiedParams}`
+    : `/api/apim-logs/latency-average`
+}
+
+export const latencyAverage = async (
+  params: LatencyAverageParams,
+  options?: RequestInit
+): Promise<latencyAverageResponse> => {
+  return customModelFetch<latencyAverageResponse>(getLatencyAverageUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getLatencyAverageQueryKey = (params?: LatencyAverageParams) => {
+  return [`/api/apim-logs/latency-average`, ...(params ? [params] : [])] as const
+}
+
+export const getLatencyAverageQueryOptions = <
+  TData = Awaited<ReturnType<typeof latencyAverage>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: LatencyAverageParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getLatencyAverageQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getLatencyAverageQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof latencyAverage>>> = ({ signal }) =>
+    latencyAverage(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof latencyAverage>>> = ({ signal }) => latencyAverage(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof latencyAverage>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type LatencyAverageQueryResult = NonNullable<Awaited<ReturnType<typeof latencyAverage>>>
 export type LatencyAverageQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useLatencyAverage<TData = Awaited<ReturnType<typeof latencyAverage>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: LatencyAverageParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>> & Pick<
+export function useLatencyAverage<
+  TData = Awaited<ReturnType<typeof latencyAverage>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: LatencyAverageParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof latencyAverage>>,
           TError,
           Awaited<ReturnType<typeof latencyAverage>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useLatencyAverage<TData = Awaited<ReturnType<typeof latencyAverage>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: LatencyAverageParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useLatencyAverage<
+  TData = Awaited<ReturnType<typeof latencyAverage>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: LatencyAverageParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof latencyAverage>>,
           TError,
           Awaited<ReturnType<typeof latencyAverage>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useLatencyAverage<TData = Awaited<ReturnType<typeof latencyAverage>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: LatencyAverageParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useLatencyAverage<
+  TData = Awaited<ReturnType<typeof latencyAverage>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: LatencyAverageParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thống kê độ trễ trung bình theo API
  */
 
-export function useLatencyAverage<TData = Awaited<ReturnType<typeof latencyAverage>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: LatencyAverageParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useLatencyAverage<
+  TData = Awaited<ReturnType<typeof latencyAverage>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: LatencyAverageParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof latencyAverage>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getLatencyAverageQueryOptions(params, options)
 
-  const queryOptions = getLatencyAverageQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Thống kê tỷ lệ lỗi theo API
@@ -1077,120 +1267,154 @@ export type errorRateResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type errorRateResponseSuccess = (errorRateResponse200) & {
-  headers: Headers;
-};
-export type errorRateResponseError = (errorRateResponse400 | errorRateResponse401 | errorRateResponse403 | errorRateResponse404 | errorRateResponse409 | errorRateResponse500) & {
-  headers: Headers;
-};
 
-export type errorRateResponse = (errorRateResponseSuccess | errorRateResponseError)
-
-export const getErrorRateUrl = (params: ErrorRateParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/apim-logs/error-rate?${stringifiedParams}` : `/api/apim-logs/error-rate`
+export type errorRateResponseSuccess = errorRateResponse200 & {
+  headers: Headers
+}
+export type errorRateResponseError = (
+  | errorRateResponse400
+  | errorRateResponse401
+  | errorRateResponse403
+  | errorRateResponse404
+  | errorRateResponse409
+  | errorRateResponse500
+) & {
+  headers: Headers
 }
 
-export const errorRate = async (params: ErrorRateParams, options?: RequestInit): Promise<errorRateResponse> => {
-  
-  return customModelFetch<errorRateResponse>(getErrorRateUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type errorRateResponse = errorRateResponseSuccess | errorRateResponseError
 
+export const getErrorRateUrl = (params: ErrorRateParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getErrorRateQueryKey = (params?: ErrorRateParams,) => {
-    return [
-    `/api/apim-logs/error-rate`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getErrorRateQueryOptions = <TData = Awaited<ReturnType<typeof errorRate>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: ErrorRateParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/apim-logs/error-rate?${stringifiedParams}`
+    : `/api/apim-logs/error-rate`
+}
+
+export const errorRate = async (
+  params: ErrorRateParams,
+  options?: RequestInit
+): Promise<errorRateResponse> => {
+  return customModelFetch<errorRateResponse>(getErrorRateUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getErrorRateQueryKey = (params?: ErrorRateParams) => {
+  return [`/api/apim-logs/error-rate`, ...(params ? [params] : [])] as const
+}
+
+export const getErrorRateQueryOptions = <
+  TData = Awaited<ReturnType<typeof errorRate>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ErrorRateParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getErrorRateQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getErrorRateQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof errorRate>>> = ({ signal }) =>
+    errorRate(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof errorRate>>> = ({ signal }) => errorRate(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof errorRate>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type ErrorRateQueryResult = NonNullable<Awaited<ReturnType<typeof errorRate>>>
 export type ErrorRateQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useErrorRate<TData = Awaited<ReturnType<typeof errorRate>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ErrorRateParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>> & Pick<
+export function useErrorRate<
+  TData = Awaited<ReturnType<typeof errorRate>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ErrorRateParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof errorRate>>,
           TError,
           Awaited<ReturnType<typeof errorRate>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useErrorRate<TData = Awaited<ReturnType<typeof errorRate>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ErrorRateParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useErrorRate<
+  TData = Awaited<ReturnType<typeof errorRate>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ErrorRateParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof errorRate>>,
           TError,
           Awaited<ReturnType<typeof errorRate>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useErrorRate<TData = Awaited<ReturnType<typeof errorRate>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ErrorRateParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useErrorRate<
+  TData = Awaited<ReturnType<typeof errorRate>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ErrorRateParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thống kê tỷ lệ lỗi theo API
  */
 
-export function useErrorRate<TData = Awaited<ReturnType<typeof errorRate>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ErrorRateParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useErrorRate<
+  TData = Awaited<ReturnType<typeof errorRate>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ErrorRateParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof errorRate>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getErrorRateQueryOptions(params, options)
 
-  const queryOptions = getErrorRateQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Thống kê throughput theo thời gian
@@ -1229,120 +1453,154 @@ export type throughputResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type throughputResponseSuccess = (throughputResponse200) & {
-  headers: Headers;
-};
-export type throughputResponseError = (throughputResponse400 | throughputResponse401 | throughputResponse403 | throughputResponse404 | throughputResponse409 | throughputResponse500) & {
-  headers: Headers;
-};
 
-export type throughputResponse = (throughputResponseSuccess | throughputResponseError)
-
-export const getThroughputUrl = (params: ThroughputParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/apim-logs/throughput?${stringifiedParams}` : `/api/apim-logs/throughput`
+export type throughputResponseSuccess = throughputResponse200 & {
+  headers: Headers
+}
+export type throughputResponseError = (
+  | throughputResponse400
+  | throughputResponse401
+  | throughputResponse403
+  | throughputResponse404
+  | throughputResponse409
+  | throughputResponse500
+) & {
+  headers: Headers
 }
 
-export const throughput = async (params: ThroughputParams, options?: RequestInit): Promise<throughputResponse> => {
-  
-  return customModelFetch<throughputResponse>(getThroughputUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type throughputResponse = throughputResponseSuccess | throughputResponseError
 
+export const getThroughputUrl = (params: ThroughputParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getThroughputQueryKey = (params?: ThroughputParams,) => {
-    return [
-    `/api/apim-logs/throughput`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getThroughputQueryOptions = <TData = Awaited<ReturnType<typeof throughput>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: ThroughputParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/apim-logs/throughput?${stringifiedParams}`
+    : `/api/apim-logs/throughput`
+}
+
+export const throughput = async (
+  params: ThroughputParams,
+  options?: RequestInit
+): Promise<throughputResponse> => {
+  return customModelFetch<throughputResponse>(getThroughputUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getThroughputQueryKey = (params?: ThroughputParams) => {
+  return [`/api/apim-logs/throughput`, ...(params ? [params] : [])] as const
+}
+
+export const getThroughputQueryOptions = <
+  TData = Awaited<ReturnType<typeof throughput>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ThroughputParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getThroughputQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getThroughputQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof throughput>>> = ({ signal }) =>
+    throughput(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof throughput>>> = ({ signal }) => throughput(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof throughput>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type ThroughputQueryResult = NonNullable<Awaited<ReturnType<typeof throughput>>>
 export type ThroughputQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useThroughput<TData = Awaited<ReturnType<typeof throughput>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ThroughputParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>> & Pick<
+export function useThroughput<
+  TData = Awaited<ReturnType<typeof throughput>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ThroughputParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof throughput>>,
           TError,
           Awaited<ReturnType<typeof throughput>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useThroughput<TData = Awaited<ReturnType<typeof throughput>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ThroughputParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useThroughput<
+  TData = Awaited<ReturnType<typeof throughput>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ThroughputParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof throughput>>,
           TError,
           Awaited<ReturnType<typeof throughput>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useThroughput<TData = Awaited<ReturnType<typeof throughput>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ThroughputParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useThroughput<
+  TData = Awaited<ReturnType<typeof throughput>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ThroughputParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thống kê throughput theo thời gian
  */
 
-export function useThroughput<TData = Awaited<ReturnType<typeof throughput>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ThroughputParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useThroughput<
+  TData = Awaited<ReturnType<typeof throughput>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ThroughputParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof throughput>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getThroughputQueryOptions(params, options)
 
-  const queryOptions = getThroughputQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Ghi log deploy/undeploy API
@@ -1381,85 +1639,107 @@ export type insertDeployLogResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type insertDeployLogResponseSuccess = (insertDeployLogResponse200) & {
-  headers: Headers;
-};
-export type insertDeployLogResponseError = (insertDeployLogResponse400 | insertDeployLogResponse401 | insertDeployLogResponse403 | insertDeployLogResponse404 | insertDeployLogResponse409 | insertDeployLogResponse500) & {
-  headers: Headers;
-};
 
-export type insertDeployLogResponse = (insertDeployLogResponseSuccess | insertDeployLogResponseError)
+export type insertDeployLogResponseSuccess = insertDeployLogResponse200 & {
+  headers: Headers
+}
+export type insertDeployLogResponseError = (
+  | insertDeployLogResponse400
+  | insertDeployLogResponse401
+  | insertDeployLogResponse403
+  | insertDeployLogResponse404
+  | insertDeployLogResponse409
+  | insertDeployLogResponse500
+) & {
+  headers: Headers
+}
+
+export type insertDeployLogResponse = insertDeployLogResponseSuccess | insertDeployLogResponseError
 
 export const getInsertDeployLogUrl = () => {
-
-
-  
-
   return `/api/apim-logs/deploy-logs`
 }
 
-export const insertDeployLog = async (apimDeployLogCreate: ApimDeployLogCreate, options?: RequestInit): Promise<insertDeployLogResponse> => {
-  
-  return customModelFetch<insertDeployLogResponse>(getInsertDeployLogUrl(),
-  {      
+export const insertDeployLog = async (
+  apimDeployLogCreate: ApimDeployLogCreate,
+  options?: RequestInit
+): Promise<insertDeployLogResponse> => {
+  return customModelFetch<insertDeployLogResponse>(getInsertDeployLogUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      apimDeployLogCreate,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(apimDeployLogCreate),
+  })
+}
+
+export const getInsertDeployLogMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof insertDeployLog>>,
+    TError,
+    { data: ApimDeployLogCreate },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof insertDeployLog>>,
+  TError,
+  { data: ApimDeployLogCreate },
+  TContext
+> => {
+  const mutationKey = ["insertDeployLog"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof insertDeployLog>>,
+    { data: ApimDeployLogCreate }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return insertDeployLog(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type InsertDeployLogMutationResult = NonNullable<Awaited<ReturnType<typeof insertDeployLog>>>
+export type InsertDeployLogMutationBody = ApimDeployLogCreate
+export type InsertDeployLogMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getInsertDeployLogMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof insertDeployLog>>, TError,{data: ApimDeployLogCreate}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof insertDeployLog>>, TError,{data: ApimDeployLogCreate}, TContext> => {
-
-const mutationKey = ['insertDeployLog'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof insertDeployLog>>, {data: ApimDeployLogCreate}> = (props) => {
-          const {data} = props ?? {};
-
-          return  insertDeployLog(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type InsertDeployLogMutationResult = NonNullable<Awaited<ReturnType<typeof insertDeployLog>>>
-    export type InsertDeployLogMutationBody = ApimDeployLogCreate
-    export type InsertDeployLogMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Ghi log deploy/undeploy API
  */
-export const useInsertDeployLog = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof insertDeployLog>>, TError,{data: ApimDeployLogCreate}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof insertDeployLog>>,
-        TError,
-        {data: ApimDeployLogCreate},
-        TContext
-      > => {
+export const useInsertDeployLog = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof insertDeployLog>>,
+      TError,
+      { data: ApimDeployLogCreate },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof insertDeployLog>>,
+  TError,
+  { data: ApimDeployLogCreate },
+  TContext
+> => {
+  const mutationOptions = getInsertDeployLogMutationOptions(options)
 
-      const mutationOptions = getInsertDeployLogMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Lấy lịch sử deploy API
  */
@@ -1497,120 +1777,154 @@ export type getDeployLogsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type getDeployLogsResponseSuccess = (getDeployLogsResponse200) & {
-  headers: Headers;
-};
-export type getDeployLogsResponseError = (getDeployLogsResponse400 | getDeployLogsResponse401 | getDeployLogsResponse403 | getDeployLogsResponse404 | getDeployLogsResponse409 | getDeployLogsResponse500) & {
-  headers: Headers;
-};
 
-export type getDeployLogsResponse = (getDeployLogsResponseSuccess | getDeployLogsResponseError)
-
-export const getGetDeployLogsUrl = (params: GetDeployLogsParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/apim-logs/deploy-logs?${stringifiedParams}` : `/api/apim-logs/deploy-logs`
+export type getDeployLogsResponseSuccess = getDeployLogsResponse200 & {
+  headers: Headers
+}
+export type getDeployLogsResponseError = (
+  | getDeployLogsResponse400
+  | getDeployLogsResponse401
+  | getDeployLogsResponse403
+  | getDeployLogsResponse404
+  | getDeployLogsResponse409
+  | getDeployLogsResponse500
+) & {
+  headers: Headers
 }
 
-export const getDeployLogs = async (params: GetDeployLogsParams, options?: RequestInit): Promise<getDeployLogsResponse> => {
-  
-  return customModelFetch<getDeployLogsResponse>(getGetDeployLogsUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDeployLogsResponse = getDeployLogsResponseSuccess | getDeployLogsResponseError
 
+export const getGetDeployLogsUrl = (params: GetDeployLogsParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getGetDeployLogsQueryKey = (params?: GetDeployLogsParams,) => {
-    return [
-    `/api/apim-logs/deploy-logs`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getGetDeployLogsQueryOptions = <TData = Awaited<ReturnType<typeof getDeployLogs>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: GetDeployLogsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDeployLogs>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/apim-logs/deploy-logs?${stringifiedParams}`
+    : `/api/apim-logs/deploy-logs`
+}
+
+export const getDeployLogs = async (
+  params: GetDeployLogsParams,
+  options?: RequestInit
+): Promise<getDeployLogsResponse> => {
+  return customModelFetch<getDeployLogsResponse>(getGetDeployLogsUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getGetDeployLogsQueryKey = (params?: GetDeployLogsParams) => {
+  return [`/api/apim-logs/deploy-logs`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDeployLogsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getDeployLogs>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetDeployLogsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDeployLogs>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetDeployLogsQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDeployLogsQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getDeployLogs>>> = ({ signal }) =>
+    getDeployLogs(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDeployLogs>>> = ({ signal }) => getDeployLogs(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDeployLogs>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getDeployLogs>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDeployLogsQueryResult = NonNullable<Awaited<ReturnType<typeof getDeployLogs>>>
 export type GetDeployLogsQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useGetDeployLogs<TData = Awaited<ReturnType<typeof getDeployLogs>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetDeployLogsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDeployLogs>>, TError, TData>> & Pick<
+export function useGetDeployLogs<
+  TData = Awaited<ReturnType<typeof getDeployLogs>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetDeployLogsParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDeployLogs>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getDeployLogs>>,
           TError,
           Awaited<ReturnType<typeof getDeployLogs>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDeployLogs<TData = Awaited<ReturnType<typeof getDeployLogs>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetDeployLogsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDeployLogs>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDeployLogs<
+  TData = Awaited<ReturnType<typeof getDeployLogs>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetDeployLogsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDeployLogs>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getDeployLogs>>,
           TError,
           Awaited<ReturnType<typeof getDeployLogs>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDeployLogs<TData = Awaited<ReturnType<typeof getDeployLogs>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetDeployLogsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDeployLogs>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDeployLogs<
+  TData = Awaited<ReturnType<typeof getDeployLogs>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetDeployLogsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDeployLogs>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy lịch sử deploy API
  */
 
-export function useGetDeployLogs<TData = Awaited<ReturnType<typeof getDeployLogs>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetDeployLogsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDeployLogs>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDeployLogs<
+  TData = Awaited<ReturnType<typeof getDeployLogs>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetDeployLogsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDeployLogs>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetDeployLogsQueryOptions(params, options)
 
-  const queryOptions = getGetDeployLogsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Danh sách API key theo API
@@ -1649,120 +1963,154 @@ export type listApiKeysResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type listApiKeysResponseSuccess = (listApiKeysResponse200) & {
-  headers: Headers;
-};
-export type listApiKeysResponseError = (listApiKeysResponse400 | listApiKeysResponse401 | listApiKeysResponse403 | listApiKeysResponse404 | listApiKeysResponse409 | listApiKeysResponse500) & {
-  headers: Headers;
-};
 
-export type listApiKeysResponse = (listApiKeysResponseSuccess | listApiKeysResponseError)
-
-export const getListApiKeysUrl = (params: ListApiKeysParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/apim-logs/api-keys?${stringifiedParams}` : `/api/apim-logs/api-keys`
+export type listApiKeysResponseSuccess = listApiKeysResponse200 & {
+  headers: Headers
+}
+export type listApiKeysResponseError = (
+  | listApiKeysResponse400
+  | listApiKeysResponse401
+  | listApiKeysResponse403
+  | listApiKeysResponse404
+  | listApiKeysResponse409
+  | listApiKeysResponse500
+) & {
+  headers: Headers
 }
 
-export const listApiKeys = async (params: ListApiKeysParams, options?: RequestInit): Promise<listApiKeysResponse> => {
-  
-  return customModelFetch<listApiKeysResponse>(getListApiKeysUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type listApiKeysResponse = listApiKeysResponseSuccess | listApiKeysResponseError
 
+export const getListApiKeysUrl = (params: ListApiKeysParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getListApiKeysQueryKey = (params?: ListApiKeysParams,) => {
-    return [
-    `/api/apim-logs/api-keys`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getListApiKeysQueryOptions = <TData = Awaited<ReturnType<typeof listApiKeys>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: ListApiKeysParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listApiKeys>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/apim-logs/api-keys?${stringifiedParams}`
+    : `/api/apim-logs/api-keys`
+}
+
+export const listApiKeys = async (
+  params: ListApiKeysParams,
+  options?: RequestInit
+): Promise<listApiKeysResponse> => {
+  return customModelFetch<listApiKeysResponse>(getListApiKeysUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getListApiKeysQueryKey = (params?: ListApiKeysParams) => {
+  return [`/api/apim-logs/api-keys`, ...(params ? [params] : [])] as const
+}
+
+export const getListApiKeysQueryOptions = <
+  TData = Awaited<ReturnType<typeof listApiKeys>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ListApiKeysParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listApiKeys>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getListApiKeysQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getListApiKeysQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listApiKeys>>> = ({ signal }) =>
+    listApiKeys(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listApiKeys>>> = ({ signal }) => listApiKeys(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listApiKeys>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listApiKeys>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type ListApiKeysQueryResult = NonNullable<Awaited<ReturnType<typeof listApiKeys>>>
 export type ListApiKeysQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useListApiKeys<TData = Awaited<ReturnType<typeof listApiKeys>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ListApiKeysParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listApiKeys>>, TError, TData>> & Pick<
+export function useListApiKeys<
+  TData = Awaited<ReturnType<typeof listApiKeys>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ListApiKeysParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof listApiKeys>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof listApiKeys>>,
           TError,
           Awaited<ReturnType<typeof listApiKeys>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListApiKeys<TData = Awaited<ReturnType<typeof listApiKeys>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ListApiKeysParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listApiKeys>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListApiKeys<
+  TData = Awaited<ReturnType<typeof listApiKeys>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ListApiKeysParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listApiKeys>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof listApiKeys>>,
           TError,
           Awaited<ReturnType<typeof listApiKeys>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListApiKeys<TData = Awaited<ReturnType<typeof listApiKeys>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ListApiKeysParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listApiKeys>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListApiKeys<
+  TData = Awaited<ReturnType<typeof listApiKeys>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ListApiKeysParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listApiKeys>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Danh sách API key theo API
  */
 
-export function useListApiKeys<TData = Awaited<ReturnType<typeof listApiKeys>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ListApiKeysParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listApiKeys>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useListApiKeys<
+  TData = Awaited<ReturnType<typeof listApiKeys>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ListApiKeysParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listApiKeys>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getListApiKeysQueryOptions(params, options)
 
-  const queryOptions = getListApiKeysQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Tạo API key mới
@@ -1801,85 +2149,107 @@ export type createApiKeyResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type createApiKeyResponseSuccess = (createApiKeyResponse200) & {
-  headers: Headers;
-};
-export type createApiKeyResponseError = (createApiKeyResponse400 | createApiKeyResponse401 | createApiKeyResponse403 | createApiKeyResponse404 | createApiKeyResponse409 | createApiKeyResponse500) & {
-  headers: Headers;
-};
 
-export type createApiKeyResponse = (createApiKeyResponseSuccess | createApiKeyResponseError)
+export type createApiKeyResponseSuccess = createApiKeyResponse200 & {
+  headers: Headers
+}
+export type createApiKeyResponseError = (
+  | createApiKeyResponse400
+  | createApiKeyResponse401
+  | createApiKeyResponse403
+  | createApiKeyResponse404
+  | createApiKeyResponse409
+  | createApiKeyResponse500
+) & {
+  headers: Headers
+}
+
+export type createApiKeyResponse = createApiKeyResponseSuccess | createApiKeyResponseError
 
 export const getCreateApiKeyUrl = () => {
-
-
-  
-
   return `/api/apim-logs/api-keys`
 }
 
-export const createApiKey = async (apiKeyCreate: ApiKeyCreate, options?: RequestInit): Promise<createApiKeyResponse> => {
-  
-  return customModelFetch<createApiKeyResponse>(getCreateApiKeyUrl(),
-  {      
+export const createApiKey = async (
+  apiKeyCreate: ApiKeyCreate,
+  options?: RequestInit
+): Promise<createApiKeyResponse> => {
+  return customModelFetch<createApiKeyResponse>(getCreateApiKeyUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      apiKeyCreate,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(apiKeyCreate),
+  })
+}
+
+export const getCreateApiKeyMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createApiKey>>,
+    TError,
+    { data: ApiKeyCreate },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createApiKey>>,
+  TError,
+  { data: ApiKeyCreate },
+  TContext
+> => {
+  const mutationKey = ["createApiKey"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createApiKey>>,
+    { data: ApiKeyCreate }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return createApiKey(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type CreateApiKeyMutationResult = NonNullable<Awaited<ReturnType<typeof createApiKey>>>
+export type CreateApiKeyMutationBody = ApiKeyCreate
+export type CreateApiKeyMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getCreateApiKeyMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createApiKey>>, TError,{data: ApiKeyCreate}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof createApiKey>>, TError,{data: ApiKeyCreate}, TContext> => {
-
-const mutationKey = ['createApiKey'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createApiKey>>, {data: ApiKeyCreate}> = (props) => {
-          const {data} = props ?? {};
-
-          return  createApiKey(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateApiKeyMutationResult = NonNullable<Awaited<ReturnType<typeof createApiKey>>>
-    export type CreateApiKeyMutationBody = ApiKeyCreate
-    export type CreateApiKeyMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Tạo API key mới
  */
-export const useCreateApiKey = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createApiKey>>, TError,{data: ApiKeyCreate}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createApiKey>>,
-        TError,
-        {data: ApiKeyCreate},
-        TContext
-      > => {
+export const useCreateApiKey = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof createApiKey>>,
+      TError,
+      { data: ApiKeyCreate },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof createApiKey>>,
+  TError,
+  { data: ApiKeyCreate },
+  TContext
+> => {
+  const mutationOptions = getCreateApiKeyMutationOptions(options)
 
-      const mutationOptions = getCreateApiKeyMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Gia hạn API key
  */
@@ -1917,85 +2287,107 @@ export type renewApiKeyResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type renewApiKeyResponseSuccess = (renewApiKeyResponse200) & {
-  headers: Headers;
-};
-export type renewApiKeyResponseError = (renewApiKeyResponse400 | renewApiKeyResponse401 | renewApiKeyResponse403 | renewApiKeyResponse404 | renewApiKeyResponse409 | renewApiKeyResponse500) & {
-  headers: Headers;
-};
 
-export type renewApiKeyResponse = (renewApiKeyResponseSuccess | renewApiKeyResponseError)
+export type renewApiKeyResponseSuccess = renewApiKeyResponse200 & {
+  headers: Headers
+}
+export type renewApiKeyResponseError = (
+  | renewApiKeyResponse400
+  | renewApiKeyResponse401
+  | renewApiKeyResponse403
+  | renewApiKeyResponse404
+  | renewApiKeyResponse409
+  | renewApiKeyResponse500
+) & {
+  headers: Headers
+}
+
+export type renewApiKeyResponse = renewApiKeyResponseSuccess | renewApiKeyResponseError
 
 export const getRenewApiKeyUrl = () => {
-
-
-  
-
   return `/api/apim-logs/api-keys/:id/renew`
 }
 
-export const renewApiKey = async (apiKeyRenew: ApiKeyRenew, options?: RequestInit): Promise<renewApiKeyResponse> => {
-  
-  return customModelFetch<renewApiKeyResponse>(getRenewApiKeyUrl(),
-  {      
+export const renewApiKey = async (
+  apiKeyRenew: ApiKeyRenew,
+  options?: RequestInit
+): Promise<renewApiKeyResponse> => {
+  return customModelFetch<renewApiKeyResponse>(getRenewApiKeyUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      apiKeyRenew,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(apiKeyRenew),
+  })
+}
+
+export const getRenewApiKeyMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof renewApiKey>>,
+    TError,
+    { data: ApiKeyRenew },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof renewApiKey>>,
+  TError,
+  { data: ApiKeyRenew },
+  TContext
+> => {
+  const mutationKey = ["renewApiKey"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof renewApiKey>>,
+    { data: ApiKeyRenew }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return renewApiKey(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type RenewApiKeyMutationResult = NonNullable<Awaited<ReturnType<typeof renewApiKey>>>
+export type RenewApiKeyMutationBody = ApiKeyRenew
+export type RenewApiKeyMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getRenewApiKeyMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof renewApiKey>>, TError,{data: ApiKeyRenew}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof renewApiKey>>, TError,{data: ApiKeyRenew}, TContext> => {
-
-const mutationKey = ['renewApiKey'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof renewApiKey>>, {data: ApiKeyRenew}> = (props) => {
-          const {data} = props ?? {};
-
-          return  renewApiKey(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RenewApiKeyMutationResult = NonNullable<Awaited<ReturnType<typeof renewApiKey>>>
-    export type RenewApiKeyMutationBody = ApiKeyRenew
-    export type RenewApiKeyMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Gia hạn API key
  */
-export const useRenewApiKey = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof renewApiKey>>, TError,{data: ApiKeyRenew}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof renewApiKey>>,
-        TError,
-        {data: ApiKeyRenew},
-        TContext
-      > => {
+export const useRenewApiKey = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof renewApiKey>>,
+      TError,
+      { data: ApiKeyRenew },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof renewApiKey>>,
+  TError,
+  { data: ApiKeyRenew },
+  TContext
+> => {
+  const mutationOptions = getRenewApiKeyMutationOptions(options)
 
-      const mutationOptions = getRenewApiKeyMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Thu hồi API key
  */
@@ -2033,85 +2425,107 @@ export type revokeApiKeyResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type revokeApiKeyResponseSuccess = (revokeApiKeyResponse200) & {
-  headers: Headers;
-};
-export type revokeApiKeyResponseError = (revokeApiKeyResponse400 | revokeApiKeyResponse401 | revokeApiKeyResponse403 | revokeApiKeyResponse404 | revokeApiKeyResponse409 | revokeApiKeyResponse500) & {
-  headers: Headers;
-};
 
-export type revokeApiKeyResponse = (revokeApiKeyResponseSuccess | revokeApiKeyResponseError)
+export type revokeApiKeyResponseSuccess = revokeApiKeyResponse200 & {
+  headers: Headers
+}
+export type revokeApiKeyResponseError = (
+  | revokeApiKeyResponse400
+  | revokeApiKeyResponse401
+  | revokeApiKeyResponse403
+  | revokeApiKeyResponse404
+  | revokeApiKeyResponse409
+  | revokeApiKeyResponse500
+) & {
+  headers: Headers
+}
+
+export type revokeApiKeyResponse = revokeApiKeyResponseSuccess | revokeApiKeyResponseError
 
 export const getRevokeApiKeyUrl = () => {
-
-
-  
-
   return `/api/apim-logs/api-keys/:id/revoke`
 }
 
-export const revokeApiKey = async (apiKeyRevoke: ApiKeyRevoke, options?: RequestInit): Promise<revokeApiKeyResponse> => {
-  
-  return customModelFetch<revokeApiKeyResponse>(getRevokeApiKeyUrl(),
-  {      
+export const revokeApiKey = async (
+  apiKeyRevoke: ApiKeyRevoke,
+  options?: RequestInit
+): Promise<revokeApiKeyResponse> => {
+  return customModelFetch<revokeApiKeyResponse>(getRevokeApiKeyUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      apiKeyRevoke,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(apiKeyRevoke),
+  })
+}
+
+export const getRevokeApiKeyMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof revokeApiKey>>,
+    TError,
+    { data: ApiKeyRevoke },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof revokeApiKey>>,
+  TError,
+  { data: ApiKeyRevoke },
+  TContext
+> => {
+  const mutationKey = ["revokeApiKey"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof revokeApiKey>>,
+    { data: ApiKeyRevoke }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return revokeApiKey(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type RevokeApiKeyMutationResult = NonNullable<Awaited<ReturnType<typeof revokeApiKey>>>
+export type RevokeApiKeyMutationBody = ApiKeyRevoke
+export type RevokeApiKeyMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getRevokeApiKeyMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof revokeApiKey>>, TError,{data: ApiKeyRevoke}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof revokeApiKey>>, TError,{data: ApiKeyRevoke}, TContext> => {
-
-const mutationKey = ['revokeApiKey'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof revokeApiKey>>, {data: ApiKeyRevoke}> = (props) => {
-          const {data} = props ?? {};
-
-          return  revokeApiKey(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RevokeApiKeyMutationResult = NonNullable<Awaited<ReturnType<typeof revokeApiKey>>>
-    export type RevokeApiKeyMutationBody = ApiKeyRevoke
-    export type RevokeApiKeyMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Thu hồi API key
  */
-export const useRevokeApiKey = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof revokeApiKey>>, TError,{data: ApiKeyRevoke}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof revokeApiKey>>,
-        TError,
-        {data: ApiKeyRevoke},
-        TContext
-      > => {
+export const useRevokeApiKey = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof revokeApiKey>>,
+      TError,
+      { data: ApiKeyRevoke },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof revokeApiKey>>,
+  TError,
+  { data: ApiKeyRevoke },
+  TContext
+> => {
+  const mutationOptions = getRevokeApiKeyMutationOptions(options)
 
-      const mutationOptions = getRevokeApiKeyMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Tìm kiếm ứng dụng trên WSO2 API Manager
  */
@@ -2149,120 +2563,154 @@ export type applicationsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type applicationsResponseSuccess = (applicationsResponse200) & {
-  headers: Headers;
-};
-export type applicationsResponseError = (applicationsResponse400 | applicationsResponse401 | applicationsResponse403 | applicationsResponse404 | applicationsResponse409 | applicationsResponse500) & {
-  headers: Headers;
-};
 
-export type applicationsResponse = (applicationsResponseSuccess | applicationsResponseError)
-
-export const getApplicationsUrl = (params?: ApplicationsParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/wso2am/applications?${stringifiedParams}` : `/api/wso2am/applications`
+export type applicationsResponseSuccess = applicationsResponse200 & {
+  headers: Headers
+}
+export type applicationsResponseError = (
+  | applicationsResponse400
+  | applicationsResponse401
+  | applicationsResponse403
+  | applicationsResponse404
+  | applicationsResponse409
+  | applicationsResponse500
+) & {
+  headers: Headers
 }
 
-export const applications = async (params?: ApplicationsParams, options?: RequestInit): Promise<applicationsResponse> => {
-  
-  return customModelFetch<applicationsResponse>(getApplicationsUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type applicationsResponse = applicationsResponseSuccess | applicationsResponseError
 
+export const getApplicationsUrl = (params?: ApplicationsParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getApplicationsQueryKey = (params?: ApplicationsParams,) => {
-    return [
-    `/api/wso2am/applications`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getApplicationsQueryOptions = <TData = Awaited<ReturnType<typeof applications>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params?: ApplicationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/wso2am/applications?${stringifiedParams}`
+    : `/api/wso2am/applications`
+}
+
+export const applications = async (
+  params?: ApplicationsParams,
+  options?: RequestInit
+): Promise<applicationsResponse> => {
+  return customModelFetch<applicationsResponse>(getApplicationsUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getApplicationsQueryKey = (params?: ApplicationsParams) => {
+  return [`/api/wso2am/applications`, ...(params ? [params] : [])] as const
+}
+
+export const getApplicationsQueryOptions = <
+  TData = Awaited<ReturnType<typeof applications>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params?: ApplicationsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getApplicationsQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getApplicationsQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof applications>>> = ({ signal }) =>
+    applications(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof applications>>> = ({ signal }) => applications(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof applications>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type ApplicationsQueryResult = NonNullable<Awaited<ReturnType<typeof applications>>>
 export type ApplicationsQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useApplications<TData = Awaited<ReturnType<typeof applications>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: undefined |  ApplicationsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>> & Pick<
+export function useApplications<
+  TData = Awaited<ReturnType<typeof applications>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: undefined | ApplicationsParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof applications>>,
           TError,
           Awaited<ReturnType<typeof applications>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useApplications<TData = Awaited<ReturnType<typeof applications>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params?: ApplicationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useApplications<
+  TData = Awaited<ReturnType<typeof applications>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params?: ApplicationsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof applications>>,
           TError,
           Awaited<ReturnType<typeof applications>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useApplications<TData = Awaited<ReturnType<typeof applications>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params?: ApplicationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useApplications<
+  TData = Awaited<ReturnType<typeof applications>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params?: ApplicationsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Tìm kiếm ứng dụng trên WSO2 API Manager
  */
 
-export function useApplications<TData = Awaited<ReturnType<typeof applications>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params?: ApplicationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useApplications<
+  TData = Awaited<ReturnType<typeof applications>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params?: ApplicationsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof applications>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getApplicationsQueryOptions(params, options)
 
-  const queryOptions = getApplicationsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Liệt kê database trên server
@@ -2301,120 +2749,154 @@ export type getDatabasesResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type getDatabasesResponseSuccess = (getDatabasesResponse200) & {
-  headers: Headers;
-};
-export type getDatabasesResponseError = (getDatabasesResponse400 | getDatabasesResponse401 | getDatabasesResponse403 | getDatabasesResponse404 | getDatabasesResponse409 | getDatabasesResponse500) & {
-  headers: Headers;
-};
 
-export type getDatabasesResponse = (getDatabasesResponseSuccess | getDatabasesResponseError)
-
-export const getGetDatabasesUrl = (params: GetDatabasesParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/excel-import-export/get-databases?${stringifiedParams}` : `/api/excel-import-export/get-databases`
+export type getDatabasesResponseSuccess = getDatabasesResponse200 & {
+  headers: Headers
+}
+export type getDatabasesResponseError = (
+  | getDatabasesResponse400
+  | getDatabasesResponse401
+  | getDatabasesResponse403
+  | getDatabasesResponse404
+  | getDatabasesResponse409
+  | getDatabasesResponse500
+) & {
+  headers: Headers
 }
 
-export const getDatabases = async (params: GetDatabasesParams, options?: RequestInit): Promise<getDatabasesResponse> => {
-  
-  return customModelFetch<getDatabasesResponse>(getGetDatabasesUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getDatabasesResponse = getDatabasesResponseSuccess | getDatabasesResponseError
 
+export const getGetDatabasesUrl = (params: GetDatabasesParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getGetDatabasesQueryKey = (params?: GetDatabasesParams,) => {
-    return [
-    `/api/excel-import-export/get-databases`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getGetDatabasesQueryOptions = <TData = Awaited<ReturnType<typeof getDatabases>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: GetDatabasesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/excel-import-export/get-databases?${stringifiedParams}`
+    : `/api/excel-import-export/get-databases`
+}
+
+export const getDatabases = async (
+  params: GetDatabasesParams,
+  options?: RequestInit
+): Promise<getDatabasesResponse> => {
+  return customModelFetch<getDatabasesResponse>(getGetDatabasesUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getGetDatabasesQueryKey = (params?: GetDatabasesParams) => {
+  return [`/api/excel-import-export/get-databases`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDatabasesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getDatabases>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetDatabasesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetDatabasesQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDatabasesQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getDatabases>>> = ({ signal }) =>
+    getDatabases(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDatabases>>> = ({ signal }) => getDatabases(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getDatabases>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetDatabasesQueryResult = NonNullable<Awaited<ReturnType<typeof getDatabases>>>
 export type GetDatabasesQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useGetDatabases<TData = Awaited<ReturnType<typeof getDatabases>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetDatabasesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>> & Pick<
+export function useGetDatabases<
+  TData = Awaited<ReturnType<typeof getDatabases>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetDatabasesParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getDatabases>>,
           TError,
           Awaited<ReturnType<typeof getDatabases>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDatabases<TData = Awaited<ReturnType<typeof getDatabases>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetDatabasesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDatabases<
+  TData = Awaited<ReturnType<typeof getDatabases>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetDatabasesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getDatabases>>,
           TError,
           Awaited<ReturnType<typeof getDatabases>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetDatabases<TData = Awaited<ReturnType<typeof getDatabases>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetDatabasesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDatabases<
+  TData = Awaited<ReturnType<typeof getDatabases>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetDatabasesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Liệt kê database trên server
  */
 
-export function useGetDatabases<TData = Awaited<ReturnType<typeof getDatabases>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetDatabasesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetDatabases<
+  TData = Awaited<ReturnType<typeof getDatabases>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetDatabasesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDatabases>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetDatabasesQueryOptions(params, options)
 
-  const queryOptions = getGetDatabasesQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Liệt kê bảng trong database
@@ -2453,120 +2935,154 @@ export type getTablesResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type getTablesResponseSuccess = (getTablesResponse200) & {
-  headers: Headers;
-};
-export type getTablesResponseError = (getTablesResponse400 | getTablesResponse401 | getTablesResponse403 | getTablesResponse404 | getTablesResponse409 | getTablesResponse500) & {
-  headers: Headers;
-};
 
-export type getTablesResponse = (getTablesResponseSuccess | getTablesResponseError)
-
-export const getGetTablesUrl = (params: GetTablesParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/excel-import-export/get-tables?${stringifiedParams}` : `/api/excel-import-export/get-tables`
+export type getTablesResponseSuccess = getTablesResponse200 & {
+  headers: Headers
+}
+export type getTablesResponseError = (
+  | getTablesResponse400
+  | getTablesResponse401
+  | getTablesResponse403
+  | getTablesResponse404
+  | getTablesResponse409
+  | getTablesResponse500
+) & {
+  headers: Headers
 }
 
-export const getTables = async (params: GetTablesParams, options?: RequestInit): Promise<getTablesResponse> => {
-  
-  return customModelFetch<getTablesResponse>(getGetTablesUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getTablesResponse = getTablesResponseSuccess | getTablesResponseError
 
+export const getGetTablesUrl = (params: GetTablesParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getGetTablesQueryKey = (params?: GetTablesParams,) => {
-    return [
-    `/api/excel-import-export/get-tables`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getGetTablesQueryOptions = <TData = Awaited<ReturnType<typeof getTables>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: GetTablesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/excel-import-export/get-tables?${stringifiedParams}`
+    : `/api/excel-import-export/get-tables`
+}
+
+export const getTables = async (
+  params: GetTablesParams,
+  options?: RequestInit
+): Promise<getTablesResponse> => {
+  return customModelFetch<getTablesResponse>(getGetTablesUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getGetTablesQueryKey = (params?: GetTablesParams) => {
+  return [`/api/excel-import-export/get-tables`, ...(params ? [params] : [])] as const
+}
+
+export const getGetTablesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTables>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetTablesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetTablesQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTablesQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getTables>>> = ({ signal }) =>
+    getTables(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTables>>> = ({ signal }) => getTables(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getTables>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetTablesQueryResult = NonNullable<Awaited<ReturnType<typeof getTables>>>
 export type GetTablesQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useGetTables<TData = Awaited<ReturnType<typeof getTables>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetTablesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>> & Pick<
+export function useGetTables<
+  TData = Awaited<ReturnType<typeof getTables>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetTablesParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTables>>,
           TError,
           Awaited<ReturnType<typeof getTables>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTables<TData = Awaited<ReturnType<typeof getTables>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetTablesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTables<
+  TData = Awaited<ReturnType<typeof getTables>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetTablesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTables>>,
           TError,
           Awaited<ReturnType<typeof getTables>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTables<TData = Awaited<ReturnType<typeof getTables>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetTablesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTables<
+  TData = Awaited<ReturnType<typeof getTables>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetTablesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Liệt kê bảng trong database
  */
 
-export function useGetTables<TData = Awaited<ReturnType<typeof getTables>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetTablesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetTables<
+  TData = Awaited<ReturnType<typeof getTables>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetTablesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getTables>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetTablesQueryOptions(params, options)
 
-  const queryOptions = getGetTablesQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Liệt kê cột của bảng
@@ -2605,120 +3121,154 @@ export type getColumnsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type getColumnsResponseSuccess = (getColumnsResponse200) & {
-  headers: Headers;
-};
-export type getColumnsResponseError = (getColumnsResponse400 | getColumnsResponse401 | getColumnsResponse403 | getColumnsResponse404 | getColumnsResponse409 | getColumnsResponse500) & {
-  headers: Headers;
-};
 
-export type getColumnsResponse = (getColumnsResponseSuccess | getColumnsResponseError)
-
-export const getGetColumnsUrl = (params: GetColumnsParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/excel-import-export/get-columns?${stringifiedParams}` : `/api/excel-import-export/get-columns`
+export type getColumnsResponseSuccess = getColumnsResponse200 & {
+  headers: Headers
+}
+export type getColumnsResponseError = (
+  | getColumnsResponse400
+  | getColumnsResponse401
+  | getColumnsResponse403
+  | getColumnsResponse404
+  | getColumnsResponse409
+  | getColumnsResponse500
+) & {
+  headers: Headers
 }
 
-export const getColumns = async (params: GetColumnsParams, options?: RequestInit): Promise<getColumnsResponse> => {
-  
-  return customModelFetch<getColumnsResponse>(getGetColumnsUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type getColumnsResponse = getColumnsResponseSuccess | getColumnsResponseError
 
+export const getGetColumnsUrl = (params: GetColumnsParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getGetColumnsQueryKey = (params?: GetColumnsParams,) => {
-    return [
-    `/api/excel-import-export/get-columns`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getGetColumnsQueryOptions = <TData = Awaited<ReturnType<typeof getColumns>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: GetColumnsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/excel-import-export/get-columns?${stringifiedParams}`
+    : `/api/excel-import-export/get-columns`
+}
+
+export const getColumns = async (
+  params: GetColumnsParams,
+  options?: RequestInit
+): Promise<getColumnsResponse> => {
+  return customModelFetch<getColumnsResponse>(getGetColumnsUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getGetColumnsQueryKey = (params?: GetColumnsParams) => {
+  return [`/api/excel-import-export/get-columns`, ...(params ? [params] : [])] as const
+}
+
+export const getGetColumnsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getColumns>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetColumnsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetColumnsQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getGetColumnsQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getColumns>>> = ({ signal }) =>
+    getColumns(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getColumns>>> = ({ signal }) => getColumns(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getColumns>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetColumnsQueryResult = NonNullable<Awaited<ReturnType<typeof getColumns>>>
 export type GetColumnsQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useGetColumns<TData = Awaited<ReturnType<typeof getColumns>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetColumnsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>> & Pick<
+export function useGetColumns<
+  TData = Awaited<ReturnType<typeof getColumns>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetColumnsParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getColumns>>,
           TError,
           Awaited<ReturnType<typeof getColumns>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetColumns<TData = Awaited<ReturnType<typeof getColumns>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetColumnsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetColumns<
+  TData = Awaited<ReturnType<typeof getColumns>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetColumnsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getColumns>>,
           TError,
           Awaited<ReturnType<typeof getColumns>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetColumns<TData = Awaited<ReturnType<typeof getColumns>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetColumnsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetColumns<
+  TData = Awaited<ReturnType<typeof getColumns>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetColumnsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Liệt kê cột của bảng
  */
 
-export function useGetColumns<TData = Awaited<ReturnType<typeof getColumns>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: GetColumnsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetColumns<
+  TData = Awaited<ReturnType<typeof getColumns>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: GetColumnsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getColumns>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetColumnsQueryOptions(params, options)
 
-  const queryOptions = getGetColumnsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Export bảng theo danh sách cột ra Excel
@@ -2757,120 +3307,168 @@ export type exportTableByColumnsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type exportTableByColumnsResponseSuccess = (exportTableByColumnsResponse200) & {
-  headers: Headers;
-};
-export type exportTableByColumnsResponseError = (exportTableByColumnsResponse400 | exportTableByColumnsResponse401 | exportTableByColumnsResponse403 | exportTableByColumnsResponse404 | exportTableByColumnsResponse409 | exportTableByColumnsResponse500) & {
-  headers: Headers;
-};
 
-export type exportTableByColumnsResponse = (exportTableByColumnsResponseSuccess | exportTableByColumnsResponseError)
+export type exportTableByColumnsResponseSuccess = exportTableByColumnsResponse200 & {
+  headers: Headers
+}
+export type exportTableByColumnsResponseError = (
+  | exportTableByColumnsResponse400
+  | exportTableByColumnsResponse401
+  | exportTableByColumnsResponse403
+  | exportTableByColumnsResponse404
+  | exportTableByColumnsResponse409
+  | exportTableByColumnsResponse500
+) & {
+  headers: Headers
+}
 
-export const getExportTableByColumnsUrl = (params: ExportTableByColumnsParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type exportTableByColumnsResponse =
+  | exportTableByColumnsResponseSuccess
+  | exportTableByColumnsResponseError
+
+export const getExportTableByColumnsUrl = (params: ExportTableByColumnsParams) => {
+  const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
-  });
+  })
 
-  const stringifiedParams = normalizedParams.toString();
+  const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/excel-import-export/export-table-by-columns?${stringifiedParams}` : `/api/excel-import-export/export-table-by-columns`
+  return stringifiedParams.length > 0
+    ? `/api/excel-import-export/export-table-by-columns?${stringifiedParams}`
+    : `/api/excel-import-export/export-table-by-columns`
 }
 
-export const exportTableByColumns = async (params: ExportTableByColumnsParams, options?: RequestInit): Promise<exportTableByColumnsResponse> => {
-  
-  return customModelFetch<exportTableByColumnsResponse>(getExportTableByColumnsUrl(params),
-  {      
+export const exportTableByColumns = async (
+  params: ExportTableByColumnsParams,
+  options?: RequestInit
+): Promise<exportTableByColumnsResponse> => {
+  return customModelFetch<exportTableByColumnsResponse>(getExportTableByColumnsUrl(params), {
     ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
-
-export const getExportTableByColumnsQueryKey = (params?: ExportTableByColumnsParams,) => {
-    return [
-    `/api/excel-import-export/export-table-by-columns`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getExportTableByColumnsQueryOptions = <TData = Awaited<ReturnType<typeof exportTableByColumns>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: ExportTableByColumnsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getExportTableByColumnsQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportTableByColumns>>> = ({ signal }) => exportTableByColumns(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    method: "GET",
+  })
 }
 
-export type ExportTableByColumnsQueryResult = NonNullable<Awaited<ReturnType<typeof exportTableByColumns>>>
+export const getExportTableByColumnsQueryKey = (params?: ExportTableByColumnsParams) => {
+  return [`/api/excel-import-export/export-table-by-columns`, ...(params ? [params] : [])] as const
+}
+
+export const getExportTableByColumnsQueryOptions = <
+  TData = Awaited<ReturnType<typeof exportTableByColumns>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ExportTableByColumnsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getExportTableByColumnsQueryKey(params)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof exportTableByColumns>>> = ({ signal }) =>
+    exportTableByColumns(params, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof exportTableByColumns>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportTableByColumnsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof exportTableByColumns>>
+>
 export type ExportTableByColumnsQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useExportTableByColumns<TData = Awaited<ReturnType<typeof exportTableByColumns>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ExportTableByColumnsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>> & Pick<
+export function useExportTableByColumns<
+  TData = Awaited<ReturnType<typeof exportTableByColumns>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ExportTableByColumnsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportTableByColumns>>,
           TError,
           Awaited<ReturnType<typeof exportTableByColumns>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportTableByColumns<TData = Awaited<ReturnType<typeof exportTableByColumns>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ExportTableByColumnsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportTableByColumns<
+  TData = Awaited<ReturnType<typeof exportTableByColumns>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ExportTableByColumnsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportTableByColumns>>,
           TError,
           Awaited<ReturnType<typeof exportTableByColumns>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportTableByColumns<TData = Awaited<ReturnType<typeof exportTableByColumns>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ExportTableByColumnsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportTableByColumns<
+  TData = Awaited<ReturnType<typeof exportTableByColumns>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ExportTableByColumnsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Export bảng theo danh sách cột ra Excel
  */
 
-export function useExportTableByColumns<TData = Awaited<ReturnType<typeof exportTableByColumns>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ExportTableByColumnsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useExportTableByColumns<
+  TData = Awaited<ReturnType<typeof exportTableByColumns>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ExportTableByColumnsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof exportTableByColumns>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getExportTableByColumnsQueryOptions(params, options)
 
-  const queryOptions = getExportTableByColumnsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Kiểm tra câu SQL trước khi export
@@ -2909,120 +3507,171 @@ export type checkExportTableBySqlResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type checkExportTableBySqlResponseSuccess = (checkExportTableBySqlResponse200) & {
-  headers: Headers;
-};
-export type checkExportTableBySqlResponseError = (checkExportTableBySqlResponse400 | checkExportTableBySqlResponse401 | checkExportTableBySqlResponse403 | checkExportTableBySqlResponse404 | checkExportTableBySqlResponse409 | checkExportTableBySqlResponse500) & {
-  headers: Headers;
-};
 
-export type checkExportTableBySqlResponse = (checkExportTableBySqlResponseSuccess | checkExportTableBySqlResponseError)
+export type checkExportTableBySqlResponseSuccess = checkExportTableBySqlResponse200 & {
+  headers: Headers
+}
+export type checkExportTableBySqlResponseError = (
+  | checkExportTableBySqlResponse400
+  | checkExportTableBySqlResponse401
+  | checkExportTableBySqlResponse403
+  | checkExportTableBySqlResponse404
+  | checkExportTableBySqlResponse409
+  | checkExportTableBySqlResponse500
+) & {
+  headers: Headers
+}
 
-export const getCheckExportTableBySqlUrl = (params: CheckExportTableBySqlParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type checkExportTableBySqlResponse =
+  | checkExportTableBySqlResponseSuccess
+  | checkExportTableBySqlResponseError
+
+export const getCheckExportTableBySqlUrl = (params: CheckExportTableBySqlParams) => {
+  const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
-  });
+  })
 
-  const stringifiedParams = normalizedParams.toString();
+  const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/excel-import-export/check-export-table-by-sql?${stringifiedParams}` : `/api/excel-import-export/check-export-table-by-sql`
+  return stringifiedParams.length > 0
+    ? `/api/excel-import-export/check-export-table-by-sql?${stringifiedParams}`
+    : `/api/excel-import-export/check-export-table-by-sql`
 }
 
-export const checkExportTableBySql = async (params: CheckExportTableBySqlParams, options?: RequestInit): Promise<checkExportTableBySqlResponse> => {
-  
-  return customModelFetch<checkExportTableBySqlResponse>(getCheckExportTableBySqlUrl(params),
-  {      
+export const checkExportTableBySql = async (
+  params: CheckExportTableBySqlParams,
+  options?: RequestInit
+): Promise<checkExportTableBySqlResponse> => {
+  return customModelFetch<checkExportTableBySqlResponse>(getCheckExportTableBySqlUrl(params), {
     ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
-
-export const getCheckExportTableBySqlQueryKey = (params?: CheckExportTableBySqlParams,) => {
-    return [
-    `/api/excel-import-export/check-export-table-by-sql`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getCheckExportTableBySqlQueryOptions = <TData = Awaited<ReturnType<typeof checkExportTableBySql>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: CheckExportTableBySqlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getCheckExportTableBySqlQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkExportTableBySql>>> = ({ signal }) => checkExportTableBySql(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    method: "GET",
+  })
 }
 
-export type CheckExportTableBySqlQueryResult = NonNullable<Awaited<ReturnType<typeof checkExportTableBySql>>>
+export const getCheckExportTableBySqlQueryKey = (params?: CheckExportTableBySqlParams) => {
+  return [
+    `/api/excel-import-export/check-export-table-by-sql`,
+    ...(params ? [params] : []),
+  ] as const
+}
+
+export const getCheckExportTableBySqlQueryOptions = <
+  TData = Awaited<ReturnType<typeof checkExportTableBySql>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: CheckExportTableBySqlParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getCheckExportTableBySqlQueryKey(params)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof checkExportTableBySql>>> = ({ signal }) =>
+    checkExportTableBySql(params, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof checkExportTableBySql>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CheckExportTableBySqlQueryResult = NonNullable<
+  Awaited<ReturnType<typeof checkExportTableBySql>>
+>
 export type CheckExportTableBySqlQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useCheckExportTableBySql<TData = Awaited<ReturnType<typeof checkExportTableBySql>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: CheckExportTableBySqlParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>> & Pick<
+export function useCheckExportTableBySql<
+  TData = Awaited<ReturnType<typeof checkExportTableBySql>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: CheckExportTableBySqlParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof checkExportTableBySql>>,
           TError,
           Awaited<ReturnType<typeof checkExportTableBySql>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCheckExportTableBySql<TData = Awaited<ReturnType<typeof checkExportTableBySql>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: CheckExportTableBySqlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckExportTableBySql<
+  TData = Awaited<ReturnType<typeof checkExportTableBySql>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: CheckExportTableBySqlParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof checkExportTableBySql>>,
           TError,
           Awaited<ReturnType<typeof checkExportTableBySql>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCheckExportTableBySql<TData = Awaited<ReturnType<typeof checkExportTableBySql>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: CheckExportTableBySqlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCheckExportTableBySql<
+  TData = Awaited<ReturnType<typeof checkExportTableBySql>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: CheckExportTableBySqlParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra câu SQL trước khi export
  */
 
-export function useCheckExportTableBySql<TData = Awaited<ReturnType<typeof checkExportTableBySql>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: CheckExportTableBySqlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useCheckExportTableBySql<
+  TData = Awaited<ReturnType<typeof checkExportTableBySql>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: CheckExportTableBySqlParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof checkExportTableBySql>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getCheckExportTableBySqlQueryOptions(params, options)
 
-  const queryOptions = getCheckExportTableBySqlQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Export kết quả câu SQL ra Excel
@@ -3061,120 +3710,156 @@ export type exportTableBySqlResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type exportTableBySqlResponseSuccess = (exportTableBySqlResponse200) & {
-  headers: Headers;
-};
-export type exportTableBySqlResponseError = (exportTableBySqlResponse400 | exportTableBySqlResponse401 | exportTableBySqlResponse403 | exportTableBySqlResponse404 | exportTableBySqlResponse409 | exportTableBySqlResponse500) & {
-  headers: Headers;
-};
 
-export type exportTableBySqlResponse = (exportTableBySqlResponseSuccess | exportTableBySqlResponseError)
-
-export const getExportTableBySqlUrl = (params: ExportTableBySqlParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/excel-import-export/export-table-by-sql?${stringifiedParams}` : `/api/excel-import-export/export-table-by-sql`
+export type exportTableBySqlResponseSuccess = exportTableBySqlResponse200 & {
+  headers: Headers
+}
+export type exportTableBySqlResponseError = (
+  | exportTableBySqlResponse400
+  | exportTableBySqlResponse401
+  | exportTableBySqlResponse403
+  | exportTableBySqlResponse404
+  | exportTableBySqlResponse409
+  | exportTableBySqlResponse500
+) & {
+  headers: Headers
 }
 
-export const exportTableBySql = async (params: ExportTableBySqlParams, options?: RequestInit): Promise<exportTableBySqlResponse> => {
-  
-  return customModelFetch<exportTableBySqlResponse>(getExportTableBySqlUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type exportTableBySqlResponse =
+  | exportTableBySqlResponseSuccess
+  | exportTableBySqlResponseError
 
+export const getExportTableBySqlUrl = (params: ExportTableBySqlParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getExportTableBySqlQueryKey = (params?: ExportTableBySqlParams,) => {
-    return [
-    `/api/excel-import-export/export-table-by-sql`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getExportTableBySqlQueryOptions = <TData = Awaited<ReturnType<typeof exportTableBySql>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: ExportTableBySqlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/excel-import-export/export-table-by-sql?${stringifiedParams}`
+    : `/api/excel-import-export/export-table-by-sql`
+}
+
+export const exportTableBySql = async (
+  params: ExportTableBySqlParams,
+  options?: RequestInit
+): Promise<exportTableBySqlResponse> => {
+  return customModelFetch<exportTableBySqlResponse>(getExportTableBySqlUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getExportTableBySqlQueryKey = (params?: ExportTableBySqlParams) => {
+  return [`/api/excel-import-export/export-table-by-sql`, ...(params ? [params] : [])] as const
+}
+
+export const getExportTableBySqlQueryOptions = <
+  TData = Awaited<ReturnType<typeof exportTableBySql>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ExportTableBySqlParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getExportTableBySqlQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getExportTableBySqlQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof exportTableBySql>>> = ({ signal }) =>
+    exportTableBySql(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportTableBySql>>> = ({ signal }) => exportTableBySql(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof exportTableBySql>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type ExportTableBySqlQueryResult = NonNullable<Awaited<ReturnType<typeof exportTableBySql>>>
 export type ExportTableBySqlQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useExportTableBySql<TData = Awaited<ReturnType<typeof exportTableBySql>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ExportTableBySqlParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>> & Pick<
+export function useExportTableBySql<
+  TData = Awaited<ReturnType<typeof exportTableBySql>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ExportTableBySqlParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportTableBySql>>,
           TError,
           Awaited<ReturnType<typeof exportTableBySql>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportTableBySql<TData = Awaited<ReturnType<typeof exportTableBySql>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ExportTableBySqlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportTableBySql<
+  TData = Awaited<ReturnType<typeof exportTableBySql>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ExportTableBySqlParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportTableBySql>>,
           TError,
           Awaited<ReturnType<typeof exportTableBySql>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportTableBySql<TData = Awaited<ReturnType<typeof exportTableBySql>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ExportTableBySqlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportTableBySql<
+  TData = Awaited<ReturnType<typeof exportTableBySql>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ExportTableBySqlParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Export kết quả câu SQL ra Excel
  */
 
-export function useExportTableBySql<TData = Awaited<ReturnType<typeof exportTableBySql>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ExportTableBySqlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useExportTableBySql<
+  TData = Awaited<ReturnType<typeof exportTableBySql>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ExportTableBySqlParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof exportTableBySql>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getExportTableBySqlQueryOptions(params, options)
 
-  const queryOptions = getExportTableBySqlQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Đọc danh sách cột từ file Excel upload
@@ -3213,87 +3898,113 @@ export type readExcelColumnsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type readExcelColumnsResponseSuccess = (readExcelColumnsResponse200) & {
-  headers: Headers;
-};
-export type readExcelColumnsResponseError = (readExcelColumnsResponse400 | readExcelColumnsResponse401 | readExcelColumnsResponse403 | readExcelColumnsResponse404 | readExcelColumnsResponse409 | readExcelColumnsResponse500) & {
-  headers: Headers;
-};
 
-export type readExcelColumnsResponse = (readExcelColumnsResponseSuccess | readExcelColumnsResponseError)
+export type readExcelColumnsResponseSuccess = readExcelColumnsResponse200 & {
+  headers: Headers
+}
+export type readExcelColumnsResponseError = (
+  | readExcelColumnsResponse400
+  | readExcelColumnsResponse401
+  | readExcelColumnsResponse403
+  | readExcelColumnsResponse404
+  | readExcelColumnsResponse409
+  | readExcelColumnsResponse500
+) & {
+  headers: Headers
+}
+
+export type readExcelColumnsResponse =
+  | readExcelColumnsResponseSuccess
+  | readExcelColumnsResponseError
 
 export const getReadExcelColumnsUrl = () => {
-
-
-  
-
   return `/api/excel-import-export/read-excel-columns`
 }
 
-export const readExcelColumns = async (readExcelColumnsBody: ReadExcelColumnsBody, options?: RequestInit): Promise<readExcelColumnsResponse> => {
-    const formData = new FormData();
-formData.append(`file`, readExcelColumnsBody.file)
+export const readExcelColumns = async (
+  readExcelColumnsBody: ReadExcelColumnsBody,
+  options?: RequestInit
+): Promise<readExcelColumnsResponse> => {
+  const formData = new FormData()
+  formData.append(`file`, readExcelColumnsBody.file)
 
-  return customModelFetch<readExcelColumnsResponse>(getReadExcelColumnsUrl(),
-  {      
+  return customModelFetch<readExcelColumnsResponse>(getReadExcelColumnsUrl(), {
     ...options,
-    method: 'POST'
-    ,
-    body: 
-      formData,
+    method: "POST",
+    body: formData,
+  })
+}
+
+export const getReadExcelColumnsMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof readExcelColumns>>,
+    TError,
+    { data: ReadExcelColumnsBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof readExcelColumns>>,
+  TError,
+  { data: ReadExcelColumnsBody },
+  TContext
+> => {
+  const mutationKey = ["readExcelColumns"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof readExcelColumns>>,
+    { data: ReadExcelColumnsBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return readExcelColumns(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type ReadExcelColumnsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof readExcelColumns>>
+>
+export type ReadExcelColumnsMutationBody = ReadExcelColumnsBody
+export type ReadExcelColumnsMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getReadExcelColumnsMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof readExcelColumns>>, TError,{data: ReadExcelColumnsBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof readExcelColumns>>, TError,{data: ReadExcelColumnsBody}, TContext> => {
-
-const mutationKey = ['readExcelColumns'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof readExcelColumns>>, {data: ReadExcelColumnsBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  readExcelColumns(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ReadExcelColumnsMutationResult = NonNullable<Awaited<ReturnType<typeof readExcelColumns>>>
-    export type ReadExcelColumnsMutationBody = ReadExcelColumnsBody
-    export type ReadExcelColumnsMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Đọc danh sách cột từ file Excel upload
  */
-export const useReadExcelColumns = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof readExcelColumns>>, TError,{data: ReadExcelColumnsBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof readExcelColumns>>,
-        TError,
-        {data: ReadExcelColumnsBody},
-        TContext
-      > => {
+export const useReadExcelColumns = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof readExcelColumns>>,
+      TError,
+      { data: ReadExcelColumnsBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof readExcelColumns>>,
+  TError,
+  { data: ReadExcelColumnsBody },
+  TContext
+> => {
+  const mutationOptions = getReadExcelColumnsMutationOptions(options)
 
-      const mutationOptions = getReadExcelColumnsMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Import dữ liệu từ Excel vào bảng database
  */
@@ -3331,94 +4042,120 @@ export type importExcelToDatabaseResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type importExcelToDatabaseResponseSuccess = (importExcelToDatabaseResponse200) & {
-  headers: Headers;
-};
-export type importExcelToDatabaseResponseError = (importExcelToDatabaseResponse400 | importExcelToDatabaseResponse401 | importExcelToDatabaseResponse403 | importExcelToDatabaseResponse404 | importExcelToDatabaseResponse409 | importExcelToDatabaseResponse500) & {
-  headers: Headers;
-};
 
-export type importExcelToDatabaseResponse = (importExcelToDatabaseResponseSuccess | importExcelToDatabaseResponseError)
+export type importExcelToDatabaseResponseSuccess = importExcelToDatabaseResponse200 & {
+  headers: Headers
+}
+export type importExcelToDatabaseResponseError = (
+  | importExcelToDatabaseResponse400
+  | importExcelToDatabaseResponse401
+  | importExcelToDatabaseResponse403
+  | importExcelToDatabaseResponse404
+  | importExcelToDatabaseResponse409
+  | importExcelToDatabaseResponse500
+) & {
+  headers: Headers
+}
+
+export type importExcelToDatabaseResponse =
+  | importExcelToDatabaseResponseSuccess
+  | importExcelToDatabaseResponseError
 
 export const getImportExcelToDatabaseUrl = () => {
-
-
-  
-
   return `/api/excel-import-export/import-excel-to-database`
 }
 
-export const importExcelToDatabase = async (importExcelToDatabaseBody: ImportExcelToDatabaseBody, options?: RequestInit): Promise<importExcelToDatabaseResponse> => {
-    const formData = new FormData();
-formData.append(`file`, importExcelToDatabaseBody.file)
-formData.append(`url`, importExcelToDatabaseBody.url)
-formData.append(`database`, importExcelToDatabaseBody.database)
-formData.append(`table`, importExcelToDatabaseBody.table)
-formData.append(`columns`, importExcelToDatabaseBody.columns)
-if(importExcelToDatabaseBody.dbType !== undefined) {
- formData.append(`dbType`, importExcelToDatabaseBody.dbType)
- }
-
-  return customModelFetch<importExcelToDatabaseResponse>(getImportExcelToDatabaseUrl(),
-  {      
-    ...options,
-    method: 'POST'
-    ,
-    body: 
-      formData,
+export const importExcelToDatabase = async (
+  importExcelToDatabaseBody: ImportExcelToDatabaseBody,
+  options?: RequestInit
+): Promise<importExcelToDatabaseResponse> => {
+  const formData = new FormData()
+  formData.append(`file`, importExcelToDatabaseBody.file)
+  formData.append(`url`, importExcelToDatabaseBody.url)
+  formData.append(`database`, importExcelToDatabaseBody.database)
+  formData.append(`table`, importExcelToDatabaseBody.table)
+  formData.append(`columns`, importExcelToDatabaseBody.columns)
+  if (importExcelToDatabaseBody.dbType !== undefined) {
+    formData.append(`dbType`, importExcelToDatabaseBody.dbType)
   }
-);}
 
+  return customModelFetch<importExcelToDatabaseResponse>(getImportExcelToDatabaseUrl(), {
+    ...options,
+    method: "POST",
+    body: formData,
+  })
+}
 
+export const getImportExcelToDatabaseMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof importExcelToDatabase>>,
+    TError,
+    { data: ImportExcelToDatabaseBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof importExcelToDatabase>>,
+  TError,
+  { data: ImportExcelToDatabaseBody },
+  TContext
+> => {
+  const mutationKey = ["importExcelToDatabase"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof importExcelToDatabase>>,
+    { data: ImportExcelToDatabaseBody }
+  > = (props) => {
+    const { data } = props ?? {}
 
-export const getImportExcelToDatabaseMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importExcelToDatabase>>, TError,{data: ImportExcelToDatabaseBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof importExcelToDatabase>>, TError,{data: ImportExcelToDatabaseBody}, TContext> => {
+    return importExcelToDatabase(data, requestOptions)
+  }
 
-const mutationKey = ['importExcelToDatabase'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+  return { mutationFn, ...mutationOptions }
+}
 
-      
+export type ImportExcelToDatabaseMutationResult = NonNullable<
+  Awaited<ReturnType<typeof importExcelToDatabase>>
+>
+export type ImportExcelToDatabaseMutationBody = ImportExcelToDatabaseBody
+export type ImportExcelToDatabaseMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importExcelToDatabase>>, {data: ImportExcelToDatabaseBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  importExcelToDatabase(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ImportExcelToDatabaseMutationResult = NonNullable<Awaited<ReturnType<typeof importExcelToDatabase>>>
-    export type ImportExcelToDatabaseMutationBody = ImportExcelToDatabaseBody
-    export type ImportExcelToDatabaseMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Import dữ liệu từ Excel vào bảng database
  */
-export const useImportExcelToDatabase = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importExcelToDatabase>>, TError,{data: ImportExcelToDatabaseBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof importExcelToDatabase>>,
-        TError,
-        {data: ImportExcelToDatabaseBody},
-        TContext
-      > => {
+export const useImportExcelToDatabase = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof importExcelToDatabase>>,
+      TError,
+      { data: ImportExcelToDatabaseBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof importExcelToDatabase>>,
+  TError,
+  { data: ImportExcelToDatabaseBody },
+  TContext
+> => {
+  const mutationOptions = getImportExcelToDatabaseMutationOptions(options)
 
-      const mutationOptions = getImportExcelToDatabaseMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Xuất file Excel từ template
  */
@@ -3456,85 +4193,107 @@ export type excelTemplateResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type excelTemplateResponseSuccess = (excelTemplateResponse200) & {
-  headers: Headers;
-};
-export type excelTemplateResponseError = (excelTemplateResponse400 | excelTemplateResponse401 | excelTemplateResponse403 | excelTemplateResponse404 | excelTemplateResponse409 | excelTemplateResponse500) & {
-  headers: Headers;
-};
 
-export type excelTemplateResponse = (excelTemplateResponseSuccess | excelTemplateResponseError)
+export type excelTemplateResponseSuccess = excelTemplateResponse200 & {
+  headers: Headers
+}
+export type excelTemplateResponseError = (
+  | excelTemplateResponse400
+  | excelTemplateResponse401
+  | excelTemplateResponse403
+  | excelTemplateResponse404
+  | excelTemplateResponse409
+  | excelTemplateResponse500
+) & {
+  headers: Headers
+}
+
+export type excelTemplateResponse = excelTemplateResponseSuccess | excelTemplateResponseError
 
 export const getExcelTemplateUrl = () => {
-
-
-  
-
   return `/api/excel-template`
 }
 
-export const excelTemplate = async (excelTemplateBody: ExcelTemplateBody, options?: RequestInit): Promise<excelTemplateResponse> => {
-  
-  return customModelFetch<excelTemplateResponse>(getExcelTemplateUrl(),
-  {      
+export const excelTemplate = async (
+  excelTemplateBody: ExcelTemplateBody,
+  options?: RequestInit
+): Promise<excelTemplateResponse> => {
+  return customModelFetch<excelTemplateResponse>(getExcelTemplateUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      excelTemplateBody,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(excelTemplateBody),
+  })
+}
+
+export const getExcelTemplateMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof excelTemplate>>,
+    TError,
+    { data: ExcelTemplateBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof excelTemplate>>,
+  TError,
+  { data: ExcelTemplateBody },
+  TContext
+> => {
+  const mutationKey = ["excelTemplate"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof excelTemplate>>,
+    { data: ExcelTemplateBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return excelTemplate(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type ExcelTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof excelTemplate>>>
+export type ExcelTemplateMutationBody = ExcelTemplateBody
+export type ExcelTemplateMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getExcelTemplateMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof excelTemplate>>, TError,{data: ExcelTemplateBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof excelTemplate>>, TError,{data: ExcelTemplateBody}, TContext> => {
-
-const mutationKey = ['excelTemplate'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof excelTemplate>>, {data: ExcelTemplateBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  excelTemplate(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ExcelTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof excelTemplate>>>
-    export type ExcelTemplateMutationBody = ExcelTemplateBody
-    export type ExcelTemplateMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Xuất file Excel từ template
  */
-export const useExcelTemplate = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof excelTemplate>>, TError,{data: ExcelTemplateBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof excelTemplate>>,
-        TError,
-        {data: ExcelTemplateBody},
-        TContext
-      > => {
+export const useExcelTemplate = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof excelTemplate>>,
+      TError,
+      { data: ExcelTemplateBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof excelTemplate>>,
+  TError,
+  { data: ExcelTemplateBody },
+  TContext
+> => {
+  const mutationOptions = getExcelTemplateMutationOptions(options)
 
-      const mutationOptions = getExcelTemplateMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Preview template Excel trên MinIO
  */
@@ -3572,85 +4331,111 @@ export type excelTemplatePreviewResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type excelTemplatePreviewResponseSuccess = (excelTemplatePreviewResponse200) & {
-  headers: Headers;
-};
-export type excelTemplatePreviewResponseError = (excelTemplatePreviewResponse400 | excelTemplatePreviewResponse401 | excelTemplatePreviewResponse403 | excelTemplatePreviewResponse404 | excelTemplatePreviewResponse409 | excelTemplatePreviewResponse500) & {
-  headers: Headers;
-};
 
-export type excelTemplatePreviewResponse = (excelTemplatePreviewResponseSuccess | excelTemplatePreviewResponseError)
+export type excelTemplatePreviewResponseSuccess = excelTemplatePreviewResponse200 & {
+  headers: Headers
+}
+export type excelTemplatePreviewResponseError = (
+  | excelTemplatePreviewResponse400
+  | excelTemplatePreviewResponse401
+  | excelTemplatePreviewResponse403
+  | excelTemplatePreviewResponse404
+  | excelTemplatePreviewResponse409
+  | excelTemplatePreviewResponse500
+) & {
+  headers: Headers
+}
+
+export type excelTemplatePreviewResponse =
+  | excelTemplatePreviewResponseSuccess
+  | excelTemplatePreviewResponseError
 
 export const getExcelTemplatePreviewUrl = () => {
-
-
-  
-
   return `/api/excel-template/preview`
 }
 
-export const excelTemplatePreview = async (excelTemplatePreviewBody: ExcelTemplatePreviewBody, options?: RequestInit): Promise<excelTemplatePreviewResponse> => {
-  
-  return customModelFetch<excelTemplatePreviewResponse>(getExcelTemplatePreviewUrl(),
-  {      
+export const excelTemplatePreview = async (
+  excelTemplatePreviewBody: ExcelTemplatePreviewBody,
+  options?: RequestInit
+): Promise<excelTemplatePreviewResponse> => {
+  return customModelFetch<excelTemplatePreviewResponse>(getExcelTemplatePreviewUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      excelTemplatePreviewBody,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(excelTemplatePreviewBody),
+  })
+}
+
+export const getExcelTemplatePreviewMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof excelTemplatePreview>>,
+    TError,
+    { data: ExcelTemplatePreviewBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof excelTemplatePreview>>,
+  TError,
+  { data: ExcelTemplatePreviewBody },
+  TContext
+> => {
+  const mutationKey = ["excelTemplatePreview"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof excelTemplatePreview>>,
+    { data: ExcelTemplatePreviewBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return excelTemplatePreview(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type ExcelTemplatePreviewMutationResult = NonNullable<
+  Awaited<ReturnType<typeof excelTemplatePreview>>
+>
+export type ExcelTemplatePreviewMutationBody = ExcelTemplatePreviewBody
+export type ExcelTemplatePreviewMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getExcelTemplatePreviewMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof excelTemplatePreview>>, TError,{data: ExcelTemplatePreviewBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof excelTemplatePreview>>, TError,{data: ExcelTemplatePreviewBody}, TContext> => {
-
-const mutationKey = ['excelTemplatePreview'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof excelTemplatePreview>>, {data: ExcelTemplatePreviewBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  excelTemplatePreview(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ExcelTemplatePreviewMutationResult = NonNullable<Awaited<ReturnType<typeof excelTemplatePreview>>>
-    export type ExcelTemplatePreviewMutationBody = ExcelTemplatePreviewBody
-    export type ExcelTemplatePreviewMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Preview template Excel trên MinIO
  */
-export const useExcelTemplatePreview = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof excelTemplatePreview>>, TError,{data: ExcelTemplatePreviewBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof excelTemplatePreview>>,
-        TError,
-        {data: ExcelTemplatePreviewBody},
-        TContext
-      > => {
+export const useExcelTemplatePreview = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof excelTemplatePreview>>,
+      TError,
+      { data: ExcelTemplatePreviewBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof excelTemplatePreview>>,
+  TError,
+  { data: ExcelTemplatePreviewBody },
+  TContext
+> => {
+  const mutationOptions = getExcelTemplatePreviewMutationOptions(options)
 
-      const mutationOptions = getExcelTemplatePreviewMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Xuất file DOCX từ template
  */
@@ -3688,85 +4473,107 @@ export type docxTemplateResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type docxTemplateResponseSuccess = (docxTemplateResponse200) & {
-  headers: Headers;
-};
-export type docxTemplateResponseError = (docxTemplateResponse400 | docxTemplateResponse401 | docxTemplateResponse403 | docxTemplateResponse404 | docxTemplateResponse409 | docxTemplateResponse500) & {
-  headers: Headers;
-};
 
-export type docxTemplateResponse = (docxTemplateResponseSuccess | docxTemplateResponseError)
+export type docxTemplateResponseSuccess = docxTemplateResponse200 & {
+  headers: Headers
+}
+export type docxTemplateResponseError = (
+  | docxTemplateResponse400
+  | docxTemplateResponse401
+  | docxTemplateResponse403
+  | docxTemplateResponse404
+  | docxTemplateResponse409
+  | docxTemplateResponse500
+) & {
+  headers: Headers
+}
+
+export type docxTemplateResponse = docxTemplateResponseSuccess | docxTemplateResponseError
 
 export const getDocxTemplateUrl = () => {
-
-
-  
-
   return `/api/docx-template`
 }
 
-export const docxTemplate = async (docxTemplateRequest: DocxTemplateRequest, options?: RequestInit): Promise<docxTemplateResponse> => {
-  
-  return customModelFetch<docxTemplateResponse>(getDocxTemplateUrl(),
-  {      
+export const docxTemplate = async (
+  docxTemplateRequest: DocxTemplateRequest,
+  options?: RequestInit
+): Promise<docxTemplateResponse> => {
+  return customModelFetch<docxTemplateResponse>(getDocxTemplateUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      docxTemplateRequest,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(docxTemplateRequest),
+  })
+}
+
+export const getDocxTemplateMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof docxTemplate>>,
+    TError,
+    { data: DocxTemplateRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof docxTemplate>>,
+  TError,
+  { data: DocxTemplateRequest },
+  TContext
+> => {
+  const mutationKey = ["docxTemplate"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof docxTemplate>>,
+    { data: DocxTemplateRequest }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return docxTemplate(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type DocxTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof docxTemplate>>>
+export type DocxTemplateMutationBody = DocxTemplateRequest
+export type DocxTemplateMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getDocxTemplateMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof docxTemplate>>, TError,{data: DocxTemplateRequest}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof docxTemplate>>, TError,{data: DocxTemplateRequest}, TContext> => {
-
-const mutationKey = ['docxTemplate'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof docxTemplate>>, {data: DocxTemplateRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  docxTemplate(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DocxTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof docxTemplate>>>
-    export type DocxTemplateMutationBody = DocxTemplateRequest
-    export type DocxTemplateMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Xuất file DOCX từ template
  */
-export const useDocxTemplate = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof docxTemplate>>, TError,{data: DocxTemplateRequest}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof docxTemplate>>,
-        TError,
-        {data: DocxTemplateRequest},
-        TContext
-      > => {
+export const useDocxTemplate = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof docxTemplate>>,
+      TError,
+      { data: DocxTemplateRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof docxTemplate>>,
+  TError,
+  { data: DocxTemplateRequest },
+  TContext
+> => {
+  const mutationOptions = getDocxTemplateMutationOptions(options)
 
-      const mutationOptions = getDocxTemplateMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Preview template DOCX trên MinIO
  */
@@ -3804,85 +4611,111 @@ export type docxTemplatePreviewResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type docxTemplatePreviewResponseSuccess = (docxTemplatePreviewResponse200) & {
-  headers: Headers;
-};
-export type docxTemplatePreviewResponseError = (docxTemplatePreviewResponse400 | docxTemplatePreviewResponse401 | docxTemplatePreviewResponse403 | docxTemplatePreviewResponse404 | docxTemplatePreviewResponse409 | docxTemplatePreviewResponse500) & {
-  headers: Headers;
-};
 
-export type docxTemplatePreviewResponse = (docxTemplatePreviewResponseSuccess | docxTemplatePreviewResponseError)
+export type docxTemplatePreviewResponseSuccess = docxTemplatePreviewResponse200 & {
+  headers: Headers
+}
+export type docxTemplatePreviewResponseError = (
+  | docxTemplatePreviewResponse400
+  | docxTemplatePreviewResponse401
+  | docxTemplatePreviewResponse403
+  | docxTemplatePreviewResponse404
+  | docxTemplatePreviewResponse409
+  | docxTemplatePreviewResponse500
+) & {
+  headers: Headers
+}
+
+export type docxTemplatePreviewResponse =
+  | docxTemplatePreviewResponseSuccess
+  | docxTemplatePreviewResponseError
 
 export const getDocxTemplatePreviewUrl = () => {
-
-
-  
-
   return `/api/docx-template/preview`
 }
 
-export const docxTemplatePreview = async (docxTemplatePreviewRequest: DocxTemplatePreviewRequest, options?: RequestInit): Promise<docxTemplatePreviewResponse> => {
-  
-  return customModelFetch<docxTemplatePreviewResponse>(getDocxTemplatePreviewUrl(),
-  {      
+export const docxTemplatePreview = async (
+  docxTemplatePreviewRequest: DocxTemplatePreviewRequest,
+  options?: RequestInit
+): Promise<docxTemplatePreviewResponse> => {
+  return customModelFetch<docxTemplatePreviewResponse>(getDocxTemplatePreviewUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      docxTemplatePreviewRequest,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(docxTemplatePreviewRequest),
+  })
+}
+
+export const getDocxTemplatePreviewMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof docxTemplatePreview>>,
+    TError,
+    { data: DocxTemplatePreviewRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof docxTemplatePreview>>,
+  TError,
+  { data: DocxTemplatePreviewRequest },
+  TContext
+> => {
+  const mutationKey = ["docxTemplatePreview"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof docxTemplatePreview>>,
+    { data: DocxTemplatePreviewRequest }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return docxTemplatePreview(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type DocxTemplatePreviewMutationResult = NonNullable<
+  Awaited<ReturnType<typeof docxTemplatePreview>>
+>
+export type DocxTemplatePreviewMutationBody = DocxTemplatePreviewRequest
+export type DocxTemplatePreviewMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getDocxTemplatePreviewMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof docxTemplatePreview>>, TError,{data: DocxTemplatePreviewRequest}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof docxTemplatePreview>>, TError,{data: DocxTemplatePreviewRequest}, TContext> => {
-
-const mutationKey = ['docxTemplatePreview'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof docxTemplatePreview>>, {data: DocxTemplatePreviewRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  docxTemplatePreview(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DocxTemplatePreviewMutationResult = NonNullable<Awaited<ReturnType<typeof docxTemplatePreview>>>
-    export type DocxTemplatePreviewMutationBody = DocxTemplatePreviewRequest
-    export type DocxTemplatePreviewMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Preview template DOCX trên MinIO
  */
-export const useDocxTemplatePreview = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof docxTemplatePreview>>, TError,{data: DocxTemplatePreviewRequest}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof docxTemplatePreview>>,
-        TError,
-        {data: DocxTemplatePreviewRequest},
-        TContext
-      > => {
+export const useDocxTemplatePreview = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof docxTemplatePreview>>,
+      TError,
+      { data: DocxTemplatePreviewRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof docxTemplatePreview>>,
+  TError,
+  { data: DocxTemplatePreviewRequest },
+  TContext
+> => {
+  const mutationOptions = getDocxTemplatePreviewMutationOptions(options)
 
-      const mutationOptions = getDocxTemplatePreviewMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Cập nhật hàng loạt luận văn/đề án
  */
@@ -3920,85 +4753,111 @@ export type batchUpdateThesisProjectsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type batchUpdateThesisProjectsResponseSuccess = (batchUpdateThesisProjectsResponse200) & {
-  headers: Headers;
-};
-export type batchUpdateThesisProjectsResponseError = (batchUpdateThesisProjectsResponse400 | batchUpdateThesisProjectsResponse401 | batchUpdateThesisProjectsResponse403 | batchUpdateThesisProjectsResponse404 | batchUpdateThesisProjectsResponse409 | batchUpdateThesisProjectsResponse500) & {
-  headers: Headers;
-};
 
-export type batchUpdateThesisProjectsResponse = (batchUpdateThesisProjectsResponseSuccess | batchUpdateThesisProjectsResponseError)
+export type batchUpdateThesisProjectsResponseSuccess = batchUpdateThesisProjectsResponse200 & {
+  headers: Headers
+}
+export type batchUpdateThesisProjectsResponseError = (
+  | batchUpdateThesisProjectsResponse400
+  | batchUpdateThesisProjectsResponse401
+  | batchUpdateThesisProjectsResponse403
+  | batchUpdateThesisProjectsResponse404
+  | batchUpdateThesisProjectsResponse409
+  | batchUpdateThesisProjectsResponse500
+) & {
+  headers: Headers
+}
+
+export type batchUpdateThesisProjectsResponse =
+  | batchUpdateThesisProjectsResponseSuccess
+  | batchUpdateThesisProjectsResponseError
 
 export const getBatchUpdateThesisProjectsUrl = () => {
-
-
-  
-
   return `/api/thesis/batch-update`
 }
 
-export const batchUpdateThesisProjects = async (batchUpdateThesisProjectsBody: BatchUpdateThesisProjectsBody, options?: RequestInit): Promise<batchUpdateThesisProjectsResponse> => {
-  
-  return customModelFetch<batchUpdateThesisProjectsResponse>(getBatchUpdateThesisProjectsUrl(),
-  {      
+export const batchUpdateThesisProjects = async (
+  batchUpdateThesisProjectsBody: BatchUpdateThesisProjectsBody,
+  options?: RequestInit
+): Promise<batchUpdateThesisProjectsResponse> => {
+  return customModelFetch<batchUpdateThesisProjectsResponse>(getBatchUpdateThesisProjectsUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      batchUpdateThesisProjectsBody,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(batchUpdateThesisProjectsBody),
+  })
+}
+
+export const getBatchUpdateThesisProjectsMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof batchUpdateThesisProjects>>,
+    TError,
+    { data: BatchUpdateThesisProjectsBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof batchUpdateThesisProjects>>,
+  TError,
+  { data: BatchUpdateThesisProjectsBody },
+  TContext
+> => {
+  const mutationKey = ["batchUpdateThesisProjects"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof batchUpdateThesisProjects>>,
+    { data: BatchUpdateThesisProjectsBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return batchUpdateThesisProjects(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type BatchUpdateThesisProjectsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof batchUpdateThesisProjects>>
+>
+export type BatchUpdateThesisProjectsMutationBody = BatchUpdateThesisProjectsBody
+export type BatchUpdateThesisProjectsMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getBatchUpdateThesisProjectsMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof batchUpdateThesisProjects>>, TError,{data: BatchUpdateThesisProjectsBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof batchUpdateThesisProjects>>, TError,{data: BatchUpdateThesisProjectsBody}, TContext> => {
-
-const mutationKey = ['batchUpdateThesisProjects'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof batchUpdateThesisProjects>>, {data: BatchUpdateThesisProjectsBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  batchUpdateThesisProjects(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type BatchUpdateThesisProjectsMutationResult = NonNullable<Awaited<ReturnType<typeof batchUpdateThesisProjects>>>
-    export type BatchUpdateThesisProjectsMutationBody = BatchUpdateThesisProjectsBody
-    export type BatchUpdateThesisProjectsMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Cập nhật hàng loạt luận văn/đề án
  */
-export const useBatchUpdateThesisProjects = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof batchUpdateThesisProjects>>, TError,{data: BatchUpdateThesisProjectsBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof batchUpdateThesisProjects>>,
-        TError,
-        {data: BatchUpdateThesisProjectsBody},
-        TContext
-      > => {
+export const useBatchUpdateThesisProjects = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof batchUpdateThesisProjects>>,
+      TError,
+      { data: BatchUpdateThesisProjectsBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof batchUpdateThesisProjects>>,
+  TError,
+  { data: BatchUpdateThesisProjectsBody },
+  TContext
+> => {
+  const mutationOptions = getBatchUpdateThesisProjectsMutationOptions(options)
 
-      const mutationOptions = getBatchUpdateThesisProjectsMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Tạo dữ liệu mẫu luận văn/đề án cho học viên
  */
@@ -4036,85 +4895,111 @@ export type createSampleThesisDataResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type createSampleThesisDataResponseSuccess = (createSampleThesisDataResponse200) & {
-  headers: Headers;
-};
-export type createSampleThesisDataResponseError = (createSampleThesisDataResponse400 | createSampleThesisDataResponse401 | createSampleThesisDataResponse403 | createSampleThesisDataResponse404 | createSampleThesisDataResponse409 | createSampleThesisDataResponse500) & {
-  headers: Headers;
-};
 
-export type createSampleThesisDataResponse = (createSampleThesisDataResponseSuccess | createSampleThesisDataResponseError)
+export type createSampleThesisDataResponseSuccess = createSampleThesisDataResponse200 & {
+  headers: Headers
+}
+export type createSampleThesisDataResponseError = (
+  | createSampleThesisDataResponse400
+  | createSampleThesisDataResponse401
+  | createSampleThesisDataResponse403
+  | createSampleThesisDataResponse404
+  | createSampleThesisDataResponse409
+  | createSampleThesisDataResponse500
+) & {
+  headers: Headers
+}
+
+export type createSampleThesisDataResponse =
+  | createSampleThesisDataResponseSuccess
+  | createSampleThesisDataResponseError
 
 export const getCreateSampleThesisDataUrl = () => {
-
-
-  
-
   return `/api/thesis/create-sample-data`
 }
 
-export const createSampleThesisData = async (createSampleThesisDataBody: CreateSampleThesisDataBody, options?: RequestInit): Promise<createSampleThesisDataResponse> => {
-  
-  return customModelFetch<createSampleThesisDataResponse>(getCreateSampleThesisDataUrl(),
-  {      
+export const createSampleThesisData = async (
+  createSampleThesisDataBody: CreateSampleThesisDataBody,
+  options?: RequestInit
+): Promise<createSampleThesisDataResponse> => {
+  return customModelFetch<createSampleThesisDataResponse>(getCreateSampleThesisDataUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      createSampleThesisDataBody,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createSampleThesisDataBody),
+  })
+}
+
+export const getCreateSampleThesisDataMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createSampleThesisData>>,
+    TError,
+    { data: CreateSampleThesisDataBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createSampleThesisData>>,
+  TError,
+  { data: CreateSampleThesisDataBody },
+  TContext
+> => {
+  const mutationKey = ["createSampleThesisData"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createSampleThesisData>>,
+    { data: CreateSampleThesisDataBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return createSampleThesisData(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type CreateSampleThesisDataMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createSampleThesisData>>
+>
+export type CreateSampleThesisDataMutationBody = CreateSampleThesisDataBody
+export type CreateSampleThesisDataMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getCreateSampleThesisDataMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSampleThesisData>>, TError,{data: CreateSampleThesisDataBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof createSampleThesisData>>, TError,{data: CreateSampleThesisDataBody}, TContext> => {
-
-const mutationKey = ['createSampleThesisData'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSampleThesisData>>, {data: CreateSampleThesisDataBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  createSampleThesisData(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateSampleThesisDataMutationResult = NonNullable<Awaited<ReturnType<typeof createSampleThesisData>>>
-    export type CreateSampleThesisDataMutationBody = CreateSampleThesisDataBody
-    export type CreateSampleThesisDataMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Tạo dữ liệu mẫu luận văn/đề án cho học viên
  */
-export const useCreateSampleThesisData = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSampleThesisData>>, TError,{data: CreateSampleThesisDataBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createSampleThesisData>>,
-        TError,
-        {data: CreateSampleThesisDataBody},
-        TContext
-      > => {
+export const useCreateSampleThesisData = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof createSampleThesisData>>,
+      TError,
+      { data: CreateSampleThesisDataBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof createSampleThesisData>>,
+  TError,
+  { data: CreateSampleThesisDataBody },
+  TContext
+> => {
+  const mutationOptions = getCreateSampleThesisDataMutationOptions(options)
 
-      const mutationOptions = getCreateSampleThesisDataMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Xóa luận văn/đề án của học viên trong đợt xét
  */
@@ -4152,85 +5037,111 @@ export type deleteStudentThesisResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type deleteStudentThesisResponseSuccess = (deleteStudentThesisResponse200) & {
-  headers: Headers;
-};
-export type deleteStudentThesisResponseError = (deleteStudentThesisResponse400 | deleteStudentThesisResponse401 | deleteStudentThesisResponse403 | deleteStudentThesisResponse404 | deleteStudentThesisResponse409 | deleteStudentThesisResponse500) & {
-  headers: Headers;
-};
 
-export type deleteStudentThesisResponse = (deleteStudentThesisResponseSuccess | deleteStudentThesisResponseError)
+export type deleteStudentThesisResponseSuccess = deleteStudentThesisResponse200 & {
+  headers: Headers
+}
+export type deleteStudentThesisResponseError = (
+  | deleteStudentThesisResponse400
+  | deleteStudentThesisResponse401
+  | deleteStudentThesisResponse403
+  | deleteStudentThesisResponse404
+  | deleteStudentThesisResponse409
+  | deleteStudentThesisResponse500
+) & {
+  headers: Headers
+}
+
+export type deleteStudentThesisResponse =
+  | deleteStudentThesisResponseSuccess
+  | deleteStudentThesisResponseError
 
 export const getDeleteStudentThesisUrl = () => {
-
-
-  
-
   return `/api/thesis/delete-student-thesis`
 }
 
-export const deleteStudentThesis = async (deleteStudentThesisBody: DeleteStudentThesisBody, options?: RequestInit): Promise<deleteStudentThesisResponse> => {
-  
-  return customModelFetch<deleteStudentThesisResponse>(getDeleteStudentThesisUrl(),
-  {      
+export const deleteStudentThesis = async (
+  deleteStudentThesisBody: DeleteStudentThesisBody,
+  options?: RequestInit
+): Promise<deleteStudentThesisResponse> => {
+  return customModelFetch<deleteStudentThesisResponse>(getDeleteStudentThesisUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      deleteStudentThesisBody,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(deleteStudentThesisBody),
+  })
+}
+
+export const getDeleteStudentThesisMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteStudentThesis>>,
+    TError,
+    { data: DeleteStudentThesisBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteStudentThesis>>,
+  TError,
+  { data: DeleteStudentThesisBody },
+  TContext
+> => {
+  const mutationKey = ["deleteStudentThesis"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteStudentThesis>>,
+    { data: DeleteStudentThesisBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return deleteStudentThesis(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type DeleteStudentThesisMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteStudentThesis>>
+>
+export type DeleteStudentThesisMutationBody = DeleteStudentThesisBody
+export type DeleteStudentThesisMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getDeleteStudentThesisMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteStudentThesis>>, TError,{data: DeleteStudentThesisBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteStudentThesis>>, TError,{data: DeleteStudentThesisBody}, TContext> => {
-
-const mutationKey = ['deleteStudentThesis'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteStudentThesis>>, {data: DeleteStudentThesisBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  deleteStudentThesis(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteStudentThesisMutationResult = NonNullable<Awaited<ReturnType<typeof deleteStudentThesis>>>
-    export type DeleteStudentThesisMutationBody = DeleteStudentThesisBody
-    export type DeleteStudentThesisMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Xóa luận văn/đề án của học viên trong đợt xét
  */
-export const useDeleteStudentThesis = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteStudentThesis>>, TError,{data: DeleteStudentThesisBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deleteStudentThesis>>,
-        TError,
-        {data: DeleteStudentThesisBody},
-        TContext
-      > => {
+export const useDeleteStudentThesis = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteStudentThesis>>,
+      TError,
+      { data: DeleteStudentThesisBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof deleteStudentThesis>>,
+  TError,
+  { data: DeleteStudentThesisBody },
+  TContext
+> => {
+  const mutationOptions = getDeleteStudentThesisMutationOptions(options)
 
-      const mutationOptions = getDeleteStudentThesisMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Xuất Excel mẫu nhập hội đồng bảo vệ theo đợt xét
  */
@@ -4268,85 +5179,114 @@ export type exportCouncilImportTemplateResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type exportCouncilImportTemplateResponseSuccess = (exportCouncilImportTemplateResponse200) & {
-  headers: Headers;
-};
-export type exportCouncilImportTemplateResponseError = (exportCouncilImportTemplateResponse400 | exportCouncilImportTemplateResponse401 | exportCouncilImportTemplateResponse403 | exportCouncilImportTemplateResponse404 | exportCouncilImportTemplateResponse409 | exportCouncilImportTemplateResponse500) & {
-  headers: Headers;
-};
 
-export type exportCouncilImportTemplateResponse = (exportCouncilImportTemplateResponseSuccess | exportCouncilImportTemplateResponseError)
+export type exportCouncilImportTemplateResponseSuccess = exportCouncilImportTemplateResponse200 & {
+  headers: Headers
+}
+export type exportCouncilImportTemplateResponseError = (
+  | exportCouncilImportTemplateResponse400
+  | exportCouncilImportTemplateResponse401
+  | exportCouncilImportTemplateResponse403
+  | exportCouncilImportTemplateResponse404
+  | exportCouncilImportTemplateResponse409
+  | exportCouncilImportTemplateResponse500
+) & {
+  headers: Headers
+}
+
+export type exportCouncilImportTemplateResponse =
+  | exportCouncilImportTemplateResponseSuccess
+  | exportCouncilImportTemplateResponseError
 
 export const getExportCouncilImportTemplateUrl = () => {
-
-
-  
-
   return `/api/thesis/export-council-import-template`
 }
 
-export const exportCouncilImportTemplate = async (exportCouncilImportTemplateBody: ExportCouncilImportTemplateBody, options?: RequestInit): Promise<exportCouncilImportTemplateResponse> => {
-  
-  return customModelFetch<exportCouncilImportTemplateResponse>(getExportCouncilImportTemplateUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      exportCouncilImportTemplateBody,)
+export const exportCouncilImportTemplate = async (
+  exportCouncilImportTemplateBody: ExportCouncilImportTemplateBody,
+  options?: RequestInit
+): Promise<exportCouncilImportTemplateResponse> => {
+  return customModelFetch<exportCouncilImportTemplateResponse>(
+    getExportCouncilImportTemplateUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(exportCouncilImportTemplateBody),
+    }
+  )
+}
+
+export const getExportCouncilImportTemplateMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof exportCouncilImportTemplate>>,
+    TError,
+    { data: ExportCouncilImportTemplateBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof exportCouncilImportTemplate>>,
+  TError,
+  { data: ExportCouncilImportTemplateBody },
+  TContext
+> => {
+  const mutationKey = ["exportCouncilImportTemplate"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof exportCouncilImportTemplate>>,
+    { data: ExportCouncilImportTemplateBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return exportCouncilImportTemplate(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type ExportCouncilImportTemplateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof exportCouncilImportTemplate>>
+>
+export type ExportCouncilImportTemplateMutationBody = ExportCouncilImportTemplateBody
+export type ExportCouncilImportTemplateMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getExportCouncilImportTemplateMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportCouncilImportTemplate>>, TError,{data: ExportCouncilImportTemplateBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof exportCouncilImportTemplate>>, TError,{data: ExportCouncilImportTemplateBody}, TContext> => {
-
-const mutationKey = ['exportCouncilImportTemplate'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportCouncilImportTemplate>>, {data: ExportCouncilImportTemplateBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  exportCouncilImportTemplate(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ExportCouncilImportTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof exportCouncilImportTemplate>>>
-    export type ExportCouncilImportTemplateMutationBody = ExportCouncilImportTemplateBody
-    export type ExportCouncilImportTemplateMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Xuất Excel mẫu nhập hội đồng bảo vệ theo đợt xét
  */
-export const useExportCouncilImportTemplate = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportCouncilImportTemplate>>, TError,{data: ExportCouncilImportTemplateBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof exportCouncilImportTemplate>>,
-        TError,
-        {data: ExportCouncilImportTemplateBody},
-        TContext
-      > => {
+export const useExportCouncilImportTemplate = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof exportCouncilImportTemplate>>,
+      TError,
+      { data: ExportCouncilImportTemplateBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof exportCouncilImportTemplate>>,
+  TError,
+  { data: ExportCouncilImportTemplateBody },
+  TContext
+> => {
+  const mutationOptions = getExportCouncilImportTemplateMutationOptions(options)
 
-      const mutationOptions = getExportCouncilImportTemplateMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Import hội đồng bảo vệ từ file Excel mẫu
  */
@@ -4384,88 +5324,114 @@ export type importCouncilFromExcelResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type importCouncilFromExcelResponseSuccess = (importCouncilFromExcelResponse200) & {
-  headers: Headers;
-};
-export type importCouncilFromExcelResponseError = (importCouncilFromExcelResponse400 | importCouncilFromExcelResponse401 | importCouncilFromExcelResponse403 | importCouncilFromExcelResponse404 | importCouncilFromExcelResponse409 | importCouncilFromExcelResponse500) & {
-  headers: Headers;
-};
 
-export type importCouncilFromExcelResponse = (importCouncilFromExcelResponseSuccess | importCouncilFromExcelResponseError)
+export type importCouncilFromExcelResponseSuccess = importCouncilFromExcelResponse200 & {
+  headers: Headers
+}
+export type importCouncilFromExcelResponseError = (
+  | importCouncilFromExcelResponse400
+  | importCouncilFromExcelResponse401
+  | importCouncilFromExcelResponse403
+  | importCouncilFromExcelResponse404
+  | importCouncilFromExcelResponse409
+  | importCouncilFromExcelResponse500
+) & {
+  headers: Headers
+}
+
+export type importCouncilFromExcelResponse =
+  | importCouncilFromExcelResponseSuccess
+  | importCouncilFromExcelResponseError
 
 export const getImportCouncilFromExcelUrl = () => {
-
-
-  
-
   return `/api/thesis/import-council-from-excel`
 }
 
-export const importCouncilFromExcel = async (importCouncilFromExcelRequest: ImportCouncilFromExcelRequest, options?: RequestInit): Promise<importCouncilFromExcelResponse> => {
-    const formData = new FormData();
-formData.append(`file`, importCouncilFromExcelRequest.file)
-formData.append(`thesisSessionId`, importCouncilFromExcelRequest.thesisSessionId)
+export const importCouncilFromExcel = async (
+  importCouncilFromExcelRequest: ImportCouncilFromExcelRequest,
+  options?: RequestInit
+): Promise<importCouncilFromExcelResponse> => {
+  const formData = new FormData()
+  formData.append(`file`, importCouncilFromExcelRequest.file)
+  formData.append(`thesisSessionId`, importCouncilFromExcelRequest.thesisSessionId)
 
-  return customModelFetch<importCouncilFromExcelResponse>(getImportCouncilFromExcelUrl(),
-  {      
+  return customModelFetch<importCouncilFromExcelResponse>(getImportCouncilFromExcelUrl(), {
     ...options,
-    method: 'POST'
-    ,
-    body: 
-      formData,
+    method: "POST",
+    body: formData,
+  })
+}
+
+export const getImportCouncilFromExcelMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof importCouncilFromExcel>>,
+    TError,
+    { data: ImportCouncilFromExcelRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof importCouncilFromExcel>>,
+  TError,
+  { data: ImportCouncilFromExcelRequest },
+  TContext
+> => {
+  const mutationKey = ["importCouncilFromExcel"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof importCouncilFromExcel>>,
+    { data: ImportCouncilFromExcelRequest }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return importCouncilFromExcel(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type ImportCouncilFromExcelMutationResult = NonNullable<
+  Awaited<ReturnType<typeof importCouncilFromExcel>>
+>
+export type ImportCouncilFromExcelMutationBody = ImportCouncilFromExcelRequest
+export type ImportCouncilFromExcelMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getImportCouncilFromExcelMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importCouncilFromExcel>>, TError,{data: ImportCouncilFromExcelRequest}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof importCouncilFromExcel>>, TError,{data: ImportCouncilFromExcelRequest}, TContext> => {
-
-const mutationKey = ['importCouncilFromExcel'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importCouncilFromExcel>>, {data: ImportCouncilFromExcelRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  importCouncilFromExcel(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ImportCouncilFromExcelMutationResult = NonNullable<Awaited<ReturnType<typeof importCouncilFromExcel>>>
-    export type ImportCouncilFromExcelMutationBody = ImportCouncilFromExcelRequest
-    export type ImportCouncilFromExcelMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Import hội đồng bảo vệ từ file Excel mẫu
  */
-export const useImportCouncilFromExcel = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importCouncilFromExcel>>, TError,{data: ImportCouncilFromExcelRequest}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof importCouncilFromExcel>>,
-        TError,
-        {data: ImportCouncilFromExcelRequest},
-        TContext
-      > => {
+export const useImportCouncilFromExcel = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof importCouncilFromExcel>>,
+      TError,
+      { data: ImportCouncilFromExcelRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof importCouncilFromExcel>>,
+  TError,
+  { data: ImportCouncilFromExcelRequest },
+  TContext
+> => {
+  const mutationOptions = getImportCouncilFromExcelMutationOptions(options)
 
-      const mutationOptions = getImportCouncilFromExcelMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Đồng bộ thanh toán hội đồng bảo vệ
  */
@@ -4503,85 +5469,111 @@ export type syncThesisCouncilPaymentsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type syncThesisCouncilPaymentsResponseSuccess = (syncThesisCouncilPaymentsResponse200) & {
-  headers: Headers;
-};
-export type syncThesisCouncilPaymentsResponseError = (syncThesisCouncilPaymentsResponse400 | syncThesisCouncilPaymentsResponse401 | syncThesisCouncilPaymentsResponse403 | syncThesisCouncilPaymentsResponse404 | syncThesisCouncilPaymentsResponse409 | syncThesisCouncilPaymentsResponse500) & {
-  headers: Headers;
-};
 
-export type syncThesisCouncilPaymentsResponse = (syncThesisCouncilPaymentsResponseSuccess | syncThesisCouncilPaymentsResponseError)
+export type syncThesisCouncilPaymentsResponseSuccess = syncThesisCouncilPaymentsResponse200 & {
+  headers: Headers
+}
+export type syncThesisCouncilPaymentsResponseError = (
+  | syncThesisCouncilPaymentsResponse400
+  | syncThesisCouncilPaymentsResponse401
+  | syncThesisCouncilPaymentsResponse403
+  | syncThesisCouncilPaymentsResponse404
+  | syncThesisCouncilPaymentsResponse409
+  | syncThesisCouncilPaymentsResponse500
+) & {
+  headers: Headers
+}
+
+export type syncThesisCouncilPaymentsResponse =
+  | syncThesisCouncilPaymentsResponseSuccess
+  | syncThesisCouncilPaymentsResponseError
 
 export const getSyncThesisCouncilPaymentsUrl = () => {
-
-
-  
-
   return `/api/thesis-payment/sync-council-payments`
 }
 
-export const syncThesisCouncilPayments = async (syncThesisCouncilPaymentsBody: SyncThesisCouncilPaymentsBody, options?: RequestInit): Promise<syncThesisCouncilPaymentsResponse> => {
-  
-  return customModelFetch<syncThesisCouncilPaymentsResponse>(getSyncThesisCouncilPaymentsUrl(),
-  {      
+export const syncThesisCouncilPayments = async (
+  syncThesisCouncilPaymentsBody: SyncThesisCouncilPaymentsBody,
+  options?: RequestInit
+): Promise<syncThesisCouncilPaymentsResponse> => {
+  return customModelFetch<syncThesisCouncilPaymentsResponse>(getSyncThesisCouncilPaymentsUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      syncThesisCouncilPaymentsBody,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(syncThesisCouncilPaymentsBody),
+  })
+}
+
+export const getSyncThesisCouncilPaymentsMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof syncThesisCouncilPayments>>,
+    TError,
+    { data: SyncThesisCouncilPaymentsBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof syncThesisCouncilPayments>>,
+  TError,
+  { data: SyncThesisCouncilPaymentsBody },
+  TContext
+> => {
+  const mutationKey = ["syncThesisCouncilPayments"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof syncThesisCouncilPayments>>,
+    { data: SyncThesisCouncilPaymentsBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return syncThesisCouncilPayments(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type SyncThesisCouncilPaymentsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof syncThesisCouncilPayments>>
+>
+export type SyncThesisCouncilPaymentsMutationBody = SyncThesisCouncilPaymentsBody
+export type SyncThesisCouncilPaymentsMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getSyncThesisCouncilPaymentsMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncThesisCouncilPayments>>, TError,{data: SyncThesisCouncilPaymentsBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof syncThesisCouncilPayments>>, TError,{data: SyncThesisCouncilPaymentsBody}, TContext> => {
-
-const mutationKey = ['syncThesisCouncilPayments'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncThesisCouncilPayments>>, {data: SyncThesisCouncilPaymentsBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  syncThesisCouncilPayments(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SyncThesisCouncilPaymentsMutationResult = NonNullable<Awaited<ReturnType<typeof syncThesisCouncilPayments>>>
-    export type SyncThesisCouncilPaymentsMutationBody = SyncThesisCouncilPaymentsBody
-    export type SyncThesisCouncilPaymentsMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Đồng bộ thanh toán hội đồng bảo vệ
  */
-export const useSyncThesisCouncilPayments = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncThesisCouncilPayments>>, TError,{data: SyncThesisCouncilPaymentsBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof syncThesisCouncilPayments>>,
-        TError,
-        {data: SyncThesisCouncilPaymentsBody},
-        TContext
-      > => {
+export const useSyncThesisCouncilPayments = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof syncThesisCouncilPayments>>,
+      TError,
+      { data: SyncThesisCouncilPaymentsBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof syncThesisCouncilPayments>>,
+  TError,
+  { data: SyncThesisCouncilPaymentsBody },
+  TContext
+> => {
+  const mutationOptions = getSyncThesisCouncilPaymentsMutationOptions(options)
 
-      const mutationOptions = getSyncThesisCouncilPaymentsMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Đồng bộ thanh toán hướng dẫn
  */
@@ -4619,85 +5611,115 @@ export type syncThesisSupervisorPaymentsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type syncThesisSupervisorPaymentsResponseSuccess = (syncThesisSupervisorPaymentsResponse200) & {
-  headers: Headers;
-};
-export type syncThesisSupervisorPaymentsResponseError = (syncThesisSupervisorPaymentsResponse400 | syncThesisSupervisorPaymentsResponse401 | syncThesisSupervisorPaymentsResponse403 | syncThesisSupervisorPaymentsResponse404 | syncThesisSupervisorPaymentsResponse409 | syncThesisSupervisorPaymentsResponse500) & {
-  headers: Headers;
-};
 
-export type syncThesisSupervisorPaymentsResponse = (syncThesisSupervisorPaymentsResponseSuccess | syncThesisSupervisorPaymentsResponseError)
+export type syncThesisSupervisorPaymentsResponseSuccess =
+  syncThesisSupervisorPaymentsResponse200 & {
+    headers: Headers
+  }
+export type syncThesisSupervisorPaymentsResponseError = (
+  | syncThesisSupervisorPaymentsResponse400
+  | syncThesisSupervisorPaymentsResponse401
+  | syncThesisSupervisorPaymentsResponse403
+  | syncThesisSupervisorPaymentsResponse404
+  | syncThesisSupervisorPaymentsResponse409
+  | syncThesisSupervisorPaymentsResponse500
+) & {
+  headers: Headers
+}
+
+export type syncThesisSupervisorPaymentsResponse =
+  | syncThesisSupervisorPaymentsResponseSuccess
+  | syncThesisSupervisorPaymentsResponseError
 
 export const getSyncThesisSupervisorPaymentsUrl = () => {
-
-
-  
-
   return `/api/thesis-payment/sync-supervisor-payments`
 }
 
-export const syncThesisSupervisorPayments = async (syncThesisSupervisorPaymentsBody: SyncThesisSupervisorPaymentsBody, options?: RequestInit): Promise<syncThesisSupervisorPaymentsResponse> => {
-  
-  return customModelFetch<syncThesisSupervisorPaymentsResponse>(getSyncThesisSupervisorPaymentsUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      syncThesisSupervisorPaymentsBody,)
+export const syncThesisSupervisorPayments = async (
+  syncThesisSupervisorPaymentsBody: SyncThesisSupervisorPaymentsBody,
+  options?: RequestInit
+): Promise<syncThesisSupervisorPaymentsResponse> => {
+  return customModelFetch<syncThesisSupervisorPaymentsResponse>(
+    getSyncThesisSupervisorPaymentsUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(syncThesisSupervisorPaymentsBody),
+    }
+  )
+}
+
+export const getSyncThesisSupervisorPaymentsMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof syncThesisSupervisorPayments>>,
+    TError,
+    { data: SyncThesisSupervisorPaymentsBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof syncThesisSupervisorPayments>>,
+  TError,
+  { data: SyncThesisSupervisorPaymentsBody },
+  TContext
+> => {
+  const mutationKey = ["syncThesisSupervisorPayments"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof syncThesisSupervisorPayments>>,
+    { data: SyncThesisSupervisorPaymentsBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return syncThesisSupervisorPayments(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type SyncThesisSupervisorPaymentsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof syncThesisSupervisorPayments>>
+>
+export type SyncThesisSupervisorPaymentsMutationBody = SyncThesisSupervisorPaymentsBody
+export type SyncThesisSupervisorPaymentsMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getSyncThesisSupervisorPaymentsMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncThesisSupervisorPayments>>, TError,{data: SyncThesisSupervisorPaymentsBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof syncThesisSupervisorPayments>>, TError,{data: SyncThesisSupervisorPaymentsBody}, TContext> => {
-
-const mutationKey = ['syncThesisSupervisorPayments'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncThesisSupervisorPayments>>, {data: SyncThesisSupervisorPaymentsBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  syncThesisSupervisorPayments(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SyncThesisSupervisorPaymentsMutationResult = NonNullable<Awaited<ReturnType<typeof syncThesisSupervisorPayments>>>
-    export type SyncThesisSupervisorPaymentsMutationBody = SyncThesisSupervisorPaymentsBody
-    export type SyncThesisSupervisorPaymentsMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Đồng bộ thanh toán hướng dẫn
  */
-export const useSyncThesisSupervisorPayments = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncThesisSupervisorPayments>>, TError,{data: SyncThesisSupervisorPaymentsBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof syncThesisSupervisorPayments>>,
-        TError,
-        {data: SyncThesisSupervisorPaymentsBody},
-        TContext
-      > => {
+export const useSyncThesisSupervisorPayments = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof syncThesisSupervisorPayments>>,
+      TError,
+      { data: SyncThesisSupervisorPaymentsBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof syncThesisSupervisorPayments>>,
+  TError,
+  { data: SyncThesisSupervisorPaymentsBody },
+  TContext
+> => {
+  const mutationOptions = getSyncThesisSupervisorPaymentsMutationOptions(options)
 
-      const mutationOptions = getSyncThesisSupervisorPaymentsMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Xuất file thanh toán hội đồng bảo vệ
  */
@@ -4735,85 +5757,114 @@ export type exportThesisCouncilPaymentsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type exportThesisCouncilPaymentsResponseSuccess = (exportThesisCouncilPaymentsResponse200) & {
-  headers: Headers;
-};
-export type exportThesisCouncilPaymentsResponseError = (exportThesisCouncilPaymentsResponse400 | exportThesisCouncilPaymentsResponse401 | exportThesisCouncilPaymentsResponse403 | exportThesisCouncilPaymentsResponse404 | exportThesisCouncilPaymentsResponse409 | exportThesisCouncilPaymentsResponse500) & {
-  headers: Headers;
-};
 
-export type exportThesisCouncilPaymentsResponse = (exportThesisCouncilPaymentsResponseSuccess | exportThesisCouncilPaymentsResponseError)
+export type exportThesisCouncilPaymentsResponseSuccess = exportThesisCouncilPaymentsResponse200 & {
+  headers: Headers
+}
+export type exportThesisCouncilPaymentsResponseError = (
+  | exportThesisCouncilPaymentsResponse400
+  | exportThesisCouncilPaymentsResponse401
+  | exportThesisCouncilPaymentsResponse403
+  | exportThesisCouncilPaymentsResponse404
+  | exportThesisCouncilPaymentsResponse409
+  | exportThesisCouncilPaymentsResponse500
+) & {
+  headers: Headers
+}
+
+export type exportThesisCouncilPaymentsResponse =
+  | exportThesisCouncilPaymentsResponseSuccess
+  | exportThesisCouncilPaymentsResponseError
 
 export const getExportThesisCouncilPaymentsUrl = () => {
-
-
-  
-
   return `/api/thesis-payment/export-council-payments`
 }
 
-export const exportThesisCouncilPayments = async (exportThesisCouncilPaymentsBody: ExportThesisCouncilPaymentsBody, options?: RequestInit): Promise<exportThesisCouncilPaymentsResponse> => {
-  
-  return customModelFetch<exportThesisCouncilPaymentsResponse>(getExportThesisCouncilPaymentsUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      exportThesisCouncilPaymentsBody,)
+export const exportThesisCouncilPayments = async (
+  exportThesisCouncilPaymentsBody: ExportThesisCouncilPaymentsBody,
+  options?: RequestInit
+): Promise<exportThesisCouncilPaymentsResponse> => {
+  return customModelFetch<exportThesisCouncilPaymentsResponse>(
+    getExportThesisCouncilPaymentsUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(exportThesisCouncilPaymentsBody),
+    }
+  )
+}
+
+export const getExportThesisCouncilPaymentsMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof exportThesisCouncilPayments>>,
+    TError,
+    { data: ExportThesisCouncilPaymentsBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof exportThesisCouncilPayments>>,
+  TError,
+  { data: ExportThesisCouncilPaymentsBody },
+  TContext
+> => {
+  const mutationKey = ["exportThesisCouncilPayments"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof exportThesisCouncilPayments>>,
+    { data: ExportThesisCouncilPaymentsBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return exportThesisCouncilPayments(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type ExportThesisCouncilPaymentsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof exportThesisCouncilPayments>>
+>
+export type ExportThesisCouncilPaymentsMutationBody = ExportThesisCouncilPaymentsBody
+export type ExportThesisCouncilPaymentsMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getExportThesisCouncilPaymentsMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportThesisCouncilPayments>>, TError,{data: ExportThesisCouncilPaymentsBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof exportThesisCouncilPayments>>, TError,{data: ExportThesisCouncilPaymentsBody}, TContext> => {
-
-const mutationKey = ['exportThesisCouncilPayments'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportThesisCouncilPayments>>, {data: ExportThesisCouncilPaymentsBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  exportThesisCouncilPayments(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ExportThesisCouncilPaymentsMutationResult = NonNullable<Awaited<ReturnType<typeof exportThesisCouncilPayments>>>
-    export type ExportThesisCouncilPaymentsMutationBody = ExportThesisCouncilPaymentsBody
-    export type ExportThesisCouncilPaymentsMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Xuất file thanh toán hội đồng bảo vệ
  */
-export const useExportThesisCouncilPayments = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportThesisCouncilPayments>>, TError,{data: ExportThesisCouncilPaymentsBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof exportThesisCouncilPayments>>,
-        TError,
-        {data: ExportThesisCouncilPaymentsBody},
-        TContext
-      > => {
+export const useExportThesisCouncilPayments = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof exportThesisCouncilPayments>>,
+      TError,
+      { data: ExportThesisCouncilPaymentsBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof exportThesisCouncilPayments>>,
+  TError,
+  { data: ExportThesisCouncilPaymentsBody },
+  TContext
+> => {
+  const mutationOptions = getExportThesisCouncilPaymentsMutationOptions(options)
 
-      const mutationOptions = getExportThesisCouncilPaymentsMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Xuất file thanh toán hướng dẫn
  */
@@ -4851,85 +5902,117 @@ export type exportThesisSupervisorPaymentsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type exportThesisSupervisorPaymentsResponseSuccess = (exportThesisSupervisorPaymentsResponse200) & {
-  headers: Headers;
-};
-export type exportThesisSupervisorPaymentsResponseError = (exportThesisSupervisorPaymentsResponse400 | exportThesisSupervisorPaymentsResponse401 | exportThesisSupervisorPaymentsResponse403 | exportThesisSupervisorPaymentsResponse404 | exportThesisSupervisorPaymentsResponse409 | exportThesisSupervisorPaymentsResponse500) & {
-  headers: Headers;
-};
 
-export type exportThesisSupervisorPaymentsResponse = (exportThesisSupervisorPaymentsResponseSuccess | exportThesisSupervisorPaymentsResponseError)
+export type exportThesisSupervisorPaymentsResponseSuccess =
+  exportThesisSupervisorPaymentsResponse200 & {
+    headers: Headers
+  }
+export type exportThesisSupervisorPaymentsResponseError = (
+  | exportThesisSupervisorPaymentsResponse400
+  | exportThesisSupervisorPaymentsResponse401
+  | exportThesisSupervisorPaymentsResponse403
+  | exportThesisSupervisorPaymentsResponse404
+  | exportThesisSupervisorPaymentsResponse409
+  | exportThesisSupervisorPaymentsResponse500
+) & {
+  headers: Headers
+}
+
+export type exportThesisSupervisorPaymentsResponse =
+  | exportThesisSupervisorPaymentsResponseSuccess
+  | exportThesisSupervisorPaymentsResponseError
 
 export const getExportThesisSupervisorPaymentsUrl = () => {
-
-
-  
-
   return `/api/thesis-payment/export-supervisor-payments`
 }
 
-export const exportThesisSupervisorPayments = async (exportThesisSupervisorPaymentsBody: ExportThesisSupervisorPaymentsBody, options?: RequestInit): Promise<exportThesisSupervisorPaymentsResponse> => {
-  
-  return customModelFetch<exportThesisSupervisorPaymentsResponse>(getExportThesisSupervisorPaymentsUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      exportThesisSupervisorPaymentsBody,)
+export const exportThesisSupervisorPayments = async (
+  exportThesisSupervisorPaymentsBody: ExportThesisSupervisorPaymentsBody,
+  options?: RequestInit
+): Promise<exportThesisSupervisorPaymentsResponse> => {
+  return customModelFetch<exportThesisSupervisorPaymentsResponse>(
+    getExportThesisSupervisorPaymentsUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(exportThesisSupervisorPaymentsBody),
+    }
+  )
+}
+
+export const getExportThesisSupervisorPaymentsMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof exportThesisSupervisorPayments>>,
+    TError,
+    { data: ExportThesisSupervisorPaymentsBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof exportThesisSupervisorPayments>>,
+  TError,
+  { data: ExportThesisSupervisorPaymentsBody },
+  TContext
+> => {
+  const mutationKey = ["exportThesisSupervisorPayments"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof exportThesisSupervisorPayments>>,
+    { data: ExportThesisSupervisorPaymentsBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return exportThesisSupervisorPayments(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type ExportThesisSupervisorPaymentsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof exportThesisSupervisorPayments>>
+>
+export type ExportThesisSupervisorPaymentsMutationBody = ExportThesisSupervisorPaymentsBody
+export type ExportThesisSupervisorPaymentsMutationError =
+  | ErrorMessageResponse
+  | UnauthorizedResponse
 
-
-export const getExportThesisSupervisorPaymentsMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportThesisSupervisorPayments>>, TError,{data: ExportThesisSupervisorPaymentsBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof exportThesisSupervisorPayments>>, TError,{data: ExportThesisSupervisorPaymentsBody}, TContext> => {
-
-const mutationKey = ['exportThesisSupervisorPayments'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportThesisSupervisorPayments>>, {data: ExportThesisSupervisorPaymentsBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  exportThesisSupervisorPayments(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ExportThesisSupervisorPaymentsMutationResult = NonNullable<Awaited<ReturnType<typeof exportThesisSupervisorPayments>>>
-    export type ExportThesisSupervisorPaymentsMutationBody = ExportThesisSupervisorPaymentsBody
-    export type ExportThesisSupervisorPaymentsMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Xuất file thanh toán hướng dẫn
  */
-export const useExportThesisSupervisorPayments = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportThesisSupervisorPayments>>, TError,{data: ExportThesisSupervisorPaymentsBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof exportThesisSupervisorPayments>>,
-        TError,
-        {data: ExportThesisSupervisorPaymentsBody},
-        TContext
-      > => {
+export const useExportThesisSupervisorPayments = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof exportThesisSupervisorPayments>>,
+      TError,
+      { data: ExportThesisSupervisorPaymentsBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof exportThesisSupervisorPayments>>,
+  TError,
+  { data: ExportThesisSupervisorPaymentsBody },
+  TContext
+> => {
+  const mutationOptions = getExportThesisSupervisorPaymentsMutationOptions(options)
 
-      const mutationOptions = getExportThesisSupervisorPaymentsMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Tạo presigned URL upload
  */
@@ -4967,85 +6050,111 @@ export type generatePresignedUrlResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type generatePresignedUrlResponseSuccess = (generatePresignedUrlResponse200) & {
-  headers: Headers;
-};
-export type generatePresignedUrlResponseError = (generatePresignedUrlResponse400 | generatePresignedUrlResponse401 | generatePresignedUrlResponse403 | generatePresignedUrlResponse404 | generatePresignedUrlResponse409 | generatePresignedUrlResponse500) & {
-  headers: Headers;
-};
 
-export type generatePresignedUrlResponse = (generatePresignedUrlResponseSuccess | generatePresignedUrlResponseError)
+export type generatePresignedUrlResponseSuccess = generatePresignedUrlResponse200 & {
+  headers: Headers
+}
+export type generatePresignedUrlResponseError = (
+  | generatePresignedUrlResponse400
+  | generatePresignedUrlResponse401
+  | generatePresignedUrlResponse403
+  | generatePresignedUrlResponse404
+  | generatePresignedUrlResponse409
+  | generatePresignedUrlResponse500
+) & {
+  headers: Headers
+}
+
+export type generatePresignedUrlResponse =
+  | generatePresignedUrlResponseSuccess
+  | generatePresignedUrlResponseError
 
 export const getGeneratePresignedUrlUrl = () => {
-
-
-  
-
   return `/api/minio/generate-presigned-url`
 }
 
-export const generatePresignedUrl = async (presignedUrlDto: PresignedUrlDto, options?: RequestInit): Promise<generatePresignedUrlResponse> => {
-  
-  return customModelFetch<generatePresignedUrlResponse>(getGeneratePresignedUrlUrl(),
-  {      
+export const generatePresignedUrl = async (
+  presignedUrlDto: PresignedUrlDto,
+  options?: RequestInit
+): Promise<generatePresignedUrlResponse> => {
+  return customModelFetch<generatePresignedUrlResponse>(getGeneratePresignedUrlUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      presignedUrlDto,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(presignedUrlDto),
+  })
+}
+
+export const getGeneratePresignedUrlMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof generatePresignedUrl>>,
+    TError,
+    { data: PresignedUrlDto },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof generatePresignedUrl>>,
+  TError,
+  { data: PresignedUrlDto },
+  TContext
+> => {
+  const mutationKey = ["generatePresignedUrl"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof generatePresignedUrl>>,
+    { data: PresignedUrlDto }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return generatePresignedUrl(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type GeneratePresignedUrlMutationResult = NonNullable<
+  Awaited<ReturnType<typeof generatePresignedUrl>>
+>
+export type GeneratePresignedUrlMutationBody = PresignedUrlDto
+export type GeneratePresignedUrlMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getGeneratePresignedUrlMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generatePresignedUrl>>, TError,{data: PresignedUrlDto}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof generatePresignedUrl>>, TError,{data: PresignedUrlDto}, TContext> => {
-
-const mutationKey = ['generatePresignedUrl'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof generatePresignedUrl>>, {data: PresignedUrlDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  generatePresignedUrl(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type GeneratePresignedUrlMutationResult = NonNullable<Awaited<ReturnType<typeof generatePresignedUrl>>>
-    export type GeneratePresignedUrlMutationBody = PresignedUrlDto
-    export type GeneratePresignedUrlMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Tạo presigned URL upload
  */
-export const useGeneratePresignedUrl = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generatePresignedUrl>>, TError,{data: PresignedUrlDto}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof generatePresignedUrl>>,
-        TError,
-        {data: PresignedUrlDto},
-        TContext
-      > => {
+export const useGeneratePresignedUrl = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof generatePresignedUrl>>,
+      TError,
+      { data: PresignedUrlDto },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof generatePresignedUrl>>,
+  TError,
+  { data: PresignedUrlDto },
+  TContext
+> => {
+  const mutationOptions = getGeneratePresignedUrlMutationOptions(options)
 
-      const mutationOptions = getGeneratePresignedUrlMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Liệt kê object trong bucket
  */
@@ -5083,120 +6192,152 @@ export type listObjectsResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type listObjectsResponseSuccess = (listObjectsResponse200) & {
-  headers: Headers;
-};
-export type listObjectsResponseError = (listObjectsResponse400 | listObjectsResponse401 | listObjectsResponse403 | listObjectsResponse404 | listObjectsResponse409 | listObjectsResponse500) & {
-  headers: Headers;
-};
 
-export type listObjectsResponse = (listObjectsResponseSuccess | listObjectsResponseError)
+export type listObjectsResponseSuccess = listObjectsResponse200 & {
+  headers: Headers
+}
+export type listObjectsResponseError = (
+  | listObjectsResponse400
+  | listObjectsResponse401
+  | listObjectsResponse403
+  | listObjectsResponse404
+  | listObjectsResponse409
+  | listObjectsResponse500
+) & {
+  headers: Headers
+}
 
-export const getListObjectsUrl = (params?: ListObjectsParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type listObjectsResponse = listObjectsResponseSuccess | listObjectsResponseError
+
+export const getListObjectsUrl = (params?: ListObjectsParams) => {
+  const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
-  });
+  })
 
-  const stringifiedParams = normalizedParams.toString();
+  const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0 ? `/api/minio?${stringifiedParams}` : `/api/minio`
 }
 
-export const listObjects = async (params?: ListObjectsParams, options?: RequestInit): Promise<listObjectsResponse> => {
-  
-  return customModelFetch<listObjectsResponse>(getListObjectsUrl(params),
-  {      
+export const listObjects = async (
+  params?: ListObjectsParams,
+  options?: RequestInit
+): Promise<listObjectsResponse> => {
+  return customModelFetch<listObjectsResponse>(getListObjectsUrl(params), {
     ...options,
-    method: 'GET'
-    
-    
+    method: "GET",
+  })
+}
+
+export const getListObjectsQueryKey = (params?: ListObjectsParams) => {
+  return [`/api/minio`, ...(params ? [params] : [])] as const
+}
+
+export const getListObjectsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listObjects>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params?: ListObjectsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
   }
-);}
-
-
-
-
-
-export const getListObjectsQueryKey = (params?: ListObjectsParams,) => {
-    return [
-    `/api/minio`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getListObjectsQueryOptions = <TData = Awaited<ReturnType<typeof listObjects>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params?: ListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getListObjectsQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getListObjectsQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listObjects>>> = ({ signal }) =>
+    listObjects(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listObjects>>> = ({ signal }) => listObjects(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listObjects>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type ListObjectsQueryResult = NonNullable<Awaited<ReturnType<typeof listObjects>>>
 export type ListObjectsQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: undefined |  ListObjectsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>> & Pick<
+export function useListObjects<
+  TData = Awaited<ReturnType<typeof listObjects>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: undefined | ListObjectsParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof listObjects>>,
           TError,
           Awaited<ReturnType<typeof listObjects>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params?: ListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListObjects<
+  TData = Awaited<ReturnType<typeof listObjects>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params?: ListObjectsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof listObjects>>,
           TError,
           Awaited<ReturnType<typeof listObjects>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params?: ListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListObjects<
+  TData = Awaited<ReturnType<typeof listObjects>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params?: ListObjectsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Liệt kê object trong bucket
  */
 
-export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params?: ListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useListObjects<
+  TData = Awaited<ReturnType<typeof listObjects>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params?: ListObjectsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getListObjectsQueryOptions(params, options)
 
-  const queryOptions = getListObjectsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Xóa object trên MinIO
@@ -5235,91 +6376,115 @@ export type deleteObjectResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type deleteObjectResponseSuccess = (deleteObjectResponse200) & {
-  headers: Headers;
-};
-export type deleteObjectResponseError = (deleteObjectResponse400 | deleteObjectResponse401 | deleteObjectResponse403 | deleteObjectResponse404 | deleteObjectResponse409 | deleteObjectResponse500) & {
-  headers: Headers;
-};
 
-export type deleteObjectResponse = (deleteObjectResponseSuccess | deleteObjectResponseError)
+export type deleteObjectResponseSuccess = deleteObjectResponse200 & {
+  headers: Headers
+}
+export type deleteObjectResponseError = (
+  | deleteObjectResponse400
+  | deleteObjectResponse401
+  | deleteObjectResponse403
+  | deleteObjectResponse404
+  | deleteObjectResponse409
+  | deleteObjectResponse500
+) & {
+  headers: Headers
+}
 
-export const getDeleteObjectUrl = (params: DeleteObjectParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type deleteObjectResponse = deleteObjectResponseSuccess | deleteObjectResponseError
+
+export const getDeleteObjectUrl = (params: DeleteObjectParams) => {
+  const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
-  });
+  })
 
-  const stringifiedParams = normalizedParams.toString();
+  const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0 ? `/api/minio?${stringifiedParams}` : `/api/minio`
 }
 
-export const deleteObject = async (params: DeleteObjectParams, options?: RequestInit): Promise<deleteObjectResponse> => {
-  
-  return customModelFetch<deleteObjectResponse>(getDeleteObjectUrl(params),
-  {      
+export const deleteObject = async (
+  params: DeleteObjectParams,
+  options?: RequestInit
+): Promise<deleteObjectResponse> => {
+  return customModelFetch<deleteObjectResponse>(getDeleteObjectUrl(params), {
     ...options,
-    method: 'DELETE'
-    
-    
+    method: "DELETE",
+  })
+}
+
+export const getDeleteObjectMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteObject>>,
+    TError,
+    { params: DeleteObjectParams },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteObject>>,
+  TError,
+  { params: DeleteObjectParams },
+  TContext
+> => {
+  const mutationKey = ["deleteObject"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteObject>>,
+    { params: DeleteObjectParams }
+  > = (props) => {
+    const { params } = props ?? {}
+
+    return deleteObject(params, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type DeleteObjectMutationResult = NonNullable<Awaited<ReturnType<typeof deleteObject>>>
 
+export type DeleteObjectMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-export const getDeleteObjectMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteObject>>, TError,{params: DeleteObjectParams}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteObject>>, TError,{params: DeleteObjectParams}, TContext> => {
-
-const mutationKey = ['deleteObject'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteObject>>, {params: DeleteObjectParams}> = (props) => {
-          const {params} = props ?? {};
-
-          return  deleteObject(params,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteObjectMutationResult = NonNullable<Awaited<ReturnType<typeof deleteObject>>>
-    
-    export type DeleteObjectMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Xóa object trên MinIO
  */
-export const useDeleteObject = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteObject>>, TError,{params: DeleteObjectParams}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deleteObject>>,
-        TError,
-        {params: DeleteObjectParams},
-        TContext
-      > => {
+export const useDeleteObject = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteObject>>,
+      TError,
+      { params: DeleteObjectParams },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof deleteObject>>,
+  TError,
+  { params: DeleteObjectParams },
+  TContext
+> => {
+  const mutationOptions = getDeleteObjectMutationOptions(options)
 
-      const mutationOptions = getDeleteObjectMutationOptions(options);
+  return useMutation(mutationOptions, queryClient)
+}
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    
 /**
  * @summary Tạo presigned URL download
  */
@@ -5357,120 +6522,160 @@ export type presignedGetObjectResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type presignedGetObjectResponseSuccess = (presignedGetObjectResponse200) & {
-  headers: Headers;
-};
-export type presignedGetObjectResponseError = (presignedGetObjectResponse400 | presignedGetObjectResponse401 | presignedGetObjectResponse403 | presignedGetObjectResponse404 | presignedGetObjectResponse409 | presignedGetObjectResponse500) & {
-  headers: Headers;
-};
 
-export type presignedGetObjectResponse = (presignedGetObjectResponseSuccess | presignedGetObjectResponseError)
+export type presignedGetObjectResponseSuccess = presignedGetObjectResponse200 & {
+  headers: Headers
+}
+export type presignedGetObjectResponseError = (
+  | presignedGetObjectResponse400
+  | presignedGetObjectResponse401
+  | presignedGetObjectResponse403
+  | presignedGetObjectResponse404
+  | presignedGetObjectResponse409
+  | presignedGetObjectResponse500
+) & {
+  headers: Headers
+}
 
-export const getPresignedGetObjectUrl = (params: PresignedGetObjectParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type presignedGetObjectResponse =
+  | presignedGetObjectResponseSuccess
+  | presignedGetObjectResponseError
+
+export const getPresignedGetObjectUrl = (params: PresignedGetObjectParams) => {
+  const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
-  });
+  })
 
-  const stringifiedParams = normalizedParams.toString();
+  const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/minio/presigned-url?${stringifiedParams}` : `/api/minio/presigned-url`
+  return stringifiedParams.length > 0
+    ? `/api/minio/presigned-url?${stringifiedParams}`
+    : `/api/minio/presigned-url`
 }
 
-export const presignedGetObject = async (params: PresignedGetObjectParams, options?: RequestInit): Promise<presignedGetObjectResponse> => {
-  
-  return customModelFetch<presignedGetObjectResponse>(getPresignedGetObjectUrl(params),
-  {      
+export const presignedGetObject = async (
+  params: PresignedGetObjectParams,
+  options?: RequestInit
+): Promise<presignedGetObjectResponse> => {
+  return customModelFetch<presignedGetObjectResponse>(getPresignedGetObjectUrl(params), {
     ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
-
-export const getPresignedGetObjectQueryKey = (params?: PresignedGetObjectParams,) => {
-    return [
-    `/api/minio/presigned-url`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getPresignedGetObjectQueryOptions = <TData = Awaited<ReturnType<typeof presignedGetObject>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: PresignedGetObjectParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getPresignedGetObjectQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof presignedGetObject>>> = ({ signal }) => presignedGetObject(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    method: "GET",
+  })
 }
 
-export type PresignedGetObjectQueryResult = NonNullable<Awaited<ReturnType<typeof presignedGetObject>>>
+export const getPresignedGetObjectQueryKey = (params?: PresignedGetObjectParams) => {
+  return [`/api/minio/presigned-url`, ...(params ? [params] : [])] as const
+}
+
+export const getPresignedGetObjectQueryOptions = <
+  TData = Awaited<ReturnType<typeof presignedGetObject>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: PresignedGetObjectParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getPresignedGetObjectQueryKey(params)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof presignedGetObject>>> = ({ signal }) =>
+    presignedGetObject(params, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof presignedGetObject>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type PresignedGetObjectQueryResult = NonNullable<
+  Awaited<ReturnType<typeof presignedGetObject>>
+>
 export type PresignedGetObjectQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function usePresignedGetObject<TData = Awaited<ReturnType<typeof presignedGetObject>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: PresignedGetObjectParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>> & Pick<
+export function usePresignedGetObject<
+  TData = Awaited<ReturnType<typeof presignedGetObject>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: PresignedGetObjectParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof presignedGetObject>>,
           TError,
           Awaited<ReturnType<typeof presignedGetObject>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePresignedGetObject<TData = Awaited<ReturnType<typeof presignedGetObject>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: PresignedGetObjectParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function usePresignedGetObject<
+  TData = Awaited<ReturnType<typeof presignedGetObject>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: PresignedGetObjectParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof presignedGetObject>>,
           TError,
           Awaited<ReturnType<typeof presignedGetObject>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePresignedGetObject<TData = Awaited<ReturnType<typeof presignedGetObject>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: PresignedGetObjectParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function usePresignedGetObject<
+  TData = Awaited<ReturnType<typeof presignedGetObject>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: PresignedGetObjectParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Tạo presigned URL download
  */
 
-export function usePresignedGetObject<TData = Awaited<ReturnType<typeof presignedGetObject>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: PresignedGetObjectParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function usePresignedGetObject<
+  TData = Awaited<ReturnType<typeof presignedGetObject>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: PresignedGetObjectParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof presignedGetObject>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getPresignedGetObjectQueryOptions(params, options)
 
-  const queryOptions = getPresignedGetObjectQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Chuyển đổi tài liệu qua OnlyOffice
@@ -5509,120 +6714,154 @@ export type convertDocumentResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type convertDocumentResponseSuccess = (convertDocumentResponse200) & {
-  headers: Headers;
-};
-export type convertDocumentResponseError = (convertDocumentResponse400 | convertDocumentResponse401 | convertDocumentResponse403 | convertDocumentResponse404 | convertDocumentResponse409 | convertDocumentResponse500) & {
-  headers: Headers;
-};
 
-export type convertDocumentResponse = (convertDocumentResponseSuccess | convertDocumentResponseError)
-
-export const getConvertDocumentUrl = (params: ConvertDocumentParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/minio/convert-document?${stringifiedParams}` : `/api/minio/convert-document`
+export type convertDocumentResponseSuccess = convertDocumentResponse200 & {
+  headers: Headers
+}
+export type convertDocumentResponseError = (
+  | convertDocumentResponse400
+  | convertDocumentResponse401
+  | convertDocumentResponse403
+  | convertDocumentResponse404
+  | convertDocumentResponse409
+  | convertDocumentResponse500
+) & {
+  headers: Headers
 }
 
-export const convertDocument = async (params: ConvertDocumentParams, options?: RequestInit): Promise<convertDocumentResponse> => {
-  
-  return customModelFetch<convertDocumentResponse>(getConvertDocumentUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type convertDocumentResponse = convertDocumentResponseSuccess | convertDocumentResponseError
 
+export const getConvertDocumentUrl = (params: ConvertDocumentParams) => {
+  const normalizedParams = new URLSearchParams()
 
-
-
-
-export const getConvertDocumentQueryKey = (params?: ConvertDocumentParams,) => {
-    return [
-    `/api/minio/convert-document`, ...(params ? [params]: [])
-    ] as const;
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
     }
+  })
 
-    
-export const getConvertDocumentQueryOptions = <TData = Awaited<ReturnType<typeof convertDocument>>, TError = ErrorMessageResponse | UnauthorizedResponse>(params: ConvertDocumentParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/minio/convert-document?${stringifiedParams}`
+    : `/api/minio/convert-document`
+}
+
+export const convertDocument = async (
+  params: ConvertDocumentParams,
+  options?: RequestInit
+): Promise<convertDocumentResponse> => {
+  return customModelFetch<convertDocumentResponse>(getConvertDocumentUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getConvertDocumentQueryKey = (params?: ConvertDocumentParams) => {
+  return [`/api/minio/convert-document`, ...(params ? [params] : [])] as const
+}
+
+export const getConvertDocumentQueryOptions = <
+  TData = Awaited<ReturnType<typeof convertDocument>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ConvertDocumentParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  }
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getConvertDocumentQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getConvertDocumentQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof convertDocument>>> = ({ signal }) =>
+    convertDocument(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof convertDocument>>> = ({ signal }) => convertDocument(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof convertDocument>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type ConvertDocumentQueryResult = NonNullable<Awaited<ReturnType<typeof convertDocument>>>
 export type ConvertDocumentQueryError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export function useConvertDocument<TData = Awaited<ReturnType<typeof convertDocument>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ConvertDocumentParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>> & Pick<
+export function useConvertDocument<
+  TData = Awaited<ReturnType<typeof convertDocument>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ConvertDocumentParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof convertDocument>>,
           TError,
           Awaited<ReturnType<typeof convertDocument>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useConvertDocument<TData = Awaited<ReturnType<typeof convertDocument>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ConvertDocumentParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useConvertDocument<
+  TData = Awaited<ReturnType<typeof convertDocument>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ConvertDocumentParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof convertDocument>>,
           TError,
           Awaited<ReturnType<typeof convertDocument>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useConvertDocument<TData = Awaited<ReturnType<typeof convertDocument>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ConvertDocumentParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useConvertDocument<
+  TData = Awaited<ReturnType<typeof convertDocument>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ConvertDocumentParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Chuyển đổi tài liệu qua OnlyOffice
  */
 
-export function useConvertDocument<TData = Awaited<ReturnType<typeof convertDocument>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
- params: ConvertDocumentParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useConvertDocument<
+  TData = Awaited<ReturnType<typeof convertDocument>>,
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+>(
+  params: ConvertDocumentParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof convertDocument>>, TError, TData>>
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getConvertDocumentQueryOptions(params, options)
 
-  const queryOptions = getConvertDocumentQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+  return query
 }
-
-
-
-
 
 /**
  * @summary Thực thi batch thao tác Prisma trong transaction
@@ -5661,81 +6900,103 @@ export type sqlTransactionResponse500 = {
   data: ErrorMessageResponse
   status: 500
 }
-    
-export type sqlTransactionResponseSuccess = (sqlTransactionResponse200) & {
-  headers: Headers;
-};
-export type sqlTransactionResponseError = (sqlTransactionResponse400 | sqlTransactionResponse401 | sqlTransactionResponse403 | sqlTransactionResponse404 | sqlTransactionResponse409 | sqlTransactionResponse500) & {
-  headers: Headers;
-};
 
-export type sqlTransactionResponse = (sqlTransactionResponseSuccess | sqlTransactionResponseError)
+export type sqlTransactionResponseSuccess = sqlTransactionResponse200 & {
+  headers: Headers
+}
+export type sqlTransactionResponseError = (
+  | sqlTransactionResponse400
+  | sqlTransactionResponse401
+  | sqlTransactionResponse403
+  | sqlTransactionResponse404
+  | sqlTransactionResponse409
+  | sqlTransactionResponse500
+) & {
+  headers: Headers
+}
+
+export type sqlTransactionResponse = sqlTransactionResponseSuccess | sqlTransactionResponseError
 
 export const getSqlTransactionUrl = () => {
-
-
-  
-
   return `/api/sql/transaction`
 }
 
-export const sqlTransaction = async (sqlTransactionItem: SqlTransactionItem[], options?: RequestInit): Promise<sqlTransactionResponse> => {
-  
-  return customModelFetch<sqlTransactionResponse>(getSqlTransactionUrl(),
-  {      
+export const sqlTransaction = async (
+  sqlTransactionItem: SqlTransactionItem[],
+  options?: RequestInit
+): Promise<sqlTransactionResponse> => {
+  return customModelFetch<sqlTransactionResponse>(getSqlTransactionUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      sqlTransactionItem,)
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(sqlTransactionItem),
+  })
+}
+
+export const getSqlTransactionMutationOptions = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sqlTransaction>>,
+    TError,
+    { data: SqlTransactionItem[] },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof sqlTransaction>>,
+  TError,
+  { data: SqlTransactionItem[] },
+  TContext
+> => {
+  const mutationKey = ["sqlTransaction"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof sqlTransaction>>,
+    { data: SqlTransactionItem[] }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return sqlTransaction(data, requestOptions)
   }
-);}
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type SqlTransactionMutationResult = NonNullable<Awaited<ReturnType<typeof sqlTransaction>>>
+export type SqlTransactionMutationBody = SqlTransactionItem[]
+export type SqlTransactionMutationError = ErrorMessageResponse | UnauthorizedResponse
 
-
-export const getSqlTransactionMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sqlTransaction>>, TError,{data: SqlTransactionItem[]}, TContext>, request?: SecondParameter<typeof customModelFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof sqlTransaction>>, TError,{data: SqlTransactionItem[]}, TContext> => {
-
-const mutationKey = ['sqlTransaction'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof sqlTransaction>>, {data: SqlTransactionItem[]}> = (props) => {
-          const {data} = props ?? {};
-
-          return  sqlTransaction(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SqlTransactionMutationResult = NonNullable<Awaited<ReturnType<typeof sqlTransaction>>>
-    export type SqlTransactionMutationBody = SqlTransactionItem[]
-    export type SqlTransactionMutationError = ErrorMessageResponse | UnauthorizedResponse
-
-    /**
+/**
  * @summary Thực thi batch thao tác Prisma trong transaction
  */
-export const useSqlTransaction = <TError = ErrorMessageResponse | UnauthorizedResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sqlTransaction>>, TError,{data: SqlTransactionItem[]}, TContext>, request?: SecondParameter<typeof customModelFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof sqlTransaction>>,
-        TError,
-        {data: SqlTransactionItem[]},
-        TContext
-      > => {
+export const useSqlTransaction = <
+  TError = ErrorMessageResponse | UnauthorizedResponse,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof sqlTransaction>>,
+      TError,
+      { data: SqlTransactionItem[] },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof sqlTransaction>>,
+  TError,
+  { data: SqlTransactionItem[] },
+  TContext
+> => {
+  const mutationOptions = getSqlTransactionMutationOptions(options)
 
-      const mutationOptions = getSqlTransactionMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
+  return useMutation(mutationOptions, queryClient)
+}

@@ -773,18 +773,20 @@ export default function KeHoachGhepLopMonHoc() {
                               </Tooltip>
                             </div>
                             <div className="flex h-fit">
-                              {record?.trainingBlocks?.flatMap(
-                                // @ts-expect-error
-                                (block) =>
-                                  block.trainingBlockOnCurriculumVersion?.curriculumVersion
-                                    ?.fixedClasses ?? []
-                              ).map((fixedClass) => (
-                                <FixedClassDragItem
-                                  subjectVersionId={record.id}
-                                  item={fixedClass}
-                                  key={fixedClass?.id}
-                                />
-                              ))}
+                              {record?.trainingBlocks
+                                ?.flatMap(
+                                  // @ts-expect-error
+                                  (block) =>
+                                    block.trainingBlockOnCurriculumVersion?.curriculumVersion
+                                      ?.fixedClasses ?? []
+                                )
+                                .map((fixedClass) => (
+                                  <FixedClassDragItem
+                                    subjectVersionId={record.id}
+                                    item={fixedClass}
+                                    key={fixedClass?.id}
+                                  />
+                                ))}
                               {/* {record?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map?.(
                                                                 (e: FixedClass) => (
                                                                     <FixedClassDragItem

@@ -27,9 +27,7 @@ const prisma = new PrismaClient({
 })
 
 const SESSION_ID = process.env.SESSION_ID || "cmse0eu6t0001sh3d0h9yfidl"
-const OUT =
-  process.env.OUT ||
-  join(__dirname, "../../../ThongKeDangKyHoc_TongHop.xlsx")
+const OUT = process.env.OUT || join(__dirname, "../../../ThongKeDangKyHoc_TongHop.xlsx")
 
 const STATUS_LABEL = {
   ENROLLED: "Đang học",
@@ -169,7 +167,7 @@ async function main() {
   const notRegActive = notRegistered.filter((s) => s.status === "ENROLLED")
   const notRegInactive = notRegistered.filter((s) => INACTIVE_STATUSES.has(s.status))
   const notRegOther = notRegistered.filter(
-    (s) => s.status !== "ENROLLED" && !INACTIVE_STATUSES.has(s.status),
+    (s) => s.status !== "ENROLLED" && !INACTIVE_STATUSES.has(s.status)
   )
 
   const eligibleActive = eligible.filter((s) => s.status === "ENROLLED")
@@ -202,7 +200,9 @@ async function main() {
     { metric: "  Trong đó: Đang học (ENROLLED)", value: eligibleActive.length },
     {
       metric: "  Trong đó: Thôi học / Nghỉ học / trạng thái khác",
-      value: eligibleInactive.length + (eligible.length - eligibleActive.length - eligibleInactive.length),
+      value:
+        eligibleInactive.length +
+        (eligible.length - eligibleActive.length - eligibleInactive.length),
     },
   ]
 
@@ -215,7 +215,7 @@ async function main() {
 
   summaryRows.push(
     { metric: "—", value: "" },
-    { metric: "Số SV đã đăng ký", value: registered.length },
+    { metric: "Số SV đã đăng ký", value: registered.length }
   )
   for (const [st, cnt] of Object.entries(regStatusCounts).sort()) {
     summaryRows.push({
@@ -234,7 +234,7 @@ async function main() {
     {
       metric: "  · Chưa ĐK — thôi học / nghỉ học",
       value: notRegInactive.length,
-    },
+    }
   )
   for (const [st, cnt] of Object.entries(notRegStatusCounts).sort()) {
     summaryRows.push({
@@ -255,9 +255,7 @@ async function main() {
     {
       metric: "Tỷ lệ đã ĐK / tổng SV khóa",
       value:
-        eligible.length > 0
-          ? `${((registered.length / eligible.length) * 100).toFixed(2)}%`
-          : "0%",
+        eligible.length > 0 ? `${((registered.length / eligible.length) * 100).toFixed(2)}%` : "0%",
     },
     {
       metric: "Tỷ lệ đã ĐK / SV đang học",
@@ -272,7 +270,7 @@ async function main() {
         eligibleActive.length > 0
           ? `${((notRegActive.length / eligibleActive.length) * 100).toFixed(2)}%`
           : "0%",
-    },
+    }
   )
 
   s1.addRows(summaryRows)
@@ -338,7 +336,7 @@ async function main() {
       .join("; ")
     const totalCredit = studentLogs.reduce(
       (sum, l) => sum + (l.subjectClass?.subject?.credit || 0),
-      0,
+      0
     )
     s3.addRow({
       stt: idx + 1,
@@ -447,8 +445,8 @@ async function main() {
         registrationRows: logs.length,
       },
       null,
-      2,
-    ),
+      2
+    )
   )
 }
 

@@ -83,21 +83,22 @@ Copy từ repo:
 Chỉnh mật khẩu / OIDC cho đúng.  
 **Quan trọng:** trong env BE dùng `postgres` và `minio` (hostname Docker), không dùng IP host.
 
-<<<<<<< HEAD
-=======
+# <<<<<<< HEAD
+
 Giữ Postgres/MinIO đang chạy:
 
->>>>>>> 739545e75263a60b6681a4e6dbeef7136528cc56
+> > > > > > > 739545e75263a60b6681a4e6dbeef7136528cc56
+
 ```bash
 cd ~/mta-app/be
 docker compose up -d postgres minio redis
 ```
 
 ### 2. Migrate schema (máy local)
+
 <<<<<<< HEAD
 
-Trong `packages/database/.env` trỏ DB online rồi migrate theo quy trình dự án.
-=======
+# Trong `packages/database/.env` trỏ DB online rồi migrate theo quy trình dự án.
 
 Trong `packages/database/.env`:
 
@@ -113,7 +114,8 @@ Verify:
 docker exec -it mta-postgres psql -U root -d mta -c '\dn'
 # kỳ vọng có schema ql-dao-tao, ...
 ```
->>>>>>> 739545e75263a60b6681a4e6dbeef7136528cc56
+
+> > > > > > > 739545e75263a60b6681a4e6dbeef7136528cc56
 
 ### 3. Build + đẩy image (máy local)
 
@@ -121,11 +123,12 @@ docker exec -it mta-postgres psql -U root -d mta -c '\dn'
 make all-be-portal SERVER_PROFILE=mta_online
 # …
 ```
-<<<<<<< HEAD
-=======
+
+# <<<<<<< HEAD
 
 Mỗi lệnh: build → scp tar.gz → `docker load` → `compose up` service đó (image `ghcr.io/...:latest`).
->>>>>>> 739545e75263a60b6681a4e6dbeef7136528cc56
+
+> > > > > > > 739545e75263a60b6681a4e6dbeef7136528cc56
 
 ### 4. Kiểm tra trên server
 
@@ -135,14 +138,15 @@ docker logs mta-be-portal --tail 50
 curl -sS http://127.0.0.1:3044/api/
 ```
 
-| Service                  | Host port |
-| ------------------------ | --------- |
+| Service | Host port |
+| ------- | --------- |
+
 <<<<<<< HEAD
-| mta-be-model             | 3041      |
-| mta-be-ql-dao-tao        | 3042      |
-| mta-be-portal            | 3044      |
-| mta-be-portal-2 (scale)  | 3046      |
-| mta-be-ql-dao-tao-shared | 3045      |
+| mta-be-model | 3041 |
+| mta-be-ql-dao-tao | 3042 |
+| mta-be-portal | 3044 |
+| mta-be-portal-2 (scale) | 3046 |
+| mta-be-ql-dao-tao-shared | 3045 |
 
 ### 5. (Sau) Nginx / FE
 
@@ -156,10 +160,11 @@ Map domain → port trên; rồi `make all-cong-hoc-vien SERVER_PROFILE=…`.
 | `too many clients already`             | Tổng pool BE > `max_connections`          |
 | Image not found                        | Chưa `docker load` / deploy               |
 | Scale portal nhưng nginx vẫn 1 backend | Chưa bật `:3046` trong upstream           |
+
 =======
-| mta-be-model             | 3000      |
-| mta-be-portal            | 3003      |
-| mta-be-ql-dao-tao-shared | 3004      |
+| mta-be-model | 3000 |
+| mta-be-portal | 3003 |
+| mta-be-ql-dao-tao-shared | 3004 |
 
 ### 5. (Sau) Nginx / FE
 
@@ -174,4 +179,5 @@ Map domain → các port trên; rồi mới `make all-cong-hoc-vien SERVER_PROFI
 | MinIO SSL error                         | `MINIO_USE_SSL=true` với `http://` → để `false` |
 | `pull` / image not found                | Chưa `make deploy` / chưa `docker load`         |
 | Schema empty                            | Chưa migrate                                    |
->>>>>>> 739545e75263a60b6681a4e6dbeef7136528cc56
+
+> > > > > > > 739545e75263a60b6681a4e6dbeef7136528cc56

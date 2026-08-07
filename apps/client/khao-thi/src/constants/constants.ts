@@ -86,8 +86,7 @@ const SURVEY_STUDENT_OBJECT_TYPES: $Enums.SurveyObject[] = [
 const isSurveyStudentObjectType = (value: string) =>
   SURVEY_STUDENT_OBJECT_TYPES.includes(value as $Enums.SurveyObject)
 
-const hasSurveyStudentObjectType = (values: string[] = []) =>
-  values.some(isSurveyStudentObjectType)
+const hasSurveyStudentObjectType = (values: string[] = []) => values.some(isSurveyStudentObjectType)
 
 const getStatusEvaluation = (status: $Enums.EvaluationCriterionStatus) => {
   switch (status) {

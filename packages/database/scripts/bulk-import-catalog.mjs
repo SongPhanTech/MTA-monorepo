@@ -10,8 +10,7 @@ import { readdirSync, statSync, writeFileSync } from "node:fs"
 import { basename, join, relative } from "node:path"
 import { PrismaClient } from "../generated/prisma-client/index.js"
 
-const DEFAULT_ROOT =
-  "/Users/minhah/Downloads/Convert ngân hàng câu hỏi/Ngân hàng câu hỏi thi"
+const DEFAULT_ROOT = "/Users/minhah/Downloads/Convert ngân hàng câu hỏi/Ngân hàng câu hỏi thi"
 
 const rootArg = process.argv.indexOf("--root")
 const ROOT = rootArg !== -1 ? process.argv[rootArg + 1] : DEFAULT_ROOT
@@ -25,9 +24,7 @@ if (!url) {
 const prisma = new PrismaClient({
   datasources: {
     db: {
-      url: url.includes("?")
-        ? `${url}&connection_limit=1`
-        : `${url}?connection_limit=1`,
+      url: url.includes("?") ? `${url}&connection_limit=1` : `${url}?connection_limit=1`,
     },
   },
 })
@@ -65,44 +62,44 @@ const NON_SUBJECT_FOLDER_PATTERNS = [
   /^c(â|a)u\s*\d+/i,
   /^page\s*\d+/i,
   /đ(ã|a)\s*s(ử|u)a/i,
-  /^ch[uư][oơ]ng\s*\d+/i,        // CHƯƠNG 1, CHƯƠNG 2...
-  /^CLO\d+$/i,                     // CLO1, CLO2
-  /^t[uự]\s*lu[aậ]n$/i,           // Tự luận
-  /^tr[aắ]c\s*nghi[eệ]m$/i,      // Trắc nghiệm
-  /^baitap$/i,                     // Baitap
-  /^Lythuyet$/i,                   // Lythuyet
-  /^Phan\s*tu\s*luan$/i,          // Phan tu luan
-  /^Tu\s*luan$/i,                  // Tu luan
-  /^TN$/i,                         // TN (trắc nghiệm)
-  /^0\s*TN$/i,                     // 0 TN
-  /^\d+$/,                         // pure number: 60, 40, 00
-  /^TL\d/i,                        // TL1, TL2
-  /^thi\s*v[aấ]n\s*đ[aá]p$/i,    // Thi vấn đáp
-  /^đ[aá]p\s*[aá]n/i,             // ĐÁP ÁN ...
-  /^dua\s*v[aà]o\s*form/i,        // dua vào form ...
+  /^ch[uư][oơ]ng\s*\d+/i, // CHƯƠNG 1, CHƯƠNG 2...
+  /^CLO\d+$/i, // CLO1, CLO2
+  /^t[uự]\s*lu[aậ]n$/i, // Tự luận
+  /^tr[aắ]c\s*nghi[eệ]m$/i, // Trắc nghiệm
+  /^baitap$/i, // Baitap
+  /^Lythuyet$/i, // Lythuyet
+  /^Phan\s*tu\s*luan$/i, // Phan tu luan
+  /^Tu\s*luan$/i, // Tu luan
+  /^TN$/i, // TN (trắc nghiệm)
+  /^0\s*TN$/i, // 0 TN
+  /^\d+$/, // pure number: 60, 40, 00
+  /^TL\d/i, // TL1, TL2
+  /^thi\s*v[aấ]n\s*đ[aá]p$/i, // Thi vấn đáp
+  /^đ[aá]p\s*[aá]n/i, // ĐÁP ÁN ...
+  /^dua\s*v[aà]o\s*form/i, // dua vào form ...
   /^Nh[oó]m\s*c[aâ]u\s*h[oỏ]i/i, // Nhóm câu hỏi tự luận
   /^Ng[aâ]n\s*h[aà]ng\s*đ[eề]\s*thi/i, // Ngân hàng đề thi
   /^C[aâ]u\s*h[oỏ]i\s*nh[oó]m/i, // Câu hỏi nhóm
-  /^Nh[oó]m\s*\d+/i,              // Nhóm 1, Nhóm 2
-  /^\d+[._]/,                      // 05_Chuỗi, 08.LaptrinhVaoRa, 10_Truyen nhiet...
-  /^\d+\.\s/,                       // 1. Từ vựng, 2. Điền từ...
-  /^\d+-/,                          // 1-Sắp xếp, 2-Đặt câu, 2-Ghép phụ âm...
-  /^B[aà]i\s*đ[oọ]c\s*CN/i,       // Bài đọc CN 1_10, Bài đọc CN 2_1...
-  /^NH\s*(DE|ĐỀ)/i,               // NH DE TNGA..., NH ĐỀ TNGA...
-  /^Ngan[_\s]*hang/i,              // Ngan_hang_de_thi, NganHangNL_CTM...
-  /^NHCH_/i,                        // NHCH_CTM_TRACNGHIEM...
-  /^Cambien\s/i,                    // Cambien PLC...
-  /^Thiet_ke_/i,                    // Thiet_ke_VLSI
-  /^\d+[A-Z]{2,}$/,                // 65AB
-  /^C[aâ]u\s*h[oỏ]i\s*thi/i,     // Câu hỏi thi_2024
-  /^Quang\s*sai/i,                  // Quang sai & TKQH
-  /^C[aâ]u\s+\d+/i,               // Câu 3. Dẻo 4 điểm
-  /^PH[AẦ]N\s+\d+/i,              // PHẦN 2 TRANG BỊ...
-  /^Tu\s*luan/i,                    // Tu luan (BT)
-  /^Trac\s*nghiem/i,               // Trac nghiem
-  /^NHDT/i,                         // NHDT_UD CAD...
+  /^Nh[oó]m\s*\d+/i, // Nhóm 1, Nhóm 2
+  /^\d+[._]/, // 05_Chuỗi, 08.LaptrinhVaoRa, 10_Truyen nhiet...
+  /^\d+\.\s/, // 1. Từ vựng, 2. Điền từ...
+  /^\d+-/, // 1-Sắp xếp, 2-Đặt câu, 2-Ghép phụ âm...
+  /^B[aà]i\s*đ[oọ]c\s*CN/i, // Bài đọc CN 1_10, Bài đọc CN 2_1...
+  /^NH\s*(DE|ĐỀ)/i, // NH DE TNGA..., NH ĐỀ TNGA...
+  /^Ngan[_\s]*hang/i, // Ngan_hang_de_thi, NganHangNL_CTM...
+  /^NHCH_/i, // NHCH_CTM_TRACNGHIEM...
+  /^Cambien\s/i, // Cambien PLC...
+  /^Thiet_ke_/i, // Thiet_ke_VLSI
+  /^\d+[A-Z]{2,}$/, // 65AB
+  /^C[aâ]u\s*h[oỏ]i\s*thi/i, // Câu hỏi thi_2024
+  /^Quang\s*sai/i, // Quang sai & TKQH
+  /^C[aâ]u\s+\d+/i, // Câu 3. Dẻo 4 điểm
+  /^PH[AẦ]N\s+\d+/i, // PHẦN 2 TRANG BỊ...
+  /^Tu\s*luan/i, // Tu luan (BT)
+  /^Trac\s*nghiem/i, // Trac nghiem
+  /^NHDT/i, // NHDT_UD CAD...
   /^2022_final$/i,
-  /^Ngan\s*hang\s*NL/i,            // NganHangNL_CTM_2024
+  /^Ngan\s*hang\s*NL/i, // NganHangNL_CTM_2024
 ]
 
 // Manual mapping: abbreviated folder name -> actual Subject name in DB
@@ -112,7 +109,8 @@ const MANUAL_SUBJECT_MAP = {
   "3-Viết luận": "Tiếng Việt cơ sở A2.2",
   "4-Viết luận": "Tiếng Việt cơ sở A2.2",
   "Trang bị VK, KTQ trên xe QS - 30t": "Trang bị VK, KTQ trên xe QS",
-  "Tính toán hệ thống quang học vùng hồng ngoại ảnh nhiệt - CH": "Tính toán hệ thống quang học vùng hồng ngoại ảnh nhiệt",
+  "Tính toán hệ thống quang học vùng hồng ngoại ảnh nhiệt - CH":
+    "Tính toán hệ thống quang học vùng hồng ngoại ảnh nhiệt",
   "Nguyên lý tính toán và TKLP - Vấn đáp": "Nguyên lý tính toán và TKLP",
   "Kết cấu tính toánTTG - CDR 4+1 - Vấn đáp": "Kết cấu tính toán TTG",
   "Cấu tạo TTG - CDR 4+1 - Vấn đáp": "Cấu tạo TTG",
@@ -146,18 +144,18 @@ function stripDiacritics(s) {
 // ── Extract subject name from folder ────────────────────────────────
 // Strategy: split by " - ", classify each segment, keep only subject-name segments.
 const NOISE_SEGMENT_PATTERNS = [
-  /^\d{1,2}[./]\d{1,2}[./]\d{2,4}$/,           // date: 30.12.2019
-  /^\d{1,2}[./]\d{4}$/,                          // date: 5.2021
-  /^\d+\s*ph[uú]t$/i,                            // duration: 30 phút
-  /^\d+p$/i,                                      // duration: 90p
+  /^\d{1,2}[./]\d{1,2}[./]\d{2,4}$/, // date: 30.12.2019
+  /^\d{1,2}[./]\d{4}$/, // date: 5.2021
+  /^\d+\s*ph[uú]t$/i, // duration: 30 phút
+  /^\d+p$/i, // duration: 90p
   /^(SDTL|CHDS|CHTMKT|CNHCKT|CHQS|NCS|TS|DS)$/i, // training codes
-  /^CH\d*$/i,                                      // CH35, CH32
+  /^CH\d*$/i, // CH35, CH32
   /^(vi[eế]t|ng[aắ]n\s*h[aạ]n|d[aà]i\s*h[aạ]n)$/i, // exam mode
   /^(m[oớ]i|c[uũ]|New)$/i,
   /^(đ[uư][oợ]c\s*s[uử]\s*d[uụ]ng\s*t[aà]i\s*li[eệ]u)$/i,
-  /^c[aậ]p\s*nh[aậ]t/i,                          // cập nhật ...
-  /^d[uù]ng\s+(l[oớ]p|t[aạ]m)/i,                // dùng lớp/tạm ...
-  /^ch[uư]a\s+đ[uủ]/i,                           // chưa đủ ...
+  /^c[aậ]p\s*nh[aậ]t/i, // cập nhật ...
+  /^d[uù]ng\s+(l[oớ]p|t[aạ]m)/i, // dùng lớp/tạm ...
+  /^ch[uư]a\s+đ[uủ]/i, // chưa đủ ...
   /^sai\s*m[aẫ]u/i,
   /^d[aâ]n\s*s[uự]/i,
   /^ph[aầ]n\s*b[aà]i\s*t[aậ]p/i,
@@ -279,7 +277,12 @@ function parseFilePath(filePath) {
       trainingTypeId = tt
       continue
     }
-    if (/^(\d+\s+)?BM\s/i.test(seg) || /^(\d+\s+)?B[oộ]\s+m[oô]n/i.test(seg) || /^Nh[oó]m\s/i.test(seg) || /^BĐTT/i.test(seg)) {
+    if (
+      /^(\d+\s+)?BM\s/i.test(seg) ||
+      /^(\d+\s+)?B[oộ]\s+m[oô]n/i.test(seg) ||
+      /^Nh[oó]m\s/i.test(seg) ||
+      /^BĐTT/i.test(seg)
+    ) {
       bmName = seg
       continue
     }
@@ -307,9 +310,7 @@ function parseFilePath(filePath) {
     }
   }
 
-  const subjectName = subjectFolderName
-    ? extractSubjectName(subjectFolderName)
-    : null
+  const subjectName = subjectFolderName ? extractSubjectName(subjectFolderName) : null
 
   return {
     filePath,
@@ -461,7 +462,8 @@ async function main() {
     }
 
     // Check manual mapping first (use original subjectFolderName before extraction)
-    const manualName = MANUAL_SUBJECT_MAP[entry.subjectFolderName] || MANUAL_SUBJECT_MAP[entry.subjectName]
+    const manualName =
+      MANUAL_SUBJECT_MAP[entry.subjectFolderName] || MANUAL_SUBJECT_MAP[entry.subjectName]
     const effectiveName = manualName || entry.subjectName
 
     const normalizedName = normalize(effectiveName)
@@ -485,11 +487,9 @@ async function main() {
       const candidates = []
       for (const [dbName, dbSubjects] of subjectByName) {
         const dbNameAscii = normalizeAscii(dbName)
-        const includesAccent =
-          dbName.includes(normalizedName) || normalizedName.includes(dbName)
+        const includesAccent = dbName.includes(normalizedName) || normalizedName.includes(dbName)
         const includesAscii =
-          dbNameAscii.includes(normalizedNameAscii) ||
-          normalizedNameAscii.includes(dbNameAscii)
+          dbNameAscii.includes(normalizedNameAscii) || normalizedNameAscii.includes(dbNameAscii)
         if (includesAccent || includesAscii) {
           candidates.push(...dbSubjects)
         }
@@ -622,7 +622,9 @@ async function main() {
     console.log("\n--- Sample missing SV (first 20) ---")
     for (const m of missingSv.slice(0, 20)) {
       console.log(`  ${m.relativePath}`)
-      console.log(`    subject: "${m.subjectName_db}" (${m.subjectId}) | need type: ${m.trainingTypeId} | template: ${m.templateSvId}`)
+      console.log(
+        `    subject: "${m.subjectName_db}" (${m.subjectId}) | need type: ${m.trainingTypeId} | template: ${m.templateSvId}`
+      )
     }
   }
 }

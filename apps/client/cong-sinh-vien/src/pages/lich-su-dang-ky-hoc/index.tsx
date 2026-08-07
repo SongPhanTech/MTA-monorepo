@@ -95,10 +95,7 @@ export default function LichSuDangKyHocPage() {
     { enabled: !!userProfileId }
   )
 
-  const { data: count = 0 } = useCountClassRegisterLogs(
-    { where },
-    { enabled: !!userProfileId }
-  )
+  const { data: count = 0 } = useCountClassRegisterLogs({ where }, { enabled: !!userProfileId })
 
   const { data: sessions = [] } = useFindManyClassRegisterSession(
     {
@@ -264,7 +261,5 @@ export default function LichSuDangKyHocPage() {
 }
 
 LichSuDangKyHocPage.getLayout = function getLayout(page: React.ReactElement) {
-  return (
-    <DefaultLayout breadcrumbList={[{ title: "Lịch sử đăng ký học" }]}>{page}</DefaultLayout>
-  )
+  return <DefaultLayout breadcrumbList={[{ title: "Lịch sử đăng ký học" }]}>{page}</DefaultLayout>
 }

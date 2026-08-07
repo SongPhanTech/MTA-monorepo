@@ -380,9 +380,7 @@ app.openapi(getClassesInfo, async (c) => {
   // (không lọc SubjectVersion.trainingObjectTypeId — học phần gốc có thể lệch TOT với lớp mở)
   const subjectVersions = await prisma.subjectVersion.findMany({
     where: {
-      ...(byCurriculumBool
-        ? { id: { in: curriculumSubjects.map((item) => item.subjectId) } }
-        : {}),
+      ...(byCurriculumBool ? { id: { in: curriculumSubjects.map((item) => item.subjectId) } } : {}),
       subjectClass: {
         some: {
           semesterId: registerSession.semesterId,

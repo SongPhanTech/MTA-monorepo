@@ -174,26 +174,25 @@ const PutClassRegisterSession = () => {
         })
         // Ghép lại metadata xếp loại (baseScore, min/max) từ bảng xếp loại —
         // Form chỉ bind maxCredit nên submit có thể thiếu field → match GPA sai / cache cũ.
-        const creditLimitCreates = Object.entries(output.creditLimit || {}).map(
-          ([key, item]) => {
-            const fromTable = tableData.find((row) => {
-              const rowKey = getClassificationKey(
-                row.baseScore === "Base10" ? row.base10Min : row.base4Min,
-                row.baseScore === "Base10" ? row.base10Max : row.base4Max
-              )
-              return rowKey === key
-            })
-            return {
-              baseScore: item.baseScore ?? fromTable?.baseScore ?? $Enums.AcademicRankingBaseType.Base10,
-              base10Min: item.base10Min ?? fromTable?.base10Min ?? null,
-              base10Max: item.base10Max ?? fromTable?.base10Max ?? null,
-              base4Min: item.base4Min ?? fromTable?.base4Min ?? null,
-              base4Max: item.base4Max ?? fromTable?.base4Max ?? null,
-              minCredit: item.minCredit ?? 0,
-              maxCredit: item.maxCredit ?? 25,
-            }
+        const creditLimitCreates = Object.entries(output.creditLimit || {}).map(([key, item]) => {
+          const fromTable = tableData.find((row) => {
+            const rowKey = getClassificationKey(
+              row.baseScore === "Base10" ? row.base10Min : row.base4Min,
+              row.baseScore === "Base10" ? row.base10Max : row.base4Max
+            )
+            return rowKey === key
+          })
+          return {
+            baseScore:
+              item.baseScore ?? fromTable?.baseScore ?? $Enums.AcademicRankingBaseType.Base10,
+            base10Min: item.base10Min ?? fromTable?.base10Min ?? null,
+            base10Max: item.base10Max ?? fromTable?.base10Max ?? null,
+            base4Min: item.base4Min ?? fromTable?.base4Min ?? null,
+            base4Max: item.base4Max ?? fromTable?.base4Max ?? null,
+            minCredit: item.minCredit ?? 0,
+            maxCredit: item.maxCredit ?? 25,
           }
-        )
+        })
         await updateClassRegisterSession({
           data: {
             ...data,
@@ -216,26 +215,25 @@ const PutClassRegisterSession = () => {
         }
         message.success("Cập nhật thành công")
       } else {
-        const creditLimitCreates = Object.entries(output.creditLimit || {}).map(
-          ([key, item]) => {
-            const fromTable = tableData.find((row) => {
-              const rowKey = getClassificationKey(
-                row.baseScore === "Base10" ? row.base10Min : row.base4Min,
-                row.baseScore === "Base10" ? row.base10Max : row.base4Max
-              )
-              return rowKey === key
-            })
-            return {
-              baseScore: item.baseScore ?? fromTable?.baseScore ?? $Enums.AcademicRankingBaseType.Base10,
-              base10Min: item.base10Min ?? fromTable?.base10Min ?? null,
-              base10Max: item.base10Max ?? fromTable?.base10Max ?? null,
-              base4Min: item.base4Min ?? fromTable?.base4Min ?? null,
-              base4Max: item.base4Max ?? fromTable?.base4Max ?? null,
-              minCredit: item.minCredit ?? 0,
-              maxCredit: item.maxCredit ?? 25,
-            }
+        const creditLimitCreates = Object.entries(output.creditLimit || {}).map(([key, item]) => {
+          const fromTable = tableData.find((row) => {
+            const rowKey = getClassificationKey(
+              row.baseScore === "Base10" ? row.base10Min : row.base4Min,
+              row.baseScore === "Base10" ? row.base10Max : row.base4Max
+            )
+            return rowKey === key
+          })
+          return {
+            baseScore:
+              item.baseScore ?? fromTable?.baseScore ?? $Enums.AcademicRankingBaseType.Base10,
+            base10Min: item.base10Min ?? fromTable?.base10Min ?? null,
+            base10Max: item.base10Max ?? fromTable?.base10Max ?? null,
+            base4Min: item.base4Min ?? fromTable?.base4Min ?? null,
+            base4Max: item.base4Max ?? fromTable?.base4Max ?? null,
+            minCredit: item.minCredit ?? 0,
+            maxCredit: item.maxCredit ?? 25,
           }
-        )
+        })
         const created = await createClassRegisterSession({
           data: {
             ...data,

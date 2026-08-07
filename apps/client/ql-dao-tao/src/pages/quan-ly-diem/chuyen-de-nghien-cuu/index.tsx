@@ -1308,7 +1308,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         { name: string },
                         { name: string },
                         SupervisorPayAmountRecord[],
-                        { chief?: string } | null
+                        { chief?: string } | null,
                       ]
                       const khoaName = khoaVaKyData?.[0]?.name || ""
                       const kyName = khoaVaKyData?.[1]?.name || ""
@@ -1330,7 +1330,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         const studentName =
                           e.studentSubjectScore.student?.userProfile?.fullname || ""
                         const studentCourse =
-                          e.studentSubjectScore.student?.fixedClass?.trainingCourse?.name || khoaName
+                          e.studentSubjectScore.student?.fixedClass?.trainingCourse?.name ||
+                          khoaName
 
                         const supName =
                           (getSupervisorName(e.supervisor, false, true) as string) || ""
@@ -1339,7 +1340,9 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
 
                         const isDual = !!(supName && coSupName)
                         const supInAcademy = !!(e.supervisor?.lecturerId || e.supervisor?.lecturer)
-                        const coSupInAcademy = !!(e.coSupervisor?.lecturerId || e.coSupervisor?.lecturer)
+                        const coSupInAcademy = !!(
+                          e.coSupervisor?.lecturerId || e.coSupervisor?.lecturer
+                        )
 
                         let cbhdText = ""
                         let moneyText = ""
@@ -1367,8 +1370,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         const decisionDate = item.decisionDate
                           ? dayjs(item.decisionDate).format("DD/MM/YYYY")
                           : item.reportDate
-                          ? dayjs(item.reportDate).format("DD/MM/YYYY")
-                          : ""
+                            ? dayjs(item.reportDate).format("DD/MM/YYYY")
+                            : ""
                         const quyetDinhText = decisionNum
                           ? `${decisionNum}${decisionDate ? ` ngày ${decisionDate}` : ""}`
                           : ""

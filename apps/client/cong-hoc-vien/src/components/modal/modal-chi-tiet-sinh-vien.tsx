@@ -444,7 +444,8 @@ const ModalChiTietSinhVien = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, record, index) => getRowSTT(studentData?.subjectClassStudent, record, index),
+              render: (_, record, index) =>
+                getRowSTT(studentData?.subjectClassStudent, record, index),
             },
             {
               title: "Mã môn",
@@ -513,7 +514,8 @@ const ModalChiTietSinhVien = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, record, index) => getRowSTT(studentData?.studentSemesterResult, record, index),
+              render: (_, record, index) =>
+                getRowSTT(studentData?.studentSemesterResult, record, index),
             },
             {
               title: "Mã",
@@ -735,7 +737,8 @@ const ModalChiTietSinhVien = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, record, index) => getRowSTT(studentData?.studentYearResult, record, index),
+              render: (_, record, index) =>
+                getRowSTT(studentData?.studentYearResult, record, index),
             },
             {
               title: "Mã",

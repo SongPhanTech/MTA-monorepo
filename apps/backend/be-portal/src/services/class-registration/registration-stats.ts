@@ -107,9 +107,7 @@ export async function getRegistrationStats(
     },
     select: { studentId: true, userProfileId: true },
   })
-  const failedKeys = new Set(
-    failedDistinct.map((f) => f.studentId || `u:${f.userProfileId}`)
-  )
+  const failedKeys = new Set(failedDistinct.map((f) => f.studentId || `u:${f.userProfileId}`))
   const failedCount = failedKeys.size
 
   const failureWhere = {
@@ -140,9 +138,7 @@ export async function getRegistrationStats(
   ])
 
   // Resolve students thiếu relation (chỉ có userProfileId)
-  const missingProfileIds = failureRows
-    .filter((r) => !r.student)
-    .map((r) => r.userProfileId)
+  const missingProfileIds = failureRows.filter((r) => !r.student).map((r) => r.userProfileId)
   const profiles =
     missingProfileIds.length > 0
       ? await prisma.student.findMany({

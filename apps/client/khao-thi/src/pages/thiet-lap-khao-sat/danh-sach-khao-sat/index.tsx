@@ -260,9 +260,7 @@ export default function DetailSurveyPage() {
           data={(data?.status === 200 && data?.data?.data) || []}
           pagination={false}
         />
-        <div
-          className="mt-2 px-3 py-1 flex flex-wrap items-center justify-between gap-x-4 gap-y-2"
-        >
+        <div className="mt-2 px-3 py-1 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ color: "#666" }}>Tổng đã làm:</span>{" "}
             <strong style={{ color: "#009a5c", fontSize: 16, fontWeight: "bold" }}>
@@ -278,9 +276,7 @@ export default function DetailSurveyPage() {
               labelRender: ({ value }) => `${value} / trang`,
               optionRender: (oriOption) => `${oriOption.value} / trang`,
             }}
-            showTotal={(total, range) =>
-              `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`
-            }
+            showTotal={(total, range) => `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`}
             onChange={(page, pageSize) => {
               if (numberOfPages === pageSize) {
                 setCurrentPage(page)

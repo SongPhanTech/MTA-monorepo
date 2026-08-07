@@ -286,11 +286,10 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                               },
                               {
                                 value:
-                                  item?.trainingBlockSubject?.trainingBlockOnCurriculumVersion
-                                    ?.curriculumVersion?.fixedClasses?.reduce(
-                                      (sum, fc) => sum + (fc?._count?.students ?? 0),
-                                      0
-                                    ) ?? 0,
+                                  item?.trainingBlockSubject?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.reduce(
+                                    (sum, fc) => sum + (fc?._count?.students ?? 0),
+                                    0
+                                  ) ?? 0,
                                 align: "center",
                                 rowSpan,
                               },
@@ -421,8 +420,8 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                   }}
                   className="text-left hover:text-primary cursor-pointer"
                 >
-                  {record?.trainingBlockSubject?.trainingBlockOnCurriculumVersion?.curriculumVersion
-                    ?.fixedClasses?.map((fc) => fc?.code)
+                  {record?.trainingBlockSubject?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses
+                    ?.map((fc) => fc?.code)
                     .filter(Boolean)
                     .join(", ") || ""}
                 </div>

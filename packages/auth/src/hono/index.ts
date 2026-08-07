@@ -36,7 +36,10 @@ const isWafChallengeHtml = (body: string, contentType?: string | null) => {
     contentType?.includes("text/html") ||
     body.trimStart().startsWith("<html") ||
     body.includes("document.cookie")
-  return looksHtml && (body.includes("D1N=") || body.includes("Cloudrity") || body.includes("window.location.reload"))
+  return (
+    looksHtml &&
+    (body.includes("D1N=") || body.includes("Cloudrity") || body.includes("window.location.reload"))
+  )
 }
 
 const upsertCookie = (cookieHeader: string, name: string, value: string) => {
@@ -124,8 +127,7 @@ const resolveAuth = (
   const headerToken = c.req.header("Authorization")?.split(" ")[1]
   if (headerToken) {
     const headerApp = c.req.header("K-AppCode")?.trim()
-    const appCode =
-      headerApp && appCodes.includes(headerApp) ? headerApp : (appCodes[0] as string)
+    const appCode = headerApp && appCodes.includes(headerApp) ? headerApp : (appCodes[0] as string)
     return { appCode, token: headerToken, tokenSource: "Authorization" }
   }
 

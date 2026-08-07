@@ -85,35 +85,24 @@ const MANUAL_SUBJECT_MAP = {
     "Kết cấu tính toán xe tăng thiết giáp + ĐAMH",
   "Cấu tạo tăng thiết giáp (ngân hàng này nếu có môn khác trùng tên thì bỏ đi)":
     "Cấu tạo xe tăng thiết giáp",
-  "Chất lượng và hiệu quả sửa chữa tăng thiết giáp":
-    "Cơ sở đảm bảo chất lượng sửa chữa TTG",
-  "Các hệ thống vũ khí khí tài tự động hoá":
-    "Các hệ thống vũ khí, khí tài tự động hóa",
+  "Chất lượng và hiệu quả sửa chữa tăng thiết giáp": "Cơ sở đảm bảo chất lượng sửa chữa TTG",
+  "Các hệ thống vũ khí khí tài tự động hoá": "Các hệ thống vũ khí, khí tài tự động hóa",
   "Cơ sở xây dựng Hệ thống điều khiển thiết bị bay":
     "Cơ sở xây dựng các hệ thống điều khiển thiết bị bay",
-  "Công tác kỹ thuật ra đa sô na thời bình":
-    "Công tác kỹ thuật ra đa so na thường xuyên + BTL",
-  "Công tác kỹ thuật tăng thiết giáp thời bình":
-    "Công tác kỹ thuật tăng - thiết giáp thời bình",
+  "Công tác kỹ thuật ra đa sô na thời bình": "Công tác kỹ thuật ra đa so na thường xuyên + BTL",
+  "Công tác kỹ thuật tăng thiết giáp thời bình": "Công tác kỹ thuật tăng - thiết giáp thời bình",
   "Công tác kỹ thuật tác chiến điện tử thời bình":
     "Công tác kỹ thuật tác chiến điện tử thường xuyên + BTL",
-  "Ứng dụng CAD,CAE trong gia công áp lực":
-    "Ứng dụng CAD/CAE trong gia công áp lực",
+  "Ứng dụng CAD,CAE trong gia công áp lực": "Ứng dụng CAD/CAE trong gia công áp lực",
   "Kỹ thuật truy vết": "Điều tra và truy vết mạng",
   "Đường lối quốc phòng an ninh": "Đường lối quốc phòng, an ninh",
   "Thông hơi +BTL": "Thông hơi công trình + Bài tập lớn",
-  "Thiết bị vũ khí, khí tài quang trên xe quân sự":
-    "Vũ khí - khí tài quang trên tăng thiết giáp",
-  "Quang sai và thiết kế quang học 1":
-    "Quang sai và thiết kế quang học + Bài tập lớn",
-  "Quang sai và thiết kế quang học 2":
-    "Quang sai và thiết kế quang học + Bài tập lớn",
-  "Quang sai và thiết kế quang học 3":
-    "Quang sai và thiết kế quang học + Bài tập lớn",
-  "Quang sai và thiết kế quang học 4":
-    "Quang sai và thiết kế quang học + Bài tập lớn",
-  "Quang sai và thiết kế quang học 5":
-    "Quang sai và thiết kế quang học + Bài tập lớn",
+  "Thiết bị vũ khí, khí tài quang trên xe quân sự": "Vũ khí - khí tài quang trên tăng thiết giáp",
+  "Quang sai và thiết kế quang học 1": "Quang sai và thiết kế quang học + Bài tập lớn",
+  "Quang sai và thiết kế quang học 2": "Quang sai và thiết kế quang học + Bài tập lớn",
+  "Quang sai và thiết kế quang học 3": "Quang sai và thiết kế quang học + Bài tập lớn",
+  "Quang sai và thiết kế quang học 4": "Quang sai và thiết kế quang học + Bài tập lớn",
+  "Quang sai và thiết kế quang học 5": "Quang sai và thiết kế quang học + Bài tập lớn",
 }
 
 const TYPE_ALIASES = {
@@ -159,9 +148,7 @@ if (!url) {
 const prisma = new PrismaClient({
   datasources: {
     db: {
-      url: url.includes("?")
-        ? `${url}&connection_limit=1`
-        : `${url}?connection_limit=1`,
+      url: url.includes("?") ? `${url}&connection_limit=1` : `${url}?connection_limit=1`,
     },
   },
 })
@@ -207,8 +194,7 @@ async function main() {
     if (aliasId) return types.find((t) => t.id === aliasId) || null
 
     // Fuzzy: excel contains / contained by DB type name
-    let hit =
-      typeByNormName.get(n) || typeByNormName.get(ascii) || null
+    let hit = typeByNormName.get(n) || typeByNormName.get(ascii) || null
     if (hit) return hit
     for (const t of types) {
       const tn = normalize(t.name)
@@ -359,12 +345,13 @@ async function main() {
       shouldSkipSubject(typeNameExcel)
     ) {
       skipTacChien++
-      const reason = shouldSkipSubject(subjectNameExcel) &&
+      const reason =
+        shouldSkipSubject(subjectNameExcel) &&
         (normalize(stripDiacritics(subjectNameExcel)).includes("bo") ||
           normalize(stripDiacritics(subjectNameExcel)).includes("mon nay") ||
           normalize(stripDiacritics(subjectNameExcel)).includes("cai nay"))
-        ? `SKIPPED: đánh dấu bỏ ("${subjectNameExcel}")`
-        : "SKIPPED: Cơ sở lý thuyết tác chiến mạng (tạm thời)"
+          ? `SKIPPED: đánh dấu bỏ ("${subjectNameExcel}")`
+          : "SKIPPED: Cơ sở lý thuyết tác chiến mạng (tạm thời)"
       stillUnmatched.push({
         ...entry,
         reason,

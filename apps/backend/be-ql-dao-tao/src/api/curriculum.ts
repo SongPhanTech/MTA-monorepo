@@ -112,7 +112,11 @@ app.openapi(importCurriculumVersion, async (c) => {
     data.trainingBlocks.map(({ name }) => name)
   )
 
-  const { map: subjectMap, unmappedOrgCodes, warnings } = await buildSubjectMapOrThrow(
+  const {
+    map: subjectMap,
+    unmappedOrgCodes,
+    warnings,
+  } = await buildSubjectMapOrThrow(
     prisma,
     data.trainingBlocks.flatMap(({ subjects }) =>
       subjects.map((s) => ({

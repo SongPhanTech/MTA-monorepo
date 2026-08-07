@@ -49,8 +49,14 @@ const renderMenuIcon = (IconComponent: MenuIconType, badgeCount: number, collaps
   let icon: ReactNode = null
   if (isValidElement(IconComponent)) {
     icon = IconComponent
-  } else if (typeof IconComponent === "function" || (typeof IconComponent === "object" && IconComponent !== null)) {
-    const Component = IconComponent as unknown as ComponentType<{ className?: string; size?: number }>
+  } else if (
+    typeof IconComponent === "function" ||
+    (typeof IconComponent === "object" && IconComponent !== null)
+  ) {
+    const Component = IconComponent as unknown as ComponentType<{
+      className?: string
+      size?: number
+    }>
     icon = <Component className="sinh-vien-menu-icon" size={18} />
   } else {
     icon = IconComponent as ReactNode

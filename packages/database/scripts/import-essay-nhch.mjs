@@ -8,9 +8,7 @@ import { readFileSync } from "node:fs"
 import { PrismaClient } from "../generated/prisma-client/index.js"
 
 const BANK_ID = "cms5jz1sf0001sh3196x8vxp4"
-const TXT =
-  process.env.TXT_PATH ||
-  "/tmp/73AN-3D_1.txt"
+const TXT = process.env.TXT_PATH || "/tmp/73AN-3D_1.txt"
 
 const dryRun = process.argv.includes("--dry-run")
 const replace = process.argv.includes("--replace")
@@ -25,9 +23,7 @@ if (!url) {
 const prisma = new PrismaClient({
   datasources: {
     db: {
-      url: url.includes("?")
-        ? `${url}&connection_limit=1`
-        : `${url}?connection_limit=1`,
+      url: url.includes("?") ? `${url}&connection_limit=1` : `${url}?connection_limit=1`,
     },
   },
 })

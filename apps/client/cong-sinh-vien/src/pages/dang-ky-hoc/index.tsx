@@ -67,8 +67,8 @@ export default function DangKyHocPage() {
               </h2>
 
               <p className="mx-auto max-w-sm text-[15px] leading-relaxed text-gray-500">
-                Hiện chưa có đợt đăng ký nào đang mở. Vui lòng quay lại sau khi có thông báo
-                lịch đăng ký mới.
+                Hiện chưa có đợt đăng ký nào đang mở. Vui lòng quay lại sau khi có thông báo lịch
+                đăng ký mới.
               </p>
             </div>
 

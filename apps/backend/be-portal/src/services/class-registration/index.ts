@@ -24,15 +24,10 @@ export type { RegisterParams, RegisterClassInfo } from "./shared"
 export type LockStrategy = "optimistic" | "pessimistic"
 
 export function getLockStrategy(): LockStrategy {
-  return process.env.CLASS_REGISTER_LOCK_STRATEGY === "optimistic"
-    ? "optimistic"
-    : "pessimistic"
+  return process.env.CLASS_REGISTER_LOCK_STRATEGY === "optimistic" ? "optimistic" : "pessimistic"
 }
 
-export async function registerClasses(
-  prisma: PrismaClient,
-  params: RegisterParams
-): Promise<void> {
+export async function registerClasses(prisma: PrismaClient, params: RegisterParams): Promise<void> {
   const strategy = getLockStrategy()
   if (strategy === "optimistic") {
     await registerWithOptimisticLock(prisma, params)

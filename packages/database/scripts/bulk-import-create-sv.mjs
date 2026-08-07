@@ -22,9 +22,7 @@ if (!url) {
 const prisma = new PrismaClient({
   datasources: {
     db: {
-      url: url.includes("?")
-        ? `${url}&connection_limit=1`
-        : `${url}?connection_limit=1`,
+      url: url.includes("?") ? `${url}&connection_limit=1` : `${url}?connection_limit=1`,
     },
   },
 })
@@ -34,7 +32,9 @@ const CATALOG_PATH = join(import.meta.dir || ".", "import-catalog.json")
 async function main() {
   const catalog = JSON.parse(readFileSync(CATALOG_PATH, "utf8"))
   console.log(`Loaded catalog: ${catalog.summary.totalFiles} files`)
-  console.log(`  matched=${catalog.summary.matched} missingSv=${catalog.summary.missingSv} unmatched=${catalog.summary.unmatched}`)
+  console.log(
+    `  matched=${catalog.summary.matched} missingSv=${catalog.summary.missingSv} unmatched=${catalog.summary.unmatched}`
+  )
 
   // ── Phase 2a: Create missing SubjectVersions ─────────────────────
   // Group missingSv entries by (subjectId, trainingTypeId) to avoid duplicates
@@ -64,7 +64,9 @@ async function main() {
     SELECT id, code, name FROM "ql-dao-tao"."TrainingObjectType" WHERE "deletedAt" IS NULL
   `
   const typeIds = new Set(existingTypes.map((t) => t.id))
-  console.log(`Training object types in DB: ${existingTypes.map((t) => `${t.id}(${t.name})`).join(", ")}`)
+  console.log(
+    `Training object types in DB: ${existingTypes.map((t) => `${t.id}(${t.name})`).join(", ")}`
+  )
 
   const createdSvMap = new Map() // key -> new SV id
 
@@ -93,12 +95,16 @@ async function main() {
       select: { id: true },
     })
     if (existingSv) {
-      console.log(`  SV exists for "${info.subjectName}" type=${info.trainingTypeId}: ${existingSv.id}`)
+      console.log(
+        `  SV exists for "${info.subjectName}" type=${info.trainingTypeId}: ${existingSv.id}`
+      )
       createdSvMap.set(key, existingSv.id)
       continue
     }
 
-    console.log(`  Creating SV for "${info.subjectName}" type=${info.trainingTypeId} (from template ${template.code})`)
+    console.log(
+      `  Creating SV for "${info.subjectName}" type=${info.trainingTypeId} (from template ${template.code})`
+    )
 
     if (dryRun) {
       console.log(`    [DRY RUN] would create SV clone`)

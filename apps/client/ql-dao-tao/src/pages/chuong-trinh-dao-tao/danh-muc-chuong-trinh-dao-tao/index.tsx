@@ -684,9 +684,8 @@ export default function TrainingProgramCatalog() {
                 render: (__, record) => {
                   const courses = [
                     ...new Set(
-                      record?.fixedClasses
-                        ?.map((fc) => fc?.trainingCourse?.name)
-                        .filter(Boolean) ?? []
+                      record?.fixedClasses?.map((fc) => fc?.trainingCourse?.name).filter(Boolean) ??
+                        []
                     ),
                   ]
                   return courses.join(", ")
