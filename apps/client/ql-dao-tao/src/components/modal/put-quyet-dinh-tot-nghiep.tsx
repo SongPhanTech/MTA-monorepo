@@ -110,7 +110,7 @@ const PutGraduationDecision = () => {
                   size: output.diplomaBack[0].size,
                 },
               }
-          : documentFront
+          : documentBack
             ? { disconnect: true }
             : undefined,
       }
