@@ -59,6 +59,14 @@ const SUBJECT_OBJECT = [
     label: "Học viên quân sự",
   },
   {
+    value: $Enums.SurveyObject.MILITARY_GRADUATE_STUDENT,
+    label: "Cao học dân sự",
+  },
+  {
+    value: $Enums.SurveyObject.CIVILIAN_GRADUATE_STUDENT,
+    label: "Cao học quân sự",
+  },
+  {
     value: $Enums.SurveyObject.LECTURER,
     label: "Giảng viên",
   },
@@ -67,6 +75,19 @@ const SUBJECT_OBJECT = [
     label: "Cán bộ nhân viên",
   },
 ]
+
+const SURVEY_STUDENT_OBJECT_TYPES: $Enums.SurveyObject[] = [
+  $Enums.SurveyObject.MILITARY_STUDENT,
+  $Enums.SurveyObject.CIVILIAN_STUDENT,
+  $Enums.SurveyObject.MILITARY_GRADUATE_STUDENT,
+  $Enums.SurveyObject.CIVILIAN_GRADUATE_STUDENT,
+]
+
+const isSurveyStudentObjectType = (value: string) =>
+  SURVEY_STUDENT_OBJECT_TYPES.includes(value as $Enums.SurveyObject)
+
+const hasSurveyStudentObjectType = (values: string[] = []) =>
+  values.some(isSurveyStudentObjectType)
 
 const getStatusEvaluation = (status: $Enums.EvaluationCriterionStatus) => {
   switch (status) {
@@ -231,6 +252,9 @@ export {
   MAX_TEXTAREA_LENGTH,
   EVALUATION_MEMBER_ROLE,
   SUBJECT_OBJECT,
+  SURVEY_STUDENT_OBJECT_TYPES,
+  isSurveyStudentObjectType,
+  hasSurveyStudentObjectType,
   getStatusEvaluation,
   getStatusConfig,
   EVALUATION_PERIOD_STATUS_LABELS,

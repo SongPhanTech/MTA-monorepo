@@ -62,6 +62,8 @@ export type GetPublicSurveysV2ResultDataItemSurveyObjectTypeItemTypeItem = typeo
 export const GetPublicSurveysV2ResultDataItemSurveyObjectTypeItemTypeItem = {
   MILITARY_STUDENT: 'MILITARY_STUDENT',
   CIVILIAN_STUDENT: 'CIVILIAN_STUDENT',
+  MILITARY_GRADUATE_STUDENT: 'MILITARY_GRADUATE_STUDENT',
+  CIVILIAN_GRADUATE_STUDENT: 'CIVILIAN_GRADUATE_STUDENT',
   LECTURER: 'LECTURER',
   STAFF: 'STAFF',
 } as const;

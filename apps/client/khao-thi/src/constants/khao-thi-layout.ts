@@ -1,4 +1,4 @@
-export const KHAO_THI_SIDER_WIDTH = 230
+export const KHAO_THI_SIDER_WIDTH = 250
 
 export const KHAO_THI_SIDER_COLLAPSED_WIDTH = 80
 

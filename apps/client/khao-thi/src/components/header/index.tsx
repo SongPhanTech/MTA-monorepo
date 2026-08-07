@@ -5,7 +5,7 @@ import type React from "react"
 import { useEffect } from "react"
 import { useRouter } from "next/router"
 
-const HeaderApp: React.FC = () => {
+const HeaderApp: React.FC<{ className?: string }> = ({ className }) => {
   const router = useRouter()
 
   const initializePlugin = () => {
@@ -75,7 +75,7 @@ const HeaderApp: React.FC = () => {
     }
   }, [router.events])
 
-  return <div id="pluginContainer" />
+  return <div id="pluginContainer" className={className} />
 }
 
 export default HeaderApp

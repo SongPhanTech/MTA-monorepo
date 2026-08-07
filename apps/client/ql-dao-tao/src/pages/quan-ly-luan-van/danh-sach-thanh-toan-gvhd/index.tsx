@@ -7,7 +7,7 @@ import { usePaymentStatusOptions } from "@hooks/paymentStatus"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { getSupervisorName } from "@pages/quan-ly-luan-van/dm-luan-van"
-import type { ExpertProfileLike, PersonLike } from "@utils/thesis-profile"
+import type { ExpertProfileLike, PersonLike } from "@/utils/thesis-profile"
 import { PaymentStatus, ThesisType } from "@workspace/db/client"
 import {
   useCountSupervisorPaymentRecord,

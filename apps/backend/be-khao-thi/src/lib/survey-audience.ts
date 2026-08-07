@@ -20,7 +20,12 @@ type SurveyObjectTypeWithRelations = {
   subjectClasses: { id: string }[]
 }
 
-const STUDENT_TYPES = ["MILITARY_STUDENT", "CIVILIAN_STUDENT"]
+const STUDENT_TYPES = [
+  "MILITARY_STUDENT",
+  "CIVILIAN_STUDENT",
+  "MILITARY_GRADUATE_STUDENT",
+  "CIVILIAN_GRADUATE_STUDENT",
+]
 const LECTURER_TYPES = ["LECTURER", "STAFF"]
 
 export type SurveyAudienceScope = "student" | "lecturer" | "all"
