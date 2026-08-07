@@ -78,6 +78,7 @@ model ClusterSurvey extends Base {
   endDate          DateTime?
   isPublic         Boolean            @default(false)
   anonymous        Boolean            @default(true)
+  scopePerUser     Boolean            @default(false)
   surveyTopic      SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId    String
   surveyObjectType SurveyObjectType[]
@@ -98,7 +99,7 @@ model Survey extends Base {
 
   isPublic             Boolean             @default(false)
   anonymous            Boolean             @default(true)
-
+  scopePerUser         Boolean             @default(false)
   surveyObjectType     SurveyObjectType[]
 
   lecture              Lecturer?           @relation(fields: [lectureId], references: [id])
