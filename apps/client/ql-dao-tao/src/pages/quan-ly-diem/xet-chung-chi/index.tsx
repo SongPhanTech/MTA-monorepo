@@ -95,7 +95,6 @@ export default function AutoCheckCertificate() {
   const getStudentResult = (record: any) => {
     let totalScore = 0
     let totalCredit = 0
-    let hasZeroScore = false
     let hasFailedSubject = false
 
     selectedCertificate?.subjectVersions?.forEach((sv) => {
@@ -109,18 +108,17 @@ export default function AutoCheckCertificate() {
                 : scoreVal
             )
           : 0
-      if (score === 0) hasZeroScore = true
+      
+      if (score < 4) hasFailedSubject = true
       totalScore += score * sv.credit
       totalCredit += sv.credit
-      const threshold = selectedCertificate?.scoreThreshold ?? 5
-      if (score < threshold) hasFailedSubject = true
     })
 
     if (totalCredit === 0) return { tbc: 0, isPassed: false }
 
     const tbc = totalScore / totalCredit
     const threshold = selectedCertificate?.scoreThreshold ?? 5
-    const isPassed = tbc >= threshold && !hasZeroScore && !hasFailedSubject
+    const isPassed = tbc >= threshold && !hasFailedSubject
     return { tbc, isPassed }
   }
 

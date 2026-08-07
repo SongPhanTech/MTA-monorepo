@@ -41,7 +41,13 @@ const BY_CURRICULUM_OPTIONS = [
 ]
 
 const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
-  const { sessionId, curriculumVersions, endDate, creditLimit, tuitionPerCredit } = props
+  const {
+    sessionId,
+    curriculumVersions = [],
+    endDate,
+    creditLimit = [],
+    tuitionPerCredit,
+  } = props
   const [curriculumVersionId, setCurriculumVersionId] = useState(
     curriculumVersions.length > 0 ? curriculumVersions[0].id : ""
   )
@@ -59,6 +65,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
       query: {
         refetchOnWindowFocus: true,
         staleTime: 0,
+        enabled: Boolean(sessionId),
       },
     }
   )
@@ -111,47 +118,47 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
     {
       query: {
         refetchOnWindowFocus: false,
+        enabled: Boolean(sessionId && curriculumVersionId),
       },
     }
   )
 
-  const registeredClasses =
-    classesInfo?.status === 200
-      ? classesInfo.data
-          ?.flatMap((e) => e?.subjectClass)
-          ?.filter((sc) => (sc?.classRegisterLogs?.length || 0) > 0)
-      : []
+  const classesInfoList =
+    classesInfo?.status === 200 && Array.isArray(classesInfo.data) ? classesInfo.data : []
+  const hasClassesInfo = classesInfo?.status === 200 && Array.isArray(classesInfo.data)
+
+  const registeredClasses = classesInfoList
+    .flatMap((e) => (Array.isArray(e?.subjectClass) ? e.subjectClass : []))
+    .filter((sc) => (sc?.classRegisterLogs?.length || 0) > 0)
 
   const { classToSubjectCodeMap, registeredSubjectCodes, classToParentMap } = useMemo(() => {
     const map = new Map<string, string>()
     const parentMap = new Map<string, any>()
     const set = new Set<string>()
 
-    if (classesInfo?.status === 200) {
-      classesInfo.data?.forEach((subject) => {
-        const subjectCode = subject.code ?? ""
+    classesInfoList.forEach((subject) => {
+      const subjectCode = subject.code ?? ""
 
-        const hasRegistered = subject.subjectClass?.some(
-          (sc) => (sc?.classRegisterLogs?.length || 0) > 0
-        )
+      const hasRegistered = subject.subjectClass?.some(
+        (sc) => (sc?.classRegisterLogs?.length || 0) > 0
+      )
 
-        if (hasRegistered) set.add(subjectCode)
+      if (hasRegistered) set.add(subjectCode)
 
-        subject.subjectClass?.forEach((sc) => {
-          if (sc?.id) {
-            map.set(sc.id, subjectCode)
-            parentMap.set(sc.id, subject)
-          }
-        })
+      subject.subjectClass?.forEach((sc) => {
+        if (sc?.id) {
+          map.set(sc.id, subjectCode)
+          parentMap.set(sc.id, subject)
+        }
       })
-    }
+    })
 
     return {
       classToSubjectCodeMap: map,
       registeredSubjectCodes: set,
       classToParentMap: parentMap,
     }
-  }, [classesInfo])
+  }, [classesInfoList])
 
   const { mutateAsync: classRegisterMutate } = useMutation({
     mutationFn: async (subjectClassIds: string[]) => {
@@ -201,12 +208,9 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
         const registeredIds = new Set(
           (registeredClasses ?? []).map((c) => c.id).filter((id): id is string => Boolean(id))
         )
-        const newlyRegistered =
-          classesInfo?.status === 200
-            ? (classesInfo.data
-                ?.flatMap((e) => e?.subjectClass ?? [])
-                ?.filter((sc) => subjectClassIds.includes(sc?.id ?? "")) ?? [])
-            : []
+        const newlyRegistered = classesInfoList
+          .flatMap((e) => (Array.isArray(e?.subjectClass) ? e.subjectClass : []))
+          .filter((sc) => subjectClassIds.includes(sc?.id ?? ""))
 
         const nextRegistered = [
           ...(registeredClasses ?? []),
@@ -363,7 +367,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
 
       <div className="flex gap-2 items-center border-gray-300 border border-b-0 px-2.5 py-2.5 justify-between not-print">
         <b className="text-sm uppercase ">Danh sách môn học đã đăng ký</b>
-        {classesInfo?.status === 200 && (
+        {hasClassesInfo && (
           <p>
             Bạn đã đăng ký <b>{registeredClasses?.length || 0}</b> học phần,{" "}
             <b>
@@ -384,7 +388,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
           </p>
         )}
       </div>
-      {classesInfo?.status === 200 && (
+      {hasClassesInfo && (
         <ThoiKhoaBieuDangKy
           key={registeredClasses?.length}
           registeredClasses={registeredClasses}
@@ -394,7 +398,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
         />
       )}
 
-      {classesInfo?.status === 200 && (
+      {hasClassesInfo && (
         <TableCollapse
           header={<b className="text-sm uppercase">Danh sách môn học mở đăng ký</b>}
           defaultExpandAll
@@ -535,18 +539,22 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               render: (_, record) => {
                 const parent = record.$type === "child" ? classToParentMap.get(record.id) : record
 
-                const equivalencies =
-                  parent?.equivalencyGroups
-                    ?.flatMap((eg: any) => {
-                      const targetSide =
-                        eg.side === EquivalencySide.SOURCE
-                          ? EquivalencySide.TARGET
-                          : EquivalencySide.SOURCE
-                      return eg?.equivalencyGroup?.subjects
-                        ?.filter((s: any) => s?.side === targetSide)
-                        ?.map((s: any) => s?.subject)
-                    })
-                    ?.filter(Boolean) ?? []
+                const equivalencies = (
+                  Array.isArray(parent?.equivalencyGroups) ? parent.equivalencyGroups : []
+                )
+                  .flatMap((eg: any) => {
+                    const targetSide =
+                      eg.side === EquivalencySide.SOURCE
+                        ? EquivalencySide.TARGET
+                        : EquivalencySide.SOURCE
+                    const subjects = Array.isArray(eg?.equivalencyGroup?.subjects)
+                      ? eg.equivalencyGroup.subjects
+                      : []
+                    return subjects
+                      .filter((s: any) => s?.side === targetSide)
+                      .map((s: any) => s?.subject)
+                  })
+                  .filter(Boolean)
 
                 if (!equivalencies.length) {
                   return <span className="text-gray-400 italic">Không có</span>
@@ -657,7 +665,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
           }}
           headerTitleKey={(record) => [record?.code, record?.name].filter(Boolean).join(" - ")}
           childrenFieldName={"subjectClass"}
-          data={classesInfo?.data?.filter((cls) => cls?.subjectClass?.length > 0)}
+          data={classesInfoList.filter((cls) => (cls?.subjectClass?.length || 0) > 0)}
         />
       )}
     </div>

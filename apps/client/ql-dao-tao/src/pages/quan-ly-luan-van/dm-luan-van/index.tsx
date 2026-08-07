@@ -32,7 +32,7 @@ import {
   importCouncilFromExcel,
 } from "@workspace/libs/api/thesis"
 import { whereOrganization } from "@workspace/libs/constants"
-import { WalletOutlined } from "@ant-design/icons"
+import { SearchOutlined, WalletOutlined } from "@ant-design/icons"
 import { dayjs, useTrainingObjectTypeStore } from "@workspace/ui"
 import {
   Button,
@@ -76,6 +76,7 @@ import {
   exportThongKeCoQuanDonViCanBoNgoaiHv,
 } from "@/utils/thesis-excel"
 import type { FilterProps } from "@constants/type"
+import type { ExpertProfileLike, PersonLike } from "@/utils/thesis-profile"
 
 export function formatDefenseSessionClock(startTime: Date | string | null | undefined): string {
   if (startTime === null || startTime === undefined) {
@@ -100,9 +101,54 @@ export interface DanhMucLuanVanProps {
   role?: "P7" | "Khoa"
 }
 
-export function getThesisRegistrationForSession(studentOrRecord: any, thesisSessionId?: string) {
-  if (!thesisSessionId) return undefined
-  return studentOrRecord?.thesisRegistrations?.find((reg: any) => {
+/** StudentRow: shape tối thiểu cần thiết cho các hàm helper trong trang này */
+export type StudentRow = {
+  id?: string
+  thesisRegistrations?: Array<{
+    deletedAt?: string | Date | null
+    thesisProject?: {
+      id?: string | null
+      deletedAt?: string | Date | null
+      thesisSessionId?: string | null
+      thesisSession?: { id?: string | null } | null
+      supervisor?: PersonLike | null
+      supervisorName?: string | null
+      primarySupervisor?: PersonLike | null
+      coSupervisor?: PersonLike | null
+      coSupervisorName?: string | null
+      secondarySupervisor?: PersonLike | null
+      thirdSupervisor?: PersonLike | null
+      council?: {
+        members?: Array<{
+          role?: string | null
+          expert?: PersonLike | null
+        }> | null
+      } | null
+      CHUTICH?: string | null
+      THUKY?: string | null
+      PHANBIEN1?: string | null
+      PHANBIEN2?: string | null
+      UYVIEN3?: string | null
+      defenseDate?: string | Date | null
+      defenseSession?: { id?: string | null; startTime?: string | Date | null } | null
+      defenseRecord?: any
+      room?: { id?: string | null; name?: string | null } | null
+      title?: string | null
+      researchTopicAssociated?: string | null
+      language?: any
+      type?: string | null
+      status?: string | null
+      organization?: { Id?: string | null; sMa?: string | null; sTen?: string | null } | null
+      [key: string]: unknown
+    } | null
+    [key: string]: unknown
+  }> | null
+  [key: string]: unknown
+}
+
+export function getThesisRegistrationForSession(studentOrRecord?: StudentRow | null, thesisSessionId?: string) {
+  if (!studentOrRecord || !thesisSessionId) return undefined
+  return studentOrRecord?.thesisRegistrations?.find((reg) => {
     if (reg?.deletedAt) return false
     const project = reg?.thesisProject
     if (!project || project.deletedAt) return false
@@ -112,7 +158,8 @@ export function getThesisRegistrationForSession(studentOrRecord: any, thesisSess
   })
 }
 
-export function getThesisProjectForSession(studentOrRecord: any, thesisSessionId?: string) {
+export function getThesisProjectForSession(studentOrRecord?: StudentRow | null, thesisSessionId?: string) {
+  if (!studentOrRecord) return undefined
   return getThesisRegistrationForSession(studentOrRecord, thesisSessionId)?.thesisProject
 }
 
@@ -183,55 +230,215 @@ export function getCouncilExpertIdsExcludingField(
   return excluded
 }
 
-export function getCouncilMemberName(record: any, role: CouncilRole, thesisSessionId?: string) {
-  const member = getThesisProjectForSession(record, thesisSessionId)?.council?.members?.find(
-    (m: CouncilMember) => m.role === role
-  )
+export function formatPersonNameWithWorkplace(
+  person: ExpertProfileLike | PersonLike | string | null | undefined,
+  allExperts: ExpertProfileLike[] = []
+): { textWithWorkplace: string; inAcademy: boolean } {
+  if (!person) return { textWithWorkplace: "", inAcademy: true }
 
-  if (!member) return ""
+  const cleanTitle = (str: string) =>
+    str.replace(/^(GS|PGS|TS|ThS|KS|CN|BS|Thạc sĩ|Tiến sĩ|Giáo sư|Phó giáo sư)\.?:?\s*/gi, "").trim().toLowerCase()
 
-  const expert = member.expert
-  const profile = expert?.lecturer?.userProfile
-  const rank = profile?.academicRankType?.sMa || expert?.academicRankType?.sMa || ""
-  const degree = profile?.academicDegreeType?.sMa || expert?.academicDegreeType?.sMa || ""
+  if (typeof person === "string") {
+    const trimmed = person.trim()
+    if (!trimmed) return { textWithWorkplace: "", inAcademy: true }
+    const cleanedTrimmed = cleanTitle(trimmed)
+
+    const matched = allExperts.find((e) => {
+      const p = e?.lecturer?.userProfile
+      const rank = p?.academicRankType?.sMa || e?.academicRankType?.sMa || ""
+      const degree = p?.academicDegreeType?.sMa || e?.academicDegreeType?.sMa || ""
+      const title = [rank, degree].filter(Boolean).join(".")
+      const fullname = e?.name || p?.fullname || ""
+      const fullStr = [title, fullname].filter(Boolean).join(" ").trim()
+      const cleanedFullname = cleanTitle(fullname)
+      return (
+        fullname.toLowerCase() === trimmed.toLowerCase() ||
+        fullStr.toLowerCase() === trimmed.toLowerCase() ||
+        (cleanedFullname && cleanedTrimmed === cleanedFullname) ||
+        (fullname.length > 3 && trimmed.toLowerCase().includes(fullname.toLowerCase()))
+      )
+    })
+
+    if (matched) {
+      const inAcad = !!(matched as ExpertProfileLike).lecturerId
+      const wp = matched.workplace || ""
+      const textWithWp = [trimmed, wp].filter(Boolean).join(", ")
+      return { textWithWorkplace: textWithWp, inAcademy: inAcad }
+    }
+
+    return { textWithWorkplace: trimmed, inAcademy: true }
+  }
+
+  const expertPerson = person as ExpertProfileLike
+  const profile = expertPerson?.lecturer?.userProfile
+  const rank = profile?.academicRankType?.sMa || expertPerson?.academicRankType?.sMa || ""
+  const degree = profile?.academicDegreeType?.sMa || expertPerson?.academicDegreeType?.sMa || ""
   const title = [rank, degree].filter(Boolean).join(".")
-  const fullname = expert?.name || profile?.fullname || ""
-  const inAcademy = expert?.lecturerId ? true : false
-  const workplace = expert?.workplace || ""
-  const text = [title, fullname].filter(Boolean).join(" ").trim()
+  const fullname = expertPerson?.name || profile?.fullname || ""
+  const inAcademy = !!expertPerson?.lecturerId
+  let workplace = expertPerson?.workplace || ""
+
+  if (!inAcademy && !workplace && allExperts.length) {
+    const cleanedFullname = cleanTitle(fullname)
+    const matched = allExperts.find((e) => {
+      if (e.id === expertPerson.id) return true
+      const eName = e.name || e?.lecturer?.userProfile?.fullname || ""
+      return eName === fullname || (cleanedFullname && cleanTitle(eName) === cleanedFullname)
+    })
+    if (matched?.workplace) workplace = matched.workplace
+  }
+
+  const text = [title, fullname].filter(Boolean).join(" ").trim() || fullname
   const textWithWorkplace = [text, workplace].filter(Boolean).join(", ")
+
+  return { textWithWorkplace, inAcademy }
+}
+
+export function getCouncilMemberName(
+  record: StudentRow | null | undefined,
+  role?: CouncilRole,
+  thesisSessionId?: string,
+  rawText = false,
+  searchKeyword = "",
+  allExperts: ExpertProfileLike[] = []
+) {
+  const project = getThesisProjectForSession(record, thesisSessionId)
+  const member = project?.council?.members?.find((m) => m.role === role)
+
+  let personTarget: PersonLike | string | null = null
+  if (member?.expert) {
+    personTarget = member.expert
+  } else if (project) {
+    if (role === CouncilRole.CHAIRMAN) personTarget = project.CHUTICH ?? null
+    else if (role === CouncilRole.SECRETARY) personTarget = project.THUKY ?? null
+    else if (role === CouncilRole.REVIEWER_1) personTarget = project.PHANBIEN1 ?? null
+    else if (role === CouncilRole.REVIEWER_2) personTarget = project.PHANBIEN2 ?? null
+    else if (role === CouncilRole.MEMBER) personTarget = project.UYVIEN3 ?? null
+  }
+
+  if (!personTarget) return ""
+
+  const { textWithWorkplace, inAcademy } = formatPersonNameWithWorkplace(personTarget, allExperts)
+
+  if (!textWithWorkplace) return ""
+  if (rawText) return textWithWorkplace
+
+  const kw = searchKeyword ? searchKeyword.trim().toLowerCase() : ""
+  const isMatched = kw ? textWithWorkplace.toLowerCase().includes(kw) : false
+
   return (
     <span
       title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
-      style={{ color: inAcademy ? "#000000" : "#16a34a" }}
+      className={
+        isMatched
+          ? "bg-yellow-200 border border-yellow-400 text-yellow-950 font-bold px-2 py-0.5 rounded shadow-sm inline-block"
+          : undefined
+      }
+      style={!isMatched ? { color: inAcademy ? "#000000" : "#16a34a" } : undefined}
     >
       {textWithWorkplace}
     </span>
   )
 }
-export function getSupervisorName(record: any, htmlRender = false, showWorkplace = false) {
-  const expert = record
-  if (!expert) return ""
 
-  const profile = expert?.lecturer?.userProfile
-  const rank = profile?.academicRankType?.sMa || expert?.academicRankType?.sMa || ""
-  const degree = profile?.academicDegreeType?.sMa || expert?.academicDegreeType?.sMa || ""
-  const title = [rank, degree].filter(Boolean).join(".")
-  const fullname = expert?.name || profile?.fullname || ""
-  const inAcademy = expert?.lecturerId ? true : false
-  const workplace = expert?.workplace || ""
-  const text = [title, fullname].filter(Boolean).join(" ").trim()
-  const textWithWorkplace = [text, showWorkplace ? workplace : ""].filter(Boolean).join(", ")
-  return htmlRender ? (
+export function getSupervisorName(
+  record: ExpertProfileLike | PersonLike | null | undefined,
+  htmlRender = false,
+  showWorkplace = false,
+  searchKeyword = "",
+  allExperts: ExpertProfileLike[] = []
+) {
+  if (!record) return ""
+
+  const { textWithWorkplace, inAcademy } = formatPersonNameWithWorkplace(record, allExperts)
+
+  if (!textWithWorkplace) return ""
+  if (!htmlRender) return textWithWorkplace
+
+  const kw = searchKeyword ? searchKeyword.trim().toLowerCase() : ""
+  const isMatched = kw ? textWithWorkplace.toLowerCase().includes(kw) : false
+
+  return (
     <span
       title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
-      style={{ color: inAcademy ? "#000000" : "#16a34a" }}
+      className={
+        isMatched
+          ? "bg-yellow-200 border border-yellow-400 text-yellow-950 font-bold px-2 py-0.5 rounded shadow-sm inline-block"
+          : undefined
+      }
+      style={!isMatched ? { color: inAcademy ? "#000000" : "#16a34a" } : undefined}
     >
       {textWithWorkplace}
     </span>
-  ) : (
-    textWithWorkplace
   )
+}
+
+export function getMatchedLecturerRoles(
+  record: StudentRow | null | undefined,
+  thesisSessionId: string | undefined,
+  keyword: string
+): string[] {
+  if (!keyword || !keyword.trim()) return []
+  const kw = keyword.trim().toLowerCase()
+  const project = getThesisProjectForSession(record, thesisSessionId)
+  if (!project) return []
+
+  const roles: string[] = []
+
+  const isMatch = (str?: string | null) => {
+    if (!str) return false
+    return str.toLowerCase().includes(kw)
+  }
+
+  const isPersonMatch = (person?: PersonLike | null, fallbackName?: string | null) => {
+    if (fallbackName && isMatch(fallbackName)) return true
+    if (!person) return false
+    if (isMatch(person.name)) return true
+    const profile = person.lecturer?.userProfile || person.userProfile
+    if (isMatch(profile?.fullname)) return true
+    const combined = `${profile?.lastName || ""} ${profile?.firstName || ""}`.trim()
+    if (combined && isMatch(combined)) return true
+    return false
+  }
+
+  if (
+    isPersonMatch(project.supervisor, project.supervisorName) ||
+    isPersonMatch(project.primarySupervisor)
+  ) {
+    roles.push("GVHD 1")
+  }
+
+  if (
+    isPersonMatch(project.coSupervisor, project.coSupervisorName) ||
+    isPersonMatch(project.secondarySupervisor)
+  ) {
+    roles.push("GVHD 2")
+  }
+
+  if (isPersonMatch(project.thirdSupervisor)) {
+    roles.push("CBHD khác")
+  }
+
+  if (project.council?.members?.length) {
+    for (const m of project.council.members) {
+      if (isPersonMatch(m.expert)) {
+        if (m.role === CouncilRole.CHAIRMAN) roles.push("Chủ tịch HĐ")
+        else if (m.role === CouncilRole.SECRETARY) roles.push("Thư ký HĐ")
+        else if (m.role === CouncilRole.REVIEWER_1) roles.push("Phản biện 1")
+        else if (m.role === CouncilRole.REVIEWER_2) roles.push("Phản biện 2")
+        else if (m.role === CouncilRole.MEMBER) roles.push("Ủy viên HĐ")
+      }
+    }
+  }
+
+  if (isMatch(project.CHUTICH) && !roles.includes("Chủ tịch HĐ")) roles.push("Chủ tịch HĐ")
+  if (isMatch(project.THUKY) && !roles.includes("Thư ký HĐ")) roles.push("Thư ký HĐ")
+  if (isMatch(project.PHANBIEN1) && !roles.includes("Phản biện 1")) roles.push("Phản biện 1")
+  if (isMatch(project.PHANBIEN2) && !roles.includes("Phản biện 2")) roles.push("Phản biện 2")
+  if (isMatch(project.UYVIEN3) && !roles.includes("Ủy viên HĐ")) roles.push("Ủy viên HĐ")
+
+  return Array.from(new Set(roles))
 }
 const { TextArea } = Input
 
@@ -279,7 +486,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     tag: "ModalCauHinhLuanVan",
   })
   const { onOpen: openModalChuyenDiemLopMonHoc } = useDisclosure<{
-    allStudentsInClasses: any[]
+    allStudentsInClasses: StudentRow[]
   }>({
     tag: "ModalChuyenDiemLopMonHoc",
   })
@@ -349,7 +556,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const studentWhere = useMemo(() => {
     if (!searchParams.thesisSessionId) return { id: { in: [] } }
 
-    const andConditions: any[] = []
+    const andConditions: Record<string, unknown>[] = []
 
     andConditions.push({
       fixedClassId: {
@@ -369,7 +576,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       })
     }
 
-    const thesisProjectConditions: any = {
+    const thesisProjectConditions: Record<string, unknown> = {
       deletedAt: null,
       thesisSessionId: searchParams.thesisSessionId,
       thesisType: ThesisType.THESIS,
@@ -416,9 +623,51 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     })
 
     if (debouncedNameKeyword) {
+      const containsKw = { contains: debouncedNameKeyword, mode: "insensitive" }
+      const expertKwFilter = {
+        OR: [
+          { name: containsKw },
+          { lecturer: { userProfile: { fullname: containsKw } } },
+        ],
+      }
+      const lecturerKwFilter = {
+        userProfile: { fullname: containsKw },
+      }
+
+      const thesisProjectKeywordConditions = [
+        { title: containsKw },
+        { researchTopicAssociated: containsKw },
+        { supervisorName: containsKw },
+        { coSupervisorName: containsKw },
+        { supervisor: expertKwFilter },
+        { coSupervisor: expertKwFilter },
+        { thirdSupervisor: expertKwFilter },
+        { primarySupervisor: lecturerKwFilter },
+        { secondarySupervisor: lecturerKwFilter },
+        { CHUTICH: containsKw },
+        { THUKY: containsKw },
+        { PHANBIEN1: containsKw },
+        { PHANBIEN2: containsKw },
+        { UYVIEN3: containsKw },
+        { language: containsKw },
+        { type: containsKw },
+        { room: { name: containsKw } },
+        {
+          council: {
+            members: {
+              some: {
+                expert: expertKwFilter,
+              },
+            },
+          },
+        },
+      ]
+
       andConditions.push({
         OR: [
-          { userProfile: { fullname: { contains: debouncedNameKeyword, mode: "insensitive" } } },
+          { userProfile: { fullname: containsKw } },
+          { code: containsKw },
+          { fixedClass: { name: containsKw } },
           {
             thesisRegistrations: {
               some: {
@@ -427,34 +676,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   deletedAt: null,
                   thesisSessionId: searchParams.thesisSessionId,
                   thesisType: ThesisType.THESIS,
-                  OR: [
-                    {
-                      supervisor: { name: { contains: debouncedNameKeyword, mode: "insensitive" } },
-                    },
-                    {
-                      supervisor: {
-                        lecturer: {
-                          userProfile: {
-                            fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
-                          },
-                        },
-                      },
-                    },
-                    {
-                      coSupervisor: {
-                        name: { contains: debouncedNameKeyword, mode: "insensitive" },
-                      },
-                    },
-                    {
-                      coSupervisor: {
-                        lecturer: {
-                          userProfile: {
-                            fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
-                          },
-                        },
-                      },
-                    },
-                  ],
+                  OR: thesisProjectKeywordConditions,
                 },
               },
             },
@@ -469,6 +691,16 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   // biome-ignore lint/correctness/useExhaustiveDependencies: dùng cho searchParams
   const allStudentWhere = useMemo(() => {
     if (!searchParams.thesisSessionId) return { id: { in: [] } }
+    const containsKw = { contains: debouncedNameKeyword, mode: "insensitive" }
+    const expertKwFilter = {
+      OR: [
+        { name: containsKw },
+        { lecturer: { userProfile: { fullname: containsKw } } },
+      ],
+    }
+    const lecturerKwFilter = {
+      userProfile: { fullname: containsKw },
+    }
     const thesisProjectWhere: Record<string, any> = {
       deletedAt: null,
       thesisSessionId: searchParams.thesisSessionId,
@@ -477,30 +709,28 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     }
     if (debouncedNameKeyword) {
       thesisProjectWhere.OR = [
+        { title: containsKw },
+        { researchTopicAssociated: containsKw },
+        { supervisorName: containsKw },
+        { coSupervisorName: containsKw },
+        { supervisor: expertKwFilter },
+        { coSupervisor: expertKwFilter },
+        { thirdSupervisor: expertKwFilter },
+        { primarySupervisor: lecturerKwFilter },
+        { secondarySupervisor: lecturerKwFilter },
+        { CHUTICH: containsKw },
+        { THUKY: containsKw },
+        { PHANBIEN1: containsKw },
+        { PHANBIEN2: containsKw },
+        { UYVIEN3: containsKw },
+        { language: containsKw },
+        { type: containsKw },
+        { room: { name: containsKw } },
         {
-          supervisor: {
-            name: { contains: debouncedNameKeyword, mode: "insensitive" },
-          },
-        },
-        {
-          supervisor: {
-            lecturer: {
-              userProfile: {
-                fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
-              },
-            },
-          },
-        },
-        {
-          coSupervisor: {
-            name: { contains: debouncedNameKeyword, mode: "insensitive" },
-          },
-        },
-        {
-          coSupervisor: {
-            lecturer: {
-              userProfile: {
-                fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+          council: {
+            members: {
+              some: {
+                expert: expertKwFilter,
               },
             },
           },
@@ -521,9 +751,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       OR: [
         {
           userProfile: {
-            fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+            fullname: containsKw,
           },
         },
+        { code: containsKw },
+        { fixedClass: { name: containsKw } },
         {
           thesisRegistrations: {
             some: {
@@ -611,6 +843,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     skip: (currentPage - 1) * numberOfPages,
     take: numberOfPages,
   })
+  type StudentRow = (typeof students)[number]
   const { data: allStudentsInClasses = [], refetch: refetchAllStudentsInClasses } =
     useFindManyStudent({
       where: allStudentWhere,
@@ -862,7 +1095,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     await Promise.all([refetchStudents(), refetchCount(), refetchAllStudentsInClasses()])
   }, [refetchStudents, refetchCount, refetchAllStudentsInClasses])
 
-  const handleDeleteStudentThesis = async (record: { id: string }) => {
+ const handleDeleteStudentThesis = async (record: StudentRow) => {
     const thesisSessionId = searchParams.thesisSessionId?.trim()
     if (!thesisSessionId) {
       message.warning("Vui lòng chọn đợt luận văn trước khi xóa.")
@@ -1118,24 +1351,24 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           defenseSession: thesisProject.defenseSession?.id || "",
           room: thesisProject.room?.id || "",
           councilChairman:
-            thesisProject.council?.members.find(
-              (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
+            thesisProject.council?.members?.find(
+              (member: { role?: string | null }) => member.role === CouncilRole.CHAIRMAN
             )?.expert?.id || "",
           councilSecretary:
-            thesisProject.council?.members.find(
-              (member: CouncilMember) => member.role === CouncilRole.SECRETARY
+            thesisProject.council?.members?.find(
+              (member: { role?: string | null }) => member.role === CouncilRole.SECRETARY
             )?.expert?.id || "",
           reviewer1:
-            thesisProject.council?.members.find(
-              (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
+            thesisProject.council?.members?.find(
+              (member: { role?: string | null }) => member.role === CouncilRole.REVIEWER_1
             )?.expert?.id || "",
           reviewer2:
-            thesisProject.council?.members.find(
-              (member: CouncilMember) => member.role === CouncilRole.REVIEWER_2
+            thesisProject.council?.members?.find(
+              (member: { role?: string | null }) => member.role === CouncilRole.REVIEWER_2
             )?.expert?.id || "",
           councilMember:
-            thesisProject.council?.members.find(
-              (member: CouncilMember) => member.role === CouncilRole.MEMBER
+            thesisProject.council?.members?.find(
+              (member: { role?: string | null }) => member.role === CouncilRole.MEMBER
             )?.expert?.id || "",
           organization: thesisProject.organization?.Id ?? "",
           score: thesisProject.defenseRecord?.finalScore?.toString() || "",
@@ -1774,15 +2007,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       }}
                     />
                   </Form.Item>
-                  {/* <Form.Item label="Tìm kiếm">
-                    <Input
-                      className="w-48"
-                      allowClear
-                      value={nameKeyword}
-                      placeholder="Tên học viên / GVHD"
-                      onChange={(e) => setNameKeyword(e.target.value)}
-                    />
-                  </Form.Item> */}
+
 
                   <Form.Item className="flex justify-end gap-3">
                     {role === "P7" && (
@@ -1940,7 +2165,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       Gán ngày
                     </Button>
                   )}
-
                   {role === "Khoa" && (
                     <Button
                       type="primary"
@@ -1973,6 +2197,16 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       Kiểm tra tiến độ
                     </Button>
                   )}
+                  <Form.Item className="mb-0" style={{ marginBottom: 0 }}>
+                    <Input
+                      className="w-64"
+                      allowClear
+                      prefix={<SearchOutlined className="text-gray-400" />}
+                      value={nameKeyword}
+                      placeholder="Tìm kiếm..."
+                      onChange={(e) => setNameKeyword(e.target.value)}
+                    />
+                  </Form.Item>
                 </Space>
               </Col>
             </Row>
@@ -1980,19 +2214,23 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         </Col>
 
         <Col span={24}>
-          <Table
+          <Table<StudentRow>
             bordered
             scroll={{ x: "max-content" }}
             className={"mt-2"}
             rowKey="id"
             filters={filters}
-            setFilters={(value: any) => {
+            setFilters={(value: FilterProps) => {
               setFilters(value)
               setCurrentPage(1)
             }}
             columns={[
               {
                 title: "Khoa quản lí",
+                sorter: (a: StudentRow, b: StudentRow) =>
+                  (getThesisProjectForSession(a, searchParams.thesisSessionId)?.organization?.sMa || "").localeCompare(
+                    getThesisProjectForSession(b, searchParams.thesisSessionId)?.organization?.sMa || ""
+                  ),
                 dataIndex: "organization",
                 width: 100,
                 fixed: "left",
@@ -2034,26 +2272,31 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Mã sinh viên",
+                sorter: (a: StudentRow, b: StudentRow) => (a?.code || "").localeCompare(b?.code || ""),
                 width: 120,
                 fixed: "left",
                 dataIndex: "code",
-                type: "input",
                 render: (_, record) => {
                   return record?.code
                 },
               },
               {
                 title: "Họ tên học viên",
+                sorter: (a: StudentRow, b: StudentRow) => (a?.userProfile?.fullname || "").localeCompare(b?.userProfile?.fullname || ""),
                 width: 180,
                 fixed: "left",
                 dataIndex: "name",
-                type: "input",
                 render: (_, record) => {
                   return record?.userProfile?.fullname
                 },
               },
               {
                 title: "Ngày sinh",
+                sorter: (a: StudentRow, b: StudentRow) => {
+                  const dateA = a?.userProfile?.dateOfBirth ? new Date(a.userProfile.dateOfBirth).getTime() : 0;
+                  const dateB = b?.userProfile?.dateOfBirth ? new Date(b.userProfile.dateOfBirth).getTime() : 0;
+                  return dateA - dateB;
+                },
                 width: 120,
                 dataIndex: "dateOfBirth",
                 align: "center",
@@ -2065,6 +2308,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Lớp quản lí ",
+                sorter: (a: StudentRow, b: StudentRow) => (a?.fixedClass?.name || "").localeCompare(b?.fixedClass?.name || ""),
                 width: 250,
                 dataIndex: "fixedClass",
                 align: "center",
@@ -2074,9 +2318,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Đề tài",
+                sorter: (a: StudentRow, b: StudentRow) => (getThesisProjectForSession(a, searchParams.thesisSessionId)?.title || "").localeCompare(getThesisProjectForSession(b, searchParams.thesisSessionId)?.title || ""),
                 width: 350,
                 // fixed: "left",
-                type: "input",
                 dataIndex: "title",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -2109,8 +2353,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "GVHD 1",
+                sorter: (a: StudentRow, b: StudentRow) => {
+                  const valA = getSupervisorName(getThesisProjectForSession(a, searchParams.thesisSessionId)?.supervisor, false, false);
+                  const valB = getSupervisorName(getThesisProjectForSession(b, searchParams.thesisSessionId)?.supervisor, false, false);
+                  return String(valA || "").localeCompare(String(valB || ""));
+                },
                 width: 200,
-                type: "input",
                 dataIndex: "supervisor",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -2175,14 +2423,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     searchParams.thesisSessionId
                   )?.supervisor
 
-                  return getSupervisorName(supervisor, true, true)
+                  return getSupervisorName(supervisor, true, true, debouncedNameKeyword, expertProfileData)
                 },
               },
               {
                 title: "GVHD 2",
+                sorter: (a: StudentRow, b: StudentRow) => {
+                  const valA = getSupervisorName(getThesisProjectForSession(a, searchParams.thesisSessionId)?.coSupervisor, false, false);
+                  const valB = getSupervisorName(getThesisProjectForSession(b, searchParams.thesisSessionId)?.coSupervisor, false, false);
+                  return String(valA || "").localeCompare(String(valB || ""));
+                },
                 width: 200,
                 // fixed: "left",
-                type: "input",
                 dataIndex: "coSupervisor",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -2246,11 +2498,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     record,
                     searchParams.thesisSessionId
                   )?.coSupervisor
-                  return getSupervisorName(coSupervisor, true, true)
+                  return getSupervisorName(coSupervisor, true, true, debouncedNameKeyword, expertProfileData)
                 },
               },
               {
                 title: "Gán với đề tài nghiên cứu",
+                sorter: (a: StudentRow, b: StudentRow)=> (getThesisProjectForSession(a, searchParams.thesisSessionId)?.researchTopicAssociated || "").localeCompare(getThesisProjectForSession(b, searchParams.thesisSessionId)?.researchTopicAssociated || ""),
                 width: 350,
                 dataIndex: "researchTopicAssociated",
                 render: (_, record) => {
@@ -2284,31 +2537,40 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Ngôn ngữ",
+                sorter: (a: StudentRow, b: StudentRow) => {
+                  const valA = getThesisProjectForSession(a, searchParams.thesisSessionId)?.language;
+                  const valB = getThesisProjectForSession(b, searchParams.thesisSessionId)?.language;
+                  const strA = typeof valA === 'object' ? (valA as Record<string, unknown>)?.language : valA;
+                  const strB = typeof valB === 'object' ? (valB as Record<string, unknown>)?.language : valB;
+                  return String(strA || "").localeCompare(String(strB || ""));
+                },
                 width: 100,
                 dataIndex: "language",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
+                    const rawLang = getThesisProjectForSession(record, searchParams.thesisSessionId)?.language
+                    const langStr = typeof rawLang === 'object' ? rawLang?.language : rawLang
                     const currentValue =
                       editingValues[record?.id]?.language !== undefined
                         ? editingValues[record?.id]?.language
-                        : getThesisProjectForSession(record, searchParams.thesisSessionId)?.language
-                            ?.language || ""
+                        : langStr || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Input
-                          value={currentValue || ""}
+                          value={String(currentValue || "")}
                           onChange={(e) => handleEditChange(record?.id, "language", e.target.value)}
                         />
                       </div>
                     )
                   }
-                  return (
-                    getThesisProjectForSession(record, searchParams.thesisSessionId)?.language || ""
-                  )
+                  const rawLang = getThesisProjectForSession(record, searchParams.thesisSessionId)?.language
+                  const langStr = typeof rawLang === 'object' ? rawLang?.language : rawLang
+                  return String(langStr || "")
                 },
               },
               {
                 title: "Luận văn/Đề án",
+                sorter: (a: StudentRow, b: StudentRow)=> (getThesisProjectForSession(a, searchParams.thesisSessionId)?.type || "").localeCompare(getThesisProjectForSession(b, searchParams.thesisSessionId)?.type || ""),
                 width: 130,
                 dataIndex: "type",
                 render: (_, record) => {
@@ -2340,6 +2602,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
               {
                 title: "Chủ tịch ",
+                sorter:(a: StudentRow, b: StudentRow) => String(getCouncilMemberName(a, CouncilRole.CHAIRMAN, searchParams.thesisSessionId, true)).localeCompare(String(getCouncilMemberName(b, CouncilRole.CHAIRMAN, searchParams.thesisSessionId, true))),
                 width: 200,
                 dataIndex: "councilChairman",
                 render: (_, record) => {
@@ -2354,7 +2617,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           record,
                           searchParams.thesisSessionId
                         )?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
+                          (member: { role?: string | null }) => member.role === CouncilRole.CHAIRMAN
                         )?.expert?.id || ""
                     const councilRow = editingValues[record?.id] || {}
                     const excludedCouncilIds = getCouncilExpertIdsExcludingField(
@@ -2404,12 +2667,16 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   return getCouncilMemberName(
                     record,
                     CouncilRole.CHAIRMAN,
-                    searchParams.thesisSessionId
+                    searchParams.thesisSessionId,
+                    false,
+                    debouncedNameKeyword,
+                    expertProfileData
                   )
                 },
               },
               {
                 title: "Thư ký",
+                sorter: (a: StudentRow, b: StudentRow) => String(getCouncilMemberName(a, CouncilRole.SECRETARY, searchParams.thesisSessionId, true)).localeCompare(String(getCouncilMemberName(b, CouncilRole.SECRETARY, searchParams.thesisSessionId, true))),
                 width: 200,
                 dataIndex: "councilSecretary",
                 render: (_, record) => {
@@ -2424,7 +2691,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           record,
                           searchParams.thesisSessionId
                         )?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.SECRETARY
+                          (member: { role?: string | null }) => member.role === CouncilRole.SECRETARY
                         )?.expert?.id || ""
                     const councilRow = editingValues[record?.id] || {}
                     const excludedCouncilIds = getCouncilExpertIdsExcludingField(
@@ -2474,12 +2741,16 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   return getCouncilMemberName(
                     record,
                     CouncilRole.SECRETARY,
-                    searchParams.thesisSessionId
+                    searchParams.thesisSessionId,
+                    false,
+                    debouncedNameKeyword,
+                    expertProfileData
                   )
                 },
               },
               {
                 title: "Phản biện 1",
+                sorter: (a: StudentRow, b: StudentRow) => String(getCouncilMemberName(a, CouncilRole.REVIEWER_1, searchParams.thesisSessionId, true)).localeCompare(String(getCouncilMemberName(b, CouncilRole.REVIEWER_1, searchParams.thesisSessionId, true))),
                 width: 200,
                 dataIndex: "reviewer1",
                 render: (_, record) => {
@@ -2494,7 +2765,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           record,
                           searchParams.thesisSessionId
                         )?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
+                          (member: { role?: string | null }) => member.role === CouncilRole.REVIEWER_1
                         )?.expert?.id || ""
                     const councilRow = editingValues[record?.id] || {}
                     const excludedCouncilIds = getCouncilExpertIdsExcludingField(
@@ -2541,12 +2812,16 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   return getCouncilMemberName(
                     record,
                     CouncilRole.REVIEWER_1,
-                    searchParams.thesisSessionId
+                    searchParams.thesisSessionId,
+                    false,
+                    debouncedNameKeyword,
+                    expertProfileData
                   )
                 },
               },
               {
                 title: "Phản biện 2",
+                sorter: (a: StudentRow, b: StudentRow) => String(getCouncilMemberName(a, CouncilRole.REVIEWER_2, searchParams.thesisSessionId, true)).localeCompare(String(getCouncilMemberName(b, CouncilRole.REVIEWER_2, searchParams.thesisSessionId, true))),
                 width: 200,
                 dataIndex: "reviewer2",
                 render: (_, record) => {
@@ -2561,7 +2836,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           record,
                           searchParams.thesisSessionId
                         )?.council?.members?.find(
-                          (member: any) => member.role === CouncilRole.REVIEWER_2
+                          (member: { role?: string | null }) => member.role === CouncilRole.REVIEWER_2
                         )?.expert?.id || ""
                     const councilRow = editingValues[record?.id] || {}
                     const excludedCouncilIds = getCouncilExpertIdsExcludingField(
@@ -2608,12 +2883,16 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   return getCouncilMemberName(
                     record,
                     CouncilRole.REVIEWER_2,
-                    searchParams.thesisSessionId
+                    searchParams.thesisSessionId,
+                    false,
+                    debouncedNameKeyword,
+                    expertProfileData
                   )
                 },
               },
               {
                 title: "Ủy viên",
+                sorter: (a: StudentRow, b: StudentRow) => String(getCouncilMemberName(a, CouncilRole.MEMBER, searchParams.thesisSessionId, true)).localeCompare(String(getCouncilMemberName(b, CouncilRole.MEMBER, searchParams.thesisSessionId, true))),
                 width: 200,
                 dataIndex: "councilMember",
                 render: (_, record) => {
@@ -2628,7 +2907,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           record,
                           searchParams.thesisSessionId
                         )?.council?.members?.find(
-                          (member: any) => member.role === CouncilRole.MEMBER
+                          (member: { role?: string | null }) => member.role === CouncilRole.MEMBER
                         )?.expert?.id || ""
                     const councilRow = editingValues[record?.id] || {}
                     const excludedCouncilIds = getCouncilExpertIdsExcludingField(
@@ -2675,15 +2954,19 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   return getCouncilMemberName(
                     record,
                     CouncilRole.MEMBER,
-                    searchParams.thesisSessionId
+                    searchParams.thesisSessionId,
+                    false,
+                    debouncedNameKeyword,
+                    expertProfileData
                   )
                 },
               },
               {
                 title: "Phòng bảo vệ",
+                sorter: (a: StudentRow, b: StudentRow) => (getThesisProjectForSession(a, searchParams.thesisSessionId)?.room?.name || "").localeCompare(getThesisProjectForSession(b, searchParams.thesisSessionId)?.room?.name || ""),
                 width: 150,
                 dataIndex: "room",
-                render: (text: string, record: any) => {
+                render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
                     const hasEditedRoom = Object.prototype.hasOwnProperty.call(
                       editingValues[record?.id] || {},
@@ -2722,6 +3005,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Ngày bảo vệ",
+                sorter: (a: StudentRow, b: StudentRow) => {
+                  const projA = getThesisProjectForSession(a, searchParams.thesisSessionId)
+                  const projB = getThesisProjectForSession(b, searchParams.thesisSessionId)
+                  const dateA = projA?.defenseDate ? new Date(projA.defenseDate as string | Date).getTime() : 0
+                  const dateB = projB?.defenseDate ? new Date(projB.defenseDate as string | Date).getTime() : 0
+                  return dateA - dateB
+                },
                 width: 150,
                 dataIndex: "defenseDate",
                 render: (_, record) => {
@@ -2757,6 +3047,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
               {
                 title: "Thời gian bảo vệ",
+                sorter: (a: StudentRow, b: StudentRow) => formatDefenseSessionClock(getThesisProjectForSession(a, searchParams.thesisSessionId)?.defenseSession?.startTime).localeCompare(formatDefenseSessionClock(getThesisProjectForSession(b, searchParams.thesisSessionId)?.defenseSession?.startTime)),
                 width: 120,
                 dataIndex: "defenseSession",
                 render: (_, record) => {
@@ -2803,6 +3094,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Điểm",
+                sorter: (a: StudentRow, b: StudentRow) => (Number(getThesisProjectForSession(a, searchParams.thesisSessionId)?.defenseRecord?.finalScore) || 0) - (Number(getThesisProjectForSession(b, searchParams.thesisSessionId)?.defenseRecord?.finalScore) || 0),
                 width: 100,
                 align: "center",
                 dataIndex: "score",
@@ -2828,12 +3120,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  return (
-                    getThesisProjectForSession(
-                      record,
-                      searchParams.thesisSessionId
-                    )?.defenseRecord?.finalScore?.toString() || ""
-                  )
+                  const finalScore = getThesisProjectForSession(
+                    record,
+                    searchParams.thesisSessionId
+                  )?.defenseRecord?.finalScore
+                  return (finalScore as any)?.toString() || ""
                 },
               },
               // {
@@ -2898,24 +3189,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               className="text-lg font-bold text-green-700"
                               size={24}
                               onClick={async () => {
-                                let status =
-                                  getThesisProjectForSession(record, searchParams.thesisSessionId)
-                                    ?.status || ""
-                                switch (status) {
-                                  case ThesisProjectStatus.APPROVED_BY_DEPT:
-                                    status = ThesisProjectStatus.IN_PROGRESS
-                                    break
-                                }
-                                const payload = {
-                                  status: status,
+                                let newStatus: ThesisProjectStatus = ThesisProjectStatus.IN_PROGRESS
+                                const currentStatus = getThesisProjectForSession(
+                                  record,
+                                  searchParams.thesisSessionId
+                                )?.status
+                                if (currentStatus === ThesisProjectStatus.APPROVED_BY_DEPT) {
+                                  newStatus = ThesisProjectStatus.IN_PROGRESS
                                 }
                                 await updateThesisProject({
-                                  data: payload,
+                                  data: { status: newStatus },
                                   where: {
-                                    id: getThesisProjectForSession(
-                                      record,
-                                      searchParams.thesisSessionId
-                                    )?.id,
+                                    id:
+                                      getThesisProjectForSession(
+                                        record,
+                                        searchParams.thesisSessionId
+                                      )?.id || "",
                                   },
                                 })
                               }}
@@ -2927,16 +3216,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               className="text-lg font-bold text-green-700"
                               size={24}
                               onClick={async () => {
-                                const payload = {
-                                  status: ThesisProjectStatus.DEFENSE_ELIGIBLE,
-                                }
                                 await updateThesisProject({
-                                  data: payload,
+                                  data: { status: ThesisProjectStatus.DEFENSE_ELIGIBLE },
                                   where: {
-                                    id: getThesisProjectForSession(
-                                      record,
-                                      searchParams.thesisSessionId
-                                    )?.id,
+                                    id:
+                                      getThesisProjectForSession(
+                                        record,
+                                        searchParams.thesisSessionId
+                                      )?.id || "",
                                   },
                                 })
                               }}
@@ -2959,7 +3246,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                     return
                                   }
                                   openModalChuyenDotXetLuanVan({
-                                    thesisProjectId: thesisProject.id,
+                                    thesisProjectId: String(thesisProject.id),
                                     thesisSessionId: searchParams.thesisSessionId || "",
                                     onSuccess: refetchThesisTableData,
                                   })
@@ -2973,10 +3260,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             onClick={(e) => {
                               e.stopPropagation()
                               openModalCauHinhLuanVan({
-                                thesisProjectId: getThesisProjectForSession(
-                                  record,
-                                  searchParams.thesisSessionId
-                                )?.id,
+                                thesisProjectId: String(
+                                  getThesisProjectForSession(
+                                    record,
+                                    searchParams.thesisSessionId
+                                  )?.id || ""
+                                ),
                                 thesisSessionId: searchParams?.thesisSessionId || "",
                               })
                             }}
@@ -2988,7 +3277,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             popConfirm={{
                               title: "Xóa luận văn/đề án",
                               description: "Xóa luận văn/đề án . Thao tác không thể hoàn tác.",
-                              onConfirm: () => handleDeleteStudentThesis(record),
+                              onConfirm: () => handleDeleteStudentThesis(record as StudentRow),
                             }}
                           />
                         </div>

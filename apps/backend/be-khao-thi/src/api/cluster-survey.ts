@@ -106,108 +106,106 @@ app.openapi(createClusterSurvey, async (c) => {
     ...payload
   } = c.req.valid("json")
 
-  const lecturerIds = await prisma.lecturer.findMany({
+  const uniqueSubjectClassIds = [...new Set(subjectClassIds)]
+
+  const subjectClasses = await prisma.subjectClass.findMany({
+    where: { id: { in: uniqueSubjectClassIds } },
+    select: { id: true, lecturerId: true },
+  })
+
+  if (subjectClasses.length === 0) {
+    return c.json({ message: "Không tìm thấy lớp môn học nào" }, 404)
+  }
+  if (subjectClasses.length !== uniqueSubjectClassIds.length) {
+    const found = new Set(subjectClasses.map((s) => s.id))
+    const missing = uniqueSubjectClassIds.filter((id) => !found.has(id))
+    return c.json(
+      { message: `Không tìm thấy ${missing.length} lớp môn học: ${missing.slice(0, 5).join(", ")}` },
+      404
+    )
+  }
+
+  const lecturers = await prisma.lecturer.findMany({
     where: {
       mainSubjectClasses: {
         some: {
           semesterId,
-          id: { in: subjectClassIds },
+          id: { in: uniqueSubjectClassIds },
         },
       },
     },
-    include: {
-      mainSubjectClasses: true,
-    },
+    select: { id: true },
   })
 
-  await prisma.$transaction(async (tx) => {
-    const cluster = await tx.clusterSurvey.create({
-      data: {
-        ...payload,
-        surveyTopic: {
-          connect: { id: surveyTopicId },
-        },
-        surveyQuestion: {
-          connect: surveyQuestionIds.map((id) => ({ id })),
-        },
-        surveyChoice: {
-          create: surveyChoices,
-        },
-        surveyObjectType: {
-          connect: surveyObjectTypeIds.map((id) => ({ id })),
-        },
-        lecturers: {
-          connect: lecturerIds.map((i) => ({ id: i?.id })),
-        },
-      },
-      include: {
-        surveyChoice: true,
-      },
-    })
-
-    // const lecturers = await tx.lecturer.findMany({
-    //     where: {
-    //         id: {
-    //             in: lecturerIds,
-    //         },
-    //         mainSubjectClasses: {
-    //             some: {
-    //                 semester: {
-    //                     id: semesterId,
-    //                 },
-    //             },
-    //         },
-    //     },
-    //     include: {
-    //         mainSubjectClasses: {
-    //             where: {
-    //                 semester: {
-    //                     id: semesterId,
-    //                 },
-    //             },
-    //         },
-    //     },
-    // })
-    const subjectClasses = await prisma.subjectClass.findMany({
-      where: {
-        id: { in: subjectClassIds },
-      },
-      include: {
-        mainLecturer: true,
-      },
-    })
-
-    const surveys = await tx.survey.createManyAndReturn({
-      data: subjectClasses.map((cls) => ({
-        ...payload,
-        clusterSurveyId: cluster.id,
-        subjectClassId: cls.id,
-        surveyTopicId,
-        lectureId: cls.lecturerId,
-        semesterId,
-        trainingObjectTypeId,
-      })),
-    })
-
-    for (const survey of surveys) {
-      await tx.survey.update({
-        where: { id: survey.id },
-        data: {
-          surveyQuestion: {
-            connect: surveyQuestionIds.map((id) => ({ id })),
+  try {
+    // Nhiều lớp môn → nhiều survey: update theo batch để tránh timeout transaction
+    const BATCH_SIZE = 10
+    await prisma.$transaction(
+      async (tx) => {
+        const cluster = await tx.clusterSurvey.create({
+          data: {
+            ...payload,
+            surveyTopic: {
+              connect: { id: surveyTopicId },
+            },
+            surveyQuestion: {
+              connect: surveyQuestionIds.map((id) => ({ id })),
+            },
+            surveyChoice: {
+              create: surveyChoices,
+            },
+            surveyObjectType: {
+              connect: surveyObjectTypeIds.map((id) => ({ id })),
+            },
+            lecturers: {
+              connect: lecturers.map((i) => ({ id: i.id })),
+            },
           },
-          surveyChoice: {
-            connect: cluster.surveyChoice.map((choice) => ({
-              id: choice.id,
-            })),
+          include: {
+            surveyChoice: true,
           },
-          surveyObjectType: {
-            connect: surveyObjectTypeIds.map((id) => ({ id })),
-          },
-        },
-      })
-    }
-  })
+        })
+
+        const surveys = await tx.survey.createManyAndReturn({
+          data: subjectClasses.map((cls) => ({
+            ...payload,
+            clusterSurveyId: cluster.id,
+            subjectClassId: cls.id,
+            surveyTopicId,
+            lectureId: cls.lecturerId,
+            semesterId,
+            trainingObjectTypeId,
+          })),
+        })
+
+        const choiceConnect = cluster.surveyChoice.map((choice) => ({ id: choice.id }))
+        const questionConnect = surveyQuestionIds.map((id) => ({ id }))
+        const objectTypeConnect = surveyObjectTypeIds.map((id) => ({ id }))
+
+        for (let i = 0; i < surveys.length; i += BATCH_SIZE) {
+          const batch = surveys.slice(i, i + BATCH_SIZE)
+          await Promise.all(
+            batch.map((survey) =>
+              tx.survey.update({
+                where: { id: survey.id },
+                data: {
+                  surveyQuestion: { connect: questionConnect },
+                  surveyChoice: { connect: choiceConnect },
+                  surveyObjectType: { connect: objectTypeConnect },
+                },
+              })
+            )
+          )
+        }
+      },
+      { timeout: 60_000, maxWait: 10_000 }
+    )
+  } catch (error) {
+    console.error("[create-cluster-survey] failed", error)
+    const message =
+      error instanceof Error ? error.message : "Không thể tạo cụm khảo sát. Vui lòng thử lại."
+    return c.json({ message }, 500)
+  }
 
   return c.json({ message: "Success" })
 })

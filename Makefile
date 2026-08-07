@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= mta_online
+SERVER_PROFILE ?= swan1
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -230,7 +230,7 @@ deploy-cdn:
 	$(SCP) -O cdn.zip $(SERVER_HOST):$(FE_APP_DIR)/
 	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
 	docker compose -f $(FE_COMPOSE_FILE) down && \
-	rm -rf chatbot-cdn cong-giang-vien-cdn cong-sinh-vien-cdn lms-cdn ems-cdn hrm-cdn  && \
+	rm -rf chatbot-cdn cong-giang-vien-cdn cong-sinh-vien-cdn cong-hoc-vien-cdn lms-cdn ems-cdn hrm-cdn  && \
 	unzip -q -o cdn.zip && \
 	mv -f cdn/* . && \
 	rm -rf cdn && \
@@ -306,7 +306,8 @@ _deploy-fe:
 	cd apps/client/$(PACKAGE) && \
 	$(SCP) $(CDN_NAME).zip $(SERVER_HOST):$(FE_APP_DIR)/ && \
 	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
-		docker compose -f $(FE_COMPOSE_FILE) down mta-$(CDN_NAME) router-$(ROUTER_NAME)-api && \
+		docker compose -f $(FE_COMPOSE_FILE) stop mta-$(CDN_NAME) router-$(ROUTER_NAME)-api && \
+		docker compose -f $(FE_COMPOSE_FILE) rm -f mta-$(CDN_NAME) router-$(ROUTER_NAME)-api && \
 		rm -rf $(CDN_NAME) && \
 		unzip -o $(CDN_NAME).zip && \
 		docker compose -f $(FE_COMPOSE_FILE) up mta-$(CDN_NAME) router-$(ROUTER_NAME)-api -d"

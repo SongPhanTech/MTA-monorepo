@@ -8,6 +8,7 @@ import { fieldDesc } from "../dto/openapi-helpers"
 import { ErrorMessageResponseSchema, ExcelBinaryResponseSchema } from "../dto/common-response.dto"
 import { ClassDivisionResultSchema } from "../dto/student-result-openapi.dto"
 import { excelSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
+import { renderXlsxTemplate } from "../services/render-xlsx-template"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -108,7 +109,12 @@ app.openapi(classDivision, async (c) => {
             },
           })
         }
-        return fixedClassStudent
+        return {
+          id: fixedClassStudent.id,
+          fixedClassId: fixedClassStudent.fixedClassId || fixedClass.id,
+          userProfileId: fixedClassStudent.userProfileId || userProfile.id,
+          from: fixedClassStudent.from?.toISOString(),
+        }
       })
     )
   })
@@ -185,22 +191,37 @@ app.openapi(fixedClassStudentCount, async (c) => {
     },
   })
 
-  const buffer = await getTemplateBuffer(prisma, "THONG_KE_QUAN_SO_HOC_VIEN_THEO_KHOA")
-  const template = new XlsxTemplate(buffer)
+  const totalCount = classes.reduce((total, r) => total + r._count.students, 0)
 
-  template.substitute(1, {
-    ĐTĐT: trainingObjectType.name,
-    KHOÁ: trainingCourse.name,
-    data: classes.map((r, idx) => ({ no: idx + 1, count: r._count.students, ...r })),
-    total: classes.reduce((total, r) => total + r._count.students, 0),
+  const result = await renderXlsxTemplate(prisma, {
+    templatePath: "/mta/template/quan_so_hoc_vien_theo_khoa.xlsx",
+    sheets: [
+      {
+        sheet: 1,
+        data: {
+          ĐTĐT: trainingObjectType.name,
+          KHOÁ: trainingCourse.name,
+          data: classes.map((r, idx) => ({
+            no: idx + 1,
+            count: String(r._count.students),
+            siso: String(r._count.students),
+            students: String(r._count.students),
+            note: "",
+            ghichu: "",
+            ...r,
+          })),
+          total: String(totalCount),
+          tong: String(totalCount),
+        },
+      },
+    ],
+    mergeBlocksToOneSheet: true,
   })
-
-  const result = await template.generate({ type: "arraybuffer" })
 
   const fileName = `QS theo khoá_${trainingObjectType.name}_${trainingCourse.name}.xlsx`
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-  return c.body(result, 200, {
+  return c.body(new Uint8Array(result), 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })

@@ -38,6 +38,12 @@ export default function ExpertProfile() {
     () => ({
       deletedAt: null,
       projectExpert: true,
+      active: true,
+      AND: [
+        {
+          OR: [{ lecturerId: null }, { lecturer: { active: true } }],
+        },
+      ],
       ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" as const } } : {}),
       ...(filters.name ? { name: { contains: filters.name, mode: "insensitive" as const } } : {}),
       ...(filters.academicRank

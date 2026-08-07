@@ -7,6 +7,7 @@ import { usePaymentStatusOptions } from "@hooks/paymentStatus"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { getSupervisorName } from "@pages/quan-ly-luan-van/dm-luan-van"
+import type { ExpertProfileLike, PersonLike } from "@utils/thesis-profile"
 import { PaymentStatus, ThesisType } from "@workspace/db/client"
 import {
   useCountSupervisorPaymentRecord,
@@ -87,10 +88,13 @@ function getPrimaryThesisProject(record: {
 }
 
 function getExpertFromPaymentRecord(record: {
-  thesisProjects?: Array<{ supervisor?: unknown }>
-  coThesisProjects?: Array<{ coSupervisor?: unknown }>
-  singleSupervisorPayment?: Array<{ supervisor?: unknown; coSupervisor?: unknown }>
-}) {
+  thesisProjects?: Array<{ supervisor?: ExpertProfileLike | PersonLike | null }>
+  coThesisProjects?: Array<{ coSupervisor?: ExpertProfileLike | PersonLike | null }>
+  singleSupervisorPayment?: Array<{
+    supervisor?: ExpertProfileLike | PersonLike | null
+    coSupervisor?: ExpertProfileLike | PersonLike | null
+  }>
+}): ExpertProfileLike | PersonLike | null | undefined {
   const supProject = record.thesisProjects?.[0]
   if (supProject?.supervisor) return supProject.supervisor
   const coProject = record.coThesisProjects?.[0]
