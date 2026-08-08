@@ -21,11 +21,7 @@
  */
 import { Prisma, type PrismaClient } from "@workspace/db"
 import { ClassFullError } from "./errors"
-import {
-  assertNotAlreadyRegistered,
-  insertRegistrations,
-  type RegisterParams,
-} from "./shared"
+import { assertNotAlreadyRegistered, insertRegistrations, type RegisterParams } from "./shared"
 
 const LOCK_TIMEOUT_MS = Number(process.env.CLASS_REGISTER_LOCK_TIMEOUT_MS || 4_000)
 

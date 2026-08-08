@@ -4405,8 +4405,8 @@ export const exportBaoCaoTienDoDoAnTotNghiep = async ({
     for (const proj of projects) {
       if (!chuyenNganh) {
         chuyenNganh =
-          proj.registrations?.[0]?.student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ||
-          ""
+          proj.registrations?.[0]?.student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+            ?.name || ""
       }
       if (!khoa) {
         khoa =
@@ -4435,15 +4435,10 @@ export const exportBaoCaoTienDoDoAnTotNghiep = async ({
           .join(", ") || "Học viên"
       const rawTitle = proj.title || "Chưa có tên đề tài"
       const thesisTitle = rawTitle.replace(/\s*-\s*Sinh viên\s+.*$/gi, "").trim()
-      const rawProgress =
-        checkTimes === "1" ? proj.firstCheckProgress : proj.secondCheckProgress
+      const rawProgress = checkTimes === "1" ? proj.firstCheckProgress : proj.secondCheckProgress
       const progressVal = Number(rawProgress || 0)
       const progressPercent = `${progressVal}%`
-      const note = proj.isLanguage
-        ? "Tiếng Anh"
-        : proj.isProductProject
-          ? "Có sản phẩm"
-          : ""
+      const note = proj.isLanguage ? "Tiếng Anh" : proj.isProductProject ? "Có sản phẩm" : ""
 
       const item = {
         studentName,
@@ -4460,7 +4455,8 @@ export const exportBaoCaoTienDoDoAnTotNghiep = async ({
     })
 
     const cleanKhoa = khoa.replace(/^Khó?a\s+/i, "").trim()
-    const chuyenNganhVal = chuyenNganh && chuyenNganh.trim() ? chuyenNganh : "                                "
+    const chuyenNganhVal =
+      chuyenNganh && chuyenNganh.trim() ? chuyenNganh : "                                "
     const khoaVal = cleanKhoa ? cleanKhoa : "            "
 
     const tieuDePhu = `(CHUYÊN NGÀNH: ${chuyenNganhVal}, KHÓA: ${khoaVal})`
@@ -4600,7 +4596,8 @@ export const exportDanhSachTieuBanChamDATN = async ({
           proj.registrations?.[0]?.student?.fixedClass?.name ||
           ""
       }
-      const objName = proj.registrations?.[0]?.student?.fixedClass?.trainingCourse?.trainingObjectType?.name
+      const objName =
+        proj.registrations?.[0]?.student?.fixedClass?.trainingCourse?.trainingObjectType?.name
       if (objName) {
         doiTuong = objName.toUpperCase()
       }
@@ -4689,10 +4686,24 @@ export const exportDanhSachTieuBanChamDATN = async ({
           const formatMember = (m: ThesisCouncilMember) => {
             const profile = m.expert?.lecturer?.userProfile
             const rank = profile?.rank?.sTen || profile?.rank?.name || profile?.rank?.sMa || ""
-            let degree = profile?.academicDegreeType?.sMa || profile?.academicDegreeType?.abbreviation || profile?.academicDegreeType?.name || profile?.academicDegreeType?.sTen || ""
-            let academicRank = profile?.academicRankType?.sMa || profile?.academicRankType?.abbreviation || profile?.academicRankType?.name || profile?.academicRankType?.sTen || ""
+            let degree =
+              profile?.academicDegreeType?.sMa ||
+              profile?.academicDegreeType?.abbreviation ||
+              profile?.academicDegreeType?.name ||
+              profile?.academicDegreeType?.sTen ||
+              ""
+            let academicRank =
+              profile?.academicRankType?.sMa ||
+              profile?.academicRankType?.abbreviation ||
+              profile?.academicRankType?.name ||
+              profile?.academicRankType?.sTen ||
+              ""
             const nameStr = profile?.fullname || m.expert?.name || "Chưa có tên"
-            const posStr = profile?.positionCPV?.sTen || profile?.positionCPV?.name || m.expert?.position || "Giảng viên"
+            const posStr =
+              profile?.positionCPV?.sTen ||
+              profile?.positionCPV?.name ||
+              m.expert?.position ||
+              "Giảng viên"
             const rawLecOrg = m.expert?.lecturer?.organization
             const rawExpOrg = m.expert?.organization
             const orgStr =
@@ -4700,7 +4711,9 @@ export const exportDanhSachTieuBanChamDATN = async ({
                 ? rawLecOrg
                 : rawLecOrg?.sTen ||
                   rawLecOrg?.name ||
-                  (typeof rawExpOrg === "string" ? rawExpOrg : rawExpOrg?.sTen || rawExpOrg?.name) ||
+                  (typeof rawExpOrg === "string"
+                    ? rawExpOrg
+                    : rawExpOrg?.sTen || rawExpOrg?.name) ||
                   "V2"
 
             if (academicRank && !academicRank.endsWith(".")) academicRank += "."
@@ -4712,7 +4725,9 @@ export const exportDanhSachTieuBanChamDATN = async ({
           }
 
           const chair = sortedMembers.find((m) => m.role === "CHAIRMAN")
-          const viceChair = sortedMembers.find((m) => m.role === "VICE_CHAIRMAN" || m.role === "REVIEWER_1")
+          const viceChair = sortedMembers.find(
+            (m) => m.role === "VICE_CHAIRMAN" || m.role === "REVIEWER_1"
+          )
           const sec = sortedMembers.find((m) => m.role === "SECRETARY")
 
           if (chair) truongTieuBan = formatMember(chair)
@@ -4753,7 +4768,8 @@ export const exportDanhSachTieuBanChamDATN = async ({
       }
       items.push({ label: `- ${tb.name}`, info: "" })
       if (tb.truongTieuBan) items.push({ label: "Trưởng Tiểu ban:", info: tb.truongTieuBan })
-      if (tb.phoTruongTieuBan) items.push({ label: "Phó trưởng Tiểu ban:", info: tb.phoTruongTieuBan })
+      if (tb.phoTruongTieuBan)
+        items.push({ label: "Phó trưởng Tiểu ban:", info: tb.phoTruongTieuBan })
       if (tb.thuKy) items.push({ label: "Thư ký:", info: tb.thuKy })
       if (tb.uyVien1) items.push({ label: "Ủy viên:", info: tb.uyVien1 })
       if (tb.uyVien2) items.push({ label: "", info: tb.uyVien2 })
@@ -4804,7 +4820,10 @@ export const exportDanhSachTieuBanChamDATN = async ({
                 return `<mergeCells count="${newCount}">${mergeTags}`
               })
             } else {
-              sheetXml = sheetXml.replace("</worksheet>", `<mergeCells count="${majorRowIndices.length}">${mergeTags}</mergeCells></worksheet>`)
+              sheetXml = sheetXml.replace(
+                "</worksheet>",
+                `<mergeCells count="${majorRowIndices.length}">${mergeTags}</mergeCells></worksheet>`
+              )
             }
 
             let stylesXml = zip.file("xl/styles.xml")?.asText()
@@ -4814,7 +4833,10 @@ export const exportDanhSachTieuBanChamDATN = async ({
               const fontCountMatch = stylesXml.match(/<fonts count="(\d+)"/)
               if (fontCountMatch) {
                 newFontIndex = parseInt(fontCountMatch[1], 10)
-                stylesXml = stylesXml.replace(/<fonts count="(\d+)"/, `<fonts count="${newFontIndex + 1}"`)
+                stylesXml = stylesXml.replace(
+                  /<fonts count="(\d+)"/,
+                  `<fonts count="${newFontIndex + 1}"`
+                )
                 stylesXml = stylesXml.replace("</fonts>", `${boldFontTag}</fonts>`)
               }
 
@@ -4823,7 +4845,10 @@ export const exportDanhSachTieuBanChamDATN = async ({
               const xfCountMatch = stylesXml.match(/<cellXfs count="(\d+)"/)
               if (xfCountMatch) {
                 newStyleIndex = parseInt(xfCountMatch[1], 10)
-                stylesXml = stylesXml.replace(/<cellXfs count="(\d+)"/, `<cellXfs count="${newStyleIndex + 1}"`)
+                stylesXml = stylesXml.replace(
+                  /<cellXfs count="(\d+)"/,
+                  `<cellXfs count="${newStyleIndex + 1}"`
+                )
                 stylesXml = stylesXml.replace("</cellXfs>", `${newXfTag}</cellXfs>`)
               }
 
@@ -4835,7 +4860,10 @@ export const exportDanhSachTieuBanChamDATN = async ({
                 if (cellBMatch && cellBMatch[1] !== undefined) {
                   const oldAttrs: string = cellBMatch[1]
                   const newAttrs: string = oldAttrs.replace(/s="\d+"/, `s="${newStyleIndex}"`)
-                  sheetXml = sheetXml.replace(cellBPattern, `<c r="B${rowIdx}"${oldAttrs.includes('s=') ? newAttrs : oldAttrs + ` s="${newStyleIndex}"`}>`)
+                  sheetXml = sheetXml.replace(
+                    cellBPattern,
+                    `<c r="B${rowIdx}"${oldAttrs.includes("s=") ? newAttrs : oldAttrs + ` s="${newStyleIndex}"`}>`
+                  )
                 }
               }
             }
@@ -4863,5 +4891,3 @@ export const exportDanhSachTieuBanChamDATN = async ({
     hideSpinner()
   }
 }
-
-

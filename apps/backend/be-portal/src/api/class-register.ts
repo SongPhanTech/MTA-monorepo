@@ -17,6 +17,7 @@ import { toRegistrationError } from "../services/class-registration"
 import { getJobStatus, setJobStatus } from "../services/class-registration/job-store"
 import { KAFKA_ENABLED, enqueueRegistration } from "../services/class-registration/kafka-queue"
 import { processRegistration } from "../services/class-registration/process"
+import { matchCreditLimitByCourseBaseScore } from "../services/class-registration/credit-limit"
 import { recordRegistrationFailure } from "../services/class-registration/record-failure"
 import { getRegistrationStats } from "../services/class-registration/registration-stats"
 
@@ -380,9 +381,7 @@ app.openapi(getClassesInfo, async (c) => {
   // (không lọc SubjectVersion.trainingObjectTypeId — học phần gốc có thể lệch TOT với lớp mở)
   const subjectVersions = await prisma.subjectVersion.findMany({
     where: {
-      ...(byCurriculumBool
-        ? { id: { in: curriculumSubjects.map((item) => item.subjectId) } }
-        : {}),
+      ...(byCurriculumBool ? { id: { in: curriculumSubjects.map((item) => item.subjectId) } } : {}),
       subjectClass: {
         some: {
           semesterId: registerSession.semesterId,
@@ -1088,7 +1087,19 @@ app.openapi(getStudentInfo, async (c) => {
 
   const student = await prisma.student.findUnique({
     where: { id: studentId },
+    include: {
+      fixedClass: {
+        select: {
+          trainingCourse: {
+            select: { baseScore: true },
+          },
+        },
+      },
+    },
   })
+
+  const courseBaseScore =
+    student?.fixedClass?.trainingCourse?.baseScore ?? AcademicRankingBaseType.Base10
 
   let latestSemesterResult: {
     rank: { classification: string | null } | null
@@ -1152,25 +1163,12 @@ app.openapi(getStudentInfo, async (c) => {
     })
 
     if (maxCreditsSetting.length > 0) {
-      const matchedLimit = maxCreditsSetting.find((limit) => {
-        if (limit.baseScore !== latestSemesterResult.baseScore) return false
-
-        if (limit.baseScore === AcademicRankingBaseType.Base10) {
-          const gpaBase10 =
-            Number(latestSemesterResult.gpaBase10 ?? latestSemesterResult.cumulativeGpaBase10) || 0
-          return (
-            (limit.base10Min == null || gpaBase10 >= limit.base10Min) &&
-            (limit.base10Max == null || gpaBase10 <= limit.base10Max)
-          )
-        }
-
-        const gpaBase4 =
-          Number(latestSemesterResult.gpaBase4 ?? latestSemesterResult.cumulativeGpaBase4) || 0
-        return (
-          (limit.base4Min == null || gpaBase4 >= limit.base4Min) &&
-          (limit.base4Max == null || gpaBase4 <= limit.base4Max)
-        )
-      })
+      const matchedLimit = matchCreditLimitByCourseBaseScore(
+        maxCreditsSetting,
+        courseBaseScore,
+        Number(latestSemesterResult.gpaBase4 ?? latestSemesterResult.cumulativeGpaBase4) || 0,
+        Number(latestSemesterResult.gpaBase10 ?? latestSemesterResult.cumulativeGpaBase10) || 0
+      )
 
       if (matchedLimit && matchedLimit.maxCredit != null) {
         maxCredit = matchedLimit.maxCredit
@@ -1180,7 +1178,12 @@ app.openapi(getStudentInfo, async (c) => {
 
   const payload = {
     userProfile: profile,
-    student: student,
+    student: student
+      ? (() => {
+          const { fixedClass: _fixedClass, ...studentScalar } = student
+          return studentScalar
+        })()
+      : null,
     latestSemesterResult: latestSemesterResult
       ? {
           rank: latestSemesterResult.rank,

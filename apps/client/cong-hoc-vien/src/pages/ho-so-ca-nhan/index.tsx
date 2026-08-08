@@ -345,7 +345,8 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, record, index) => getRowSTT(studentData?.subjectClassStudent, record, index),
+              render: (_, record, index) =>
+                getRowSTT(studentData?.subjectClassStudent, record, index),
             },
             {
               title: "Mã môn",
@@ -415,7 +416,8 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, record, index) => getRowSTT(studentData?.studentSemesterResult, record, index),
+              render: (_, record, index) =>
+                getRowSTT(studentData?.studentSemesterResult, record, index),
             },
             {
               title: "Mã",
@@ -617,7 +619,8 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, record, index) => getRowSTT(studentData?.studentYearResult, record, index),
+              render: (_, record, index) =>
+                getRowSTT(studentData?.studentYearResult, record, index),
             },
             {
               title: "Mã",
@@ -772,7 +775,8 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, record, index) => getRowSTT(studentData?.scholarshipAwards, record, index),
+              render: (_, record, index) =>
+                getRowSTT(studentData?.scholarshipAwards, record, index),
             },
             {
               title: "Tên học bổng",
@@ -792,9 +796,9 @@ const HoSoCaNhan = () => {
               render: (amount) =>
                 amount
                   ? new Intl.NumberFormat("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(amount)
+                      style: "currency",
+                      currency: "VND",
+                    }).format(amount)
                   : "",
             },
             {
@@ -835,7 +839,8 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, record, index) => getRowSTT(studentData?.archivedCertificate, record, index),
+              render: (_, record, index) =>
+                getRowSTT(studentData?.archivedCertificate, record, index),
             },
             {
               title: "Tên chứng chỉ",
@@ -1071,7 +1076,8 @@ const HoSoCaNhan = () => {
               title: "STT",
               width: 50,
               align: "center",
-              render: (_, record, index) => getRowSTT(studentData?.disciplinaryWarning, record, index),
+              render: (_, record, index) =>
+                getRowSTT(studentData?.disciplinaryWarning, record, index),
             },
             {
               title: "Học kỳ",

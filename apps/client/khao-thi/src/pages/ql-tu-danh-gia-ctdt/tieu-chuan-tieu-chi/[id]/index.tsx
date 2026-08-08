@@ -12,7 +12,7 @@ import {
   useUpdateRequirementCriterionCatalog,
 } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
-import { KHAO_THI_PERMISSION, ROUTER_PATH } from "@workspace/router"
+import { KHAO_THI_PERMISSION } from "@workspace/router"
 import { Button, Col, Flex, message, Row, Tooltip } from "antd"
 import { BookPlus } from "lucide-react"
 import { useRouter } from "next/router"
@@ -254,22 +254,5 @@ export default function RequirementCriterionCatalog() {
 }
 
 RequirementCriterionCatalog.getLayout = function getLayout(page: React.ReactElement) {
-  return (
-    <DefaultLayout
-      breadcrumbList={[
-        {
-          title: "QL tự đánh giá CTĐT",
-        },
-        {
-          title: "Tiêu chuẩn, tiêu chí",
-          href: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
-        },
-        {
-          title: "Danh mục yêu cầu",
-        },
-      ]}
-    >
-      {page}
-    </DefaultLayout>
-  )
+  return <DefaultLayout>{page}</DefaultLayout>
 }

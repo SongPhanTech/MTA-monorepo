@@ -102,7 +102,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
             select: {
               curriculumVersion: {
                 select: {
-                  fixedClass: {
+                  fixedClasses: {
                     select: {
                       id: true,
                       code: true,
@@ -627,10 +627,11 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                   align: "center",
                   hidden: type !== $Enums.SubjectClassType.NORMAL,
                   render: (__, record) => {
-                    const fixedClasses = record?.trainingBlocks?.map(
+                    const fixedClasses = record?.trainingBlocks?.flatMap(
                       // @ts-expect-error
                       (block) =>
-                        block?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClass
+                        block?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses ??
+                        []
                     )
 
                     return (
@@ -653,10 +654,11 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                         width: 80,
                         align: "center" as const,
                         render: (_: any, record: any) => {
-                          const fixedClasses = record?.trainingBlocks.map(
+                          const fixedClasses = record?.trainingBlocks.flatMap(
                             // @ts-expect-error
                             (block) =>
-                              block?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClass
+                              block?.trainingBlockOnCurriculumVersion?.curriculumVersion
+                                ?.fixedClasses ?? []
                           )
                           return (
                             fixedClasses?.reduce(

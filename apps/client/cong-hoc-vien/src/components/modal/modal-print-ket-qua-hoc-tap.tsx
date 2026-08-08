@@ -32,7 +32,7 @@ const ModalPrintToKQHT = () => {
         id: input?.dataStudent?.curriculumVersionId,
       },
       include: {
-        fixedClass: {
+        fixedClasses: {
           where: {
             id: input?.dataStudent?.fixedClassId,
           },
@@ -67,16 +67,16 @@ const ModalPrintToKQHT = () => {
     { enabled: !!input?.dataStudent?.curriculumVersionId }
   )
 
-  const { convertScore } = useScoreConverter(
-    subjectScoreData?.fixedClass?.trainingCourse?.scoreConverts
-  )
+  const trainingCourseFromFixedClass = subjectScoreData?.fixedClasses?.[0]?.trainingCourse
+
+  const { convertScore } = useScoreConverter(trainingCourseFromFixedClass?.scoreConverts)
 
   const { convertAcademicRanking } = useAcademicRankingConverter(
-    subjectScoreData?.fixedClass?.trainingCourse?.academicRankingConvert,
-    subjectScoreData?.fixedClass?.trainingCourse?.baseScore
+    trainingCourseFromFixedClass?.academicRankingConvert,
+    trainingCourseFromFixedClass?.baseScore
   )
 
-  const baseScore = subjectScoreData?.fixedClass?.trainingCourse?.baseScore || "Base4"
+  const baseScore = trainingCourseFromFixedClass?.baseScore || "Base4"
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
@@ -350,53 +350,54 @@ const ModalPrintToKQHT = () => {
                 })
 
                 // Render các môn tốt nghiệp sau
-                const graduationRows = graduationSubjects?.map(
-                  ({ subjectItem }, originalIndex) => {
-                    const subject = subjectItem.subject
-                    const score = subject.studentSubjectScore?.[0]
-                    const isOptional = subjectItem.type === SubjectRequirementType.Optional
-                    const notForFinalScore = !subjectItem.useForFinalScore
+                const graduationRows = graduationSubjects?.map(({ subjectItem }, originalIndex) => {
+                  const subject = subjectItem.subject
+                  const score = subject.studentSubjectScore?.[0]
+                  const isOptional = subjectItem.type === SubjectRequirementType.Optional
+                  const notForFinalScore = !subjectItem.useForFinalScore
 
-                    const score10 = score?.manualFinalScore || score?.finalScore || 0
-                    const score4 = convertScore(score10).base4
-                    const letterGrade = convertScore(score10).letter
+                  const score10 = score?.manualFinalScore || score?.finalScore || 0
+                  const score4 = convertScore(score10).base4
+                  const letterGrade = convertScore(score10).letter
 
-                    return (
-                      <tr key={subject.id}>
-                        <td className="border border-black px-1 py-1 text-center">
-                          {originalIndex + 1}
-                        </td>
-                        <td
-                          className={`border border-black px-1 py-1 ${notForFinalScore ? "italic" : ""}`}
-                        >
-                          {isOptional ? "* " : ""}
-                          {subject.name}
-                        </td>
-                        <td className="border border-black px-1 py-1 text-center">
-                          {subject.credit}
-                        </td>
-                        <td className="border border-black px-1 py-1 text-center">
-                          {Number(score10).toFixedSmart(1)}
-                        </td>
-                        <td className="border border-black px-1 py-1 text-center">
-                          {Number(score4).toFixedSmart(2)}
-                        </td>
-                        <td className="border border-black px-1 py-1 text-center">
-                          {String(letterGrade)}
-                        </td>
-                      </tr>
-                    )
-                  }
-                )
+                  return (
+                    <tr key={subject.id}>
+                      <td className="border border-black px-1 py-1 text-center">
+                        {originalIndex + 1}
+                      </td>
+                      <td
+                        className={`border border-black px-1 py-1 ${notForFinalScore ? "italic" : ""}`}
+                      >
+                        {isOptional ? "* " : ""}
+                        {subject.name}
+                      </td>
+                      <td className="border border-black px-1 py-1 text-center">
+                        {subject.credit}
+                      </td>
+                      <td className="border border-black px-1 py-1 text-center">
+                        {Number(score10).toFixedSmart(1)}
+                      </td>
+                      <td className="border border-black px-1 py-1 text-center">
+                        {Number(score4).toFixedSmart(2)}
+                      </td>
+                      <td className="border border-black px-1 py-1 text-center">
+                        {String(letterGrade)}
+                      </td>
+                    </tr>
+                  )
+                })
 
-                const graduationSection = graduationSubjects?.length > 0 ? [
-                  <tr key="graduation-header">
-                    <td colSpan={6} className="border border-black px-1 py-1 font-semibold">
-                      Học phần tốt nghiệp
-                    </td>
-                  </tr>,
-                  ...graduationRows
-                ] : []
+                const graduationSection =
+                  graduationSubjects?.length > 0
+                    ? [
+                        <tr key="graduation-header">
+                          <td colSpan={6} className="border border-black px-1 py-1 font-semibold">
+                            Học phần tốt nghiệp
+                          </td>
+                        </tr>,
+                        ...graduationRows,
+                      ]
+                    : []
 
                 // Kết hợp cả 2 và giữ nguyên STT
                 return [...regularRows, ...graduationSection]
@@ -430,7 +431,8 @@ const ModalPrintToKQHT = () => {
             </div>
             <div>
               <span>
-                Điểm trung bình chung tích lũy toàn khoá (Thang điểm {baseScore === "Base10" ? "10" : "4"}):{" "}
+                Điểm trung bình chung tích lũy toàn khoá (Thang điểm{" "}
+                {baseScore === "Base10" ? "10" : "4"}):{" "}
               </span>
               <span className="font-bold">{gpaScore.toFixed(2)}</span>
             </div>
@@ -508,7 +510,7 @@ const ModalPrintToKQHT = () => {
             - Phân hạng tốt nghiệp theo thang điểm {baseScore === "Base10" ? "10" : "4"}:{" "}
             {(() => {
               const rankingData =
-                subjectScoreData?.fixedClass?.trainingCourse?.academicRankingConvert || []
+                trainingCourseFromFixedClass?.academicRankingConvert || []
 
               const sortedRankings = rankingData
                 .filter((item: any) => item.graduated)

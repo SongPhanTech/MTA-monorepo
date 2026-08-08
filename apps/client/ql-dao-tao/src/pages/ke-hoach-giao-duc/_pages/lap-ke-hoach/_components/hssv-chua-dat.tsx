@@ -19,7 +19,7 @@ interface RegisterClassProps {
 
 export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClassProps) {
   const [currentPage, setCurrentPage] = useState(1)
-  const [numberOfPages, setNumberOfPages] = useState(50)
+  const [numberOfPages, setNumberOfPages] = useState(500)
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
 
   const [filters, setFilters] = useState<FilterProps>({
@@ -99,6 +99,7 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
           rowKey="id"
           className="mt-0"
           data={data}
+          scroll={{ y: "calc(100vh - 270px)" }}
           onRow={(record) => ({
             onClick: () => {
               const isSelected = selectedRowKeys.includes(record.id)

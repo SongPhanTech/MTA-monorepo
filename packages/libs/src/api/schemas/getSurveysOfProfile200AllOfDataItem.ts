@@ -82,6 +82,7 @@ export type GetSurveysOfProfile200AllOfDataItem = {
   endDate?: string | null;
   isPublic?: boolean;
   anonymous?: boolean;
+  targetEnrollStudentOnly?: boolean;
   /** @nullable */
   lecture: GetSurveysOfProfile200AllOfDataItemLecture;
   /** @nullable */

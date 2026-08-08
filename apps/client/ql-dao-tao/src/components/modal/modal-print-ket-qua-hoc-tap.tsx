@@ -106,7 +106,10 @@ const ModalPrintToKQHT = () => {
             },
           },
         },
-        fixedClass: {
+        fixedClasses: {
+          where: input?.dataStudent?.fixedClassId
+            ? { id: input.dataStudent.fixedClassId }
+            : undefined,
           include: {
             trainingCourse: {
               include: {
@@ -130,20 +133,19 @@ const ModalPrintToKQHT = () => {
     { enabled: !!input?.dataStudent?.curriculumVersionId }
   )
 
-  const academicRankingConvertData =
-    subjectScoreData?.fixedClass?.trainingCourse?.academicRankingConvert
+  const trainingCourseFromFixedClass = subjectScoreData?.fixedClasses?.[0]?.trainingCourse
+
+  const academicRankingConvertData = trainingCourseFromFixedClass?.academicRankingConvert
 
   const graduationRankingData = academicRankingConvertData?.filter(
-    (item) => item.context === "GRADUATION"
+    (item: { context: string }) => item.context === "GRADUATION"
   )
 
   const graduationBaseScore =
-    graduationRankingData?.find((item) => item.base4Min != null)?.baseScore ??
-    graduationRankingData?.[0]?.baseScore
+    graduationRankingData?.find((item: { base4Min: number | null }) => item.base4Min != null)
+      ?.baseScore ?? graduationRankingData?.[0]?.baseScore
 
-  const { convertScore } = useScoreConverter(
-    subjectScoreData?.fixedClass?.trainingCourse?.scoreConverts
-  )
+  const { convertScore } = useScoreConverter(trainingCourseFromFixedClass?.scoreConverts)
 
   const { convertAcademicRanking } = useAcademicRankingConverter(
     graduationRankingData,
@@ -539,7 +541,7 @@ const ModalPrintToKQHT = () => {
           <div className="mt-2 text-sm">
             {(() => {
               const sortedData = [
-                ...(subjectScoreData?.fixedClass?.trainingCourse?.scoreConverts ?? []),
+                ...(trainingCourseFromFixedClass?.scoreConverts ?? []),
               ].sort((a, b) => b.base4 - a.base4)
 
               return (

@@ -69,7 +69,7 @@ function Page() {
         id: curriculumVersionId,
       },
       include: {
-        fixedClass: {
+        fixedClasses: {
           where: {
             id: fixedClassId,
           },
@@ -117,7 +117,7 @@ function Page() {
           blockElective += sub.subject?.credit ?? 0
         }
       })
-      
+
       if (block.electiveCreditsRequired != null && block.electiveCreditsRequired > 0) {
         elective += Math.min(blockElective, block.electiveCreditsRequired)
       }

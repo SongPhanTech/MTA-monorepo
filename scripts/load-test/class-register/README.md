@@ -65,17 +65,17 @@ k6 run -e RAMP=true -e VUS_MAX=500 \
 
 ## Tiêu chí đạt
 
-| Metric | Mục tiêu |
-|--------|----------|
-| Overbook sĩ số (DB) | = 0 |
-| 5xx / `errors` | < 5% |
-| p95 `class_register_duration` | ≤ 3000 ms |
-| Pool exhausted / too many clients | ≈ 0 |
+| Metric                            | Mục tiêu  |
+| --------------------------------- | --------- |
+| Overbook sĩ số (DB)               | = 0       |
+| 5xx / `errors`                    | < 5%      |
+| p95 `class_register_duration`     | ≤ 3000 ms |
+| Pool exhausted / too many clients | ≈ 0       |
 
 Sau test, đối soát:
 
 ```sql
-SELECT "subjectClassId", count(*) 
+SELECT "subjectClassId", count(*)
 FROM "ql-dao-tao"."StudentSubjectScore"
 WHERE "subjectClassId" IN (...)
 GROUP BY 1;

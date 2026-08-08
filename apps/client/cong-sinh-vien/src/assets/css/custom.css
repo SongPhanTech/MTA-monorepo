@@ -341,7 +341,8 @@
 }
 
 @keyframes pulseGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
@@ -369,4 +370,78 @@
   animation: pulseGlow 2s infinite ease-in-out;
 }
 
+@keyframes registerPauseFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
 
+@keyframes registerPauseRing {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.85;
+  }
+  70% {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+}
+
+@keyframes registerPauseSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes registerPauseBlob {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(10px, -8px) scale(1.08);
+    opacity: 1;
+  }
+}
+
+.register-pause-icon {
+  animation: registerPauseFloat 3.2s ease-in-out infinite;
+}
+
+.register-pause-ring {
+  animation: registerPauseRing 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.register-pause-ring-reverse {
+  animation: registerPauseSpin 12s linear infinite;
+}
+
+.register-pause-blob {
+  animation: registerPauseBlob 6s ease-in-out infinite;
+}
+
+.register-pause-blob-delay {
+  animation: registerPauseBlob 7.5s ease-in-out 0.8s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .register-pause-icon,
+  .register-pause-ring,
+  .register-pause-ring-reverse,
+  .register-pause-blob,
+  .register-pause-blob-delay {
+    animation: none !important;
+  }
+}

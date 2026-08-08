@@ -23,6 +23,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
       },
     },
   })
+  console.log("test log export ")
 
   const students = await prisma.student.findMany({
     where: { fixedClass: { trainingCourseId } },
@@ -34,6 +35,19 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
       entryScore: true,
       competencyScore: true,
       description: true,
+      department: true,
+      careerYear: true,
+      universitySchool: true,
+      universityGraduationYear: true,
+      universityMajor: true,
+      universityRank: true,
+      universityTrainingType: true,
+      basic: true,
+      departmentAddress: true,
+      priorityReason: true,
+      foreignLanguage: true,
+
+      facility: true,
       userProfile: {
         select: {
           fullname: true,
@@ -48,6 +62,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
               sTen: true,
             },
           },
+          provinceOfBirth: { select: { sTen: true } },
           nationality: { select: { sTen: true } },
           officerNumber: true,
           rank: { select: { sTen: true } },
@@ -151,6 +166,19 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
       officerNumber: student.userProfile.officerNumber,
       rank: student.userProfile.rank?.sTen,
       chucvu: student.userProfile.chucVuChinhQuyen?.sTen,
+      provinceOfBirth: student.userProfile.provinceOfBirth?.sTen,
+      department: student.department,
+      departmentAddress: student.departmentAddress,
+      priorityReason: student.priorityReason,
+      foreignLanguage: student.foreignLanguage,
+      careerYear: student.careerYear,
+      universitySchool: student.universitySchool,
+      universityGraduationYear: student.universityGraduationYear,
+      universityMajor: student.universityMajor,
+      universityRank: student.universityRank,
+      universityTrainingType: student.universityTrainingType,
+      basic: student.basic,
+      facility: student.facility,
 
       description: student.description,
       gpaBase10: student.studentSemesterResult?.[0]?.cumulativeGpaBase10?.toNumber(),

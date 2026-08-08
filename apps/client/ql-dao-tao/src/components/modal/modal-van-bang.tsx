@@ -140,7 +140,9 @@ export const ModalVanBang = () => {
                   style={{ maxHeight: "25vh" }}
                 />
               ) : (
-                <div className={`w-full h-24 flex items-center justify-center border border-dashed rounded text-gray-400 my-2 print:hidden ${!checkedItems.front ? "print:hidden" : ""}`}>
+                <div
+                  className={`w-full h-24 flex items-center justify-center border border-dashed rounded text-gray-400 my-2 print:hidden ${!checkedItems.front ? "print:hidden" : ""}`}
+                >
                   Chưa tải lên phôi mặt trước
                 </div>
               )}
@@ -169,7 +171,9 @@ export const ModalVanBang = () => {
                   style={{ maxHeight: "25vh" }}
                 />
               ) : (
-                <div className={`w-full h-24 flex items-center justify-center border border-dashed rounded text-gray-400 my-2 print:hidden ${!checkedItems.back ? "print:hidden" : ""}`}>
+                <div
+                  className={`w-full h-24 flex items-center justify-center border border-dashed rounded text-gray-400 my-2 print:hidden ${!checkedItems.back ? "print:hidden" : ""}`}
+                >
                   Chưa tải lên phôi mặt sau
                 </div>
               )}

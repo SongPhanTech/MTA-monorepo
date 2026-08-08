@@ -4529,7 +4529,8 @@ exports.Prisma.ClusterSurveyScalarFieldEnum = {
   endDate: 'endDate',
   isPublic: 'isPublic',
   anonymous: 'anonymous',
-  surveyTopicId: 'surveyTopicId'
+  surveyTopicId: 'surveyTopicId',
+  targetEnrollStudentOnly: 'targetEnrollStudentOnly'
 };
 
 exports.Prisma.SurveyScalarFieldEnum = {
@@ -4551,7 +4552,8 @@ exports.Prisma.SurveyScalarFieldEnum = {
   semesterId: 'semesterId',
   surveyTopicId: 'surveyTopicId',
   trainingObjectTypeId: 'trainingObjectTypeId',
-  clusterSurveyId: 'clusterSurveyId'
+  clusterSurveyId: 'clusterSurveyId',
+  targetEnrollStudentOnly: 'targetEnrollStudentOnly'
 };
 
 exports.Prisma.SurveyQuestionScalarFieldEnum = {
@@ -8704,6 +8706,8 @@ exports.Difficult = exports.$Enums.Difficult = {
 exports.SurveyObject = exports.$Enums.SurveyObject = {
   MILITARY_STUDENT: 'MILITARY_STUDENT',
   CIVILIAN_STUDENT: 'CIVILIAN_STUDENT',
+  MILITARY_GRADUATE_STUDENT: 'MILITARY_GRADUATE_STUDENT',
+  CIVILIAN_GRADUATE_STUDENT: 'CIVILIAN_GRADUATE_STUDENT',
   LECTURER: 'LECTURER',
   STAFF: 'STAFF'
 };

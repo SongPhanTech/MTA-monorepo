@@ -84,6 +84,8 @@ export type GetSurveyResultSubjectClass = {
   /** @nullable */
   schedule?: GetSurveyResultSubjectClassSchedule;
   maxStudent: number;
+  enrolledCount?: number;
+  version?: number;
   type: GetSurveyResultSubjectClassType;
   status: GetSurveyResultSubjectClassStatus;
   cancelled?: boolean;
@@ -110,6 +112,7 @@ export type GetSurveyResultSubjectClass = {
   issuedScoreAt?: string | null;
   isLockScore?: boolean;
   isLockExamScore?: boolean;
+  isLockLecturer?: boolean;
   scoreSubmitted?: boolean;
   scoreChecked?: boolean;
 } | null;

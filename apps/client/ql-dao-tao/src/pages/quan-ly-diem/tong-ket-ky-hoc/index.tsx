@@ -78,7 +78,7 @@ export default function TongKetKyHoc() {
           // },
           {
             key: "7",
-            label: "Xét đình chỉ",
+            label: "Buộc thôi học",
             children: (
               <XetXuLyHocTap
                 semesterId={semesterId}

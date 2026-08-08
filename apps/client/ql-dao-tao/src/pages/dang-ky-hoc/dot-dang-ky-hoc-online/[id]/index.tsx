@@ -14,7 +14,20 @@ import {
   useUpdateManyClassRegisterLogs,
 } from "@workspace/db/hooks"
 import { ROUTER_PATH } from "@workspace/router"
-import { Button, Col, Divider, Flex, Form, Input, Modal, Row, Select, Tag, Tooltip, message } from "antd"
+import {
+  Button,
+  Col,
+  Divider,
+  Flex,
+  Form,
+  Input,
+  Modal,
+  Row,
+  Select,
+  Tag,
+  Tooltip,
+  message,
+} from "antd"
 import dayjs from "dayjs"
 import { TriangleAlert } from "lucide-react"
 import { useRouter } from "next/router"
@@ -168,9 +181,7 @@ export default function ClassRegisterLogs() {
         data: {
           status: values.status,
           reason:
-            values.status === ClassRegisterStatus.FAILED
-              ? values.reason?.trim() || null
-              : null,
+            values.status === ClassRegisterStatus.FAILED ? values.reason?.trim() || null : null,
         },
       })
       message.success(`Đã cập nhật trạng thái cho ${selectedRowKeys.length} đơn đăng ký`)
@@ -203,7 +214,11 @@ export default function ClassRegisterLogs() {
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Flex justify="end" gap={8} wrap>
-            <Button type="primary" disabled={selectedRowKeys.length === 0} onClick={handleOpenStatusModal}>
+            <Button
+              type="primary"
+              disabled={selectedRowKeys.length === 0}
+              onClick={handleOpenStatusModal}
+            >
               Cập nhật trạng thái
               {selectedRowKeys.length > 0 ? ` (${selectedRowKeys.length})` : ""}
             </Button>

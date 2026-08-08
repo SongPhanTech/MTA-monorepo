@@ -28,11 +28,7 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max)
 }
 
-const CONCURRENCY = clamp(
-  Number(process.env.CLASS_REGISTER_WORKER_CONCURRENCY || 5) || 5,
-  1,
-  10
-)
+const CONCURRENCY = clamp(Number(process.env.CLASS_REGISTER_WORKER_CONCURRENCY || 5) || 5, 1, 10)
 const MAX_ATTEMPTS = clamp(Number(process.env.CLASS_REGISTER_MAX_ATTEMPTS || 3) || 3, 1, 10)
 const RECONNECT_DELAY_MS = 15_000
 

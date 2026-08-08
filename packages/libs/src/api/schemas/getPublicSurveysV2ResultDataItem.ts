@@ -82,6 +82,7 @@ export type GetPublicSurveysV2ResultDataItem = {
   endDate?: string | null;
   isPublic?: boolean;
   anonymous?: boolean;
+  targetEnrollStudentOnly?: boolean;
   surveyObjectType?: GetPublicSurveysV2ResultDataItemSurveyObjectTypeItem[];
   /** @nullable */
   surveyTopic?: GetPublicSurveysV2ResultDataItemSurveyTopic;

@@ -20,11 +20,7 @@
  */
 import { Prisma, type PrismaClient } from "@workspace/db"
 import { ClassFullError, VersionConflictError } from "./errors"
-import {
-  assertNotAlreadyRegistered,
-  insertRegistrations,
-  type RegisterParams,
-} from "./shared"
+import { assertNotAlreadyRegistered, insertRegistrations, type RegisterParams } from "./shared"
 
 const MAX_RETRIES = 3
 

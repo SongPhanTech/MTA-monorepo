@@ -85,6 +85,7 @@ export type GetClusterSurveyStatistics200 = {
   endDate?: string | null;
   isPublic?: boolean;
   anonymous?: boolean;
+  targetEnrollStudentOnly?: boolean;
   surveyTopicId: string;
   surveyTopic?: GetClusterSurveyStatistics200SurveyTopic;
   surveyObjectType?: GetClusterSurveyStatistics200SurveyObjectTypeItem[];

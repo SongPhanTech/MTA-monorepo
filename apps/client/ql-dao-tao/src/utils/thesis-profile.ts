@@ -249,9 +249,7 @@ export function getDefenseSessionInfo(project?: ThesisProjectLike | null): {
   }
 
   const sessionName = project.thesisSession?.name || ""
-  const defenseDate = project.defenseDate
-    ? dayjs(project.defenseDate).format("DD/MM/YYYY")
-    : ""
+  const defenseDate = project.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : ""
 
   let defenseTime = ""
   if (project.defenseSession?.startTime) {

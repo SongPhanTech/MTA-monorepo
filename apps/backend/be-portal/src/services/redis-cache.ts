@@ -280,9 +280,7 @@ export const classRegisterCache = {
     // Sĩ số realtime
     await cacheDel(`${PREFIX}:seats:${sessionId}`)
     deleted += 1
-    console.log(
-      `[redis-cache] invalidateSession sessionId=${sessionId} deleted≈${deleted}`
-    )
+    console.log(`[redis-cache] invalidateSession sessionId=${sessionId} deleted≈${deleted}`)
     return { deleted }
   },
 }

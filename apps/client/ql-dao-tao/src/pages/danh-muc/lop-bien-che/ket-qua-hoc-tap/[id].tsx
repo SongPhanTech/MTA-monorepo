@@ -136,22 +136,29 @@ export default function StudentScoreClassPage() {
       examScore?: number | null
     ) => {
       if (score == null) return null
-      
+
       const isFailByConfig =
         (attendanceScore != null && scoreToTakeExam != null && attendanceScore < scoreToTakeExam) ||
         (midtermScore != null && scoreToTakeExam != null && midtermScore < scoreToTakeExam) ||
-        (examScore != null && examScoreToPass != null && examScore < examScoreToPass);
+        (examScore != null && examScoreToPass != null && examScore < examScoreToPass)
 
       const failGraduation = isGraduation && score < scoreToPassGraduation
       const failConditional = isConditional && score < scoreToPassConditional
       const failNormal = !isGraduation && !isConditional && score < scoreToPass
-      
+
       if (failGraduation || failConditional || failNormal || isFailByConfig) {
         return { base4: 0, letter: "F", pass: false, classification: undefined }
       }
       return convertScore(score)
     },
-    [convertScore, scoreToPassGraduation, scoreToPassConditional, scoreToPass, scoreToTakeExam, examScoreToPass]
+    [
+      convertScore,
+      scoreToPassGraduation,
+      scoreToPassConditional,
+      scoreToPass,
+      scoreToTakeExam,
+      examScoreToPass,
+    ]
   )
 
   const { data: manualScoreData = [] } = useFindManyStudentSubjectScore(
@@ -503,14 +510,21 @@ export default function StudentScoreClassPage() {
                   : 0
 
             const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
-            const isConditional = subjectClass?.subject?.trainingBlocks?.[0]?.useForFinalScore === false
+            const isConditional =
+              subjectClass?.subject?.trainingBlocks?.[0]?.useForFinalScore === false
             const converted = convertScoreWithGraduation(
               rawScore,
               isGraduation,
               isConditional,
-              subjectClassStudent?.attendanceScore != null ? Number(subjectClassStudent.attendanceScore) : undefined,
-              subjectClassStudent?.midtermScore != null ? Number(subjectClassStudent.midtermScore) : undefined,
-              subjectClassStudent?.examScore != null ? Number(subjectClassStudent.examScore) : undefined
+              subjectClassStudent?.attendanceScore != null
+                ? Number(subjectClassStudent.attendanceScore)
+                : undefined,
+              subjectClassStudent?.midtermScore != null
+                ? Number(subjectClassStudent.midtermScore)
+                : undefined,
+              subjectClassStudent?.examScore != null
+                ? Number(subjectClassStudent.examScore)
+                : undefined
             )
 
             monhoc.push({
@@ -802,14 +816,21 @@ export default function StudentScoreClassPage() {
                   : 0
 
             const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
-            const isConditional = subjectClass?.subject?.trainingBlocks?.[0]?.useForFinalScore === false
+            const isConditional =
+              subjectClass?.subject?.trainingBlocks?.[0]?.useForFinalScore === false
             const converted = convertScoreWithGraduation(
               rawScore,
               isGraduation,
               isConditional,
-              subjectClassStudent?.attendanceScore != null ? Number(subjectClassStudent.attendanceScore) : undefined,
-              subjectClassStudent?.midtermScore != null ? Number(subjectClassStudent.midtermScore) : undefined,
-              subjectClassStudent?.examScore != null ? Number(subjectClassStudent.examScore) : undefined
+              subjectClassStudent?.attendanceScore != null
+                ? Number(subjectClassStudent.attendanceScore)
+                : undefined,
+              subjectClassStudent?.midtermScore != null
+                ? Number(subjectClassStudent.midtermScore)
+                : undefined,
+              subjectClassStudent?.examScore != null
+                ? Number(subjectClassStudent.examScore)
+                : undefined
             )
 
             monhoc.push({
@@ -1121,8 +1142,12 @@ export default function StudentScoreClassPage() {
           rawScore,
           isGraduation,
           isConditional,
-          subjectClassStudent?.attendanceScore != null ? Number(subjectClassStudent.attendanceScore) : undefined,
-          subjectClassStudent?.midtermScore != null ? Number(subjectClassStudent.midtermScore) : undefined,
+          subjectClassStudent?.attendanceScore != null
+            ? Number(subjectClassStudent.attendanceScore)
+            : undefined,
+          subjectClassStudent?.midtermScore != null
+            ? Number(subjectClassStudent.midtermScore)
+            : undefined,
           subjectClassStudent?.examScore != null ? Number(subjectClassStudent.examScore) : undefined
         )
 
@@ -1604,15 +1629,18 @@ export default function StudentScoreClassPage() {
                           : undefined
                     if (score == null) return null
                     const isGraduation = record?.subject?.trainingBlocks?.[0]?.graduation === true
-                    const isConditional = record?.subject?.trainingBlocks?.[0]?.useForFinalScore === false
-                    return convertScoreWithGraduation(
-                      score,
-                      isGraduation,
-                      isConditional,
-                      s?.attendanceScore != null ? Number(s.attendanceScore) : undefined,
-                      s?.midtermScore != null ? Number(s.midtermScore) : undefined,
-                      s?.examScore != null ? Number(s.examScore) : undefined
-                    )?.base4 ?? ""
+                    const isConditional =
+                      record?.subject?.trainingBlocks?.[0]?.useForFinalScore === false
+                    return (
+                      convertScoreWithGraduation(
+                        score,
+                        isGraduation,
+                        isConditional,
+                        s?.attendanceScore != null ? Number(s.attendanceScore) : undefined,
+                        s?.midtermScore != null ? Number(s.midtermScore) : undefined,
+                        s?.examScore != null ? Number(s.examScore) : undefined
+                      )?.base4 ?? ""
+                    )
                   },
                 },
                 {
@@ -1632,15 +1660,18 @@ export default function StudentScoreClassPage() {
                           : undefined
                     if (score == null) return null
                     const isGraduation = record?.subject?.trainingBlocks?.[0]?.graduation === true
-                    const isConditional = record?.subject?.trainingBlocks?.[0]?.useForFinalScore === false
-                    return convertScoreWithGraduation(
-                      score,
-                      isGraduation,
-                      isConditional,
-                      s?.attendanceScore != null ? Number(s.attendanceScore) : undefined,
-                      s?.midtermScore != null ? Number(s.midtermScore) : undefined,
-                      s?.examScore != null ? Number(s.examScore) : undefined
-                    )?.letter ?? ""
+                    const isConditional =
+                      record?.subject?.trainingBlocks?.[0]?.useForFinalScore === false
+                    return (
+                      convertScoreWithGraduation(
+                        score,
+                        isGraduation,
+                        isConditional,
+                        s?.attendanceScore != null ? Number(s.attendanceScore) : undefined,
+                        s?.midtermScore != null ? Number(s.midtermScore) : undefined,
+                        s?.examScore != null ? Number(s.examScore) : undefined
+                      )?.letter ?? ""
+                    )
                   },
                 },
                 {
@@ -1657,7 +1688,8 @@ export default function StudentScoreClassPage() {
                           : undefined
                     if (score == null) return null
                     const isGraduation = record?.subject?.trainingBlocks?.[0]?.graduation === true
-                    const isConditional = record?.subject?.trainingBlocks?.[0]?.useForFinalScore === false
+                    const isConditional =
+                      record?.subject?.trainingBlocks?.[0]?.useForFinalScore === false
                     const result = convertScoreWithGraduation(
                       score,
                       isGraduation,

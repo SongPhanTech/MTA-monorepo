@@ -283,10 +283,7 @@ function parseOptionBlock(optionLines) {
       const label = labelOnly[1].toUpperCase()
       const contentParts = []
       i++
-      while (
-        i < optionLines.length &&
-        !/^([A-D])(?:\.?\s*$|\.\s+\S)/i.test(optionLines[i])
-      ) {
+      while (i < optionLines.length && !/^([A-D])(?:\.?\s*$|\.\s+\S)/i.test(optionLines[i])) {
         // stop if next line looks like a new question
         if (/^Câu(?:\s*hỏi)?\s*\d+/i.test(optionLines[i])) break
         contentParts.push(optionLines[i])
@@ -325,9 +322,7 @@ function tryExtractOptionsFromLines(main, answerText) {
     const options = parseOptionBlock(lines.slice(start))
     const labels = options.map((o) => o.label).join("")
     const isMc =
-      options.length >= 2 &&
-      /^AB/.test(labels) &&
-      options.every((o) => o.content.length > 0)
+      options.length >= 2 && /^AB/.test(labels) && options.every((o) => o.content.length > 0)
 
     if (!isMc) continue
 
@@ -436,11 +431,7 @@ function parseQuestions(text, bankName, bankId) {
     usedStd = true
     const restBody = [header.rest, ...part.split("\n").slice(1)].join("\n")
     const mc = extractMcOptions(restBody)
-    if (
-      header.type === "SINGLE_CHOICE" ||
-      header.type === "MULTIPLE_CHOICE" ||
-      mc.isMc
-    ) {
+    if (header.type === "SINGLE_CHOICE" || header.type === "MULTIPLE_CHOICE" || mc.isMc) {
       pushQ({
         num: header.num,
         content: mc.content || restBody.trim(),
@@ -596,9 +587,7 @@ async function mapPool(items, concurrency, worker) {
       results[i] = await worker(items[i], i)
     }
   }
-  await Promise.all(
-    Array.from({ length: Math.min(concurrency, items.length || 1) }, () => run())
-  )
+  await Promise.all(Array.from({ length: Math.min(concurrency, items.length || 1) }, () => run()))
   return results
 }
 
@@ -701,9 +690,7 @@ async function processEntry(entry, index, total) {
     ).length
 
     if (dryRun) {
-      console.log(
-        `${pct} ${entry.relativePath} -> ${questions.length} q (mc=${mcCount}) [dry-run]`
-      )
+      console.log(`${pct} ${entry.relativePath} -> ${questions.length} q (mc=${mcCount}) [dry-run]`)
       return {
         status: "success",
         questions: questions.length,
@@ -741,9 +728,7 @@ async function main() {
       console.error(`Missing ${errPath}`)
       process.exit(1)
     }
-    const failedPaths = new Set(
-      JSON.parse(readFileSync(errPath, "utf8")).map((e) => e.file)
-    )
+    const failedPaths = new Set(JSON.parse(readFileSync(errPath, "utf8")).map((e) => e.file))
     entries = entries.filter((e) => failedPaths.has(e.relativePath))
     console.log(`--errors-only: ${entries.length} files from import-errors.json`)
   }

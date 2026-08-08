@@ -1659,6 +1659,11 @@ export const listStudentResultInfo = async (
   type: "SEMESTER" | "YEAR" = "SEMESTER"
 ) => {
   try {
+    const currentSemester = await prisma.semester.findUnique({
+      where: { id: semesterId },
+      select: { schoolYearId: true },
+    })
+
     const students = await prisma.student.findMany({
       where: {
         status: StudentStatus.ENROLLED, // Chỉ lấy sinh viên đang học
@@ -1672,7 +1677,9 @@ export const listStudentResultInfo = async (
       include: {
         userProfile: true,
         studentSemesterResult: { where: { semesterId } },
-        studentYearResult: { where: { schoolYear: { semesters: { some: { id: semesterId } } } } },
+        studentYearResult: currentSemester?.schoolYearId
+          ? { where: { schoolYearId: currentSemester.schoolYearId } }
+          : { where: { schoolYear: { semesters: { some: { id: semesterId } } } } },
         fixedClass: {
           include: {
             managementOrganization: true,
@@ -2255,22 +2262,13 @@ const checkAcademicWarning = (
 
   return ruleList.filter((item) => item !== null)
 }
-const checkScholarshipReceived = async (
-  student: StudentInfoCheck,
-  semesterId: string,
-  semesterScholarship: Scholarship[] = []
-): Promise<Scholarship[]> => {
-  // Lấy danh sách học bổng đã nhận của sinh viên trong học kỳ này
-  const scholarshipAward = await prisma.scholarshipAward.findMany({
-    where: {
-      studentId: student.id,
-      semesterId: semesterId,
-      deletedAt: null,
-      active: true,
-    },
-  })
+const checkScholarshipReceived = (
+  studentId: string,
+  semesterScholarship: Scholarship[] = [],
+  studentAwards: { scholarshipId: string }[] = []
+): Scholarship[] => {
   return semesterScholarship.filter((scholarship) =>
-    scholarshipAward.some((award) => award.scholarshipId === scholarship.id)
+    studentAwards.some((award) => award.scholarshipId === scholarship.id)
   )
 }
 const checkScholarship = async (
@@ -2453,10 +2451,10 @@ const CheckDecreaseAcademicWarning = (
 
   return previousLevel >= 1 && !hasAcademicWarningThisTerm
 }
-const fetchStudentSemesterResult = async (studentId: string, semesterId: string) => {
-  return await prisma.studentSemesterResult.findFirst({
+const fetchBulkStudentSemesterResults = async (studentIds: string[], semesterId: string) => {
+  const results = await prisma.studentSemesterResult.findMany({
     where: {
-      studentId,
+      studentId: { in: studentIds },
       semesterId,
     },
     include: {
@@ -2489,6 +2487,12 @@ const fetchStudentSemesterResult = async (studentId: string, semesterId: string)
       },
     },
   })
+
+  const map = new Map<string, (typeof results)[0]>()
+  for (const r of results) {
+    map.set(r.studentId, r)
+  }
+  return map
 }
 
 export const resultCourseStudentScholarship = async (
@@ -2514,6 +2518,24 @@ export const resultCourseStudentScholarship = async (
     orderBy: { scholarship: { rankOrder: "asc" } },
   })
 
+  const studentIds = students.map((s) => s.id)
+  const semesterResultMap = await fetchBulkStudentSemesterResults(studentIds, semesterId)
+
+  // Lấy tất cả danh sách học bổng đã nhận của các sinh viên trong học kỳ
+  const allScholarshipAwards = await prisma.scholarshipAward.findMany({
+    where: {
+      studentId: { in: studentIds },
+      semesterId,
+      deletedAt: null,
+      active: true,
+    },
+  })
+  const scholarshipAwardMap = new Map<string, typeof allScholarshipAwards>()
+  for (const award of allScholarshipAwards) {
+    if (!scholarshipAwardMap.has(award.studentId)) scholarshipAwardMap.set(award.studentId, [])
+    scholarshipAwardMap.get(award.studentId)!.push(award)
+  }
+
   await Promise.all(
     students.map(async (student) => {
       const courseId = student.khoaId
@@ -2525,7 +2547,7 @@ export const resultCourseStudentScholarship = async (
         }
       }
       const trainingCourseId = student.khoaId
-      const studentSemesterResult = await fetchStudentSemesterResult(student.id, semesterId)
+      const studentSemesterResult = semesterResultMap.get(student.id)
 
       if (!studentSemesterResult) return
 
@@ -2553,10 +2575,11 @@ export const resultCourseStudentScholarship = async (
         semesterScholarship,
         scholarshipCriteriaList
       )
-      const scholarshipReceive = await checkScholarshipReceived(
-        student,
-        semesterId,
-        semesterScholarship
+      const studentAwards = scholarshipAwardMap.get(student.id) || []
+      const scholarshipReceive = checkScholarshipReceived(
+        student.id,
+        semesterScholarship,
+        studentAwards
       )
 
       if (scholarshipInfo.length === 0 || scholarshipReceive.length > 0) return
@@ -2581,9 +2604,7 @@ export const resultCourseStudentScholarship = async (
         id: studentSemesterResult.studentId,
         code: studentSemesterResult.student?.code,
         studentSemesterResult: filteredResult,
-        userProfile: await prisma.userProfile.findUnique({
-          where: { id: studentSemesterResult.student.userProfileId },
-        }),
+        userProfile: studentSemesterResult.student.userProfile,
         trainingMajor:
           studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
             ?.name || "",
@@ -2646,6 +2667,9 @@ export const resultCourseStudentAcademicWarning = async (
     },
   })
 
+  const studentIds = students.map((s) => s.id)
+  const semesterResultMap = await fetchBulkStudentSemesterResults(studentIds, semesterId)
+
   await Promise.all(
     students.map(async (student) => {
       const courseId = student.khoaId
@@ -2657,7 +2681,7 @@ export const resultCourseStudentAcademicWarning = async (
         }
       }
       const trainingCourseId = student.khoaId
-      const studentSemesterResult = await fetchStudentSemesterResult(student.id, semesterId)
+      const studentSemesterResult = semesterResultMap.get(student.id)
 
       if (!studentSemesterResult) return
 
@@ -2682,9 +2706,7 @@ export const resultCourseStudentAcademicWarning = async (
         id: studentSemesterResult.studentId,
         code: studentSemesterResult.student.userProfile?.code,
         studentSemesterResult: filteredResult,
-        userProfile: await prisma.userProfile.findUnique({
-          where: { id: studentSemesterResult.student.userProfileId },
-        }),
+        userProfile: studentSemesterResult.student.userProfile,
         trainingMajor:
           studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
             ?.name || "",
@@ -2776,6 +2798,9 @@ export const resultCourseStudentAcademicAction = async (
     },
   })
 
+  const studentIds = students.map((s) => s.id)
+  const semesterResultMap = await fetchBulkStudentSemesterResults(studentIds, semesterId)
+
   await Promise.all(
     students.map(async (student) => {
       const courseId = student.khoaId
@@ -2787,7 +2812,7 @@ export const resultCourseStudentAcademicAction = async (
         }
       }
       const trainingCourseId = student.khoaId
-      const studentSemesterResult = await fetchStudentSemesterResult(student.id, semesterId)
+      const studentSemesterResult = semesterResultMap.get(student.id)
 
       if (!studentSemesterResult) return
 
@@ -2816,9 +2841,7 @@ export const resultCourseStudentAcademicAction = async (
         id: studentSemesterResult.studentId,
         code: studentSemesterResult.student.userProfile?.code,
         studentSemesterResult: filteredResult,
-        userProfile: await prisma.userProfile.findUnique({
-          where: { id: studentSemesterResult.student.userProfileId },
-        }),
+        userProfile: studentSemesterResult.student.userProfile,
         trainingMajor:
           studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
             ?.name || "",
@@ -2966,6 +2989,9 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
 
   const studentsToProcess = [...inputWarningStudents, ...additionalWarningStudents]
 
+  const studentsToProcessIds = studentsToProcess.map((s: any) => s.id)
+  const semesterResultMap = await fetchBulkStudentSemesterResults(studentsToProcessIds, semesterId)
+
   await Promise.all(
     studentsToProcess.map(async (student: any) => {
       const courseId = student.fixedClass?.trainingCourse?.id || student.khoaId
@@ -2981,7 +3007,7 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
         }
       }
       const trainingCourseId = courseId
-      const studentSemesterResult = await fetchStudentSemesterResult(student.id, semesterId)
+      const studentSemesterResult = semesterResultMap.get(student.id)
 
       if (!studentSemesterResult) return
 
@@ -3014,9 +3040,7 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
         id: studentSemesterResult.studentId,
         code: studentSemesterResult.student.userProfile?.code,
         studentSemesterResult: filteredResult,
-        userProfile: await prisma.userProfile.findUnique({
-          where: { id: studentSemesterResult.student.userProfileId },
-        }),
+        userProfile: studentSemesterResult.student.userProfile,
         trainingMajor:
           studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
             ?.name || "",

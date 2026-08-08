@@ -98,9 +98,11 @@ const KhoiTaoMon = () => {
                 trainingBlockOnCurriculumVersion: {
                   curriculumVersion: fixedClassIds?.length
                     ? {
-                        fixedClass: {
-                          id: {
-                            in: fixedClassIds,
+                        fixedClasses: {
+                          some: {
+                            id: {
+                              in: fixedClassIds,
+                            },
                           },
                         },
                       }
@@ -114,7 +116,7 @@ const KhoiTaoMon = () => {
                   select: {
                     curriculumVersion: {
                       select: {
-                        fixedClass: {
+                        fixedClasses: {
                           select: {
                             id: true,
                           },

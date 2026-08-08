@@ -301,10 +301,7 @@ export default function StudentGradeSystem() {
         deletedAt: null,
         ...(trainingObjectTypeId && { trainingObjectTypeId }),
         ...(trainingCourseIds?.length && {
-          OR: [
-            { trainingCourseId: { in: trainingCourseIds } },
-            { trainingCourseId: null },
-          ],
+          OR: [{ trainingCourseId: { in: trainingCourseIds } }, { trainingCourseId: null }],
         }),
       },
       orderBy: {
@@ -1311,7 +1308,8 @@ export default function StudentGradeSystem() {
       if (res.status === 200) {
         saveAs(res.data as Blob, config.fileName)
       } else {
-        const errorMsg = (res.data as { message?: string })?.message || "Đã xảy ra lỗi khi xuất file"
+        const errorMsg =
+          (res.data as { message?: string })?.message || "Đã xảy ra lỗi khi xuất file"
         message.error(errorMsg)
       }
     } catch (error: unknown) {
@@ -1344,7 +1342,9 @@ export default function StudentGradeSystem() {
     }
 
     const selectedSessionId = thesisSessionIds?.[0]
-    const session = thesisSessionData.find((s) => s.id === selectedSessionId) as SessionSignerInfo | undefined
+    const session = thesisSessionData.find((s) => s.id === selectedSessionId) as
+      | SessionSignerInfo
+      | undefined
     if (!session) {
       message.warning("Vui lòng chọn đợt xét trước khi xuất file.")
       return
@@ -1359,7 +1359,9 @@ export default function StudentGradeSystem() {
 
   const handleConfirmSignExport = async () => {
     const selectedSessionId = thesisSessionIds?.[0]
-    const session = thesisSessionData.find((s) => s.id === selectedSessionId) as SessionSignerInfo | undefined
+    const session = thesisSessionData.find((s) => s.id === selectedSessionId) as
+      | SessionSignerInfo
+      | undefined
     if (!session) return
 
     const chiefName = session.chief?.trim() || session.graduationDecisionSigner?.trim() || ""
@@ -1379,11 +1381,14 @@ export default function StudentGradeSystem() {
 
   const doExportQuyetDinhCongNhan = async (signerNameTS: string, dateTS: Dayjs) => {
     const selectedSessionId = thesisSessionIds?.[0]
-    const session = thesisSessionData.find((s) => s.id === selectedSessionId)
+    const session = thesisSessionData.find((s) => s.id === selectedSessionId) as
+      | SessionSignerInfo
+      | undefined
 
     let effectiveSignerName = signerName
     if (!effectiveSignerName) {
-      effectiveSignerName = session?.graduationDecisionSigner || session?.graduationDecisionMaker || ""
+      effectiveSignerName =
+        session?.graduationDecisionMaker || session?.graduationDecisionSigner || ""
     }
 
     const parts = (effectiveSignerName || "").split(",").map((s) => s.trim())
@@ -1434,7 +1439,7 @@ export default function StudentGradeSystem() {
     const thangTS = String(dateTS.month() + 1)
     const namTS = String(dateTS.year())
 
-    let soToTrinh = session?.proposalGraduation || session?.graduationReport || ""
+    let soToTrinh = session?.graduationReport || session?.proposalGraduation || ""
     let ngayToTrinh = ""
     if (soToTrinh.toLowerCase().includes(" ngày ")) {
       const reportParts = soToTrinh.split(/ ngày /i)
@@ -1477,7 +1482,7 @@ export default function StudentGradeSystem() {
         path: "QuyetDinhCongNhanTotNghiep.docx",
         prefix: "/mta/template",
         data: {
-          soQD: session?.graduationDecisionNumber || session?.graduationNumber || "",
+          soQD: session?.graduationNumber || session?.graduationDecisionNumber || "",
           ngayQD,
           thangQD,
           namQD,
@@ -1971,7 +1976,8 @@ export default function StudentGradeSystem() {
           <Radio value="deputy">
             Phó phòng sau đại học:{" "}
             <strong>
-              {(selectedThesisSession as SessionSignerInfo | undefined)?.deputy?.trim() || "(chưa nhập)"}
+              {(selectedThesisSession as SessionSignerInfo | undefined)?.deputy?.trim() ||
+                "(chưa nhập)"}
             </strong>
           </Radio>
         </Radio.Group>

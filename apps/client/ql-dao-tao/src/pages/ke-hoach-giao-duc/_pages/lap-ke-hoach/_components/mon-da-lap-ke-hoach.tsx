@@ -84,7 +84,7 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                   include: {
                     curriculumVersion: {
                       include: {
-                        fixedClass: {
+                        fixedClasses: {
                           include: {
                             _count: {
                               select: {
@@ -245,9 +245,10 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                       tableStartCell: { row: 7, col: 1 },
                       rows:
                         planTraining?.planTrainingSubjects.map((item, index) => {
-                          const fc =
+                          const fcs =
                             item?.trainingBlockSubject?.trainingBlockOnCurriculumVersion
-                              ?.curriculumVersion?.fixedClass
+                              ?.curriculumVersion?.fixedClasses ?? []
+                          const fc = fcs[0]
                           const rowSpan = 1
                           return {
                             cells: [
@@ -285,8 +286,10 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                               },
                               {
                                 value:
-                                  item?.trainingBlockSubject?.trainingBlockOnCurriculumVersion
-                                    .curriculumVersion?.fixedClass?._count?.students ?? 0,
+                                  item?.trainingBlockSubject?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.reduce(
+                                    (sum, fc) => sum + (fc?._count?.students ?? 0),
+                                    0
+                                  ) ?? 0,
                                 align: "center",
                                 rowSpan,
                               },
@@ -412,13 +415,15 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                     e.stopPropagation()
                     onOpenDetailFixedClass({
                       fixedClassId: record?.trainingBlockSubject?.trainingBlockOnCurriculumVersion
-                        ?.curriculumVersion?.fixedClass?.id as string,
+                        ?.curriculumVersion?.fixedClasses?.[0]?.id as string,
                     })
                   }}
                   className="text-left hover:text-primary cursor-pointer"
                 >
                   {record?.trainingBlockSubject?.trainingBlockOnCurriculumVersion?.curriculumVersion
-                    ?.fixedClass?.code || ""}
+                    ?.fixedClasses?.map((fc: { code?: string | null }) => fc?.code)
+                    .filter(Boolean)
+                    .join(", ") || ""}
                 </div>
               ),
             },

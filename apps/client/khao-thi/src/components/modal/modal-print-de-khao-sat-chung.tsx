@@ -1,13 +1,18 @@
-import { PrinterOutlined } from "@ant-design/icons"
+import { FileWordOutlined } from "@ant-design/icons"
 import { toRoman } from "@lib/utils"
 import { useFindUniqueSurvey } from "@workspace/db/hooks"
-import { Button, Col, Input, Modal, Radio, Row, Table } from "antd"
+import { Button, Col, Input, message, Modal, Radio, Row, Table } from "antd"
 import dayjs from "dayjs"
-import { useMemo, useRef } from "react"
+import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-import { useReactToPrint } from "react-to-print"
+import { exportSurveyFormDocx, toDocxFileName } from "@/utils/export-survey-form-docx"
 
 dayjs.locale("vi")
+
+const SURVEY_NOTES = [
+  'Để đóng góp phần tìm ra những giải pháp nhằm nâng cao chất lượng đào tạo của Học viện đề nghị đồng chí (anh/chị) vui lòng điền đầy đủ thông tin trả lời các câu hỏi dưới dây bằng cách đánh dấu "X" vào một ô phù hợp nhất trong mục "các phương án trả lời".',
+  "Thông tin đồng chí (anh/chị) cung cấp sẽ được Học viện xử lý khách quan và bảo mật",
+]
 type GroupedSurveyQuestion = {
   id: string // group id
   name: string // group name
@@ -18,7 +23,6 @@ type GroupedSurveyQuestion = {
   }[]
 }
 const ModalPrintExamSurvey = () => {
-  const printRef = useRef<HTMLDivElement>(null)
   const { isOpen, onClose, input } = useDisclosure<{
     id: string
   }>({
@@ -40,7 +44,7 @@ const ModalPrintExamSurvey = () => {
     },
   })
 
-  const dataTest = useMemo(() => {
+  const { grouped, flatData } = useMemo(() => {
     const groupedMap = (survey?.surveyQuestion ?? []).reduce<Record<string, GroupedSurveyQuestion>>(
       (acc: any, item: any, index: number) => {
         const groupId = item.surveyQuestionGroupId
@@ -76,44 +80,41 @@ const ModalPrintExamSurvey = () => {
     })
     // const general=grouped.filter((i)=>i?.)
     const flatData = grouped.flatMap((i) => [i, ...(i.question || [])])
-    return flatData || []
+    return { grouped, flatData }
     // return classGroups
   }, [survey])
 
-  const handlePrint = useReactToPrint({
-    contentRef: printRef,
-    pageStyle: `
-        @page {
-            size: A4;
-            margin: 1cm;
-        }
-        @media print {
-            .page-break {
-                page-break-after: always;
-            }
-            .blank-page {
-                height: 100vh;
-                visibility: hidden;
-            }
-            table {
-                page-break-inside: auto;
-            }
-            tr {
-                page-break-inside: avoid;
-            }
-            .custom-red-table .ant-table,
-            .custom-red-table .ant-table-container,
-            .custom-red-table .ant-table-content table {
-             border: 2px solid red !important;
-            }
+  const handleExportWord = async () => {
+    if (!survey) return
 
-            .custom-red-table .ant-table-cell {
-            border: 1px solid red !important;
-            }
-
-        }
-      `,
-  })
+    try {
+      await exportSurveyFormDocx({
+        headerLeft: "HỌC VIỆN KTQS",
+        formCode: "Mẫu số 11-ĐBCL",
+        title: survey?.name,
+        notes: SURVEY_NOTES,
+        infoTitle: "I. THÔNG TIN CHUNG",
+        infoFields: [
+          { label: "Chuyên ngành: " },
+          { label: "Khoa (Viện): " },
+          { label: "Lớp: " },
+          { label: "Khoá: " },
+          { label: "Đối tượng đào tạo: ", fullWidth: true },
+        ],
+        contentTitle: "II. NỘI DUNG ĐÁNH GIÁ",
+        choices: survey?.surveyChoice ?? [],
+        groups: grouped.map((group) => ({
+          id: group.id,
+          name: group.name,
+          questions: group.question ?? [],
+        })),
+        fileName: toDocxFileName("Phieu khao sat", survey?.name),
+      })
+    } catch (error) {
+      console.error(error)
+      message.error("Không thể xuất file Word")
+    }
+  }
 
   return (
     <Modal
@@ -125,13 +126,18 @@ const ModalPrintExamSurvey = () => {
       title={
         <div className="flex items-center justify-between w-[95%]">
           <span>Xem đề khảo sát</span>
-          <Button icon={<PrinterOutlined />} onClick={handlePrint} size="small" type="primary">
-            In
+          <Button
+            icon={<FileWordOutlined />}
+            onClick={handleExportWord}
+            size="small"
+            type="primary"
+          >
+            Tải file Word
           </Button>
         </div>
       }
     >
-      <div ref={printRef} className="mx-auto p-6 text-sm leading-relaxed !font-time-news-roman">
+      <div className="mx-auto p-6 text-sm leading-relaxed !font-time-news-roman">
         <div className="flex justify-between items-start mb-2 color-black font-bold text-base">
           <div className="uppercase">HỌC VIỆN KTQS</div>
           <div className="italic">Mẫu số 11-ĐBCL</div>
@@ -217,7 +223,7 @@ const ModalPrintExamSurvey = () => {
             <Col span={24} className="my-3">
               <Table
                 rowKey="id"
-                dataSource={dataTest || []}
+                dataSource={flatData}
                 className="custom-red-table"
                 rowClassName={(record: any) => (record.isParent ? "group-row" : "")}
                 pagination={false}

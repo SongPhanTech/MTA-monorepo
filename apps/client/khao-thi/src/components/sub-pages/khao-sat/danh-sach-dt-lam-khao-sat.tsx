@@ -2,7 +2,7 @@ import { DownloadOutlined, PrinterOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
 import type { FilterProps } from "@components/commons/typeFilter"
 import ExportObjectInSurvey from "@components/modal/export-list-object-in-survey"
-import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
+import { DEFAULT_PAGINATE_SIZE, SURVEY_STUDENT_OBJECT_TYPES } from "@constants/constants"
 import { useSession } from "@workspace/auth/react"
 import type { Survey, SurveyObjectType, SurveyObject } from "@workspace/db"
 import { useFindManyFixedClass, useFindManyTrainingCourse } from "@workspace/db/hooks"
@@ -43,7 +43,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
     isStudent: "all",
   })
 
-  const STUDENT_TYPES: SurveyObject[] = ["MILITARY_STUDENT", "CIVILIAN_STUDENT"]
+  const STUDENT_TYPES: SurveyObject[] = SURVEY_STUDENT_OBJECT_TYPES
   const LECTURER_TYPES: SurveyObject[] = ["LECTURER", "STAFF"]
 
   // Kiểm tra từng loại đối tượng trong đợt khảo sát

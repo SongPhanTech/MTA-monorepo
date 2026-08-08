@@ -84,6 +84,8 @@ export type GetSurveysOfProfile200AllOfDataItemSubjectClass = {
   /** @nullable */
   schedule?: GetSurveysOfProfile200AllOfDataItemSubjectClassSchedule;
   maxStudent: number;
+  enrolledCount?: number;
+  version?: number;
   type: GetSurveysOfProfile200AllOfDataItemSubjectClassType;
   status: GetSurveysOfProfile200AllOfDataItemSubjectClassStatus;
   cancelled?: boolean;
@@ -110,6 +112,7 @@ export type GetSurveysOfProfile200AllOfDataItemSubjectClass = {
   issuedScoreAt?: string | null;
   isLockScore?: boolean;
   isLockExamScore?: boolean;
+  isLockLecturer?: boolean;
   scoreSubmitted?: boolean;
   scoreChecked?: boolean;
 } | null;
