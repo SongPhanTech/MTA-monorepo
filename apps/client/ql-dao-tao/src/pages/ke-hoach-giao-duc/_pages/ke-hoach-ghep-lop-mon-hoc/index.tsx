@@ -778,7 +778,7 @@ export default function KeHoachGhepLopMonHoc() {
                                 (block) =>
                                   block.trainingBlockOnCurriculumVersion?.curriculumVersion
                                     ?.fixedClasses ?? []
-                              ).map((fixedClass) => (
+                              ).map((fixedClass: any) => (
                                 <FixedClassDragItem
                                   subjectVersionId={record.id}
                                   item={fixedClass}

@@ -8,6 +8,7 @@
  */
 import { AcademicRankingBaseType, type PrismaClient } from "@workspace/db"
 import { classRegisterCache, seatCache } from "../redis-cache"
+import { matchCreditLimitByCourseBaseScore } from "./credit-limit"
 import { RegistrationError } from "./errors"
 import { registerClasses } from "./index"
 import { assertNoScheduleConflict } from "./schedule-conflict"
@@ -65,6 +66,12 @@ export async function processRegistration(
     profile.educationAndTraining.find(
       (item) => curriculumVersionId && item.curriculumVersionId === curriculumVersionId
     )?.id ?? (profile.educationAndTraining[0]?.id as string)
+
+  const studentCourse =
+    profile.educationAndTraining.find((item) => item.id === studentId) ??
+    profile.educationAndTraining[0]
+  const courseBaseScore =
+    studentCourse?.fixedClass?.trainingCourse?.baseScore ?? AcademicRankingBaseType.Base10
 
   const semester = await prisma.semester.findUniqueOrThrow({
     where: { id: registerSession.semesterId },
@@ -164,25 +171,19 @@ export async function processRegistration(
     }
   }
 
-  // ===== Kiểm tra giới hạn tín chỉ theo GPA =====
+  // ===== Kiểm tra giới hạn tín chỉ theo GPA kỳ gần nhất + hệ điểm của khóa =====
   if (nearestSemesterResult) {
     const creditLimits = await prisma.classRegisterSessionCredit.findMany({
-      where: { classRegisterSessionId: sessionId },
+      where: { classRegisterSessionId: sessionId, deletedAt: null },
     })
 
     if (creditLimits.length > 0) {
-      const creditLimit = creditLimits.find((item) => {
-        const gpa = (
-          item.baseScore === AcademicRankingBaseType.Base10
-            ? nearestSemesterResult.gpaBase10
-            : nearestSemesterResult.gpaBase4
-        ).toNumber()
-        const minGpa =
-          (item.baseScore === AcademicRankingBaseType.Base10 ? item.base10Min : item.base4Min) || 0
-        const maxGpa =
-          (item.baseScore === AcademicRankingBaseType.Base10 ? item.base10Max : item.base4Max) || 10
-        return gpa >= minGpa && gpa <= maxGpa
-      })
+      const creditLimit = matchCreditLimitByCourseBaseScore(
+        creditLimits,
+        courseBaseScore,
+        nearestSemesterResult.gpaBase4.toNumber(),
+        nearestSemesterResult.gpaBase10.toNumber()
+      )
 
       if (creditLimit) {
         const registeredScores = await prisma.studentSubjectScore.findMany({

@@ -1379,11 +1379,14 @@ export default function StudentGradeSystem() {
 
   const doExportQuyetDinhCongNhan = async (signerNameTS: string, dateTS: Dayjs) => {
     const selectedSessionId = thesisSessionIds?.[0]
-    const session = thesisSessionData.find((s) => s.id === selectedSessionId)
+    const session = thesisSessionData.find((s) => s.id === selectedSessionId) as
+      | SessionSignerInfo
+      | undefined
 
     let effectiveSignerName = signerName
     if (!effectiveSignerName) {
-      effectiveSignerName = session?.graduationDecisionMaker || ""
+      effectiveSignerName =
+        session?.graduationDecisionMaker || session?.graduationDecisionSigner || ""
     }
 
     const parts = (effectiveSignerName || "").split(",").map((s) => s.trim())
@@ -1434,7 +1437,7 @@ export default function StudentGradeSystem() {
     const thangTS = String(dateTS.month() + 1)
     const namTS = String(dateTS.year())
 
-    let soToTrinh = session?.graduationReport || ""
+    let soToTrinh = session?.graduationReport || session?.proposalGraduation || ""
     let ngayToTrinh = ""
     if (soToTrinh.toLowerCase().includes(" ngày ")) {
       const reportParts = soToTrinh.split(/ ngày /i)
@@ -1477,7 +1480,7 @@ export default function StudentGradeSystem() {
         path: "QuyetDinhCongNhanTotNghiep.docx",
         prefix: "/mta/template",
         data: {
-          soQD: session?.graduationNumber || "",
+          soQD: session?.graduationNumber || session?.graduationDecisionNumber || "",
           ngayQD,
           thangQD,
           namQD,

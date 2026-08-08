@@ -32,7 +32,7 @@ const ModalPrintToKQHT = () => {
         id: input?.dataStudent?.curriculumVersionId,
       },
       include: {
-        fixedClass: {
+        fixedClasses: {
           where: {
             id: input?.dataStudent?.fixedClassId,
           },
@@ -67,16 +67,16 @@ const ModalPrintToKQHT = () => {
     { enabled: !!input?.dataStudent?.curriculumVersionId }
   )
 
-  const { convertScore } = useScoreConverter(
-    subjectScoreData?.fixedClass?.trainingCourse?.scoreConverts
-  )
+  const trainingCourseFromFixedClass = subjectScoreData?.fixedClasses?.[0]?.trainingCourse
+
+  const { convertScore } = useScoreConverter(trainingCourseFromFixedClass?.scoreConverts)
 
   const { convertAcademicRanking } = useAcademicRankingConverter(
-    subjectScoreData?.fixedClass?.trainingCourse?.academicRankingConvert,
-    subjectScoreData?.fixedClass?.trainingCourse?.baseScore
+    trainingCourseFromFixedClass?.academicRankingConvert,
+    trainingCourseFromFixedClass?.baseScore
   )
 
-  const baseScore = subjectScoreData?.fixedClass?.trainingCourse?.baseScore || "Base4"
+  const baseScore = trainingCourseFromFixedClass?.baseScore || "Base4"
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
@@ -508,7 +508,7 @@ const ModalPrintToKQHT = () => {
             - Phân hạng tốt nghiệp theo thang điểm {baseScore === "Base10" ? "10" : "4"}:{" "}
             {(() => {
               const rankingData =
-                subjectScoreData?.fixedClass?.trainingCourse?.academicRankingConvert || []
+                trainingCourseFromFixedClass?.academicRankingConvert || []
 
               const sortedRankings = rankingData
                 .filter((item: any) => item.graduated)

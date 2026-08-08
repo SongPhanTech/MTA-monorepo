@@ -201,8 +201,10 @@ const PutGraduationDecision = () => {
       where: {
         curriculumVersion: {
           some: {
-            fixedClass: {
-              trainingCourseId: input?.trainingCourseId,
+            fixedClasses: {
+              some: {
+                trainingCourseId: input?.trainingCourseId,
+              },
             },
           },
         },
