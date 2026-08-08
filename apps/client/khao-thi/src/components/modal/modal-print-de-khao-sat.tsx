@@ -1,15 +1,19 @@
-import { PrinterOutlined } from "@ant-design/icons"
+import { FileWordOutlined } from "@ant-design/icons"
 import { useFindUniqueClusterSurvey } from "@workspace/db/hooks"
-import { Button, Col, Input, Modal, Radio, Row, Table } from "antd"
+import { Button, Col, Input, message, Modal, Radio, Row, Table } from "antd"
 import dayjs from "dayjs"
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-import { useReactToPrint } from "react-to-print"
+import { exportSurveyFormDocx, toDocxFileName } from "@/utils/export-survey-form-docx"
 
 dayjs.locale("vi")
 
+const LECTURER_SURVEY_NOTES = [
+  "Nhằm góp phần nâng cao chất lượng giảng dạy, phục vụ lợi ích của người học, Học viện đề nghị Anh/Chị với tinh thần trách nhiệm và xây dựng, cho ý kiến về hoạt động giảng dạy của giảng viên thông qua phiếu phản hồi này. Thông tin do Anh/Chị cung cấp sẽ được Học viện bảo mật và xử lý đảm bảo không làm ảnh hưởng đến kết quả học tập, rèn luyện của Anh/Chị",
+  'Đề nghị Anh/Chị đánh dấu "X" vào các ô tương ứng với nội dung trong bảng câu hỏi theo thang phản hồi',
+]
+
 const ModalPrintExamClusterSurvey = () => {
-  const printRef = useRef<HTMLDivElement>(null)
   const [selectedAnswers] = useState<Record<string, string>>({})
   const { isOpen, onClose, input } = useDisclosure<{
     id: string
@@ -32,30 +36,35 @@ const ModalPrintExamClusterSurvey = () => {
     },
   })
 
-  const handlePrint = useReactToPrint({
-    contentRef: printRef,
-    pageStyle: `
-        @page {
-            size: A4;
-            margin: 1cm;
-        }
-        @media print {
-            .page-break {
-                page-break-after: always;
-            }
-            .blank-page {
-                height: 100vh;
-                visibility: hidden;
-            }
-            table {
-                page-break-inside: auto;
-            }
-            tr {
-                page-break-inside: avoid;
-            }
-        }
-      `,
-  })
+  const handleExportWord = async () => {
+    if (!data) return
+
+    try {
+      await exportSurveyFormDocx({
+        headerLeft: "HỌC VIỆN KTQS",
+        formCode: "Mẫu số 11-ĐBCL",
+        title: data?.name,
+        notes: LECTURER_SURVEY_NOTES,
+        notesAfterInfo: true,
+        infoFields: [
+          { label: "Tên giảng viên: " },
+          { label: "Tên học phần: " },
+          { label: "Khoa (Viện): " },
+          { label: "Bộ môn: " },
+          { label: "Lớp: " },
+          { label: "Ngày lấy ý kiến: " },
+          { label: "Học kỳ: " },
+          { label: "Năm học: " },
+        ],
+        choices: data?.surveyChoice ?? [],
+        groups: [{ questions: data?.surveyQuestion ?? [] }],
+        fileName: toDocxFileName("Phieu khao sat giang vien", data?.name),
+      })
+    } catch (error) {
+      console.error(error)
+      message.error("Không thể xuất file Word")
+    }
+  }
 
   return (
     <Modal
@@ -67,13 +76,18 @@ const ModalPrintExamClusterSurvey = () => {
       title={
         <div className="flex items-center justify-between w-[95%]">
           <span>Xem đề khảo sát</span>
-          <Button icon={<PrinterOutlined />} onClick={handlePrint} size="small" type="primary">
-            In
+          <Button
+            icon={<FileWordOutlined />}
+            onClick={handleExportWord}
+            size="small"
+            type="primary"
+          >
+            Tải file Word
           </Button>
         </div>
       }
     >
-      <div ref={printRef} className="mx-auto p-6 text-sm leading-relaxed !font-time-news-roman">
+      <div className="mx-auto p-6 text-sm leading-relaxed !font-time-news-roman">
         <div className="flex justify-between items-start mb-2 color-black font-bold text-base">
           <div className="uppercase">HỌC VIỆN KTQS</div>
           <div className="italic">Mẫu số 11-ĐBCL</div>
