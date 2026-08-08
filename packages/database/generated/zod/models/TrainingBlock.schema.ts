@@ -15,6 +15,7 @@ const baseSchema = z.object({
     createdBy: z.string().uuid().nullish(),
     code: z.string().nullish(),
     name: z.string(),
+    isNationalDefense: z.boolean().default(false),
     priority: z.number().default(0),
 }
 ).strict();
@@ -28,6 +29,7 @@ const baseSchemaWithoutDefaults = z.object({
     createdBy: z.string().uuid().nullish(),
     code: z.string().nullish(),
     name: z.string(),
+    isNationalDefense: z.boolean(),
     priority: z.number(),
 }
 ).strict();
@@ -77,6 +79,7 @@ export const TrainingBlockPrismaUpdateSchema = z.object({
     createdBy: z.string().uuid().nullish(),
     code: z.string().nullish(),
     name: z.string(),
+    isNationalDefense: z.boolean(),
     priority: z.union([z.number(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
@@ -85,7 +88,7 @@ export const TrainingBlockPrismaUpdateSchema = z.object({
  * `TrainingBlock` schema for create operations excluding foreign keys and relations.
  */
 export const TrainingBlockCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, priority: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isNationalDefense: true, priority: true
 });
 
 

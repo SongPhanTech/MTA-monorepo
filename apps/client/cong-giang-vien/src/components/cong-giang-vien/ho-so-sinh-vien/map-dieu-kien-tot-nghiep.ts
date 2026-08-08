@@ -36,7 +36,17 @@ type MonHocRow = {
   finalScore?: number | null | { toNumber?: () => number }
   manualFinalScore?: number | null | { toNumber?: () => number }
   subjectClass?: {
-    subject?: { name?: string | null; code?: string | null } | null
+    subject?: { 
+      name?: string | null; 
+      code?: string | null;
+      trainingBlockSubjects?: {
+        trainingBlockOnCurriculumVersion?: {
+          trainingBlock?: {
+            isNationalDefense?: boolean | null
+          } | null
+        } | null
+      }[] | null
+    } | null
     semester?: {
       name?: string | null
       schoolYear?: { name?: string | null } | null
@@ -133,6 +143,14 @@ const timChungChiTheoLoai = (
 
 const timMonHocTheoLoai = (monHoc: MonHocRow[], loai: LoaiDieuKienTotNghiep) =>
   monHoc.filter((item) => {
+    // Ưu tiên check flag isNationalDefense từ database trước
+    if (loai === "giaoDucQuocPhong") {
+      const isGDQPFlag = item.subjectClass?.subject?.trainingBlockSubjects?.some(
+        (tbs) => tbs.trainingBlockOnCurriculumVersion?.trainingBlock?.isNationalDefense
+      )
+      if (isGDQPFlag) return true
+    }
+
     const tenMon = item.subjectClass?.subject?.name ?? ""
     return phanLoaiTheoTen(tenMon) === loai
   })

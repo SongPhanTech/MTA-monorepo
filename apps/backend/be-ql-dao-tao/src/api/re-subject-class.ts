@@ -314,7 +314,11 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                sv.name,
                                sv."trainingObjectTypeId",
                                C."trainingMajorId",
-                               TC.id as trainingCourseId,
+                               TC.id                                                                                    as trainingCourseId,
+                               TC."isRetakeExam"                                                                        as "isRetakeExam",
+                               TOT.type                                                                                 as training_object_type,
+                               TB.code                                                                                  as training_block_code,
+                               TB."isNationalDefense"                                                                   as is_national_defense,
                                SSS."studentId",
                                SSS."finalScore" as diem_cuoi,
                                SSS.withdrew,
@@ -330,7 +334,6 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam"
                                     as truot_mon,
                                TBS.id                         as trainingBlockSubjectId,
-                               TC."isRetakeExam",
                                FIRST_VALUE(SSS."examBanned") OVER (
                                  PARTITION BY SSS."studentId", SSS."subjectVersionId"
                                  ORDER BY SSS."createdAt" ASC
@@ -354,6 +357,8 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                                  inner join "ql-dao-tao"."TrainingBlock" TB on TB.id = TBOCV."trainingBlockId"
+                                  left join "ql-dao-tao"."TrainingObjectType" TOT on TOT.id = TC."trainingObjectTypeId"
                         where ${whereClause})
         select id, code, name, trainingBlockSubjectId as "trainingBlockSubjectId", count("studentId") ::INTEGER as count
         from mon_no
@@ -366,8 +371,12 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and "examPostponed" = false -- hoãn thi
           -- exclude students eligible for ReExam (thi lại)
           -- only exclude on first attempt: if they already did a ReExam but still fail → belongs in Retake
-          and not ("isRetakeExam" = true and attempt_count = 1 and first_attempt_exam_banned = false
-                   and truot_mon = true and cam_thi = false and dinh_chi = false)
+          and not (attempt_count = 1 and first_attempt_exam_banned = false
+                   and truot_mon = true and cam_thi = false and dinh_chi = false
+                   and (
+                       ("isRetakeExam" = true and (training_object_type != 'CIVILIAN' or training_object_type is null))
+                       or is_national_defense = true
+                   ))
           
         group by id, code, name, trainingBlockSubjectId
         order by code
@@ -381,6 +390,10 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                sv."trainingObjectTypeId",
                                C."trainingMajorId",
                                TC.id                                                                                    as trainingCourseId,
+                               TC."isRetakeExam"                                                                        as "isRetakeExam",
+                               TOT.type                                                                                 as training_object_type,
+                               TB.code                                                                                  as training_block_code,
+                               TB."isNationalDefense"                                                                   as is_national_defense,
                                SSS."studentId",
                                SSS."finalScore"                                                                         as diem_cuoi,
                                SSS.withdrew,
@@ -394,7 +407,6 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
                                (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
                                SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam" as truot_mon,
-                               TC."isRetakeExam",
                                FIRST_VALUE(SSS."examBanned") OVER (
                                  PARTITION BY SSS."studentId", SSS."subjectVersionId"
                                  ORDER BY SSS."createdAt" ASC
@@ -418,6 +430,8 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                                  inner join "ql-dao-tao"."TrainingBlock" TB on TB.id = TBOCV."trainingBlockId"
+                                  left join "ql-dao-tao"."TrainingObjectType" TOT on TOT.id = TC."trainingObjectTypeId"
                         where ${whereClause})
         select count(DISTINCT id) ::INTEGER as count
         from mon_no
@@ -430,8 +444,12 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and "examPostponed" = false -- hoãn thi
           -- exclude students eligible for ReExam (thi lại)
           -- only exclude on first attempt: if they already did a ReExam but still fail → belongs in Retake
-          and not ("isRetakeExam" = true and attempt_count = 1 and first_attempt_exam_banned = false
-                   and truot_mon = true and cam_thi = false and dinh_chi = false)
+          and not (attempt_count = 1 and first_attempt_exam_banned = false
+                   and truot_mon = true and cam_thi = false and dinh_chi = false
+                   and (
+                       ("isRetakeExam" = true and (training_object_type != 'CIVILIAN' or training_object_type is null))
+                       or is_national_defense = true
+                   ))
           
     `
   return c.json({ data: res, count: countRaw[0]?.count }, 200)
@@ -504,7 +522,11 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                "UP"."fullname",
                                sv."trainingObjectTypeId",
                                C."trainingMajorId",
-                               TC.id                                                                                             as trainingCourseId,
+                               TC.id                                                                                    as trainingCourseId,
+                               TC."isRetakeExam"                                                                        as "isRetakeExam",
+                               TOT.type                                                                                 as training_object_type,
+                               TB.code                                                                                  as training_block_code,
+                               TB."isNationalDefense"                                                                   as is_national_defense,
                                FC.id                                                                                             as fixedClassId,
                                SSS."studentId",
                                SSS."attendanceScore"                                                                              as thuong_xuyen,
@@ -523,7 +545,6 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
                                (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
                                SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam" as truot_mon,
-                               TC."isRetakeExam",
                                FIRST_VALUE(SSS."examBanned") OVER (
                                  PARTITION BY SSS."studentId", SSS."subjectVersionId"
                                  ORDER BY SSS."createdAt" ASC
@@ -553,6 +574,8 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                                  inner join "ql-dao-tao"."TrainingBlock" TB on TB.id = TBOCV."trainingBlockId"
+                                  left join "ql-dao-tao"."TrainingObjectType" TOT on TOT.id = TC."trainingObjectTypeId"
                         where ${whereClause})
         select "studentId",
                thuong_xuyen,
@@ -579,8 +602,12 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
           and hoan_thi = false -- hoãn thi
           -- exclude students eligible for ReExam (thi lại)
           -- only exclude on first attempt: if they already did a ReExam but still fail → belongs in Retake
-          and not ("isRetakeExam" = true and attempt_count = 1 and first_attempt_exam_banned = false
-                   and truot_mon = true and cam_thi = false and dinh_chi = false)
+          and not (attempt_count = 1 and first_attempt_exam_banned = false
+                   and truot_mon = true and cam_thi = false and dinh_chi = false
+                   and (
+                       ("isRetakeExam" = true and (training_object_type != 'CIVILIAN' or training_object_type is null))
+                       or is_national_defense = true
+                   ))
           
         limit ${pageSize} offset ${pageSize} * (${page} - 1)
     `
@@ -682,9 +709,7 @@ app.openapi(openSubjectClassReExam, async (c) => {
     select: { name: true, isRetakeExam: true },
   })
 
-  if (!trainingCourse.isRetakeExam) {
-    return c.json({ message: `${trainingCourse.name} không được thi lại` }, 400)
-  }
+  // Removed 400 check because QPAN subjects can still be re-examined even if course isRetakeExam is false
 
   const planTraining = await prisma.planTraining.upsert({
     where: {
@@ -742,6 +767,10 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                sv."trainingObjectTypeId",
                                C."trainingMajorId",
                                TC.id                                                                                    as trainingCourseId,
+                               TC."isRetakeExam"                                                                        as "isRetakeExam",
+                               TOT.type                                                                                 as training_object_type,
+                               TB.code                                                                                  as training_block_code,
+                               TB."isNationalDefense"                                                                   as is_national_defense,
                                SSS."studentId",
                                SSS."attendanceScore"                                                                    as thuong_xuyen,
                                SSS."midtermScore"                                                                       as dinh_ky,
@@ -776,6 +805,8 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                                  inner join "ql-dao-tao"."TrainingBlock" TB on TB.id = TBOCV."trainingBlockId"
+                                  left join "ql-dao-tao"."TrainingObjectType" TOT on TOT.id = TC."trainingObjectTypeId"
                         where ${whereClause})
         select id, code, name, trainingBlockSubjectId as "trainingBlockSubjectId", count("studentId") ::INTEGER as count
         from mon_no
@@ -784,6 +815,10 @@ app.openapi(openSubjectClassReExam, async (c) => {
           and cam_thi = false
           and dinh_chi = false
           and attempt_count = 1      -- only first attempt: if they failed ReExam, they belong in Retake
+          and (
+               ("isRetakeExam" = true and (training_object_type != 'CIVILIAN' or training_object_type is null))
+               or is_national_defense = true
+          )
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           
@@ -799,6 +834,10 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                sv."trainingObjectTypeId",
                                C."trainingMajorId",
                                TC.id                                                                                    as trainingCourseId,
+                               TC."isRetakeExam"                                                                        as "isRetakeExam",
+                               TOT.type                                                                                 as training_object_type,
+                               TB.code                                                                                  as training_block_code,
+                               TB."isNationalDefense"                                                                   as is_national_defense,
                                SSS."studentId",
                                SSS."finalScore"                                                                         as diem_cuoi,
                                SSS.withdrew,
@@ -830,6 +869,8 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                                  inner join "ql-dao-tao"."TrainingBlock" TB on TB.id = TBOCV."trainingBlockId"
+                                  left join "ql-dao-tao"."TrainingObjectType" TOT on TOT.id = TC."trainingObjectTypeId"
                         where ${whereClause})
         select count(DISTINCT id) ::INTEGER as count
         from mon_no
@@ -838,6 +879,10 @@ app.openapi(openSubjectClassReExam, async (c) => {
           and cam_thi = false
           and dinh_chi = false
           and attempt_count = 1      -- only first attempt: if they failed ReExam, they belong in Retake
+          and (
+               ("isRetakeExam" = true and (training_object_type != 'CIVILIAN' or training_object_type is null))
+               or is_national_defense = true
+          )
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           
@@ -901,7 +946,11 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
                                "UP"."fullname",
                                sv."trainingObjectTypeId",
                                C."trainingMajorId",
-                               TC.id                                                                                             as trainingCourseId,
+                               TC.id                                                                                    as trainingCourseId,
+                               TC."isRetakeExam"                                                                        as "isRetakeExam",
+                               TOT.type                                                                                 as training_object_type,
+                               TB.code                                                                                  as training_block_code,
+                               TB."isNationalDefense"                                                                   as is_national_defense,
                                FC.id                                                                                             as fixedClassId,
                                SSS."studentId",
                                SSS."attendanceScore"                                                                              as thuong_xuyen,
@@ -944,6 +993,8 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
                                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                                  inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                                  inner join "ql-dao-tao"."TrainingBlock" TB on TB.id = TBOCV."trainingBlockId"
+                                  left join "ql-dao-tao"."TrainingObjectType" TOT on TOT.id = TC."trainingObjectTypeId"
                         where ${whereClause})
         select "studentId",
                thuong_xuyen,
@@ -965,6 +1016,10 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
         where rn = 1
           and (truot_mon = true or hoan_thi = true) and cam_thi = false and dinh_chi = false
           and attempt_count = 1      -- only first attempt: if they failed ReExam, they belong in Retake
+          and (
+               ("isRetakeExam" = true and (training_object_type != 'CIVILIAN' or training_object_type is null))
+               or is_national_defense = true
+          )
           and withdrew = false -- rút khỏi lớp
           and mien_thi = false -- miễn học
           

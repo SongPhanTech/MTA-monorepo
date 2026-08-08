@@ -14838,6 +14838,10 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'trainingObjectType',
+                }, isNationalDefense: {
+                    name: "isNationalDefense",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, priority: {
                     name: "priority",
                     type: "Int",

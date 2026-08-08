@@ -4077,6 +4077,7 @@ model TrainingBlock {
   name                 String
   trainingObjectType   TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId String
+  isNationalDefense    Boolean                            @default(false)
   /// ưu tiên sắp xếp
   priority             Int                                @default(0)
   parent               TrainingBlock?                     @relation("ParentChild", fields: [parentId], references: [id])

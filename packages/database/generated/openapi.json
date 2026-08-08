@@ -14536,6 +14536,9 @@
           "trainingObjectTypeId": {
             "type": "string"
           },
+          "isNationalDefense": {
+            "type": "boolean"
+          },
           "priority": {
             "type": "integer"
           },
@@ -14572,6 +14575,7 @@
           "name",
           "trainingObjectType",
           "trainingObjectTypeId",
+          "isNationalDefense",
           "priority"
         ]
       },
@@ -45909,6 +45913,9 @@
           "trainingObjectTypeId": {
             "type": "string"
           },
+          "isNationalDefense": {
+            "type": "boolean"
+          },
           "priority": {
             "type": "integer"
           },
@@ -45964,6 +45971,7 @@
           "updatedAt",
           "name",
           "trainingObjectTypeId",
+          "isNationalDefense",
           "priority"
         ]
       },
@@ -96523,6 +96531,9 @@
           "trainingObjectTypeId": {
             "type": "integer"
           },
+          "isNationalDefense": {
+            "type": "integer"
+          },
           "priority": {
             "type": "integer"
           },
@@ -96544,6 +96555,7 @@
           "code",
           "name",
           "trainingObjectTypeId",
+          "isNationalDefense",
           "priority",
           "parentId",
           "_all"
@@ -96613,6 +96625,10 @@
             "type": "string",
             "nullable": true
           },
+          "isNationalDefense": {
+            "type": "boolean",
+            "nullable": true
+          },
           "priority": {
             "type": "integer",
             "nullable": true
@@ -96667,6 +96683,10 @@
           },
           "trainingObjectTypeId": {
             "type": "string",
+            "nullable": true
+          },
+          "isNationalDefense": {
+            "type": "boolean",
             "nullable": true
           },
           "priority": {

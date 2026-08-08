@@ -99,7 +99,24 @@ const STUDENT_INCLUDE = {
     include: {
       subjectClass: {
         include: {
-          subject: { select: { credit: true, name: true, code: true } },
+          subject: { 
+            select: { 
+              credit: true, 
+              name: true, 
+              code: true,
+              trainingBlockSubjects: {
+                select: {
+                  trainingBlockOnCurriculumVersion: {
+                    select: {
+                      trainingBlock: {
+                        select: { isNationalDefense: true }
+                      }
+                    }
+                  }
+                }
+              }
+            } 
+          },
           semester: {
             select: {
               name: true,
