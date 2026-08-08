@@ -9064,7 +9064,7 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Users/minhah/code/MTA-monorepo/packages/database/prisma/schema.prisma",
+    "sourceFilePath": "/Users/swantech/Documents/MTA/MTA-monorepo/packages/database/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

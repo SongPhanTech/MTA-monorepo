@@ -43,4 +43,7 @@
     "[typescriptreact]": {
         "editor.defaultFormatter": "TypeScriptTeam.native-preview"
     },
+    "[javascript]": {
+        "editor.defaultFormatter": "TypeScriptTeam.native-preview"
+    },
 }
