@@ -1517,9 +1517,10 @@ export const exportGiayMoiHdlv = async ({
         tenhuongdan: supervisor ? ` ${getSupervisorName(supervisor, false, true)}` : "",
         khoa: khoahoc,
         chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
-        tendetai:
-          `Tên đề tài: "${student?.thesisRegistrations?.[0]?.thesisProject?.title.trim()}"` || "",
-        type: student?.thesisRegistrations?.[0]?.thesisProject?.type.trim().toLowerCase(),
+        tendetai: student?.thesisRegistrations?.[0]?.thesisProject?.title
+          ? `Tên đề tài: "${student.thesisRegistrations[0].thesisProject.title.trim()}"`
+          : "",
+        type: student?.thesisRegistrations?.[0]?.thesisProject?.type?.trim().toLowerCase() || "",
         text1: isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC",
         text2: isChief ? "" : "PHÓ TRƯỞNG PHÒNG SAU ĐẠI HỌC",
         nguoiky1: signerName || "",
@@ -3097,6 +3098,7 @@ export const exportBanSaoHDDGLV = async ({
     downloadFile(blob, "BanSaoHoiDongDanhGiaLuanVan.docx")
     message.success("Xuất file thành công")
   } catch (error) {
+    console.error("exportBanSaoHDDGLV error:", error)
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
     hideSpinner?.()
@@ -3143,7 +3145,7 @@ const convertToBanSaoHDDGLV = (
       if (project?.coSupervisor) {
         gvhd2 = (getSupervisorName(project?.coSupervisor, false, false) as string) || ""
       }
-      const loaiLuanVan = project?.type.trim().toLowerCase() || ""
+      const loaiLuanVan = project?.type?.trim().toLowerCase() || ""
       const nganh =
         student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
       const chuyenNganh =
@@ -3359,7 +3361,7 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
         sttHoiDong: (studentIdx + 1).toString(),
         loaiLuanVan: project?.type?.trim().toLowerCase() || "luận văn",
         nganh: groupKey,
-        tenDeTai: project?.title.trim().replace(/\s+/g, " ") || "",
+        tenDeTai: project?.title?.trim().replace(/\s+/g, " ") || "",
         tenHocVien: student.userProfile?.fullname || "",
         ngaySinh: ngaySinhStr,
         khoaHoc: khoaHocStr,
