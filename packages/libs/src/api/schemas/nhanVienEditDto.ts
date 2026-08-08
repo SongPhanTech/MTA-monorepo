@@ -115,7 +115,6 @@ export type NhanVienEditDto = NhanVien & {
   sUserName?: string | null;
   /** @nullable */
   sPassword?: string | null;
-  bHasAccount?: boolean;
   /** @nullable */
   sPasswordConfirm?: string | null;
 };

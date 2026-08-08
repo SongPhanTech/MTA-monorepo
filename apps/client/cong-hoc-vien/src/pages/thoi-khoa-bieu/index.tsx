@@ -284,154 +284,154 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                     </Col>
                   </Row>
                 }
-            rowKey="id"
-            scrollable
-            filters={filters}
-            setFilters={(value) => {
-              setFilters(value)
-              setCurrentPage(1)
-            }}
-            columns={[
-              {
-                title: "Mã LMH",
-                width: 110,
-                align: "center",
-                type: "input",
-                onCell: () => ({ style: { whiteSpace: "nowrap" } }),
-                render: (_, record) => record?.code || "",
-              },
-              {
-                title: "Tên môn",
-                width: 260,
-                align: "center",
-                type: "input",
-                onCell: () => ({
-                  style: { minWidth: 200, whiteSpace: "normal", wordBreak: "normal" },
-                }),
-                render: (_, record) => (
-                  <p className="mb-0 text-left">
-                    {record?.name} ({record.subject?.credit} TC)
-                  </p>
-                ),
-              },
-              {
-                title: "Số SV",
-                width: 100,
-                align: "center",
-                type: "order",
-                distinctFilters: ["maxStudent"],
-                render: (_, record) => (
-                  <p className="mb-0">
-                    {record?.fixedClasses?.reduce(
-                      (acc: number, curr: any) => acc + (curr?._count?.students ?? 0),
-                      0
-                    ) ?? 0}
-                  </p>
-                ),
-              },
-              {
-                title: "Giảng viên 1",
-                width: 150,
-                align: "center",
-                type: "input",
-                onCell: () => ({
-                  style: { minWidth: 120, whiteSpace: "normal", wordBreak: "normal" },
-                }),
-                render: (__, record) => record?.mainLecturer?.userProfile?.fullname ?? "-",
-              },
-              {
-                title: "Giảng viên 2",
-                width: 150,
-                align: "center",
-                type: "input",
-                onCell: () => ({
-                  style: { minWidth: 120, whiteSpace: "normal", wordBreak: "normal" },
-                }),
-                render: (__, record) => record?.extraLecturer?.userProfile?.fullname ?? "-",
-              },
-              {
-                title: "Hình thức thi",
-                align: "center",
-                width: 120,
-                type: "select",
-                options: options,
-                render: (__, record) => <div>{getExamTypeLabel(record?.examType)}</div>,
-              },
-              {
-                title: "Khu vực",
-                align: "center",
-                width: 110,
-                type: "input",
-                ellipsis: true,
-                render: (_, record) =>
-                  record.trainingLocation ? record.trainingLocation?.name : "-",
-              },
-              {
-                title: "Phòng học",
-                align: "center",
-                width: 120,
-                ellipsis: true,
-                render: (_, record) => record?.room?.name || "-",
-              },
-              {
-                title: "Thời khoá biểu",
-                width: 120,
-                align: "center",
-                onCell: () => ({ style: { whiteSpace: "nowrap" } }),
-                render: (_, record) =>
-                  record.subjectClassTimes
-                    ?.uniqueByKeys?.(["dayOfWeek", "startPeriod", "endPeriod"])
-                    ?.sort?.(
-                      (a: SubjectClassTime, b: SubjectClassTime) =>
-                        a.dayOfWeek - b.dayOfWeek || a.startPeriod - b.startPeriod
-                    )
-                    ?.map?.((tkb: SubjectClassTime) => (
-                      <p
-                        key={`${tkb.dayOfWeek}-${tkb.startPeriod}-${tkb.endPeriod}`}
-                        className="mb-0"
-                      >
-                        {tkb.dayOfWeek === 8 ? "CN" : `T${tkb.dayOfWeek}`} - {tkb.startPeriod} -{" "}
-                        {tkb.endPeriod}
-                      </p>
-                    )),
-              },
-              {
-                title: "Ngày thi",
-                align: "center",
-                width: 110,
-                render: (_, record) => (record.examDate ? formatDate(record.examDate) : "-"),
-              },
-              {
-                title: "Thao tác",
-                width: 100,
-                align: "center",
-                fixed: "right",
-                render: (_, record) => (
-                  <div className="flex items-center justify-center">
-                    <ViewIcon
-                      onClick={() => onOpenEditSubjectClass({ id: record.id, mode: "view" })}
-                    />
-                  </div>
-                ),
-              },
-            ]}
-            scroll={{ x: 1450 }}
-            data={subjectClasses}
-            maxHeight={"calc(100vh - 250px)"}
-            pagination={{
-              current: currentPage,
-              pageSize: numberOfPages,
-              total: count,
-              onChange: (page, pageSize) => {
-                if (numberOfPages === pageSize) {
-                  setCurrentPage(page)
-                } else {
+                rowKey="id"
+                scrollable
+                filters={filters}
+                setFilters={(value) => {
+                  setFilters(value)
                   setCurrentPage(1)
-                  setNumberOfPages(pageSize)
-                }
-              },
-            }}
-          />
+                }}
+                columns={[
+                  {
+                    title: "Mã LMH",
+                    width: 110,
+                    align: "center",
+                    type: "input",
+                    onCell: () => ({ style: { whiteSpace: "nowrap" } }),
+                    render: (_, record) => record?.code || "",
+                  },
+                  {
+                    title: "Tên môn",
+                    width: 260,
+                    align: "center",
+                    type: "input",
+                    onCell: () => ({
+                      style: { minWidth: 200, whiteSpace: "normal", wordBreak: "normal" },
+                    }),
+                    render: (_, record) => (
+                      <p className="mb-0 text-left">
+                        {record?.name} ({record.subject?.credit} TC)
+                      </p>
+                    ),
+                  },
+                  {
+                    title: "Số SV",
+                    width: 100,
+                    align: "center",
+                    type: "order",
+                    distinctFilters: ["maxStudent"],
+                    render: (_, record) => (
+                      <p className="mb-0">
+                        {record?.fixedClasses?.reduce(
+                          (acc: number, curr: any) => acc + (curr?._count?.students ?? 0),
+                          0
+                        ) ?? 0}
+                      </p>
+                    ),
+                  },
+                  {
+                    title: "Giảng viên 1",
+                    width: 150,
+                    align: "center",
+                    type: "input",
+                    onCell: () => ({
+                      style: { minWidth: 120, whiteSpace: "normal", wordBreak: "normal" },
+                    }),
+                    render: (__, record) => record?.mainLecturer?.userProfile?.fullname ?? "-",
+                  },
+                  {
+                    title: "Giảng viên 2",
+                    width: 150,
+                    align: "center",
+                    type: "input",
+                    onCell: () => ({
+                      style: { minWidth: 120, whiteSpace: "normal", wordBreak: "normal" },
+                    }),
+                    render: (__, record) => record?.extraLecturer?.userProfile?.fullname ?? "-",
+                  },
+                  {
+                    title: "Hình thức thi",
+                    align: "center",
+                    width: 120,
+                    type: "select",
+                    options: options,
+                    render: (__, record) => <div>{getExamTypeLabel(record?.examType)}</div>,
+                  },
+                  {
+                    title: "Khu vực",
+                    align: "center",
+                    width: 110,
+                    type: "input",
+                    ellipsis: true,
+                    render: (_, record) =>
+                      record.trainingLocation ? record.trainingLocation?.name : "-",
+                  },
+                  {
+                    title: "Phòng học",
+                    align: "center",
+                    width: 120,
+                    ellipsis: true,
+                    render: (_, record) => record?.room?.name || "-",
+                  },
+                  {
+                    title: "Thời khoá biểu",
+                    width: 120,
+                    align: "center",
+                    onCell: () => ({ style: { whiteSpace: "nowrap" } }),
+                    render: (_, record) =>
+                      record.subjectClassTimes
+                        ?.uniqueByKeys?.(["dayOfWeek", "startPeriod", "endPeriod"])
+                        ?.sort?.(
+                          (a: SubjectClassTime, b: SubjectClassTime) =>
+                            a.dayOfWeek - b.dayOfWeek || a.startPeriod - b.startPeriod
+                        )
+                        ?.map?.((tkb: SubjectClassTime) => (
+                          <p
+                            key={`${tkb.dayOfWeek}-${tkb.startPeriod}-${tkb.endPeriod}`}
+                            className="mb-0"
+                          >
+                            {tkb.dayOfWeek === 8 ? "CN" : `T${tkb.dayOfWeek}`} - {tkb.startPeriod} -{" "}
+                            {tkb.endPeriod}
+                          </p>
+                        )),
+                  },
+                  {
+                    title: "Ngày thi",
+                    align: "center",
+                    width: 110,
+                    render: (_, record) => (record.examDate ? formatDate(record.examDate) : "-"),
+                  },
+                  {
+                    title: "Thao tác",
+                    width: 100,
+                    align: "center",
+                    fixed: "right",
+                    render: (_, record) => (
+                      <div className="flex items-center justify-center">
+                        <ViewIcon
+                          onClick={() => onOpenEditSubjectClass({ id: record.id, mode: "view" })}
+                        />
+                      </div>
+                    ),
+                  },
+                ]}
+                scroll={{ x: 1450 }}
+                data={subjectClasses}
+                maxHeight={"calc(100vh - 250px)"}
+                pagination={{
+                  current: currentPage,
+                  pageSize: numberOfPages,
+                  total: count,
+                  onChange: (page, pageSize) => {
+                    if (numberOfPages === pageSize) {
+                      setCurrentPage(page)
+                    } else {
+                      setCurrentPage(1)
+                      setNumberOfPages(pageSize)
+                    }
+                  },
+                }}
+              />
             </div>
           </div>
         </Col>

@@ -217,9 +217,7 @@ const scMap = new Map(
 
 const failureDetails = failureRows.map((row) => {
   const student =
-    row.student ||
-    (row.userProfileId ? profileByUserId.get(row.userProfileId) : undefined) ||
-    null
+    row.student || (row.userProfileId ? profileByUserId.get(row.userProfileId) : undefined) || null
   const classes = row.subjectClassIds
     .map((id) => scMap.get(id))
     .filter(Boolean)
@@ -238,9 +236,7 @@ const failureDetails = failureRows.map((row) => {
   }
 })
 
-const failedStudentKeys = new Set(
-  failureDetails.map((f) => f.studentId || `code:${f.studentCode}`)
-)
+const failedStudentKeys = new Set(failureDetails.map((f) => f.studentId || `code:${f.studentCode}`))
 const failedOnlyKeys = [...failedStudentKeys].filter((k) => {
   if (k.startsWith("code:")) return true
   return !successByStudent.has(k)

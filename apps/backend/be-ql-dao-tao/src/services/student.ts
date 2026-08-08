@@ -463,7 +463,7 @@ export const exportStudentScholarship = async ({
       if (isGroupHeader) {
         try {
           worksheet.mergeCells(rowNumber, 1, rowNumber, 12)
-        } catch (err) { }
+        } catch (err) {}
         row.height = 24
 
         for (let col = 1; col <= 12; col++) {

@@ -50,6 +50,7 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
+import type { NotificationMessageRequestChannels } from './notificationMessageRequestChannels';
 
 export interface NotificationMessageRequest {
   /**
@@ -109,4 +110,19 @@ export interface NotificationMessageRequest {
    * @nullable
    */
   sActionName?: string | null;
+  /**
+   * Các kênh xử lý thông báo dạng Flags: Fcm=1, Websocket=2, Store=4
+   * @nullable
+   */
+  Channels?: NotificationMessageRequestChannels;
+  /**
+   * Tiêu đề thông báo dùng cho FCM/title
+   * @nullable
+   */
+  sTitle?: string | null;
+  /**
+   * Danh sách FCM token gửi push trực tiếp (tùy chọn)
+   * @nullable
+   */
+  sFcmTokens?: string[] | null;
 }

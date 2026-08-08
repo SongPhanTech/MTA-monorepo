@@ -54,7 +54,10 @@ async function querySessionToTrainingCourse(sessionId: string) {
   `
 }
 
-async function querySubjectVersionJoins(table: "_PrerequisiteSubject" | "_CoRequisiteSubject", subjectVersionIds: string[]) {
+async function querySubjectVersionJoins(
+  table: "_PrerequisiteSubject" | "_CoRequisiteSubject",
+  subjectVersionIds: string[]
+) {
   if (subjectVersionIds.length === 0) return [] as JoinRow[]
   return prisma.$queryRawUnsafe<JoinRow[]>(
     `SELECT "A", "B" FROM "ql-dao-tao"."${table}" WHERE "A" = ANY($1::text[]) OR "B" = ANY($1::text[])`,
@@ -433,15 +436,11 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
   const joinKey = (j: JoinRow) => `${j.A}|${j.B}`
   const prerequisiteJoinsMerged = [
     ...prerequisiteJoins,
-    ...blockPrereqJoins.filter(
-      (j) => !prerequisiteJoins.some((x) => joinKey(x) === joinKey(j))
-    ),
+    ...blockPrereqJoins.filter((j) => !prerequisiteJoins.some((x) => joinKey(x) === joinKey(j))),
   ]
   const coRequisiteJoinsMerged = [
     ...coRequisiteJoins,
-    ...blockCoreqJoins.filter(
-      (j) => !coRequisiteJoins.some((x) => joinKey(x) === joinKey(j))
-    ),
+    ...blockCoreqJoins.filter((j) => !coRequisiteJoins.some((x) => joinKey(x) === joinKey(j))),
   ]
 
   // Semester / SchoolYear từ kết quả học kỳ, điểm lịch sử, semesterStart khóa
@@ -452,40 +451,47 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
     ...studentSubjectScoresRaw.map((s) => s.semesterId),
   ])
 
-  const [lecturers, staff, rooms, curriculumVersions, relatedSemesters, subjectsMerged, extraTrainingObjectTypes] =
-    await Promise.all([
-      lecturerIds.length > 0
-        ? prisma.lecturer.findMany({ where: { id: { in: lecturerIds }, deletedAt: null } })
-        : Promise.resolve([]),
-      staffIds.length > 0
-        ? prisma.staff.findMany({ where: { id: { in: staffIds }, deletedAt: null } })
-        : Promise.resolve([]),
-      roomIds.length > 0
-        ? prisma.room.findMany({ where: { id: { in: roomIds }, deletedAt: null } })
-        : Promise.resolve([]),
-      curriculumVersionIds.length > 0
-        ? prisma.curriculumVersion.findMany({
-            where: { id: { in: curriculumVersionIds }, deletedAt: null },
-          })
-        : Promise.resolve([]),
-      relatedSemesterIds.length > 0
-        ? prisma.semester.findMany({ where: { id: { in: relatedSemesterIds }, deletedAt: null } })
-        : Promise.resolve([semesterRecord]),
-      subjectIdsWithBlocks.length > 0
-        ? prisma.subject.findMany({
-            where: { id: { in: subjectIdsWithBlocks }, deletedAt: null },
-          })
-        : Promise.resolve([]),
-      (() => {
-        const existingTot = new Set(trainingObjectTypes.map((t) => t.id))
-        const missingTot = uniqueIds(trainingBlocks.map((b) => b.trainingObjectTypeId)).filter(
-          (id) => !existingTot.has(id)
-        )
-        return missingTot.length > 0
-          ? prisma.trainingObjectType.findMany({ where: { id: { in: missingTot } } })
-          : Promise.resolve([])
-      })(),
-    ])
+  const [
+    lecturers,
+    staff,
+    rooms,
+    curriculumVersions,
+    relatedSemesters,
+    subjectsMerged,
+    extraTrainingObjectTypes,
+  ] = await Promise.all([
+    lecturerIds.length > 0
+      ? prisma.lecturer.findMany({ where: { id: { in: lecturerIds }, deletedAt: null } })
+      : Promise.resolve([]),
+    staffIds.length > 0
+      ? prisma.staff.findMany({ where: { id: { in: staffIds }, deletedAt: null } })
+      : Promise.resolve([]),
+    roomIds.length > 0
+      ? prisma.room.findMany({ where: { id: { in: roomIds }, deletedAt: null } })
+      : Promise.resolve([]),
+    curriculumVersionIds.length > 0
+      ? prisma.curriculumVersion.findMany({
+          where: { id: { in: curriculumVersionIds }, deletedAt: null },
+        })
+      : Promise.resolve([]),
+    relatedSemesterIds.length > 0
+      ? prisma.semester.findMany({ where: { id: { in: relatedSemesterIds }, deletedAt: null } })
+      : Promise.resolve([semesterRecord]),
+    subjectIdsWithBlocks.length > 0
+      ? prisma.subject.findMany({
+          where: { id: { in: subjectIdsWithBlocks }, deletedAt: null },
+        })
+      : Promise.resolve([]),
+    (() => {
+      const existingTot = new Set(trainingObjectTypes.map((t) => t.id))
+      const missingTot = uniqueIds(trainingBlocks.map((b) => b.trainingObjectTypeId)).filter(
+        (id) => !existingTot.has(id)
+      )
+      return missingTot.length > 0
+        ? prisma.trainingObjectType.findMany({ where: { id: { in: missingTot } } })
+        : Promise.resolve([])
+    })(),
+  ])
 
   const allTrainingObjectTypes = [...trainingObjectTypes, ...extraTrainingObjectTypes]
 

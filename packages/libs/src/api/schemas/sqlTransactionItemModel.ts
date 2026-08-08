@@ -170,6 +170,7 @@ export const SqlTransactionItemModel = {
   ClassRegisterSessionCredit: 'ClassRegisterSessionCredit',
   ClassRegisterSession: 'ClassRegisterSession',
   ClassRegisterLogs: 'ClassRegisterLogs',
+  ClassRegisterAttempt: 'ClassRegisterAttempt',
   SubjectClass: 'SubjectClass',
   SubjectClassAttendance: 'SubjectClassAttendance',
   SubjectClassAttendanceStudent: 'SubjectClassAttendanceStudent',

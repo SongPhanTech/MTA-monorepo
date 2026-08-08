@@ -82,6 +82,7 @@ export interface GetSurveyResult {
   endDate?: string | null;
   isPublic?: boolean;
   anonymous?: boolean;
+  targetEnrollStudentOnly?: boolean;
   surveyQuestion: GetSurveyResultSurveyQuestionItem[];
   surveyChoice: GetSurveyResultSurveyChoiceItem[];
   /** @nullable */

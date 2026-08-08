@@ -146,7 +146,10 @@ function sheetToRows(filePath, sheetName) {
 
 function parseTiet(s) {
   if (s == null || s === "") return [null, null]
-  const str = String(s).trim().replace(/[–→]/g, "-").replace("->", "-")
+  const str = String(s)
+    .trim()
+    .replace(/[–→]/g, "-")
+    .replace("->", "-")
   const m = str.match(/(\d+)\s*-\s*(\d+)/)
   if (!m) return [null, null]
   return [Number(m[1]), Number(m[2])]
@@ -165,7 +168,12 @@ function normalizeRoom(r) {
   const raw = String(r).trim()
   const low = raw.toLowerCase()
   const compact = low.replace(/[.\s]/g, "")
-  if (low.includes("bãi") || compact === "btap" || compact === "baitap" || compact.startsWith("btap")) {
+  if (
+    low.includes("bãi") ||
+    compact === "btap" ||
+    compact === "baitap" ||
+    compact.startsWith("btap")
+  ) {
     return "BAITAP"
   }
   return raw.toUpperCase().replace(/\s+/g, "")
@@ -284,7 +292,10 @@ function loadGvRows(gvPath) {
   let headerIdx = -1
   for (let i = 0; i < Math.min(rows.length, 20); i++) {
     const r = rows[i] || []
-    if (r.some((c) => String(c || "").trim() === "Mã môn") && r.some((c) => String(c || "").includes("Ngày"))) {
+    if (
+      r.some((c) => String(c || "").trim() === "Mã môn") &&
+      r.some((c) => String(c || "").includes("Ngày"))
+    ) {
       headerIdx = i
       break
     }
@@ -345,11 +356,7 @@ function matchDatesForSlot(slot, gvRows) {
 
   const collect = (pred) =>
     gvRows.filter(
-      (g) =>
-        g.maMh === slot.maMh &&
-        g.thuVn === slot.thu &&
-        g.startAbs != null &&
-        pred(g)
+      (g) => g.maMh === slot.maMh && g.thuVn === slot.thu && g.startAbs != null && pred(g)
     )
 
   const strategies = isFuzzy
@@ -366,10 +373,7 @@ function matchDatesForSlot(slot, gvRows) {
           "Gần đúng — chỉ lấy ngày từ GV (thứ + phòng + GV)",
           (g) => g.roomNorm === roomN && nameOverlap(slot.gv, g.tenGv),
         ],
-        [
-          "Gần đúng — chỉ lấy ngày từ GV (thứ + tiết)",
-          (g) => g.startAbs === st && g.endAbs === en,
-        ],
+        ["Gần đúng — chỉ lấy ngày từ GV (thứ + tiết)", (g) => g.startAbs === st && g.endAbs === en],
       ]
     : [
         [
@@ -399,9 +403,9 @@ function matchDatesForSlot(slot, gvRows) {
       break
     }
   }
-  const dates = [
-    ...new Set(cands.map((g) => g.ngay).filter(Boolean)),
-  ].sort((a, b) => dayjs(a, "DD/MM/YYYY").valueOf() - dayjs(b, "DD/MM/YYYY").valueOf())
+  const dates = [...new Set(cands.map((g) => g.ngay).filter(Boolean))].sort(
+    (a, b) => dayjs(a, "DD/MM/YYYY").valueOf() - dayjs(b, "DD/MM/YYYY").valueOf()
+  )
   return { dates, note }
 }
 
@@ -409,7 +413,9 @@ function buildPayload(tkbByLmh, gvRows) {
   const items = []
   for (const [maLmh, slots] of [...tkbByLmh.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
     // bỏ LMH không có thứ số
-    const usableSlots = slots.filter((s) => typeof s.thu === "number" && s.start != null && s.end != null)
+    const usableSlots = slots.filter(
+      (s) => typeof s.thu === "number" && s.start != null && s.end != null
+    )
     if (!usableSlots.length) continue
 
     const enriched = usableSlots.map((s) => {
@@ -418,7 +424,14 @@ function buildPayload(tkbByLmh, gvRows) {
     })
 
     const kips = new Set(enriched.map((s) => s.kip))
-    const schedule = kips.has("AFTERNOON") && kips.size === 1 ? "AFTERNOON" : kips.has("MORNING") && kips.size === 1 ? "MORNING" : kips.has("AFTERNOON") ? "AFTERNOON" : "MORNING"
+    const schedule =
+      kips.has("AFTERNOON") && kips.size === 1
+        ? "AFTERNOON"
+        : kips.has("MORNING") && kips.size === 1
+          ? "MORNING"
+          : kips.has("AFTERNOON")
+            ? "AFTERNOON"
+            : "MORNING"
 
     items.push({
       tkbCode: maLmh,
@@ -608,7 +621,10 @@ async function main() {
 
   if (args.only?.size) {
     payload = payload.filter(
-      (p) => args.only.has(p.tkbCode) || args.only.has(p.dbCode) || args.only.has(mapTkbCodeToDb(p.tkbCode))
+      (p) =>
+        args.only.has(p.tkbCode) ||
+        args.only.has(p.dbCode) ||
+        args.only.has(mapTkbCodeToDb(p.tkbCode))
     )
   }
   if (!args.skipMissingDates) {
@@ -660,7 +676,11 @@ async function main() {
           )
         }
       } catch (e) {
-        summary.errors.push({ tkbCode: item.tkbCode, dbCode: item.dbCode, error: String(e?.message || e) })
+        summary.errors.push({
+          tkbCode: item.tkbCode,
+          dbCode: item.dbCode,
+          error: String(e?.message || e),
+        })
         console.error(`ERR ${item.tkbCode} => ${item.dbCode}:`, e?.message || e)
       }
     }
@@ -676,8 +696,12 @@ async function main() {
         timeOnly: summary.timeOnly.length,
         notFound: summary.notFound,
         errors: summary.errors,
-        createdTotal: summary.ok.reduce((a, x) => a + x.created, 0) + summary.timeOnly.reduce((a, x) => a + (x.created || 0), 0),
-        updatedTotal: summary.ok.reduce((a, x) => a + x.updated, 0) + summary.timeOnly.reduce((a, x) => a + (x.updated || 0), 0),
+        createdTotal:
+          summary.ok.reduce((a, x) => a + x.created, 0) +
+          summary.timeOnly.reduce((a, x) => a + (x.created || 0), 0),
+        updatedTotal:
+          summary.ok.reduce((a, x) => a + x.updated, 0) +
+          summary.timeOnly.reduce((a, x) => a + (x.updated || 0), 0),
       },
       null,
       2

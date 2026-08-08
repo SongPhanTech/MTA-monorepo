@@ -173,6 +173,8 @@ export interface NhanVien {
   bLaGiangVien?: boolean;
   /** Trạng thái */
   bActive?: boolean;
+  /** Đã cấp tài khoản */
+  bHasAccount?: boolean;
   bDeleted?: boolean;
   bSystem?: boolean;
   /** @nullable */

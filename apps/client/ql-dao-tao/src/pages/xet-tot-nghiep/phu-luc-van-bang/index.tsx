@@ -301,10 +301,7 @@ export default function StudentGradeSystem() {
         deletedAt: null,
         ...(trainingObjectTypeId && { trainingObjectTypeId }),
         ...(trainingCourseIds?.length && {
-          OR: [
-            { trainingCourseId: { in: trainingCourseIds } },
-            { trainingCourseId: null },
-          ],
+          OR: [{ trainingCourseId: { in: trainingCourseIds } }, { trainingCourseId: null }],
         }),
       },
       orderBy: {
@@ -1311,7 +1308,8 @@ export default function StudentGradeSystem() {
       if (res.status === 200) {
         saveAs(res.data as Blob, config.fileName)
       } else {
-        const errorMsg = (res.data as { message?: string })?.message || "Đã xảy ra lỗi khi xuất file"
+        const errorMsg =
+          (res.data as { message?: string })?.message || "Đã xảy ra lỗi khi xuất file"
         message.error(errorMsg)
       }
     } catch (error: unknown) {
@@ -1344,7 +1342,9 @@ export default function StudentGradeSystem() {
     }
 
     const selectedSessionId = thesisSessionIds?.[0]
-    const session = thesisSessionData.find((s) => s.id === selectedSessionId) as SessionSignerInfo | undefined
+    const session = thesisSessionData.find((s) => s.id === selectedSessionId) as
+      | SessionSignerInfo
+      | undefined
     if (!session) {
       message.warning("Vui lòng chọn đợt xét trước khi xuất file.")
       return
@@ -1359,7 +1359,9 @@ export default function StudentGradeSystem() {
 
   const handleConfirmSignExport = async () => {
     const selectedSessionId = thesisSessionIds?.[0]
-    const session = thesisSessionData.find((s) => s.id === selectedSessionId) as SessionSignerInfo | undefined
+    const session = thesisSessionData.find((s) => s.id === selectedSessionId) as
+      | SessionSignerInfo
+      | undefined
     if (!session) return
 
     const chiefName = session.chief?.trim() || session.graduationDecisionSigner?.trim() || ""
@@ -1974,7 +1976,8 @@ export default function StudentGradeSystem() {
           <Radio value="deputy">
             Phó phòng sau đại học:{" "}
             <strong>
-              {(selectedThesisSession as SessionSignerInfo | undefined)?.deputy?.trim() || "(chưa nhập)"}
+              {(selectedThesisSession as SessionSignerInfo | undefined)?.deputy?.trim() ||
+                "(chưa nhập)"}
             </strong>
           </Radio>
         </Radio.Group>

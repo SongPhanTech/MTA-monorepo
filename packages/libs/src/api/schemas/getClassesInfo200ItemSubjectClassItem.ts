@@ -38,6 +38,8 @@ export type GetClassesInfo200ItemSubjectClassItem = {
   /** @nullable */
   schedule?: GetClassesInfo200ItemSubjectClassItemSchedule;
   maxStudent: number;
+  enrolledCount?: number;
+  version?: number;
   type?: GetClassesInfo200ItemSubjectClassItemType;
   status: GetClassesInfo200ItemSubjectClassItemStatus;
   cancelled?: boolean;
@@ -64,6 +66,7 @@ export type GetClassesInfo200ItemSubjectClassItem = {
   issuedScoreAt?: string | null;
   isLockScore?: boolean;
   isLockExamScore?: boolean;
+  isLockLecturer?: boolean;
   scoreSubmitted?: boolean;
   scoreChecked?: boolean;
   /** @nullable */

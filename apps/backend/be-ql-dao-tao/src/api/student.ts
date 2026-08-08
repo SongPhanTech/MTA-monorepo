@@ -759,13 +759,15 @@ app.openapi(debtStatistics, async (c) => {
     ],
   })
 
-  const cvIds = Array.from(new Set(scores.map((s) => s.student.curriculumVersionId).filter(Boolean))) as string[]
+  const cvIds = Array.from(
+    new Set(scores.map((s) => s.student.curriculumVersionId).filter(Boolean))
+  ) as string[]
 
   const tbSubjects = await prisma.trainingBlockSubject.findMany({
     where: {
       trainingBlockOnCurriculumVersion: {
-        curriculumVersionId: { in: cvIds }
-      }
+        curriculumVersionId: { in: cvIds },
+      },
     },
     select: {
       subjectId: true,
@@ -779,14 +781,13 @@ app.openapi(debtStatistics, async (c) => {
     },
   })
 
-  const tbsMap: Record<string, Record<string, typeof tbSubjects[0]>> = {}
+  const tbsMap: Record<string, Record<string, (typeof tbSubjects)[0]>> = {}
   for (const tbs of tbSubjects) {
     const cvId = tbs.trainingBlockOnCurriculumVersion.curriculumVersionId
     if (!cvId) continue
     if (!tbsMap[cvId]) tbsMap[cvId] = {}
     tbsMap[cvId][tbs.subjectId] = tbs
   }
-
 
   type SubjectAttempt = {
     semesterCode: string
@@ -969,9 +970,7 @@ app.openapi(debtStatistics, async (c) => {
           )
           .join("/"),
         examScores: subject.attempts
-          .map((attempt) =>
-            attempt.examScore === null ? "Chưa có" : String(attempt.examScore)
-          )
+          .map((attempt) => (attempt.examScore === null ? "Chưa có" : String(attempt.examScore)))
           .join("/"),
         type,
         note,

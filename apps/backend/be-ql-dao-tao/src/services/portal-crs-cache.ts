@@ -79,7 +79,7 @@ export async function invalidateClassRegisterSessionCache(
 
   let deleted = 0
   deleted += await delByPattern(`${PREFIX}:session:*`)
-    deleted += await delByPattern(`${PREFIX}:student:*:${sessionId}*`)
+  deleted += await delByPattern(`${PREFIX}:student:*:${sessionId}*`)
   deleted += await delByPattern(`${PREFIX}:classes:*:${sessionId}:*`)
   await withRedis(async (redis) => {
     await redis.del(`${PREFIX}:seats:${sessionId}`)

@@ -286,11 +286,10 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                               },
                               {
                                 value:
-                                  item?.trainingBlockSubject?.trainingBlockOnCurriculumVersion
-                                    ?.curriculumVersion?.fixedClasses?.reduce(
-                                      (sum, fc) => sum + (fc?._count?.students ?? 0),
-                                      0
-                                    ) ?? 0,
+                                  item?.trainingBlockSubject?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.reduce(
+                                    (sum, fc) => sum + (fc?._count?.students ?? 0),
+                                    0
+                                  ) ?? 0,
                                 align: "center",
                                 rowSpan,
                               },

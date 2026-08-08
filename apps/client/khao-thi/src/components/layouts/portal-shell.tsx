@@ -90,7 +90,12 @@ const PortalShell = ({
             overflow: "hidden",
           }}
         >
-          <Content className={cn("flex h-full flex-col px-2 py-2", contentVariant === "plain" && "px-0 py-0")}>
+          <Content
+            className={cn(
+              "flex h-full flex-col px-2 py-2",
+              contentVariant === "plain" && "px-0 py-0"
+            )}
+          >
             {unLayout ? (
               <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
             ) : contentVariant === "plain" ? (

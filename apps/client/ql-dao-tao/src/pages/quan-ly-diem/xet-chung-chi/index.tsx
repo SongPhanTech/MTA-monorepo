@@ -108,7 +108,7 @@ export default function AutoCheckCertificate() {
                 : scoreVal
             )
           : 0
-      
+
       if (score < 4) hasFailedSubject = true
       totalScore += score * sv.credit
       totalCredit += sv.credit

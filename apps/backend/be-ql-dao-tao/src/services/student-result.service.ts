@@ -1661,7 +1661,7 @@ export const listStudentResultInfo = async (
   try {
     const currentSemester = await prisma.semester.findUnique({
       where: { id: semesterId },
-      select: { schoolYearId: true }
+      select: { schoolYearId: true },
     })
 
     const students = await prisma.student.findMany({
@@ -1677,8 +1677,8 @@ export const listStudentResultInfo = async (
       include: {
         userProfile: true,
         studentSemesterResult: { where: { semesterId } },
-        studentYearResult: currentSemester?.schoolYearId 
-          ? { where: { schoolYearId: currentSemester.schoolYearId } } 
+        studentYearResult: currentSemester?.schoolYearId
+          ? { where: { schoolYearId: currentSemester.schoolYearId } }
           : { where: { schoolYear: { semesters: { some: { id: semesterId } } } } },
         fixedClass: {
           include: {
@@ -2487,8 +2487,8 @@ const fetchBulkStudentSemesterResults = async (studentIds: string[], semesterId:
       },
     },
   })
-  
-  const map = new Map<string, typeof results[0]>()
+
+  const map = new Map<string, (typeof results)[0]>()
   for (const r of results) {
     map.set(r.studentId, r)
   }

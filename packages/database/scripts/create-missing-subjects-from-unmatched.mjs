@@ -81,9 +81,7 @@ if (!url) {
 const prisma = new PrismaClient({
   datasources: {
     db: {
-      url: url.includes("?")
-        ? `${url}&connection_limit=1`
-        : `${url}?connection_limit=1`,
+      url: url.includes("?") ? `${url}&connection_limit=1` : `${url}?connection_limit=1`,
     },
   },
 })
@@ -118,11 +116,11 @@ async function main() {
     const raw = entry.remappedSubjectName || entry.subjectName
     const forceKey = normalize(raw)
     let name = FORCE_EXISTING[forceKey] || cleanSubjectName(raw)
-    const typeId =
-      resolveType(entry.remappedTrainingType) ||
-      resolveType(entry.trainingTypeId)
+    const typeId = resolveType(entry.remappedTrainingType) || resolveType(entry.trainingTypeId)
     if (!typeId) {
-      console.warn(`  SKIP no training type: ${entry.relativePath} | "${entry.remappedTrainingType}"`)
+      console.warn(
+        `  SKIP no training type: ${entry.relativePath} | "${entry.remappedTrainingType}"`
+      )
       continue
     }
     if (!groups.has(name)) groups.set(name, { name, typeIds: new Set(), entries: [] })
@@ -153,8 +151,7 @@ async function main() {
 
   for (const [name, g] of groups) {
     let subject =
-      subjectByNorm.get(normalize(name)) ||
-      subjectByNorm.get(normalize(stripDiacritics(name)))
+      subjectByNorm.get(normalize(name)) || subjectByNorm.get(normalize(stripDiacritics(name)))
 
     if (!subject) {
       console.log(`\nCreating Subject: "${name}"`)

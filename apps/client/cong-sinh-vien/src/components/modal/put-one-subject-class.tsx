@@ -731,7 +731,8 @@ const PutOneSubjectClassModal = () => {
               className="m-0"
               onRow={(record) => {
                 const isSelf =
-                  (record.student?.userProfileId && record.student.userProfileId === currentUserId) ||
+                  (record.student?.userProfileId &&
+                    record.student.userProfileId === currentUserId) ||
                   (record.student?.id && record.student.id === currentUserId)
                 if (!isSelf) return {}
                 return {

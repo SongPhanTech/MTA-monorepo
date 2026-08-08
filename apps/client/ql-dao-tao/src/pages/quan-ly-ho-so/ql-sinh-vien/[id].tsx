@@ -1505,7 +1505,9 @@ export default function StudentDetailV2Page() {
                 const titleInfo = getThesisTitle(record.thesisProject)
                 return (
                   <div>
-                    <div className="font-medium text-gray-900">{titleInfo.title || record.description || "—"}</div>
+                    <div className="font-medium text-gray-900">
+                      {titleInfo.title || record.description || "—"}
+                    </div>
                     {titleInfo.titleEN && (
                       <div className="text-xs text-gray-500 italic mt-0.5">{titleInfo.titleEN}</div>
                     )}
@@ -1539,10 +1541,16 @@ export default function StudentDetailV2Page() {
                 if (!info.fullText) return "—"
                 return (
                   <div className="text-xs space-y-0.5">
-                    {info.sessionName && <div className="font-medium text-gray-800">{info.sessionName}</div>}
-                    {info.defenseDate && <div className="text-gray-600">Ngày BV: {info.defenseDate}</div>}
+                    {info.sessionName && (
+                      <div className="font-medium text-gray-800">{info.sessionName}</div>
+                    )}
+                    {info.defenseDate && (
+                      <div className="text-gray-600">Ngày BV: {info.defenseDate}</div>
+                    )}
                     {info.roomName && <div className="text-gray-600">Phòng: {info.roomName}</div>}
-                    {info.defenseTime && <div className="text-gray-600">Ca BV: {info.defenseTime}</div>}
+                    {info.defenseTime && (
+                      <div className="text-gray-600">Ca BV: {info.defenseTime}</div>
+                    )}
                   </div>
                 )
               },

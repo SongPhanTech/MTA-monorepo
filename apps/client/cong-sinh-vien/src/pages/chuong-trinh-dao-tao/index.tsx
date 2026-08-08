@@ -91,45 +91,45 @@ export default function TrainingProgramSubjects() {
     () =>
       isFiltering
         ? {
-          subjects: {
-            some: {
-              subject: {
-                ...(filters.name
-                  ? {
-                    name: {
-                      contains: filters.name,
-                      mode: "insensitive",
+            subjects: {
+              some: {
+                subject: {
+                  ...(filters.name
+                    ? {
+                        name: {
+                          contains: filters.name,
+                          mode: "insensitive",
+                        },
+                      }
+                    : {}),
+                  ...(filters.code
+                    ? {
+                        code: {
+                          contains: filters.code,
+                          mode: "insensitive",
+                        },
+                      }
+                    : {}),
+                  ...emptyObjectIf(
+                    {
+                      managementOrganizationId: {
+                        in: filters.organization,
+                      },
                     },
-                  }
-                  : {}),
-                ...(filters.code
-                  ? {
-                    code: {
-                      contains: filters.code,
-                      mode: "insensitive",
+                    !!filters.organization
+                  ),
+                  ...emptyObjectIf(
+                    {
+                      examType: {
+                        in: filters.examType,
+                      },
                     },
-                  }
-                  : {}),
-                ...emptyObjectIf(
-                  {
-                    managementOrganizationId: {
-                      in: filters.organization,
-                    },
-                  },
-                  !!filters.organization
-                ),
-                ...emptyObjectIf(
-                  {
-                    examType: {
-                      in: filters.examType,
-                    },
-                  },
-                  !!filters.examType
-                ),
+                    !!filters.examType
+                  ),
+                },
               },
             },
-          },
-        }
+          }
         : {},
     [filters, isFiltering]
   )
@@ -148,19 +148,19 @@ export default function TrainingProgramSubjects() {
           subject: {
             ...(filters.name
               ? {
-                name: {
-                  contains: filters.name,
-                  mode: "insensitive",
-                },
-              }
+                  name: {
+                    contains: filters.name,
+                    mode: "insensitive",
+                  },
+                }
               : {}),
             ...(filters.code
               ? {
-                code: {
-                  contains: filters.code,
-                  mode: "insensitive",
-                },
-              }
+                  code: {
+                    contains: filters.code,
+                    mode: "insensitive",
+                  },
+                }
               : {}),
             ...emptyObjectIf(
               {
@@ -180,148 +180,148 @@ export default function TrainingProgramSubjects() {
             ),
             ...(filters.creditCmp
               ? {
-                credit: {
-                  ...(filters.creditCmp.gte
-                    ? {
-                      gte: Number(filters.creditCmp.gte),
-                    }
-                    : {}),
-                  ...(filters.creditCmp.lte
-                    ? {
-                      lte: Number(filters.creditCmp.lte),
-                    }
-                    : {}),
-                },
-              }
+                  credit: {
+                    ...(filters.creditCmp.gte
+                      ? {
+                          gte: Number(filters.creditCmp.gte),
+                        }
+                      : {}),
+                    ...(filters.creditCmp.lte
+                      ? {
+                          lte: Number(filters.creditCmp.lte),
+                        }
+                      : {}),
+                  },
+                }
               : {}),
             ...(filters.periodCmp
               ? {
-                period: {
-                  ...(filters.periodCmp.gte
-                    ? {
-                      gte: Number(filters.periodCmp.gte),
-                    }
-                    : {}),
-                  ...(filters.periodCmp.lte
-                    ? {
-                      lte: Number(filters.periodCmp.lte),
-                    }
-                    : {}),
-                },
-              }
+                  period: {
+                    ...(filters.periodCmp.gte
+                      ? {
+                          gte: Number(filters.periodCmp.gte),
+                        }
+                      : {}),
+                    ...(filters.periodCmp.lte
+                      ? {
+                          lte: Number(filters.periodCmp.lte),
+                        }
+                      : {}),
+                  },
+                }
               : {}),
             ...(filters.numberOfTheoryCmp
               ? {
-                numberOfTheory: {
-                  ...(filters.numberOfTheoryCmp.gte
-                    ? {
-                      gte: Number(filters.numberOfTheoryCmp.gte),
-                    }
-                    : {}),
-                  ...(filters.numberOfTheoryCmp.lte
-                    ? {
-                      lte: Number(filters.numberOfTheoryCmp.lte),
-                    }
-                    : {}),
-                },
-              }
+                  numberOfTheory: {
+                    ...(filters.numberOfTheoryCmp.gte
+                      ? {
+                          gte: Number(filters.numberOfTheoryCmp.gte),
+                        }
+                      : {}),
+                    ...(filters.numberOfTheoryCmp.lte
+                      ? {
+                          lte: Number(filters.numberOfTheoryCmp.lte),
+                        }
+                      : {}),
+                  },
+                }
               : {}),
             ...(filters.numberOfPracticalCmp
               ? {
-                numberOfPractical: {
-                  ...(filters.numberOfPracticalCmp.gte
-                    ? {
-                      gte: Number(filters.numberOfPracticalCmp.gte),
-                    }
-                    : {}),
-                  ...(filters.numberOfPracticalCmp.lte
-                    ? {
-                      lte: Number(filters.numberOfPracticalCmp.lte),
-                    }
-                    : {}),
-                },
-              }
+                  numberOfPractical: {
+                    ...(filters.numberOfPracticalCmp.gte
+                      ? {
+                          gte: Number(filters.numberOfPracticalCmp.gte),
+                        }
+                      : {}),
+                    ...(filters.numberOfPracticalCmp.lte
+                      ? {
+                          lte: Number(filters.numberOfPracticalCmp.lte),
+                        }
+                      : {}),
+                  },
+                }
               : {}),
             ...(filters.numberOfSelfStudyCmp
               ? {
-                numberOfSelfStudy: {
-                  ...(filters.numberOfSelfStudyCmp.gte
-                    ? {
-                      gte: Number(filters.numberOfSelfStudyCmp.gte),
-                    }
-                    : {}),
-                  ...(filters.numberOfSelfStudyCmp.lte
-                    ? {
-                      lte: Number(filters.numberOfSelfStudyCmp.lte),
-                    }
-                    : {}),
-                },
-              }
+                  numberOfSelfStudy: {
+                    ...(filters.numberOfSelfStudyCmp.gte
+                      ? {
+                          gte: Number(filters.numberOfSelfStudyCmp.gte),
+                        }
+                      : {}),
+                    ...(filters.numberOfSelfStudyCmp.lte
+                      ? {
+                          lte: Number(filters.numberOfSelfStudyCmp.lte),
+                        }
+                      : {}),
+                  },
+                }
               : {}),
             ...(filters.numberOfPracticeCmp
               ? {
-                numberOfPractice: {
-                  ...(filters.numberOfPracticeCmp.gte
-                    ? {
-                      gte: Number(filters.numberOfPracticeCmp.gte),
-                    }
-                    : {}),
-                  ...(filters.numberOfPracticeCmp.lte
-                    ? {
-                      lte: Number(filters.numberOfPracticeCmp.lte),
-                    }
-                    : {}),
-                },
-              }
+                  numberOfPractice: {
+                    ...(filters.numberOfPracticeCmp.gte
+                      ? {
+                          gte: Number(filters.numberOfPracticeCmp.gte),
+                        }
+                      : {}),
+                    ...(filters.numberOfPracticeCmp.lte
+                      ? {
+                          lte: Number(filters.numberOfPracticeCmp.lte),
+                        }
+                      : {}),
+                  },
+                }
               : {}),
             ...(filters.numberOfReviewCmp
               ? {
-                numberOfReview: {
-                  ...(filters.numberOfReviewCmp.gte
-                    ? {
-                      gte: Number(filters.numberOfReviewCmp.gte),
-                    }
-                    : {}),
-                  ...(filters.numberOfReviewCmp.lte
-                    ? {
-                      lte: Number(filters.numberOfReviewCmp.lte),
-                    }
-                    : {}),
-                },
-              }
+                  numberOfReview: {
+                    ...(filters.numberOfReviewCmp.gte
+                      ? {
+                          gte: Number(filters.numberOfReviewCmp.gte),
+                        }
+                      : {}),
+                    ...(filters.numberOfReviewCmp.lte
+                      ? {
+                          lte: Number(filters.numberOfReviewCmp.lte),
+                        }
+                      : {}),
+                  },
+                }
               : {}),
             ...(filters.numberOfExamCmp
               ? {
-                numberOfExam: {
-                  ...(filters.numberOfExamCmp.gte
-                    ? {
-                      gte: Number(filters.numberOfExamCmp.gte),
-                    }
-                    : {}),
-                  ...(filters.numberOfExamCmp.lte
-                    ? {
-                      lte: Number(filters.numberOfExamCmp.lte),
-                    }
-                    : {}),
-                },
-              }
+                  numberOfExam: {
+                    ...(filters.numberOfExamCmp.gte
+                      ? {
+                          gte: Number(filters.numberOfExamCmp.gte),
+                        }
+                      : {}),
+                    ...(filters.numberOfExamCmp.lte
+                      ? {
+                          lte: Number(filters.numberOfExamCmp.lte),
+                        }
+                      : {}),
+                  },
+                }
               : {}),
           },
           ...(filters.semesterCmp
             ? {
-              semester: {
-                ...(filters.semesterCmp.gte
-                  ? {
-                    gte: Number(filters.semesterCmp.gte),
-                  }
-                  : {}),
-                ...(filters.semesterCmp.lte
-                  ? {
-                    lte: Number(filters.semesterCmp.lte),
-                  }
-                  : {}),
-              },
-            }
+                semester: {
+                  ...(filters.semesterCmp.gte
+                    ? {
+                        gte: Number(filters.semesterCmp.gte),
+                      }
+                    : {}),
+                  ...(filters.semesterCmp.lte
+                    ? {
+                        lte: Number(filters.semesterCmp.lte),
+                      }
+                    : {}),
+                },
+              }
             : {}),
         },
         include: {
@@ -368,7 +368,8 @@ export default function TrainingProgramSubjects() {
             <div className="px-5 py-3.5 border-b border-gray-100 bg-slate-50/80 flex items-center justify-between">
               <span className="font-semibold uppercase tracking-wide text-sm text-[#004725] flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#028850] animate-pulse-glow" />
-                CTĐT toàn khoá: {[initialValue?.code, initialValue?.name].filter(Boolean).join(" - ")}
+                CTĐT toàn khoá:{" "}
+                {[initialValue?.code, initialValue?.name].filter(Boolean).join(" - ")}
               </span>
             </div>
             <div className="p-4">
@@ -419,7 +420,7 @@ export default function TrainingProgramSubjects() {
                     className: cn(
                       subject.type === $Enums.SubjectRequirementType.Mandatory && "bg-white",
                       subject.type === $Enums.SubjectRequirementType.Optional && "bg-yellow-100",
-                     !subject.useForFinalScore && "bg-orange-300"
+                      !subject.useForFinalScore && "bg-orange-300"
                     ),
                     onClick: () => {
                       openChiTietMonHoc({
@@ -433,7 +434,9 @@ export default function TrainingProgramSubjects() {
                     colSpan: 1,
                   },
                   {
-                    render: (_, record) => <p className="font-bold">{record?.trainingBlock?.name}</p>,
+                    render: (_, record) => (
+                      <p className="font-bold">{record?.trainingBlock?.name}</p>
+                    ),
                     colSpan: 2,
                   },
                   {
@@ -470,7 +473,10 @@ export default function TrainingProgramSubjects() {
                   {
                     render: (_, record) => (
                       <p className="font-bold">
-                        {record.subjects.reduce((sum, s) => sum + (s.subject?.numberOfTheory ?? 0), 0)}
+                        {record.subjects.reduce(
+                          (sum, s) => sum + (s.subject?.numberOfTheory ?? 0),
+                          0
+                        )}
                       </p>
                     ),
                     colSpan: 1,
@@ -500,7 +506,10 @@ export default function TrainingProgramSubjects() {
                   {
                     render: (_, record) => (
                       <p className="font-bold">
-                        {record.subjects.reduce((sum, s) => sum + (s.subject.numberOfPractice ?? 0), 0)}
+                        {record.subjects.reduce(
+                          (sum, s) => sum + (s.subject.numberOfPractice ?? 0),
+                          0
+                        )}
                       </p>
                     ),
                     colSpan: 1,
@@ -508,7 +517,10 @@ export default function TrainingProgramSubjects() {
                   {
                     render: (_, record) => (
                       <p className="font-bold">
-                        {record.subjects.reduce((sum, s) => sum + (s.subject.numberOfReview ?? 0), 0)}
+                        {record.subjects.reduce(
+                          (sum, s) => sum + (s.subject.numberOfReview ?? 0),
+                          0
+                        )}
                       </p>
                     ),
                     colSpan: 1,

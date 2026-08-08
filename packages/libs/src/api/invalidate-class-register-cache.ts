@@ -52,9 +52,7 @@ export const invalidatePortalRegistrationCache = async (
 }
 
 /** Gọi cả LMS + Portal; lỗi một bên không chặn bên còn lại */
-export async function invalidateRegistrationCaches(
-  classRegisterSessionId: string
-): Promise<void> {
+export async function invalidateRegistrationCaches(classRegisterSessionId: string): Promise<void> {
   const results = await Promise.allSettled([
     invalidateClassRegisterCache({ classRegisterSessionId }),
     invalidatePortalRegistrationCache({ classRegisterSessionId }),

@@ -1,8 +1,4 @@
-import {
-  buildMenuItems,
-  findMatchingKey,
-  findOpenKeys,
-} from "@components/layouts/sider/utils"
+import { buildMenuItems, findMatchingKey, findOpenKeys } from "@components/layouts/sider/utils"
 import type { MenuItem } from "@workspace/router"
 import { Layout, Menu } from "antd"
 import { useRouter } from "next/router"

@@ -46,6 +46,7 @@ const createClusterSurvey = createRoute({
               isPublic: z.boolean().default(false),
               anonymous: z.boolean().default(false),
               surveyTopicId: z.string(),
+              targetEnrollStudentOnly: z.boolean().default(false),
               surveyObjectTypeIds: z.array(z.string()).optional().default([]),
               subjectClassIds: z.array(z.string()).nonempty(),
               surveyQuestionIds: z.array(z.string()).nonempty(),
@@ -120,7 +121,9 @@ app.openapi(createClusterSurvey, async (c) => {
     const found = new Set(subjectClasses.map((s) => s.id))
     const missing = uniqueSubjectClassIds.filter((id) => !found.has(id))
     return c.json(
-      { message: `Không tìm thấy ${missing.length} lớp môn học: ${missing.slice(0, 5).join(", ")}` },
+      {
+        message: `Không tìm thấy ${missing.length} lớp môn học: ${missing.slice(0, 5).join(", ")}`,
+      },
       404
     )
   }

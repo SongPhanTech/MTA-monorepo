@@ -940,10 +940,29 @@ app.openapi(getSurveysByProfile, async (c) => {
     // startDate: { lte: new Date() },
   }
 
+  const enrollmentFilter: Prisma.SurveyWhereInput = {
+    OR: [
+      { targetEnrollStudentOnly: false },
+      {
+        targetEnrollStudentOnly: true,
+        subjectClass: {
+          subjectClassStudent: {
+            some: {
+              student: {
+                userProfile: { id },
+              },
+            },
+          },
+        },
+      },
+    ],
+  }
+
   if (audienceMatch.OR?.length) {
-    where.AND = [{ OR: [{ anonymous: false }, audienceMatch] }]
+    where.AND = [{ OR: [{ anonymous: false }, audienceMatch] }, enrollmentFilter]
   } else {
     where.anonymous = false
+    where.AND = [enrollmentFilter]
   }
 
   const surveys = await prisma.survey.findMany({

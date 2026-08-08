@@ -5,9 +5,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs"
 import { execSync } from "node:child_process"
 import { join } from "node:path"
 
-const cat = JSON.parse(
-  readFileSync(join(import.meta.dir, "import-catalog.json"), "utf8")
-)
+const cat = JSON.parse(readFileSync(join(import.meta.dir, "import-catalog.json"), "utf8"))
 const entries = cat.matched.filter((e) => e.filePath)
 
 const patterns = {
@@ -38,10 +36,7 @@ const preferred = entries.filter((e) =>
 )
 const rest = entries.filter((e) => !preferred.includes(e))
 const step = Math.max(1, Math.floor(rest.length / 350))
-const sample = [
-  ...preferred.slice(0, 250),
-  ...rest.filter((_, i) => i % step === 0).slice(0, 350),
-]
+const sample = [...preferred.slice(0, 250), ...rest.filter((_, i) => i % step === 0).slice(0, 350)]
 
 console.log(
   `Scanning ${sample.length} files (preferred=${Math.min(250, preferred.length)}) of ${entries.length}`
