@@ -666,6 +666,26 @@ export default function StudentFixedClassPage() {
       }
 
       const allSheets: Parameters<typeof exportFromTemplate>[0]["sheets"] = []
+      const usedSheetNames = new Set<string>()
+      const getUniqueSheetName = (name: string): string => {
+        const sanitized = name.replace(/[\\/?:*[\]]/g, "_").trim()
+        const baseName = sanitized.slice(0, 31)
+        if (!usedSheetNames.has(baseName)) {
+          usedSheetNames.add(baseName)
+          return baseName
+        }
+        let counter = 1
+        while (true) {
+          const suffix = ` (${counter})`
+          const maxBaseLen = 31 - suffix.length
+          const candidate = `${sanitized.slice(0, maxBaseLen)}${suffix}`
+          if (!usedSheetNames.has(candidate)) {
+            usedSheetNames.add(candidate)
+            return candidate
+          }
+          counter++
+        }
+      }
 
       for (const cls of allClassIds) {
         const res = await sqlTransaction([
@@ -736,7 +756,7 @@ export default function StudentFixedClassPage() {
           .flatMap((block) => block.subjects)
           .sort((a, b) => (a.semester ?? 0) - (b.semester ?? 0))
 
-        if (!subjectsInOrder.length) continue
+        // Allow exporting class even if subjectsInOrder is empty
 
         const tongSoHP = subjectsInOrder.length
         const tongSoTC = subjectsInOrder.reduce((s, sub) => s + (sub.subject.credit ?? 0), 0)
@@ -1092,7 +1112,7 @@ export default function StudentFixedClassPage() {
           .filter(Boolean)
           .join(" - ")
 
-        const sheetName = detail.name.replace(/[\\/?:*[\]]/g, "_").slice(0, 31)
+        const sheetName = getUniqueSheetName(detail.name)
 
         allSheets.push(
           {
