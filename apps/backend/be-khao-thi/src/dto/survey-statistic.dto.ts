@@ -20,10 +20,20 @@ export const SurveyStatisticSchema = z.object({
 })
 
 export const SurveyFieldGroupStatisticSchema = z.object({
-  id: z.string(),
-  name: z.string().optional(),
+  groupId: z.string(),
+  groupName: z.string().optional(),
+  answers: z.array(AnswerStatisticSchema),
   questions: z.array(QuestionStatisticSchema),
 })
+
+export const SurveyMajorCountItemSchema = z.object({
+  name: z.string(),
+  total: z.number(),
+  taken: z.number(),
+  organization: z.string().optional(),
+})
+
+export const SurveyMajorCountResponseSchema = z.array(SurveyMajorCountItemSchema).openapi("SurveyMajorCountResponse")
 
 export const SurveyStatisticsByFieldResponseSchema = z
   .object({

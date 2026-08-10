@@ -7,7 +7,9 @@ import {
 import HtmlTruncate from "@components/commons/html-truncate"
 import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
-import { useGetSurveyObjectCount, useGetSurveyStatistics } from "@workspace/libs/api/exam"
+import { useGetSurveyObjectCount, useGetSurveyStatistics, useGetSurveyStatisticsToField } from "@workspace/libs/api/exam"
+import { customExamFetch } from "@workspace/libs/api/custom-instance"
+import { useQuery } from "@tanstack/react-query"
 import type { GetSurveyStatistics200QuestionsItemAnswersItem } from "@workspace/libs/api/schemas"
 import { Button, Col, Dropdown, Empty, Row, Typography } from "antd"
 import { Document, Table as DocxTable, Packer, Paragraph, TableCell, TableRow, TextRun } from "docx"
@@ -34,6 +36,15 @@ type AnswerItem = {
 }
 
 type AnswerWithPercent = AnswerItem & { percent: number; total: number }
+
+export const useGetSurveyMajorCount = (id: string) => {
+  return useQuery({
+    queryKey: ['/api/survey/objects/count-by-major', id],
+    queryFn: () => customExamFetch<any[]>(`/api/survey/objects/count-by-major?id=${id}`, { method: 'GET' }),
+    enabled: !!id,
+  })
+}
+
 function SurveyReport({ selectedId }: { selectedId: string }) {
   const router = useRouter()
   const { showSpinner, hideSpinner } = useSpinner()
@@ -43,6 +54,9 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
   const { data } = useGetSurveyObjectCount({
     id: selectedId as string,
   })
+  
+  const { data: dataMajorCount } = useGetSurveyMajorCount(selectedId as string)
+
   const dataInfo = useMemo(() => {
     if (data?.status === 200 && data?.data?.length) {
       return {
@@ -90,7 +104,62 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     return {}
   }, [data])
 
-  const { data: dataLevel } = useGetSurveyStatistics(selectedId as string)
+  const dataInfoMajor = useMemo(() => {
+    if (dataMajorCount?.length) {
+      return {
+        title: {
+          text: "Chuyên ngành",
+          show: false,
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+        },
+        legend: {},
+        xAxis: {
+          type: "value",
+          boundaryGap: [0, 0.01],
+        },
+        yAxis: {
+          type: "category",
+          data: dataMajorCount.map((i) => i.name),
+        },
+        series: [
+          {
+            name: "Đã làm",
+            type: "bar",
+            color: "#7F95C9",
+            itemStyle: {
+              borderRadius: 0,
+            },
+            data: dataMajorCount.map((i) => i.taken),
+          },
+          {
+            name: "Tổng",
+            type: "bar",
+            color: "#5FAE8C",
+            itemStyle: {
+              borderRadius: 0,
+            },
+            data: dataMajorCount.map((i) => i.total),
+          },
+        ],
+      }
+    }
+    return {}
+  }, [dataMajorCount])
+
+  const { data: dataLevel } = useGetSurveyStatisticsToField(selectedId as string)
+
+  const allQuestions = useMemo(() => {
+    if (dataLevel?.status === 200) {
+      return (dataLevel.data as any).data?.flatMap((group: any) => group.questions) || []
+    }
+    return []
+  }, [dataLevel])
+
   function convertToStackChartData(
     data: CriteriaItem[],
     answerDescriptions: GetSurveyStatistics200QuestionsItemAnswersItem[]
@@ -124,11 +193,11 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
   }
   const dataBarchart = useMemo(() => {
     let label: string[] = []
-    if (dataLevel?.status === 200 && dataLevel?.data?.questions?.length) {
-      label = dataLevel?.data?.questions?.map((_item, index) => `Câu hỏi ${index + 1}`)
+    if (dataLevel?.status === 200 && allQuestions.length) {
+      label = allQuestions.map((_item: any, index: number) => `Câu hỏi ${index + 1}`)
       const { series } = convertToStackChartData(
-        dataLevel?.data?.questions,
-        dataLevel?.data?.questions[0]?.answers
+        allQuestions as any,
+        allQuestions[0]?.answers as any
       )
 
       return {
@@ -158,164 +227,135 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     return {}
   }, [dataLevel])
 
-  const exportTemplate = async (name: string, dataTable: any, dataTableInfo: any) => {
-    // Tạo workbook mới
-    const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet("BaoCaoKhaoSat")
-
-    // Thiết lập style
-    const golbalFontStyle = {
-      name: "Times New Roman",
-    }
-
-    const headerTitleStyle = {
-      font: { ...golbalFontStyle, bold: true, size: 14 },
-      alignment: {
-        horizontal: "center" as const,
-        vertical: "middle" as const,
-        wrapText: true as const,
-      },
-    }
-
-    const headerSubtitleStyle = {
-      font: { ...golbalFontStyle, bold: true, size: 16 },
-      alignment: {
-        horizontal: "center" as const,
-        vertical: "middle" as const,
-        wrapText: true as const,
-      },
-    }
-    const headerSubtitleStyle1 = {
-      font: { ...golbalFontStyle, bold: true, size: 16 },
-      alignment: {
-        horizontal: "left" as const,
-        vertical: "middle" as const,
-        wrapText: true as const,
-      },
-    }
-    const tableHeaderStyle = {
-      font: {
-        ...golbalFontStyle,
-        bold: true,
-        size: 14,
-        color: { argb: "FF000000" },
-      },
-      fill: {
-        type: "pattern",
-        pattern: "none",
-      },
-      alignment: {
-        horizontal: "center",
-        vertical: "middle",
-        wrapText: true,
-      },
-      border: {
-        top: {
-          style: "thin" as ExcelJS.BorderStyle,
-          color: { argb: "FF000000" },
+  const exportTemplate = async (name: string, dataTable: any, dataTableInfo: any, dataMajorCount: any) => {
+    showSpinner()
+    try {
+      const workbook = new ExcelJS.Workbook()
+      
+      const golbalFontStyle = { name: "Times New Roman" }
+      const headerTitleStyle = {
+        font: { ...golbalFontStyle, bold: true, size: 14 },
+        alignment: { horizontal: "center" as const, vertical: "middle" as const, wrapText: true as const },
+      }
+      const headerSubtitleStyle = {
+        font: { ...golbalFontStyle, bold: true, size: 16 },
+        alignment: { horizontal: "center" as const, vertical: "middle" as const, wrapText: true as const },
+      }
+      const headerSubtitleStyle1 = {
+        font: { ...golbalFontStyle, bold: true, size: 16 },
+        alignment: { horizontal: "left" as const, vertical: "middle" as const, wrapText: true as const },
+      }
+      const tableHeaderStyle = {
+        font: { ...golbalFontStyle, bold: true, size: 14, color: { argb: "FF000000" } },
+        fill: { type: "pattern", pattern: "none" },
+        alignment: { horizontal: "center", vertical: "middle", wrapText: true },
+        border: {
+          top: { style: "thin" as ExcelJS.BorderStyle, color: { argb: "FF000000" } },
+          left: { style: "thin" as ExcelJS.BorderStyle, color: { argb: "FF000000" } },
+          right: { style: "thin" as ExcelJS.BorderStyle, color: { argb: "FF000000" } },
+          bottom: { style: "thin" as ExcelJS.BorderStyle, color: { argb: "FF000000" } },
         },
-        left: {
-          style: "thin" as ExcelJS.BorderStyle,
-          color: { argb: "FF000000" },
-        },
-        right: {
-          style: "thin" as ExcelJS.BorderStyle,
-          color: { argb: "FF000000" },
-        },
-        bottom: {
-          style: "thin" as ExcelJS.BorderStyle,
-          color: { argb: "FF000000" },
-        },
-      },
-    }
+      }
 
-    worksheet.mergeCells("A1:C2")
-    worksheet.getCell("A1").value = "BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ"
-    worksheet.getCell("A1").style = headerTitleStyle
+      const generateSheet = (sheetName: string, tData: any, majorName: string = "", majorOrg: string = "") => {
+        const worksheet = workbook.addWorksheet(sheetName.substring(0, 31))
 
-    worksheet.getRow(1).height = 30
-    worksheet.getRow(2).height = 30
+        worksheet.mergeCells("A1:C2")
+        worksheet.getCell("A1").value = "BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ"
+        worksheet.getCell("A1").style = headerTitleStyle
 
-    worksheet.mergeCells("E1:H2")
-    worksheet.getCell("E1").value =
-      "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc"
-    worksheet.getCell("E1").style = headerTitleStyle
+        worksheet.getRow(1).height = 30
+        worksheet.getRow(2).height = 30
 
-    worksheet.mergeCells("A4:H4")
-    worksheet.getCell("A4").value = `Báo cáo khảo sát: ${name}`
-    worksheet.getCell("A4").style = headerSubtitleStyle
-    worksheet.getRow(4).height = 20
+        worksheet.mergeCells("E1:H2")
+        if (majorName) {
+           worksheet.getCell("E1").value = `${(majorOrg || "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM").toUpperCase()}\nCHUYÊN NGÀNH HỌC: ${majorName}`
+        } else {
+           worksheet.getCell("E1").value = "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc"
+        }
+        worksheet.getCell("E1").style = headerTitleStyle
 
-    let rowIndex = 11
-    if (dataTableInfo?.length > 0) {
-      worksheet.mergeCells("A7:C7")
-      worksheet.getCell("A7").value = "Thông kê chung"
-      worksheet.getCell("A7").style = headerSubtitleStyle1
-      // Thông tin chung
-      const headerRowInfo = worksheet.getRow(9)
-      headerRowInfo.values = ["STT", "Đối tượng", "Trạng thái"]
-      headerRowInfo.eachCell((cell: any) => {
-        cell.style = tableHeaderStyle
-      })
+        worksheet.mergeCells("A4:H4")
+        worksheet.getCell("A4").value = `Báo cáo khảo sát: ${name}`
+        worksheet.getCell("A4").style = headerSubtitleStyle
+        worksheet.getRow(4).height = 20
 
-      dataTableInfo?.forEach((item: any, index: number) => {
-        worksheet.getRow(index + 10).values = [
-          index + 1,
-          item?.name,
-          `${item?.taken || 0}/${item?.total || 0}`,
+        let rowIndex = 7
+        
+        // Thêm tiêu đề bảng
+        worksheet.mergeCells(`A${rowIndex}:C${rowIndex}`)
+        worksheet.getCell(`A${rowIndex}`).value = "Thống kê theo từng Câu hỏi"
+        worksheet.getCell(`A${rowIndex}`).style = headerSubtitleStyle1
+        
+        const answerHeaders = tData?.[0]?.answers || tData?.[0]?.questions?.[0]?.answers || []
+        const headerRow = worksheet.getRow(rowIndex + 2)
+        headerRow.values = answerHeaders?.length
+          ? [
+              "STT",
+              "Câu hỏi",
+              "Nội dung",
+              ...answerHeaders.map((i: any) => i?.description),
+            ]
+          : ["STT", "Câu hỏi", "Nội dung"]
+        headerRow.eachCell((cell: any) => {
+          cell.style = tableHeaderStyle
+        })
+
+        worksheet.columns = [
+          { width: 10 }, { width: 30 }, { width: 60 }, { width: 20 }, { width: 20 }, { width: 20 }, { width: 20 }, { width: 20 },
         ]
-      })
 
-      rowIndex = 9 + dataTableInfo?.length + 3
+        if (tData?.length > 0) {
+          const flatData: any[] = []
+          let qIndex = 1
+          tData.forEach((group: any) => {
+            flatData.push({ ...group, isGroup: true })
+            group.questions?.forEach((q: any) => {
+              flatData.push({ ...q, isGroup: false, questionIndex: qIndex++ })
+            })
+          })
+
+          flatData.forEach((i: any, index: number) => {
+            const headerRowValue: any = worksheet.getRow(rowIndex + 3 + index)
+            const percents = calculatePercent(i?.answers || [])
+            headerRowValue.values = i.isGroup ? [
+              "",
+              "ĐGTB",
+              i.groupName || "Nhóm câu hỏi",
+              ...percents.map((a: any) => `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`),
+            ] : [
+              i.questionIndex,
+              `Câu hỏi ${i.questionIndex}`,
+              i?.name,
+              ...percents.map((a: any) => `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`),
+            ]
+          })
+        }
+      }
+
+      generateSheet("Tổng hợp chung", dataTable)
+
+      if (dataMajorCount && dataMajorCount.length > 0) {
+        for (const major of dataMajorCount) {
+          try {
+            const res = await customExamFetch<any>(`/api/survey/${selectedId}/statistics-to-Field?majorName=${encodeURIComponent(major.name)}`, { method: 'GET' })
+            const tData = res?.data || res
+            if (tData) {
+               generateSheet(`CN ${major.name}`, tData, major.name, major.organization)
+            }
+          } catch(e) {
+            console.error(e)
+          }
+        }
+      }
+
+      const buffer = await workbook.xlsx.writeBuffer()
+      saveAs(new Blob([buffer]), `Bao_cao_khao_sat_${name || ""}.xlsx`)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      hideSpinner()
     }
-
-    worksheet.mergeCells(`A${rowIndex}:C${rowIndex}`)
-    worksheet.getCell(`A${rowIndex}`).value = "Thống kê theo từng Câu hỏi"
-    worksheet.getCell(`A${rowIndex}`).style = headerSubtitleStyle1
-
-    // Thêm tiêu đề bảng
-    const headerRow = worksheet.getRow(rowIndex + 2)
-    headerRow.values = dataTable[0]?.answers?.length
-      ? [
-          "STT",
-          "Câu hỏi",
-          "Tên Câu hỏi",
-          // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-          ...dataTable[0]?.answers?.map((i: any) => i?.description),
-        ]
-      : ["STT", "Câu hỏi", "Tên Câu hỏi"]
-    headerRow.eachCell((cell: any) => {
-      cell.style = tableHeaderStyle
-    })
-
-    // Điều chỉnh độ rộng cột
-    worksheet.columns = [
-      { width: 10 },
-      { width: 30 },
-      { width: 60 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-    ]
-    if (dataTable?.length > 0) {
-      dataTable.forEach((i: any, index: number) => {
-        const headerRowValue: any = worksheet.getRow(rowIndex + 3 + index)
-        headerRowValue.values = [
-          index + 1,
-          `Câu hỏi ${index + 1}`,
-          i?.name,
-          ...calculatePercent(i?.answers).map(
-            (a: any) => `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
-          ),
-        ]
-      })
-    }
-
-    // Xuất file
-    const buffer = await workbook.xlsx.writeBuffer()
-    saveAs(new Blob([buffer]), `Bao_cao_khao_sat_${name || ""}.xlsx`)
   }
 
   function calculatePercent(items: AnswerItem[]): AnswerWithPercent[] {
@@ -329,68 +369,68 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
 
   const renderTable = (dataTable: any) => {
     if (!dataTable?.length) return
-    let average = dataTable[0]?.answers.map((i: any) => {
-      return { ...i, total: 0, count: 0 }
-    })
-    dataTable.forEach((e: any) => {
-      average = average.map((i: any) => {
-        return {
-          ...i,
-          total: i.total + e.answers.find((a: any) => a.id === i.id)?.total,
-          count: i.count + e.answers.find((a: any) => a.id === i.id)?.count,
-        }
+
+    const flatData: any[] = []
+    let questionIndex = 1
+    dataTable.forEach((group: any) => {
+      flatData.push({
+        ...group,
+        isGroup: true,
+        rowKey: `group-${group.groupId || Math.random()}`,
+      })
+      group.questions?.forEach((q: any) => {
+        flatData.push({
+          ...q,
+          isGroup: false,
+          questionIndex: questionIndex++,
+          rowKey: `question-${q.id}`,
+        })
       })
     })
-    const datarender = [
-      ...dataTable,
-      {
-        name: "Trung bình",
-        answers: average,
-        id: "average",
-      },
-    ]
+
+    const answerHeaders = dataTable[0]?.answers || dataTable[0]?.questions?.[0]?.answers || []
+
     return (
       <Table
+        rowKey="rowKey"
         columns={
-          dataTable?.length > 0
+          answerHeaders?.length > 0
             ? [
                 {
                   title: "STT",
                   width: 60,
                   align: "center",
                   fixed: "left",
-                  render: (_, __, index) => index + 1,
+                  render: (_, record: any) => (record.isGroup ? "" : record.questionIndex),
                 },
                 {
                   title: "Câu hỏi",
                   align: "center",
                   width: 100,
-                  render: (_, record, index) => {
-                    return index === datarender.length - 1 ? "ĐGTB" : `Câu hỏi ${index + 1}`
+                  render: (_, record: any) => {
+                    return record.isGroup ? <strong>ĐGTB</strong> : `Câu hỏi ${record.questionIndex}`
                   },
                 },
                 {
-                  title: "Nội dung câu hỏi",
+                  title: "Nội dung",
                   align: "left",
-                  render: (_, record, index) => {
-                    return index === datarender.length - 1 ? (
-                      ""
+                  render: (_, record: any) => {
+                    return record.isGroup ? (
+                      <strong>{record.groupName || "Nhóm câu hỏi"}</strong>
                     ) : (
                       <HtmlTruncate>{record?.name}</HtmlTruncate>
                     )
                   },
                 },
-                // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                ...dataTable[0]?.answers?.map((i: any) => ({
+                ...answerHeaders.map((i: any) => ({
                   title: i?.description,
                   id: i?.id,
                   dataIndex: i?.id,
                   width: 130,
                   align: "center",
                   render: (__: any, record: any) => {
-                    const count = calculatePercent(record?.answers).find((a) => a.id === i?.id)
-
-                    return `${count?.percent || 0}% (${count?.count || 0}/${count?.total})` || "0"
+                    const count = calculatePercent(record?.answers || []).find((a) => a.id === i?.id)
+                    return count ? `${count.percent || 0}% (${count.count || 0}/${count.total})` : "0"
                   },
                 })),
               ]
@@ -400,135 +440,150 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                   width: 60,
                   align: "center",
                   fixed: "left",
-                  render: (_, __, index) => index + 1,
+                  render: (_, record: any) => (record.isGroup ? "" : record.questionIndex),
                 },
                 {
                   title: "Câu hỏi",
                   align: "center",
-                  render: (_, record, index) => {
-                    return `Câu hỏi ${index + 1}`
+                  render: (_, record: any) => {
+                    return record.isGroup ? <strong>ĐGTB</strong> : `Câu hỏi ${record.questionIndex}`
+                  },
+                },
+                {
+                  title: "Nội dung",
+                  align: "left",
+                  render: (_, record: any) => {
+                    return record.isGroup ? (
+                      <strong>{record.groupName || "Nhóm câu hỏi"}</strong>
+                    ) : (
+                      <HtmlTruncate>{record?.name}</HtmlTruncate>
+                    )
                   },
                 },
               ]
         }
-        dataSource={dataTable}
+        dataSource={flatData}
         pagination={false}
       />
     )
   }
-  const exportWordReport = async (name: string, dataTable: any, dataTableInfo: any) => {
-    const centerCell = (text = "") =>
-      new TableCell({
-        children: [
-          new Paragraph({
-            alignment: "center",
-            children: [new TextRun(text)],
-          }),
-        ],
-      })
-
-    // ===== BẢNG THỐNG KÊ CHUNG =====
-    const summaryRows = [
-      new TableRow({
-        children: [centerCell("STT"), centerCell("Đối tượng"), centerCell("Trạng thái")],
-      }),
-      ...(dataTableInfo || []).map(
-        (i: any, idx: number) =>
-          new TableRow({
-            children: [
-              centerCell(String(idx + 1)),
-              new TableCell({
-                children: [new Paragraph(i?.name || "")],
-              }),
-              centerCell(`${i?.taken || 0}/${i?.total || 0}`),
-            ],
-          })
-      ),
-    ]
-
-    // ===== BẢNG THEO CÂU HỎI =====
-    const answerHeaders = dataTable?.[0]?.answers?.map((a: any) => a.description) || []
-
-    const questionRows = [
-      new TableRow({
-        children: [
-          centerCell("STT"),
-          centerCell("Câu hỏi"),
-          new TableCell({ children: [new Paragraph("Nội dung câu hỏi")] }),
-          ...answerHeaders.map(centerCell),
-        ],
-      }),
-      ...dataTable.map((q: any, idx: number) => {
-        const percentData = calculatePercent(q.answers)
-        return new TableRow({
-          children: [
-            centerCell(String(idx + 1)),
-            centerCell(`Câu hỏi ${idx + 1}`),
-            new TableCell({ children: [new Paragraph(q.name || "")] }),
-            ...percentData.map((p) => centerCell(`${p.percent}% (${p.count}/${p.total})`)),
-          ],
-        })
-      }),
-    ]
-
-    const doc = new Document({
-      sections: [
-        {
-          properties: {
-            page: {
-              size: { orientation: "landscape" },
-              margin: { top: 720, bottom: 720, left: 720, right: 720 },
-            },
-          },
+  const exportWordReport = async (name: string, dataTable: any, dataTableInfo: any, dataMajorCount: any) => {
+    showSpinner()
+    try {
+      const centerCell = (text = "") =>
+        new TableCell({
           children: [
             new Paragraph({
               alignment: "center",
-              spacing: { after: 300 },
-              children: [
-                new TextRun({
-                  text: `BÁO CÁO KHẢO SÁT: ${name || ""}`,
-                  bold: true,
-                  size: 28,
-                }),
-              ],
-            }),
-
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: "Thống kê chung",
-                  bold: true,
-                }),
-              ],
-              spacing: { after: 200 },
-            }),
-            new DocxTable({
-              width: { size: 100, type: "pct" },
-              rows: summaryRows,
-            }),
-
-            new Paragraph({ spacing: { after: 300 } }),
-
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: "Thống kê theo từng Câu hỏi",
-                  bold: true,
-                }),
-              ],
-              spacing: { after: 200 },
-            }),
-            new DocxTable({
-              width: { size: 100, type: "pct" },
-              rows: questionRows,
+              children: [new TextRun(text)],
             }),
           ],
-        },
-      ],
-    })
+        })
 
-    const blob = await Packer.toBlob(doc)
-    saveAs(blob, `Bao_cao_khao_sat_${name || ""}.docx`)
+      const buildQuestionTable = (tData: any) => {
+        const answerHeaders = tData?.[0]?.answers?.map((a: any) => a.description) 
+          || tData?.[0]?.questions?.[0]?.answers?.map((a: any) => a.description) 
+          || []
+
+        const answerRows: any[] = []
+        if (tData?.length > 0) {
+          const flatData: any[] = []
+          let qIndex = 1
+          tData.forEach((group: any) => {
+            flatData.push({ ...group, isGroup: true })
+            group.questions?.forEach((q: any) => {
+              flatData.push({ ...q, isGroup: false, questionIndex: qIndex++ })
+            })
+          })
+
+          flatData.forEach((i: any) => {
+            const percents = calculatePercent(i?.answers || [])
+            answerRows.push(
+              new TableRow({
+                children: [
+                  centerCell(i.isGroup ? "" : String(i.questionIndex)),
+                  centerCell(i.isGroup ? "ĐGTB" : `Câu hỏi ${i.questionIndex}`),
+                  new TableCell({
+                    children: [new Paragraph({ children: [new TextRun({ text: (i.isGroup ? i.groupName : i?.name) || "", bold: i.isGroup })] })],
+                  }),
+                  ...percents.map((a: any) => centerCell(`${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`)),
+                ],
+              })
+            )
+          })
+        }
+
+        return new DocxTable({
+          width: { size: 100, type: "pct" },
+          rows: [
+            new TableRow({
+              children: [
+                centerCell("STT"),
+                centerCell("Câu hỏi"),
+                centerCell("Nội dung"),
+                ...answerHeaders.map((h: string) => centerCell(h)),
+              ],
+            }),
+            ...answerRows,
+          ],
+        })
+      }
+
+      const buildSection = (title: string, tData: any, majorName: string = "", majorOrg: string = "") => {
+        return [
+          new Paragraph({
+            alignment: "center",
+            children: [
+              new TextRun({ text: majorName ? `CHUYÊN NGÀNH HỌC: ${majorName}`: "", bold: true, underline: majorName ? {} : undefined }),
+            ],
+          }),
+          new Paragraph({ text: "" }),
+          new Paragraph({
+            alignment: "center",
+            children: [
+              new TextRun({ text: `Báo cáo khảo sát: ${name}`, bold: true, size: 28 }),
+            ],
+          }),
+          new Paragraph({ text: "" }),
+          new Paragraph({
+            children: [new TextRun({ text: "Thống kê theo từng Câu hỏi", bold: true, size: 24 })],
+          }),
+          buildQuestionTable(tData)
+        ]
+      }
+
+      const sections = []
+      
+      sections.push({
+        properties: {},
+        children: buildSection("Tổng hợp chung", dataTable)
+      })
+
+      if (dataMajorCount && dataMajorCount.length > 0) {
+        for (const major of dataMajorCount) {
+          try {
+            const res = await customExamFetch<any>(`/api/survey/${selectedId}/statistics-to-Field?majorName=${encodeURIComponent(major.name)}`, { method: 'GET' })
+            const tData = res?.data || res
+            if (tData) {
+              sections.push({
+                properties: {},
+                children: buildSection(`CN ${major.name}`, tData, major.name, major.organization)
+              })
+            }
+          } catch(e) {
+             console.error(e)
+          }
+        }
+      }
+
+      const doc = new Document({ sections })
+      const buffer = await Packer.toBlob(doc)
+      saveAs(buffer, `Bao_cao_khao_sat_${name || ""}.docx`)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      hideSpinner()
+    }
   }
 
   return (
@@ -574,8 +629,44 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
           </Col>
         )}
 
+        {dataMajorCount && dataMajorCount.length > 0 && (
+          <Col span={24}>
+            <div className="bg-white h-full flex flex-col mt-4">
+              <div className="px-4 pb-4 flex justify-between">
+                <Title level={4}>Thống kê chuyên ngành</Title>
+              </div>
+              <div className="flex-1">
+                <ReactECharts option={dataInfoMajor} className="w-full min-h-[400px]" />
+                <Table
+                  columns={[
+                    {
+                      title: "STT",
+                      width: 60,
+                      align: "center",
+                      fixed: "left",
+                      render: (_, __, index) => index + 1,
+                    },
+                    {
+                      title: "Chuyên ngành",
+                      render: (_, record) => record?.name,
+                    },
+                    {
+                      title: "Trạng thái",
+                      align: "center",
+                      width: 200,
+                      render: (_, record) => `${record?.taken || 0}/${record?.total || 0}`,
+                    },
+                  ]}
+                  dataSource={dataMajorCount}
+                  pagination={false}
+                />
+              </div>
+            </div>
+          </Col>
+        )}
+
         <Col span={24}>
-          <div className="bg-white h-full flex flex-col">
+          <div className="bg-white h-full flex flex-col mt-4">
             <div className="p-4 flex justify-between">
               <Title level={4}>Thống kê theo từng Câu hỏi</Title>
               {dataLevel?.status === 200 && (
@@ -589,7 +680,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                         onClick: () =>
                           onOpen({
                             surveyName: dataLevel?.data?.surveyName,
-                            questions: dataLevel?.data?.questions,
+                            questions: allQuestions,
                             summaryInfo: data?.data,
                             chartOption: dataBarchart,
                           }),
@@ -601,8 +692,9 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                         onClick: () =>
                           exportWordReport(
                             dataLevel?.data?.surveyName,
-                            dataLevel?.data?.questions,
-                            data?.data
+                            dataLevel?.data?.data,
+                            data?.data,
+                            dataMajorCount
                           ),
                       },
                       {
@@ -612,8 +704,9 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                         onClick: () =>
                           exportTemplate(
                             dataLevel?.data?.surveyName,
-                            dataLevel?.data?.questions,
-                            data?.data
+                            dataLevel?.data?.data,
+                            data?.data,
+                            dataMajorCount
                           ),
                       },
                     ],
@@ -626,11 +719,10 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
               )}
             </div>
             <div className="flex-1 mb-6">
-              {dataLevel?.status === 200 && dataLevel?.data?.questions?.length > 0 ? (
+              {dataLevel?.status === 200 && dataLevel?.data?.data?.length > 0 ? (
                 <div style={{ width: "100%", height: "100%" }}>
                   <ReactECharts option={dataBarchart} className="w-full min-h-[400px]" />
-                  {dataLevel?.data?.questions?.length > 0 &&
-                    renderTable(dataLevel?.data?.questions)}
+                  {renderTable(dataLevel?.data?.data)}
                 </div>
               ) : (
                 <Empty />
