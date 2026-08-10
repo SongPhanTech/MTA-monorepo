@@ -687,7 +687,7 @@ app.openapi(debtStatistics, async (c) => {
     examBannedReason: string | null
   }[]
 
-  const trainingCourses = await prisma.trainingCourse.findMany()
+  const trainingCourses = await prisma.trainingCourse.findMany({ include: { trainingObjectType: { select: { type: true } } } })
   const coursesMap = Object.fromEntries(trainingCourses.map((c) => [c.id, c]))
 
   const scores = await prisma.studentSubjectScore.findMany({
@@ -776,6 +776,7 @@ app.openapi(debtStatistics, async (c) => {
       trainingBlockOnCurriculumVersion: {
         select: {
           curriculumVersionId: true,
+          trainingBlock: { select: { isNationalDefense: true } }
         },
       },
     },
@@ -810,6 +811,7 @@ app.openapi(debtStatistics, async (c) => {
     attempts: SubjectAttempt[]
     hasPassed: boolean
     hasFailed: boolean
+    isNationalDefense: boolean
   }
 
   type StudentDebtSummary = {
@@ -818,6 +820,7 @@ app.openapi(debtStatistics, async (c) => {
     fullname: string
     dateOfBirth: string | null
     fixedClassCode: string
+    courseId: string
     subjects: Record<string, DebtSubject>
   }
 
@@ -889,6 +892,7 @@ app.openapi(debtStatistics, async (c) => {
           ? score.student.userProfile.dateOfBirth.toISOString()
           : null,
         fixedClassCode: score.student.fixedClass?.code || "",
+        courseId,
         subjects: {},
       }
     }
@@ -898,6 +902,7 @@ app.openapi(debtStatistics, async (c) => {
         subjectCode: score.subjectVersion.code || "",
         subjectName: score.subjectVersion.name || "",
         subjectCredit: score.subjectVersion.credit,
+        isNationalDefense: tbs.trainingBlockOnCurriculumVersion?.trainingBlock?.isNationalDefense ?? false,
         attempts: [],
         hasPassed: false,
         hasFailed: false,
@@ -935,6 +940,9 @@ app.openapi(debtStatistics, async (c) => {
     return debtSubjects.map((subject) => {
       const lastAttempt = subject.attempts[subject.attempts.length - 1]
 
+      const tc = coursesMap[s.courseId]
+      const isCivilian = tc?.trainingObjectType?.type === 'CIVILIAN'
+
       let type = "THI LẠI"
       let note = "Đã thi trượt 1 lần"
 
@@ -950,6 +958,12 @@ app.openapi(debtStatistics, async (c) => {
       } else if (subject.attempts.length > 1) {
         type = "HỌC LẠI"
         note = `Đã thi trượt ít nhất ${subject.attempts.length} lần`
+      } else {
+        const eligibleForReExam = subject.isNationalDefense || (tc?.isRetakeExam && !isCivilian)
+        if (!eligibleForReExam) {
+          type = "HỌC LẠI"
+          note = "Không thuộc đối tượng được thi lại"
+        }
       }
 
       return {

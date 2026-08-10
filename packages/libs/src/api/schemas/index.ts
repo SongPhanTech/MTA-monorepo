@@ -1007,6 +1007,8 @@ export * from './insertDeployLog200';
 export * from './insertDeployLogBody';
 export * from './insertDeployLogBodyAction';
 export * from './insertDeployLogBodyStatus';
+export * from './invalidateClassRegisterSessionCache200';
+export * from './invalidateClassRegisterSessionCacheRequest';
 export * from './invalidateRegistrationCache200';
 export * from './invalidateRegistrationCache400';
 export * from './invalidateRegistrationCacheBody';

@@ -10,7 +10,7 @@ import {
   useUpdateTrainingBlock,
 } from "@workspace/db/hooks"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
-import { Col, Form, Input, message, Radio, Select } from "antd"
+import { Col, Form, Input, message, Radio, Select, Checkbox } from "antd"
 import dayjs from "dayjs"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
@@ -60,6 +60,7 @@ const PutTrainingBlock = () => {
         active: output.active,
         parentId: output.parentId,
         trainingObjectTypeId: trainingObjectTypeId ?? "",
+        isNationalDefense: !!output.isNationalDefense,
       }
 
       if (id) {
@@ -124,6 +125,11 @@ const PutTrainingBlock = () => {
               label: item.name,
             }))}
           />
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem form={form} name="isNationalDefense" valuePropName="checked">
+          <Checkbox>Là KKT Giáo dục Quốc phòng - An ninh</Checkbox>
         </FormItem>
       </Col>
       {/* <Col span={24}>

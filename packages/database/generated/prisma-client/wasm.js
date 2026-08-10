@@ -2525,6 +2525,7 @@ exports.Prisma.TrainingBlockScalarFieldEnum = {
   code: 'code',
   name: 'name',
   trainingObjectTypeId: 'trainingObjectTypeId',
+  isNationalDefense: 'isNationalDefense',
   priority: 'priority',
   parentId: 'parentId'
 };

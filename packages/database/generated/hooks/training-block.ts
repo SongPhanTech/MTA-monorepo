@@ -327,7 +327,7 @@ export function useSuspenseCountTrainingBlock<TArgs extends Prisma.TrainingBlock
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TrainingBlock', `${endpoint}/trainingBlock/count`, args, options, fetch);
 }
 
-export function useCheckTrainingBlock<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; code?: string; name?: string; trainingObjectTypeId?: string; priority?: number; parentId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTrainingBlock<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; code?: string; name?: string; trainingObjectTypeId?: string; isNationalDefense?: boolean; priority?: number; parentId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TrainingBlock', `${endpoint}/trainingBlock/check`, args, options, fetch);
 }

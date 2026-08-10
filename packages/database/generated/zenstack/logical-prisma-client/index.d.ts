@@ -9009,6 +9009,7 @@ export namespace Prisma {
         code: 'code',
         name: 'name',
         trainingObjectTypeId: 'trainingObjectTypeId',
+        isNationalDefense: 'isNationalDefense',
         priority: 'priority',
         parentId: 'parentId'
     };
@@ -64005,6 +64006,7 @@ export namespace Prisma {
         readonly code: FieldRef<"TrainingBlock", 'String'>;
         readonly name: FieldRef<"TrainingBlock", 'String'>;
         readonly trainingObjectTypeId: FieldRef<"TrainingBlock", 'String'>;
+        readonly isNationalDefense: FieldRef<"TrainingBlock", 'Boolean'>;
         readonly priority: FieldRef<"TrainingBlock", 'Int'>;
         readonly parentId: FieldRef<"TrainingBlock", 'String'>;
     }
@@ -256576,6 +256578,7 @@ export namespace Prisma {
         code: string | null
         name: string | null
         trainingObjectTypeId: string | null
+        isNationalDefense: boolean | null
         priority: number | null
         parentId: string | null
     };
@@ -256590,6 +256593,7 @@ export namespace Prisma {
         code: string | null
         name: string | null
         trainingObjectTypeId: string | null
+        isNationalDefense: boolean | null
         priority: number | null
         parentId: string | null
     };
@@ -256604,6 +256608,7 @@ export namespace Prisma {
         code: number
         name: number
         trainingObjectTypeId: number
+        isNationalDefense: number
         priority: number
         parentId: number
         _all: number
@@ -256625,6 +256630,7 @@ export namespace Prisma {
         code?: true
         name?: true
         trainingObjectTypeId?: true
+        isNationalDefense?: true
         priority?: true
         parentId?: true
     };
@@ -256639,6 +256645,7 @@ export namespace Prisma {
         code?: true
         name?: true
         trainingObjectTypeId?: true
+        isNationalDefense?: true
         priority?: true
         parentId?: true
     };
@@ -256653,6 +256660,7 @@ export namespace Prisma {
         code?: true
         name?: true
         trainingObjectTypeId?: true
+        isNationalDefense?: true
         priority?: true
         parentId?: true
         _all?: true
@@ -256748,6 +256756,7 @@ export namespace Prisma {
         code: string | null
         name: string
         trainingObjectTypeId: string
+        isNationalDefense: boolean
         priority: number
         parentId: string | null
         _count: TrainingBlockCountAggregateOutputType | null
@@ -256779,6 +256788,7 @@ export namespace Prisma {
         code?: boolean
         name?: boolean
         trainingObjectTypeId?: boolean
+        isNationalDefense?: boolean
         priority?: boolean
         parentId?: boolean
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -256798,6 +256808,7 @@ export namespace Prisma {
         code?: boolean
         name?: boolean
         trainingObjectTypeId?: boolean
+        isNationalDefense?: boolean
         priority?: boolean
         parentId?: boolean
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -256814,6 +256825,7 @@ export namespace Prisma {
         code?: boolean
         name?: boolean
         trainingObjectTypeId?: boolean
+        isNationalDefense?: boolean
         priority?: boolean
         parentId?: boolean
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -256830,10 +256842,11 @@ export namespace Prisma {
         code?: boolean
         name?: boolean
         trainingObjectTypeId?: boolean
+        isNationalDefense?: boolean
         priority?: boolean
         parentId?: boolean
     };
-    export type TrainingBlockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "code" | "name" | "trainingObjectTypeId" | "priority" | "parentId", ExtArgs["result"]["trainingBlock"]>;
+    export type TrainingBlockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "code" | "name" | "trainingObjectTypeId" | "isNationalDefense" | "priority" | "parentId", ExtArgs["result"]["trainingBlock"]>;
     export type TrainingBlockInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         parent?: boolean | TrainingBlock$parentArgs<ExtArgs>
@@ -256868,6 +256881,7 @@ export namespace Prisma {
             code: string | null
             name: string
             trainingObjectTypeId: string
+            isNationalDefense: boolean
             /**
              * ưu tiên sắp xếp
              */
@@ -392542,6 +392556,7 @@ export namespace Prisma {
         code?: StringNullableFilter<"TrainingBlock"> | string | null
         name?: StringFilter<"TrainingBlock"> | string
         trainingObjectTypeId?: StringFilter<"TrainingBlock"> | string
+        isNationalDefense?: BoolFilter<"TrainingBlock"> | boolean
         priority?: IntFilter<"TrainingBlock"> | number
         parentId?: StringNullableFilter<"TrainingBlock"> | string | null
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
@@ -392560,6 +392575,7 @@ export namespace Prisma {
         code?: SortOrderInput | SortOrder
         name?: SortOrder
         trainingObjectTypeId?: SortOrder
+        isNationalDefense?: SortOrder
         priority?: SortOrder
         parentId?: SortOrderInput | SortOrder
         trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
@@ -392583,6 +392599,7 @@ export namespace Prisma {
         code?: StringNullableFilter<"TrainingBlock"> | string | null
         name?: StringFilter<"TrainingBlock"> | string
         trainingObjectTypeId?: StringFilter<"TrainingBlock"> | string
+        isNationalDefense?: BoolFilter<"TrainingBlock"> | boolean
         priority?: IntFilter<"TrainingBlock"> | number
         parentId?: StringNullableFilter<"TrainingBlock"> | string | null
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
@@ -392601,6 +392618,7 @@ export namespace Prisma {
         code?: SortOrderInput | SortOrder
         name?: SortOrder
         trainingObjectTypeId?: SortOrder
+        isNationalDefense?: SortOrder
         priority?: SortOrder
         parentId?: SortOrderInput | SortOrder
         _count?: TrainingBlockCountOrderByAggregateInput
@@ -392623,6 +392641,7 @@ export namespace Prisma {
         code?: StringNullableWithAggregatesFilter<"TrainingBlock"> | string | null
         name?: StringWithAggregatesFilter<"TrainingBlock"> | string
         trainingObjectTypeId?: StringWithAggregatesFilter<"TrainingBlock"> | string
+        isNationalDefense?: BoolWithAggregatesFilter<"TrainingBlock"> | boolean
         priority?: IntWithAggregatesFilter<"TrainingBlock"> | number
         parentId?: StringNullableWithAggregatesFilter<"TrainingBlock"> | string | null
     };
@@ -425218,6 +425237,7 @@ export namespace Prisma {
         createdBy?: string | null
         code?: string | null
         name: string
+        isNationalDefense?: boolean
         priority?: number
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
         parent?: TrainingBlockCreateNestedOneWithoutChildrenInput
@@ -425235,6 +425255,7 @@ export namespace Prisma {
         code?: string | null
         name: string
         trainingObjectTypeId: string
+        isNationalDefense?: boolean
         priority?: number
         parentId?: string | null
         children?: TrainingBlockUncheckedCreateNestedManyWithoutParentInput
@@ -425250,6 +425271,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
         priority?: IntFieldUpdateOperationsInput | number
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
         parent?: TrainingBlockUpdateOneWithoutChildrenNestedInput
@@ -425267,6 +425289,7 @@ export namespace Prisma {
         code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
         priority?: IntFieldUpdateOperationsInput | number
         parentId?: NullableStringFieldUpdateOperationsInput | string | null
         children?: TrainingBlockUncheckedUpdateManyWithoutParentNestedInput
@@ -425283,6 +425306,7 @@ export namespace Prisma {
         code?: string | null
         name: string
         trainingObjectTypeId: string
+        isNationalDefense?: boolean
         priority?: number
         parentId?: string | null
     };
@@ -425296,6 +425320,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
         priority?: IntFieldUpdateOperationsInput | number
     };
     export type TrainingBlockUncheckedUpdateManyInput = {
@@ -425309,6 +425334,7 @@ export namespace Prisma {
         code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
         priority?: IntFieldUpdateOperationsInput | number
         parentId?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -453414,6 +453440,7 @@ export namespace Prisma {
         code?: SortOrder
         name?: SortOrder
         trainingObjectTypeId?: SortOrder
+        isNationalDefense?: SortOrder
         priority?: SortOrder
         parentId?: SortOrder
     };
@@ -453431,6 +453458,7 @@ export namespace Prisma {
         code?: SortOrder
         name?: SortOrder
         trainingObjectTypeId?: SortOrder
+        isNationalDefense?: SortOrder
         priority?: SortOrder
         parentId?: SortOrder
     };
@@ -453445,6 +453473,7 @@ export namespace Prisma {
         code?: SortOrder
         name?: SortOrder
         trainingObjectTypeId?: SortOrder
+        isNationalDefense?: SortOrder
         priority?: SortOrder
         parentId?: SortOrder
     };
@@ -573577,6 +573606,7 @@ export namespace Prisma {
         createdBy?: string | null
         code?: string | null
         name: string
+        isNationalDefense?: boolean
         priority?: number
         parent?: TrainingBlockCreateNestedOneWithoutChildrenInput
         children?: TrainingBlockCreateNestedManyWithoutParentInput
@@ -573592,6 +573622,7 @@ export namespace Prisma {
         createdBy?: string | null
         code?: string | null
         name: string
+        isNationalDefense?: boolean
         priority?: number
         parentId?: string | null
         children?: TrainingBlockUncheckedCreateNestedManyWithoutParentInput
@@ -574131,6 +574162,7 @@ export namespace Prisma {
         code?: StringNullableFilter<"TrainingBlock"> | string | null
         name?: StringFilter<"TrainingBlock"> | string
         trainingObjectTypeId?: StringFilter<"TrainingBlock"> | string
+        isNationalDefense?: BoolFilter<"TrainingBlock"> | boolean
         priority?: IntFilter<"TrainingBlock"> | number
         parentId?: StringNullableFilter<"TrainingBlock"> | string | null
     };
@@ -578512,6 +578544,7 @@ export namespace Prisma {
         createdBy?: string | null
         code?: string | null
         name: string
+        isNationalDefense?: boolean
         priority?: number
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
         parent?: TrainingBlockCreateNestedOneWithoutChildrenInput
@@ -578528,6 +578561,7 @@ export namespace Prisma {
         code?: string | null
         name: string
         trainingObjectTypeId: string
+        isNationalDefense?: boolean
         priority?: number
         parentId?: string | null
         curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutTrainingBlockInput
@@ -578546,6 +578580,7 @@ export namespace Prisma {
         createdBy?: string | null
         code?: string | null
         name: string
+        isNationalDefense?: boolean
         priority?: number
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
         children?: TrainingBlockCreateNestedManyWithoutParentInput
@@ -578562,6 +578597,7 @@ export namespace Prisma {
         code?: string | null
         name: string
         trainingObjectTypeId: string
+        isNationalDefense?: boolean
         priority?: number
         children?: TrainingBlockUncheckedCreateNestedManyWithoutParentInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutTrainingBlockInput
@@ -578702,6 +578738,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
         priority?: IntFieldUpdateOperationsInput | number
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
         parent?: TrainingBlockUpdateOneWithoutChildrenNestedInput
@@ -578718,6 +578755,7 @@ export namespace Prisma {
         code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
         priority?: IntFieldUpdateOperationsInput | number
         parentId?: NullableStringFieldUpdateOperationsInput | string | null
         curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutTrainingBlockNestedInput
@@ -578758,6 +578796,7 @@ export namespace Prisma {
         createdBy?: string | null
         code?: string | null
         name: string
+        isNationalDefense?: boolean
         priority?: number
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingBlocksInput
         parent?: TrainingBlockCreateNestedOneWithoutChildrenInput
@@ -578774,6 +578813,7 @@ export namespace Prisma {
         code?: string | null
         name: string
         trainingObjectTypeId: string
+        isNationalDefense?: boolean
         priority?: number
         parentId?: string | null
         children?: TrainingBlockUncheckedCreateNestedManyWithoutParentInput
@@ -578933,6 +578973,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
         priority?: IntFieldUpdateOperationsInput | number
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
         parent?: TrainingBlockUpdateOneWithoutChildrenNestedInput
@@ -578949,6 +578990,7 @@ export namespace Prisma {
         code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
         priority?: IntFieldUpdateOperationsInput | number
         parentId?: NullableStringFieldUpdateOperationsInput | string | null
         children?: TrainingBlockUncheckedUpdateManyWithoutParentNestedInput
@@ -678622,6 +678664,7 @@ export namespace Prisma {
         createdBy?: string | null
         code?: string | null
         name: string
+        isNationalDefense?: boolean
         priority?: number
         parentId?: string | null
     };
@@ -679716,6 +679759,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
         priority?: IntFieldUpdateOperationsInput | number
         parent?: TrainingBlockUpdateOneWithoutChildrenNestedInput
         children?: TrainingBlockUpdateManyWithoutParentNestedInput
@@ -679731,6 +679775,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
         priority?: IntFieldUpdateOperationsInput | number
         parentId?: NullableStringFieldUpdateOperationsInput | string | null
         children?: TrainingBlockUncheckedUpdateManyWithoutParentNestedInput
@@ -679746,6 +679791,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
         priority?: IntFieldUpdateOperationsInput | number
         parentId?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -683315,6 +683361,7 @@ export namespace Prisma {
         code?: string | null
         name: string
         trainingObjectTypeId: string
+        isNationalDefense?: boolean
         priority?: number
     };
     export type TrainingBlockOnCurriculumVersionCreateManyTrainingBlockInput = {
@@ -683340,6 +683387,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
         priority?: IntFieldUpdateOperationsInput | number
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingBlocksNestedInput
         children?: TrainingBlockUpdateManyWithoutParentNestedInput
@@ -683356,6 +683404,7 @@ export namespace Prisma {
         code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
         priority?: IntFieldUpdateOperationsInput | number
         children?: TrainingBlockUncheckedUpdateManyWithoutParentNestedInput
         curriculumVersions?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutTrainingBlockNestedInput
@@ -683371,6 +683420,7 @@ export namespace Prisma {
         code?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        isNationalDefense?: BoolFieldUpdateOperationsInput | boolean
         priority?: IntFieldUpdateOperationsInput | number
     };
     export type TrainingBlockOnCurriculumVersionUpdateWithoutTrainingBlockInput = {
