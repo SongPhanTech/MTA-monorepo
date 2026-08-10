@@ -1471,7 +1471,7 @@ model CurriculumVersion {
 /// môn học
 model Subject {
   id                       String                 @id() @default(cuid())
-  code                     String?                @unique()
+  code                     String?
   active                   Boolean                @default(true)
   description              String?                @db.Text()
   deletedAt                DateTime?
@@ -1509,7 +1509,7 @@ model SubjectVersionCategory {
 /// Phiên bản môn học
 model SubjectVersion {
   id                       String                  @id() @default(cuid())
-  code                     String?                 @unique()
+  code                     String?
   active                   Boolean                 @default(true)
   description              String?                 @db.Text()
   deletedAt                DateTime?

@@ -112,7 +112,7 @@ async function main() {
         where: { deletedAt: null },
         select: { id: true, name: true, code: true },
       },
-      semester: { select: { name: true, code: true } },
+      semester: { select: { id: true, name: true, code: true } },
     },
   })
   if (!session) throw new Error(`Không tìm thấy đợt đăng ký: ${SESSION_ID}`)
@@ -137,17 +137,38 @@ async function main() {
     where: { classRegisterSessionId: SESSION_ID, deletedAt: null },
     select: {
       studentId: true,
+      subjectClassId: true,
       createdAt: true,
       subjectClass: {
         select: {
           id: true,
           code: true,
           name: true,
-          subject: { select: { code: true, name: true, credit: true } },
+          maxStudent: true,
+          enrolledCount: true,
+          subjectId: true,
+          subject: { select: { id: true, code: true, name: true, credit: true } },
         },
       },
     },
     orderBy: [{ studentId: "asc" }, { createdAt: "asc" }],
+  })
+
+  // Tất cả lớp môn của học kỳ đợt (kể cả lớp chưa có SV đăng ký)
+  const subjectClasses = await prisma.subjectClass.findMany({
+    where: { semesterId: session.semesterId, deletedAt: null },
+    select: {
+      id: true,
+      code: true,
+      name: true,
+      maxStudent: true,
+      enrolledCount: true,
+      cancelled: true,
+      status: true,
+      subjectId: true,
+      subject: { select: { id: true, code: true, name: true, credit: true } },
+    },
+    orderBy: [{ code: "asc" }],
   })
 
   const logsByStudent = new Map()
@@ -428,6 +449,185 @@ async function main() {
   })
   applyBorders(s6)
 
+  // Đếm SV đăng ký theo lớp môn (từ ClassRegisterLogs của đợt)
+  const regByClass = new Map() // subjectClassId -> Set(studentId)
+  for (const log of logs) {
+    if (!regByClass.has(log.subjectClassId)) regByClass.set(log.subjectClassId, new Set())
+    regByClass.get(log.subjectClassId).add(log.studentId)
+  }
+
+  // Sheet 7: Lớp môn học
+  const s7 = wb.addWorksheet("Lop mon hoc")
+  s7.columns = [
+    { header: "STT", key: "stt", width: 8 },
+    { header: "Mã lớp môn", key: "classCode", width: 16 },
+    { header: "Tên lớp môn", key: "className", width: 28 },
+    { header: "Mã học phần", key: "subjectCode", width: 14 },
+    { header: "Tên học phần", key: "subjectName", width: 40 },
+    { header: "Tín chỉ", key: "credit", width: 10 },
+    { header: "Sĩ số tối đa", key: "maxStudent", width: 12 },
+    { header: "SV đã ĐK (đợt này)", key: "registered", width: 16 },
+    { header: "Còn trống", key: "remaining", width: 12 },
+    { header: "% đầy", key: "fillRate", width: 10 },
+    { header: "enrolledCount (DB)", key: "enrolledCount", width: 16 },
+    { header: "Trạng thái lớp", key: "status", width: 14 },
+    { header: "Đã hủy", key: "cancelled", width: 10 },
+  ]
+  styleHeader(s7)
+
+  const classRows = subjectClasses
+    .map((sc) => {
+      const registeredCount = regByClass.get(sc.id)?.size || 0
+      const max = sc.maxStudent || 0
+      const remaining = Math.max(0, max - registeredCount)
+      const fillRate = max > 0 ? `${((registeredCount / max) * 100).toFixed(1)}%` : ""
+      return {
+        classCode: sc.code || "",
+        className: sc.name || "",
+        subjectCode: sc.subject?.code || "",
+        subjectName: sc.subject?.name || "",
+        credit: sc.subject?.credit ?? "",
+        maxStudent: max,
+        registered: registeredCount,
+        remaining,
+        fillRate,
+        enrolledCount: sc.enrolledCount ?? 0,
+        status: sc.status || "",
+        cancelled: sc.cancelled ? "Có" : "Không",
+        _subjectId: sc.subjectId,
+      }
+    })
+    .sort((a, b) => b.registered - a.registered || String(a.classCode).localeCompare(String(b.classCode)))
+
+  classRows.forEach((row, idx) => {
+    s7.addRow({
+      stt: idx + 1,
+      classCode: row.classCode,
+      className: row.className,
+      subjectCode: row.subjectCode,
+      subjectName: row.subjectName,
+      credit: row.credit,
+      maxStudent: row.maxStudent,
+      registered: row.registered,
+      remaining: row.remaining,
+      fillRate: row.fillRate,
+      enrolledCount: row.enrolledCount,
+      status: row.status,
+      cancelled: row.cancelled,
+    })
+  })
+  applyBorders(s7)
+
+  // Sheet 8: Học phần (gộp theo SubjectVersion)
+  const subjectAgg = new Map()
+  for (const row of classRows) {
+    const key = row._subjectId || `${row.subjectCode}|${row.subjectName}`
+    if (!subjectAgg.has(key)) {
+      subjectAgg.set(key, {
+        subjectCode: row.subjectCode,
+        subjectName: row.subjectName,
+        credit: row.credit,
+        classCount: 0,
+        totalMax: 0,
+        totalRegistered: 0,
+        classesWithReg: 0,
+        studentSet: new Set(),
+      })
+    }
+    const agg = subjectAgg.get(key)
+    agg.classCount += 1
+    agg.totalMax += row.maxStudent || 0
+    agg.totalRegistered += row.registered
+    if (row.registered > 0) agg.classesWithReg += 1
+  }
+  // Distinct SV theo học phần (1 SV có thể đăng ký nhiều lớp cùng HP — hiếm; đếm theo log)
+  for (const log of logs) {
+    const subjectId = log.subjectClass?.subjectId || log.subjectClass?.subject?.id
+    if (!subjectId) continue
+    const key = subjectId
+    if (!subjectAgg.has(key)) {
+      subjectAgg.set(key, {
+        subjectCode: log.subjectClass?.subject?.code || "",
+        subjectName: log.subjectClass?.subject?.name || "",
+        credit: log.subjectClass?.subject?.credit ?? "",
+        classCount: 0,
+        totalMax: 0,
+        totalRegistered: 0,
+        classesWithReg: 0,
+        studentSet: new Set(),
+      })
+    }
+    subjectAgg.get(key).studentSet.add(log.studentId)
+  }
+
+  const s8 = wb.addWorksheet("Hoc phan")
+  s8.columns = [
+    { header: "STT", key: "stt", width: 8 },
+    { header: "Mã học phần", key: "subjectCode", width: 14 },
+    { header: "Tên học phần", key: "subjectName", width: 42 },
+    { header: "Tín chỉ", key: "credit", width: 10 },
+    { header: "Số lớp môn", key: "classCount", width: 12 },
+    { header: "Lớp có SV ĐK", key: "classesWithReg", width: 14 },
+    { header: "Tổng sĩ số max", key: "totalMax", width: 14 },
+    { header: "Tổng chỗ đã ĐK", key: "totalRegistered", width: 14 },
+    { header: "SV unique đã ĐK", key: "uniqueStudents", width: 16 },
+    { header: "Còn trống", key: "remaining", width: 12 },
+    { header: "% đầy", key: "fillRate", width: 10 },
+  ]
+  styleHeader(s8)
+
+  const subjectRows = [...subjectAgg.values()]
+    .map((agg) => {
+      const remaining = Math.max(0, agg.totalMax - agg.totalRegistered)
+      const fillRate =
+        agg.totalMax > 0 ? `${((agg.totalRegistered / agg.totalMax) * 100).toFixed(1)}%` : ""
+      return {
+        subjectCode: agg.subjectCode,
+        subjectName: agg.subjectName,
+        credit: agg.credit,
+        classCount: agg.classCount,
+        classesWithReg: agg.classesWithReg,
+        totalMax: agg.totalMax,
+        totalRegistered: agg.totalRegistered,
+        uniqueStudents: agg.studentSet.size,
+        remaining,
+        fillRate,
+      }
+    })
+    .sort(
+      (a, b) =>
+        b.totalRegistered - a.totalRegistered ||
+        String(a.subjectCode).localeCompare(String(b.subjectCode))
+    )
+
+  subjectRows.forEach((row, idx) => {
+    s8.addRow({
+      stt: idx + 1,
+      ...row,
+    })
+  })
+  applyBorders(s8)
+
+  // Bổ sung tóm tắt học phần / lớp môn vào sheet Tổng hợp
+  s1.addRows([
+    { metric: "—", value: "" },
+    { metric: "Số lớp môn trong học kỳ", value: subjectClasses.length },
+    {
+      metric: "  · Lớp môn có ít nhất 1 SV đăng ký",
+      value: classRows.filter((r) => r.registered > 0).length,
+    },
+    {
+      metric: "  · Lớp môn chưa có SV đăng ký",
+      value: classRows.filter((r) => r.registered === 0).length,
+    },
+    { metric: "Số học phần trong học kỳ", value: subjectRows.length },
+    {
+      metric: "  · Học phần có SV đăng ký",
+      value: subjectRows.filter((r) => r.totalRegistered > 0).length,
+    },
+  ])
+  applyBorders(s1)
+
   await wb.xlsx.writeFile(OUT)
   console.log(
     JSON.stringify(
@@ -443,6 +643,10 @@ async function main() {
         notRegisteredActiveEnrolled: notRegActive.length,
         notRegisteredInactive: notRegInactive.length,
         registrationRows: logs.length,
+        subjectClassCount: subjectClasses.length,
+        subjectClassWithReg: classRows.filter((r) => r.registered > 0).length,
+        subjectCount: subjectRows.length,
+        subjectWithReg: subjectRows.filter((r) => r.totalRegistered > 0).length,
       },
       null,
       2
