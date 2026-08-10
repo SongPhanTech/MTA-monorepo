@@ -194,3 +194,98 @@
   width: 16px;
   height: 16px;
 }
+
+/* Tab chỉnh sửa đăng ký — căn giữa phân trang + icon nút */
+.chinh-sua-sv-table .ant-pagination {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+.chinh-sua-sv-table .ant-pagination-total-text {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  line-height: 24px;
+}
+
+.chinh-sua-sv-table .ant-pagination-item,
+.chinh-sua-sv-table .ant-pagination-prev,
+.chinh-sua-sv-table .ant-pagination-next,
+.chinh-sua-sv-table .ant-pagination-jump-prev,
+.chinh-sua-sv-table .ant-pagination-jump-next {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+
+.chinh-sua-sv-table .ant-pagination-item a,
+.chinh-sua-sv-table .ant-pagination-item button,
+.chinh-sua-sv-table .ant-pagination-prev button,
+.chinh-sua-sv-table .ant-pagination-next button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100%;
+  line-height: 1 !important;
+  padding: 0 !important;
+}
+
+.chinh-sua-sv-table .ant-pagination-options {
+  display: inline-flex;
+  align-items: center;
+}
+
+.chinh-sua-sv-table .ant-pagination-options .ant-select-selector {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.chinh-sua-sv-table .ant-pagination-options .ant-select-selection-item {
+  display: flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
+}
+
+.chinh-sua-actions .ant-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.chinh-sua-actions .ant-btn .ant-btn-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+
+/* Biểu đồ thống kê đăng ký — full width, tránh thừa khoảng trắng */
+.thong-ke-chart-wrap {
+  width: 100% !important;
+}
+
+.thong-ke-chart-wrap > div,
+.thong-ke-chart-wrap canvas,
+.thong-ke-chart-wrap svg {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Trang chi tiết đợt ĐK học — gọn 1 màn hình, chỉ scroll trong table */
+.dot-dkh-page .ant-tabs-nav {
+  margin-bottom: 8px !important;
+}
+
+.dot-dkh-list .ant-table.ant-table-small .ant-table-thead > tr > th {
+  padding: 6px 8px !important;
+}
+
+.dot-dkh-list .ant-table.ant-table-small .ant-table-tbody > tr > td {
+  padding: 4px 8px !important;
+}
+
+.dot-dkh-list .ant-pagination {
+  margin: 8px 0 0 !important;
+}

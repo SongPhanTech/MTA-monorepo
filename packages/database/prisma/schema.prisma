@@ -3219,7 +3219,7 @@ model CurriculumVersion {
 /// môn học
 model Subject {
   id                       String                 @id() @default(cuid())
-  code                     String?
+  code                     String?                @unique()
   active                   Boolean                @default(true)
   description              String?                @db.Text()
   deletedAt                DateTime?
@@ -3235,6 +3235,7 @@ model Subject {
   certificateOnSubject     CertificateOnSubject[]
   awardOnSubject           Award[]
 
+  @@unique([code, name, managementOrganizationId])
   @@schema("ql-dao-tao")
 }
 
