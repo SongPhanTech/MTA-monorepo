@@ -382,143 +382,6 @@ export default function StudentScoreClassPage() {
       })
   }, [data, semesterId])
 
-  const getTrainingBlockSortKey = (subject: any, originalIndex: number) => {
-    const curriculumBlock = subject?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion
-
-    return [
-      curriculumBlock?.priority ?? Infinity,
-      curriculumBlock?.trainingBlock?.priority ?? Infinity,
-      curriculumBlock?.trainingBlock?.name ?? "",
-      originalIndex,
-    ] as const
-  }
-
-  const getRelatedSubjectIds = (subject: any) => {
-    const prerequisiteIds: string[] = (subject?.prerequisiteSubject ?? [])
-      .map((item: any) => item?.id)
-      .filter(Boolean)
-
-    return {
-      prerequisiteIds,
-      relatedIds: [
-        ...prerequisiteIds,
-        ...(subject?.dependentSubject ?? []),
-        ...(subject?.coRequisiteSubject ?? []),
-        ...(subject?.depCoRequisiteSubject ?? []),
-        ...(subject?.equivalencyGroups ?? []),
-      ]
-        .map((item: any) => item?.id ?? item?.equivalencyGroupId)
-        .filter(Boolean),
-    }
-  }
-
-  const compareTrainingBlockSortKey = (
-    a: ReturnType<typeof getTrainingBlockSortKey>,
-    b: ReturnType<typeof getTrainingBlockSortKey>
-  ) => a[0] - b[0] || a[1] - b[1] || a[2].localeCompare(b[2], "vi") || a[3] - b[3]
-
-  const sortSubjectClassesForExport = (subjectClasses: any[]) => {
-    if (!subjectClasses?.length) return []
-
-    const parent = new Map<string, string>()
-    const rank = new Map<string, number>()
-    const prerequisiteMap = new Map<string, Set<string>>()
-
-    const findGroup = (subjectId: string): string => {
-      if (!parent.has(subjectId)) {
-        parent.set(subjectId, subjectId)
-        rank.set(subjectId, 0)
-      }
-
-      if (parent.get(subjectId) !== subjectId) {
-        parent.set(subjectId, findGroup(parent.get(subjectId)!))
-      }
-
-      return parent.get(subjectId)!
-    }
-
-    const mergeGroup = (subjectId: string, relatedSubjectId: string) => {
-      const rootA = findGroup(subjectId)
-      const rootB = findGroup(relatedSubjectId)
-
-      if (rootA === rootB) return
-
-      const rankA = rank.get(rootA)!
-      const rankB = rank.get(rootB)!
-
-      if (rankA < rankB) {
-        parent.set(rootA, rootB)
-      } else if (rankA > rankB) {
-        parent.set(rootB, rootA)
-      } else {
-        parent.set(rootB, rootA)
-        rank.set(rootA, rankA + 1)
-      }
-    }
-
-    const items = subjectClasses.map((subjectClass, originalIndex) => {
-      const subject = subjectClass?.subject
-      const subjectId: string = subject?.id
-
-      if (subjectId && subject) {
-        const { prerequisiteIds, relatedIds } = getRelatedSubjectIds(subject)
-
-        prerequisiteMap.set(subjectId, new Set(prerequisiteIds))
-        relatedIds.forEach((relatedId: string) => {
-          mergeGroup(subjectId, relatedId)
-        })
-      }
-
-      return {
-        subjectClass,
-        subject,
-        subjectId,
-        sortKey: getTrainingBlockSortKey(subject, originalIndex),
-        originalIndex,
-      }
-    })
-
-    const groupMinSortKey = new Map<string, ReturnType<typeof getTrainingBlockSortKey>>()
-
-    items.forEach(({ subjectId, sortKey }) => {
-      if (!subjectId) return
-
-      const groupId = findGroup(subjectId)
-      const currentMinKey = groupMinSortKey.get(groupId)
-
-      if (!currentMinKey || compareTrainingBlockSortKey(sortKey, currentMinKey) < 0) {
-        groupMinSortKey.set(groupId, sortKey)
-      }
-    })
-
-    return items
-      .sort((a, b) => {
-        if (!a.subjectId || !b.subjectId) return 0
-
-        const groupA = findGroup(a.subjectId)
-        const groupB = findGroup(b.subjectId)
-
-        if (groupA !== groupB) {
-          return compareTrainingBlockSortKey(
-            groupMinSortKey.get(groupA) ?? a.sortKey,
-            groupMinSortKey.get(groupB) ?? b.sortKey
-          )
-        }
-
-        const sortKeyCompare = compareTrainingBlockSortKey(a.sortKey, b.sortKey)
-        if (sortKeyCompare) return sortKeyCompare
-
-        if (prerequisiteMap.get(a.subjectId)?.has(b.subjectId)) return 1
-        if (prerequisiteMap.get(b.subjectId)?.has(a.subjectId)) return -1
-
-        return (
-          a.originalIndex - b.originalIndex ||
-          String(a.subject?.code ?? "").localeCompare(String(b.subject?.code ?? ""))
-        )
-      })
-      .map((item) => item.subjectClass)
-  }
-
   const exportTemplate = async () => {
     const hocKis: IHocKi[] = []
     if (data.length > 0) {
@@ -1142,21 +1005,20 @@ export default function StudentScoreClassPage() {
     let stt = 1
     const monhocList: IMonHoc[] = []
 
-    const allSubjectClasses = data.flatMap((semester) => semester.subjectClasses)
+    // Thứ tự giống màn hình (học kỳ → tên môn); điểm lấy lần học mới nhất.
+    const latestSubjectClassesMap = new Map<string, any>()
+    data.forEach((semester) => {
+      semester.subjectClasses.forEach((subjectClass: any) => {
+        if (subjectClass.$isSummary) return
 
-    const latestSubjectClassesMap = new Map()
-    allSubjectClasses.forEach((subjectClass: any) => {
-      if (subjectClass.$isSummary) return
-
-      const subjectId = subjectClass?.subject?.id
-      if (subjectId) {
-        latestSubjectClassesMap.set(subjectId, subjectClass)
-      }
+        const subjectId = subjectClass?.subject?.id
+        if (subjectId) {
+          latestSubjectClassesMap.set(subjectId, subjectClass)
+        }
+      })
     })
 
-    const uniqueSubjectClasses = Array.from(latestSubjectClassesMap.values())
-
-    const orderedSubjectClasses = sortSubjectClassesForExport(uniqueSubjectClasses)
+    const orderedSubjectClasses = Array.from(latestSubjectClassesMap.values())
 
     orderedSubjectClasses.forEach((subjectClass) => {
       subjectClass.subjectClassStudent.forEach((subjectClassStudent: any) => {
