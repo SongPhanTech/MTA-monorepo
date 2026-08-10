@@ -1,6 +1,7 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import {
   ErrorMessageResponseSchema,
+  DocxBinaryResponseSchema,
   ExcelBinaryResponseSchema,
   SuccessMessageResponseSchema,
 } from "../dto/common-response.dto"
@@ -11,6 +12,7 @@ import { models } from "@workspace/db/zod"
 import { getTemplateBuffer } from "@workspace/libs/server"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
+import { buildClusterSurveySummaryReport } from "../services/cluster-survey-summary-report.service"
 import {
   getLecturerSurveyStats,
   getOrganizationsSurveyStats,
@@ -1189,6 +1191,89 @@ app.openapi(getClusterSurveyInfoDepartment, async (c) => {
   }
 
   return c.json(data, 200)
+})
+
+const exportClusterSurveySummaryReport = createRoute({
+  operationId: "export-cluster-survey-summary-report",
+  path: "/{id}/summary-report",
+  method: "post",
+  tags: ["Cụm khảo sát"],
+  summary: "Xuất báo cáo thống kê tổng hợp khảo sát giảng viên (Word)",
+  request: {
+    params: z.object({ id: z.string() }),
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            positiveChoiceIds: z.array(z.string()).min(1),
+            highChoiceIds: z.array(z.string()).min(1),
+            highThreshold: z.number().min(0).max(100).default(50),
+            concernChoiceIds: z.array(z.string()).min(1),
+            concernThreshold: z.number().min(0).max(100).default(20),
+            doiTuongTieuDe: z.string().optional(),
+            doiTuongMoTa: z.string().optional(),
+            doiTuongChiTiet: z.string().optional(),
+            phamVi: z.string().optional(),
+            hocKyNamHoc: z.string().optional(),
+            diaDiem: z.string().optional(),
+            date: z.string().optional(),
+            month: z.string().optional(),
+            year: z.union([z.string(), z.number()]).optional(),
+            vaiTroNguoiKi: z.string().optional(),
+            tenNguoiKi: z.string().optional(),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Export thành công",
+      content: {
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+          schema: DocxBinaryResponseSchema,
+        },
+      },
+    },
+    400: {
+      description: "Invalid request",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy khảo sát",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(exportClusterSurveySummaryReport, async (c) => {
+  const { id } = c.req.valid("param")
+  const body = c.req.valid("json")
+
+  try {
+    const { buffer, fileName } = await buildClusterSurveySummaryReport(prisma, id, body)
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+    return c.body(new Uint8Array(buffer), 200, {
+      "Content-Type":
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "Content-Disposition": disposition,
+    })
+  } catch (error: any) {
+    const message = error?.message || "Đã xảy ra lỗi khi xuất báo cáo"
+    if (String(message).includes("Không tìm thấy")) {
+      return c.json({ message }, 404)
+    }
+    return c.json({ message }, 400)
+  }
 })
 
 export default app

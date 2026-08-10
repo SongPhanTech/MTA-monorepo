@@ -59,6 +59,7 @@ import AddNganHangKhungDe from "./add-ngan-hang-khung-de"
 import ViewMinhChungModal from "./view-minh-chung-modal"
 import XemBangChungFilesModal from "./xem-bang-chung-files-modal"
 import AttachEvidenceCategoryModal from "./attach-evidence-category-modal"
+import ModalThongKeKhaoSatCum from "./modal-thong-ke-khao-sat-cum"
 
 export {
   AttachEvidenceCategoryModal,
@@ -122,4 +123,5 @@ export {
   AddNganHangKhungDe,
   ViewMinhChungModal,
   XemBangChungFilesModal,
+  ModalThongKeKhaoSatCum,
 }

@@ -1,4 +1,4 @@
-import { EyeOutlined } from "@ant-design/icons"
+import { BarChartOutlined, EyeOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
 import type { FilterProps } from "@components/commons/typeFilter"
 import DeleteIcon from "@components/icons/delete"
@@ -19,7 +19,6 @@ import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { Link } from "lucide-react"
-import { useRouter } from "next/router"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
@@ -69,7 +68,6 @@ function TabDotKhaoSatCum({
 
   // Tạo treeData từ schoolYears và semesters
   const treeData = converData(schoolYears)
-  const router = useRouter()
   const where = useMemo(() => {
     return {
       ...(filters.name && filters.name !== ""
@@ -279,6 +277,10 @@ function TabDotKhaoSatCum({
     tag: "ModalPrintExamClusterSurvey",
   })
 
+  const { onOpen: onOpenThongKe } = useDisclosure<{ id: string; name?: string }>({
+    tag: "ModalThongKeKhaoSatCum",
+  })
+
   return (
     <div>
       <Row gutter={[16, 8]}>
@@ -428,7 +430,7 @@ function TabDotKhaoSatCum({
               },
               {
                 title: "Thao tác",
-                width: 120,
+                width: 150,
                 align: "center",
                 hidden: !canSome(
                   KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
@@ -437,25 +439,17 @@ function TabDotKhaoSatCum({
                   "XOA",
                   "XEM_CHI_TIET"
                 ),
-                render: (_, { id, isPublic, surveyQuestion, surveys, surveyObjectType }) => (
+                render: (_, { id, name, isPublic, surveyQuestion, surveys, surveyObjectType }) => (
                   <Row className="justify-center gap-2">
-                    {/* {can(
-                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                            'XEM_CHI_TIET'
-                                        ) &&  (
-                                            <Tooltip
-                                                className="mr-2"
-                                                title={'Báo cáo khảo sát'}
-                                                placement="top"
-                                            >
-                                                <EyeOutlined
-                                                    onClick={() => {
-                                                        router.push(`/bao-cao-khao-sat/${id}`)
-                                                    }}
-                                                    style={{ fontSize: '16px' }}
-                                                />
-                                            </Tooltip>
-                                        )} */}
+                    <Tooltip className="mr-2" title="Thống kê khảo sát" placement="top">
+                      <BarChartOutlined
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onOpenThongKe({ id, name })
+                        }}
+                        style={{ fontSize: "16px" }}
+                      />
+                    </Tooltip>
 
                     {surveyQuestion?.length > 0 &&
                       can(

@@ -13,7 +13,8 @@ import {
 
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Col, Flex, Row, Skeleton, Tree } from "antd"
-import { useMemo, useState } from "react"
+import { useRouter } from "next/router"
+import { useEffect, useMemo, useState } from "react"
 
 import OrganizationSurveyReport from "@/components/sub-pages/khao-sat/bao-cao-don-vi"
 import { getRuntimeEnv } from "@workspace/libs"
@@ -70,14 +71,19 @@ function buildOrgAndLectureTree(
 }
 
 export default function BaoCaoGiangVien() {
+  const router = useRouter()
+  const queryClusterId =
+    typeof router.query.clusterId === "string" ? router.query.clusterId : undefined
+  const queryClusterName = typeof router.query.name === "string" ? router.query.name : ""
+
   const [filters, setFilters] = useState<any>({
     name: "",
-    surveyName: "",
+    surveyName: queryClusterName,
     surveyId: undefined,
     lectureId: undefined,
     organizationId: undefined,
     semesterIds: undefined,
-    clusterId: undefined,
+    clusterId: queryClusterId,
   })
   const [searchText, setSearchText] = useState<any>("")
   const [selectedKeys, setSelectedKeys] = useState<any>([])
@@ -85,6 +91,15 @@ export default function BaoCaoGiangVien() {
 
   const { id: semesterId } = useSemesterStore()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+  useEffect(() => {
+    if (!router.isReady || !queryClusterId) return
+    setFilters((prev: any) => ({
+      ...prev,
+      clusterId: queryClusterId,
+      surveyName: queryClusterName || prev.surveyName,
+    }))
+  }, [router.isReady, queryClusterId, queryClusterName])
 
   const { data: semester } = useFindUniqueSemester(
     {
@@ -589,6 +604,7 @@ export default function BaoCaoGiangVien() {
         <Flex justify="space-between">
           <Flex>
             <Select
+              value={filters.clusterId}
               onChange={(value, option: any) => {
                 setFilters((prev: any) => ({
                   ...prev,
