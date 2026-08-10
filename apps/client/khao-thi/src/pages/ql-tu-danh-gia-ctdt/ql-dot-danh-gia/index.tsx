@@ -15,6 +15,7 @@ import { useAbility } from "@workspace/permissions/hooks"
 import { KHAO_THI_PERMISSION } from "@workspace/router"
 import { Col, Row, Tabs, type TabsProps } from "antd"
 import { useMemo, useState } from "react"
+import PeriodEvidenceRepositoryTab from "./_components/period-evidence-repository"
 import SumaryReport from "./_components/sumary-report"
 import CrossReviewNoCouncilMember from "./_components/cross-review-nocouncil-member"
 
@@ -148,6 +149,12 @@ export default function EvaluationPeriodTabPage() {
         disabled: !selectedEvaluationPeriodId,
       })
     }
+
+    tabs.push({
+      key: "11",
+      label: "Kho minh chứng theo đợt",
+      children: <PeriodEvidenceRepositoryTab />,
+    })
 
     return tabs
   }, [selectedEvaluationPeriodId, councilMember, can])
