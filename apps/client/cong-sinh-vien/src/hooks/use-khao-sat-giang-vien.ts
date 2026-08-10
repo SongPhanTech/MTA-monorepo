@@ -49,6 +49,11 @@ export const getTenGiangVien = (khaoSat: KhaoSatItem): string => {
   return userProfile.fullname || hoTen
 }
 
+const isKhaoSatGiangVien = (ks: KhaoSatItem) => {
+  const topicType = ks.surveyTopic?.type
+  return ks.lecture != null || topicType === $Enums.SurveyType.CLUSTER || topicType === "CLUSTER"
+}
+
 const useKhaoSatGiangVien = ({
   semesterId,
   tuKhoa,
@@ -82,16 +87,14 @@ const useKhaoSatGiangVien = ({
   const danhSach = useMemo<KhaoSatItem[]>(() => {
     const danhSachApi = data?.status === 200 ? data.data?.data : undefined
     const raw = Array.isArray(danhSachApi) ? (danhSachApi as KhaoSatItem[]) : []
-    return raw
-      .filter((ks) => ks.lecture != null || ks.surveyTopic?.type === $Enums.SurveyType.CLUSTER)
-      .map((ks) => {
-        const tenHocKyNamHoc = ks.semesterId ? mapNamHoc.get(ks.semesterId) : undefined
-        return {
-          ...ks,
-          tenHocKy: tenHocKyNamHoc?.tenHocKy,
-          tenNamHoc: tenHocKyNamHoc?.tenNamHoc,
-        }
-      })
+    return raw.filter(isKhaoSatGiangVien).map((ks) => {
+      const tenHocKyNamHoc = ks.semesterId ? mapNamHoc.get(ks.semesterId) : undefined
+      return {
+        ...ks,
+        tenHocKy: tenHocKyNamHoc?.tenHocKy,
+        tenNamHoc: tenHocKyNamHoc?.tenNamHoc,
+      }
+    })
   }, [data, mapNamHoc])
 
   const tongSo = danhSach.length

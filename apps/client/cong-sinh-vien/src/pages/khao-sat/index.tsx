@@ -60,11 +60,6 @@ export default function KhaoSatHocVien() {
       trangThai,
     })
 
-  // Làm mới = tải lại dữ liệu mới, GIỮ NGUYÊN bộ lọc đang chọn
-  const lamMoi = () => {
-    refetch()
-  }
-
   return (
     <div className="flex h-[calc(100vh-112px)] flex-col">
       <StatCardsKhaoSat
@@ -116,7 +111,7 @@ export default function KhaoSatHocVien() {
           className="inline-flex h-10 items-center justify-center gap-1 text-sm leading-none"
           loading={isFetching}
           icon={<RefreshCcw size={16} className="block" />}
-          onClick={lamMoi}
+          onClick={() => refetch()}
         >
           Làm mới
         </Button>
