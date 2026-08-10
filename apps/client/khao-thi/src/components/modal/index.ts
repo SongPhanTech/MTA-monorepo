@@ -58,7 +58,10 @@ import PutPhanCongThanhVienModal from "./put-phan-cong-thanh-vien"
 import AddNganHangKhungDe from "./add-ngan-hang-khung-de"
 import ViewMinhChungModal from "./view-minh-chung-modal"
 import XemBangChungFilesModal from "./xem-bang-chung-files-modal"
+import AttachEvidenceCategoryModal from "./attach-evidence-category-modal"
+
 export {
+  AttachEvidenceCategoryModal,
   ConfirmModal,
   PutSurveyObjectTypeModal,
   PutSurveyTopicModal,
