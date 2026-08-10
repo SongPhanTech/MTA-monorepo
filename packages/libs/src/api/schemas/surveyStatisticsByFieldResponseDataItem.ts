@@ -54,10 +54,12 @@ Authorization: Bearer <access_token>
 | **500** | Lỗi máy chủ |
  * OpenAPI spec version: 1.0.0
  */
+import type { SurveyStatisticsByFieldResponseDataItemAnswersItem } from './surveyStatisticsByFieldResponseDataItemAnswersItem';
 import type { SurveyStatisticsByFieldResponseDataItemQuestionsItem } from './surveyStatisticsByFieldResponseDataItemQuestionsItem';
 
 export type SurveyStatisticsByFieldResponseDataItem = {
-  id: string;
-  name?: string;
+  groupId: string;
+  groupName?: string;
+  answers: SurveyStatisticsByFieldResponseDataItemAnswersItem[];
   questions: SurveyStatisticsByFieldResponseDataItemQuestionsItem[];
 };

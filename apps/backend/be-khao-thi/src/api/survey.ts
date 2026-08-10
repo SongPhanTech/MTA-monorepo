@@ -13,6 +13,7 @@ import { prisma } from ".."
 import {
   SurveyStatisticSchema,
   SurveyStatisticsByFieldResponseSchema,
+  SurveyMajorCountResponseSchema,
 } from "../dto/survey-statistic.dto"
 import {
   SURVEY_OBJECT_TYPE_INCLUDE,
@@ -314,6 +315,9 @@ const getSurveyStatisticsToField = createRoute({
         description: "ID của khảo sát cần xem thống kê.",
       }),
     }),
+    query: z.object({
+      majorName: z.string().optional(),
+    }),
   },
   responses: {
     ...standardErrorResponses(),
@@ -336,8 +340,9 @@ const getSurveyStatisticsToField = createRoute({
   },
 })
 
-app.openapi(getSurveyStatisticsToField, async (c) => {
+  app.openapi(getSurveyStatisticsToField, async (c) => {
   const { id } = c.req.valid("param")
+  const { majorName } = c.req.valid("query")
 
   const survey = await prisma.survey.findUnique({
     where: { id },
@@ -349,6 +354,9 @@ app.openapi(getSurveyStatisticsToField, async (c) => {
         },
       },
       surveyChoice: true,
+      surveyObjectType: {
+        include: SURVEY_OBJECT_TYPE_INCLUDE,
+      },
     },
   })
 
@@ -358,10 +366,93 @@ app.openapi(getSurveyStatisticsToField, async (c) => {
 
   const questionIds = survey.surveyQuestion.map((q) => q.id)
 
+  let surveySessionFilter: any = { surveyId: survey.id }
+
+  if (majorName) {
+    let allProfiles: any[] = []
+
+    for (const surveyObjectType of survey.surveyObjectType) {
+      const orClauses = buildSurveyObjectTypeProfileOrClauses(surveyObjectType, {})
+      if (!orClauses.length) continue
+
+      const objectTypeProfiles = await prisma.userProfile.findMany({
+        select: {
+          id: true,
+          educationAndTraining: {
+            select: {
+              fixedClass: {
+                select: {
+                  curriculumVersion: {
+                    select: {
+                      curriculum: {
+                        select: {
+                          trainingMajor: {
+                            select: {
+                              name: true,
+                              trainingField: {
+                                select: { name: true }
+                              },
+                              organization: {
+                                select: { sTen: true }
+                              }
+                            }
+                          },
+                          trainingField: {
+                            select: { name: true }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        where: {
+          deletedAt: null,
+          active: true,
+          OR: orClauses,
+        },
+      })
+
+      allProfiles = [...allProfiles, ...objectTypeProfiles]
+    }
+
+    const uniqueProfilesMap = new Map<string, any>()
+    for (const p of allProfiles) {
+      uniqueProfilesMap.set(p.id, p)
+    }
+    const uniqueProfiles = Array.from(uniqueProfilesMap.values())
+
+    const validProfileIds: string[] = []
+
+    uniqueProfiles.forEach((p: any) => {
+      let mName = "Khác"
+
+      const studentInfo = p.educationAndTraining?.[0]
+      if (studentInfo) {
+        const curriculum = studentInfo.fixedClass?.curriculumVersion?.curriculum
+        if (curriculum) {
+          mName = curriculum.trainingMajor?.trainingField?.name
+            || curriculum.trainingMajor?.name
+            || curriculum.trainingField?.name
+            || "Khác"
+        }
+      }
+
+      if (mName === majorName) {
+        validProfileIds.push(p.id)
+      }
+    })
+
+    surveySessionFilter.profileId = { in: validProfileIds }
+  }
+
   const answerCounts = await prisma.surveyResponse.groupBy({
     by: ["surveyQuestionId", "surveyChoiceId"],
     where: {
-      surveySession: { surveyId: survey.id },
+      surveySession: surveySessionFilter,
       surveyQuestionId: { in: questionIds },
       surveyChoiceId: { not: null },
     },
@@ -375,8 +466,7 @@ app.openapi(getSurveyStatisticsToField, async (c) => {
   const answerCountMap = answerCounts.reduce<Record<string, number>>((acc, curr) => {
     if (!curr.surveyChoiceId) return acc
 
-    const groupId = questionToGroupMap[curr.surveyQuestionId]
-    const key = `${groupId}-${curr.surveyChoiceId}`
+    const key = `${curr.surveyQuestionId}-${curr.surveyChoiceId}`
 
     acc[key] = (acc[key] ?? 0) + curr._count.surveyChoiceId
     return acc
@@ -405,7 +495,7 @@ app.openapi(getSurveyStatisticsToField, async (c) => {
     const group = groupsMap.get(groupId)!
 
     const answers = survey.surveyChoice.map((choice) => {
-      const key = `${groupId}-${choice.id}`
+      const key = `${question.id}-${choice.id}`
 
       return {
         id: choice.id,
@@ -425,33 +515,56 @@ app.openapi(getSurveyStatisticsToField, async (c) => {
   function calcTotalCount(answers: any[]): any {
     return answers.reduce((total, item) => total + item.count, 0)
   }
+
   function calcGroupAnswerTotals(groups: any[]) {
     return groups.map((group) => {
-      const answers = group.questions[0].answers.map((i: any) => {
-        return { ...i }
+      // Calculate group average answers
+      const groupAnswers = survey!.surveyChoice.map((choice) => {
+        return {
+          id: choice.id,
+          answer: choice.answer,
+          description: choice.description,
+          count: 0,
+        }
       })
-      // answers.forEach((answer: any, index: number) => {
-      //     answers[index].count= group.questions[0].answers.reduce((sum:any, item:any) => sum + item.count, 0)
 
-      // })
-      // group.questions.forEach((question: any) => {
-      //     question.answers.forEach((answer: any, index: number) => {
-      //         answers[index].count += answer.count
-      //     })
-      // })
+      let totalQuestions = group.questions.length
+      if (totalQuestions === 0) totalQuestions = 1
 
-      const totalCount = calcTotalCount(answers)
+      group.questions.forEach((question: any) => {
+        question.answers.forEach((answer: any, index: number) => {
+          if (groupAnswers[index]) {
+            groupAnswers[index].count += answer.count
+          }
+        })
+      })
+
+      // Divide by totalQuestions to get the average (or we can just sum it up and calculate percent)
+      // Actually, if we just sum the counts, the totalCount will also be the sum, and the percent will be exactly the average percent!
+      // Let's just keep the sum of counts.
+      const groupTotalCount = calcTotalCount(groupAnswers)
 
       return {
         groupId: group.id,
         groupName: group.name,
-        answers: answers.map((i: any) => {
+        answers: groupAnswers.map((i: any) => {
           return {
             ...i,
-            totalCount,
-            percent: totalCount === 0 ? 0 : Number(((i.count / totalCount) * 100).toFixed(2)),
+            totalCount: groupTotalCount,
+            percent: groupTotalCount === 0 ? 0 : Number(((i.count / groupTotalCount) * 100).toFixed(2)),
           }
         }),
+        questions: group.questions.map((q: any) => {
+          const qTotal = calcTotalCount(q.answers)
+          return {
+            ...q,
+            answers: q.answers.map((a: any) => ({
+              ...a,
+              totalCount: qTotal,
+              percent: qTotal === 0 ? 0 : Number(((a.count / qTotal) * 100).toFixed(2))
+            }))
+          }
+        })
       }
     })
   }
@@ -460,24 +573,6 @@ app.openapi(getSurveyStatisticsToField, async (c) => {
     Array.from(groupsMap.values())?.length > 0
       ? calcGroupAnswerTotals(Array.from(groupsMap.values()) || [])
       : []
-
-  // const answerCountMap = answerCounts.reduce(
-  //     (acc, curr) => {
-  //         if (curr.surveyChoiceId) {
-  //             const key = `${curr.surveyQuestionId}-${curr.surveyChoiceId}`
-  //             acc[key] = curr._count.surveyChoiceId
-  //         }
-  //         return acc
-  //     },
-  //     {} as Record<string, number>
-  // )
-
-  // const questions = survey.surveyQuestion.map((question) => {
-  //     const answers = survey.surveyChoice.map((choice) => {
-  //         const key = `${question.id}-${choice.id}`
-  //         return {
-  //             id: choice.id,
-  //             answer: choice.answer,
   //             description: choice.description,
   //             count: answerCountMap[key] || 0,
   //         }
@@ -706,14 +801,14 @@ app.openapi(getSurveyObjectCount, async (c) => {
 
       const objectTypeProfiles = orClauses.length
         ? await prisma.userProfile.findMany({
-            select: { id: true },
-            where: {
-              deletedAt: null,
-              active: true,
-              ...(q.fullname ? { fullname: { contains: q.fullname, mode: "insensitive" } } : {}),
-              OR: orClauses,
-            },
-          })
+          select: { id: true },
+          where: {
+            deletedAt: null,
+            active: true,
+            ...(q.fullname ? { fullname: { contains: q.fullname, mode: "insensitive" } } : {}),
+            OR: orClauses,
+          },
+        })
         : []
 
       const taken = await prisma.surveySession.count({
@@ -730,6 +825,169 @@ app.openapi(getSurveyObjectCount, async (c) => {
       }
     })
   )
+
+  return c.json(data, 200)
+})
+
+const getSurveyMajorCount = createRoute({
+  operationId: "get-survey-major-count",
+  path: "/objects/count-by-major",
+  method: "get",
+  tags: ["Khảo sát"],
+  summary: "Lấy số người làm khảo sát theo chuyên ngành",
+  request: {
+    query: z.object({
+      id: z.string(),
+    }),
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Success",
+      content: {
+        "application/json": {
+          schema: SurveyMajorCountResponseSchema,
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy khảo sát.",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(getSurveyMajorCount, async (c) => {
+  const { id } = c.req.valid("query")
+
+  const survey = await prisma.survey.findUnique({
+    where: { id },
+    include: {
+      surveyObjectType: {
+        include: SURVEY_OBJECT_TYPE_INCLUDE,
+      },
+    },
+  })
+
+  if (!survey) {
+    return c.json({ message: "Không tìm thấy khảo sát" }, 404)
+  }
+
+  let allProfiles: any[] = []
+
+  for (const surveyObjectType of survey.surveyObjectType) {
+    const orClauses = buildSurveyObjectTypeProfileOrClauses(surveyObjectType, {})
+    if (!orClauses.length) continue
+
+    const objectTypeProfiles = await prisma.userProfile.findMany({
+      select: {
+        id: true,
+        educationAndTraining: {
+          select: {
+            fixedClass: {
+              select: {
+                curriculumVersion: {
+                  select: {
+                    curriculum: {
+                      select: {
+                        trainingMajor: {
+                            select: {
+                              name: true,
+                              trainingField: {
+                                select: { name: true }
+                              },
+                              organization: {
+                                select: { sTen: true }
+                              }
+                            }
+                          },
+                        trainingField: {
+                          select: { name: true }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      where: {
+        deletedAt: null,
+        active: true,
+        OR: orClauses,
+      },
+    })
+
+    allProfiles = [...allProfiles, ...objectTypeProfiles]
+  }
+
+  const uniqueProfilesMap = new Map<string, any>()
+  for (const p of allProfiles) {
+    uniqueProfilesMap.set(p.id, p)
+  }
+  const uniqueProfiles = Array.from(uniqueProfilesMap.values())
+
+  const profileIdToMajor = new Map<string, { majorName: string, orgName: string }>()
+
+  uniqueProfiles.forEach((p: any) => {
+    let majorName = "Khác"
+    let orgName = ""
+
+    const studentInfo = p.educationAndTraining?.[0]
+    if (studentInfo) {
+      const curriculum = studentInfo.fixedClass?.curriculumVersion?.curriculum
+      if (curriculum) {
+        majorName = curriculum.trainingMajor?.trainingField?.name
+          || curriculum.trainingMajor?.name
+          || curriculum.trainingField?.name
+          || "Khác"
+        orgName = curriculum.trainingMajor?.organization?.sTen || ""
+      }
+    }
+
+    profileIdToMajor.set(p.id, { majorName, orgName })
+  })
+
+  const profileIds = uniqueProfiles.map(p => p.id)
+
+  const takenSessions = await prisma.surveySession.findMany({
+    where: {
+      surveyId: survey.id,
+      profileId: { in: profileIds },
+    },
+    select: { profileId: true }
+  })
+
+  const takenProfileIds = new Set(takenSessions.map(s => s.profileId).filter(Boolean))
+
+  const majorStats = new Map<string, { name: string, total: number, taken: number, organization?: string }>()
+
+  uniqueProfiles.forEach(p => {
+    const { majorName, orgName } = profileIdToMajor.get(p.id)!
+    const isTaken = takenProfileIds.has(p.id)
+
+    if (!majorStats.has(majorName)) {
+      majorStats.set(majorName, { name: majorName, total: 0, taken: 0, organization: orgName })
+    }
+
+    const stat = majorStats.get(majorName)!
+    stat.total += 1
+    if (isTaken) {
+      stat.taken += 1
+    }
+  })
+
+  const data = Array.from(majorStats.values()).sort((a, b) => {
+    if (a.name === "Khác") return 1
+    if (b.name === "Khác") return -1
+    return a.name.localeCompare(b.name)
+  })
 
   return c.json(data, 200)
 })
@@ -926,10 +1184,10 @@ app.openapi(getSurveysByProfile, async (c) => {
     ...(semesterId && { semesterId }),
     ...(q.lecturerName
       ? {
-          lecture: {
-            userProfile: { fullname: { contains: q.lecturerName, mode: "insensitive" } },
-          },
-        }
+        lecture: {
+          userProfile: { fullname: { contains: q.lecturerName, mode: "insensitive" } },
+        },
+      }
       : {}),
     ...(q.subjectClassName
       ? { subjectClass: { name: { contains: q.subjectClassName, mode: "insensitive" } } }
@@ -1022,8 +1280,8 @@ const getPrivateSurvey = createRoute({
               surveyChoice: models.SurveyChoiceScalarSchema.array(),
               lectureInfo: z
                 .object({
-                  firstName: z.string(),
-                  lastName: z.string(),
+                  firstName: z.string().nullable(),
+                  lastName: z.string().nullable(),
                   academicDegree: z.string().nullish(),
                   academicRank: z.string().nullish(),
                   organization: z.string().nullable(),
@@ -1118,12 +1376,12 @@ app.openapi(getPrivateSurvey, async (c) => {
 
   const lectureInfo = lecture
     ? {
-        firstName: lecture.userProfile.firstName,
-        lastName: lecture.userProfile.lastName,
-        academicDegree: lecture.userProfile.academicDegreeType?.sTen,
-        academicRank: lecture.userProfile.academicRankType?.sTen,
-        organization: lecture.organization.sTen,
-      }
+      firstName: lecture.userProfile.firstName,
+      lastName: lecture.userProfile.lastName,
+      academicDegree: lecture.userProfile.academicDegreeType?.sTen,
+      academicRank: lecture.userProfile.academicRankType?.sTen,
+   organization: lecture.organization?.sTen ?? null,
+    }
     : null
 
   return c.json({ ...data, lectureInfo }, 200)
@@ -1205,7 +1463,7 @@ app.openapi(sinhdetudong, async (c) => {
     const arr = [...questions]
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
-      ;[arr[i], arr[j]] = [arr[j], arr[i]]
+        ;[arr[i], arr[j]] = [arr[j], arr[i]]
     }
 
     const hasImage = (q: any): boolean =>

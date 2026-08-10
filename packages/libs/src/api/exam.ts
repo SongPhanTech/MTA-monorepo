@@ -102,10 +102,12 @@ import type {
   GetLectureSurveyStatisticsParams,
   GetOrganizationSurveyStatistics200,
   GetOrganizationSurveyStatisticsParams,
+  GetPrivateSurvey200,
   GetPrivateSurveyParams,
   GetPublicSurveysResult,
   GetPublicSurveysV2Params,
   GetPublicSurveysV2Result,
+  GetSurveyMajorCountParams,
   GetSurveyObjectCount200Item,
   GetSurveyObjectCountParams,
   GetSurveyObjectsParams,
@@ -118,6 +120,7 @@ import type {
   SingleTopicGenerationBody,
   SuccessBooleanResponse,
   SuccessMessageResponse,
+  SurveyMajorCountResponse,
   SurveyStatisticsByFieldResponse,
   ValidateUserSurvey200,
   ValidateUserSurveyParams
@@ -1974,6 +1977,153 @@ export function useGetSurveyObjectCount<TData = Awaited<ReturnType<typeof getSur
 
 
 /**
+ * @summary Lấy số người làm khảo sát theo chuyên ngành
+ */
+export type getSurveyMajorCountResponse200 = {
+  data: SurveyMajorCountResponse
+  status: 200
+}
+
+export type getSurveyMajorCountResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type getSurveyMajorCountResponse403 = {
+  data: ErrorMessageResponse
+  status: 403
+}
+
+export type getSurveyMajorCountResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type getSurveyMajorCountResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type getSurveyMajorCountResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type getSurveyMajorCountResponseSuccess = (getSurveyMajorCountResponse200) & {
+  headers: Headers;
+};
+export type getSurveyMajorCountResponseError = (getSurveyMajorCountResponse400 | getSurveyMajorCountResponse403 | getSurveyMajorCountResponse404 | getSurveyMajorCountResponse409 | getSurveyMajorCountResponse500) & {
+  headers: Headers;
+};
+
+export type getSurveyMajorCountResponse = (getSurveyMajorCountResponseSuccess | getSurveyMajorCountResponseError)
+
+export const getGetSurveyMajorCountUrl = (params: GetSurveyMajorCountParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/survey/objects/count-by-major?${stringifiedParams}` : `/api/survey/objects/count-by-major`
+}
+
+export const getSurveyMajorCount = async (params: GetSurveyMajorCountParams, options?: RequestInit): Promise<getSurveyMajorCountResponse> => {
+  
+  return customExamFetch<getSurveyMajorCountResponse>(getGetSurveyMajorCountUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetSurveyMajorCountQueryKey = (params?: GetSurveyMajorCountParams,) => {
+    return [
+    `/api/survey/objects/count-by-major`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetSurveyMajorCountQueryOptions = <TData = Awaited<ReturnType<typeof getSurveyMajorCount>>, TError = ErrorMessageResponse>(params: GetSurveyMajorCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyMajorCount>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSurveyMajorCountQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyMajorCount>>> = ({ signal }) => getSurveyMajorCount(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSurveyMajorCount>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSurveyMajorCountQueryResult = NonNullable<Awaited<ReturnType<typeof getSurveyMajorCount>>>
+export type GetSurveyMajorCountQueryError = ErrorMessageResponse
+
+
+export function useGetSurveyMajorCount<TData = Awaited<ReturnType<typeof getSurveyMajorCount>>, TError = ErrorMessageResponse>(
+ params: GetSurveyMajorCountParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyMajorCount>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSurveyMajorCount>>,
+          TError,
+          Awaited<ReturnType<typeof getSurveyMajorCount>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSurveyMajorCount<TData = Awaited<ReturnType<typeof getSurveyMajorCount>>, TError = ErrorMessageResponse>(
+ params: GetSurveyMajorCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyMajorCount>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSurveyMajorCount>>,
+          TError,
+          Awaited<ReturnType<typeof getSurveyMajorCount>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSurveyMajorCount<TData = Awaited<ReturnType<typeof getSurveyMajorCount>>, TError = ErrorMessageResponse>(
+ params: GetSurveyMajorCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyMajorCount>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lấy số người làm khảo sát theo chuyên ngành
+ */
+
+export function useGetSurveyMajorCount<TData = Awaited<ReturnType<typeof getSurveyMajorCount>>, TError = ErrorMessageResponse>(
+ params: GetSurveyMajorCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyMajorCount>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSurveyMajorCountQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
  * @summary Danh sách khảo sát cần làm
  */
 export type getSurveysOfProfileResponse200 = {
@@ -2133,7 +2283,7 @@ export function useGetSurveysOfProfile<TData = Awaited<ReturnType<typeof getSurv
  * @summary Thông tin đợt khảo sát không công khai
  */
 export type getPrivateSurveyResponse200 = {
-  data: GetSurveyResult
+  data: GetPrivateSurvey200
   status: 200
 }
 
