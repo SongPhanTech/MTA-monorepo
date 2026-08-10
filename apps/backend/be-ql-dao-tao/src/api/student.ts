@@ -667,9 +667,9 @@ app.openapi(debtStatistics, async (c) => {
 
   const trainingCourse = trainingCourseId
     ? await prisma.trainingCourse.findUnique({
-        where: { id: trainingCourseId },
-        select: { name: true },
-      })
+      where: { id: trainingCourseId },
+      select: { name: true },
+    })
     : null
 
   type Result = {
@@ -700,10 +700,10 @@ app.openapi(debtStatistics, async (c) => {
       },
       student: trainingCourseId
         ? {
-            fixedClass: {
-              trainingCourseId,
-            },
-          }
+          fixedClass: {
+            trainingCourseId,
+          },
+        }
         : undefined,
     },
     select: {
@@ -992,15 +992,24 @@ app.openapi(debtStatistics, async (c) => {
     })
   })
 
+  const hocLaiRows = rows.filter((r) => r.type === "HỌC LẠI" || r.type === "CHƯA THI")
+  const thiLaiRows = rows.filter((r) => r.type === "THI LẠI")
+
   const buffer = await getTemplateBuffer(prisma, "thong_ke_no")
   const template = new XlsxTemplate(buffer)
-  const sheetName = "DS HV nợ môn"
 
-  template.substitute(sheetName, {
+  template.substitute("Học lại", {
     ĐTĐT: trainingObjectType.name,
     KHOÁ: trainingCourse?.name || "Tất cả các khoá",
     DATE: dayjs(date).format("DD/MM/YYYY"),
-    data: rows.map((r, idx) => ({ no: idx + 1, ...r })),
+    data: hocLaiRows.map((r, idx) => ({ no: idx + 1, ...r })),
+  })
+
+  template.substitute("Thi lại", {
+    ĐTĐT: trainingObjectType.name,
+    KHOÁ: trainingCourse?.name || "Tất cả các khoá",
+    DATE: dayjs(date).format("DD/MM/YYYY"),
+    data: thiLaiRows.map((r, idx) => ({ no: idx + 1, ...r })),
   })
 
   const result = await template.generate({ type: "arraybuffer" })

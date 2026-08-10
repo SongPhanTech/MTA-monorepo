@@ -95,6 +95,7 @@ export default function StudentScoreClassPage() {
             trainingType: true,
             curriculum: {
               include: {
+                trainingField: true,
                 trainingMajor: {
                   include: {
                     trainingField: true,
@@ -112,6 +113,29 @@ export default function StudentScoreClassPage() {
                 scoreConverts: true,
               },
             },
+            curriculumVersion: {
+              include: {
+                trainingLevel: true,
+                trainingLanguage: true,
+                trainingTime: true,
+                trainingType: true,
+                curriculum: {
+                  include: {
+                    trainingField: true,
+                    trainingMajor: {
+                      include: {
+                        trainingField: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        studentYearResult: {
+          include: {
+            rank: true,
           },
         },
       },
@@ -593,8 +617,8 @@ export default function StudentScoreClassPage() {
       maSV: student?.code,
       htdt: student?.fixedClass?.trainingCourse.trainingObjectType.name,
       nganh:
-        student?.curriculumVersion?.curriculum.trainingMajor?.name ??
-        student?.curriculumVersion?.curriculum.trainingMajor?.trainingField?.name,
+        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
+        student?.fixedClass?.curriculumVersion?.curriculum?.trainingField?.name,
       lop: student?.fixedClass?.trainingCourse?.name,
       hocKis,
     }
@@ -677,11 +701,18 @@ export default function StudentScoreClassPage() {
 
     const gapRow: TableRow = { cells: [{ value: null, colSpan: 19, border: false }] }
 
-    const lastSemesterResult = [...data].reverse().find((d) => d.studentSemesterResult?.length > 0)
-      ?.studentSemesterResult?.[0]
+    const sortedYearResults = student?.studentYearResult
+      ? [...student.studentYearResult].sort((a, b) => {
+          return (a.schoolYearId || "").localeCompare(b.schoolYearId || "")
+        })
+      : []
+
+    const lastYearResult = sortedYearResults.length > 0
+      ? sortedYearResults[sortedYearResults.length - 1]
+      : null
 
     const tongtinchi =
-      lastSemesterResult?.accumulatedCredits ??
+      lastYearResult?.accumulatedCredits ??
       sampleStudentData.hocKis.reduce((acc, curr) => acc + (curr.SoTinChiKy ?? 0), 0)
     const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
       (acc, curr) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
@@ -692,19 +723,19 @@ export default function StudentScoreClassPage() {
       0
     )
     const tongdiemhe10 =
-      lastSemesterResult?.cumulativeGpaBase10 != null
-        ? Number(lastSemesterResult.cumulativeGpaBase10)
+      lastYearResult?.cumulativeGpaBase10 != null
+        ? Number(lastYearResult.cumulativeGpaBase10)
         : tongtinchi === 0
           ? 0
           : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(2))
     const tongdiemhe4 =
-      lastSemesterResult?.cumulativeGpaBase4 != null
-        ? Number(lastSemesterResult.cumulativeGpaBase4)
+      lastYearResult?.cumulativeGpaBase4 != null
+        ? Number(lastYearResult.cumulativeGpaBase4)
         : tongtinchi === 0
           ? 0
           : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(2))
 
-    const xeploai = convertScore(tongdiemhe10).classification
+    const xeploai = lastYearResult?.rank?.classification ?? convertScore(tongdiemhe10).classification
 
     exportFromTemplate({
       templateUrl: getMinioUrl("/mta/template/BangDiemCaNhan(P2).xlsx"),
@@ -899,8 +930,8 @@ export default function StudentScoreClassPage() {
       maSV: student?.code,
       htdt: student?.fixedClass?.trainingCourse.trainingObjectType.name,
       nganh:
-        student?.curriculumVersion?.curriculum.trainingMajor?.name ??
-        student?.curriculumVersion?.curriculum.trainingMajor?.trainingField?.name,
+        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
+        student?.fixedClass?.curriculumVersion?.curriculum?.trainingField?.name,
       lop: student?.fixedClass?.trainingCourse?.name,
       hocKis,
     }
@@ -1174,14 +1205,14 @@ export default function StudentScoreClassPage() {
       ngaySinh: student?.userProfile?.dateOfBirth,
       maSinhVien: student?.code,
       ngayNhapHoc: student?.fixedClass?.trainingCourse.admissionStartDate,
-      ngonNguDaoTao: student?.curriculumVersion?.trainingLanguage?.name,
-      thoiGianDaoTao: student?.curriculumVersion?.trainingTime?.name,
-      nganhDaoTao: student?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name,
-      trinhDoDaoTao: student?.curriculumVersion?.trainingLevel?.name,
+      ngonNguDaoTao: student?.fixedClass?.curriculumVersion?.trainingLanguage?.name,
+      thoiGianDaoTao: student?.fixedClass?.curriculumVersion?.trainingTime?.name,
+      nganhDaoTao: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || student?.fixedClass?.curriculumVersion?.curriculum?.trainingField?.name,
+      trinhDoDaoTao: student?.fixedClass?.curriculumVersion?.trainingLevel?.name,
       chuyenNganh:
-        student?.curriculumVersion?.curriculum.trainingMajor?.name ??
-        student?.curriculumVersion?.curriculum.trainingMajor?.trainingField?.name,
-      hinhThucDaoTao: student?.curriculumVersion?.trainingType?.name,
+        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ??
+        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name,
+      hinhThucDaoTao: student?.fixedClass?.curriculumVersion?.trainingType?.name,
     }
 
     const scoredMonhocs = monhocList.filter(
@@ -1310,9 +1341,9 @@ export default function StudentScoreClassPage() {
             student?.userProfile?.fullname,
             student?.fixedClass?.trainingCourse.trainingObjectType.name,
             student?.fixedClass?.trainingCourse?.name,
-            student?.curriculumVersion?.name,
-            student?.curriculumVersion?.curriculum.trainingMajor?.name,
-            student?.curriculumVersion?.curriculum.trainingMajor?.trainingField?.name,
+            student?.fixedClass?.curriculumVersion?.name,
+            student?.fixedClass?.curriculumVersion?.curriculum.trainingMajor?.name,
+            student?.fixedClass?.curriculumVersion?.curriculum.trainingMajor?.trainingField?.name,
           ]
             .filter(Boolean)
             .join(" - ")}
