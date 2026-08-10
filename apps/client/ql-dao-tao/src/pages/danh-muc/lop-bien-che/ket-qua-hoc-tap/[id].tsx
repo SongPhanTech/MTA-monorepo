@@ -1120,6 +1120,7 @@ export default function StudentScoreClassPage() {
             chuyenNganh: sampleStudentData.chuyenNganh ?? "",
             hinhThucDaoTao: sampleStudentData.hinhThucDaoTao ?? "",
           },
+          boldDataKeys: ["hoVaTen"],
           tableStartCell: { row: 14, col: 1 },
           rows: [
             ...tableRows,

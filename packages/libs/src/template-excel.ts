@@ -25,6 +25,8 @@ export interface TableRow {
 export interface SheetExportOptions {
   sheet?: string | number
   data?: Record<string, string | number | null>
+  /** Các key trong `data` — ô chứa `{{key}}` sẽ được in đậm sau khi thay placeholder */
+  boldDataKeys?: string[]
   rows?: TableRow[]
   tableStartCell?: { row: number; col: number }
   hiddenColumns?: string[]
@@ -82,6 +84,22 @@ function replaceTemplatePlaceholders(
   }
 
   return value
+}
+
+function cellContainsPlaceholder(value: ExcelJS.CellValue, key: string): boolean {
+  const pattern = new RegExp(`{{\\s*${key}\\s*}}`)
+  if (typeof value === "string") return pattern.test(value)
+  if (value && typeof value === "object" && "richText" in value && Array.isArray(value.richText)) {
+    return value.richText.some((part) => pattern.test(part.text))
+  }
+  return false
+}
+
+function applyBoldToCell(cell: ExcelJS.Cell) {
+  cell.font = {
+    ...(cell.font ?? {}),
+    bold: true,
+  }
 }
 
 function cloneWorksheet(
@@ -251,9 +269,12 @@ async function handleExcelJSDefault(
       })
     }
     // 1️⃣ Replace placeholder {{...}}
+    const boldDataKeys = sheetOption.boldDataKeys ?? []
     worksheet.eachRow((row) => {
       row.eachCell((cell) => {
+        const shouldBold = boldDataKeys.some((key) => cellContainsPlaceholder(cell.value, key))
         cell.value = replaceTemplatePlaceholders(cell.value, data)
+        if (shouldBold) applyBoldToCell(cell)
       })
     })
 
@@ -580,9 +601,12 @@ async function handleExcelJSMergeSheets(
     }
 
     // 1b. Thay thế placeholder {{...}}
+    const boldDataKeys = sheetOption.boldDataKeys ?? []
     worksheet.eachRow((row) => {
       row.eachCell((cell) => {
+        const shouldBold = boldDataKeys.some((key) => cellContainsPlaceholder(cell.value, key))
         cell.value = replaceTemplatePlaceholders(cell.value, data)
+        if (shouldBold) applyBoldToCell(cell)
       })
     })
 
