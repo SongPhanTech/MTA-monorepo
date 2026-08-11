@@ -8,6 +8,7 @@ import {
 import { ClusterSurveyDepartmentInfoResponseSchema } from "../dto/cluster-survey-openapi.dto"
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import { getOrganizationAndAllChildren } from "@workspace/db"
+import { Prisma } from "@workspace/db/client"
 import { models } from "@workspace/db/zod"
 import { getTemplateBuffer } from "@workspace/libs/server"
 import XlsxTemplate from "xlsx-template"
@@ -27,6 +28,50 @@ import {
 import { getRuntimeEnv } from "@workspace/libs"
 
 const app = new OpenAPIHono({ strict: false })
+
+const SURVEY_LINK_CHUNK = 400
+const DB_ID_RE = /^[a-z0-9_-]+$/i
+
+function assertDbIds(ids: string[], label: string) {
+  for (const id of ids) {
+    if (!id || !DB_ID_RE.test(id)) {
+      throw new Error(`Invalid ${label} id`)
+    }
+  }
+}
+
+async function bulkLinkSurveyRelations(
+  tx: Prisma.TransactionClient,
+  surveyIds: string[],
+  questionIds: string[],
+  choiceIds: string[],
+  objectTypeIds: string[]
+) {
+  if (surveyIds.length === 0) return
+
+  const insertPairs = async (
+    table: "_SurveyToSurveyQuestion" | "_SurveyToSurveyChoice" | "_SurveyToSurveyObjectType",
+    aIds: string[],
+    bIds: string[]
+  ) => {
+    if (bIds.length === 0) return
+    assertDbIds(aIds, "survey")
+    assertDbIds(bIds, "relation")
+
+    const pairs = aIds.flatMap((a) => bIds.map((b) => ({ a, b })))
+    for (let i = 0; i < pairs.length; i += SURVEY_LINK_CHUNK) {
+      const batch = pairs.slice(i, i + SURVEY_LINK_CHUNK)
+      const values = batch.map(({ a, b }) => `('${a}', '${b}')`).join(",")
+      await tx.$executeRawUnsafe(
+        `INSERT INTO "khao-thi"."${table}" ("A", "B") VALUES ${values} ON CONFLICT DO NOTHING`
+      )
+    }
+  }
+
+  await insertPairs("_SurveyToSurveyQuestion", surveyIds, questionIds)
+  await insertPairs("_SurveyToSurveyChoice", surveyIds, choiceIds)
+  await insertPairs("_SurveyToSurveyObjectType", surveyIds, objectTypeIds)
+}
 
 const createClusterSurvey = createRoute({
   operationId: "create-cluster-survey",
@@ -143,8 +188,6 @@ app.openapi(createClusterSurvey, async (c) => {
   })
 
   try {
-    // Nhiều lớp môn → nhiều survey: update theo batch để tránh timeout transaction
-    const BATCH_SIZE = 10
     await prisma.$transaction(
       async (tx) => {
         const cluster = await tx.clusterSurvey.create({
@@ -183,27 +226,15 @@ app.openapi(createClusterSurvey, async (c) => {
           })),
         })
 
-        const choiceConnect = cluster.surveyChoice.map((choice) => ({ id: choice.id }))
-        const questionConnect = surveyQuestionIds.map((id) => ({ id }))
-        const objectTypeConnect = surveyObjectTypeIds.map((id) => ({ id }))
-
-        for (let i = 0; i < surveys.length; i += BATCH_SIZE) {
-          const batch = surveys.slice(i, i + BATCH_SIZE)
-          await Promise.all(
-            batch.map((survey) =>
-              tx.survey.update({
-                where: { id: survey.id },
-                data: {
-                  surveyQuestion: { connect: questionConnect },
-                  surveyChoice: { connect: choiceConnect },
-                  surveyObjectType: { connect: objectTypeConnect },
-                },
-              })
-            )
-          )
-        }
+        await bulkLinkSurveyRelations(
+          tx,
+          surveys.map((s) => s.id),
+          surveyQuestionIds,
+          cluster.surveyChoice.map((c) => c.id),
+          surveyObjectTypeIds
+        )
       },
-      { timeout: 60_000, maxWait: 10_000 }
+      { timeout: 180_000, maxWait: 30_000 }
     )
   } catch (error) {
     console.error("[create-cluster-survey] failed", error)

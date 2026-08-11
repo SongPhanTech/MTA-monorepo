@@ -5,25 +5,21 @@
  * 1) repair (mặc định) — trên 1 DB: tạo SSS còn thiếu từ ClassRegisterLogs
  * 2) copy — copy SSS từ SOURCE → TARGET (chỉ bản ghi target còn thiếu)
  *
- * Usage (máy nội bộ — repair trên DB nội bộ):
+ * Usage (DB nội bộ — tạo SSS từ ClassRegisterLogs):
  *   cd packages/database
  *   DATABASE_URL="postgres://admin:123456654321@192.168.100.132:5432/mta" \
  *     bun scripts/sync-student-subject-score-from-registration.mjs --dry-run
  *
- *   DATABASE_URL="postgres://admin:123456654321@192.168.100.132:5432/mta" \
- *     bun scripts/sync-student-subject-score-from-registration.mjs
- *
- * Copy từ nội bộ → mta_in:
- *   SOURCE_DATABASE_URL="postgres://admin:123456654321@192.168.100.132:5432/mta" \
- *   TARGET_DATABASE_URL="postgresql://root:SwanT3chDB@45.117.177.26:5432/mta_in" \
- *     bun scripts/sync-student-subject-score-from-registration.mjs --mode=copy --dry-run
- *
+ *   # Hoặc từ root repo:
+ *   ./scripts/sync-student-subject-score.sh --dry-run
+ *   ./scripts/sync-student-subject-score.sh --session=cmse0eu6t0001sh3d0h9yfidl
  * Options:
  *   --dry-run              Chỉ thống kê / in mẫu, không ghi DB
- *   --mode=repair|copy     Mặc định repair
+ *   --mode=repair|copy     Mặc định repair (repair = 1 DB, tạo SSS từ ClassRegisterLogs)
+ *   --status=PENDING,SUCCESS|SUCCESS   Trạng thái log lấy (mặc định PENDING,SUCCESS)
  *   --batch=500            Kích thước batch insert (mặc định 500)
  *   --session=<id>         Chỉ xử lý 1 ClassRegisterSession
- *   --limit=<n>            Giới hạn số bản ghi tạo/copy (debug)
+ *   --limit=<n>            Giới hạn số bản ghi tạo (debug)
  */
 import { PrismaClient } from "../generated/prisma-client/index.js"
 
@@ -36,6 +32,11 @@ const sessionArg = process.argv.find((a) => a.startsWith("--session="))
 const SESSION_ID = sessionArg?.split("=")[1] || process.env.SESSION_ID || null
 const limitArg = process.argv.find((a) => a.startsWith("--limit="))
 const LIMIT = limitArg ? Number(limitArg.split("=")[1]) : null
+const statusArg = process.argv.find((a) => a.startsWith("--status="))
+const LOG_STATUSES = (statusArg?.split("=")[1] || "PENDING,SUCCESS")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean)
 
 function withLimit(url) {
   return url.includes("?") ? `${url}&connection_limit=1` : `${url}?connection_limit=1`
@@ -97,7 +98,9 @@ async function loadIdSet(prisma, model, ids) {
 }
 
 /** ClassRegisterLogs chưa có StudentSubjectScore tương ứng */
-async function findMissingFromLogs(prisma, sessionId) {
+async function findMissingFromLogs(prisma, sessionId, statuses) {
+  const statusList = statuses.length ? statuses : ["PENDING", "SUCCESS"]
+
   if (sessionId) {
     return prisma.$queryRaw`
       SELECT
@@ -105,6 +108,7 @@ async function findMissingFromLogs(prisma, sessionId) {
         l."studentId",
         l."subjectClassId",
         sc."subjectId" AS "subjectVersionId",
+        crs."semesterId" AS "semesterId",
         l.status::text AS "logStatus",
         l."classRegisterSessionId",
         l."createdAt" AS "registeredAt"
@@ -112,6 +116,9 @@ async function findMissingFromLogs(prisma, sessionId) {
       INNER JOIN "ql-dao-tao"."SubjectClass" sc
         ON sc.id = l."subjectClassId"
         AND sc."deletedAt" IS NULL
+      INNER JOIN "ql-dao-tao"."ClassRegisterSession" crs
+        ON crs.id = l."classRegisterSessionId"
+        AND crs."deletedAt" IS NULL
       INNER JOIN "ql-dao-tao"."Student" st
         ON st.id = l."studentId"
         AND st."deletedAt" IS NULL
@@ -121,7 +128,7 @@ async function findMissingFromLogs(prisma, sessionId) {
         AND sss."deletedAt" IS NULL
       WHERE l."deletedAt" IS NULL
         AND l.active = true
-        AND l.status::text IN ('PENDING', 'SUCCESS')
+        AND l.status::text = ANY(${statusList})
         AND sss.id IS NULL
         AND l."classRegisterSessionId" = ${sessionId}
       ORDER BY l."createdAt" ASC
@@ -134,6 +141,7 @@ async function findMissingFromLogs(prisma, sessionId) {
       l."studentId",
       l."subjectClassId",
       sc."subjectId" AS "subjectVersionId",
+      crs."semesterId" AS "semesterId",
       l.status::text AS "logStatus",
       l."classRegisterSessionId",
       l."createdAt" AS "registeredAt"
@@ -141,6 +149,9 @@ async function findMissingFromLogs(prisma, sessionId) {
     INNER JOIN "ql-dao-tao"."SubjectClass" sc
       ON sc.id = l."subjectClassId"
       AND sc."deletedAt" IS NULL
+    INNER JOIN "ql-dao-tao"."ClassRegisterSession" crs
+      ON crs.id = l."classRegisterSessionId"
+      AND crs."deletedAt" IS NULL
     INNER JOIN "ql-dao-tao"."Student" st
       ON st.id = l."studentId"
       AND st."deletedAt" IS NULL
@@ -150,7 +161,7 @@ async function findMissingFromLogs(prisma, sessionId) {
       AND sss."deletedAt" IS NULL
     WHERE l."deletedAt" IS NULL
       AND l.active = true
-      AND l.status::text IN ('PENDING', 'SUCCESS')
+      AND l.status::text = ANY(${statusList})
       AND sss.id IS NULL
     ORDER BY l."createdAt" ASC
   `
@@ -250,10 +261,11 @@ async function repairMode() {
   const prisma = createPrisma(url)
   console.log(`[sync-sss] mode=repair dryRun=${dryRun} batch=${BATCH}`)
   console.log(`[sync-sss] DATABASE_URL host=${safeHost(url)}`)
+  console.log(`[sync-sss] log statuses=${LOG_STATUSES.join(",")}`)
   if (SESSION_ID) console.log(`[sync-sss] filter session=${SESSION_ID}`)
 
   try {
-    const missing = await findMissingFromLogs(prisma, SESSION_ID)
+    const missing = await findMissingFromLogs(prisma, SESSION_ID, LOG_STATUSES)
     const toCreate = LIMIT != null ? missing.slice(0, LIMIT) : missing
 
     console.log(`[sync-sss] ClassRegisterLogs thiếu SSS: ${missing.length}`)
@@ -275,21 +287,38 @@ async function repairMode() {
 
     let created = 0
     let skipped = 0
+    const touchedClasses = new Set()
     for (const batch of chunk(toCreate, BATCH)) {
       const result = await prisma.studentSubjectScore.createMany({
         data: batch.map((r) => ({
           studentId: r.studentId,
           subjectClassId: r.subjectClassId,
           subjectVersionId: r.subjectVersionId,
+          semesterId: r.semesterId,
         })),
         skipDuplicates: true,
       })
       created += result.count
       skipped += batch.length - result.count
+      for (const r of batch) touchedClasses.add(r.subjectClassId)
       console.log(
         `[sync-sss] batch +${result.count} (skipDup=${batch.length - result.count}) totalCreated=${created}`
       )
     }
+
+    for (const subjectClassId of touchedClasses) {
+      const actual = await prisma.studentSubjectScore.count({
+        where: { subjectClassId, deletedAt: null },
+      })
+      await prisma.subjectClass.update({
+        where: { id: subjectClassId },
+        data: {
+          enrolledCount: actual,
+          version: { increment: 1 },
+        },
+      })
+    }
+    console.log(`[sync-sss] synced enrolledCount for ${touchedClasses.size} lớp`)
 
     console.log(`[sync-sss] DONE created=${created} skippedDuplicates=${skipped}`)
   } finally {

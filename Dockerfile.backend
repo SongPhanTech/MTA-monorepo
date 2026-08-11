@@ -1,6 +1,6 @@
 ARG PACKAGE
 
-FROM imbios/bun-node:24-debian AS base
+FROM imbios/bun-node:latest AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable pnpm
@@ -26,7 +26,7 @@ RUN echo "cachebust=${CACHEBUST}" && pnpm build
 
 # CMD ["/app/myapp"]
 
-FROM oven/bun:slim AS backend
+FROM oven/bun:latest AS backend
 ARG PACKAGE
 ENV PACKAGE="${PACKAGE}"
 WORKDIR /app

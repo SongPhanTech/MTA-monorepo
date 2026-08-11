@@ -42,7 +42,6 @@ export default function DetailSurveyPage({
           subjectClass: {
             subject: {
               type: $Enums.SubjectVersionType.Normal,
-              numberOfTheory: { gt: 0 },
             },
           },
         },
