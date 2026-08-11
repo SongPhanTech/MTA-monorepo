@@ -3154,14 +3154,18 @@ export const exportBanSaoHDDGLV = async ({
       blobSize: response?.data instanceof Blob ? response.data.size : undefined,
       blobType: response?.data instanceof Blob ? response.data.type : undefined,
       errorBodyText,
-      headers: response?.headers
-        ? Object.fromEntries(
-            // Headers may be a Headers object or a plain object depending on env
-            typeof (response.headers as Headers).entries === "function"
-              ? Array.from((response.headers as Headers).entries())
-              : Object.entries(response.headers as Record<string, string>)
-          )
-        : null,
+      headers: (() => {
+        const h = response?.headers
+        if (!h) return null
+        try {
+          if (typeof (h as Headers).entries === "function") {
+            return Object.fromEntries(Array.from((h as Headers).entries()))
+          }
+          return Object.fromEntries(Object.entries(h as unknown as Record<string, string>))
+        } catch {
+          return String(h)
+        }
+      })(),
     })
 
     if (response.status !== 200) {

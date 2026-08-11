@@ -20,7 +20,7 @@ type EnrollSuccess = {
 }
 
 type EnrollError = {
-  status: number
+  status: 400 | 401 | 403 | 404 | 409 | 500
   data: { message?: string }
   headers: Headers
 }
@@ -32,7 +32,7 @@ export const enrollApprovedStudents = async (
   body: EnrollApprovedStudentsRequest,
   options?: RequestInit
 ): Promise<EnrollApprovedStudentsResponse> => {
-  return customTrainingFetch<EnrollApprovedStudentsResponse>(
+  const res = await customTrainingFetch<EnrollApprovedStudentsResponse>(
     "/api/class-register-session/enroll-approved-students",
     {
       ...options,
@@ -41,6 +41,14 @@ export const enrollApprovedStudents = async (
       body: JSON.stringify(body),
     }
   )
+  // customTrainingFetch trả status number — ép về union để caller narrow được
+  if (res.status === 200) {
+    return { ...res, status: 200 }
+  }
+  return {
+    ...res,
+    status: res.status as EnrollError["status"],
+  }
 }
 
 export const useEnrollApprovedStudents = () => {

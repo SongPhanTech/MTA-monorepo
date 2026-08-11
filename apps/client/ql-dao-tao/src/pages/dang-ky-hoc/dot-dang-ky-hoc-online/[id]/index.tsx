@@ -243,15 +243,15 @@ export default function ClassRegisterLogs() {
         try {
           showSpinner()
           const res = await enrollApprovedStudents({ classRegisterSessionId: id })
-          if (res.status !== 200) {
-            message.error(res.data?.message || "Đưa SV vào lớp thất bại")
+          if (res.status === 200) {
+            message.success(
+              res.data.message ||
+                `Đã đưa ${res.data.created} SV vào lớp (${res.data.alreadyEnrolled} đã có sẵn)`
+            )
+            await refetch()
             return
           }
-          message.success(
-            res.data.message ||
-              `Đã đưa ${res.data.created} SV vào lớp (${res.data.alreadyEnrolled} đã có sẵn)`
-          )
-          await refetch()
+          message.error(res.data?.message || "Đưa SV vào lớp thất bại")
         } catch (error: any) {
           message.error(error?.message || "Đưa SV vào lớp thất bại")
         } finally {
