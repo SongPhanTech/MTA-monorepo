@@ -14,6 +14,7 @@ import {
   useUpdateManyClassRegisterLogs,
 } from "@workspace/db/hooks"
 import { ROUTER_PATH } from "@workspace/router"
+import { enrollApprovedStudents } from "@workspace/libs/api/enroll-approved-students"
 import {
   Button,
   Divider,
@@ -231,6 +232,35 @@ export default function ClassRegisterLogs() {
     }
   }
 
+  function handleEnrollApprovedStudents() {
+    Modal.confirm({
+      title: "Đưa sinh viên vào lớp môn học",
+      content:
+        "Chỉ đưa các sinh viên có đơn đăng ký ở trạng thái Được chấp thuận vào lớp môn học. Sinh viên đã có trong lớp sẽ được bỏ qua.",
+      okText: "Đồng ý",
+      cancelText: "Hủy",
+      onOk: async () => {
+        try {
+          showSpinner()
+          const res = await enrollApprovedStudents({ classRegisterSessionId: id })
+          if (res.status !== 200) {
+            message.error(res.data?.message || "Đưa SV vào lớp thất bại")
+            return
+          }
+          message.success(
+            res.data.message ||
+              `Đã đưa ${res.data.created} SV vào lớp (${res.data.alreadyEnrolled} đã có sẵn)`
+          )
+          await refetch()
+        } catch (error: any) {
+          message.error(error?.message || "Đưa SV vào lớp thất bại")
+        } finally {
+          hideSpinner()
+        }
+      },
+    })
+  }
+
   const danhSachTab = (
     <div className="dot-dkh-list">
       <Flex justify="space-between" align="center" gap={8} wrap className="mb-2">
@@ -247,15 +277,20 @@ export default function ClassRegisterLogs() {
           }}
           className="!max-w-[380px]"
         />
-        <Button
-          type="primary"
-          size="small"
-          disabled={selectedRowKeys.length === 0}
-          onClick={handleOpenStatusModal}
-        >
-          Cập nhật trạng thái
-          {selectedRowKeys.length > 0 ? ` (${selectedRowKeys.length})` : ""}
-        </Button>
+        <Flex gap={8} wrap>
+          <Button size="small" onClick={handleEnrollApprovedStudents} disabled={!id}>
+            Đưa SV vào lớp môn học
+          </Button>
+          <Button
+            type="primary"
+            size="small"
+            disabled={selectedRowKeys.length === 0}
+            onClick={handleOpenStatusModal}
+          >
+            Cập nhật trạng thái
+            {selectedRowKeys.length > 0 ? ` (${selectedRowKeys.length})` : ""}
+          </Button>
+        </Flex>
       </Flex>
 
       <Table

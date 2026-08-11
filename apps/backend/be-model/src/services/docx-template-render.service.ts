@@ -14,22 +14,119 @@ export async function renderDocxTemplate({
   prefix?: string | null
   data: Record<string, unknown>
 }): Promise<Buffer> {
+  const logPrefix = "[DOCX-TEMPLATE-RENDER]"
   const templatePrefix = (prefix ?? "/mta/luan-van").replace(/\/+$/, "")
   const templatePath = path.replace(/^\/+/, "")
+  const primaryUri = `${templatePrefix}/${templatePath}`
+  const primaryUrl = getMinioUrl(primaryUri)
+  const fallbackUri = `/mta/template/${templatePath}`
+  const fallbackUrl = getMinioUrl(fallbackUri)
 
-  let res = await fetch(getMinioUrl(`${templatePrefix}/${templatePath}`))
+  console.log(`${logPrefix} START`, {
+    path,
+    prefix,
+    templatePrefix,
+    templatePath,
+    primaryUri,
+    primaryUrl,
+    fallbackUri,
+    fallbackUrl,
+    dataKeys: data && typeof data === "object" ? Object.keys(data) : [],
+    itemsCount: Array.isArray((data as { items?: unknown[] })?.items)
+      ? (data as { items: unknown[] }).items.length
+      : undefined,
+  })
 
-  if (!res.ok && templatePrefix !== "/mta/template") {
-    res = await fetch(getMinioUrl(`/mta/template/${templatePath}`))
+  let usedUrl = primaryUrl
+  let res: Response
+  try {
+    console.log(`${logPrefix} Fetch primary MinIO`, { url: primaryUrl })
+    res = await fetch(primaryUrl)
+    console.log(`${logPrefix} Primary response`, {
+      url: primaryUrl,
+      ok: res.ok,
+      status: res.status,
+      statusText: res.statusText,
+      contentType: res.headers.get("content-type"),
+      contentLength: res.headers.get("content-length"),
+    })
+  } catch (fetchError) {
+    console.error(`${logPrefix} Primary fetch FAILED`, {
+      url: primaryUrl,
+      message: fetchError instanceof Error ? fetchError.message : String(fetchError),
+      stack: fetchError instanceof Error ? fetchError.stack : undefined,
+      fetchError,
+    })
+    throw fetchError
   }
 
-  if (!res.ok) throw new TemplateNotFoundError("Không tìm thấy template trên MinIO")
+  if (!res.ok && templatePrefix !== "/mta/template") {
+    try {
+      console.warn(`${logPrefix} Primary not ok, try fallback`, {
+        primaryStatus: res.status,
+        fallbackUrl,
+      })
+      usedUrl = fallbackUrl
+      res = await fetch(fallbackUrl)
+      console.log(`${logPrefix} Fallback response`, {
+        url: fallbackUrl,
+        ok: res.ok,
+        status: res.status,
+        statusText: res.statusText,
+        contentType: res.headers.get("content-type"),
+        contentLength: res.headers.get("content-length"),
+      })
+    } catch (fetchError) {
+      console.error(`${logPrefix} Fallback fetch FAILED`, {
+        url: fallbackUrl,
+        message: fetchError instanceof Error ? fetchError.message : String(fetchError),
+        stack: fetchError instanceof Error ? fetchError.stack : undefined,
+        fetchError,
+      })
+      throw fetchError
+    }
+  }
+
+  if (!res.ok) {
+    console.error(`${logPrefix} TEMPLATE_NOT_FOUND`, {
+      usedUrl,
+      status: res.status,
+      statusText: res.statusText,
+      primaryUrl,
+      fallbackUrl,
+    })
+    throw new TemplateNotFoundError("Không tìm thấy template trên MinIO")
+  }
 
   const buffer = await res.arrayBuffer()
-  const handler = new TemplateHandler()
-  const renderedBuffer = await handler.process(Buffer.from(buffer), data as TemplateData)
+  console.log(`${logPrefix} Template downloaded`, {
+    usedUrl,
+    templateBytes: buffer.byteLength,
+  })
 
-  return applyPageBreaks(Buffer.from(renderedBuffer))
+  try {
+    const handler = new TemplateHandler()
+    const processStartedAt = Date.now()
+    const renderedBuffer = await handler.process(Buffer.from(buffer), data as TemplateData)
+    console.log(`${logPrefix} Template processed`, {
+      renderedBytes: renderedBuffer.byteLength ?? (renderedBuffer as Buffer).length,
+      durationMs: Date.now() - processStartedAt,
+    })
+
+    const finalBuffer = applyPageBreaks(Buffer.from(renderedBuffer))
+    console.log(`${logPrefix} DONE applyPageBreaks`, {
+      finalBytes: finalBuffer.length,
+    })
+    return finalBuffer
+  } catch (processError) {
+    console.error(`${logPrefix} PROCESS/PAGEBREAK FAILED`, {
+      usedUrl,
+      message: processError instanceof Error ? processError.message : String(processError),
+      stack: processError instanceof Error ? processError.stack : undefined,
+      processError,
+    })
+    throw processError
+  }
 }
 
 const CRC32_TABLE = (() => {

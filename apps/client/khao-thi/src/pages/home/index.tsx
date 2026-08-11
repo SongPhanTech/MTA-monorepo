@@ -1,15 +1,18 @@
-import QuyTrinhKhaoSatDashboard from "@components/dashboard/quy-trinh-khao-sat";
-import QuyTrinhDeThiDashboard from "@components/dashboard/quy-trinh-quan-ly-de-thi";
+import QuyTrinhKhaoSatDashboard from "@components/dashboard/quy-trinh-khao-sat"
+import QuyTrinhDeThiDashboard from "@components/dashboard/quy-trinh-quan-ly-de-thi"
+import QuyTrinhTuDanhGiaCtdtDashboard from "@components/dashboard/quy-trinh-tu-danh-gia-ctdt"
 import DashboardLayout from "@layouts/dashboard-layout"
-import { useState } from "react";
+import { useState } from "react"
+
+type HomeTab = "de-thi" | "khao-sat" | "tu-danh-gia-ctdt"
+
 function Page() {
-  const [activeTab, setActiveTab] = useState<"de-thi" | "khao-sat">("de-thi")
+  const [activeTab, setActiveTab] = useState<HomeTab>("de-thi")
 
   return (
     <div className="flex min-h-[calc(100vh-64px)] flex-col justify-start bg-[#ebebeb] p-3 md:p-4">
-      {/* TOP PILLS TAB */}
       <div className="mb-2 flex flex-col items-center gap-2 sm:relative sm:flex-row sm:justify-center shrink-0">
-        <div className="inline-flex rounded-full border border-[#d9dee5] bg-white p-1 shadow-sm">
+        <div className="inline-flex flex-wrap justify-center rounded-full border border-[#d9dee5] bg-white p-1 shadow-sm">
           <button
             type="button"
             onClick={() => setActiveTab("de-thi")}
@@ -32,11 +35,28 @@ function Page() {
           >
             Quy trình nghiệp vụ khảo sát
           </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("tu-danh-gia-ctdt")}
+            className={`inline-flex items-center gap-1.5 rounded-full px-5 py-1 text-sm font-medium transition-all ${
+              activeTab === "tu-danh-gia-ctdt"
+                ? "bg-[#0f8a4b] text-white shadow-sm"
+                : "text-[#475467] hover:text-[#101828]"
+            }`}
+          >
+            Quy trình nghiệp vụ tự đánh giá CTĐT
+          </button>
         </div>
       </div>
 
       <div className="flex min-h-0 flex-col">
-        {activeTab === "de-thi" ? <QuyTrinhDeThiDashboard /> : <QuyTrinhKhaoSatDashboard />}
+        {activeTab === "de-thi" ? (
+          <QuyTrinhDeThiDashboard />
+        ) : activeTab === "khao-sat" ? (
+          <QuyTrinhKhaoSatDashboard />
+        ) : (
+          <QuyTrinhTuDanhGiaCtdtDashboard />
+        )}
       </div>
     </div>
   )

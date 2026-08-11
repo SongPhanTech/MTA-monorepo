@@ -3059,7 +3059,19 @@ export const exportBanSaoHDDGLV = async ({
   isChief,
   signingDate,
 }: ExportOptions) => {
+  const logPrefix = "[exportBanSaoHDDGLV]"
+  console.log(`${logPrefix} START`, {
+    origin: typeof window !== "undefined" ? window.location.origin : "ssr",
+    href: typeof window !== "undefined" ? window.location.href : "ssr",
+    thesisSessionId,
+    signerName,
+    isChief,
+    signingDate,
+    studentCount: allStudentsInClasses?.length ?? 0,
+  })
+
   if (!allStudentsInClasses?.length) {
+    console.warn(`${logPrefix} STOP: allStudentsInClasses rỗng`)
     message.error("Không có dữ liệu để xuất bản sao hội đồng bảo vệ luan van")
     return []
   }
@@ -3073,11 +3085,36 @@ export const exportBanSaoHDDGLV = async ({
       }
     })
     .filter(Boolean)
+
+  console.log(`${logPrefix} Sau filter theo thesisSessionId`, {
+    thesisSessionId,
+    inputCount: allStudentsInClasses.length,
+    projectCount: project.length,
+    sampleStudentIds: project.slice(0, 5).map((s: any) => s?.id ?? s?.userProfile?.id),
+    missingProjectCount: allStudentsInClasses.length - project.length,
+  })
+
   try {
     showSpinner?.()
     const dataConvert = convertToBanSaoHDDGLV(project, signerName, isChief, signingDate)
 
+    console.log(`${logPrefix} convertToBanSaoHDDGLV result`, {
+      dataConvertLength: dataConvert?.length ?? 0,
+      sampleItem: dataConvert?.[0]?.data
+        ? {
+            tenHocVien: dataConvert[0].data.tenHocVien,
+            deTai: dataConvert[0].data.deTai,
+            soQd: dataConvert[0].data.soQd,
+            tenChuTich: dataConvert[0].data.tenChuTich,
+            tenThuKy: dataConvert[0].data.tenThuKy,
+            nguoiki1: dataConvert[0].data.nguoiki1,
+            nguoiki2: dataConvert[0].data.nguoiki2,
+          }
+        : null,
+    })
+
     if (!dataConvert || dataConvert.length === 0) {
+      console.warn(`${logPrefix} STOP: dataConvert rỗng sau convert`)
       message.error("Chưa có dữ liệu để xuất bản sao hội đồng bảo vệ luan van")
       return
     }
@@ -3089,18 +3126,80 @@ export const exportBanSaoHDDGLV = async ({
         items: dataConvert.map((item: banSaoHDDGLV) => item.data),
       },
     }
+    const payloadJson = JSON.stringify(payload)
+    console.log(`${logPrefix} Gọi docxTemplate`, {
+      fileName: payload.fileName,
+      path: payload.path,
+      prefix: payload.prefix,
+      itemsCount: payload.data.items.length,
+      payloadSizeBytes: new Blob([payloadJson]).size,
+      payloadSizeKB: Number((new Blob([payloadJson]).size / 1024).toFixed(2)),
+    })
+
     const response = await docxTemplate(payload)
+
+    let errorBodyText: string | undefined
+    if (response.status !== 200 && response?.data instanceof Blob) {
+      try {
+        errorBodyText = await response.data.text()
+      } catch {
+        errorBodyText = undefined
+      }
+    }
+
+    console.log(`${logPrefix} docxTemplate response`, {
+      status: response?.status,
+      hasData: !!response?.data,
+      dataType: response?.data?.constructor?.name,
+      blobSize: response?.data instanceof Blob ? response.data.size : undefined,
+      blobType: response?.data instanceof Blob ? response.data.type : undefined,
+      errorBodyText,
+      headers: response?.headers
+        ? Object.fromEntries(
+            // Headers may be a Headers object or a plain object depending on env
+            typeof (response.headers as Headers).entries === "function"
+              ? Array.from((response.headers as Headers).entries())
+              : Object.entries(response.headers as Record<string, string>)
+          )
+        : null,
+    })
+
     if (response.status !== 200) {
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      console.error(`${logPrefix} STOP: status !== 200`, {
+        status: response.status,
+        errorBodyText,
+        response,
+      })
+      message.error(
+        errorBodyText
+          ? `Xuất thất bại (${response.status}): ${errorBodyText.slice(0, 200)}`
+          : "Đã xảy ra lỗi, vui lòng kiểm tra lại"
+      )
       return []
     }
     const blob = response.data
+    console.log(`${logPrefix} Bắt đầu downloadFile`, {
+      fileName: "BanSaoHoiDongDanhGiaLuanVan.docx",
+      blobSize: blob instanceof Blob ? blob.size : undefined,
+      blobType: blob instanceof Blob ? blob.type : typeof blob,
+    })
     downloadFile(blob, "BanSaoHoiDongDanhGiaLuanVan.docx")
+    console.log(`${logPrefix} SUCCESS`)
     message.success("Xuất file thành công")
   } catch (error) {
-    console.error("exportBanSaoHDDGLV error:", error)
+    const err = error as any
+    console.error(`${logPrefix} CATCH error`, {
+      message: err?.message,
+      name: err?.name,
+      status: err?.status ?? err?.response?.status,
+      statusText: err?.statusText ?? err?.response?.statusText,
+      responseData: err?.response?.data,
+      stack: err?.stack,
+      error,
+    })
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
+    console.log(`${logPrefix} FINALLY (hideSpinner)`)
     hideSpinner?.()
   }
 }

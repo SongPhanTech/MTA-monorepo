@@ -49,9 +49,33 @@ app.openapi(
     },
   }),
   async (c) => {
+    const logPrefix = "[DOCX-TEMPLATE]"
     const { fileName, path, data, prefix } = c.req.valid("json")
+    const items = (data as { items?: unknown[] })?.items
+    console.log(`${logPrefix} REQUEST`, {
+      fileName,
+      path,
+      prefix,
+      dataKeys: data && typeof data === "object" ? Object.keys(data) : [],
+      itemsCount: Array.isArray(items) ? items.length : undefined,
+      payloadApproxBytes: (() => {
+        try {
+          return Buffer.byteLength(JSON.stringify({ fileName, path, prefix, data }))
+        } catch {
+          return undefined
+        }
+      })(),
+    })
     try {
+      const startedAt = Date.now()
       const finalBuffer = await renderDocxTemplate({ path, prefix, data })
+      console.log(`${logPrefix} SUCCESS`, {
+        fileName,
+        path,
+        prefix,
+        outputBytes: finalBuffer.length,
+        durationMs: Date.now() - startedAt,
+      })
       const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
       return c.body(new Uint8Array(finalBuffer), 200, {
@@ -59,9 +83,25 @@ app.openapi(
         "Content-Disposition": disposition,
       })
     } catch (error: unknown) {
-      if (error instanceof TemplateNotFoundError) return c.json({ message: error.message }, 404)
+      if (error instanceof TemplateNotFoundError) {
+        console.error(`${logPrefix} TEMPLATE_NOT_FOUND`, {
+          fileName,
+          path,
+          prefix,
+          message: error.message,
+        })
+        return c.json({ message: error.message }, 404)
+      }
       const msg = error instanceof Error ? error.message : "Lỗi khi xử lý template Docx"
-      console.error("[DOCX-TEMPLATE] Error:", error)
+      console.error(`${logPrefix} ERROR`, {
+        fileName,
+        path,
+        prefix,
+        message: msg,
+        name: error instanceof Error ? error.name : typeof error,
+        stack: error instanceof Error ? error.stack : undefined,
+        error,
+      })
       return c.json({ message: msg }, 500)
     }
   }

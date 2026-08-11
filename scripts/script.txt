@@ -1,0 +1,62 @@
+-- Xem trước
+SELECT id, status, "studentId", "subjectClassId"
+FROM "ql-dao-tao"."ClassRegisterLogs"
+WHERE "classRegisterSessionId" = 'cmse0eu6t0001sh3d0h9yfidl'
+  AND "deletedAt" IS NULL
+  AND active = true
+  AND status <> 'SUCCESS';
+
+-- Cập nhật
+UPDATE "ql-dao-tao"."ClassRegisterLogs"
+SET
+  status = 'SUCCESS',
+  reason = NULL,
+  "updatedAt" = NOW()
+WHERE "classRegisterSessionId" = 'cmse0eu6t0001sh3d0h9yfidl'
+  AND "deletedAt" IS NULL
+  AND active = true
+  AND status <> 'SUCCESS';
+
+
+  cd ~/app/fe && \
+docker compose -f docker-compose.yml stop \
+  mta-lms-cdn router-lms-api \
+  mta-chatbot-cdn router-chatbot-api \
+  mta-ems-cdn router-ems-api \
+  mta-hrm-cdn router-hrm-api \
+  mta-cong-giang-vien-cdn router-cong-giang-vien-api \
+  mta-cong-sinh-vien-cdn router-cong-sinh-vien-api \
+  2>/dev/null || true && \
+docker compose -f docker-compose.yml rm -f \
+  mta-lms-cdn router-lms-api \
+  mta-chatbot-cdn router-chatbot-api \
+  mta-ems-cdn router-ems-api \
+  mta-hrm-cdn router-hrm-api \
+  mta-cong-giang-vien-cdn router-cong-giang-vien-api \
+  mta-cong-sinh-vien-cdn router-cong-sinh-vien-api \
+  2>/dev/null || true && \
+rm -rf lms-cdn chatbot-cdn ems-cdn hrm-cdn cong-hoc-vien-cdn cong-giang-vien-cdn cong-sinh-vien-cdn && \
+unzip -q -o cdn.zip && \
+mv -f cdn/* . && \
+rm -rf cdn && \
+docker compose -f docker-compose.yml up -d \
+  mta-lms-cdn router-lms-api \
+  mta-chatbot-cdn router-chatbot-api \
+  mta-ems-cdn router-ems-api \
+  mta-hrm-cdn router-hrm-api \
+  mta-cong-giang-vien-cdn router-cong-giang-vien-api \
+  mta-cong-sinh-vien-cdn router-cong-sinh-vien-api
+
+
+
+  cd ~/app/be && \
+unzip -o docker-images.zip && \
+cd docker-images && ls *.tar.gz | xargs -I {} docker load -i {} && \
+cd ~/app/be && \
+docker compose up -d --force-recreate \
+  mta-be-model \
+  mta-be-ql-dao-tao \
+  mta-be-khao-thi \
+  mta-be-portal \
+  mta-be-ql-dao-tao-shared \
+  mta-be-exchange
