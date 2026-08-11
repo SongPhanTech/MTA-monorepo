@@ -40,7 +40,10 @@ type AnswerWithPercent = AnswerItem & { percent: number; total: number }
 export const useGetSurveyMajorCount = (id: string) => {
   return useQuery({
     queryKey: ['/api/survey/objects/count-by-major', id],
-    queryFn: () => customExamFetch<any[]>(`/api/survey/objects/count-by-major?id=${id}`, { method: 'GET' }),
+    queryFn: async () => {
+      const res = await customExamFetch<any>(`/api/survey/objects/count-by-major?id=${id}`, { method: 'GET' })
+      return res?.data || res
+    },
     enabled: !!id,
   })
 }
@@ -124,7 +127,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         },
         yAxis: {
           type: "category",
-          data: dataMajorCount.map((i) => i.name),
+          data: dataMajorCount.map((i:any) => i.name),
         },
         series: [
           {
@@ -134,7 +137,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
             itemStyle: {
               borderRadius: 0,
             },
-            data: dataMajorCount.map((i) => i.taken),
+            data: dataMajorCount.map((i:any) => i.taken),
           },
           {
             name: "Tổng",
@@ -143,7 +146,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
             itemStyle: {
               borderRadius: 0,
             },
-            data: dataMajorCount.map((i) => i.total),
+            data: dataMajorCount.map((i:any) => i.total),
           },
         ],
       }
@@ -257,78 +260,157 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         },
       }
 
-      const generateSheet = (sheetName: string, tData: any, majorName: string = "", majorOrg: string = "") => {
-        const worksheet = workbook.addWorksheet(sheetName.substring(0, 31))
+      const generateSheet = (sheetName: string, tData: any, majorName: string = "", majorOrg: any = "") => {
+        const worksheet = workbook.addWorksheet(sheetName.substring(0, 31).replace(/[\*\?\:\[\]\\\/]/g, ''))
 
-        worksheet.mergeCells("A1:C2")
-        worksheet.getCell("A1").value = "BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ"
-        worksheet.getCell("A1").style = headerTitleStyle
-
-        worksheet.getRow(1).height = 30
-        worksheet.getRow(2).height = 30
-
-        worksheet.mergeCells("E1:H2")
-        if (majorName) {
-           worksheet.getCell("E1").value = `${(majorOrg || "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM").toUpperCase()}\nCHUYÊN NGÀNH HỌC: ${majorName}`
-        } else {
-           worksheet.getCell("E1").value = "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc"
+        const titleStyle = {
+          font: { name: "Times New Roman", bold: true, size: 14 },
+          alignment: { horizontal: "left" as const, vertical: "middle" as const, wrapText: true as const },
         }
-        worksheet.getCell("E1").style = headerTitleStyle
 
-        worksheet.mergeCells("A4:H4")
-        worksheet.getCell("A4").value = `Báo cáo khảo sát: ${name}`
-        worksheet.getCell("A4").style = headerSubtitleStyle
-        worksheet.getRow(4).height = 20
+        const centerBoldStyle = {
+          font: { name: "Times New Roman", bold: true, size: 12 },
+          alignment: { horizontal: "center" as const, vertical: "middle" as const, wrapText: true as const },
+        }
 
-        let rowIndex = 7
-        
-        // Thêm tiêu đề bảng
-        worksheet.mergeCells(`A${rowIndex}:C${rowIndex}`)
-        worksheet.getCell(`A${rowIndex}`).value = "Thống kê theo từng Câu hỏi"
-        worksheet.getCell(`A${rowIndex}`).style = headerSubtitleStyle1
-        
         const answerHeaders = tData?.[0]?.answers || tData?.[0]?.questions?.[0]?.answers || []
-        const headerRow = worksheet.getRow(rowIndex + 2)
-        headerRow.values = answerHeaders?.length
-          ? [
-              "STT",
-              "Câu hỏi",
-              "Nội dung",
-              ...answerHeaders.map((i: any) => i?.description),
-            ]
-          : ["STT", "Câu hỏi", "Nội dung"]
-        headerRow.eachCell((cell: any) => {
-          cell.style = tableHeaderStyle
-        })
+        const numAnswers = answerHeaders.length || 5
 
         worksheet.columns = [
-          { width: 10 }, { width: 30 }, { width: 60 }, { width: 20 }, { width: 20 }, { width: 20 }, { width: 20 }, { width: 20 },
+          { width: 60 },
+          ...Array.from({ length: numAnswers * 2 }).map(() => ({ width: 15 }))
         ]
 
-        if (tData?.length > 0) {
-          const flatData: any[] = []
-          let qIndex = 1
-          tData.forEach((group: any) => {
-            flatData.push({ ...group, isGroup: true })
-            group.questions?.forEach((q: any) => {
-              flatData.push({ ...q, isGroup: false, questionIndex: qIndex++ })
-            })
-          })
+        const lastCol = 1 + numAnswers * 2
+        const lastColLetter = worksheet.getColumn(lastCol).letter
 
-          flatData.forEach((i: any, index: number) => {
-            const headerRowValue: any = worksheet.getRow(rowIndex + 3 + index)
-            const percents = calculatePercent(i?.answers || [])
-            headerRowValue.values = i.isGroup ? [
-              "",
-              "ĐGTB",
-              i.groupName || "Nhóm câu hỏi",
-              ...percents.map((a: any) => `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`),
-            ] : [
-              i.questionIndex,
-              `Câu hỏi ${i.questionIndex}`,
-              i?.name,
-              ...percents.map((a: any) => `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`),
-            ]
+        let rowIndex = 1
+        
+        // Row 1: Title
+        worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
+        worksheet.getCell(`A${rowIndex}`).value = `BẢNG TỔNG HỢP PHIẾU LẤY Ý KIẾN HỌC VIÊN TỐT NGHIỆP`
+        worksheet.getCell(`A${rowIndex}`).style = { ...titleStyle, alignment: { horizontal: "center" as const, vertical: "middle" as const } }
+        rowIndex++
+
+        // Row 2: Faculty
+        let orgString = "VIỆN CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG"
+        if (typeof majorOrg === 'string' && majorOrg) {
+          orgString = majorOrg
+        } else if (majorOrg && typeof majorOrg === 'object') {
+          orgString = majorOrg.sTen || majorOrg.name || orgString
+        }
+        worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
+        worksheet.getCell(`A${rowIndex}`).value = majorName ? `KHOA/ĐƠN VỊ: ${orgString.toUpperCase()}` : "TỔNG HỢP CHUNG TOÀN HỌC VIỆN"
+        worksheet.getCell(`A${rowIndex}`).style = { ...titleStyle, alignment: { horizontal: "center" as const, vertical: "middle" as const } }
+        rowIndex++
+
+        // Row 3: Major
+        worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
+        worksheet.getCell(`A${rowIndex}`).value = majorName ? `CHUYÊN NGÀNH: ${majorName.toUpperCase()}` : ""
+        worksheet.getCell(`A${rowIndex}`).style = { ...titleStyle, alignment: { horizontal: "center" as const, vertical: "middle" as const } }
+        rowIndex++
+        
+        rowIndex++ // Empty row
+        
+        if (tData?.length > 0) {
+          tData.forEach((group: any, gIndex: number) => {
+            const romanize = (num: number) => {
+              const lookup: any = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1}
+              let roman = ''
+              for (const i in lookup) {
+                while ( num >= lookup[i] ) { roman += i; num -= lookup[i] }
+              }
+              return roman
+            }
+            
+            const groupTitle = `${romanize(gIndex + 1)}. ${group.groupName || "NHẬN XÉT ĐÁNH GIÁ"}`.toUpperCase()
+            
+            worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
+            worksheet.getCell(`A${rowIndex}`).value = groupTitle
+            worksheet.getCell(`A${rowIndex}`).style = { 
+               font: { name: "Times New Roman", bold: true, italic: true, size: 12 },
+               alignment: { horizontal: "left" as const, vertical: "middle" as const }
+            }
+            rowIndex++
+
+            const currentAnswerHeaders = group.questions?.[0]?.answers || answerHeaders
+            
+            if (currentAnswerHeaders.length > 0) {
+              const legendText = currentAnswerHeaders.map((a: any, idx: number) => `${idx + 1}. ${a.description}`).join("          ")
+              worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
+              worksheet.getCell(`A${rowIndex}`).value = legendText
+              worksheet.getCell(`A${rowIndex}`).style = { font: { name: "Times New Roman", size: 11 }, alignment: { horizontal: "left" as const, wrapText: true as const } }
+              rowIndex++
+            }
+            
+            rowIndex++ // Blank row
+
+            const headerRow1 = rowIndex
+            worksheet.mergeCells(`A${headerRow1}:A${headerRow1 + 1}`)
+            worksheet.getCell(`A${headerRow1}`).value = "Nội dung đánh giá"
+            
+            if (numAnswers > 0) {
+              worksheet.mergeCells(headerRow1, 2, headerRow1, 1 + numAnswers)
+              worksheet.getCell(headerRow1, 2).value = "Phương án trả lời"
+              
+              worksheet.mergeCells(headerRow1, 2 + numAnswers, headerRow1, 1 + numAnswers * 2)
+              worksheet.getCell(headerRow1, 2 + numAnswers).value = "% trả lời"
+              
+              const headerRow2 = rowIndex + 1
+              for (let i = 0; i < numAnswers; i++) {
+                worksheet.getCell(headerRow2, 2 + i).value = i + 1
+                worksheet.getCell(headerRow2, 2 + numAnswers + i).value = i + 1
+              }
+            }
+            
+            for (let r = headerRow1; r <= headerRow1 + 1; r++) {
+               for (let c = 1; c <= 1 + numAnswers * 2; c++) {
+                 const cell = worksheet.getCell(r, c)
+                 cell.style = { ...centerBoldStyle, border: tableHeaderStyle.border }
+               }
+            }
+            
+            rowIndex += 2
+            
+            let qIndex = 1
+            group.questions?.forEach((q: any) => {
+               const rowValues: any[] = []
+               rowValues.push(`${qIndex}. ${q.name || ""}`)
+               
+               let total = 0
+               for (let i = 0; i < numAnswers; i++) {
+                 const count = Number(q.answers?.[i]?.count || 0)
+                 rowValues.push(count)
+                 total += count
+               }
+               
+               const row = worksheet.getRow(rowIndex)
+               row.values = rowValues
+               
+               if (numAnswers > 0) {
+                 const colStart = worksheet.getColumn(2).letter
+                 const colEnd = worksheet.getColumn(1 + numAnswers).letter
+                 
+                 for (let i = 0; i < numAnswers; i++) {
+                   const currCol = worksheet.getColumn(2 + i).letter
+                   row.getCell(2 + numAnswers + i).value = {
+                     formula: `IFERROR(${currCol}${rowIndex}/SUM(${colStart}${rowIndex}:${colEnd}${rowIndex})*100, 0)`
+                   } as any
+                 }
+               }
+               
+               for (let c = 1; c <= 1 + numAnswers * 2; c++) {
+                 const cell = row.getCell(c)
+                 cell.border = tableHeaderStyle.border
+                 cell.font = { name: "Times New Roman", size: 11 }
+                 if (c > 1) cell.alignment = { horizontal: "center" as const, vertical: "middle" as const }
+                 else cell.alignment = { horizontal: "left" as const, vertical: "middle" as const, wrapText: true as const }
+               }
+               
+               rowIndex++
+               qIndex++
+            })
+            rowIndex++ 
           })
         }
       }
@@ -339,7 +421,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         for (const major of dataMajorCount) {
           try {
             const res = await customExamFetch<any>(`/api/survey/${selectedId}/statistics-to-Field?majorName=${encodeURIComponent(major.name)}`, { method: 'GET' })
-            const tData = res?.data || res
+            const tData = res?.data?.data || res?.data || res
             if (tData) {
                generateSheet(`CN ${major.name}`, tData, major.name, major.organization)
             }
@@ -563,7 +645,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         for (const major of dataMajorCount) {
           try {
             const res = await customExamFetch<any>(`/api/survey/${selectedId}/statistics-to-Field?majorName=${encodeURIComponent(major.name)}`, { method: 'GET' })
-            const tData = res?.data || res
+            const tData = res?.data?.data || res?.data || res
             if (tData) {
               sections.push({
                 properties: {},
