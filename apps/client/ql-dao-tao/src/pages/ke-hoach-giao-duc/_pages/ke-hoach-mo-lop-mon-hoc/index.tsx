@@ -125,6 +125,24 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
           },
         },
       },
+      studentSubjectScore: {
+        where: {
+          active: true,
+          deletedAt: null,
+          student: {
+            active: true,
+            deletedAt: null,
+            status: "ENROLLED",
+          },
+        },
+        select: {
+          student: {
+            select: {
+              fixedClassId: true,
+            },
+          },
+        },
+      },
       subjectClass: {
         where: {
           semesterId,
@@ -136,6 +154,15 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
           code: true,
           maxStudent: true,
           _count: { select: { subjectClassStudent: true } },
+          subjectClassStudent: {
+            select: {
+              student: {
+                select: {
+                  fixedClassId: true,
+                },
+              },
+            },
+          },
           mainLecturer: {
             select: { id: true },
           },
@@ -637,9 +664,10 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                     return (
                       <TextTruncate
                         arr={fixedClasses.map((i: any) => {
+                          const count = record?.studentSubjectScore?.filter((sss: any) => sss?.student?.fixedClassId === i?.id)?.length || 0
                           return {
                             key: i?.id,
-                            label: `${i?.code} (${i?._count?.students || 0} SV)`,
+                            label: `${i?.code} (${count || 0} SV)`,
                           }
                         })}
                         key="fixedClass"
@@ -654,15 +682,9 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                         width: 80,
                         align: "center" as const,
                         render: (_: any, record: any) => {
-                          const fixedClasses = record?.trainingBlocks.flatMap(
-                            // @ts-expect-error
-                            (block) =>
-                              block?.trainingBlockOnCurriculumVersion?.curriculumVersion
-                                ?.fixedClasses ?? []
-                          )
                           return (
-                            fixedClasses?.reduce(
-                              (sum: number, fc: any) => sum + (fc?._count?.students ?? 0),
+                            record?.subjectClass?.reduce(
+                              (sum: number, sc: any) => sum + (sc?._count?.subjectClassStudent ?? 0),
                               0
                             ) || 0
                           )

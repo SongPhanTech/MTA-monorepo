@@ -438,7 +438,21 @@ app.openapi(openSubjectClass, async (c) => {
                             dv."sMa"                       as management_organization_code,
                             tc."trainingObjectTypeId"      as training_object_type_id,
                             tbs.id                         as training_block_subject_id,
-                            COUNT(fc.id)                   as fixed_class_count
+                            (
+                                SELECT COUNT(sss.id)
+                                FROM "ql-dao-tao"."StudentSubjectScore" sss
+                                JOIN "ql-dao-tao"."SubjectClass" sc ON sss."subjectClassId" = sc.id
+                                JOIN "ql-dao-tao"."Student" st ON st.id = sss."studentId"
+                                WHERE sc."subjectId" = sv.id 
+                                  AND sc."semesterId" = ${semesterId}
+                                  AND st."fixedClassId" = fc.id
+                                  AND sc."deletedAt" IS NULL
+                                  AND sc.active = TRUE
+                                  AND sss."deletedAt" IS NULL
+                                  AND sss.active = TRUE
+                                  AND st.active = TRUE
+                                  AND st."deletedAt" IS NULL
+                            )::INTEGER                     as fixed_class_count
                      FROM "ql-dao-tao"."SubjectVersion" sv
                               JOIN "ql-dao-tao"."TrainingBlockSubject" tbs ON sv.id = tbs."subjectId"
                               JOIN "ql-dao-tao"."TrainingBlockOnCurriculumVersion" tbocv
@@ -446,7 +460,6 @@ app.openapi(openSubjectClass, async (c) => {
                               JOIN "ql-dao-tao"."CurriculumVersion" cv ON tbocv."curriculumVersionId" = cv.id
                               JOIN "ql-dao-tao"."Curriculum" c ON cv."curriculumId" = c.id
                               JOIN "ql-dao-tao"."FixedClass" fc ON cv.id = fc."curriculumVersionId"
-                              JOIN "ql-dao-tao"."Student" s ON fc.id = s."fixedClassId"
                               JOIN "ql-dao-tao"."TrainingCourse" tc ON fc."trainingCourseId" = tc."id"
                               JOIN "ql-dao-tao"."Semester" sem on tc."semesterStartId" = sem.id
                               JOIN "ql-dao-tao"."SchoolYear" schy on sem."schoolYearId" = schy.id
