@@ -723,10 +723,7 @@ export default function ThoiKhoaBieu({
                   distinctFilters: ["maxStudent", "credit"],
                   render: (_, record) => (
                     <p>
-                      {record?.fixedClasses?.reduce(
-                        (acc, curr) => acc + (curr?._count?.students ?? 0),
-                        0
-                      ) ?? 0}
+                      {record?.subjectClassStudent?.length ?? 0}
                     </p>
                   ),
                 },

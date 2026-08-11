@@ -654,7 +654,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
           title="Top lớp môn học theo số SV đăng ký"
           loading={loading}
           styles={{ body: { paddingBottom: 8 } }}
-o        >
+       >
           {stats.barClassData.length ? (
             <div className="thong-ke-chart-wrap w-full min-h-[320px]">
               <Column
