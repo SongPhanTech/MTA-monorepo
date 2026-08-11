@@ -23,6 +23,7 @@ type SubjectClassForm = {
   id: string
   code: string | null
   count: number
+  baseCount?: number
   hasStudentScores?: boolean
   createdAt?: Date
   fixedClasses?: {
@@ -135,7 +136,7 @@ const SubjectClassDropItem: React.FC<{
           size={14}
         />
       </Tooltip>
-      {item?.code} ({fixedClass.reduce((sum, fcId) => sum + (fcId?.count || 0), 0)})
+      {item?.code} ({(item?.baseCount || 0) + fixedClass.reduce((sum, fcId) => sum + (fcId?.count || 0), 0)})
       <div className="gap-1 w-fit">
         {!!fixedClass?.length &&
           fixedClass.map((fcId) => (
@@ -153,7 +154,7 @@ const SubjectClassDropItem: React.FC<{
 }
 
 const FixedClassDragItem: React.FC<{
-  item: FixedClass & { _count?: { students: number } }
+  item: FixedClass & { count?: number }
   subjectVersionId: string
   hiddenAlreadyAdded?: boolean
 }> = ({ item, subjectVersionId, hiddenAlreadyAdded = true }) => {
@@ -184,7 +185,7 @@ const FixedClassDragItem: React.FC<{
                   {
                     id: item?.id,
                     code: item?.code,
-                    count: item?._count?.students || 0,
+                    count: item?.count || 0,
                   },
                 ],
               },
@@ -216,7 +217,7 @@ const FixedClassDragItem: React.FC<{
       className="border border-dashed border-gray-400 rounded px-2 py-1 m-1 bg-green-100 select-none cursor-move"
       style={{ opacity }}
     >
-      {item?.code} ({item?._count?.students})
+      {item?.code} ({item?.count || 0})
     </div>
   )
 }
@@ -311,6 +312,24 @@ export default function KeHoachGhepLopMonHoc() {
             },
           },
         },
+        studentSubjectScore: {
+          where: {
+            active: true,
+            deletedAt: null,
+            student: {
+              active: true,
+              deletedAt: null,
+              status: "ENROLLED",
+            },
+          },
+          select: {
+            student: {
+              select: {
+                fixedClassId: true,
+              },
+            },
+          },
+        },
         subjectClass: {
           where: {
             semesterId,
@@ -336,6 +355,15 @@ export default function KeHoachGhepLopMonHoc() {
                         status: "ENROLLED",
                       },
                     },
+                  },
+                },
+              },
+            },
+            subjectClassStudent: {
+              select: {
+                student: {
+                  select: {
+                    fixedClassId: true,
                   },
                 },
               },
@@ -387,19 +415,21 @@ export default function KeHoachGhepLopMonHoc() {
                 if (!subAcc) {
                   return {}
                 }
+                const mappedCount = subCur?.fixedClasses.reduce(
+                  (sum, fc) => sum + (subCur?.subjectClassStudent?.filter((sss: any) => sss?.student?.fixedClassId === fc?.id)?.length || 0),
+                  0
+                )
                 subAcc[subCur.id] = {
                   id: subCur.id,
                   code: subCur?.code,
+                  baseCount: (subCur._count?.subjectClassStudent ?? 0) - mappedCount,
                   hasStudentScores: (subCur._count?.subjectClassStudent ?? 0) > 0,
-                  count: subCur?.fixedClasses.reduce(
-                    (sum, fc) => sum + (fc?._count?.students ?? 0),
-                    0
-                  ),
+                  count: mappedCount,
                   createdAt: subCur.createdAt,
                   fixedClasses: subCur.fixedClasses.map((fc) => ({
                     id: fc.id,
                     code: fc?.code,
-                    count: fc?._count?.students || 0,
+                    count: subCur?.subjectClassStudent?.filter((sss: any) => sss?.student?.fixedClassId === fc?.id)?.length || 0,
                   })),
                 }
                 return subAcc
@@ -776,8 +806,11 @@ export default function KeHoachGhepLopMonHoc() {
                               {record?.trainingBlocks?.flatMap(
                                 // @ts-expect-error
                                 (block) =>
-                                  block.trainingBlockOnCurriculumVersion?.curriculumVersion
-                                    ?.fixedClasses ?? []
+                                  block?.trainingBlockOnCurriculumVersion?.curriculumVersion?.fixedClasses?.map((fc: any) => ({
+                                    ...fc,
+                                    count: record?.studentSubjectScore?.filter((sss: any) => sss?.student?.fixedClassId === fc?.id)?.length || 0,
+                                  })) ??
+                                  []
                               ).map((fixedClass: any) => (
                                 <FixedClassDragItem
                                   subjectVersionId={record.id}
@@ -801,24 +834,18 @@ export default function KeHoachGhepLopMonHoc() {
                       },
                     },
                     {
-                      title: "Tổng SV",
-                      width: 80,
-                      align: "center",
-                      render: (_: any, record: any) => {
-                        const fixedClasses = record?.trainingBlocks.flatMap(
-                          // @ts-expect-error
-                          (block) =>
-                            block?.trainingBlockOnCurriculumVersion?.curriculumVersion
-                              ?.fixedClasses ?? []
-                        )
-                        return (
-                          fixedClasses?.reduce(
-                            (sum: number, fc: any) => sum + (fc?._count?.students ?? 0),
-                            0
-                          ) || 0
-                        )
+                        title: "Tổng SV",
+                        width: 80,
+                        align: "center" as const,
+                        render: (_: any, record: any) => {
+                          return (
+                            record?.subjectClass?.reduce(
+                              (sum: number, sc: any) => sum + (sc?._count?.subjectClassStudent ?? 0),
+                              0
+                            ) || 0
+                          )
+                        },
                       },
-                    },
                     {
                       title: "Đơn vị phụ trách",
                       width: 150,
