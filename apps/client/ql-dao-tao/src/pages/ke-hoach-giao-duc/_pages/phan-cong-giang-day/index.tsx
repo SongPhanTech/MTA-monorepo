@@ -816,6 +816,9 @@ export default function PhanCongGiangDay({
         students: number
       }
     }>
+    _count?: {
+      subjectClassStudent: number
+    }
     room?: {
       code: string
       name: string
@@ -894,6 +897,11 @@ export default function PhanCongGiangDay({
                       },
                     },
                   },
+                },
+              },
+              _count: {
+                select: {
+                  subjectClassStudent: true,
                 },
               },
               room: {
@@ -1085,11 +1093,7 @@ export default function PhanCongGiangDay({
                         align: "center",
                       },
                       {
-                        value: item.fixedClasses.reduce(
-                          (acc: number, curr: { code: string; _count: { students: number } }) =>
-                            acc + curr._count.students,
-                          0
-                        ),
+                        value: item._count?.subjectClassStudent ?? 0,
                       },
                       {
                         value: item.fixedClasses
@@ -2035,18 +2039,9 @@ export default function PhanCongGiangDay({
                   title: "Số SV",
                   width: 50,
                   align: "center",
-                  distinctFilters: ["maxStudent"],
                   render: (_, record) => (
                     <p>
-                      {(subjectClassForm?.[record.id]?.isEdit
-                        ? subjectClassForm[record.id]?.maxStudent
-                        : null) ??
-                        record.maxStudent ??
-                        record?.fixedClasses?.reduce(
-                          (acc, curr) => acc + (curr?._count?.students ?? 0),
-                          0
-                        ) ??
-                        0}
+                      {record?.subjectClassStudent?.length ?? 0}
                     </p>
                   ),
                 },
