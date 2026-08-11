@@ -6,6 +6,8 @@ import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import TreeSelect from "@components/commons/tree-select"
 import EditIcon from "@components/icons/edit"
+import { DownloadOutlined } from "@ant-design/icons"
+import { exportStudentList } from "../../utils/export-student-list"
 import { SUBJECT_CLASS_SCHEDULE_TYPE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
@@ -300,6 +302,32 @@ const PutOneSubjectClassModal = () => {
     },
   })
 
+  const handleExportExcel = async () => {
+    if (!subjectClassData) return
+    const hideLoading = message.loading("Đang xuất Excel...", 0)
+    try {
+      const scheduleText = subjectClassData.subjectClassTimes
+        ?.map((t: any) => `${t.dayOfWeek}, ${t.startPeriod} - ${t.endPeriod}`)
+        .join("; ") || ""
+      const roomName = subjectClassData.room?.name || ""
+      
+      await exportStudentList({
+        subjectName: subjectClassData.subject?.name || "",
+        subjectClassCode: subjectClassData.code || "",
+        credits: subjectClassData.subject?.credit || 0,
+        scheduleText,
+        roomName,
+        students: dataTable,
+      })
+      message.success("Xuất Excel thành công")
+    } catch (error) {
+      console.error(error)
+      message.error("Đã xảy ra lỗi khi xuất Excel")
+    } finally {
+      hideLoading()
+    }
+  }
+
   const { data: rooms = [] } = useFindManyRoom({
     where: { active: true, deletedAt: null },
   })
@@ -317,6 +345,7 @@ const PutOneSubjectClassModal = () => {
     {
       where: { id: input?.id },
       include: {
+        subject: true,
         room: {
           include: {
             building: {
@@ -959,6 +988,16 @@ const PutOneSubjectClassModal = () => {
               </Row>
             </Tabs.TabPane>
             <Tabs.TabPane tab={"Danh sách sinh viên"} key="danh-sach-sinh-vien">
+              <Flex justify="end" className="mb-2">
+                <Button 
+                  type="primary" 
+                  icon={<DownloadOutlined />} 
+                  onClick={handleExportExcel}
+                  disabled={!dataTable?.length}
+                >
+                  Xuất Excel
+                </Button>
+              </Flex>
               <Table
                 filters={filterTable}
                 setFilters={setFilterTable}
