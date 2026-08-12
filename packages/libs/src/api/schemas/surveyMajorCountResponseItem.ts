@@ -59,4 +59,5 @@ export type SurveyMajorCountResponseItem = {
   name: string;
   total: number;
   taken: number;
+  organization?: string;
 };

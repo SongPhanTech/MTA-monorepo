@@ -20,10 +20,57 @@ import {
   buildSurveyObjectTypeProfileOrClauses,
 } from "../lib/survey-audience"
 import { getBufferFromUrl } from "../services/template.service"
+import { exportSurveyExcelReportService } from "../services/export-survey-report.service"
 import { getCurrentDateForReport } from "../utils"
 import { PaginatedDataResponseSchema, PaginationQuerySchema } from "../zod/base"
+// import { Hono } from "hono"
+import { HTTPException } from "hono/http-exception"
 
 const app = new OpenAPIHono({ strict: false })
+
+app.openapi(
+  createRoute({
+    method: "get",
+    path: "/{id}/export-report-excel",
+    summary: "Export survey report directly as Excel file",
+    request: {
+      params: z.object({
+        id: z.string().openapi({ description: "Survey ID" }),
+      }),
+    },
+    responses: {
+      200: {
+        description: "Excel file exported successfully",
+        content: {
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+            schema: {
+              type: "string",
+              format: "binary",
+            },
+          },
+        },
+      },
+      ...standardErrorResponses(),
+    },
+  }),
+  async (c) => {
+    const { id } = c.req.valid("param")
+
+    const res = await exportSurveyExcelReportService(prisma, id)
+    if (!res.buffer) {
+      throw new HTTPException(400, { message: "Không thể tạo file báo cáo" })
+    }
+
+    const { buffer, surveyName } = res
+    const fileName = `Bao_cao_khao_sat_${surveyName || "survey"}.xlsx`
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(buffer, 200, {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Disposition": disposition,
+    })
+  }
+)
 
 const exportReportSurvey = createRoute({
   operationId: "export-report-survey",

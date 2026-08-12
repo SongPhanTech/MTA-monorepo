@@ -55,6 +55,9 @@ Authorization: Bearer <access_token>
  * OpenAPI spec version: 1.0.0
  */
 
+/**
+ * @nullable
+ */
 export type GetSurveysOfProfile200AllOfDataItemLectureOrganization = {
   Id: string;
   /** @nullable */
@@ -105,4 +108,4 @@ export type GetSurveysOfProfile200AllOfDataItemLectureOrganization = {
   iCapDonVi?: number | null;
   /** @nullable */
   iLoaiDonVi?: number | null;
-};
+} | null;

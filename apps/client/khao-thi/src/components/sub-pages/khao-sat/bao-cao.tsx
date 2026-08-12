@@ -230,215 +230,32 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     return {}
   }, [dataLevel])
 
-  const exportTemplate = async (name: string, dataTable: any, dataTableInfo: any, dataMajorCount: any) => {
+  const exportTemplate = async (name: string) => {
     showSpinner()
     try {
-      const workbook = new ExcelJS.Workbook()
+      const res = await customExamFetch<any>(`/api/survey/${selectedId}/export-report-excel`, {
+        method: "GET",
+      })
       
-      const golbalFontStyle = { name: "Times New Roman" }
-      const headerTitleStyle = {
-        font: { ...golbalFontStyle, bold: true, size: 14 },
-        alignment: { horizontal: "center" as const, vertical: "middle" as const, wrapText: true as const },
-      }
-      const headerSubtitleStyle = {
-        font: { ...golbalFontStyle, bold: true, size: 16 },
-        alignment: { horizontal: "center" as const, vertical: "middle" as const, wrapText: true as const },
-      }
-      const headerSubtitleStyle1 = {
-        font: { ...golbalFontStyle, bold: true, size: 16 },
-        alignment: { horizontal: "left" as const, vertical: "middle" as const, wrapText: true as const },
-      }
-      const tableHeaderStyle = {
-        font: { ...golbalFontStyle, bold: true, size: 14, color: { argb: "FF000000" } },
-        fill: { type: "pattern", pattern: "none" },
-        alignment: { horizontal: "center", vertical: "middle", wrapText: true },
-        border: {
-          top: { style: "thin" as ExcelJS.BorderStyle, color: { argb: "FF000000" } },
-          left: { style: "thin" as ExcelJS.BorderStyle, color: { argb: "FF000000" } },
-          right: { style: "thin" as ExcelJS.BorderStyle, color: { argb: "FF000000" } },
-          bottom: { style: "thin" as ExcelJS.BorderStyle, color: { argb: "FF000000" } },
-        },
+      if (res.status && res.status !== 200) {
+        let msg = "Lỗi khi tải file báo cáo Excel"
+        try {
+          const text = await (res.data as Blob).text()
+          const json = JSON.parse(text)
+          msg = json.message || msg
+        } catch(e) {}
+        throw new Error(msg)
       }
 
-      const generateSheet = (sheetName: string, tData: any, majorName: string = "", majorOrg: any = "") => {
-        const worksheet = workbook.addWorksheet(sheetName.substring(0, 31).replace(/[\*\?\:\[\]\\\/]/g, ''))
-
-        const titleStyle = {
-          font: { name: "Times New Roman", bold: true, size: 14 },
-          alignment: { horizontal: "left" as const, vertical: "middle" as const, wrapText: true as const },
-        }
-
-        const centerBoldStyle = {
-          font: { name: "Times New Roman", bold: true, size: 12 },
-          alignment: { horizontal: "center" as const, vertical: "middle" as const, wrapText: true as const },
-        }
-
-        const answerHeaders = tData?.[0]?.answers || tData?.[0]?.questions?.[0]?.answers || []
-        const numAnswers = answerHeaders.length || 5
-
-        worksheet.columns = [
-          { width: 60 },
-          ...Array.from({ length: numAnswers * 2 }).map(() => ({ width: 15 }))
-        ]
-
-        const lastCol = 1 + numAnswers * 2
-        const lastColLetter = worksheet.getColumn(lastCol).letter
-
-        let rowIndex = 1
-        
-        // Row 1: Title
-        worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
-        worksheet.getCell(`A${rowIndex}`).value = `BẢNG TỔNG HỢP PHIẾU LẤY Ý KIẾN HỌC VIÊN TỐT NGHIỆP`
-        worksheet.getCell(`A${rowIndex}`).style = { ...titleStyle, alignment: { horizontal: "center" as const, vertical: "middle" as const } }
-        rowIndex++
-
-        // Row 2: Faculty
-        let orgString = "VIỆN CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG"
-        if (typeof majorOrg === 'string' && majorOrg) {
-          orgString = majorOrg
-        } else if (majorOrg && typeof majorOrg === 'object') {
-          orgString = majorOrg.sTen || majorOrg.name || orgString
-        }
-        worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
-        worksheet.getCell(`A${rowIndex}`).value = majorName ? `KHOA/ĐƠN VỊ: ${orgString.toUpperCase()}` : "TỔNG HỢP CHUNG TOÀN HỌC VIỆN"
-        worksheet.getCell(`A${rowIndex}`).style = { ...titleStyle, alignment: { horizontal: "center" as const, vertical: "middle" as const } }
-        rowIndex++
-
-        // Row 3: Major
-        worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
-        worksheet.getCell(`A${rowIndex}`).value = majorName ? `CHUYÊN NGÀNH: ${majorName.toUpperCase()}` : ""
-        worksheet.getCell(`A${rowIndex}`).style = { ...titleStyle, alignment: { horizontal: "center" as const, vertical: "middle" as const } }
-        rowIndex++
-        
-        rowIndex++ // Empty row
-        
-        if (tData?.length > 0) {
-          tData.forEach((group: any, gIndex: number) => {
-            const romanize = (num: number) => {
-              const lookup: any = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1}
-              let roman = ''
-              for (const i in lookup) {
-                while ( num >= lookup[i] ) { roman += i; num -= lookup[i] }
-              }
-              return roman
-            }
-            
-            const groupTitle = `${romanize(gIndex + 1)}. ${group.groupName || "NHẬN XÉT ĐÁNH GIÁ"}`.toUpperCase()
-            
-            worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
-            worksheet.getCell(`A${rowIndex}`).value = groupTitle
-            worksheet.getCell(`A${rowIndex}`).style = { 
-               font: { name: "Times New Roman", bold: true, italic: true, size: 12 },
-               alignment: { horizontal: "left" as const, vertical: "middle" as const }
-            }
-            rowIndex++
-
-            const currentAnswerHeaders = group.questions?.[0]?.answers || answerHeaders
-            
-            if (currentAnswerHeaders.length > 0) {
-              const legendText = currentAnswerHeaders.map((a: any, idx: number) => `${idx + 1}. ${a.description}`).join("          ")
-              worksheet.mergeCells(`A${rowIndex}:${lastColLetter}${rowIndex}`)
-              worksheet.getCell(`A${rowIndex}`).value = legendText
-              worksheet.getCell(`A${rowIndex}`).style = { font: { name: "Times New Roman", size: 11 }, alignment: { horizontal: "left" as const, wrapText: true as const } }
-              rowIndex++
-            }
-            
-            rowIndex++ // Blank row
-
-            const headerRow1 = rowIndex
-            worksheet.mergeCells(`A${headerRow1}:A${headerRow1 + 1}`)
-            worksheet.getCell(`A${headerRow1}`).value = "Nội dung đánh giá"
-            
-            if (numAnswers > 0) {
-              worksheet.mergeCells(headerRow1, 2, headerRow1, 1 + numAnswers)
-              worksheet.getCell(headerRow1, 2).value = "Phương án trả lời"
-              
-              worksheet.mergeCells(headerRow1, 2 + numAnswers, headerRow1, 1 + numAnswers * 2)
-              worksheet.getCell(headerRow1, 2 + numAnswers).value = "% trả lời"
-              
-              const headerRow2 = rowIndex + 1
-              for (let i = 0; i < numAnswers; i++) {
-                worksheet.getCell(headerRow2, 2 + i).value = i + 1
-                worksheet.getCell(headerRow2, 2 + numAnswers + i).value = i + 1
-              }
-            }
-            
-            for (let r = headerRow1; r <= headerRow1 + 1; r++) {
-               for (let c = 1; c <= 1 + numAnswers * 2; c++) {
-                 const cell = worksheet.getCell(r, c)
-                 cell.style = { ...centerBoldStyle, border: tableHeaderStyle.border }
-               }
-            }
-            
-            rowIndex += 2
-            
-            let qIndex = 1
-            group.questions?.forEach((q: any) => {
-               const rowValues: any[] = []
-               rowValues.push(`${qIndex}. ${q.name || ""}`)
-               
-               let total = 0
-               for (let i = 0; i < numAnswers; i++) {
-                 const count = Number(q.answers?.[i]?.count || 0)
-                 rowValues.push(count)
-                 total += count
-               }
-               
-               const row = worksheet.getRow(rowIndex)
-               row.values = rowValues
-               
-               if (numAnswers > 0) {
-                 const colStart = worksheet.getColumn(2).letter
-                 const colEnd = worksheet.getColumn(1 + numAnswers).letter
-                 
-                 for (let i = 0; i < numAnswers; i++) {
-                   const currCol = worksheet.getColumn(2 + i).letter
-                   row.getCell(2 + numAnswers + i).value = {
-                     formula: `IFERROR(${currCol}${rowIndex}/SUM(${colStart}${rowIndex}:${colEnd}${rowIndex})*100, 0)`
-                   } as any
-                 }
-               }
-               
-               for (let c = 1; c <= 1 + numAnswers * 2; c++) {
-                 const cell = row.getCell(c)
-                 cell.border = tableHeaderStyle.border
-                 cell.font = { name: "Times New Roman", size: 11 }
-                 if (c > 1) cell.alignment = { horizontal: "center" as const, vertical: "middle" as const }
-                 else cell.alignment = { horizontal: "left" as const, vertical: "middle" as const, wrapText: true as const }
-               }
-               
-               rowIndex++
-               qIndex++
-            })
-            rowIndex++ 
-          })
-        }
-      }
-
-      generateSheet("Tổng hợp chung", dataTable)
-
-      if (dataMajorCount && dataMajorCount.length > 0) {
-        for (const major of dataMajorCount) {
-          try {
-            const res = await customExamFetch<any>(`/api/survey/${selectedId}/statistics-to-Field?majorName=${encodeURIComponent(major.name)}`, { method: 'GET' })
-            const tData = res?.data?.data || res?.data || res
-            if (tData) {
-               generateSheet(`CN ${major.name}`, tData, major.name, major.organization)
-            }
-          } catch(e) {
-            console.error(e)
-          }
-        }
-      }
-
-      const buffer = await workbook.xlsx.writeBuffer()
-      saveAs(new Blob([buffer]), `Bao_cao_khao_sat_${name || ""}.xlsx`)
+      const blob = res.data as Blob || res as any as Blob
+      saveAs(blob, `Bao_cao_khao_sat_${name || ""}.xlsx`)
     } catch (e) {
       console.error(e)
     } finally {
       hideSpinner()
     }
   }
+
 
   function calculatePercent(items: AnswerItem[]): AnswerWithPercent[] {
     const total = items.reduce((sum, item) => sum + item.count, 0)
@@ -549,6 +366,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
       />
     )
   }
+
   const exportWordReport = async (name: string, dataTable: any, dataTableInfo: any, dataMajorCount: any) => {
     showSpinner()
     try {
@@ -741,6 +559,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                   ]}
                   dataSource={dataMajorCount}
                   pagination={false}
+                  scroll={{ y: 400 }}
                 />
               </div>
             </div>
@@ -784,12 +603,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                         label: "Xuất Excel",
                         icon: <FileExcelOutlined />,
                         onClick: () =>
-                          exportTemplate(
-                            dataLevel?.data?.surveyName,
-                            dataLevel?.data?.data,
-                            data?.data,
-                            dataMajorCount
-                          ),
+                          exportTemplate(dataLevel?.data?.surveyName),
                       },
                     ],
                   }}

@@ -54,6 +54,7 @@ Authorization: Bearer <access_token>
 | **500** | Lỗi máy chủ |
  * OpenAPI spec version: 1.0.0
  */
+import type { GetSurveysOfProfile200AllOfDataItemPrintFormTemplate } from './getSurveysOfProfile200AllOfDataItemPrintFormTemplate';
 import type { GetSurveysOfProfile200AllOfDataItemLecture } from './getSurveysOfProfile200AllOfDataItemLecture';
 import type { GetSurveysOfProfile200AllOfDataItemSubjectClass } from './getSurveysOfProfile200AllOfDataItemSubjectClass';
 import type { GetSurveysOfProfile200AllOfDataItemSurveyTopic } from './getSurveysOfProfile200AllOfDataItemSurveyTopic';
@@ -83,6 +84,8 @@ export type GetSurveysOfProfile200AllOfDataItem = {
   isPublic?: boolean;
   anonymous?: boolean;
   targetEnrollStudentOnly?: boolean;
+  /** @nullable */
+  printFormTemplate?: GetSurveysOfProfile200AllOfDataItemPrintFormTemplate;
   /** @nullable */
   lecture: GetSurveysOfProfile200AllOfDataItemLecture;
   /** @nullable */
