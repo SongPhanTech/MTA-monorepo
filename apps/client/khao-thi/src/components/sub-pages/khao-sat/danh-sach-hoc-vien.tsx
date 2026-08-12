@@ -295,14 +295,14 @@ function DanhSachHocVien({
                 }}
                 scroll={{ y: "calc(100vh - 225px)", x: "max-content" }}
                 className="w-full"
+                hideDefaultSTT={true}
                 columns={[
-                  // {
-                  //     title: 'STT',
-                  //     width: 20,
-                  //     align: 'center',
-                  //     render: (_, __, index) =>
-                  //         index + 1 + (currentPage - 1) * numberOfPages,
-                  // },
+                  {
+                      title: 'STT',
+                      width: 60,
+                      align: 'center',
+                      render: (_, record, index) => record.$type === 'child' ? index + 1 : '',
+                  },
                   {
                     title: "Mã SV",
                     dataIndex: "code",
