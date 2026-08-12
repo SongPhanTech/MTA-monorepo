@@ -1,7 +1,7 @@
 import PutFormModal from "@components/commons/put-modal"
 import useSpinner from "@hooks/spinner"
 import { useSession } from "@workspace/auth/react"
-import type { AnalysisFormEvidence, Evidence, Prisma, RequirementCriterion } from "@workspace/db"
+import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from "@workspace/db"
 import {
   useFindManyEvidence,
   useFindManyEvidenceCategory,
@@ -158,8 +158,8 @@ const AddEvidenceToPeriod = () => {
   }
   const { data: dataUser } = useSession()
 
-  const evidenceWhere: Prisma.EvidenceWhereInput = useMemo(() => {
-    const userFilters: Prisma.EvidenceWhereInput[] = []
+  const evidenceWhere = useMemo(() => {
+    const userFilters: { createdBy: string }[] = []
     if (dataUser?.sDM_NhanVienId) {
       userFilters.push({ createdBy: dataUser.sDM_NhanVienId })
     }

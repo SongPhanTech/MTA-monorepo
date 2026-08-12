@@ -1,6 +1,5 @@
 import { DownloadOutlined, EyeOutlined, FileOutlined } from "@ant-design/icons"
 import { useSession } from "@workspace/auth/react"
-import type { Prisma } from "@workspace/db"
 import {
   useFindManyEvidence,
   useFindManyEvidenceCategory,
@@ -32,8 +31,8 @@ const ViewMinhChungModal = () => {
     { enabled: !!input?.evidenceId }
   )
 
-  const evidenceWhere: Prisma.EvidenceWhereInput = useMemo(() => {
-    const userFilters: Prisma.EvidenceWhereInput[] = []
+  const evidenceWhere = useMemo(() => {
+    const userFilters: { createdBy: string }[] = []
     if (dataUser?.sDM_NhanVienId) {
       userFilters.push({ createdBy: dataUser.sDM_NhanVienId })
     }

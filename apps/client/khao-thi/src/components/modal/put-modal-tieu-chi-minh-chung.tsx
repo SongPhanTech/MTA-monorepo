@@ -13,7 +13,6 @@ import {
   createId,
   type Evidence,
   type EvidenceFile,
-  type Prisma,
   type RequirementCriterion,
 } from "@workspace/db"
 
@@ -102,8 +101,8 @@ const PutTieuChiMinhChungModal = () => {
   const allowedCategoryIds = evaluationPeriod?.evidenceCategories?.map((item) => item.id) ?? []
   const hasAllowedCategories = allowedCategoryIds.length > 0
 
-  const evidenceWhere: Prisma.EvidenceWhereInput = useMemo(() => {
-    const userFilters: Prisma.EvidenceWhereInput[] = []
+  const evidenceWhere = useMemo(() => {
+    const userFilters: { createdBy: string }[] = []
     if (dataUser?.sDM_NhanVienId) {
       userFilters.push({ createdBy: dataUser.sDM_NhanVienId })
     }

@@ -94,8 +94,8 @@ export default function EvidenceCategory() {
     [objectTypeFilter]
   )
 
-  const where: Prisma.EvidenceWhereInput = useMemo(() => {
-    const userFilters: Prisma.EvidenceWhereInput[] = []
+  const where = useMemo(() => {
+    const userFilters: { createdBy: string }[] = []
     if (session?.sDM_NhanVienId) {
       userFilters.push({ createdBy: session.sDM_NhanVienId })
     }
@@ -110,7 +110,7 @@ export default function EvidenceCategory() {
         ? {
             name: {
               contains: filters.evidenceName,
-              mode: "insensitive",
+              mode: "insensitive" as const,
             },
           }
         : {}),
@@ -118,7 +118,7 @@ export default function EvidenceCategory() {
         ? {
             issuer: {
               contains: filters.issuer,
-              mode: "insensitive",
+              mode: "insensitive" as const,
             },
           }
         : {}),

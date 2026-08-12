@@ -200,6 +200,42 @@ const infoBlock = (input: ExportSurveyFormDocxInput) => {
   return children
 }
 
+/** Đáp án đặc biệt: nhãn trên, ô tick dưới, xếp ngang để tiết kiệm diện tích. */
+const specificChoiceOptionsTable = (
+  choices: readonly { description?: string | null }[]
+) => {
+  const columnWidth = Math.floor(100 / choices.length)
+
+  return new Table({
+    width: { size: 100, type: WidthType.PERCENTAGE },
+    borders: BORDERLESS,
+    rows: [
+      new TableRow({
+        children: choices.map(
+          (choice) =>
+            new TableCell({
+              verticalAlign: "center",
+              width: { size: columnWidth, type: WidthType.PERCENTAGE },
+              borders: BORDERLESS,
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  spacing: { after: 40 },
+                  children: [new TextRun({ text: stripHtml(choice?.description) })],
+                }),
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  spacing: { after: 0 },
+                  children: [new TextRun({ text: "\u2610" })],
+                }),
+              ],
+            })
+        ),
+      }),
+    ],
+  })
+}
+
 /** Bảng chú giải thang phản hồi: mô tả ở hàng trên, ký hiệu ở hàng dưới. */
 const choiceLegendTable = (choices: readonly SurveyFormChoice[]) =>
   new Table({
@@ -297,15 +333,18 @@ const questionTable = (input: ExportSurveyFormDocxInput) => {
       const specificChoices = question?.specificChoice || []
       const isEssay = question?.type === "ESSAY"
       const hasOwnChoices = specificChoices.length > 0
-      const contentParagraphs: Paragraph[] = toTextLines(question?.name).map((line) => text(line))
+      const contentChildren: (Paragraph | Table)[] = toTextLines(question?.name).map((line) =>
+        text(line)
+      )
 
       if (hasOwnChoices) {
-        specificChoices.forEach((choice) => {
-          contentParagraphs.push(text(`\u2610 ${stripHtml(choice?.description)}`))
-        })
+        contentChildren.push(
+          new Paragraph({ spacing: { before: 80, after: 40 } }),
+          specificChoiceOptionsTable(specificChoices)
+        )
       } else if (isEssay) {
         for (let line = 0; line < 3; line += 1) {
-          contentParagraphs.push(
+          contentChildren.push(
             new Paragraph({
               spacing: { after: 60 },
               tabStops: [
@@ -326,7 +365,7 @@ const questionTable = (input: ExportSurveyFormDocxInput) => {
             }),
             new TableCell({
               columnSpan: hasOwnChoices || isEssay ? totalColumns - 1 : undefined,
-              children: contentParagraphs,
+              children: contentChildren,
             }),
             ...(hasOwnChoices || isEssay
               ? []
