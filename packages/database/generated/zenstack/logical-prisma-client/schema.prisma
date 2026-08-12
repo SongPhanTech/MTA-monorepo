@@ -7685,6 +7685,8 @@ model ClusterSurvey {
   surveyQuestion          SurveyQuestion[]
   targetEnrollStudentOnly Boolean            @default(false)
   surveys                 Survey[]
+  /// Mẫu phiếu in cụm (OnlyOffice) — editable per khảo sát cụm
+  printFormTemplate       Json?
 
   @@schema("khao-thi")
 }

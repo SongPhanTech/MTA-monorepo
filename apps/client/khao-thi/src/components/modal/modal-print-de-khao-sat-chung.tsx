@@ -32,14 +32,18 @@ type GroupedSurveyQuestion = {
   }[]
 }
 
-const isPubliclyReachableApiBase = (apiOrigin: string) => {
-  if (!apiOrigin) return false
-  try {
-    const host = new URL(apiOrigin).hostname
-    return host !== "localhost" && host !== "127.0.0.1"
-  } catch {
-    return false
-  }
+const buildMinioApiBases = (rawModelBase: string) => {
+  const trimmed = rawModelBase.replace(/\/+$/, "")
+  if (!trimmed) return []
+
+  const fixedModelEndpoint = trimmed.endsWith("/api/model") ? trimmed : `${trimmed}/api/model`
+  const legacyModelEndpoint = `${fixedModelEndpoint}/api/model`
+
+  const toMinioBase = (modelEndpoint: string) => modelEndpoint.replace(/\/model$/, "/minio")
+
+  // On current production gateway, minio is typically exposed via legacy prefix first.
+  const bases = [toMinioBase(legacyModelEndpoint), toMinioBase(fixedModelEndpoint)]
+  return Array.from(new Set(bases))
 }
 
 const ModalPrintExamSurvey = () => {
@@ -216,16 +220,11 @@ const ModalPrintExamSurvey = () => {
   }, [isOpen, survey?.id, storedDocMeta, refetch])
 
   const apiBase = getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL") || ""
-  const apiOrigin = useMemo(() => {
-    if (!apiBase) return ""
-    if (apiBase.startsWith("http")) return new URL(apiBase).origin
-    if (typeof window !== "undefined") return window.location.origin
-    return ""
-  }, [apiBase])
-  // OnlyOffice Document Server (remote) cannot POST to localhost callback
+  const minioApiBases = useMemo(() => buildMinioApiBases(apiBase), [apiBase])
+  // Use NEXT_PUBLIC_API_MODEL_BASE_URL as single source of truth for all model/minio endpoints.
   const callbackUrl =
-    docMeta && isPubliclyReachableApiBase(apiOrigin)
-      ? `${apiOrigin}/api/minio/onlyoffice-callback?objectName=${encodeURIComponent(docMeta.objectName)}`
+    docMeta && minioApiBases.length > 0
+      ? `${minioApiBases[0]}/onlyoffice-callback?objectName=${encodeURIComponent(docMeta.objectName)}`
       : undefined
   const documentUrl = docMeta ? getMinioUrl(docMeta.filePath) : ""
   const documentKey = docMeta ? `${survey?.id || "survey"}_${docMeta.version}` : undefined
@@ -270,14 +269,25 @@ const ModalPrintExamSurvey = () => {
       try {
         if (!docMeta?.objectName) throw new Error("Missing objectName")
 
-        const saveUrl = `${apiOrigin}/api/minio/onlyoffice-save-from-url?objectName=${encodeURIComponent(docMeta.objectName)}`
-        const res = await fetch(saveUrl, {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url: fileUrl }),
-        })
-        if (!res.ok) throw new Error(`Save from URL failed: ${res.status}`)
+        let saveOk = false
+        let lastStatus = 0
+        for (const base of minioApiBases) {
+          const saveUrl = `${base}/onlyoffice-save-from-url?objectName=${encodeURIComponent(docMeta.objectName)}`
+          const res = await fetch(saveUrl, {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url: fileUrl }),
+          })
+          lastStatus = res.status
+          if (res.ok) {
+            saveOk = true
+            break
+          }
+          // If not found, keep trying fallback base. Other errors stop early.
+          if (res.status !== 404) break
+        }
+        if (!saveOk) throw new Error(`Save from URL failed: ${lastStatus}`)
 
         const nextVersion = (docMeta.version ?? 0) + 1
         const meta: SurveyPrintFormDocMeta = {
@@ -298,7 +308,7 @@ const ModalPrintExamSurvey = () => {
         setSaving(false)
       }
     },
-    [apiOrigin, docMeta, refetch, survey?.id, survey?.name, updateSurvey]
+    [docMeta, minioApiBases, refetch, survey?.id, survey?.name, updateSurvey]
   )
 
   const handleRegenerate = () => {

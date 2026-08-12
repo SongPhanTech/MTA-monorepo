@@ -25884,6 +25884,10 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'clusterSurvey',
+                }, printFormTemplate: {
+                    name: "printFormTemplate",
+                    type: "Json",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {
