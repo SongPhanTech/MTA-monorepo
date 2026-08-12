@@ -5,7 +5,7 @@ import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { useSession } from "@workspace/auth/react"
 import { useGetSurveysOfProfile } from "@workspace/libs/api/exam"
-import { useSemesterStore } from "@workspace/ui"
+import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Col, Pagination, Row, Tag, Tooltip, Tabs } from "antd"
 import dayjs from "dayjs"
 import { ArrowRight } from "lucide-react"
@@ -21,6 +21,7 @@ export default function DetailSurveyPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const { id: semesterId } = useSemesterStore()
+  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const [surveyType, setSurveyType] = useState<"SINGLE" | "CLUSTER">("SINGLE")
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
@@ -98,6 +99,7 @@ export default function DetailSurveyPage() {
     subjectClassName: filters.subjectClassName,
     lecturerName: filters.lecturerName,
     semesterId,
+    trainingObjectTypeId,
     type: surveyType,
   }
 

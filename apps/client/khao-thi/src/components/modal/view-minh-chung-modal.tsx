@@ -1,4 +1,6 @@
 import { DownloadOutlined, EyeOutlined, FileOutlined } from "@ant-design/icons"
+import { useSession } from "@workspace/auth/react"
+import type { Prisma } from "@workspace/db"
 import {
   useFindManyEvidence,
   useFindManyEvidenceCategory,
@@ -9,6 +11,7 @@ import { Descriptions, Modal, Skeleton, Tree, Typography } from "antd"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 const ViewMinhChungModal = () => {
+  const { data: dataUser } = useSession()
   const { isOpen, onClose, input } = useDisclosure<{ evidenceId: string }>({
     tag: "ViewMinhChungModal",
   })
@@ -29,8 +32,26 @@ const ViewMinhChungModal = () => {
     { enabled: !!input?.evidenceId }
   )
 
+  const evidenceWhere: Prisma.EvidenceWhereInput = useMemo(() => {
+    const userFilters: Prisma.EvidenceWhereInput[] = []
+    if (dataUser?.sDM_NhanVienId) {
+      userFilters.push({ createdBy: dataUser.sDM_NhanVienId })
+    }
+    if (dataUser?.userId && dataUser.userId !== dataUser.sDM_NhanVienId) {
+      userFilters.push({ createdBy: dataUser.userId })
+    }
+
+    return {
+      deletedAt: null,
+      ...(userFilters.length > 0 ? { OR: userFilters } : {}),
+    }
+  }, [dataUser?.sDM_NhanVienId, dataUser?.userId])
+
   const { data: listEvidenceCategory = [] } = useFindManyEvidenceCategory()
-  const { data: listEvidence = [] } = useFindManyEvidence()
+  const { data: listEvidence = [] } = useFindManyEvidence({
+    where: evidenceWhere,
+  })
+
 
   const treeData = useMemo(() => {
     return listEvidenceCategory.map((cat) => ({

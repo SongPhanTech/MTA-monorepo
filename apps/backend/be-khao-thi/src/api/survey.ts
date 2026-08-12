@@ -1054,6 +1054,7 @@ const getSurveysByProfile = createRoute({
       lecturerName: z.string().optional(),
       subjectClassName: z.string().optional(),
       semesterId: z.string().optional(),
+      trainingObjectTypeId: z.string().optional(),
       type: z.enum(["SINGLE", "CLUSTER"]).optional(),
     }),
   },
@@ -1091,7 +1092,8 @@ const getSurveysByProfile = createRoute({
 
 app.openapi(getSurveysByProfile, async (c) => {
   const { id } = c.req.valid("param")
-  const { semesterId, limit = 10, page = 1, ...q } = c.req.valid("query")
+  const { semesterId, trainingObjectTypeId, limit = 10, page = 1, ...q } = c.req.valid("query")
+
 
   const profile = await prisma.userProfile.findUniqueOrThrow({
     where: { id },
@@ -1230,6 +1232,13 @@ app.openapi(getSurveysByProfile, async (c) => {
   const where: Prisma.SurveyWhereInput = {
     ...(q.name ? { name: { contains: q.name, mode: "insensitive" } } : {}),
     ...(semesterId && { semesterId }),
+    ...(trainingObjectTypeId && {
+      OR: [
+        { trainingObjectTypeId },
+        { surveyObjectType: { some: { trainingObjectTypeId } } },
+      ],
+    }),
+
     ...(q.lecturerName
       ? {
         lecture: {

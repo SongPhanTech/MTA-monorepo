@@ -85,9 +85,11 @@ const PutEvidence = () => {
         })
         message.success("Cập nhật thành công")
       } else {
+        const createdById = dataUser?.sDM_NhanVienId || dataUser?.userId || null
         await createEvidence({
           data: {
             ...data,
+            ...(createdById ? { createdBy: createdById } : {}),
             evidenceFile: {
               create: (output.evidenceFile || []).map((file: EvidenceFile) => ({
                 name: file.name,
