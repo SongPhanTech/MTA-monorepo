@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const SurveyScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "startDate", "endDate", "isPublic", "anonymous", "lectureId", "subjectClassId", "semesterId", "surveyTopicId", "trainingObjectTypeId", "clusterSurveyId", "targetEnrollStudentOnly"])
+export const SurveyScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "startDate", "endDate", "isPublic", "anonymous", "lectureId", "subjectClassId", "semesterId", "surveyTopicId", "trainingObjectTypeId", "clusterSurveyId", "targetEnrollStudentOnly", "printFormTemplate"])

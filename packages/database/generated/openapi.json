@@ -25410,6 +25410,9 @@
           },
           "targetEnrollStudentOnly": {
             "type": "boolean"
+          },
+          "printFormTemplate": {
+            "nullable": true
           }
         },
         "required": [
@@ -62078,6 +62081,9 @@
           },
           "targetEnrollStudentOnly": {
             "type": "boolean"
+          },
+          "printFormTemplate": {
+            "nullable": true
           },
           "_count": {
             "allOf": [
@@ -122910,6 +122916,9 @@
           "targetEnrollStudentOnly": {
             "type": "integer"
           },
+          "printFormTemplate": {
+            "type": "integer"
+          },
           "_all": {
             "type": "integer"
           }
@@ -122935,6 +122944,7 @@
           "trainingObjectTypeId",
           "clusterSurveyId",
           "targetEnrollStudentOnly",
+          "printFormTemplate",
           "_all"
         ]
       },

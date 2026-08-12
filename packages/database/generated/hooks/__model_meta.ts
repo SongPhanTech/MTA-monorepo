@@ -26063,6 +26063,10 @@ const metadata: ModelMeta = {
                     name: "targetEnrollStudentOnly",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, printFormTemplate: {
+                    name: "printFormTemplate",
+                    type: "Json",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {

@@ -3,7 +3,7 @@ import { createId } from "@workspace/db"
 import { convertDocument } from "@workspace/libs/api/model"
 import { getMinioUrl } from "@workspace/libs/utils"
 import { Col, Image, Modal, Row } from "antd"
-import { useEffect, useId } from "react"
+import { useEffect, useId, useRef } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 export type DocumentType =
   | "word"
@@ -290,6 +290,15 @@ type Props = {
   allowDownload?: boolean
   containerClassName?: string
   editorHeight?: string
+  /** OnlyOffice save callback (required for edit mode to persist). */
+  callbackUrl?: string
+  /** Stable document key; bump when file content is replaced so editor reloads. */
+  documentKey?: string
+  /**
+   * When set, `downloadAs` / Save-as events call this with the temporary file URL
+   * instead of triggering a browser download. Useful for client-side persist.
+   */
+  onDownloadAsUrl?: (url: string) => void
 }
 
 declare global {
@@ -307,11 +316,17 @@ const OnlyOfficeViewer = ({
   allowDownload = true,
   containerClassName = "w-full h-[90vh]",
   editorHeight = "750px",
+  callbackUrl,
+  documentKey,
+  onDownloadAsUrl,
 }: Props) => {
   const containerId = useId().replace(/:/g, "")
+  const canEdit = mode === "edit"
+  const onDownloadAsUrlRef = useRef(onDownloadAsUrl)
+  onDownloadAsUrlRef.current = onDownloadAsUrl
 
   useEffect(() => {
-    const editorNodeId = createId()
+    const editorNodeId = documentKey || createId()
 
     const placeholderContainer = document.getElementById(containerId)
     if (window.DocsAPI) {
@@ -327,7 +342,7 @@ const OnlyOfficeViewer = ({
       const config = {
         width: "100%",
         height: editorHeight,
-        type: allowDownload ? "desktop" : "embedded",
+        type: allowDownload || canEdit ? "desktop" : "embedded",
         documentType: getDocumentType(fileType),
         token: "",
         document: {
@@ -336,36 +351,41 @@ const OnlyOfficeViewer = ({
           title,
           url: uri,
           permissions: {
-            download: allowDownload,
+            download: allowDownload || !!onDownloadAsUrlRef.current,
             print: allowDownload,
-            edit: false,
+            edit: canEdit,
             copy: allowDownload,
           },
         },
         events: {
           onRequestSaveAs: () => {},
-          ...(allowDownload
-            ? {
-                onDownloadAs(data: { data?: { url?: string } }) {
-                  const link = document.createElement("a")
-                  link.href = data?.data?.url ?? ""
-                  link.setAttribute("download", title || "download")
-                  document.body.appendChild(link)
-                  link.click()
-                  link.parentNode?.removeChild(link)
-                },
-              }
-            : {}),
+          onDownloadAs(data: { data?: { url?: string } }) {
+            const fileUrl = data?.data?.url ?? ""
+            if (!fileUrl) return
+            if (onDownloadAsUrlRef.current) {
+              onDownloadAsUrlRef.current(fileUrl)
+              return
+            }
+            if (!allowDownload) return
+            const link = document.createElement("a")
+            link.href = fileUrl
+            link.setAttribute("download", title || "download")
+            document.body.appendChild(link)
+            link.click()
+            link.parentNode?.removeChild(link)
+          },
         },
         editorConfig: {
           mode,
           lang: "vi",
+          // Remote OnlyOffice cannot reach localhost callback — omit when unreachable
+          ...(canEdit && callbackUrl ? { callbackUrl } : {}),
           customization: {
-            forcesave: false,
-            toolbar: allowDownload,
-            compactToolbar: !allowDownload,
-            statusBar: false,
-            autosave: false,
+            forcesave: Boolean(canEdit && callbackUrl),
+            toolbar: allowDownload || canEdit,
+            compactToolbar: !allowDownload && !canEdit,
+            statusBar: canEdit,
+            autosave: Boolean(canEdit && callbackUrl),
             help: false,
             logo: {
               visible: false,
@@ -376,7 +396,7 @@ const OnlyOfficeViewer = ({
               request: false,
             },
             plugins: false,
-            ...(allowDownload
+            ...(allowDownload || canEdit
               ? {}
               : {
                   layout: {
@@ -406,7 +426,18 @@ const OnlyOfficeViewer = ({
     return () => {
       window.docEditor?.destroyEditor?.()
     }
-  }, [uri, title, fileType, mode, allowDownload, editorHeight, containerId])
+  }, [
+    uri,
+    title,
+    fileType,
+    mode,
+    allowDownload,
+    editorHeight,
+    containerId,
+    callbackUrl,
+    documentKey,
+    canEdit,
+  ])
 
   return <div id={containerId} className={containerClassName} />
 }

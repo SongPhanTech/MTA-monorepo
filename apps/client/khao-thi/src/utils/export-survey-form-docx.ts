@@ -389,6 +389,11 @@ export const exportSurveyFormDocx = async (input: ExportSurveyFormDocxInput) => 
   saveAs(blob, input.fileName)
 }
 
+/** Build DOCX blob without triggering browser download (for MinIO upload). */
+export const buildSurveyFormDocxBlob = async (input: Omit<ExportSurveyFormDocxInput, "fileName">) => {
+  return Packer.toBlob(buildSurveyFormDocx({ ...input, fileName: "survey.docx" }))
+}
+
 export const toDocxFileName = (prefix: string, name?: string | null) => {
   const safeName = stripHtml(name)
     .replace(/[\\/:*?"<>|]+/g, " ")

@@ -52,6 +52,8 @@ function TabDotKhaoSat({
   const where = useMemo(
     () => ({
       clusterSurveyId: null,
+      deletedAt: null,
+      surveyTopic: { deletedAt: null },
       ...(semesterId ? { semesterId } : {}),
       ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
       ...(filters.name && filters.name !== ""
@@ -150,7 +152,7 @@ function TabDotKhaoSat({
   // Tạo treeData từ schoolYears và semesters
   const treeData = converData(schoolYears)
 
-  const { data: count } = useCountSurvey({ where: { ...where, deletedAt: null } })
+  const { data: count } = useCountSurvey({ where })
 
   const { onOpen } = useDisclosure<{ id: string; type: string }>({
     tag: "PutSurveyModal",
@@ -369,14 +371,13 @@ function TabDotKhaoSat({
                   _,
                   { id, isPublic, surveyQuestion, surveyObjectType, surveySessions, endDate }
                 ) => (
-                  <Row className="justify-end gap-2">
+                  <Row className="justify-center gap-2" wrap={false}>
                     {/* {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                                             'XEM_CHI_TIET'
                                         ) &&
                                             surveySessions?.length > 0 && (
                                                 <Tooltip
-                                                    className="mr-2"
                                                     title={'Báo cáo khảo sát'}
                                                     placement="top"
                                                 >
@@ -393,7 +394,7 @@ function TabDotKhaoSat({
                         KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                         "XEM_CHI_TIET"
                       ) && (
-                        <Tooltip className="mr-2" title={"Xem đề khảo sát"} placement="top">
+                        <Tooltip title={"Xem đề khảo sát"} placement="top">
                           <EyeOutlined
                             onClick={() => {
                               onOpenPrint({ id })
@@ -409,11 +410,7 @@ function TabDotKhaoSat({
                         "XEM_CHI_TIET"
                       ) &&
                       !!isPublic && (
-                        <Tooltip
-                          className="mr-2"
-                          title={"Lấy đường dẫn khảo sát công khai"}
-                          placement="top"
-                        >
+                        <Tooltip title={"Lấy đường dẫn khảo sát công khai"} placement="top">
                           <Link
                             size={16}
                             onClick={(e) => {
@@ -431,7 +428,7 @@ function TabDotKhaoSat({
                       <EditIcon
                         disabled={surveySessions.length > 0}
                         onClick={() => onOpen({ id, type: "one" })}
-                        className="text-sm text-blue-700 cursor-pointer mr-2"
+                        className="text-sm text-blue-700 cursor-pointer"
                       />
                     )}
 

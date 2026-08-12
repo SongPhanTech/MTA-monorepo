@@ -170,4 +170,51 @@ app.openapi(
   }
 )
 
+const SURVEY_PRINT_OBJECT_PREFIX = "khao-thi/survey-print/"
+const DOCX_CONTENT_TYPE =
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
+const normalizeSurveyPrintObjectName = (raw: string): string | null => {
+  const trimmed = decodeURIComponent(raw).replace(/^\/+/, "")
+  if (trimmed.startsWith(SURVEY_PRINT_OBJECT_PREFIX)) return trimmed
+  const idx = trimmed.indexOf(SURVEY_PRINT_OBJECT_PREFIX)
+  if (idx > 0 && trimmed[idx - 1] === "/") return trimmed.slice(idx)
+  return null
+}
+
+/** OnlyOffice Document Server save callback — must stay public (no JWT). */
+app.post("/onlyoffice-callback", async (c) => {
+  const objectNameParam = c.req.query("objectName") || ""
+  const objectName = normalizeSurveyPrintObjectName(objectNameParam)
+
+  if (!objectName) {
+    console.error("[onlyoffice-callback] Rejected objectName:", objectNameParam)
+    return c.json({ error: 1 }, 400)
+  }
+
+  try {
+    const body = (await c.req.json()) as {
+      status?: number
+      url?: string
+    }
+
+    // 2 = ready for saving, 6 = force save
+    if ((body.status === 2 || body.status === 6) && body.url) {
+      const fileRes = await fetch(body.url)
+      if (!fileRes.ok) {
+        console.error("[onlyoffice-callback] Download failed:", fileRes.status, body.url)
+        return c.json({ error: 1 }, 500)
+      }
+      const buffer = Buffer.from(await fileRes.arrayBuffer())
+      await minioService.putObject(objectName, buffer, DOCX_CONTENT_TYPE)
+      console.log("[onlyoffice-callback] Saved:", objectName, "status=", body.status)
+    }
+  } catch (error) {
+    console.error("[onlyoffice-callback] Error:", error)
+    return c.json({ error: 1 }, 500)
+  }
+
+  return c.json({ error: 0 })
+})
+
 export default app
