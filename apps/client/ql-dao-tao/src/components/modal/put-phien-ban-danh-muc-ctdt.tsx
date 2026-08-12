@@ -312,7 +312,7 @@ const PutCurriculumVersion = () => {
         message.success("Cập nhật thành công")
       } else {
         if (!input?.curriculumId) {
-          message.error("Thiếu curriculumId, không thể tạo CTĐT toàn khoá")
+          message.error(`Thiếu curriculumId, không thể tạo ${input?.isFramework ? "CTĐT khung" : "CTĐT toàn khoá"}`)
           return
         }
 
@@ -416,7 +416,7 @@ const PutCurriculumVersion = () => {
       setDocument(initialValue?.documentFiles)
     }
   }, [initialValue, trainingObjectTypeSelected])
-  const text = input?.isFramework ? "khung" : "toàn khóa"
+  const ctdtTypeLabel = input?.isFramework ? "CTĐT khung" : "CTĐT toàn khoá"
   return (
     <PutFormModal
       open={isOpen}
@@ -424,7 +424,7 @@ const PutCurriculumVersion = () => {
       onFinish={onOk}
       onCancel={onClose}
       // maskClosable={true}
-      title={input?.versionId ? `Sửa CTĐT ${text}` : `Thêm CTĐT ${text}`}
+      title={input?.versionId ? `Sửa ${ctdtTypeLabel}` : `Thêm ${ctdtTypeLabel}`}
       className="w-[60vw]"
       style={{ top: 20 }}
       formProps={{
@@ -443,23 +443,23 @@ const PutCurriculumVersion = () => {
               <div>
                 <Row gutter={[16, 16]} className="w-full">
                   <Col span={12}>
-                    <FormItem form={form} name="code" label="Mã CTĐT toàn khoá" required>
-                      <Input placeholder="Nhập mã CTĐT toàn khoá" />
+                    <FormItem form={form} name="code" label={`Mã ${ctdtTypeLabel}`} required>
+                      <Input placeholder={`Nhập mã ${ctdtTypeLabel}`} />
                     </FormItem>
                   </Col>
                   <Col span={12}>
                     <FormItem
                       form={form}
                       name="name"
-                      label="Tên CTĐT toàn khoá (tiếng việt)"
+                      label={`Tên ${ctdtTypeLabel} (tiếng việt)`}
                       required
                     >
-                      <Input placeholder="Nhập tên CTĐT toàn khoá (tiếng việt)" />
+                      <Input placeholder={`Nhập tên ${ctdtTypeLabel} (tiếng việt)`} />
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem form={form} name="englishName" label="Tên CTĐT toàn khoá (tiếng anh)">
-                      <Input placeholder="Nhập tên CTĐT toàn khoá (tiếng anh)" />
+                    <FormItem form={form} name="englishName" label={`Tên ${ctdtTypeLabel} (tiếng anh)`}>
+                      <Input placeholder={`Nhập tên ${ctdtTypeLabel} (tiếng anh)`} />
                     </FormItem>
                   </Col>
                   <Col span={12}>
