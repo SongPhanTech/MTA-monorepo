@@ -1,5 +1,7 @@
 import { queryClient } from "@api/index"
+import { useSession } from "@workspace/auth/react"
 import Select from "@components/commons/select"
+
 import TableCollapse from "@components/commons/tableCollapse"
 import type { FilterProps } from "@components/commons/typeFilter"
 import CreateIcon from "@components/icons/create"
@@ -74,7 +76,10 @@ function FileItem({
 }
 
 export default function EvidenceCategory() {
+
   const { can, canSome } = useAbility()
+  const { data: session } = useSession()
+
   const [filters, setFilters] = useState<FilterProps>({
     evidenceName: "",
     issuer: "",
@@ -89,14 +94,23 @@ export default function EvidenceCategory() {
     [objectTypeFilter]
   )
 
-  const where = useMemo(
-    () => ({
+  const where: Prisma.EvidenceWhereInput = useMemo(() => {
+    const userFilters: Prisma.EvidenceWhereInput[] = []
+    if (session?.sDM_NhanVienId) {
+      userFilters.push({ createdBy: session.sDM_NhanVienId })
+    }
+    if (session?.userId && session.userId !== session.sDM_NhanVienId) {
+      userFilters.push({ createdBy: session.userId })
+    }
+
+    return {
       deletedAt: null,
+      ...(userFilters.length > 0 ? { OR: userFilters } : {}),
       ...(filters.evidenceName
         ? {
             name: {
               contains: filters.evidenceName,
-              mode: "insensitive" as const,
+              mode: "insensitive",
             },
           }
         : {}),
@@ -104,13 +118,13 @@ export default function EvidenceCategory() {
         ? {
             issuer: {
               contains: filters.issuer,
-              mode: "insensitive" as const,
+              mode: "insensitive",
             },
           }
         : {}),
-    }),
-    [filters.evidenceName, filters.issuer]
-  )
+    }
+  }, [filters.evidenceName, filters.issuer, session?.sDM_NhanVienId, session?.userId])
+
 
   const { data } = useFindManyEvidenceCategory({
     where: categoryWhere,
