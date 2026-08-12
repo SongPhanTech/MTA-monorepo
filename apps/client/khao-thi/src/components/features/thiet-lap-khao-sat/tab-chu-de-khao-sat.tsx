@@ -57,7 +57,18 @@ function TabChuDeKhaoSat({
   const { data = [], refetch } = useFindManySurveyTopic({
     where,
     include: {
-      surveyQuestionGroup: true,
+      surveyQuestionGroup: {
+        where: {
+          deletedAt: null,
+        },
+        include: {
+          surveyQuestion: {
+            where: {
+              deletedAt: null,
+            },
+          },
+        },
+      },
     },
     orderBy: { createdAt: "desc" },
     take: numberOfPages,
@@ -163,7 +174,7 @@ function TabChuDeKhaoSat({
                   "SUA",
                   "XOA"
                 ),
-                render: (_, { id, surveyQuestionGroup }) => (
+                render: (_, { id, surveyQuestionGroup, type }: any) => (
                   <Row className="justify-center gap-2">
                     {can(
                       KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
@@ -179,7 +190,13 @@ function TabChuDeKhaoSat({
                       "XOA"
                     ) && (
                       <DeleteIcon
-                        disabled={surveyQuestionGroup.length > 0}
+                        disabled={
+                          type === "CLUSTER"
+                            ? surveyQuestionGroup.some(
+                                (group: any) => group.surveyQuestion?.length > 0
+                              )
+                            : surveyQuestionGroup.length > 0
+                        }
                         popConfirm={{
                           onConfirm: () => handleDelete(id),
                         }}
