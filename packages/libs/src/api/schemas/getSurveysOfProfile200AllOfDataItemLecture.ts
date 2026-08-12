@@ -81,6 +81,7 @@ export type GetSurveysOfProfile200AllOfDataItemLecture = {
   lectureID?: string | null;
   /** @nullable */
   serviceDate?: string | null;
+  /** @nullable */
   organization: GetSurveysOfProfile200AllOfDataItemLectureOrganization;
   userProfile: GetSurveysOfProfile200AllOfDataItemLectureUserProfile;
 } | null;

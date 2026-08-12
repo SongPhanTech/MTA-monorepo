@@ -54,6 +54,7 @@ Authorization: Bearer <access_token>
 | **500** | Lỗi máy chủ |
  * OpenAPI spec version: 1.0.0
  */
+import type { GetSurveyResultPrintFormTemplate } from './getSurveyResultPrintFormTemplate';
 import type { GetSurveyResultSurveyQuestionItem } from './getSurveyResultSurveyQuestionItem';
 import type { GetSurveyResultSurveyChoiceItem } from './getSurveyResultSurveyChoiceItem';
 import type { GetSurveyResultLectureInfo } from './getSurveyResultLectureInfo';
@@ -83,6 +84,8 @@ export interface GetSurveyResult {
   isPublic?: boolean;
   anonymous?: boolean;
   targetEnrollStudentOnly?: boolean;
+  /** @nullable */
+  printFormTemplate?: GetSurveyResultPrintFormTemplate;
   surveyQuestion: GetSurveyResultSurveyQuestionItem[];
   surveyChoice: GetSurveyResultSurveyChoiceItem[];
   /** @nullable */

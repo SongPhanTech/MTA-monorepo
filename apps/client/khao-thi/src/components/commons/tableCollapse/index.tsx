@@ -49,6 +49,7 @@ type TableProps<T, ChildKey extends keyof T> = {
   childrenFieldName: ChildKey
   onRowDoubleClick?: (record: T) => void
   defaultExpandAll?: boolean
+  hideDefaultSTT?: boolean
 } & Omit<
   TableAntdProps,
   "columns" | "data" | "pagination" | "headerTitleKey" | "onRow" | "childrenFieldName"
@@ -78,6 +79,7 @@ const TableCollapse = <
   childrenFieldName,
   onRowDoubleClick,
   defaultExpandAll,
+  hideDefaultSTT = false,
   filters,
   setFilters,
   ...rest
@@ -166,28 +168,27 @@ const TableCollapse = <
   }, [dataWithKey, childrenFieldName])
 
   const restColumns = useMemo(() => {
-    const baseColumns = [
-      {
-        title: "STT",
-        align: "center",
-        width: 60,
-        // fixed: 'left',
-        render: (_: any, record: T) => {
-          if (record.$type !== "child") return ""
+    const defaultSTTColumn = {
+      title: "STT",
+      align: "center",
+      width: 60,
+      // fixed: 'left',
+      render: (_: any, record: T) => {
+        if (record.$type !== "child") return ""
 
-          // @ts-expect-error
-          const order = allChildren.findIndex((item) => item.key === record.key)
-          return order >= 0
-            ? order +
-                1 +
-                (((typeof pagination !== "boolean" && pagination?.current) || currentPage || 1) -
-                  1) *
-                  DEFAULT_PAGINATE_SIZE
-            : ""
-        },
+        // @ts-expect-error
+        const order = allChildren.findIndex((item) => item.key === record.key)
+        return order >= 0
+          ? order +
+              1 +
+              (((typeof pagination !== "boolean" && pagination?.current) || currentPage || 1) -
+                1) *
+                DEFAULT_PAGINATE_SIZE
+          : ""
       },
-      ...columns,
-    ]
+    }
+
+    const baseColumns = hideDefaultSTT ? [...columns] : [defaultSTTColumn, ...columns]
 
     // Merge onCell for colSpan handling
     return baseColumns?.map((col, index) => ({
@@ -200,7 +201,7 @@ const TableCollapse = <
           : 1,
       }),
     }))
-  }, [columns, childrenFieldName, allChildren, currentPage, pagination])
+  }, [columns, childrenFieldName, allChildren, currentPage, pagination, hideDefaultSTT])
 
   return (
     <>

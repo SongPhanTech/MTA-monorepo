@@ -32,14 +32,18 @@ type GroupedSurveyQuestion = {
   }[]
 }
 
-const isPubliclyReachableApiBase = (apiBase: string) => {
-  if (!apiBase) return false
-  try {
-    const host = new URL(apiBase).hostname
-    return host !== "localhost" && host !== "127.0.0.1"
-  } catch {
-    return false
-  }
+const buildMinioApiBases = (rawModelBase: string) => {
+  const trimmed = rawModelBase.replace(/\/+$/, "")
+  if (!trimmed) return []
+
+  const fixedModelEndpoint = trimmed.endsWith("/api/model") ? trimmed : `${trimmed}/api/model`
+  const legacyModelEndpoint = `${fixedModelEndpoint}/api/model`
+
+  const toMinioBase = (modelEndpoint: string) => modelEndpoint.replace(/\/model$/, "/minio")
+
+  // On current production gateway, minio is typically exposed via legacy prefix first.
+  const bases = [toMinioBase(legacyModelEndpoint), toMinioBase(fixedModelEndpoint)]
+  return Array.from(new Set(bases))
 }
 
 const ModalPrintExamSurvey = () => {
@@ -216,10 +220,11 @@ const ModalPrintExamSurvey = () => {
   }, [isOpen, survey?.id, storedDocMeta, refetch])
 
   const apiBase = getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL") || ""
-  // OnlyOffice Document Server (remote) cannot POST to localhost callback
+  const minioApiBases = useMemo(() => buildMinioApiBases(apiBase), [apiBase])
+  // Use NEXT_PUBLIC_API_MODEL_BASE_URL as single source of truth for all model/minio endpoints.
   const callbackUrl =
-    docMeta && isPubliclyReachableApiBase(apiBase)
-      ? `${apiBase}/api/minio/onlyoffice-callback?objectName=${encodeURIComponent(docMeta.objectName)}`
+    docMeta && minioApiBases.length > 0
+      ? `${minioApiBases[0]}/onlyoffice-callback?objectName=${encodeURIComponent(docMeta.objectName)}`
       : undefined
   const documentUrl = docMeta ? getMinioUrl(docMeta.filePath) : ""
   const documentKey = docMeta ? `${survey?.id || "survey"}_${docMeta.version}` : undefined
@@ -262,11 +267,37 @@ const ModalPrintExamSurvey = () => {
 
       saveRequestRef.current = false
       try {
-        const fileRes = await fetch(fileUrl)
-        if (!fileRes.ok) throw new Error(`Download failed: ${fileRes.status}`)
-        const blob = await fileRes.blob()
-        const nextVersion = (docMeta?.version ?? 0) + 1
-        const meta = await uploadBlobToSurveyPrintPath(blob, nextVersion)
+        if (!docMeta?.objectName) throw new Error("Missing objectName")
+
+        let saveOk = false
+        let lastStatus = 0
+        for (const base of minioApiBases) {
+          const saveUrl = `${base}/onlyoffice-save-from-url?objectName=${encodeURIComponent(docMeta.objectName)}`
+          const res = await fetch(saveUrl, {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url: fileUrl }),
+          })
+          lastStatus = res.status
+          if (res.ok) {
+            saveOk = true
+            break
+          }
+          // If not found, keep trying fallback base. Other errors stop early.
+          if (res.status !== 404) break
+        }
+        if (!saveOk) throw new Error(`Save from URL failed: ${lastStatus}`)
+
+        const nextVersion = (docMeta.version ?? 0) + 1
+        const meta: SurveyPrintFormDocMeta = {
+          ...docMeta,
+          version: nextVersion,
+        }
+        await updateSurvey({
+          where: { id: survey?.id || "" },
+          data: { printFormTemplate: meta },
+        })
         setDocMeta(meta)
         await refetch()
         message.success("Đã lưu mẫu phiếu khảo sát")
@@ -277,7 +308,7 @@ const ModalPrintExamSurvey = () => {
         setSaving(false)
       }
     },
-    [docMeta?.version, refetch, survey?.name, uploadBlobToSurveyPrintPath]
+    [docMeta, minioApiBases, refetch, survey?.id, survey?.name, updateSurvey]
   )
 
   const handleRegenerate = () => {
@@ -357,10 +388,10 @@ const ModalPrintExamSurvey = () => {
         </div>
       }
     >
-      <div className="mb-2 text-xs text-neutral-500 shrink-0">
+      {/* <div className="mb-2 text-xs text-neutral-500 shrink-0">
         Chỉnh sửa trên OnlyOffice (có thể vẽ line/shape). Sau khi sửa, bấm <b>Lưu mẫu</b> trên thanh
         tiêu đề modal để lưu — không dùng nút Save trong OnlyOffice khi chạy local.
-      </div>
+      </div> */}
       {preparing || !docMeta || !documentUrl ? (
         <div className="flex items-center justify-center h-[calc(100%-2rem)]">
           <Spin tip="Đang chuẩn bị mẫu phiếu..." />

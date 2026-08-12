@@ -4531,7 +4531,8 @@ exports.Prisma.ClusterSurveyScalarFieldEnum = {
   isPublic: 'isPublic',
   anonymous: 'anonymous',
   surveyTopicId: 'surveyTopicId',
-  targetEnrollStudentOnly: 'targetEnrollStudentOnly'
+  targetEnrollStudentOnly: 'targetEnrollStudentOnly',
+  printFormTemplate: 'printFormTemplate'
 };
 
 exports.Prisma.SurveyScalarFieldEnum = {

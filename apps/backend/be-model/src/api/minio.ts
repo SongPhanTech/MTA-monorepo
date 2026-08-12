@@ -182,6 +182,42 @@ const normalizeSurveyPrintObjectName = (raw: string): string | null => {
   return null
 }
 
+const saveOnlyOfficeUrlToObject = async (objectName: string, fileUrl: string) => {
+  const fileRes = await fetch(fileUrl)
+  if (!fileRes.ok) {
+    console.error("[onlyoffice-save] Download failed:", fileRes.status, fileUrl)
+    return false
+  }
+  const buffer = Buffer.from(await fileRes.arrayBuffer())
+  await minioService.putObject(objectName, buffer, DOCX_CONTENT_TYPE)
+  return true
+}
+
+/** Browser asks server to fetch OnlyOffice temp URL and persist to MinIO. */
+app.post("/onlyoffice-save-from-url", async (c) => {
+  const objectNameParam = c.req.query("objectName") || ""
+  const objectName = normalizeSurveyPrintObjectName(objectNameParam)
+  if (!objectName) {
+    console.error("[onlyoffice-save-from-url] Rejected objectName:", objectNameParam)
+    return c.json({ success: false, message: "Invalid objectName" }, 400)
+  }
+
+  try {
+    const body = (await c.req.json()) as { url?: string }
+    if (!body.url) {
+      return c.json({ success: false, message: "Missing url" }, 400)
+    }
+
+    const ok = await saveOnlyOfficeUrlToObject(objectName, body.url)
+    if (!ok) return c.json({ success: false, message: "Download failed" }, 500)
+
+    return c.json({ success: true }, 200)
+  } catch (error) {
+    console.error("[onlyoffice-save-from-url] Error:", error)
+    return c.json({ success: false, message: "Save failed" }, 500)
+  }
+})
+
 /** OnlyOffice Document Server save callback — must stay public (no JWT). */
 app.post("/onlyoffice-callback", async (c) => {
   const objectNameParam = c.req.query("objectName") || ""
@@ -200,13 +236,8 @@ app.post("/onlyoffice-callback", async (c) => {
 
     // 2 = ready for saving, 6 = force save
     if ((body.status === 2 || body.status === 6) && body.url) {
-      const fileRes = await fetch(body.url)
-      if (!fileRes.ok) {
-        console.error("[onlyoffice-callback] Download failed:", fileRes.status, body.url)
-        return c.json({ error: 1 }, 500)
-      }
-      const buffer = Buffer.from(await fileRes.arrayBuffer())
-      await minioService.putObject(objectName, buffer, DOCX_CONTENT_TYPE)
+      const ok = await saveOnlyOfficeUrlToObject(objectName, body.url)
+      if (!ok) return c.json({ error: 1 }, 500)
       console.log("[onlyoffice-callback] Saved:", objectName, "status=", body.status)
     }
   } catch (error) {

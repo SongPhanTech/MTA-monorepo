@@ -25250,6 +25250,9 @@
             "items": {
               "$ref": "#/components/schemas/Survey"
             }
+          },
+          "printFormTemplate": {
+            "nullable": true
           }
         },
         "required": [
@@ -61936,6 +61939,9 @@
           },
           "targetEnrollStudentOnly": {
             "type": "boolean"
+          },
+          "printFormTemplate": {
+            "nullable": true
           },
           "_count": {
             "allOf": [
@@ -122690,6 +122696,9 @@
           "targetEnrollStudentOnly": {
             "type": "integer"
           },
+          "printFormTemplate": {
+            "type": "integer"
+          },
           "_all": {
             "type": "integer"
           }
@@ -122710,6 +122719,7 @@
           "anonymous",
           "surveyTopicId",
           "targetEnrollStudentOnly",
+          "printFormTemplate",
           "_all"
         ]
       },
