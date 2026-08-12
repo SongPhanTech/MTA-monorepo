@@ -23,7 +23,6 @@ const PutBoTieuChuanModal = () => {
     },
   })
 
-  console.log("objectType: ", input?.objectType)
 
   const { data: initialValue } = useFindUniqueEvaluationStandardSet(
     {

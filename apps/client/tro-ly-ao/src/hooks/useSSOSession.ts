@@ -47,7 +47,6 @@ const checkSSORedirect = (): boolean => {
   sessionStorage.setItem(SSO_CHECKED_FLAG, "true")
 
   if (sessionStorage.getItem(SSO_REDIRECT_FLAG)) {
-    console.log("[useSSOSession] Detected pending SSO redirect flag, invalidating cache")
     sessionStorage.removeItem(SSO_REDIRECT_FLAG)
     return true
   }
@@ -57,7 +56,6 @@ const checkSSORedirect = (): boolean => {
     try {
       const authHostname = new URL(authIssuer).hostname
       if (document.referrer && document.referrer.includes(authHostname)) {
-        console.log("[useSSOSession] Detected redirect from SSO via referrer, invalidating cache")
         return true
       }
     } catch {

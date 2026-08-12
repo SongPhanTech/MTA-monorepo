@@ -15,7 +15,6 @@ const HeaderApp: React.FC = () => {
         appCode: getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || "hrm",
       })
     } catch (error) {
-      console.log(error)
     }
   }, [])
 

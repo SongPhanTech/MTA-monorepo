@@ -117,7 +117,6 @@ const PutFixedClassModal = () => {
     include: { userProfile: true },
     orderBy: { userProfile: { firstName: "asc" } },
   })
-  // console.log(staffData)
   // const { data: lecturerData = [] } = useFindManyLecturer({
   //     include: {
   //         userProfile: true,

@@ -404,7 +404,6 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
         console.error("Không có dữ liệu để xuất")
         return
       }
-      console.log(data)
       const criteriaWithEvidence = await Promise.all(
         data.criteria.map(async (criterion) => {
           const res = await sqlTransaction([
@@ -523,7 +522,6 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
           criterionData?.evaluationCriterion?.currentSituation ||
           criterion?.evaluationCriterion?.currentSituation ||
           ""
-        console.log("--- 1. MÔ TẢ HIỆN TRẠNG ---", currentSituation)
         allChildren.push(
           ...(await htmlToParagraphs(processHtmlContent(currentSituation, evidenceTags)))
         )
@@ -539,7 +537,6 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
           criterionData?.evaluationCriterion?.strengths ||
           criterion?.evaluationCriterion?.strengths ||
           ""
-        console.log("--- 2. ĐIỂM MẠNH ---", strengths)
         allChildren.push(...(await htmlToParagraphs(processHtmlContent(strengths, evidenceTags))))
         allChildren.push(new Paragraph({ children: [new TextRun({ text: "" })] }))
 
@@ -553,7 +550,6 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
           criterionData?.evaluationCriterion?.weakness ||
           criterion?.evaluationCriterion?.weakness ||
           ""
-        console.log("--- 3. ĐIỂM TỒN TẠI ---", weakness)
         allChildren.push(...(await htmlToParagraphs(processHtmlContent(weakness, evidenceTags))))
         allChildren.push(new Paragraph({ children: [new TextRun({ text: "" })] }))
 
@@ -573,14 +569,12 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
           criterionData?.evaluationCriterion?.actionPlan ||
           criterion?.evaluationCriterion?.actionPlan ||
           ""
-        console.log("--- 4. KẾ HOẠCH HÀNH ĐỘNG ---", actionPlan)
         allChildren.push(...(await htmlToParagraphs(processHtmlContent(actionPlan, evidenceTags))))
         allChildren.push(new Paragraph({ children: [new TextRun({ text: "" })] }))
 
         // === 5. TỰ ĐÁNH GIÁ ===
         const scoreRaw =
           criterionData?.evaluationCriterion?.score || criterion?.evaluationCriterion?.score || ""
-        console.log("--- 5. TỰ ĐÁNH GIÁ ---", scoreRaw)
 
         const scoreText = scoreRaw.replace(/<[^>]*>/g, "").trim()
         const isKhongDat = /không\s*đạt|KĐ\b/i.test(scoreText)

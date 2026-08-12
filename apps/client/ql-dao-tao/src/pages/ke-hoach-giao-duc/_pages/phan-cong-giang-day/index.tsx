@@ -277,7 +277,6 @@ export default function PhanCongGiangDay({
     ]
   )
 
-  console.log(111, where)
 
   const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
     {
@@ -1126,7 +1125,6 @@ export default function PhanCongGiangDay({
       })
       setIsExportModalOpen(false)
     } catch (error) {
-      console.log("error", error)
     } finally {
       hideSpinner()
     }

@@ -44,7 +44,6 @@ const ChatIframeHeader = ({
       onClose()
     } else {
       if (typeof window !== "undefined" && window.parent && window.parent !== window) {
-        console.log("Sending TOGGLE_CHAT_WIDGET message to parent window")
         window.parent.postMessage({ type: "TOGGLE_CHAT_WIDGET" }, "*")
       }
     }

@@ -413,7 +413,6 @@ function SurveyOrganizationReport({
   //             }) || [],
   //         })) || [],
   //     }
-  //     console.log("data", templateData)
   //     const handler = new TemplateHandler()
   //     const doc = await handler.process(templateFile, templateData)
 

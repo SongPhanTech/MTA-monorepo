@@ -115,7 +115,6 @@ const ImportScoreModal = ({
 
     // Lọc chỉ những sinh viên được chọn
     const selectedData = previewData.filter((item) => selectedRowKeys.includes(item.id))
-    console.log(111, selectedData)
 
     // Validate data
     const errors: string[] = []

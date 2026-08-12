@@ -53,7 +53,6 @@ export default function TrainingCoursePage() {
     { enabled: !!idTrainingCourse.current }
   )
 
-  console.log("filters.schoolYearId", filters.schoolYearId)
 
   const where = useMemo(
     () => ({
@@ -154,7 +153,6 @@ export default function TrainingCoursePage() {
         },
       },
     ])
-    console.log("result", result)
     if (result.status !== 200) return
     const data: any = result.data[0]
     const rows =

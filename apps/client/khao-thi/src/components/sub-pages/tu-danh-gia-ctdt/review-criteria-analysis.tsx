@@ -116,7 +116,6 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
       toggleCommentRow(requirementCriterionId)
       message.success("Gửi yêu cầu chỉnh sửa tiêu chí thành công")
     } catch (error) {
-      console.log(error)
       message.error("Gửi yêu cầu chỉnh sửa tiêu chí thất bại, vui lòng thử lại")
     } finally {
       hideSpinner()

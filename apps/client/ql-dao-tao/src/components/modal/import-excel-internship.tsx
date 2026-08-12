@@ -40,7 +40,6 @@ const ImportInternshipModal = ({ visible, onSuccess, onCancel }: ImportInternshi
         setDisabledButton(false)
       }
       setErrorData(errors)
-      console.log(errors)
     }
     reader.readAsArrayBuffer(file)
   }

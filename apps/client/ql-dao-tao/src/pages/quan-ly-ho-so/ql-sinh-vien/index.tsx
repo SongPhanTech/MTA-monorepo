@@ -92,7 +92,6 @@ export default function UserProfilePageDs() {
         message.error(res.data.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
       }
     } catch (error) {
-      console.log(error)
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()
@@ -115,7 +114,6 @@ export default function UserProfilePageDs() {
         message.error(res.data.message)
       }
     } catch (error) {
-      console.log(error)
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()
@@ -560,7 +558,6 @@ export default function UserProfilePageDs() {
       await deleteUserProfile({ where: { id: userProfileId } })
       message.success("Xóa thành công")
     } catch (error) {
-      console.log(error)
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()

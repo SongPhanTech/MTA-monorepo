@@ -37,7 +37,6 @@ function DanhSachThongBao() {
               <div
                 key={item?.id}
                 onClick={() => {
-                  console.log("open into")
                   onOpen(item?.id)
                 }}
                 className="cursor-pointer"

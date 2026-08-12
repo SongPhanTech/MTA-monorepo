@@ -371,7 +371,6 @@ export default function SettingCouncil() {
         width: 200,
         render: (_: any, record: any) => {
           const student = record.thesis?.[0]?.registrations?.[0]?.student
-          console.log(student)
           return (
             <div>
               <div className="font-bold text-primary">

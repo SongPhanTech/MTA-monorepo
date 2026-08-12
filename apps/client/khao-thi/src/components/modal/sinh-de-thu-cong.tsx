@@ -227,7 +227,6 @@ const SinhDeThuCongModal = () => {
         message.error(input?.id ? "Cập nhật đề thất bại!" : "Tạo đề thất bại!")
       }
     } catch (error) {
-      console.log(error)
       message.error("Tạo đề thất bại!")
     }
   }

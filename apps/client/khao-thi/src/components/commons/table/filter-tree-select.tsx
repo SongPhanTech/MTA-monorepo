@@ -57,7 +57,6 @@ export default function FilterTreeSelect({ item, filtersTable, setFiltersTable }
   }
   const [input, setInput] = useState("")
   const [optionsSearch, setOptionsSearch] = useState(item?.options)
-  console.log(optionsSearch, "2", item?.options)
   const handleSearchTree = async (value: string) => {
     if (!value.trim()) {
       setOptionsSearch(item?.options || [])

@@ -257,7 +257,6 @@ const PutStudentModal = () => {
       })
       onClose()
     } catch (error) {
-      console.log("Error updating student:", error)
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()

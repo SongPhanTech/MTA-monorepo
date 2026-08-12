@@ -136,7 +136,6 @@ const SinhDeModal = () => {
 
       // onClose()
     } catch (error) {
-      console.log(error)
       message.error("Tạo đề thất bại!")
     }
   }

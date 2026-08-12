@@ -89,7 +89,6 @@ function TakeTestPage() {
 
   async function onOk() {
     const dataSubmit = form.getFieldsValue()
-    console.log(dataSubmit)
 
     const studentCode = formUser.getFieldValue("code")
 

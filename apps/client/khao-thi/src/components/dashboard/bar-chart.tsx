@@ -18,7 +18,6 @@ const BarChart: React.FC<ChartProps> = ({ className, dataMap }) => {
     }
     return []
   }, [dataMap])
-  console.log(dataMap)
 
   const config = {
     data,

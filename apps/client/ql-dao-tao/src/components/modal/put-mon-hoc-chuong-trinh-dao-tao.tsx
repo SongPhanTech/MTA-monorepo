@@ -240,7 +240,6 @@ const PutTrainingBlockSubject = () => {
       className="min-w-[400px] w-[500px]"
       formProps={{
         onValuesChange: (changedValues) => {
-          console.log("changedValues", changedValues)
         },
       }}
     >

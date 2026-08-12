@@ -430,7 +430,6 @@ const ExamImportModal: React.FC = () => {
       }
 
       // Debug: log các dòng trích xuất được từ Word
-      console.log("Extracted lines from Word:", lines)
 
       // Parse câu hỏi
       const questions = parseQuestions(lines)

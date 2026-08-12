@@ -50,7 +50,6 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
           existingLecturerMap.set(lec.code, lec.userProfile.idCardNumber)
         }
       })
-      console.log("Existing lecturers from DB:", existingLecturerMap.size)
 
       const { lecturers, errors } = parseSheetLecturer(
         e.target?.result as ArrayBuffer,
@@ -61,7 +60,6 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
         setDisabledButton(false)
       }
       setErrorData(errors)
-      console.log("Parse errors:", errors)
     }
     reader.readAsArrayBuffer(file)
   }

@@ -339,7 +339,6 @@ export default function TrainingMajorPage() {
             currentPage={currentPage}
             filters={filters}
             setFilters={(value) => {
-              console.log(value)
               if (value.active?.length === 0 || value.active?.length === 2) {
                 value.active = undefined
               }

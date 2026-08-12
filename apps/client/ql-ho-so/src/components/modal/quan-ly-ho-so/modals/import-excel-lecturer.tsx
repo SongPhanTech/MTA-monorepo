@@ -47,7 +47,6 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportLecturerModalProps) =>
         setDisabledButton(false)
       }
       setErrorData(errors)
-      console.log(errors)
     }
     reader.readAsArrayBuffer(file)
   }

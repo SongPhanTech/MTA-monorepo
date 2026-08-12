@@ -260,7 +260,6 @@ async function handleExcelJSDefault(
       worksheet = workbook.worksheets[0]
     }
     if (!worksheet) {
-      console.log("Cannot find or create sheet:", sheet)
       continue
     }
     if (sheetOption.hiddenColumns && sheetOption.hiddenColumns.length > 0) {

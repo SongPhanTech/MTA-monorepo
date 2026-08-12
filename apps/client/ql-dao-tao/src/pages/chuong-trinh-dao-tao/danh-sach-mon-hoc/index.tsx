@@ -320,7 +320,6 @@ export default function SubjectList() {
     }
   }
   const handleLogHistory = (record: any) => {
-    // console.log(record)
   }
 
   async function handleDeleteSubject(id: string) {

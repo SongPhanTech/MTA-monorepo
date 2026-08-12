@@ -146,7 +146,6 @@ export default function TextEditorMenuBar({
 
   const insertPinFormula = (value: { value: string; label: string }) => {
     if (!editor) return
-    console.log(value)
     if (value) {
       try {
         editor

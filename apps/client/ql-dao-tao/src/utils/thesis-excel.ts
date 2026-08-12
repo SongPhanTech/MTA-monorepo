@@ -3060,15 +3060,6 @@ export const exportBanSaoHDDGLV = async ({
   signingDate,
 }: ExportOptions) => {
   const logPrefix = "[exportBanSaoHDDGLV]"
-  console.log(`${logPrefix} START`, {
-    origin: typeof window !== "undefined" ? window.location.origin : "ssr",
-    href: typeof window !== "undefined" ? window.location.href : "ssr",
-    thesisSessionId,
-    signerName,
-    isChief,
-    signingDate,
-    studentCount: allStudentsInClasses?.length ?? 0,
-  })
 
   if (!allStudentsInClasses?.length) {
     console.warn(`${logPrefix} STOP: allStudentsInClasses rỗng`)
@@ -3086,32 +3077,11 @@ export const exportBanSaoHDDGLV = async ({
     })
     .filter(Boolean)
 
-  console.log(`${logPrefix} Sau filter theo thesisSessionId`, {
-    thesisSessionId,
-    inputCount: allStudentsInClasses.length,
-    projectCount: project.length,
-    sampleStudentIds: project.slice(0, 5).map((s: any) => s?.id ?? s?.userProfile?.id),
-    missingProjectCount: allStudentsInClasses.length - project.length,
-  })
 
   try {
     showSpinner?.()
     const dataConvert = convertToBanSaoHDDGLV(project, signerName, isChief, signingDate)
 
-    console.log(`${logPrefix} convertToBanSaoHDDGLV result`, {
-      dataConvertLength: dataConvert?.length ?? 0,
-      sampleItem: dataConvert?.[0]?.data
-        ? {
-            tenHocVien: dataConvert[0].data.tenHocVien,
-            deTai: dataConvert[0].data.deTai,
-            soQd: dataConvert[0].data.soQd,
-            tenChuTich: dataConvert[0].data.tenChuTich,
-            tenThuKy: dataConvert[0].data.tenThuKy,
-            nguoiki1: dataConvert[0].data.nguoiki1,
-            nguoiki2: dataConvert[0].data.nguoiki2,
-          }
-        : null,
-    })
 
     if (!dataConvert || dataConvert.length === 0) {
       console.warn(`${logPrefix} STOP: dataConvert rỗng sau convert`)
@@ -3127,14 +3097,6 @@ export const exportBanSaoHDDGLV = async ({
       },
     }
     const payloadJson = JSON.stringify(payload)
-    console.log(`${logPrefix} Gọi docxTemplate`, {
-      fileName: payload.fileName,
-      path: payload.path,
-      prefix: payload.prefix,
-      itemsCount: payload.data.items.length,
-      payloadSizeBytes: new Blob([payloadJson]).size,
-      payloadSizeKB: Number((new Blob([payloadJson]).size / 1024).toFixed(2)),
-    })
 
     const response = await docxTemplate(payload)
 
@@ -3147,26 +3109,6 @@ export const exportBanSaoHDDGLV = async ({
       }
     }
 
-    console.log(`${logPrefix} docxTemplate response`, {
-      status: response?.status,
-      hasData: !!response?.data,
-      dataType: response?.data?.constructor?.name,
-      blobSize: response?.data instanceof Blob ? response.data.size : undefined,
-      blobType: response?.data instanceof Blob ? response.data.type : undefined,
-      errorBodyText,
-      headers: (() => {
-        const h = response?.headers
-        if (!h) return null
-        try {
-          if (typeof (h as Headers).entries === "function") {
-            return Object.fromEntries(Array.from((h as Headers).entries()))
-          }
-          return Object.fromEntries(Object.entries(h as unknown as Record<string, string>))
-        } catch {
-          return String(h)
-        }
-      })(),
-    })
 
     if (response.status !== 200) {
       console.error(`${logPrefix} STOP: status !== 200`, {
@@ -3182,13 +3124,7 @@ export const exportBanSaoHDDGLV = async ({
       return []
     }
     const blob = response.data
-    console.log(`${logPrefix} Bắt đầu downloadFile`, {
-      fileName: "BanSaoHoiDongDanhGiaLuanVan.docx",
-      blobSize: blob instanceof Blob ? blob.size : undefined,
-      blobType: blob instanceof Blob ? blob.type : typeof blob,
-    })
     downloadFile(blob, "BanSaoHoiDongDanhGiaLuanVan.docx")
-    console.log(`${logPrefix} SUCCESS`)
     message.success("Xuất file thành công")
   } catch (error) {
     const err = error as any
@@ -3203,7 +3139,6 @@ export const exportBanSaoHDDGLV = async ({
     })
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
-    console.log(`${logPrefix} FINALLY (hideSpinner)`)
     hideSpinner?.()
   }
 }

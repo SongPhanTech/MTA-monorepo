@@ -382,11 +382,9 @@ function SelectLecturer({
     preserveSelectedRowKeys: true,
     onChange: (selectedRowKeys: any, selectedRows: any, info: any) => {
       if (info.type === "all") {
-        console.log("all")
       }
     },
     // onChange: (newSelectedRowKeys: React.Key[]) => {
-    //     console.log(newSelectedRowKeys)
 
     //     setSelectedRowKeys(newSelectedRowKeys)
     //     form.setFieldsValue({

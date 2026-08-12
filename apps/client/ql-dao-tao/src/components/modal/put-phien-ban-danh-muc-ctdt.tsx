@@ -14,6 +14,7 @@ import {
   type DiplomaType,
   type DocumentFile,
   type Prisma,
+  type TrainingCourse,
   type TrainingForm,
   type TrainingObjectType,
   type TrainingTime,
@@ -22,6 +23,7 @@ import {
   useCreateCurriculumVersion,
   useDeleteCurriculumVersion,
   useFindManyDiplomaType,
+  useFindManyTrainingCourse,
   useFindManyTrainingLanguage,
   useFindManyTrainingLevel,
   useFindManyTrainingTime,
@@ -105,6 +107,17 @@ const PutCurriculumVersion = () => {
   const { data: trainingLanguageData = [] } = useFindManyTrainingLanguage({
     where: { active: true },
     orderBy: { name: "asc" },
+  })
+  const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+    where: {
+      trainingObjectTypeId: trainingObjectTypeId || undefined,
+      deletedAt: null,
+    },
+    orderBy: {
+      semesterStart: {
+        startDate: "desc",
+      },
+    },
   })
 
   const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
@@ -223,6 +236,7 @@ const PutCurriculumVersion = () => {
         yearApplication: output.yearApplication,
         trainingObjectTypeId: output.trainingObjectTypeId,
         trainingLevelId: output.trainingLevelId || trainingObjectTypeSelected?.trainingLevelId,
+        trainingCourseId: output.trainingCourseId || null,
         trainingTypeId: output.trainingTypeId,
         trainingTimeId: output.trainingTimeId,
         diplomaTypeId: output.diplomaTypeId,
@@ -556,6 +570,20 @@ const PutCurriculumVersion = () => {
                     </FormItem>
                   </Col>
                   <Col span={12}>
+                    <FormItem form={form} label="Khoá học" name="trainingCourseId">
+                      <Select
+                        placeholder="Chọn khoá học"
+                        options={trainingCourseData.map((i: TrainingCourse) => ({
+                          value: i.id,
+                          label: i.name,
+                        }))}
+                        allowClear
+                        showSearch
+                        optionFilterProp="label"
+                      />
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
                     <FormItem form={form} label="Bậc đào tạo" name="trainingLevelId">
                       <Select
                         placeholder="Chọn bậc đào tạo"
@@ -563,7 +591,6 @@ const PutCurriculumVersion = () => {
                           value: i.id,
                           label: i.name,
                         }))}
-                        disabled
                         allowClear
                       />
                     </FormItem>

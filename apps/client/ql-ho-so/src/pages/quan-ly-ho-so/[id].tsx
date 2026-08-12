@@ -456,7 +456,6 @@ export default function UpdateUserPage() {
         bLaCanBoNhanVien: values.bLaCanBoNhanVien || undefined,
         bLaGiangVien: bLaGiangVien || undefined,
       }).catch((error) => {
-        console.log(error)
       })
       let rank = null
       let hocvi = null

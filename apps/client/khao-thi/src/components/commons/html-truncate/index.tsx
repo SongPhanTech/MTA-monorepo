@@ -18,7 +18,6 @@ export default function HtmlTruncate({ children }: TypeProps) {
   }, [show, showButton])
   const handleShowMore = () => {
     setShow(!show)
-    console.log(show)
   }
 
   useEffect(() => {

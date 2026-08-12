@@ -470,7 +470,6 @@ const PutLichVaSuKienModal = () => {
 
     // Regular single event deletion without confirmation
     try {
-      console.log("Deleting regular single event:", payload.id)
       await deleteClassSchedule({ where: { id: payload.id } })
       message.success("Xóa sự kiện thành công")
     } catch (error) {

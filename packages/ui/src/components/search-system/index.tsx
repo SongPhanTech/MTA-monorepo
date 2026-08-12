@@ -32,7 +32,6 @@ const options: SearchSystemOptionType[] = Object.entries(NAVIGATION).map(([key, 
 }))
 
 const onChange: CascaderProps<SearchSystemOptionType>["onChange"] = (value, selectedOptions) => {
-  console.log(value, selectedOptions)
 }
 const filter = (inputValue: string, path: SearchSystemOptionType[]) =>
   path.some(
@@ -52,7 +51,6 @@ const SearchSystem = () => {
       onChange={onChange}
       placeholder="Tìm kiếm hệ thống"
       showSearch={{ filter }}
-      onSearch={(value) => console.log(value)}
     />
   )
 }

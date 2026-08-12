@@ -48,7 +48,6 @@ export const getOCRResult = async (taskId: string): Promise<OCRResult> => {
 export const cancelOCRTask = async (taskId: string): Promise<void> => {
   try {
     await axios.post(`${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/cancel/${taskId}`)
-    console.log("[OCR Cancel] Đã hủy task OCR với task_id:", taskId)
   } catch (_error: any) {
     console.error("[OCR Cancel] Lỗi hủy task OCR:", _error)
   }
@@ -61,7 +60,6 @@ export const stopOCRPolling = (taskId: string): void => {
   if (timeoutId) {
     clearTimeout(timeoutId)
     pollTimeouts.delete(taskId)
-    console.log("[OCR Polling] Dừng polling với task_id:", taskId)
   }
 }
 
@@ -85,7 +83,6 @@ export const pollOCRResult = async (
       const result = await getOCRResult(taskId)
 
       if (result.status === "done") {
-        console.log("[OCR Polling] Hoàn thành xử lý OCR với task_id:", taskId)
         pollTimeouts.delete(taskId)
         onSuccess(result)
       } else if (result.status === "error" || result.status === "failed") {
@@ -94,9 +91,6 @@ export const pollOCRResult = async (
         if (onError) onError(result)
       } else if (result.status === "processing") {
         retries++
-        console.log(
-          `[OCR Polling] Đang xử lý OCR (lần ${retries}/${maxRetries}), task_id: ${taskId}`
-        )
         if (retries < maxRetries) {
           const timeoutId = setTimeout(poll, intervalMs)
           pollTimeouts.set(taskId, timeoutId)

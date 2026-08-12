@@ -427,7 +427,6 @@ export function LichCongTac({
   })
 
   const handleSelectEventReactBigCalendar = (event: CustomCalendarEvent) => {
-    console.log("event", event)
     if (event?.subjectClassId) {
       onOpenSubjectClass({
         id: event?.subjectClassId as string,
@@ -467,7 +466,6 @@ export function LichCongTac({
     let source = "single-day"
     if (eventRecord?.isWeekRow) source = "full-week"
     else if (eventRecord?.isMultiDayRow) source = "multi-day"
-    console.log("eventRecord", eventRecord)
   }
 
   const handleCreateEventTableCalendar = (startTime: string, endTime: string) => {

@@ -42,7 +42,6 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
     { query: { enabled: !!trainingObjectTypeId && !!subjectVersionId } }
   )
 
-  console.log("res: ", res)
 
   // queryKey /api/subject-class/open-subject-class-retake
 

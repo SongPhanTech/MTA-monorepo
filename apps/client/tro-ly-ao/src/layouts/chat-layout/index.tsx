@@ -181,12 +181,9 @@ const ChatLayout = ({
 
   // Iframe handlers
   const handleIframeClose = () => {
-    console.log("handleIframeClose called in ChatLayout")
     if (typeof window !== "undefined" && window.parent) {
-      console.log("Sending TOGGLE_CHAT_WIDGET message to parent")
       window.parent.postMessage({ type: "TOGGLE_CHAT_WIDGET" }, "*")
     } else {
-      console.log("window.parent not available")
     }
   }
 

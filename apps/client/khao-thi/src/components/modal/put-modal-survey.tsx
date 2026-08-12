@@ -368,7 +368,6 @@ const PutSurveyModal = () => {
 
       // refetch() lại danh sách level
     } catch (error: any) {
-      console.log(error)
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()

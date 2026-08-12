@@ -24,7 +24,6 @@ const fetchInstance = async (url: string, options?: RequestInit) => {
                     })
                     window.dispatchEvent(event)
                 }
-                console.log('code come here 401')
             }
             return res
         })

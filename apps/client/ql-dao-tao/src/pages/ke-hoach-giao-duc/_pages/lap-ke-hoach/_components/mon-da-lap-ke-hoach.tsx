@@ -326,7 +326,6 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                   message.success("Xoá môn đã lập kế hoạch thành công")
                   form.resetFields()
                 } catch (error) {
-                  console.log(error)
                   message.error("Xoá môn đã lập kế hoạch thất bại")
                 }
                 hideSpinner()

@@ -269,7 +269,6 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         message.error(res?.data?.message)
       }
     } catch (error) {
-      console.log(error)
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()

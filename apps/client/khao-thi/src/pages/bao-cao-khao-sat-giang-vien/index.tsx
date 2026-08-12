@@ -312,7 +312,6 @@ export default function BaoCaoGiangVien() {
     if (!organizations.length || !lecturerData.length) return []
     // const treeData1 = buildDonViTree(organizations.map(i=>{return {...i,key:i.Id,title:i.sTen}}))
 
-    // console.log(treeData1, '123')
     // return treeData1
     return buildOrgAndLectureTree(
       organizations.map((org) => ({
@@ -486,7 +485,6 @@ export default function BaoCaoGiangVien() {
       return <div className="my-10 text-center text-primary text-base">Chọn đợt khảo sát</div>
     }
     if (filters?.clusterId) {
-      console.log(selectedItem, "123")
 
       if (selectedItem?.id && selectedItem?.iCapDonVi === 0 && selectedItem?.iLoaiDonVi === 0) {
         return (
@@ -657,7 +655,6 @@ export default function BaoCaoGiangVien() {
               // setFilters((prev: any) => ({
               //     ...prev,
               // }))
-              // console.log('selectedItem:', info.node)
             }}
           />
         )}

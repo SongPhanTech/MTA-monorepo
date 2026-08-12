@@ -11,7 +11,6 @@ const IndexPage = () => {
   const router = useRouter()
 
   useEffect(() => {
-    console.log(status)
     if (status === "authenticated") {
       const flatMenu = menus.flat()
 

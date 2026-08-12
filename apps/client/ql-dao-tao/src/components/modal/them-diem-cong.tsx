@@ -146,7 +146,6 @@ const PutAddOlympicScoreModal = () => {
       }
       onClose()
     } catch (error) {
-      console.log(error)
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()

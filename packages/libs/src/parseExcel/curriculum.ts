@@ -222,7 +222,6 @@ export const parseCurriculumSheet = (file: ArrayBufferLike): ParseCurriculumShee
       continue
     }
 
-    console.log("skip:", Object.values(row).join("; "))
   }
 
   if (trainingBlocks.length === 0) {

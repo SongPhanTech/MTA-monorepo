@@ -139,7 +139,6 @@ export default function NhapDiemPhach() {
     }
   }
 
-  console.log("ExamId: ", examId)
 
   const handlePrint = async () => {
     if (!!subjectClassId && subjectClassId?.length > 0) {

@@ -43,7 +43,6 @@ const PutUploadProfileModal = () => {
       //   "api/UserProfile/upload-excel-create-user-profile"
       // );
       // const data = await res.json();
-      // console.log(res.ok);
       // if (res.ok) {
       //   message.success("Tải lên thành công!");
       // } else {
@@ -55,7 +54,6 @@ const PutUploadProfileModal = () => {
       //         'Content-Type': 'multipart/form-data',
       //     },
       // })
-      // console.log(response)
       message.success("Tải lên thành công!")
 
       // refetch() lại danh sách level

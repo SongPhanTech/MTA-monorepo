@@ -195,7 +195,6 @@ export default function UserProfilePageDs() {
       })
       message.success("Xoá hồ sơ thành công")
     } catch (error) {
-      console.log(error)
 
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {

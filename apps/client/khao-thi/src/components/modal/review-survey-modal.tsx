@@ -125,16 +125,6 @@ const ReviewSurveyModal = () => {
         runningIndex++
         return row
       })
-      console.log(
-        "DEBUG SPECIFIC:",
-        Object.values(groupedMap).flatMap((group: any) =>
-          group.questions.map((q: any) => ({
-            questionId: q.surveyQuestionId,
-            surveyChoiceId: q.surveyChoiceId,
-            specificChoice: q.specificChoice,
-          }))
-        )
-      )
       return [groupRow, ...questionRows]
     })
   }, [data])
@@ -158,7 +148,6 @@ const ReviewSurveyModal = () => {
       form.setFieldsValue({
         questionsList: result,
       })
-      console.log(form.getFieldsValue())
     }
   }, [data, requireExplanation])
 

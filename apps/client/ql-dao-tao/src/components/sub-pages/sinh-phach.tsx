@@ -323,7 +323,6 @@ export default function SinhPhach() {
           initialValues={{ list: {} }}
           onValuesChange={(changedValue) => {
             const key = Object.keys(changedValue.list)?.[0]
-            console.log("key", key)
 
             form.setFieldValue(["list", key, "isEdit"], true)
           }}

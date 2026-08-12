@@ -111,8 +111,6 @@ export const getAllChildrenByParentId = (
   treeData: TreeNodeOrganization[],
   parentId: string | number
 ): TreeNodeOrganization[] => {
-  console.log(treeData)
-  console.log(parentId)
   const parentNode = findNodeById(treeData, parentId)
   if (!parentNode) return []
   return [parentNode, ...getAllDescendants(parentNode)]

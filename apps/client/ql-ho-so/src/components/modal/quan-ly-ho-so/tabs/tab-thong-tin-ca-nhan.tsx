@@ -112,7 +112,6 @@ export default function ThongTinCaNhanTab({
   const fillUserInfo = useCallback(
     (userData: any) => {
       if (!userData) return
-      console.log(userData, "log", type)
 
       // Fill thông tin cơ bản từ UserProfile
       form.setFieldsValue({

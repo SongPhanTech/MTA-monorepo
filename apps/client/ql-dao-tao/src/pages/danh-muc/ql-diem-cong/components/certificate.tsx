@@ -185,7 +185,6 @@ export default function Certificate() {
                 align: "center",
                 type: "input",
                 render: (__, record) => {
-                  console.log(record)
 
                   return record?.subject?.name || ""
                 },
@@ -208,7 +207,6 @@ export default function Certificate() {
                   "XOA"
                 ),
                 render: (_, { id, certificateId, certificate }) => {
-                  console.log(certificate)
 
                   return (
                     <Row className="justify-center gap-2">

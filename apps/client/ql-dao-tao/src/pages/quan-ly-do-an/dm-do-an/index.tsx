@@ -598,7 +598,6 @@ export default function DanhMucDoAn() {
         (i) => i?.defenseRecordFinalScore
       )
       const subjectClassIds = [...new Set(enteredExamScore.map((i) => i.subjectClassId))]
-      console.log(subjectClassIds, enteredExamScore)
       if (subjectClassIds.length > 0) {
         subjectClassIds.forEach((i) => {
           transactions.push({

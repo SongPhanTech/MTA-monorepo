@@ -15,7 +15,6 @@ const HeaderApp: React.FC<{ className?: string }> = ({ className }) => {
         appCode: getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || "dangkyhoc",
       })
     } catch (error) {
-      console.log(error)
     }
   }, [])
 

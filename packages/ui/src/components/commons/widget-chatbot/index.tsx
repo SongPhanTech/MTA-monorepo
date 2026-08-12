@@ -8,7 +8,6 @@ export const WidgetChatbot = ({ src = "https://mta.swantech.vn/chatbot/tro-ly-ao
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data.type === "TOGGLE_CHAT_WIDGET") {
-        // console.log('Received TOGGLE_CHAT_WIDGET message from iframe')
         setOpen(false)
       }
     }

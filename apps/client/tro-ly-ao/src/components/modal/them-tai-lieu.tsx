@@ -234,7 +234,6 @@ const ThemTaiLieu = () => {
   const processWithOCR = async (file: File, fileId: string) => {
     return new Promise<string>((resolve) => {
       try {
-        console.log("[OCR] Bắt đầu xử lý OCR cho file:", file.name)
 
         // Bắt đầu OCR
         form.setFieldsValue({
@@ -251,7 +250,6 @@ const ThemTaiLieu = () => {
         ;(async () => {
           try {
             const ocrResult = await fetchOCR(file)
-            console.log("[OCR] Upload file thành công, task_id:", ocrResult.task_id)
 
             // Check taskId hợp lệ
             if (!ocrResult.task_id) {
@@ -286,10 +284,6 @@ const ThemTaiLieu = () => {
               ocrResult.task_id,
               (result) => {
                 const textResult = result.output || result.text || ""
-                console.log(
-                  `[OCR] Text trích xuất được (length: ${textResult.length}):`,
-                  textResult.substring(0, 500)
-                )
 
                 form.setFieldsValue({
                   files: {
@@ -427,14 +421,11 @@ const ThemTaiLieu = () => {
                 },
               })
               documentBody = await processWithOCR(file.file, file.id)
-              console.log(`[OCR] Body sau khi xử lý (length: ${documentBody.length})`)
             } else if (isPDFFile(file.file)) {
               isTextPdf = await isPDFTextDocument(file.file)
               if (!isTextPdf) {
                 needOCR = true
-                console.log("[PDF] Xác định PDF ảnh, chuyển sang OCR")
                 documentBody = await processWithOCR(file.file, file.id)
-                console.log(`[OCR] Body sau khi xử lý (length: ${documentBody.length})`)
               }
             }
 
@@ -502,7 +493,6 @@ const ThemTaiLieu = () => {
 
             if (needOCR && documentBody && documentBody.trim().length > 0) {
               try {
-                console.log("[OCR] Kiểm tra trùng lặp cho file OCR")
                 pendingAPICallsRef.current++
                 const resReaderDocument = await fetchReadDocumentContentDocumentDocumentReaderPost({
                   body: {
@@ -544,7 +534,6 @@ const ThemTaiLieu = () => {
               }
 
               if (isPDFFile(file.file) && isTextPdf && !hasEnoughPdfText(documentBody)) {
-                console.log("[PDF] Server đọc chưa đủ nội dung, fallback đọc text local")
                 documentBody = await extractPDFTextContent(file.file)
               }
 
@@ -553,7 +542,6 @@ const ThemTaiLieu = () => {
                 !isTextPdf &&
                 (!documentBody || documentBody.trim().length < 50)
               ) {
-                console.log("[OCR] PDF không có text, chuyển sang OCR")
                 form.setFieldsValue({
                   files: {
                     ...form.getFieldValue("files"),
@@ -569,7 +557,6 @@ const ThemTaiLieu = () => {
 
                 if (documentBody && documentBody.trim().length > 0) {
                   try {
-                    console.log("[OCR Fallback] Kiểm tra trùng lặp")
                     pendingAPICallsRef.current++
                     const resReaderDocumentRetry =
                       await fetchReadDocumentContentDocumentDocumentReaderPost({
@@ -638,7 +625,6 @@ const ThemTaiLieu = () => {
         })
       )
     } catch (error) {
-      console.log("error", error)
     }
   }
 
@@ -683,7 +669,6 @@ const ThemTaiLieu = () => {
             .filter((file) => file.isProcessingOCR && file.taskId)
             .map(async (file) => {
               if (file.taskId) {
-                console.log("[OCR] Hủy task OCR", file.file.name)
                 await cancelOCRTask(file.taskId)
                 stopOCRPolling(file.taskId)
                 cancelledFiles.push(file.file.name)
@@ -717,12 +702,6 @@ const ThemTaiLieu = () => {
       // Tạo document trước, sau đó tạo DocumentTopic
       await Promise.all(
         Object.values(values.files).map(async ({ body, file, url, customName }) => {
-          console.log("[Database] Lưu tài liệu:", {
-            fileName: customName || file.name,
-            fileType: file.type,
-            bodyLength: body.length,
-            isOCR: isImageFile(file) || isPDFFile(file),
-          })
           // Tạo document
           const newDocument = await createDocument({
             data: {
@@ -734,7 +713,6 @@ const ThemTaiLieu = () => {
               classificationId: values.classificationId || null,
             },
           })
-          console.log("[Database] Đã lưu document ID:", newDocument?.id)
 
           // Tạo DocumentTopic cho tất cả topicIds
           if (newDocument && values.topicIds.length > 0) {
@@ -943,7 +921,6 @@ const ThemTaiLieu = () => {
 
                     // Nếu file đang OCR thì cancel task trước
                     if (file.isProcessingOCR && file.taskId) {
-                      console.log("[OCR] Hủy task OCR cho file:", file.file.name)
                       await cancelOCRTask(file.taskId)
                       stopOCRPolling(file.taskId)
                     }

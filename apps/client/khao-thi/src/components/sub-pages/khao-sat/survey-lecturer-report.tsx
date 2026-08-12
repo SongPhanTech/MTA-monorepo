@@ -117,7 +117,6 @@ function SurveylecturerReport({
 
     return { categories, series }
   }
-  console.log(dataLevel)
 
   const dataBarchart = useMemo(() => {
     let label: string[] = []

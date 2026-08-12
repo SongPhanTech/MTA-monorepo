@@ -56,7 +56,6 @@ export default function HocHamHocViTab({
   const { mutateAsync: updateHocVi } = useUpdateHocVi()
   const { mutateAsync: updateHocHam } = useUpdateHocHam()
 
-  console.log(studentData, userSelected)
 
   const handleCollapseChange = (collapseId: string) => (key: string | string[]) => {
     if (key && key.length > 0) {

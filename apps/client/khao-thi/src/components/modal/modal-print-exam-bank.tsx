@@ -38,13 +38,10 @@ export const ModalPrintExamBank = () => {
     if (!input?.data) return
 
     try {
-      console.log("Loading template file...")
       const res = await loadFile(
         `${getRuntimeEnv("NEXT_PUBLIC_ASSET_PREFIX")}/templates/InDeThi.docx`
       )
-      console.log("Template loaded successfully:", !!res)
 
-      console.log("Initializing Docxtemplater...")
       const doc = new Docxtemplater(res, {
         linebreaks: true,
         paragraphLoop: true,
@@ -81,11 +78,8 @@ export const ModalPrintExamBank = () => {
               : "Chưa có nội dung",
           })) || [],
       }
-      console.log(templateData)
 
-      console.log("Rendering template with data...")
       await doc.renderAsync(templateData)
-      console.log("Template rendered successfully")
 
       const blob = exportFile(doc.getZip())
       const fileName = `De_thi_mon_${input?.subjectVersionName}_${input?.examCode}_${dayjs().format("DDMMYYYY")}.docx`

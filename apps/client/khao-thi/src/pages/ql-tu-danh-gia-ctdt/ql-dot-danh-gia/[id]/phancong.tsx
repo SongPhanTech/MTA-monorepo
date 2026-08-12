@@ -182,7 +182,6 @@ export default function EvaluationAssignmentPage() {
 
       message.success("Lưu phân công giảng viên đánh giá thành công")
 
-      console.log(listData)
     } catch (error: any) {
       message.error(error.message || "Đã có lỗi xảy ra")
     } finally {
