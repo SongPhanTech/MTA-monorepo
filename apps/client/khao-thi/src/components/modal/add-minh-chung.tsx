@@ -1,6 +1,7 @@
 import PutFormModal from "@components/commons/put-modal"
 import useSpinner from "@hooks/spinner"
-import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from "@workspace/db"
+import { useSession } from "@workspace/auth/react"
+import type { AnalysisFormEvidence, Evidence, Prisma, RequirementCriterion } from "@workspace/db"
 import {
   useFindManyEvidence,
   useFindManyEvidenceCategory,
@@ -155,8 +156,28 @@ const AddEvidenceToPeriod = () => {
       hideSpinner()
     }
   }
-  const { data: listEvidence } = useFindManyEvidence()
+  const { data: dataUser } = useSession()
+
+  const evidenceWhere: Prisma.EvidenceWhereInput = useMemo(() => {
+    const userFilters: Prisma.EvidenceWhereInput[] = []
+    if (dataUser?.sDM_NhanVienId) {
+      userFilters.push({ createdBy: dataUser.sDM_NhanVienId })
+    }
+    if (dataUser?.userId && dataUser.userId !== dataUser.sDM_NhanVienId) {
+      userFilters.push({ createdBy: dataUser.userId })
+    }
+
+    return {
+      deletedAt: null,
+      ...(userFilters.length > 0 ? { OR: userFilters } : {}),
+    }
+  }, [dataUser?.sDM_NhanVienId, dataUser?.userId])
+
+  const { data: listEvidence } = useFindManyEvidence({
+    where: evidenceWhere,
+  })
   const { data: listEvidenceCategory } = useFindManyEvidenceCategory()
+
 
   const treeData = useMemo(() => {
     if (!listEvidenceCategory || !listEvidence) return []

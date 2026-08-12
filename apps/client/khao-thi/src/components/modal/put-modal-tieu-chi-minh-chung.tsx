@@ -13,8 +13,10 @@ import {
   createId,
   type Evidence,
   type EvidenceFile,
+  type Prisma,
   type RequirementCriterion,
 } from "@workspace/db"
+
 import {
   useCreateEvidence,
   useFindManyEvidence,
@@ -100,19 +102,33 @@ const PutTieuChiMinhChungModal = () => {
   const allowedCategoryIds = evaluationPeriod?.evidenceCategories?.map((item) => item.id) ?? []
   const hasAllowedCategories = allowedCategoryIds.length > 0
 
-  // Chỉ list minh chứng thuộc nhóm đã chọn ở đợt; chưa chọn → list rỗng (không load hết)
+  const evidenceWhere: Prisma.EvidenceWhereInput = useMemo(() => {
+    const userFilters: Prisma.EvidenceWhereInput[] = []
+    if (dataUser?.sDM_NhanVienId) {
+      userFilters.push({ createdBy: dataUser.sDM_NhanVienId })
+    }
+    if (dataUser?.userId && dataUser.userId !== dataUser.sDM_NhanVienId) {
+      userFilters.push({ createdBy: dataUser.userId })
+    }
+
+    return {
+      categoryId: {
+        in: allowedCategoryIds,
+      },
+      deletedAt: null,
+      ...(userFilters.length > 0 ? { OR: userFilters } : {}),
+    }
+  }, [allowedCategoryIds, dataUser?.sDM_NhanVienId, dataUser?.userId])
+
   const { data: listEvidence } = useFindManyEvidence(
     {
-      where: {
-        categoryId: {
-          in: allowedCategoryIds,
-        },
-      },
+      where: evidenceWhere,
     },
     {
       enabled: hasAllowedCategories,
     }
   )
+
   const { data: listEvidenceCategory } = useFindManyEvidenceCategory(
     {
       where: {
@@ -437,12 +453,14 @@ const PutTieuChiMinhChungModal = () => {
       const values = await evidenceForm.validateFields()
       showSpinner()
 
+      const createdById = dataUser?.sDM_NhanVienId || dataUser?.userId || null
       const result = await createEvidence({
         data: {
           name: values.name,
           categoryId: values.categoryId,
           information: values.information,
           issuer: values.issuer,
+          ...(createdById ? { createdBy: createdById } : {}),
           evidenceFile: {
             create: (values.evidenceFile || []).map((file: EvidenceFile) => ({
               name: file.name,
@@ -454,6 +472,7 @@ const PutTieuChiMinhChungModal = () => {
           },
         },
       })
+
 
       queryClient.invalidateQueries({
         queryKey: ["Evidence"],
