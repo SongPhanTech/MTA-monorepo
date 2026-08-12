@@ -1007,6 +1007,7 @@ const getSurveysByProfile = createRoute({
       lecturerName: z.string().optional(),
       subjectClassName: z.string().optional(),
       semesterId: z.string().optional(),
+      type: z.enum(["SINGLE", "CLUSTER"]).optional(),
     }),
   },
   responses: {
@@ -1018,7 +1019,7 @@ const getSurveysByProfile = createRoute({
           schema: PaginatedDataResponseSchema(
             models.SurveyScalarSchema.extend({
               lecture: models.LecturerScalarSchema.extend({
-                organization: models.DM_DonViScalarSchema,
+                organization: models.DM_DonViScalarSchema.nullable(),
                 userProfile: models.UserProfileScalarSchema,
               }).nullable(),
               subjectClass: models.SubjectClassScalarSchema.nullable(),
@@ -1191,6 +1192,9 @@ app.openapi(getSurveysByProfile, async (c) => {
       : {}),
     ...(q.subjectClassName
       ? { subjectClass: { name: { contains: q.subjectClassName, mode: "insensitive" } } }
+      : {}),
+    ...(q.type
+      ? { surveyTopic: { type: q.type} }
       : {}),
 
     deletedAt: null,

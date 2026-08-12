@@ -6,7 +6,7 @@ import DefaultLayout from "@layouts/default-layout"
 import { useSession } from "@workspace/auth/react"
 import { useGetSurveysOfProfile } from "@workspace/libs/api/exam"
 import { useSemesterStore } from "@workspace/ui"
-import { Col, Pagination, Row, Tag, Tooltip } from "antd"
+import { Col, Pagination, Row, Tag, Tooltip, Tabs } from "antd"
 import dayjs from "dayjs"
 import { ArrowRight } from "lucide-react"
 import { useRouter } from "next/router"
@@ -21,6 +21,7 @@ export default function DetailSurveyPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const { id: semesterId } = useSemesterStore()
+  const [surveyType, setSurveyType] = useState<"SINGLE" | "CLUSTER">("SINGLE")
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
     name: "",
@@ -97,6 +98,7 @@ export default function DetailSurveyPage() {
     subjectClassName: filters.subjectClassName,
     lecturerName: filters.lecturerName,
     semesterId,
+    type: surveyType,
   }
 
   const { data } = useGetSurveysOfProfile(profileId as string, {
@@ -134,6 +136,18 @@ export default function DetailSurveyPage() {
                 <div className="text-lg font-bold">{data?.[0]?.clusterSurvey?.name}</div>
             </Col> */}
       <Col span={24}>
+        <Tabs
+          activeKey={surveyType}
+          onChange={(key) => {
+            setSurveyType(key as "SINGLE" | "CLUSTER")
+            setCurrentPage(1)
+          }}
+          items={[
+            { key: "SINGLE", label: "Khảo sát chung" },
+            { key: "CLUSTER", label: "Khảo sát giảng viên" },
+          ]}
+          className="mb-0"
+        />
         <Table
           className="h-[calc(100vh-200px)]"
           filters={filters}
