@@ -82,6 +82,7 @@ import type {
   ErrorMessageResponse,
   ExamBankQuestionsResult,
   ExportClusterSurveyStatisticsParams,
+  ExportClusterSurveySummaryReportBody,
   ExportReportSurvey,
   ExportReportSurveyOrganizationalBody,
   GenExamBank,
@@ -113,6 +114,7 @@ import type {
   GetSurveyObjectsParams,
   GetSurveyResult,
   GetSurveyStatistics200,
+  GetSurveyStatisticsToFieldParams,
   GetSurveysOfProfile200,
   GetSurveysOfProfileParams,
   PaginatedDataItem,
@@ -1163,6 +1165,146 @@ export const useSingleTopicGeneration = <TError = ErrorMessageResponse,
     }
     
 /**
+ * @summary Export survey report directly as Excel file
+ */
+export type getApiSurveyIdExportReportExcelResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type getApiSurveyIdExportReportExcelResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type getApiSurveyIdExportReportExcelResponse403 = {
+  data: ErrorMessageResponse
+  status: 403
+}
+
+export type getApiSurveyIdExportReportExcelResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type getApiSurveyIdExportReportExcelResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type getApiSurveyIdExportReportExcelResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type getApiSurveyIdExportReportExcelResponseSuccess = (getApiSurveyIdExportReportExcelResponse200) & {
+  headers: Headers;
+};
+export type getApiSurveyIdExportReportExcelResponseError = (getApiSurveyIdExportReportExcelResponse400 | getApiSurveyIdExportReportExcelResponse403 | getApiSurveyIdExportReportExcelResponse404 | getApiSurveyIdExportReportExcelResponse409 | getApiSurveyIdExportReportExcelResponse500) & {
+  headers: Headers;
+};
+
+export type getApiSurveyIdExportReportExcelResponse = (getApiSurveyIdExportReportExcelResponseSuccess | getApiSurveyIdExportReportExcelResponseError)
+
+export const getGetApiSurveyIdExportReportExcelUrl = (id: string,) => {
+
+
+  
+
+  return `/api/survey/${id}/export-report-excel`
+}
+
+export const getApiSurveyIdExportReportExcel = async (id: string, options?: RequestInit): Promise<getApiSurveyIdExportReportExcelResponse> => {
+  
+  return customExamFetch<getApiSurveyIdExportReportExcelResponse>(getGetApiSurveyIdExportReportExcelUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetApiSurveyIdExportReportExcelQueryKey = (id?: string,) => {
+    return [
+    `/api/survey/${id}/export-report-excel`
+    ] as const;
+    }
+
+    
+export const getGetApiSurveyIdExportReportExcelQueryOptions = <TData = Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>, TError = ErrorMessageResponse>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetApiSurveyIdExportReportExcelQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>> = ({ signal }) => getApiSurveyIdExportReportExcel(id, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiSurveyIdExportReportExcelQueryResult = NonNullable<Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>>
+export type GetApiSurveyIdExportReportExcelQueryError = ErrorMessageResponse
+
+
+export function useGetApiSurveyIdExportReportExcel<TData = Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>, TError = ErrorMessageResponse>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>,
+          TError,
+          Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiSurveyIdExportReportExcel<TData = Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>, TError = ErrorMessageResponse>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>,
+          TError,
+          Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiSurveyIdExportReportExcel<TData = Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>, TError = ErrorMessageResponse>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Export survey report directly as Excel file
+ */
+
+export function useGetApiSurveyIdExportReportExcel<TData = Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>, TError = ErrorMessageResponse>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSurveyIdExportReportExcel>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetApiSurveyIdExportReportExcelQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
  * Báo cáo khảo sát
  * @summary Báo cáo khảo sát
  */
@@ -1568,17 +1710,26 @@ export type getSurveyStatisticsToFieldResponseError = (getSurveyStatisticsToFiel
 
 export type getSurveyStatisticsToFieldResponse = (getSurveyStatisticsToFieldResponseSuccess | getSurveyStatisticsToFieldResponseError)
 
-export const getGetSurveyStatisticsToFieldUrl = (id: string,) => {
+export const getGetSurveyStatisticsToFieldUrl = (id: string,
+    params?: GetSurveyStatisticsToFieldParams,) => {
+  const normalizedParams = new URLSearchParams();
 
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
 
-  
+  const stringifiedParams = normalizedParams.toString();
 
-  return `/api/survey/${id}/statistics-to-Field`
+  return stringifiedParams.length > 0 ? `/api/survey/${id}/statistics-to-Field?${stringifiedParams}` : `/api/survey/${id}/statistics-to-Field`
 }
 
-export const getSurveyStatisticsToField = async (id: string, options?: RequestInit): Promise<getSurveyStatisticsToFieldResponse> => {
+export const getSurveyStatisticsToField = async (id: string,
+    params?: GetSurveyStatisticsToFieldParams, options?: RequestInit): Promise<getSurveyStatisticsToFieldResponse> => {
   
-  return customExamFetch<getSurveyStatisticsToFieldResponse>(getGetSurveyStatisticsToFieldUrl(id),
+  return customExamFetch<getSurveyStatisticsToFieldResponse>(getGetSurveyStatisticsToFieldUrl(id,params),
   {      
     ...options,
     method: 'GET'
@@ -1591,23 +1742,25 @@ export const getSurveyStatisticsToField = async (id: string, options?: RequestIn
 
 
 
-export const getGetSurveyStatisticsToFieldQueryKey = (id?: string,) => {
+export const getGetSurveyStatisticsToFieldQueryKey = (id?: string,
+    params?: GetSurveyStatisticsToFieldParams,) => {
     return [
-    `/api/survey/${id}/statistics-to-Field`
+    `/api/survey/${id}/statistics-to-Field`, ...(params ? [params]: [])
     ] as const;
     }
 
     
-export const getGetSurveyStatisticsToFieldQueryOptions = <TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError = ErrorMessageResponse>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+export const getGetSurveyStatisticsToFieldQueryOptions = <TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError = ErrorMessageResponse>(id: string,
+    params?: GetSurveyStatisticsToFieldParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSurveyStatisticsToFieldQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getGetSurveyStatisticsToFieldQueryKey(id,params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyStatisticsToField>>> = ({ signal }) => getSurveyStatisticsToField(id, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSurveyStatisticsToField>>> = ({ signal }) => getSurveyStatisticsToField(id,params, { signal, ...requestOptions });
 
       
 
@@ -1621,7 +1774,8 @@ export type GetSurveyStatisticsToFieldQueryError = ErrorMessageResponse
 
 
 export function useGetSurveyStatisticsToField<TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError = ErrorMessageResponse>(
- id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>> & Pick<
+ id: string,
+    params: undefined |  GetSurveyStatisticsToFieldParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
           TError,
@@ -1631,7 +1785,8 @@ export function useGetSurveyStatisticsToField<TData = Awaited<ReturnType<typeof 
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSurveyStatisticsToField<TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError = ErrorMessageResponse>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>> & Pick<
+ id: string,
+    params?: GetSurveyStatisticsToFieldParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSurveyStatisticsToField>>,
           TError,
@@ -1641,7 +1796,8 @@ export function useGetSurveyStatisticsToField<TData = Awaited<ReturnType<typeof 
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSurveyStatisticsToField<TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError = ErrorMessageResponse>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+ id: string,
+    params?: GetSurveyStatisticsToFieldParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1649,11 +1805,12 @@ export function useGetSurveyStatisticsToField<TData = Awaited<ReturnType<typeof 
  */
 
 export function useGetSurveyStatisticsToField<TData = Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError = ErrorMessageResponse>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
+ id: string,
+    params?: GetSurveyStatisticsToFieldParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSurveyStatisticsToField>>, TError, TData>>, request?: SecondParameter<typeof customExamFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetSurveyStatisticsToFieldQueryOptions(id,options)
+  const queryOptions = getGetSurveyStatisticsToFieldQueryOptions(id,params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -4077,6 +4234,118 @@ export function useGetClusterSurveyInfoDepartment<TData = Awaited<ReturnType<typ
 
 
 
+/**
+ * @summary Xuất báo cáo thống kê tổng hợp khảo sát giảng viên (Word)
+ */
+export type exportClusterSurveySummaryReportResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportClusterSurveySummaryReportResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type exportClusterSurveySummaryReportResponse403 = {
+  data: ErrorMessageResponse
+  status: 403
+}
+
+export type exportClusterSurveySummaryReportResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type exportClusterSurveySummaryReportResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type exportClusterSurveySummaryReportResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type exportClusterSurveySummaryReportResponseSuccess = (exportClusterSurveySummaryReportResponse200) & {
+  headers: Headers;
+};
+export type exportClusterSurveySummaryReportResponseError = (exportClusterSurveySummaryReportResponse400 | exportClusterSurveySummaryReportResponse403 | exportClusterSurveySummaryReportResponse404 | exportClusterSurveySummaryReportResponse409 | exportClusterSurveySummaryReportResponse500) & {
+  headers: Headers;
+};
+
+export type exportClusterSurveySummaryReportResponse = (exportClusterSurveySummaryReportResponseSuccess | exportClusterSurveySummaryReportResponseError)
+
+export const getExportClusterSurveySummaryReportUrl = (id: string,) => {
+
+
+  
+
+  return `/api/cluster-survey/${id}/summary-report`
+}
+
+export const exportClusterSurveySummaryReport = async (id: string,
+    exportClusterSurveySummaryReportBody: ExportClusterSurveySummaryReportBody, options?: RequestInit): Promise<exportClusterSurveySummaryReportResponse> => {
+  
+  return customExamFetch<exportClusterSurveySummaryReportResponse>(getExportClusterSurveySummaryReportUrl(id),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportClusterSurveySummaryReportBody,)
+  }
+);}
+
+
+
+
+export const getExportClusterSurveySummaryReportMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportClusterSurveySummaryReport>>, TError,{id: string;data: ExportClusterSurveySummaryReportBody}, TContext>, request?: SecondParameter<typeof customExamFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportClusterSurveySummaryReport>>, TError,{id: string;data: ExportClusterSurveySummaryReportBody}, TContext> => {
+
+const mutationKey = ['exportClusterSurveySummaryReport'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportClusterSurveySummaryReport>>, {id: string;data: ExportClusterSurveySummaryReportBody}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  exportClusterSurveySummaryReport(id,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportClusterSurveySummaryReportMutationResult = NonNullable<Awaited<ReturnType<typeof exportClusterSurveySummaryReport>>>
+    export type ExportClusterSurveySummaryReportMutationBody = ExportClusterSurveySummaryReportBody
+    export type ExportClusterSurveySummaryReportMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xuất báo cáo thống kê tổng hợp khảo sát giảng viên (Word)
+ */
+export const useExportClusterSurveySummaryReport = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportClusterSurveySummaryReport>>, TError,{id: string;data: ExportClusterSurveySummaryReportBody}, TContext>, request?: SecondParameter<typeof customExamFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportClusterSurveySummaryReport>>,
+        TError,
+        {id: string;data: ExportClusterSurveySummaryReportBody},
+        TContext
+      > => {
+
+      const mutationOptions = getExportClusterSurveySummaryReportMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * @summary Đánh tag minh chứng cho đợt đánh giá
  */

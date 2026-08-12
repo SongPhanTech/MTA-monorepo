@@ -54,6 +54,7 @@ Authorization: Bearer <access_token>
 | **500** | Lỗi máy chủ |
  * OpenAPI spec version: 1.0.0
  */
+import type { GetSurveysOfProfileType } from './getSurveysOfProfileType';
 
 export type GetSurveysOfProfileParams = {
 /**
@@ -72,4 +73,5 @@ taken?: boolean;
 lecturerName?: string;
 subjectClassName?: string;
 semesterId?: string;
+type?: GetSurveysOfProfileType;
 };
