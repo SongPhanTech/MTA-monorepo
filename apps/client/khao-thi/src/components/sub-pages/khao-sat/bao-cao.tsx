@@ -483,20 +483,20 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                   width: 60,
                   align: "center",
                   fixed: "left",
-                  render: (_, record: any) => (record.isGroup ? "" : record.questionIndex),
+                  render: (_, record) => (record.isGroup ? "" : record.questionIndex),
                 },
                 {
                   title: "Câu hỏi",
                   align: "center",
                   width: 100,
-                  render: (_, record: any) => {
+                  render: (_, record) => {
                     return record.isGroup ? <strong>ĐGTB</strong> : `Câu hỏi ${record.questionIndex}`
                   },
                 },
                 {
                   title: "Nội dung",
                   align: "left",
-                  render: (_, record: any) => {
+                  render: (_, record) => {
                     return record.isGroup ? (
                       <strong>{record.groupName || "Nhóm câu hỏi"}</strong>
                     ) : (
@@ -522,19 +522,19 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                   width: 60,
                   align: "center",
                   fixed: "left",
-                  render: (_, record: any) => (record.isGroup ? "" : record.questionIndex),
+                  render: (_, record) => (record.isGroup ? "" : record.questionIndex),
                 },
                 {
                   title: "Câu hỏi",
                   align: "center",
-                  render: (_, record: any) => {
+                  render: (_, record) => {
                     return record.isGroup ? <strong>ĐGTB</strong> : `Câu hỏi ${record.questionIndex}`
                   },
                 },
                 {
                   title: "Nội dung",
                   align: "left",
-                  render: (_, record: any) => {
+                  render: (_, record) => {
                     return record.isGroup ? (
                       <strong>{record.groupName || "Nhóm câu hỏi"}</strong>
                     ) : (
