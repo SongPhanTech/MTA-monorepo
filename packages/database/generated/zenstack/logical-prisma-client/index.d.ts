@@ -346872,9 +346872,6 @@ export namespace Prisma {
             anonymous: boolean
             surveyTopicId: string
             targetEnrollStudentOnly: boolean
-            /**
-             * Mẫu phiếu in cụm (OnlyOffice) — editable per khảo sát cụm
-             */
             printFormTemplate: Prisma.JsonValue | null
         }, ExtArgs["result"]["clusterSurvey"]>
         composites: {}

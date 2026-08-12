@@ -2,6 +2,7 @@ import { BarChartOutlined, EyeOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
 import type { FilterProps } from "@components/commons/typeFilter"
 import DeleteIcon from "@components/icons/delete"
+import EditIcon from "@components/icons/edit"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import { cn } from "@lib/utils"
@@ -489,6 +490,20 @@ function TabDotKhaoSatCum({
                           />
                         </Tooltip>
                       )}
+
+                    
+                      <EditIcon
+                        disabled={surveys?.some(
+                          (item: { surveySessions?: unknown[] }) =>
+                            (item?.surveySessions?.length ?? 0) > 0
+                        )}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onOpen({ id, type: "multiple" })
+                        }}
+                        className="text-sm text-blue-700 cursor-pointer"
+                      />
+                    
 
                     {can(KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT, "XOA") && (
                       <DeleteIcon

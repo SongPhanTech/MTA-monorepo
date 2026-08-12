@@ -16,6 +16,10 @@ export function surveyPrintObjectName(surveyId: string) {
   return `${SURVEY_PRINT_OBJECT_PREFIX}${surveyId}.docx`
 }
 
+export function clusterSurveyPrintObjectName(clusterSurveyId: string) {
+  return `${SURVEY_PRINT_OBJECT_PREFIX}cluster-${clusterSurveyId}.docx`
+}
+
 /** Parse stored printFormTemplate; old field-JSON shape is treated as missing file. */
 export function parseSurveyPrintFormDocMeta(raw: unknown): SurveyPrintFormDocMeta | null {
   if (!isRecord(raw)) return null
@@ -27,6 +31,27 @@ export function parseSurveyPrintFormDocMeta(raw: unknown): SurveyPrintFormDocMet
   }
   const version = typeof raw.version === "number" && raw.version > 0 ? raw.version : 1
   return { objectName: raw.objectName, filePath: raw.filePath, version }
+}
+
+/** Defaults for cluster (lecturer) survey DOCX. */
+export const LECTURER_SURVEY_PRINT_FORM_CONTENT = {
+  headerLeft: "HỌC VIỆN KTQS",
+  formCode: "Mẫu số 11-ĐBCL",
+  notes: [
+    "Nhằm góp phần nâng cao chất lượng giảng dạy, phục vụ lợi ích của người học, Học viện đề nghị Anh/Chị với tinh thần trách nhiệm và xây dựng, cho ý kiến về hoạt động giảng dạy của giảng viên thông qua phiếu phản hồi này. Thông tin do Anh/Chị cung cấp sẽ được Học viện bảo mật và xử lý đảm bảo không làm ảnh hưởng đến kết quả học tập, rèn luyện của Anh/Chị",
+    'Đề nghị Anh/Chị đánh dấu "X" vào các ô tương ứng với nội dung trong bảng câu hỏi theo thang phản hồi',
+  ],
+  notesAfterInfo: true,
+  infoFields: [
+    { label: "Tên giảng viên: " },
+    { label: "Tên học phần: " },
+    { label: "Khoa (Viện): " },
+    { label: "Bộ môn: " },
+    { label: "Lớp: " },
+    { label: "Ngày lấy ý kiến: " },
+    { label: "Học kỳ: " },
+    { label: "Năm học: " },
+  ],
 }
 
 /** Defaults used when generating the initial DOCX snapshot. */

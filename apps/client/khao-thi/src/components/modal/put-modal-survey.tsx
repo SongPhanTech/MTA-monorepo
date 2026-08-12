@@ -8,10 +8,12 @@ import type { Survey, SurveyObjectType, SurveyResponse, SurveyTopic } from "@wor
 import {
   useCreateSurvey,
   useCreateSurveyChoice,
+  useFindUniqueClusterSurvey,
   useFindManySchoolYear,
   useFindManySurveyObjectType,
   useFindManySurveyTopic,
   useFindUniqueSurvey,
+  useUpdateClusterSurvey,
   useUpdateSurvey,
 } from "@workspace/db/hooks"
 import { useCreateClusterSurvey } from "@workspace/libs/api/exam"
@@ -148,6 +150,7 @@ const PutSurveyModal = () => {
 
   const { mutateAsync: create } = useCreateSurvey()
   const { mutateAsync: update } = useUpdateSurvey()
+  const { mutateAsync: updateClusterSurvey } = useUpdateClusterSurvey()
   const { mutateAsync: createSurveyChoice } = useCreateSurveyChoice()
   const { mutateAsync: createMultiple } = useCreateClusterSurvey()
   const { data: surveyTopics = [] } = useFindManySurveyTopic({
@@ -169,6 +172,40 @@ const PutSurveyModal = () => {
       showSpinner()
 
       if (input?.type === "multiple") {
+        if (input?.id) {
+          await updateClusterSurvey({
+            where: { id: input.id },
+            data: {
+              name: output.name.trim(),
+              surveyTopicId: output.surveyTopicId,
+              startDate: output.startDate,
+              endDate: output?.endDate || null,
+              isPublic: output.isPublic,
+              anonymous: !output.isPublic ? false : output.anonymous,
+              targetEnrollStudentOnly: output.targetEnrollStudentOnly ?? false,
+              surveyObjectType: {
+                set: (output.surveyObjectTypes || []).map((item) => ({ id: item })),
+              },
+              surveyQuestion: {
+                set: output.surveyQuestionIds.length
+                  ? output.surveyQuestionIds.map((item) => ({ id: item }))
+                  : [],
+              },
+              surveyChoice: {
+                deleteMany: {},
+                create: (output.surveyChoice || []).map((item) => ({
+                  answer: item.answer || "",
+                  description: item.description,
+                  requireExplanation: !!item.requireExplanation,
+                })),
+              },
+            },
+          })
+          message.success("Cập nhật thành công")
+          onClose()
+          return
+        }
+
         const res = await createMultiple({
           data: {
             name: output.name.trim(),
@@ -383,6 +420,25 @@ const PutSurveyModal = () => {
       refetchOnWindowFocus: false,
     }
   )
+  const { data: clusterSurvey } = useFindUniqueClusterSurvey(
+    {
+      where: { id: input?.id },
+      include: {
+        surveyObjectType: true,
+        surveyChoice: {
+          include: {
+            surveyResponses: true,
+          },
+        },
+        surveyQuestion: true,
+        surveys: true,
+      },
+    },
+    {
+      enabled: !!input?.id && input?.type === "multiple",
+      refetchOnWindowFocus: false,
+    }
+  )
 
   const filterTreeNode = (input: string, treeNode: any) => {
     return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
@@ -586,10 +642,12 @@ const PutSurveyModal = () => {
   ])
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
-    if (survey) {
+    const editingData = input?.type === "multiple" ? clusterSurvey : survey
+
+    if (editingData) {
       setChoices(
-        survey?.surveyChoice.length
-          ? survey?.surveyChoice.map((item) => {
+        editingData?.surveyChoice.length
+          ? editingData?.surveyChoice.map((item) => {
               return {
                 id: item.id,
                 answer: item.answer,
@@ -601,14 +659,27 @@ const PutSurveyModal = () => {
           : choices
       )
       form.setFieldsValue({
-        ...survey,
-        semesterId: semesterIdStore,
-        startDate: dayjs(survey.startDate),
-        endDate: survey.endDate ? dayjs(survey.endDate) : undefined,
-        surveyObjectTypes: survey.surveyObjectType.map((item) => item.id),
-        surveyQuestionIds: survey?.surveyQuestion.map((item) => item.id),
-        surveyChoice: survey?.surveyChoice.length
-          ? survey?.surveyChoice.map((item) => {
+        ...editingData,
+        semesterId:
+          input?.type === "multiple"
+            ? clusterSurvey?.surveys?.[0]?.semesterId || semesterIdStore
+            : semesterIdStore,
+        subjectClassIds:
+          input?.type === "multiple"
+            ? Array.from(
+                new Set(
+                  (clusterSurvey?.surveys || [])
+                    .map((item) => item?.subjectClassId)
+                    .filter((item): item is string => !!item)
+                )
+              )
+            : [],
+        startDate: dayjs(editingData.startDate),
+        endDate: editingData.endDate ? dayjs(editingData.endDate) : undefined,
+        surveyObjectTypes: editingData.surveyObjectType.map((item) => item.id),
+        surveyQuestionIds: editingData?.surveyQuestion.map((item) => item.id),
+        surveyChoice: editingData?.surveyChoice.length
+          ? editingData?.surveyChoice.map((item) => {
               return {
                 id: item.id,
                 answer: item.answer,
@@ -628,7 +699,7 @@ const PutSurveyModal = () => {
         surveyChoice: choices,
       })
     }
-  }, [survey, semesterIdStore])
+  }, [survey, clusterSurvey, semesterIdStore, input?.type])
 
   return (
     <Modal
