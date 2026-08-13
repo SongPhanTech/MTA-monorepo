@@ -1,11 +1,56 @@
 export const SURVEY_PRINT_OBJECT_PREFIX = "khao-thi/survey-print/"
 
+export const DOCX_CONTENT_TYPE =
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
 export type SurveyPrintFormDocMeta = {
-  /** MinIO object key without bucket (for OnlyOffice callback). */
+  /** MinIO object key without bucket (for OnlyOffice callback / proxy). */
   objectName: string
-  /** Path including bucket for getMinioUrl. */
+  /** Path including bucket (stored for reference; access goes through BE proxy). */
   filePath: string
   version: number
+}
+
+/** Resolve be-model `/api/minio` bases (legacy + current gateway prefixes). */
+export function buildMinioApiBases(rawModelBase: string): string[] {
+  const trimmed = rawModelBase.replace(/\/+$/, "")
+  if (!trimmed) return []
+
+  const fixedModelEndpoint = trimmed.endsWith("/api/model") ? trimmed : `${trimmed}/api/model`
+  const legacyModelEndpoint = `${fixedModelEndpoint}/api/model`
+  const toMinioBase = (modelEndpoint: string) => modelEndpoint.replace(/\/model$/, "/minio")
+
+  return Array.from(new Set([toMinioBase(legacyModelEndpoint), toMinioBase(fixedModelEndpoint)]))
+}
+
+export function surveyPrintProxyUrl(minioApiBase: string, objectName: string) {
+  return `${minioApiBase}/survey-print?objectName=${encodeURIComponent(objectName)}`
+}
+
+/** Upload DOCX via BE proxy (client → server → MinIO). */
+export async function uploadSurveyPrintViaServer(
+  minioApiBases: string[],
+  objectName: string,
+  blob: Blob
+): Promise<{ filePath: string }> {
+  if (!minioApiBases.length) throw new Error("Missing MinIO API base")
+
+  let lastStatus = 0
+  for (const base of minioApiBases) {
+    const res = await fetch(surveyPrintProxyUrl(base, objectName), {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": DOCX_CONTENT_TYPE },
+      body: blob,
+    })
+    lastStatus = res.status
+    if (res.ok) {
+      const data = (await res.json()) as { filePath?: string }
+      return { filePath: data.filePath || objectName }
+    }
+    if (res.status !== 404) break
+  }
+  throw new Error(`Upload survey print failed: ${lastStatus}`)
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

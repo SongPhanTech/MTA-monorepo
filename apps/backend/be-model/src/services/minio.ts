@@ -101,6 +101,15 @@ export class MinIOService {
     return { url: "", fileName: `${this.bucketName}/${objectName}` }
   }
 
+  async getObject(objectName: string): Promise<Buffer> {
+    const stream = await this.minioClient.getObject(this.bucketName, objectName)
+    const chunks: Buffer[] = []
+    for await (const chunk of stream) {
+      chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+    }
+    return Buffer.concat(chunks)
+  }
+
   async presignedGetObject(objectName: string): Promise<UrlDto> {
     const url = await this.minioClient.presignedGetObject(this.bucketName, objectName, 3600)
     return { url, fileName: objectName }
