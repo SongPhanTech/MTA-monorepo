@@ -1033,10 +1033,19 @@ const downloadStudentImportTemplate = createRoute({
 
 **Bảng dữ liệu nguồn:** (file mẫu, không ghi DB).
 
-**Tham số:** trainingObjectTypeId (query).`,
+**Tham số:** trainingObjectTypeId (query). allCourses=true xuất toàn bộ; hoặc truyền trainingCourseId để lọc theo khoá.`,
   request: {
     query: z.object({
       trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
+      trainingCourseId: z
+        .string()
+        .optional()
+        .openapi(fieldDesc("ID khoá học. Bỏ trống nếu xuất toàn bộ / allCourses=true.")),
+      allCourses: z
+        .preprocess((val) => val === "true" || val === true, z.boolean())
+        .optional()
+        .default(false)
+        .openapi(fieldDesc("true = xuất ngành/chuyên ngành/CTĐT của mọi khoá.")),
     }),
   },
   responses: {
@@ -1098,14 +1107,25 @@ const exportStudentProfiles = createRoute({
 })
 
 app.openapi(downloadStudentImportTemplate, async (c) => {
-  const { trainingObjectTypeId } = c.req.valid("query")
-  const result = await _generateStudentImportTemplate(trainingObjectTypeId)
-  const fileName = "MauImportDSHV.xlsx"
-  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
-  return c.body(result, 200, {
-    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "Content-Disposition": disposition,
-  })
+  const { trainingObjectTypeId, trainingCourseId, allCourses } = c.req.valid("query")
+  try {
+    const result = await _generateStudentImportTemplate(trainingObjectTypeId, {
+      trainingCourseId: allCourses ? undefined : trainingCourseId,
+    })
+    const fileName = "MauImportDSHV.xlsx"
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+    return c.body(result, 200, {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Disposition": disposition,
+    })
+  } catch (error) {
+    return c.json(
+      {
+        message: error instanceof Error ? error.message : "Không thể tạo file mẫu",
+      },
+      400
+    )
+  }
 })
 
 app.openapi(exportStudentProfiles, async (c) => {

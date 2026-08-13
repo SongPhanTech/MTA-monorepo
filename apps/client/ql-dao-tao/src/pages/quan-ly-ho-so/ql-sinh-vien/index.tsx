@@ -28,7 +28,6 @@ import {
   useDeleteUserProfile,
 } from "@workspace/db/hooks"
 import {
-  downloadStudentImportTemplate,
   useExportStudentProfiles,
 } from "@workspace/libs/api/training"
 import { useAbility } from "@workspace/permissions/hooks"
@@ -74,28 +73,16 @@ export default function UserProfilePageDs() {
   const [importModalVisible, setImportModalVisible] = useState(false)
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const { mutateAsync: exportStudentProfiles } = useExportStudentProfiles()
+  const { onOpen: onOpenExportTemplate } = useDisclosure({
+    tag: "ExportStudentImportTemplateModal",
+  })
 
-  const handleDownloadTemplate = async () => {
+  const handleDownloadTemplate = () => {
     if (!trainingObjectTypeId) {
       message.error("Vui lòng chọn đối tượng đào tạo")
       return
     }
-    try {
-      showSpinner()
-      const res = await downloadStudentImportTemplate({
-        trainingObjectTypeId,
-      })
-
-      if (res.status === 200) {
-        saveAs(res.data, "MauImportDSHV.xlsx")
-      } else {
-        message.error(res.data.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
-      }
-    } catch (error) {
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-    } finally {
-      hideSpinner()
-    }
+    onOpenExportTemplate()
   }
   const handleExportStudentProfiles = async () => {
     if (!filters.trainingCourseId) {

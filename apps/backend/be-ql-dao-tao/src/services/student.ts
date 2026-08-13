@@ -23,7 +23,6 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
       },
     },
   })
-  console.log("test log export ")
 
   const students = await prisma.student.findMany({
     where: { fixedClass: { trainingCourseId } },
@@ -616,32 +615,83 @@ export const exportStudentAcademicWarning = async ({
 }
 
 export async function _generateStudentImportTemplate(
-  trainingObjectTypeId: string
+  trainingObjectTypeId: string,
+  options?: { trainingCourseId?: string | null }
 ): Promise<ArrayBuffer> {
+  const trainingCourseId = options?.trainingCourseId?.trim() || undefined
+
+  if (trainingCourseId) {
+    const course = await prisma.trainingCourse.findFirst({
+      where: {
+        id: trainingCourseId,
+        trainingObjectTypeId,
+        active: true,
+        deletedAt: null,
+      },
+      select: { id: true },
+    })
+    if (!course) {
+      throw new Error("Khoá học không tồn tại hoặc không thuộc đối tượng đào tạo")
+    }
+  }
+
+  const curriculumVersionWhere = {
+    trainingObjectTypeId,
+    active: true,
+    deletedAt: null,
+    ...(trainingCourseId
+      ? {
+          OR: [
+            { trainingCourseId },
+            {
+              fixedClasses: {
+                some: {
+                  trainingCourseId,
+                  deletedAt: null,
+                  active: true,
+                },
+              },
+            },
+          ],
+        }
+      : {}),
+  }
+
   const [
     fixedClasses,
     curricula,
     organizations,
-    trainingMajors,
-    trainingFields,
     trainingObjectType,
   ] = await Promise.all([
     prisma.fixedClass.findMany({
       where: {
         active: true,
+        deletedAt: null,
         trainingCourse: {
           trainingObjectTypeId,
           active: true,
           deletedAt: null,
+          ...(trainingCourseId ? { id: trainingCourseId } : {}),
         },
-        deletedAt: null,
       },
       select: { code: true, name: true },
       orderBy: { name: "asc" },
     }),
     prisma.curriculumVersion.findMany({
-      where: { trainingObjectTypeId, active: true, deletedAt: null },
-      select: { name: true },
+      where: curriculumVersionWhere,
+      select: {
+        name: true,
+        curriculum: {
+          select: {
+            trainingMajor: {
+              select: {
+                name: true,
+                trainingField: { select: { name: true } },
+              },
+            },
+          },
+        },
+      },
       orderBy: { name: "asc" },
     }),
     prisma.dM_DonVi.findMany({
@@ -649,39 +699,60 @@ export async function _generateStudentImportTemplate(
       select: { sTen: true },
       orderBy: { sTen: "asc" },
     }),
-    prisma.trainingMajor.findMany({
-      where: {
-        trainingObjectTypes: {
-          some: {
-            trainingObjectTypeId,
-            deletedAt: null,
-            active: true,
-          },
-        },
-        deletedAt: null,
-      },
-      select: { name: true },
-      orderBy: { name: "asc" },
-    }),
-    prisma.trainingField.findMany({
-      where: {
-        trainingObjectTypes: {
-          some: {
-            trainingObjectTypeId,
-            deletedAt: null,
-            active: true,
-          },
-        },
-        deletedAt: null,
-      },
-      select: { name: true },
-      orderBy: { name: "asc" },
-    }),
     prisma.trainingObjectType.findUniqueOrThrow({
       where: { id: trainingObjectTypeId },
       select: { name: true },
     }),
   ])
+
+  // Khi lọc theo khoá: chỉ lấy ngành/chuyên ngành từ CTĐT thuộc khoá đó.
+  // Khi xuất toàn bộ: lấy toàn bộ ngành/chuyên ngành theo đối tượng đào tạo.
+  let trainingMajors: { name: string }[]
+  let trainingFields: { name: string }[]
+
+  if (trainingCourseId) {
+    const majorNames = new Set<string>()
+    const fieldNames = new Set<string>()
+    for (const cv of curricula) {
+      const majorName = cv.curriculum?.trainingMajor?.name?.trim()
+      const fieldName = cv.curriculum?.trainingMajor?.trainingField?.name?.trim()
+      if (majorName) majorNames.add(majorName)
+      if (fieldName) fieldNames.add(fieldName)
+    }
+    trainingMajors = [...majorNames].sort((a, b) => a.localeCompare(b)).map((name) => ({ name }))
+    trainingFields = [...fieldNames].sort((a, b) => a.localeCompare(b)).map((name) => ({ name }))
+  } else {
+    ;[trainingMajors, trainingFields] = await Promise.all([
+      prisma.trainingMajor.findMany({
+        where: {
+          trainingObjectTypes: {
+            some: {
+              trainingObjectTypeId,
+              deletedAt: null,
+              active: true,
+            },
+          },
+          deletedAt: null,
+        },
+        select: { name: true },
+        orderBy: { name: "asc" },
+      }),
+      prisma.trainingField.findMany({
+        where: {
+          trainingObjectTypes: {
+            some: {
+              trainingObjectTypeId,
+              deletedAt: null,
+              active: true,
+            },
+          },
+          deletedAt: null,
+        },
+        select: { name: true },
+        orderBy: { name: "asc" },
+      }),
+    ])
+  }
 
   const buffer = await getTemplateBuffer(prisma, "MauImportDSHV_v4.xlsx")
   const template = new XlsxTemplate(buffer)
@@ -716,7 +787,44 @@ export async function _generateStudentImportTemplate(
     team: organizations.map((o) => ({ ten: o.sTen })),
   })
 
-  return template.generate({ type: "nodebuffer" }) as any
+  const generated = template.generate({ type: "nodebuffer" }) as Buffer
+  // xlsx-template shifts named-range end rows beyond Excel max (1048576) → Excel repair.
+  return sanitizeXlsxDefinedNames(generated) as any
+}
+
+/** Excel max row; named ranges past this cause "Removed Records: Named range". */
+const EXCEL_MAX_ROW = 1_048_576
+
+/**
+ * Fix workbook definedNames broken by xlsx-template table expansion:
+ * - clamp row refs > 1048576
+ * - drop #REF! names
+ */
+function sanitizeXlsxDefinedNames(buffer: Buffer): Buffer {
+  const zip = new PizZip(buffer)
+  const workbookPath = "xl/workbook.xml"
+  const workbookXml = zip.file(workbookPath)?.asText()
+  if (!workbookXml) return buffer
+
+  let next = workbookXml.replace(
+    /<definedName(\b[^>]*)>([\s\S]*?)<\/definedName>/g,
+    (_full, attrs: string, value: string) => {
+      const ref = String(value).trim()
+      if (!ref || ref.includes("#REF!")) return ""
+
+      const fixed = ref.replace(/\$([A-Z]+)\$(\d+)/gi, (_m, col: string, rowStr: string) => {
+        const row = Number(rowStr)
+        if (!Number.isFinite(row)) return _m
+        return `$${col}$${Math.min(row, EXCEL_MAX_ROW)}`
+      })
+
+      return `<definedName${attrs}>${fixed}</definedName>`
+    }
+  )
+
+  next = next.replace(/<definedNames>\s*<\/definedNames>/, "")
+  zip.file(workbookPath, next)
+  return zip.generate({ type: "nodebuffer" }) as Buffer
 }
 
 export const exportArchivedCertificate = async ({
