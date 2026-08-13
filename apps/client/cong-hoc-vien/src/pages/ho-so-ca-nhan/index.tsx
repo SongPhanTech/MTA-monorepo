@@ -420,11 +420,6 @@ const HoSoCaNhan = () => {
                 getRowSTT(studentData?.studentSemesterResult, record, index),
             },
             {
-              title: "Mã",
-              dataIndex: "code",
-              width: 100,
-            },
-            {
               title: "Học kỳ",
               dataIndex: ["semester", "name"],
               width: 150,
@@ -623,20 +618,9 @@ const HoSoCaNhan = () => {
                 getRowSTT(studentData?.studentYearResult, record, index),
             },
             {
-              title: "Mã",
-              dataIndex: "code",
-              width: 100,
-            },
-            {
               title: "Năm học",
               dataIndex: ["schoolYear", "name"],
               width: 150,
-            },
-            {
-              title: "Năm học thứ",
-              dataIndex: "studyYear",
-              width: 100,
-              align: "center",
             },
             {
               title: "GPA (4)",
@@ -699,13 +683,6 @@ const HoSoCaNhan = () => {
               dataIndex: "failedCredits",
               width: 90,
               align: "center",
-            },
-            {
-              title: "Năm cuối",
-              dataIndex: "isLastStudyYear",
-              width: 80,
-              align: "center",
-              render: (val) => <Tag color={val ? "green" : "default"}>{val ? "Có" : "Không"}</Tag>,
             },
             {
               title: "Thang điểm",

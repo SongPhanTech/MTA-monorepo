@@ -723,7 +723,7 @@ const PutOneSubjectClassModal = () => {
               </Col>
             </Row>
           </Tabs.TabPane>
-          <Tabs.TabPane tab={"Danh sách sinh viên"} key="danh-sach-sinh-vien">
+          {/* <Tabs.TabPane tab={"Danh sách sinh viên"} key="danh-sach-sinh-vien">
             <Table
               filters={filterTable}
               setFilters={setFilterTable}
@@ -879,7 +879,7 @@ const PutOneSubjectClassModal = () => {
               data={dataTable}
               pagination={false}
             />
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
           <Tabs.TabPane tab={"Lịch học"} key="lich-hoc">
             <Table
               data={classSchedules}
