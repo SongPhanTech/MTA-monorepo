@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import type { UseQueryOptions } from "@tanstack/react-query"
 import { customPortalFetch } from "./custom-instance"
 
 export type DataSyncHistoryItem = {
@@ -67,11 +68,19 @@ export const finishDataSync = async (body: {
   })
 }
 
-export const useGetDataSyncHistory = (limit = 50) =>
+export const useGetDataSyncHistory = (
+  limit = 50,
+  options?: Omit<
+    UseQueryOptions<PortalListResponse, Error, DataSyncHistoryItem[]>,
+    "queryKey" | "queryFn" | "select"
+  >
+) =>
   useQuery({
     queryKey: [...historyQueryKey, limit],
     queryFn: () => getDataSyncHistory(limit),
     select: (res) => (res.status === 200 ? res.data : []),
+    refetchOnWindowFocus: false,
+    ...options,
   })
 
 export const useStartDataSync = () => {

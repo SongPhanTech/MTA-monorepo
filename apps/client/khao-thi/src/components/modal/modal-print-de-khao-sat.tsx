@@ -1,38 +1,23 @@
 import { FileWordOutlined, ReloadOutlined, SaveOutlined } from "@ant-design/icons"
 import { useFindUniqueClusterSurvey, useUpdateClusterSurvey } from "@workspace/db/hooks"
-import { generatePresignedUrl } from "@workspace/libs/api/model"
-import { getMinioUrl, getRuntimeEnv } from "@workspace/libs/utils"
+import { getRuntimeEnv } from "@workspace/libs/utils"
 import { OnlyOfficeViewer } from "@workspace/ui"
 import { Button, Modal, Space, Spin, message } from "antd"
-import axios from "axios"
 import dayjs from "dayjs"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { buildSurveyFormDocxBlob, toDocxFileName } from "@/utils/export-survey-form-docx"
 import {
   LECTURER_SURVEY_PRINT_FORM_CONTENT,
+  buildMinioApiBases,
   clusterSurveyPrintObjectName,
   parseSurveyPrintFormDocMeta,
+  surveyPrintProxyUrl,
+  uploadSurveyPrintViaServer,
   type SurveyPrintFormDocMeta,
 } from "@/utils/survey-print-form-template"
 
 dayjs.locale("vi")
-
-const DOCX_CONTENT_TYPE =
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-
-const buildMinioApiBases = (rawModelBase: string) => {
-  const trimmed = rawModelBase.replace(/\/+$/, "")
-  if (!trimmed) return []
-
-  const fixedModelEndpoint = trimmed.endsWith("/api/model") ? trimmed : `${trimmed}/api/model`
-  const legacyModelEndpoint = `${fixedModelEndpoint}/api/model`
-
-  const toMinioBase = (modelEndpoint: string) => modelEndpoint.replace(/\/model$/, "/minio")
-
-  const bases = [toMinioBase(legacyModelEndpoint), toMinioBase(fixedModelEndpoint)]
-  return Array.from(new Set(bases))
-}
 
 const ModalPrintExamClusterSurvey = () => {
   const { isOpen, onClose, input } = useDisclosure<{
@@ -70,29 +55,13 @@ const ModalPrintExamClusterSurvey = () => {
       if (!clusterSurvey?.id) throw new Error("ClusterSurvey missing")
 
       const objectName = clusterSurveyPrintObjectName(clusterSurvey.id)
-      const resPresignedUrl = await generatePresignedUrl({
-        path: "khao-thi/survey-print",
-        extension: "docx",
-        name: `cluster-${clusterSurvey.id}`,
-        flat: true,
-      })
-
-      if (resPresignedUrl.status !== 200) {
-        throw new Error(
-          "message" in resPresignedUrl.data
-            ? resPresignedUrl.data.message
-            : "Không thể tạo presigned URL"
-        )
-      }
-
-      const { url, fileName } = resPresignedUrl.data
-      await axios.put(url, blob, {
-        headers: { "Content-Type": DOCX_CONTENT_TYPE },
-      })
+      const apiBase = getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL") || ""
+      const bases = buildMinioApiBases(apiBase)
+      const { filePath } = await uploadSurveyPrintViaServer(bases, objectName, blob)
 
       const meta: SurveyPrintFormDocMeta = {
         objectName,
-        filePath: fileName,
+        filePath,
         version,
       }
 
@@ -174,13 +143,16 @@ const ModalPrintExamClusterSurvey = () => {
     docMeta && minioApiBases.length > 0
       ? `${minioApiBases[0]}/onlyoffice-callback?objectName=${encodeURIComponent(docMeta.objectName)}`
       : undefined
-  const documentUrl = docMeta ? getMinioUrl(docMeta.filePath) : ""
+  const documentUrl =
+    docMeta && minioApiBases.length > 0
+      ? surveyPrintProxyUrl(minioApiBases[0], docMeta.objectName)
+      : ""
   const documentKey = docMeta ? `${clusterSurvey?.id || "cluster"}_${docMeta.version}` : undefined
 
   const handleDownload = () => {
-    if (!docMeta) return
+    if (!docMeta || !documentUrl) return
     const link = document.createElement("a")
-    link.href = getMinioUrl(docMeta.filePath)
+    link.href = documentUrl
     link.download = toDocxFileName("Phieu khao sat giang vien", clusterSurvey?.name)
     link.target = "_blank"
     document.body.appendChild(link)

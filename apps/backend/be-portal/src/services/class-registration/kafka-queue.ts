@@ -28,8 +28,10 @@ const BROKERS = (process.env.KAFKA_BROKERS || "")
   .map((b) => b.trim())
   .filter(Boolean)
 
-/** Bật luồng bất đồng bộ khi có KAFKA_BROKERS và không bị tắt qua env */
-export const KAFKA_ENABLED = BROKERS.length > 0 && process.env.CLASS_REGISTER_ASYNC !== "false"
+export const hasKafkaBrokers = BROKERS.length > 0
+
+/** Bật luồng bất đồng bộ đăng ký khi có KAFKA_BROKERS và không bị tắt qua env */
+export const KAFKA_ENABLED = hasKafkaBrokers && process.env.CLASS_REGISTER_ASYNC !== "false"
 
 export type RegistrationJobMessage = {
   jobId: string
@@ -48,7 +50,7 @@ export type { RegistrationFailedEvent }
 let kafka: Kafka | null = null
 
 export function getKafka(): Kafka | null {
-  if (!KAFKA_ENABLED) return null
+  if (!hasKafkaBrokers) return null
   if (!kafka) {
     kafka = new Kafka({
       clientId: process.env.KAFKA_CLIENT_ID || "be-portal",
@@ -93,7 +95,11 @@ async function getProducer(): Promise<Producer | null> {
   return producerConnecting
 }
 
-async function produce(topic: string, key: string, value: unknown): Promise<boolean> {
+export async function produceKafkaMessage(
+  topic: string,
+  key: string,
+  value: unknown
+): Promise<boolean> {
   try {
     const p = await getProducer()
     if (!p) return false
@@ -116,17 +122,17 @@ async function produce(topic: string, key: string, value: unknown): Promise<bool
 
 /** Producer (API đăng ký): đẩy job vào queue. false = Kafka lỗi → caller fallback sync. */
 export async function enqueueRegistration(message: RegistrationJobMessage): Promise<boolean> {
-  return produce(REGISTRATION_TOPIC, message.userId, message)
+  return produceKafkaMessage(REGISTRATION_TOPIC, message.userId, message)
 }
 
 /** NACK: trả message về queue để retry (attempts đã tăng). */
 export async function requeueRegistration(message: RegistrationJobMessage): Promise<boolean> {
-  return produce(REGISTRATION_TOPIC, message.userId, message)
+  return produceKafkaMessage(REGISTRATION_TOPIC, message.userId, message)
 }
 
 /** Quá số lần retry → đẩy vào Dead Letter Queue để xử lý thủ công/giám sát. */
 export async function sendToDeadLetterQueue(message: RegistrationJobMessage): Promise<boolean> {
-  return produce(REGISTRATION_DLQ_TOPIC, message.userId, message)
+  return produceKafkaMessage(REGISTRATION_DLQ_TOPIC, message.userId, message)
 }
 
 /**
@@ -135,5 +141,5 @@ export async function sendToDeadLetterQueue(message: RegistrationJobMessage): Pr
  */
 export async function publishRegistrationEvent(event: RegistrationFailedEvent): Promise<boolean> {
   if (!KAFKA_ENABLED) return false
-  return produce(REGISTRATION_EVENTS_TOPIC, event.userId, event)
+  return produceKafkaMessage(REGISTRATION_EVENTS_TOPIC, event.userId, event)
 }

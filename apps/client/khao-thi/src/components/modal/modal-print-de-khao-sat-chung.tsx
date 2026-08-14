@@ -1,26 +1,24 @@
 import { FileWordOutlined, ReloadOutlined, SaveOutlined } from "@ant-design/icons"
 import { toRoman } from "@lib/utils"
 import { useFindUniqueSurvey, useUpdateSurvey } from "@workspace/db/hooks"
-import { generatePresignedUrl } from "@workspace/libs/api/model"
-import { getMinioUrl, getRuntimeEnv } from "@workspace/libs/utils"
+import { getRuntimeEnv } from "@workspace/libs/utils"
 import { OnlyOfficeViewer } from "@workspace/ui"
 import { Button, Modal, Space, Spin, message } from "antd"
-import axios from "axios"
 import dayjs from "dayjs"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { buildSurveyFormDocxBlob, toDocxFileName } from "@/utils/export-survey-form-docx"
 import {
   DEFAULT_SURVEY_PRINT_FORM_CONTENT,
+  buildMinioApiBases,
   parseSurveyPrintFormDocMeta,
   surveyPrintObjectName,
+  surveyPrintProxyUrl,
+  uploadSurveyPrintViaServer,
   type SurveyPrintFormDocMeta,
 } from "@/utils/survey-print-form-template"
 
 dayjs.locale("vi")
-
-const DOCX_CONTENT_TYPE =
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
 type GroupedSurveyQuestion = {
   id: string
@@ -30,20 +28,6 @@ type GroupedSurveyQuestion = {
     name: string
     type: string
   }[]
-}
-
-const buildMinioApiBases = (rawModelBase: string) => {
-  const trimmed = rawModelBase.replace(/\/+$/, "")
-  if (!trimmed) return []
-
-  const fixedModelEndpoint = trimmed.endsWith("/api/model") ? trimmed : `${trimmed}/api/model`
-  const legacyModelEndpoint = `${fixedModelEndpoint}/api/model`
-
-  const toMinioBase = (modelEndpoint: string) => modelEndpoint.replace(/\/model$/, "/minio")
-
-  // On current production gateway, minio is typically exposed via legacy prefix first.
-  const bases = [toMinioBase(legacyModelEndpoint), toMinioBase(fixedModelEndpoint)]
-  return Array.from(new Set(bases))
 }
 
 const ModalPrintExamSurvey = () => {
@@ -117,29 +101,13 @@ const ModalPrintExamSurvey = () => {
       if (!survey?.id) throw new Error("Survey missing")
 
       const objectName = surveyPrintObjectName(survey.id)
-      const resPresignedUrl = await generatePresignedUrl({
-        path: "khao-thi/survey-print",
-        extension: "docx",
-        name: survey.id,
-        flat: true,
-      })
-
-      if (resPresignedUrl.status !== 200) {
-        throw new Error(
-          "message" in resPresignedUrl.data
-            ? resPresignedUrl.data.message
-            : "Không thể tạo presigned URL"
-        )
-      }
-
-      const { url, fileName } = resPresignedUrl.data
-      await axios.put(url, blob, {
-        headers: { "Content-Type": DOCX_CONTENT_TYPE },
-      })
+      const apiBase = getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL") || ""
+      const bases = buildMinioApiBases(apiBase)
+      const { filePath } = await uploadSurveyPrintViaServer(bases, objectName, blob)
 
       const meta: SurveyPrintFormDocMeta = {
         objectName,
-        filePath: fileName,
+        filePath,
         version,
       }
 
@@ -221,18 +189,20 @@ const ModalPrintExamSurvey = () => {
 
   const apiBase = getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL") || ""
   const minioApiBases = useMemo(() => buildMinioApiBases(apiBase), [apiBase])
-  // Use NEXT_PUBLIC_API_MODEL_BASE_URL as single source of truth for all model/minio endpoints.
   const callbackUrl =
     docMeta && minioApiBases.length > 0
       ? `${minioApiBases[0]}/onlyoffice-callback?objectName=${encodeURIComponent(docMeta.objectName)}`
       : undefined
-  const documentUrl = docMeta ? getMinioUrl(docMeta.filePath) : ""
+  const documentUrl =
+    docMeta && minioApiBases.length > 0
+      ? surveyPrintProxyUrl(minioApiBases[0], docMeta.objectName)
+      : ""
   const documentKey = docMeta ? `${survey?.id || "survey"}_${docMeta.version}` : undefined
 
   const handleDownload = () => {
-    if (!docMeta) return
+    if (!docMeta || !documentUrl) return
     const link = document.createElement("a")
-    link.href = getMinioUrl(docMeta.filePath)
+    link.href = documentUrl
     link.download = toDocxFileName("Phieu khao sat", survey?.name)
     link.target = "_blank"
     document.body.appendChild(link)

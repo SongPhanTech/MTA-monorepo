@@ -174,18 +174,23 @@ export default function ClassRegisterSession() {
     }
   }
 
-  async function handleExportRawData(sessionId: string, sessionName?: string | null) {
+  async function handleExportRawData() {
     try {
       showSpinner()
-      const res = await exportRawData({ classRegisterSessionId: sessionId })
+      const res = await exportRawData({})
 
       if (res.status === 200) {
-        message.success("Xuất dữ liệu thô thành công")
-        const blob = new Blob([JSON.stringify(res.data, null, 2)], {
+        const blob = new Blob([JSON.stringify(res.data)], {
           type: "application/json;charset=utf-8",
         })
-        const safeName = (sessionName || sessionId).replace(/[\\/:*?"<>|]/g, "_")
-        saveAs(blob, `export-dot-dang-ky-${safeName}.json`)
+        const stamp = dayjs().format("YYYYMMDD-HHmm")
+        saveAs(blob, `export-toan-bo-du-lieu-${stamp}.json`)
+        const sessionCount = res.data.counts?.ClassRegisterSession ?? 0
+        const studentCount = res.data.counts?.Student ?? 0
+        const scoreCount = res.data.counts?.StudentSubjectScore ?? 0
+        message.success(
+          `Đã xuất toàn bộ dữ liệu (đợt ${sessionCount}, SV ${studentCount}, điểm ${scoreCount})`
+        )
         return
       }
 
@@ -280,8 +285,11 @@ export default function ClassRegisterSession() {
                 </Col>
               </Row>
             </Col>
-            <Col span={8}>
-              <Flex justify="end" gap={4}>
+            <Col span={12}>
+              <Flex justify="end" gap={4} wrap="wrap">
+                <Button icon={<DownloadOutlined />} onClick={() => void handleExportRawData()}>
+                  Xuất toàn bộ dữ liệu ra internet
+                </Button>
                 {can(
                   QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
                   "THEM"
@@ -417,11 +425,11 @@ export default function ClassRegisterSession() {
                         className="text-sm cursor-pointer"
                       />
                     </Tooltip>
-                    <Tooltip title="Xuất dữ liệu thô" placement="top">
+                    <Tooltip title="Xuất toàn bộ dữ liệu ra internet" placement="top">
                       <DownloadOutlined
                         onClick={(e) => {
                           e.stopPropagation()
-                          handleExportRawData(record.id, record.name)
+                          void handleExportRawData()
                         }}
                         className="text-sm cursor-pointer"
                       />

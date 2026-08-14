@@ -1,6 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { models } from "@workspace/db/zod"
-import { prisma } from ".."
+import { prisma } from "../prisma"
 import { findClassRegisterSession } from "../services/register"
 import {
   CACHE_TTL,

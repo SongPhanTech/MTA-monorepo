@@ -58,6 +58,8 @@ interface MenuItem {
   children?: MenuItem[]
   description?: string
   type?: string
+  /** Ẩn khỏi sidebar, vẫn vào được bằng URL trực tiếp */
+  hidden?: boolean
 }
 
 type NavigationType = Record<
@@ -121,13 +123,14 @@ const NAVIGATION: NavigationType = {
       //   icon: BarChart3,
       //   path: ROUTER_PATH.CONG_SINH_VIEN.THONG_KE_DANG_KY,
       // },
-      // {
-      //   id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_DONG_BO_DU_LIEU,
-      //   label: "Đồng bộ dữ liệu",
-      //   icon: ArrowLeftRight,
-      //   path: ROUTER_PATH.CONG_SINH_VIEN.DONG_BO_DU_LIEU,
-      //   description: "Nhập/xuất dữ liệu giữa phần mềm nội bộ và cổng đăng ký học",
-      // },
+      {
+        id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_DONG_BO_DU_LIEU,
+        label: "Đồng bộ dữ liệu",
+        icon: ArrowLeftRight,
+        path: ROUTER_PATH.CONG_SINH_VIEN.DONG_BO_DU_LIEU,
+        description: "Nhập/xuất dữ liệu giữa phần mềm nội bộ và cổng đăng ký học",
+        hidden: true,
+      },
       {
         id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_KHAO_SAT,
         label: "Khảo sát",
@@ -182,13 +185,14 @@ const NAVIGATION: NavigationType = {
         icon: ScrollText,
         path: ROUTER_PATH.CONG_HOC_VIEN.LICH_SU_DANG_KY_HOC,
       },
-      // {
-      //   id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_DONG_BO_DU_LIEU,
-      //   label: "Đồng bộ dữ liệu",
-      //   icon: ArrowLeftRight,
-      //   path: ROUTER_PATH.CONG_HOC_VIEN.DONG_BO_DU_LIEU,
-      //   description: "Nhập/xuất dữ liệu giữa phần mềm nội bộ và cổng đăng ký học",
-      // },
+      {
+        id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_DONG_BO_DU_LIEU,
+        label: "Đồng bộ dữ liệu",
+        icon: ArrowLeftRight,
+        path: ROUTER_PATH.CONG_HOC_VIEN.DONG_BO_DU_LIEU,
+        description: "Nhập/xuất dữ liệu giữa phần mềm nội bộ và cổng đăng ký học",
+        hidden: true,
+      },
       {
         id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_KHAO_SAT,
         label: "Khảo sát",

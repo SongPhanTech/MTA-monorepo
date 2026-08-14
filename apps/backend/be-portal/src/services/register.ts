@@ -1,4 +1,4 @@
-import { prisma } from ".."
+import { prisma } from "../prisma"
 import { CACHE_TTL, cacheGet, cacheSet, classRegisterCache } from "./redis-cache"
 
 export const findClassRegisterSession = async (userId: string) => {

@@ -1,7 +1,8 @@
 import { Prisma, type PrismaClient } from "@workspace/db"
-import { prisma } from ".."
+import { prisma } from "../prisma"
+import { markDataSyncHistoryFailed, markDataSyncHistorySuccess } from "./data-sync-history"
 
-export const SUPPORTED_IMPORT_VERSIONS = ["1.3.0", "1.3.1", "1.3.2", "1.3.3"] as const
+export const SUPPORTED_IMPORT_VERSIONS = ["1.3.0", "1.3.1", "1.3.2", "1.3.3", "1.4.0"] as const
 
 type JsonRecord = Record<string, unknown>
 type ExportPayload = {
@@ -32,13 +33,31 @@ const FIXED_CLASS_ROLE_FIELDS = [
 /** Optional FKs that may be missing on internet DB — null before upsert if target not present */
 const NULLABLE_RISKY_FIELDS: Record<string, string[]> = {
   UserProfile: ["groupId", "sQuanlyTrucTiepId", "positionId"],
-  SubjectClass: ["scoreLinkSubjectVersionId", "examId", "planTrainingSubjectId"],
+  SubjectClass: [
+    "scoreLinkSubjectVersionId",
+    "examId",
+    "planTrainingSubjectId",
+    "lecturerId",
+    "extraLecturerId",
+    "enterGradeLecturerId",
+    "roomId",
+    "trainingLocationId",
+  ],
   FixedClass: ["staffManagementId", "lecturerManagementId", ...FIXED_CLASS_ROLE_FIELDS],
   Student: ["trainingFieldId", "curriculumVersionParallelId"],
   ClassSchedule: ["originalScheduleId"],
-  StudentSubjectScore: ["subjectClassId", "examId"],
+  StudentSubjectScore: ["examId"],
   Staff: [],
   Lecturer: [],
+}
+
+/** FK không được ghi đè thành null khi update — chỉ insert/gán khi giá trị hợp lệ */
+const PRESERVE_ON_UPDATE_FIELDS: Record<string, string[]> = {
+  StudentSubjectScore: ["subjectClassId"],
+}
+
+const PRESERVE_FK_MODEL: Record<string, string> = {
+  subjectClassId: "SubjectClass",
 }
 
 const DM_IMPORT_ORDER = [
@@ -192,9 +211,10 @@ function prepareRow(
 ): JsonRecord {
   const allowed = getScalarFields(modelName)
   const risky = NULLABLE_RISKY_FIELDS[modelName] ?? []
+  const preserve = new Set(PRESERVE_ON_UPDATE_FIELDS[modelName] ?? [])
   const nullSet = new Set([
     ...(options?.nullFields ?? []),
-    ...risky.filter((f) => !(f in row) || row[f] == null),
+    ...risky.filter((f) => !preserve.has(f) && (!(f in row) || row[f] == null)),
   ])
 
   const out: JsonRecord = {}
@@ -207,6 +227,39 @@ function prepareRow(
     out[key] = coerceValue(value)
   }
   return out
+}
+
+function omitNullPreserveFields(modelName: string, data: JsonRecord): JsonRecord {
+  const preserve = new Set(PRESERVE_ON_UPDATE_FIELDS[modelName] ?? [])
+  if (preserve.size === 0) return data
+  const out: JsonRecord = {}
+  for (const [key, value] of Object.entries(data)) {
+    if (preserve.has(key) && value == null) continue
+    out[key] = value
+  }
+  return out
+}
+
+function omitPreserveFields(modelName: string, data: JsonRecord): JsonRecord {
+  const preserve = new Set(PRESERVE_ON_UPDATE_FIELDS[modelName] ?? [])
+  if (preserve.size === 0) return data
+  const out: JsonRecord = {}
+  for (const [key, value] of Object.entries(data)) {
+    if (preserve.has(key)) continue
+    out[key] = value
+  }
+  return out
+}
+
+async function existingIdsOf(modelName: string, ids: string[]): Promise<Set<string>> {
+  const unique = [...new Set(ids.filter((id) => id.length > 0))]
+  if (unique.length === 0) return new Set()
+  const pk = pkField(modelName)
+  const rows = await getDelegate(modelName).findMany({
+    where: { [pk]: { in: unique } },
+    select: { [pk]: true },
+  })
+  return new Set(rows.map((row) => String(row[pk])))
 }
 
 function asRows(data: Record<string, unknown> | undefined, key: string): JsonRecord[] {
@@ -284,17 +337,38 @@ async function importUpsert(
   if (rows.length === 0) return 0
   const pk = pkField(modelName)
   const delegate = getDelegate(modelName)
+  const preserveFields = PRESERVE_ON_UPDATE_FIELDS[modelName] ?? []
+  const existingPreserveFks: Record<string, Set<string>> = {}
+
+  for (const field of preserveFields) {
+    const fkModel = PRESERVE_FK_MODEL[field]
+    if (!fkModel) continue
+    const ids = rows
+      .map((row) => row[field])
+      .filter((id): id is string => typeof id === "string" && id.length > 0)
+    existingPreserveFks[field] = await existingIdsOf(fkModel, ids)
+  }
+
   let imported = 0
 
   for (const raw of rows) {
-    const prepared = prepareRow(modelName, raw, options)
+    let prepared = prepareRow(modelName, raw, options)
     const id = prepared[pk]
     if (!id) {
       warnings.push(`${modelName}: bỏ qua bản ghi thiếu ${pk}`)
       continue
     }
 
-    const { [pk]: _id, ...updateData } = prepared
+    for (const field of preserveFields) {
+      const existing = existingPreserveFks[field]
+      const fk = prepared[field]
+      if (typeof fk === "string" && existing && !existing.has(fk)) {
+        prepared = { ...prepared, [field]: null }
+      }
+    }
+
+    const { [pk]: _id, ...updateRaw } = prepared
+    const updateData = omitNullPreserveFields(modelName, updateRaw)
     try {
       await delegate.upsert({
         where: { [pk]: id },
@@ -303,15 +377,20 @@ async function importUpsert(
       })
       imported += 1
     } catch (error) {
-      // Retry with extra nullable FKs cleared
+      // Retry: null FK tùy chọn; không xoá FK cần giữ (chỉ bỏ khỏi update, null khi create)
       try {
         const retry = prepareRow(modelName, raw, {
           nullFields: [...(options?.nullFields ?? []), ...(NULLABLE_RISKY_FIELDS[modelName] ?? [])],
         })
-        const { [pk]: __id, ...retryUpdate } = retry
+        const retryCreate = { ...retry }
+        for (const field of preserveFields) {
+          retryCreate[field] = null
+        }
+        const { [pk]: __id, ...retryUpdateRaw } = retryCreate
+        const retryUpdate = omitPreserveFields(modelName, retryUpdateRaw)
         await delegate.upsert({
           where: { [pk]: id },
-          create: retry,
+          create: retryCreate,
           update: retryUpdate,
         })
         imported += 1
@@ -580,4 +659,60 @@ export async function importTrainingDataFromJson(
     steps,
     warnings,
   }
+}
+
+/** Parse file JSON (không xóa file — caller tự cleanup). */
+export async function processImportFromFile(filePath: string): Promise<ImportTrainingDataResult> {
+  const { readImportJson } = await import("./data-sync/import-file-store")
+  const payload = await readImportJson(filePath)
+  return importTrainingDataFromJson(payload)
+}
+
+async function finishImportJob(syncHistoryId: string, result: ImportTrainingDataResult) {
+  const description =
+    result.warnings.length > 0
+      ? result.warnings.slice(0, 80).join("\n")
+      : result.steps.map((s) => `${s.table}: ${s.count}`).join(", ")
+  await markDataSyncHistorySuccess(syncHistoryId, {
+    classRegisterSessionId: result.sessionId,
+    description,
+  })
+  console.log(
+    `[data-sync] import xong history=${syncHistoryId} session=${result.sessionName} warnings=${result.warnings.length}`
+  )
+}
+
+/** Chạy import nền từ payload đã parse — fallback khi không dùng file/Kafka. */
+export function runImportTrainingDataJob(syncHistoryId: string, payload: unknown) {
+  void (async () => {
+    try {
+      const result = await importTrainingDataFromJson(payload)
+      await finishImportJob(syncHistoryId, result)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Nhập dữ liệu thất bại"
+      console.error(`[data-sync] import lỗi history=${syncHistoryId}`, error)
+      await markDataSyncHistoryFailed(syncHistoryId, message).catch((e) => {
+        console.error("[data-sync] không ghi được FAILED", e)
+      })
+    }
+  })()
+}
+
+/** Fallback in-process: parse file tạm + import + xóa file. */
+export function runImportTrainingDataJobFromFile(syncHistoryId: string, filePath: string) {
+  void (async () => {
+    try {
+      const result = await processImportFromFile(filePath)
+      await finishImportJob(syncHistoryId, result)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Nhập dữ liệu thất bại"
+      console.error(`[data-sync] import lỗi history=${syncHistoryId}`, error)
+      await markDataSyncHistoryFailed(syncHistoryId, message).catch((e) => {
+        console.error("[data-sync] không ghi được FAILED", e)
+      })
+    } finally {
+      const { removeImportFile } = await import("./data-sync/import-file-store")
+      await removeImportFile(filePath)
+    }
+  })()
 }

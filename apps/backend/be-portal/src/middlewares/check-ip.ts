@@ -1,6 +1,6 @@
 import type { MiddlewareHandler } from "hono"
 import { getConnInfo } from "hono/bun"
-import { prisma } from ".."
+import { prisma } from "../prisma"
 
 export const checkIp: MiddlewareHandler = async (c, next) => {
   const info = getConnInfo(c)

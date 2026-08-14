@@ -218,6 +218,62 @@ app.post("/onlyoffice-save-from-url", async (c) => {
   }
 })
 
+/**
+ * Proxy download for survey print templates.
+ * OnlyOffice Document Server fetches this URL (no direct MinIO access).
+ */
+app.get("/survey-print", async (c) => {
+  const objectNameParam = c.req.query("objectName") || ""
+  const objectName = normalizeSurveyPrintObjectName(objectNameParam)
+  if (!objectName) {
+    return c.json({ success: false, message: "Invalid objectName" }, 400)
+  }
+
+  try {
+    const buffer = await minioService.getObject(objectName)
+    const fileName = objectName.split("/").pop() || "survey.docx"
+    return c.body(new Uint8Array(buffer), 200, {
+      "Content-Type": DOCX_CONTENT_TYPE,
+      "Content-Disposition": `inline; filename="${fileName}"`,
+      "Cache-Control": "no-store",
+      "Access-Control-Allow-Origin": "*",
+    })
+  } catch (error) {
+    console.error("[survey-print GET] Error:", error)
+    return c.json({ success: false, message: "File not found" }, 404)
+  }
+})
+
+/**
+ * Proxy upload for survey print templates (client → BE → MinIO).
+ */
+app.put("/survey-print", async (c) => {
+  const objectNameParam = c.req.query("objectName") || ""
+  const objectName = normalizeSurveyPrintObjectName(objectNameParam)
+  if (!objectName) {
+    return c.json({ success: false, message: "Invalid objectName" }, 400)
+  }
+
+  try {
+    const buffer = Buffer.from(await c.req.arrayBuffer())
+    if (!buffer.length) {
+      return c.json({ success: false, message: "Empty body" }, 400)
+    }
+    const saved = await minioService.putObject(objectName, buffer, DOCX_CONTENT_TYPE)
+    return c.json(
+      {
+        success: true,
+        objectName,
+        filePath: saved.fileName,
+      },
+      200
+    )
+  } catch (error) {
+    console.error("[survey-print PUT] Error:", error)
+    return c.json({ success: false, message: "Upload failed" }, 500)
+  }
+})
+
 /** OnlyOffice Document Server save callback — must stay public (no JWT). */
 app.post("/onlyoffice-callback", async (c) => {
   const objectNameParam = c.req.query("objectName") || ""

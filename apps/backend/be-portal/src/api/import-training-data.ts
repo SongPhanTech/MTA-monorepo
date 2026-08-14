@@ -2,10 +2,14 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums } from "@workspace/db"
 import {
   createDataSyncHistoryPending,
-  markDataSyncHistoryFailed,
-  markDataSyncHistorySuccess,
+  findOtherPendingImport,
 } from "../services/data-sync-history"
-import { importTrainingDataFromJson } from "../services/import-training-data"
+import { saveImportFile } from "../services/data-sync/import-file-store"
+import {
+  DATA_SYNC_KAFKA_ENABLED,
+  enqueueDataSyncImport,
+} from "../services/data-sync/kafka-queue"
+import { runImportTrainingDataJobFromFile } from "../services/import-training-data"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -13,7 +17,9 @@ const importFromInternal = createRoute({
   operationId: "import-from-internal",
   path: "/import-from-internal",
   tags: ["DataSync"],
-  summary: "Nhập dữ liệu từ file JSON xuất bởi phần mềm nội bộ",
+  summary: "Nhập dữ liệu từ file JSON xuất bởi phần mềm nội bộ (bất đồng bộ)",
+  description:
+    "Nhận file, ghi PENDING, đẩy Kafka (worker import). Kafka tắt → fallback in-process. Theo dõi qua get-data-sync-history.",
   method: "post",
   request: {
     body: {
@@ -34,28 +40,51 @@ const importFromInternal = createRoute({
     },
   },
   responses: {
-    200: {
-      description: "Import thành công",
+    202: {
+      description: "Đã nhận file, đang nhập nền",
       content: {
         "application/json": {
           schema: z.object({
             message: z.string(),
-            sessionId: z.string(),
-            sessionName: z.string(),
-            steps: z.array(
-              z.object({
-                table: z.string(),
-                count: z.number(),
-              })
-            ),
-            warnings: z.array(z.string()),
+            syncHistoryId: z.string(),
+            status: z.literal("PENDING"),
+          }),
+        },
+      },
+    },
+    200: {
+      description: "Import thành công (tương thích cũ, không còn dùng)",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+            sessionId: z.string().optional(),
+            sessionName: z.string().optional(),
+            steps: z
+              .array(
+                z.object({
+                  table: z.string(),
+                  count: z.number(),
+                })
+              )
+              .optional(),
+            warnings: z.array(z.string()).optional(),
             syncHistoryId: z.string().optional(),
+            status: z.string().optional(),
           }),
         },
       },
     },
     400: {
       description: "File không hợp lệ",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+    409: {
+      description: "Đang có tiến trình nhập khác",
       content: {
         "application/json": {
           schema: z.object({ message: z.string() }),
@@ -75,56 +104,62 @@ app.openapi(importFromInternal, async (c) => {
     return c.json({ message: "Vui lòng chọn file JSON" }, 400)
   }
 
-  let payload: unknown
-  try {
-    const text = await file.text()
-    payload = JSON.parse(text)
-  } catch {
-    return c.json({ message: "File JSON không hợp lệ" }, 400)
+  const otherPending = await findOtherPendingImport(syncHistoryId)
+  if (otherPending) {
+    return c.json(
+      {
+        message: `Đang có một tiến trình nhập dữ liệu (${otherPending.sessionName || otherPending.fileName || otherPending.id}). Vui lòng đợi hoàn tất.`,
+      },
+      409
+    )
   }
-
-  const preview = payload as {
-    version?: string
-    exportedAt?: string
-    counts?: Record<string, number>
-    data?: { ClassRegisterSession?: Array<{ id?: string; name?: string }> }
-  }
-  const sessionRow = preview.data?.ClassRegisterSession?.[0]
 
   if (!syncHistoryId) {
     const history = await createDataSyncHistoryPending({
       type: $Enums.DataSyncType.IMPORT,
-      sessionName: sessionRow?.name || file.name,
-      classRegisterSessionId: sessionRow?.id,
+      sessionName: file.name || "Import JSON",
       fileName: file.name,
-      fileVersion: preview.version,
-      sourceExportedAt: preview.exportedAt ? new Date(preview.exportedAt) : undefined,
-      recordCounts: preview.counts,
       performedById: session.id,
     })
     syncHistoryId = history.id
   }
 
-  try {
-    const result = await importTrainingDataFromJson(payload)
-    await markDataSyncHistorySuccess(syncHistoryId)
+  const historyId = syncHistoryId
+  const filePath = await saveImportFile(historyId, Buffer.from(await file.arrayBuffer()))
 
-    return c.json(
-      {
-        message: "Nhập dữ liệu thành công",
-        sessionId: result.sessionId,
-        sessionName: result.sessionName,
-        steps: result.steps,
-        warnings: result.warnings,
-        syncHistoryId,
-      },
-      200
-    )
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Nhập dữ liệu thất bại"
-    await markDataSyncHistoryFailed(syncHistoryId, message)
-    return c.json({ message }, 400)
+  if (DATA_SYNC_KAFKA_ENABLED) {
+    const enqueued = await enqueueDataSyncImport({
+      syncHistoryId: historyId,
+      filePath,
+      fileName: file.name,
+      timestamp: new Date().toISOString(),
+      attempts: 0,
+    })
+    if (enqueued) {
+      return c.json(
+        {
+          message: "Đã nhận file. Worker đang nhập dữ liệu, theo dõi tab Lịch sử đồng bộ.",
+          syncHistoryId: historyId,
+          status: "PENDING" as const,
+        },
+        202
+      )
+    }
+    console.warn("[data-sync] Kafka không khả dụng → fallback import in-process")
   }
+
+  setTimeout(() => {
+    runImportTrainingDataJobFromFile(historyId, filePath)
+  }, 50)
+
+  return c.json(
+    {
+      message: "Đã nhận file. Hệ thống đang nhập dữ liệu nền, theo dõi tab Lịch sử đồng bộ.",
+      syncHistoryId: historyId,
+      status: "PENDING" as const,
+    },
+    202
+  )
 })
 
 export default app

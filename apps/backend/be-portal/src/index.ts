@@ -1,6 +1,6 @@
 import { OpenAPIHono } from "@hono/zod-openapi"
 import { jwtAuth } from "@workspace/auth/hono"
-import { Prisma, type PrismaClient } from "@workspace/db"
+import { Prisma } from "@workspace/db"
 import { contextStorage } from "hono/context-storage"
 import { cors } from "hono/cors"
 import { showRoutes } from "hono/dev"
@@ -11,18 +11,21 @@ import ClassRegisterApp from "./api/class-register"
 import DataSyncHistoryApp from "./api/data-sync-history"
 import ExportRegistrationResultsApp from "./api/export-registration-results"
 import ImportTrainingDataApp from "./api/import-training-data"
-import { createPrismaClient } from "./config/database"
+import { prisma } from "./prisma"
 import { checkIp } from "./middlewares/check-ip"
 import { startRegistrationEventsWorker } from "./services/class-registration/events-worker"
 import { startRegistrationWorker } from "./services/class-registration/worker"
+import { startDataSyncWorker } from "./services/data-sync/worker"
 import { setupOpenApi } from "./utils/openapi"
 
-export const prisma: PrismaClient = createPrismaClient()
+export { prisma }
 
 // Background worker tiêu thụ course_registration_queue (Kafka) — chạy nền, không block server
 startRegistrationWorker(prisma)
 // Consumer ghi ClassRegisterAttempt từ topic events (thống kê lỗi đăng ký)
 startRegistrationEventsWorker(prisma)
+// Worker import JSON đồng bộ (Kafka data_sync_import_queue)
+startDataSyncWorker(prisma)
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -94,7 +97,16 @@ app.onError((err, c) => {
       return c.json({ message: "Internal Server Error" }, status)
     }
 
-    return c.json({ message: err.meta?.cause }, status)
+    return c.json(
+      {
+        message:
+          (typeof err.meta?.cause === "string" && err.meta.cause) ||
+          err.message ||
+          `Database error ${err.code}`,
+        code: err.code,
+      },
+      status
+    )
   }
 
   console.log(err)
@@ -107,6 +119,9 @@ export default {
   fetch: app.fetch,
   hostname: "0.0.0.0",
   port: process.env.PORT || 3000,
+  // Upload JSON đồng bộ lớn: mặc định Bun idleTimeout=10s → ERR_CONNECTION_RESET ~30s
+  idleTimeout: 255,
+  maxRequestBodySize: 512 * 1024 * 1024,
 }
 
 process.on("SIGINT", () => {

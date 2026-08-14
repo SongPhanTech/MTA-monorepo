@@ -1,0 +1,95 @@
+name: mta-be-infra
+
+services:
+  mta-be-model:
+    image: ghcr.io/songphantech/mta-be-model:latest
+    pull_policy: never
+    container_name: mta-be-model
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3041:3000"
+    networks:
+      - mta-shared-network
+
+  mta-be-ql-dao-tao:
+    image: ghcr.io/songphantech/mta-be-ql-dao-tao:latest
+    pull_policy: never
+    container_name: mta-be-ql-dao-tao
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3042:3000"
+    networks:
+      - mta-shared-network
+
+  mta-be-portal:
+    image: ghcr.io/songphantech/mta-be-portal:latest
+    pull_policy: never
+    container_name: mta-be-portal
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      REDIS_CACHE_ENABLED: ${REDIS_CACHE_ENABLED:-true}
+      REDIS_TTL_SESSION: ${REDIS_TTL_SESSION:-60}
+      REDIS_TTL_STUDENT: ${REDIS_TTL_STUDENT:-60}
+      REDIS_TTL_CLASSES_INFO: ${REDIS_TTL_CLASSES_INFO:-5}
+      REDIS_RATE_LIMIT_ENABLED: ${REDIS_RATE_LIMIT_ENABLED:-true}
+      REDIS_RL_REGISTER_MAX: ${REDIS_RL_REGISTER_MAX:-20}
+      REDIS_RL_REGISTER_WINDOW: ${REDIS_RL_REGISTER_WINDOW:-60}
+      REDIS_RL_UNREGISTER_MAX: ${REDIS_RL_UNREGISTER_MAX:-20}
+      REDIS_RL_UNREGISTER_WINDOW: ${REDIS_RL_UNREGISTER_WINDOW:-60}
+      REDIS_RL_READ_MAX: ${REDIS_RL_READ_MAX:-120}
+      REDIS_RL_READ_WINDOW: ${REDIS_RL_READ_WINDOW:-60}
+      DATA_SYNC_IMPORT_DIR: /data/mta-import
+      DATA_SYNC_WORKER_ENABLED: "false"
+    ports:
+      - "3044:3000"
+    volumes:
+      - mta-import-data:/data/mta-import
+    networks:
+      - mta-shared-network
+
+  mta-be-portal-data-sync-worker:
+    image: ghcr.io/songphantech/mta-be-portal:latest
+    pull_policy: never
+    container_name: mta-be-portal-data-sync-worker
+    restart: unless-stopped
+    command: ["bun", "worker-data-sync.js"]
+    env_file:
+      - .env
+    environment:
+      DATABASE_POOL_SIZE: ${DATA_SYNC_WORKER_POOL_SIZE:-10}
+      DATA_SYNC_IMPORT_DIR: /data/mta-import
+      DATA_SYNC_WORKER_ENABLED: "true"
+      CLASS_REGISTER_WORKER_ENABLED: "false"
+      CLASS_REGISTER_EVENTS_WORKER_ENABLED: "false"
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+    volumes:
+      - mta-import-data:/data/mta-import
+    networks:
+      - mta-shared-network
+
+  mta-be-ql-dao-tao-shared:
+    image: ghcr.io/songphantech/mta-be-ql-dao-tao-shared:latest
+    pull_policy: never
+    container_name: mta-be-ql-dao-tao-shared
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3045:3000"
+    networks:
+      - mta-shared-network
+
+volumes:
+  mta-import-data:
+
+networks:
+  mta-shared-network:
+    external: true
+    name: mta-shared-network

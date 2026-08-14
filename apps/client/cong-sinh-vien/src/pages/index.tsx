@@ -11,15 +11,24 @@ const IndexPage = () => {
   const router = useRouter()
 
   useEffect(() => {
-    if (status === "authenticated") {
-      const flatMenu = menus.flat()
+    if (status !== "authenticated") return
 
-      const firstMenu = flatMenu.find((i) => i.path)
-      if (firstMenu?.path) {
-        router.push(firstMenu.path)
-      }
+    const asPath = router.asPath.split("?")[0]
+    const isIndex = router.pathname === "/" || router.pathname === "/index"
+    if (!isIndex) return
+
+    // CDN try_files fallback về index.html khi mở deep link → giữ đúng URL, không đẩy /home
+    if (asPath && asPath !== "/" && asPath !== "/index") {
+      void router.replace(asPath)
+      return
     }
-  }, [status, menus, router.push])
+
+    const firstMenu = menus.flat().find((i) => i.path)
+    if (firstMenu?.path) {
+      void router.push(firstMenu.path)
+    }
+  }, [status, menus, router])
+
   return <Loading />
 }
 export default IndexPage

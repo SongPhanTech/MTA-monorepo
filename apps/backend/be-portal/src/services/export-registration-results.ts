@@ -1,4 +1,4 @@
-import { prisma } from ".."
+import { prisma } from "../prisma"
 
 export const EXPORT_REGISTRATION_RESULTS_VERSION = "1.0.0"
 

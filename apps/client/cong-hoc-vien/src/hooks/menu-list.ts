@@ -20,7 +20,7 @@ const useMenuList = () => {
     setIsUpdateAbility(true)
   }, [permissions])
 
-  const menus = NAVIGATION.CONG_SINH_VIEN.menus
+  const menus = NAVIGATION.CONG_SINH_VIEN.menus.filter((menu) => !menu.hidden)
 
   return menus
 }

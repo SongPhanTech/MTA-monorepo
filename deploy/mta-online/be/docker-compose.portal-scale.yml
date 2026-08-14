@@ -17,6 +17,7 @@ services:
     environment:
       DATABASE_POOL_SIZE: ${DATABASE_POOL_SIZE_2:-40}
       PORT: "3000"
+      DATA_SYNC_IMPORT_DIR: /data/mta-import
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
       REDIS_CACHE_ENABLED: ${REDIS_CACHE_ENABLED:-true}
       REDIS_TTL_SESSION: ${REDIS_TTL_SESSION:-60}
@@ -33,6 +34,8 @@ services:
       - "3046:3000"
     cpus: ${PORTAL_CPU_LIMIT:-2}
     mem_limit: ${PORTAL_MEM_LIMIT:-2g}
+    volumes:
+      - mta-import-data:/data/mta-import
     depends_on:
       postgres:
         condition: service_healthy
