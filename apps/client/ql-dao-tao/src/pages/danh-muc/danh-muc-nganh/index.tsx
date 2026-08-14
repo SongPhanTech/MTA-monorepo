@@ -17,11 +17,11 @@ import { whereOrganization } from "@workspace/libs/constants"
 import { getMinioUrl } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
-import { useFindManyTrainingObjectTypePermission } from "@workspace/ui"
+import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Col, Flex, message, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import type React from "react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 export default function TrainingFieldPage() {
@@ -29,7 +29,6 @@ export default function TrainingFieldPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [filters, setFilters] = useState<FilterProps>({
-    trainingObjectTypes: undefined,
     name: "",
     code: "",
     organization: undefined,
@@ -39,6 +38,31 @@ export default function TrainingFieldPage() {
   })
 
   const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission()
+  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+  const selectedTrainingObjectTypeIds = useMemo(() => {
+    if (trainingObjectTypeId) {
+      return [trainingObjectTypeId]
+    }
+    return trainingObjectTypeData.map((item) => item.id)
+  }, [trainingObjectTypeId, trainingObjectTypeData])
+
+  const renderTrainingObjectTypeNames = (
+    trainingObjectTypes: Array<{ trainingObjectType: TrainingObjectType }>
+  ) => {
+    const names = trainingObjectTypes
+      .filter(
+        ({ trainingObjectType }) =>
+          !trainingObjectTypeId || trainingObjectType.id === trainingObjectTypeId
+      )
+      .map(({ trainingObjectType }) => trainingObjectType.name)
+
+    return [...new Set(names)].join("; ")
+  }
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [trainingObjectTypeId])
 
   const where = useMemo(
     () => ({
@@ -77,9 +101,7 @@ export default function TrainingFieldPage() {
       trainingObjectTypes: {
         some: {
           trainingObjectTypeId: {
-            in: filters.trainingObjectTypes?.length
-              ? filters.trainingObjectTypes
-              : trainingObjectTypeData.map((item) => item.id),
+            in: selectedTrainingObjectTypeIds,
           },
         },
       },
@@ -102,12 +124,11 @@ export default function TrainingFieldPage() {
     [
       filters.code,
       filters.name,
-      filters.trainingObjectTypes,
       filters.organization,
       filters.publishDate,
       filters.active,
       filters.decisionNo,
-      trainingObjectTypeData,
+      selectedTrainingObjectTypeIds,
     ]
   )
   const { data = [] } = useFindManyTrainingField({
@@ -225,23 +246,9 @@ export default function TrainingFieldPage() {
               },
               {
                 title: "Đối tượng đào tạo",
-                dataIndex: "trainingObjectTypes",
                 align: "center",
                 width: 175,
-                type: "select",
-                options: trainingObjectTypeData.map((i) => {
-                  return {
-                    value: i.id,
-                    label: i.name,
-                  }
-                }),
-                render: (trainingObjectTypes) =>
-                  trainingObjectTypes
-                    .map(
-                      ({ trainingObjectType }: { trainingObjectType: TrainingObjectType }) =>
-                        trainingObjectType.name
-                    )
-                    .join("; "),
+                render: (_, record) => renderTrainingObjectTypeNames(record.trainingObjectTypes),
               },
               {
                 title: "Mã ngành",

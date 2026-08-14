@@ -17,12 +17,12 @@ import {
 import { whereOrganization } from "@workspace/libs/constants"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
-import { useFindManyTrainingObjectTypePermission } from "@workspace/ui"
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from "antd"
+import { useFindManyTrainingObjectTypePermission, useTrainingObjectTypeStore } from "@workspace/ui"
+import { Button, Col, Flex, Input, message, Row, Tag, Tooltip } from "antd"
 import _ from "lodash"
 import { Search } from "lucide-react"
 import type React from "react"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 export default function TrainingMajorPage() {
@@ -32,7 +32,6 @@ export default function TrainingMajorPage() {
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [filters, setFilters] = useState<FilterProps>({
     searchText: "",
-    trainingObjectTypes: undefined,
     code: "",
     name: "",
     numberCreditsMajor: undefined,
@@ -47,6 +46,41 @@ export default function TrainingMajorPage() {
   }, [filters])
 
   const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission()
+  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+  const selectedTrainingObjectTypeIds = useMemo(() => {
+    if (trainingObjectTypeId) {
+      return [trainingObjectTypeId]
+    }
+    return trainingObjectTypeData.map((item) => item.id)
+  }, [trainingObjectTypeId, trainingObjectTypeData])
+
+  const renderTrainingObjectTypes = (
+    trainingObjectTypes: Array<{
+      id: string
+      trainingObjectType: TrainingObjectType
+    }>
+  ) => {
+    const items = trainingObjectTypes.filter(
+      ({ trainingObjectType }) =>
+        !trainingObjectTypeId || trainingObjectType.id === trainingObjectTypeId
+    )
+
+    const uniqueItems = items.filter(
+      (item, index, array) =>
+        array.findIndex((i) => i.trainingObjectType.id === item.trainingObjectType.id) === index
+    )
+
+    if (uniqueItems.length === 0) return ""
+
+    return uniqueItems.map((item) => (
+      <div key={item.id}>- {item.trainingObjectType.name}</div>
+    ))
+  }
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [trainingObjectTypeId])
 
   const where: Prisma.TrainingFieldWhereInput = useMemo(() => {
     const filter: Prisma.TrainingFieldWhereInput = isFiltering
@@ -101,12 +135,12 @@ export default function TrainingMajorPage() {
                   trainingObjectTypes: {
                     some: {
                       trainingObjectTypeId: {
-                        in: filters.trainingObjectTypes,
+                        in: selectedTrainingObjectTypeIds,
                       },
                     },
                   },
                 },
-                !!filters.trainingObjectTypes?.length
+                selectedTrainingObjectTypeIds.length > 0
               ),
               ...emptyObjectIf(
                 {
@@ -124,15 +158,13 @@ export default function TrainingMajorPage() {
     filter.trainingObjectTypes = {
       some: {
         trainingObjectTypeId: {
-          in: filters.trainingObjectTypes?.length
-            ? filters.trainingObjectTypes
-            : trainingObjectTypeData.map((item) => item.id),
+          in: selectedTrainingObjectTypeIds,
         },
       },
     }
 
     return filter
-  }, [filters, isFiltering, trainingObjectTypeData])
+  }, [filters, isFiltering, selectedTrainingObjectTypeIds])
 
   const { data = [], refetch } = useFindManyTrainingField({
     where,
@@ -169,12 +201,12 @@ export default function TrainingMajorPage() {
               trainingObjectTypes: {
                 some: {
                   trainingObjectTypeId: {
-                    in: filters.trainingObjectTypes,
+                    in: selectedTrainingObjectTypeIds,
                   },
                 },
               },
             },
-            !!filters.trainingObjectTypes?.length
+            selectedTrainingObjectTypeIds.length > 0
           ),
           ...emptyObjectIf(
             {
@@ -284,34 +316,29 @@ export default function TrainingMajorPage() {
           <Row gutter={[16, 16]} align="top" justify="space-between">
             <Col span={12}>
               <Flex>
-                <Col span={8}>
-                  <Form.Item name="searchText">
-                    <Input
-                      id="search"
-                      onChange={(e) =>
-                        setFilters({
-                          ...filters,
-                          searchText: e.target.value,
-                        })
-                      }
-                      placeholder="Tìm kiếm"
+                <Input
+                  id="search"
+                  onChange={(e) =>
+                    setFilters({
+                      ...filters,
+                      searchText: e.target.value,
+                    })
+                  }
+                  placeholder="Tìm kiếm"
+                  style={{
+                    maxWidth: 300,
+                    height: 32,
+                  }}
+                  prefix={
+                    <Search
+                      size={15}
                       style={{
-                        maxWidth: 300,
-                        marginRight: 8,
-                        height: 32,
+                        color: "rgba(0, 0, 0, 0.25)",
                       }}
-                      prefix={
-                        <Search
-                          size={15}
-                          style={{
-                            color: "rgba(0, 0, 0, 0.25)",
-                          }}
-                        />
-                      }
-                      allowClear
                     />
-                  </Form.Item>
-                </Col>
+                  }
+                  allowClear
+                />
               </Flex>
             </Col>
             <Col span={6}>
@@ -370,26 +397,9 @@ export default function TrainingMajorPage() {
               // },
               {
                 title: "ĐTĐT",
-                dataIndex: "trainingObjectTypes",
                 align: "center",
                 width: 150,
-                type: "select",
-                options: trainingObjectTypeData.map((i: TrainingObjectType) => ({
-                  value: i.id,
-                  label: i.name,
-                })),
-                render: (value) =>
-                  value?.length > 0
-                    ? value.map(
-                        (
-                          i: TrainingObjectType & {
-                            trainingObjectType: TrainingObjectType
-                          }
-                        ) => {
-                          return <div key={i?.id}>- {i?.trainingObjectType?.name}</div>
-                        }
-                      )
-                    : "",
+                render: (_, record) => renderTrainingObjectTypes(record.trainingObjectTypes),
               },
               {
                 title: "Đơn vị quản lý",
