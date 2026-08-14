@@ -8,7 +8,9 @@ const app = new OpenAPIHono()
 
 const exportTrainingDataRequestSchema = z
   .object({
-    classRegisterSessionId: z.string().openapi(fieldDesc("ID đợt đăng ký học online.")),
+    classRegisterSessionId: z.string().optional().openapi(
+      fieldDesc("Tùy chọn, giữ tương thích. Xuất luôn toàn bộ dữ liệu, không lọc theo đợt.")
+    ),
   })
   .openapi("ExportTrainingDataRequest")
 
@@ -17,8 +19,9 @@ const exportTrainingDataResponseSchema = z
     version: z.string(),
     exportedAt: z.string(),
     filters: z.object({
-      classRegisterSessionId: z.string(),
-      semesterId: z.string(),
+      scope: z.literal("full"),
+      classRegisterSessionIds: z.array(z.string()),
+      semesterIds: z.array(z.string()),
       trainingCourseIds: z.array(z.string()),
     }),
     counts: z.object({}).catchall(z.number()),
@@ -31,16 +34,21 @@ const exportTrainingDataRoute = createRoute({
   tags: ["Xuất dữ liệu"],
   path: "/export",
   method: "post",
-  summary: "Xuất dữ liệu thô theo đợt đăng ký học",
-  description: `Xuất gói JSON theo 1 đợt đăng ký học online để migrate sang môi trường internet (version 1.3.3).
+  summary: "Xuất toàn bộ dữ liệu thô sang môi trường internet",
+  description: `Xuất gói JSON toàn bộ (version 1.4.0) để migrate sang cổng internet / import ngược.
 
-**Bảng danh mục:** toàn bộ bảng DM_* (mta, ql-ho-so), LecturerType, StaffType, StaffPosition, TrainingLanguage, TrainingType, TrainingLevel, TrainingForm, TrainingTime, DiplomaType, PriorityObject, TrainingField, AcademicRankingConvert, SubjectVersionCategory, LoadCategory, TemplateFile.
+**Phạm vi (không lọc 1 đợt):**
+- Đợt đăng ký học + hạn mức tín chỉ + gắn khóa
+- Lớp học phần, thời khóa biểu (SubjectClassTime, ClassSchedule), phòng/cơ sở
+- Sinh viên, hồ sơ UserProfile (SV/GV/CB), lớp niên chế, giảng viên, cán bộ
+- Danh mục hệ thống DM_* và catalog đào tạo
+- Chương trình đào tạo, khối, môn, phiên bản môn, tiên quyết/tương đương
+- Điểm lớp học phần + kết quả học kỳ của sinh viên **mọi kỳ**
 
-**Bảng nghiệp vụ:** ClassRegisterSession, ClassRegisterSessionCredit, _ClassRegisterSessionToTrainingCourse, Student, UserProfile, Lecturer, Staff, TrainingObjectType, SchoolYear, Semester (HK đợt + điểm/kết quả + semesterStart khóa + lớp điểm lịch sử), TrainingCourse, TrainingCourseRegulation, Subject, SubjectVersion, _PrerequisiteSubject, _CoRequisiteSubject, EquivalencyGroup, SubjectInGroup, TrainingBlock, TrainingBlockOnCurriculumVersion, TrainingBlockSubject, SubjectClass (lớp đợt đăng ký + lớp được điểm lịch sử tham chiếu, kèm enrolledCount/version), SubjectClassTime, FixedClass, _FixedClassToSubjectClass, Room, Building, TrainingLocation, TrainingMajor, Curriculum, CurriculumVersion, StudentSubjectScore (điểm lịch sử SV khóa — giữ subjectClassId), StudentSemesterResult, Exam, ClassSchedule.
-
-**Tham số:** classRegisterSessionId.`,
+**Tham số:** classRegisterSessionId (optional, không dùng để lọc).`,
   request: {
     body: {
+      required: false,
       content: {
         "application/json": {
           schema: exportTrainingDataRequestSchema,
@@ -51,7 +59,7 @@ const exportTrainingDataRoute = createRoute({
   responses: {
     ...standardErrorResponses(),
     200: {
-      description: "Gói dữ liệu JSON",
+      description: "Gói dữ liệu JSON toàn bộ",
       content: {
         "application/json": {
           schema: exportTrainingDataResponseSchema,
@@ -70,14 +78,12 @@ const exportTrainingDataRoute = createRoute({
 })
 
 app.openapi(exportTrainingDataRoute, async (c) => {
-  const { classRegisterSessionId } = c.req.valid("json")
-
   try {
-    const result = await exportTrainingData({ classRegisterSessionId })
+    const result = await exportTrainingData()
     return c.json(result, 200)
   } catch (error) {
     const message = error instanceof Error ? error.message : "Xuất dữ liệu thất bại"
-    return c.json({ message }, 404)
+    return c.json({ message }, 500)
   }
 })
 

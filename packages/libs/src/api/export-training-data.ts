@@ -2,15 +2,18 @@ import { useMutation } from "@tanstack/react-query"
 import { customTrainingFetch } from "./custom-instance"
 
 export type ExportTrainingDataRequest = {
-  classRegisterSessionId: string
+  classRegisterSessionId?: string
 }
 
 export type ExportTrainingDataPayload = {
   version: string
   exportedAt: string
   filters: {
-    classRegisterSessionId: string
-    semesterId: string
+    scope?: "full"
+    classRegisterSessionId?: string
+    classRegisterSessionIds?: string[]
+    semesterId?: string
+    semesterIds?: string[]
     trainingCourseIds: string[]
   }
   counts: Record<string, number>

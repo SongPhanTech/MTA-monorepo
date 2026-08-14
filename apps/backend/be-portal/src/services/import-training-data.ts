@@ -2,7 +2,7 @@ import { Prisma, type PrismaClient } from "@workspace/db"
 import { prisma } from "../prisma"
 import { markDataSyncHistoryFailed, markDataSyncHistorySuccess } from "./data-sync-history"
 
-export const SUPPORTED_IMPORT_VERSIONS = ["1.3.0", "1.3.1", "1.3.2", "1.3.3"] as const
+export const SUPPORTED_IMPORT_VERSIONS = ["1.3.0", "1.3.1", "1.3.2", "1.3.3", "1.4.0"] as const
 
 type JsonRecord = Record<string, unknown>
 type ExportPayload = {

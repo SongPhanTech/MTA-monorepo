@@ -312,7 +312,10 @@ export async function parseImportJsonFile(file: File): Promise<ImportJsonPreview
     version: json.version ?? "—",
     exportedAt: json.exportedAt,
     sessionId: str(session, "id") || "",
-    sessionName: str(session, "name") || "",
+    sessionName:
+      sessions.length > 1
+        ? `${str(session, "name")} (+${sessions.length - 1} đợt)`
+        : str(session, "name") || "",
     semesterName: str(semester, "name"),
     schoolYearName: str(schoolYear, "name"),
     startDate: str(session, "startDate"),
