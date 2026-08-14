@@ -227,16 +227,10 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
       : Promise.resolve([]),
   ])
 
-  // SSS tham chiếu lớp ngoài gói → null subjectClassId (tránh FK thiếu trên cổng)
-  // vẫn giữ subjectVersionId + finalScore để check tiên quyết
-  const exportedSubjectClassIdSet = new Set(subjectClassIds)
-  const studentSubjectScores = studentSubjectScoresRaw.map((row) => ({
-    ...row,
-    subjectClassId:
-      row.subjectClassId && exportedSubjectClassIdSet.has(row.subjectClassId)
-        ? row.subjectClassId
-        : null,
-  }))
+  // Giữ nguyên subjectClassId trên điểm lịch sử; bổ sung lớp HP được SSS tham chiếu
+  const studentSubjectScores = studentSubjectScoresRaw
+  const scoreSubjectClassIds = uniqueIds(studentSubjectScoresRaw.map((s) => s.subjectClassId))
+  const allSubjectClassIdsForExport = uniqueIds([...subjectClassIds, ...scoreSubjectClassIds])
 
   const subjectIds = uniqueIds(subjectVersions.map((sv) => sv.subjectId))
 
@@ -315,8 +309,8 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
   ])
 
   const [subjectClassRecords, exams] = await Promise.all([
-    subjectClassIds.length > 0
-      ? prisma.subjectClass.findMany({ where: { id: { in: subjectClassIds } } })
+    allSubjectClassIdsForExport.length > 0
+      ? prisma.subjectClass.findMany({ where: { id: { in: allSubjectClassIdsForExport } } })
       : Promise.resolve([]),
     subjectClassIds.length > 0 || subjectVersionIds.length > 0
       ? prisma.exam.findMany({
@@ -344,9 +338,9 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
   }))
 
   const lecturerIds = uniqueIds([
-    ...subjectClasses.map((sc) => sc.lecturerId),
-    ...subjectClasses.map((sc) => sc.extraLecturerId),
-    ...subjectClasses.map((sc) => sc.enterGradeLecturerId),
+    ...subjectClassRecords.map((sc) => sc.lecturerId),
+    ...subjectClassRecords.map((sc) => sc.extraLecturerId),
+    ...subjectClassRecords.map((sc) => sc.enterGradeLecturerId),
     ...fixedClasses.map((fc) => fc.lecturerManagementId),
     ...classSchedules.map((cs) => cs.lecturerId),
     ...classSchedules.map((cs) => cs.extraLecturerId),
@@ -355,12 +349,12 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
   const staffIds = uniqueIds(fixedClasses.map((fc) => fc.staffManagementId))
 
   const roomIds = uniqueIds([
-    ...subjectClasses.map((sc) => sc.roomId),
+    ...subjectClassRecords.map((sc) => sc.roomId),
     ...classSchedules.map((cs) => cs.roomId),
   ])
 
   const trainingLocationIds = uniqueIds([
-    ...subjectClasses.map((sc) => sc.trainingLocationId),
+    ...subjectClassRecords.map((sc) => sc.trainingLocationId),
     ...students.map((s) => s.trainingLocationId),
   ])
 
@@ -449,6 +443,7 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
     ...trainingCourses.map((tc) => tc.semesterStartId),
     ...studentSemesterResultsResolved.map((r) => r.semesterId),
     ...studentSubjectScoresRaw.map((s) => s.semesterId),
+    ...subjectClassRecords.map((sc) => sc.semesterId),
   ])
 
   const [
@@ -484,9 +479,10 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
       : Promise.resolve([]),
     (() => {
       const existingTot = new Set(trainingObjectTypes.map((t) => t.id))
-      const missingTot = uniqueIds(trainingBlocks.map((b) => b.trainingObjectTypeId)).filter(
-        (id) => !existingTot.has(id)
-      )
+      const missingTot = uniqueIds([
+        ...trainingBlocks.map((b) => b.trainingObjectTypeId),
+        ...subjectClassRecords.map((sc) => sc.trainingObjectTypeId),
+      ]).filter((id) => !existingTot.has(id))
       return missingTot.length > 0
         ? prisma.trainingObjectType.findMany({ where: { id: { in: missingTot } } })
         : Promise.resolve([])
@@ -550,7 +546,7 @@ export async function exportTrainingData(params: ExportTrainingDataParams) {
     (async () => {
       const examIds = uniqueIds([
         ...exams.map((e) => e.id),
-        ...subjectClasses.map((sc) => sc.examId),
+        ...subjectClassRecords.map((sc) => sc.examId),
       ])
       return examIds.length > 0
         ? prisma.exam.findMany({ where: { id: { in: examIds }, deletedAt: null } })

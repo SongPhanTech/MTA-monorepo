@@ -5,7 +5,8 @@
     "dev": "bun run --watch src/index.ts",
     "build": "bun build.ts",
     "postcompile": "rm -f .*.bun-build",
-    "start": "bun dist/index.js"
+    "start": "bun dist/index.js",
+    "start:data-sync-worker": "bun dist/worker-data-sync.js"
   },
   "dependencies": {
     "@hono/oidc-auth": "catalog:",
