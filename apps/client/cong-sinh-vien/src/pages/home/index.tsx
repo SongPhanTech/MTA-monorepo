@@ -23,6 +23,9 @@ function Page() {
             curriculumVersionId: true,
             fixedClassId: true,
             studentYearResult: {
+              where: {
+                rankId: { not: null },
+              },
               select: {
                 rank: {
                   select: {
@@ -33,7 +36,9 @@ function Page() {
                 accumulatedCredits: true,
               },
               orderBy: {
-                studyYear: "desc",
+                schoolYear: {
+                  startDate: "desc",
+                },
               },
               take: 1,
             },
