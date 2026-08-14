@@ -691,7 +691,7 @@ export default function StudentScoreClassPage() {
           hiddenColumns: ["M", "N", "R", "J", "K", "L"],
         },
       ],
-      fileName: `BDCN-${sampleStudentData.fullname}.xlsx`,
+      fileName: `BDCN-${sampleStudentData.maSV}-${sampleStudentData.fullname}.xlsx`,
     })
   }
 
@@ -997,7 +997,7 @@ export default function StudentScoreClassPage() {
           hiddenColumns: ["M", "N", "R", "J", "K", "L"],
         },
       ],
-      fileName: `BDCN-${sampleStudentData.fullname}.xlsx`,
+      fileName: `BDCN-${sampleStudentData.maSV}-${sampleStudentData.fullname}.xlsx`,
     })
   }
 
@@ -1176,7 +1176,7 @@ export default function StudentScoreClassPage() {
           ],
         },
       ],
-      fileName: `BDQT-${sampleStudentData.hoVaTen}.xlsx`,
+      fileName: `BDQT-${sampleStudentData.maSinhVien}-${sampleStudentData.hoVaTen}.xlsx`,
     })
   }
 
