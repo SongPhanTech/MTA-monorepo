@@ -262,6 +262,19 @@ function DanhSachHocVien({
     tag: "ReviewSurveyModal",
   })
 
+  let totalStudents = 0
+  let doneStudents = 0
+
+  data?.forEach((subjectClass: any) => {
+    const students = subjectClass?.subjectClassStudent || []
+    totalStudents += students.length
+    students.forEach((studentRecord: any) => {
+      if (checkStatus(studentRecord)) {
+        doneStudents++
+      }
+    })
+  })
+
   return (
     <div>
       <Row gutter={[16, 4]}>
@@ -446,6 +459,14 @@ function DanhSachHocVien({
                 data={data || []}
                 pagination={false}
               />
+              <div className="mt-2 px-3 py-1 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ color: "#666" }}>Tổng đã làm:</span>{" "}
+                  <strong style={{ color: "#009a5c", fontSize: 16, fontWeight: "bold" }}>
+                    {doneStudents}/{totalStudents}
+                  </strong>
+                </div>
+              </div>
             </Col>
           </>
         )}
