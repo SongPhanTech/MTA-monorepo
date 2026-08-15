@@ -1,10 +1,14 @@
 services:
-    backup:
-        command: ./dist/app
-        image: mta-backup:main
-        container_name: mta-backup
-        restart: unless-stopped
-        ports:
-            - "8085:8085"
-        env_file:
-            - .env
+  mta-backup:
+    image: ghcr.io/songphantech/mta-backup:latest
+    pull_policy: never
+    container_name: mta-backup
+    restart: unless-stopped
+    ports:
+      - "${BACKUP_PORT:-8085}:8085"
+    env_file:
+      - .env
+    environment:
+      TZ: ${TZ:-Asia/Ho_Chi_Minh}
+    volumes:
+      - ./backups:/backups

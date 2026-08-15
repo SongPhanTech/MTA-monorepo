@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= swan1
+SERVER_PROFILE ?= app
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -106,6 +106,9 @@ PKG_BE_KHAO_THI := be-khao-thi
 PKG_BE_PORTAL := be-portal
 PKG_BE_DAO_TAO_SHARED := be-ql-dao-tao-shared
 PKG_BE_EXCHANGE := be-exchange
+PKG_BE_BACKUP := backup
+BACKUP_IMAGE := $(REGISTRY)/$(IMG_PREFIX)$(PKG_BE_BACKUP):$(DEV_TAG)
+BACKUP_SERVICE := $(IMG_PREFIX)$(PKG_BE_BACKUP)
 
 PKG_KHAO_THI := khao-thi
 PKG_DAO_TAO := ql-dao-tao
@@ -155,7 +158,8 @@ APP_URL_SUFFIX_cong-hoc-vien = /conghocvien/home
 
 # Targets
 .PHONY: all clean push deploy release all-be build-all-be build-all-fe ship-fe \
-	build-% all-% save-docker-images package-cdn _package-fe-cdn-copy
+	build-% all-% save-docker-images package-cdn _package-fe-cdn-copy \
+	build-backup deploy-backup all-backup
 
 help:
 	@echo "Available targets:"
@@ -174,6 +178,7 @@ help:
 	@echo "  all-clients"
 	@echo "  save-docker-images"
 	@echo "  package-cdn"
+	@echo "  build-backup / deploy-backup / all-backup  (Go PG Back Web → ~/app/be khi SERVER_PROFILE=app)"
 
 # Pattern rule: build-<name>
 build-%:
@@ -281,6 +286,59 @@ all-%: build-%
 	elif echo "$(FE_PKGS)" | tr ' ' '\n' | grep -Fxq "$*"; then \
 		$(MAKE) _deploy-fe PACKAGE=$*; \
 	fi
+
+# ── backup (Go / apps/backup, không đi turbo prune) ──────────────────────────
+# Usage:
+#   make all-backup SERVER_PROFILE=app
+# Image: ghcr.io/songphantech/mta-backup:latest
+# Server: $(BE_APP_DIR)  (profile app → ~/app/be)
+build-backup:
+	@echo "Building $(BACKUP_IMAGE) from apps/backup"
+	@echo "Pre-pull base images (Docker Hub CloudFront hay 502 — retry + mirror golang)"
+	@pull_img() { \
+		img="$$1"; \
+		for i in 1 2 3 4 5; do \
+			$(DOCKER) pull --platform linux/amd64 "$$img" && return 0; \
+			echo "  pull $$img failed ($$i/5), retry in 12s"; \
+			sleep 12; \
+		done; \
+		return 1; \
+	}; \
+	if ! pull_img golang:1.23.5-bookworm; then \
+		echo "  fallback mirror.gcr.io for golang"; \
+		pull_img mirror.gcr.io/library/golang:1.23.5-bookworm && \
+			$(DOCKER) tag mirror.gcr.io/library/golang:1.23.5-bookworm golang:1.23.5-bookworm; \
+	fi; \
+	pull_img denoland/deno:debian-2.1.9 || true; \
+	pull_img debian:12.7 || true; \
+	ok=0; \
+	for i in 1 2 3 4 5; do \
+		$(DOCKER) build -f apps/backup/docker/Dockerfile --platform linux/amd64 \
+			-t $(BACKUP_IMAGE) \
+			apps/backup --output type=docker && ok=1 && break; \
+		echo "  docker build failed ($$i/5), retry in 15s"; \
+		sleep 15; \
+	done; \
+	[ "$$ok" = 1 ]
+
+deploy-backup:
+	@mkdir -p docker-images
+	@echo "Saving $(BACKUP_IMAGE)"
+	$(DOCKER) save $(BACKUP_IMAGE) | gzip > docker-images/$(BACKUP_SERVICE).tar.gz
+	$(SSH) $(SERVER_HOST) "mkdir -p $(BE_DEPLOY_DIR)/docker-images $(BE_APP_DIR)/backups"
+	$(SCP) -O docker-images/$(BACKUP_SERVICE).tar.gz $(SERVER_HOST):$(BE_DEPLOY_DIR)/docker-images/
+	$(SCP) -O apps/backup/docker-compose.yml $(SERVER_HOST):$(BE_APP_DIR)/docker-compose.backup.yml
+	$(SSH) $(SERVER_HOST) "set -e; \
+		docker load -i $(BE_DEPLOY_DIR)/docker-images/$(BACKUP_SERVICE).tar.gz; \
+		cd $(BE_APP_DIR); \
+		if [ ! -f .env ]; then echo 'WARNING: $(BE_APP_DIR)/.env chưa có PBW_* — tạo trước khi lên web :8085'; fi; \
+		if [ -f docker-compose.yml ]; then \
+			docker compose -f docker-compose.yml -f docker-compose.backup.yml up -d --force-recreate $(BACKUP_SERVICE); \
+		else \
+			docker compose -f docker-compose.backup.yml up -d --force-recreate; \
+		fi"
+
+all-backup: build-backup deploy-backup
 
 # Internal backend build
 _build-be:

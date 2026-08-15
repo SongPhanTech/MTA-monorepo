@@ -1,0 +1,14 @@
+###############################################################################
+# ⚠️ Do not use this file in production. This is only for development purposes.
+###############################################################################
+
+# This values are configured by default in the compose.yaml file, so you can
+# copy this file to .env and use it as is (only for development).
+
+# Encryption key is used to encrypt and decrypt the sensitive data stored
+# in the database such as database credentials, secret keys, etc.
+PBW_ENCRYPTION_KEY="swantech"
+
+# Database connection string for a PostgreSQL database where the pgbackweb
+# will store its data.
+PBW_POSTGRES_CONN_STRING="postgres://admin:123456654321@192.168.100.132:5432/mta-backup?sslmode=disable"
