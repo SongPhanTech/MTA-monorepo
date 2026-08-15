@@ -1006,8 +1006,20 @@ const getStudentInfo = createRoute({
       content: {
         "application/json": {
           schema: z.object({
-            userProfile: models.UserProfileScalarSchema.nullish(),
-            student: models.StudentScalarSchema.nullish(),
+            userProfile: z
+              .object({
+                id: z.string(),
+                code: z.string().nullish(),
+                fullname: z.string().nullish(),
+              })
+              .nullish(),
+            student: z
+              .object({
+                id: z.string(),
+                code: z.string().nullish(),
+                status: z.string().nullish(),
+              })
+              .nullish(),
             latestSemesterResult: z
               .object({
                 rank: z
@@ -1066,16 +1078,20 @@ app.openapi(getStudentInfo, async (c) => {
     latestSemesterResult: unknown
     creditLimit: { maxCredit: number } | null
   }>(cacheKey)
-  if (cached) {
+  if (cached && typeof cached === "object" && cached.userProfile) {
     return c.json(cached, 200)
   }
 
   const profile = await prisma.userProfile.findUniqueOrThrow({
     where: { id: session.id },
-    include: {
+    select: {
+      id: true,
+      code: true,
+      fullname: true,
       educationAndTraining: {
         orderBy: { createdAt: "desc" },
         take: 1,
+        select: { id: true, code: true, status: true },
       },
     },
   })
@@ -1177,12 +1193,17 @@ app.openapi(getStudentInfo, async (c) => {
   }
 
   const payload = {
-    userProfile: profile,
+    userProfile: {
+      id: profile.id,
+      code: profile.code,
+      fullname: profile.fullname,
+    },
     student: student
-      ? (() => {
-          const { fixedClass: _fixedClass, ...studentScalar } = student
-          return studentScalar
-        })()
+      ? {
+          id: student.id,
+          code: student.code,
+          status: student.status,
+        }
       : null,
     latestSemesterResult: latestSemesterResult
       ? {

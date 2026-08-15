@@ -118,12 +118,28 @@ export async function withRedis<T>(fn: (redis: RedisClient) => Promise<T>): Prom
   }
 }
 
+function redisValueToString(v: unknown): string | null {
+  if (v == null) return null
+  if (typeof v === "string") return v
+  if (typeof v === "number" || typeof v === "bigint" || typeof v === "boolean") return String(v)
+  if (v instanceof Uint8Array) return new TextDecoder().decode(v)
+  if (ArrayBuffer.isView(v)) {
+    const view = v as ArrayBufferView
+    return new TextDecoder().decode(new Uint8Array(view.buffer, view.byteOffset, view.byteLength))
+  }
+  return null
+}
+
 export async function cacheGet<T>(key: string): Promise<T | null> {
   if (!ENABLED) return null
   const raw = await withRedis((redis) => redis.get(key))
-  if (raw == null) return null
+  const text = redisValueToString(raw)
+  if (text == null || text === "") return null
   try {
-    return JSON.parse(String(raw), jsonReviver) as T
+    const parsed = JSON.parse(text, jsonReviver) as T
+    // GET nhầm key INCR (uver/rl) → số 0..n; không dùng làm payload JSON.
+    if (parsed == null || typeof parsed !== "object") return null
+    return parsed
   } catch {
     return null
   }
@@ -177,8 +193,10 @@ export async function cacheExpire(key: string, ttlSec: number): Promise<void> {
 export async function cacheGetNumber(key: string): Promise<number> {
   if (!ENABLED) return 0
   const v = await withRedis((redis) => redis.get(key))
-  if (v == null) return 0
-  return Number(v) || 0
+  const text = redisValueToString(v)
+  if (text == null || text === "") return 0
+  const n = Number(text)
+  return Number.isFinite(n) ? n : 0
 }
 
 /** Fixed-window rate limit. Redis down → cho qua (fail-open). */

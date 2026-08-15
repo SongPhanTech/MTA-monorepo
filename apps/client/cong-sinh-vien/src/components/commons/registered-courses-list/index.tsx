@@ -66,6 +66,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
     if (classStudentData?.status !== 200) return null
 
     const data = classStudentData.data
+    if (!data || typeof data !== "object") return null
 
     return {
       studentName: data?.userProfile?.fullname,
