@@ -624,7 +624,7 @@ export default function StudentScoreClassPage() {
             {
               cells: [
                 {
-                  value: `Điểm trung bình hệ 10 toàn khoá: ${tongdiemhe10}`,
+                  value: `TBC tích luỹ hệ 10 toàn khoá: ${tongdiemhe10}`,
                   colSpan: 19,
                   border: false,
                 },
@@ -633,7 +633,7 @@ export default function StudentScoreClassPage() {
             {
               cells: [
                 {
-                  value: `Điểm trung bình hệ 4 toàn khoá: ${tongdiemhe4}`,
+                  value: `TBC tích luỹ hệ 4 toàn khoá: ${tongdiemhe4}`,
                   colSpan: 19,
                   border: false,
                 },
@@ -930,7 +930,7 @@ export default function StudentScoreClassPage() {
             {
               cells: [
                 {
-                  value: `Điểm trung bình hệ 10 toàn khoá: ${tongdiemhe10}`,
+                  value: `TBC tích luỹ hệ 10 toàn khoá: ${tongdiemhe10}`,
                   colSpan: 19,
                   border: false,
                 },
@@ -939,7 +939,7 @@ export default function StudentScoreClassPage() {
             {
               cells: [
                 {
-                  value: `Điểm trung bình hệ 4 toàn khoá: ${tongdiemhe4}`,
+                  value: `TBC tích luỹ hệ 4 toàn khoá: ${tongdiemhe4}`,
                   colSpan: 19,
                   border: false,
                 },

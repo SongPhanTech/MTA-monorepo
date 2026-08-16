@@ -1438,7 +1438,7 @@ export default function StudentFixedClassPage() {
         const diemTBHe10Row: TableRow = {
           cells: [
             {
-              value: `Điểm trung bình hệ 10 toàn khoá: ${tongdiemhe10}`,
+              value: `TBC tích luỹ hệ 10 toàn khoá: ${tongdiemhe10}`,
               colSpan: 18,
               border: false,
             },
@@ -1447,7 +1447,7 @@ export default function StudentFixedClassPage() {
         const diemTBHe4Row: TableRow = {
           cells: [
             {
-              value: `Điểm trung bình hệ 4 toàn khoá: ${tongdiemhe4}`,
+              value: `TBC tích luỹ hệ 4 toàn khoá: ${tongdiemhe4}`,
               colSpan: 18,
               border: false,
             },
@@ -1804,7 +1804,7 @@ export default function StudentFixedClassPage() {
         const diemTBHe10Row: TableRow = {
           cells: [
             {
-              value: `Điểm trung bình hệ 10 toàn khoá: ${tongdiemhe10}`,
+              value: `TBC tích luỹ hệ 10 toàn khoá: ${tongdiemhe10}`,
               colSpan: 18,
               border: false,
             },
@@ -1813,16 +1813,16 @@ export default function StudentFixedClassPage() {
         const diemTBHe4Row: TableRow = {
           cells: [
             {
-              value: `Điểm trung bình hệ 4 toàn khoá: ${tongdiemhe4}`,
+              value: `TBC tích luỹ hệ 4 toàn khoá: ${tongdiemhe4}`,
               colSpan: 18,
               border: false,
             },
           ],
         }
         const xeploai = convertScore(tongdiemhe10).classification
-        const xepLoaiRow: TableRow = {
-          cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 18, border: false }],
-        }
+        // const xepLoaiRow: TableRow = {
+        //   cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 18, border: false }],
+        // }
 
         const dateSignatureRow: TableRow = {
           cells: [
