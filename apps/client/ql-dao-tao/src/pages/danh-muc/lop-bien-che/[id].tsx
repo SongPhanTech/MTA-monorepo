@@ -8,7 +8,7 @@ import type { FilterProps } from "@constants/type"
 import { useScoreConverter } from "@hooks/scoreConverter"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
-import { $Enums, type Semester, type StudentSemesterResult } from "@workspace/db"
+import type { Semester, StudentSemesterResult } from "@workspace/db"
 import type { Student } from "@workspace/db/client"
 import {
   useFindManyCurriculumVersion,
@@ -20,7 +20,7 @@ import {
   useUpdateManyStudent,
   useUpdateStudent,
 } from "@workspace/db/hooks"
-import { sqlTransaction, type sqlTransactionResponse200 } from "@workspace/libs/api/model"
+import { sqlTransaction } from "@workspace/libs/api/model"
 import { Docxtemplater, exportFile, loadFile } from "@workspace/libs/docxjs"
 import { exportFromTemplate, type TableRow } from "@workspace/libs/template-excel"
 import { getMinioUrl } from "@workspace/libs/utils"
@@ -29,7 +29,6 @@ import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Col, Divider, Dropdown, Flex, message, Popconfirm, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { saveAs } from "file-saver"
-import _ from "lodash"
 import { BookCheckIcon } from "lucide-react"
 import { useRouter } from "next/router"
 import { useCallback, useMemo, useState } from "react"
@@ -1200,29 +1199,8 @@ export default function StudentFixedClassPage() {
                             },
                           },
                         },
-                        certificates: {
-                          include: {
-                            archivedCertificate: true,
-                          },
-                        },
-                        awards: {
-                          where: {
-                            status: $Enums.ArchivedCertificateStatus.APPROVED,
-                          },
-                          include: {
-                            archivedAward: true,
-                          },
-                        },
                       },
                     },
-                  },
-                },
-                trainingCoursesStart: {
-                  where: {
-                    id: item.fixedClass?.trainingCourseId ?? undefined,
-                  },
-                  include: {
-                    scoreConverts: true,
                   },
                 },
                 schoolYear: true,
@@ -1579,29 +1557,8 @@ export default function StudentFixedClassPage() {
                             },
                           },
                         },
-                        certificates: {
-                          include: {
-                            archivedCertificate: true,
-                          },
-                        },
-                        awards: {
-                          where: {
-                            status: $Enums.ArchivedCertificateStatus.APPROVED,
-                          },
-                          include: {
-                            archivedAward: true,
-                          },
-                        },
                       },
                     },
-                  },
-                },
-                trainingCoursesStart: {
-                  where: {
-                    id: item.fixedClass?.trainingCourseId ?? undefined,
-                  },
-                  include: {
-                    scoreConverts: true,
                   },
                 },
                 schoolYear: true,
@@ -1773,56 +1730,6 @@ export default function StudentFixedClassPage() {
         const gapRow: TableRow = {
           cells: [{ value: null, colSpan: 18, border: false }],
         }
-        const tongtinchi = sampleStudentData.hocKis.reduce(
-          (acc: number, curr: IHocKi) => acc + (curr.SoTinChiKy ?? 0),
-          0
-        )
-
-        // Tính điểm trung bình hệ 10 toàn khoá: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
-        const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
-          (acc: number, curr: IHocKi) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
-          0
-        )
-        const tongDiemNhanTinChiHe4 = sampleStudentData.hocKis.reduce(
-          (acc: number, curr: IHocKi) => acc + (curr.DiemTBKyHe4 ?? 0) * (curr.SoTinChiKy ?? 0),
-          0
-        )
-
-        const tongdiemhe10 =
-          tongtinchi === 0 ? 0 : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1))
-        const tongdiemhe4 =
-          tongtinchi === 0 ? 0 : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1))
-        const totalRow: TableRow = {
-          cells: [
-            {
-              value: `Tổng tín chỉ: ${tongtinchi}`,
-              colSpan: 18,
-              border: false,
-            },
-          ],
-        }
-        const diemTBHe10Row: TableRow = {
-          cells: [
-            {
-              value: `TBC tích luỹ hệ 10 toàn khoá: ${tongdiemhe10}`,
-              colSpan: 18,
-              border: false,
-            },
-          ],
-        }
-        const diemTBHe4Row: TableRow = {
-          cells: [
-            {
-              value: `TBC tích luỹ hệ 4 toàn khoá: ${tongdiemhe4}`,
-              colSpan: 18,
-              border: false,
-            },
-          ],
-        }
-        const xeploai = convertScore(tongdiemhe10).classification
-        // const xepLoaiRow: TableRow = {
-        //   cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 18, border: false }],
-        // }
 
         const dateSignatureRow: TableRow = {
           cells: [
@@ -1898,9 +1805,6 @@ export default function StudentFixedClassPage() {
     }
   }
 
-  // ─── handleExportBangDiem ─────────────────────────────────────────────────────
-  // Sửa: dùng convertScoreWithGraduation thay vì convertScore trực tiếp
-  // Sửa: gọi convert 1 lần duy nhất trên mỗi điểm thay vì 2-3 lần
   const handleExportBangDiem = async () => {
     const result: any[] = []
     showSpinner()
@@ -1937,37 +1841,9 @@ export default function StudentFixedClassPage() {
                         studentId: item.id,
                       },
                       include: {
-                        subjectVersion: {
-                          include: {
-                            trainingBlocks: {
-                              select: { graduation: true },
-                              take: 1,
-                            },
-                          },
-                        },
-                        certificates: {
-                          include: {
-                            archivedCertificate: true,
-                          },
-                        },
-                        awards: {
-                          where: {
-                            status: $Enums.ArchivedCertificateStatus.APPROVED,
-                          },
-                          include: {
-                            archivedAward: true,
-                          },
-                        },
+                        subjectVersion: true,
                       },
                     },
-                  },
-                },
-                trainingCoursesStart: {
-                  where: {
-                    id: item.fixedClass?.trainingCourseId ?? undefined,
-                  },
-                  include: {
-                    scoreConverts: true,
                   },
                 },
                 schoolYear: true,
@@ -1996,44 +1872,17 @@ export default function StudentFixedClassPage() {
                     subjectClassStudent?.manualFinalScore ||
                     Number(subjectClassStudent?.finalScore) ||
                     0
-                  const isGraduation =
-                    subjectClassStudent.subjectVersion?.trainingBlocks?.[0]?.graduation === true
-                  const converted = convertScoreWithGraduation(rawScore, isGraduation)
 
                   monhoc.push({
                     TenMonhoc: subjectClassStudent.subjectVersion.name,
-                    MaMH: subjectClassStudent.subjectVersion.code?.slice(0, 2) ?? "",
                     soTC: subjectClassStudent.subjectVersion.credit,
                     diemhe10: rawScore,
-                    diemhe4: converted?.base4 ?? 0,
-                    diemchu: converted?.letter ?? "",
-                    ghichu: subjectClassStudent.description ?? "",
                   })
                 })
               })
 
-              const tongSoTinChi = monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
-
-              const tongDiemNhanTinChiHe10 = monhoc.reduce(
-                (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
-                0
-              )
-              const tongDiemNhanTinChiHe4 = monhoc.reduce(
-                (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
-                0
-              )
-
-              const diemTBHe10_Raw = tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi
-              const diemTBHe4_Raw = tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi
-
-              const diemTBHe10 = Number.parseFloat(diemTBHe10_Raw.toFixed(1))
-              const diemTBHe4 = Number.parseFloat(diemTBHe4_Raw.toFixed(1))
-
               hocKis.push({
                 TenHocKi: semester.code + "-" + semester.name + "-" + semester.schoolYear?.name,
-                SoTinChiKy: tongSoTinChi,
-                DiemTBKyHe10: diemTBHe10,
-                DiemTBKyHe4: diemTBHe4,
                 monHocs: monhoc,
               })
             })
