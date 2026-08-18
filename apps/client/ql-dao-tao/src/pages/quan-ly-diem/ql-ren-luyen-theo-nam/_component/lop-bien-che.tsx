@@ -5,8 +5,6 @@ import {
   useFindUniqueLecturer,
   useFindUniqueStaff,
 } from "@workspace/db/hooks"
-import { useAbility } from "@workspace/permissions/hooks"
-import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { Tree } from "antd"
 import type React from "react"
@@ -22,11 +20,8 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
   className,
   objectTrainingTypeId,
 }) => {
-  const { can } = useAbility()
   const { data: session } = useSession()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-
-  const canViewAll = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, "XEM_TAT_CA")
 
   const { data: currentLecturer, isLoading: isLoadingLecturer } = useFindUniqueLecturer(
     {
@@ -35,7 +30,7 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
       },
     },
     {
-      enabled: !!session?.sDM_NhanVienId && !canViewAll,
+      enabled: !!session?.sDM_NhanVienId,
     }
   )
 
@@ -46,11 +41,11 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
       },
     },
     {
-      enabled: !!session?.sDM_NhanVienId && !canViewAll,
+      enabled: !!session?.sDM_NhanVienId,
     }
   )
 
-  const isManager = !canViewAll && (!!currentLecturer?.id || !!currentStaff?.id)
+  const isClassManager = !!currentLecturer?.id || !!currentStaff?.id
 
   const { data: trainingCourses = [] } = useFindManyTrainingCourse({
     where: {
@@ -74,11 +69,9 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
       name: className ? { contains: className } : undefined,
     }
 
-    if (canViewAll) {
-      return baseWhere
-    }
-
-    const orConditions: any[] = []
+    const orConditions: Array<
+      { lecturerManagementId: string } | { staffManagementId: string }
+    > = []
 
     if (currentLecturer?.id) {
       orConditions.push({ lecturerManagementId: currentLecturer.id })
@@ -101,9 +94,14 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
     }
   }
 
-  const { data: fixedClasses = [], isLoading: fixedClassesLoading } = useFindManyFixedClass({
-    where: buildFixedClassWhere(),
-  })
+  const { data: fixedClasses = [], isLoading: fixedClassesLoading } = useFindManyFixedClass(
+    {
+      where: buildFixedClassWhere(),
+    },
+    {
+      enabled: !isLoadingLecturer && !isLoadingStaff,
+    }
+  )
 
   const treeData = trainingCourses
     .map((course) => {
@@ -130,7 +128,7 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
     <div style={{ width: "100%", padding: "16px", borderRadius: "8px" }}>
       <h2 className="text-lg font-semibold px-[6]" style={{ marginBottom: "12px" }}>
         Danh sách lớp
-        {isManager && (
+        {isClassManager && (
           <span className="text-sm font-normal text-gray-500 block">(Lớp bạn quản lý)</span>
         )}
       </h2>
@@ -153,7 +151,11 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
             }}
           />
         ) : (
-          <p>{isManager ? "Bạn chưa được phân công lớp nào." : "Không có dữ liệu để hiển thị."}</p>
+          <p>
+            {isClassManager
+              ? "Bạn chưa được phân công quản lý lớp nào."
+              : "Không có lớp quản lý để hiển thị."}
+          </p>
         )}
       </div>
     </div>
