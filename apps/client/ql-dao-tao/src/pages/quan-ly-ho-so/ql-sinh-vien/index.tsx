@@ -107,144 +107,140 @@ export default function UserProfilePageDs() {
     }
   }
 
-  const where: Prisma.StudentWhereInput = useMemo(
-    () => ({
-      ...(filters.code
+  const where: Prisma.StudentWhereInput = useMemo(() => {
+    const and: Prisma.StudentWhereInput[] = []
+
+    if (filters.code) {
+      and.push({
+        code: {
+          contains: filters.code,
+          mode: "insensitive",
+        },
+      })
+    }
+
+    const userProfile: Prisma.UserProfileWhereInput = {
+      ...(filters.name
         ? {
-            code: {
-              contains: filters.code,
+            fullname: {
+              contains: filters.name,
               mode: "insensitive" as const,
             },
           }
         : {}),
-      userProfile: {
-        ...(filters.name
-          ? {
-              fullname: {
-                contains: filters.name,
-                mode: "insensitive" as const,
-              },
-            }
-          : {}),
-        ...(filters.idCardNumber
-          ? {
-              idCardNumber: {
-                contains: filters.idCardNumber,
-                mode: "insensitive" as const,
-              },
-            }
-          : {}),
-        ...(filters.rank
-          ? {
-              rank: {
-                sTen: {
-                  contains: filters.rank,
-                  mode: "insensitive",
-                },
-              },
-            }
-          : {}),
-        ...(filters.phone
-          ? {
-              phoneNumber: {
-                contains: filters.phone,
+      ...(filters.idCardNumber
+        ? {
+            idCardNumber: {
+              contains: filters.idCardNumber,
+              mode: "insensitive" as const,
+            },
+          }
+        : {}),
+      ...(filters.rank
+        ? {
+            rank: {
+              sTen: {
+                contains: filters.rank,
                 mode: "insensitive",
               },
-            }
-          : {}),
-      },
-      ...(filters.curriculumVersion
-        ? {
-            curriculumVersionId: {
-              in: filters.curriculumVersion,
             },
           }
         : {}),
-      ...(filters.curriculumVersionParallel
+      ...(filters.phone
         ? {
-            curriculumVersionParallelId: {
-              in: filters.curriculumVersionParallel,
+            phoneNumber: {
+              contains: filters.phone,
+              mode: "insensitive",
             },
           }
         : {}),
+    }
+    if (Object.keys(userProfile).length > 0) {
+      and.push({ userProfile })
+    }
 
-      ...(filters.trainingCourse
-        ? {
+    if (filters.curriculumVersion?.length) {
+      and.push({ curriculumVersionId: { in: filters.curriculumVersion } })
+    }
+    if (filters.curriculumVersionParallel?.length) {
+      and.push({ curriculumVersionParallelId: { in: filters.curriculumVersionParallel } })
+    }
+    if (filters.statusStudent?.length) {
+      and.push({ status: { in: filters.statusStudent } })
+    }
+
+    const selectedClassIds = filters.fixedClassId
+      ? [filters.fixedClassId]
+      : filters.fixedClass?.length
+        ? filters.fixedClass
+        : undefined
+    const selectedCourseIds = filters.trainingCourseId
+      ? [filters.trainingCourseId]
+      : filters.trainingCourse?.length
+        ? filters.trainingCourse
+        : undefined
+
+    if (selectedClassIds) {
+      and.push({ fixedClassId: { in: selectedClassIds } })
+    } else if (selectedCourseIds) {
+      and.push({
+        OR: [
+          { fixedClass: { trainingCourseId: { in: selectedCourseIds } } },
+          {
+            fixedClassId: null,
+            curriculumVersion: { trainingCourseId: { in: selectedCourseIds } },
+          },
+        ],
+      })
+    } else {
+      and.push({
+        OR: [
+          {
             fixedClass: {
-              trainingCourseId: {
-                in: filters.trainingCourse,
+              trainingCourse: {
+                trainingObjectTypeId,
               },
             },
-          }
-        : {}),
-      ...(filters.trainingCourseId
-        ? {
-            fixedClass: {
-              trainingCourseId: filters.trainingCourseId,
-            },
-          }
-        : {
+          },
+          {
+            fixedClassId: null,
             OR: [
-              {
-                fixedClass: {
-                  trainingCourse: {
-                    trainingObjectTypeId,
-                  },
-                },
-              },
-              {
-                fixedClassId: null,
-                curriculumVersion: {
-                  curriculum: {
-                    trainingObjectTypeId,
-                  },
-                },
-              },
+              { curriculumVersion: { trainingObjectTypeId } },
+              { curriculumVersion: { curriculum: { trainingObjectTypeId } } },
+              { curriculumVersionId: null },
             ],
-          }),
-      ...(filters.fixedClassId
-        ? {
-            fixedClass: {
-              id: filters.fixedClassId,
-            },
-          }
-        : filters.fixedClass
-          ? {
-              fixedClass: {
-                id: { in: filters.fixedClass },
-              },
-            }
+          },
+        ],
+      })
+    }
+
+    if (filters.trainingMajors?.length || filters.trainingField?.length) {
+      const trainingMajor = {
+        ...(filters.trainingMajors?.length ? { id: { in: filters.trainingMajors } } : {}),
+        ...(filters.trainingField?.length
+          ? { trainingFieldId: { in: filters.trainingField } }
           : {}),
-      ...(filters.trainingMajors || filters.trainingField
-        ? {
+      }
+      and.push({
+        OR: [
+          {
             fixedClass: {
               curriculumVersion: {
-                curriculum: {
-                  trainingMajor: {
-                    ...(filters.trainingMajors
-                      ? {
-                          id: {
-                            in: filters.trainingMajors,
-                          },
-                        }
-                      : {}),
-                    ...(filters.trainingField
-                      ? {
-                          trainingFieldId: {
-                            in: filters.trainingField,
-                          },
-                        }
-                      : {}),
-                  },
-                },
+                curriculum: { trainingMajor },
               },
             },
-          }
-        : {}),
-      ...(filters.statusStudent ? { status: { in: filters.statusStudent } } : {}),
-    }),
-    [filters, trainingObjectTypeId]
-  )
+          },
+          {
+            curriculumVersion: {
+              curriculum: { trainingMajor },
+            },
+          },
+        ],
+      })
+    }
+
+    return and.length > 0 ? { AND: and } : {}
+  }, [filters, trainingObjectTypeId])
 
   const {
     data = [],
