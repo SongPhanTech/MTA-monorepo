@@ -179,7 +179,7 @@ export default function ClassRegisterSession() {
       showSpinner()
       const res = await exportRawData({})
 
-      if (res.status === 200) {
+      if (res.status === 200 && "counts" in res.data) {
         const blob = new Blob([JSON.stringify(res.data)], {
           type: "application/json;charset=utf-8",
         })

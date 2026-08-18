@@ -1,4 +1,4 @@
-import { parseDate } from "@workspace/libs/utils"
+import { normalizeCatalogName, parseDate } from "@workspace/libs/utils"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 import type { CellObject } from "xlsx"
@@ -527,7 +527,7 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
         objectType: row[cols.objectType]?.trim(),
         officerNumber: row[cols.officerNumber]?.trim(),
         rank: row[cols.rank]?.trim(),
-        position: row[cols.position]?.trim(),
+        position: normalizeCatalogName(row[cols.position]) || undefined,
         department: row[cols.department]?.trim(),
         departmentAddress: row[cols.departmentAddress]?.trim(),
         careerYear: row[cols.careerYear]?.trim(),

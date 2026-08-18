@@ -9,7 +9,7 @@ import {
   parseSheetStudent,
   zParseSheetError,
 } from "@workspace/libs/parseExcel"
-import { splitFullName } from "@workspace/libs/utils"
+import { normalizeCatalogName, splitFullName } from "@workspace/libs/utils"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import {
@@ -1370,7 +1370,7 @@ app.openapi(importStudent, async (c) => {
             phoneNumber: student.phoneNumber,
             officerNumber: student.officerNumber,
             rankId: rankMap.get(student.rank ?? "") || null,
-            positionCPVId: positionMap.get(student.position ?? "") || null,
+            positionCPVId: positionMap.get(normalizeCatalogName(student.position)) || null,
           }
 
           const existingProfile = existingProfileMap.get(student.idCardNumber)
@@ -1395,7 +1395,7 @@ app.openapi(importStudent, async (c) => {
                   userProfileId: st.userProfileId,
                   donVi: student.department,
                   diaChi: student.departmentAddress,
-                  chucVuId: positionMap.get(student.position ?? ""),
+                  chucVuId: positionMap.get(normalizeCatalogName(student.position)),
                 },
               })
             }

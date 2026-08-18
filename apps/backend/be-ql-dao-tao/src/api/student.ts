@@ -1112,7 +1112,7 @@ app.openapi(downloadStudentImportTemplate, async (c) => {
     const result = await _generateStudentImportTemplate(trainingObjectTypeId, {
       trainingCourseId: allCourses ? undefined : trainingCourseId,
     })
-    const fileName = "MauImportDSHV.xlsx"
+    const fileName = "MauImportDSHV_v5.xlsx"
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
     return c.body(result, 200, {
       "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
