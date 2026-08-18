@@ -125,6 +125,8 @@ import type {
   DebtStatisticsParams,
   DownloadCurriculumImportTemplateParams,
   DownloadStudentImportTemplateParams,
+  EnrollApprovedStudentsRequest,
+  EnrollApprovedStudentsResponse,
   EnrollFixedClassOnSubjectClassBody,
   ErrorDetailResponse,
   ErrorMessageResponse,
@@ -162,6 +164,7 @@ import type {
   ExportTrainingDataResponse,
   FailureBooleanResponse,
   FixedClassStudentCountParams,
+  FromTemplateRequest,
   GenExamListCodeResult,
   GenExamRoomCode,
   GenerateDiplomaNumberBody,
@@ -9799,7 +9802,7 @@ export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatisti
 
 **Bảng dữ liệu nguồn:** (file mẫu, không ghi DB).
 
-**Tham số:** trainingObjectTypeId (query).
+**Tham số:** trainingObjectTypeId (query). allCourses=true xuất toàn bộ; hoặc truyền trainingCourseId để lọc theo khoá.
  * @summary Tải mẫu import học viên
  */
 export type downloadStudentImportTemplateResponse200 = {
@@ -15925,14 +15928,131 @@ export const useRenderXlsxTemplate = <TError = ErrorMessageResponse,
     }
     
 /**
- * Xuất gói JSON theo 1 đợt đăng ký học online để migrate sang môi trường internet (version 1.3.3).
+ * Render file Excel từ template MinIO bằng engine template-excel (placeholder `{{key}}`, bảng `rows`, merge sheet).
 
-**Bảng danh mục:** toàn bộ bảng DM_* (mta, ql-ho-so), LecturerType, StaffType, StaffPosition, TrainingLanguage, TrainingType, TrainingLevel, TrainingForm, TrainingTime, DiplomaType, PriorityObject, TrainingField, AcademicRankingConvert, SubjectVersionCategory, LoadCategory, TemplateFile.
+**Cách dùng:**
+1. `templatePath`: path MinIO (vd `/mta/template/BangDiemQuaTrinh.xlsx`)
+2. `sheets[]`: data placeholder, rows bảng động, hiddenColumns, ...
 
-**Bảng nghiệp vụ:** ClassRegisterSession, ClassRegisterSessionCredit, _ClassRegisterSessionToTrainingCourse, Student, UserProfile, Lecturer, Staff, TrainingObjectType, SchoolYear, Semester (HK đợt + điểm/kết quả + semesterStart khóa), TrainingCourse, TrainingCourseRegulation, Subject, SubjectVersion, _PrerequisiteSubject, _CoRequisiteSubject, EquivalencyGroup, SubjectInGroup, TrainingBlock, TrainingBlockOnCurriculumVersion, TrainingBlockSubject, SubjectClass (kèm enrolledCount/version), SubjectClassTime, FixedClass, _FixedClassToSubjectClass, Room, Building, TrainingLocation, TrainingMajor, Curriculum, CurriculumVersion, StudentSubjectScore (điểm lịch sử SV khóa — null subjectClassId nếu lớp ngoài gói), StudentSemesterResult, Exam, ClassSchedule.
+BE tự tải template từ MinIO nội bộ — FE không cần gọi MinIO trực tiếp.
+ * @summary Xuất Excel từ template-excel (placeholder + bảng động)
+ */
+export type exportFromTemplateResponse200 = {
+  data: Blob
+  status: 200
+}
 
-**Tham số:** classRegisterSessionId.
- * @summary Xuất dữ liệu thô theo đợt đăng ký học
+export type exportFromTemplateResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type exportFromTemplateResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type exportFromTemplateResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type exportFromTemplateResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type exportFromTemplateResponseSuccess = (exportFromTemplateResponse200) & {
+  headers: Headers;
+};
+export type exportFromTemplateResponseError = (exportFromTemplateResponse400 | exportFromTemplateResponse404 | exportFromTemplateResponse409 | exportFromTemplateResponse500) & {
+  headers: Headers;
+};
+
+export type exportFromTemplateResponse = (exportFromTemplateResponseSuccess | exportFromTemplateResponseError)
+
+export const getExportFromTemplateUrl = () => {
+
+
+  
+
+  return `/api/export-template/from-template`
+}
+
+export const exportFromTemplate = async (fromTemplateRequest: FromTemplateRequest, options?: RequestInit): Promise<exportFromTemplateResponse> => {
+  
+  return customTrainingFetch<exportFromTemplateResponse>(getExportFromTemplateUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      fromTemplateRequest,)
+  }
+);}
+
+
+
+
+export const getExportFromTemplateMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportFromTemplate>>, TError,{data: FromTemplateRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportFromTemplate>>, TError,{data: FromTemplateRequest}, TContext> => {
+
+const mutationKey = ['exportFromTemplate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportFromTemplate>>, {data: FromTemplateRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportFromTemplate(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportFromTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof exportFromTemplate>>>
+    export type ExportFromTemplateMutationBody = FromTemplateRequest
+    export type ExportFromTemplateMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xuất Excel từ template-excel (placeholder + bảng động)
+ */
+export const useExportFromTemplate = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportFromTemplate>>, TError,{data: FromTemplateRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportFromTemplate>>,
+        TError,
+        {data: FromTemplateRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getExportFromTemplateMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Xuất gói JSON toàn bộ (version 1.4.0) để migrate sang cổng internet / import ngược.
+
+**Phạm vi (không lọc 1 đợt):**
+- Đợt đăng ký học + hạn mức tín chỉ + gắn khóa
+- Lớp học phần, thời khóa biểu (SubjectClassTime, ClassSchedule), phòng/cơ sở
+- Sinh viên, hồ sơ UserProfile (SV/GV/CB), lớp niên chế, giảng viên, cán bộ
+- Danh mục hệ thống DM_* và catalog đào tạo
+- Chương trình đào tạo, khối, môn, phiên bản môn, tiên quyết/tương đương
+- Điểm lớp học phần + kết quả học kỳ của sinh viên **mọi kỳ**
+
+**Tham số:** classRegisterSessionId (optional, không dùng để lọc).
+ * @summary Xuất toàn bộ dữ liệu thô sang môi trường internet
  */
 export type exportTrainingDataResponse200 = {
   data: ExportTrainingDataResponse
@@ -15976,7 +16096,7 @@ export const getExportTrainingDataUrl = () => {
   return `/api/export-training-data/export`
 }
 
-export const exportTrainingData = async (exportTrainingDataRequest: ExportTrainingDataRequest, options?: RequestInit): Promise<exportTrainingDataResponse> => {
+export const exportTrainingData = async (exportTrainingDataRequest?: ExportTrainingDataRequest, options?: RequestInit): Promise<exportTrainingDataResponse> => {
   
   return customTrainingFetch<exportTrainingDataResponse>(getExportTrainingDataUrl(),
   {      
@@ -16021,7 +16141,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type ExportTrainingDataMutationError = ErrorMessageResponse
 
     /**
- * @summary Xuất dữ liệu thô theo đợt đăng ký học
+ * @summary Xuất toàn bộ dữ liệu thô sang môi trường internet
  */
 export const useExportTrainingData = <TError = ErrorMessageResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportTrainingData>>, TError,{data: ExportTrainingDataRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
@@ -16254,6 +16374,115 @@ export const useInvalidateClassRegisterSessionCache = <TError = ErrorMessageResp
       > => {
 
       const mutationOptions = getInvalidateClassRegisterSessionCacheMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Tạo StudentSubjectScore còn thiếu cho các đơn ClassRegisterLogs ở trạng thái SUCCESS (Được chấp thuận) trong đợt.
+
+Idempotent: bỏ qua SV đã có trong lớp. Đồng bộ enrolledCount của SubjectClass.
+ * @summary Đưa SV đã chấp thuận vào lớp môn học
+ */
+export type enrollApprovedStudentsResponse200 = {
+  data: EnrollApprovedStudentsResponse
+  status: 200
+}
+
+export type enrollApprovedStudentsResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type enrollApprovedStudentsResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type enrollApprovedStudentsResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type enrollApprovedStudentsResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type enrollApprovedStudentsResponseSuccess = (enrollApprovedStudentsResponse200) & {
+  headers: Headers;
+};
+export type enrollApprovedStudentsResponseError = (enrollApprovedStudentsResponse400 | enrollApprovedStudentsResponse404 | enrollApprovedStudentsResponse409 | enrollApprovedStudentsResponse500) & {
+  headers: Headers;
+};
+
+export type enrollApprovedStudentsResponse = (enrollApprovedStudentsResponseSuccess | enrollApprovedStudentsResponseError)
+
+export const getEnrollApprovedStudentsUrl = () => {
+
+
+  
+
+  return `/api/class-register-session/enroll-approved-students`
+}
+
+export const enrollApprovedStudents = async (enrollApprovedStudentsRequest: EnrollApprovedStudentsRequest, options?: RequestInit): Promise<enrollApprovedStudentsResponse> => {
+  
+  return customTrainingFetch<enrollApprovedStudentsResponse>(getEnrollApprovedStudentsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      enrollApprovedStudentsRequest,)
+  }
+);}
+
+
+
+
+export const getEnrollApprovedStudentsMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof enrollApprovedStudents>>, TError,{data: EnrollApprovedStudentsRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof enrollApprovedStudents>>, TError,{data: EnrollApprovedStudentsRequest}, TContext> => {
+
+const mutationKey = ['enrollApprovedStudents'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof enrollApprovedStudents>>, {data: EnrollApprovedStudentsRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  enrollApprovedStudents(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type EnrollApprovedStudentsMutationResult = NonNullable<Awaited<ReturnType<typeof enrollApprovedStudents>>>
+    export type EnrollApprovedStudentsMutationBody = EnrollApprovedStudentsRequest
+    export type EnrollApprovedStudentsMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Đưa SV đã chấp thuận vào lớp môn học
+ */
+export const useEnrollApprovedStudents = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof enrollApprovedStudents>>, TError,{data: EnrollApprovedStudentsRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof enrollApprovedStudents>>,
+        TError,
+        {data: EnrollApprovedStudentsRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getEnrollApprovedStudentsMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

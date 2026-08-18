@@ -10,6 +10,8 @@
         "./constants": "./src/constants.ts",
         "./parseExcel": "./src/parseExcel.ts",
         "./template-excel": "./src/template-excel.ts",
+        "./template-excel-core": "./src/template-excel-core.ts",
+        "./download-excel": "./src/download-excel.ts",
         "./create-excel": "./src/create-excel.ts",
         "./utils": "./src/utils.ts",
         "./server": "./src/server.ts",

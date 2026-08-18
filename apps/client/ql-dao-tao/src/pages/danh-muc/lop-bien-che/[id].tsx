@@ -22,6 +22,7 @@ import {
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { Docxtemplater, exportFile, loadFile } from "@workspace/libs/docxjs"
+import { exportAndDownloadFromTemplate } from "@workspace/libs/download-excel"
 import { exportFromTemplate, type TableRow } from "@workspace/libs/template-excel"
 import { getMinioUrl } from "@workspace/libs/utils"
 import { ROUTER_PATH } from "@workspace/router"
@@ -1142,8 +1143,8 @@ export default function StudentFixedClassPage() {
         return
       }
 
-      await exportFromTemplate({
-        templateUrl: getMinioUrl("/mta/template/BangdiemTheoLop_v3.xlsx"),
+      await exportAndDownloadFromTemplate({
+        templatePath: "/mta/template/BangdiemTheoLop_v3.xlsx",
         sheets: allSheets,
         fileName: `BangDiemToanKhoa-${fixedClass?.trainingCourse?.name ?? "KhoaHoc"}.xlsx`,
       })

@@ -82,6 +82,6 @@ Một số endpoint đặc biệt:
  */
 
 export interface ExportTrainingDataRequest {
-  /** ID đợt đăng ký học online. */
-  classRegisterSessionId: string;
+  /** Tùy chọn, giữ tương thích. Xuất luôn toàn bộ dữ liệu, không lọc theo đợt. */
+  classRegisterSessionId?: string;
 }

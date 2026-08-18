@@ -92,6 +92,7 @@ trainingObjectTypeId: string;
 trainingCourseId?: string;
 /**
  * true = xuất ngành/chuyên ngành/CTĐT của mọi khoá.
+ * @nullable
  */
-allCourses?: boolean;
+allCourses?: boolean | null;
 };

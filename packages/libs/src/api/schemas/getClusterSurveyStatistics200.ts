@@ -54,6 +54,7 @@ Authorization: Bearer <access_token>
 | **500** | Lỗi máy chủ |
  * OpenAPI spec version: 1.0.0
  */
+import type { GetClusterSurveyStatistics200PrintFormTemplate } from './getClusterSurveyStatistics200PrintFormTemplate';
 import type { GetClusterSurveyStatistics200SurveyTopic } from './getClusterSurveyStatistics200SurveyTopic';
 import type { GetClusterSurveyStatistics200SurveyObjectTypeItem } from './getClusterSurveyStatistics200SurveyObjectTypeItem';
 import type { GetClusterSurveyStatistics200LecturersItem } from './getClusterSurveyStatistics200LecturersItem';
@@ -86,6 +87,8 @@ export type GetClusterSurveyStatistics200 = {
   isPublic?: boolean;
   anonymous?: boolean;
   targetEnrollStudentOnly?: boolean;
+  /** @nullable */
+  printFormTemplate?: GetClusterSurveyStatistics200PrintFormTemplate;
   surveyTopicId: string;
   surveyTopic?: GetClusterSurveyStatistics200SurveyTopic;
   surveyObjectType?: GetClusterSurveyStatistics200SurveyObjectTypeItem[];

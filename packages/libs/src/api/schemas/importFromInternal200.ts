@@ -8,9 +8,10 @@ import type { ImportFromInternal200StepsItem } from './importFromInternal200Step
 
 export type ImportFromInternal200 = {
   message: string;
-  sessionId: string;
-  sessionName: string;
-  steps: ImportFromInternal200StepsItem[];
-  warnings: string[];
+  sessionId?: string;
+  sessionName?: string;
+  steps?: ImportFromInternal200StepsItem[];
+  warnings?: string[];
   syncHistoryId?: string;
+  status?: string;
 };

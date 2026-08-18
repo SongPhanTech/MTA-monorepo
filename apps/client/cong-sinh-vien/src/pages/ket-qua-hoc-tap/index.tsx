@@ -19,8 +19,8 @@ import {
   useFindUniqueStudent,
   useFindUniqueUserProfile,
 } from "@workspace/db/hooks"
-import { exportFromTemplate, type TableRow } from "@workspace/libs/template-excel"
-import { getMinioUrl } from "@workspace/libs/utils"
+import { exportAndDownloadFromTemplate } from "@workspace/libs/download-excel"
+import type { TableRow } from "@workspace/libs/template-excel"
 import { Button, Col, Flex, Row, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { Check, X } from "lucide-react"
@@ -325,8 +325,8 @@ export default function StudentScoreClassPage() {
         },
       ],
     }
-    exportFromTemplate({
-      templateUrl: getMinioUrl("/mta/template/quatrinh.xlsx"),
+    await exportAndDownloadFromTemplate({
+      templatePath: "/mta/template/quatrinh.xlsx",
       sheets: [
         {
           sheet: "BaoCaoDiem",

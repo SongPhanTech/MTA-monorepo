@@ -17,8 +17,8 @@ import {
   useFindManySubjectVersion,
   useFindUniqueStudent,
 } from "@workspace/db/hooks"
-import { exportFromTemplate, type TableRow } from "@workspace/libs/template-excel"
-import { getMinioUrl } from "@workspace/libs/utils"
+import { exportAndDownloadFromTemplate } from "@workspace/libs/download-excel"
+import type { TableRow } from "@workspace/libs/template-excel"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
 import { Button, Col, Divider, Dropdown, Flex, Row, Tag, Tooltip } from "antd"
@@ -600,8 +600,8 @@ export default function StudentScoreClassPage() {
 
     const xeploai = lastYearResult?.rank?.classification ?? convertScore(tongdiemhe10).classification
 
-    exportFromTemplate({
-      templateUrl: getMinioUrl("/mta/template/BangDiemCaNhan(P2).xlsx"),
+    await exportAndDownloadFromTemplate({
+      templatePath: "/mta/template/BangDiemCaNhan(P2).xlsx",
       sheets: [
         {
           sheet: "BaoCaoDiem",
@@ -906,8 +906,8 @@ export default function StudentScoreClassPage() {
 
     const xeploai = convertScore(tongdiemhe10).classification
 
-    exportFromTemplate({
-      templateUrl: getMinioUrl("/mta/luan-van/BangDiemCaNhan(P7).xlsx"),
+    await exportAndDownloadFromTemplate({
+      templatePath: "/mta/luan-van/BangDiemCaNhan(P7).xlsx",
       sheets: [
         {
           sheet: "BaoCaoDiem",
@@ -1099,8 +1099,8 @@ export default function StudentScoreClassPage() {
 
     const gapRow: TableRow = { cells: [{ value: null, colSpan: 9, border: false }] }
 
-    exportFromTemplate({
-      templateUrl: getMinioUrl("/mta/template/BangDiemQuaTrinh.xlsx"),
+    await exportAndDownloadFromTemplate({
+      templatePath: "/mta/template/BangDiemQuaTrinh.xlsx",
       sheets: [
         {
           sheet: "BaoCaoDiem",

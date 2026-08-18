@@ -73,5 +73,6 @@ taken?: boolean;
 lecturerName?: string;
 subjectClassName?: string;
 semesterId?: string;
+trainingObjectTypeId?: string;
 type?: GetSurveysOfProfileType;
 };

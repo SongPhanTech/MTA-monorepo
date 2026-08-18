@@ -3,6 +3,7 @@ import { ErrorMessageResponseSchema, ExcelBinaryResponseSchema } from "../dto/co
 import { fieldDesc } from "../dto/openapi-helpers"
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import { renderXlsxTemplate } from "../services/render-xlsx-template"
+import { buildFromTemplate } from "../services/build-from-template"
 import { prisma } from ".."
 
 const app = new OpenAPIHono()
@@ -35,6 +36,68 @@ const xlsxTemplateSheetSchema = z
       ),
   })
   .openapi("XlsxTemplateSheetInput")
+
+const tableCellSchema = z
+  .object({
+    value: z.any().optional(),
+    colSpan: z.number().optional(),
+    rowSpan: z.number().optional(),
+    align: z.enum(["left", "center", "right"]).optional(),
+    bgColor: z.string().optional(),
+    bold: z.boolean().optional(),
+    italic: z.boolean().optional(),
+    fontSize: z.number().optional(),
+    wrapText: z.boolean().optional(),
+    border: z.boolean().optional(),
+    color: z.string().optional(),
+    numFmt: z.string().optional(),
+  })
+  .openapi("TemplateExcelTableCell")
+
+const templateExcelSheetSchema = z
+  .object({
+    sheet: z.union([z.number(), z.string()]).optional(),
+    data: z.record(z.union([z.string(), z.number(), z.null()])).optional(),
+    boldDataKeys: z.array(z.string()).optional(),
+    rows: z.array(z.object({ cells: z.array(tableCellSchema) })).optional(),
+    tableStartCell: z.object({ row: z.number(), col: z.number() }).optional(),
+    hiddenColumns: z.array(z.string()).optional(),
+    thinBorderRange: z
+      .object({
+        top: z.number(),
+        left: z.number(),
+        bottom: z.number(),
+        right: z.number(),
+      })
+      .optional(),
+  })
+  .openapi("TemplateExcelSheetInput")
+
+const fromTemplateRequestSchema = z
+  .object({
+    templatePath: z
+      .string()
+      .openapi(
+        fieldDesc(
+          "Đường dẫn template trên MinIO. Ví dụ: /mta/template/BangDiemQuaTrinh.xlsx"
+        )
+      ),
+    fileName: z.string().openapi(fieldDesc("Tên file tải về.")),
+    extension: z
+      .string()
+      .optional()
+      .openapi(fieldDesc("Đuôi file: xlsx hoặc xls. Mặc định theo templatePath.")),
+    fontFamily: z.string().optional(),
+    fontSize: z.number().optional(),
+    mergeSheetsToOne: z.boolean().optional(),
+    sheetName: z.string().optional(),
+    prefix: z
+      .string()
+      .optional()
+      .openapi(fieldDesc("Prefix MinIO khi templatePath là tên file ngắn.")),
+    sheets: z.array(templateExcelSheetSchema).min(1),
+  })
+  .openapi("FromTemplateRequest")
 
 const renderXlsxTemplateRequestSchema = z
   .object({
@@ -154,6 +217,61 @@ app.openapi(renderXlsxTemplateRoute, async (c) => {
   } catch (error) {
     const message = error instanceof Error ? error.message : "Xuất template thất bại"
     console.error("[export-template/render]", message, error)
+    return c.json({ message }, 404)
+  }
+})
+
+const fromTemplateRoute = createRoute({
+  operationId: "exportFromTemplate",
+  tags: ["Xuất template Excel"],
+  path: "/from-template",
+  method: "post",
+  summary: "Xuất Excel từ template-excel ",
+  description: `Render file Excel từ template MinIO bằng engine template-excel (placeholder \`{{key}}\`, bảng \`rows\`, merge sheet).`,
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: fromTemplateRequestSchema,
+        },
+      },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "File Excel đã render",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: ExcelBinaryResponseSchema,
+        },
+      },
+    },
+    404: {
+      description: "Not Found",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(fromTemplateRoute, async (c) => {
+  const body = c.req.valid("json")
+
+  try {
+    const result = await buildFromTemplate(prisma, body)
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(body.fileName)}`
+
+    return c.body(result, 200, {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Disposition": disposition,
+    })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Xuất template thất bại"
+    console.error("[export-template/from-template]", message, error)
     return c.json({ message }, 404)
   }
 })

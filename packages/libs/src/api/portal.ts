@@ -59,7 +59,9 @@ import type {
   GetStudentInfo404,
   GetStudentInfoParams,
   ImportFromInternal200,
+  ImportFromInternal202,
   ImportFromInternal400,
+  ImportFromInternal409,
   ImportFromInternalBody,
   InvalidateRegistrationCache200,
   InvalidateRegistrationCache400,
@@ -1415,22 +1417,33 @@ export const useFinishDataSync = <TError = unknown,
     }
     
 /**
- * @summary Nhập dữ liệu từ file JSON xuất bởi phần mềm nội bộ
+ * Nhận file, tạo/ghi nhận lịch sử PENDING rồi trả 202 ngay. Import chạy nền; theo dõi qua get-data-sync-history.
+ * @summary Nhập dữ liệu từ file JSON xuất bởi phần mềm nội bộ (bất đồng bộ)
  */
 export type importFromInternalResponse200 = {
   data: ImportFromInternal200
   status: 200
 }
 
+export type importFromInternalResponse202 = {
+  data: ImportFromInternal202
+  status: 202
+}
+
 export type importFromInternalResponse400 = {
   data: ImportFromInternal400
   status: 400
 }
+
+export type importFromInternalResponse409 = {
+  data: ImportFromInternal409
+  status: 409
+}
     
-export type importFromInternalResponseSuccess = (importFromInternalResponse200) & {
+export type importFromInternalResponseSuccess = (importFromInternalResponse200 | importFromInternalResponse202) & {
   headers: Headers;
 };
-export type importFromInternalResponseError = (importFromInternalResponse400) & {
+export type importFromInternalResponseError = (importFromInternalResponse400 | importFromInternalResponse409) & {
   headers: Headers;
 };
 
@@ -1464,7 +1477,7 @@ if(importFromInternalBody.syncHistoryId !== undefined) {
 
 
 
-export const getImportFromInternalMutationOptions = <TError = ImportFromInternal400,
+export const getImportFromInternalMutationOptions = <TError = ImportFromInternal400 | ImportFromInternal409,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importFromInternal>>, TError,{data: ImportFromInternalBody}, TContext>, request?: SecondParameter<typeof customPortalFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof importFromInternal>>, TError,{data: ImportFromInternalBody}, TContext> => {
 
@@ -1491,12 +1504,12 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type ImportFromInternalMutationResult = NonNullable<Awaited<ReturnType<typeof importFromInternal>>>
     export type ImportFromInternalMutationBody = ImportFromInternalBody
-    export type ImportFromInternalMutationError = ImportFromInternal400
+    export type ImportFromInternalMutationError = ImportFromInternal400 | ImportFromInternal409
 
     /**
- * @summary Nhập dữ liệu từ file JSON xuất bởi phần mềm nội bộ
+ * @summary Nhập dữ liệu từ file JSON xuất bởi phần mềm nội bộ (bất đồng bộ)
  */
-export const useImportFromInternal = <TError = ImportFromInternal400,
+export const useImportFromInternal = <TError = ImportFromInternal400 | ImportFromInternal409,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importFromInternal>>, TError,{data: ImportFromInternalBody}, TContext>, request?: SecondParameter<typeof customPortalFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof importFromInternal>>,
