@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react"
 
 const { Text } = Typography
 
-interface ProgressRow {
+export interface ProgressRow {
   key: string
   parentKey?: string
   type: "faculty" | "department" | "lecturer" | "total"

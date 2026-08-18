@@ -1,4 +1,3 @@
-import { FolderOpenOutlined, UserOutlined } from "@ant-design/icons"
 import Select from "@components/commons/select"
 import SurveylecturerReport from "@components/sub-pages/khao-sat/survey-lecturer-report"
 import SurveyOrganizationReport from "@components/sub-pages/khao-sat/survey-oragation-report"
@@ -10,84 +9,31 @@ import {
   useFindUniqueSemester,
   useFindUniqueTrainingObjectType,
 } from "@workspace/db/hooks"
-
+import { $Enums } from "@workspace/db/client"
+import { getRuntimeEnv } from "@workspace/libs"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Col, Flex, Row, Skeleton, Tree } from "antd"
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useState, type Key } from "react"
 
 import OrganizationSurveyReport from "@/components/sub-pages/khao-sat/bao-cao-don-vi"
-import { getRuntimeEnv } from "@workspace/libs"
-import { $Enums } from "@workspace/db/client"
-import dayjs from "dayjs"
+import {
+  buildOrgLecturerTree,
+  buildProgressRows,
+  CLUSTER_LECTURER_INCLUDE,
+  CLUSTER_LECTURER_SURVEY_INCLUDE,
+  isLecturerNode,
+  isOrgNode,
+  lecturerTitle,
+  mergeOrgs,
+  ORG_SELECT,
+  type ReportTreeNode,
+} from "@/utils/buildOrgLecturerTree"
 
-/**
- * Nhãn hệ đào tạo cho mẫu báo cáo — chỉ theo `TrainingObjectType.type` (không đoán qua tên/regex).
- * Quốc tế: không đưa chữ "Quốc tế" vào mẫu → trả về rỗng.
- */
 function trainingSystemNameFromDbType(type: $Enums.TrainingObjectTypes | undefined): string {
-  if (type == null) {
-    return ""
-  }
-  if (type === $Enums.TrainingObjectTypes.MILITARY) {
-    return "Quân sự"
-  }
-  if (type === $Enums.TrainingObjectTypes.CIVILIAN) {
-    return "Dân sự"
-  }
-  if (type === $Enums.TrainingObjectTypes.INTERNATIONAL_MILITARY) {
-    return ""
-  }
+  if (type === $Enums.TrainingObjectTypes.MILITARY) return "Quân sự"
+  if (type === $Enums.TrainingObjectTypes.CIVILIAN) return "Dân sự"
   return ""
-}
-
-function buildOrgAndLectureTree(list: Array<any>, lecturers: Array<any>): Array<any> {
-  const map = new Map<string, any>()
-  const roots: Array<any> = []
-  const attachedLecturerIds = new Set<string>()
-
-  for (const item of list) {
-    const orgLecturers = lecturers.filter((lecturer) => lecturer.organizationId === item.id)
-    orgLecturers.forEach((lecturer) => attachedLecturerIds.add(lecturer.id))
-    map.set(item.id, {
-      ...item,
-      parent: list.find((p) => p.id === item.parentId),
-      title: item.name || "Đơn vị không tên",
-      key: item.id,
-      icon: <FolderOpenOutlined />,
-      selectable: true,
-      children: orgLecturers.map((lecturer) => ({
-        ...lecturer,
-        title: lecturer.userProfile?.fullName || "Giảng viên không tên",
-        key: `${lecturer.id}`,
-        icon: <UserOutlined />,
-        parent: item,
-      })),
-    })
-  }
-
-  for (const item of list) {
-    const node = map.get(item.id)
-    if (!node) continue
-    const parentId = item.parentId
-    if (parentId && map.has(parentId)) {
-      map.get(parentId).children.push(node)
-    } else {
-      roots.push(node)
-    }
-  }
-
-  for (const lecturer of lecturers) {
-    if (attachedLecturerIds.has(lecturer.id)) continue
-    roots.push({
-      ...lecturer,
-      title: lecturer.userProfile?.fullName || "Giảng viên không tên",
-      key: `${lecturer.id}`,
-      icon: <UserOutlined />,
-    })
-  }
-
-  return roots
 }
 
 export default function BaoCaoGiangVien() {
@@ -96,59 +42,34 @@ export default function BaoCaoGiangVien() {
     typeof router.query.clusterId === "string" ? router.query.clusterId : undefined
   const queryClusterName = typeof router.query.name === "string" ? router.query.name : ""
 
-  const [filters, setFilters] = useState<any>({
-    name: "",
-    surveyName: queryClusterName,
-    surveyId: undefined,
-    lectureId: undefined,
-    organizationId: undefined,
-    semesterIds: undefined,
-    clusterId: queryClusterId,
-  })
-  const [searchText, setSearchText] = useState<any>("")
-  const [selectedKeys, setSelectedKeys] = useState<any>([])
-  const [selectedItem, setSelectedItem] = useState<any>()
+  const [clusterId, setClusterId] = useState(queryClusterId)
+  const [surveyName, setSurveyName] = useState(queryClusterName)
+  const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
+  const [selectedNode, setSelectedNode] = useState<ReportTreeNode>()
+  const [expandedKeys, setExpandedKeys] = useState<Key[]>([])
 
   const { id: semesterId } = useSemesterStore()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
   useEffect(() => {
     if (!router.isReady || !queryClusterId) return
-    setFilters((prev: any) => ({
-      ...prev,
-      clusterId: queryClusterId,
-      surveyName: queryClusterName || prev.surveyName,
-    }))
+    setClusterId(queryClusterId)
+    if (queryClusterName) setSurveyName(queryClusterName)
   }, [router.isReady, queryClusterId, queryClusterName])
 
   const { data: semester } = useFindUniqueSemester(
-    {
-      where: { id: semesterId },
-      select: { name: true },
-    },
+    { where: { id: semesterId }, select: { name: true } },
     { enabled: !!semesterId }
   )
-  const semesterName = semester?.name ?? ""
-
   const { data: trainingObjectType } = useFindUniqueTrainingObjectType(
-    {
-      where: { id: trainingObjectTypeId },
-      select: { name: true, type: true },
-    },
-    {
-      enabled: !!trainingObjectTypeId,
-    }
+    { where: { id: trainingObjectTypeId }, select: { name: true, type: true } },
+    { enabled: !!trainingObjectTypeId }
   )
-  const trainingObjectTypeName = trainingObjectType?.name ?? ""
-  const trainingSystemName = trainingSystemNameFromDbType(trainingObjectType?.type)
 
-  const { data = [], refetch } = useFindManyClusterSurvey({
+  const { data: clusters = [] } = useFindManyClusterSurvey({
     where: {
       surveys: {
-        some: {
-          semesterId,
-          trainingObjectTypeId,
-        },
+        some: { semesterId, trainingObjectTypeId },
       },
     },
     include: {
@@ -158,360 +79,85 @@ export default function BaoCaoGiangVien() {
       surveys: {
         include: {
           surveySessions: true,
-          subjectClass: {
-            include: {
-              semester: true,
-            },
-          },
+          subjectClass: { include: { semester: true } },
         },
       },
     },
     orderBy: { createdAt: "desc" },
   })
 
-  const {
-    data: organizations = [],
-    isLoading: organizationsLoading,
-    isFetching,
-    error: organizationsError,
-  } = useFindManyDM_DonVi(
+  const { data: organizations = [], isFetching } = useFindManyDM_DonVi(
     {
       where: {
-        // ...(searchText && {
-        //     OR: [
-        //         { sTen: { contains: searchText, mode: 'insensitive' } },
-        //         { sMa: { contains: searchText, mode: 'insensitive' } },
-        //     ],
-        // }),
         OR: [
-          {
-            sMa: getRuntimeEnv("NEXT_PUBLIC_ROOT_ORG_CODE") || "HD",
-          },
-          {
-            iCapDonVi: 0,
-            iLoaiDonVi: 0,
-          },
-          {
-            iCapDonVi: 1,
-          },
-          {
-            iLoaiDonVi: {
-              in: [5, 6, 7],
-            },
-          },
+          { sMa: getRuntimeEnv("NEXT_PUBLIC_ROOT_ORG_CODE") || "HD" },
+          { iCapDonVi: 0, iLoaiDonVi: 0 },
+          { iCapDonVi: 1 },
+          { iLoaiDonVi: { in: [5, 6, 7] } },
         ],
       },
-      select: {
-        Id: true,
-        sMa: true,
-        sTen: true,
-        bActive: true,
-        iCapDonVi: true,
-        iDictionaryKey: true,
-        iLoaiDonVi: true,
-        iNhomDonVi: true,
-        sParentId: true,
-      },
+      select: ORG_SELECT,
       orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
     },
-
-    {
-      refetchOnWindowFocus: false,
-    }
-  )
-
-  const { data: lecturerData = [] } = useFindManyLecturer(
-    {
-      where: {
-        // ...(searchText && {
-        //     userProfile: {
-        //         OR: [
-        //             { fullName: { contains: searchText, mode: 'insensitive' } },
-        //             { code: { contains: searchText, mode: 'insensitive' } },
-        //         ],
-        //     },
-        // }),
-        mainSubjectClasses: {
-          some: {
-            ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
-          },
-        },
-        organization: {
-          OR: [
-            {
-              sMa: getRuntimeEnv("NEXT_PUBLIC_ROOT_ORG_CODE") || "HD",
-            },
-            {
-              iLoaiDonVi: {
-                in: [5, 6, 7],
-              },
-            },
-          ],
-        },
-      },
-      orderBy: {
-        userProfile: {
-          firstName: "asc",
-        },
-      },
-      include: {
-        userProfile: true,
-        organization: true,
-        mainSubjectClasses: {
-          include: {
-            subjectClassStudent: {
-              include: {
-                student: {
-                  include: {
-                    userProfile: {},
-                    surveySessions: {
-                      include: {
-                        survey: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    {
-      enabled: !!filters.clusterId,
-      refetchOnWindowFocus: false,
-    }
+    { refetchOnWindowFocus: false }
   )
 
   const { data: clusterLecturers = [] } = useFindManyLecturer(
     {
       where: {
-        survey: {
-          some: {
-            clusterSurveyId: filters.clusterId,
-          },
-        },
+        survey: { some: { clusterSurveyId: clusterId } },
       },
-      orderBy: {
-        userProfile: {
-          firstName: "asc",
-        },
-      },
+      orderBy: { userProfile: { firstName: "asc" } },
       include: {
-        userProfile: true,
-        organization: true,
+        ...CLUSTER_LECTURER_INCLUDE,
+        survey: {
+          where: { clusterSurveyId: clusterId },
+          include: CLUSTER_LECTURER_SURVEY_INCLUDE,
+        },
       },
     },
-    {
-      enabled: !!filters.clusterId,
-      refetchOnWindowFocus: false,
-    }
+    { enabled: !!clusterId, refetchOnWindowFocus: false }
   )
 
-  const organizationsForTree = useMemo(() => {
-    const byId = new Map(organizations.map((org) => [org.Id, org]))
-    for (const lecturer of clusterLecturers) {
-      const org = lecturer.organization
-      if (org?.Id && !byId.has(org.Id)) {
-        byId.set(org.Id, org)
-      }
-    }
-    return Array.from(byId.values())
-  }, [organizations, clusterLecturers])
-
-  const lecturersForTree = filters.clusterId ? clusterLecturers : lecturerData
-
-  // Tạo treeData từ organizations và lecturers
-  const treeData: any[] = useMemo(() => {
-    if (!organizationsForTree.length) return []
-
-    return buildOrgAndLectureTree(
-      organizationsForTree.map((org) => ({
-        ...org,
-        id: org.Id,
-        name: `${org.sMa} - ${org.sTen}`,
-        parentId: org.sParentId,
-      })),
-      lecturersForTree.map((lec) => ({
-        ...lec,
-        id: lec.id,
-        userProfile: {
-          ...lec.userProfile,
-          fullName:
-            `${lec.userProfile?.lastName ?? ""} ${lec.userProfile?.firstName ?? ""}`.trim() ||
-            "Giảng viên không tên",
-        },
-        selectable: true,
-        organizationId: lec.organizationId,
-      }))
-    )
-  }, [organizationsForTree, lecturersForTree])
-
-  const orgKeys = useMemo(
-    () => organizationsForTree.map((org) => org.Id),
-    [organizationsForTree]
+  const orgs = useMemo(
+    () => mergeOrgs(organizations, clusterLecturers),
+    [organizations, clusterLecturers]
   )
-  const [expandedKeys, setExpandedKeys] = useState<Key[]>([])
+  const treeData = useMemo(
+    () => buildOrgLecturerTree(orgs, clusterLecturers),
+    [orgs, clusterLecturers]
+  )
+  const progressData = useMemo(
+    () => buildProgressRows(orgs, clusterLecturers),
+    [orgs, clusterLecturers]
+  )
+  const orgKeys = useMemo(() => orgs.map((org) => org.Id), [orgs])
 
   useEffect(() => {
     setExpandedKeys(orgKeys)
   }, [orgKeys])
 
-  const hanleSearchReport = () => {}
-
-  const getLecturerDisplayName = (lecturer: any) => {
-    const fullName =
-      `${lecturer?.userProfile?.lastName ?? ""} ${lecturer?.userProfile?.firstName ?? ""}`.trim() ||
-      lecturer?.userProfile?.fullName ||
-      "Giảng viên không tên"
-
-    return fullName
-  }
-
-  const progressData = useMemo(() => {
-    const getDescendantOrgIds = (orgId: string): string[] => {
-      const children = organizations.filter((item: any) => item.sParentId === orgId)
-      return children.flatMap((item: any) => [item.Id, ...getDescendantOrgIds(item.Id)])
-    }
-
-    const selectedCluster = data.find((c: any) => c.id === filters.clusterId)
-    const clusterSubjectClassIds = new Set<string>(
-      (selectedCluster?.surveys || []).map((s: any) => s.subjectClassId).filter(Boolean)
-    )
-
-    const getStudents = (lecturer: any) => {
-      const seen = new Set<string>()
-      const students: any[] = []
-
-      for (const subjectClass of lecturer.mainSubjectClasses || []) {
-        if (!clusterSubjectClassIds.has(subjectClass.id)) continue
-        for (const entry of subjectClass.subjectClassStudent || []) {
-          const student = entry?.student
-          if (!student || seen.has(student.id)) continue
-          seen.add(student.id)
-          students.push(student)
-        }
-      }
-
-      return students
-    }
-
-    const isStudentCompleted = (student: any) =>
-      (student?.surveySessions || []).some((session: any) => {
-        const survey = session?.survey
-        return (
-          survey?.clusterSurveyId === filters.clusterId &&
-          (session?.completedAt || session?.isCompleted)
-        )
-      })
-
-    const studentStats = lecturerData.reduce<Record<string, { total: number; completed: number }>>(
-      (acc, lecturer) => {
-        const students = getStudents(lecturer)
-        acc[lecturer.id] = {
-          total: students.length,
-          completed: students.filter(isStudentCompleted).length,
-        }
-        return acc
-      },
-      {}
-    )
-
-    const countStudents = (orgId: string) =>
-      lecturerData
-        .filter((item: any) => {
-          const orgIds = [orgId, ...getDescendantOrgIds(orgId)]
-          return orgIds.includes(item.organizationId)
-        })
-        .reduce((sum, item) => sum + (studentStats[item.id]?.total || 0), 0)
-
-    const countCompleted = (orgId: string) =>
-      lecturerData
-        .filter((item: any) => {
-          const orgIds = [orgId, ...getDescendantOrgIds(orgId)]
-          return orgIds.includes(item.organizationId)
-        })
-        .reduce((sum, item) => sum + (studentStats[item.id]?.completed || 0), 0)
-
-    const facultyRows = organizations
-      .filter((item: any) => [5, 6].includes(item.iLoaiDonVi))
-      .map((item: any) => ({
-        key: `faculty-${item.Id}`,
-        parentKey: undefined,
-        type: "faculty" as const,
-        name: `${item.sMa || ""} - ${item.sTen || ""}`.trim(),
-        completed: countCompleted(item.Id),
-        total: countStudents(item.Id),
-      }))
-
-    const departmentRows = organizations
-      .filter((item: any) => item.iLoaiDonVi === 7)
-      .map((item: any) => ({
-        key: `department-${item.Id}`,
-        parentKey: `faculty-${item.sParentId}`,
-        type: "department" as const,
-        name: `${item.sMa || ""} - ${item.sTen || ""}`.trim(),
-        completed: countCompleted(item.Id),
-        total: countStudents(item.Id),
-      }))
-
-    const lecturerRows = lecturerData
-      .filter((item: any) => item.organizationId)
-      .map((item: any) => {
-        const organization = organizations.find((org: any) => org.Id === item.organizationId)
-        const lecturerName = getLecturerDisplayName(item)
-        const lecturerCode = item.code?.trim() || ""
-        const name =
-          [lecturerCode, lecturerName].filter(Boolean).join(" - ") || "Giảng viên không tên"
-
-        return {
-          key: `lecturer-${item.id}`,
-          parentKey:
-            organization?.iLoaiDonVi === 7
-              ? `department-${item.organizationId}`
-              : `faculty-${item.organizationId}`,
-          type: "lecturer" as const,
-          name,
-          completed: studentStats[item.id]?.completed || 0,
-          total: studentStats[item.id]?.total || 0,
-        }
-      })
-
-    const totalCompleted = lecturerData.reduce(
-      (sum, item) => sum + (studentStats[item.id]?.completed || 0),
-      0
-    )
-    const totalStudents = lecturerData.reduce(
-      (sum, item) => sum + (studentStats[item.id]?.total || 0),
-      0
-    )
-
-    return [
-      ...facultyRows,
-      ...departmentRows,
-      ...lecturerRows,
-      {
-        key: "total",
-        type: "total" as const,
-        name: "Tổng số",
-        completed: totalCompleted,
-        total: totalStudents,
-      },
-    ]
-  }, [organizations, lecturerData, filters.clusterId, data])
-
-  const items = useMemo(() => {
-    if (!filters?.clusterId) {
+  const report = useMemo(() => {
+    if (!clusterId) {
       return <div className="my-10 text-center text-primary text-base">Chọn đợt khảo sát</div>
     }
-    if (filters?.clusterId) {
+    if (!selectedNode) {
+      return <>Vui lòng chọn đối tượng</>
+    }
 
-      if (selectedItem?.id && selectedItem?.iCapDonVi === 0 && selectedItem?.iLoaiDonVi === 0) {
+    const semesterName = semester?.name ?? ""
+    const trainingObjectTypeName = trainingObjectType?.name ?? ""
+    const trainingSystemName = trainingSystemNameFromDbType(trainingObjectType?.type)
+
+    if (isOrgNode(selectedNode)) {
+      const { org, parentOrg } = selectedNode
+      const isAcademy = org.iCapDonVi === 0 && org.iLoaiDonVi === 0
+      if (isAcademy) {
         return (
           <OrganizationSurveyReport
-            selectedId={filters?.clusterId}
-            surveyName={filters?.surveyName}
-            organizationId={selectedItem?.id}
+            selectedId={clusterId}
+            surveyName={surveyName}
+            organizationId={org.Id}
             trainingObjectTypeName={trainingObjectTypeName}
             semesterId={semesterId || ""}
             trainingObjectTypeId={trainingObjectTypeId || ""}
@@ -519,174 +165,118 @@ export default function BaoCaoGiangVien() {
         )
       }
 
-      if (selectedItem?.id && selectedItem?.iCapDonVi && selectedItem?.iLoaiDonVi) {
-        return (
-          <SurveyOrganizationReport
-            selectedId={filters.clusterId}
-            organizationId={selectedItem.id}
-            surveyName={filters?.surveyName}
-            trainingObjectTypeName={trainingObjectTypeName}
-            semesterName={semesterName}
-            trainingSystemName={trainingSystemName}
-            organizationName={
-              selectedItem.iCapDonVi === 3 ? selectedItem.parent?.sTen : selectedItem.sTen
-            }
-            organizationCode={
-              selectedItem.iCapDonVi === 3 ? selectedItem.parent?.sMa : selectedItem.sMa
-            }
-            departmentName={selectedItem.iCapDonVi === 3 ? selectedItem.sTen : ""}
-            departmentCode={selectedItem.iCapDonVi === 3 ? selectedItem.sMa : ""}
-            selectedItem={selectedItem}
-          />
-        )
-      }
-
-      if (selectedItem?.id && !selectedItem?.iCapDonVi) {
-        const org = selectedItem.organization
-        const isDepartment = org?.iCapDonVi === 3
-        const parentOrg = isDepartment
-          ? organizations.find((o: any) => o?.Id === org?.sParentId || o?.id === org?.sParentId)
-          : null
-        return (
-          <SurveylecturerReport
-            selectedId={filters?.clusterId}
-            lectureId={selectedItem?.id}
-            surveyName={filters?.surveyName}
-            progressData={progressData}
-            trainingObjectTypeName={trainingObjectTypeName}
-            semesterName={semesterName}
-            trainingSystemName={trainingSystemName}
-            organizationName={isDepartment ? parentOrg?.sTen : org?.sTen}
-            organizationCode={isDepartment ? parentOrg?.sMa : org?.sMa}
-            lecturerName={selectedItem?.userProfile?.fullName}
-            lecturerCode={selectedItem?.code}
-            departmentName={isDepartment ? org?.sTen : ""}
-            departmentCode={isDepartment ? org?.sMa : ""}
-          />
-        )
-      }
-      return <>Vui lòng chọn đối tượng</>
-      // if (filtersMore.surveyId) {
-      //     return <SurveyReport selectedId={filtersMore?.surveyId || ''} />
-      // }
-      // if (filtersMore.lectureId) {
-      //     return (
-      //         <LecturerSurveyReport
-      //             selectedId={filtersMore?.clusterId}
-      //             lectureId={filtersMore?.lectureId || ''}
-      //             sublectClass={filters}
-      //             setSublectClass={(value: any) => {
-      //                 setFilters({ ...filters, surveyId: value })
-      //             }}
-      //         />
-      //     )
-      // }
-      // if (filtersMore.organizationId) {
-      //     return (
-      //         <ClusterSurveyReport
-      //             selectedId={filtersMore?.clusterId}
-      //             surveyName={filtersMore?.name}
-      //             surveyId={filters?.surveyId || ''}
-      //             setSurvey={(value) => {
-      //                 setFilters({ ...filters, surveyId: value })
-      //             }}
-      //             organizationSelected={filters?.organizationId}
-      //         />
-      //     )
-      // }
-      // return (
-      //     <OrganizationSurveyReport
-      //         selectedId={filtersMore?.clusterId}
-      //         surveyName={filtersMore?.name}
-      //         organizationSelected={filters?.organizationId}
-      //         setOrganizationSelected={(value) => {
-      //             setFilters({ ...filters, organizationId: value })
-      //         }}
-      //     />
-      // )
+      const isDepartment = org.iCapDonVi === 3
+      return (
+        <SurveyOrganizationReport
+          selectedId={clusterId}
+          organizationId={org.Id}
+          surveyName={surveyName}
+          trainingObjectTypeName={trainingObjectTypeName}
+          semesterName={semesterName}
+          trainingSystemName={trainingSystemName}
+          organizationName={isDepartment ? parentOrg?.sTen ?? "" : org.sTen ?? ""}
+          organizationCode={isDepartment ? parentOrg?.sMa ?? "" : org.sMa ?? ""}
+          departmentName={isDepartment ? org.sTen ?? "" : ""}
+          departmentCode={isDepartment ? org.sMa ?? "" : ""}
+          selectedItem={org}
+        />
+      )
     }
-    return
+
+    if (isLecturerNode(selectedNode)) {
+      const { lecturer } = selectedNode
+      const org = lecturer.organization
+      const isDepartment = org?.iCapDonVi === 3
+      const parentOrg = isDepartment
+        ? organizations.find((item) => item.Id === org?.sParentId)
+        : null
+
+      return (
+        <SurveylecturerReport
+          selectedId={clusterId}
+          lectureId={lecturer.id}
+          surveyName={surveyName}
+          progressData={progressData}
+          trainingObjectTypeName={trainingObjectTypeName}
+          semesterName={semesterName}
+          trainingSystemName={trainingSystemName}
+          organizationName={(isDepartment ? parentOrg?.sTen : org?.sTen) ?? undefined}
+          organizationCode={(isDepartment ? parentOrg?.sMa : org?.sMa) ?? undefined}
+          lecturerName={lecturerTitle(lecturer)}
+          lecturerCode={lecturer.code ?? undefined}
+          departmentName={isDepartment ? org?.sTen ?? "" : ""}
+          departmentCode={isDepartment ? org?.sMa ?? "" : ""}
+        />
+      )
+    }
+
+    return <>Vui lòng chọn đối tượng</>
   }, [
-    filters,
-    selectedItem,
-    trainingObjectTypeName,
-    trainingSystemName,
-    semesterName,
+    clusterId,
+    selectedNode,
+    surveyName,
+    semester,
+    trainingObjectType,
     semesterId,
     trainingObjectTypeId,
     organizations,
+    progressData,
   ])
+
   return (
     <Row gutter={[16, 4]}>
       <Col span={24}>
         <Flex justify="space-between">
-          <Flex>
-            <Select
-              value={filters.clusterId}
-              onChange={(value, option: any) => {
-                setFilters((prev: any) => ({
-                  ...prev,
-                  clusterId: value,
-                  surveyName: option?.label,
-                }))
-              }}
-              className="mr-4 w-[250px]"
-              options={data.map((i) => {
-                return {
-                  label: i.name,
-                  value: i.id,
-                }
-              })}
-              placeholder="Chọn đợt khảo sát"
-              dropdownStyle={{
-                maxHeight: 400,
-                overflow: "auto",
-                width: "fit-content",
-                maxWidth: 400,
-              }}
-              dropdownMatchSelectWidth={false}
-            />
-            {/* <Input
-                            placeholder="Tìm kiếm"
-                            className="mr-4 w-[250px]"
-                            value={searchText}
-                            onChange={(e) => {
-                                setSearchText(e.target.value)
-                            }}
-                        /> */}
-          </Flex>
-          {/* <Button onClick={hanleSearchReport} type="primary">
-                        Tìm kiếm
-                    </Button> */}
+          <Select
+            value={clusterId}
+            onChange={(value, option) => {
+              const selected = Array.isArray(option) ? option[0] : option
+              setClusterId(typeof value === "string" ? value : undefined)
+              if (typeof selected?.label === "string") setSurveyName(selected.label)
+            }}
+            className="mr-4 w-[250px]"
+            options={clusters.map((cluster) => ({
+              label: cluster.name,
+              value: cluster.id,
+            }))}
+            placeholder="Chọn đợt khảo sát"
+            dropdownStyle={{
+              maxHeight: 400,
+              overflow: "auto",
+              width: "fit-content",
+              maxWidth: 400,
+            }}
+            dropdownMatchSelectWidth={false}
+          />
         </Flex>
       </Col>
       <Col span={6}>
         {isFetching ? (
           <Skeleton />
         ) : (
-          <Tree
+          <Tree<ReportTreeNode>
             showIcon
             showLine
             selectedKeys={selectedKeys}
             expandedKeys={expandedKeys}
-            onExpand={(keys) => setExpandedKeys(keys)}
+            onExpand={setExpandedKeys}
             treeData={treeData}
             className="w-full mb-3 min-w-[250px]"
             style={{ maxHeight: "calc(100vh - 180px)", overflow: "auto" }}
-            onSelect={(key, info) => {
-              setSelectedKeys(key)
-              setSelectedItem(info.node)
+            onSelect={(keys, info) => {
+              setSelectedKeys(keys)
+              setSelectedNode(info.node)
             }}
           />
         )}
       </Col>
-
       <Col span={18} className="w-[calc(100%-250px)]">
-        {isFetching ? <Skeleton /> : items}
+        {isFetching ? <Skeleton /> : report}
       </Col>
     </Row>
   )
 }
+
 BaoCaoGiangVien.getLayout = function getLayout(page: React.ReactElement) {
   return <DefaultLayout>{page}</DefaultLayout>
 }
