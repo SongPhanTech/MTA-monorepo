@@ -12,6 +12,8 @@ import {
   buildMinioApiBases,
   clusterSurveyPrintObjectName,
   parseSurveyPrintFormDocMeta,
+  surveyPrintCallbackUrl,
+  surveyPrintFileExists,
   surveyPrintProxyUrl,
   uploadSurveyPrintViaServer,
   type SurveyPrintFormDocMeta,
@@ -110,14 +112,19 @@ const ModalPrintExamClusterSurvey = () => {
     let cancelled = false
 
     const ensureDoc = async () => {
-      if (storedDocMeta) {
-        if (!cancelled) setDocMeta(storedDocMeta)
-        return
-      }
-
       setPreparing(true)
       try {
-        const meta = await uploadClusterSurveyPrintDocxRef.current(1)
+        const apiBase = getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL") || ""
+        const bases = buildMinioApiBases(apiBase)
+        if (storedDocMeta) {
+          const exists = await surveyPrintFileExists(bases, storedDocMeta.objectName)
+          if (exists) {
+            if (!cancelled) setDocMeta(storedDocMeta)
+            return
+          }
+        }
+
+        const meta = await uploadClusterSurveyPrintDocxRef.current(storedDocMeta?.version || 1)
         if (!cancelled) {
           setDocMeta(meta)
           await refetch()
@@ -141,7 +148,7 @@ const ModalPrintExamClusterSurvey = () => {
   const minioApiBases = useMemo(() => buildMinioApiBases(apiBase), [apiBase])
   const callbackUrl =
     docMeta && minioApiBases.length > 0
-      ? `${minioApiBases[0]}/onlyoffice-callback?objectName=${encodeURIComponent(docMeta.objectName)}`
+      ? surveyPrintCallbackUrl(minioApiBases[0], docMeta.objectName)
       : undefined
   const documentUrl =
     docMeta && minioApiBases.length > 0

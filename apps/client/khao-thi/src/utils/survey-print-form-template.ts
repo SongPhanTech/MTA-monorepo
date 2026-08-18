@@ -11,21 +11,41 @@ export type SurveyPrintFormDocMeta = {
   version: number
 }
 
-/** Resolve be-model `/api/minio` bases (legacy + current gateway prefixes). */
+export function toAbsoluteUrl(url: string): string {
+  if (!url || /^https?:\/\//i.test(url)) return url
+  if (typeof window === "undefined") return url
+  return new URL(url, window.location.origin).toString()
+}
+
+/**
+ * Gateway `/api/model/` thường rewrite thành be-model `/api/`.
+ * Vì vậy MinIO proxy phải gọi `/api/model/api/minio` (không phải `/api/minio`).
+ */
 export function buildMinioApiBases(rawModelBase: string): string[] {
   const trimmed = rawModelBase.replace(/\/+$/, "")
   if (!trimmed) return []
 
-  const fixedModelEndpoint = trimmed.endsWith("/api/model") ? trimmed : `${trimmed}/api/model`
-  const legacyModelEndpoint = `${fixedModelEndpoint}/api/model`
-  const toMinioBase = (modelEndpoint: string) => modelEndpoint.replace(/\/model$/, "/minio")
+  const modelEndpoint = trimmed.endsWith("/api/model") ? trimmed : `${trimmed}/api/model`
+  const viaGateway = `${modelEndpoint}/api/minio`
+  const direct = modelEndpoint.replace(/\/model$/, "/minio")
 
-  return Array.from(new Set([toMinioBase(legacyModelEndpoint), toMinioBase(fixedModelEndpoint)]))
+  return Array.from(new Set([viaGateway, direct]))
 }
 
 export function surveyPrintProxyUrl(minioApiBase: string, objectName: string) {
-  return `${minioApiBase}/survey-print?objectName=${encodeURIComponent(objectName)}`
+  return toAbsoluteUrl(
+    `${minioApiBase.replace(/\/+$/, "")}/survey-print?objectName=${encodeURIComponent(objectName)}`
+  )
 }
+
+export function surveyPrintCallbackUrl(minioApiBase: string, objectName: string) {
+  return toAbsoluteUrl(
+    `${minioApiBase.replace(/\/+$/, "")}/onlyoffice-callback?objectName=${encodeURIComponent(objectName)}`
+  )
+}
+
+const shouldTryNextMinioBase = (status: number) =>
+  status === 404 || status === 405 || status === 502 || status === 503
 
 /** Upload DOCX via BE proxy (client → server → MinIO). */
 export async function uploadSurveyPrintViaServer(
@@ -48,9 +68,34 @@ export async function uploadSurveyPrintViaServer(
       const data = (await res.json()) as { filePath?: string }
       return { filePath: data.filePath || objectName }
     }
-    if (res.status !== 404) break
+    if (!shouldTryNextMinioBase(res.status)) break
   }
   throw new Error(`Upload survey print failed: ${lastStatus}`)
+}
+
+/** true = file đã có trên MinIO và GET proxy trả docx. */
+export async function surveyPrintFileExists(
+  minioApiBases: string[],
+  objectName: string
+): Promise<boolean> {
+  for (const base of minioApiBases) {
+    const res = await fetch(surveyPrintProxyUrl(base, objectName), {
+      method: "GET",
+      credentials: "include",
+    })
+    const contentType = res.headers.get("content-type") || ""
+    if (
+      res.ok &&
+      (contentType.includes("officedocument") ||
+        contentType.includes("octet-stream") ||
+        contentType.includes("msword"))
+    ) {
+      return true
+    }
+    if (res.ok) return true
+    if (!shouldTryNextMinioBase(res.status)) break
+  }
+  return false
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

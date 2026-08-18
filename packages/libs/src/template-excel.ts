@@ -41,5 +41,7 @@ export async function exportFromTemplate(options: ExportOptions) {
         ? fileName
         : `${fileName}.xlsx`
 
-  saveAs(new Blob([outBuffer], { type: mimeType }), normalizedName)
+  const blobParts = new Uint8Array(outBuffer.byteLength)
+  blobParts.set(outBuffer)
+  saveAs(new Blob([blobParts], { type: mimeType }), normalizedName)
 }

@@ -16,7 +16,8 @@ interface ProgressRow {
 }
 
 function getStatusStyles(row: ProgressRow) {
-  const isComplete = row.completed === row.total
+  const hasNoSurvey = row.total === 0
+  const isComplete = row.total > 0 && row.completed === row.total
 
   if (row.type === "total") {
     return {
@@ -25,7 +26,7 @@ function getStatusStyles(row: ProgressRow) {
     }
   }
 
-  if (isComplete) {
+  if (hasNoSurvey || isComplete) {
     return {
       color: "#52c41a",
       backgroundColor: "rgba(82, 196, 26, 0.12)",
@@ -84,12 +85,23 @@ export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
 
       if (row.type === "department" && expandedKeys[row.key] !== false) {
         rows
+          .filter((child) => child.parentKey === row.key && child.type === "department")
+          .forEach((child) => visit(child, depth + 1))
+
+        rows
           .filter((child) => child.parentKey === row.key && child.type === "lecturer")
           .forEach((child) => visit(child, depth + 1))
       }
     }
 
+    const knownKeys = new Set(rows.map((row) => row.key))
     rows.filter((row) => row.type === "faculty").forEach((row) => visit(row))
+    rows
+      .filter(
+        (row) =>
+          row.type === "department" && (!row.parentKey || !knownKeys.has(row.parentKey))
+      )
+      .forEach((row) => visit(row))
 
     return result
   }, [expandedKeys, rows])
@@ -150,6 +162,18 @@ export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
                 width: 10,
                 height: 10,
                 borderRadius: "50%",
+                backgroundColor: "#52c41a",
+              }}
+            />
+            <Text style={{ fontSize: 12 }}>Chưa có khảo sát (0/0)</Text>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
                 backgroundColor: "#ff4d4f",
               }}
             />
@@ -179,8 +203,12 @@ export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
             }),
             render: (_, row: ProgressRow & { depth?: number }) => {
               const isExpanded = expandedKeys[row.key] !== false
-              const canToggleFaculty = row.type === "faculty" && hasDepartmentChildren(row)
-              const canToggleDepartment = row.type === "department" && hasLectureChildren(row)
+              const canToggleFaculty =
+                row.type === "faculty" &&
+                (hasDepartmentChildren(row) || hasLectureChildren(row))
+              const canToggleDepartment =
+                row.type === "department" &&
+                (hasLectureChildren(row) || hasDepartmentChildren(row))
               const canToggle = canToggleFaculty || canToggleDepartment
 
               return (
@@ -199,7 +227,7 @@ export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
                     fontStyle: row.type === "lecturer" ? "italic" : "normal",
                     color:
                       row.type === "lecturer"
-                        ? row.completed === row.total
+                        ? row.total > 0 && row.completed === row.total
                           ? "#111827"
                           : "#ff4d4f"
                         : row.type === "total"

@@ -174,12 +174,32 @@ const SURVEY_PRINT_OBJECT_PREFIX = "khao-thi/survey-print/"
 const DOCX_CONTENT_TYPE =
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
+const safeDecodeUri = (raw: string) => {
+  try {
+    return decodeURIComponent(raw)
+  } catch {
+    return raw
+  }
+}
+
 const normalizeSurveyPrintObjectName = (raw: string): string | null => {
-  const trimmed = decodeURIComponent(raw).replace(/^\/+/, "")
+  const trimmed = safeDecodeUri(raw).replace(/^\/+/, "")
   if (trimmed.startsWith(SURVEY_PRINT_OBJECT_PREFIX)) return trimmed
   const idx = trimmed.indexOf(SURVEY_PRINT_OBJECT_PREFIX)
   if (idx > 0 && trimmed[idx - 1] === "/") return trimmed.slice(idx)
   return null
+}
+
+const readSurveyPrintObject = async (objectName: string) => {
+  try {
+    return await minioService.getObject(objectName)
+  } catch {
+    const bucket = process.env.MINIO_BUCKET || ""
+    if (bucket && objectName.startsWith(`${bucket}/`)) {
+      return minioService.getObject(objectName.slice(bucket.length + 1))
+    }
+    throw new Error("File not found")
+  }
 }
 
 const saveOnlyOfficeUrlToObject = async (objectName: string, fileUrl: string) => {
@@ -230,9 +250,9 @@ app.get("/survey-print", async (c) => {
   }
 
   try {
-    const buffer = await minioService.getObject(objectName)
+    const buffer = await readSurveyPrintObject(objectName)
     const fileName = objectName.split("/").pop() || "survey.docx"
-    return c.body(new Uint8Array(buffer), 200, {
+    return c.body(Uint8Array.from(buffer), 200, {
       "Content-Type": DOCX_CONTENT_TYPE,
       "Content-Disposition": `inline; filename="${fileName}"`,
       "Cache-Control": "no-store",
@@ -269,8 +289,19 @@ app.put("/survey-print", async (c) => {
       200
     )
   } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error)
     console.error("[survey-print PUT] Error:", error)
-    return c.json({ success: false, message: "Upload failed" }, 500)
+    const diskFull = /free drive threshold|insufficient/i.test(detail)
+    return c.json(
+      {
+        success: false,
+        message: diskFull
+          ? "MinIO hết dung lượng, không ghi được file phiếu in"
+          : "Upload failed",
+        detail,
+      },
+      diskFull ? 507 : 500
+    )
   }
 })
 
