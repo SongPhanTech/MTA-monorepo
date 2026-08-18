@@ -1407,7 +1407,7 @@ export default function StudentFixedClassPage() {
         const totalRow: TableRow = {
           cells: [
             {
-              value: `Tổng tín chỉ: ${tongtinchi}`,
+              value: `Tổng tín chỉ tích luỹ: ${tongtinchi}`,
               colSpan: 18,
               border: false,
             },
@@ -1416,7 +1416,7 @@ export default function StudentFixedClassPage() {
         const diemTBHe10Row: TableRow = {
           cells: [
             {
-              value: `TBC tích luỹ hệ 10 toàn khoá: ${tongdiemhe10}`,
+              value: `Điểm trung bình tích luỹ hệ 10 toàn khoá: ${tongdiemhe10}`,
               colSpan: 18,
               border: false,
             },
@@ -1425,7 +1425,7 @@ export default function StudentFixedClassPage() {
         const diemTBHe4Row: TableRow = {
           cells: [
             {
-              value: `TBC tích luỹ hệ 4 toàn khoá: ${tongdiemhe4}`,
+              value: `Điểm trung bình tích luỹ hệ 4 toàn khoá: ${tongdiemhe4}`,
               colSpan: 18,
               border: false,
             },

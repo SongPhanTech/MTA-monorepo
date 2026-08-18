@@ -14,7 +14,7 @@ import {
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Col, Flex, Row, Skeleton, Tree } from "antd"
 import { useRouter } from "next/router"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState, type Key } from "react"
 
 import OrganizationSurveyReport from "@/components/sub-pages/khao-sat/bao-cao-don-vi"
 import { getRuntimeEnv } from "@workspace/libs"
@@ -41,33 +41,53 @@ function trainingSystemNameFromDbType(type: $Enums.TrainingObjectTypes | undefin
   return ""
 }
 
-function buildOrgAndLectureTree(
-  list: Array<any>,
-  lecturers: Array<any>,
-  parentId: string | null = null
-): Array<any> {
-  return list
-    .filter((item) => (item.parentId ?? null) === parentId)
-    .map((item) => ({
+function buildOrgAndLectureTree(list: Array<any>, lecturers: Array<any>): Array<any> {
+  const map = new Map<string, any>()
+  const roots: Array<any> = []
+  const attachedLecturerIds = new Set<string>()
+
+  for (const item of list) {
+    const orgLecturers = lecturers.filter((lecturer) => lecturer.organizationId === item.id)
+    orgLecturers.forEach((lecturer) => attachedLecturerIds.add(lecturer.id))
+    map.set(item.id, {
       ...item,
       parent: list.find((p) => p.id === item.parentId),
       title: item.name || "Đơn vị không tên",
       key: item.id,
       icon: <FolderOpenOutlined />,
       selectable: true,
-      children: [
-        ...lecturers
-          .filter((lecturer) => lecturer.organizationId === item.id)
-          .map((lecturer) => ({
-            ...lecturer,
-            title: lecturer.userProfile?.fullName || "Giảng viên không tên",
-            key: `${lecturer.id}`,
-            icon: <UserOutlined />,
-            parent: item,
-          })),
-        ...buildOrgAndLectureTree(list, lecturers, item.id),
-      ],
-    }))
+      children: orgLecturers.map((lecturer) => ({
+        ...lecturer,
+        title: lecturer.userProfile?.fullName || "Giảng viên không tên",
+        key: `${lecturer.id}`,
+        icon: <UserOutlined />,
+        parent: item,
+      })),
+    })
+  }
+
+  for (const item of list) {
+    const node = map.get(item.id)
+    if (!node) continue
+    const parentId = item.parentId
+    if (parentId && map.has(parentId)) {
+      map.get(parentId).children.push(node)
+    } else {
+      roots.push(node)
+    }
+  }
+
+  for (const lecturer of lecturers) {
+    if (attachedLecturerIds.has(lecturer.id)) continue
+    roots.push({
+      ...lecturer,
+      title: lecturer.userProfile?.fullName || "Giảng viên không tên",
+      key: `${lecturer.id}`,
+      icon: <UserOutlined />,
+    })
+  }
+
+  return roots
 }
 
 export default function BaoCaoGiangVien() {
@@ -168,6 +188,13 @@ export default function BaoCaoGiangVien() {
             sMa: getRuntimeEnv("NEXT_PUBLIC_ROOT_ORG_CODE") || "HD",
           },
           {
+            iCapDonVi: 0,
+            iLoaiDonVi: 0,
+          },
+          {
+            iCapDonVi: 1,
+          },
+          {
             iLoaiDonVi: {
               in: [5, 6, 7],
             },
@@ -251,43 +278,18 @@ export default function BaoCaoGiangVien() {
       },
     },
     {
+      enabled: !!filters.clusterId,
       refetchOnWindowFocus: false,
     }
   )
 
-  const { data: lecturerActive = [] } = useFindManyLecturer(
+  const { data: clusterLecturers = [] } = useFindManyLecturer(
     {
       where: {
-        // ...(searchText && {
-        //     userProfile: {
-        //         OR: [
-        //             { fullName: { contains: searchText, mode: 'insensitive' } },
-        //             { code: { contains: searchText, mode: 'insensitive' } },
-        //         ],
-        //     },
-        // }),
-        mainSubjectClasses: {
+        survey: {
           some: {
-            ...(!!trainingObjectTypeId && { trainingObjectTypeId }),
+            clusterSurveyId: filters.clusterId,
           },
-        },
-        clusterSurvey: {
-          some: {
-            id: filters.clusterId,
-          },
-        },
-        organization: {
-          OR: [
-            {
-              iCapDonVi: 0,
-              iLoaiDonVi: 0,
-            },
-            {
-              iLoaiDonVi: {
-                in: [5, 6, 7],
-              },
-            },
-          ],
         },
       },
       orderBy: {
@@ -297,7 +299,6 @@ export default function BaoCaoGiangVien() {
       },
       include: {
         userProfile: true,
-        mainSubjectClasses: true,
         organization: true,
       },
     },
@@ -307,20 +308,31 @@ export default function BaoCaoGiangVien() {
     }
   )
 
+  const organizationsForTree = useMemo(() => {
+    const byId = new Map(organizations.map((org) => [org.Id, org]))
+    for (const lecturer of clusterLecturers) {
+      const org = lecturer.organization
+      if (org?.Id && !byId.has(org.Id)) {
+        byId.set(org.Id, org)
+      }
+    }
+    return Array.from(byId.values())
+  }, [organizations, clusterLecturers])
+
+  const lecturersForTree = filters.clusterId ? clusterLecturers : lecturerData
+
   // Tạo treeData từ organizations và lecturers
   const treeData: any[] = useMemo(() => {
-    if (!organizations.length || !lecturerData.length) return []
-    // const treeData1 = buildDonViTree(organizations.map(i=>{return {...i,key:i.Id,title:i.sTen}}))
+    if (!organizationsForTree.length) return []
 
-    // return treeData1
     return buildOrgAndLectureTree(
-      organizations.map((org) => ({
+      organizationsForTree.map((org) => ({
         ...org,
         id: org.Id,
         name: `${org.sMa} - ${org.sTen}`,
         parentId: org.sParentId,
       })),
-      lecturerData.map((lec) => ({
+      lecturersForTree.map((lec) => ({
         ...lec,
         id: lec.id,
         userProfile: {
@@ -329,13 +341,21 @@ export default function BaoCaoGiangVien() {
             `${lec.userProfile?.lastName ?? ""} ${lec.userProfile?.firstName ?? ""}`.trim() ||
             "Giảng viên không tên",
         },
-        selectable: lecturerActive.some((i) => i.id === lec.id),
+        selectable: true,
         organizationId: lec.organizationId,
-        className: !lecturerActive.some((i) => i.id === lec.id) ? "tree-child-disabled" : "",
-      })),
-      null
+      }))
     )
-  }, [organizations, lecturerData, lecturerActive])
+  }, [organizationsForTree, lecturersForTree])
+
+  const orgKeys = useMemo(
+    () => organizationsForTree.map((org) => org.Id),
+    [organizationsForTree]
+  )
+  const [expandedKeys, setExpandedKeys] = useState<Key[]>([])
+
+  useEffect(() => {
+    setExpandedKeys(orgKeys)
+  }, [orgKeys])
 
   const hanleSearchReport = () => {}
 
@@ -646,15 +666,16 @@ export default function BaoCaoGiangVien() {
         ) : (
           <Tree
             showIcon
+            showLine
             selectedKeys={selectedKeys}
+            expandedKeys={expandedKeys}
+            onExpand={(keys) => setExpandedKeys(keys)}
             treeData={treeData}
             className="w-full mb-3 min-w-[250px]"
+            style={{ maxHeight: "calc(100vh - 180px)", overflow: "auto" }}
             onSelect={(key, info) => {
               setSelectedKeys(key)
               setSelectedItem(info.node)
-              // setFilters((prev: any) => ({
-              //     ...prev,
-              // }))
             }}
           />
         )}
