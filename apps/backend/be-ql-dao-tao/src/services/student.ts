@@ -683,6 +683,7 @@ export async function _generateStudentImportTemplate(
         name: true,
         curriculum: {
           select: {
+            trainingField: { select: { name: true } },
             trainingMajor: {
               select: {
                 name: true,
@@ -705,56 +706,64 @@ export async function _generateStudentImportTemplate(
     }),
   ])
 
-  // Khi lọc theo khoá: chỉ lấy ngành/chuyên ngành từ CTĐT thuộc khoá đó.
-  // Khi xuất toàn bộ: lấy toàn bộ ngành/chuyên ngành theo đối tượng đào tạo.
-  let trainingMajors: { name: string }[]
-  let trainingFields: { name: string }[]
-
-  if (trainingCourseId) {
-    const majorNames = new Set<string>()
-    const fieldNames = new Set<string>()
-    for (const cv of curricula) {
-      const majorName = cv.curriculum?.trainingMajor?.name?.trim()
-      const fieldName = cv.curriculum?.trainingMajor?.trainingField?.name?.trim()
-      if (majorName) majorNames.add(majorName)
-      if (fieldName) fieldNames.add(fieldName)
-    }
-    trainingMajors = [...majorNames].sort((a, b) => a.localeCompare(b)).map((name) => ({ name }))
-    trainingFields = [...fieldNames].sort((a, b) => a.localeCompare(b)).map((name) => ({ name }))
-  } else {
-    ;[trainingMajors, trainingFields] = await Promise.all([
-      prisma.trainingMajor.findMany({
-        where: {
-          trainingObjectTypes: {
-            some: {
-              trainingObjectTypeId,
-              deletedAt: null,
-              active: true,
-            },
-          },
-          deletedAt: null,
-        },
-        select: { name: true },
-        orderBy: { name: "asc" },
-      }),
-      prisma.trainingField.findMany({
-        where: {
-          trainingObjectTypes: {
-            some: {
-              trainingObjectTypeId,
-              deletedAt: null,
-              active: true,
-            },
-          },
-          deletedAt: null,
-        },
-        select: { name: true },
-        orderBy: { name: "asc" },
-      }),
-    ])
+  // Ngành = TrainingField, chuyên ngành = TrainingMajor.
+  // CTĐT có thể gắn field trực tiếp (trainingFieldId) hoặc gián tiếp qua major.
+  const majorNamesFromCurricula = new Set<string>()
+  const fieldNamesFromCurricula = new Set<string>()
+  for (const cv of curricula) {
+    const majorName = cv.curriculum?.trainingMajor?.name?.trim()
+    const fieldFromCurriculum = cv.curriculum?.trainingField?.name?.trim()
+    const fieldFromMajor = cv.curriculum?.trainingMajor?.trainingField?.name?.trim()
+    if (majorName) majorNamesFromCurricula.add(majorName)
+    if (fieldFromCurriculum) fieldNamesFromCurricula.add(fieldFromCurriculum)
+    if (fieldFromMajor) fieldNamesFromCurricula.add(fieldFromMajor)
   }
 
-  const buffer = await getTemplateBuffer(prisma, "MauImportDSHV_v4.xlsx")
+  const [majorsByObjectType, fieldsByObjectType] = await Promise.all([
+    prisma.trainingMajor.findMany({
+      where: {
+        trainingObjectTypes: {
+          some: { trainingObjectTypeId, deletedAt: null, active: true },
+        },
+        deletedAt: null,
+      },
+      select: { name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.trainingField.findMany({
+      where: {
+        trainingObjectTypes: {
+          some: { trainingObjectTypeId, deletedAt: null, active: true },
+        },
+        deletedAt: null,
+      },
+      select: { name: true },
+      orderBy: { name: "asc" },
+    }),
+  ])
+
+  const mergeNames = (...groups: Array<Iterable<string> | Array<{ name: string }>>) => {
+    const set = new Set<string>()
+    for (const group of groups) {
+      for (const item of group) {
+        const name = (typeof item === "string" ? item : item.name)?.trim()
+        if (name) set.add(name)
+      }
+    }
+    return [...set].sort((a, b) => a.localeCompare(b, "vi")).map((name) => ({ name }))
+  }
+
+  // Ưu tiên CTĐT của khoá; nếu trống thì lấy toàn bộ danh mục theo đối tượng đào tạo.
+  let trainingMajors = mergeNames(majorNamesFromCurricula)
+  let trainingFields = mergeNames(fieldNamesFromCurricula)
+  if (trainingMajors.length === 0) trainingMajors = mergeNames(majorsByObjectType)
+  if (trainingFields.length === 0) trainingFields = mergeNames(fieldsByObjectType)
+  if (!trainingCourseId) {
+    trainingMajors = mergeNames(majorNamesFromCurricula, majorsByObjectType)
+    trainingFields = mergeNames(fieldNamesFromCurricula, fieldsByObjectType)
+  }
+
+  const buffer = await getTemplateBuffer(prisma, "MauImportDSHV_v5.xlsx")
   const template = new XlsxTemplate(buffer)
 
   const safeSubstitute = (sheetName: string, data: Record<string, unknown>) => {
@@ -788,23 +797,42 @@ export async function _generateStudentImportTemplate(
   })
 
   const generated = template.generate({ type: "nodebuffer" }) as Buffer
-  // xlsx-template shifts named-range end rows beyond Excel max (1048576) → Excel repair.
-  return sanitizeXlsxDefinedNames(generated) as any
+  return sanitizeStudentImportWorkbook(generated, {
+    DanhMucNganh: Math.max(2, 1 + trainingFields.length),
+    DanhMucChuyenNganh: Math.max(2, 1 + trainingMajors.length),
+    DanhMucChuongTrinhDaoTao: Math.max(1, curricula.length),
+    DanhMucLopQuanLi: Math.max(1, fixedClasses.length),
+    DanhMucDonViQuanLi: Math.max(1, organizations.length),
+  }) as any
 }
 
 /** Excel max row; named ranges past this cause "Removed Records: Named range". */
 const EXCEL_MAX_ROW = 1_048_576
 
 /**
- * Fix workbook definedNames broken by xlsx-template table expansion:
- * - clamp row refs > 1048576
- * - drop #REF! names
+ * Clamp named ranges + reset sheet selection (template MinIO chọn sẵn A3:A527).
  */
-function sanitizeXlsxDefinedNames(buffer: Buffer): Buffer {
+function sanitizeStudentImportWorkbook(
+  buffer: Buffer,
+  lastRowBySheet: Record<string, number>
+): Buffer {
   const zip = new PizZip(buffer)
+
+  for (const file of Object.values(zip.files)) {
+    if (!file.name.startsWith("xl/worksheets/sheet") || !file.name.endsWith(".xml")) continue
+    if (file.dir) continue
+    let xml = file.asText()
+    xml = xml.replace(/<selection\b[^>]*\/>/g, '<selection activeCell="A1" sqref="A1"/>')
+    xml = xml.replace(/<selection\b[^>]*>\s*<\/selection>/g, '<selection activeCell="A1" sqref="A1"/>')
+    xml = xml.replace(/\s+topLeftCell="[^"]*"/g, "")
+    zip.file(file.name, xml)
+  }
+
   const workbookPath = "xl/workbook.xml"
   const workbookXml = zip.file(workbookPath)?.asText()
-  if (!workbookXml) return buffer
+  if (!workbookXml) {
+    return zip.generate({ type: "nodebuffer" }) as Buffer
+  }
 
   let next = workbookXml.replace(
     /<definedName(\b[^>]*)>([\s\S]*?)<\/definedName>/g,
@@ -812,11 +840,26 @@ function sanitizeXlsxDefinedNames(buffer: Buffer): Buffer {
       const ref = String(value).trim()
       if (!ref || ref.includes("#REF!")) return ""
 
-      const fixed = ref.replace(/\$([A-Z]+)\$(\d+)/gi, (_m, col: string, rowStr: string) => {
+      const sheetMatch = ref.match(/^([^!]+)!/)
+      const sheetName = sheetMatch?.[1]?.replace(/'/g, "")
+      const lastRow = sheetName ? lastRowBySheet[sheetName] : undefined
+
+      let fixed = ref.replace(/\$([A-Z]+)\$(\d+)/gi, (_m, col: string, rowStr: string) => {
         const row = Number(rowStr)
         if (!Number.isFinite(row)) return _m
-        return `$${col}$${Math.min(row, EXCEL_MAX_ROW)}`
+        let capped = Math.min(row, EXCEL_MAX_ROW)
+        if (typeof lastRow === "number" && capped > lastRow) capped = lastRow
+        return `$${col}$${capped}`
       })
+
+      // Entire-column refs (DanhMucNganh!$A:$A) → bound to filled rows
+      if (lastRow && /![A-Z]+:[A-Z]+$/i.test(fixed.replace(/\$/g, ""))) {
+        const colMatch = fixed.match(/!\$?([A-Z]+):\$?([A-Z]+)$/i)
+        if (colMatch) {
+          const prefix = fixed.slice(0, fixed.lastIndexOf("!"))
+          fixed = `${prefix}!$${colMatch[1]}$2:$${colMatch[2]}$${lastRow}`
+        }
+      }
 
       return `<definedName${attrs}>${fixed}</definedName>`
     }
@@ -825,6 +868,15 @@ function sanitizeXlsxDefinedNames(buffer: Buffer): Buffer {
   next = next.replace(/<definedNames>\s*<\/definedNames>/, "")
   zip.file(workbookPath, next)
   return zip.generate({ type: "nodebuffer" }) as Buffer
+}
+
+/**
+ * Fix workbook definedNames broken by xlsx-template table expansion:
+ * - clamp row refs > 1048576
+ * - drop #REF! names
+ */
+function sanitizeXlsxDefinedNames(buffer: Buffer): Buffer {
+  return sanitizeStudentImportWorkbook(buffer, {})
 }
 
 export const exportArchivedCertificate = async ({

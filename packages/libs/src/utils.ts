@@ -82,6 +82,12 @@ export function normalizeVietnamese(str: string): string {
     .toLowerCase()
 }
 
+/** Bỏ khoảng trắng đầu/cuối và gom khoảng trắng thừa (kể cả NBSP từ Excel). */
+export function normalizeCatalogName(value?: string | null) {
+  if (value == null) return ""
+  return String(value).replace(/\u00a0/g, " ").replace(/\s+/g, " ").trim()
+}
+
 export function filterOption(input: any, option: any) {
   const label = String(option?.label ?? "")
   return label.toLowerCase().includes(input.toLowerCase())

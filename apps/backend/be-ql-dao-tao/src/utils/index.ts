@@ -1,4 +1,5 @@
 import { $Enums, type PrismaClient } from "@workspace/db"
+import { normalizeCatalogName } from "@workspace/libs/utils"
 import { HTTPException } from "hono/http-exception"
 import ExcelJS from "exceljs"
 import XlsxTemplate from "xlsx-template"
@@ -906,25 +907,71 @@ export const buildRankMapOrThrow = async (prisma: PrismaClient, names: (string |
   return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
 }
 
+const positionMatchScore = (
+  row: { sTen: string | null; bActive?: boolean | null },
+  key: string
+) => (row.sTen === key ? 2 : 0) + (row.bActive !== false ? 1 : 0)
+
 export const buildPositionMapOrThrow = async (
   prisma: PrismaClient,
   names: (string | undefined)[]
 ) => {
-  const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
+  const uniqueNormalized = Array.from(
+    new Set(names.map((name) => normalizeCatalogName(name)).filter(Boolean))
+  )
+
+  if (!uniqueNormalized.length) {
+    return new Map<string, string>()
+  }
 
   const existing = await prisma.dM_ChucVu.findMany({
-    where: { sTen: { in: uniqNames } },
-    select: { sTen: true, Id: true },
+    where: {
+      OR: [{ bDeleted: false }, { bDeleted: null }],
+    },
+    select: { Id: true, sTen: true, bActive: true, iSTT: true },
   })
 
-  const missing = uniqNames.filter((name) => !existing.some(({ sTen }) => sTen === name))
+  const byNormalized = new Map<string, { Id: string; sTen: string | null; bActive?: boolean | null }>()
+  for (const row of existing) {
+    const key = normalizeCatalogName(row.sTen)
+    if (!key) continue
+    const current = byNormalized.get(key)
+    if (!current || positionMatchScore(row, key) > positionMatchScore(current, key)) {
+      byNormalized.set(key, row)
+    }
+  }
+
+  const missing = uniqueNormalized.filter((name) => !byNormalized.has(name))
 
   if (missing.length) {
-    throw new HTTPException(400, {
-      message: `Chức vụ không tồn tại: ${missing.join(", ")}`,
+    const maxStt = existing.reduce((max, row) => Math.max(max, row.iSTT ?? 0), 0)
+    const created = await prisma.dM_ChucVu.createManyAndReturn({
+      data: missing.map((sTen, index) => ({
+        sTen,
+        sMa: sTen,
+        bActive: true,
+        bDeleted: false,
+        dNgayTao: new Date(),
+        iSTT: maxStt + index + 1,
+      })),
+      select: { Id: true, sTen: true },
     })
+
+    for (const row of created) {
+      byNormalized.set(normalizeCatalogName(row.sTen), row)
+    }
   }
-  return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
+
+  const map = new Map<string, string>()
+  for (const name of names) {
+    const key = normalizeCatalogName(name)
+    const id = key ? byNormalized.get(key)?.Id : undefined
+    if (!key || !id) continue
+    map.set(key, id)
+    if (name) map.set(name, id)
+  }
+
+  return map
 }
 
 export const buildDMTruongMap = async (prisma: PrismaClient, names: (string | undefined)[]) => {

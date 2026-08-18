@@ -59,7 +59,7 @@ const ExportStudentImportTemplateModal = () => {
       })
 
       if (res.status === 200) {
-        saveAs(res.data, "MauImportDSHV.xlsx")
+        saveAs(res.data, "MauImportDSHV_v5.xlsx")
         onClose()
       } else {
         message.error(res.data.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
