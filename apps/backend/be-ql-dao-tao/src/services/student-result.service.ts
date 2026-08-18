@@ -1433,6 +1433,14 @@ export async function calculateStudentYearResult({
     return scoreConvert.base4
   }
 
+  const roundGpa = (totalWeightedScore: Decimal, credits: number) =>
+    credits > 0
+      ? totalWeightedScore
+          .dividedBy(credits)
+          .toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
+          .toNumber()
+      : 0
+
   // A. Phân loại điểm
   // Điểm trong năm học hiện tại
   const scoresInYear = allScores.filter(
@@ -1442,8 +1450,8 @@ export async function calculateStudentYearResult({
   const scoreToPassConditional = student.fixedClass.trainingCourse.scoreToPassConditional || 0
 
   // B. Tính YEARLY (Trung bình năm)
-  let yearTotalScore10 = 0
-  let yearTotalScore4 = 0
+  let yearTotalScore10 = new Decimal(0)
+  let yearTotalScore4 = new Decimal(0)
   let yearTotalCredits = 0
   let yearFailedCredits = 0
   let yearCreditsForGpa = 0
@@ -1476,8 +1484,8 @@ export async function calculateStudentYearResult({
     // Chuyển đổi sang hệ 4
     const score4 = convertScore10to4(score10)
 
-    yearTotalScore10 += score10 * credit
-    yearTotalScore4 += score4 * credit
+    yearTotalScore10 = yearTotalScore10.plus(new Decimal(score10).mul(credit))
+    yearTotalScore4 = yearTotalScore4.plus(new Decimal(score4).mul(credit))
     yearCreditsForGpa += credit
 
     if (score10 < scoreToPass) {
@@ -1496,10 +1504,8 @@ export async function calculateStudentYearResult({
     }
   }
 
-  const yearlyGpa10 =
-    yearCreditsForGpa > 0 ? Number.parseFloat((yearTotalScore10 / yearCreditsForGpa).toFixed(2)) : 0
-  const yearlyGpa4 =
-    yearCreditsForGpa > 0 ? Number.parseFloat((yearTotalScore4 / yearCreditsForGpa).toFixed(2)) : 0
+  const yearlyGpa10 = roundGpa(yearTotalScore10, yearCreditsForGpa)
+  const yearlyGpa4 = roundGpa(yearTotalScore4, yearCreditsForGpa)
 
   // C. Tính CUMULATIVE (Trung bình tích lũy)
   // Logic: Với tích lũy, nếu sinh viên học lại môn đó, chỉ lấy điểm cao nhất của môn đó (dựa trên Subject Code)
@@ -1531,29 +1537,23 @@ export async function calculateStudentYearResult({
     }
   }
 
-  let cumulativeTotalScore10 = 0
-  let cumulativeTotalScore4 = 0
+  let cumulativeTotalScore10 = new Decimal(0)
+  let cumulativeTotalScore4 = new Decimal(0)
   let cumulativePassedCredits = 0
   let cumulativeDebtCredits = 0
   uniqueSubjectsMap.forEach((val) => {
     if (val.passed) {
       // Trung bình tích luỹ (chỉ tính môn đạt)
-      cumulativeTotalScore10 += val.score10 * val.credit
-      cumulativeTotalScore4 += val.score4 * val.credit
+      cumulativeTotalScore10 = cumulativeTotalScore10.plus(new Decimal(val.score10).mul(val.credit))
+      cumulativeTotalScore4 = cumulativeTotalScore4.plus(new Decimal(val.score4).mul(val.credit))
       cumulativePassedCredits += val.credit
     } else {
       cumulativeDebtCredits += val.credit
     }
   })
 
-  const cumulativeGpa10 =
-    cumulativePassedCredits > 0
-      ? Number.parseFloat((cumulativeTotalScore10 / cumulativePassedCredits).toFixed(2))
-      : 0
-  const cumulativeGpa4 =
-    cumulativePassedCredits > 0
-      ? Number.parseFloat((cumulativeTotalScore4 / cumulativePassedCredits).toFixed(2))
-      : 0
+  const cumulativeGpa10 = roundGpa(cumulativeTotalScore10, cumulativePassedCredits)
+  const cumulativeGpa4 = roundGpa(cumulativeTotalScore4, cumulativePassedCredits)
 
   const cgpa10 = cumulativeGpa10
   const cgpa4 = cumulativeGpa4
