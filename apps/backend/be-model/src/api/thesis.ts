@@ -3,6 +3,7 @@ import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
 import { excelSuccess, jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 import { batchUpdateThesisProjects } from "../services/thesis-batch-update.service"
 import { exportCouncilImportTemplate } from "../services/thesis-council-export.service"
+import { exportPhuLucDanhSachLuanVan } from "../services/thesis-phu-luc-export.service"
 import { importCouncilFromExcel } from "../services/thesis-council-import.service"
 import { deleteStudentThesis } from "../services/thesis-delete.service"
 import { createSampleThesisData } from "../services/thesis-sample-data.service"
@@ -218,6 +219,63 @@ app.openapi(exportCouncilImportTemplateRoute, async (c) => {
   try {
     const result = await exportCouncilImportTemplate({
       thesisSessionId: body.thesisSessionId,
+    })
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(result.fileName)}`
+    return c.body(new Uint8Array(result.buffer), 200, {
+      "Content-Type": XLSX_CONTENT_TYPE,
+      "Content-Disposition": disposition,
+    })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Xuất file thất bại."
+    return c.json({ message }, 400)
+  }
+})
+
+const ExportPhuLucDanhSachLuanVanSchema = z.object({
+  thesisSessionId: z.string().min(1).openapi({ description: "ID đợt xét luận văn." }),
+  trainingCourseIds: z
+    .array(z.string().min(1))
+    .optional()
+    .openapi({ description: "Danh sách ID khóa học (để trống = tất cả khóa của đợt xét)." }),
+  fixedClassIds: z
+    .array(z.string().min(1))
+    .optional()
+    .openapi({ description: "Danh sách ID lớp học (để trống = tất cả lớp thuộc khóa đã chọn)." }),
+  organizationId: z
+    .string()
+    .optional()
+    .openapi({ description: "ID khoa quản lý (để trống = không lọc theo khoa)." }),
+})
+
+const exportPhuLucDanhSachLuanVanRoute = createRoute({
+  operationId: "exportPhuLucDanhSachLuanVan",
+  tags: ["Luận văn"],
+  path: "/export-phu-luc-danh-sach-luan-van",
+  method: "post",
+  summary: "Xuất phụ lục danh sách luận văn",
+  request: {
+    body: {
+      content: { "application/json": { schema: ExportPhuLucDanhSachLuanVanSchema } },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    ...excelSuccess("File Excel phụ lục danh sách luận văn"),
+    400: {
+      description: "Lỗi nghiệp vụ khi xuất file",
+      content: { "application/json": { schema: ErrorMessageResponseSchema } },
+    },
+  },
+})
+
+app.openapi(exportPhuLucDanhSachLuanVanRoute, async (c) => {
+  const body = c.req.valid("json")
+  try {
+    const result = await exportPhuLucDanhSachLuanVan({
+      thesisSessionId: body.thesisSessionId,
+      trainingCourseIds: body.trainingCourseIds,
+      fixedClassIds: body.fixedClassIds,
+      organizationId: body.organizationId,
     })
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(result.fileName)}`
     return c.body(new Uint8Array(result.buffer), 200, {

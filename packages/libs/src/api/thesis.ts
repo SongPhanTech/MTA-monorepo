@@ -136,6 +136,37 @@ export const exportCouncilImportTemplate = async (
   })
 }
 
+export type ExportPhuLucDanhSachLuanVanRequest = {
+  thesisSessionId: string
+  trainingCourseIds?: string[]
+  fixedClassIds?: string[]
+  organizationId?: string
+}
+
+export type ExportPhuLucDanhSachLuanVanResponse = {
+  status: number
+  data: Blob
+  headers: Headers
+}
+
+export type ExportPhuLucDanhSachLuanVanErrorResponse = {
+  status: number
+  data: { message: string }
+  headers: Headers
+}
+
+const getExportPhuLucDanhSachLuanVanUrl = () => "/api/thesis/export-phu-luc-danh-sach-luan-van"
+
+export const exportPhuLucDanhSachLuanVan = async (
+  body: ExportPhuLucDanhSachLuanVanRequest
+): Promise<ExportPhuLucDanhSachLuanVanResponse | ExportPhuLucDanhSachLuanVanErrorResponse> => {
+  return customModelFetch(getExportPhuLucDanhSachLuanVanUrl(), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  })
+}
+
 export type ImportCouncilFromExcelResponse = {
   status: number
   data: { updatedCount: number }

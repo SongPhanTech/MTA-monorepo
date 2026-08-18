@@ -232,17 +232,37 @@ export async function exportFromTemplate(options: ExportOptions) {
   }
 }
 
+export type ExportFromTemplateBufferOptions = Omit<ExportOptions, "templateUrl"> & {
+  templateBuffer: ArrayBuffer | Uint8Array
+}
+
+function toArrayBuffer(templateBuffer: ArrayBuffer | Uint8Array): ArrayBuffer {
+  if (templateBuffer instanceof ArrayBuffer) {
+    return templateBuffer
+  }
+  return templateBuffer.buffer.slice(
+    templateBuffer.byteOffset,
+    templateBuffer.byteOffset + templateBuffer.byteLength
+  ) as ArrayBuffer
+}
+
+/** Render template Excel từ buffer (dùng trên BE, không cần fetch MinIO từ client). */
+export async function exportFromTemplateBuffer(
+  options: ExportFromTemplateBufferOptions
+): Promise<Buffer> {
+  return buildExcelJSFromBuffer(toArrayBuffer(options.templateBuffer), options.sheets, options).then(
+    (bytes) => Buffer.from(bytes)
+  )
+}
+
 /** ──────────────── XLSX: ExcelJS ──────────────── */
-async function handleExcelJSDefault(
-  templateUrl: string,
+async function buildExcelJSFromBuffer(
+  templateBuffer: ArrayBuffer,
   sheets: SheetExportOptions[],
-  fileName: string,
-  options: ExportOptions
-) {
-  const response = await fetch(templateUrl)
-  const buffer = await response.arrayBuffer()
+  options: Pick<ExportOptions, "fontFamily" | "fontSize">
+): Promise<Uint8Array> {
   const workbook = new ExcelJS.Workbook()
-  await workbook.xlsx.load(buffer)
+  await workbook.xlsx.load(templateBuffer)
 
   const firstSheet = workbook.worksheets[0]
   if (!firstSheet) {
@@ -267,7 +287,6 @@ async function handleExcelJSDefault(
         worksheet.getColumn(colName).hidden = true
       })
     }
-    // 1️⃣ Replace placeholder {{...}}
     const boldDataKeys = sheetOption.boldDataKeys ?? []
     worksheet.eachRow((row) => {
       row.eachCell((cell) => {
@@ -277,7 +296,6 @@ async function handleExcelJSDefault(
       })
     })
 
-    // 2️⃣ Render bảng động
     if (rows && tableStartCell) {
       let currentRow = tableStartCell.row
 
@@ -296,7 +314,6 @@ async function handleExcelJSDefault(
             cell.numFmt = cellData.numFmt
           }
 
-          // Style
           cell.alignment = {
             horizontal: cellData.align || "left",
             vertical: "middle",
@@ -366,15 +383,28 @@ async function handleExcelJSDefault(
 
   workbook.removeWorksheet(firstSheet.id)
   const outBuffer = await workbook.xlsx.writeBuffer()
+  return outBuffer instanceof Uint8Array
+    ? outBuffer
+    : new Uint8Array(outBuffer as ArrayBuffer)
+}
+
+async function handleExcelJSDefault(
+  templateUrl: string,
+  sheets: SheetExportOptions[],
+  fileName: string,
+  options: ExportOptions
+) {
+  const response = await fetch(templateUrl)
+  const buffer = await response.arrayBuffer()
+  const outBytes = await buildExcelJSFromBuffer(buffer, sheets, options)
   saveAs(
-    new Blob([outBuffer], {
+    new Blob([outBytes.slice()], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     }),
     fileName.endsWith(".xlsx") ? fileName : `${fileName}.xlsx`
   )
 }
 
-/** ──────────────── XLS: SheetJS ──────────────── */
 function cloneCellStyle(source: ExcelJS.Cell, target: ExcelJS.Cell) {
   if (source.font) target.font = { ...source.font }
 

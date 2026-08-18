@@ -56,19 +56,19 @@ export default function TrainingMajorPage() {
   }, [trainingObjectTypeId, trainingObjectTypeData])
 
   const renderTrainingObjectTypes = (
-    trainingObjectTypes: Array<{
+    trainingObjectTypes?: Array<{
       id: string
       trainingObjectType: TrainingObjectType
     }>
   ) => {
-    const items = trainingObjectTypes.filter(
+    const items = (trainingObjectTypes ?? []).filter(
       ({ trainingObjectType }) =>
-        !trainingObjectTypeId || trainingObjectType.id === trainingObjectTypeId
+        !trainingObjectTypeId || trainingObjectType?.id === trainingObjectTypeId
     )
 
     const uniqueItems = items.filter(
       (item, index, array) =>
-        array.findIndex((i) => i.trainingObjectType.id === item.trainingObjectType.id) === index
+        array.findIndex((i) => i.trainingObjectType?.id === item.trainingObjectType?.id) === index
     )
 
     if (uniqueItems.length === 0) return ""
@@ -360,7 +360,7 @@ export default function TrainingMajorPage() {
           <TableCollapse
             rowKey="id"
             headerTitleKey={({ code, name, trainingMajors }) =>
-              `${[code, name].filter(Boolean).join(" - ")} (${trainingMajors.length})`
+              `${[code, name].filter(Boolean).join(" - ")} (${trainingMajors?.length ?? 0})`
             }
             defaultExpandAll={expandAll}
             currentPage={currentPage}

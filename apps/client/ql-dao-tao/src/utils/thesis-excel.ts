@@ -23,6 +23,7 @@ import {
   syncThesisCouncilPayments,
   syncThesisSupervisorPayments,
 } from "@workspace/libs/api/thesis-payment"
+import { exportPhuLucDanhSachLuanVan } from "@workspace/libs/api/thesis"
 import { docxTemplate } from "./docx-template"
 import { renderXlsxTemplate } from "@workspace/libs/api/training"
 import { buildSupervisorPaymentRows } from "./thesis-supervisor-payment-export"
@@ -464,167 +465,77 @@ export const formatBirthDate = (date?: Date | string | null) => {
   return `${formatDay(d.date())}/${formatMonth(d.month() + 1)}/${d.year()}`
 }
 
+const downloadBlobResponse = (
+  response: { data: Blob; headers: Headers },
+  fallbackFileName: string
+) => {
+  const disposition = response.headers.get("Content-Disposition") || ""
+  const utf8Match = disposition.match(/filename\*=UTF-8''([^;]+)/i)
+  const plainMatch = disposition.match(/filename="?([^"]+)"?/i)
+  const fileName = utf8Match?.[1]
+    ? decodeURIComponent(utf8Match[1])
+    : plainMatch?.[1] || fallbackFileName
+
+  const url = URL.createObjectURL(response.data)
+  const link = document.createElement("a")
+  link.href = url
+  link.setAttribute("download", fileName)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
+}
+
+export type PhuLucDsLuanVanExportFilters = {
+  thesisSessionId: string
+  trainingCourseIds?: string[]
+  fixedClassIds?: string[]
+  organizationId?: string
+}
+
 export const exportPhuLucDsLuanVan = async ({
-  allStudentsInClasses,
+  filters,
   showSpinner,
-  thesisSessionId,
   hideSpinner,
   message,
-}: ExportOptions) => {
+}: {
+  filters: PhuLucDsLuanVanExportFilters
+  showSpinner: () => void
+  hideSpinner: () => void
+  message: ExportOptions["message"]
+}) => {
   showSpinner()
-  if (!allStudentsInClasses?.length) {
-    message.error("Không có dữ liệu để xuất phụ lục danh sách luận văn")
+  if (!filters.thesisSessionId) {
+    message.error("Không xác định được đợt luận văn")
     hideSpinner()
     return
   }
-  const project = allStudentsInClasses
-    .map((student) => {
-      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
-      if (!thesisProject) return null
-      return {
-        ...student,
-        thesisRegistrations: [{ thesisProject }],
-      }
-    })
-    .filter(Boolean)
-  if (!project) {
-    message.error("Không tìm thấy dữ liệu để xuất phụ lục danh sách luận văn")
+  if (!filters.trainingCourseIds?.length) {
+    message.error("Vui lòng chọn khóa học trước khi xuất phụ lục danh sách luận văn")
+    hideSpinner()
     return
   }
+
   try {
-    const majorMap = new Map<string, any>()
-    let dotxet = ""
-    let soQD = ""
-    let ngayQD = ""
-    project.forEach((student: any) => {
-      const thesisProject = student?.thesisRegistrations?.find(
-        (reg: any) => reg?.thesisProject?.thesisSession?.id === thesisSessionId
-      )?.thesisProject
-      if (!thesisProject) return
-      dotxet = dotxet || thesisProject?.thesisSession?.name || ""
-      soQD = soQD || thesisProject?.thesisSession?.decisionNumber || ""
-      ngayQD =
-        ngayQD ||
-        (thesisProject?.thesisSession?.decisionDate
-          ? dayjs(thesisProject.thesisSession.decisionDate).format("DD/MM/YYYY")
-          : "")
-      const majorName =
-        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
-      const specializationName =
-        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
-      const groupKey = `${majorName}__${specializationName}`
-      if (!majorMap.has(groupKey)) {
-        majorMap.set(groupKey, {
-          majorName: majorName || "Chưa có ngành",
-          specializationName: specializationName || "Chưa có chuyên ngành",
-          thesisProject: [],
-        })
-      }
-      const groupData = majorMap.get(groupKey)
-      groupData.thesisProject.push({
-        studentId: student.id || "",
-        hovatenhocvien: student.userProfile?.fullname || "",
-        ngaysinh: student.userProfile?.dateOfBirth
-          ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
-          : "",
-        doituongdaotao:
-          tenDoiTuong[
-            student?.fixedClass?.trainingCourse?.trainingObjectType
-              ?.type as keyof typeof tenDoiTuong
-          ]?.shortname || "",
-        khoa: student.fixedClass?.trainingCourse?.name || "",
-        tendetai: thesisProject.title || "",
-        gvhd1: getSupervisorName(thesisProject.supervisor, false, true) || "",
-        gvhd2: getSupervisorName(thesisProject.coSupervisor, false, true) || "",
-        isThesis: thesisProject.type,
-        language: thesisProject.language.trim(),
-      })
+    const response = await exportPhuLucDanhSachLuanVan({
+      thesisSessionId: filters.thesisSessionId,
+      trainingCourseIds: filters.trainingCourseIds,
+      fixedClassIds: filters.fixedClassIds?.length ? filters.fixedClassIds : undefined,
+      organizationId: filters.organizationId || undefined,
     })
-    const result = Array.from(majorMap.values())
-    if (result.length === 0) {
-      message.error("Không có dữ liệu để xuất phụ lục danh sách luận văn")
-      hideSpinner()
+    if (response.status !== 200 || !(response.data instanceof Blob)) {
+      message.error(
+        response.data && typeof response.data === "object" && "message" in response.data
+          ? String(response.data.message)
+          : "Xuất phụ lục danh sách luận văn thất bại."
+      )
       return
     }
-    let count = 1
-    const dataRows: TableRow[] = result.flatMap((item: any, index: number) => {
-      const orgRow: TableRow = {
-        cells: [
-          {
-            value: `${index + 1} Ngành ${item.majorName} (${item.specializationName}) : ${item.thesisProject.length} học viên`,
-            border: true,
-            align: "center",
-            colSpan: 6,
-            bold: true,
-            fontSize: 12,
-          },
-        ],
-      }
-      const thesisRows: TableRow[] = item.thesisProject.map((thesis: any) => {
-        return {
-          cells: [
-            { value: count++, border: true, align: "center", fontSize: 12 },
-            {
-              value: `${thesis.hovatenhocvien}\nNS:${thesis.ngaysinh}\n${thesis.doituongdaotao}-${thesis.khoa}`,
-              border: true,
-              align: "left",
-              fontSize: 12,
-            },
-            { value: `${thesis.tendetai}`, border: true, align: "left", fontSize: 12 },
-            {
-              value:
-                thesis.gvhd1 && thesis.gvhd2
-                  ? `1. ${thesis.gvhd1}\n2. ${thesis.gvhd2}`
-                  : thesis.gvhd1 || thesis.gvhd2 || "",
-              border: true,
-              align: "left",
-              fontSize: 12,
-            },
-            { value: `${thesis.isThesis}`, border: true, align: "center", fontSize: 12 },
-            {
-              value: `${thesis.language.trim().toLowerCase() === "tiếng việt" ? "" : thesis.language}`,
-              border: true,
-              align: "center",
-              fontSize: 12,
-            },
-          ],
-        }
-      })
-      return [orgRow, ...thesisRows]
-    })
-    const gapRow: TableRow = {
-      cells: [{ value: "", border: false, colSpan: 6 }],
-    }
-    const totalRow: TableRow = {
-      cells: [
-        {
-          value: `(Tổng số: ${count - 1} học viên)`,
-          align: "center",
-          colSpan: 6,
-          border: false,
-          italic: true,
-          fontSize: 12,
-        },
-      ],
-    }
-    await exportFromTemplate({
-      templateUrl: getMinioUrl("mta/luan-van/PhuLucDanhSachLuanVan.xlsx"),
-      sheets: [
-        {
-          sheet: "PhuLucDanhSachLuanVan",
-          rows: [...dataRows, gapRow, totalRow],
-          tableStartCell: { row: 7, col: 1 },
-          data: {
-            dotxet: dotxet.trim().toUpperCase() || "",
-            soQD: soQD || "",
-            ngay: ngayQD.split("/")[0] || "",
-            thang: ngayQD.split("/")[1] || "",
-            nam: ngayQD.split("/")[2] || "",
-          },
-        },
-      ],
-      fileName: "PhuLucDsLuanVan",
-    })
+
+    downloadBlobResponse(
+      { data: response.data, headers: response.headers },
+      "Phu_Luc_Danh_Sach_Luan_Van.xlsx"
+    )
     message.success("Xuất file thành công")
   } catch (error) {
     console.error("error", error)
@@ -3077,11 +2988,9 @@ export const exportBanSaoHDDGLV = async ({
     })
     .filter(Boolean)
 
-
   try {
     showSpinner?.()
     const dataConvert = convertToBanSaoHDDGLV(project, signerName, isChief, signingDate)
-
 
     if (!dataConvert || dataConvert.length === 0) {
       console.warn(`${logPrefix} STOP: dataConvert rỗng sau convert`)
@@ -3108,7 +3017,6 @@ export const exportBanSaoHDDGLV = async ({
         errorBodyText = undefined
       }
     }
-
 
     if (response.status !== 200) {
       console.error(`${logPrefix} STOP: status !== 200`, {

@@ -1485,8 +1485,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       needSign: true,
       onClick: async () =>
         await exportPhuLucDsLuanVan({
-          allStudentsInClasses,
-          thesisSessionId: searchParams.thesisSessionId,
+          filters: {
+            thesisSessionId: searchParams.thesisSessionId!,
+            trainingCourseIds,
+            fixedClassIds: searchParams.fixedClassId,
+            organizationId: searchParams.organizationId,
+          },
           showSpinner,
           hideSpinner,
           message,
