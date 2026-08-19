@@ -1,5 +1,6 @@
 import ImportScoreModal, { type ImportScoreData } from "@components/commons/print/nhap-diem-tu-file"
 import ExportScoreTemplate from "@components/commons/print/xuat-mau-nhap-diem"
+import { examBanReason } from "@constants/constants"
 import { scoreConvert } from "@hooks/scoreConverter"
 import { ROUTER_PATH } from "@workspace/router"
 import { calcFinalScore } from "@workspace/libs/utils"
@@ -14,7 +15,18 @@ import { $Enums } from "@workspace/db/client"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import type { SqlTransactionBodyItem } from "@workspace/libs/api/schemas/sqlTransactionBodyItem"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
-import { Breadcrumb, Button, Input, InputNumber, Modal, Select, Table, message } from "antd"
+import {
+  AutoComplete,
+  Breadcrumb,
+  Button,
+  Checkbox,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Table,
+  message,
+} from "antd"
 import { cn } from "@workspace/ui/lib/utils"
 import dayjs from "dayjs"
 import {
@@ -65,10 +77,19 @@ type ScoreRowGoc = {
 
 const tinhDiemQT = (row: RowData, goc?: ScoreRowGoc): number | null => {
   if (row.attendanceScore == null || row.midtermScore == null) return null
-  if (row.finalScore != null) return row.finalScore
   const tc = goc?.student?.fixedClass?.trainingCourse ?? HE_SO_MAC_DINH
   return Number((row.attendanceScore * tc.coef_1 + row.midtermScore * tc.coef_2).toFixed(1))
 }
+
+const tinhCamThi = (
+  attendanceScore: number | null,
+  midtermScore: number | null,
+  examBannedReason: string,
+  scoreToTakeExam: number | null
+): boolean =>
+  !!examBannedReason ||
+  (attendanceScore !== null && scoreToTakeExam !== null && attendanceScore < scoreToTakeExam) ||
+  (midtermScore !== null && scoreToTakeExam !== null && midtermScore < scoreToTakeExam)
 
 const TheThongKeNgang = ({
   icon,
@@ -142,6 +163,12 @@ type RowData = {
   finalScore: number | null
   letter: string
   description: string
+  examBanned: boolean
+  examBannedReason: string
+  examPostponed: boolean
+  examPostponedReason: string
+  suspended: boolean
+  suspendedReason: string
   isChanged: boolean
 }
 
@@ -315,6 +342,12 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
       midtermScore: r.midtermScore ?? null,
       examScore: r.examScore ?? null,
       description: r.description ?? "",
+      examBanned: r.examBanned ?? false,
+      examBannedReason: r.examBannedReason ?? "",
+      examPostponed: r.examPostponed ?? false,
+      examPostponedReason: r.examPostponedReason ?? "",
+      suspended: r.suspended ?? false,
+      suspendedReason: r.suspendedReason ?? "",
       isChanged: false,
     }))
     setRows(mapped)
@@ -322,12 +355,25 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
 
   const tinhDongSauCapNhat = (
     row: RowData,
-    patch: Partial<Pick<RowData, "attendanceScore" | "midtermScore" | "description">>
+    patch: Partial<
+      Pick<
+        RowData,
+        "attendanceScore" | "midtermScore" | "description" | "examBanned" | "examBannedReason"
+      >
+    >
   ): RowData => {
     const next = { ...row, ...patch }
     const goc = scoreRows.find((x) => x.id === row.id)
     const trainingCourse = goc?.student?.fixedClass?.trainingCourse
-    const finalScore =
+
+    const examBanned = tinhCamThi(
+      next.attendanceScore,
+      next.midtermScore,
+      next.examBannedReason,
+      trainingCourse?.scoreToTakeExam ?? null
+    )
+
+    const finalScoreTinhToan =
       next.attendanceScore == null || next.midtermScore == null || next.examScore == null
         ? null
         : calcFinalScore(
@@ -341,14 +387,19 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
             },
             goc?.subjectClass?.type ?? $Enums.SubjectClassType.NORMAL
           )
-    const convert =
-      finalScore != null
-        ? scoreConvert(Number(finalScore), trainingCourse?.scoreConverts ?? [])
+    // Bị cấm thi thì điểm học phần = 0 kể cả khi chưa có điểm thi
+    const finalScore = examBanned
+      ? 0
+      : finalScoreTinhToan != null
+        ? Number(finalScoreTinhToan)
         : null
+    const convert =
+      finalScore != null ? scoreConvert(finalScore, trainingCourse?.scoreConverts ?? []) : null
 
     return {
       ...next,
-      finalScore: finalScore != null ? Number(finalScore) : null,
+      examBanned,
+      finalScore,
       letter: convert?.letter ?? "",
       isChanged: true,
     }
@@ -371,7 +422,12 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
 
   const capNhatDong = (
     id: string,
-    patch: Partial<Pick<RowData, "attendanceScore" | "midtermScore" | "description">>
+    patch: Partial<
+      Pick<
+        RowData,
+        "attendanceScore" | "midtermScore" | "description" | "examBanned" | "examBannedReason"
+      >
+    >
   ) => {
     setRows((prev) => prev.map((row) => (row.id === id ? tinhDongSauCapNhat(row, patch) : row)))
   }
@@ -379,17 +435,19 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
   const thongKe = useMemo(() => {
     const tong = rows.length
     const daNhap = rows.filter((r) => r.attendanceScore != null && r.midtermScore != null).length
+    const camThi = rows.filter((r) => r.examBanned).length
+    // Đủ điều kiện thi: đã nhập đủ CC + ĐK và không bị cấm thi
+    const duDieuKienThi = rows.filter(
+      (r) => r.attendanceScore != null && r.midtermScore != null && !r.examBanned
+    ).length
+
     const rowsWithQT = rows
       .map((row) => {
         const goc = scoreRows.find((x) => x.id === row.id)
         const diem = tinhDiemQT(row, goc)
-        return diem == null
-          ? null
-          : { row, diem, duDieuKienThi: diem >= HE_SO_MAC_DINH.scoreToTakeExam }
+        return diem == null ? null : { row, diem }
       })
-      .filter(
-        (item): item is { row: RowData; diem: number; duDieuKienThi: boolean } => item != null
-      )
+      .filter((item): item is { row: RowData; diem: number } => item != null)
 
     if (rowsWithQT.length === 0) {
       return {
@@ -399,8 +457,8 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
         max: null as number | null,
         min: null as number | null,
         diemTb: null as number | null,
-        duDieuKienThi: 0,
-        camThi: 0,
+        duDieuKienThi,
+        camThi,
       }
     }
 
@@ -408,8 +466,6 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
     const maxItem = sorted[0]
     const minItem = sorted[sorted.length - 1]
     const tongDiem = rowsWithQT.reduce((sum, item) => sum + item.diem, 0)
-    const duDieuKienThi = rowsWithQT.filter((item) => item.duDieuKienThi).length
-    const camThi = rowsWithQT.length - duDieuKienThi
 
     return {
       tong,
@@ -435,6 +491,11 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
       return
     }
 
+    if (changed.some((r) => r.examBanned && !r.examBannedReason)) {
+      message.error("Vui lòng nhập lý do cấm thi")
+      return
+    }
+
     const tx: SqlTransactionBodyItem[] = [
       {
         model: "SubjectClass",
@@ -454,6 +515,8 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
             midtermScore: r.midtermScore,
             finalScore: r.finalScore,
             description: r.description || null,
+            examBanned: r.examBanned,
+            examBannedReason: r.examBannedReason || null,
           },
         },
       })),
@@ -468,6 +531,8 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
             examScore: r.examScore,
             finalScore: r.finalScore,
             description: r.description || null,
+            examBanned: r.examBanned,
+            examBannedReason: r.examBannedReason || null,
             updatedById: profileId,
           })),
         },
@@ -654,7 +719,13 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
             pagination={false}
             size="small"
             dataSource={rows}
-            scroll={{ y: chieuCaoBody }}
+            scroll={{ x: "max-content", y: chieuCaoBody }}
+            rowClassName={(row) =>
+              cn(
+                (row.examBanned || row.suspended) && "[&>td]:!bg-red-100",
+                !row.examBanned && !row.suspended && row.examPostponed && "[&>td]:!bg-yellow-100"
+              )
+            }
             columns={[
               { title: "STT", width: 56, align: "center", render: (_v, _r, i) => i + 1 },
               { title: "MÃ SV", dataIndex: "mssv", width: 100, align: "center" },
@@ -709,6 +780,54 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
               },
               { title: "Điểm chữ", dataIndex: "letter", width: 100, align: "center" },
               {
+                title: "Cấm thi",
+                dataIndex: "examBanned",
+                width: 80,
+                align: "center",
+                render: (value, row) => (
+                  <Checkbox
+                    checked={!!value}
+                    disabled={quaHanNhapDiemQuaTrinh}
+                    onChange={(e) =>
+                      capNhatDong(row.id, {
+                        examBanned: e.target.checked,
+                        // Bỏ tick thì phải xoá lý do, nếu không cờ cấm thi sẽ tự bật lại
+                        examBannedReason: e.target.checked ? row.examBannedReason : "",
+                      })
+                    }
+                  />
+                ),
+              },
+              {
+                title: "Lý do cấm thi",
+                dataIndex: "examBannedReason",
+                width: 200,
+                render: (value, row) => (
+                  <AutoComplete
+                    value={value || undefined}
+                    onChange={(v: string) => capNhatDong(row.id, { examBannedReason: v })}
+                    placeholder="Nhập lý do cấm thi"
+                    options={examBanReason.map((s) => ({ label: s, value: s }))}
+                    disabled={!row.examBanned || quaHanNhapDiemQuaTrinh}
+                    className="w-full"
+                  >
+                    <Input.TextArea autoSize />
+                  </AutoComplete>
+                ),
+              },
+              {
+                title: "Hoãn thi / Đình chỉ",
+                dataIndex: "examPostponed",
+                width: 200,
+                render: (_v, row) =>
+                  [
+                    row.examPostponed && `Hoãn thi: ${row.examPostponedReason || "—"}`,
+                    row.suspended && `Đình chỉ: ${row.suspendedReason || "—"}`,
+                  ]
+                    .filter(Boolean)
+                    .join("; "),
+              },
+              {
                 title: "Ghi chú",
                 dataIndex: "description",
                 render: (value, row) => (
@@ -734,6 +853,8 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                           attendanceScore: null,
                           midtermScore: null,
                           description: "",
+                          examBanned: false,
+                          examBannedReason: "",
                         })
                       }
                     />
@@ -805,6 +926,18 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
               align: "center",
               width: 100,
               render: (v) => (v != null ? Number(v).toFixed(1) : ""),
+            },
+            {
+              title: "Trạng thái",
+              width: 180,
+              render: (_v, r) =>
+                [
+                  r.examBanned && `Cấm thi: ${r.examBannedReason || "—"}`,
+                  r.examPostponed && `Hoãn thi: ${r.examPostponedReason || "—"}`,
+                  r.suspended && `Đình chỉ: ${r.suspendedReason || "—"}`,
+                ]
+                  .filter(Boolean)
+                  .join("; "),
             },
             {
               title: "Ghi chú",

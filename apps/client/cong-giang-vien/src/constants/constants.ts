@@ -170,6 +170,30 @@ const TRAINING_OBJECT_TYPE = {
   INTERNATIONAL_MILITARY: "Quốc tế",
 }
 
+const examBanReason = [
+  "Không đủ 80% thời lượng lên lớp",
+  "Không hoàn thành nội dung bắt buộc của học phần",
+  "Bị điểm liệt",
+  "Bị kỷ luật học đường ở mức cấm thi",
+]
+
+const examPostponeReason = [
+  "Bị ốm (có giấy chứng nhận y tế)",
+  "Bị tai nạn (có giấy chứng nhận y tế)",
+  "Lý do khách quan hoặc đặc biệt khác (có xác nhận của cơ quan thẩm quyền)",
+]
+
+const examSuspendedReason = [
+  "Đã bị cảnh cáo một lần nhưng vẫn tiếp tục vi phạm",
+  "Mang vật dụng trái phép vào phòng thi (tài liệu, thiết bị truyền tin...)",
+  "Đưa đề thi ra ngoài hoặc nhận bài giải từ ngoài vào",
+  "Viết, vẽ nội dung không liên quan vào bài thi",
+  "Đe dọa, gây gổ với cán bộ coi thi hoặc sinh viên/học viên khác",
+  "Giả mạo chữ ký cán bộ coi thi",
+  "Đánh tráo bài thi hoặc tráo đổi đề thi",
+  "Đi thi hộ hoặc nhờ người khác thi hộ",
+]
+
 export {
   DEFAULT_PAGINATE_SIZE,
   MAX_INPUT_LENGTH,
@@ -187,4 +211,7 @@ export {
   CUSTOM_VI_LOCALE,
   TRAINING_OBJECT_TYPE,
   SCORE_CONVERT_STATUS,
+  examBanReason,
+  examPostponeReason,
+  examSuspendedReason,
 }
