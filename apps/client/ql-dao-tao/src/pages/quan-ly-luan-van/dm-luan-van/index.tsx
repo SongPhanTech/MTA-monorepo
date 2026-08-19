@@ -236,6 +236,61 @@ export function getCouncilExpertIdsExcludingField(
   return excluded
 }
 
+/**
+ * Tạo danh sách options cho Select expert, đảm bảo giá trị hiện tại (currentValue)
+ * luôn có option tương ứng ngay cả khi bị lọc ra khỏi danh sách chính.
+ * Điều này tránh việc Ant Design Select hiển thị raw ID khi expert không nằm trong options.
+ */
+export function buildExpertSelectOptions(
+  expertProfileData: ExpertProfileLike[] | undefined,
+  filterFn: (item: ExpertProfileLike) => boolean,
+  currentValue: string | null | undefined,
+  getSupervisorNameFn: (item: ExpertProfileLike, htmlRender?: boolean, showWorkplace?: boolean) => React.ReactNode,
+  fallbackElement?: React.ReactNode
+): { label: React.ReactNode; value: string }[] {
+  const filtered = (expertProfileData ?? []).filter(filterFn)
+  const options: { label: React.ReactNode; value: string }[] = filtered.map((item) => {
+    const text = getSupervisorNameFn(item, true, true)
+    const hasLecturer = item.lecturer != null
+    return {
+      label: (
+        <span
+          title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+          style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
+        >
+          {text}
+        </span>
+      ),
+      value: item.id as string,
+    }
+  })
+
+  if (currentValue && !filtered.some((item) => item.id === currentValue)) {
+    const fallback = (expertProfileData ?? []).find((item) => item.id === currentValue)
+    if (fallback) {
+      const text = getSupervisorNameFn(fallback, true, true)
+      const hasLecturer = fallback.lecturer != null
+      options.unshift({
+        label: (
+          <span
+            title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+            style={{ color: hasLecturer ? "#000000" : "#16a34a", opacity: 0.6 }}
+          >
+            {text}
+          </span>
+        ),
+        value: fallback.id as string,
+      })
+    } else if (fallbackElement) {
+      options.unshift({
+        label: fallbackElement,
+        value: currentValue,
+      })
+    }
+  }
+  return options
+}
+
 export function formatPersonNameWithWorkplace(
   person: ExpertProfileLike | PersonLike | string | null | undefined,
   allExperts: ExpertProfileLike[] = []
@@ -249,11 +304,12 @@ export function formatPersonNameWithWorkplace(
       .toLowerCase()
 
   if (typeof person === "string") {
-    const trimmed = person.trim()
+    const trimmed = (person as string).trim()
     if (!trimmed) return { textWithWorkplace: "", inAcademy: true }
     const cleanedTrimmed = cleanTitle(trimmed)
 
     const matched = allExperts.find((e) => {
+      if (e.id === trimmed) return true
       const p = e?.lecturer?.userProfile
       const rank = p?.academicRankType?.sMa || e?.academicRankType?.sMa || ""
       const degree = p?.academicDegreeType?.sMa || e?.academicDegreeType?.sMa || ""
@@ -270,10 +326,7 @@ export function formatPersonNameWithWorkplace(
     })
 
     if (matched) {
-      const inAcad = !!(matched as ExpertProfileLike).lecturerId
-      const wp = matched.workplace || ""
-      const textWithWp = [trimmed, wp].filter(Boolean).join(", ")
-      return { textWithWorkplace: textWithWp, inAcademy: inAcad }
+      return formatPersonNameWithWorkplace(matched, allExperts)
     }
 
     return { textWithWorkplace: trimmed, inAcademy: true }
@@ -311,7 +364,7 @@ export function getCouncilMemberName(
   rawText = false,
   searchKeyword = "",
   allExperts: ExpertProfileLike[] = []
-) {
+): React.ReactNode {
   const project = getThesisProjectForSession(record, thesisSessionId)
   const member = project?.council?.members?.find((m) => m.role === role)
 
@@ -357,7 +410,7 @@ export function getSupervisorName(
   showWorkplace = false,
   searchKeyword = "",
   allExperts: ExpertProfileLike[] = []
-) {
+): React.ReactNode {
   if (!record) return ""
 
   const { textWithWorkplace, inAcademy } = formatPersonNameWithWorkplace(record, allExperts)
@@ -381,6 +434,47 @@ export function getSupervisorName(
       {textWithWorkplace}
     </span>
   )
+}
+
+export function getMappedActiveExpertId(
+  rawId: string | null | undefined,
+  savedExpert: ExpertProfileLike | PersonLike | null | undefined,
+  allExperts: ExpertProfileLike[] = []
+): string {
+  if (!rawId) return ""
+  if (allExperts.some((e) => e.id === rawId)) return rawId
+
+  if (savedExpert) {
+    const expert = savedExpert as ExpertProfileLike
+    if (expert.lecturerId) {
+      const match = allExperts.find((e) => e.lecturerId === expert.lecturerId)
+      if (match?.id) return match.id as string
+    }
+
+    const cleanName = expert.name?.trim().toLowerCase() || expert.lecturer?.userProfile?.fullname?.trim().toLowerCase() || ""
+    if (cleanName) {
+      const matchedByName = allExperts.filter((e) => {
+        const eName = e.name?.trim().toLowerCase() || e.lecturer?.userProfile?.fullname?.trim().toLowerCase() || ""
+        return eName === cleanName
+      })
+
+      if (matchedByName.length === 1) {
+        return matchedByName[0].id as string
+      } else if (matchedByName.length > 1) {
+        // Trùng tên với nhiều người, cần check thêm Nơi công tác (workplace)
+        const cleanWorkplace = ((expert.workplace || expert.organization) as string)?.trim().toLowerCase() || ""
+        if (cleanWorkplace) {
+          const exactMatch = matchedByName.find((e) => {
+            const eWorkplace = ((e.workplace || e.organization) as string)?.trim().toLowerCase() || ""
+            return eWorkplace === cleanWorkplace
+          })
+          if (exactMatch?.id) return exactMatch.id as string
+        }
+      }
+    }
+  }
+
+  return rawId
 }
 
 export function getMatchedLecturerRoles(
@@ -1343,36 +1437,38 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     students.forEach((record) => {
       const thesisProject = getThesisProjectForSession(record, searchParams.thesisSessionId)
       if (thesisProject) {
+        const getExpertIdByRole = (role: string) => {
+          const member = thesisProject.council?.members?.find((m) => m.role === role)
+          return getMappedActiveExpertId(
+            member?.expert?.id as string,
+            member?.expert,
+            expertProfileData
+          )
+        }
+
         initialEditingValues[record.id] = {
           title: thesisProject.title || "",
-          supervisor: thesisProject.supervisor?.id || "",
-          coSupervisor: thesisProject.coSupervisor?.id || "",
+          supervisor: getMappedActiveExpertId(
+            thesisProject.supervisor?.id as string,
+            thesisProject.supervisor as ExpertProfileLike,
+            expertProfileData
+          ),
+          coSupervisor: getMappedActiveExpertId(
+            thesisProject.coSupervisor?.id as string,
+            thesisProject.coSupervisor as ExpertProfileLike,
+            expertProfileData
+          ),
           language: thesisProject.language || "",
           type: thesisProject.type || "",
           status: thesisProject.status || "",
           defenseDate: thesisProject.defenseDate || "",
           defenseSession: thesisProject.defenseSession?.id || "",
           room: thesisProject.room?.id || "",
-          councilChairman:
-            thesisProject.council?.members?.find(
-              (member: { role?: string | null }) => member.role === CouncilRole.CHAIRMAN
-            )?.expert?.id || "",
-          councilSecretary:
-            thesisProject.council?.members?.find(
-              (member: { role?: string | null }) => member.role === CouncilRole.SECRETARY
-            )?.expert?.id || "",
-          reviewer1:
-            thesisProject.council?.members?.find(
-              (member: { role?: string | null }) => member.role === CouncilRole.REVIEWER_1
-            )?.expert?.id || "",
-          reviewer2:
-            thesisProject.council?.members?.find(
-              (member: { role?: string | null }) => member.role === CouncilRole.REVIEWER_2
-            )?.expert?.id || "",
-          councilMember:
-            thesisProject.council?.members?.find(
-              (member: { role?: string | null }) => member.role === CouncilRole.MEMBER
-            )?.expert?.id || "",
+          councilChairman: getExpertIdByRole(CouncilRole.CHAIRMAN),
+          councilSecretary: getExpertIdByRole(CouncilRole.SECRETARY),
+          reviewer1: getExpertIdByRole(CouncilRole.REVIEWER_1),
+          reviewer2: getExpertIdByRole(CouncilRole.REVIEWER_2),
+          councilMember: getExpertIdByRole(CouncilRole.MEMBER),
           organization: thesisProject.organization?.Id ?? "",
           score: thesisProject.defenseRecord?.finalScore?.toString() || "",
           researchTopicAssociated: thesisProject.researchTopicAssociated || "",
@@ -2412,26 +2508,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinGvhdSupervisorEditWindow()}
-                          options={expertProfileData
-                            ?.filter(
-                              (item) =>
-                                !coSupervisorPeerId || item.id !== String(coSupervisorPeerId)
-                            )
-                            .map((item) => {
-                              const text = getSupervisorName(item, true, true)
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                  >
-                                    {text}
-                                  </span>
-                                ),
-                                value: item.id,
-                              }
-                            })}
+                          options={buildExpertSelectOptions(
+                            expertProfileData,
+                            (item) =>
+                              !coSupervisorPeerId || item.id !== String(coSupervisorPeerId),
+                            currentValue,
+                            getSupervisorName,
+                            getSupervisorName(getThesisProjectForSession(record, searchParams.thesisSessionId)?.supervisor, true, true, undefined, expertProfileData)
+                          )}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -2503,25 +2587,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           className="w-full"
                           disabled={!isWithinGvhdSupervisorEditWindow()}
-                          options={expertProfileData
-                            ?.filter(
-                              (item) => !supervisorPeerId || item.id !== String(supervisorPeerId)
-                            )
-                            .map((item) => {
-                              const text = getSupervisorName(item, true, true)
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                  >
-                                    {text}
-                                  </span>
-                                ),
-                                value: item.id,
-                              }
-                            })}
+                          options={buildExpertSelectOptions(
+                            expertProfileData,
+                            (item) =>
+                              !supervisorPeerId || item.id !== String(supervisorPeerId),
+                            currentValue,
+                            getSupervisorName,
+                            getSupervisorName(getThesisProjectForSession(record, searchParams.thesisSessionId)?.coSupervisor, true, true, undefined, expertProfileData)
+                          )}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -2715,26 +2788,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           className="w-full"
                           disabled={!isWithinCouncilEditWindow()}
-                          options={expertProfileData
-                            ?.filter(
-                              (item) =>
-                                item.eligiblePresident === true && !excludedCouncilIds.has(item.id)
-                            )
-                            .map((item) => {
-                              const text = getSupervisorName(item, true, true)
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                  >
-                                    {text}
-                                  </span>
-                                ),
-                                value: item.id,
-                              }
-                            })}
+                          options={buildExpertSelectOptions(
+                            expertProfileData,
+                            (item) =>
+                              item.eligiblePresident === true && !excludedCouncilIds.has(item.id as string),
+                            currentValue,
+                            getSupervisorName,
+                            getCouncilMemberName(record, CouncilRole.CHAIRMAN, searchParams.thesisSessionId, false, undefined, expertProfileData)
+                          )}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -2807,26 +2868,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
-                          options={expertProfileData
-                            ?.filter(
-                              (item) =>
-                                item.eligibleSecretary === true && !excludedCouncilIds.has(item.id)
-                            )
-                            .map((item) => {
-                              const text = getSupervisorName(item, true, true)
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                  >
-                                    {text}
-                                  </span>
-                                ),
-                                value: item.id,
-                              }
-                            })}
+                          options={buildExpertSelectOptions(
+                            expertProfileData,
+                            (item) =>
+                              item.eligibleSecretary === true && !excludedCouncilIds.has(item.id as string),
+                            currentValue,
+                            getSupervisorName,
+                            getCouncilMemberName(record, CouncilRole.SECRETARY, searchParams.thesisSessionId, false, undefined, expertProfileData)
+                          )}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -2899,23 +2948,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
-                          options={expertProfileData
-                            ?.filter((item) => !excludedCouncilIds.has(item.id))
-                            .map((item) => {
-                              const text = getSupervisorName(item, true, true)
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                  >
-                                    {text}
-                                  </span>
-                                ),
-                                value: item.id,
-                              }
-                            })}
+                          options={buildExpertSelectOptions(
+                            expertProfileData,
+                            (item) => !excludedCouncilIds.has(item.id as string),
+                            currentValue,
+                            getSupervisorName,
+                            getCouncilMemberName(record, CouncilRole.REVIEWER_1, searchParams.thesisSessionId, false, undefined, expertProfileData)
+                          )}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -2988,23 +3027,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
-                          options={expertProfileData
-                            ?.filter((item) => !excludedCouncilIds.has(item.id))
-                            .map((item) => {
-                              const text = getSupervisorName(item, true, true)
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                  >
-                                    {text}
-                                  </span>
-                                ),
-                                value: item.id,
-                              }
-                            })}
+                          options={buildExpertSelectOptions(
+                            expertProfileData,
+                            (item) => !excludedCouncilIds.has(item.id as string),
+                            currentValue,
+                            getSupervisorName,
+                            getCouncilMemberName(record, CouncilRole.REVIEWER_2, searchParams.thesisSessionId, false, undefined, expertProfileData)
+                          )}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -3071,23 +3100,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
-                          options={expertProfileData
-                            ?.filter((item) => !excludedCouncilIds.has(item.id))
-                            .map((item) => {
-                              const text = getSupervisorName(item, true, true)
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#16a34a" : "" }}
-                                  >
-                                    {text}
-                                  </span>
-                                ),
-                                value: item.id,
-                              }
-                            })}
+                          options={buildExpertSelectOptions(
+                            expertProfileData,
+                            (item) => !excludedCouncilIds.has(item.id as string),
+                            currentValue,
+                            getSupervisorName,
+                            getCouncilMemberName(record, CouncilRole.MEMBER, searchParams.thesisSessionId, false, undefined, expertProfileData)
+                          )}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
