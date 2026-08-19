@@ -52,6 +52,7 @@ export default function ThongKeNoHocLai() {
         trainingObjectTypeId: trainingObjectTypeId,
         trainingCourseId,
         semesterId,
+        trainingMajorId: trainingMajorId || undefined,
       })
       if (status === 200) {
         const filename = getFilenameFromContentDisposition(

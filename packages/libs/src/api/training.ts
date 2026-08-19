@@ -9655,7 +9655,7 @@ export const useCalculateStudentSchoolYearResult = <TError = ErrorMessageRespons
 
 **Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion.
 
-**Tham số:** trainingObjectTypeId, trainingCourseId, semesterId, date.
+**Tham số:** trainingObjectTypeId, trainingCourseId, semesterId, date, trainingMajorId.
  * @summary Xuất thống kê nợ môn
  */
 export type debtStatisticsResponse200 = {
@@ -15929,13 +15929,7 @@ export const useRenderXlsxTemplate = <TError = ErrorMessageResponse,
     
 /**
  * Render file Excel từ template MinIO bằng engine template-excel (placeholder `{{key}}`, bảng `rows`, merge sheet).
-
-**Cách dùng:**
-1. `templatePath`: path MinIO (vd `/mta/template/BangDiemQuaTrinh.xlsx`)
-2. `sheets[]`: data placeholder, rows bảng động, hiddenColumns, ...
-
-BE tự tải template từ MinIO nội bộ — FE không cần gọi MinIO trực tiếp.
- * @summary Xuất Excel từ template-excel (placeholder + bảng động)
+ * @summary Xuất Excel từ template-excel 
  */
 export type exportFromTemplateResponse200 = {
   data: Blob
@@ -16024,7 +16018,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type ExportFromTemplateMutationError = ErrorMessageResponse
 
     /**
- * @summary Xuất Excel từ template-excel (placeholder + bảng động)
+ * @summary Xuất Excel từ template-excel 
  */
 export const useExportFromTemplate = <TError = ErrorMessageResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportFromTemplate>>, TError,{data: FromTemplateRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}

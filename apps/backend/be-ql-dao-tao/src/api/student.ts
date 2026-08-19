@@ -619,13 +619,14 @@ const debtStatistics = createRoute({
 
 **Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion.
 
-**Tham số:** trainingObjectTypeId, trainingCourseId, semesterId, date.`,
+**Tham số:** trainingObjectTypeId, trainingCourseId, semesterId, date, trainingMajorId.`,
   request: {
     query: z.object({
       trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
       trainingCourseId: z.string().optional().openapi(fieldDesc("ID khóa (tùy chọn).")),
       semesterId: z.string().optional().openapi(fieldDesc("ID HK — lấy ngày cuối kỳ.")),
       date: z.coerce.date().optional().openapi(fieldDesc("Ngày chốt nợ (mặc định hôm nay).")),
+      trainingMajorId: z.string().optional().openapi(fieldDesc("ID chuyên ngành (tùy chọn)."))
     }),
   },
   responses: {
@@ -647,6 +648,7 @@ app.openapi(debtStatistics, async (c) => {
     trainingCourseId: rawCourseId,
     semesterId,
     date: queryDate,
+    trainingMajorId,
   } = c.req.valid("query")
 
   const trainingCourseId = rawCourseId || null
@@ -698,10 +700,17 @@ app.openapi(debtStatistics, async (c) => {
       subjectVersion: {
         trainingObjectTypeId,
       },
-      student: trainingCourseId
+      student: (trainingCourseId || trainingMajorId)
         ? {
           fixedClass: {
-            trainingCourseId,
+            ...(trainingCourseId ? { trainingCourseId } : {}),
+            ...(trainingMajorId
+              ? {
+                curriculumVersion: {
+                  curriculum: { trainingMajorId },
+                },
+              }
+              : {}),
           },
         }
         : undefined,
