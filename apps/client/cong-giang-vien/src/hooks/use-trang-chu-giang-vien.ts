@@ -6,7 +6,7 @@ import type {
 import { useSession } from "@workspace/auth/react"
 import { $Enums } from "@workspace/db/client"
 import { useFindFirstLecturer } from "@workspace/db/hooks"
-import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
+import { useSemesterStore } from "@workspace/ui"
 import dayjs from "dayjs"
 import { useMemo } from "react"
 
@@ -26,11 +26,9 @@ const useTrangChuGiangVien = () => {
   const { data: me } = useSession()
   const profileId = me?.sDM_NhanVienId
   const { id: semesterId } = useSemesterStore()
-  const { id: trainingObjectId } = useTrainingObjectTypeStore()
 
   const subjectClassWhere = {
     semesterId,
-    trainingObjectTypeId: trainingObjectId,
     cancelled: false,
     deletedAt: null,
     active: true,

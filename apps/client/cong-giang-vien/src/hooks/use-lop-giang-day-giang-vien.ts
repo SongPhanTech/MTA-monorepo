@@ -13,7 +13,7 @@ import { useSession } from "@workspace/auth/react"
 import { $Enums } from "@workspace/db/client"
 import { useCountSubjectClass, useFindManySubjectClass } from "@workspace/db/hooks"
 import { formatLecturerName } from "@workspace/libs"
-import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
+import { useSemesterStore } from "@workspace/ui"
 import dayjs from "dayjs"
 import { useMemo, useState } from "react"
 
@@ -21,7 +21,7 @@ const useLopGiangDayGiangVien = () => {
   const { data: me } = useSession()
   const profileId = me?.sDM_NhanVienId ?? ""
   const { id: semesterId } = useSemesterStore()
-  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
   const { getExamTypeLabel } = useExamTypeOptions()
 
   const [boLocNhap, setBoLocNhap] = useState<BoLocLopGiangDay>({
@@ -38,42 +38,53 @@ const useLopGiangDayGiangVien = () => {
       deletedAt: null,
       active: true,
       status: $Enums.SubjectClassStatus.OFFICIAL,
-      mainLecturer: { userProfileId: profileId },
-      semesterId,
-      trainingObjectTypeId,
-      ...dieuKienTrangThaiNhapDiem(boLocApDung.trangThaiNhapDiem),
-      ...(boLocApDung.tuKhoa
-        ? {
-            OR: [
-              { code: { contains: boLocApDung.tuKhoa, mode: "insensitive" as const } },
+      AND: [
+        {
+          OR: [
+            { mainLecturer: { userProfileId: profileId } },
+            { extraLecturer: { userProfileId: profileId } },
+            { enterGradeLecturer: { userProfileId: profileId } },
+          ],
+        },
+        ...(Object.keys(dieuKienTrangThaiNhapDiem(boLocApDung.trangThaiNhapDiem)).length > 0
+          ? [dieuKienTrangThaiNhapDiem(boLocApDung.trangThaiNhapDiem)]
+          : []),
+        ...(boLocApDung.tuKhoa
+          ? [
               {
-                subject: {
-                  is: { name: { contains: boLocApDung.tuKhoa, mode: "insensitive" as const } },
-                },
-              },
-              {
-                subject: {
-                  is: { code: { contains: boLocApDung.tuKhoa, mode: "insensitive" as const } },
-                },
-              },
-              {
-                fixedClasses: {
-                  some: {
-                    OR: [
-                      { code: { contains: boLocApDung.tuKhoa, mode: "insensitive" as const } },
-                      { name: { contains: boLocApDung.tuKhoa, mode: "insensitive" as const } },
-                    ],
+                OR: [
+                  { code: { contains: boLocApDung.tuKhoa, mode: "insensitive" as const } },
+                  {
+                    subject: {
+                      is: { name: { contains: boLocApDung.tuKhoa, mode: "insensitive" as const } },
+                    },
                   },
-                },
+                  {
+                    subject: {
+                      is: { code: { contains: boLocApDung.tuKhoa, mode: "insensitive" as const } },
+                    },
+                  },
+                  {
+                    fixedClasses: {
+                      some: {
+                        OR: [
+                          { code: { contains: boLocApDung.tuKhoa, mode: "insensitive" as const } },
+                          { name: { contains: boLocApDung.tuKhoa, mode: "insensitive" as const } },
+                        ],
+                      },
+                    },
+                  },
+                ],
               },
-            ],
-          }
-        : {}),
+            ]
+          : []),
+      ],
+      semesterId,
     }),
-    [profileId, semesterId, trainingObjectTypeId, boLocApDung]
+    [profileId, semesterId, boLocApDung]
   )
 
-  const queryEnabled = !!profileId && !!semesterId && !!trainingObjectTypeId
+  const queryEnabled = !!profileId && !!semesterId
 
   const include = {
     subject: {
