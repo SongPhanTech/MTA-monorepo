@@ -72,8 +72,6 @@ export default function ChinhSuaDangKy({ sessionId, semesterId }: Props) {
   const [addForm] = Form.useForm<{ subjectClassId: string }>()
   const [changeForm] = Form.useForm<{ subjectClassId: string }>()
 
-  const hasStudentSearch = Boolean(studentFilters.code || studentFilters.name)
-
   const studentWhere = useMemo(
     () => ({
       deletedAt: null,
@@ -90,19 +88,15 @@ export default function ChinhSuaDangKy({ sessionId, semesterId }: Props) {
             },
           }
         : {}),
-      // Không gõ tìm kiếm → mặc định SV đã có đơn trong đợt; có tìm kiếm → cho phép chọn SV mới để đăng ký bổ sung
-      ...(!hasStudentSearch
-        ? {
-            classRegisterLogs: {
-              some: {
-                classRegisterSessionId: sessionId,
-                deletedAt: null,
-              },
-            },
-          }
-        : {}),
+      fixedClass: {
+        trainingCourse: {
+          classRegisterSession: {
+            some: { id: sessionId },
+          },
+        },
+      },
     }),
-    [sessionId, studentFilters.code, studentFilters.name, hasStudentSearch]
+    [sessionId, studentFilters.code, studentFilters.name]
   )
 
   const { data: students = [], isFetching: loadingStudents } = useFindManyStudent(
