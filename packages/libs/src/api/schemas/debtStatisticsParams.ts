@@ -99,4 +99,8 @@ semesterId?: string;
  * @nullable
  */
 date?: string | null;
+/**
+ * ID chuyên ngành (tùy chọn).
+ */
+trainingMajorId?: string;
 };
