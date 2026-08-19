@@ -506,7 +506,6 @@ function TabDotKhaoSatCum({
                         </Tooltip>
                       )}
 
-                    {can(KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT, "SUA") && (
                       <Tooltip title="Chỉnh sửa nội dung form khảo sát" placement="top">
                         <FilePenLine
                           size={16}
@@ -517,7 +516,7 @@ function TabDotKhaoSatCum({
                           }}
                         />
                       </Tooltip>
-                    )}
+                    
 
                     
                       <EditIcon

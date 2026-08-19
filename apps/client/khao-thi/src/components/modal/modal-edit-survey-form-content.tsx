@@ -70,15 +70,20 @@ const ModalEditSurveyFormContent = () => {
 
   useEffect(() => {
     if (!isOpen) return
-    form.setFieldsValue(
-      parseSurveyFormDisplayContent(sourceSurvey?.formContent, defaultContent)
-    )
+    const content = parseSurveyFormDisplayContent(sourceSurvey?.formContent, defaultContent)
+    form.setFieldsValue({
+      ...content,
+      footerNotes: content.footerNotes?.length
+        ? content.footerNotes
+        : defaultContent.footerNotes ?? [],
+    })
   }, [isOpen, sourceSurvey?.formContent, defaultContent, form])
 
   async function onOk(values: FormValues) {
     if (!input?.id && !input?.clusterSurveyId) return
     try {
       showSpinner()
+      const footerNotes = (values.footerNotes || []).map((note) => note.trim()).filter(Boolean)
       const displayContent: SurveyFormDisplayContent = {
         notes: (values.notes || []).map((note) => note.trim()).filter(Boolean),
         infoTitle: values.infoTitle?.trim() || undefined,
@@ -92,7 +97,7 @@ const ModalEditSurveyFormContent = () => {
             ...(field.span ? { span: field.span } : {}),
             ...(field.bindKey ? { bindKey: field.bindKey } : {}),
           })),
-        footerNotes: (values.footerNotes || []).map((note) => note.trim()).filter(Boolean),
+        ...(footerNotes.length ? { footerNotes } : {}),
       }
 
       if (isClusterMode && input.clusterSurveyId) {

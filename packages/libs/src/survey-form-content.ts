@@ -140,6 +140,16 @@ function parseDisplayContentObject(raw: unknown): Partial<SurveyFormDisplayConte
   }
 }
 
+function resolveFooterNotes(
+  parsed: string[] | undefined,
+  fallback: string[] | undefined
+): string[] | undefined {
+  const parsedNotes = parsed?.filter((note) => note.trim()) ?? []
+  if (parsedNotes.length) return parsedNotes
+  const fallbackNotes = fallback?.filter((note) => note.trim()) ?? []
+  return fallbackNotes.length ? fallbackNotes : undefined
+}
+
 /** Read editable survey form intro from formContent JSON. */
 export function parseSurveyFormDisplayContent(
   raw: unknown,
@@ -157,6 +167,6 @@ export function parseSurveyFormDisplayContent(
     infoTitle: parsed.infoTitle ?? clonedFallback.infoTitle,
     infoFields: parsed.infoFields ?? clonedFallback.infoFields,
     contentTitle: parsed.contentTitle ?? clonedFallback.contentTitle,
-    footerNotes: parsed.footerNotes ?? clonedFallback.footerNotes,
+    footerNotes: resolveFooterNotes(parsed.footerNotes, clonedFallback.footerNotes),
   }
 }

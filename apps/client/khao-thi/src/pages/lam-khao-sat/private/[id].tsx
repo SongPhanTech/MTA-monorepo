@@ -382,27 +382,27 @@ function TakeTestPage() {
               bordered={true}
             />
           </Col>
-
-          <Col span={24}>
-            <SurveyFormFooter
-              survey={survey}
-              fallback={
-                survey?.lectureInfo
-                  ? LECTURER_SURVEY_PRINT_FORM_CONTENT
-                  : DEFAULT_SURVEY_PRINT_FORM_CONTENT
-              }
-            />
-          </Col>
-
-          <Col span={24} className="my-6">
-            <Flex justify="end">
-              <Button onClick={() => onOk()} type="primary">
-                Lưu
-              </Button>
-            </Flex>
-          </Col>
         </Row>
       )}
+
+      <SurveyFormFooter
+        survey={survey}
+        fallback={
+          survey?.lectureInfo
+            ? LECTURER_SURVEY_PRINT_FORM_CONTENT
+            : DEFAULT_SURVEY_PRINT_FORM_CONTENT
+        }
+      />
+
+      {survey?.surveyChoice?.length ? (
+        <Col span={24} className="my-6">
+          <Flex justify="end">
+            <Button onClick={() => onOk()} type="primary">
+              Lưu
+            </Button>
+          </Flex>
+        </Col>
+      ) : null}
     </Form>
   )
 }
