@@ -19,7 +19,7 @@ import { KHAO_THI_PERMISSION } from "@workspace/router"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from "antd"
 import dayjs from "dayjs"
-import { Link } from "lucide-react"
+import { FilePenLine, Link } from "lucide-react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
@@ -288,6 +288,13 @@ function TabDotKhaoSatCum({
     tag: "ModalThongKeKhaoSatCum",
   })
 
+  const { onOpen: onOpenEditFormContent } = useDisclosure<{
+    clusterSurveyId: string
+    name?: string
+  }>({
+    tag: "ModalEditSurveyFormContent",
+  })
+
   return (
     <div>
       <Row gutter={[16, 8]}>
@@ -498,6 +505,19 @@ function TabDotKhaoSatCum({
                           />
                         </Tooltip>
                       )}
+
+                    {can(KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT, "SUA") && (
+                      <Tooltip title="Chỉnh sửa nội dung form khảo sát" placement="top">
+                        <FilePenLine
+                          size={16}
+                          className="cursor-pointer text-emerald-700"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onOpenEditFormContent({ clusterSurveyId: id, name })
+                          }}
+                        />
+                      </Tooltip>
+                    )}
 
                     
                       <EditIcon

@@ -10,7 +10,7 @@ import { getPublicSurvey, useSavePublicSurvey, validateUserSurvey } from "@works
 import type { GetSurveyResult } from "@workspace/libs/api/schemas/getSurveyResult"
 import { Button, Col, Flex, Form, Input, Modal, message, Radio, Row } from "antd"
 import { LECTURER_SURVEY_PRINT_FORM_CONTENT } from "@workspace/libs/survey-form-content"
-import { SurveyFormIntro } from "@workspace/ui"
+import { SurveyFormFooter, SurveyFormIntro } from "@workspace/ui"
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useState } from "react"
 import Confetti from "react-confetti"
@@ -370,6 +370,10 @@ function TakeTestPage() {
                     pagination={false}
                   />
                 )}
+              </Col>
+
+              <Col span={24}>
+                <SurveyFormFooter survey={survey} fallback={LECTURER_SURVEY_PRINT_FORM_CONTENT} />
               </Col>
 
               <Col span={24} className="mt-6">

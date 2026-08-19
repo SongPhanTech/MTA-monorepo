@@ -94,3 +94,25 @@ export function SurveyFormIntro({ survey, fallback, className }: SurveyFormIntro
     </Row>
   )
 }
+
+type SurveyFormFooterProps = {
+  survey?: SurveyFormIntroData | null
+  fallback: SurveyFormDisplayContent
+  className?: string
+}
+
+export function SurveyFormFooter({ survey, fallback, className }: SurveyFormFooterProps) {
+  const content = parseSurveyFormDisplayContent(survey?.formContent, fallback)
+  const footerNotes = (content.footerNotes ?? []).filter((note) => note.trim())
+  if (!footerNotes.length) return null
+
+  return (
+    <Row gutter={[0, 2]} className={className ?? "my-4 text-black color-black"}>
+      {footerNotes.map((note, index) => (
+        <Col span={24} key={`${index}-${note.slice(0, 24)}`}>
+          <div className="indent-8 italic">{note}</div>
+        </Col>
+      ))}
+    </Row>
+  )
+}

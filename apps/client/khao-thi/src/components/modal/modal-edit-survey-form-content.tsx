@@ -5,44 +5,78 @@ import { DeleteOutlined, PlusOutlined } from "@ant-design/icons"
 import {
   cloneSurveyFormDisplayContent,
   DEFAULT_SURVEY_PRINT_FORM_CONTENT,
+  LECTURER_SURVEY_PRINT_FORM_CONTENT,
   parseSurveyFormDisplayContent,
   type SurveyFormDisplayContent,
 } from "@workspace/libs/survey-form-content"
-import { useFindUniqueSurvey, useUpdateSurvey } from "@workspace/db/hooks"
+import { useFindManySurvey, useFindUniqueSurvey, useUpdateManySurvey, useUpdateSurvey } from "@workspace/db/hooks"
 import { Button, Checkbox, Col, Form, Input, Select, message } from "antd"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 type FormValues = SurveyFormDisplayContent
 
+type ModalInput = {
+  id?: string
+  clusterSurveyId?: string
+  name?: string
+}
+
 const ModalEditSurveyFormContent = () => {
   const [form] = Form.useForm<FormValues>()
-  const { isOpen, onClose, input } = useDisclosure<{ id: string }>({
+  const { isOpen, onClose, input } = useDisclosure<ModalInput>({
     tag: "ModalEditSurveyFormContent",
     onClose: form.resetFields,
   })
   const { showSpinner, hideSpinner } = useSpinner()
   const { mutateAsync: updateSurvey } = useUpdateSurvey()
+  const { mutateAsync: updateManySurvey } = useUpdateManySurvey()
+
+  const isClusterMode = !!input?.clusterSurveyId
 
   const { data: survey } = useFindUniqueSurvey(
     {
       where: { id: input?.id },
-      select: { id: true, name: true, formContent: true },
+      select: { id: true, name: true, formContent: true, lectureId: true },
     },
-    { enabled: !!input?.id && isOpen }
+    { enabled: !!input?.id && !isClusterMode && isOpen }
   )
 
-  const defaultContent = cloneSurveyFormDisplayContent(DEFAULT_SURVEY_PRINT_FORM_CONTENT)
+  const { data: clusterSurveys = [] } = useFindManySurvey(
+    {
+      where: {
+        clusterSurveyId: input?.clusterSurveyId,
+        deletedAt: null,
+      },
+      select: { id: true, formContent: true, lectureId: true },
+      take: 1,
+      orderBy: { createdAt: "asc" },
+    },
+    { enabled: isClusterMode && isOpen }
+  )
+
+  const sourceSurvey = isClusterMode ? clusterSurveys[0] : survey
+  const isLecturerSurvey = isClusterMode || !!sourceSurvey?.lectureId
+
+  const defaultContent = useMemo(
+    () =>
+      cloneSurveyFormDisplayContent(
+        isLecturerSurvey
+          ? LECTURER_SURVEY_PRINT_FORM_CONTENT
+          : DEFAULT_SURVEY_PRINT_FORM_CONTENT
+      ),
+    [isLecturerSurvey]
+  )
 
   useEffect(() => {
     if (!isOpen) return
     form.setFieldsValue(
-      parseSurveyFormDisplayContent(survey?.formContent, defaultContent)
+      parseSurveyFormDisplayContent(sourceSurvey?.formContent, defaultContent)
     )
-  }, [isOpen, survey?.formContent, form])
+  }, [isOpen, sourceSurvey?.formContent, defaultContent, form])
 
   async function onOk(values: FormValues) {
-    if (!input?.id) return
+    if (!input?.id && !input?.clusterSurveyId) return
     try {
       showSpinner()
       const displayContent: SurveyFormDisplayContent = {
@@ -58,13 +92,28 @@ const ModalEditSurveyFormContent = () => {
             ...(field.span ? { span: field.span } : {}),
             ...(field.bindKey ? { bindKey: field.bindKey } : {}),
           })),
+        footerNotes: (values.footerNotes || []).map((note) => note.trim()).filter(Boolean),
       }
-      await updateSurvey({
-        where: { id: input.id },
-        data: {
-          formContent: displayContent,
-        },
-      })
+
+      if (isClusterMode && input.clusterSurveyId) {
+        await updateManySurvey({
+          where: {
+            clusterSurveyId: input.clusterSurveyId,
+            deletedAt: null,
+          },
+          data: {
+            formContent: displayContent,
+          },
+        })
+      } else if (input.id) {
+        await updateSurvey({
+          where: { id: input.id },
+          data: {
+            formContent: displayContent,
+          },
+        })
+      }
+
       message.success("Cập nhật nội dung form khảo sát thành công")
       onClose()
     } catch (error: any) {
@@ -74,13 +123,17 @@ const ModalEditSurveyFormContent = () => {
     }
   }
 
+  const modalTitle = isClusterMode
+    ? `Chỉnh sửa nội dung form${input?.name ? `: ${input.name}` : ""}`
+    : `Chỉnh sửa nội dung form${survey?.name ? `: ${survey.name}` : ""}`
+
   return (
     <PutFormModal
       open={isOpen}
       form={form}
       onFinish={onOk}
       onCancel={onClose}
-      title={`Chỉnh sửa nội dung form${survey?.name ? `: ${survey.name}` : ""}`}
+      title={modalTitle}
       className="w-[720px] top-4"
       okText="Lưu"
     >
@@ -194,13 +247,43 @@ const ModalEditSurveyFormContent = () => {
           <Input placeholder="VD: II. NỘI DUNG ĐÁNH GIÁ" />
         </FormItem>
       </Col>
+      <Col span={24}>
+        <Form.Item label="Nội dung footer (lời cảm ơn)">
+          <Form.List name="footerNotes">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }) => (
+                  <div key={key} className="mb-2 flex items-start gap-2">
+                    <Form.Item {...restField} name={name} className="mb-0 flex-1">
+                      <Input.TextArea rows={2} placeholder="Nhập lời cảm ơn" />
+                    </Form.Item>
+                    <DeleteOutlined
+                      className="mt-2 cursor-pointer text-red-500"
+                      onClick={() => remove(name)}
+                    />
+                  </div>
+                ))}
+                <Button type="dashed" block icon={<PlusOutlined />} onClick={() => add("")}>
+                  Thêm đoạn footer
+                </Button>
+              </>
+            )}
+          </Form.List>
+        </Form.Item>
+      </Col>
       <Form.Item name="notesAfterInfo" hidden valuePropName="checked">
         <Checkbox />
       </Form.Item>
       <Col span={24}>
         <Button
           onClick={() =>
-            form.setFieldsValue(cloneSurveyFormDisplayContent(DEFAULT_SURVEY_PRINT_FORM_CONTENT))
+            form.setFieldsValue(
+              cloneSurveyFormDisplayContent(
+                isLecturerSurvey
+                  ? LECTURER_SURVEY_PRINT_FORM_CONTENT
+                  : DEFAULT_SURVEY_PRINT_FORM_CONTENT
+              )
+            )
           }
         >
           Khôi phục mặc định

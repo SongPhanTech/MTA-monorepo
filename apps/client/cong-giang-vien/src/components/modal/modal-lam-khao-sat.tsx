@@ -9,7 +9,7 @@ import {
   DEFAULT_SURVEY_PRINT_FORM_CONTENT,
   LECTURER_SURVEY_PRINT_FORM_CONTENT,
 } from "@workspace/libs/survey-form-content"
-import { SurveyFormIntro } from "@workspace/ui"
+import { SurveyFormFooter, SurveyFormIntro } from "@workspace/ui"
 import { useQueryClient } from "@tanstack/react-query"
 import {
   Modal as AntdModal,
@@ -313,6 +313,17 @@ const ModalLamKhaoSat = () => {
                       },
                     },
                   ]}
+                />
+              </Col>
+
+              <Col span={24}>
+                <SurveyFormFooter
+                  survey={survey}
+                  fallback={
+                    survey?.lectureInfo
+                      ? LECTURER_SURVEY_PRINT_FORM_CONTENT
+                      : DEFAULT_SURVEY_PRINT_FORM_CONTENT
+                  }
                 />
               </Col>
 

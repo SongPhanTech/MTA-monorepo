@@ -19,6 +19,7 @@ export type SurveyFormDisplayContent = {
   infoTitle?: string
   infoFields: SurveyFormInfoField[]
   contentTitle?: string
+  footerNotes?: string[]
 }
 
 export const LECTURER_SURVEY_PRINT_FORM_CONTENT: SurveyFormDisplayContent = {
@@ -39,6 +40,7 @@ export const LECTURER_SURVEY_PRINT_FORM_CONTENT: SurveyFormDisplayContent = {
     { label: "Học kỳ: ", bindKey: "semester" },
     { label: "Năm học: " },
   ],
+  footerNotes: ["Xin trân trọng cảm ơn Anh/Chị đã dành thời gian phản hồi!"],
 }
 
 export const DEFAULT_SURVEY_PRINT_FORM_CONTENT: SurveyFormDisplayContent = {
@@ -57,6 +59,9 @@ export const DEFAULT_SURVEY_PRINT_FORM_CONTENT: SurveyFormDisplayContent = {
     { label: "Đối tượng đào tạo: ", fullWidth: true, span: 24 },
   ],
   contentTitle: "II. NỘI DUNG ĐÁNH GIÁ",
+  footerNotes: [
+    "Xin trân trọng cảm ơn đồng chí (anh/chị) đã dành thời gian hoàn thành phiếu khảo sát.",
+  ],
 }
 
 const BIND_KEYS: SurveyFormFieldBindKey[] = [
@@ -81,6 +86,7 @@ export function cloneSurveyFormDisplayContent(
     ...content,
     notes: [...content.notes],
     infoFields: content.infoFields.map((field) => ({ ...field })),
+    ...(content.footerNotes ? { footerNotes: [...content.footerNotes] } : {}),
   }
 }
 
@@ -112,9 +118,11 @@ function parseDisplayContentObject(raw: unknown): Partial<SurveyFormDisplayConte
   if (!isRecord(raw)) return null
   const notes = parseNotes(raw.notes)
   const infoFields = parseInfoFields(raw.infoFields)
+  const footerNotes = parseNotes(raw.footerNotes)
   if (
     !notes &&
     !infoFields &&
+    !footerNotes &&
     typeof raw.infoTitle !== "string" &&
     typeof raw.contentTitle !== "string"
   ) {
@@ -123,6 +131,7 @@ function parseDisplayContentObject(raw: unknown): Partial<SurveyFormDisplayConte
   return {
     ...(notes ? { notes } : {}),
     ...(infoFields ? { infoFields } : {}),
+    ...(footerNotes ? { footerNotes } : {}),
     ...(typeof raw.infoTitle === "string" ? { infoTitle: raw.infoTitle } : {}),
     ...(typeof raw.contentTitle === "string" ? { contentTitle: raw.contentTitle } : {}),
     ...(typeof raw.headerLeft === "string" ? { headerLeft: raw.headerLeft } : {}),
@@ -148,5 +157,6 @@ export function parseSurveyFormDisplayContent(
     infoTitle: parsed.infoTitle ?? clonedFallback.infoTitle,
     infoFields: parsed.infoFields ?? clonedFallback.infoFields,
     contentTitle: parsed.contentTitle ?? clonedFallback.contentTitle,
+    footerNotes: parsed.footerNotes ?? clonedFallback.footerNotes,
   }
 }

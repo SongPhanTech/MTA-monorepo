@@ -13,7 +13,7 @@ import {
   DEFAULT_SURVEY_PRINT_FORM_CONTENT,
   LECTURER_SURVEY_PRINT_FORM_CONTENT,
 } from "@workspace/libs/survey-form-content"
-import { SurveyFormIntro } from "@workspace/ui"
+import { SurveyFormFooter, SurveyFormIntro } from "@workspace/ui"
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useState } from "react"
 import Confetti from "react-confetti"
@@ -189,10 +189,10 @@ function TakeTestPage() {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
-    if (id) {
+    if (id && profileId) {
       fetchData()
     }
-  }, [id])
+  }, [id, profileId])
 
   return isLoading ? (
     <Loading />
@@ -380,6 +380,17 @@ function TakeTestPage() {
                 },
               ]}
               bordered={true}
+            />
+          </Col>
+
+          <Col span={24}>
+            <SurveyFormFooter
+              survey={survey}
+              fallback={
+                survey?.lectureInfo
+                  ? LECTURER_SURVEY_PRINT_FORM_CONTENT
+                  : DEFAULT_SURVEY_PRINT_FORM_CONTENT
+              }
             />
           </Col>
 
