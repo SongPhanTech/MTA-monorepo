@@ -146,7 +146,10 @@ function TabDotKhaoSatCum({
 
   const { data = [], refetch } = useFindManyClusterSurvey(
     {
-      where,
+      where: {
+        ...where,
+        deletedAt: null,
+      },
       include: {
         surveyObjectType: true,
         surveyTopic: true,
