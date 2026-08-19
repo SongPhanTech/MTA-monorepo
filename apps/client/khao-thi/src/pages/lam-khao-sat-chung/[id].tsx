@@ -9,6 +9,8 @@ import type { SurveySession } from "@workspace/db"
 import { getPublicSurvey, useSavePublicSurvey, validateUserSurvey } from "@workspace/libs/api/exam"
 import type { GetSurveyResult } from "@workspace/libs/api/schemas/getSurveyResult"
 import { Button, Col, Flex, Form, Input, Modal, message, Radio, Row } from "antd"
+import { LECTURER_SURVEY_PRINT_FORM_CONTENT } from "@workspace/libs/survey-form-content"
+import { SurveyFormIntro } from "@workspace/ui"
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useState } from "react"
 import Confetti from "react-confetti"
@@ -199,66 +201,7 @@ function TakeTestPage() {
             {survey?.name}
           </div>
           {survey?.lectureInfo && (
-            <Row gutter={[0, 2]} className="mb-3 color-black">
-              <Col span={12}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Tên giảng viên: </div>
-                  <span>
-                    {survey?.lectureInfo?.lastName || ""} {survey?.lectureInfo?.firstName || ""}
-                  </span>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Tên học phần: </div>
-                  <span>
-                    {survey?.subjectClass?.code || ""} {survey?.subjectClass?.name || ""}
-                  </span>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Khoa (Viện): </div>
-                  <span>{survey?.lectureInfo?.organization || ""}</span>
-                </div>
-              </Col>
-              <Col span={6}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Bộ môn: </div>
-                </div>
-              </Col>
-              <Col span={6}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Lớp: </div>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Ngày lấy ý kiến: </div>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Học kỳ: </div>
-                  <span>{survey?.semester?.name || ""}</span>
-                </div>
-              </Col>
-              <Col span={24}>
-                <div className="italic indent-8 mt-4">
-                  Nhằm góp phần nâng cao chất lượng giảng dạy, phục vụ lợi ích của người học, Học
-                  viện đề nghị Anh/Chị với tinh thần trách nhiệm và xây dựng , cho ý kiến về hoạt
-                  động giảng dạy của giảng viên thông qua phiếu phản hồi này. Thông tin do Anh/Chị
-                  cung cấp sẽ được Học viên bảo mật và xử lý đảm bảo không làm ảnh hưởng đến kết quả
-                  học tập, rèn luyên của Anh/Chị
-                </div>
-              </Col>
-              <Col span={24}>
-                <div className="italic indent-8">
-                  Đề nghị Anh/chị đánh xấu "X" vào các ô tương ứng với nội dung trong bảng câu hỏi
-                  theo thang phản hồi
-                </div>
-              </Col>
-            </Row>
+            <SurveyFormIntro survey={survey} fallback={LECTURER_SURVEY_PRINT_FORM_CONTENT} />
           )}
 
           {survey?.surveyChoice?.length && (

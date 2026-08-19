@@ -25416,6 +25416,9 @@
           },
           "printFormTemplate": {
             "nullable": true
+          },
+          "formContent": {
+            "nullable": true
           }
         },
         "required": [
@@ -62089,6 +62092,9 @@
             "type": "boolean"
           },
           "printFormTemplate": {
+            "nullable": true
+          },
+          "formContent": {
             "nullable": true
           },
           "_count": {
@@ -122929,6 +122935,9 @@
           "printFormTemplate": {
             "type": "integer"
           },
+          "formContent": {
+            "type": "integer"
+          },
           "_all": {
             "type": "integer"
           }
@@ -122955,6 +122964,7 @@
           "clusterSurveyId",
           "targetEnrollStudentOnly",
           "printFormTemplate",
+          "formContent",
           "_all"
         ]
       },

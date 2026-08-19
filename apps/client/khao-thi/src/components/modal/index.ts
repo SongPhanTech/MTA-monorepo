@@ -12,6 +12,7 @@ import ModalPrintAllExams from "./modal-print-all-exam-bank"
 import ModalPrintBaoCaoDonVi from "./modal-print-bao-cao-don-vi"
 import ModalPrintExamClusterSurvey from "./modal-print-de-khao-sat"
 import ModalPrintExamSurvey from "./modal-print-de-khao-sat-chung"
+import ModalEditSurveyFormContent from "./modal-edit-survey-form-content"
 import ModalPrintDotDanhGia from "./modal-print-dot-danh-gia"
 import ModalPrintExamBank from "./modal-print-exam-bank"
 import ModalPrintSurveylecturer from "./modal-print-survey-lecturer-report"
@@ -94,6 +95,7 @@ export {
   XemTaiLieu,
   ModalPrintExamSurvey,
   ModalPrintExamClusterSurvey,
+  ModalEditSurveyFormContent,
   PutSurveyImportQuestionModal,
   ModalTaoKhungDe,
   PutMaTranDeModal,

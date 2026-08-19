@@ -86,6 +86,8 @@ export type GetPrivateSurvey200AllOf = {
   targetEnrollStudentOnly?: boolean;
   /** @nullable */
   printFormTemplate?: GetPrivateSurvey200AllOfPrintFormTemplate;
+  /** @nullable */
+  formContent?: unknown | null;
   surveyQuestion?: GetPrivateSurvey200AllOfSurveyQuestionItem[];
   surveyChoice?: GetPrivateSurvey200AllOfSurveyChoiceItem[];
   /** @nullable */

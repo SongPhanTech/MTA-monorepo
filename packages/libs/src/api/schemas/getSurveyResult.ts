@@ -86,6 +86,8 @@ export interface GetSurveyResult {
   targetEnrollStudentOnly?: boolean;
   /** @nullable */
   printFormTemplate?: GetSurveyResultPrintFormTemplate;
+  /** @nullable */
+  formContent?: unknown | null;
   surveyQuestion: GetSurveyResultSurveyQuestionItem[];
   surveyChoice: GetSurveyResultSurveyChoiceItem[];
   /** @nullable */

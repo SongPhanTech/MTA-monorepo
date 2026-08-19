@@ -4556,7 +4556,8 @@ exports.Prisma.SurveyScalarFieldEnum = {
   trainingObjectTypeId: 'trainingObjectTypeId',
   clusterSurveyId: 'clusterSurveyId',
   targetEnrollStudentOnly: 'targetEnrollStudentOnly',
-  printFormTemplate: 'printFormTemplate'
+  printFormTemplate: 'printFormTemplate',
+  formContent: 'formContent'
 };
 
 exports.Prisma.SurveyQuestionScalarFieldEnum = {

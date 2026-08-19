@@ -21,6 +21,7 @@ const baseSchema = z.object({
     anonymous: z.boolean().default(true),
     targetEnrollStudentOnly: z.boolean().default(false),
     printFormTemplate: z.any().nullish(),
+    formContent: z.any().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -39,6 +40,7 @@ const baseSchemaWithoutDefaults = z.object({
     anonymous: z.boolean(),
     targetEnrollStudentOnly: z.boolean(),
     printFormTemplate: z.any().nullish(),
+    formContent: z.any().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -102,7 +104,8 @@ export const SurveyPrismaUpdateSchema = z.object({
     isPublic: z.boolean(),
     anonymous: z.boolean(),
     targetEnrollStudentOnly: z.boolean(),
-    printFormTemplate: z.any().nullish()
+    printFormTemplate: z.any().nullish(),
+    formContent: z.any().nullish()
 }).partial().passthrough();
 
 

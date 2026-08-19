@@ -27510,6 +27510,10 @@ const metadata: ModelMeta = {
                     name: "printFormTemplate",
                     type: "Json",
                     isOptional: true,
+                }, formContent: {
+                    name: "formContent",
+                    type: "Json",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {

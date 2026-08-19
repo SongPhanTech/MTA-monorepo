@@ -152,7 +152,6 @@ function TabDotKhaoSatCum({
       },
       include: {
         surveyObjectType: true,
-        surveyTopic: true,
         surveyQuestion: true,
         surveys: {
           include: {
@@ -276,6 +275,10 @@ function TabDotKhaoSatCum({
   }, [data])
 
   const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: "desc" } })
+  const surveyTopicNameById = useMemo(
+    () => new Map((surveyTopicData ?? []).map((topic) => [topic.id, topic.name])),
+    [surveyTopicData]
+  )
 
   const { onOpen: onOpenPrint } = useDisclosure<{ id: string }>({
     tag: "ModalPrintExamClusterSurvey",
@@ -352,7 +355,9 @@ function TabDotKhaoSatCum({
                   value: id,
                   label: name,
                 })),
-                render: (_, record) => (record?.surveyTopic ? record?.surveyTopic.name : ""),
+                render: (_, record) =>
+                  surveyTopicNameById.get(record.surveyTopicId) ??
+                  (record.surveyTopicId ? "Chủ đề đã xóa" : ""),
               },
               {
                 title: "Học kỳ",

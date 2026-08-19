@@ -1,4 +1,5 @@
 import { EyeOutlined } from "@ant-design/icons"
+import { FilePenLine, Link } from "lucide-react"
 import HtmlTruncate from "@components/commons/html-truncate"
 import Table from "@components/commons/table"
 import type { FilterProps } from "@components/commons/typeFilter"
@@ -21,7 +22,6 @@ import { KHAO_THI_PERMISSION } from "@workspace/router"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Checkbox, Col, Flex, message, Row, Tooltip } from "antd"
 import dayjs from "dayjs"
-import { Link } from "lucide-react"
 import { useRouter } from "next/router"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -116,7 +116,6 @@ function TabDotKhaoSat({
     where,
     include: {
       surveyObjectType: true,
-      surveyTopic: true,
       surveyQuestion: true,
       surveySessions: true,
       semester: true,
@@ -193,12 +192,19 @@ function TabDotKhaoSat({
   }
 
   const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: "desc" } })
+  const surveyTopicNameById = useMemo(
+    () => new Map((surveyTopicData ?? []).map((topic) => [topic.id, topic.name])),
+    [surveyTopicData]
+  )
   const { data: surveyObjectTypeData } = useFindManySurveyObjectType({
     orderBy: { name: "asc" },
   })
 
   const { onOpen: onOpenPrint } = useDisclosure<{ id: string }>({
     tag: "ModalPrintExamSurvey",
+  })
+  const { onOpen: onOpenEditFormContent } = useDisclosure<{ id: string }>({
+    tag: "ModalEditSurveyFormContent",
   })
   return (
     <div>
@@ -254,7 +260,9 @@ function TabDotKhaoSat({
                   value: id,
                   label: name,
                 })),
-                render: (_, record) => (record?.surveyTopic ? record?.surveyTopic.name : ""),
+                render: (_, record) =>
+                  surveyTopicNameById.get(record.surveyTopicId) ??
+                  (record.surveyTopicId ? "Chủ đề đã xóa" : ""),
               },
               {
                 title: "ĐTLKS",
@@ -358,7 +366,7 @@ function TabDotKhaoSat({
               },
               {
                 title: "Thao tác",
-                width: 150,
+                width: 170,
                 align: "center",
                 hidden: !canSome(
                   KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
@@ -424,6 +432,18 @@ function TabDotKhaoSat({
                           />
                         </Tooltip>
                       )}
+                    {can(KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT, "SUA") && (
+                      <Tooltip title="Chỉnh sửa nội dung form khảo sát" placement="top">
+                        <FilePenLine
+                          size={16}
+                          className="cursor-pointer text-emerald-700"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onOpenEditFormContent({ id })
+                          }}
+                        />
+                      </Tooltip>
+                    )}
                     {can(KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT, "SUA") && (
                       <EditIcon
                         disabled={surveySessions.length > 0}

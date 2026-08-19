@@ -5,6 +5,11 @@ import {
   useSavePublicSurvey,
 } from "@workspace/libs/api/exam"
 import type { GetSurveyResult } from "@workspace/libs/api/schemas/getSurveyResult"
+import {
+  DEFAULT_SURVEY_PRINT_FORM_CONTENT,
+  LECTURER_SURVEY_PRINT_FORM_CONTENT,
+} from "@workspace/libs/survey-form-content"
+import { SurveyFormIntro } from "@workspace/ui"
 import { useQueryClient } from "@tanstack/react-query"
 import {
   Modal as AntdModal,
@@ -172,115 +177,14 @@ const ModalLamKhaoSat = () => {
             {survey?.name}
           </div>
 
-          {survey?.lectureInfo && (
-            <Row gutter={[0, 2]} className="mb-3 text-black">
-              <Col span={12}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Tên giảng viên: </div>
-                  <span>
-                    {survey?.lectureInfo?.lastName || ""} {survey?.lectureInfo?.firstName || ""}
-                  </span>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Tên học phần: </div>
-                  <span>
-                    {survey?.subjectClass?.code || ""} {survey?.subjectClass?.name || ""}
-                  </span>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Khoa (Viện): </div>
-                  <span>{survey?.lectureInfo?.organization || ""}</span>
-                </div>
-              </Col>
-              <Col span={6}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Bộ môn: </div>
-                </div>
-              </Col>
-              <Col span={6}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Lớp: </div>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Ngày lấy ý kiến: </div>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Học kỳ: </div>
-                  <span>{survey?.semester?.name || ""}</span>
-                </div>
-              </Col>
-              <Col span={24}>
-                <div className="mt-4 indent-8 italic">
-                  Nhằm góp phần nâng cao chất lượng giảng dạy, phục vụ lợi ích của người học, Học
-                  viện đề nghị Anh/Chị với tinh thần trách nhiệm và xây dựng , cho ý kiến về hoạt
-                  động giảng dạy của giảng viên thông qua phiếu phản hồi này. Thông tin do Anh/Chị
-                  cung cấp sẽ được Học viên bảo mật và xử lý đảm bảo không làm ảnh hưởng đến kết quả
-                  học tập, rèn luyên của Anh/Chị
-                </div>
-              </Col>
-              <Col span={24}>
-                <div className="indent-8 italic">
-                  Đề nghị Anh/chị đánh xấu "X" vào các ô tương ứng với nội dung trong bảng câu hỏi
-                  theo thang phản hồi
-                </div>
-              </Col>
-            </Row>
-          )}
-          {!survey?.lectureInfo && (
-            <Row gutter={[0, 2]} className="mb-3 text-black">
-              <Col span={24}>
-                <div className="mt-4 indent-8 italic">
-                  Để đóng góp phần tìm ra những giải pháp nhằm nâng cao chất lượng đào tạo của Học
-                  viện đề nghị đồng chí (anh/chị) vui lòng điền đầy đủ thông tin trả lời các câu hỏi
-                  dưới dây bằng cách đánh dấu "X" vào một ô phù hợp nhất trong mục "các phương án
-                  trả lời".
-                </div>
-              </Col>
-              <Col span={24}>
-                <div className="indent-8 italic">
-                  Thông tin đồng chí (anh/chị) cung cấp sẽ được Học viện xử lý khách quan và bảo mật
-                </div>
-              </Col>
-              <Col span={24}>
-                <div className="indent-8 font-bold uppercase">I. Thông tin chung</div>
-              </Col>
-              <Col span={12}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Chuyên ngành: </div>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Khoa (Viện): </div>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Lớp: </div>
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Khoá: </div>
-                </div>
-              </Col>
-              <Col span={24}>
-                <div className="flex items-end">
-                  <div className="!w-fit whitespace-nowrap">Đối tượng đào tạo: </div>
-                </div>
-              </Col>
-
-              <div className="indent-8 font-bold uppercase">II. Nội dung đánh giá</div>
-            </Row>
-          )}
+          <SurveyFormIntro
+            survey={survey}
+            fallback={
+              survey?.lectureInfo
+                ? LECTURER_SURVEY_PRINT_FORM_CONTENT
+                : DEFAULT_SURVEY_PRINT_FORM_CONTENT
+            }
+          />
 
           {survey?.surveyChoice?.length ? (
             <Row gutter={[16, 16]}>

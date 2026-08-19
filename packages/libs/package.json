@@ -14,6 +14,7 @@
         "./download-excel": "./src/download-excel.ts",
         "./create-excel": "./src/create-excel.ts",
         "./utils": "./src/utils.ts",
+        "./survey-form-content": "./src/survey-form-content.ts",
         "./server": "./src/server.ts",
         "./docxjs": "./src/docxjs.ts",
         ".": "./src/index.ts"

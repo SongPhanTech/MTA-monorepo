@@ -6977,8 +6977,10 @@ model Survey {
   clusterSurvey           ClusterSurvey?      @relation(fields: [clusterSurveyId], references: [id])
   clusterSurveyId         String?
   targetEnrollStudentOnly Boolean             @default(false)
-  /// Mẫu phiếu in (header, ghi chú, nhãn thông tin...) — editable per đợt
+  /// Mẫu phiếu in Word (OnlyOffice / MinIO)
   printFormTemplate       Json?
+  /// Nội dung hiển thị form khảo sát (giới thiệu, nhãn trường...) — tách khỏi phiếu in
+  formContent             Json?
 
   @@schema("khao-thi")
 }
