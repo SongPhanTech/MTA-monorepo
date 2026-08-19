@@ -538,6 +538,8 @@ export default function DanhSachSinhVien() {
           el.studentSubjectScores.push(s)
         }
       }
+      const overflowStudentSubjectScores = filteredStudentSubjectScores.slice(idx)
+
       const examNonRoomId = createId()
       const examListNonRoomId = createId()
       const res = await sqlTransaction([
@@ -598,16 +600,18 @@ export default function DanhSachSinhVien() {
             },
           },
         },
-        ...skippedStudentSubjectScores.map((studentSubjectScore) => ({
-          model: "ExamPaper" as const,
-          operation: "create",
-          data: {
+        ...[...skippedStudentSubjectScores, ...overflowStudentSubjectScores].map(
+          (studentSubjectScore) => ({
+            model: "ExamPaper" as const,
+            operation: "create",
             data: {
-              studentSubjectScoreId: studentSubjectScore.id,
-              examListId: examListNonRoomId,
+              data: {
+                studentSubjectScoreId: studentSubjectScore.id,
+                examListId: examListNonRoomId,
+              },
             },
-          },
-        })),
+          })
+        ),
         ...allExamLists
           .flatMap((examList) =>
             examList.studentSubjectScores.map((sss) => ({
@@ -638,7 +642,13 @@ export default function DanhSachSinhVien() {
       queryClient.invalidateQueries({
         queryKey: ["zenstack", "Exam"],
       })
-      message.success("Phân phòng thi thành công")
+      if (overflowStudentSubjectScores.length > 0) {
+        message.warning(
+          `Phân phòng thi thành công. Có ${overflowStudentSubjectScores.length} sinh viên chưa được phân phòng do không đủ ghế thi.`
+        )
+      } else {
+        message.success("Phân phòng thi thành công")
+      }
     } catch (error: any) {
       console.error(error)
       message.error(error.message || "Có lỗi xảy ra, vui lòng thử lại sau!")
