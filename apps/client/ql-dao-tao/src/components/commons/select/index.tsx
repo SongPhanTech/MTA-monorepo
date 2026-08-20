@@ -9,7 +9,12 @@ const Select = (props: SelectProps) => {
       popupMatchSelectWidth={false}
       allowClear
       showSearch
-      filterOption={(input, option) => fuzzyMatch(input, option?.label?.toString() || "")}
+      filterOption={(input, option: any) =>
+        fuzzyMatch(
+          input,
+          (option?.searchString || option?.label?.toString() || option?.value || "").toString()
+        )
+      }
       notFoundContent="Không có dữ liệu"
       {...props}
     />

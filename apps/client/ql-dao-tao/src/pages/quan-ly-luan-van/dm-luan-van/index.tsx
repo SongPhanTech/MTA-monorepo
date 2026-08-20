@@ -2419,6 +2419,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             )
                             .map((item) => {
                               const text = getSupervisorName(item, true, true)
+                              const searchString = getSupervisorName(item, false, true) as string
                               const hasLecturer = item.lecturer != null
                               return {
                                 label: (
@@ -2430,6 +2431,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                   </span>
                                 ),
                                 value: item.id,
+                                searchString,
                               }
                             })}
                           value={currentValue === null ? undefined : currentValue || undefined}
@@ -2509,6 +2511,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             )
                             .map((item) => {
                               const text = getSupervisorName(item, true, true)
+                              const searchString = getSupervisorName(item, false, true) as string
                               const hasLecturer = item.lecturer != null
                               return {
                                 label: (
@@ -2520,6 +2523,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                   </span>
                                 ),
                                 value: item.id,
+                                searchString,
                               }
                             })}
                           value={currentValue === null ? undefined : currentValue || undefined}
@@ -2722,6 +2726,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             )
                             .map((item) => {
                               const text = getSupervisorName(item, true, true)
+                              const searchString = getSupervisorName(item, false, true) as string
                               const hasLecturer = item.lecturer != null
                               return {
                                 label: (
@@ -2733,6 +2738,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                   </span>
                                 ),
                                 value: item.id,
+                                searchString,
                               }
                             })}
                           value={currentValue === null ? undefined : currentValue || undefined}
@@ -2814,6 +2820,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             )
                             .map((item) => {
                               const text = getSupervisorName(item, true, true)
+                              const searchString = getSupervisorName(item, false, true) as string
                               const hasLecturer = item.lecturer != null
                               return {
                                 label: (
@@ -2825,6 +2832,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                   </span>
                                 ),
                                 value: item.id,
+                                searchString,
                               }
                             })}
                           value={currentValue === null ? undefined : currentValue || undefined}
@@ -2903,6 +2911,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             ?.filter((item) => !excludedCouncilIds.has(item.id))
                             .map((item) => {
                               const text = getSupervisorName(item, true, true)
+                              const searchString = getSupervisorName(item, false, true) as string
                               const hasLecturer = item.lecturer != null
                               return {
                                 label: (
@@ -2914,6 +2923,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                   </span>
                                 ),
                                 value: item.id,
+                                searchString,
                               }
                             })}
                           value={currentValue === null ? undefined : currentValue || undefined}
@@ -3075,17 +3085,19 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             ?.filter((item) => !excludedCouncilIds.has(item.id))
                             .map((item) => {
                               const text = getSupervisorName(item, true, true)
+                              const searchString = getSupervisorName(item, false, true) as string
                               const hasLecturer = item.lecturer != null
                               return {
                                 label: (
                                   <span
                                     title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#16a34a" : "" }}
+                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
                                   >
                                     {text}
                                   </span>
                                 ),
                                 value: item.id,
+                                searchString,
                               }
                             })}
                           value={currentValue === null ? undefined : currentValue || undefined}
