@@ -57,8 +57,13 @@ export type DiemRenLuyenRow = {
   maSinhVien: string
   hoVaTen: string
   diem: number | null
+  diemRecordId?: string | null
   xepLoai: StudentTrainingType | null
   ghiChu: string
+}
+
+export type DiemRenLuyenForm = {
+  list: Record<string, { score: number | null }>
 }
 
 export type ThongKeDiemRenLuyen = {

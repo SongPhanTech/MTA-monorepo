@@ -113,6 +113,7 @@ const TabNoiDungLopQuanLy = ({ fixedClassId, coQuyenXem, tabProps }: TabNoiDungL
             <TabDiemRenLuyen
               fixedClassId={fixedClassId}
               enabled={coQuyenXem && tabActive === "diem-ren-luyen"}
+              coQuyenNhap={coQuyenXem}
             />
           ),
         },

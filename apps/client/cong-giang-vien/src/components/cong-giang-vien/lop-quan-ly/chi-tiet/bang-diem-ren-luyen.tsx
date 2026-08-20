@@ -1,5 +1,5 @@
 import type { DiemRenLuyenRow } from "@components/cong-giang-vien/lop-quan-ly/types"
-import { Table } from "antd"
+import { Form, InputNumber, Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { useEffect, useRef, useState } from "react"
 
@@ -10,9 +10,16 @@ interface BangDiemRenLuyenProps {
   loading?: boolean
   trang: number
   soTrang: number
+  coQuyenNhap?: boolean
 }
 
-const BangDiemRenLuyen = ({ danhSach, loading, trang, soTrang }: BangDiemRenLuyenProps) => {
+const BangDiemRenLuyen = ({
+  danhSach,
+  loading,
+  trang,
+  soTrang,
+  coQuyenNhap = false,
+}: BangDiemRenLuyenProps) => {
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(320)
 
@@ -56,9 +63,40 @@ const BangDiemRenLuyen = ({ danhSach, loading, trang, soTrang }: BangDiemRenLuye
     {
       title: "Điểm SV đạt",
       dataIndex: "diem",
-      width: 110,
+      width: 130,
       align: "center",
-      render: (value: number | null) => (value != null ? value : "—"),
+      render: (value: number | null, record) =>
+        coQuyenNhap ? (
+          <Form.Item
+            name={["list", record.id, "score"]}
+            className="mb-0"
+            rules={[
+              {
+                validator: (_, val) => {
+                  if (val == null || val === "") return Promise.resolve()
+                  const num = Number(val)
+                  if (Number.isNaN(num) || num < 0 || num > 10) {
+                    return Promise.reject(new Error("0–10"))
+                  }
+                  return Promise.resolve()
+                },
+              },
+            ]}
+          >
+            <InputNumber
+              size="small"
+              min={0}
+              max={10}
+              precision={0}
+              className="w-full"
+              placeholder="—"
+            />
+          </Form.Item>
+        ) : value != null ? (
+          value
+        ) : (
+          "—"
+        ),
     },
     {
       title: "Ghi chú",
@@ -78,9 +116,9 @@ const BangDiemRenLuyen = ({ danhSach, loading, trang, soTrang }: BangDiemRenLuye
         dataSource={danhSach}
         loading={loading}
         pagination={false}
+        scroll={{ y: chieuCaoBody }}
         rowClassName={(_, index) => (index % 2 === 1 ? "bg-gray-50/80" : "")}
         bordered={true}
-        // className="bang-lq-chi-tiet mt-2 [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark [&_.ant-table-thead>tr>th]:!border-b-gray-300 [&_.ant-table-thead>tr>th::before]:!bg-gray-400"
       />
     </div>
   )

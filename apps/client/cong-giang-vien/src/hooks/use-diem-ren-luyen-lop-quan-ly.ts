@@ -1,4 +1,6 @@
+import { queryClient } from "@api/index"
 import type {
+  DiemRenLuyenForm,
   DiemRenLuyenRow,
   LocDiemRenLuyen,
   ThongKeDiemRenLuyen,
@@ -14,10 +16,20 @@ import {
 } from "@lib/diem-ren-luyen"
 import { SemesterType, TrainingScoreStatus } from "@workspace/db/client"
 import { useCountStudent, useFindManySchoolYear, useFindManyStudent } from "@workspace/db/hooks"
+import { sqlTransaction } from "@workspace/libs/api/model"
+import type { SqlTransactionBodyItem } from "@workspace/libs/api/schemas/sqlTransactionBodyItem"
 import { useSemesterStore } from "@workspace/ui"
+import { message } from "antd"
 import { useEffect, useMemo, useState } from "react"
 
-const STUDENT_INCLUDE_KY = (semesterId: string) =>
+const RECORD_SELECT = {
+  id: true,
+  score: true,
+  description: true,
+  status: true,
+} as const
+
+const STUDENT_INCLUDE_KY = (semesterId: string, choNhap: boolean) =>
   ({
     userProfile: { select: { code: true, fullname: true } },
     studentSemesterResult: {
@@ -26,14 +38,17 @@ const STUDENT_INCLUDE_KY = (semesterId: string) =>
       take: 1,
     },
     semesterTrainingScore: {
-      where: { semesterId, status: TrainingScoreStatus.APPROVED },
-      select: { score: true, description: true, status: true },
+      where: {
+        semesterId,
+        ...(choNhap ? {} : { status: TrainingScoreStatus.APPROVED }),
+      },
+      select: RECORD_SELECT,
       orderBy: { updatedAt: "desc" as const },
       take: 1,
     },
   }) as const
 
-const STUDENT_INCLUDE_NAM = (schoolYearId: string) =>
+const STUDENT_INCLUDE_NAM = (schoolYearId: string, choNhap: boolean) =>
   ({
     userProfile: { select: { code: true, fullname: true } },
     studentYearResult: {
@@ -42,8 +57,11 @@ const STUDENT_INCLUDE_NAM = (schoolYearId: string) =>
       take: 1,
     },
     schoolYearTrainingScore: {
-      where: { schoolYearId, status: TrainingScoreStatus.APPROVED },
-      select: { score: true, description: true, status: true },
+      where: {
+        schoolYearId,
+        ...(choNhap ? {} : { status: TrainingScoreStatus.APPROVED }),
+      },
+      select: RECORD_SELECT,
       orderBy: { updatedAt: "desc" as const },
       take: 1,
     },
@@ -55,36 +73,55 @@ const STUDENT_INCLUDE_NAM = (schoolYearId: string) =>
           semesterType: SemesterType.SECOND,
         },
       },
-      select: { score: true, description: true, status: true },
+      select: RECORD_SELECT,
       orderBy: { updatedAt: "desc" as const },
       take: 1,
     },
   }) as const
 
-const toDiemRenLuyenRow = (
-  sv: {
+type SinhVienDiemRenLuyen = Parameters<typeof layDiemRenLuyenSinhVien>[0] &
+  Parameters<typeof layDiemRenLuyenNamHoc>[0] & {
     id: string
     code?: string | null
     userProfile?: { code?: string | null; fullname?: string | null } | null
-  } & Parameters<typeof layDiemRenLuyenSinhVien>[0] &
-    Parameters<typeof layDiemRenLuyenNamHoc>[0],
-  theoKy: boolean
-): DiemRenLuyenRow => ({
-  id: sv.id,
-  maSinhVien: sv.userProfile?.code ?? sv.code ?? "",
-  hoVaTen: sv.userProfile?.fullname ?? "",
-  diem: theoKy ? layDiemRenLuyenSinhVien(sv) : layDiemRenLuyenNamHoc(sv),
-  xepLoai: theoKy ? layXepLoaiRenLuyen(sv) : layXepLoaiRenLuyenNamHoc(sv),
-  ghiChu: theoKy ? layGhiChuDiemRenLuyen(sv) : layGhiChuDiemRenLuyenNamHoc(sv),
-})
+    semesterTrainingScore?: Array<{ id: string; score?: number | null }>
+    schoolYearTrainingScore?: Array<{ id: string; score?: number | null }>
+  }
 
-const useDiemRenLuyenLopQuanLy = (fixedClassId: string, enabled: boolean) => {
+const toDiemRenLuyenRow = (
+  sv: SinhVienDiemRenLuyen,
+  theoKy: boolean,
+  choNhap: boolean
+): DiemRenLuyenRow => {
+  const diemRecord = theoKy ? sv.semesterTrainingScore?.[0] : sv.schoolYearTrainingScore?.[0]
+
+  return {
+    id: sv.id,
+    maSinhVien: sv.userProfile?.code ?? sv.code ?? "",
+    hoVaTen: sv.userProfile?.fullname ?? "",
+    diem: choNhap
+      ? (diemRecord?.score ?? null)
+      : theoKy
+        ? layDiemRenLuyenSinhVien(sv)
+        : layDiemRenLuyenNamHoc(sv),
+    diemRecordId: diemRecord?.id ?? null,
+    xepLoai: theoKy ? layXepLoaiRenLuyen(sv) : layXepLoaiRenLuyenNamHoc(sv),
+    ghiChu: theoKy ? layGhiChuDiemRenLuyen(sv) : layGhiChuDiemRenLuyenNamHoc(sv),
+  }
+}
+
+const useDiemRenLuyenLopQuanLy = (
+  fixedClassId: string,
+  enabled: boolean,
+  coQuyenNhap = false
+) => {
   const { id: semesterMacDinh } = useSemesterStore()
   const [schoolYearApDung, setSchoolYearApDung] = useState<string>("")
   const [semesterApDung, setSemesterApDung] = useState<string | undefined>(semesterMacDinh)
   const [trang, setTrang] = useState(1)
   const [soTrang, setSoTrang] = useState(DEFAULT_PAGINATE_SIZE)
   const [locDiem, setLocDiem] = useState<LocDiemRenLuyen>(null)
+  const [dangLuu, setDangLuu] = useState(false)
 
   const { data: schoolYears = [] } = useFindManySchoolYear({
     orderBy: { startDate: "desc" },
@@ -119,8 +156,11 @@ const useDiemRenLuyenLopQuanLy = (fixedClassId: string, enabled: boolean) => {
   const theoKy = !!semesterId
 
   const studentInclude = useMemo(
-    () => (theoKy ? STUDENT_INCLUDE_KY(semesterId!) : STUDENT_INCLUDE_NAM(schoolYearId)),
-    [theoKy, semesterId, schoolYearId]
+    () =>
+      theoKy
+        ? STUDENT_INCLUDE_KY(semesterId!, coQuyenNhap)
+        : STUDENT_INCLUDE_NAM(schoolYearId, coQuyenNhap),
+    [theoKy, semesterId, schoolYearId, coQuyenNhap]
   )
 
   const where = useMemo(
@@ -157,8 +197,20 @@ const useDiemRenLuyenLopQuanLy = (fixedClassId: string, enabled: boolean) => {
   )
 
   const tatCaDanhSach: DiemRenLuyenRow[] = useMemo(
-    () => tatCaSinhVien.map((sv) => toDiemRenLuyenRow(sv, theoKy)),
-    [tatCaSinhVien, theoKy]
+    () => tatCaSinhVien.map((sv) => toDiemRenLuyenRow(sv as SinhVienDiemRenLuyen, theoKy, coQuyenNhap)),
+    [tatCaSinhVien, theoKy, coQuyenNhap]
+  )
+
+  const giaTriFormMacDinh: DiemRenLuyenForm["list"] = useMemo(
+    () =>
+      tatCaDanhSach.reduce(
+        (acc, sv) => {
+          acc[sv.id] = { score: sv.diem }
+          return acc
+        },
+        {} as DiemRenLuyenForm["list"]
+      ),
+    [tatCaDanhSach]
   )
 
   const thongKe: ThongKeDiemRenLuyen = useMemo(() => {
@@ -189,8 +241,10 @@ const useDiemRenLuyenLopQuanLy = (fixedClassId: string, enabled: boolean) => {
       const batDau = (trang - 1) * soTrang
       return danhSachLoc.slice(batDau, batDau + soTrang)
     }
-    return trangData.map((sv) => toDiemRenLuyenRow(sv, theoKy))
-  }, [danhSachLoc, trang, soTrang, trangData, theoKy])
+    return trangData.map((sv) =>
+      toDiemRenLuyenRow(sv as SinhVienDiemRenLuyen, theoKy, coQuyenNhap)
+    )
+  }, [danhSachLoc, trang, soTrang, trangData, theoKy, coQuyenNhap])
 
   const tongSo = danhSachLoc ? danhSachLoc.length : tongSoGoc
 
@@ -214,9 +268,108 @@ const useDiemRenLuyenLopQuanLy = (fixedClassId: string, enabled: boolean) => {
     setTrang(1)
   }
 
+  const luuDiemRenLuyen = async (values: DiemRenLuyenForm) => {
+    if (!coQuyenNhap) return
+
+    const loiDiem = Object.values(values.list ?? {}).find((item) => {
+      if (item.score == null) return false
+      return item.score < 0 || item.score > 10
+    })
+    if (loiDiem) {
+      message.error("Vui lòng nhập điểm từ 0 đến 10")
+      return
+    }
+
+    const recordMap = new Map(tatCaDanhSach.map((sv) => [sv.id, sv.diemRecordId]))
+    const listCreate: SqlTransactionBodyItem[] = []
+    const listUpdate: SqlTransactionBodyItem[] = []
+
+    Object.entries(values.list ?? {}).forEach(([studentId, item]) => {
+      if (item.score == null) return
+
+      const score = Math.round(item.score)
+      const recordId = recordMap.get(studentId)
+
+      if (recordId) {
+        if (theoKy) {
+          listUpdate.push({
+            model: "SemesterTrainingScore",
+            operation: "update",
+            data: {
+              where: { id: recordId },
+              data: { score, status: TrainingScoreStatus.APPROVED },
+            },
+          })
+        } else {
+          listUpdate.push({
+            model: "SchoolYearTrainingScore",
+            operation: "update",
+            data: {
+              where: { id: recordId },
+              data: { score, status: TrainingScoreStatus.APPROVED },
+            },
+          })
+        }
+        return
+      }
+
+      if (theoKy && semesterId) {
+        listCreate.push({
+          model: "SemesterTrainingScore",
+          operation: "create",
+          data: {
+            data: {
+              studentId,
+              semesterId,
+              score,
+              status: TrainingScoreStatus.APPROVED,
+            },
+          },
+        })
+      } else if (schoolYearId) {
+        listCreate.push({
+          model: "SchoolYearTrainingScore",
+          operation: "create",
+          data: {
+            data: {
+              studentId,
+              schoolYearId,
+              score,
+              status: TrainingScoreStatus.APPROVED,
+            },
+          },
+        })
+      }
+    })
+
+    const transactions = [...listCreate, ...listUpdate]
+    if (transactions.length === 0) {
+      message.info("Không có điểm nào để lưu")
+      return
+    }
+
+    setDangLuu(true)
+    try {
+      const res = await sqlTransaction(transactions)
+      if (res.status === 200) {
+        message.success("Lưu điểm rèn luyện thành công")
+        await queryClient.invalidateQueries({ queryKey: ["zenstack", "Student"] })
+        await queryClient.invalidateQueries({ queryKey: ["zenstack", "SemesterTrainingScore"] })
+        await queryClient.invalidateQueries({ queryKey: ["zenstack", "SchoolYearTrainingScore"] })
+      } else {
+        message.error("Lưu điểm rèn luyện thất bại")
+      }
+    } catch {
+      message.error("Lưu điểm rèn luyện thất bại")
+    } finally {
+      setDangLuu(false)
+    }
+  }
+
   return {
     schoolYearId,
     semesterId,
+    theoKy,
     apDungBoLoc,
     locDiem,
     chonLocDiem,
@@ -227,6 +380,9 @@ const useDiemRenLuyenLopQuanLy = (fixedClassId: string, enabled: boolean) => {
     setTrang,
     soTrang,
     setSoTrang,
+    giaTriFormMacDinh,
+    luuDiemRenLuyen,
+    dangLuu,
     dangTai: queryEnabled && (dangTaiBang || dangTaiThongKe),
   }
 }

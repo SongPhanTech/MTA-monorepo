@@ -65,6 +65,7 @@ const BoLocDiemRenLuyen = ({ schoolYearId, semesterId, onApDung }: BoLocDiemRenL
       <div className="flex items-center gap-2">
         <span className="text-sm text-gray-600">Học kỳ:</span>
         <Select
+          allowClear
           placeholder="Chọn học kỳ"
           className="min-w-[140px]"
           value={semesterNhap}
