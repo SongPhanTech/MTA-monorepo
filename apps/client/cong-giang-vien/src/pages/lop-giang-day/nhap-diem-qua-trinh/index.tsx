@@ -1,5 +1,6 @@
 import ImportScoreModal, { type ImportScoreData } from "@components/commons/print/nhap-diem-tu-file"
 import ExportScoreTemplate from "@components/commons/print/xuat-mau-nhap-diem"
+import { XuatDanhSachThiButton } from "@components/commons/print/xuat-danh-sach-thi"
 import { examBanReason } from "@constants/constants"
 import { scoreConvert } from "@hooks/scoreConverter"
 import { ROUTER_PATH } from "@workspace/router"
@@ -36,6 +37,8 @@ import {
   CalendarClock,
   CalendarDays,
   CheckCircle2,
+  ChevronDown,
+  ChevronUp,
   CircleSlash2,
   ClipboardCheck,
   FileUp,
@@ -50,7 +53,10 @@ import { useRouter } from "next/router"
 import { useEffect, useMemo, useRef, useState } from "react"
 import type { ReactNode } from "react"
 
-const CHIEU_CAO_HEADER_BANG = 39
+const CHIEU_CAO_HEADER_BANG = 32
+
+const CLASS_BANG_COMPACT =
+  "[&_.ant-table-thead>tr>th]:!py-1 [&_.ant-table-thead>tr>th]:!px-2 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-tbody>tr>td]:!py-0.5 [&_.ant-table-tbody>tr>td]:!px-2 [&_.ant-table-cell]:!text-xs [&_.ant-input-number]:!w-full"
 
 const HE_SO_MAC_DINH = {
   coef_1: 0.1,
@@ -185,6 +191,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
   const [rows, setRows] = useState<RowData[]>([])
   const [historyTarget, setHistoryTarget] = useState<{ id: string; hoTen: string } | null>(null)
   const [importModalVisible, setImportModalVisible] = useState(false)
+  const [hienThongKe, setHienThongKe] = useState(true)
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(320)
 
@@ -200,7 +207,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
     const observer = new ResizeObserver(capNhatChieuCao)
     observer.observe(el)
     return () => observer.disconnect()
-  }, [])
+  }, [hienThongKe])
 
   const { data: schoolYears = [] } = useFindManySchoolYear({
     orderBy: { startDate: "desc" },
@@ -277,6 +284,16 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
         mainLecturer: { include: { userProfile: { select: { fullname: true } } } },
         classSchedules: { include: { room: true }, take: 1 },
         _count: { select: { subjectClassStudent: true } },
+        exam: {
+          select: {
+            id: true,
+            examRooms: {
+              select: {
+                examList: { select: { id: true } },
+              },
+            },
+          },
+        },
       },
       take: 1,
     },
@@ -284,6 +301,9 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
   )
 
   const lopMonHoc = subjectClass?.[0]
+  const coTheXuatDanhSachThi =
+    !!lopMonHoc?.exam?.id &&
+    (lopMonHoc.exam.examRooms?.some((room) => (room.examList?.length ?? 0) > 0) ?? false)
   const quaHanNhapDiemQuaTrinh = useMemo(() => {
     if (!lopMonHoc?.scoreDeadline) return false
     return dayjs().isAfter(dayjs(lopMonHoc.scoreDeadline))
@@ -618,74 +638,90 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
         </div>
       </div>
 
-      <div className="rounded-lg border border-gray-100 bg-white p-3">
-        <div className="overflow-hidden rounded-lg border border-gray-100">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(300px,auto)_minmax(0,1fr)]">
-            <div className="border-b border-gray-100 bg-gray-50/70 px-3 py-2 lg:border-b-0 lg:border-r">
-              <div className="space-y-0.5">
-                <TheThongTinLopHang
-                  icon={<Hash size={14} />}
-                  label="Mã lớp:"
-                  value={lopMonHoc?.code ?? "—"}
-                />
-                <TheThongTinLopHang
-                  icon={<GraduationCap size={14} />}
-                  label="Tín chỉ:"
-                  value={String(lopMonHoc?.subject?.credit ?? "—")}
-                />
-                <TheThongTinLopHang
-                  icon={<CalendarClock size={14} />}
-                  label="Hạn nhập điểm:"
-                  value={
-                    lopMonHoc?.scoreDeadline
-                      ? dayjs(lopMonHoc.scoreDeadline).format("DD/MM/YYYY")
-                      : "—"
-                  }
-                />
+      <div className="shrink-0 rounded-lg border border-gray-100 bg-white p-3">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+            Thông tin lớp & thống kê
+          </span>
+          <Button
+            type="text"
+            size="small"
+            className="text-cgv-green-dark"
+            icon={hienThongKe ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            onClick={() => setHienThongKe((prev) => !prev)}
+          >
+            {hienThongKe ? "Thu gọn" : "Hiện thông tin"}
+          </Button>
+        </div>
+        {hienThongKe ? (
+          <div className="mt-2 overflow-hidden rounded-lg border border-gray-100">
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(300px,auto)_minmax(0,1fr)]">
+              <div className="border-b border-gray-100 bg-gray-50/70 px-3 py-2 lg:border-b-0 lg:border-r">
+                <div className="space-y-0.5">
+                  <TheThongTinLopHang
+                    icon={<Hash size={14} />}
+                    label="Mã lớp:"
+                    value={lopMonHoc?.code ?? "—"}
+                  />
+                  <TheThongTinLopHang
+                    icon={<GraduationCap size={14} />}
+                    label="Tín chỉ:"
+                    value={String(lopMonHoc?.subject?.credit ?? "—")}
+                  />
+                  <TheThongTinLopHang
+                    icon={<CalendarClock size={14} />}
+                    label="Hạn nhập điểm:"
+                    value={
+                      lopMonHoc?.scoreDeadline
+                        ? dayjs(lopMonHoc.scoreDeadline).format("DD/MM/YYYY")
+                        : "—"
+                    }
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="bg-white p-1.5">
-              <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 xl:grid-cols-5">
-                <TheThongKeNgang
-                  icon={<ClipboardCheck size={18} />}
-                  tieuDe="Đã nhập"
-                  giaTri={String(thongKe.daNhap)}
-                  tyLe={`${thongKe.tong ? Math.round((thongKe.daNhap / thongKe.tong) * 100) : 0}%`}
-                  tone="green"
-                />
-                <TheThongKeNgang
-                  icon={<CircleSlash2 size={18} />}
-                  tieuDe="Chưa nhập"
-                  giaTri={String(thongKe.chuaNhap)}
-                  tyLe={`${thongKe.tong ? Math.round((thongKe.chuaNhap / thongKe.tong) * 100) : 0}%`}
-                  tone="yellow"
-                />
-                <TheThongKeNgang
-                  icon={<GraduationCap size={18} />}
-                  tieuDe="Điểm TB quá trình"
-                  giaTri={thongKe.diemTb != null ? thongKe.diemTb.toFixed(1) : "—"}
-                  tyLe="/10"
-                  tone="blue"
-                />
-                <TheThongKeNgang
-                  icon={<CheckCircle2 size={18} />}
-                  tieuDe="Đủ điều kiện thi"
-                  giaTri={String(thongKe.duDieuKienThi)}
-                  tyLe={`${thongKe.tong ? Math.round((thongKe.duDieuKienThi / thongKe.tong) * 100) : 0}%`}
-                  tone="teal"
-                />
-                <TheThongKeNgang
-                  icon={<Ban size={18} />}
-                  tieuDe="Cấm thi"
-                  giaTri={String(thongKe.camThi)}
-                  tyLe={`${thongKe.tong ? Math.round((thongKe.camThi / thongKe.tong) * 100) : 0}%`}
-                  tone="red"
-                />
+              <div className="bg-white p-1.5">
+                <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 xl:grid-cols-5">
+                  <TheThongKeNgang
+                    icon={<ClipboardCheck size={18} />}
+                    tieuDe="Đã nhập"
+                    giaTri={String(thongKe.daNhap)}
+                    tyLe={`${thongKe.tong ? Math.round((thongKe.daNhap / thongKe.tong) * 100) : 0}%`}
+                    tone="green"
+                  />
+                  <TheThongKeNgang
+                    icon={<CircleSlash2 size={18} />}
+                    tieuDe="Chưa nhập"
+                    giaTri={String(thongKe.chuaNhap)}
+                    tyLe={`${thongKe.tong ? Math.round((thongKe.chuaNhap / thongKe.tong) * 100) : 0}%`}
+                    tone="yellow"
+                  />
+                  <TheThongKeNgang
+                    icon={<GraduationCap size={18} />}
+                    tieuDe="Điểm TB quá trình"
+                    giaTri={thongKe.diemTb != null ? thongKe.diemTb.toFixed(1) : "—"}
+                    tyLe="/10"
+                    tone="blue"
+                  />
+                  <TheThongKeNgang
+                    icon={<CheckCircle2 size={18} />}
+                    tieuDe="Đủ điều kiện thi"
+                    giaTri={String(thongKe.duDieuKienThi)}
+                    tyLe={`${thongKe.tong ? Math.round((thongKe.duDieuKienThi / thongKe.tong) * 100) : 0}%`}
+                    tone="teal"
+                  />
+                  <TheThongKeNgang
+                    icon={<Ban size={18} />}
+                    tieuDe="Cấm thi"
+                    giaTri={String(thongKe.camThi)}
+                    tyLe={`${thongKe.tong ? Math.round((thongKe.camThi / thongKe.tong) * 100) : 0}%`}
+                    tone="red"
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        ) : null}
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-gray-100 bg-white p-3">
@@ -711,6 +747,11 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
               type="TX/ĐK"
               disabled={quaHanNhapDiemQuaTrinh}
             />
+            <XuatDanhSachThiButton
+              examId={lopMonHoc?.exam?.id}
+              examName={[lopMonHoc?.subject?.name, lopMonHoc?.code].filter(Boolean).join(" - ")}
+              disabled={!coTheXuatDanhSachThi}
+            />
           </div>
         </div>
         <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden">
@@ -718,6 +759,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
             rowKey="id"
             pagination={false}
             size="small"
+            className={CLASS_BANG_COMPACT}
             dataSource={rows}
             scroll={{ x: "max-content", y: chieuCaoBody }}
             rowClassName={(row) =>
@@ -737,6 +779,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                 align: "center",
                 render: (value, row) => (
                   <InputNumber
+                    size="small"
                     value={value ?? undefined}
                     min={0}
                     max={10}
@@ -754,6 +797,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                 align: "center",
                 render: (value, row) => (
                   <InputNumber
+                    size="small"
                     value={value ?? undefined}
                     min={0}
                     max={10}
@@ -769,7 +813,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                 dataIndex: "examScore",
                 width: 120,
                 align: "center",
-                render: (value) => <Input value={value ?? ""} disabled />,
+                render: (value) => <Input size="small" value={value ?? ""} disabled />,
               },
               {
                 title: "Điểm HP",
@@ -804,6 +848,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                 width: 200,
                 render: (value, row) => (
                   <AutoComplete
+                    size="small"
                     value={value || undefined}
                     onChange={(v: string) => capNhatDong(row.id, { examBannedReason: v })}
                     placeholder="Nhập lý do cấm thi"
@@ -811,7 +856,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                     disabled={!row.examBanned || quaHanNhapDiemQuaTrinh}
                     className="w-full"
                   >
-                    <Input.TextArea autoSize />
+                    <Input size="small" />
                   </AutoComplete>
                 ),
               },
@@ -831,21 +876,24 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                 title: "Ghi chú",
                 dataIndex: "description",
                 render: (value, row) => (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     <Input
+                      size="small"
                       value={value}
                       onChange={(e) => capNhatDong(row.id, { description: e.target.value })}
                       disabled={quaHanNhapDiemQuaTrinh}
                     />
                     <Button
                       type="text"
-                      icon={<History size={14} />}
+                      size="small"
+                      icon={<History size={12} />}
                       title="Lịch sử chỉnh sửa"
                       onClick={() => setHistoryTarget({ id: row.id, hoTen: row.hoTen })}
                     />
                     <Button
                       type="text"
-                      icon={<RotateCcw size={14} />}
+                      size="small"
+                      icon={<RotateCcw size={12} />}
                       title="Đặt lại dòng điểm"
                       disabled={quaHanNhapDiemQuaTrinh}
                       onClick={() =>

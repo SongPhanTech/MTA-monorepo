@@ -1,4 +1,5 @@
 import type { LopGiangDayRow } from "@components/cong-giang-vien/lop-giang-day/types"
+import { xuatDanhSachThiTheoKyThi } from "@components/commons/print/xuat-danh-sach-thi"
 import {
   chiTietMonHocGiangDayPath,
   diemDanhGiangDayPath,
@@ -7,13 +8,13 @@ import {
 } from "@/utils/cong-giang-vien-path-helper"
 import { diemLopMonHocStore } from "@/stores/diem-lop-mon-hoc"
 import { $Enums } from "@workspace/db/client"
-import { Button, Checkbox, Dropdown, Table, Tag, Tooltip } from "antd"
+import { Button, Checkbox, Dropdown, Table, Tag, Tooltip, message } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import type { MenuProps } from "antd"
 import dayjs from "dayjs"
-import { CalendarPlus, Ellipsis, Eye, PenLine } from "lucide-react"
+import { CalendarPlus, Download, Ellipsis, Eye, PenLine } from "lucide-react"
 import { useRouter } from "next/router"
-import { useEffect, useRef, useState, type Key } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const CHIEU_CAO_HEADER_BANG = 56
 
@@ -59,6 +60,19 @@ const BangLopGiangDay = ({ danhSach, loading, trang, soTrang }: BangLopGiangDayP
 
   const moDiemDanh = (id: string) => {
     router.push(diemDanhGiangDayPath(id))
+  }
+
+  const xuatDanhSachThi = async (record: LopGiangDayRow) => {
+    if (!record.canXuatDanhSachThi) {
+      message.warning(
+        "Chưa thể xuất danh sách thi. Phòng đào tạo cần lên kỳ thi và lấy điểm sinh viên trước."
+      )
+      return
+    }
+    await xuatDanhSachThiTheoKyThi(
+      record.examId,
+      [record.tenMonHoc, record.maLop].filter(Boolean).join(" - ")
+    )
   }
 
   const columns: ColumnsType<LopGiangDayRow> = [
@@ -214,6 +228,15 @@ const BangLopGiangDay = ({ danhSach, loading, trang, soTrang }: BangLopGiangDayP
             label: "Nhập điểm thi",
             icon: <PenLine size={14} />,
             onClick: () => moNhapDiem(record.id, "thi"),
+          },
+          {
+            key: "xuat-ds-thi",
+            label: record.canXuatDanhSachThi
+              ? "Xuất danh sách thi"
+              : "Xuất danh sách thi (chưa lấy điểm SV)",
+            icon: <Download size={14} />,
+            disabled: !record.canXuatDanhSachThi,
+            onClick: () => xuatDanhSachThi(record),
           },
         ]
 

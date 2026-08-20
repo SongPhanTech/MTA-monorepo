@@ -124,6 +124,18 @@ const useLopGiangDayGiangVien = () => {
         },
       },
     },
+    exam: {
+      select: {
+        id: true,
+        examRooms: {
+          select: {
+            examList: {
+              select: { id: true },
+            },
+          },
+        },
+      },
+    },
   } as const
 
   const { data = [], isLoading } = useFindManySubjectClass(
@@ -166,6 +178,10 @@ const useLopGiangDayGiangVien = () => {
           giangVien1: formatLecturerName(item.mainLecturer),
           giangVien2: formatLecturerName(item.extraLecturer),
           donViPhuTrach: item.subject?.managementOrganization?.sMa ?? "",
+          examId: item.exam?.id ?? null,
+          canXuatDanhSachThi:
+            !!item.exam?.id &&
+            (item.exam.examRooms?.some((room) => (room.examList?.length ?? 0) > 0) ?? false),
         }
       }),
     [data, getExamTypeLabel]

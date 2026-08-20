@@ -1,5 +1,6 @@
 import ImportScoreModal, { type ImportScoreData } from "@components/commons/print/nhap-diem-tu-file"
 import ExportScoreTemplate from "@components/commons/print/xuat-mau-nhap-diem"
+import { XuatDanhSachThiButton } from "@components/commons/print/xuat-danh-sach-thi"
 import { examPostponeReason, examSuspendedReason } from "@constants/constants"
 import { scoreConvert } from "@hooks/scoreConverter"
 import { ROUTER_PATH } from "@workspace/router"
@@ -253,6 +254,16 @@ const NhapDiemThiGiangDayPage = () => {
         mainLecturer: { include: { userProfile: { select: { fullname: true } } } },
         classSchedules: { include: { room: true }, take: 1 },
         _count: { select: { subjectClassStudent: true } },
+        exam: {
+          select: {
+            id: true,
+            examRooms: {
+              select: {
+                examList: { select: { id: true } },
+              },
+            },
+          },
+        },
       },
       take: 1,
     },
@@ -260,6 +271,9 @@ const NhapDiemThiGiangDayPage = () => {
   )
 
   const lopMonHoc = subjectClass?.[0]
+  const coTheXuatDanhSachThi =
+    !!lopMonHoc?.exam?.id &&
+    (lopMonHoc.exam.examRooms?.some((room) => (room.examList?.length ?? 0) > 0) ?? false)
   const quaHanNhapDiemThi = useMemo(() => {
     if (!lopMonHoc?.examScoreDeadline) return false
     return dayjs().isAfter(dayjs(lopMonHoc.examScoreDeadline))
@@ -682,6 +696,11 @@ const NhapDiemThiGiangDayPage = () => {
               dataTable={scoreRows}
               type="THI"
               disabled={quaHanNhapDiemThi}
+            />
+            <XuatDanhSachThiButton
+              examId={lopMonHoc?.exam?.id}
+              examName={[lopMonHoc?.subject?.name, lopMonHoc?.code].filter(Boolean).join(" - ")}
+              disabled={!coTheXuatDanhSachThi}
             />
           </div>
         </div>

@@ -34,6 +34,8 @@ export interface LopGiangDayRow {
   giangVien1: string
   giangVien2: string
   donViPhuTrach: string
+  examId?: string | null
+  canXuatDanhSachThi: boolean
 }
 
 export const layTrangThaiNhapDiem = (record: {
