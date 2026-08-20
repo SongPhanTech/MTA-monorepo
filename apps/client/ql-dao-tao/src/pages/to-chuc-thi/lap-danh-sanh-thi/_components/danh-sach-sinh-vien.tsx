@@ -220,6 +220,15 @@ export default function DanhSachSinhVien() {
     er.examList?.some((el) => el.createdExamCode)
   )
 
+  const allLockScore = examData?.subjectClass?.every((sc) => sc.isLockScore) ?? false
+  const someLockScore = examData?.subjectClass?.some((sc) => sc.isLockScore) ?? false
+  const isLockedExamSessions = examData?.lockExamSessions ?? false
+
+  // Quy trình: 0.Lấy điểm → 1.Lưu hoãn thi → 2.Khóa ĐQT → 3.Phân phòng → 4.Khóa DS thi
+  const isExamListLocked = isLockedExamSessions || !!isCreatedExamCode
+  const canLockExamList =
+    isAssignedExamRoom && allLockScore && !isCreatedExamCode && !isLockedExamSessions
+
   const { mutateAsync: updateExamData } = useUpdateExam()
   const { showSpinner, hideSpinner } = useSpinner()
 
@@ -642,6 +651,7 @@ export default function DanhSachSinhVien() {
       queryClient.invalidateQueries({
         queryKey: ["zenstack", "Exam"],
       })
+      await refetchExamData()
       if (overflowStudentSubjectScores.length > 0) {
         message.warning(
           `Phân phòng thi thành công. Có ${overflowStudentSubjectScores.length} sinh viên chưa được phân phòng do không đủ ghế thi.`
@@ -747,7 +757,7 @@ export default function DanhSachSinhVien() {
             <Flex justify="end" align="center" gap={12}>
               <Button
                 type="primary"
-                disabled={examData?.lockExamSessions || isCreatedExamCode}
+                disabled={isExamListLocked}
                 onClick={() => handleLayDiemCCTX()}
               >
                 0. Lấy điểm SV
@@ -756,8 +766,8 @@ export default function DanhSachSinhVien() {
                 type="primary"
                 className="bg-orange-500"
                 disabled={
-                  examData?.lockExamSessions ||
-                  isCreatedExamCode ||
+                  isExamListLocked ||
+                  isAssignedExamRoom ||
                   !can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_TO_CHUC_THI_LAP_DANH_SANH_THI, "DUYET")
                 }
                 onClick={handleSaveExamDecision}
@@ -765,10 +775,7 @@ export default function DanhSachSinhVien() {
                 1. Lưu hoãn thi
               </Button>
               <Checkbox
-                indeterminate={
-                  !examData?.subjectClass.every((sc) => sc.isLockScore) &&
-                  examData?.subjectClass.some((sc) => sc.isLockScore)
-                }
+                indeterminate={someLockScore && !allLockScore}
                 onChange={async (e) => {
                   try {
                     await updateExamData({
@@ -789,26 +796,23 @@ export default function DanhSachSinhVien() {
                     if (!e.target.checked) {
                       await handleLayDiemCCTX({ lockAfter: false })
                     }
+                    await refetchExamData()
                   } catch (error) {}
                 }}
-                disabled={examData?.lockExamSessions || isCreatedExamCode}
-                checked={examData?.subjectClass.some((sc) => sc.isLockScore)}
+                disabled={isExamListLocked || isAssignedExamRoom}
+                checked={allLockScore}
               >
                 2. Khoá nhập ĐQT
               </Checkbox>
               <Button
                 type="primary"
-                disabled={
-                  examData?.lockExamSessions ||
-                  isCreatedExamCode ||
-                  !examData?.subjectClass.every((sc) => sc.isLockScore)
-                }
+                disabled={isExamListLocked || !allLockScore}
                 onClick={handlePhanPhongThi}
               >
                 3. Phân phòng thi
               </Button>
               <Checkbox
-                disabled={examData?.subjectClass.some((sc) => !sc.isLockScore) || isCreatedExamCode}
+                disabled={!!isCreatedExamCode || (!isLockedExamSessions && !canLockExamList)}
                 onChange={async (e) => {
                   try {
                     await updateExamData({
@@ -829,9 +833,10 @@ export default function DanhSachSinhVien() {
                           : {},
                       },
                     })
+                    await refetchExamData()
                   } catch (error) {}
                 }}
-                checked={examData?.lockExamSessions}
+                checked={isLockedExamSessions}
               >
                 4. Khoá DS thi
               </Checkbox>
