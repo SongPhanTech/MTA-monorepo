@@ -22,6 +22,7 @@ import {
   buildProgressRows,
   CLUSTER_LECTURER_INCLUDE,
   CLUSTER_LECTURER_SURVEY_INCLUDE,
+  getLecturerSurveyStats,
   isLecturerNode,
   isOrgNode,
   lecturerTitle,
@@ -190,14 +191,16 @@ export default function BaoCaoGiangVien() {
       const parentOrg = isDepartment
         ? organizations.find((item) => item.Id === org?.sParentId)
         : null
+      const stats = getLecturerSurveyStats(lecturer)
 
       return (
         <SurveylecturerReport
           selectedId={clusterId}
           lectureId={lecturer.id}
           surveyName={surveyName}
-          progressData={progressData}
           trainingObjectTypeName={trainingObjectTypeName}
+          completed={stats.completed}
+          total={stats.total}
           semesterName={semesterName}
           trainingSystemName={trainingSystemName}
           organizationName={(isDepartment ? parentOrg?.sTen : org?.sTen) ?? undefined}

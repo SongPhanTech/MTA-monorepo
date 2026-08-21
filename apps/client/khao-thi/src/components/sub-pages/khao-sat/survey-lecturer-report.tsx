@@ -18,7 +18,6 @@ import { exportSurveyDocxTemplate } from "@/utils/export-survey-docx-template"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-import { SurveyProgressTable } from "./survey-progress-table"
 
 const { Title } = Typography
 
@@ -39,7 +38,6 @@ function SurveylecturerReport({
   selectedId,
   lectureId,
   surveyName,
-  progressData = [],
   trainingObjectTypeName,
   semesterName,
   trainingSystemName,
@@ -49,19 +47,12 @@ function SurveylecturerReport({
   lecturerCode,
   departmentName,
   departmentCode,
+  completed,
+  total,
 }: {
   selectedId: string
   lectureId: string
   surveyName: string
-  progressData?: Array<{
-    key: string
-    parentKey?: string
-    type: "faculty" | "department" | "lecturer" | "total"
-    name: string
-    completed: number
-    total: number
-    indent?: number
-  }>
   trainingObjectTypeName?: string
   semesterName?: string
   trainingSystemName?: string
@@ -71,6 +62,8 @@ function SurveylecturerReport({
   lecturerCode?: string
   departmentName?: string
   departmentCode?: string
+  completed?: number
+  total?: number
 }) {
   const router = useRouter()
   const { showSpinner, hideSpinner } = useSpinner()
@@ -450,7 +443,12 @@ function SurveylecturerReport({
         <Col span={24}>
           <div className="bg-white h-full flex flex-col">
             <div className="p-4 flex justify-between">
-              <Title level={4}>Thống kê theo từng Câu hỏi</Title>
+              <div>
+                <Title level={4}>Thống kê theo từng Câu hỏi</Title>
+                <div className="text-gray-500 font-medium">
+                  Số lượt tham gia khảo sát: <span className="text-primary">{completed || 0}</span> / {total || 0}
+                </div>
+              </div>
               {dataLevel?.status === 200 && (
                 <Dropdown
                   trigger={["click"]}
@@ -525,7 +523,6 @@ function SurveylecturerReport({
             <div className="flex-1 mb-6">
               {dataLevel?.status === 200 && dataLevel?.data?.data?.questions?.length > 0 ? (
                 <div style={{ width: "100%", height: "100%" }}>
-                  <SurveyProgressTable data={progressData} />
                   <ReactECharts
                     option={dataBarchart}
                     style={{
