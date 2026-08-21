@@ -788,7 +788,7 @@ export default function NhapDiem({
           const exportUrl = getExportSubjectClassScoreUrl({ id: selectedSubjectClassId })
 
           openXemTaiLieu({
-            uri: getUrl(baseUrl, exportUrl),
+            uri: getUrl(baseUrl, exportUrl) + (exportUrl.includes('?') ? '&' : '?') + `role=${role || ""}`,
             name: "Phiếu điểm",
             mimeType: "xlsx",
             // convertTo: "pdf",
@@ -1001,7 +1001,7 @@ export default function NhapDiem({
                         `${getExportSubjectClassScoreUrl({
                           id: selectedSubjectClassId ?? "",
                           type: "NHAP",
-                        })}`
+                        })}&role=${role || ""}`
                       ),
                       name: "Phiếu điểm nháp",
                       mimeType: "xlsx",

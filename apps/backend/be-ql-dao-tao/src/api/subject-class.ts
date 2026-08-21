@@ -5,6 +5,7 @@ import { getMinioUrl, getScoreStatistics } from "@workspace/libs/utils"
 import dayjs from "dayjs"
 import { read, utils } from "xlsx"
 import XlsxTemplate from "xlsx-template"
+import ExcelJS from "exceljs"
 import { prisma } from ".."
 import {
   thongBaoHanNhapDiemQuaTrinhServer,
@@ -278,6 +279,7 @@ const exportSubjectClassScore = createRoute({
       id: z.string().optional().openapi("id", { description: "ID của lớp môn học" }),
       examId: z.string().optional().openapi("examId", { description: "ID của kỳ thi" }),
       type: z.string().default(""),
+      role: z.string().optional(),
     }),
   },
   responses: {
@@ -1035,7 +1037,7 @@ app.openapi(exportSubjectClassListExcel, async (c) => {
 })
 
 app.openapi(exportSubjectClassScore, async (c) => {
-  const { id, type, examId } = c.req.valid("query")
+  const { id, type, examId, role } = c.req.valid("query")
 
   let subjectClass = await prisma.subjectClass.findUnique({
     where: { id: id ?? "" },
@@ -1251,6 +1253,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
     d: dayjs().date(),
     m: dayjs().month() + 1,
     y: dayjs().year(),
+    CHUC_DANH_KY: role === "P13" ? "BAN KHẢO THÍ & ĐBCL GD-ĐT" : "CHỦ NHIỆM BỘ MÔN",
     NGUOI_IN: c.get("user")?.fullName || "",
     THOI_GIAN_IN: dayjs().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss DD/MM/YYYY"),
     data: subjectClass.subjectClassStudent.map((scs, index) => {
@@ -1297,11 +1300,27 @@ app.openapi(exportSubjectClassScore, async (c) => {
   }
 
   template.substitute(1, data)
-  const result = await template.generate({ type: "arraybuffer" })
+  const templateResult = await template.generate({ type: "nodebuffer" })
+  
+  const workbook = new ExcelJS.Workbook()
+  await workbook.xlsx.load(templateResult as any)
+  const worksheet = workbook.getWorksheet(1)
+  
+  if (worksheet) {
+    const nguoiIn = c.get("user")?.fullName || ""
+    const thoiGianIn = dayjs().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss DD/MM/YYYY")
+    worksheet.headerFooter = {
+      ...worksheet.headerFooter,
+      oddFooter: `&LNgười in: ${nguoiIn}&C&P/&N&R${thoiGianIn}`,
+      evenFooter: `&LNgười in: ${nguoiIn}&C&P/&N&R${thoiGianIn}`,
+    }
+  }
+  
+  const result = await workbook.xlsx.writeBuffer()
   const fileName = `Phieu_diem_${subjectClass.name}.xlsx`
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-  return c.body(result, 200, {
+  return c.body(result as any, 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })
