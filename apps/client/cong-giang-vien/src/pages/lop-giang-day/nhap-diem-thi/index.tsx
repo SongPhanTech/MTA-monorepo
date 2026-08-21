@@ -1,20 +1,24 @@
+import { queryClient } from "@api/index"
 import ImportScoreModal, { type ImportScoreData } from "@components/commons/print/nhap-diem-tu-file"
 import ExportScoreTemplate from "@components/commons/print/xuat-mau-nhap-diem"
 import { XuatDanhSachThiButton } from "@components/commons/print/xuat-danh-sach-thi"
 import { examPostponeReason, examSuspendedReason } from "@constants/constants"
 import { scoreConvert } from "@hooks/scoreConverter"
 import { ROUTER_PATH } from "@workspace/router"
-import { calcFinalScore } from "@workspace/libs/utils"
+import { calcFinalScore, getRuntimeEnv } from "@workspace/libs/utils"
 import { useSession } from "@workspace/auth/react"
 import {
   useFindManySchoolYear,
   useFindManyStudentSubjectScore,
   useFindManyStudentSubjectScoreHistory,
   useFindManySubjectClass,
+  useUpdateSubjectClass,
 } from "@workspace/db/hooks"
 import { $Enums } from "@workspace/db/client"
+import { getUrl } from "@workspace/libs/api/custom-instance"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import type { SqlTransactionBodyItem } from "@workspace/libs/api/schemas/sqlTransactionBodyItem"
+import { getExportSubjectClassScoreUrl } from "@workspace/libs/api/training"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import {
   AutoComplete,
@@ -43,6 +47,7 @@ import {
   GraduationCap,
   Hash,
   History,
+  Printer,
   RefreshCcw,
   RotateCcw,
   Save,
@@ -50,6 +55,7 @@ import {
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useRef, useState } from "react"
 import type { ReactNode } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 
 type RowData = {
   id: string
@@ -168,8 +174,20 @@ const NhapDiemThiGiangDayPage = () => {
   const [historyTarget, setHistoryTarget] = useState<{ id: string; hoTen: string } | null>(null)
   const [importModalVisible, setImportModalVisible] = useState(false)
   const [dongFocusIds, setDongFocusIds] = useState<string[]>([])
+  const [manualEnableLockPrint, setManualEnableLockPrint] = useState(false)
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(320)
+
+  const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
+  const { onOpen: openXemTaiLieu } = useDisclosure<{
+    uri: string
+    name?: string
+    mimeType?: string
+    mode?: "view" | "edit"
+    convertTo?: string
+  }>({
+    tag: "XemTaiLieu",
+  })
 
   useEffect(() => {
     const el = vungBangRef.current
@@ -245,7 +263,7 @@ const NhapDiemThiGiangDayPage = () => {
     setLopId(lopOptions[0]?.value)
   }, [lopId, lopOptions])
 
-  const { data: subjectClass } = useFindManySubjectClass(
+  const { data: subjectClass, refetch: refetchSubjectClass } = useFindManySubjectClass(
     {
       where: { id: lopId },
       include: {
@@ -257,9 +275,15 @@ const NhapDiemThiGiangDayPage = () => {
         exam: {
           select: {
             id: true,
+            lockExamSessions: true,
             examRooms: {
               select: {
-                examList: { select: { id: true } },
+                examList: {
+                  select: {
+                    id: true,
+                    createdExamCode: true,
+                  },
+                },
               },
             },
           },
@@ -271,13 +295,37 @@ const NhapDiemThiGiangDayPage = () => {
   )
 
   const lopMonHoc = subjectClass?.[0]
+
   const coTheXuatDanhSachThi =
     !!lopMonHoc?.exam?.id &&
     (lopMonHoc.exam.examRooms?.some((room) => (room.examList?.length ?? 0) > 0) ?? false)
-  const quaHanNhapDiemThi = useMemo(() => {
-    if (!lopMonHoc?.examScoreDeadline) return false
-    return dayjs().isAfter(dayjs(lopMonHoc.examScoreDeadline))
-  }, [lopMonHoc?.examScoreDeadline])
+
+  // Kỳ thi đánh phách: đã khóa DS thi (vào luồng đánh phách) hoặc đã sinh phách
+  const laKyThiDanhPhach = useMemo(() => {
+    if (!lopMonHoc?.exam) return false
+    if (lopMonHoc.exam.lockExamSessions) return true
+    return (
+      lopMonHoc.exam.examRooms?.some((room) =>
+        room.examList?.some((el) => el.createdExamCode)
+      ) ?? false
+    )
+  }, [lopMonHoc])
+
+  // Chỉ enable nhập khi KHÔNG phải kỳ thi đánh phách và chưa khóa điểm
+  const disabledForm = useMemo(() => {
+    if (!lopMonHoc) return true
+    const daKhoaDiem = !!lopMonHoc.isLockExamScore || !!lopMonHoc.scoreSubmitted
+    const quaHan =
+      !!lopMonHoc.examScoreDeadline && dayjs().isAfter(dayjs(lopMonHoc.examScoreDeadline))
+    return laKyThiDanhPhach || daKhoaDiem || quaHan
+  }, [lopMonHoc, laKyThiDanhPhach])
+
+  const khoaNhapDiem = disabledForm && !manualEnableLockPrint
+
+  const isLockAndPrintDisabled =
+    !lopId ||
+    (!manualEnableLockPrint &&
+      (!lopMonHoc?.enteredExamScore || !!lopMonHoc?.isLockExamScore || !!lopMonHoc?.scoreSubmitted))
 
   const { data: scoreRows = [], refetch } = useFindManyStudentSubjectScore(
     {
@@ -437,82 +485,176 @@ const NhapDiemThiGiangDayPage = () => {
   }
 
   const luu = async () => {
-    if (quaHanNhapDiemThi) {
-      message.warning("Đã quá hạn nhập điểm thi")
-      return
-    }
-    const changed = rows.filter((r) => r.isChanged)
-    if (changed.length === 0) {
-      message.info("Không có thay đổi để lưu")
+    if (khoaNhapDiem) {
+      message.warning("Không thể lưu: lớp đã khóa nhập điểm hoặc chưa đủ điều kiện")
       return
     }
 
-    // Hoãn thi / đình chỉ bắt buộc phải có lý do, giống ràng buộc bên quản lý đào tạo
-    if (changed.some((r) => r.examPostponed && !r.examPostponedReason)) {
-      message.error("Vui lòng nhập lý do hoãn thi")
-      return
-    }
-    if (changed.some((r) => r.suspended && !r.suspendedReason)) {
-      message.error("Vui lòng nhập lý do đình chỉ")
-      return
-    }
+    Modal.confirm({
+      title: "Xác nhận",
+      content: "Bạn có chắc chắn muốn lưu điểm không?",
+      okText: "Xác nhận",
+      cancelText: "Hủy",
+      onOk: async () => {
+        const changed = rows.filter((r) => r.isChanged)
+        if (changed.length === 0) {
+          message.info("Không có thay đổi để lưu")
+          return
+        }
 
-    const tx: SqlTransactionBodyItem[] = [
-      {
-        model: "SubjectClass",
-        operation: "update",
-        data: {
-          where: { id: lopId },
-          data: { enteredExamScore: true },
-        },
+        if (changed.some((r) => r.examPostponed && !r.examPostponedReason)) {
+          message.error("Vui lòng nhập lý do hoãn thi")
+          return
+        }
+        if (changed.some((r) => r.suspended && !r.suspendedReason)) {
+          message.error("Vui lòng nhập lý do đình chỉ")
+          return
+        }
+
+        const allHaveExamScore = rows.every(
+          (r) => r.examBanned || r.examPostponed || r.suspended || r.examScore != null
+        )
+
+        const tx: SqlTransactionBodyItem[] = [
+          {
+            model: "SubjectClass",
+            operation: "update",
+            data: {
+              where: { id: lopId },
+              data: { enteredExamScore: allHaveExamScore },
+            },
+          },
+          ...changed.map((r) => ({
+            model: "StudentSubjectScore" as const,
+            operation: "update" as const,
+            data: {
+              where: { id: r.id },
+              data: {
+                examScore: r.examScore,
+                finalScore: r.finalScore,
+                description: r.description || null,
+                examPostponed: r.examPostponed,
+                examPostponedReason: r.examPostponedReason || null,
+                suspended: r.suspended,
+                suspendedReason: r.suspendedReason || null,
+              },
+            },
+          })),
+          {
+            model: "StudentSubjectScoreHistory" as const,
+            operation: "createMany" as const,
+            data: {
+              data: changed.map((r) => ({
+                studentSubjectScoreId: r.id,
+                attendanceScore: r.attendanceScore,
+                midtermScore: r.midtermScore,
+                examScore: r.examScore,
+                finalScore: r.finalScore,
+                description: r.description || null,
+                examBanned: r.examBanned,
+                examBannedReason: r.examBannedReason || null,
+                examPostponed: r.examPostponed,
+                examPostponedReason: r.examPostponedReason || null,
+                suspended: r.suspended,
+                suspendedReason: r.suspendedReason || null,
+                updatedById: profileId,
+              })),
+            },
+          },
+        ]
+
+        try {
+          await sqlTransaction(tx)
+          message.success("Lưu điểm thi thành công")
+          await refetch()
+          await refetchSubjectClass()
+          queryClient.invalidateQueries({ queryKey: ["zenstack", "SubjectClass"] })
+        } catch {
+          message.error("Lưu điểm thất bại")
+        }
       },
-      ...changed.map((r) => ({
-        model: "StudentSubjectScore" as const,
-        operation: "update" as const,
+    })
+  }
+
+  const lockExam = async (subjectClassId?: string) => {
+    if (!subjectClassId) {
+      message.warning("Không tìm thấy ID lớp học")
+      return false
+    }
+    try {
+      await updateSubjectClass({
+        where: { id: subjectClassId },
         data: {
-          where: { id: r.id },
-          data: {
-            examScore: r.examScore,
-            finalScore: r.finalScore,
-            description: r.description || null,
-            examPostponed: r.examPostponed,
-            examPostponedReason: r.examPostponedReason || null,
-            suspended: r.suspended,
-            suspendedReason: r.suspendedReason || null,
+          isLockScore: true,
+          isLockExamScore: true,
+          subjectClassHistory: {
+            create: {
+              isLockExamScore: true,
+              isLockScore: true,
+              updatedById: profileId,
+            },
           },
         },
-      })),
-      {
-        model: "StudentSubjectScoreHistory" as const,
-        operation: "createMany" as const,
-        data: {
-          data: changed.map((r) => ({
-            studentSubjectScoreId: r.id,
-            attendanceScore: r.attendanceScore,
-            midtermScore: r.midtermScore,
-            examScore: r.examScore,
-            finalScore: r.finalScore,
-            description: r.description || null,
-            examBanned: r.examBanned,
-            examBannedReason: r.examBannedReason || null,
-            examPostponed: r.examPostponed,
-            examPostponedReason: r.examPostponedReason || null,
-            suspended: r.suspended,
-            suspendedReason: r.suspendedReason || null,
-            updatedById: profileId,
-          })),
-        },
-      },
-    ]
-
-    try {
-      await sqlTransaction(tx)
-      message.success("Lưu điểm thi thành công")
-      await refetch()
-    } catch {
-      message.error("Lưu điểm thất bại")
+      })
+      message.success("Khoá điểm thành công")
+      return true
+    } catch (error) {
+      console.error(error)
+      message.error("Có lỗi xảy ra khi khoá điểm")
+      return false
     }
   }
+
+  const handleKhoaVaInPhieuDiem = () => {
+    if (!lopId) {
+      message.warning("Vui lòng chọn lớp học trước khi in")
+      return
+    }
+    Modal.confirm({
+      title: "Xác nhận",
+      content: "Bạn có chắc chắn muốn in phiếu điểm và khoá nhập điểm lại không?",
+      okText: "Xác nhận",
+      cancelText: "Hủy",
+      onOk: async () => {
+        const isSuccess = await lockExam(lopId)
+        if (!isSuccess) return
+        setManualEnableLockPrint(false)
+        try {
+          await refetchSubjectClass()
+          queryClient.invalidateQueries({ queryKey: ["zenstack", "SubjectClass"] })
+        } catch (e) {
+          console.error(e)
+        }
+        const baseUrl =
+          getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "https://api.daotao.mta.swantech.vn"
+        const exportUrl = getExportSubjectClassScoreUrl({ id: lopId })
+        openXemTaiLieu({
+          uri: `${getUrl(baseUrl, exportUrl)}${exportUrl.includes("?") ? "&" : "?"}role=GV`,
+          name: "Phiếu điểm",
+          mimeType: "xlsx",
+        })
+      },
+    })
+  }
+
+  const handleInPhieuDiemNhap = () => {
+    if (!lopId) {
+      message.warning("Vui lòng chọn lớp học trước khi in")
+      return
+    }
+    const baseUrl =
+      getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "https://api.daotao.mta.swantech.vn"
+    const exportUrl = getExportSubjectClassScoreUrl({ id: lopId, type: "NHAP" })
+    openXemTaiLieu({
+      uri: `${getUrl(baseUrl, exportUrl)}${exportUrl.includes("?") ? "&" : "?"}role=GV`,
+      name: "Phiếu điểm nháp",
+      mimeType: "xlsx",
+    })
+  }
+
+  useEffect(() => {
+    setManualEnableLockPrint(false)
+  }, [lopId])
 
   return (
     <div className="flex h-[calc(100vh-112px)] flex-col gap-3">
@@ -679,14 +821,11 @@ const NhapDiemThiGiangDayPage = () => {
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-gray-100 bg-white p-3">
         <div className="mb-2 flex shrink-0 flex-wrap items-center justify-between gap-x-3 gap-y-2">
           <span className="text-sm font-semibold text-cgv-green-dark">BẢNG NHẬP ĐIỂM THI</span>
-          <div className="flex items-center gap-2">
-            <Button icon={<Save size={14} />} onClick={luu} disabled={quaHanNhapDiemThi}>
-              Lưu
-            </Button>
+          <div className="flex flex-wrap items-center gap-2">
             <Button
               icon={<FileUp size={14} />}
               onClick={() => setImportModalVisible(true)}
-              disabled={!lopId || rows.length === 0 || quaHanNhapDiemThi}
+              disabled={!lopId || rows.length === 0 || khoaNhapDiem}
             >
               Nhập điểm từ file
             </Button>
@@ -695,8 +834,37 @@ const NhapDiemThiGiangDayPage = () => {
               subjectClass={lopMonHoc}
               dataTable={scoreRows}
               type="THI"
-              disabled={quaHanNhapDiemThi}
+              disabled={khoaNhapDiem}
             />
+            <Button
+              type={manualEnableLockPrint ? "primary" : "default"}
+              disabled={!lopId}
+              onClick={() => setManualEnableLockPrint((prev) => !prev)}
+            >
+              {manualEnableLockPrint ? "Tắt mở khoá in" : "Bật mở khoá in"}
+            </Button>
+            <Button
+              icon={<Printer size={14} />}
+              disabled={isLockAndPrintDisabled}
+              onClick={handleKhoaVaInPhieuDiem}
+            >
+              Khoá và in phiếu điểm
+            </Button>
+            <Button
+              icon={<Printer size={14} />}
+              disabled={!lopId}
+              onClick={handleInPhieuDiemNhap}
+            >
+              In phiếu điểm nháp
+            </Button>
+            <Button
+              type="primary"
+              icon={<Save size={14} />}
+              onClick={luu}
+              disabled={khoaNhapDiem}
+            >
+              Lưu
+            </Button>
             <XuatDanhSachThiButton
               examId={lopMonHoc?.exam?.id}
               examName={[lopMonHoc?.subject?.name, lopMonHoc?.code].filter(Boolean).join(" - ")}
@@ -752,7 +920,7 @@ const NhapDiemThiGiangDayPage = () => {
                       min={0}
                       max={10}
                       step={0.5}
-                      disabled={quaHanNhapDiemThi}
+                      disabled={khoaNhapDiem}
                       onChange={(v) => capNhatDong(row.id, { examScore: Number(v) })}
                       className="w-full"
                     />
@@ -780,7 +948,7 @@ const NhapDiemThiGiangDayPage = () => {
                 render: (value, row) => (
                   <Checkbox
                     checked={!!value}
-                    disabled={quaHanNhapDiemThi || row.examBanned}
+                    disabled={khoaNhapDiem || row.examBanned}
                     onChange={(e) =>
                       capNhatDong(row.id, {
                         examPostponed: e.target.checked,
@@ -800,7 +968,7 @@ const NhapDiemThiGiangDayPage = () => {
                     onChange={(v: string) => capNhatDong(row.id, { examPostponedReason: v })}
                     placeholder="Nhập lý do hoãn thi"
                     options={examPostponeReason.map((s) => ({ label: s, value: s }))}
-                    disabled={!row.examPostponed || quaHanNhapDiemThi}
+                    disabled={!row.examPostponed || khoaNhapDiem}
                     className="w-full"
                   >
                     <Input.TextArea autoSize />
@@ -815,7 +983,7 @@ const NhapDiemThiGiangDayPage = () => {
                 render: (value, row) => (
                   <Checkbox
                     checked={!!value}
-                    disabled={quaHanNhapDiemThi || row.examBanned}
+                    disabled={khoaNhapDiem || row.examBanned}
                     onChange={(e) =>
                       capNhatDong(row.id, {
                         suspended: e.target.checked,
@@ -835,7 +1003,7 @@ const NhapDiemThiGiangDayPage = () => {
                     onChange={(v: string) => capNhatDong(row.id, { suspendedReason: v })}
                     placeholder="Nhập lý do đình chỉ"
                     options={examSuspendedReason.map((s) => ({ label: s, value: s }))}
-                    disabled={!row.suspended || quaHanNhapDiemThi}
+                    disabled={!row.suspended || khoaNhapDiem}
                     className="w-full"
                   >
                     <Input.TextArea autoSize />
@@ -850,7 +1018,7 @@ const NhapDiemThiGiangDayPage = () => {
                     <Input
                       value={value}
                       onChange={(e) => capNhatDong(row.id, { description: e.target.value })}
-                      disabled={quaHanNhapDiemThi}
+                      disabled={khoaNhapDiem}
                     />
                     <Button
                       type="text"
@@ -862,7 +1030,7 @@ const NhapDiemThiGiangDayPage = () => {
                       type="text"
                       icon={<RotateCcw size={14} />}
                       title="Đặt lại dòng điểm"
-                      disabled={quaHanNhapDiemThi}
+                      disabled={khoaNhapDiem}
                       onClick={() =>
                         capNhatDong(row.id, {
                           examScore: null,

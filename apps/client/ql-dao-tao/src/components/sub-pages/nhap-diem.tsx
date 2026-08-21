@@ -607,6 +607,15 @@ export default function NhapDiem({
         exam: {
           select: {
             lockExamSessions: true,
+            examRooms: {
+              select: {
+                examList: {
+                  select: {
+                    createdExamCode: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -709,13 +718,25 @@ export default function NhapDiem({
         dataDetailSubjectClass?.type !== $Enums.SubjectClassType.REEXAM
       )
     }
+
+    // THI: chỉ enable khi KHÔNG phải kỳ thi đánh phách và chưa khóa điểm
+    const laKyThiDanhPhach =
+      !!dataDetailSubjectClass?.exam?.lockExamSessions ||
+      (dataDetailSubjectClass?.exam?.examRooms?.some((room) =>
+        room.examList?.some((el) => el.createdExamCode)
+      ) ??
+        false)
+    const daKhoaDiem =
+      !!dataDetailSubjectClass?.isLockExamScore || !!dataDetailSubjectClass?.scoreSubmitted
+    const trongHan =
+      !!dataDetailSubjectClass?.examScoreDeadline &&
+      dayjs().isBefore(dataDetailSubjectClass.examScoreDeadline)
+
     return !(
       can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI, "NHAP_DIEM") &&
-      dataDetailSubjectClass?.examScoreDeadline &&
-      dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
-      !dataDetailSubjectClass?.isLockExamScore &&
-      !dataDetailSubjectClass?.scoreSubmitted &&
-      dataDetailSubjectClass?.exam?.lockExamSessions
+      trongHan &&
+      !laKyThiDanhPhach &&
+      !daKhoaDiem
     )
   }, [dataDetailSubjectClass, can, score])
 
