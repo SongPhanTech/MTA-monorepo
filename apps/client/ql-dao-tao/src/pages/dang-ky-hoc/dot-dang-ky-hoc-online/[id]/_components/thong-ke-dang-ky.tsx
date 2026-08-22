@@ -49,10 +49,16 @@ type LogRow = {
   student?: {
     id: string
     code: string | null
+    fixedClass?: {
+      id: string
+      code: string
+      name: string
+    } | null
     userProfile?: {
       fullname?: string | null
       lastName?: string | null
       firstName?: string | null
+      dateOfBirth?: Date | string | null
     } | null
   } | null
   subjectClass?: {
@@ -65,6 +71,7 @@ type LogRow = {
       id: string
       code: string | null
       name: string
+      credit?: number
     } | null
   } | null
 }
@@ -147,7 +154,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
         deletedAt: null,
       },
       include: {
-        student: { include: { userProfile: true } },
+        student: { include: { userProfile: true, fixedClass: true } },
         subjectClass: { include: { subject: true } },
       },
       orderBy: { createdAt: "desc" },
@@ -210,6 +217,9 @@ export default function ThongKeDangKy({ sessionId }: Props) {
         studentId: string
         code: string
         name: string
+        dateOfBirth: Date | string | null
+        fixedClassCode: string
+        totalCredits: number
         classes: { code: string; name: string }[]
         logCount: number
       }
@@ -263,16 +273,21 @@ export default function ThongKeDangKy({ sessionId }: Props) {
           code: sc?.code || "",
           name: sc?.name || "",
         }
+        const credit = sc?.subject?.credit || 0
         if (existingSt) {
           existingSt.logCount += 1
           if (!existingSt.classes.some((c) => c.code === classInfo.code && c.name === classInfo.name)) {
             existingSt.classes.push(classInfo)
+            existingSt.totalCredits += credit
           }
         } else {
           studentRegMap.set(st.id, {
             studentId: st.id,
             code: st.code || "",
             name: studentName(st),
+            dateOfBirth: st.userProfile?.dateOfBirth || null,
+            fixedClassCode: st.fixedClass?.code || "",
+            totalCredits: credit,
             classes: [classInfo],
             logCount: 1,
           })
@@ -407,22 +422,28 @@ export default function ThongKeDangKy({ sessionId }: Props) {
             "STT",
             "Mã SV",
             "Họ và tên",
+            "Ngày sinh",
+            "Lớp quản lý",
             "Số đơn ĐK",
             "Số lớp ĐK",
+            "Tổng số tín chỉ",
             "Danh sách lớp môn học",
           ])
-          styleHeader(ws, 6)
+          styleHeader(ws, 9)
           stats.registeredStudents.forEach((s, idx) => {
             ws.addRow([
               idx + 1,
               s.code,
               s.name,
+              s.dateOfBirth ? new Date(s.dateOfBirth).toLocaleDateString("vi-VN") : "",
+              s.fixedClassCode,
               s.logCount,
               s.classes.length,
+              s.totalCredits,
               s.classes.map((c) => `${c.code} - ${c.name}`).join("; "),
             ])
           })
-          ;[8, 14, 28, 12, 12, 80].forEach((w, i) => {
+          ;[8, 14, 28, 14, 16, 12, 12, 16, 80].forEach((w, i) => {
             ws.getColumn(i + 1).width = w
           })
         }
