@@ -1254,7 +1254,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
     m: dayjs().month() + 1,
     y: dayjs().year(),
     CHUC_DANH_KY: role === "P13" ? "BAN KHẢO THÍ & ĐBCL GD-ĐT" : "CHỦ NHIỆM BỘ MÔN",
-    NGUOI_IN: c.get("user")?.fullName || "",
+    NGUOI_IN: c.get("user")?.userName || "",
     THOI_GIAN_IN: dayjs().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss DD/MM/YYYY"),
     data: subjectClass.subjectClassStudent.map((scs, index) => {
       const statusTexts = []
@@ -1307,12 +1307,12 @@ app.openapi(exportSubjectClassScore, async (c) => {
   const worksheet = workbook.getWorksheet(1)
   
   if (worksheet) {
-    const nguoiIn = c.get("user")?.fullName || ""
-    const thoiGianIn = dayjs().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss DD/MM/YYYY")
+    const NGUOI_IN = c.get("user")?.userName || ""
+    const THOI_GIAN_IN = dayjs().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss DD/MM/YYYY")
     worksheet.headerFooter = {
       ...worksheet.headerFooter,
-      oddFooter: `&LNgười in: ${nguoiIn}&C&P/&N&R${thoiGianIn}`,
-      evenFooter: `&LNgười in: ${nguoiIn}&C&P/&N&R${thoiGianIn}`,
+      oddFooter: `&LNgười in: ${NGUOI_IN}&C&P/&N&R${THOI_GIAN_IN}`,
+      evenFooter: `&LNgười in: ${NGUOI_IN}&C&P/&N&R${THOI_GIAN_IN}`,
     }
   }
   
