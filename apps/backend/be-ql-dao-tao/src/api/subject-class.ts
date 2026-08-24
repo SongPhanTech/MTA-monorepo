@@ -1191,6 +1191,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
   if (!subjectClass) {
     return c.json({ message: "Không tìm thấy lớp học" }, 404)
   }
+
   const res = await fetch(getMinioUrl(`/mta/template/PHIEU-DIEM${type ? `-${type}` : ""}.xlsx`))
   const buffer = await res.arrayBuffer()
   const nodeBuffer = Buffer.from(buffer)
@@ -1221,7 +1222,12 @@ app.openapi(exportSubjectClassScore, async (c) => {
       improvementRegister: matched.improvementRegister,
     }
   }
+
   const statistics = getScoreStatistics(subjectClass.subjectClassStudent || [])
+  const currentUser = c.get("user")
+  const NGUOI_IN = currentUser?.userName || currentUser?.fullName || ""
+  const THOI_GIAN_IN = dayjs().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss DD/MM/YYYY")
+
   const data = {
     HOC_KY: subjectClass.semester?.name || "",
     MA_LMH: subjectClass.code,
@@ -1235,9 +1241,6 @@ app.openapi(exportSubjectClassScore, async (c) => {
     ].join(", "),
     NGAY_THI: subjectClass.examDate ? dayjs(subjectClass.examDate).format("DD/MM/YYYY") : "",
     QUAN_SO: subjectClass.subjectClassStudent.length,
-    // VANG: subjectClass.subjectClassStudent.filter(
-    //     (scs) => scs.attendanceScore === null || scs.attendanceScore === undefined
-    // ).length,
     VANG: "",
     TEN_MON_HOC: subjectClass.subject?.name || "",
     STC: subjectClass.subject?.credit || "",
@@ -1254,8 +1257,8 @@ app.openapi(exportSubjectClassScore, async (c) => {
     m: dayjs().month() + 1,
     y: dayjs().year(),
     CHUC_DANH_KY: role === "P13" ? "BAN KHẢO THÍ & ĐBCL GD-ĐT" : "CHỦ NHIỆM BỘ MÔN",
-    NGUOI_IN: c.get("user")?.userName || "",
-    THOI_GIAN_IN: dayjs().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss DD/MM/YYYY"),
+    NGUOI_IN,
+    THOI_GIAN_IN,
     data: subjectClass.subjectClassStudent.map((scs, index) => {
       const statusTexts = []
       if (scs.examPostponed) statusTexts.push("Hoãn thi")
@@ -1301,21 +1304,19 @@ app.openapi(exportSubjectClassScore, async (c) => {
 
   template.substitute(1, data)
   const templateResult = await template.generate({ type: "nodebuffer" })
-  
+
   const workbook = new ExcelJS.Workbook()
   await workbook.xlsx.load(templateResult as any)
   const worksheet = workbook.getWorksheet(1)
-  
+
   if (worksheet) {
-    const NGUOI_IN = c.get("user")?.userName || ""
-    const THOI_GIAN_IN = dayjs().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss DD/MM/YYYY")
     worksheet.headerFooter = {
       ...worksheet.headerFooter,
       oddFooter: `&LNgười in: ${NGUOI_IN}&C&P/&N&R${THOI_GIAN_IN}`,
       evenFooter: `&LNgười in: ${NGUOI_IN}&C&P/&N&R${THOI_GIAN_IN}`,
     }
   }
-  
+
   const result = await workbook.xlsx.writeBuffer()
   const fileName = `Phieu_diem_${subjectClass.name}.xlsx`
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
