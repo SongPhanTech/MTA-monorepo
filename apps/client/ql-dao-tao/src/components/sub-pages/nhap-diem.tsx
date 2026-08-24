@@ -806,10 +806,14 @@ export default function NhapDiem({
 
           const baseUrl =
             getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "https://api.daotao.mta.swantech.vn"
-          const exportUrl = getExportSubjectClassScoreUrl({ id: selectedSubjectClassId })
+          const exportUrl = getExportSubjectClassScoreUrl({
+            id: selectedSubjectClassId,
+            role: role || "",
+            userId: profileId,
+          })
 
           openXemTaiLieu({
-            uri: getUrl(baseUrl, exportUrl) + (exportUrl.includes('?') ? '&' : '?') + `role=${role || ""}`,
+            uri: getUrl(baseUrl, exportUrl),
             name: "Phiếu điểm",
             mimeType: "xlsx",
             // convertTo: "pdf",
@@ -973,6 +977,7 @@ export default function NhapDiem({
                       `${getExportSubjectClassScoreUrl({
                         id: selectedSubjectClassId ?? "",
                         type: "DANH-SACH-THI",
+                        userId: profileId,
                       })}`
                     ),
                     name: "Danh sách thi",
@@ -1019,10 +1024,12 @@ export default function NhapDiem({
                       uri: getUrl(
                         getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") ||
                           "https://api.daotao.mta.swantech.vn",
-                        `${getExportSubjectClassScoreUrl({
+                        getExportSubjectClassScoreUrl({
                           id: selectedSubjectClassId ?? "",
                           type: "NHAP",
-                        })}&role=${role || ""}`
+                          role: role || "",
+                          userId: profileId,
+                        })
                       ),
                       name: "Phiếu điểm nháp",
                       mimeType: "xlsx",

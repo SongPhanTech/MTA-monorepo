@@ -55,6 +55,7 @@ Authorization: Bearer <access_token>
  * OpenAPI spec version: 1.0.0
  */
 import type { GetSurveyResultPrintFormTemplate } from './getSurveyResultPrintFormTemplate';
+import type { GetSurveyResultFormContent } from './getSurveyResultFormContent';
 import type { GetSurveyResultSurveyQuestionItem } from './getSurveyResultSurveyQuestionItem';
 import type { GetSurveyResultSurveyChoiceItem } from './getSurveyResultSurveyChoiceItem';
 import type { GetSurveyResultLectureInfo } from './getSurveyResultLectureInfo';
@@ -87,7 +88,7 @@ export interface GetSurveyResult {
   /** @nullable */
   printFormTemplate?: GetSurveyResultPrintFormTemplate;
   /** @nullable */
-  formContent?: unknown | null;
+  formContent?: GetSurveyResultFormContent;
   surveyQuestion: GetSurveyResultSurveyQuestionItem[];
   surveyChoice: GetSurveyResultSurveyChoiceItem[];
   /** @nullable */

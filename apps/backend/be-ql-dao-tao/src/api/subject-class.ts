@@ -273,13 +273,18 @@ const exportSubjectClassScore = createRoute({
 
 **Bảng dữ liệu nguồn:** SubjectClass, StudentSubjectScore, Exam.
 
-**Tham số:** id (lớp HP), examId, type (query).`,
+**Tham số:** id (lớp HP), examId, type, role, userId (query).`,
   request: {
     query: z.object({
       id: z.string().optional().openapi("id", { description: "ID của lớp môn học" }),
       examId: z.string().optional().openapi("examId", { description: "ID của kỳ thi" }),
       type: z.string().default(""),
       role: z.string().optional(),
+      userId: z
+        .string()
+        .uuid()
+        .optional()
+        .openapi("userId", { description: "ID UserProfile người in (từ client)" }),
     }),
   },
   responses: {
@@ -1033,7 +1038,7 @@ app.openapi(exportSubjectClassListExcel, async (c) => {
 })
 
 app.openapi(exportSubjectClassScore, async (c) => {
-  const { id, type, examId, role } = c.req.valid("query")
+  const { id, type, examId, role, userId } = c.req.valid("query")
 
   let subjectClass = await prisma.subjectClass.findUnique({
     where: { id: id ?? "" },
@@ -1222,7 +1227,19 @@ app.openapi(exportSubjectClassScore, async (c) => {
   const statistics = getScoreStatistics(subjectClass.subjectClassStudent || [])
   const printedAt = nowVn()
   const currentUser = c.get("user")
-  const NGUOI_IN = currentUser?.userName || currentUser?.fullName || ""
+  const printerProfile = userId
+    ? await prisma.userProfile.findUnique({
+        where: { id: userId },
+        select: { fullname: true, code: true, firstName: true, lastName: true },
+      })
+    : null
+  const NGUOI_IN =
+    printerProfile?.fullname ||
+    `${printerProfile?.lastName || ""} ${printerProfile?.firstName || ""}`.trim() ||
+    printerProfile?.code ||
+    currentUser?.fullName ||
+    currentUser?.userName ||
+    ""
   const THOI_GIAN_IN = formatDateTimeVn(printedAt, "HH:mm:ss DD/MM/YYYY")
   const data = {
     HOC_KY: subjectClass.semester?.name || "",

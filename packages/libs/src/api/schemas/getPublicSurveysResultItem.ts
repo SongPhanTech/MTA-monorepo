@@ -55,6 +55,7 @@ Authorization: Bearer <access_token>
  * OpenAPI spec version: 1.0.0
  */
 import type { GetPublicSurveysResultItemPrintFormTemplate } from './getPublicSurveysResultItemPrintFormTemplate';
+import type { GetPublicSurveysResultItemFormContent } from './getPublicSurveysResultItemFormContent';
 
 export type GetPublicSurveysResultItem = {
   id: string;
@@ -81,4 +82,6 @@ export type GetPublicSurveysResultItem = {
   targetEnrollStudentOnly?: boolean;
   /** @nullable */
   printFormTemplate?: GetPublicSurveysResultItemPrintFormTemplate;
+  /** @nullable */
+  formContent?: GetPublicSurveysResultItemFormContent;
 };

@@ -1417,7 +1417,7 @@ export const useFinishDataSync = <TError = unknown,
     }
     
 /**
- * Nhận file, tạo/ghi nhận lịch sử PENDING rồi trả 202 ngay. Import chạy nền; theo dõi qua get-data-sync-history.
+ * Nhận file, ghi PENDING, đẩy Kafka (worker import). Kafka tắt → fallback in-process. Theo dõi qua get-data-sync-history.
  * @summary Nhập dữ liệu từ file JSON xuất bởi phần mềm nội bộ (bất đồng bộ)
  */
 export type importFromInternalResponse200 = {
