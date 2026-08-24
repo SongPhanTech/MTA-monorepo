@@ -13,6 +13,7 @@ import { useSession } from "@workspace/auth/react"
 import { $Enums } from "@workspace/db/client"
 import { useCountSubjectClass, useFindManySubjectClass } from "@workspace/db/hooks"
 import { formatLecturerName } from "@workspace/libs"
+import { formatDateVn } from "@workspace/libs/timezone"
 import { useSemesterStore } from "@workspace/ui"
 import dayjs from "dayjs"
 import { useMemo, useState } from "react"
@@ -167,13 +168,11 @@ const useLopGiangDayGiangVien = () => {
           trangThaiNhapDiem: trangThai.label,
           trangThaiNhapDiemColor: trangThai.color,
           monMotDauDiem: item.subject?.onePoint ?? false,
-          ngayNdqt: item.scoreDeadLineStart
-            ? dayjs(item.scoreDeadLineStart).format("DD/MM/YYYY")
-            : "",
-          hanNdqt: item.scoreDeadline ? dayjs(item.scoreDeadline).format("DD/MM/YYYY") : "",
+          ngayNdqt: item.scoreDeadLineStart ? formatDateVn(item.scoreDeadLineStart) : "",
+          hanNdqt: item.scoreDeadline ? formatDateVn(item.scoreDeadline) : "",
           hanDqt: layHanConLai(item.scoreDeadline, item.isLockScore),
           ngayThi: item.examDate ? dayjs(item.examDate).toISOString() : null,
-          hanNdt: item.examScoreDeadline ? dayjs(item.examScoreDeadline).format("DD/MM/YYYY") : "",
+          hanNdt: item.examScoreDeadline ? formatDateVn(item.examScoreDeadline) : "",
           hanDt: layHanConLai(item.examScoreDeadline, item.isLockExamScore),
           giangVien1: formatLecturerName(item.mainLecturer),
           giangVien2: formatLecturerName(item.extraLecturer),

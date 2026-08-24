@@ -6,6 +6,7 @@ import { examPostponeReason, examSuspendedReason } from "@constants/constants"
 import { scoreConvert } from "@hooks/scoreConverter"
 import { ROUTER_PATH } from "@workspace/router"
 import { calcFinalScore, getRuntimeEnv } from "@workspace/libs/utils"
+import { formatDateVn, nowVn } from "@workspace/libs/timezone"
 import { useSession } from "@workspace/auth/react"
 import {
   useFindManySchoolYear,
@@ -313,7 +314,7 @@ const NhapDiemThiGiangDayPage = () => {
     if (!lopMonHoc) return true
     const daKhoaDiem = !!lopMonHoc.isLockExamScore || !!lopMonHoc.scoreSubmitted
     const quaHan =
-      !!lopMonHoc.examScoreDeadline && dayjs().isAfter(dayjs(lopMonHoc.examScoreDeadline))
+      !!lopMonHoc.examScoreDeadline && nowVn().isAfter(dayjs(lopMonHoc.examScoreDeadline))
     return laKyThiDanhPhach || daKhoaDiem || quaHan
   }, [lopMonHoc, laKyThiDanhPhach])
 
@@ -715,7 +716,7 @@ const NhapDiemThiGiangDayPage = () => {
                   label="Hạn nhập điểm:"
                   value={
                     lopMonHoc?.examScoreDeadline
-                      ? dayjs(lopMonHoc.examScoreDeadline).format("DD/MM/YYYY")
+                      ? formatDateVn(lopMonHoc.examScoreDeadline)
                       : "—"
                   }
                 />

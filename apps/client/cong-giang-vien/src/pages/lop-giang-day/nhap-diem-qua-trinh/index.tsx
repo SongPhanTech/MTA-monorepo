@@ -5,6 +5,7 @@ import { examBanReason } from "@constants/constants"
 import { scoreConvert } from "@hooks/scoreConverter"
 import { ROUTER_PATH } from "@workspace/router"
 import { calcFinalScore } from "@workspace/libs/utils"
+import { formatDateVn, nowVn } from "@workspace/libs/timezone"
 import { useSession } from "@workspace/auth/react"
 import {
   useFindManySchoolYear,
@@ -306,7 +307,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
     (lopMonHoc.exam.examRooms?.some((room) => (room.examList?.length ?? 0) > 0) ?? false)
   const quaHanNhapDiemQuaTrinh = useMemo(() => {
     if (!lopMonHoc?.scoreDeadline) return false
-    return dayjs().isAfter(dayjs(lopMonHoc.scoreDeadline))
+    return nowVn().isAfter(dayjs(lopMonHoc.scoreDeadline))
   }, [lopMonHoc?.scoreDeadline])
 
   const { data: scoreRows = [], refetch } = useFindManyStudentSubjectScore(
@@ -673,7 +674,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                     label="Hạn nhập điểm:"
                     value={
                       lopMonHoc?.scoreDeadline
-                        ? dayjs(lopMonHoc.scoreDeadline).format("DD/MM/YYYY")
+                        ? formatDateVn(lopMonHoc.scoreDeadline)
                         : "—"
                     }
                   />

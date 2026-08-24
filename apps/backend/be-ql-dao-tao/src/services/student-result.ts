@@ -1,5 +1,5 @@
 import { getTemplateBuffer } from "@workspace/libs/server"
-import dayjs from "dayjs"
+import { formatDateVn } from "@workspace/libs/timezone"
 import type { Borders, Font, Alignment } from "exceljs"
 import { HTTPException } from "hono/http-exception"
 import XlsxTemplate from "xlsx-template"
@@ -101,14 +101,12 @@ export async function exportStudentSemesterResult({
     const student = result.student
     const userProfile = student.userProfile
     const dateOfBirth = userProfile.dateOfBirth
-      ? dayjs(userProfile.dateOfBirth).tz("Asia/Ho_Chi_Minh")
-      : null
 
     return {
       no: idx + 1,
       code: student.code,
       fullname: userProfile.fullname,
-      dateOfBirth: dateOfBirth ? `'${dateOfBirth.format("DD/MM/YYYY")}` : "",
+      dateOfBirth: dateOfBirth ? `'${formatDateVn(dateOfBirth)}` : "",
       fixedClass: student.fixedClass?.code,
       trainingCourse: student.fixedClass?.trainingCourse?.name,
 
@@ -352,7 +350,7 @@ export async function exportStudentSemesterResultV2({
       const student = students[si]!
       const semResult = student.studentSemesterResult[0]
       const dob = student.userProfile?.dateOfBirth
-        ? dayjs(student.userProfile.dateOfBirth).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")
+        ? formatDateVn(student.userProfile.dateOfBirth)
         : ""
 
       const subjectScores: (number | string)[] = subjects.map(([subjectId]) => {
@@ -517,14 +515,12 @@ export async function exportStudentYearResult({
     const student = result.student
     const userProfile = student.userProfile
     const dateOfBirth = userProfile.dateOfBirth
-      ? dayjs(userProfile.dateOfBirth).tz("Asia/Ho_Chi_Minh")
-      : null
 
     return {
       no: idx + 1,
       code: student.code,
       fullname: userProfile.fullname,
-      dateOfBirth: dateOfBirth ? `'${dateOfBirth.format("DD/MM/YYYY")}` : "",
+      dateOfBirth: dateOfBirth ? `'${formatDateVn(dateOfBirth)}` : "",
       fixedClass: student.fixedClass?.code,
       trainingCourse: student.fixedClass?.trainingCourse?.name,
       // StudentYearResult Data

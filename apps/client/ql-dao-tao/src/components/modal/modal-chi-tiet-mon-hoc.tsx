@@ -5,6 +5,7 @@ import { useSubjectClassTypeOptions } from "@hooks/subjectClassType"
 import { useSubjectRequirementTypeOptions } from "@hooks/subjectRequirementType"
 import { useSubjectVersionTypeOptions } from "@hooks/subjectVersionType"
 import { useFindUniqueSubject, useFindUniqueSubjectVersion } from "@workspace/db/hooks"
+import { formatDateTimeVn } from "@workspace/libs/timezone"
 import { Descriptions, Modal, Table, Tabs, Tag } from "antd"
 import dayjs from "dayjs"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -573,19 +574,19 @@ export default function ModalChiTietMonHoc() {
               title: "Bắt đầu nhập TX/ĐK",
               dataIndex: "scoreDeadLineStart",
               width: 140,
-              render: (value) => (value ? dayjs(value).format("DD/MM/YYYY HH:mm") : ""),
+              render: (value) => (value ? formatDateTimeVn(value) : ""),
             },
             {
               title: "Hạn nhập TX/ĐK",
               dataIndex: "scoreDeadline",
               width: 140,
-              render: (value) => (value ? dayjs(value).format("DD/MM/YYYY HH:mm") : ""),
+              render: (value) => (value ? formatDateTimeVn(value) : ""),
             },
             {
               title: "Hạn nhập điểm thi",
               dataIndex: "examScoreDeadline",
               width: 140,
-              render: (value) => (value ? dayjs(value).format("DD/MM/YYYY HH:mm") : ""),
+              render: (value) => (value ? formatDateTimeVn(value) : ""),
             },
             {
               title: "Khoá TX/ĐK",

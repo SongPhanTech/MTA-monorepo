@@ -2,9 +2,7 @@ import { OpenAPIHono } from "@hono/zod-openapi"
 import { jwtAuth } from "@workspace/auth/hono"
 import { enhance, Prisma, PrismaClient } from "@workspace/db"
 import { createHonoHandler } from "@workspace/db/hono"
-import dayjs from "dayjs"
-import timezone from "dayjs/plugin/timezone"
-import utc from "dayjs/plugin/utc"
+import { setupAppTimezone } from "@workspace/libs/timezone"
 import type { Context } from "hono"
 import { contextStorage } from "hono/context-storage"
 import { cors } from "hono/cors"
@@ -46,10 +44,8 @@ import { startQuetNhacLichCaNhanCron } from "./cron/quet-nhac-lich-ca-nhan"
 import { startDonDepThongBaoCron } from "./cron/don-dep-thong-bao"
 import { setupOpenApi } from "./utils/openapi"
 import VersionApp from "./api/public-version"
-dayjs.extend(utc)
-dayjs.extend(timezone)
 
-dayjs.tz.setDefault("Asia/Ho_Chi_Minh")
+setupAppTimezone()
 
 export const prisma: PrismaClient = new PrismaClient()
 

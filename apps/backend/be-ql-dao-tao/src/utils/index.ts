@@ -1,5 +1,6 @@
 import { $Enums, type PrismaClient } from "@workspace/db"
 import { normalizeCatalogName } from "@workspace/libs/utils"
+import { APP_TIMEZONE, setupAppTimezone } from "@workspace/libs/timezone"
 import { HTTPException } from "hono/http-exception"
 import ExcelJS from "exceljs"
 import XlsxTemplate from "xlsx-template"
@@ -55,19 +56,17 @@ export const MONTH_EN = [
 
 export const getReportDateParts = (date?: Date | dayjs.Dayjs | string | number | null) => {
   if (!date) return null
+  setupAppTimezone()
   const d = dayjs(date)
   if (!d.isValid()) return null
 
-  // Convert to UTC+7 (Vietnam Time) to avoid server timezone issues
-  const utcTimestamp = d.valueOf()
-  const vnDate = new Date(utcTimestamp + 7 * 60 * 60 * 1000)
-
-  const day = vnDate.getUTCDate().toString().padStart(2, "0")
-  const monthRaw = vnDate.getUTCMonth() + 1
+  const vn = d.tz(APP_TIMEZONE)
+  const day = vn.date().toString().padStart(2, "0")
+  const monthRaw = vn.month() + 1
   const monthVi =
     monthRaw === 1 || monthRaw === 2 ? monthRaw.toString().padStart(2, "0") : monthRaw.toString()
-  const monthEn = MONTH_EN[vnDate.getUTCMonth()]
-  const year = vnDate.getUTCFullYear().toString()
+  const monthEn = MONTH_EN[vn.month()]
+  const year = vn.year().toString()
 
   const dateVi = `${day}/${monthVi}/${year}`
   const fullVi = `ngày ${day} tháng ${monthVi} năm ${year}`

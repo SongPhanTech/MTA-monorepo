@@ -28,10 +28,12 @@ import LoadingBar from "react-top-loading-bar"
 import "@assets/css/cong-giang-vien.css"
 import "@assets/css/custom.css"
 import { getRuntimeEnv } from "@workspace/libs/utils"
+import { setupAppTimezone } from "@workspace/libs/timezone"
 import { lightThemeCustom } from "@workspace/ui"
 import "@workspace/libs"
 import { fetchInstance } from "@workspace/libs/api/custom-instance"
 
+setupAppTimezone()
 dayjs.locale("vi")
 dayjs.extend(weekOfYear)
 dayjs.extend(isoWeeksInYear)

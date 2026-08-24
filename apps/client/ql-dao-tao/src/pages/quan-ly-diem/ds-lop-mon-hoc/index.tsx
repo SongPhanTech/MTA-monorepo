@@ -17,6 +17,7 @@ import {
   useFindManySubjectClass,
 } from "@workspace/db/hooks"
 import { formatLecturerName } from "@workspace/libs"
+import { formatDateVn, toVnDayjs, toVnEndOfDay, toVnStartOfDay } from "@workspace/libs/timezone"
 import {
   setExamScoreDeadLine,
   setScoreDeadLine,
@@ -363,12 +364,14 @@ export default function ClassSubject() {
   const handleUpdateTime = async (values: TimeScore) => {
     try {
       showSpinner()
+      const startVn = values.time?.[0] ? toVnStartOfDay(values.time[0]) : null
+      const endVn = values.time?.[1] ? toVnEndOfDay(values.time[1]) : null
       const { status, data } = await setScoreDeadLine({
         classIds: selectedRowKeys as string[],
         startPadding: values.startPadding,
         endPadding: values.endPadding,
-        startDate: values.time?.[0]?.startOf("day").toISOString(),
-        endDate: values.time?.[1]?.endOf("day").toISOString(),
+        startDate: startVn ? toVnDayjs(startVn)?.format("YYYY-MM-DD") : undefined,
+        endDate: endVn ? toVnDayjs(endVn)?.format("YYYY-MM-DD") : undefined,
         overwrite: values.overwrite,
         trainingObjectTypeId,
         semesterId,
@@ -392,10 +395,11 @@ export default function ClassSubject() {
   const handleUpdateTimeScore = async (values: TimeScoreExam) => {
     try {
       showSpinner()
+      const endVn = values.endDate ? toVnEndOfDay(values.endDate) : null
       const { status, data } = await setExamScoreDeadLine({
         classIds: selectedRowKeys as string[],
         endPadding: values.endPadding,
-        endDate: values.endDate?.toISOString(),
+        endDate: endVn ? toVnDayjs(endVn)?.format("YYYY-MM-DD") : undefined,
         overwrite: values.overwrite,
         trainingObjectTypeId,
         semesterId,
@@ -843,7 +847,7 @@ export default function ClassSubject() {
                 width: 120,
                 align: "center",
                 type: "date",
-                render: (record: string) => (record ? dayjs(record).format("DD/MM/YYYY") : ""),
+                render: (record: string) => (record ? formatDateVn(record) : ""),
               },
               {
                 title: "Hạn NĐQT",
@@ -855,7 +859,7 @@ export default function ClassSubject() {
                   <div
                   // className={`${dayjs().isBefore(record?.scoreDeadline) ? '' : 'text-red-500'}`}
                   >
-                    {record?.scoreDeadline ? dayjs(record.scoreDeadline).format("DD/MM/YYYY") : ""}
+                    {record?.scoreDeadline ? formatDateVn(record.scoreDeadline) : ""}
                   </div>
                 ),
               },
@@ -899,7 +903,7 @@ export default function ClassSubject() {
                 // render: (record: string) => (record ? dayjs(record).format("DD/MM/YYYY") : ""),
                 render: (_, record) => {
                   if (!canReadAll) {
-                    return record.examDate ? dayjs(record.examDate).format("DD/MM/YYYY") : ""
+                    return record.examDate ? formatDateVn(record.examDate) : ""
                   }
 
                   const isExpired =
@@ -944,7 +948,7 @@ export default function ClassSubject() {
                     // className={`${dayjs().isBefore(record?.examScoreDeadline) ? '' : 'text-red-500'}`}
                     >
                       {record?.examScoreDeadline
-                        ? dayjs(record.examScoreDeadline).format("DD/MM/YYYY")
+                        ? formatDateVn(record.examScoreDeadline)
                         : ""}
                     </div>
                   )

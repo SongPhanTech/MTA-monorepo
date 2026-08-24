@@ -1,6 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { getTemplateBuffer } from "@workspace/libs/server"
-import dayjs from "dayjs"
+import { formatDateVn } from "@workspace/libs/timezone"
 import ExcelJS from "exceljs"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
@@ -110,7 +110,7 @@ app.openapi(exportInternshipProfile, async (c) => {
     code: internship.studentSubjectScore?.student?.code || "",
     fullname: internship.studentSubjectScore?.student?.userProfile?.fullname || "",
     dateOfBirth: internship.studentSubjectScore?.student?.userProfile?.dateOfBirth
-      ? dayjs(internship.studentSubjectScore.student.userProfile.dateOfBirth).format("DD/MM/YYYY")
+      ? formatDateVn(internship.studentSubjectScore.student.userProfile.dateOfBirth)
       : "",
     subjectClassCode: internship.studentSubjectScore?.subjectClass?.code || "",
     subjectClassName: internship.studentSubjectScore?.subjectClass?.name || "",
@@ -151,9 +151,9 @@ app.openapi(exportInternshipProfile, async (c) => {
         ]
           .filter(Boolean)
           .join(". "),
-    startDate: internship.startDate ? dayjs(internship.startDate).format("DD/MM/YYYY") : "",
-    endDate: internship.endDate ? dayjs(internship.endDate).format("DD/MM/YYYY") : "",
-    reportDate: internship.reportDate ? dayjs(internship.reportDate).format("DD/MM/YYYY") : "",
+    startDate: internship.startDate ? formatDateVn(internship.startDate) : "",
+    endDate: internship.endDate ? formatDateVn(internship.endDate) : "",
+    reportDate: internship.reportDate ? formatDateVn(internship.reportDate) : "",
     finalScore: internship.studentSubjectScore?.finalScore?.toString() || "",
   }))
 

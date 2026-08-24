@@ -331,34 +331,24 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 fixed: "right",
-                hidden: !canSome(
-                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
-                  "SUA",
-                  "XOA"
-                ),
+                
                 render: (_, { id }) => {
                   if (id) {
                     return (
                       <Row className="justify-center gap-2">
-                        {can(
-                          QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
-                          "SUA"
-                        ) && (
+                       
                           <EditIcon
                             onClick={() => onOpen({ id, thesisExpert: true })}
                             className="text-sm text-blue-700 cursor-pointer"
                           />
-                        )}
-                        {can(
-                          QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
-                          "XOA"
-                        ) && (
+                        
+                        
                           <DeleteIcon
                             popConfirm={{
                               onConfirm: () => handleDelete(id),
                             }}
                           />
-                        )}
+                        
                       </Row>
                     )
                   }

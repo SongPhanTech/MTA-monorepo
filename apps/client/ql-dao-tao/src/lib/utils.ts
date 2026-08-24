@@ -1,6 +1,11 @@
 import { normalizeVietnamese } from "@workspace/libs/utils"
+import {
+  formatDateTimeVn,
+  formatDateVn as formatDateVnTz,
+  toVnDayjs,
+} from "@workspace/libs/timezone"
 import clsx, { type ClassValue } from "clsx"
-import dayjs, { type Dayjs } from "dayjs"
+import type { Dayjs } from "dayjs"
 import { twMerge } from "tailwind-merge"
 
 export function searchVietnamese(
@@ -28,19 +33,26 @@ export const getPageCount = (totalItems: number, itemsPerPage: number) => {
 
 export const formatDate = (date?: string | Date | Dayjs, unit?: "Day" | "Month" | "Year") => {
   if (!date) return ""
-  if (unit === "Year") return dayjs(date).format("YYYY")
-  if (unit === "Month") return dayjs(date).format("MM/YYYY")
-  return dayjs(date).format("DD/MM/YYYY")
+  if (unit === "Year") return formatDateVnTz(date, "YYYY")
+  if (unit === "Month") return formatDateVnTz(date, "MM/YYYY")
+  return formatDateVnTz(date)
 }
 
 export const formatDateReadable = (date: string | Date | Dayjs) => {
-  const d = dayjs(date)
+  const d = toVnDayjs(date)
+  if (!d) return ""
   return `${d.hour().toString().padStart(2, "0")}h:${d.minute().toString().padStart(2, "0")} - ${d.date().toString().padStart(2, "0")}/${(d.month() + 1).toString().padStart(2, "0")}/${d.year()}`
 }
 
 export const formatDateVN = (date: string | Date | Dayjs) => {
-  const d = dayjs(date)
+  const d = toVnDayjs(date)
+  if (!d) return ""
   return `Ngày ${d.date().toString().padStart(2, "0")} tháng ${(d.month() + 1).toString().padStart(2, "0")} năm ${d.year()}`
+}
+
+export const formatDateTime = (date?: string | Date | Dayjs) => {
+  if (!date) return ""
+  return formatDateTimeVn(date)
 }
 
 export const getColorByIndex = (index: number) => {

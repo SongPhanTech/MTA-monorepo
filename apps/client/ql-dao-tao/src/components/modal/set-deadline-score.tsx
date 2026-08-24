@@ -4,10 +4,10 @@ import PutFormModal from "@components/commons/put-modal"
 import useSpinner from "@hooks/spinner"
 import { thongBaoHanNhapDiemQuaTrinh, thongBaoHanNhapDiemThi } from "@lib/thong-bao-giang-vien"
 import { useFindUniqueSubjectClass, useUpdateSubjectClass } from "@workspace/db/hooks"
+import { toVnDayjs, toVnEndOfDay, toVnStartOfDay } from "@workspace/libs/timezone"
 import { DatePicker as AntdDatePicker, Col, Form, message } from "antd"
 import locale from "antd/es/date-picker/locale/vi_VN"
 import type { Dayjs } from "dayjs"
-import dayjs from "dayjs"
 import { useEffect } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
@@ -42,10 +42,10 @@ const PutDeadlineScoreModal = () => {
       await updateSubjectClass({
         where: { id },
         data: {
-          scoreDeadLineStart: output?.time ? output?.time[0]?.toISOString() : null,
-          scoreDeadline: output?.time ? output?.time[1]?.toISOString() : null,
+          scoreDeadLineStart: output?.time?.[0] ? toVnStartOfDay(output.time[0]) : null,
+          scoreDeadline: output?.time?.[1] ? toVnEndOfDay(output.time[1]) : null,
           examScoreDeadline: output?.examScoreDeadline
-            ? output?.examScoreDeadline?.toISOString()
+            ? toVnEndOfDay(output.examScoreDeadline)
             : null,
         },
         select: { id: true },
@@ -72,10 +72,10 @@ const PutDeadlineScoreModal = () => {
     if (data) {
       form.setFieldsValue({
         time: [
-          data.scoreDeadLineStart ? dayjs(data.scoreDeadLineStart) : undefined,
-          data.scoreDeadline ? dayjs(data.scoreDeadline) : undefined,
+          toVnDayjs(data.scoreDeadLineStart) ?? undefined,
+          toVnDayjs(data.scoreDeadline) ?? undefined,
         ],
-        examScoreDeadline: data.examScoreDeadline ? dayjs(data.examScoreDeadline) : undefined,
+        examScoreDeadline: toVnDayjs(data.examScoreDeadline) ?? undefined,
       })
     }
   }, [data, form.setFieldsValue])

@@ -1,7 +1,7 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { DiplomaVerificationStatus } from "@workspace/db"
 import { getTemplateBuffer } from "@workspace/libs/server"
-import dayjs from "dayjs"
+import { formatDateVn } from "@workspace/libs/timezone"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
 import { fieldDesc } from "../dto/openapi-helpers"
@@ -72,8 +72,8 @@ app.openapi(exportDiplomaVerification, async (c) => {
   const data = applications.map((application, idx) => ({
     no: idx + 1,
     ...application,
-    dateOfBirth: application.dateOfBirth ? dayjs(application.dateOfBirth).format("DD/MM/YYYY") : "",
-    createdAt: dayjs(application.createdAt).format("DD/MM/YYYY"),
+    dateOfBirth: application.dateOfBirth ? formatDateVn(application.dateOfBirth) : "",
+    createdAt: formatDateVn(application.createdAt),
     status: statusMap[application.status],
   }))
 
@@ -82,8 +82,8 @@ app.openapi(exportDiplomaVerification, async (c) => {
   const template = new XlsxTemplate(buffer)
 
   template.substitute(1, {
-    startDate: dayjs(startDate).format("DD/MM/YYYY"),
-    endDate: dayjs(endDate).format("DD/MM/YYYY"),
+    startDate: formatDateVn(startDate),
+    endDate: formatDateVn(endDate),
     total,
     totalPending,
     totalAccepted,

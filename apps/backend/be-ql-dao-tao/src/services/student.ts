@@ -1,7 +1,7 @@
 import { TrainingObjectTypes } from "@workspace/db"
 import PizZip from "pizzip"
 import { getTemplateBuffer } from "@workspace/libs/server"
-import dayjs from "dayjs"
+import { formatDateVn, nowVn } from "@workspace/libs/timezone"
 import ExcelJS from "exceljs"
 import type { Alignment } from "exceljs"
 import XlsxTemplate from "xlsx-template"
@@ -135,8 +135,6 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
     const curriculumVersion = student.curriculumVersion || student.fixedClass?.curriculumVersion
 
     const dateOfBirth = student.userProfile.dateOfBirth
-      ? dayjs(student.userProfile.dateOfBirth)
-      : null
 
     return {
       no: idx + 1,
@@ -144,7 +142,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
       doctoralCode: student.doctoralCode,
       code: student.code,
       fullname: student.userProfile.fullname,
-      dateOfBirth: dateOfBirth ? `'${dateOfBirth?.format("DD/MM/YYYY")}` : "",
+      dateOfBirth: dateOfBirth ? `'${formatDateVn(dateOfBirth)}` : "",
       gender: student.userProfile.gender?.sTen,
       ethnicity: student.userProfile.ethnicity?.sTen,
       nationality: student.userProfile.nationality?.sTen,
@@ -222,8 +220,7 @@ export const exportStudentScholarship = async ({
   const semesterName = semester?.name || ""
   const schoolYear = semester?.schoolYear?.name || ""
 
-  const now = dayjs()
-  const reportDate = now.format("D/M/YYYY")
+  const reportDate = formatDateVn(nowVn(), "D/M/YYYY")
 
   const mapTrainingType = (type?: string | null) => {
     if (!type) return ""
@@ -559,7 +556,7 @@ export const exportStudentAcademicWarning = async ({
         (student.studentSemesterResult as any)?.studentName ||
         ""
       const dob = (student.userProfile as any)?.dateOfBirth
-        ? dayjs((student.userProfile as any).dateOfBirth).format("DD/MM/YYYY")
+        ? formatDateVn((student.userProfile as any).dateOfBirth)
         : ""
       const studentCode = student.code || ""
       const className = student.fixedClass?.name || ""
@@ -972,7 +969,7 @@ export const exportArchivedCertificate = async ({
       no: idx + 1,
       studentName: userProfile?.fullname || "",
       dateOfBirth: userProfile?.dateOfBirth
-        ? `'${dayjs(userProfile.dateOfBirth).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}`
+        ? `'${formatDateVn(userProfile.dateOfBirth)}`
         : "",
       placeOfBirth: userProfile?.placeOfBirth || "",
       idCardNumber: userProfile?.idCardNumber || "",
@@ -986,7 +983,7 @@ export const exportArchivedCertificate = async ({
       writing: item.writingScore || "",
       score: item.score ?? "",
       issuedDate: item.issuedDate
-        ? `'${dayjs(item.issuedDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}`
+        ? `'${formatDateVn(item.issuedDate)}`
         : "",
       issuedBy: item.issuedBy || "",
     }
@@ -1139,7 +1136,7 @@ export const exportArchivedCertificateMulti = async ({
       no: idx + 1,
       studentName: userProfile?.fullname || "",
       dateOfBirth: userProfile?.dateOfBirth
-        ? `'${dayjs(userProfile.dateOfBirth).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}`
+        ? `'${formatDateVn(userProfile.dateOfBirth)}`
         : "",
       placeOfBirth: userProfile?.placeOfBirth || "",
       idCardNumber: userProfile?.idCardNumber || "",
@@ -1147,7 +1144,7 @@ export const exportArchivedCertificateMulti = async ({
       trainingCourse: fixedClass?.trainingCourse?.name || "",
       trainingMajorName: trainingMajor?.name || "",
       issuedDate: archivedState?.issuedDate
-        ? `'${dayjs(archivedState.issuedDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}`
+        ? `'${formatDateVn(archivedState.issuedDate)}`
         : "",
       issuedBy: archivedState?.issuedBy || "",
       scores: scoresArray,
@@ -1256,7 +1253,7 @@ export const exportStudentsMissingCertificate = async ({
       studentCode: userProfile?.code || "",
       studentName: userProfile?.fullname || "",
       dateOfBirth: userProfile?.dateOfBirth
-        ? `'${dayjs(userProfile.dateOfBirth).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}`
+        ? `'${formatDateVn(userProfile.dateOfBirth)}`
         : "",
       fixedClass: fixedClass?.name || "",
       trainingCourse: fixedClass?.trainingCourse?.name || "",

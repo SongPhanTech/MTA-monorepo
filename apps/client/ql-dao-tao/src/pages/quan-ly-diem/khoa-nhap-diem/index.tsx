@@ -8,6 +8,7 @@ import type { Prisma } from "@workspace/db/client"
 import { useCountSubjectClass, useFindManySubjectClass } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
+import { parseVnDateEnd, parseVnDateStart, formatDateVn } from "@workspace/libs/timezone"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Col, Form, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
@@ -86,40 +87,40 @@ export default function SubjectClassScore() {
         ...(filters.scoreDeadline?.length === 2
           ? {
               scoreDeadline: {
-                gte: dayjs(filters.scoreDeadline?.[0], "DD/MM/YYYY").toDate(),
-                lte: dayjs(filters.scoreDeadline?.[1], "DD/MM/YYYY").toDate(),
+                gte: parseVnDateStart(String(filters.scoreDeadline?.[0])) ?? undefined,
+                lte: parseVnDateEnd(String(filters.scoreDeadline?.[1])) ?? undefined,
               },
             }
           : {}),
         ...(filters.examScoreDeadline?.length === 2
           ? {
               examScoreDeadline: {
-                gte: dayjs(filters.examScoreDeadline?.[0], "DD/MM/YYYY").toDate(),
-                lte: dayjs(filters.examScoreDeadline?.[1], "DD/MM/YYYY").toDate(),
+                gte: parseVnDateStart(String(filters.examScoreDeadline?.[0])) ?? undefined,
+                lte: parseVnDateEnd(String(filters.examScoreDeadline?.[1])) ?? undefined,
               },
             }
           : {}),
         ...(filters.startDate?.length === 2
           ? {
               startDate: {
-                gte: dayjs(filters.startDate?.[0], "DD/MM/YYYY").toDate(),
-                lte: dayjs(filters.startDate?.[1], "DD/MM/YYYY").toDate(),
+                gte: parseVnDateStart(String(filters.startDate?.[0])) ?? undefined,
+                lte: parseVnDateEnd(String(filters.startDate?.[1])) ?? undefined,
               },
             }
           : {}),
         ...(filters.examDate?.length === 2
           ? {
               examDate: {
-                gte: dayjs(filters.examDate?.[0], "DD/MM/YYYY").toDate(),
-                lte: dayjs(filters.examDate?.[1], "DD/MM/YYYY").toDate(),
+                gte: parseVnDateStart(String(filters.examDate?.[0])) ?? undefined,
+                lte: parseVnDateEnd(String(filters.examDate?.[1])) ?? undefined,
               },
             }
           : {}),
         ...(filters.endDate?.length === 2
           ? {
               endDate: {
-                gte: dayjs(filters.endDate?.[0], "DD/MM/YYYY").toDate(),
-                lte: dayjs(filters.endDate?.[1], "DD/MM/YYYY").toDate(),
+                gte: parseVnDateStart(String(filters.endDate?.[0])) ?? undefined,
+                lte: parseVnDateEnd(String(filters.endDate?.[1])) ?? undefined,
               },
             }
           : {}),
@@ -322,7 +323,7 @@ export default function SubjectClassScore() {
                   align: "center",
                   type: "date",
                   render: (_, record) =>
-                    record.startDate ? dayjs(record.startDate).format("DD/MM/YYYY") : "",
+                    record.startDate ? formatDateVn(record.startDate) : "",
                 },
                 {
                   title: "Ngày thi",
@@ -330,7 +331,7 @@ export default function SubjectClassScore() {
                   align: "center",
                   type: "date",
                   render: (_, record) =>
-                    record.examDate ? dayjs(record.examDate).format("DD/MM/YYYY") : "",
+                    record.examDate ? formatDateVn(record.examDate) : "",
                 },
                 {
                   title: "Ngày kết thúc",
@@ -338,7 +339,7 @@ export default function SubjectClassScore() {
                   align: "center",
                   type: "date",
                   render: (_, record) =>
-                    record.endDate ? dayjs(record.endDate).format("DD/MM/YYYY") : "",
+                    record.endDate ? formatDateVn(record.endDate) : "",
                 },
                 {
                   title: "Bộ môn",

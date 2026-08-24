@@ -1,6 +1,7 @@
 import { OpenAPIHono } from "@hono/zod-openapi"
 import { jwtAuth } from "@workspace/auth/hono"
 import { Prisma } from "@workspace/db"
+import { setupAppTimezone } from "@workspace/libs/timezone"
 import { contextStorage } from "hono/context-storage"
 import { cors } from "hono/cors"
 import { showRoutes } from "hono/dev"
@@ -17,6 +18,8 @@ import { startRegistrationEventsWorker } from "./services/class-registration/eve
 import { startRegistrationWorker } from "./services/class-registration/worker"
 import { startDataSyncWorker } from "./services/data-sync/worker"
 import { setupOpenApi } from "./utils/openapi"
+
+setupAppTimezone()
 
 export { prisma }
 

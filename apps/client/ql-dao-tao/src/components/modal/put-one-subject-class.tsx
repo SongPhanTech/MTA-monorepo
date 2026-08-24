@@ -37,6 +37,7 @@ import {
   useFindManyRoom,
 } from "@workspace/db/hooks"
 import { calcFinalScore } from "@workspace/libs/utils"
+import { toVnDayjs, toVnEndOfDay, toVnStartOfDay } from "@workspace/libs/timezone"
 import { PERIOD } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
 import {
@@ -152,9 +153,14 @@ const PutOneSubjectClassModal = () => {
           lecturerId: output?.lecturerId,
           extraLecturerId: output.extraLecturerId,
           enterGradeLecturerId: output?.enterGradeLecturerId,
-          examDate: output?.examDate,
-          scoreDeadline: output?.scoreDeadline,
-          examScoreDeadline: output.examScoreDeadline,
+          examDate: output?.examDate ? toVnStartOfDay(output.examDate) : null,
+          scoreDeadline: output?.scoreDeadline ? toVnEndOfDay(output.scoreDeadline) : null,
+          examScoreDeadline: output?.examScoreDeadline
+            ? toVnEndOfDay(output.examScoreDeadline)
+            : null,
+          scoreDeadLineStart: output?.scoreDeadLineStart
+            ? toVnStartOfDay(output.scoreDeadLineStart)
+            : null,
           lecturerAssignmentDeadline: output.lecturerAssignmentDeadline,
           subjectClassTimes: {
             create: output.times?.map((time) => ({
@@ -626,19 +632,11 @@ const PutOneSubjectClassModal = () => {
       form.setFieldsValue({
         ...subjectClassData,
         trainingLocationId: subjectClassData.room?.building?.trainingLocation?.id,
-        lecturerAssignmentDeadline: subjectClassData.lecturerAssignmentDeadline
-          ? dayjs(subjectClassData.lecturerAssignmentDeadline)
-          : null,
-        examDate: subjectClassData.examDate ? dayjs(subjectClassData.examDate) : null,
-        scoreDeadline: subjectClassData.scoreDeadline
-          ? dayjs(subjectClassData.scoreDeadline)
-          : null,
-        examScoreDeadline: subjectClassData.examScoreDeadline
-          ? dayjs(subjectClassData.examScoreDeadline)
-          : null,
-        scoreDeadLineStart: subjectClassData.scoreDeadLineStart
-          ? dayjs(subjectClassData.scoreDeadLineStart)
-          : null,
+        lecturerAssignmentDeadline: toVnDayjs(subjectClassData.lecturerAssignmentDeadline),
+        examDate: toVnDayjs(subjectClassData.examDate),
+        scoreDeadline: toVnDayjs(subjectClassData.scoreDeadline),
+        examScoreDeadline: toVnDayjs(subjectClassData.examScoreDeadline),
+        scoreDeadLineStart: toVnDayjs(subjectClassData.scoreDeadLineStart),
         dayOfWeeks: [...new Set(subjectClassData.subjectClassTimes?.map((item) => item.dayOfWeek))],
         times: subjectClassData.subjectClassTimes
           ?.uniqueByKeys(["dayOfWeek", "startPeriod", "endPeriod"])

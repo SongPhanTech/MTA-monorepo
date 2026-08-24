@@ -1,6 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { getTemplateBuffer } from "@workspace/libs/server"
-import dayjs from "dayjs"
+import { formatDateVn } from "@workspace/libs/timezone"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
 import { fieldDesc } from "../dto/openapi-helpers"
@@ -243,7 +243,7 @@ app.openapi(exportLecturerProfile, async (c) => {
     ...lecturer,
     fullname: lecturer.userProfile?.fullname,
     dateOfBirth: lecturer.userProfile?.dateOfBirth
-      ? `'${dayjs(lecturer.userProfile.dateOfBirth).format("DD/MM/YYYY")}`
+      ? `'${formatDateVn(lecturer.userProfile.dateOfBirth)}`
       : "",
     gender: lecturer.userProfile?.gender?.sTen,
     type: lecturer.lecturerType?.name || "",

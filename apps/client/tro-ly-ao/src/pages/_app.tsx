@@ -8,6 +8,7 @@ import { QueryClientProvider } from "@tanstack/react-query"
 import { SessionProvider } from "@workspace/auth/react"
 import { Provider as ZenStackHooksProvider } from "@workspace/db/hooks"
 import { getRuntimeEnv } from "@workspace/libs/utils"
+import { setupAppTimezone } from "@workspace/libs/timezone"
 import { lightThemeCustom } from "@workspace/ui"
 import { ConfigProvider } from "antd"
 import dayjs from "dayjs"
@@ -20,6 +21,7 @@ import { type ReactNode, useEffect, useState } from "react"
 import { ReactHookModalProvider } from "react-hook-disclosure-modal"
 import LoadingBar from "react-top-loading-bar"
 
+setupAppTimezone()
 dayjs.locale("vi")
 
 // Pages that require SSO authentication (using SessionProvider)

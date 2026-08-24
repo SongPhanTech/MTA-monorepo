@@ -2,6 +2,7 @@ import { OpenAPIHono } from "@hono/zod-openapi"
 import { jwtAuth } from "@workspace/auth/hono"
 import { enhance, Prisma, type PrismaClient } from "@workspace/db"
 import { createHonoHandler } from "@workspace/db/hono"
+import { setupAppTimezone } from "@workspace/libs/timezone"
 import type { Context } from "hono"
 import { contextStorage } from "hono/context-storage"
 import { cors } from "hono/cors"
@@ -23,6 +24,8 @@ import { startPreviewCleanupCron } from "./cron/cleanup-preview"
 import { checkIp } from "./middlewares/check-ip"
 import { createPrismaClient } from "./utils/db-pool"
 import { setupOpenApi } from "./utils/openapi"
+
+setupAppTimezone()
 
 export const prisma: PrismaClient = createPrismaClient()
 const app = new OpenAPIHono({ strict: false })

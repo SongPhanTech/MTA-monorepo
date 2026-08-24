@@ -1,8 +1,8 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums, Prisma, type ScoreConvert } from "@workspace/db"
 import { examTypeOptions } from "@workspace/libs/constants"
+import { formatDateTimeVn, formatDateVn, nowVn } from "@workspace/libs/timezone"
 import { getMinioUrl, getScoreStatistics } from "@workspace/libs/utils"
-import dayjs from "dayjs"
 import { read, utils } from "xlsx"
 import XlsxTemplate from "xlsx-template"
 import ExcelJS from "exceljs"
@@ -1001,14 +1001,10 @@ app.openapi(exportSubjectClassListExcel, async (c) => {
           ? "Đã nhập điểm TX,ĐK"
           : "Chưa nhập điểm", // trạng thái nhập điểm
       onePoint: item.subject?.onePoint ? "1" : "", // môn 1 đầu điểm
-      deadLineStart: item.scoreDeadLineStart
-        ? dayjs(item.scoreDeadLineStart).format("DD/MM/YYYY")
-        : "", // ngày NĐQT
-      deadLine: item.scoreDeadline ? dayjs(item.scoreDeadline).format("DD/MM/YYYY") : "", // hạn NĐQT
-      examDate: item.examDate ? dayjs(item.examDate).format("DD/MM/YYYY") : "",
-      examScoreDeadline: item.examScoreDeadline
-        ? dayjs(item.examScoreDeadline).format("DD/MM/YYYY")
-        : "", // hạn nhập điểm thi
+      deadLineStart: item.scoreDeadLineStart ? formatDateVn(item.scoreDeadLineStart) : "", // ngày NĐQT
+      deadLine: item.scoreDeadline ? formatDateVn(item.scoreDeadline) : "", // hạn NĐQT
+      examDate: item.examDate ? formatDateVn(item.examDate) : "",
+      examScoreDeadline: item.examScoreDeadline ? formatDateVn(item.examScoreDeadline) : "", // hạn nhập điểm thi
       mainLecturer: item.mainLecturer?.userProfile?.fullname || "",
       secondLecturer: item.extraLecturer?.userProfile?.fullname || "",
       enterGradeLecturer: item.enterGradeLecturer?.userProfile?.fullname || "",
@@ -1222,6 +1218,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
     }
   }
   const statistics = getScoreStatistics(subjectClass.subjectClassStudent || [])
+  const printedAt = nowVn()
   const data = {
     HOC_KY: subjectClass.semester?.name || "",
     MA_LMH: subjectClass.code,
@@ -1233,7 +1230,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
           .filter(Boolean)
       ),
     ].join(", "),
-    NGAY_THI: subjectClass.examDate ? dayjs(subjectClass.examDate).format("DD/MM/YYYY") : "",
+    NGAY_THI: subjectClass.examDate ? formatDateVn(subjectClass.examDate) : "",
     QUAN_SO: subjectClass.subjectClassStudent.length,
     // VANG: subjectClass.subjectClassStudent.filter(
     //     (scs) => scs.attendanceScore === null || scs.attendanceScore === undefined
@@ -1250,12 +1247,12 @@ app.openapi(exportSubjectClassScore, async (c) => {
         }`,
     KHOA: subjectClass.subject?.managementOrganization?.sCode || "",
     HINH_THUC_THI: examTypeOptions.find((et) => et.value === subjectClass.examType)?.label || "",
-    d: dayjs().date(),
-    m: dayjs().month() + 1,
-    y: dayjs().year(),
+    d: printedAt.date(),
+    m: printedAt.month() + 1,
+    y: printedAt.year(),
     CHUC_DANH_KY: role === "P13" ? "BAN KHẢO THÍ & ĐBCL GD-ĐT" : "CHỦ NHIỆM BỘ MÔN",
     NGUOI_IN: c.get("user")?.userName || "",
-    THOI_GIAN_IN: dayjs().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss DD/MM/YYYY"),
+    THOI_GIAN_IN: formatDateTimeVn(printedAt, "HH:mm:ss DD/MM/YYYY"),
     data: subjectClass.subjectClassStudent.map((scs, index) => {
       const statusTexts = []
       if (scs.examPostponed) statusTexts.push("Hoãn thi")
@@ -1275,7 +1272,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
         MA_SV: scs.student.code,
         HO_TEN: scs.student.userProfile?.fullname || "",
         NGAY_SINH: scs.student.userProfile?.dateOfBirth
-          ? dayjs(scs.student.userProfile.dateOfBirth).format("DD/MM/YYYY")
+          ? formatDateVn(scs.student.userProfile.dateOfBirth)
           : "",
         LOP: scs.student.fixedClass?.code || "",
         CC:
@@ -1308,7 +1305,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
   
   if (worksheet) {
     const NGUOI_IN = c.get("user")?.userName || ""
-    const THOI_GIAN_IN = dayjs().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss DD/MM/YYYY")
+    const THOI_GIAN_IN = formatDateTimeVn(printedAt, "HH:mm:ss DD/MM/YYYY")
     worksheet.headerFooter = {
       ...worksheet.headerFooter,
       oddFooter: `&LNgười in: ${NGUOI_IN}&C&P/&N&R${THOI_GIAN_IN}`,

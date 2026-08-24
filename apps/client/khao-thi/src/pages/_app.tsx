@@ -26,8 +26,10 @@ import { ReactHookModalProvider } from "react-hook-disclosure-modal"
 import LoadingBar from "react-top-loading-bar"
 import "@assets/css/custom.css"
 import { getRuntimeEnv } from "@workspace/libs/utils"
+import { setupAppTimezone } from "@workspace/libs/timezone"
 import { fetchInstance } from "@workspace/libs/api/custom-instance"
 
+setupAppTimezone()
 dayjs.locale("vi")
 dayjs.extend(weekOfYear)
 dayjs.extend(isoWeeksInYear)

@@ -1,6 +1,6 @@
 import { z } from "@hono/zod-openapi"
 import { getTemplateBuffer } from "@workspace/libs/server"
-import dayjs from "dayjs"
+import { formatDateVn } from "@workspace/libs/timezone"
 import XlsxTemplate from "xlsx-template"
 import { fieldDesc } from "../dto/openapi-helpers"
 import { prisma } from ".."
@@ -155,8 +155,8 @@ export const exportStatsArchivedAward = async (params: {
   const formattedData = data.map((item, idx) => ({
     ...item,
     no: idx + 1,
-    dateOfBirth: item.dateOfBirth ? dayjs(item.dateOfBirth).format("DD/MM/YYYY") : "",
-    awardDate: item.awardDate ? dayjs(item.awardDate).format("DD/MM/YYYY") : "",
+    dateOfBirth: item.dateOfBirth ? formatDateVn(item.dateOfBirth) : "",
+    awardDate: item.awardDate ? formatDateVn(item.awardDate) : "",
   }))
 
   template.substitute(1, {

@@ -16,6 +16,7 @@ import {
 } from "@workspace/db/zod/models"
 import { getFilesEmployeeUserIdImage } from "@workspace/libs/api/system-share"
 import { getLuanVanTemplateBuffer, getTemplateBuffer } from "@workspace/libs/server"
+import { APP_TIMEZONE, formatDateVn, nowVn, setupAppTimezone, toVnDayjs } from "@workspace/libs/timezone"
 import { chunk, genOriginalDiplomaNumber } from "@workspace/libs/utils"
 import Decimal from "decimal.js"
 import { Automizer } from "pptx-automizer"
@@ -1706,9 +1707,10 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
 
   const courseNames = courses.map((e) => e.name).join(", ")
   const trainingForm = trainingObjectType.trainingForm?.name || ""
-  let selectedDate = printDate ? dayjs(printDate, "DD/MM/YYYY") : dayjs()
+  setupAppTimezone()
+  let selectedDate = printDate ? dayjs.tz(printDate, "DD/MM/YYYY", APP_TIMEZONE) : nowVn()
   if (!selectedDate.isValid()) {
-    selectedDate = dayjs()
+    selectedDate = nowVn()
   }
   const ngayInText = `ngày ${selectedDate.date()} tháng ${selectedDate.month() + 1} năm ${selectedDate.year()}`
 
@@ -1754,7 +1756,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     return {
       stt: index + 1,
       hoTen: user?.fullname || "",
-      ngaySinh: user?.dateOfBirth ? dayjs(user.dateOfBirth).format("DD/MM/YYYY") : "",
+      ngaySinh: user?.dateOfBirth ? formatDateVn(user.dateOfBirth) : "",
       soDinhDanh: user?.idCardNumber || "",
       khoa: student.fixedClass?.trainingCourse?.name || "",
       noiSinh: user?.placeOfBirth || "",
@@ -1764,7 +1766,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       quocTich: user?.nationality?.sTen || "",
       "quyetDinhHDDGLV/ĐATN": thesisSession?.defenseDecisionNumber || "",
       ngayBaoVe: thesisSession?.startDate
-        ? dayjs(thesisSession.startDate).format("DD/MM/YYYY")
+        ? formatDateVn(thesisSession.startDate)
         : "",
       quyetDinhTotNghiep: gD?.code || "",
       namTN: student.universityGraduationYear || "",
@@ -3343,7 +3345,7 @@ app.openapi(getPhuLucIXData, async (c) => {
     return {
       stt: idx + 1,
       hoTen: u?.fullname ?? "",
-      ngaySinh: u?.dateOfBirth ? dayjs(u.dateOfBirth).format("DD/MM/YYYY") : "",
+      ngaySinh: u?.dateOfBirth ? formatDateVn(u.dateOfBirth) : "",
       chuyenNganh: app.trainingMajor?.shortName ?? app.trainingMajor?.name ?? "",
       gioiTinh: u?.gender?.sTen ?? "",
       danToc: u?.ethnicity?.sTen ?? "",
@@ -3372,8 +3374,8 @@ app.openapi(getPhuLucIXData, async (c) => {
         )
           .replace(/^\s*kho[áa]\s*/i, "")
           .trim(),
-        namXet: dayjs(session.sessionDate).year(),
-        ngayBaoCao: dayjs(session.sessionDate).format("DD/MM/YYYY"),
+        namXet: toVnDayjs(session.sessionDate)?.year(),
+        ngayBaoCao: formatDateVn(session.sessionDate),
         danhSach,
       },
     },
@@ -3488,7 +3490,7 @@ app.openapi(getDanhSachTotNghiepData, async (c) => {
     const hocVien: HocVien = {
       stt: idx + 1,
       hoTen: u?.fullname ?? "",
-      ngaySinh: u?.dateOfBirth ? dayjs(u.dateOfBirth).format("DD/MM/YYYY") : "",
+      ngaySinh: u?.dateOfBirth ? formatDateVn(u.dateOfBirth) : "",
       gioiTinh: u?.gender?.sTen ?? "",
       danToc: u?.ethnicity?.sTen ?? "",
       noiSinh: u?.newProvinceOfBirth?.sTen ?? u?.placeOfBirth ?? "",
@@ -3530,7 +3532,7 @@ app.openapi(getDanhSachTotNghiepData, async (c) => {
         )
           .replace(/^\s*kho[áa]\s*/i, "")
           .trim(),
-        namXet: dayjs(session.sessionDate).year(),
+        namXet: toVnDayjs(session.sessionDate)?.year(),
       },
     },
     200
@@ -3675,7 +3677,7 @@ app.openapi(getDanhSachHVChuaTotNghiepTA, async (c) => {
     return {
       stt: idx + 1,
       hoTen: u?.fullname ?? "",
-      ngaySinh: u?.dateOfBirth ? dayjs(u.dateOfBirth).format("DD/MM/YYYY") : "",
+      ngaySinh: u?.dateOfBirth ? formatDateVn(u.dateOfBirth) : "",
       chuyenNganh: app.trainingMajor?.shortName,
       gioiTinh: u?.gender?.sTen ?? "",
       danToc: u?.ethnicity?.sTen ?? "",
@@ -3700,7 +3702,7 @@ app.openapi(getDanhSachHVChuaTotNghiepTA, async (c) => {
         )
           .replace(/^\s*kho[áa]\s*/i, "")
           .trim(),
-        namXet: dayjs(session.sessionDate).year(),
+        namXet: toVnDayjs(session.sessionDate)?.year(),
         danhSach,
       },
     },

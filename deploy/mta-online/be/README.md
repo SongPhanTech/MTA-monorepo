@@ -1,5 +1,20 @@
 # Checklist đưa BE lên mta_online
 
+## Múi giờ (bắt buộc đồng nhất)
+
+Tất cả container BE / Postgres / Redis / MinIO dùng `TZ=Asia/Ho_Chi_Minh`.
+Code FE/BE gọi `setupAppTimezone()` từ `@workspace/libs/timezone`.
+
+Khi hiển thị ngày giờ trên UI nên dùng:
+
+```ts
+import { formatDateVn, formatDateTimeVn, toVnStartOfDay } from "@workspace/libs/timezone"
+
+formatDateVn(record.createdAt)           // DD/MM/YYYY
+formatDateTimeVn(record.createdAt)      // DD/MM/YYYY HH:mm
+toVnStartOfDay(pickerValue)              // lưu đầu ngày theo giờ VN
+```
+
 ## Đã xong
 
 - [x] Docker trên server

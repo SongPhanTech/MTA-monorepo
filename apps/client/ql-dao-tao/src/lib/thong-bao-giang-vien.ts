@@ -1,9 +1,7 @@
 import { queryClient } from "@api/index"
 import type { NotificationType } from "@workspace/db"
 import { sqlTransaction } from "@workspace/libs/api/model"
-import dayjs from "dayjs"
-
-const FMT_NGAY = "DD/MM/YYYY"
+import { formatDateVn } from "@workspace/libs/timezone"
 
 type LopMonHocThongBao = {
   id: string
@@ -27,7 +25,7 @@ type TaoThongBaoInput = {
   expiresAt?: Date | string | null
 }
 
-const formatNgay = (value?: Date | string | null) => (value ? dayjs(value).format(FMT_NGAY) : "")
+const formatNgay = (value?: Date | string | null) => (value ? formatDateVn(value) : "")
 
 const tenMonHoc = (lop: LopMonHocThongBao) => lop.monHoc || lop.name || ""
 

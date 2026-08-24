@@ -1,5 +1,5 @@
 import { CouncilRole, SupervisorRole } from "@workspace/db/client"
-import dayjs from "dayjs"
+import { formatDateVn, nowVn } from "@workspace/libs/timezone"
 import {
   councilRoleOrder,
   formatAmountWithComma,
@@ -94,7 +94,7 @@ export async function buildCouncilPaymentExportPayload(params: {
   studentIds?: string[]
 }) {
   const projects = await loadThesisProjectsForPayment(params.thesisSessionId, params.studentIds)
-  const now = dayjs()
+  const now = nowVn()
   const majorMap = new Map<string, Array<Record<string, unknown>>>()
   let khoaquanli = ""
 
@@ -115,14 +115,14 @@ export async function buildCouncilPaymentExportPayload(params: {
     }
 
     const dob = student.userProfile?.dateOfBirth
-      ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
+      ? formatDateVn(student.userProfile.dateOfBirth)
       : ""
     const doiTuong = student.fixedClass?.trainingCourse?.trainingObjectType?.type
     const loaiDoiTuong = doiTuong ? (tenDoiTuong[doiTuong]?.fullname ?? "") : ""
     const khoaHoc = student.fixedClass?.trainingCourse?.name || ""
     const chuyenNganhCode =
       student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
-    const ngayBV = project.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : ""
+    const ngayBV = project.defenseDate ? formatDateVn(project.defenseDate) : ""
     const thongTinBaoVe = `${student.userProfile?.fullname || ""}\nNgày sinh: ${dob}\nĐối tượng: ${loaiDoiTuong}, ${khoaHoc}\nChuyên ngành: ${chuyenNganhCode}\nNgày BV: ${ngayBV}`
 
     const sortedMembers = [...(project.council?.members ?? [])].sort(
@@ -227,7 +227,7 @@ export async function buildSupervisorPaymentExportPayload(params: {
   studentIds?: string[]
 }) {
   const projects = await loadThesisProjectsForPayment(params.thesisSessionId, params.studentIds)
-  const now = dayjs()
+  const now = nowVn()
   const organizationMap = new Map<string, Record<string, unknown>>()
   let studentsWithSupervisor = 0
 
@@ -261,7 +261,7 @@ export async function buildSupervisorPaymentExportPayload(params: {
 
     const qdNum = project.thesisSession?.decisionNumber || "...."
     const qdDate = project.thesisSession?.decisionDate
-      ? dayjs(project.thesisSession.decisionDate).format("DD/MM/YYYY")
+      ? formatDateVn(project.thesisSession.decisionDate)
       : ".../.../...."
     const quyetDinh = `${qdNum} \n ngày ${qdDate}`
 

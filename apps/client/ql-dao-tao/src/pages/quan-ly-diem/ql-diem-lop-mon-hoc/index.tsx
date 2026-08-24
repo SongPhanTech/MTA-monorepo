@@ -232,7 +232,7 @@ export default function QuanLyDiemLopMonHoc({
             size="small"
             className="bg-red-600 text-white pointer-events-none"
             placeholder="Hạn nhập điểm"
-            value={`Ngoài hạn nhập điểm quá trình, ${formatDate(data?.scoreDeadLineStart || "")} đến ${formatDate(data?.scoreDeadline || "")}`}
+            value={`Ngoài hạn nhập điểm thi, ${formatDate(data?.examScoreDeadline || "")}`}
           />
         )
       }
@@ -241,7 +241,7 @@ export default function QuanLyDiemLopMonHoc({
           size="small"
           className="pointer-events-none"
           placeholder="Hạn nhập điểm"
-          value={`${data?.scoreDeadLineStart && formatDate(data?.scoreDeadLineStart)} đến ${data?.scoreDeadline && formatDate(data?.scoreDeadline || "")}`}
+          value={`${formatDate(data?.examScoreDeadline || "")}`}
         />
       )
     }

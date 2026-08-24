@@ -8,6 +8,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    environment:
+      TZ: Asia/Ho_Chi_Minh
     ports:
       - "3041:3000"
     networks:
@@ -20,6 +22,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    environment:
+      TZ: Asia/Ho_Chi_Minh
     ports:
       - "3042:3000"
     networks:
@@ -33,6 +37,7 @@ services:
     env_file:
       - .env
     environment:
+      TZ: Asia/Ho_Chi_Minh
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
       REDIS_CACHE_ENABLED: ${REDIS_CACHE_ENABLED:-true}
       REDIS_TTL_SESSION: ${REDIS_TTL_SESSION:-60}
@@ -63,6 +68,7 @@ services:
     env_file:
       - .env
     environment:
+      TZ: Asia/Ho_Chi_Minh
       DATABASE_POOL_SIZE: ${DATA_SYNC_WORKER_POOL_SIZE:-10}
       DATA_SYNC_IMPORT_DIR: /data/mta-import
       DATA_SYNC_WORKER_ENABLED: "true"
@@ -81,6 +87,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    environment:
+      TZ: Asia/Ho_Chi_Minh
     ports:
       - "3045:3000"
     networks:

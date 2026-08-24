@@ -2,6 +2,7 @@ import { useExamTypeOptions } from "@hooks/examType"
 import { useSubjectClassStatusOptions } from "@hooks/subjectClassStatus"
 import { useSubjectClassTypeOptions } from "@hooks/subjectClassType"
 import { useFindUniqueFixedClass } from "@workspace/db/hooks"
+import { formatDateTimeVn } from "@workspace/libs/timezone"
 import { Descriptions, Modal, Table, Tabs, Tag } from "antd"
 import dayjs from "dayjs"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -539,14 +540,14 @@ export default function ModalChiTietLopBienChe() {
               dataIndex: "scoreDeadline",
               width: 150,
               align: "center",
-              render: (value) => (value ? dayjs(value).format("DD/MM/YYYY HH:mm") : ""),
+              render: (value) => (value ? formatDateTimeVn(value) : ""),
             },
             {
               title: "Hạn nhập điểm thi",
               dataIndex: "examScoreDeadline",
               width: 150,
               align: "center",
-              render: (value) => (value ? dayjs(value).format("DD/MM/YYYY HH:mm") : ""),
+              render: (value) => (value ? formatDateTimeVn(value) : ""),
             },
             {
               title: "Khoá điểm TX/ĐK",

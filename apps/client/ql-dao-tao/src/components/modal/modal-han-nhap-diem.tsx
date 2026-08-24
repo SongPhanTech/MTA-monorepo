@@ -1,19 +1,16 @@
 import type { SubjectClass } from "@workspace/db/client"
 import { Col, DatePicker, Form, message } from "antd"
-import dayjs from "dayjs"
 import "dayjs/locale/vi"
 import { queryClient } from "@api/index"
 import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import useSpinner from "@hooks/spinner"
 import { useFindUniqueSubjectClass, useUpdateSubjectClass } from "@workspace/db/hooks"
+import { toVnDayjs, toVnEndOfDay } from "@workspace/libs/timezone"
 import { useWatch } from "antd/es/form/Form"
-import customParseFormat from "dayjs/plugin/customParseFormat"
 import { useEffect } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 export type PutSubjectClass = SubjectClass
-
-dayjs.extend(customParseFormat)
 
 const HanNhapDiem = () => {
   const [form] = Form.useForm<PutSubjectClass>()
@@ -31,7 +28,7 @@ const HanNhapDiem = () => {
 
   const { showSpinner, hideSpinner } = useSpinner()
 
-  const { data: initialValue, refetch } = useFindUniqueSubjectClass(
+  const { data: initialValue } = useFindUniqueSubjectClass(
     {
       where: { id },
     },
@@ -43,11 +40,9 @@ const HanNhapDiem = () => {
     if (initialValue) {
       form.setFieldsValue({
         ...initialValue,
-        scoreDeadline: initialValue.scoreDeadline ? dayjs(initialValue.scoreDeadline) : undefined,
-        examScoreDeadline: initialValue.examScoreDeadline
-          ? dayjs(initialValue.examScoreDeadline)
-          : undefined,
-      })
+        scoreDeadline: toVnDayjs(initialValue.scoreDeadline) ?? undefined,
+        examScoreDeadline: toVnDayjs(initialValue.examScoreDeadline) ?? undefined,
+      } as any)
     }
   }, [initialValue])
 
@@ -58,8 +53,8 @@ const HanNhapDiem = () => {
     try {
       showSpinner()
       const data = {
-        scoreDeadline: output?.scoreDeadline,
-        examScoreDeadline: output?.examScoreDeadline,
+        scoreDeadline: output.scoreDeadline ? toVnEndOfDay(output.scoreDeadline) : null,
+        examScoreDeadline: output.examScoreDeadline ? toVnEndOfDay(output.examScoreDeadline) : null,
       }
       if (id) {
         await update({
@@ -101,10 +96,10 @@ const HanNhapDiem = () => {
             style={{ width: "100%" }}
             placeholder="Chọn ngày"
             format="DD/MM/YYYY"
-            value={scoreDeadline}
+            value={scoreDeadline as any}
             onChange={(date) => {
               form.setFieldsValue({
-                scoreDeadline: date ? dayjs(date) : null,
+                scoreDeadline: (toVnDayjs(date) ?? null) as any,
               })
             }}
           />
@@ -116,10 +111,10 @@ const HanNhapDiem = () => {
             style={{ width: "100%" }}
             placeholder="Chọn ngày"
             format="DD/MM/YYYY"
-            value={examScoreDeadline}
+            value={examScoreDeadline as any}
             onChange={(date) => {
               form.setFieldsValue({
-                examScoreDeadline: date ? dayjs(date) : null,
+                examScoreDeadline: (toVnDayjs(date) ?? null) as any,
               })
             }}
           />

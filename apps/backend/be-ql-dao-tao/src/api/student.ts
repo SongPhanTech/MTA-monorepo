@@ -1,7 +1,7 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { AcademicActionType, StudentStatus, Prisma as PrismaNamespace } from "@workspace/db"
 import { getTemplateBuffer } from "@workspace/libs/server"
-import dayjs from "dayjs"
+import { formatDateVn } from "@workspace/libs/timezone"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
 import {
@@ -978,8 +978,8 @@ app.openapi(debtStatistics, async (c) => {
       return {
         studentCode: s.studentCode,
         fullname: s.fullname,
-        birthday: s.dateOfBirth ? dayjs(s.dateOfBirth).format("DD/MM/YYYY") : "",
-        dateOfBirth: s.dateOfBirth ? dayjs(s.dateOfBirth).format("DD/MM/YYYY") : "",
+        birthday: s.dateOfBirth ? formatDateVn(s.dateOfBirth) : "",
+        dateOfBirth: s.dateOfBirth ? formatDateVn(s.dateOfBirth) : "",
         fixedClassCode: s.fixedClassCode,
         totalDebtSubject,
         totalDebtCredit,
@@ -1010,14 +1010,14 @@ app.openapi(debtStatistics, async (c) => {
   template.substitute("Học lại", {
     ĐTĐT: trainingObjectType.name,
     KHOÁ: trainingCourse?.name || "Tất cả các khoá",
-    DATE: dayjs(date).format("DD/MM/YYYY"),
+    DATE: formatDateVn(date),
     data: hocLaiRows.map((r, idx) => ({ no: idx + 1, ...r })),
   })
 
   template.substitute("Thi lại", {
     ĐTĐT: trainingObjectType.name,
     KHOÁ: trainingCourse?.name || "Tất cả các khoá",
-    DATE: dayjs(date).format("DD/MM/YYYY"),
+    DATE: formatDateVn(date),
     data: thiLaiRows.map((r, idx) => ({ no: idx + 1, ...r })),
   })
 

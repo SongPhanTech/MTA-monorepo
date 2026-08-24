@@ -15,6 +15,7 @@ services:
       - .env
       - .env.be-portal
     environment:
+      TZ: Asia/Ho_Chi_Minh
       DATABASE_POOL_SIZE: ${DATABASE_POOL_SIZE_2:-40}
       PORT: "3000"
       DATA_SYNC_IMPORT_DIR: /data/mta-import
