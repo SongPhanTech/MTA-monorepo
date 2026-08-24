@@ -227,7 +227,8 @@ const openSubjectClassReExamStudents = createRoute({
  * Business rules:
  * - A student is a Retake (học lại) candidate if their most recent attempt (rn=1) satisfies:
  *     truot_mon = true  OR  cam_thi = true  OR  dinh_chi = true
- *   and they have NOT withdrawn, are NOT exempted, and have NOT postponed the exam.
+ *   and they have NOT withdrawn, are NOT exempted, have NOT postponed the exam,
+ *   and Student.status = ENROLLED.
  *
  * Relationship with isRetakeExam / ReExam (thi lại):
  * - TrainingCourse.isRetakeExam = true means the course allows students to retake only the
@@ -288,7 +289,10 @@ app.openapi(openSubjectClassRetake, async (c) => {
   })
   const subjectAlreadyInPlan =
     planTraining?.planTrainingSubjects?.map((e) => e.trainingBlockSubjectId) || []
-  const conditions = [PrismaNamespace.sql`TBS."subjectId" = sv.id`]
+  const conditions = [
+    PrismaNamespace.sql`TBS."subjectId" = sv.id`,
+    PrismaNamespace.sql`S."status" = ${$Enums.StudentStatus.ENROLLED}`,
+  ]
   if (trainingObjectTypeId) {
     conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
   }
@@ -496,7 +500,10 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
     attempt_count: number
   }[]
 
-  const conditions = [PrismaNamespace.sql`TBS."subjectId" = sv.id`]
+  const conditions = [
+    PrismaNamespace.sql`TBS."subjectId" = sv.id`,
+    PrismaNamespace.sql`S."status" = ${$Enums.StudentStatus.ENROLLED}`,
+  ]
   if (trainingObjectTypeId) {
     conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
   }
@@ -685,6 +692,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
  *     AND dinh_chi = false  -- not suspended
  *     AND withdrew = false
  *     AND exempted = false
+ *     AND Student.status = ENROLLED
  * - ReExam is the student's ONE extra chance before they must do a full Retake (học lại).
  *   After failing a ReExam (attempt_count >= 2), they fall out of this list and appear in
  *   openSubjectClassRetake instead.
@@ -739,7 +747,10 @@ app.openapi(openSubjectClassReExam, async (c) => {
   })
   const subjectAlreadyInPlan =
     planTraining?.planTrainingSubjects?.map((e) => e.trainingBlockSubjectId) || []
-  const conditions = [PrismaNamespace.sql`TBS."subjectId" = sv.id`]
+  const conditions = [
+    PrismaNamespace.sql`TBS."subjectId" = sv.id`,
+    PrismaNamespace.sql`S."status" = ${$Enums.StudentStatus.ENROLLED}`,
+  ]
   if (trainingObjectTypeId) {
     conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
   }
@@ -920,7 +931,10 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
     truot_mon: boolean
   }[]
 
-  const conditions = [PrismaNamespace.sql`TBS."subjectId" = sv.id`]
+  const conditions = [
+    PrismaNamespace.sql`TBS."subjectId" = sv.id`,
+    PrismaNamespace.sql`S."status" = ${$Enums.StudentStatus.ENROLLED}`,
+  ]
   if (trainingObjectTypeId) {
     conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
   }
