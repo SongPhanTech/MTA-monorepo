@@ -12,7 +12,6 @@ import {
   useFindManyStudentSubjectScore,
   useFindManyStudentSubjectScoreHistory,
   useFindManySubjectClass,
-  useUpdateSubjectClass,
 } from "@workspace/db/hooks"
 import { $Enums } from "@workspace/db/client"
 import { getUrl } from "@workspace/libs/api/custom-instance"
@@ -174,11 +173,9 @@ const NhapDiemThiGiangDayPage = () => {
   const [historyTarget, setHistoryTarget] = useState<{ id: string; hoTen: string } | null>(null)
   const [importModalVisible, setImportModalVisible] = useState(false)
   const [dongFocusIds, setDongFocusIds] = useState<string[]>([])
-  const [manualEnableLockPrint, setManualEnableLockPrint] = useState(false)
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(320)
 
-  const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
   const { onOpen: openXemTaiLieu } = useDisclosure<{
     uri: string
     name?: string
@@ -320,12 +317,10 @@ const NhapDiemThiGiangDayPage = () => {
     return laKyThiDanhPhach || daKhoaDiem || quaHan
   }, [lopMonHoc, laKyThiDanhPhach])
 
-  const khoaNhapDiem = disabledForm && !manualEnableLockPrint
+  const khoaNhapDiem = disabledForm
 
-  const isLockAndPrintDisabled =
-    !lopId ||
-    (!manualEnableLockPrint &&
-      (!lopMonHoc?.enteredExamScore || !!lopMonHoc?.isLockExamScore || !!lopMonHoc?.scoreSubmitted))
+  const daKhoaDiem = !!lopMonHoc?.isLockExamScore || !!lopMonHoc?.scoreSubmitted
+  const coTheInPhieuDiem = !!lopId && daKhoaDiem
 
   const { data: scoreRows = [], refetch } = useFindManyStudentSubjectScore(
     {
@@ -576,64 +571,22 @@ const NhapDiemThiGiangDayPage = () => {
     })
   }
 
-  const lockExam = async (subjectClassId?: string) => {
-    if (!subjectClassId) {
-      message.warning("Không tìm thấy ID lớp học")
-      return false
-    }
-    try {
-      await updateSubjectClass({
-        where: { id: subjectClassId },
-        data: {
-          isLockScore: true,
-          isLockExamScore: true,
-          subjectClassHistory: {
-            create: {
-              isLockExamScore: true,
-              isLockScore: true,
-              updatedById: profileId,
-            },
-          },
-        },
-      })
-      message.success("Khoá điểm thành công")
-      return true
-    } catch (error) {
-      console.error(error)
-      message.error("Có lỗi xảy ra khi khoá điểm")
-      return false
-    }
-  }
-
-  const handleKhoaVaInPhieuDiem = () => {
+  const handleInPhieuDiem = () => {
     if (!lopId) {
       message.warning("Vui lòng chọn lớp học trước khi in")
       return
     }
-    Modal.confirm({
-      title: "Xác nhận",
-      content: "Bạn có chắc chắn muốn in phiếu điểm và khoá nhập điểm lại không?",
-      okText: "Xác nhận",
-      cancelText: "Hủy",
-      onOk: async () => {
-        const isSuccess = await lockExam(lopId)
-        if (!isSuccess) return
-        setManualEnableLockPrint(false)
-        try {
-          await refetchSubjectClass()
-          queryClient.invalidateQueries({ queryKey: ["zenstack", "SubjectClass"] })
-        } catch (e) {
-          console.error(e)
-        }
-        const baseUrl =
-          getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "https://api.daotao.mta.swantech.vn"
-        const exportUrl = getExportSubjectClassScoreUrl({ id: lopId })
-        openXemTaiLieu({
-          uri: `${getUrl(baseUrl, exportUrl)}${exportUrl.includes("?") ? "&" : "?"}role=GV`,
-          name: "Phiếu điểm",
-          mimeType: "xlsx",
-        })
-      },
+    if (!daKhoaDiem) {
+      message.warning("Chỉ được in phiếu điểm khi lớp đã được khoá điểm")
+      return
+    }
+    const baseUrl =
+      getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "https://api.daotao.mta.swantech.vn"
+    const exportUrl = getExportSubjectClassScoreUrl({ id: lopId })
+    openXemTaiLieu({
+      uri: `${getUrl(baseUrl, exportUrl)}${exportUrl.includes("?") ? "&" : "?"}role=GV`,
+      name: "Phiếu điểm",
+      mimeType: "xlsx",
     })
   }
 
@@ -651,10 +604,6 @@ const NhapDiemThiGiangDayPage = () => {
       mimeType: "xlsx",
     })
   }
-
-  useEffect(() => {
-    setManualEnableLockPrint(false)
-  }, [lopId])
 
   return (
     <div className="flex h-[calc(100vh-112px)] flex-col gap-3">
@@ -837,18 +786,11 @@ const NhapDiemThiGiangDayPage = () => {
               disabled={khoaNhapDiem}
             />
             <Button
-              type={manualEnableLockPrint ? "primary" : "default"}
-              disabled={!lopId}
-              onClick={() => setManualEnableLockPrint((prev) => !prev)}
-            >
-              {manualEnableLockPrint ? "Tắt mở khoá in" : "Bật mở khoá in"}
-            </Button>
-            <Button
               icon={<Printer size={14} />}
-              disabled={isLockAndPrintDisabled}
-              onClick={handleKhoaVaInPhieuDiem}
+              disabled={!coTheInPhieuDiem}
+              onClick={handleInPhieuDiem}
             >
-              Khoá và in phiếu điểm
+              In phiếu điểm
             </Button>
             <Button
               icon={<Printer size={14} />}
