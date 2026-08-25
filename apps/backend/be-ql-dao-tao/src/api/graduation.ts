@@ -2272,10 +2272,12 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
       (acc, item) => acc + (item.subjectVersion?.credit || 0),
       0
     )
-    const totalPoints = subjectScores.reduce(
-      (acc, item) => acc + (Number(item.finalScore) || 0) * (item.subjectVersion?.credit || 0),
-      0
-    )
+    const totalPoints = subjectScores.reduce((acc, item) => {
+      // Ưu tiên điểm phiên / điểm chuyển trường
+      const score =
+        item.manualFinalScore ?? (item.finalScore != null ? Number(item.finalScore) : 0)
+      return acc + score * (item.subjectVersion?.credit || 0)
+    }, 0)
     const gpa = totalCredits > 0 ? totalPoints / totalCredits : 0
 
     const scoreConverts = course?.scoreConverts || []
@@ -3244,17 +3246,24 @@ app.openapi(getPhuLucIXData, async (c) => {
     ? await prisma.studentSubjectScore.findMany({
         where: {
           studentId: { in: studentIds },
-          finalScore: { not: null },
           deletedAt: null,
+          OR: [{ manualFinalScore: { not: null } }, { finalScore: { not: null } }],
         },
-        select: { studentId: true, subjectVersionId: true, finalScore: true },
+        select: {
+          studentId: true,
+          subjectVersionId: true,
+          finalScore: true,
+          manualFinalScore: true,
+        },
       })
     : []
 
   const scoreMap = new Map<string, Map<string, number>>()
   for (const s of allScores) {
-    if (s.finalScore == null) continue
-    const score = Number(s.finalScore)
+    // Ưu tiên điểm phiên / điểm chuyển trường
+    const score =
+      s.manualFinalScore ?? (s.finalScore != null ? Number(s.finalScore) : null)
+    if (score == null) continue
     let inner = scoreMap.get(s.studentId)
     if (!inner) {
       inner = new Map()
@@ -3619,17 +3628,24 @@ app.openapi(getDanhSachHVChuaTotNghiepTA, async (c) => {
     ? await prisma.studentSubjectScore.findMany({
         where: {
           studentId: { in: studentIds },
-          finalScore: { not: null },
           deletedAt: null,
+          OR: [{ manualFinalScore: { not: null } }, { finalScore: { not: null } }],
         },
-        select: { studentId: true, subjectVersionId: true, finalScore: true },
+        select: {
+          studentId: true,
+          subjectVersionId: true,
+          finalScore: true,
+          manualFinalScore: true,
+        },
       })
     : []
 
   const scoreMap = new Map<string, Map<string, number>>()
   for (const s of allScores) {
-    if (s.finalScore == null) continue
-    const score = Number(s.finalScore)
+    // Ưu tiên điểm phiên / điểm chuyển trường
+    const score =
+      s.manualFinalScore ?? (s.finalScore != null ? Number(s.finalScore) : null)
+    if (score == null) continue
     let inner = scoreMap.get(s.studentId)
     if (!inner) {
       inner = new Map()
