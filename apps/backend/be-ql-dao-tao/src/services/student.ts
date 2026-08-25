@@ -612,71 +612,32 @@ export const exportStudentAcademicWarning = async ({
 }
 
 export async function _generateStudentImportTemplate(
-  trainingObjectTypeId: string,
-  options?: { trainingCourseId?: string | null }
+  trainingObjectTypeId: string
 ): Promise<ArrayBuffer> {
-  const trainingCourseId = options?.trainingCourseId?.trim() || undefined
-  let trainingCourseName = ""
-
-  if (trainingCourseId) {
-    const course = await prisma.trainingCourse.findFirst({
-      where: {
-        id: trainingCourseId,
-        trainingObjectTypeId,
-        active: true,
-        deletedAt: null,
-      },
-      select: { id: true, name: true },
-    })
-    if (!course) {
-      throw new Error("Khoá học không tồn tại hoặc không thuộc đối tượng đào tạo")
-    }
-    trainingCourseName = course.name
-  }
-
-  // CV có thể gắn ĐTĐT trực tiếp, qua Curriculum, hoặc qua khoá học.
+  // CTĐT / ngành / CN / đơn vị / lớp QL: luôn theo ĐTĐT (không lọc theo khoá).
   const curriculumVersionWhere = {
     active: true,
     deletedAt: null,
-    AND: [
+    OR: [
+      { trainingObjectTypeId },
+      { curriculum: { trainingObjectTypeId, deletedAt: null } },
       {
-        OR: [
-          { trainingObjectTypeId },
-          { curriculum: { trainingObjectTypeId, deletedAt: null } },
-          {
-            trainingCourse: {
-              trainingObjectTypeId,
-              deletedAt: null,
-              active: true,
-            },
-          },
-        ],
+        trainingCourse: {
+          trainingObjectTypeId,
+          deletedAt: null,
+          active: true,
+        },
       },
-      ...(trainingCourseId
-        ? [
-            {
-              OR: [
-                { trainingCourseId },
-                {
-                  fixedClasses: {
-                    some: {
-                      trainingCourseId,
-                      deletedAt: null,
-                      active: true,
-                    },
-                  },
-                },
-              ],
-            },
-          ]
-        : []),
     ],
   }
+
+  const orgSelect = { sTen: true, bActive: true, bDeleted: true } as const
 
   const [
     fixedClasses,
     curricula,
-    organizations,
+    majorsByObjectType,
+    fieldsByObjectType,
     trainingObjectType,
   ] = await Promise.all([
     prisma.fixedClass.findMany({
@@ -687,7 +648,6 @@ export async function _generateStudentImportTemplate(
           trainingObjectTypeId,
           active: true,
           deletedAt: null,
-          ...(trainingCourseId ? { id: trainingCourseId } : {}),
         },
       },
       select: { code: true, name: true },
@@ -699,11 +659,19 @@ export async function _generateStudentImportTemplate(
         name: true,
         curriculum: {
           select: {
-            trainingField: { select: { name: true } },
+            trainingField: {
+              select: {
+                name: true,
+                organization: { select: orgSelect },
+              },
+            },
             trainingMajor: {
               select: {
                 name: true,
                 trainingField: { select: { name: true } },
+                organization: { select: orgSelect },
+                secondOrganization: { select: orgSelect },
+                thirdOrganization: { select: orgSelect },
               },
             },
           },
@@ -711,31 +679,6 @@ export async function _generateStudentImportTemplate(
       },
       orderBy: { name: "asc" },
     }),
-    prisma.dM_DonVi.findMany({
-      where: { bActive: true, bDeleted: false },
-      select: { sTen: true },
-      orderBy: { sTen: "asc" },
-    }),
-    prisma.trainingObjectType.findUniqueOrThrow({
-      where: { id: trainingObjectTypeId },
-      select: { name: true },
-    }),
-  ])
-
-  // Ngành = TrainingField, chuyên ngành = TrainingMajor.
-  // CTĐT có thể gắn field trực tiếp (trainingFieldId) hoặc gián tiếp qua major.
-  const majorNamesFromCurricula = new Set<string>()
-  const fieldNamesFromCurricula = new Set<string>()
-  for (const cv of curricula) {
-    const majorName = cv.curriculum?.trainingMajor?.name?.trim()
-    const fieldFromCurriculum = cv.curriculum?.trainingField?.name?.trim()
-    const fieldFromMajor = cv.curriculum?.trainingMajor?.trainingField?.name?.trim()
-    if (majorName) majorNamesFromCurricula.add(majorName)
-    if (fieldFromCurriculum) fieldNamesFromCurricula.add(fieldFromCurriculum)
-    if (fieldFromMajor) fieldNamesFromCurricula.add(fieldFromMajor)
-  }
-
-  const [majorsByObjectType, fieldsByObjectType] = await Promise.all([
     prisma.trainingMajor.findMany({
       where: {
         trainingObjectTypes: {
@@ -744,7 +687,13 @@ export async function _generateStudentImportTemplate(
         deletedAt: null,
         active: true,
       },
-      select: { name: true },
+      select: {
+        name: true,
+        organization: { select: orgSelect },
+        secondOrganization: { select: orgSelect },
+        thirdOrganization: { select: orgSelect },
+        trainingField: { select: { name: true } },
+      },
       orderBy: { name: "asc" },
     }),
     prisma.trainingField.findMany({
@@ -755,10 +704,53 @@ export async function _generateStudentImportTemplate(
         deletedAt: null,
         active: true,
       },
-      select: { name: true },
+      select: {
+        name: true,
+        organization: { select: orgSelect },
+      },
       orderBy: { name: "asc" },
     }),
+    prisma.trainingObjectType.findUniqueOrThrow({
+      where: { id: trainingObjectTypeId },
+      select: { name: true },
+    }),
   ])
+
+  const majorNamesFromCurricula = new Set<string>()
+  const fieldNamesFromCurricula = new Set<string>()
+  const orgNamesFromCurricula = new Set<string>()
+  const orgNamesFromObjectType = new Set<string>()
+  const addOrg = (
+    target: Set<string>,
+    org?: { sTen: string | null; bActive: boolean | null; bDeleted: boolean | null } | null
+  ) => {
+    const name = org?.sTen?.trim()
+    if (name && org?.bActive !== false && org?.bDeleted !== true) target.add(name)
+  }
+
+  for (const cv of curricula) {
+    const major = cv.curriculum?.trainingMajor
+    const field = cv.curriculum?.trainingField
+    const majorName = major?.name?.trim()
+    const fieldFromCurriculum = field?.name?.trim()
+    const fieldFromMajor = major?.trainingField?.name?.trim()
+    if (majorName) majorNamesFromCurricula.add(majorName)
+    if (fieldFromCurriculum) fieldNamesFromCurricula.add(fieldFromCurriculum)
+    if (fieldFromMajor) fieldNamesFromCurricula.add(fieldFromMajor)
+    addOrg(orgNamesFromCurricula, field?.organization)
+    addOrg(orgNamesFromCurricula, major?.organization)
+    addOrg(orgNamesFromCurricula, major?.secondOrganization)
+    addOrg(orgNamesFromCurricula, major?.thirdOrganization)
+  }
+
+  for (const major of majorsByObjectType) {
+    addOrg(orgNamesFromObjectType, major.organization)
+    addOrg(orgNamesFromObjectType, major.secondOrganization)
+    addOrg(orgNamesFromObjectType, major.thirdOrganization)
+  }
+  for (const field of fieldsByObjectType) {
+    addOrg(orgNamesFromObjectType, field.organization)
+  }
 
   const mergeNames = (...groups: Array<Iterable<string> | Array<{ name: string }>>) => {
     const set = new Set<string>()
@@ -768,75 +760,50 @@ export async function _generateStudentImportTemplate(
         if (name) set.add(name)
       }
     }
-    return [...set].sort((a, b) => a.localeCompare(b, "vi")).map((name) => ({ name }))
+    return [...set].sort((a, b) => a.localeCompare(b, "vi"))
   }
 
-  // Dropdown ngành/chuyên ngành luôn theo đối tượng đào tạo.
-  // Khi chọn khoá và CTĐT khoá có ngành/CN → ưu tiên danh mục của khoá đó.
-  let trainingMajors = mergeNames(majorsByObjectType, majorNamesFromCurricula)
-  let trainingFields = mergeNames(fieldsByObjectType, fieldNamesFromCurricula)
-  if (trainingCourseId && majorNamesFromCurricula.size > 0) {
-    trainingMajors = mergeNames(majorNamesFromCurricula)
+  // Luôn lấy đủ danh mục theo ĐTĐT (gộp từ major/field của ĐTĐT + từ CTĐT).
+  const trainingMajors = mergeNames(
+    majorsByObjectType.map((m) => m.name),
+    majorNamesFromCurricula
+  )
+  const trainingFields = mergeNames(
+    fieldsByObjectType.map((f) => f.name),
+    fieldNamesFromCurricula
+  )
+  let organizationNames = mergeNames(orgNamesFromObjectType, orgNamesFromCurricula)
+  if (organizationNames.length === 0) {
+    const allOrgs = await prisma.dM_DonVi.findMany({
+      where: { bActive: true, bDeleted: false },
+      select: { sTen: true },
+      orderBy: { sTen: "asc" },
+    })
+    organizationNames = mergeNames(allOrgs.map((o) => o.sTen || ""))
   }
-  if (trainingCourseId && fieldNamesFromCurricula.size > 0) {
-    trainingFields = mergeNames(fieldNamesFromCurricula)
-  }
+
+  const curriculumNames = mergeNames(curricula.map((c) => c.name))
+  const fixedClassRows = fixedClasses.map((fc) => ({
+    ma: (fc.code || "").trim(),
+    ten: (fc.name || "").trim(),
+  }))
 
   const buffer = await getTemplateBuffer(prisma, "MauImportDSHV_v5.xlsx")
-  const template = new XlsxTemplate(buffer)
-
-  const safeSubstitute = (sheetName: string, data: Record<string, unknown>) => {
-    try {
-      template.substitute(sheetName, data)
-    } catch (e) {
-      console.warn(`[_generateStudentImportTemplate] Không thể map sheet "${sheetName}":`, e)
-    }
-  }
-
-  // Template: J6/J7 = ${doituongdaotao}/${khoahoc}; danh mục = ${table:team.*}
-  // finalizeStudentImportWorkbook gắn lại named range + dropdown theo dữ liệu ĐTĐT.
-  safeSubstitute("HỌC VIÊN, SINH VIÊN", {
-    doituongdaotao: trainingObjectType.name,
-    khoahoc: trainingCourseName,
-  })
-  safeSubstitute("DoiTuongDaoTao", {
-    team: [{ ten: trainingObjectType.name }],
-  })
-  safeSubstitute("DanhMucLopQuanLi", {
-    team: fixedClasses.map((fc) => ({ ma: fc.code || "", ten: fc.name })),
-  })
-  safeSubstitute("DanhMucChuongTrinhDaoTao", {
-    team: curricula.map((c) => ({ ten: c.name })),
-  })
-  safeSubstitute("DanhMucChuyenNganh", {
-    team: trainingMajors.map((tm) => ({ ten: tm.name })),
-  })
-  safeSubstitute("DanhMucNganh", {
-    team: trainingFields.map((tf) => ({ ten: tf.name })),
-  })
-  safeSubstitute("DanhMucDonViQuanLi", {
-    team: organizations.map((o) => ({ ten: o.sTen })),
-  })
-
-  const generated = template.generate({ type: "nodebuffer" }) as Buffer
-  return finalizeStudentImportWorkbook(generated, {
+  // Không dùng xlsx-template: template MinIO không có placeholder, và xlsx-template
+  // dễ làm lệch named range. Chỉ PizZip ghi J6/J7 + danh mục + dropdown.
+  return finalizeStudentImportWorkbook(buffer, {
     trainingObjectTypeName: trainingObjectType.name,
-    trainingCourseName,
-    lastRowBySheet: {
-      DanhMucNganh: Math.max(2, 1 + trainingFields.length),
-      DanhMucChuyenNganh: Math.max(2, 1 + trainingMajors.length),
-      DanhMucChuongTrinhDaoTao: Math.max(1, curricula.length || 1),
-      DanhMucLopQuanLi: Math.max(1, fixedClasses.length || 1),
-      DanhMucDonViQuanLi: Math.max(1, organizations.length || 1),
-      DanhMucGioiTinh: 3,
-      DanhMucDanToc: 56,
-      DanhMucQuocTich: 231,
-      DanhMucTinh: 35,
+    trainingCourseName: "",
+    catalogs: {
+      nganh: trainingFields,
+      chuyenNganh: trainingMajors,
+      chuongTrinhDaoTao: curriculumNames,
+      donViQuanLi: organizationNames,
+      lopQuanLi: fixedClassRows,
     },
   }) as any
 }
 
-/** Excel max row; named ranges past this cause "Removed Records: Named range". */
 const EXCEL_MAX_ROW = 1_048_576
 const STUDENT_IMPORT_DATA_START_ROW = 13
 const STUDENT_IMPORT_DATA_END_ROW = 5000
@@ -865,33 +832,138 @@ function getWorkbookSheetPath(zip: InstanceType<typeof PizZip>, sheetName: strin
   const relsXml = zip.file("xl/_rels/workbook.xml.rels")?.asText()
   if (!workbookXml || !relsXml) return null
 
-  const sheetTag = [...workbookXml.matchAll(/<sheet\b[^>]*>/g)].find((m) => {
+  const sheetTag = [...workbookXml.matchAll(/<sheet\b[^>]*\/?>/g)].find((m) => {
     const nameMatch = m[0].match(/\bname="([^"]+)"/)
     return nameMatch?.[1] === sheetName
   })
   if (!sheetTag) return null
   const rId = sheetTag[0].match(/\br:id="([^"]+)"/)?.[1]
   if (!rId) return null
-  const target = relsXml.match(new RegExp(`Id="${rId}"[^>]*Target="([^"]+)"`))?.[1]
-    || relsXml.match(new RegExp(`Target="([^"]+)"[^>]*Id="${rId}"`))?.[1]
+
+  let target: string | undefined
+  for (const m of relsXml.matchAll(/<Relationship\b[^>]*\/?>/g)) {
+    const tag = m[0]
+    const id = tag.match(/\bId="([^"]+)"/)?.[1]
+    if (id !== rId) continue
+    target = tag.match(/\bTarget="([^"]+)"/)?.[1]
+    break
+  }
   if (!target) return null
-  return target.startsWith("/") ? `xl${target}` : `xl/${target.replace(/^\.\//, "")}`
+
+  const normalized = target.replace(/^\.\//, "").replace(/^\//, "")
+  const candidates = [
+    normalized.startsWith("xl/") ? normalized : `xl/${normalized}`,
+    normalized,
+  ]
+  for (const path of candidates) {
+    if (zip.file(path)) return path
+  }
+  return candidates[0]
 }
 
-/**
- * Ghi J6/J7 theo ĐTĐT + khoá, gắn named range/dropdown cột danh mục,
- * clamp range và reset selection (template MinIO hay chọn A3:A527).
- */
+
+function catalogLastRow(valueCount: number, hasHeader: boolean): number {
+  const dataStartRow = hasHeader ? 2 : 1
+  if (valueCount <= 0) return dataStartRow
+  return dataStartRow + valueCount - 1
+}
+
+function rewriteCatalogSheetData(
+  zip: InstanceType<typeof PizZip>,
+  sheetName: string,
+  columns: Array<{ col: string; header?: string; values: string[] }>
+): number {
+  const sheetPath = getWorkbookSheetPath(zip, sheetName)
+  const maxValues = Math.max(0, ...columns.map((c) => c.values.length))
+  const hasHeader = columns.some((c) => c.header != null && c.header !== "")
+  const dataStartRow = hasHeader ? 2 : 1
+  const lastRow = catalogLastRow(maxValues, hasHeader)
+
+  if (!sheetPath || !zip.file(sheetPath)) {
+    console.warn(
+      `[_generateStudentImportTemplate] Không tìm thấy sheet danh mục "${sheetName}" — dropdown có thể thiếu dữ liệu`
+    )
+    return lastRow
+  }
+
+  const rowsXml: string[] = []
+  if (hasHeader) {
+    const cells = columns
+      .map((c) => {
+        const text = escapeXmlText(c.header || "")
+        return `<c r="${c.col}1" t="inlineStr"><is><t>${text}</t></is></c>`
+      })
+      .join("")
+    rowsXml.push(`<row r="1">${cells}</row>`)
+  }
+
+  for (let i = 0; i < maxValues; i++) {
+    const rowNum = dataStartRow + i
+    const cells = columns
+      .map((c) => {
+        const value = c.values[i] ?? ""
+        return `<c r="${c.col}${rowNum}" t="inlineStr"><is><t>${escapeXmlText(value)}</t></is></c>`
+      })
+      .join("")
+    rowsXml.push(`<row r="${rowNum}">${cells}</row>`)
+  }
+  if (maxValues === 0) {
+    const cells = columns
+      .map((c) => `<c r="${c.col}${dataStartRow}" t="inlineStr"><is><t></t></is></c>`)
+      .join("")
+    rowsXml.push(`<row r="${dataStartRow}">${cells}</row>`)
+  }
+
+  const lastCol = columns.map((c) => c.col).sort().slice(-1)[0] || "A"
+  const sheetData = `<sheetData>${rowsXml.join("")}</sheetData>`
+  let xml = zip.file(sheetPath)!.asText()
+  if (/<sheetData\b[^>]*\/>/.test(xml)) {
+    xml = xml.replace(/<sheetData\b[^>]*\/>/, sheetData)
+  } else if (/<sheetData\b[\s\S]*?<\/sheetData>/.test(xml)) {
+    xml = xml.replace(/<sheetData\b[\s\S]*?<\/sheetData>/, sheetData)
+  } else {
+    xml = xml.replace("</worksheet>", `${sheetData}</worksheet>`)
+  }
+  if (/<dimension\b[^>]*\/>/.test(xml)) {
+    xml = xml.replace(/<dimension\b[^>]*\/>/, `<dimension ref="A1:${lastCol}${lastRow}"/>`)
+  } else if (/<dimension\b[^>]*>[\s\S]*?<\/dimension>/.test(xml)) {
+    xml = xml.replace(
+      /<dimension\b[^>]*>[\s\S]*?<\/dimension>/,
+      `<dimension ref="A1:${lastCol}${lastRow}"/>`
+    )
+  }
+  // Bỏ table/autoFilter — dễ khóa named range còn 1 dòng.
+  xml = xml.replace(/<tableParts\b[\s\S]*?<\/tableParts>/g, "")
+  xml = xml.replace(/<autoFilter\b[^>]*\/>/g, "")
+  xml = xml.replace(/<autoFilter\b[\s\S]*?<\/autoFilter>/g, "")
+  zip.file(sheetPath, xml)
+
+  const written = zip.file(sheetPath)?.asText() || ""
+  const inlineCount = (written.match(/t="inlineStr"/g) || []).length
+  if (maxValues > 0 && inlineCount === 0) {
+    console.warn(
+      `[_generateStudentImportTemplate] Ghi sheet "${sheetName}" thất bại (không có inlineStr sau khi ghi)`
+    )
+  }
+  return lastRow
+}
+
 function finalizeStudentImportWorkbook(
   buffer: Buffer,
   opts: {
     trainingObjectTypeName: string
     trainingCourseName: string
-    lastRowBySheet: Record<string, number>
+    catalogs: {
+      nganh: string[]
+      chuyenNganh: string[]
+      chuongTrinhDaoTao: string[]
+      donViQuanLi: string[]
+      lopQuanLi: Array<{ ma: string; ten: string }>
+    }
   }
 ): Buffer {
   const zip = new PizZip(buffer)
-  const { lastRowBySheet } = opts
+  const { catalogs } = opts
 
   for (const file of Object.values(zip.files)) {
     if (!file.name.startsWith("xl/worksheets/sheet") || !file.name.endsWith(".xml")) continue
@@ -902,6 +974,46 @@ function finalizeStudentImportWorkbook(
     xml = xml.replace(/\s+topLeftCell="[^"]*"/g, "")
     zip.file(file.name, xml)
   }
+
+  // lastRow lấy theo số phần tử catalog (không tin chiều dài sheet template).
+  const lastRowBySheet: Record<string, number> = {
+    DanhMucNganh: rewriteCatalogSheetData(zip, "DanhMucNganh", [
+      { col: "A", header: "Tên", values: catalogs.nganh },
+    ]),
+    DanhMucChuyenNganh: rewriteCatalogSheetData(zip, "DanhMucChuyenNganh", [
+      { col: "A", header: "Tên", values: catalogs.chuyenNganh },
+    ]),
+    DanhMucChuongTrinhDaoTao: rewriteCatalogSheetData(zip, "DanhMucChuongTrinhDaoTao", [
+      { col: "A", values: catalogs.chuongTrinhDaoTao },
+    ]),
+    DanhMucDonViQuanLi: rewriteCatalogSheetData(zip, "DanhMucDonViQuanLi", [
+      { col: "A", values: catalogs.donViQuanLi },
+    ]),
+    DanhMucLopQuanLi: rewriteCatalogSheetData(zip, "DanhMucLopQuanLi", [
+      { col: "A", values: catalogs.lopQuanLi.map((x) => x.ma) },
+      { col: "B", values: catalogs.lopQuanLi.map((x) => x.ten) },
+    ]),
+    DanhMucGioiTinh: 3,
+    DanhMucDanToc: 56,
+    DanhMucQuocTich: 231,
+    DanhMucTinh: 35,
+  }
+
+  // Bảo đảm range dropdown khớp số lượng catalog (tránh A2:A2 khi sheet còn nhiều dòng).
+  lastRowBySheet.DanhMucNganh = catalogLastRow(catalogs.nganh.length, true)
+  lastRowBySheet.DanhMucChuyenNganh = catalogLastRow(catalogs.chuyenNganh.length, true)
+  lastRowBySheet.DanhMucChuongTrinhDaoTao = catalogLastRow(catalogs.chuongTrinhDaoTao.length, false)
+  lastRowBySheet.DanhMucDonViQuanLi = catalogLastRow(catalogs.donViQuanLi.length, false)
+  lastRowBySheet.DanhMucLopQuanLi = catalogLastRow(catalogs.lopQuanLi.length, false)
+
+  console.info("[_generateStudentImportTemplate] catalog rows", {
+    nganh: catalogs.nganh.length,
+    chuyenNganh: catalogs.chuyenNganh.length,
+    ctdt: catalogs.chuongTrinhDaoTao.length,
+    donVi: catalogs.donViQuanLi.length,
+    lop: catalogs.lopQuanLi.length,
+    lastRowBySheet,
+  })
 
   const mainSheetPath = getWorkbookSheetPath(zip, "HỌC VIÊN, SINH VIÊN")
   if (mainSheetPath && zip.file(mainSheetPath)) {
@@ -917,9 +1029,15 @@ function finalizeStudentImportWorkbook(
     )
     mainXml = mainXml.replace(/<extLst>\s*<\/extLst>/g, "")
 
-    const quoteSheet = (name: string) => `'${name.replace(/'/g, "''")}'`
-    const sheetRange = (sheet: string, col: string, startRow: number, endRow: number) =>
-      `${quoteSheet(sheet)}!$${col}$${startRow}:$${col}$${Math.min(endRow, EXCEL_MAX_ROW)}`
+    const quoteSheet = (name: string) => {
+      // Chỉ quote khi tên sheet có khoảng trắng / ký tự đặc biệt (Excel native).
+      if (/^[A-Za-z0-9_]+$/.test(name)) return name
+      return `'${name.replace(/'/g, "''")}'`
+    }
+    const sheetRange = (sheet: string, col: string, startRow: number, endRow: number) => {
+      const end = Math.min(Math.max(endRow, startRow), EXCEL_MAX_ROW)
+      return `${quoteSheet(sheet)}!$${col}$${startRow}:$${col}$${end}`
+    }
 
     const listValidations = [
       ["G", sheetRange("DanhMucGioiTinh", "A", 2, lastRowBySheet.DanhMucGioiTinh ?? 3)],
@@ -966,13 +1084,23 @@ function finalizeStudentImportWorkbook(
     return zip.generate({ type: "nodebuffer" }) as Buffer
   }
 
-  const quoteSheet = (name: string) => `'${name.replace(/'/g, "''")}'`
-  const range = (sheet: string, col: string, startRow: number, endRow: number) =>
-    `${quoteSheet(sheet)}!$${col}$${startRow}:$${col}$${Math.min(endRow, EXCEL_MAX_ROW)}`
+  const quoteSheet = (name: string) => {
+    if (/^[A-Za-z0-9_]+$/.test(name)) return name
+    return `'${name.replace(/'/g, "''")}'`
+  }
+  const range = (sheet: string, col: string, startRow: number, endRow: number) => {
+    const end = Math.min(Math.max(endRow, startRow), EXCEL_MAX_ROW)
+    return `${quoteSheet(sheet)}!$${col}$${startRow}:$${col}$${end}`
+  }
 
   const requiredNames: Record<string, string> = {
     danhmucnganh2: range("DanhMucNganh", "A", 2, lastRowBySheet.DanhMucNganh ?? 2),
-    danhmucchuyennganh2: range("DanhMucChuyenNganh", "A", 2, lastRowBySheet.DanhMucChuyenNganh ?? 2),
+    danhmucchuyennganh2: range(
+      "DanhMucChuyenNganh",
+      "A",
+      2,
+      lastRowBySheet.DanhMucChuyenNganh ?? 2
+    ),
     danhmucctdt: range(
       "DanhMucChuongTrinhDaoTao",
       "A",
@@ -993,40 +1121,20 @@ function finalizeStudentImportWorkbook(
     danhmuctinh2: range("DanhMucTinh", "A", 2, lastRowBySheet.DanhMucTinh ?? 35),
   }
 
+  // Bỏ hết defined name danh mục cũ (thường bị clamp lệch kiểu $A$15:$A$15 / $A$444).
+  // Chỉ giữ name không liên quan; gắn lại requiredNames phía dưới.
   const keptNames: string[] = []
   let next = workbookXml.replace(
     /<definedName(\b[^>]*)>([\s\S]*?)<\/definedName>/g,
     (_full, attrs: string, value: string) => {
       const nameMatch = String(attrs).match(/\bname="([^"]+)"/)
-      const name = nameMatch?.[1]
-      if (name && requiredNames[name]) {
-        // sẽ ghi lại bên dưới
+      const name = (nameMatch?.[1] || "").toLowerCase()
+      if (name.startsWith("danhmuc") || requiredNames[nameMatch?.[1] || ""]) {
         return ""
       }
       const ref = String(value).trim()
       if (!ref || ref.includes("#REF!")) return ""
-
-      const sheetMatch = ref.match(/^([^!]+)!/)
-      const sheetName = sheetMatch?.[1]?.replace(/'/g, "")
-      const lastRow = sheetName ? lastRowBySheet[sheetName] : undefined
-
-      let fixed = ref.replace(/\$([A-Z]+)\$(\d+)/gi, (_m, col: string, rowStr: string) => {
-        const row = Number(rowStr)
-        if (!Number.isFinite(row)) return _m
-        let capped = Math.min(row, EXCEL_MAX_ROW)
-        if (typeof lastRow === "number" && capped > lastRow) capped = lastRow
-        return `$${col}$${capped}`
-      })
-
-      if (lastRow && /![A-Z]+:[A-Z]+$/i.test(fixed.replace(/\$/g, ""))) {
-        const colMatch = fixed.match(/!\$?([A-Z]+):\$?([A-Z]+)$/i)
-        if (colMatch) {
-          const prefix = fixed.slice(0, fixed.lastIndexOf("!"))
-          fixed = `${prefix}!$${colMatch[1]}$2:$${colMatch[2]}$${lastRow}`
-        }
-      }
-
-      keptNames.push(`<definedName${attrs}>${fixed}</definedName>`)
+      keptNames.push(`<definedName${attrs}>${ref}</definedName>`)
       return ""
     }
   )

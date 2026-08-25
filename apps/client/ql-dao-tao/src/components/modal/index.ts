@@ -4,7 +4,6 @@ import AddStudentToFixedClassModal from "./add-student-to-fixedClass"
 import GanCanBoLopModal from "./gan-can-bo-lop"
 import ConfirmModal from "./confirm-dialog"
 import ExportStatsArchivedAwardModal from "./export-stats-archived-award"
-import ExportStudentImportTemplateModal from "./export-student-import-template-modal"
 import PutScoreLinkSheetModal from "./modal-add-diem-lien-ket"
 import PutMonHocTuongDuong from "./modal-add-mon-tuong-duong"
 import PutUpdatePaymentStatus from "./modal-cap-nhat-trang-thai-thanh-toan"
@@ -254,7 +253,6 @@ export {
   ModalLamKhaoSat,
   ModalXemLaiKhaoSat,
   ExportStatsArchivedAwardModal,
-  ExportStudentImportTemplateModal,
 }
 export * from "./ke-hoach-dao-tao"
 export * from "./thong-bao"

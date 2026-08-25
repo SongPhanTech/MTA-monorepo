@@ -70,7 +70,7 @@ export default function EvaluationPeriodTabPage() {
     const tabs: TabsProps["items"] = [
       {
         key: "1",
-        label: "Danh sách đợt đánh giá",
+        label: "Danh sách CTĐT/CSGD",
         children: <EvaluationPeriod />,
       },
     ]
