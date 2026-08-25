@@ -88,4 +88,5 @@ id?: Id;
 examId?: ExamId;
 type?: string;
 role?: string;
+userId?: string;
 };
