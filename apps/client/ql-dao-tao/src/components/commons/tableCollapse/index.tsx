@@ -228,6 +228,9 @@ const TableCollapse = <
             return headerCol?.render?.(text, record, idx)
           }
         }
+        if (isParent) {
+          return ""
+        }
         if (col.render) {
           return col.render(text, record, index)
         }

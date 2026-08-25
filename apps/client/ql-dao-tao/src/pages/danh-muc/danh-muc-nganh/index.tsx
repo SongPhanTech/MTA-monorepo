@@ -48,8 +48,10 @@ export default function TrainingFieldPage() {
   }, [trainingObjectTypeId, trainingObjectTypeData])
 
   const renderTrainingObjectTypeNames = (
-    trainingObjectTypes: Array<{ trainingObjectType: TrainingObjectType }>
+    trainingObjectTypes?: Array<{ trainingObjectType: TrainingObjectType }>
   ) => {
+    if (!Array.isArray(trainingObjectTypes)) return ""
+
     const names = trainingObjectTypes
       .filter(
         ({ trainingObjectType }) =>

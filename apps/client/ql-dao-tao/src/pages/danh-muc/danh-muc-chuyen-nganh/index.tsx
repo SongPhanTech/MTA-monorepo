@@ -56,11 +56,13 @@ export default function TrainingMajorPage() {
   }, [trainingObjectTypeId, trainingObjectTypeData])
 
   const renderTrainingObjectTypes = (
-    trainingObjectTypes: Array<{
+    trainingObjectTypes?: Array<{
       id: string
       trainingObjectType: TrainingObjectType
     }>
   ) => {
+    if (!Array.isArray(trainingObjectTypes)) return ""
+
     const items = trainingObjectTypes.filter(
       ({ trainingObjectType }) =>
         !trainingObjectTypeId || trainingObjectType.id === trainingObjectTypeId
@@ -360,7 +362,7 @@ export default function TrainingMajorPage() {
           <TableCollapse
             rowKey="id"
             headerTitleKey={({ code, name, trainingMajors }) =>
-              `${[code, name].filter(Boolean).join(" - ")} (${trainingMajors.length})`
+              `${[code, name].filter(Boolean).join(" - ")} (${trainingMajors?.length ?? 0})`
             }
             defaultExpandAll={expandAll}
             currentPage={currentPage}
