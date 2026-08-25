@@ -616,6 +616,7 @@ export async function _generateStudentImportTemplate(
   options?: { trainingCourseId?: string | null }
 ): Promise<ArrayBuffer> {
   const trainingCourseId = options?.trainingCourseId?.trim() || undefined
+  let trainingCourseName = ""
 
   if (trainingCourseId) {
     const course = await prisma.trainingCourse.findFirst({
@@ -625,33 +626,51 @@ export async function _generateStudentImportTemplate(
         active: true,
         deletedAt: null,
       },
-      select: { id: true },
+      select: { id: true, name: true },
     })
     if (!course) {
       throw new Error("Khoá học không tồn tại hoặc không thuộc đối tượng đào tạo")
     }
+    trainingCourseName = course.name
   }
 
+  // CV có thể gắn ĐTĐT trực tiếp, qua Curriculum, hoặc qua khoá học.
   const curriculumVersionWhere = {
-    trainingObjectTypeId,
     active: true,
     deletedAt: null,
-    ...(trainingCourseId
-      ? {
-          OR: [
-            { trainingCourseId },
-            {
-              fixedClasses: {
-                some: {
-                  trainingCourseId,
-                  deletedAt: null,
-                  active: true,
-                },
-              },
+    AND: [
+      {
+        OR: [
+          { trainingObjectTypeId },
+          { curriculum: { trainingObjectTypeId, deletedAt: null } },
+          {
+            trainingCourse: {
+              trainingObjectTypeId,
+              deletedAt: null,
+              active: true,
             },
-          ],
-        }
-      : {}),
+          },
+        ],
+      },
+      ...(trainingCourseId
+        ? [
+            {
+              OR: [
+                { trainingCourseId },
+                {
+                  fixedClasses: {
+                    some: {
+                      trainingCourseId,
+                      deletedAt: null,
+                      active: true,
+                    },
+                  },
+                },
+              ],
+            },
+          ]
+        : []),
+    ],
   }
 
   const [
@@ -720,9 +739,10 @@ export async function _generateStudentImportTemplate(
     prisma.trainingMajor.findMany({
       where: {
         trainingObjectTypes: {
-          some: { trainingObjectTypeId, deletedAt: null, active: true },
+          some: { trainingObjectTypeId, deletedAt: null },
         },
         deletedAt: null,
+        active: true,
       },
       select: { name: true },
       orderBy: { name: "asc" },
@@ -730,9 +750,10 @@ export async function _generateStudentImportTemplate(
     prisma.trainingField.findMany({
       where: {
         trainingObjectTypes: {
-          some: { trainingObjectTypeId, deletedAt: null, active: true },
+          some: { trainingObjectTypeId, deletedAt: null },
         },
         deletedAt: null,
+        active: true,
       },
       select: { name: true },
       orderBy: { name: "asc" },
@@ -750,14 +771,15 @@ export async function _generateStudentImportTemplate(
     return [...set].sort((a, b) => a.localeCompare(b, "vi")).map((name) => ({ name }))
   }
 
-  // Ưu tiên CTĐT của khoá; nếu trống thì lấy toàn bộ danh mục theo đối tượng đào tạo.
-  let trainingMajors = mergeNames(majorNamesFromCurricula)
-  let trainingFields = mergeNames(fieldNamesFromCurricula)
-  if (trainingMajors.length === 0) trainingMajors = mergeNames(majorsByObjectType)
-  if (trainingFields.length === 0) trainingFields = mergeNames(fieldsByObjectType)
-  if (!trainingCourseId) {
-    trainingMajors = mergeNames(majorNamesFromCurricula, majorsByObjectType)
-    trainingFields = mergeNames(fieldNamesFromCurricula, fieldsByObjectType)
+  // Dropdown ngành/chuyên ngành luôn theo đối tượng đào tạo.
+  // Khi chọn khoá và CTĐT khoá có ngành/CN → ưu tiên danh mục của khoá đó.
+  let trainingMajors = mergeNames(majorsByObjectType, majorNamesFromCurricula)
+  let trainingFields = mergeNames(fieldsByObjectType, fieldNamesFromCurricula)
+  if (trainingCourseId && majorNamesFromCurricula.size > 0) {
+    trainingMajors = mergeNames(majorNamesFromCurricula)
+  }
+  if (trainingCourseId && fieldNamesFromCurricula.size > 0) {
+    trainingFields = mergeNames(fieldNamesFromCurricula)
   }
 
   const buffer = await getTemplateBuffer(prisma, "MauImportDSHV_v5.xlsx")
@@ -771,8 +793,11 @@ export async function _generateStudentImportTemplate(
     }
   }
 
+  // Template: J6/J7 = ${doituongdaotao}/${khoahoc}; danh mục = ${table:team.*}
+  // finalizeStudentImportWorkbook gắn lại named range + dropdown theo dữ liệu ĐTĐT.
   safeSubstitute("HỌC VIÊN, SINH VIÊN", {
     doituongdaotao: trainingObjectType.name,
+    khoahoc: trainingCourseName,
   })
   safeSubstitute("DoiTuongDaoTao", {
     team: [{ ten: trainingObjectType.name }],
@@ -794,21 +819,237 @@ export async function _generateStudentImportTemplate(
   })
 
   const generated = template.generate({ type: "nodebuffer" }) as Buffer
-  return sanitizeStudentImportWorkbook(generated, {
-    DanhMucNganh: Math.max(2, 1 + trainingFields.length),
-    DanhMucChuyenNganh: Math.max(2, 1 + trainingMajors.length),
-    DanhMucChuongTrinhDaoTao: Math.max(1, curricula.length),
-    DanhMucLopQuanLi: Math.max(1, fixedClasses.length),
-    DanhMucDonViQuanLi: Math.max(1, organizations.length),
+  return finalizeStudentImportWorkbook(generated, {
+    trainingObjectTypeName: trainingObjectType.name,
+    trainingCourseName,
+    lastRowBySheet: {
+      DanhMucNganh: Math.max(2, 1 + trainingFields.length),
+      DanhMucChuyenNganh: Math.max(2, 1 + trainingMajors.length),
+      DanhMucChuongTrinhDaoTao: Math.max(1, curricula.length || 1),
+      DanhMucLopQuanLi: Math.max(1, fixedClasses.length || 1),
+      DanhMucDonViQuanLi: Math.max(1, organizations.length || 1),
+      DanhMucGioiTinh: 3,
+      DanhMucDanToc: 56,
+      DanhMucQuocTich: 231,
+      DanhMucTinh: 35,
+    },
   }) as any
 }
 
 /** Excel max row; named ranges past this cause "Removed Records: Named range". */
 const EXCEL_MAX_ROW = 1_048_576
+const STUDENT_IMPORT_DATA_START_ROW = 13
+const STUDENT_IMPORT_DATA_END_ROW = 5000
+
+function escapeXmlText(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+}
+
+function setWorksheetInlineCell(xml: string, cellRef: string, value: string): string {
+  const escaped = escapeXmlText(value)
+  const re = new RegExp(`<c r="${cellRef}"([^>]*)/>|<c r="${cellRef}"([^>]*)>[\\s\\S]*?</c>`)
+  return xml.replace(re, (full, attrsA?: string, attrsB?: string) => {
+    const attrs = attrsA || attrsB || ""
+    const styleMatch = attrs.match(/\ss="([^"]+)"/)
+    const styleAttr = styleMatch ? ` s="${styleMatch[1]}"` : ""
+    return `<c r="${cellRef}"${styleAttr} t="inlineStr"><is><t>${escaped}</t></is></c>`
+  })
+}
+
+function getWorkbookSheetPath(zip: InstanceType<typeof PizZip>, sheetName: string): string | null {
+  const workbookXml = zip.file("xl/workbook.xml")?.asText()
+  const relsXml = zip.file("xl/_rels/workbook.xml.rels")?.asText()
+  if (!workbookXml || !relsXml) return null
+
+  const sheetTag = [...workbookXml.matchAll(/<sheet\b[^>]*>/g)].find((m) => {
+    const nameMatch = m[0].match(/\bname="([^"]+)"/)
+    return nameMatch?.[1] === sheetName
+  })
+  if (!sheetTag) return null
+  const rId = sheetTag[0].match(/\br:id="([^"]+)"/)?.[1]
+  if (!rId) return null
+  const target = relsXml.match(new RegExp(`Id="${rId}"[^>]*Target="([^"]+)"`))?.[1]
+    || relsXml.match(new RegExp(`Target="([^"]+)"[^>]*Id="${rId}"`))?.[1]
+  if (!target) return null
+  return target.startsWith("/") ? `xl${target}` : `xl/${target.replace(/^\.\//, "")}`
+}
 
 /**
- * Clamp named ranges + reset sheet selection (template MinIO chọn sẵn A3:A527).
+ * Ghi J6/J7 theo ĐTĐT + khoá, gắn named range/dropdown cột danh mục,
+ * clamp range và reset selection (template MinIO hay chọn A3:A527).
  */
+function finalizeStudentImportWorkbook(
+  buffer: Buffer,
+  opts: {
+    trainingObjectTypeName: string
+    trainingCourseName: string
+    lastRowBySheet: Record<string, number>
+  }
+): Buffer {
+  const zip = new PizZip(buffer)
+  const { lastRowBySheet } = opts
+
+  for (const file of Object.values(zip.files)) {
+    if (!file.name.startsWith("xl/worksheets/sheet") || !file.name.endsWith(".xml")) continue
+    if (file.dir) continue
+    let xml = file.asText()
+    xml = xml.replace(/<selection\b[^>]*\/>/g, '<selection activeCell="A1" sqref="A1"/>')
+    xml = xml.replace(/<selection\b[^>]*>\s*<\/selection>/g, '<selection activeCell="A1" sqref="A1"/>')
+    xml = xml.replace(/\s+topLeftCell="[^"]*"/g, "")
+    zip.file(file.name, xml)
+  }
+
+  const mainSheetPath = getWorkbookSheetPath(zip, "HỌC VIÊN, SINH VIÊN")
+  if (mainSheetPath && zip.file(mainSheetPath)) {
+    let mainXml = zip.file(mainSheetPath)!.asText()
+    mainXml = setWorksheetInlineCell(mainXml, "J6", opts.trainingObjectTypeName)
+    mainXml = setWorksheetInlineCell(mainXml, "J7", opts.trainingCourseName)
+
+    // Excel ưu tiên x14:dataValidations (thường lệch/hỏng) → gỡ trước khi gắn lại classic.
+    mainXml = mainXml.replace(/<x14:dataValidations\b[\s\S]*?<\/x14:dataValidations>/g, "")
+    mainXml = mainXml.replace(
+      /<ext uri="\{CCE6A557-97BC-4b89-ADB6-D9C93CAAB3DF\}"[^>]*>\s*<\/ext>/g,
+      ""
+    )
+    mainXml = mainXml.replace(/<extLst>\s*<\/extLst>/g, "")
+
+    const quoteSheet = (name: string) => `'${name.replace(/'/g, "''")}'`
+    const sheetRange = (sheet: string, col: string, startRow: number, endRow: number) =>
+      `${quoteSheet(sheet)}!$${col}$${startRow}:$${col}$${Math.min(endRow, EXCEL_MAX_ROW)}`
+
+    const listValidations = [
+      ["G", sheetRange("DanhMucGioiTinh", "A", 2, lastRowBySheet.DanhMucGioiTinh ?? 3)],
+      ["H", sheetRange("DanhMucDanToc", "A", 2, lastRowBySheet.DanhMucDanToc ?? 56)],
+      ["I", sheetRange("DanhMucQuocTich", "A", 2, lastRowBySheet.DanhMucQuocTich ?? 231)],
+      ["J", sheetRange("DanhMucTinh", "A", 2, lastRowBySheet.DanhMucTinh ?? 35)],
+      ["P", sheetRange("DanhMucLopQuanLi", "A", 1, lastRowBySheet.DanhMucLopQuanLi ?? 1)],
+      ["Q", sheetRange("DanhMucLopQuanLi", "B", 1, lastRowBySheet.DanhMucLopQuanLi ?? 1)],
+      ["R", sheetRange("DanhMucNganh", "A", 2, lastRowBySheet.DanhMucNganh ?? 2)],
+      ["S", sheetRange("DanhMucChuyenNganh", "A", 2, lastRowBySheet.DanhMucChuyenNganh ?? 2)],
+      [
+        "T",
+        sheetRange(
+          "DanhMucChuongTrinhDaoTao",
+          "A",
+          1,
+          lastRowBySheet.DanhMucChuongTrinhDaoTao ?? 1
+        ),
+      ],
+      [
+        "U",
+        sheetRange("DanhMucDonViQuanLi", "A", 1, lastRowBySheet.DanhMucDonViQuanLi ?? 1),
+      ],
+    ].map(([col, formula], idx) => {
+      const sqref = `${col}${STUDENT_IMPORT_DATA_START_ROW}:${col}${STUDENT_IMPORT_DATA_END_ROW}`
+      return `<dataValidation type="list" allowBlank="1" showErrorMessage="1" sqref="${sqref}" xr:uid="{00000000-0001-0000-0000-${String(idx + 1).padStart(12, "0")}}"><formula1>${formula}</formula1></dataValidation>`
+    })
+    listValidations.push(
+      `<dataValidation type="list" allowBlank="1" showErrorMessage="1" sqref="V${STUDENT_IMPORT_DATA_START_ROW}:V${STUDENT_IMPORT_DATA_END_ROW}" xr:uid="{00000000-0001-0000-0000-000000000099}"><formula1>"Quân sự,Dân sự"</formula1></dataValidation>`
+    )
+
+    const dataValidationsXml = `<dataValidations count="${listValidations.length}">${listValidations.join("")}</dataValidations>`
+    if (/<dataValidations\b[\s\S]*?<\/dataValidations>/.test(mainXml)) {
+      mainXml = mainXml.replace(/<dataValidations\b[\s\S]*?<\/dataValidations>/, dataValidationsXml)
+    } else {
+      mainXml = mainXml.replace("</worksheet>", `${dataValidationsXml}</worksheet>`)
+    }
+    zip.file(mainSheetPath, mainXml)
+  }
+
+  const workbookPath = "xl/workbook.xml"
+  const workbookXml = zip.file(workbookPath)?.asText()
+  if (!workbookXml) {
+    return zip.generate({ type: "nodebuffer" }) as Buffer
+  }
+
+  const quoteSheet = (name: string) => `'${name.replace(/'/g, "''")}'`
+  const range = (sheet: string, col: string, startRow: number, endRow: number) =>
+    `${quoteSheet(sheet)}!$${col}$${startRow}:$${col}$${Math.min(endRow, EXCEL_MAX_ROW)}`
+
+  const requiredNames: Record<string, string> = {
+    danhmucnganh2: range("DanhMucNganh", "A", 2, lastRowBySheet.DanhMucNganh ?? 2),
+    danhmucchuyennganh2: range("DanhMucChuyenNganh", "A", 2, lastRowBySheet.DanhMucChuyenNganh ?? 2),
+    danhmucctdt: range(
+      "DanhMucChuongTrinhDaoTao",
+      "A",
+      1,
+      lastRowBySheet.DanhMucChuongTrinhDaoTao ?? 1
+    ),
+    danhmucmalop: range("DanhMucLopQuanLi", "A", 1, lastRowBySheet.DanhMucLopQuanLi ?? 1),
+    danhmuctenlop: range("DanhMucLopQuanLi", "B", 1, lastRowBySheet.DanhMucLopQuanLi ?? 1),
+    danhmucdonviquanly2: range(
+      "DanhMucDonViQuanLi",
+      "A",
+      1,
+      lastRowBySheet.DanhMucDonViQuanLi ?? 1
+    ),
+    danhmucgioitinh2: range("DanhMucGioiTinh", "A", 2, lastRowBySheet.DanhMucGioiTinh ?? 3),
+    danhmucdantoc2: range("DanhMucDanToc", "A", 2, lastRowBySheet.DanhMucDanToc ?? 56),
+    danhmucquoctich2: range("DanhMucQuocTich", "A", 2, lastRowBySheet.DanhMucQuocTich ?? 231),
+    danhmuctinh2: range("DanhMucTinh", "A", 2, lastRowBySheet.DanhMucTinh ?? 35),
+  }
+
+  const keptNames: string[] = []
+  let next = workbookXml.replace(
+    /<definedName(\b[^>]*)>([\s\S]*?)<\/definedName>/g,
+    (_full, attrs: string, value: string) => {
+      const nameMatch = String(attrs).match(/\bname="([^"]+)"/)
+      const name = nameMatch?.[1]
+      if (name && requiredNames[name]) {
+        // sẽ ghi lại bên dưới
+        return ""
+      }
+      const ref = String(value).trim()
+      if (!ref || ref.includes("#REF!")) return ""
+
+      const sheetMatch = ref.match(/^([^!]+)!/)
+      const sheetName = sheetMatch?.[1]?.replace(/'/g, "")
+      const lastRow = sheetName ? lastRowBySheet[sheetName] : undefined
+
+      let fixed = ref.replace(/\$([A-Z]+)\$(\d+)/gi, (_m, col: string, rowStr: string) => {
+        const row = Number(rowStr)
+        if (!Number.isFinite(row)) return _m
+        let capped = Math.min(row, EXCEL_MAX_ROW)
+        if (typeof lastRow === "number" && capped > lastRow) capped = lastRow
+        return `$${col}$${capped}`
+      })
+
+      if (lastRow && /![A-Z]+:[A-Z]+$/i.test(fixed.replace(/\$/g, ""))) {
+        const colMatch = fixed.match(/!\$?([A-Z]+):\$?([A-Z]+)$/i)
+        if (colMatch) {
+          const prefix = fixed.slice(0, fixed.lastIndexOf("!"))
+          fixed = `${prefix}!$${colMatch[1]}$2:$${colMatch[2]}$${lastRow}`
+        }
+      }
+
+      keptNames.push(`<definedName${attrs}>${fixed}</definedName>`)
+      return ""
+    }
+  )
+
+  const requiredXml = Object.entries(requiredNames)
+    .map(([name, ref]) => `<definedName name="${name}">${ref}</definedName>`)
+    .join("")
+
+  if (/<definedNames>[\s\S]*?<\/definedNames>/.test(next)) {
+    next = next.replace(
+      /<definedNames>[\s\S]*?<\/definedNames>/,
+      `<definedNames>${keptNames.join("")}${requiredXml}</definedNames>`
+    )
+  } else {
+    next = next.replace("</workbook>", `<definedNames>${requiredXml}</definedNames></workbook>`)
+  }
+
+  next = next.replace(/<definedNames>\s*<\/definedNames>/, "")
+  zip.file(workbookPath, next)
+  return zip.generate({ type: "nodebuffer" }) as Buffer
+}
+
+/** @deprecated kept for callers that only need named-range clamp */
 function sanitizeStudentImportWorkbook(
   buffer: Buffer,
   lastRowBySheet: Record<string, number>
@@ -849,7 +1090,6 @@ function sanitizeStudentImportWorkbook(
         return `$${col}$${capped}`
       })
 
-      // Entire-column refs (DanhMucNganh!$A:$A) → bound to filled rows
       if (lastRow && /![A-Z]+:[A-Z]+$/i.test(fixed.replace(/\$/g, ""))) {
         const colMatch = fixed.match(/!\$?([A-Z]+):\$?([A-Z]+)$/i)
         if (colMatch) {
