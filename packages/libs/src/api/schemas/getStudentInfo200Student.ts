@@ -4,7 +4,6 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetStudentInfo200StudentStatus } from './getStudentInfo200StudentStatus';
 
 /**
  * @nullable
@@ -13,66 +12,6 @@ export type GetStudentInfo200Student = {
   id: string;
   /** @nullable */
   code?: string | null;
-  active?: boolean;
   /** @nullable */
-  description?: string | null;
-  /** @nullable */
-  deletedAt?: string | null;
-  /** @nullable */
-  createdAt?: string | null;
-  /** @nullable */
-  updatedAt?: string | null;
-  /** @nullable */
-  createdBy?: string | null;
-  /** @nullable */
-  note?: string | null;
-  /** @nullable */
-  from?: string | null;
-  /** @nullable */
-  to?: string | null;
-  /** @nullable */
-  registerNumber?: string | null;
-  /** @nullable */
-  doctoralCode?: string | null;
-  /** @nullable */
-  admissionCombination?: string | null;
-  /** @nullable */
-  entryScore?: number | null;
-  /** @nullable */
-  competencyScore?: number | null;
-  /** @nullable */
-  department?: string | null;
-  /** @nullable */
-  departmentAddress?: string | null;
-  /** @nullable */
-  careerYear?: number | null;
-  /** @nullable */
-  universitySchool?: string | null;
-  /** @nullable */
-  universityTrainingType?: string | null;
-  /** @nullable */
-  universityGraduationYear?: number | null;
-  /** @nullable */
-  universityMajor?: string | null;
-  /** @nullable */
-  universityRank?: string | null;
-  /** @nullable */
-  basic?: number | null;
-  /** @nullable */
-  facility?: number | null;
-  /** @nullable */
-  foreignLanguage?: string | null;
-  /** @nullable */
-  priorityReason?: string | null;
-  /** @nullable */
-  unionLeader?: string | null;
-  status: GetStudentInfo200StudentStatus;
-  academicWarningLevel?: number;
-  disciplinaryWarningLevel?: number;
-  suspended?: boolean;
-  expelled?: boolean;
-  foreignLangPass?: boolean;
-  ITCertificationPass?: boolean;
-  strengthTrainingPass?: boolean;
-  militaryTrainingPass?: boolean;
+  status?: string | null;
 } | null;

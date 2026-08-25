@@ -55,6 +55,7 @@ Authorization: Bearer <access_token>
  * OpenAPI spec version: 1.0.0
  */
 import type { GetPublicSurveysV2ResultDataItemPrintFormTemplate } from './getPublicSurveysV2ResultDataItemPrintFormTemplate';
+import type { GetPublicSurveysV2ResultDataItemFormContent } from './getPublicSurveysV2ResultDataItemFormContent';
 import type { GetPublicSurveysV2ResultDataItemSurveyObjectTypeItem } from './getPublicSurveysV2ResultDataItemSurveyObjectTypeItem';
 import type { GetPublicSurveysV2ResultDataItemSurveyTopic } from './getPublicSurveysV2ResultDataItemSurveyTopic';
 import type { GetPublicSurveysV2ResultDataItemSurveyQuestionItem } from './getPublicSurveysV2ResultDataItemSurveyQuestionItem';
@@ -86,6 +87,8 @@ export type GetPublicSurveysV2ResultDataItem = {
   targetEnrollStudentOnly?: boolean;
   /** @nullable */
   printFormTemplate?: GetPublicSurveysV2ResultDataItemPrintFormTemplate;
+  /** @nullable */
+  formContent?: GetPublicSurveysV2ResultDataItemFormContent;
   surveyObjectType?: GetPublicSurveysV2ResultDataItemSurveyObjectTypeItem[];
   /** @nullable */
   surveyTopic?: GetPublicSurveysV2ResultDataItemSurveyTopic;

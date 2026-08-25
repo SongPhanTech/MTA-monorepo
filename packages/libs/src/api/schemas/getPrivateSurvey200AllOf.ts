@@ -55,6 +55,7 @@ Authorization: Bearer <access_token>
  * OpenAPI spec version: 1.0.0
  */
 import type { GetPrivateSurvey200AllOfPrintFormTemplate } from './getPrivateSurvey200AllOfPrintFormTemplate';
+import type { GetPrivateSurvey200AllOfFormContent } from './getPrivateSurvey200AllOfFormContent';
 import type { GetPrivateSurvey200AllOfSurveyQuestionItem } from './getPrivateSurvey200AllOfSurveyQuestionItem';
 import type { GetPrivateSurvey200AllOfSurveyChoiceItem } from './getPrivateSurvey200AllOfSurveyChoiceItem';
 import type { GetPrivateSurvey200AllOfLectureInfo } from './getPrivateSurvey200AllOfLectureInfo';
@@ -87,7 +88,7 @@ export type GetPrivateSurvey200AllOf = {
   /** @nullable */
   printFormTemplate?: GetPrivateSurvey200AllOfPrintFormTemplate;
   /** @nullable */
-  formContent?: unknown | null;
+  formContent?: GetPrivateSurvey200AllOfFormContent;
   surveyQuestion?: GetPrivateSurvey200AllOfSurveyQuestionItem[];
   surveyChoice?: GetPrivateSurvey200AllOfSurveyChoiceItem[];
   /** @nullable */

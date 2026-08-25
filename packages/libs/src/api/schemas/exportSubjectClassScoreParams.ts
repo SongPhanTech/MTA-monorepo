@@ -87,4 +87,5 @@ export type ExportSubjectClassScoreParams = {
 id?: Id;
 examId?: ExamId;
 type?: string;
+role?: string;
 };

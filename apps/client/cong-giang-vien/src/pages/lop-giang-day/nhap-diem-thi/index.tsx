@@ -583,9 +583,13 @@ const NhapDiemThiGiangDayPage = () => {
     }
     const baseUrl =
       getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "https://api.daotao.mta.swantech.vn"
-    const exportUrl = getExportSubjectClassScoreUrl({ id: lopId })
+    const exportUrl = getExportSubjectClassScoreUrl({
+      id: lopId,
+      role: "GV",
+      userId: profileId || undefined,
+    })
     openXemTaiLieu({
-      uri: `${getUrl(baseUrl, exportUrl)}${exportUrl.includes("?") ? "&" : "?"}role=GV`,
+      uri: getUrl(baseUrl, exportUrl),
       name: "Phiếu điểm",
       mimeType: "xlsx",
     })
@@ -598,9 +602,14 @@ const NhapDiemThiGiangDayPage = () => {
     }
     const baseUrl =
       getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "https://api.daotao.mta.swantech.vn"
-    const exportUrl = getExportSubjectClassScoreUrl({ id: lopId, type: "NHAP" })
+    const exportUrl = getExportSubjectClassScoreUrl({
+      id: lopId,
+      type: "NHAP",
+      role: "GV",
+      userId: profileId || undefined,
+    })
     openXemTaiLieu({
-      uri: `${getUrl(baseUrl, exportUrl)}${exportUrl.includes("?") ? "&" : "?"}role=GV`,
+      uri: getUrl(baseUrl, exportUrl),
       name: "Phiếu điểm nháp",
       mimeType: "xlsx",
     })
