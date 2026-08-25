@@ -1377,7 +1377,7 @@ export async function calculateStudentYearResult({
   // 3. Lấy bảng điểm của sinh viên
   // TODO: useForFinalScore lấy theo CTĐT
   // Lấy TOÀN BỘ điểm từ trước đến nay để tính tích lũy
-  // Chỉ filter điểm đã có finalScore và môn tính điểm (useForFinalScore)
+  // Điểm dùng = manualFinalScore (phiên điểm / chuyển trường) ?? finalScore (học/thi)
   const allScores = await prisma.studentSubjectScore.findMany({
     where: {
       studentId: studentId,
@@ -1478,9 +1478,11 @@ export async function calculateStudentYearResult({
       reExamCredits += credit
     }
 
-    if (record.finalScore === null) continue
+    // Ưu tiên điểm phiên / điểm chuyển trường
+    const score10 =
+      record.manualFinalScore ?? (record.finalScore != null ? Number(record.finalScore) : null)
+    if (score10 == null) continue
 
-    const score10 = Number(record.finalScore)
     // Chuyển đổi sang hệ 4
     const score4 = convertScore10to4(score10)
 
@@ -1517,11 +1519,14 @@ export async function calculateStudentYearResult({
   for (const record of allScores) {
     const config = subjectConfigMap.get(record.subjectVersionId)
     if (!config || !config.useForFinalScore) continue
-    if (record.finalScore === null) continue
+
+    // Ưu tiên điểm phiên / điểm chuyển trường
+    const score10 =
+      record.manualFinalScore ?? (record.finalScore != null ? Number(record.finalScore) : null)
+    if (score10 == null) continue
 
     // Dùng subjectId (môn học gốc) làm key để gộp các lần học lại/thi lại cùng môn
     const subjectKey = record.subjectVersion.subjectId
-    const score10 = Number(record.finalScore)
     const score4 = convertScore10to4(score10)
     const credit = record.subjectVersion.credit
     const passed = score10 >= scoreToPass
