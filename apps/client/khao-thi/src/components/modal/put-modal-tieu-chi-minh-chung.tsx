@@ -203,14 +203,85 @@ const PutTieuChiMinhChungModal = () => {
     }
   }, [initialValue, form, input?.count])
 
+  const hasEvidenceFormInput = () => {
+    const values = evidenceForm.getFieldsValue()
+    return Boolean(values?.name || values?.categoryId || values?.information || values?.issuer)
+  }
+
+  const createEvidenceFromForm = async () => {
+    const values = await evidenceForm.validateFields()
+    const createdById = dataUser?.sDM_NhanVienId || dataUser?.userId || null
+    const result = await createEvidence({
+      data: {
+        name: values.name,
+        categoryId: values.categoryId,
+        information: values.information,
+        issuer: values.issuer,
+        ...(createdById ? { createdBy: createdById } : {}),
+        evidenceFile: {
+          create: (values.evidenceFile || []).map((file: EvidenceFile) => ({
+            name: file.name,
+            path: file.path,
+            mimeType: file.mimeType,
+            size: file.size,
+            userProfileId: dataUser?.sDM_NhanVienId || null,
+          })),
+        },
+      },
+    })
+
+    if (!result?.id) {
+      throw new Error("CREATE_EVIDENCE_FAILED")
+    }
+
+    queryClient.invalidateQueries({
+      queryKey: ["Evidence"],
+    })
+
+    const newItem = {
+      value: result.id,
+      label: result.name,
+      key: result.id,
+    }
+    setItems((prev) => [...prev, newItem])
+    const currentEvidences = form.getFieldValue("evidences") || []
+    form.setFieldsValue({
+      evidences: [...currentEvidences, result.id],
+    })
+    evidenceForm.resetFields()
+    setDocument([])
+
+    return newItem
+  }
+
   const onOk = async (output: PutRequirementCriterion) => {
     if (!output) return
+
+    let evidenceItems = [...items]
+    const shouldCreateFromTab = activeTab === "2" && (hasEvidenceFormInput() || evidenceItems.length === 0)
+
+    if (shouldCreateFromTab) {
+      try {
+        await evidenceForm.validateFields()
+      } catch {
+        return
+      }
+    } else if (activeTab !== "2" && evidenceItems.length === 0) {
+      message.warning("Vui lòng chọn minh chứng")
+      return
+    }
+
     try {
       showSpinner()
 
+      if (shouldCreateFromTab) {
+        const created = await createEvidenceFromForm()
+        evidenceItems = [...evidenceItems, created]
+      }
+
       if (input?.id) {
         const currentEvidenceIds = initialValue?.evidences?.map((e) => e.evidenceId) || []
-        const newEvidenceIds = items.map((i) => i.value)
+        const newEvidenceIds = evidenceItems.map((i) => i.value)
 
         const { onlyInA: toCreate, onlyInB: toDelete } = diffArrays(
           newEvidenceIds.map((id) => ({ value: id })),
@@ -326,9 +397,9 @@ const PutTieuChiMinhChungModal = () => {
           },
         ]
 
-        if (items.length > 0) {
+        if (evidenceItems.length > 0) {
           listTransition.push(
-            ...items.map((item, index) => ({
+            ...evidenceItems.map((item, index) => ({
               model: "AnalysisFormEvidence",
               operation: "create",
               data: {
@@ -449,53 +520,17 @@ const PutTieuChiMinhChungModal = () => {
 
   const handleCreateNewEvidence = async () => {
     try {
-      const values = await evidenceForm.validateFields()
+      await evidenceForm.validateFields()
+    } catch {
+      return
+    }
+
+    try {
       showSpinner()
-
-      const createdById = dataUser?.sDM_NhanVienId || dataUser?.userId || null
-      const result = await createEvidence({
-        data: {
-          name: values.name,
-          categoryId: values.categoryId,
-          information: values.information,
-          issuer: values.issuer,
-          ...(createdById ? { createdBy: createdById } : {}),
-          evidenceFile: {
-            create: (values.evidenceFile || []).map((file: EvidenceFile) => ({
-              name: file.name,
-              path: file.path,
-              mimeType: file.mimeType,
-              size: file.size,
-              userProfileId: dataUser?.sDM_NhanVienId || null,
-            })),
-          },
-        },
-      })
-
-
-      queryClient.invalidateQueries({
-        queryKey: ["Evidence"],
-      })
-
+      await createEvidenceFromForm()
       message.success("Tạo mới minh chứng thành công")
-      evidenceForm.resetFields()
-      setDocument([])
-      setActiveTab("1")
-
-      if (result) {
-        const newItem = {
-          value: result.id,
-          label: result.name,
-          key: result.id,
-        }
-        setItems([...items, newItem])
-
-        const currentEvidences = form.getFieldValue("evidences") || []
-        form.setFieldsValue({
-          evidences: [...currentEvidences, result.id],
-        })
-      }
     } catch (error: any) {
+      if (error?.errorFields) return
       if (error?.info?.message) {
         message.error(error?.info?.message)
         return
@@ -513,6 +548,12 @@ const PutTieuChiMinhChungModal = () => {
       open={isOpen}
       onCancel={onClose}
       onFinish={onOk}
+      onOk={() => {
+        if (activeTab === "2") {
+          form.setFields([{ name: "evidences", errors: [] }])
+        }
+        form.submit()
+      }}
       className="w-[70vw] top-2"
     >
       <Col span={24}>
@@ -576,7 +617,12 @@ const PutTieuChiMinhChungModal = () => {
       <Col span={24}>
         <Tabs
           activeKey={activeTab}
-          onChange={setActiveTab}
+          onChange={(key) => {
+            setActiveTab(key)
+            if (key === "2") {
+              form.setFields([{ name: "evidences", errors: [] }])
+            }
+          }}
           items={[
             {
               key: "1",
@@ -584,7 +630,7 @@ const PutTieuChiMinhChungModal = () => {
               children: (
                 <>
                   <Col span={24}>
-                    <FormItem form={form} label="Minh chứng" name="evidences" required>
+                    <FormItem form={form} label="Minh chứng" name="evidences" required={activeTab === "1"}>
                       <TreeSelect
                         multiple
                         maxTagCount="responsive"
@@ -615,7 +661,7 @@ const PutTieuChiMinhChungModal = () => {
               key: "2",
               label: "Tạo mới minh chứng",
               children: (
-                <Form form={evidenceForm}>
+                <Form form={evidenceForm} component={false} layout="vertical">
                   <Row gutter={16}>
                     <Col span={12}>
                       <FormItem form={evidenceForm} name="name" label="Tên minh chứng" required>
@@ -671,7 +717,7 @@ const PutTieuChiMinhChungModal = () => {
                   </Row>
                   <Row>
                     <Col span={24}>
-                      <Button type="primary" onClick={handleCreateNewEvidence} block>
+                      <Button type="primary" htmlType="button" onClick={handleCreateNewEvidence} block>
                         Tạo mới minh chứng
                       </Button>
                     </Col>

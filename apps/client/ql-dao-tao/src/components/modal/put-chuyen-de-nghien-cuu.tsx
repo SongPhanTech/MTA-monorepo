@@ -14,6 +14,7 @@ import type { StudentResearchTopic } from "@workspace/db/client"
 import { FormItem } from "@workspace/ui"
 import { useEffect } from "react"
 import { getSupervisorName } from "@pages/quan-ly-luan-van/dm-luan-van"
+import { fuzzyMatch } from "@workspace/libs/utils"
 
 dayjs.locale("vi")
 const { TextArea } = Input
@@ -159,6 +160,15 @@ const PutResearchTopicModal = () => {
       })
     }
   }, [input?.studentResearchTopicId, studentResearchTopic, form])
+
+  const expertOptions = expertProfile.map((item) => ({
+    label: getSupervisorName(item, true, true),
+    value: item.id,
+    searchString: getSupervisorName(item, false, true) as string,
+  }))
+  const filterExpertOption = (input: string, option?: { searchString?: string }) =>
+    fuzzyMatch(input, String(option?.searchString ?? ""))
+
   return (
     <PutFormModal
       open={isOpen}
@@ -207,12 +217,9 @@ const PutResearchTopicModal = () => {
           <FormItem form={form} name="supervisorId" label="Hướng dẫn 1" required>
             <Select
               placeholder="Chọn giảng viên hướng dẫn"
-              options={expertProfile.map((item) => ({
-                label: getSupervisorName(item, true, true),
-                value: item.id,
-              }))}
+              options={expertOptions}
               showSearch
-              filterOption={false}
+              filterOption={filterExpertOption}
               allowClear
             />
           </FormItem>
@@ -221,12 +228,9 @@ const PutResearchTopicModal = () => {
           <FormItem form={form} name="coSupervisorId" label="Hướng dẫn 2">
             <Select
               placeholder="Chọn giảng viên hướng dẫn"
-              options={expertProfile.map((item) => ({
-                label: getSupervisorName(item, true, true),
-                value: item.id,
-              }))}
+              options={expertOptions}
               showSearch
-              filterOption={false}
+              filterOption={filterExpertOption}
               allowClear
             />
           </FormItem>
