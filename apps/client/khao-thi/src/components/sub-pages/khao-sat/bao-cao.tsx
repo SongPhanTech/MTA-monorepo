@@ -12,7 +12,7 @@ import { customExamFetch } from "@workspace/libs/api/custom-instance"
 import { useQuery } from "@tanstack/react-query"
 import type { GetSurveyStatistics200QuestionsItemAnswersItem } from "@workspace/libs/api/schemas"
 import { Button, Col, Dropdown, Empty, Row, Typography } from "antd"
-import { Document, Table as DocxTable, Packer, Paragraph, TableCell, TableRow, TextRun } from "docx"
+import { AlignmentType, Document, Table as DocxTable, Packer, Paragraph, TableCell, TableRow, TextRun, VerticalAlign } from "docx"
 // @ts-nocheck
 import ReactECharts from "echarts-for-react"
 import ExcelJS from "exceljs"
@@ -321,17 +321,21 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                     )
                   },
                 },
-                ...answerHeaders.map((i: any) => ({
-                  title: i?.description,
-                  id: i?.id,
-                  dataIndex: i?.id,
-                  width: 130,
+                {
+                  title: "Phương án trả lời",
                   align: "center",
-                  render: (__: any, record: any) => {
-                    const count = calculatePercent(record?.answers || []).find((a) => a.id === i?.id)
-                    return count ? `${count.percent || 0}% (${count.count || 0}/${count.total})` : "0"
-                  },
-                })),
+                  children: answerHeaders.map((i: any) => ({
+                    title: i?.description,
+                    id: i?.id,
+                    dataIndex: i?.id,
+                    width: 130,
+                    align: "center",
+                    render: (__: any, record: any) => {
+                      const count = calculatePercent(record?.answers || []).find((a) => a.id === i?.id)
+                      return count ? `${count.percent || 0}% (${count.count || 0}/${count.total})` : "0"
+                    },
+                  })),
+                },
               ]
             : [
                 {
@@ -372,10 +376,23 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     try {
       const centerCell = (text = "") =>
         new TableCell({
+          verticalAlign: VerticalAlign.CENTER,
           children: [
             new Paragraph({
-              alignment: "center",
+              alignment: AlignmentType.CENTER,
               children: [new TextRun(text)],
+            }),
+          ],
+        })
+      const headerCell = (text: string, opts?: { rowSpan?: number; columnSpan?: number }) =>
+        new TableCell({
+          ...(opts?.rowSpan ? { rowSpan: opts.rowSpan } : {}),
+          ...(opts?.columnSpan ? { columnSpan: opts.columnSpan } : {}),
+          verticalAlign: VerticalAlign.CENTER,
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun({ text, bold: true })],
             }),
           ],
         })
@@ -413,19 +430,30 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
           })
         }
 
+        const headerRows =
+          answerHeaders.length > 0
+            ? [
+                new TableRow({
+                  children: [
+                    headerCell("STT", { rowSpan: 2 }),
+                    headerCell("Câu hỏi", { rowSpan: 2 }),
+                    headerCell("Nội dung", { rowSpan: 2 }),
+                    headerCell("Phương án trả lời", { columnSpan: answerHeaders.length }),
+                  ],
+                }),
+                new TableRow({
+                  children: answerHeaders.map((h: string) => headerCell(h)),
+                }),
+              ]
+            : [
+                new TableRow({
+                  children: [headerCell("STT"), headerCell("Câu hỏi"), headerCell("Nội dung")],
+                }),
+              ]
+
         return new DocxTable({
           width: { size: 100, type: "pct" },
-          rows: [
-            new TableRow({
-              children: [
-                centerCell("STT"),
-                centerCell("Câu hỏi"),
-                centerCell("Nội dung"),
-                ...answerHeaders.map((h: string) => centerCell(h)),
-              ],
-            }),
-            ...answerRows,
-          ],
+          rows: [...headerRows, ...answerRows],
         })
       }
 

@@ -9,7 +9,17 @@ import Table from "@components/commons/table"
 import { useGetSurveyStatisticsToField } from "@workspace/libs/api/exam"
 import type { GetSurveyStatistics200QuestionsItemAnswersItem } from "@workspace/libs/api/schemas"
 import { Button, Col, Dropdown, Empty, Row, Typography } from "antd"
-import { Document, Table as DocxTable, Packer, Paragraph, TableCell, TableRow, TextRun } from "docx"
+import {
+  AlignmentType,
+  Document,
+  Table as DocxTable,
+  Packer,
+  Paragraph,
+  TableCell,
+  TableRow,
+  TextRun,
+  VerticalAlign,
+} from "docx"
 import ReactECharts from "echarts-for-react"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
@@ -124,7 +134,7 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
         wrapText: true as const,
       },
     }
-    const tableHeaderStyle = {
+    const tableHeaderStyle: Partial<ExcelJS.Style> = {
       font: {
         ...golbalFontStyle,
         bold: true,
@@ -183,19 +193,34 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
     worksheet.getCell(`A${rowIndex}`).value = "Thống kê theo từng Lĩnh vực"
     worksheet.getCell(`A${rowIndex}`).style = headerSubtitleStyle1
 
-    const headerRow = worksheet.getRow(rowIndex + 2)
-    headerRow.values = dataTableInfo[0]?.answers?.length
-      ? [
-          "STT",
-          "Lĩnh vực",
-          "Tên Lĩnh vực",
-          // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-          ...dataTableInfo[0]?.answers?.map((i: any) => i?.description),
-        ]
-      : ["STT", "Lĩnh vực", "Nội dung lĩnh vực"]
-    headerRow.eachCell((cell: any) => {
-      cell.style = tableHeaderStyle
-    })
+    const answers = dataTableInfo?.[0]?.answers || []
+    const numAnswers = answers.length
+    const headerRow1 = rowIndex + 2
+    const headerRow2 = rowIndex + 3
+    const lastCol = 3 + numAnswers
+
+    worksheet.mergeCells(headerRow1, 1, headerRow2, 1)
+    worksheet.getCell(headerRow1, 1).value = "STT"
+    worksheet.mergeCells(headerRow1, 2, headerRow2, 2)
+    worksheet.getCell(headerRow1, 2).value = "Lĩnh vực"
+    worksheet.mergeCells(headerRow1, 3, headerRow2, 3)
+    worksheet.getCell(headerRow1, 3).value = "Nội dung"
+
+    if (numAnswers > 0) {
+      worksheet.mergeCells(headerRow1, 4, headerRow1, 3 + numAnswers)
+      worksheet.getCell(headerRow1, 4).value = "Phương án trả lời"
+      answers.forEach((a: any, i: number) => {
+        worksheet.getCell(headerRow2, 4 + i).value = a?.description || ""
+      })
+    }
+
+    for (let r = headerRow1; r <= headerRow2; r++) {
+      for (let c = 1; c <= Math.max(lastCol, 3); c++) {
+        worksheet.getCell(r, c).style = tableHeaderStyle
+      }
+    }
+    worksheet.getRow(headerRow1).height = 22
+    worksheet.getRow(headerRow2).height = 30
 
     worksheet.columns = [
       { width: 10 },
@@ -209,7 +234,7 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
     ]
     if (dataTableInfo?.length > 0) {
       dataTableInfo.forEach((i: any, index: number) => {
-        const headerRowValue: any = worksheet.getRow(rowIndex + 3 + index)
+        const headerRowValue: any = worksheet.getRow(headerRow2 + 1 + index)
         headerRowValue.values = [
           index + 1,
           `Lĩnh vực ${index + 1}`,
@@ -218,6 +243,15 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
             (a: any) => `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
           ),
         ]
+        headerRowValue.eachCell((cell: any, colNumber: number) => {
+          cell.alignment = {
+            horizontal: colNumber === 3 ? "left" : "center",
+            vertical: "middle",
+            wrapText: true,
+          }
+          cell.border = tableHeaderStyle.border
+          cell.font = { name: "Times New Roman", size: 11 }
+        })
       })
     }
 
@@ -277,7 +311,7 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
                   },
                 },
                 {
-                  title: "Nội dung Lĩnh vực",
+                  title: "Nội dung",
                   align: "left",
                   render: (_, record, index) => {
                     return index === datarender.length - 1 ? (
@@ -287,19 +321,22 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
                     )
                   },
                 },
-                // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-                ...dataTable[0]?.answers?.map((i: any) => ({
-                  title: i?.description,
-                  id: i?.id,
-                  dataIndex: i?.id,
-                  width: 130,
+                {
+                  title: "Phương án trả lời",
                   align: "center",
-                  render: (__: any, record: any) => {
-                    const count = calculatePercent(record?.answers).find((a) => a.id === i?.id)
+                  children: (dataTable[0]?.answers || []).map((i: any) => ({
+                    title: i?.description,
+                    id: i?.id,
+                    dataIndex: i?.id,
+                    width: 130,
+                    align: "center" as const,
+                    render: (__: any, record: any) => {
+                      const count = calculatePercent(record?.answers).find((a) => a.id === i?.id)
 
-                    return `${count?.percent || 0}% (${count?.count || 0}/${count?.total})` || "0"
-                  },
-                })),
+                      return `${count?.percent || 0}% (${count?.count || 0}/${count?.total})` || "0"
+                    },
+                  })),
+                },
               ]
             : [
                 {
@@ -324,32 +361,60 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
     )
   }
   const exportWordReport = async (name: string, dataTable: any) => {
-    const centerCell = (text = "") =>
+    const centerCell = (text = "", opts?: { bold?: boolean; left?: boolean }) =>
       new TableCell({
+        verticalAlign: VerticalAlign.CENTER,
         children: [
           new Paragraph({
-            alignment: "center",
-            children: [new TextRun(text)],
+            alignment: opts?.left ? AlignmentType.LEFT : AlignmentType.CENTER,
+            children: [new TextRun({ text, bold: opts?.bold })],
+          }),
+        ],
+      })
+    const headerCell = (text: string, opts?: { rowSpan?: number; columnSpan?: number }) =>
+      new TableCell({
+        ...(opts?.rowSpan ? { rowSpan: opts.rowSpan } : {}),
+        ...(opts?.columnSpan ? { columnSpan: opts.columnSpan } : {}),
+        verticalAlign: VerticalAlign.CENTER,
+        children: [
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            children: [new TextRun({ text, bold: true })],
           }),
         ],
       })
     const answerHeaders = dataTable?.[0]?.answers?.map((a: any) => a.description) || []
 
-    const questionRows = [
-      new TableRow({
-        children: [
-          centerCell("STT"),
-          centerCell("Lĩnh vực"),
+    const headerRows =
+      answerHeaders.length > 0
+        ? [
+            new TableRow({
+              children: [
+                headerCell("STT", { rowSpan: 2 }),
+                headerCell("Lĩnh vực", { rowSpan: 2 }),
+                headerCell("Nội dung", { rowSpan: 2 }),
+                headerCell("Phương án trả lời", { columnSpan: answerHeaders.length }),
+              ],
+            }),
+            new TableRow({
+              children: answerHeaders.map((h: string) => headerCell(h)),
+            }),
+          ]
+        : [
+            new TableRow({
+              children: [headerCell("STT"), headerCell("Lĩnh vực"), headerCell("Nội dung")],
+            }),
+          ]
 
-          ...answerHeaders.map(centerCell),
-        ],
-      }),
+    const questionRows = [
+      ...headerRows,
       ...dataTable.map((q: any, idx: number) => {
         const percentData = calculatePercent(q.answers)
         return new TableRow({
           children: [
             centerCell(String(idx + 1)),
             centerCell(`Lĩnh vực ${idx + 1}`),
+            centerCell(q?.groupName || "", { left: true }),
             ...percentData.map((p) => centerCell(`${p.percent}% (${p.count}/${p.total})`)),
           ],
         })

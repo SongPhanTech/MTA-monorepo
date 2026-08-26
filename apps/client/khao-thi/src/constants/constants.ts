@@ -46,7 +46,7 @@ const DEADLINE_OPTIONS = [
 
 const STANDARD_CATALOG_TYPE_OPTIONS = [
   { value: $Enums.StandardCatalogType.PROGRAM, label: "Chương trình đào tạo" },
-  { value: $Enums.StandardCatalogType.ASSET, label: "Cơ sở vật chất" },
+  { value: $Enums.StandardCatalogType.ASSET, label: "Cơ sở giáo dục" },
 ]
 
 const SUBJECT_OBJECT = [
