@@ -138,6 +138,17 @@ export default function BaoCaoGiangVien() {
     setExpandedKeys(orgKeys)
   }, [orgKeys])
 
+  const findTreeNode = (nodes: ReportTreeNode[], key: Key): ReportTreeNode | undefined => {
+    for (const node of nodes) {
+      if (node.key === key) return node
+      if (isOrgNode(node)) {
+        const found = findTreeNode(node.children, key)
+        if (found) return found
+      }
+    }
+    return undefined
+  }
+
   const report = useMemo(() => {
     if (!clusterId) {
       return <div className="my-10 text-center text-primary text-base">Chọn đợt khảo sát</div>
@@ -269,7 +280,8 @@ export default function BaoCaoGiangVien() {
               style={{ maxHeight: "calc(100vh - 210px)", overflow: "auto" }}
               onSelect={(keys, info) => {
                 setSelectedKeys(keys)
-                setSelectedNode(info.node)
+                const key = keys[0]
+                setSelectedNode((key != null ? findTreeNode(treeData, key) : undefined) ?? info.node)
               }}
             />
             <div className="mb-3 text-xs text-gray-500">
