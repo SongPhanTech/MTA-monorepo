@@ -5,6 +5,7 @@ import { XuatDanhSachThiButton } from "@components/commons/print/xuat-danh-sach-
 import { examPostponeReason, examSuspendedReason } from "@constants/constants"
 import { scoreConvert } from "@hooks/scoreConverter"
 import { ROUTER_PATH } from "@workspace/router"
+import { isKyThiDanhPhach } from "@workspace/libs/constants"
 import { calcFinalScore, getRuntimeEnv } from "@workspace/libs/utils"
 import { formatDateVn, nowVn } from "@workspace/libs/timezone"
 import { useSession } from "@workspace/auth/react"
@@ -298,16 +299,11 @@ const NhapDiemThiGiangDayPage = () => {
     !!lopMonHoc?.exam?.id &&
     (lopMonHoc.exam.examRooms?.some((room) => (room.examList?.length ?? 0) > 0) ?? false)
 
-  // Kỳ thi đánh phách: đã khóa DS thi (vào luồng đánh phách) hoặc đã sinh phách
-  const laKyThiDanhPhach = useMemo(() => {
-    if (!lopMonHoc?.exam) return false
-    if (lopMonHoc.exam.lockExamSessions) return true
-    return (
-      lopMonHoc.exam.examRooms?.some((room) =>
-        room.examList?.some((el) => el.createdExamCode)
-      ) ?? false
-    )
-  }, [lopMonHoc])
+  // Chỉ thi viết đi luồng đánh phách. Vấn đáp / thực hành vẫn khoá DS thi rồi nhập điểm bình thường.
+  const laKyThiDanhPhach = useMemo(
+    () => isKyThiDanhPhach(lopMonHoc?.examType, lopMonHoc?.exam),
+    [lopMonHoc]
+  )
 
   // Chỉ enable nhập khi KHÔNG phải kỳ thi đánh phách và chưa khóa điểm
   const disabledForm = useMemo(() => {

@@ -24,6 +24,7 @@ import { getUrl } from "@workspace/libs/api/custom-instance"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import type { SqlTransactionBodyItem } from "@workspace/libs/api/schemas/sqlTransactionBodyItem"
 import { getExportSubjectClassScoreUrl } from "@workspace/libs/api/training"
+import { isKyThiDanhPhach } from "@workspace/libs/constants"
 import { calcFinalScore, fastIsEqual, getRuntimeEnv, isNullish } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
@@ -719,13 +720,11 @@ export default function NhapDiem({
       )
     }
 
-    // THI: chỉ enable khi KHÔNG phải kỳ thi đánh phách và chưa khóa điểm
-    const laKyThiDanhPhach =
-      !!dataDetailSubjectClass?.exam?.lockExamSessions ||
-      (dataDetailSubjectClass?.exam?.examRooms?.some((room) =>
-        room.examList?.some((el) => el.createdExamCode)
-      ) ??
-        false)
+    // THI: chỉ thi viết đi luồng đánh phách; vấn đáp vẫn khoá DS thi rồi nhập điểm bình thường
+    const laKyThiDanhPhach = isKyThiDanhPhach(
+      dataDetailSubjectClass?.examType,
+      dataDetailSubjectClass?.exam
+    )
     const daKhoaDiem =
       !!dataDetailSubjectClass?.isLockExamScore || !!dataDetailSubjectClass?.scoreSubmitted
     const trongHan =

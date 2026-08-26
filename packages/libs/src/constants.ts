@@ -28,6 +28,21 @@ export const examTypeOptions = Object.entries(examTypes).map(([label, value]) =>
   value,
 }))
 
+/** Chỉ thi viết đi luồng đánh phách. Khoá DS thi vẫn bắt buộc để nhập điểm các hình thức khác. */
+export function isKyThiDanhPhach(
+  examType: $Enums.ExamType | null | undefined,
+  exam?: {
+    lockExamSessions?: boolean | null
+    examRooms?: Array<{
+      examList?: Array<{ createdExamCode?: boolean | null }> | null
+    }> | null
+  } | null
+): boolean {
+  if (examType !== $Enums.ExamType.OfflineWritten || !exam) return false
+  if (exam.lockExamSessions) return true
+  return exam.examRooms?.some((room) => room.examList?.some((el) => el.createdExamCode)) ?? false
+}
+
 export const criteriaOperatorLabels: Record<CriteriaOperator, string> = {
   [CriteriaOperator.GT]: ">", // Lớn hơn
   [CriteriaOperator.GTE]: "≥", // Lớn hơn hoặc bằng
