@@ -183,10 +183,10 @@ const ContentFacilities = () => {
             <FolderClosed className="w-12 h-12 text-green-600" />
           </div>
           <h3 className="text-xl font-semibold text-gray-700 mb-2">
-            Chọn bộ tiêu chuẩn - tiêu chí cơ sở vật chất
+            Chọn bộ tiêu chuẩn - tiêu chí cơ sở giáo dục
           </h3>
           <p className="text-gray-500 text-center max-w-md mb-4 text-sm">
-            Vui lòng chọn một bộ tiêu chuẩn - tiêu chí cơ sở vật chất
+            Vui lòng chọn một bộ tiêu chuẩn - tiêu chí cơ sở giáo dục
           </p>
         </div>
       ) : (
@@ -194,7 +194,7 @@ const ContentFacilities = () => {
           <Col span={24}>
             <Flex justify="space-between" align="center">
               <Typography.Title level={4}>
-                Danh mục tiêu chuẩn - tiêu chí cơ sở vật chất
+                Danh mục tiêu chuẩn - tiêu chí cơ sở giáo dục
               </Typography.Title>
 
               {can(
