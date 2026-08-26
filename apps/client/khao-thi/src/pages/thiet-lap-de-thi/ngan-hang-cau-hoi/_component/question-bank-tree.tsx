@@ -260,11 +260,12 @@ export default function QuestionBankTree({
               []
             )
 
-            if (normalizedSearch && versionData.length === 0 && !subjectMatches) {
+            // Hide nhóm môn học that have no phiên bản for the selected training type
+            if (versionData.length === 0) {
               return subjects
             }
 
-            if (normalizedSearch && versionData.length > 0) {
+            if (normalizedSearch) {
               keysToExpand.push(subjectKey)
             }
 
@@ -280,7 +281,7 @@ export default function QuestionBankTree({
 
           const allChildren = [...subjectData, ...childOrgData]
 
-          if (normalizedSearch && allChildren.length === 0 && !orgMatches) {
+          if (allChildren.length === 0 && (!normalizedSearch || !orgMatches)) {
             return null
           }
 

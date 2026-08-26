@@ -136,7 +136,7 @@ async function main() {
   const subjectByNorm = new Map()
   const allSubjects = await prisma.subject.findMany({
     where: { deletedAt: null },
-    select: { id: true, name: true, code: true },
+    select: { id: true, name: true, code: true, managementOrganizationId: true },
   })
   for (const s of allSubjects) {
     subjectByNorm.set(normalize(s.name), s)
@@ -149,9 +149,32 @@ async function main() {
   const newlyMissingSv = [] // shouldn't remain after we create SVs
   const still = []
 
+  const orgs = await prisma.dM_DonVi.findMany({
+    where: { OR: [{ bDeleted: false }, { bDeleted: null }] },
+    select: { Id: true, sTen: true, iLoaiDonVi: true },
+  })
+  function canonOrgName(raw) {
+    let t = normalize(stripDiacritics(raw))
+    t = t.replace(/^\d+\s+/, "")
+    t = t.replace(/^(bm|bo mon)\s+/, "bo mon ")
+    return t.trim()
+  }
+  function resolveOrgId(bmName) {
+    if (!bmName) return null
+    const key = canonOrgName(bmName)
+    const exact = orgs.find((o) => canonOrgName(o.sTen) === key)
+    if (exact) return exact.Id
+    const loose = orgs.find((o) => {
+      const c = canonOrgName(o.sTen)
+      return c.startsWith(key) || key.startsWith(c)
+    })
+    return loose?.Id || null
+  }
+
   for (const [name, g] of groups) {
     let subject =
       subjectByNorm.get(normalize(name)) || subjectByNorm.get(normalize(stripDiacritics(name)))
+    const managementOrganizationId = resolveOrgId(g.entries[0]?.bmName)
 
     if (!subject) {
       console.log(`\nCreating Subject: "${name}"`)
@@ -163,13 +186,24 @@ async function main() {
             name,
             active: true,
             description: "Tạo từ import NHCH (unmatched remap)",
+            ...(managementOrganizationId ? { managementOrganizationId } : {}),
           },
         })
       }
       createdSubjects.push(subject)
       subjectByNorm.set(normalize(name), subject)
+      if (managementOrganizationId) {
+        console.log(`  org=${managementOrganizationId}`)
+      }
     } else {
       console.log(`\nReuse Subject: "${subject.name}" (${subject.id})`)
+      if (managementOrganizationId && !subject.managementOrganizationId && !dryRun) {
+        await prisma.subject.update({
+          where: { id: subject.id },
+          data: { managementOrganizationId },
+        })
+        subject.managementOrganizationId = managementOrganizationId
+      }
     }
 
     // Ensure SV per training type

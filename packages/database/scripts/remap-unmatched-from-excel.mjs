@@ -5,6 +5,15 @@
  *   DATABASE_URL=... bun scripts/remap-unmatched-from-excel.mjs [--dry-run]
  *   DATABASE_URL=... bun scripts/remap-unmatched-from-excel.mjs --excel "/path/to.xlsx"
  *
+ * Default Excel: scripts/Danh sách map lại môn học.xlsx
+ *
+ * Typical order (after bun scripts/bulk-import-catalog.mjs):
+ *   bun scripts/remap-unmatched-from-excel.mjs
+ *   bun scripts/bulk-import-create-sv.mjs
+ *   bun scripts/create-missing-subjects-from-unmatched.mjs
+ *   bun scripts/bulk-import-questions.mjs
+ *   bun scripts/fix-question-bank-tree-orgs.mjs
+ *
  * Skips:
  *   - "Cơ sở lý thuyết tác chiến mạng" (tạm thời)
  *   - Đối tượng đào tạo không có trong hệ thống
@@ -21,6 +30,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 function loadXlsx() {
   const candidates = [
     "xlsx",
+    join(__dirname, "../node_modules/xlsx"),
     join(__dirname, "../../../apps/backend/be-ql-dao-tao/node_modules/xlsx"),
     join(__dirname, "../../../apps/backend/be-portal/node_modules/xlsx"),
     join(__dirname, "../../../node_modules/xlsx"),
@@ -41,7 +51,7 @@ const excelArg = process.argv.indexOf("--excel")
 const EXCEL =
   excelArg !== -1
     ? process.argv[excelArg + 1]
-    : "/Users/minhah/Downloads/Danh sách môn học chưa map được.xlsx"
+    : join(__dirname, "Danh sách map lại môn học.xlsx")
 const CATALOG_PATH = join(__dirname, "import-catalog.json")
 
 function stripDiacritics(s) {
@@ -94,6 +104,11 @@ const MANUAL_SUBJECT_MAP = {
   "Công tác kỹ thuật tác chiến điện tử thời bình":
     "Công tác kỹ thuật tác chiến điện tử thường xuyên + BTL",
   "Ứng dụng CAD,CAE trong gia công áp lực": "Ứng dụng CAD/CAE trong gia công áp lực",
+  "Lý thuyết + Thí nghiệm tăng thiết giáp": "Lý thuyết và thí nghiệm tăng thiết giáp",
+  "những nguyên lý cơ bản của chủ nghĩa mác lê nin":
+    "Những nguyên lý cơ bản của chủ nghĩa Mác - Lênin 2",
+  "Những nguyên lý cơ bản của chủ nghĩa mác lê nin":
+    "Những nguyên lý cơ bản của chủ nghĩa Mác - Lênin 2",
   "Kỹ thuật truy vết": "Điều tra và truy vết mạng",
   "Đường lối quốc phòng an ninh": "Đường lối quốc phòng, an ninh",
   "Thông hơi +BTL": "Thông hơi công trình + Bài tập lớn",
@@ -222,7 +237,14 @@ async function main() {
   }
 
   function findSubject(rawName) {
-    const mapped = MANUAL_SUBJECT_MAP[rawName] || rawName
+    const mapped =
+      MANUAL_SUBJECT_MAP[rawName] ||
+      Object.entries(MANUAL_SUBJECT_MAP).find(
+        ([k]) =>
+          normalize(k) === normalize(rawName) ||
+          normalize(stripDiacritics(k)) === normalize(stripDiacritics(rawName))
+      )?.[1] ||
+      rawName
     const n = normalize(mapped)
     const a = normalize(stripDiacritics(mapped))
     let hits = subjectByNorm.get(n) || subjectByAscii.get(a)
@@ -299,6 +321,8 @@ async function main() {
   let toMatched = 0
   let toMissingSv = 0
 
+  const skipNoSubjectNames = new Map()
+  const skipNoTypeNames = new Map()
   const newlyMatched = []
   const newlyMissingSv = []
   const stillUnmatched = []
@@ -362,9 +386,11 @@ async function main() {
       continue
     }
 
-    const tot = resolveTrainingType(typeNameExcel)
+    const tot = resolveTrainingType(typeNameExcel) ||
+      (entry.trainingTypeId ? types.find((t) => t.id === entry.trainingTypeId) : null)
     if (!tot) {
       skipNoType++
+      skipNoTypeNames.set(typeNameExcel, (skipNoTypeNames.get(typeNameExcel) || 0) + 1)
       stillUnmatched.push({
         ...entry,
         reason: `SKIPPED: Đối tượng đào tạo không có trong hệ thống ("${typeNameExcel}")`,
@@ -378,6 +404,10 @@ async function main() {
     const subject = findSubject(subjectNameExcel)
     if (!subject) {
       skipNoSubject++
+      skipNoSubjectNames.set(
+        subjectNameExcel,
+        (skipNoSubjectNames.get(subjectNameExcel) || 0) + 1
+      )
       stillUnmatched.push({
         ...entry,
         reason: `Remap: No matching Subject found for "${subjectNameExcel}"`,
@@ -443,6 +473,15 @@ async function main() {
     toMissingSv,
     stillUnmatched: stillUnmatched.length,
   })
+
+  if (skipNoSubjectNames.size) {
+    console.log("\nNo matching Subject in DB:")
+    for (const [k, v] of [...skipNoSubjectNames.entries()].sort()) console.log(`  "${k}" x${v}`)
+  }
+  if (skipNoTypeNames.size) {
+    console.log("\nSkipped training types (not in system):")
+    for (const [k, v] of [...skipNoTypeNames.entries()].sort()) console.log(`  "${k}" x${v}`)
+  }
 
   const missGroups = new Map()
   for (const m of newlyMissingSv) {
