@@ -123,15 +123,22 @@ const ModalPrintSurveyToFieldReport = () => {
         >
           <thead>
             <tr className="font-bold bg-white border border-black text-center">
-              <th className="border border-black" style={{ width: 60 }}>
+              <th className="border border-black" rowSpan={2} style={{ width: 60 }}>
                 STT
               </th>
-              <th className="border border-black" style={{ width: 120 }}>
+              <th className="border border-black" rowSpan={2} style={{ width: 120 }}>
                 Lĩnh vực
               </th>
-              <th className="border border-black" style={{ width: 250 }}>
-                Nội dung Lĩnh vực
+              <th className="border border-black" rowSpan={2} style={{ width: 250 }}>
+                Nội dung
               </th>
+              {dataTable[0]?.answers?.length > 0 && (
+                <th className="border border-black" colSpan={dataTable[0].answers.length}>
+                  Phương án trả lời
+                </th>
+              )}
+            </tr>
+            <tr className="font-bold bg-white border border-black text-center">
               {dataTable[0]?.answers?.map((a: any) => (
                 <th className="border border-black" key={a.id}>
                   {a.description}
