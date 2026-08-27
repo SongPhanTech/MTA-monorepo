@@ -79,6 +79,21 @@ export type Subject = {
   score: number
 }
 
+export const data: {
+  school?: string
+  major?: string
+  duration?: string
+  type?: string
+  certificate?: string
+}[] = []
+export const data2: { duration?: string; detail?: string }[] = []
+export const data3: {
+  relationship?: string
+  fullName?: string
+  yearOfBirth?: string
+  details?: string
+}[] = []
+
 export const dataFake: Subject[] = [
   { name: "Phương pháp luận nghiên cứu khoa học", credits: 2, score: 8.7 },
   { name: "Tiếng Anh", credits: 3, score: 10 },

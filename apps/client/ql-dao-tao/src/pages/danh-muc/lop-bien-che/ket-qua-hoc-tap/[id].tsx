@@ -4,6 +4,7 @@ import Table from "@components/commons/table"
 import TableCollapse from "@components/commons/tableCollapse"
 import type { FilterProps } from "@constants/type"
 import { useScoreConverter } from "@hooks/scoreConverter"
+import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import {
   $Enums,
@@ -17,12 +18,14 @@ import {
   useFindManySubjectVersion,
   useFindUniqueStudent,
 } from "@workspace/db/hooks"
+import { customTrainingFetch } from "@workspace/libs/api/custom-instance"
 import { exportAndDownloadFromTemplate } from "@workspace/libs/download-excel"
 import type { TableRow } from "@workspace/libs/template-excel"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
-import { Button, Col, Divider, Dropdown, Flex, Row, Tag, Tooltip } from "antd"
+import { Button, Col, Divider, Dropdown, Flex, message, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
+import { saveAs } from "file-saver"
 import _ from "lodash"
 import { Check, X } from "lucide-react"
 import { useRouter } from "next/router"
@@ -56,6 +59,7 @@ export interface IHocKi {
 export default function StudentScoreClassPage() {
   const router = useRouter()
   const { can } = useAbility()
+  const { showSpinner, hideSpinner } = useSpinner()
   const [expandAll, setExpandAll] = useState(true)
   const studentId = router.query.id as string
   const [semesterId, setSemesterId] = useState<string>()
@@ -383,622 +387,59 @@ export default function StudentScoreClassPage() {
   }, [data, semesterId])
 
   const exportTemplate = async () => {
-    const hocKis: IHocKi[] = []
-    if (data.length > 0) {
-      data.forEach((item) => {
-        const monhoc: IMonHoc[] = []
-        item.subjectClasses.forEach((subjectClass) => {
-          subjectClass.subjectClassStudent.forEach((subjectClassStudent) => {
-            const rawScore =
-              subjectClassStudent?.manualFinalScore != null
-                ? Number(subjectClassStudent.manualFinalScore)
-                : subjectClassStudent?.finalScore != null
-                  ? Number(subjectClassStudent.finalScore)
-                  : 0
-
-            const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
-            const isConditional =
-              subjectClass?.subject?.trainingBlocks?.[0]?.useForFinalScore === false
-            const converted = convertScoreWithGraduation(
-              rawScore,
-              isGraduation,
-              isConditional,
-              subjectClassStudent?.attendanceScore != null
-                ? Number(subjectClassStudent.attendanceScore)
-                : undefined,
-              subjectClassStudent?.midtermScore != null
-                ? Number(subjectClassStudent.midtermScore)
-                : undefined,
-              subjectClassStudent?.examScore != null
-                ? Number(subjectClassStudent.examScore)
-                : undefined
-            )
-
-            monhoc.push({
-              TenMonhoc: subjectClass.subject.name,
-              MaMH: subjectClass.subject.code ?? "",
-              soTC: subjectClass.subject.credit,
-              diem01:
-                subjectClassStudent?.attendanceScore != null
-                  ? Number(subjectClassStudent.attendanceScore)
-                  : undefined,
-              diem02:
-                subjectClassStudent?.midtermScore != null
-                  ? Number(subjectClassStudent.midtermScore)
-                  : undefined,
-              diem07:
-                subjectClassStudent?.examScore != null
-                  ? Number(subjectClassStudent.examScore)
-                  : undefined,
-              diemhe10: rawScore,
-              diemhe4: converted?.base4 ?? 0,
-              diemchu: converted?.letter ?? "",
-              ghichu: subjectClassStudent.description ?? "",
-            })
-          })
-        })
-
-        const semesterResult = item.studentSemesterResult?.[0]
-
-        const tongSoTinChi =
-          semesterResult?.registeredCredits ??
-          monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
-        const tongDiemNhanTinChiHe10 = monhoc.reduce(
-          (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
-          0
-        )
-        const tongDiemNhanTinChiHe4 = monhoc.reduce(
-          (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
-          0
-        )
-        const diemTBHe10 =
-          semesterResult?.gpaBase10 != null
-            ? Number(semesterResult.gpaBase10)
-            : Number.parseFloat(
-                (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi).toFixed(2)
-              )
-        const diemTBHe4 =
-          semesterResult?.gpaBase4 != null
-            ? Number(semesterResult.gpaBase4)
-            : Number.parseFloat(
-                (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi).toFixed(2)
-              )
-
-        hocKis.push({
-          TenHocKi: `${item.name}`,
-          SoTinChiKy: tongSoTinChi,
-          DiemTBKyHe10: diemTBHe10,
-          DiemTBKyHe4: diemTBHe4,
-          monHocs: monhoc,
-        })
-      })
+    if (!studentId) {
+      message.warning("Không tìm thấy học viên")
+      return
     }
-
-    const sampleStudentData = {
-      fullname: student?.userProfile?.fullname,
-      dateOfBirth: student?.userProfile?.dateOfBirth,
-      maSV: student?.code,
-      htdt: student?.fixedClass?.trainingCourse.trainingObjectType.name,
-      nganh:
-        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
-        student?.fixedClass?.curriculumVersion?.curriculum?.trainingField?.name,
-      lop: student?.fixedClass?.trainingCourse?.name,
-      hocKis,
+    showSpinner()
+    try {
+      const res = await customTrainingFetch<{
+        status: number
+        data: Blob & { message?: string }
+      }>("/api/student-result/export-bang-diem-ca-nhan-p2", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ studentId }),
+      })
+      if (res.status === 200 && res.data instanceof Blob) {
+        const fileName = `BDCN-${student?.code ?? ""}-${student?.userProfile?.fullname ?? ""}.xlsx`
+        saveAs(res.data, fileName)
+      } else {
+        message.error(res.data?.message || "Xuất file thất bại")
+      }
+    } catch {
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } finally {
+      hideSpinner()
     }
-
-    const TABLE_START_ROW = 11
-    let cursor = TABLE_START_ROW
-    const tableRows: TableRow[] = []
-
-    for (const hocKi of sampleStudentData.hocKis) {
-      tableRows.push({
-        cells: [
-          { value: hocKi.TenHocKi ?? "", colSpan: 19, bold: true, align: "left", border: true },
-        ],
-      })
-      cursor += 1
-
-      const firstMonRow = cursor
-      const monHocs = hocKi?.monHocs ?? []
-      monHocs.forEach((monHoc: IMonHoc, index: number) => {
-        tableRows.push({
-          cells: [
-            { value: index + 1, align: "center" },
-            { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
-            { value: monHoc.MaMH ?? "" },
-            { value: monHoc.soTC, align: "center" },
-            { value: monHoc.diem01 ?? null, align: "right", numFmt: "0.00" },
-            { value: monHoc.diem02 ?? null, align: "right", numFmt: "0.00" },
-            { value: monHoc.diem07 ?? null, align: "right", numFmt: "0.00" },
-            { value: null },
-            { value: null },
-            { value: monHoc.diemhe10 ?? null, align: "right", numFmt: "0.00" },
-            { value: monHoc.diemhe4 ?? null, align: "right", numFmt: "0.00" },
-            { value: monHoc.diemchu ?? "", align: "center" },
-            { value: null },
-            { value: monHoc.ghichu ?? "" },
-          ],
-        })
-        cursor += 1
-      })
-      const lastMonRow = cursor - 1
-      const hasMon = monHocs.length > 0 && lastMonRow >= firstMonRow
-      const sumStcFormula = `SUM(I${firstMonRow}:I${lastMonRow})`
-      const tbHe10Formula = `IFERROR(SUMPRODUCT(I${firstMonRow}:I${lastMonRow},O${firstMonRow}:O${lastMonRow})/${sumStcFormula},0)`
-      const tbHe4Formula = `IFERROR(SUMPRODUCT(I${firstMonRow}:I${lastMonRow},P${firstMonRow}:P${lastMonRow})/${sumStcFormula},0)`
-
-      tableRows.push({
-        cells: [
-          { value: null },
-          { value: "Điểm trung bình học kỳ:", colSpan: 6, bold: true, align: "center" },
-          { value: null },
-          {
-            value: hasMon ? (hocKi.SoTinChiKy ?? 0) : 0,
-            bold: true,
-            align: "center",
-          },
-          { value: null },
-          { value: null },
-          { value: null },
-          { value: null },
-          { value: null },
-          {
-            value: hasMon ? (hocKi.DiemTBKyHe10 ?? 0) : 0,
-            bold: true,
-            align: "right",
-            numFmt: "0.00",
-          },
-          {
-            value: hasMon ? (hocKi.DiemTBKyHe4 ?? 0) : 0,
-            bold: true,
-            align: "right",
-            numFmt: "0.00",
-          },
-          { value: null },
-          { value: null },
-          { value: null },
-        ],
-      })
-      cursor += 1
-    }
-
-    const gapRow: TableRow = { cells: [{ value: null, colSpan: 19, border: false }] }
-
-    const sortedYearResults = student?.studentYearResult
-      ? [...student.studentYearResult].sort((a, b) => {
-          return (a.schoolYearId || "").localeCompare(b.schoolYearId || "")
-        })
-      : []
-
-    const lastYearResult = sortedYearResults.length > 0
-      ? sortedYearResults[sortedYearResults.length - 1]
-      : null
-
-    const tongtinchi =
-      lastYearResult?.accumulatedCredits ??
-      sampleStudentData.hocKis.reduce((acc, curr) => acc + (curr.SoTinChiKy ?? 0), 0)
-    const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
-      (acc, curr) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
-      0
-    )
-    const tongDiemNhanTinChiHe4 = sampleStudentData.hocKis.reduce(
-      (acc, curr) => acc + (curr.DiemTBKyHe4 ?? 0) * (curr.SoTinChiKy ?? 0),
-      0
-    )
-    const tongdiemhe10 =
-      lastYearResult?.cumulativeGpaBase10 != null
-        ? Number(lastYearResult.cumulativeGpaBase10)
-        : tongtinchi === 0
-          ? 0
-          : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(2))
-    const tongdiemhe4 =
-      lastYearResult?.cumulativeGpaBase4 != null
-        ? Number(lastYearResult.cumulativeGpaBase4)
-        : tongtinchi === 0
-          ? 0
-          : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(2))
-
-    const xeploai = lastYearResult?.rank?.classification ?? convertScore(tongdiemhe10).classification
-
-    await exportAndDownloadFromTemplate({
-      templatePath: "/mta/template/BangDiemCaNhan(P2).xlsx",
-      sheets: [
-        {
-          sheet: "BaoCaoDiem",
-          data: {
-            fullname: sampleStudentData.fullname ?? "",
-            dateOfBirth: sampleStudentData.dateOfBirth
-              ? dayjs(sampleStudentData.dateOfBirth).format("DD/MM/YYYY")
-              : "",
-            htdt: sampleStudentData.htdt ?? "",
-            maSV: sampleStudentData.maSV ?? "",
-            nganh: sampleStudentData.nganh ?? "",
-            lop: sampleStudentData.lop ?? "",
-          },
-          tableStartCell: { row: 14, col: 1 },
-          rows: [
-            ...tableRows,
-            gapRow,
-            gapRow,
-            { cells: [{ value: `Tổng tín chỉ tích luỹ: ${tongtinchi}`, colSpan: 19, border: false }] },
-            {
-              cells: [
-                {
-                  value: `Điểm trung bình tích luỹ hệ 10 toàn khoá: ${tongdiemhe10}`,
-                  colSpan: 19,
-                  border: false,
-                },
-              ],
-            },
-            {
-              cells: [
-                {
-                  value: `Điểm trung bình tích luỹ hệ 4 toàn khoá: ${tongdiemhe4}`,
-                  colSpan: 19,
-                  border: false,
-                },
-              ],
-            },
-            { cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 19, border: false }] },
-            {
-              cells: [
-                { value: null, colSpan: 8, border: false },
-                {
-                  value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`,
-                  colSpan: 11,
-                  border: false,
-                  align: "center",
-                },
-              ],
-            },
-            {
-              cells: [
-                { value: null, colSpan: 8, border: false },
-                {
-                  value: "  KT. TRƯỞNG PHÒNG",
-                  colSpan: 11,
-                  border: false,
-                  align: "center",
-                  bold: true,
-                },
-              ],
-            },
-            {
-              cells: [
-                { value: null, colSpan: 8, border: false },
-                {
-                  value: "  PHÓ TRƯỞNG PHÒNG",
-                  colSpan: 11,
-                  border: false,
-                  align: "center",
-                  bold: true,
-                },
-              ],
-            },
-            {
-              cells: [
-                { value: null, colSpan: 8, border: false },
-                {
-                  value: "Đại tá, TS Nguyễn Văn Bình",
-                  colSpan: 11,
-                  border: false,
-                  align: "center",
-                  bold: true,
-                },
-              ],
-            },
-          ],
-          hiddenColumns: ["M", "N", "R", "J", "K", "L"],
-        },
-      ],
-      fileName: `BDCN-${sampleStudentData.maSV}-${sampleStudentData.fullname}.xlsx`,
-    })
   }
 
   const exportTemplateP7 = async () => {
-    const hocKis: IHocKi[] = []
-    if (data.length > 0) {
-      data.forEach((item) => {
-        const monhoc: IMonHoc[] = []
-        item.subjectClasses.forEach((subjectClass) => {
-          subjectClass.subjectClassStudent.forEach((subjectClassStudent) => {
-            const rawScore =
-              subjectClassStudent?.manualFinalScore != null
-                ? Number(subjectClassStudent.manualFinalScore)
-                : subjectClassStudent?.finalScore != null
-                  ? Number(subjectClassStudent.finalScore)
-                  : 0
-
-            const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
-            const isConditional =
-              subjectClass?.subject?.trainingBlocks?.[0]?.useForFinalScore === false
-            const converted = convertScoreWithGraduation(
-              rawScore,
-              isGraduation,
-              isConditional,
-              subjectClassStudent?.attendanceScore != null
-                ? Number(subjectClassStudent.attendanceScore)
-                : undefined,
-              subjectClassStudent?.midtermScore != null
-                ? Number(subjectClassStudent.midtermScore)
-                : undefined,
-              subjectClassStudent?.examScore != null
-                ? Number(subjectClassStudent.examScore)
-                : undefined
-            )
-
-            monhoc.push({
-              TenMonhoc: subjectClass.subject.name,
-              MaMH: subjectClass.subject.code ?? "",
-              soTC: subjectClass.subject.credit,
-              diem01:
-                subjectClassStudent?.attendanceScore != null
-                  ? Number(subjectClassStudent.attendanceScore)
-                  : undefined,
-              diem02:
-                subjectClassStudent?.midtermScore != null
-                  ? Number(subjectClassStudent.midtermScore)
-                  : undefined,
-              diem07:
-                subjectClassStudent?.examScore != null
-                  ? Number(subjectClassStudent.examScore)
-                  : undefined,
-              diemhe10: rawScore,
-              diemhe4: converted?.base4 ?? 0,
-              diemchu: converted?.letter ?? "",
-              ghichu: subjectClassStudent.description ?? "",
-            })
-          })
-        })
-
-        const semesterResult = item.studentSemesterResult?.[0]
-
-        const tongSoTinChi =
-          semesterResult?.registeredCredits ??
-          monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
-        const tongDiemNhanTinChiHe10 = monhoc.reduce(
-          (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
-          0
-        )
-        const tongDiemNhanTinChiHe4 = monhoc.reduce(
-          (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
-          0
-        )
-        const diemTBHe10 =
-          semesterResult?.gpaBase10 != null
-            ? Number(semesterResult.gpaBase10)
-            : Number.parseFloat(
-                (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi).toFixed(2)
-              )
-        const diemTBHe4 =
-          semesterResult?.gpaBase4 != null
-            ? Number(semesterResult.gpaBase4)
-            : Number.parseFloat(
-                (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi).toFixed(2)
-              )
-
-        hocKis.push({
-          TenHocKi: `${item.name}`,
-          SoTinChiKy: tongSoTinChi,
-          DiemTBKyHe10: diemTBHe10,
-          DiemTBKyHe4: diemTBHe4,
-          monHocs: monhoc,
-        })
-      })
+    if (!studentId) {
+      message.warning("Không tìm thấy học viên")
+      return
     }
-
-    const sampleStudentData = {
-      fullname: student?.userProfile?.fullname,
-      dateOfBirth: student?.userProfile?.dateOfBirth,
-      maSV: student?.code,
-      htdt: student?.fixedClass?.trainingCourse.trainingObjectType.name,
-      nganh:
-        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
-        student?.fixedClass?.curriculumVersion?.curriculum?.trainingField?.name,
-      lop: student?.fixedClass?.trainingCourse?.name,
-      hocKis,
+    showSpinner()
+    try {
+      const res = await customTrainingFetch<{
+        status: number
+        data: Blob & { message?: string }
+      }>("/api/student-result/export-bang-diem-ca-nhan-p7", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ studentId }),
+      })
+      if (res.status === 200 && res.data instanceof Blob) {
+        const fileName = `BDCN-${student?.code ?? ""}-${student?.userProfile?.fullname ?? ""}.xlsx`
+        saveAs(res.data, fileName)
+      } else {
+        message.error(res.data?.message || "Xuất file thất bại")
+      }
+    } catch {
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } finally {
+      hideSpinner()
     }
-
-    const TABLE_START_ROW = 11
-    let cursor = TABLE_START_ROW
-    const tableRows: TableRow[] = []
-
-    for (const hocKi of sampleStudentData.hocKis) {
-      tableRows.push({
-        cells: [
-          { value: hocKi.TenHocKi ?? "", colSpan: 19, bold: true, align: "left", border: true },
-        ],
-      })
-      cursor += 1
-
-      const firstMonRow = cursor
-      const monHocs = hocKi?.monHocs ?? []
-      monHocs.forEach((monHoc: IMonHoc, index: number) => {
-        tableRows.push({
-          cells: [
-            { value: index + 1, align: "center" },
-            { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
-            { value: monHoc.MaMH ?? "" },
-            { value: monHoc.soTC, align: "center" },
-            { value: monHoc.diem01 ?? null, align: "right", numFmt: "0.00" },
-            { value: monHoc.diem02 ?? null, align: "right", numFmt: "0.00" },
-            { value: monHoc.diem07 ?? null, align: "right", numFmt: "0.00" },
-            { value: null },
-            { value: null },
-            { value: monHoc.diemhe10 ?? null, align: "right", numFmt: "0.00" },
-            { value: monHoc.diemhe4 ?? null, align: "right", numFmt: "0.00" },
-            { value: monHoc.diemchu ?? "", align: "center" },
-            { value: null },
-            { value: monHoc.ghichu ?? "" },
-          ],
-        })
-        cursor += 1
-      })
-      const lastMonRow = cursor - 1
-      const hasMon = monHocs.length > 0 && lastMonRow >= firstMonRow
-      const sumStcFormula = `SUM(I${firstMonRow}:I${lastMonRow})`
-      const tbHe10Formula = `IFERROR(SUMPRODUCT(I${firstMonRow}:I${lastMonRow},O${firstMonRow}:O${lastMonRow})/${sumStcFormula},0)`
-      const tbHe4Formula = `IFERROR(SUMPRODUCT(I${firstMonRow}:I${lastMonRow},P${firstMonRow}:P${lastMonRow})/${sumStcFormula},0)`
-
-      tableRows.push({
-        cells: [
-          { value: null },
-          { value: "Điểm trung bình học kỳ:", colSpan: 6, bold: true, align: "center" },
-          { value: null },
-          {
-            value: hasMon ? (hocKi.SoTinChiKy ?? 0) : 0,
-            bold: true,
-            align: "center",
-          },
-          { value: null },
-          { value: null },
-          { value: null },
-          { value: null },
-          { value: null },
-          {
-            value: hasMon ? (hocKi.DiemTBKyHe10 ?? 0) : 0,
-            bold: true,
-            align: "right",
-            numFmt: "0.00",
-          },
-          {
-            value: hasMon ? (hocKi.DiemTBKyHe4 ?? 0) : 0,
-            bold: true,
-            align: "right",
-            numFmt: "0.00",
-          },
-          { value: null },
-          { value: null },
-          { value: null },
-        ],
-      })
-      cursor += 1
-    }
-
-    const gapRow: TableRow = { cells: [{ value: null, colSpan: 19, border: false }] }
-
-    const lastSemesterResult = [...data].reverse().find((d) => d.studentSemesterResult?.length > 0)
-      ?.studentSemesterResult?.[0]
-
-    const tongtinchi =
-      lastSemesterResult?.accumulatedCredits ??
-      sampleStudentData.hocKis.reduce((acc, curr) => acc + (curr.SoTinChiKy ?? 0), 0)
-    const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
-      (acc, curr) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
-      0
-    )
-    const tongDiemNhanTinChiHe4 = sampleStudentData.hocKis.reduce(
-      (acc, curr) => acc + (curr.DiemTBKyHe4 ?? 0) * (curr.SoTinChiKy ?? 0),
-      0
-    )
-    const tongdiemhe10 =
-      lastSemesterResult?.cumulativeGpaBase10 != null
-        ? Number(lastSemesterResult.cumulativeGpaBase10)
-        : tongtinchi === 0
-          ? 0
-          : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(2))
-    const tongdiemhe4 =
-      lastSemesterResult?.cumulativeGpaBase4 != null
-        ? Number(lastSemesterResult.cumulativeGpaBase4)
-        : tongtinchi === 0
-          ? 0
-          : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(2))
-
-    const xeploai = convertScore(tongdiemhe10).classification
-
-    await exportAndDownloadFromTemplate({
-      templatePath: "/mta/luan-van/BangDiemCaNhan(P7).xlsx",
-      sheets: [
-        {
-          sheet: "BaoCaoDiem",
-          data: {
-            fullname: sampleStudentData.fullname ?? "",
-            dateOfBirth: sampleStudentData.dateOfBirth
-              ? dayjs(sampleStudentData.dateOfBirth).format("DD/MM/YYYY")
-              : "",
-            htdt: sampleStudentData.htdt ?? "",
-            maSV: sampleStudentData.maSV ?? "",
-            nganh: sampleStudentData.nganh ?? "",
-            lop: sampleStudentData.lop ?? "",
-          },
-          tableStartCell: { row: 14, col: 1 },
-          rows: [
-            ...tableRows,
-            gapRow,
-            gapRow,
-            { cells: [{ value: `Tổng tín chỉ tích luỹ: ${tongtinchi}`, colSpan: 19, border: false }] },
-            {
-              cells: [
-                {
-                  value: `Điểm trung bình tích luỹ hệ 10 toàn khoá: ${tongdiemhe10}`,
-                  colSpan: 19,
-                  border: false,
-                },
-              ],
-            },
-            {
-              cells: [
-                {
-                  value: `Điểm trung bình tích luỹ hệ 4 toàn khoá: ${tongdiemhe4}`,
-                  colSpan: 19,
-                  border: false,
-                },
-              ],
-            },
-            { cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 19, border: false }] },
-            {
-              cells: [
-                { value: null, colSpan: 8, border: false },
-                {
-                  value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`,
-                  colSpan: 11,
-                  border: false,
-                  align: "center",
-                },
-              ],
-            },
-            // {
-            //   cells: [
-            //     { value: null, colSpan: 13, border: false },
-            //     {
-            //       value: "  KT. TRƯỞNG PHÒNG",
-            //       colSpan: 6,
-            //       border: false,
-            //       align: "center",
-            //       bold: true,
-            //     },
-            //   ],
-            // },
-            // {
-            //   cells: [
-            //     { value: null, colSpan: 13, border: false },
-            //     {
-            //       value: "  PHÓ TRƯỞNG PHÒNG",
-            //       colSpan: 6,
-            //       border: false,
-            //       align: "center",
-            //       bold: true,
-            //     },
-            //   ],
-            // },
-            // {
-            //   cells: [
-            //     { value: null, colSpan: 13, border: false },
-            //     {
-            //       value: "Đại tá, TS Nguyễn Văn Bình",
-            //       colSpan: 6,
-            //       border: false,
-            //       align: "center",
-            //       bold: true,
-            //     },
-            //   ],
-            // },
-          ],
-          hiddenColumns: ["M", "N", "R", "J", "K", "L"],
-        },
-      ],
-      fileName: `BDCN-${sampleStudentData.maSV}-${sampleStudentData.fullname}.xlsx`,
-    })
   }
 
   const handleExportQuaTrinh = async () => {

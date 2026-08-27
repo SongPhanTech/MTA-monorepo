@@ -53,6 +53,7 @@ import axios from "axios"
 import dayjs from "dayjs"
 import { useRouter } from "next/router"
 import { useCallback, useEffect, useMemo, useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 import "./tao-moi/index.css"
 import ChucVuChinhQuyenForm from "@components/modal/quan-ly-ho-so/form/chuc-vu-chinh-quyen"
 import ChucVuDangForm from "@components/modal/quan-ly-ho-so/form/chuc-vu-dang"
@@ -369,6 +370,24 @@ export default function UpdateUserPage() {
   }, [search, listTabs.filter])
 
   const { showSpinner, hideSpinner } = useSpinner()
+
+  const { onOpen: onOpenModalTomTatLyLich } = useDisclosure<{
+    id: string
+  }>({
+    tag: "ModalTomTatLyLich",
+  })
+
+  const { onOpen: onOpenModalLyLichCanBo } = useDisclosure<{
+    id: string
+  }>({
+    tag: "ModalLyLichCanBo",
+  })
+
+  const { onOpen: onOpenModalSoYeuLyLich } = useDisclosure<{
+    id: string
+  }>({
+    tag: "ModalSoYeuLyLich",
+  })
   function findLatestQuyetDinh(list: any[]) {
     if (list.length === 0) return null
     return list.reduce((latest, current) =>
@@ -1177,12 +1196,28 @@ export default function UpdateUserPage() {
 
   return (
     <Form form={form} onFinish={handleSubmit}>
-      <div>
-        <Flex justify="space-between" className="p-4">
+      <div className="p-4">
+        <Flex justify="space-between" className="mb-4">
           <div className="text-xl font-semibold">Hồ sơ của tôi</div>
-          <Flex justify="end">
+          <Flex justify="end" wrap="wrap" gap="8px">
             <Button
-              className="mr-3"
+              htmlType="button"
+              disabled={!id}
+              onClick={() => onOpenModalTomTatLyLich({ id })}
+            >
+              Xuất dữ liệu theo mẫu trích yếu 63
+            </Button>
+            <Button htmlType="button" disabled={!id} onClick={() => onOpenModalLyLichCanBo({ id })}>
+              Xuất dữ liệu theo mẫu C2
+            </Button>
+            <Button
+              htmlType="button"
+              disabled={!id}
+              onClick={() => onOpenModalSoYeuLyLich({ id })}
+            >
+              Xuất dữ liệu theo mẫu sơ yếu lý lịch
+            </Button>
+            <Button
               onClick={() => {
                 router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
               }}
