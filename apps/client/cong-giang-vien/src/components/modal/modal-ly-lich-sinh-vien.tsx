@@ -10,6 +10,17 @@ import { useReactToPrint } from "react-to-print"
 
 dayjs.locale("vi")
 
+const MISSING_DATE = "- -"
+
+function formatDateOrPlaceholder(
+  value: Date | string | null | undefined,
+  format: string
+) {
+  if (!value) return MISSING_DATE
+  const parsed = dayjs(value)
+  return parsed.isValid() ? parsed.format(format) : MISSING_DATE
+}
+
 type ModalTomTatLyLichInput = {
   id: string
 }
@@ -251,10 +262,7 @@ const ModalTomTatLyLich = () => {
                 key: "dob",
                 content: (
                   <>
-                    Sinh ngày:{" "}
-                    {initialData?.dateOfBirth
-                      ? dayjs(initialData?.dateOfBirth).format("DD/MM/YYYY")
-                      : ""}
+                    Sinh ngày: {formatDateOrPlaceholder(initialData?.dateOfBirth, "DD/MM/YYYY")}
                   </>
                 ),
               },

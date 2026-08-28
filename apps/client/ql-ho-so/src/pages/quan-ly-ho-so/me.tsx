@@ -1,4 +1,4 @@
-import { CameraFilled, UserOutlined } from "@ant-design/icons"
+import { CameraFilled, PrinterOutlined, UserOutlined } from "@ant-design/icons"
 import { queryClient } from "@api/index"
 import FormItem from "@components/commons/form-item"
 import BoiDuongQuocPhongAnNinhForm from "@components/modal/quan-ly-ho-so/form/boi-duong-quoc-phong-an-ninh"
@@ -40,6 +40,7 @@ import { ROUTER_PATH } from "@workspace/router"
 import {
   Button,
   Divider,
+  Dropdown,
   Flex,
   Form,
   Input,
@@ -1200,23 +1201,33 @@ export default function UpdateUserPage() {
         <Flex justify="space-between" className="mb-4">
           <div className="text-xl font-semibold">Hồ sơ của tôi</div>
           <Flex justify="end" wrap="wrap" gap="8px">
-            <Button
-              htmlType="button"
+            <Dropdown
+              trigger={["click"]}
               disabled={!id}
-              onClick={() => onOpenModalTomTatLyLich({ id })}
+              menu={{
+                items: [
+                  {
+                    key: "trich-yeu-63",
+                    label: "Xuất dữ liệu theo mẫu trích yếu 63",
+                    onClick: () => onOpenModalTomTatLyLich({ id }),
+                  },
+                  {
+                    key: "mau-c2",
+                    label: "Xuất dữ liệu theo mẫu C2",
+                    onClick: () => onOpenModalLyLichCanBo({ id }),
+                  },
+                  {
+                    key: "so-yeu-ly-lich",
+                    label: "Xuất dữ liệu theo mẫu sơ yếu lý lịch",
+                    onClick: () => onOpenModalSoYeuLyLich({ id }),
+                  },
+                ],
+              }}
             >
-              Xuất dữ liệu theo mẫu trích yếu 63
-            </Button>
-            <Button htmlType="button" disabled={!id} onClick={() => onOpenModalLyLichCanBo({ id })}>
-              Xuất dữ liệu theo mẫu C2
-            </Button>
-            <Button
-              htmlType="button"
-              disabled={!id}
-              onClick={() => onOpenModalSoYeuLyLich({ id })}
-            >
-              Xuất dữ liệu theo mẫu sơ yếu lý lịch
-            </Button>
+              <Button htmlType="button" disabled={!id} icon={<PrinterOutlined />}>
+                Xuất dữ liệu
+              </Button>
+            </Dropdown>
             <Button
               onClick={() => {
                 router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)

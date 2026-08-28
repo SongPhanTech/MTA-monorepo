@@ -2,8 +2,8 @@ import DoiAnhDaiDien from "@components/cong-giang-vien/ho-so-ca-nhan/doi-anh-dai
 import InputRow from "@components/cong-giang-vien/ho-so-ca-nhan/hang-thong-tin"
 import PutThongTinCaNhanModal from "@components/cong-giang-vien/ho-so-ca-nhan/put-thong-tin-ca-nhan"
 import type { ThongKeHoSo, ThongTinCaNhan } from "@components/cong-giang-vien/ho-so-ca-nhan/types"
-import { Button, Card, Col, Row, Tag } from "antd"
-import { SquarePen } from "lucide-react"
+import { Button, Card, Col, Dropdown, Row, Tag } from "antd"
+import { Printer, SquarePen } from "lucide-react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 interface ThongTinChungProps {
@@ -23,6 +23,15 @@ const ThongTinChung = ({ thongTin, thongKe, profileId }: ThongTinChungProps) => 
   const { onOpen: moChinhSua } = useDisclosure<{ id: string }>({
     tag: "PutThongTinCaNhanModal",
   })
+  const { onOpen: onOpenModalTomTatLyLich } = useDisclosure<{ id: string }>({
+    tag: "ModalTomTatLyLich",
+  })
+  const { onOpen: onOpenModalLyLichCanBo } = useDisclosure<{ id: string }>({
+    tag: "ModalLyLichCanBo",
+  })
+  const { onOpen: onOpenModalSoYeuLyLich } = useDisclosure<{ id: string }>({
+    tag: "ModalSoYeuLyLich",
+  })
 
   const danhSachThongKe: ItemThongKe[] = [
     { key: "nam-cong-tac", nhan: "Số năm công tác", giaTri: thongKe.soNamCongTac },
@@ -41,16 +50,43 @@ const ThongTinChung = ({ thongTin, thongKe, profileId }: ThongTinChungProps) => 
 
   return (
     <Card size="small" className="relative mb-4">
-      {/* Nút chỉnh sửa thông tin */}
-      <Button
-        type="default"
-        icon={<SquarePen size={16} />}
-        className="absolute right-3 top-3 z-10"
-        disabled={!profileId}
-        onClick={() => profileId && moChinhSua({ id: profileId })}
-      >
-        Chỉnh sửa
-      </Button>
+      <div className="absolute right-3 top-3 z-10 flex items-center gap-2">
+        <Dropdown
+          trigger={["click"]}
+          disabled={!profileId}
+          menu={{
+            items: [
+              {
+                key: "trich-yeu-63",
+                label: "Xuất dữ liệu theo mẫu trích yếu 63",
+                onClick: () => profileId && onOpenModalTomTatLyLich({ id: profileId }),
+              },
+              {
+                key: "mau-c2",
+                label: "Xuất dữ liệu theo mẫu C2",
+                onClick: () => profileId && onOpenModalLyLichCanBo({ id: profileId }),
+              },
+              {
+                key: "so-yeu-ly-lich",
+                label: "Xuất dữ liệu theo mẫu sơ yếu lý lịch",
+                onClick: () => profileId && onOpenModalSoYeuLyLich({ id: profileId }),
+              },
+            ],
+          }}
+        >
+          <Button disabled={!profileId} icon={<Printer size={16} />}>
+            Xuất dữ liệu
+          </Button>
+        </Dropdown>
+        <Button
+          type="default"
+          icon={<SquarePen size={16} />}
+          disabled={!profileId}
+          onClick={() => profileId && moChinhSua({ id: profileId })}
+        >
+          Chỉnh sửa
+        </Button>
+      </div>
 
       <Row gutter={[12, 16]}>
         {/* Ảnh đại diện */}

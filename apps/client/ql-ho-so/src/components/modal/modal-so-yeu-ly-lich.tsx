@@ -10,6 +10,17 @@ import { data, data2, data3 } from "@/utils/dataFake"
 
 dayjs.locale("vi")
 
+const MISSING_DATE = "- -"
+
+function formatDateOrPlaceholder(
+  value: Date | string | null | undefined,
+  format: string
+) {
+  if (!value) return MISSING_DATE
+  const parsed = dayjs(value)
+  return parsed.isValid() ? parsed.format(format) : MISSING_DATE
+}
+
 type ModalSoYeuLyLichInput = {
   id: string
 }
@@ -234,11 +245,11 @@ const ModalSoYeuLyLich = () => {
               <span className="inline-block flex-1" />
             </p>
             <p className="flex w-full leading-[12px] mb-4">
-              3. Sinh ngày: {dayjs(initialData?.dateOfBirth).format("DD")}
+              3. Sinh ngày: {formatDateOrPlaceholder(initialData?.dateOfBirth, "DD")}
               <span className="inline-block w-14 flex-1 " />
-              tháng: {dayjs(initialData?.dateOfBirth).format("MM")}
+              tháng: {formatDateOrPlaceholder(initialData?.dateOfBirth, "MM")}
               <span className="inline-block w-12 flex-1" />
-              năm: {dayjs(initialData?.dateOfBirth).format("YYYY")}
+              năm: {formatDateOrPlaceholder(initialData?.dateOfBirth, "YYYY")}
               <span className="inline-block w-16 flex-1" />
             </p>
 

@@ -175,7 +175,7 @@ const HoSoShell = ({
               )}
             >
               {showBreadcrumb ? (
-                <div className="mb-2 shrink-0">
+                <div className={cn("mb-2 shrink-0", unLayout && "px-4 pt-4")}>
                   <Breadcrumb items={listBreadcrumb} />
                 </div>
               ) : null}

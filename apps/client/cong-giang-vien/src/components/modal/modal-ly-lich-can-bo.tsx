@@ -11,6 +11,17 @@ import { data } from "@/utils/dataFake"
 
 dayjs.locale("vi")
 
+const MISSING_DATE = "- -"
+
+function formatDateOrPlaceholder(
+  value: Date | string | null | undefined,
+  format: string
+) {
+  if (!value) return MISSING_DATE
+  const parsed = dayjs(value)
+  return parsed.isValid() ? parsed.format(format) : MISSING_DATE
+}
+
 type ModalLyLichCanBoInput = {
   id: string
 }
@@ -208,11 +219,11 @@ const ModalLyLichCanBo = () => {
             </p>
             <p className="flex w-full">2) Tên gọi khác: {initialData?.hoTenThuongDung}</p>
             <p className="flex w-full">
-              3) Sinh ngày: {dayjs(initialData?.dateOfBirth).format("DD")}
+              3) Sinh ngày: {formatDateOrPlaceholder(initialData?.dateOfBirth, "DD")}
               <span className="inline-block w-14 flex-1" />
-              tháng: {dayjs(initialData?.dateOfBirth).format("MM")}
+              tháng: {formatDateOrPlaceholder(initialData?.dateOfBirth, "MM")}
               <span className="inline-block w-12 flex-1" />
-              năm: {dayjs(initialData?.dateOfBirth).format("YYYY")}
+              năm: {formatDateOrPlaceholder(initialData?.dateOfBirth, "YYYY")}
               <span className="inline-block w-16 flex-" />, Giới tính (nam, nữ):{" "}
               {initialData?.gender?.sTen}
               <span className="inline-block w-32 flex-1 " />
