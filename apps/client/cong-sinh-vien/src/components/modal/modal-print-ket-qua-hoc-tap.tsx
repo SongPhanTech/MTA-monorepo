@@ -14,8 +14,8 @@ dayjs.locale("vi")
 type SubjectScoreRow = {
   subjectClassId?: string | null
   createdAt?: Date | string
-  manualFinalScore?: number | null
-  finalScore?: number | null
+  manualFinalScore?: unknown
+  finalScore?: unknown
 }
 
 /** Điểm lớp (mới nhất) nếu có; không thì phiên chứng chỉ (mới nhất). */

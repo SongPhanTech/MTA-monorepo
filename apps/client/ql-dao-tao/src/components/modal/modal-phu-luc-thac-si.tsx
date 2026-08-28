@@ -14,8 +14,8 @@ dayjs.locale("vi")
 type SubjectScoreRow = {
   subjectClassId?: string | null
   createdAt?: Date | string
-  manualFinalScore?: number | null
-  finalScore?: number | null
+  manualFinalScore?: unknown
+  finalScore?: unknown
 }
 
 type Subject = {
