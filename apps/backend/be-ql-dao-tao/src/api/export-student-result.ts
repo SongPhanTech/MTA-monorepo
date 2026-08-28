@@ -8,6 +8,9 @@ import {
   exportBangDiemCaNhanP2,
   exportBangDiemCaNhanP7,
 } from "../services/export-bang-diem-ca-nhan-p2"
+import { exportBangDiemQuaTrinhHocVien } from "../services/export-bang-diem-qua-trinh-hoc-vien"
+import { exportBangDiemNganDaiHan } from "../services/export-bang-diem-ngan-dai-han"
+import { exportBangDiemTheoLop } from "../services/export-bang-diem-theo-lop"
 import { ErrorMessageResponseSchema, ExcelBinaryResponseSchema } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
@@ -346,6 +349,156 @@ app.openapi(exportBangDiemCaNhanP7Route, async (c) => {
   const { studentId } = c.req.valid("json")
 
   const { buffer, fileName } = await exportBangDiemCaNhanP7({ studentId })
+  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+  return c.body(buffer, 200, {
+    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "Content-Disposition": disposition,
+  })
+})
+
+const exportBangDiemQuaTrinhHocVienRoute = createRoute({
+  operationId: "exportBangDiemQuaTrinhHocVien",
+  tags: ["Kết quả học tập"],
+  path: "/export-bang-diem-qua-trinh-hoc-vien",
+  method: "post",
+  summary: "Xuất bảng điểm quá trình học viên",
+  description: `Xuất file Excel bảng điểm quá trình của một học viên (mẫu BangDiemQuaTrinh.xlsx).
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion, Semester, ScoreConvert.
+
+**Tham số:** studentId — ID học viên. Điểm lấy lần học mới nhất của mỗi môn.`,
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              studentId: z.string().openapi(fieldDesc("ID học viên (Student).")),
+            })
+            .openapi("ExportBangDiemQuaTrinhHocVienRequest"),
+        },
+      },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "File Excel bảng điểm quá trình học viên",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: ExcelBinaryResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(exportBangDiemQuaTrinhHocVienRoute, async (c) => {
+  const { studentId } = c.req.valid("json")
+
+  const { buffer, fileName } = await exportBangDiemQuaTrinhHocVien({ studentId })
+  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+  return c.body(buffer, 200, {
+    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "Content-Disposition": disposition,
+  })
+})
+
+const exportBangDiemNganDaiHanRoute = createRoute({
+  operationId: "exportBangDiemNganDaiHan",
+  tags: ["Kết quả học tập"],
+  path: "/export-bang-diem-ngan-dai-han",
+  method: "post",
+  summary: "Xuất bảng điểm ngắn hạn, dài hạn",
+  description: `Xuất file Excel bảng điểm ngắn hạn / dài hạn (mẫu bang-diem-ngan-dai-han.xlsx).
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, Semester.
+
+**Tham số:** studentIds — danh sách ID học viên cần xuất (theo thứ tự bảng).`,
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              studentIds: z
+                .array(z.string())
+                .min(1)
+                .openapi(fieldDesc("Danh sách ID học viên (Student).")),
+            })
+            .openapi("ExportBangDiemNganDaiHanRequest"),
+        },
+      },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "File Excel bảng điểm ngắn hạn, dài hạn",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: ExcelBinaryResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(exportBangDiemNganDaiHanRoute, async (c) => {
+  const { studentIds } = c.req.valid("json")
+
+  const { buffer, fileName } = await exportBangDiemNganDaiHan({ studentIds })
+  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+  return c.body(buffer, 200, {
+    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "Content-Disposition": disposition,
+  })
+})
+
+const exportBangDiemTheoLopRoute = createRoute({
+  operationId: "exportBangDiemTheoLop",
+  tags: ["Kết quả học tập"],
+  path: "/export-bang-diem-theo-lop",
+  method: "post",
+  summary: "Xuất bảng điểm theo lớp, kết quả đào tạo toàn khoá",
+  description: `Xuất file Excel bảng điểm theo lớp / toàn khoá (mẫu BangdiemTheoLop_v3.xlsx).
+
+**Bảng dữ liệu nguồn:** FixedClass, Student, StudentSubjectScore, TrainingBlockSubject.
+
+**Tham số:** trainingCourseId — ID khóa học. Xuất tất cả lớp biên chế đang hoạt động trong khóa.`,
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              trainingCourseId: z.string().openapi(fieldDesc("ID khóa học (TrainingCourse).")),
+            })
+            .openapi("ExportBangDiemTheoLopRequest"),
+        },
+      },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "File Excel bảng điểm theo lớp toàn khoá",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: ExcelBinaryResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(exportBangDiemTheoLopRoute, async (c) => {
+  const { trainingCourseId } = c.req.valid("json")
+
+  const { buffer, fileName } = await exportBangDiemTheoLop({ trainingCourseId })
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
   return c.body(buffer, 200, {

@@ -1,16 +1,68 @@
 import { GridBlock } from "@components/commons/grid-block"
-import { useFindUniqueStudent } from "@workspace/db/hooks"
+import { useScoreConverter } from "@hooks/scoreConverter"
+import { $Enums } from "@workspace/db/client"
+import { useFindManyStudentResearchTopic, useFindUniqueStudent } from "@workspace/db/hooks"
 import { Button, Modal, Space } from "antd"
 import dayjs from "dayjs"
 import { Printer } from "lucide-react"
-import { useRef } from "react"
+import { useMemo, useRef } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
-import { dataFake, fakeData, fakeScores, type Subject } from "@/utils/dataFake"
 
-const mid = Math.ceil(dataFake.length / 2)
-const leftData = dataFake.slice(0, mid)
-const rightData = dataFake.slice(mid)
+dayjs.locale("vi")
+
+type SubjectScoreRow = {
+  subjectClassId?: string | null
+  createdAt?: Date | string
+  manualFinalScore?: number | null
+  finalScore?: number | null
+}
+
+type Subject = {
+  name: string
+  credits: number
+  score: number | null
+}
+
+const COUNCIL_ROLE_LABEL: Record<string, string> = {
+  CHAIRMAN: "Chủ tịch",
+  SECRETARY: "Thư ký",
+  REVIEWER_1: "Phản biện 1",
+  REVIEWER_2: "Phản biện 2",
+  MEMBER: "Ủy viên",
+}
+
+function pickOfficialScore<T extends SubjectScoreRow>(scores: T[] | undefined): T | undefined {
+  if (!scores?.length) return undefined
+  const byCreatedAt = (a: T, b: T) => {
+    const at = a.createdAt ? new Date(a.createdAt).getTime() : 0
+    const bt = b.createdAt ? new Date(b.createdAt).getTime() : 0
+    return at - bt
+  }
+  const classScores = scores.filter((s) => s.subjectClassId).sort(byCreatedAt)
+  if (classScores.length) return classScores[classScores.length - 1]
+  const phienScores = scores.filter((s) => !s.subjectClassId).sort(byCreatedAt)
+  return phienScores.at(-1)
+}
+
+function toScoreNumber(value: unknown): number | null {
+  if (value == null || value === "") return null
+  if (typeof value === "number") return Number.isFinite(value) ? value : null
+  if (typeof value === "string") {
+    const n = Number(value.replace(",", "."))
+    return Number.isFinite(n) ? n : null
+  }
+  if (typeof value === "object" && "toNumber" in value) {
+    const n = (value as { toNumber: () => number }).toNumber()
+    return Number.isFinite(n) ? n : null
+  }
+  return null
+}
+
+function formatScore(value: number | null | undefined, digits: number) {
+  if (value == null || !Number.isFinite(value)) return ""
+  return Number(value).toFixedSmart(digits)
+}
 
 const SubjectTable: React.FC<{ data: Subject[]; startIndex: number }> = ({ data, startIndex }) => (
   <table className="table-auto border-collapse border border-black w-full text-sm">
@@ -28,7 +80,9 @@ const SubjectTable: React.FC<{ data: Subject[]; startIndex: number }> = ({ data,
           <td className="border border-black px-2 py-1 text-center">{startIndex + idx + 1}</td>
           <td className="border border-black px-2 py-1">{item.name}</td>
           <td className="border border-black px-2 py-1 text-center">{item.credits}</td>
-          <td className="border border-black px-2 py-1 text-center">{item.score}</td>
+          <td className="border border-black px-2 py-1 text-center">
+            {item.score != null ? formatScore(item.score, 1) : ""}
+          </td>
         </tr>
       ))}
     </tbody>
@@ -53,10 +107,50 @@ export const ModalPhuLucThacSi = () => {
           include: { gender: true, ethnicity: true, religion: true, nationality: true },
         },
         graduationDecision: true,
+        studentYearResult: {
+          where: { isLastStudyYear: true, deletedAt: null },
+          take: 1,
+          select: {
+            cumulativeGpaBase10: true,
+            cumulativeGpaBase4: true,
+          },
+        },
+        thesisRegistrations: {
+          where: { deletedAt: null },
+          orderBy: { createdAt: "desc" },
+          take: 1,
+          include: {
+            studentSubjectScore: { include: { subjectVersion: true } },
+            thesisProject: {
+              include: {
+                supervisor: true,
+                coSupervisor: true,
+                defenseRecord: true,
+                subjectClass: { include: { subject: true } },
+                council: {
+                  include: {
+                    members: {
+                      include: {
+                        expert: {
+                          include: {
+                            academicDegreeType: true,
+                            academicRankType: true,
+                            lecturer: { include: { organization: true } },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         fixedClass: {
           include: {
             trainingCourse: {
               include: {
+                scoreConverts: true,
                 trainingObjectType: {
                   include: {
                     trainingForm: true,
@@ -66,7 +160,6 @@ export const ModalPhuLucThacSi = () => {
             },
           },
         },
-
         curriculumVersion: {
           include: {
             curriculum: {
@@ -80,12 +173,185 @@ export const ModalPhuLucThacSi = () => {
             },
             trainingTime: true,
             trainingLanguage: true,
+            trainingBlocks: {
+              orderBy: { priority: "asc" },
+              include: {
+                subjects: {
+                  orderBy: { semester: "asc" },
+                  include: {
+                    subject: {
+                      include: {
+                        studentSubjectScore: {
+                          where: { studentId: id },
+                          orderBy: { createdAt: "asc" },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
     },
     { enabled: !!id }
   )
+
+  const { data: researchTopicData = [] } = useFindManyStudentResearchTopic(
+    {
+      where: {
+        deletedAt: null,
+        studentSubjectScore: { studentId: id },
+      },
+      include: {
+        studentSubjectScore: {
+          include: { subjectVersion: true },
+        },
+      },
+      orderBy: { createdAt: "asc" },
+    },
+    { enabled: !!id }
+  )
+
+  const { convertScore } = useScoreConverter(data?.fixedClass?.trainingCourse?.scoreConverts)
+
+  const thesisReg = data?.thesisRegistrations?.[0]
+  const thesisProject = thesisReg?.thesisProject
+  const isProject = thesisProject?.thesisType === $Enums.ThesisType.PROJECT
+
+  const courseRows = useMemo(() => {
+    const subjects = (data?.curriculumVersion?.trainingBlocks ?? []).flatMap((block) =>
+      block.subjects.map((item) => item)
+    )
+    return subjects.map((item) => {
+      const subject = item.subject
+      const score = pickOfficialScore(subject.studentSubjectScore)
+      const score10 = toScoreNumber(score?.manualFinalScore) ?? toScoreNumber(score?.finalScore)
+      const converted = score10 != null ? convertScore(score10) : null
+      return {
+        id: subject.id,
+        name: subject.name,
+        credits: subject.credit,
+        score10,
+        score4: converted?.base4 ?? null,
+        scoreLetter: converted?.letter ?? null,
+        useForFinalScore: item.useForFinalScore !== false,
+        graduation: item.graduation === true,
+      }
+    })
+  }, [data, convertScore])
+
+  const researchTopicRows = useMemo(() => {
+    return researchTopicData.map((topic, index) => {
+      const score = topic.studentSubjectScore
+      const score10 = toScoreNumber(score?.manualFinalScore) ?? toScoreNumber(score?.finalScore)
+      const converted = score10 != null ? convertScore(score10) : null
+      return {
+        id: topic.id,
+        name: topic.name || score?.subjectVersion?.name || `Chuyên đề nghiên cứu ${index + 1}`,
+        credits: score?.subjectVersion?.credit ?? null,
+        score10,
+        score4: converted?.base4 ?? null,
+        scoreLetter: converted?.letter ?? null,
+      }
+    })
+  }, [researchTopicData, convertScore])
+
+  const thesisScore10 =
+    toScoreNumber(thesisProject?.defenseRecord?.finalScore) ??
+    toScoreNumber(thesisReg?.studentSubjectScore?.manualFinalScore) ??
+    toScoreNumber(thesisReg?.studentSubjectScore?.finalScore)
+  const thesisConverted = thesisScore10 != null ? convertScore(thesisScore10) : null
+  const thesisCredits =
+    thesisReg?.studentSubjectScore?.subjectVersion?.credit ??
+    thesisProject?.subjectClass?.subject?.credit ??
+    null
+  const thesisName = isProject ? "Đề án tốt nghiệp" : "Luận văn tốt nghiệp"
+
+  const page1Rows = useMemo(() => {
+    const rows = [
+      ...researchTopicRows,
+      ...(thesisProject
+        ? [
+            {
+              id: thesisProject.id,
+              name: thesisName,
+              credits: thesisCredits,
+              score10: thesisScore10,
+              score4: thesisConverted?.base4 ?? null,
+              scoreLetter: thesisConverted?.letter ?? null,
+            },
+          ]
+        : []),
+    ]
+    return rows.length ? rows : courseRows
+  }, [
+    researchTopicRows,
+    thesisProject,
+    thesisName,
+    thesisCredits,
+    thesisScore10,
+    thesisConverted,
+    courseRows,
+  ])
+
+  const computedGpa = useMemo(() => {
+    const scored = courseRows.filter((row) => row.useForFinalScore && row.score10 != null)
+    const totalCredits = scored.reduce((sum, row) => sum + (row.credits || 0), 0)
+    const totalWeighted = scored.reduce((sum, row) => sum + (row.score10 ?? 0) * (row.credits || 0), 0)
+    return totalCredits > 0 ? Number((totalWeighted / totalCredits).toFixed(2)) : null
+  }, [courseRows])
+
+  const gpa10 =
+    toScoreNumber(data?.graduationDecision?.finalGpa) ??
+    toScoreNumber(data?.studentYearResult?.[0]?.cumulativeGpaBase10) ??
+    computedGpa
+  const gpaConverted = gpa10 != null ? convertScore(gpa10) : null
+  const gpa4 =
+    toScoreNumber(data?.studentYearResult?.[0]?.cumulativeGpaBase4) ?? gpaConverted?.base4 ?? null
+
+  const councilMembers = useMemo(() => {
+    const roleOrder: Record<string, number> = {
+      CHAIRMAN: 1,
+      SECRETARY: 2,
+      REVIEWER_1: 3,
+      REVIEWER_2: 4,
+      MEMBER: 5,
+    }
+    return [...(thesisProject?.council?.members ?? [])]
+      .sort((a, b) => (roleOrder[a.role] ?? 99) - (roleOrder[b.role] ?? 99))
+      .map((member) => {
+        const expert = member.expert
+        const rank = expert?.academicRankType?.sMa ?? ""
+        const degree = expert?.academicDegreeType?.sMa ?? ""
+        const title = [rank, degree].filter(Boolean).join(".")
+        const name = [title, expert?.name].filter(Boolean).join(" ").trim()
+        return {
+          role: COUNCIL_ROLE_LABEL[member.role] ?? "Ủy viên",
+          name,
+          unit: expert?.lecturer?.organization?.sTen || expert?.workplace || "",
+        }
+      })
+  }, [thesisProject])
+
+  const supervisors = [thesisProject?.supervisor?.name, thesisProject?.coSupervisor?.name]
+    .filter(Boolean)
+    .join("; ")
+
+  const defenseDate = thesisProject?.defenseDate
+  const defenseDateLabel = defenseDate
+    ? `Bảo vệ ngày ${dayjs(defenseDate).format("DD")} tháng ${dayjs(defenseDate).format("MM")} năm ${dayjs(defenseDate).format("YYYY")} tại Hội đồng đánh giá luận văn HVKTQS, danh sách`
+    : "Bảo vệ ngày ... tháng ... năm ... tại Hội đồng đánh giá luận văn HVKTQS, danh sách"
+
+  const certificateSubjects: Subject[] = courseRows.map((row) => ({
+    name: row.name,
+    credits: row.credits,
+    score: row.score10,
+  }))
+  const mid = Math.ceil(certificateSubjects.length / 2) || 0
+  const leftData = certificateSubjects.slice(0, mid)
+  const rightData = certificateSubjects.slice(mid)
 
   const printRef = useRef<HTMLDivElement>(null)
 
@@ -247,7 +513,8 @@ export const ModalPhuLucThacSi = () => {
               </div>
             </div>
             <div className="text-[#656565] text-sm py-2">
-              Đã hoàn thành chương trình đào tạo thạc sĩ theo định hướng nghiên cứu
+              Đã hoàn thành chương trình đào tạo thạc sĩ theo{" "}
+              {isProject ? "định hướng ứng dụng" : "định hướng nghiên cứu"}
             </div>
             <div className="flex justify-between gap-5">
               <div className="flex flex-col gap-2.5 w-[50%]">
@@ -298,16 +565,18 @@ export const ModalPhuLucThacSi = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {fakeScores.map((row, index) => (
+                  {page1Rows.map((row, index) => (
                     <tr key={row.id}>
                       <td className="border border-black px-1 py-1 text-center">{index + 1}</td>
                       <td className="border border-black px-1 py-1">{row.name}</td>
-                      <td className="border border-black px-1 py-1 text-center">{row.credits}</td>
                       <td className="border border-black px-1 py-1 text-center">
-                        {row.score10 ?? ""}
+                        {row.credits ?? ""}
                       </td>
                       <td className="border border-black px-1 py-1 text-center">
-                        {row.score4 ?? ""}
+                        {formatScore(row.score10, 1)}
+                      </td>
+                      <td className="border border-black px-1 py-1 text-center">
+                        {formatScore(row.score4, 2)}
                       </td>
                       <td className="border border-black px-1 py-1 text-center">
                         {row.scoreLetter ?? ""}
@@ -320,29 +589,34 @@ export const ModalPhuLucThacSi = () => {
                       Điểm trung bình chung tốt nghiệp
                     </td>
                     <td className="border border-black px-1 py-1 text-center" />
-                    <td className="border border-black px-1 py-1 text-center" />
-                    <td className="border border-black px-1 py-1 text-center" />
-                    <td className="border border-black px-1 py-1 text-center" />
+                    <td className="border border-black px-1 py-1 text-center">
+                      {formatScore(gpa10, 2)}
+                    </td>
+                    <td className="border border-black px-1 py-1 text-center">
+                      {formatScore(gpa4, 2)}
+                    </td>
+                    <td className="border border-black px-1 py-1 text-center">
+                      {gpaConverted?.letter ?? ""}
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div className="font-bold italic text-sm py-1">Tên chuyên đề nghiên cứu 1:</div>
-            <div className="font-bold italic text-sm py-1">Tên chuyên đề nghiên cứu 2:</div>
-            <div className="font-bold italic text-sm py-1">Tên chuyên đề nghiên cứu 3:</div>
-            <div className="font-bold italic text-sm py-1">Tên chuyên đề nghiên cứu 4:</div>
-            <div className="font-bold italic text-sm py-1">Tên chuyên đề nghiên cứu 5:</div>
-            <div className="font-bold italic py-1">Tên đề tài luận văn:</div>
-            <span>Cán bộ hướng dẫn: </span>
-            <div>
-              Bảo vệ ngày ... tháng ... năm ... tại Hội đồng đánh giá luận văn HVKTQS, danh
-              sách{" "}
+            {researchTopicRows.map((topic, index) => (
+              <div key={topic.id} className="font-bold italic text-sm py-1">
+                Tên chuyên đề nghiên cứu {index + 1}: {topic.name}
+              </div>
+            ))}
+            <div className="font-bold italic py-1">
+              Tên đề tài luận văn: {thesisProject?.title ?? ""}
             </div>
+            <span>Cán bộ hướng dẫn: {supervisors}</span>
+            <div>{defenseDateLabel}</div>
             <div className="overflow-x-auto">
               <table className="table-auto  border-separate border-spacing-0 w-full text-sm">
                 <tbody>
-                  {fakeData.map((item, index) => (
-                    <tr key={item.stt} className="hover:bg-gray-50">
+                  {councilMembers.map((item, index) => (
+                    <tr key={`${item.role}-${index}`} className="hover:bg-gray-50">
                       <td className="px-3 py-1 font-medium">
                         {index + 1}. {item.role}
                       </td>
@@ -404,7 +678,8 @@ export const ModalPhuLucThacSi = () => {
               </div>
             </div>
             <div className="text-[#656565] text-sm py-2">
-              Đã hoàn thành chương trình đào tạo thạc sĩ theo định hướng nghiên cứu
+              Đã hoàn thành chương trình đào tạo thạc sĩ theo{" "}
+              {isProject ? "định hướng ứng dụng" : "định hướng nghiên cứu"}
             </div>
             <div className="flex justify-between gap-5">
               <div className="flex flex-col gap-2.5 w-[50%]">
@@ -458,12 +733,22 @@ export const ModalPhuLucThacSi = () => {
                   <tr>
                     <td className="border border-black px-1 py-1 text-center" />
                     <td className="border border-black px-1 py-1 font-bold">
-                      Luận văn tốt nghiệp (Đối với NC) hoặc đề án tốt nghiệp (với UD)
+                      {isProject
+                        ? "Đề án tốt nghiệp (với UD)"
+                        : "Luận văn tốt nghiệp (Đối với NC)"}
                     </td>
-                    <td className="border border-black px-1 py-1 text-center" />
-                    <td className="border border-black px-1 py-1 text-center" />
-                    <td className="border border-black px-1 py-1 text-center" />
-                    <td className="border border-black px-1 py-1 text-center" />
+                    <td className="border border-black px-1 py-1 text-center">
+                      {thesisCredits ?? ""}
+                    </td>
+                    <td className="border border-black px-1 py-1 text-center">
+                      {formatScore(thesisScore10, 1)}
+                    </td>
+                    <td className="border border-black px-1 py-1 text-center">
+                      {formatScore(thesisConverted?.base4, 2)}
+                    </td>
+                    <td className="border border-black px-1 py-1 text-center">
+                      {thesisConverted?.letter ?? ""}
+                    </td>
                   </tr>
                   <tr>
                     <td className="border border-black px-1 py-1 text-center" />
@@ -471,26 +756,30 @@ export const ModalPhuLucThacSi = () => {
                       Điểm trung bình chung tốt nghiệp
                     </td>
                     <td className="border border-black px-1 py-1 text-center" />
-                    <td className="border border-black px-1 py-1 text-center" />
-                    <td className="border border-black px-1 py-1 text-center" />
-                    <td className="border border-black px-1 py-1 text-center" />
+                    <td className="border border-black px-1 py-1 text-center">
+                      {formatScore(gpa10, 2)}
+                    </td>
+                    <td className="border border-black px-1 py-1 text-center">
+                      {formatScore(gpa4, 2)}
+                    </td>
+                    <td className="border border-black px-1 py-1 text-center">
+                      {gpaConverted?.letter ?? ""}
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <div className="font-bold italic py-2">
               Tên đề tài luận văn (Đối với NC) hoặc tên đề án tốt nghiệp (với ƯD):{" "}
+              {thesisProject?.title ?? ""}
             </div>
-            <span>Cán bộ hướng dẫn: </span>
-            <div>
-              Bảo vệ ngày ... tháng ... năm ... tại Hội đồng đánh giá luận văn HVKTQS, danh
-              sách{" "}
-            </div>
+            <span>Cán bộ hướng dẫn: {supervisors}</span>
+            <div>{defenseDateLabel}</div>
             <div className="overflow-x-auto">
               <table className="table-auto  border-separate border-spacing-0 w-full text-sm">
                 <tbody>
-                  {fakeData.map((item, index) => (
-                    <tr key={item.stt} className="hover:bg-gray-50">
+                  {councilMembers.map((item, index) => (
+                    <tr key={`${item.role}-${index}`} className="hover:bg-gray-50">
                       <td className="px-3 py-2 font-medium">
                         {index + 1}. {item.role}
                       </td>
@@ -595,7 +884,7 @@ export const ModalPhuLucThacSi = () => {
             </div>
 
             <div className="mt-2 flex flex-col">
-              <span>Điểm trung bình chung các học phần: 8.4</span>
+              <span>Điểm trung bình chung các học phần: {formatScore(gpa10, 2)}</span>
               <span>Giấy này có hiệu lực đến hết ngày </span>
             </div>
             <table className="w-full border-separate border-spacing-0">
@@ -641,7 +930,7 @@ export const ModalPhuLucThacSi = () => {
                 <tr>
                   {/* Bên trái */}
                   <td className="align-top w-1/2 p-1 text-center">
-                    <span>Số hồ sơ TS: 123</span>
+                    <span>Số hồ sơ TS: {data?.doctoralCode ?? ""}</span>
                   </td>
 
                   {/* Bên phải */}

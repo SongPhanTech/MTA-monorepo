@@ -20,13 +20,7 @@ import {
   useUpdateStudent,
 } from "@workspace/db/hooks"
 import { customTrainingFetch } from "@workspace/libs/api/custom-instance"
-import { sqlTransaction } from "@workspace/libs/api/model"
-import { Docxtemplater, exportFile, loadFile } from "@workspace/libs/docxjs"
-import { exportAndDownloadFromTemplate } from "@workspace/libs/download-excel"
-import { exportFromTemplate, type TableRow } from "@workspace/libs/template-excel"
-import { getMinioUrl } from "@workspace/libs/utils"
 import { ROUTER_PATH } from "@workspace/router"
-import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Col, Divider, Dropdown, Flex, message, Popconfirm, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { saveAs } from "file-saver"
@@ -35,7 +29,6 @@ import { useRouter } from "next/router"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { cn } from "@workspace/ui/lib/utils"
-import type { IHocKi, IMonHoc } from "./ket-qua-hoc-tap/[id]"
 
 dayjs.locale("vi")
 
@@ -136,7 +129,6 @@ export default function StudentFixedClassPage() {
     }
   )
 
-  const { getLabel: getLabelTrainingObjectType } = useTrainingObjectTypeStore()
   const { data: genderData = [] } = useFindManyDM_GioiTinh()
 
   const { data: fixedClass } = useFindUniqueFixedClass(
@@ -420,8 +412,6 @@ export default function StudentFixedClassPage() {
     }
   )
 
-  const scoreToPassGraduation = data?.[0]?.fixedClass?.trainingCourse?.scoreToPassGraduation ?? 5.5
-
   const { onOpen } = useDisclosure<{
     id: string
   }>({
@@ -507,6 +497,42 @@ export default function StudentFixedClassPage() {
   const showPopconfirm = () => {
     setOpen(true)
   }
+
+  const handleExportCtdt = async (
+    mau: "cttk-dai-han" | "cttk-ngan-han" | "khtk-nghien-cuu" | "khtk-ung-dung"
+  ) => {
+    if (!fixedClassId) {
+      message.warning("Không tìm thấy lớp quản lý")
+      return
+    }
+    const filePrefix: Record<typeof mau, string> = {
+      "cttk-dai-han": "CTTK-dai-han",
+      "cttk-ngan-han": "CTTK-ngan-han",
+      "khtk-nghien-cuu": "KHTK-ding-huong-nghien-cuu",
+      "khtk-ung-dung": "KHTK-ding-huong-ung-dung",
+    }
+    showSpinner()
+    try {
+      const res = await customTrainingFetch<{
+        status: number
+        data: Blob & { message?: string }
+      }>("/api/fixed-class/export-chuong-trinh-dao-tao", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fixedClassId, mau }),
+      })
+      if (res.status === 200 && res.data instanceof Blob) {
+        saveAs(res.data, `${filePrefix[mau]}.${dayjs().format("DDMMYY")}.docx`)
+      } else {
+        message.error(res.data?.message || "Xuất file thất bại")
+      }
+    } catch {
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } finally {
+      hideSpinner()
+    }
+  }
+
   const handleExportDiemLop = async () => {
     const trainingCourseId = fixedClass?.trainingCourseId
     if (!trainingCourseId) {
@@ -515,629 +541,21 @@ export default function StudentFixedClassPage() {
     }
     showSpinner()
     try {
-      // ── Types nội bộ cho export bảng điểm ──────────────────────────────
-      type ScoreValue = string | number | null
-
-      interface SubjectExport {
-        semester: number | null
-        graduation: boolean | null
-        subject: {
-          id: string
-          name: string
-          credit: number | null
-        }
-      }
-
-      interface SubjectClassStudentExport {
-        subjectVersionId: string
-        exempted: boolean | null
-        examPostponed: boolean | null
-        examBanned: boolean | null
-        suspended: boolean | null
-        manualFinalScore: number | null
-        finalScore: number | null
-      }
-
-      interface UserProfileExport {
-        fullname: string
-        dateOfBirth: Date | string | null
-      }
-
-      interface ThesisDefenseRecord {
-        finalScore: number | null
-      }
-
-      interface ThesisProject {
-        defenseRecord: ThesisDefenseRecord | null
-      }
-
-      interface ThesisRegistration {
-        thesisProject: ThesisProject | null
-      }
-
-      interface StudentExport {
-        foreignLangPass: boolean | null
-        userProfile: UserProfileExport
-        thesisRegistrations: ThesisRegistration[]
-        subjectClassStudent: SubjectClassStudentExport[]
-      }
-
-      interface SchoolYearExport {
-        startDate: string | Date | null
-        endDate: string | Date | null
-      }
-
-      interface SemesterExport {
-        schoolYear: SchoolYearExport | null
-      }
-
-      interface TrainingObjectTypeExport {
-        name: string
-      }
-
-      interface TrainingCourseExport {
-        id: string
-        name: string
-        trainingObjectType: TrainingObjectTypeExport | null
-        semesterStart: SemesterExport | null
-      }
-
-      interface TrainingMajorExport {
-        code: string | null
-        name: string | null
-      }
-
-      interface CurriculumExport {
-        trainingMajor: TrainingMajorExport | null
-      }
-
-      interface TrainingBlockExport {
-        subjects: SubjectExport[]
-      }
-
-      interface CurriculumVersionExport {
-        curriculum: CurriculumExport | null
-        trainingBlocks: TrainingBlockExport[]
-      }
-
-      interface FixedClassDetail {
-        id: string
-        name: string
-        trainingCourse: TrainingCourseExport
-        curriculumVersion: CurriculumVersionExport | null
-        students: StudentExport[]
-      }
-
-      // ── Fetch danh sách lớp trong cùng khóa ──────────────────────────
-      const classListRes = await sqlTransaction([
-        {
-          model: "FixedClass",
-          operation: "findMany",
-          data: {
-            where: { trainingCourseId, deletedAt: null, active: true },
-            select: { id: true, name: true },
-            orderBy: { name: "asc" },
-          },
-        },
-      ])
-
-      if (classListRes.status !== 200) {
-        message.warning("Không tải được danh sách lớp")
-        return
-      }
-
-      const allClassIds = (classListRes.data[0] ?? []) as { id: string; name: string }[]
-
-      if (!allClassIds.length) {
-        message.warning("Không tìm thấy lớp biên chế nào trong khóa học")
-        return
-      }
-
-      const toNumericScore = (value: unknown): number | null => {
-        if (typeof value === "number") return Number.isFinite(value) ? value : null
-        if (typeof value === "string") {
-          const normalized = value.trim().replace(",", ".")
-          if (normalized === "") return null
-          const parsed = Number(normalized)
-          return Number.isFinite(parsed) ? parsed : null
-        }
-        if (value && typeof value === "object") {
-          const maybeNumber = (value as { toNumber?: () => number }).toNumber?.()
-          if (typeof maybeNumber === "number" && Number.isFinite(maybeNumber)) return maybeNumber
-          const text = String(value).trim().replace(",", ".")
-          if (text && text !== "[object Object]") {
-            const parsed = Number(text)
-            return Number.isFinite(parsed) ? parsed : null
-          }
-        }
-        return null
-      }
-
-      const allSheets: Parameters<typeof exportFromTemplate>[0]["sheets"] = []
-      const usedSheetNames = new Set<string>()
-      const getUniqueSheetName = (name: string): string => {
-        const sanitized = name.replace(/[\\/?:*[\]]/g, "_").trim()
-        const baseName = sanitized.slice(0, 31)
-        if (!usedSheetNames.has(baseName)) {
-          usedSheetNames.add(baseName)
-          return baseName
-        }
-        let counter = 1
-        while (true) {
-          const suffix = ` (${counter})`
-          const maxBaseLen = 31 - suffix.length
-          const candidate = `${sanitized.slice(0, maxBaseLen)}${suffix}`
-          if (!usedSheetNames.has(candidate)) {
-            usedSheetNames.add(candidate)
-            return candidate
-          }
-          counter++
-        }
-      }
-
-      for (const cls of allClassIds) {
-        const res = await sqlTransaction([
-          {
-            model: "FixedClass" as Parameters<typeof sqlTransaction>[0][number]["model"],
-            operation: "findUnique" as Parameters<typeof sqlTransaction>[0][number]["operation"],
-            data: {
-              where: { id: cls.id },
-              include: {
-                trainingCourse: {
-                  include: {
-                    trainingObjectType: true,
-                    semesterStart: { include: { schoolYear: true } },
-                  },
-                },
-                curriculumVersion: {
-                  include: {
-                    curriculum: {
-                      include: {
-                        trainingMajor: { include: { trainingField: true } },
-                      },
-                    },
-                    trainingBlocks: {
-                      include: {
-                        subjects: {
-                          include: { subject: { include: { managementOrganization: true } } },
-                          orderBy: { semester: "asc" },
-                        },
-                      },
-                      orderBy: { priority: "asc" },
-                    },
-                  },
-                },
-                students: {
-                  where: { active: true, status: "ENROLLED", deletedAt: null },
-                  include: {
-                    userProfile: true,
-                    fixedClass: {
-                      include: { trainingCourse: { include: { trainingObjectType: true } } },
-                    },
-                    thesisRegistrations: {
-                      where: { deletedAt: null },
-                      include: { thesisProject: { include: { defenseRecord: true } } },
-                    },
-                    subjectClassStudent: {
-                      include: {
-                        subjectVersion: {
-                          include: {
-                            trainingBlocks: { select: { graduation: true }, take: 1 },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        ])
-
-        if (res.status !== 200 || !res.data[0]) continue
-        const detail = res.data[0] as FixedClassDetail
-
-        const students = detail.students
-        if (!students.length) continue
-
-        const subjectsInOrder: SubjectExport[] = (detail.curriculumVersion?.trainingBlocks ?? [])
-          .flatMap((block) => block.subjects)
-          .sort((a, b) => (a.semester ?? 0) - (b.semester ?? 0))
-
-        // Allow exporting class even if subjectsInOrder is empty
-
-        const tongSoHP = subjectsInOrder.length
-        const tongSoTC = subjectsInOrder.reduce((s, sub) => s + (sub.subject.credit ?? 0), 0)
-        const chuthichMonHoc: string[] = subjectsInOrder.map(
-          (s, idx) => `M${idx + 1}. ${s.subject.name}`
-        )
-
-        const studentRows: TableRow[] = students.map((student, index) => {
-          const thesisReg = student.thesisRegistrations[0]
-          const defenseScore = thesisReg?.thesisProject?.defenseRecord?.finalScore ?? null
-
-          const diem: ScoreValue[] = subjectsInOrder.map((subjectInfo) => {
-            const scoreData = student.subjectClassStudent.find(
-              (score) => score.subjectVersionId === subjectInfo.subject.id
-            )
-            if (!scoreData) return " "
-            if (scoreData.exempted) return "Miễn"
-            if (scoreData.examPostponed) return "HT"
-            if (scoreData.examBanned) return "CT"
-            if (scoreData.suspended) return "ĐCT"
-            const final = scoreData.manualFinalScore ?? scoreData.finalScore
-            return final !== null && final !== undefined ? final : "Null"
-          })
-
-          const ccta = student.foreignLangPass ? "Đạt" : ""
-          let totalWeightedScore = 0
-          let totalCredits = 0
-
-          subjectsInOrder.forEach((subjectInfo, i) => {
-            const numericD = toNumericScore(diem[i])
-            const credit = Number(subjectInfo.subject.credit ?? 0)
-            if (numericD != null && Number.isFinite(numericD) && credit > 0) {
-              totalWeightedScore += numericD * credit
-              totalCredits += credit
-            }
-          })
-
-          const tbcDisplay =
-            totalCredits > 0 ? Number((totalWeightedScore / totalCredits).toFixed(2)) : null
-          let dlv: number | null = null
-          const parsedDefenseScore = toNumericScore(defenseScore)
-          if (parsedDefenseScore != null && Number.isFinite(parsedDefenseScore)) {
-            dlv = parsedDefenseScore
-          } else {
-            const thesisIdx = subjectsInOrder.findIndex((s) => {
-              const name = s.subject.name.toLowerCase()
-              return name.includes("luận văn") || name.includes("đề án")
-            })
-            if (thesisIdx >= 0) {
-              const numericD = toNumericScore(diem[thesisIdx])
-              if (numericD != null && Number.isFinite(numericD)) dlv = numericD
-            }
-          }
-
-          return {
-            cells: [
-              { value: index + 1, align: "center" as const, border: true },
-              { value: student.userProfile.fullname, border: true, align: "center" as const },
-              {
-                value: student.userProfile.dateOfBirth
-                  ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
-                  : "",
-                align: "center" as const,
-                border: true,
-              },
-              {
-                value: detail.trainingCourse.trainingObjectType?.name ?? "",
-                align: "center" as const,
-                border: true,
-              },
-              ...subjectsInOrder.map((subjectInfo, i) => {
-                const scoreValue = diem[i]
-                const isGraduation = subjectInfo.graduation === true
-                const passThreshold = isGraduation ? scoreToPassGraduation : 4.0
-                const numericScore = toNumericScore(scoreValue)
-                const isFailed =
-                  numericScore != null && Number.isFinite(numericScore)
-                    ? numericScore < passThreshold
-                    : false
-                return {
-                  value:
-                    scoreValue !== undefined && scoreValue !== null ? String(scoreValue) : null,
-                  align: "center" as const,
-                  border: true,
-                  color: isFailed ? "FFFF0000" : undefined,
-                }
-              }),
-              { value: ccta || null, align: "center" as const, border: true },
-              {
-                value: tbcDisplay !== null ? String(tbcDisplay) : null,
-                align: "center" as const,
-                border: true,
-                bold: true,
-              },
-              {
-                value: dlv !== null ? String(dlv) : null,
-                align: "center" as const,
-                border: true,
-                bold: true,
-              },
-            ],
-          }
-        })
-
-        type SemesterGroup = { semesterNum: number; subjects: SubjectExport[] }
-        const semesterGroups: SemesterGroup[] = []
-        subjectsInOrder.forEach((s) => {
-          const semNum = s.semester ?? 0
-          let group = semesterGroups.find((g) => g.semesterNum === semNum)
-          if (!group) {
-            group = { semesterNum: semNum, subjects: [] }
-            semesterGroups.push(group)
-          }
-          group.subjects.push(s)
-        })
-        semesterGroups.sort((a, b) => a.semesterNum - b.semesterNum)
-
-        const getSemesterLabel = (semNum: number): string => {
-          const schoolYear = detail.trainingCourse.semesterStart?.schoolYear
-          const semesterIndexInYear = ((semNum - 1) % 2) + 1
-          const schoolYearOffset = Math.floor((semNum - 1) / 2)
-          const semesterName = `Học kỳ ${semesterIndexInYear}`
-          if (!schoolYear?.startDate) return semesterName
-          const startYear = dayjs(schoolYear.startDate).year() + schoolYearOffset
-          const endYear = schoolYear.endDate
-            ? dayjs(schoolYear.endDate).year() + schoolYearOffset
-            : startYear + 1
-          return `${semesterName} (năm học ${startYear}-${endYear})`
-        }
-
-        const totalSubjectCols = subjectsInOrder.length
-        const totalTableCols = 4 + totalSubjectCols + 3
-
-        const headerRow5: TableRow = {
-          cells: [
-            { value: null, border: true, rowSpan: 2 },
-            {
-              value: `Lớp: ${detail.name}`,
-              align: "center",
-              bold: true,
-              border: true,
-              colSpan: 2,
-              rowSpan: 2,
-              wrapText: true,
-            },
-            {
-              value: "Bảng điểm các học phần cơ sở và chuyên ngành",
-              align: "center",
-              bold: true,
-              border: true,
-              colSpan: totalTableCols - 3,
-              wrapText: true,
-            },
-          ],
-        }
-
-        const headerRow6Cells: TableRow["cells"] = [
-          {
-            value: "Đối tượng",
-            align: "center",
-            bold: true,
-            border: true,
-            rowSpan: 3,
-            wrapText: true,
-          },
-        ]
-        semesterGroups.forEach((group) => {
-          headerRow6Cells.push({
-            value: getSemesterLabel(group.semesterNum),
-            align: "center",
-            bold: true,
-            border: true,
-            colSpan: group.subjects.length,
-            wrapText: true,
-          })
-        })
-        headerRow6Cells.push(
-          { value: null, border: true },
-          { value: null, border: true },
-          { value: null, border: true }
-        )
-        const headerRow6: TableRow = { cells: headerRow6Cells }
-
-        const headerRow7Left: TableRow = {
-          cells: [
-            { value: "STT", align: "center", bold: true, border: true, rowSpan: 2, wrapText: true },
-            {
-              value: "Họ và tên",
-              align: "center",
-              bold: true,
-              border: true,
-              rowSpan: 2,
-              wrapText: true,
-            },
-            {
-              value: "Ngày sinh",
-              align: "center",
-              bold: true,
-              border: true,
-              rowSpan: 2,
-              wrapText: true,
-            },
-          ],
-        }
-
-        const headerRow7Score: TableRow = {
-          cells: [
-            ...subjectsInOrder.map((_, i) => ({
-              value: `M${i + 1}`,
-              align: "center" as const,
-              bold: true,
-              border: true,
-              wrapText: false,
-            })),
-            {
-              value: "CCTA",
-              align: "center",
-              bold: true,
-              border: true,
-              rowSpan: 2,
-              wrapText: false,
-            },
-            {
-              value: "Điểm",
-              align: "center",
-              bold: true,
-              border: true,
-              colSpan: 2,
-              wrapText: false,
-            },
-          ],
-        }
-
-        const headerRow8Credit: TableRow = {
-          cells: subjectsInOrder.map((s) => ({
-            value: s.subject.credit ? Number(s.subject.credit).toFixed(1) : "",
-            align: "center" as const,
-            border: true,
-            wrapText: false,
-          })),
-        }
-
-        const headerRow8Score: TableRow = {
-          cells: [
-            { value: "TBC", align: "center", bold: true, border: true, wrapText: false },
-            { value: "ĐLV", align: "center", bold: true, border: true, wrapText: false },
-          ],
-        }
-
-        const thongKeRows: TableRow[] = [
-          {
-            cells: [
-              {
-                value: `Tổng số học phần: ${tongSoHP} HP, tổng số tín chỉ: ${tongSoTC} TC`,
-                border: false,
-                colSpan: totalTableCols,
-                bold: true,
-              },
-            ],
-          },
-        ]
-
-        const chuthichPerRow = 3
-        const maxRowsPerColumn = Math.ceil(chuthichMonHoc.length / chuthichPerRow)
-        const footerColSpan = Math.ceil(totalTableCols / chuthichPerRow)
-        const columnFooterRows: TableRow[] = []
-
-        for (let i = 0; i < maxRowsPerColumn; i++) {
-          const rowCells: TableRow["cells"] = []
-          for (let col = 0; col < chuthichPerRow; col++) {
-            const idx = i + col * maxRowsPerColumn
-            rowCells.push(
-              chuthichMonHoc[idx]
-                ? {
-                    value: chuthichMonHoc[idx],
-                    border: false,
-                    colSpan: footerColSpan,
-                    wrapText: false,
-                  }
-                : { value: null, border: false, colSpan: footerColSpan, wrapText: false }
-            )
-          }
-          columnFooterRows.push({ cells: rowCells })
-        }
-
-        const ghiChuRows: TableRow[] = [
-          { cells: [{ value: null, border: false }] },
-          {
-            cells: [
-              { value: null, border: false },
-              { value: "GHI CHÚ:", border: false, bold: true, colSpan: 29 },
-            ],
-          },
-          {
-            cells: [
-              { value: null, border: false },
-              {
-                value:
-                  "1. 'Null': Môn đã lên danh sách thi nhưng chưa thi hoặc giảng viên chưa nhập điểm",
-                border: false,
-                colSpan: 29,
-              },
-            ],
-          },
-          {
-            cells: [
-              { value: null, border: false },
-              { value: "2. ' ': Môn chưa lên danh sách thi", border: false, colSpan: 29 },
-            ],
-          },
-          {
-            cells: [
-              { value: null, border: false },
-              { value: "3. 'Miễn': Môn miễn học", border: false, colSpan: 29 },
-            ],
-          },
-          {
-            cells: [
-              { value: null, border: false },
-              { value: "4. 'HT': Môn hoãn thi", border: false, colSpan: 29 },
-            ],
-          },
-          {
-            cells: [
-              { value: null, border: false },
-              { value: "4. 'CT': Môn cấm thi", border: false, colSpan: 29 },
-            ],
-          },
-          {
-            cells: [
-              { value: null, border: false },
-              { value: "5. 'ĐCT': Môn đình chỉ thi", border: false, colSpan: 29 },
-            ],
-          },
-          {
-            cells: [
-              { value: null, border: false },
-              {
-                value:
-                  "6. Điểm TBC: Tính điểm trung bình cộng của tất cả các môn đã có điểm ở thời điểm xuất file excel điểm (Không tính điểm môn chưa thi, không tính điểm môn hoãn thi, miễn thi)",
-                border: false,
-                colSpan: 29,
-              },
-            ],
-          },
-        ]
-
-        const bodyRows = [...studentRows, ...thongKeRows, ...columnFooterRows, ...ghiChuRows]
-
-        const curriculum = detail.curriculumVersion?.curriculum
-        const nganhHoacChuyenNganh = curriculum?.trainingMajor
-        const chuyenNganhText = [nganhHoacChuyenNganh?.code, nganhHoacChuyenNganh?.name]
-          .filter(Boolean)
-          .join(" - ")
-
-        const sheetName = getUniqueSheetName(detail.name)
-
-        allSheets.push(
-          {
-            sheet: sheetName,
-            data: {
-              khoa: detail.trainingCourse.name.toUpperCase(),
-              chuyenNganh: chuyenNganhText,
-              lop: detail.name,
-            },
-            tableStartCell: { row: 5, col: 1 },
-            rows: [headerRow5],
-          },
-          { sheet: sheetName, tableStartCell: { row: 6, col: 4 }, rows: [headerRow6] },
-          { sheet: sheetName, tableStartCell: { row: 7, col: 1 }, rows: [headerRow7Left] },
-          { sheet: sheetName, tableStartCell: { row: 7, col: 5 }, rows: [headerRow7Score] },
-          { sheet: sheetName, tableStartCell: { row: 8, col: 5 }, rows: [headerRow8Credit] },
-          {
-            sheet: sheetName,
-            tableStartCell: { row: 8, col: 5 + totalSubjectCols + 1 },
-            rows: [headerRow8Score],
-          },
-          { sheet: sheetName, tableStartCell: { row: 9, col: 1 }, rows: bodyRows }
-        )
-      }
-
-      if (!allSheets.length) {
-        message.warning("Không có dữ liệu điểm để xuất")
-        return
-      }
-
-      await exportAndDownloadFromTemplate({
-        templatePath: "/mta/template/BangdiemTheoLop_v3.xlsx",
-        sheets: allSheets,
-        fileName: `BangDiemToanKhoa-${fixedClass?.trainingCourse?.name ?? "KhoaHoc"}.xlsx`,
+      const res = await customTrainingFetch<{
+        status: number
+        data: Blob & { message?: string }
+      }>("/api/student-result/export-bang-diem-theo-lop", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ trainingCourseId }),
       })
-    } catch (error) {
-      console.error("Export failed:", error)
+      if (res.status === 200 && res.data instanceof Blob) {
+        const fileName = `BangDiemToanKhoa-${fixedClass?.trainingCourse?.name ?? "KhoaHoc"}.xlsx`
+        saveAs(res.data, fileName)
+      } else {
+        message.error(res.data?.message || "Xuất file thất bại")
+      }
+    } catch {
       message.error("Xuất file thất bại, vui lòng thử lại!")
     } finally {
       hideSpinner()
@@ -1198,268 +616,27 @@ export default function StudentFixedClassPage() {
   }
 
   const handleExportBangDiem = async () => {
-    const result: any[] = []
+    if (!data.length) {
+      message.warning("Không có học viên để xuất")
+      return
+    }
     showSpinner()
     try {
-      const tasks = data.map(async (item) => {
-        const res = await sqlTransaction([
-          {
-            model: "Semester",
-            operation: "findMany",
-            data: {
-              where: {
-                subjectClasses: {
-                  some: {
-                    subjectClassStudent: {
-                      some: {
-                        studentId: item.id,
-                      },
-                    },
-                  },
-                },
-              },
-              include: {
-                subjectClasses: {
-                  where: {
-                    subjectClassStudent: {
-                      some: {
-                        studentId: item.id,
-                      },
-                    },
-                  },
-                  include: {
-                    subjectClassStudent: {
-                      where: {
-                        studentId: item.id,
-                      },
-                      include: {
-                        subjectVersion: true,
-                      },
-                    },
-                  },
-                },
-                schoolYear: true,
-              },
-              orderBy: {
-                createdAt: "asc",
-              },
-            },
-          },
-        ])
-
-        return { item, res }
+      const res = await customTrainingFetch<{
+        status: number
+        data: Blob & { message?: string }
+      }>("/api/student-result/export-bang-diem-ngan-dai-han", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ studentIds: data.map((item) => item.id) }),
       })
-      const allResults = await Promise.all(tasks)
-      for (const { item, res } of allResults) {
-        if (res.status === 200) {
-          const hocKis: IHocKi[] = []
-          if ((res.data[0] as any[]).length) {
-            const rawData = res.data[0] as any[]
-
-            rawData.forEach((semester) => {
-              const monhoc: IMonHoc[] = []
-              semester.subjectClasses.forEach((subjectClass: any) => {
-                subjectClass.subjectClassStudent.forEach((subjectClassStudent: any) => {
-                  const rawScore =
-                    subjectClassStudent?.manualFinalScore ||
-                    Number(subjectClassStudent?.finalScore) ||
-                    0
-
-                  monhoc.push({
-                    TenMonhoc: subjectClassStudent.subjectVersion.name,
-                    soTC: subjectClassStudent.subjectVersion.credit,
-                    diemhe10: rawScore,
-                  })
-                })
-              })
-
-              hocKis.push({
-                TenHocKi: semester.code + "-" + semester.name + "-" + semester.schoolYear?.name,
-                monHocs: monhoc,
-              })
-            })
-          }
-          const sampleStudentData = {
-            fullname: item.userProfile?.fullname,
-            dateOfBirth: ((dateInput) => {
-              if (!dateInput) {
-                return ""
-              }
-              try {
-                const date = new Date(dateInput)
-                if (Number.isNaN(date.getTime())) {
-                  return ""
-                }
-                return date.toLocaleDateString("vi-VN")
-              } catch (e) {
-                return "" // Trả về rỗng nếu có lỗi
-              }
-            })(item.userProfile?.dateOfBirth),
-            maSV: item.code,
-            nganh: item.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name,
-            soChungChi: "0",
-            ngaynhaphoc: item.fixedClass?.trainingCourse?.admissionStartDate,
-            thoigian: item.curriculumVersion?.trainingTime?.name,
-            khoa: item.fixedClass?.trainingCourse?.name,
-            ctdt: item?.fixedClass?.trainingCourse?.trainingObjectType?.name,
-            ngonngu: item.curriculumVersion?.trainingLanguage?.name,
-            hocKis: hocKis,
-          }
-          result.push(sampleStudentData)
-        }
+      if (res.status === 200 && res.data instanceof Blob) {
+        saveAs(res.data, "BangDiemNganHan,DaiHan.xlsx")
+      } else {
+        message.error(res.data?.message || "Xuất file thất bại")
       }
-      let globalCounter = 1
-      const allSheetOptions = result.map((sampleStudentData) => {
-        const tableRows = sampleStudentData.hocKis.flatMap((hocKi: IHocKi) => {
-          const monHocRows: TableRow[] =
-            hocKi?.monHocs?.map((monHoc: IMonHoc) => ({
-              cells: [
-                { value: globalCounter++ },
-                { value: monHoc.TenMonhoc ?? "", colSpan: 8, border: true },
-                { value: monHoc.soTC, align: "center" },
-                { value: monHoc.diemhe10 ?? 0, align: "right" },
-              ],
-            })) ?? []
-          return [...monHocRows]
-        })
-
-        const gapRow: TableRow = {
-          cells: [{ value: null, colSpan: 18, border: false }],
-        }
-        const allMonHocs = sampleStudentData.hocKis.flatMap((hocKi: IHocKi) => hocKi.monHocs)
-
-        const { tongDiemCoTrongSo, tongTrongSo } = allMonHocs.reduce(
-          (acc: { tongDiemCoTrongSo: number; tongTrongSo: number }, mon: IMonHoc) => {
-            const diem = mon.diemhe10 ?? 0
-            const tc = mon.soTC ?? 0
-
-            acc.tongDiemCoTrongSo += diem * tc
-            acc.tongTrongSo += tc
-
-            return acc
-          },
-          { tongDiemCoTrongSo: 0, tongTrongSo: 0 } // Giá trị khởi tạo là một object
-        )
-
-        // 3. Tính điểm TB (đã sửa lỗi cú pháp)
-        const diemTB =
-          tongTrongSo > 0 ? Math.round((tongDiemCoTrongSo / tongTrongSo) * 100) / 100 : 0
-
-        let hang = ""
-        if (diemTB >= 9.0) {
-          hang = "Xuất sắc"
-        } else if (diemTB >= 8.0) {
-          hang = "Giỏi"
-        } else if (diemTB >= 7.0) {
-          hang = "Khá"
-        } else if (diemTB >= 6.0) {
-          hang = "Trung bình"
-        } else if (diemTB >= 5.0) {
-          hang = "Trung bình yếu"
-        } else {
-          hang = "Yếu"
-        }
-        const totalRow: TableRow = {
-          cells: [
-            {
-              value: `Điểm trung bình chung tốt nghiệp: ${diemTB}`,
-              border: false,
-              colSpan: 7,
-              bold: true,
-            },
-            {
-              value: `Hạng tốt nghiệp: ${hang}`,
-              border: false,
-              colSpan: 10,
-              bold: true,
-            },
-          ],
-        }
-        const dateSignatureRow: TableRow = {
-          cells: [
-            { value: null, border: false },
-            { value: null, border: false },
-            { value: null, border: false },
-            { value: null, border: false },
-            { value: null, border: false },
-            { value: null, border: false },
-            {
-              value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`,
-              colSpan: 5,
-              border: false,
-              align: "center",
-            },
-          ],
-        }
-        const titleSignatureRow: TableRow = {
-          cells: [
-            { value: null, border: false },
-            { value: null, border: false },
-            { value: null, border: false },
-            { value: null, border: false },
-            { value: null, border: false },
-            { value: null, border: false },
-            {
-              value: "TL. GIÁM ĐỐC ",
-              colSpan: 5,
-              border: false,
-              align: "center",
-              bold: true,
-            },
-          ],
-        }
-        const nameSignatureRow: TableRow = {
-          cells: [
-            { value: null, border: false },
-            { value: null, border: false },
-            { value: null, border: false },
-            { value: null, border: false },
-            { value: null, border: false },
-            { value: null, border: false },
-            {
-              value: "TRƯỞNG PHÒNG SAU ĐẠI HỌC",
-              colSpan: 5,
-              border: false,
-              align: "center",
-              bold: true,
-            },
-          ],
-        }
-        return {
-          sheet: `${sampleStudentData.maSV} - ${sampleStudentData.fullname}`,
-          data: {
-            soChungChi: sampleStudentData.soChungChi,
-            fullname: sampleStudentData.fullname,
-            maSV: sampleStudentData.maSV,
-            dateOfBirth: sampleStudentData.dateOfBirth,
-            khoa: sampleStudentData.khoa,
-            ngaynhaphoc: sampleStudentData.ngaynhaphoc,
-            ctdt: sampleStudentData.ctdt,
-            nganh: sampleStudentData.nganh,
-            thoigian: sampleStudentData.thoigian,
-            ngonngu: sampleStudentData.ngonngu,
-          },
-          tableStartCell: { row: 15, col: 1 },
-          rows: [
-            ...tableRows,
-            gapRow,
-            totalRow,
-            gapRow,
-            dateSignatureRow,
-            titleSignatureRow,
-            nameSignatureRow,
-          ],
-        }
-      })
-      exportFromTemplate({
-        templateUrl: getMinioUrl("/mta/template/bang-diem-ngan-dai-han.xlsx"),
-        sheets: allSheetOptions,
-        fileName: "BangDiemNganHan%2cDaiHan",
-        mergeSheetsToOne: true,
-      })
-    } catch (error) {
+    } catch {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-      console.error("Error exporting template:", error)
     } finally {
       hideSpinner()
     }
@@ -1503,291 +680,22 @@ export default function StudentFixedClassPage() {
                       {
                         label: "CTTK dài hạn",
                         key: "CTTK-dai-han",
-                        onClick: async () => {
-                          const res = await loadFile(
-                            getMinioUrl("/lms/templates/chuong-trinh-dao-tao/CTTK-dai-han.docx")
-                          )
-                          const doc = new Docxtemplater(res, {
-                            linebreaks: true,
-                            paragraphLoop: true,
-                          })
-                          await doc.renderAsync({
-                            d: dayjs().format("DD"),
-                            m: dayjs().format("MM"),
-                            y: dayjs().format("YYYY"),
-                            TEN_CTDT: fixedClass?.curriculumVersion?.name?.toUpperCase(),
-                            KHOA_HOC: fixedClass?.trainingCourse?.name?.toUpperCase(),
-                            lop_quan_ly: fixedClass?.name,
-                            mon_hoc: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .map((e, index) => ({
-                                tt: index + 1,
-                                ten_mon: e.subject.name,
-                                trong_so: e.subject.credit,
-                                so_tiet: e.subject.period,
-                                dv_phu_trach: e.subject?.managementOrganization?.sMa ?? "",
-                                ghi_chu:
-                                  e.trainingBlockOnCurriculumVersion?.trainingBlock?.name?.firstCase() ??
-                                  "",
-                                ky_1: e.semester === 1 && e.subject.period ? e.subject.period : "",
-                                ky_2: e.semester === 2 && e.subject.period ? e.subject.period : "",
-                                ky_3: e.semester === 3 && e.subject.period ? e.subject.period : "",
-                              })),
-                            tong_trong_so: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce((total, curr) => total + (curr.subject.credit || 0), 0),
-                            tong_so_tiet: fixedClass?.curriculumVersion?.trainingBlocks
-                              ?.flatMap((e) => e.subjects)
-                              .reduce((total, curr) => total + (curr.subject.period || 0), 0),
-                            tong_ky_1: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce(
-                                (total, curr) =>
-                                  total + (curr.semester === 1 ? curr.subject.period || 0 : 0),
-                                0
-                              ),
-                            tong_ky_2: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce(
-                                (total, curr) =>
-                                  total + (curr.semester === 2 ? curr.subject.period || 0 : 0),
-                                0
-                              ),
-                            tong_ky_3: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce(
-                                (total, curr) =>
-                                  total + (curr.semester === 3 ? curr.subject.period || 0 : 0),
-                                0
-                              ),
-                          })
-                          const blob = exportFile(doc.getZip())
-                          saveAs(blob, `CTTK-dai-han.${dayjs().format("DDMMYY")}.docx`)
-                        },
+                        onClick: async () => await handleExportCtdt("cttk-dai-han"),
                       },
                       {
                         label: "CTTK ngắn hạn",
                         key: "CTTK-ngan-han",
-                        onClick: async () => {
-                          const res = await loadFile(
-                            getMinioUrl("/lms/templates/chuong-trinh-dao-tao/CTTK-ngan-han.docx")
-                          )
-                          const doc = new Docxtemplater(res, {
-                            linebreaks: true,
-                            paragraphLoop: true,
-                          })
-                          await doc.renderAsync({
-                            d: dayjs().format("DD"),
-                            m: dayjs().format("MM"),
-                            y: dayjs().format("YYYY"),
-                            TEN_CTDT: fixedClass?.curriculumVersion?.name?.toUpperCase(),
-                            KHOA_HOC: fixedClass?.trainingCourse?.name?.toUpperCase(),
-                            lop_quan_ly: fixedClass?.name,
-                            mon_hoc: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .map((e, index) => ({
-                                tt: index + 1,
-                                ten_mon: e.subject.name,
-                                trong_so: e.subject.credit,
-                                so_tiet: e.subject.period,
-                                dv_phu_trach: e.subject?.managementOrganization?.sMa ?? "",
-                                ghi_chu:
-                                  e.trainingBlockOnCurriculumVersion?.trainingBlock?.name?.firstCase() ??
-                                  "",
-                                ky_1: e.semester === 1 && e.subject.period ? e.subject.period : "",
-                                ky_2: e.semester === 2 && e.subject.period ? e.subject.period : "",
-                              })),
-                            tong_trong_so: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce((total, curr) => total + (curr.subject.credit || 0), 0),
-                            tong_so_tiet: fixedClass?.curriculumVersion?.trainingBlocks
-                              ?.flatMap((e) => e.subjects)
-                              .reduce((total, curr) => total + (curr.subject.period || 0), 0),
-                            tong_ky_1: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce(
-                                (total, curr) =>
-                                  total + (curr.semester === 1 ? curr.subject.period || 0 : 0),
-                                0
-                              ),
-                            tong_ky_2: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce(
-                                (total, curr) =>
-                                  total + (curr.semester === 2 ? curr.subject.period || 0 : 0),
-                                0
-                              ),
-                          })
-                          const blob = exportFile(doc.getZip())
-                          saveAs(blob, `CTTK-ngan-han.${dayjs().format("DDMMYY")}.docx`)
-                        },
+                        onClick: async () => await handleExportCtdt("cttk-ngan-han"),
                       },
                       {
                         label: "KHTK định hướng nghiên cứu",
                         key: "KHTK-ding-huong-nghien-cuu",
-                        onClick: async () => {
-                          const res = await loadFile(
-                            getMinioUrl(
-                              "/lms/templates/chuong-trinh-dao-tao/KHTK-ding-huong-nghien-cuu.docx"
-                            )
-                          )
-                          const doc = new Docxtemplater(res, {
-                            linebreaks: true,
-                            paragraphLoop: true,
-                          })
-                          await doc.renderAsync({
-                            d: dayjs().format("DD"),
-                            m: dayjs().format("MM"),
-                            y: dayjs().format("YYYY"),
-                            HE: getLabelTrainingObjectType(
-                              fixedClass?.trainingCourse.trainingObjectType.type
-                            ).toUpperCase(),
-                            KHOA_HOC: fixedClass?.trainingCourse?.name?.toUpperCase(),
-                            ten_lop: fixedClass?.name,
-                            chuyen_nganh:
-                              fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ?? "",
-                            ma_nganh:
-                              fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.code ?? "",
-                            quan_so: fixedClass?._count.students ?? 0,
-                            mon_hoc: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .map((e, index) => ({
-                                tt: index + 1,
-                                ten_mon: e.subject.name,
-                                trong_so: e.subject.credit,
-                                so_tiet: e.subject.period,
-                                dv_phu_trach: e.subject?.managementOrganization?.sMa ?? "",
-                                ghi_chu:
-                                  e.trainingBlockOnCurriculumVersion?.trainingBlock?.name?.firstCase() ??
-                                  "",
-                                ky_1: e.semester === 1 && e.subject.period ? e.subject.period : "",
-                                ky_2: e.semester === 2 && e.subject.period ? e.subject.period : "",
-                                ky_3: e.semester === 3 && e.subject.period ? e.subject.period : "",
-                                ky_4: e.semester === 4 && e.subject.period ? e.subject.period : "",
-                              })),
-                            tong_trong_so: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce((total, curr) => total + (curr.subject.credit || 0), 0),
-                            tong_so_tiet: fixedClass?.curriculumVersion?.trainingBlocks
-                              ?.flatMap((e) => e.subjects)
-                              .reduce((total, curr) => total + (curr.subject.period || 0), 0),
-                            tong_ky_1: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce(
-                                (total, curr) =>
-                                  total + (curr.semester === 1 ? curr.subject.period || 0 : 0),
-                                0
-                              ),
-                            tong_ky_2: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce(
-                                (total, curr) =>
-                                  total + (curr.semester === 2 ? curr.subject.period || 0 : 0),
-                                0
-                              ),
-                            tong_ky_3: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce(
-                                (total, curr) =>
-                                  total + (curr.semester === 3 ? curr.subject.period || 0 : 0),
-                                0
-                              ),
-                            tong_ky_4: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce(
-                                (total, curr) =>
-                                  total + (curr.semester === 4 ? curr.subject.period || 0 : 0),
-                                0
-                              ),
-                          })
-                          const blob = exportFile(doc.getZip())
-                          saveAs(
-                            blob,
-                            `KHTK-ding-huong-nghien-cuu.${dayjs().format("DDMMYY")}.docx`
-                          )
-                        },
+                        onClick: async () => await handleExportCtdt("khtk-nghien-cuu"),
                       },
                       {
                         label: "KHTK định hướng ứng dụng",
                         key: "KHTK-ding-huong-ung-dung",
-                        onClick: async () => {
-                          const res = await loadFile(
-                            getMinioUrl(
-                              "/mta/template/chuong-trinh-dao-tao/KHTK-ding-huong-ung-dung.docx"
-                            )
-                          )
-                          const doc = new Docxtemplater(res, {
-                            linebreaks: true,
-                            paragraphLoop: true,
-                          })
-                          await doc.renderAsync({
-                            d: dayjs().format("DD"),
-                            m: dayjs().format("MM"),
-                            y: dayjs().format("YYYY"),
-                            HE: getLabelTrainingObjectType(
-                              fixedClass?.trainingCourse.trainingObjectType.type
-                            ).toUpperCase(),
-                            KHOA_HOC: fixedClass?.trainingCourse?.name?.toUpperCase(),
-                            ten_lop: fixedClass?.name,
-                            chuyen_nganh:
-                              fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ?? "",
-                            ma_nganh:
-                              fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.code ?? "",
-                            quan_so: fixedClass?._count.students ?? 0,
-                            mon_hoc: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .map((e, index) => ({
-                                tt: index + 1,
-                                ten_mon: e.subject.name,
-                                trong_so: e.subject.credit,
-                                so_tiet: e.subject.period,
-                                dv_phu_trach: e.subject?.managementOrganization?.sMa ?? "",
-                                ghi_chu:
-                                  e.trainingBlockOnCurriculumVersion?.trainingBlock?.name?.firstCase() ??
-                                  "",
-                                ky_1: e.semester === 1 && e.subject.period ? e.subject.period : "",
-                                ky_2: e.semester === 2 && e.subject.period ? e.subject.period : "",
-                                ky_3: e.semester === 3 && e.subject.period ? e.subject.period : "",
-                                ky_4: e.semester === 4 && e.subject.period ? e.subject.period : "",
-                              })),
-                            tong_trong_so: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce((total, curr) => total + (curr.subject.credit || 0), 0),
-                            tong_so_tiet: fixedClass?.curriculumVersion?.trainingBlocks
-                              ?.flatMap((e) => e.subjects)
-                              .reduce((total, curr) => total + (curr.subject.period || 0), 0),
-                            tong_ky_1: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce(
-                                (total, curr) =>
-                                  total + (curr.semester === 1 ? curr.subject.period || 0 : 0),
-                                0
-                              ),
-                            tong_ky_2: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce(
-                                (total, curr) =>
-                                  total + (curr.semester === 2 ? curr.subject.period || 0 : 0),
-                                0
-                              ),
-                            tong_ky_3: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce(
-                                (total, curr) =>
-                                  total + (curr.semester === 3 ? curr.subject.period || 0 : 0),
-                                0
-                              ),
-                            tong_ky_4: fixedClass?.curriculumVersion?.trainingBlocks
-                              .flatMap((e) => e.subjects)
-                              .reduce(
-                                (total, curr) =>
-                                  total + (curr.semester === 4 ? curr.subject.period || 0 : 0),
-                                0
-                              ),
-                          })
-                          const blob = exportFile(doc.getZip())
-                          saveAs(blob, `KHTK-ding-huong-ung-dung.${dayjs().format("DDMMYY")}.docx`)
-                        },
+                        onClick: async () => await handleExportCtdt("khtk-ung-dung"),
                       },
                     ],
                   }}

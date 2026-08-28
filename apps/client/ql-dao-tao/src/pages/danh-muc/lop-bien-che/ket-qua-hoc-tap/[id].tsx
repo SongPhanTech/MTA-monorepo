@@ -19,20 +19,15 @@ import {
   useFindUniqueStudent,
 } from "@workspace/db/hooks"
 import { customTrainingFetch } from "@workspace/libs/api/custom-instance"
-import { exportAndDownloadFromTemplate } from "@workspace/libs/download-excel"
-import type { TableRow } from "@workspace/libs/template-excel"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
 import { Button, Col, Divider, Dropdown, Flex, message, Row, Tag, Tooltip } from "antd"
-import dayjs from "dayjs"
 import { saveAs } from "file-saver"
 import _ from "lodash"
 import { Check, X } from "lucide-react"
 import { useRouter } from "next/router"
 import { useCallback, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-
-dayjs.locale("vi")
 
 export interface IMonHoc {
   TenMonhoc: string
@@ -443,182 +438,31 @@ export default function StudentScoreClassPage() {
   }
 
   const handleExportQuaTrinh = async () => {
-    let stt = 1
-    const monhocList: IMonHoc[] = []
-
-    // Thứ tự giống màn hình (học kỳ → tên môn); điểm lấy lần học mới nhất.
-    const latestSubjectClassesMap = new Map<string, any>()
-    data.forEach((semester) => {
-      semester.subjectClasses.forEach((subjectClass: any) => {
-        if (subjectClass.$isSummary) return
-
-        const subjectId = subjectClass?.subject?.id
-        if (subjectId) {
-          latestSubjectClassesMap.set(subjectId, subjectClass)
-        }
-      })
-    })
-
-    const orderedSubjectClasses = Array.from(latestSubjectClassesMap.values())
-
-    orderedSubjectClasses.forEach((subjectClass) => {
-      subjectClass.subjectClassStudent.forEach((subjectClassStudent: any) => {
-        const rawScore =
-          subjectClassStudent?.manualFinalScore != null
-            ? Number(subjectClassStudent.manualFinalScore)
-            : subjectClassStudent?.finalScore != null
-              ? Number(subjectClassStudent.finalScore)
-              : null
-
-        const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
-        const isConditional = subjectClass?.subject?.trainingBlocks?.[0]?.useForFinalScore === false
-        const converted = convertScoreWithGraduation(
-          rawScore,
-          isGraduation,
-          isConditional,
-          subjectClassStudent?.attendanceScore != null
-            ? Number(subjectClassStudent.attendanceScore)
-            : undefined,
-          subjectClassStudent?.midtermScore != null
-            ? Number(subjectClassStudent.midtermScore)
-            : undefined,
-          subjectClassStudent?.examScore != null ? Number(subjectClassStudent.examScore) : undefined
-        )
-
-        let tenMonHoc = subjectClass.subject.name
-        if (subjectClass.type === $Enums.SubjectClassType.RETAKE) {
-          tenMonHoc += " (Học lại)"
-        } else if (subjectClass.type === $Enums.SubjectClassType.REEXAM) {
-          tenMonHoc += " (Thi lại)"
-        }
-
-        monhocList.push({
-          TenMonhoc: tenMonHoc,
-          soTC: subjectClass.subject.credit,
-          diemhe10: rawScore,
-          diemhe4: converted?.base4 ?? null,
-          diemchu: converted?.letter ?? null,
-          pass: converted?.pass ?? null,
-        })
-      })
-    })
-
-    const sampleStudentData = {
-      hoVaTen: student?.userProfile?.fullname,
-      ngaySinh: student?.userProfile?.dateOfBirth,
-      maSinhVien: student?.code,
-      ngayNhapHoc: student?.fixedClass?.trainingCourse.admissionStartDate,
-      ngonNguDaoTao: student?.fixedClass?.curriculumVersion?.trainingLanguage?.name,
-      thoiGianDaoTao: student?.fixedClass?.curriculumVersion?.trainingTime?.name,
-      nganhDaoTao: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || student?.fixedClass?.curriculumVersion?.curriculum?.trainingField?.name,
-      trinhDoDaoTao: student?.fixedClass?.curriculumVersion?.trainingLevel?.name,
-      chuyenNganh:
-        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ??
-        student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name,
-      hinhThucDaoTao: student?.fixedClass?.curriculumVersion?.trainingType?.name,
+    if (!studentId) {
+      message.warning("Không tìm thấy học viên")
+      return
     }
-
-    const scoredMonhocs = monhocList.filter(
-      (monHoc) => monHoc.diemhe10 != null || monHoc.diemhe4 != null || monHoc.diemchu != null
-    )
-
-    const tableRows: TableRow[] = scoredMonhocs.map((monHoc: IMonHoc) => {
-      const hasScore = monHoc.diemhe10 != null || monHoc.diemhe4 != null || monHoc.diemchu != null
-      const isFail = hasScore && monHoc.pass === false
-      const cellStyle = isFail ? { bgColor: "FFFFC7CE", color: "FFFF0000" } : {}
-      return {
-        cells: [
-          { value: stt++, align: "center", ...cellStyle },
-          { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true, ...cellStyle },
-          { value: monHoc.soTC, align: "center", ...cellStyle },
-          { value: monHoc.diemhe10 ?? null, align: "right", ...cellStyle },
-          { value: monHoc.diemhe4 ?? null, align: "right", ...cellStyle },
-          { value: monHoc.diemchu ?? null, align: "center", ...cellStyle },
-        ],
+    showSpinner()
+    try {
+      const res = await customTrainingFetch<{
+        status: number
+        data: Blob & { message?: string }
+      }>("/api/student-result/export-bang-diem-qua-trinh-hoc-vien", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ studentId }),
+      })
+      if (res.status === 200 && res.data instanceof Blob) {
+        const fileName = `BDQT-${student?.code ?? ""}-${student?.userProfile?.fullname ?? ""}.xlsx`
+        saveAs(res.data, fileName)
+      } else {
+        message.error(res.data?.message || "Xuất file thất bại")
       }
-    })
-
-    const gapRow: TableRow = { cells: [{ value: null, colSpan: 9, border: false }] }
-
-    await exportAndDownloadFromTemplate({
-      templatePath: "/mta/template/BangDiemQuaTrinh.xlsx",
-      sheets: [
-        {
-          sheet: "BaoCaoDiem",
-          data: {
-            hoVaTen: sampleStudentData.hoVaTen ?? "",
-            ngaySinh: sampleStudentData.ngaySinh
-              ? dayjs(sampleStudentData.ngaySinh).format("DD/MM/YYYY")
-              : "",
-            maSinhVien: sampleStudentData.maSinhVien ?? "",
-            ngayNhapHoc: sampleStudentData.ngayNhapHoc
-              ? dayjs(sampleStudentData.ngayNhapHoc).format("DD/MM/YYYY")
-              : "",
-            ngonNguDaoTao: sampleStudentData.ngonNguDaoTao ?? "",
-            thoiGianDaoTao: sampleStudentData.thoiGianDaoTao ?? "",
-            nganhDaoTao: sampleStudentData.nganhDaoTao ?? "",
-            trinhDoDaoTao: sampleStudentData.trinhDoDaoTao ?? "",
-            chuyenNganh: sampleStudentData.chuyenNganh ?? "",
-            hinhThucDaoTao: sampleStudentData.hinhThucDaoTao ?? "",
-          },
-          boldDataKeys: ["hoVaTen"],
-          tableStartCell: { row: 14, col: 1 },
-          rows: [
-            ...tableRows,
-            gapRow,
-            gapRow,
-            {
-              cells: [
-                { value: null, colSpan: 5, border: false },
-                {
-                  value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`,
-                  colSpan: 6,
-                  border: false,
-                  align: "center",
-                },
-              ],
-            },
-            {
-              cells: [
-                { value: null, colSpan: 5, border: false },
-                {
-                  value: "  TL. GIÁM ĐỐC",
-                  colSpan: 6,
-                  border: false,
-                  align: "center",
-                  bold: true,
-                },
-              ],
-            },
-            {
-              cells: [
-                { value: null, colSpan: 5, border: false },
-                {
-                  value: "  KT. TRƯỞNG PHÒNG ĐÀO TẠO",
-                  colSpan: 6,
-                  border: false,
-                  align: "center",
-                  bold: true,
-                },
-              ],
-            },
-            {
-              cells: [
-                { value: null, colSpan: 5, border: false },
-                {
-                  value: "  PHÓ TRƯỞNG PHÒNG",
-                  colSpan: 6,
-                  border: false,
-                  align: "center",
-                  bold: true,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      fileName: `BDQT-${sampleStudentData.maSinhVien}-${sampleStudentData.hoVaTen}.xlsx`,
-    })
+    } catch {
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } finally {
+      hideSpinner()
+    }
   }
 
   return (

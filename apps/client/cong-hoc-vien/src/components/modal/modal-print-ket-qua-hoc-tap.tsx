@@ -11,6 +11,27 @@ import { useReactToPrint } from "react-to-print"
 
 dayjs.locale("vi")
 
+type SubjectScoreRow = {
+  subjectClassId?: string | null
+  createdAt?: Date | string
+  manualFinalScore?: number | null
+  finalScore?: number | null
+}
+
+/** Điểm lớp (mới nhất) nếu có; không thì phiên chứng chỉ (mới nhất). */
+function pickOfficialScore<T extends SubjectScoreRow>(scores: T[] | undefined): T | undefined {
+  if (!scores?.length) return undefined
+  const byCreatedAt = (a: T, b: T) => {
+    const at = a.createdAt ? new Date(a.createdAt).getTime() : 0
+    const bt = b.createdAt ? new Date(b.createdAt).getTime() : 0
+    return at - bt
+  }
+  const classScores = scores.filter((s) => s.subjectClassId).sort(byCreatedAt)
+  if (classScores.length) return classScores[classScores.length - 1]
+  const phienScores = scores.filter((s) => !s.subjectClassId).sort(byCreatedAt)
+  return phienScores.at(-1)
+}
+
 type ModalPrintToKQHTInput = {
   dataTable: any
   dataStudent: any
@@ -55,6 +76,7 @@ const ModalPrintToKQHT = () => {
                       where: {
                         studentId: input?.dataStudent?.id,
                       },
+                      orderBy: { createdAt: "asc" },
                     },
                   },
                 },
@@ -181,7 +203,7 @@ const ModalPrintToKQHT = () => {
 
     validSubjects.forEach((subjectItem: any) => {
       const subject = subjectItem.subject
-      const score = subject.studentSubjectScore?.[0]
+      const score = pickOfficialScore(subject.studentSubjectScore)
       const credits = subject.credit || 0
 
       if (score) {
@@ -314,7 +336,7 @@ const ModalPrintToKQHT = () => {
                 // Render các môn thường trước
                 const regularRows = regularSubjects?.map(({ subjectItem }, originalIndex) => {
                   const subject = subjectItem.subject
-                  const score = subject.studentSubjectScore?.[0]
+                  const score = pickOfficialScore(subject.studentSubjectScore)
                   const isOptional = subjectItem.type === SubjectRequirementType.Optional
                   const notForFinalScore = !subjectItem.useForFinalScore
 
@@ -352,7 +374,7 @@ const ModalPrintToKQHT = () => {
                 // Render các môn tốt nghiệp sau
                 const graduationRows = graduationSubjects?.map(({ subjectItem }, originalIndex) => {
                   const subject = subjectItem.subject
-                  const score = subject.studentSubjectScore?.[0]
+                  const score = pickOfficialScore(subject.studentSubjectScore)
                   const isOptional = subjectItem.type === SubjectRequirementType.Optional
                   const notForFinalScore = !subjectItem.useForFinalScore
 

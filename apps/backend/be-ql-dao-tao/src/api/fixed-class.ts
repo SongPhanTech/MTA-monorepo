@@ -5,10 +5,15 @@ import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
-import { ErrorMessageResponseSchema, ExcelBinaryResponseSchema } from "../dto/common-response.dto"
+import {
+  DocxBinaryResponseSchema,
+  ErrorMessageResponseSchema,
+  ExcelBinaryResponseSchema,
+} from "../dto/common-response.dto"
 import { ClassDivisionResultSchema } from "../dto/student-result-openapi.dto"
 import { excelSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 import { renderXlsxTemplate } from "../services/render-xlsx-template"
+import { CtdtExportMau, exportChuongTrinhDaoTao } from "../services/export-chuong-trinh-dao-tao"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -223,6 +228,62 @@ app.openapi(fixedClassStudentCount, async (c) => {
 
   return c.body(new Uint8Array(result), 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "Content-Disposition": disposition,
+  })
+})
+
+const exportChuongTrinhDaoTaoRoute = createRoute({
+  operationId: "exportChuongTrinhDaoTao",
+  tags: ["Lớp niên chế"],
+  path: "/export-chuong-trinh-dao-tao",
+  method: "post",
+  summary: "Xuất CTTK / KHTK lớp quản lý",
+  description: `Xuất file Word chương trình / kế hoạch toàn khóa theo mẫu CTTK hoặc KHTK.
+
+**Bảng dữ liệu nguồn:** FixedClass, CurriculumVersion, TrainingBlockSubject.
+
+**Tham số:** fixedClassId, mau — cttk-dai-han | cttk-ngan-han | khtk-nghien-cuu | khtk-ung-dung.`,
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              fixedClassId: z.string().openapi(fieldDesc("ID lớp quản lý (FixedClass).")),
+              mau: z
+                .enum([
+                  CtdtExportMau.CTTK_DAI_HAN,
+                  CtdtExportMau.CTTK_NGAN_HAN,
+                  CtdtExportMau.KHTK_NGHIEN_CUU,
+                  CtdtExportMau.KHTK_UNG_DUNG,
+                ])
+                .openapi(fieldDesc("Loại mẫu xuất.")),
+            })
+            .openapi("ExportChuongTrinhDaoTaoRequest"),
+        },
+      },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "File Word CTTK / KHTK",
+      content: {
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+          schema: DocxBinaryResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(exportChuongTrinhDaoTaoRoute, async (c) => {
+  const { fixedClassId, mau } = c.req.valid("json")
+  const { buffer, fileName } = await exportChuongTrinhDaoTao({ fixedClassId, mau })
+  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+  return c.body(buffer, 200, {
+    "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "Content-Disposition": disposition,
   })
 })
