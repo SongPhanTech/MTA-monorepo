@@ -1330,13 +1330,15 @@ app.openapi(exportSubjectClassScore, async (c) => {
     }
     const headerRange = findTableHeaderRange(worksheet)
     if (headerRange) {
+
       worksheet.pageSetup = {
         ...worksheet.pageSetup,
         printTitlesRow: `${headerRange.start}:${headerRange.end}`,
       }
-
-      repeatTableHeadersOnEachPage(worksheet, headerRange)
-      worksheet.pageSetup.printTitlesRow = `${headerRange.start}:${headerRange.end}`
+      const lastUsedRow = findLastUsedRow(worksheet)
+      if (lastUsedRow > 0) {
+        worksheet.pageSetup.printArea = `A1:${toColumnLetter(worksheet.columnCount)}${lastUsedRow}`
+      }
     }
   }
 
@@ -1451,7 +1453,6 @@ function findTableHeaderRange(
     return { start: rowNumber, end: endRow }
   }
 
-
   const firstDataRow = findFirstStudentDataRow(worksheet)
   if (!firstDataRow) return undefined
 
@@ -1492,6 +1493,28 @@ function findLastDataRow(worksheet: ExcelJS.Worksheet, firstDataRow: number): nu
   return last
 }
 
+function findLastUsedRow(worksheet: ExcelJS.Worksheet): number {
+  for (let rowNumber = worksheet.rowCount; rowNumber >= 1; rowNumber--) {
+    let hasValue = false
+    worksheet.getRow(rowNumber).eachCell({ includeEmpty: false }, (cell) => {
+      if (excelCellText(cell)) hasValue = true
+    })
+    if (hasValue) return rowNumber
+  }
+  return 0
+}
+
+function toColumnLetter(columnNumber: number): string {
+  let result = ""
+  let current = Math.max(1, columnNumber)
+  while (current > 0) {
+    const remainder = (current - 1) % 26
+    result = String.fromCharCode(65 + remainder) + result
+    current = Math.floor((current - 1) / 26)
+  }
+  return result
+}
+
 function getRowHeightPt(worksheet: ExcelJS.Worksheet, rowNumber: number): number {
   const height = worksheet.getRow(rowNumber).height
   return height && height > 0 ? height : worksheet.properties?.defaultRowHeight || 15
@@ -1502,15 +1525,9 @@ function getPrintableHeightPt(worksheet: ExcelJS.Worksheet): number {
   const landscape = pageSetup.orientation === "landscape"
   const pageHeightMm = landscape ? 210 : 297
   const pageHeightPt = (pageHeightMm * 72) / 25.4
-  const margins = pageSetup.margins || { top: 0.75, bottom: 0.75, header: 0.3, footer: 0.3 }
+  const margins = pageSetup.margins || { top: 0.75, bottom: 0.75 }
   const inchToPt = (inch: number) => inch * 72
-  return (
-    pageHeightPt -
-    inchToPt(margins.top ?? 0.75) -
-    inchToPt(margins.bottom ?? 0.75) -
-    inchToPt(margins.header ?? 0.3) -
-    inchToPt(margins.footer ?? 0.3)
-  )
+  return pageHeightPt - inchToPt(margins.top ?? 0.75) - inchToPt(margins.bottom ?? 0.75)
 }
 
 function getFitToWidthScale(worksheet: ExcelJS.Worksheet): number {
@@ -1601,7 +1618,6 @@ function insertHeaderCopy(
     }
   }
 }
-
 
 function repeatTableHeadersOnEachPage(
   worksheet: ExcelJS.Worksheet,
