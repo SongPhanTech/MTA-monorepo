@@ -1328,6 +1328,16 @@ app.openapi(exportSubjectClassScore, async (c) => {
       oddFooter: `&LNgười in: ${NGUOI_IN}&C&P/&N&R${THOI_GIAN_IN}`,
       evenFooter: `&LNgười in: ${NGUOI_IN}&C&P/&N&R${THOI_GIAN_IN}`,
     }
+    const headerRange = findTableHeaderRange(worksheet)
+    if (headerRange) {
+      worksheet.pageSetup = {
+        ...worksheet.pageSetup,
+        printTitlesRow: `${headerRange.start}:${headerRange.end}`,
+      }
+
+      repeatTableHeadersOnEachPage(worksheet, headerRange)
+      worksheet.pageSetup.printTitlesRow = `${headerRange.start}:${headerRange.end}`
+    }
   }
 
   const result = await workbook.xlsx.writeBuffer()
@@ -1339,5 +1349,303 @@ app.openapi(exportSubjectClassScore, async (c) => {
     "Content-Disposition": disposition,
   })
 })
+
+function excelCellText(cell: ExcelJS.Cell): string {
+  const value = cell.value
+  if (value == null) return ""
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value).trim()
+  }
+  if (typeof value === "object") {
+    if ("richText" in value && Array.isArray(value.richText)) {
+      return value.richText
+        .map((part) => part.text)
+        .join("")
+        .trim()
+    }
+    if ("text" in value && typeof value.text === "string") {
+      return value.text.trim()
+    }
+    if ("result" in value && value.result !== undefined && value.result !== null) {
+      return String(value.result).trim()
+    }
+  }
+  return ""
+}
+
+function normalizeHeaderText(text: string): string {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/gi, "d")
+    .replace(/\u00a0/g, " ")
+    .replace(/[.:]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase()
+}
+
+function getWorksheetMerges(worksheet: ExcelJS.Worksheet): string[] {
+  return (worksheet.model as { merges?: string[] } | undefined)?.merges ?? []
+}
+
+function parseMerge(
+  merge: string
+): { tlCol: string; brCol: string; top: number; bottom: number } | null {
+  const [topLeft, bottomRight] = merge.split(":")
+  const topMatch = topLeft?.match(/^([A-Z]+)(\d+)$/)
+  const bottomMatch = bottomRight?.match(/^([A-Z]+)(\d+)$/)
+  if (!topMatch?.[1] || !topMatch[2] || !bottomMatch?.[1] || !bottomMatch[2]) return null
+  return {
+    tlCol: topMatch[1],
+    brCol: bottomMatch[1],
+    top: Number(topMatch[2]),
+    bottom: Number(bottomMatch[2]),
+  }
+}
+
+function findTableHeaderRange(
+  worksheet: ExcelJS.Worksheet
+): { start: number; end: number } | undefined {
+  const maxScan = Math.min(worksheet.rowCount, 60)
+  for (let rowNumber = 1; rowNumber <= maxScan; rowNumber++) {
+    const texts: string[] = []
+    worksheet.getRow(rowNumber).eachCell({ includeEmpty: false }, (cell) => {
+      const text = normalizeHeaderText(excelCellText(cell))
+      if (text) texts.push(text)
+    })
+    const hasTt = texts.some((text) => text === "tt" || text === "stt" || text === "so tt")
+    const hasNameOrCode = texts.some(
+      (text) =>
+        text.includes("ma sv") ||
+        text.includes("ma sinh vien") ||
+        text.includes("ma hoc vien") ||
+        text.includes("ho ten") ||
+        text.includes("ho va ten")
+    )
+    const hasOtherTableColumn = texts.some(
+      (text) =>
+        text.includes("ngay sinh") ||
+        text === "lop" ||
+        text.includes("diem") ||
+        text.includes("ghi chu")
+    )
+    if (!hasTt || texts.length < 2 || (!hasNameOrCode && !hasOtherTableColumn)) continue
+
+    let endRow = rowNumber
+    for (const merge of getWorksheetMerges(worksheet)) {
+      const parsed = parseMerge(merge)
+      if (parsed && parsed.top === rowNumber && parsed.bottom > endRow) endRow = parsed.bottom
+    }
+
+    const nextRow = worksheet.getRow(endRow + 1)
+    const firstNext = excelCellText(nextRow.getCell(1))
+    if (!/^\d+$/.test(firstNext)) {
+      let nextHasText = false
+      nextRow.eachCell({ includeEmpty: false }, () => {
+        nextHasText = true
+      })
+      if (nextHasText) endRow += 1
+    }
+
+    return { start: rowNumber, end: endRow }
+  }
+
+
+  const firstDataRow = findFirstStudentDataRow(worksheet)
+  if (!firstDataRow) return undefined
+
+  const end = firstDataRow - 1
+  const previous = worksheet.getRow(end)
+  if (!rowHasTableContent(previous)) return undefined
+
+  return { start: end, end }
+}
+
+function findFirstStudentDataRow(worksheet: ExcelJS.Worksheet): number | undefined {
+  for (let rowNumber = 1; rowNumber <= worksheet.rowCount; rowNumber++) {
+    const row = worksheet.getRow(rowNumber)
+    const firstCell = excelCellText(row.getCell(1))
+    let populatedCells = 0
+    row.eachCell({ includeEmpty: false }, () => {
+      populatedCells += 1
+    })
+    if (/^\d+$/.test(firstCell) && populatedCells >= 3) return rowNumber
+  }
+  return undefined
+}
+
+function rowHasTableContent(row: ExcelJS.Row): boolean {
+  let populatedCells = 0
+  row.eachCell({ includeEmpty: false }, () => {
+    populatedCells += 1
+  })
+  return populatedCells >= 3
+}
+
+function findLastDataRow(worksheet: ExcelJS.Worksheet, firstDataRow: number): number {
+  let last = firstDataRow - 1
+  for (let rowNumber = firstDataRow; rowNumber <= worksheet.rowCount; rowNumber++) {
+    if (!/^\d+$/.test(excelCellText(worksheet.getRow(rowNumber).getCell(1)))) break
+    last = rowNumber
+  }
+  return last
+}
+
+function getRowHeightPt(worksheet: ExcelJS.Worksheet, rowNumber: number): number {
+  const height = worksheet.getRow(rowNumber).height
+  return height && height > 0 ? height : worksheet.properties?.defaultRowHeight || 15
+}
+
+function getPrintableHeightPt(worksheet: ExcelJS.Worksheet): number {
+  const pageSetup = worksheet.pageSetup
+  const landscape = pageSetup.orientation === "landscape"
+  const pageHeightMm = landscape ? 210 : 297
+  const pageHeightPt = (pageHeightMm * 72) / 25.4
+  const margins = pageSetup.margins || { top: 0.75, bottom: 0.75, header: 0.3, footer: 0.3 }
+  const inchToPt = (inch: number) => inch * 72
+  return (
+    pageHeightPt -
+    inchToPt(margins.top ?? 0.75) -
+    inchToPt(margins.bottom ?? 0.75) -
+    inchToPt(margins.header ?? 0.3) -
+    inchToPt(margins.footer ?? 0.3)
+  )
+}
+
+function getFitToWidthScale(worksheet: ExcelJS.Worksheet): number {
+  const pageSetup = worksheet.pageSetup
+  if (pageSetup.scale && !pageSetup.fitToPage) return pageSetup.scale / 100
+  if (!pageSetup.fitToPage) return 1
+
+  const colCount = Math.max(worksheet.columnCount || 0, 1)
+  let totalPx = 0
+  for (let col = 1; col <= colCount; col++) {
+    const width = worksheet.getColumn(col).width ?? 8.43
+    totalPx += Math.floor(((256 * width + Math.floor(128 / 7)) / 256) * 7)
+  }
+  const landscape = pageSetup.orientation === "landscape"
+  const pageWidthMm = landscape ? 297 : 210
+  const margins = pageSetup.margins || { left: 0.7, right: 0.7 }
+  const printablePx = (pageWidthMm / 25.4 - (margins.left ?? 0.7) - (margins.right ?? 0.7)) * 96
+  if (totalPx <= 0) return 1
+  return Math.min(1, printablePx / totalPx)
+}
+
+type HeaderSnapshot = {
+  start: number
+  end: number
+  rows: {
+    height?: number
+    cells: { col: number; value: ExcelJS.CellValue; style?: Partial<ExcelJS.Style> }[]
+  }[]
+  merges: { tlCol: string; brCol: string; topOffset: number; bottomOffset: number }[]
+}
+
+function snapshotHeaderRows(
+  worksheet: ExcelJS.Worksheet,
+  start: number,
+  end: number
+): HeaderSnapshot {
+  const rows: HeaderSnapshot["rows"] = []
+  for (let rowNumber = start; rowNumber <= end; rowNumber++) {
+    const row = worksheet.getRow(rowNumber)
+    const cells: HeaderSnapshot["rows"][number]["cells"] = []
+    row.eachCell({ includeEmpty: true }, (cell, col) => {
+      cells.push({
+        col,
+        value: cell.value,
+        style: cell.style ? JSON.parse(JSON.stringify(cell.style)) : undefined,
+      })
+    })
+    rows.push({ height: row.height, cells })
+  }
+
+  const merges: HeaderSnapshot["merges"] = []
+  for (const merge of getWorksheetMerges(worksheet)) {
+    const parsed = parseMerge(merge)
+    if (!parsed || parsed.top < start || parsed.bottom > end) continue
+    merges.push({
+      tlCol: parsed.tlCol,
+      brCol: parsed.brCol,
+      topOffset: parsed.top - start,
+      bottomOffset: parsed.bottom - start,
+    })
+  }
+
+  return { start, end, rows, merges }
+}
+
+function insertHeaderCopy(
+  worksheet: ExcelJS.Worksheet,
+  snapshot: HeaderSnapshot,
+  insertAt: number
+) {
+  worksheet.spliceRows(insertAt, 0, ...snapshot.rows.map(() => []))
+  snapshot.rows.forEach((src, index) => {
+    const dest = worksheet.getRow(insertAt + index)
+    if (src.height) dest.height = src.height
+    src.cells.forEach(({ col, value, style }) => {
+      const cell = dest.getCell(col)
+      cell.value = value
+      if (style) cell.style = JSON.parse(JSON.stringify(style))
+    })
+  })
+  for (const merge of snapshot.merges) {
+    try {
+      worksheet.mergeCells(
+        `${merge.tlCol}${insertAt + merge.topOffset}:${merge.brCol}${insertAt + merge.bottomOffset}`
+      )
+    } catch {
+      // ignore overlap after splice
+    }
+  }
+}
+
+
+function repeatTableHeadersOnEachPage(
+  worksheet: ExcelJS.Worksheet,
+  headerRange: { start: number; end: number }
+) {
+  const firstDataRow = headerRange.end + 1
+  const lastDataRow = findLastDataRow(worksheet, firstDataRow)
+  if (lastDataRow < firstDataRow) return
+
+  const scale = getFitToWidthScale(worksheet)
+  const printablePt = getPrintableHeightPt(worksheet)
+  const headerHeight = Array.from({ length: headerRange.end - headerRange.start + 1 }, (_, i) =>
+    getRowHeightPt(worksheet, headerRange.start + i)
+  ).reduce((sum, h) => sum + h, 0)
+  const titleHeight = Array.from({ length: headerRange.start - 1 }, (_, i) =>
+    getRowHeightPt(worksheet, i + 1)
+  ).reduce((sum, h) => sum + h, 0)
+
+  const insertAt: number[] = []
+  let used = (titleHeight + headerHeight) * scale
+  for (let rowNumber = firstDataRow; rowNumber <= lastDataRow; rowNumber++) {
+    const rowHeight = getRowHeightPt(worksheet, rowNumber) * scale
+    if (rowNumber !== firstDataRow && used + rowHeight > printablePt) {
+      insertAt.push(rowNumber)
+      used = headerHeight * scale + rowHeight
+      continue
+    }
+    used += rowHeight
+  }
+  if (insertAt.length === 0) return
+
+  const snapshot = snapshotHeaderRows(worksheet, headerRange.start, headerRange.end)
+  const headerCount = snapshot.rows.length
+  for (let i = insertAt.length - 1; i >= 0; i--) {
+    const pos = insertAt[i]
+    if (!pos) continue
+    insertHeaderCopy(worksheet, snapshot, pos)
+  }
+  for (let i = 0; i < insertAt.length; i++) {
+    const originalHeaderPos = insertAt[i]
+    if (!originalHeaderPos) continue
+    const actualHeaderPos = originalHeaderPos + headerCount * i
+    worksheet.getRow(actualHeaderPos - 1).addPageBreak()
+  }
+}
 
 export default app
