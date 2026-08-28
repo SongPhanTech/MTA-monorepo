@@ -1330,11 +1330,24 @@ app.openapi(exportSubjectClassScore, async (c) => {
     }
     const headerRange = findTableHeaderRange(worksheet)
     if (headerRange) {
+      const firstDataRow = headerRange.end + 1
+      const lastStudentRow = findLastDataRow(worksheet, firstDataRow)
+      const lastUsedRowBeforePagination = findLastUsedRow(worksheet)
+      const hasStudents = lastStudentRow >= firstDataRow
+      const hasContentAfterStudents = lastUsedRowBeforePagination > lastStudentRow
 
-      worksheet.pageSetup = {
-        ...worksheet.pageSetup,
-        printTitlesRow: `${headerRange.start}:${headerRange.end}`,
+      if (hasStudents && hasContentAfterStudents) {
+        worksheet.pageSetup.printTitlesRow = undefined
+        repeatTableHeadersOnEachPage(worksheet, headerRange)
+      } else if (hasStudents) {
+        worksheet.pageSetup = {
+          ...worksheet.pageSetup,
+          printTitlesRow: `${headerRange.start}:${headerRange.end}`,
+        }
+      } else { 
+        worksheet.pageSetup.printTitlesRow = undefined
       }
+
       const lastUsedRow = findLastUsedRow(worksheet)
       if (lastUsedRow > 0) {
         worksheet.pageSetup.printArea = `A1:${toColumnLetter(worksheet.columnCount)}${lastUsedRow}`
