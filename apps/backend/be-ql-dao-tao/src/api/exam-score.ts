@@ -282,6 +282,13 @@ app.openapi(saveExamScore, async (c) => {
                       maxReExamScore: true,
                       reduceReExamScore: true,
                       examScoreToPass: true,
+                      trainingObjectType: {
+                        select: {
+                          type: true,
+                          name: true,
+                          trainingLevel: { select: { code: true, name: true } },
+                        },
+                      },
                     },
                   },
                 },

@@ -3,9 +3,9 @@ import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import TableCollapse from "@components/commons/tableCollapse"
 import type { FilterProps } from "@constants/type"
-import { useScoreConverter } from "@hooks/scoreConverter"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
+import { convertScoreWithCourseConfig } from "@workspace/libs/utils"
 import {
   $Enums,
   type ArchivedCertificate,
@@ -142,7 +142,6 @@ export default function StudentScoreClassPage() {
     { enabled: !!studentId }
   )
 
-  const { convertScore } = useScoreConverter(student?.fixedClass?.trainingCourse?.scoreConverts)
   const scoreToPassGraduation = student?.fixedClass?.trainingCourse?.scoreToPassGraduation ?? 5.5
   const scoreToPassConditional = student?.fixedClass?.trainingCourse?.scoreToPassConditional ?? 5
   const scoreToPass = student?.fixedClass?.trainingCourse?.scoreToPass ?? 4
@@ -160,22 +159,25 @@ export default function StudentScoreClassPage() {
     ) => {
       if (score == null) return null
 
-      const isFailByConfig =
-        (attendanceScore != null && scoreToTakeExam != null && attendanceScore < scoreToTakeExam) ||
-        (midtermScore != null && scoreToTakeExam != null && midtermScore < scoreToTakeExam) ||
-        (examScore != null && examScoreToPass != null && examScore < examScoreToPass)
-
-      const failGraduation = isGraduation && score < scoreToPassGraduation
-      const failConditional = isConditional && score < scoreToPassConditional
-      const failNormal = !isGraduation && !isConditional && score < scoreToPass
-
-      if (failGraduation || failConditional || failNormal || isFailByConfig) {
-        return { base4: 0, letter: "F", pass: false, classification: undefined }
-      }
-      return convertScore(score)
+      return convertScoreWithCourseConfig(
+        score,
+        student?.fixedClass?.trainingCourse?.scoreConverts ?? [],
+        {
+          attendanceScore,
+          midtermScore,
+          examScore,
+          isGraduation,
+          isConditional,
+          scoreToTakeExam,
+          examScoreToPass,
+          scoreToPass,
+          scoreToPassGraduation,
+          scoreToPassConditional,
+        }
+      )
     },
     [
-      convertScore,
+      student?.fixedClass?.trainingCourse?.scoreConverts,
       scoreToPassGraduation,
       scoreToPassConditional,
       scoreToPass,

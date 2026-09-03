@@ -21,6 +21,7 @@ import {
   type TrainingBlockSubject,
 } from "@workspace/db"
 import { criteriaFieldLabels, criteriaOperatorLabels } from "@workspace/libs/constants"
+import { courseScoreConfigFrom, isFailedByCourseConfig } from "@workspace/libs/utils"
 import Decimal from "decimal.js"
 import pMap from "p-map"
 import { prisma } from ".."
@@ -47,6 +48,11 @@ const checkScorePassed = ({
   scoreToPassConditional,
   scoreToPassGraduation,
   scoreConverts,
+  attendanceScore,
+  midtermScore,
+  examScore,
+  scoreToTakeExam,
+  examScoreToPass,
 }: {
   subjectId: string
   finalScore: number
@@ -55,18 +61,36 @@ const checkScorePassed = ({
   scoreToPassConditional: number
   scoreToPassGraduation: number
   scoreConverts: ScoreConvertItem[]
+  attendanceScore?: number | null
+  midtermScore?: number | null
+  examScore?: number | null
+  scoreToTakeExam?: number | null
+  examScoreToPass?: number | null
 }): boolean => {
   const graduation = curriculumSubjects.find((item) => item.subjectId === subjectId)?.graduation
   const useForFinalScore = curriculumSubjects.find(
     (item) => item.subjectId === subjectId
   )?.useForFinalScore
-  if (graduation && finalScore < scoreToPassGraduation) {
-    return false
-  }
-  if (useForFinalScore && finalScore < scoreToPass) {
-    return false
-  }
-  if (!graduation && !useForFinalScore && finalScore < scoreToPassConditional) {
+
+  if (
+    isFailedByCourseConfig(
+      courseScoreConfigFrom(
+        {
+          scoreToPass,
+          scoreToPassConditional,
+          scoreToPassGraduation,
+          scoreToTakeExam,
+          examScoreToPass,
+        },
+        { attendanceScore, midtermScore, examScore },
+        {
+          isGraduation: !!graduation,
+          isConditional: !graduation && !useForFinalScore,
+        }
+      ),
+      finalScore
+    )
+  ) {
     return false
   }
 
@@ -105,6 +129,8 @@ const ThongTinTichLuy = async (
         scoreToPass: true,
         scoreToPassConditional: true,
         scoreToPassGraduation: true,
+        scoreToTakeExam: true,
+        examScoreToPass: true,
         baseScore: true,
         academicRankingConvert: {
           where: {
@@ -231,6 +257,9 @@ const ThongTinTichLuy = async (
         },
         manualFinalScore: true, // Lấy điểm thủ công nếu có
         finalScore: true, // Lấy điểm cuối
+        attendanceScore: true,
+        midtermScore: true,
+        examScore: true,
         examBanned: true, // Có cấm thi không
         suspended: true, // Có đình chỉ học không
         exempted: true, // Có miễn thi không
@@ -311,6 +340,11 @@ const ThongTinTichLuy = async (
               scoreToPass: trainingCourse.scoreToPass,
               scoreToPassGraduation: trainingCourse.scoreToPassGraduation,
               scoreConverts,
+              attendanceScore: item.attendanceScore,
+              midtermScore: item.midtermScore,
+              examScore: item.examScore,
+              scoreToTakeExam: trainingCourse.scoreToTakeExam,
+              examScoreToPass: trainingCourse.examScoreToPass,
             })
           ) {
             TongTinChiTichLuy += soTinChi // chỉ tính môn đã qua
@@ -522,7 +556,9 @@ const ThongTinDiemHocKy = async (
   baseType: AcademicRankingBaseType,
   scoreToPass: number,
   scoreToPassConditional: number,
-  scoreToPassGraduation: number
+  scoreToPassGraduation: number,
+  scoreToTakeExam?: number | null,
+  examScoreToPass?: number | null
 ) => {
   try {
     const semester = await prisma.semester.findUniqueOrThrow({
@@ -589,6 +625,9 @@ const ThongTinDiemHocKy = async (
         },
         examPostponed: true, // Có hoãn thi không
         examBanned: true, // Có cấm thi không
+        attendanceScore: true,
+        midtermScore: true,
+        examScore: true,
         suspended: true, // Có đình chỉ học không
         exempted: false, // Có miễn thi không
       },
@@ -664,22 +703,26 @@ const ThongTinDiemHocKy = async (
           }
 
           TongTinChiGpa += soTinChi // Chỉ cộng dồn vào tín chỉ tính GPA nếu có điểm
-          if (
-            !checkScorePassed({
-              subjectId: item.subjectVersionId,
-              finalScore: diemHe10,
-              curriculumSubjects,
-              scoreToPass,
-              scoreToPassConditional,
-              scoreToPassGraduation,
-              scoreConverts,
-            })
-          ) {
+          const passed = checkScorePassed({
+            subjectId: item.subjectVersionId,
+            finalScore: diemHe10,
+            curriculumSubjects,
+            scoreToPass,
+            scoreToPassConditional,
+            scoreToPassGraduation,
+            scoreConverts,
+            attendanceScore: item.attendanceScore,
+            midtermScore: item.midtermScore,
+            examScore: item.examScore,
+            scoreToTakeExam,
+            examScoreToPass,
+          })
+          if (!passed) {
             soTinChiKhongDat += soTinChi // Cộng dồn số tín chỉ không đạt
           } else {
             soTinChiDat += soTinChi // Cộng dồn số tín chỉ đạt
           }
-          const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, scoreConverts)
+          const diemHe4 = passed ? layGiaTriDiem4(diemHe10, trainingCourseId, scoreConverts) : 0
           DsDiemHe4.push(new Decimal(diemHe4).mul(soTinChi).toNumber()) // Nhân điểm hệ 4 với số tín chỉ (tất cả môn)
           DSDiemHe10.push(new Decimal(diemHe10).mul(soTinChi).toNumber()) // Nhân điểm hệ 10 với số tín chỉ (tất cả môn)
         }
@@ -825,6 +868,8 @@ export const calculateStudentSemesterResult = async (
                 scoreToPass: true,
                 scoreToPassConditional: true,
                 scoreToPassGraduation: true,
+                scoreToTakeExam: true,
+                examScoreToPass: true,
                 trainingObjectType: {
                   select: {
                     id: true,
@@ -973,7 +1018,9 @@ export const calculateStudentSemesterResult = async (
             baseType,
             student.fixedClass?.trainingCourse?.scoreToPass || 0,
             student.fixedClass?.trainingCourse?.scoreToPassConditional || 0,
-            student.fixedClass?.trainingCourse?.scoreToPassGraduation || 0
+            student.fixedClass?.trainingCourse?.scoreToPassGraduation || 0,
+            student.fixedClass?.trainingCourse?.scoreToTakeExam,
+            student.fixedClass?.trainingCourse?.examScoreToPass
           )
           if (!thongTinDiemHocKy) {
             stats.skippedNoSemesterScore++
@@ -1483,14 +1530,20 @@ export async function calculateStudentYearResult({
       record.manualFinalScore ?? (record.finalScore != null ? Number(record.finalScore) : null)
     if (score10 == null) continue
 
-    // Chuyển đổi sang hệ 4
-    const score4 = convertScore10to4(score10)
+    const failed = isFailedByCourseConfig(
+      courseScoreConfigFrom(student.fixedClass.trainingCourse, record, {
+        isGraduation: config.graduation,
+        isConditional: !config.graduation && !config.useForFinalScore,
+      }),
+      score10
+    )
+    const score4 = failed ? 0 : convertScore10to4(score10)
 
     yearTotalScore10 = yearTotalScore10.plus(new Decimal(score10).mul(credit))
     yearTotalScore4 = yearTotalScore4.plus(new Decimal(score4).mul(credit))
     yearCreditsForGpa += credit
 
-    if (score10 < scoreToPass) {
+    if (failed) {
       yearFailedCredits += credit
     }
 
@@ -1527,9 +1580,16 @@ export async function calculateStudentYearResult({
 
     // Dùng subjectId (môn học gốc) làm key để gộp các lần học lại/thi lại cùng môn
     const subjectKey = record.subjectVersion.subjectId
-    const score4 = convertScore10to4(score10)
+    const failed = isFailedByCourseConfig(
+      courseScoreConfigFrom(student.fixedClass.trainingCourse, record, {
+        isGraduation: config.graduation,
+        isConditional: !config.graduation && !config.useForFinalScore,
+      }),
+      score10
+    )
+    const score4 = failed ? 0 : convertScore10to4(score10)
     const credit = record.subjectVersion.credit
-    const passed = score10 >= scoreToPass
+    const passed = !failed
 
     const existing = uniqueSubjectsMap.get(subjectKey)
     if (existing) {

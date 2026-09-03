@@ -1,6 +1,6 @@
 import "core-js/proposals/array-grouping-v2"
 import type { Prisma, ScoreConvert, StudentSubjectScore } from "@workspace/db"
-import { SubjectClassType } from "@workspace/db"
+import { $Enums, SubjectClassType } from "@workspace/db"
 import dayjs from "dayjs"
 import Decimal from "decimal.js"
 import { doReadNumber, InvalidNumberError, ReadingConfig } from "read-vietnamese-number" // or CDN URL
@@ -207,11 +207,18 @@ export function parseDate(date?: string): dayjs.Dayjs {
 
 type StudentSubjectScoreRelation = StudentSubjectScore & {
   finalScore: Decimal | null
+  attendanceScore?: number | null
+  midtermScore?: number | null
+  examScore?: number | null
   student?: {
     fixedClass?: {
       trainingCourse?: {
         scoreConverts?: ScoreConvert[] | null
         scoreToPass?: number | null
+        scoreToPassGraduation?: number | null
+        scoreToPassConditional?: number | null
+        scoreToTakeExam?: number | null
+        examScoreToPass?: number | null
       } | null
     } | null
   }
@@ -435,19 +442,66 @@ export function formatLecturerName(
   return `${prefix ? `${prefix} ` : ""}${fullname}${codeSuffix}`.trim()
 }
 
-export const calcFinalScore = (
-  coef: Prisma.TrainingCourseGetPayload<{
-    select: {
-      coef_1: true
-      coef_2: true
-      coef_3: true
-      scoreToTakeExam: true
-      scoreToPass: true
-      maxReExamScore: true
-      reduceReExamScore: true
-      examScoreToPass: true
+const UNDERGRAD_LEVEL_CODES = new Set(["ĐH", "DH"])
+
+function normalizeScoreLookup(value?: string | null) {
+  return (value ?? "").trim().toLowerCase().normalize("NFC")
+}
+
+/** Đại học dân sự: type CIVILIAN + bậc Đại học (không gồm thạc sĩ/tiến sĩ dân sự). */
+export function isUndergraduateCivilian(course?: {
+  trainingObjectType?: {
+    type?: string | null
+    name?: string | null
+    trainingLevel?: { code?: string | null; name?: string | null } | null
+  } | null
+} | null): boolean {
+  const objectType = course?.trainingObjectType
+  if (objectType?.type !== $Enums.TrainingObjectTypes.CIVILIAN) return false
+
+  const levelCode = (objectType.trainingLevel?.code ?? "").trim().toUpperCase().normalize("NFC")
+  if (UNDERGRAD_LEVEL_CODES.has(levelCode)) return true
+
+  const levelName = normalizeScoreLookup(objectType.trainingLevel?.name)
+  if (levelName) {
+    if (
+      levelName.includes("thạc") ||
+      levelName.includes("tiến") ||
+      levelName.includes("sau đại học")
+    ) {
+      return false
     }
-  }>,
+    if (levelName.includes("đại học") || levelName.includes("dai hoc")) return true
+  }
+
+  const objectName = normalizeScoreLookup(objectType.name)
+  return (
+    (objectName.includes("đại học dân sự") || objectName.includes("dai hoc dan su")) &&
+    !objectName.includes("sau đại học")
+  )
+}
+
+export type TrainingCourseScoreCoef = Prisma.TrainingCourseGetPayload<{
+  select: {
+    coef_1: true
+    coef_2: true
+    coef_3: true
+    scoreToTakeExam: true
+    scoreToPass: true
+    maxReExamScore: true
+    reduceReExamScore: true
+    examScoreToPass: true
+  }
+}> & {
+  trainingObjectType?: {
+    type?: string | null
+    name?: string | null
+    trainingLevel?: { code?: string | null; name?: string | null } | null
+  } | null
+}
+
+export const calcFinalScore = (
+  coef: TrainingCourseScoreCoef,
   subjectScore: Prisma.StudentSubjectScoreGetPayload<{
     select: {
       certificates: {
@@ -503,6 +557,10 @@ export const calcFinalScore = (
 
   // 3.5 Check exam score
   if (subjectScore.examScore < coef.examScoreToPass) {
+    // Đại học dân sự: điểm thi dưới ngưỡng → điểm HP = 0. Đối tượng khác: điểm HP = điểm thi.
+    if (isUndergraduateCivilian(coef)) {
+      return new Decimal(0)
+    }
     return new Decimal(subjectScore.examScore).toDecimalPlaces(1)
   }
 
@@ -539,18 +597,172 @@ export const calcFinalScore = (
   ).toDecimalPlaces(1)
 }
 
+export type ScoreConvertRange = {
+  base10Min: number
+  base10Max: number
+  base4: number
+  letter: string
+  classification: string
+  pass: boolean
+  improvementRegister?: boolean
+}
+
+export type ConvertedScore = {
+  base4: number | null
+  letter: string
+  classification: string
+  pass: boolean
+  improvementRegister: boolean
+}
+
+export type CourseScoreConfig = {
+  attendanceScore?: number | null
+  midtermScore?: number | null
+  examScore?: number | null
+  isGraduation?: boolean
+  isConditional?: boolean
+  scoreToTakeExam?: number | null
+  examScoreToPass?: number | null
+  scoreToPass?: number | null
+  scoreToPassGraduation?: number | null
+  scoreToPassConditional?: number | null
+}
+
+const FAILED_CONVERTED_SCORE: ConvertedScore = {
+  base4: 0,
+  letter: "F",
+  classification: "",
+  pass: false,
+  improvementRegister: false,
+}
+
+function toScoreNumber(value: unknown): number | null {
+  if (value == null) return null
+  if (typeof value === "number") return Number.isFinite(value) ? value : null
+  if (typeof value === "object" && "toNumber" in value) {
+    const n = (value as { toNumber: () => number }).toNumber()
+    return Number.isFinite(n) ? n : null
+  }
+  const n = Number(value)
+  return Number.isFinite(n) ? n : null
+}
+
+export function courseScoreConfigFrom(
+  course?: {
+    scoreToTakeExam?: number | null
+    examScoreToPass?: number | null
+    scoreToPass?: number | null
+    scoreToPassGraduation?: number | null
+    scoreToPassConditional?: number | null
+  } | null,
+  scores?: {
+    attendanceScore?: number | null
+    midtermScore?: number | null
+    examScore?: number | null
+  } | null,
+  flags?: { isGraduation?: boolean; isConditional?: boolean }
+): CourseScoreConfig {
+  return {
+    scoreToTakeExam: course?.scoreToTakeExam,
+    examScoreToPass: course?.examScoreToPass,
+    scoreToPass: course?.scoreToPass,
+    scoreToPassGraduation: course?.scoreToPassGraduation,
+    scoreToPassConditional: course?.scoreToPassConditional,
+    attendanceScore: scores?.attendanceScore,
+    midtermScore: scores?.midtermScore,
+    examScore: scores?.examScore,
+    isGraduation: flags?.isGraduation,
+    isConditional: flags?.isConditional,
+  }
+}
+
+/** Trượt theo cấu hình khóa: điểm thi/CC/GK dưới ngưỡng, hoặc điểm HP dưới điểm qua môn. */
+export function isFailedByCourseConfig(
+  config: CourseScoreConfig,
+  finalScore?: number | null
+): boolean {
+  const attendanceScore = toScoreNumber(config.attendanceScore)
+  const midtermScore = toScoreNumber(config.midtermScore)
+  const examScore = toScoreNumber(config.examScore)
+  const scoreToTakeExam = toScoreNumber(config.scoreToTakeExam)
+  const examScoreToPass = toScoreNumber(config.examScoreToPass)
+
+  if (attendanceScore != null && scoreToTakeExam != null && attendanceScore < scoreToTakeExam) {
+    return true
+  }
+  if (midtermScore != null && scoreToTakeExam != null && midtermScore < scoreToTakeExam) {
+    return true
+  }
+  if (examScore != null && examScoreToPass != null && examScore < examScoreToPass) {
+    return true
+  }
+
+  const score = toScoreNumber(finalScore)
+  if (score == null) return false
+
+  if (config.isGraduation) {
+    const min = toScoreNumber(config.scoreToPassGraduation)
+    return min != null && score < min
+  }
+  if (config.isConditional) {
+    const min = toScoreNumber(config.scoreToPassConditional)
+    return min != null && score < min
+  }
+  const min = toScoreNumber(config.scoreToPass)
+  return min != null && score < min
+}
+
+export function convertScoreByRange(
+  finalScore: number,
+  scoreRanges: ScoreConvertRange[] = []
+): ConvertedScore {
+  const sortedRanges = [...scoreRanges].sort((a, b) => b.base10Min - a.base10Min)
+  const matched = sortedRanges.find(
+    (range) => finalScore >= range.base10Min && finalScore <= range.base10Max
+  )
+
+  if (!matched) {
+    return {
+      base4: null,
+      letter: "-",
+      classification: "Không xác định",
+      pass: false,
+      improvementRegister: false,
+    }
+  }
+
+  return {
+    base4: matched.base4,
+    letter: matched.letter,
+    classification: matched.classification,
+    pass: matched.pass,
+    improvementRegister: matched.improvementRegister ?? false,
+  }
+}
+
+export function convertScoreWithCourseConfig(
+  finalScore: number,
+  scoreRanges: ScoreConvertRange[] = [],
+  config?: CourseScoreConfig
+): ConvertedScore {
+  if (config && isFailedByCourseConfig(config, finalScore)) {
+    return { ...FAILED_CONVERTED_SCORE }
+  }
+  return convertScoreByRange(finalScore, scoreRanges)
+}
+
 function getScoreClassification(
   finalScore: Decimal | null,
   examScore: Decimal | number | null,
   scoreConverts: ScoreConvert[],
-  scoreToPass?: Decimal | number | null
+  config?: CourseScoreConfig
 ) {
   // Nếu không có điểm thi ⇒ coi là Vắng
-  if (
-    examScore === null ||
-    examScore === undefined ||
-    (scoreToPass !== null && scoreToPass !== undefined && examScore < scoreToPass)
-  ) {
+  if (examScore === null || examScore === undefined) {
+    return { classification: "Không đạt", base10Max: null }
+  }
+
+  if (config && isFailedByCourseConfig(config, toScoreNumber(finalScore))) {
     return { classification: "Không đạt", base10Max: null }
   }
 
@@ -580,14 +792,19 @@ export function getScoreStatistics(
   dataTable.forEach((row) => {
     const finalScore = row.finalScore
     const examScore = row?.examScore ?? null
-    const scoreConverts = row?.student?.fixedClass?.trainingCourse?.scoreConverts ?? []
-    const scoreToPass = row?.student?.fixedClass?.trainingCourse?.scoreToPass ?? null
+    const trainingCourse = row?.student?.fixedClass?.trainingCourse
+    const scoreConverts = trainingCourse?.scoreConverts ?? []
+    const config = courseScoreConfigFrom(trainingCourse, {
+      attendanceScore: row?.attendanceScore,
+      midtermScore: row?.midtermScore,
+      examScore,
+    })
 
     const { classification, base10Max } = getScoreClassification(
       finalScore,
       examScore,
       scoreConverts,
-      scoreToPass
+      config
     )
 
     const entry = stats.get(classification)

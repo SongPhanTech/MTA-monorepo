@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { $Enums, type ScoreConvert } from "@workspace/db"
+import { convertScoreWithCourseConfig, courseScoreConfigFrom } from "@workspace/libs/utils"
 import { prisma } from ".."
 import {
   StudentScoreNotFoundResponse,
@@ -10,29 +11,10 @@ import {
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
 function scoreConverter(scoreRanges: ScoreConvert[] = []) {
-  const sortedRanges = [...scoreRanges].sort((a, b) => b.base10Min - a.base10Min)
-  const convertScore = (finalScore: number) => {
-    const matched = sortedRanges.find(
-      (range) => finalScore >= range.base10Min && finalScore <= range.base10Max
-    )
-    if (!matched) {
-      return {
-        base4: null,
-        letter: null,
-        classification: null,
-        pass: false,
-        improvementRegister: false,
-      }
-    }
-
-    return {
-      base4: matched.base4,
-      letter: matched.letter,
-      classification: matched.classification,
-      pass: matched.pass,
-      improvementRegister: matched.improvementRegister,
-    }
-  }
+  const convertScore = (
+    finalScore: number,
+    config?: Parameters<typeof convertScoreWithCourseConfig>[2]
+  ) => convertScoreWithCourseConfig(finalScore, scoreRanges, config)
 
   return { convertScore }
 }
@@ -143,7 +125,10 @@ app.openapi(getStudentScore, async (c) => {
         if (!subjectStudent) return null
         const score10 =
           subjectStudent.manualFinalScore ?? subjectStudent.finalScore?.toNumber() ?? 0
-        const converted = convertScore(score10)
+        const converted = convertScore(
+          score10,
+          courseScoreConfigFrom(student.fixedClass?.trainingCourse, subjectStudent)
+        )
         const totalBonus =
           subjectStudent.awards?.reduce(
             (acc, curr) => acc + (curr.archivedAward?.bonusScore ?? 0),

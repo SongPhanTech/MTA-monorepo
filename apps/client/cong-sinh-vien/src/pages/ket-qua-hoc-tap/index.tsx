@@ -21,6 +21,7 @@ import {
 } from "@workspace/db/hooks"
 import { exportAndDownloadFromTemplate } from "@workspace/libs/download-excel"
 import type { TableRow } from "@workspace/libs/template-excel"
+import { courseScoreConfigFrom } from "@workspace/libs/utils"
 import { Button, Col, Flex, Row, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { Check, X } from "lucide-react"
@@ -136,13 +137,15 @@ export default function StudentScoreClassPage() {
                 convertScore(
                   subjectClassStudent?.manualFinalScore ||
                     subjectClassStudent?.finalScore?.toNumber() ||
-                    0
+                    0,
+                  courseScoreConfigFrom(student?.fixedClass?.trainingCourse, subjectClassStudent)
                 ).base4 ?? 0,
               diemchu:
                 convertScore(
                   subjectClassStudent?.manualFinalScore ??
                     subjectClassStudent?.finalScore?.toNumber() ??
-                    0
+                    0,
+                  courseScoreConfigFrom(student?.fixedClass?.trainingCourse, subjectClassStudent)
                 ).letter ?? "",
 
               ghichu: subjectClassStudent.description ?? "",
@@ -734,7 +737,10 @@ export default function StudentScoreClassPage() {
                     subjectClassStudent?.manualFinalScore ||
                     subjectClassStudent?.finalScore?.toNumber()
                   if (score === undefined || score === null) return null
-                  return score !== undefined ? convertScore(score).base4 : ""
+                  return convertScore(
+                    score,
+                    courseScoreConfigFrom(student?.fixedClass?.trainingCourse, subjectClassStudent)
+                  ).base4
                 },
               },
               {
@@ -750,7 +756,10 @@ export default function StudentScoreClassPage() {
 
                   if (score === null || score === undefined) return null
 
-                  return convertScore(score).letter
+                  return convertScore(
+                    score,
+                    courseScoreConfigFrom(student?.fixedClass?.trainingCourse, subjectClassStudent)
+                  ).letter
                 },
               },
               {
@@ -764,7 +773,10 @@ export default function StudentScoreClassPage() {
                     subjectClassStudent?.finalScore?.toNumber()
 
                   if (score === undefined || score === null) return null
-                  const result = convertScore(score)
+                  const result = convertScore(
+                    score,
+                    courseScoreConfigFrom(student?.fixedClass?.trainingCourse, subjectClassStudent)
+                  )
 
                   return (
                     <div className="flex items-center justify-center">

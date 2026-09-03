@@ -928,7 +928,7 @@ const PutTrainingCourseModal = () => {
                 Điểm thi tối thiểu
                 <Tooltip
                   placement="topLeft"
-                  title="Điểm thi tối thiểu để được qua môn. Nếu điểm thi thấp hơn điểm, điểm học phần sẽ được đặt bằng điểm thi."
+                  title="Điểm thi tối thiểu để được qua môn. Nếu điểm thi thấp hơn: đối tượng đại học dân sự thì điểm học phần = 0; các đối tượng khác thì điểm học phần = điểm thi."
                 >
                   <BadgeHelpIcon size={16} style={{ margin: "0 0 -1px" }} />
                 </Tooltip>

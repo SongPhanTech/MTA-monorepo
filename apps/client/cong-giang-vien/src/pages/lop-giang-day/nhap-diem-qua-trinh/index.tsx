@@ -4,7 +4,7 @@ import { XuatDanhSachThiButton } from "@components/commons/print/xuat-danh-sach-
 import { examBanReason } from "@constants/constants"
 import { scoreConvert } from "@hooks/scoreConverter"
 import { ROUTER_PATH } from "@workspace/router"
-import { calcFinalScore } from "@workspace/libs/utils"
+import { calcFinalScore, courseScoreConfigFrom } from "@workspace/libs/utils"
 import { formatDateVn, nowVn } from "@workspace/libs/timezone"
 import { useSession } from "@workspace/auth/react"
 import {
@@ -320,7 +320,12 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
             userProfile: { select: { fullname: true, dateOfBirth: true } },
             fixedClass: {
               include: {
-                trainingCourse: { include: { scoreConverts: true } },
+                trainingCourse: {
+                  include: {
+                    scoreConverts: true,
+                    trainingObjectType: { include: { trainingLevel: true } },
+                  },
+                },
               },
             },
           },
@@ -350,7 +355,17 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
         const trainingCourse = r.student?.fixedClass?.trainingCourse
         const finalScore = r.finalScore != null ? Number(r.finalScore) : null
         const convert =
-          finalScore != null ? scoreConvert(finalScore, trainingCourse?.scoreConverts ?? []) : null
+          finalScore != null
+            ? scoreConvert(
+                finalScore,
+                trainingCourse?.scoreConverts ?? [],
+                courseScoreConfigFrom(trainingCourse, {
+                  attendanceScore: r.attendanceScore,
+                  midtermScore: r.midtermScore,
+                  examScore: r.examScore,
+                })
+              )
+            : null
         return {
           finalScore,
           letter: convert?.letter ?? "",
@@ -415,7 +430,17 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
         ? Number(finalScoreTinhToan)
         : null
     const convert =
-      finalScore != null ? scoreConvert(finalScore, trainingCourse?.scoreConverts ?? []) : null
+      finalScore != null
+        ? scoreConvert(
+            finalScore,
+            trainingCourse?.scoreConverts ?? [],
+            courseScoreConfigFrom(trainingCourse, {
+              attendanceScore: next.attendanceScore,
+              midtermScore: next.midtermScore,
+              examScore: next.examScore,
+            })
+          )
+        : null
 
     return {
       ...next,

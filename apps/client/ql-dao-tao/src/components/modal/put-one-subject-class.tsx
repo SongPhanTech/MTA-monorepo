@@ -428,6 +428,7 @@ const PutOneSubjectClassModal = () => {
                 trainingCourse: {
                   include: {
                     scoreConverts: true,
+                    trainingObjectType: { include: { trainingLevel: true } },
                   },
                 },
               },

@@ -49,6 +49,9 @@ const PutAddOlympicScoreModal = () => {
         },
       },
     },
+    include: {
+      trainingObjectType: { include: { trainingLevel: true } },
+    },
   })
 
   const { showSpinner, hideSpinner } = useSpinner()

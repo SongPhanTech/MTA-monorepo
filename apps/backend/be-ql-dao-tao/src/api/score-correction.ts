@@ -81,7 +81,13 @@ app.openapi(approveScoreCorrection, async (c) => {
                     include: {
                       fixedClass: {
                         include: {
-                          trainingCourse: true,
+                          trainingCourse: {
+                            include: {
+                              trainingObjectType: {
+                                include: { trainingLevel: true },
+                              },
+                            },
+                          },
                         },
                       },
                     },

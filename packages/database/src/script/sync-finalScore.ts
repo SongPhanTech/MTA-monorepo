@@ -69,6 +69,13 @@ const subjectScores = await prisma.studentSubjectScore.findMany({
                 maxReExamScore: true,
                 reduceReExamScore: true,
                 examScoreToPass: true,
+                trainingObjectType: {
+                  select: {
+                    type: true,
+                    name: true,
+                    trainingLevel: { select: { code: true, name: true } },
+                  },
+                },
               },
             },
           },

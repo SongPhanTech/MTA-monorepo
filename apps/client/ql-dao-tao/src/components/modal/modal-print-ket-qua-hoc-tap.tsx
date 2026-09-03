@@ -3,6 +3,7 @@ import { useScoreConverter } from "@hooks/scoreConverter"
 import { $Enums, SubjectRequirementType } from "@workspace/db/client"
 import { useFindManySemester, useFindUniqueCurriculumVersion } from "@workspace/db/hooks"
 import { useAcademicRankingConverter } from "@workspace/libs/hook/academicRankingConvert"
+import { courseScoreConfigFrom } from "@workspace/libs/utils"
 import { Button, Input, Modal } from "antd"
 import dayjs from "dayjs"
 import { useRef, useState } from "react"
@@ -146,6 +147,17 @@ const ModalPrintToKQHT = () => {
       ?.baseScore ?? graduationRankingData?.[0]?.baseScore
 
   const { convertScore } = useScoreConverter(trainingCourseFromFixedClass?.scoreConverts)
+
+  const quyDoiMon = (
+    score10: number,
+    score?: {
+      attendanceScore?: number | null
+      midtermScore?: number | null
+      examScore?: number | null
+    },
+    flags?: { isGraduation?: boolean; isConditional?: boolean }
+  ) =>
+    convertScore(score10, courseScoreConfigFrom(trainingCourseFromFixedClass, score, flags))
 
   const { convertAcademicRanking } = useAcademicRankingConverter(
     graduationRankingData,
@@ -398,8 +410,12 @@ const ModalPrintToKQHT = () => {
                   const isOptionalNonGpa = isOptional && notForFinalScore
 
                   const score10 = toScoreNumber(score?.manualFinalScore ?? score?.finalScore)
-                  const score4 = convertScore(score10).base4
-                  const letterGrade = isOptionalNonGpa ? "Đạt" : convertScore(score10).letter
+                  const converted = quyDoiMon(score10, score, {
+                    isGraduation: subjectItem.graduation,
+                    isConditional: subjectItem.useForFinalScore === false,
+                  })
+                  const score4 = converted.base4
+                  const letterGrade = isOptionalNonGpa ? "Đạt" : converted.letter
 
                   return (
                     <tr key={subject.id}>
@@ -445,8 +461,12 @@ const ModalPrintToKQHT = () => {
                     )
                     const isOptionalNonGpa = isOptional && notForFinalScore
                     const score10 = toScoreNumber(score?.manualFinalScore ?? score?.finalScore)
-                    const score4 = convertScore(score10).base4
-                    const letterGrade = isOptionalNonGpa ? "Đạt" : convertScore(score10).letter
+                    const converted = quyDoiMon(score10, score, {
+                      isGraduation: true,
+                      isConditional: subjectItem.useForFinalScore === false,
+                    })
+                    const score4 = converted.base4
+                    const letterGrade = isOptionalNonGpa ? "Đạt" : converted.letter
 
                     return (
                       <tr key={subject.id}>

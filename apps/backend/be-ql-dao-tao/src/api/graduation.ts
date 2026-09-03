@@ -17,7 +17,7 @@ import {
 import { getFilesEmployeeUserIdImage } from "@workspace/libs/api/system-share"
 import { getLuanVanTemplateBuffer, getTemplateBuffer } from "@workspace/libs/server"
 import { APP_TIMEZONE, formatDateVn, nowVn, setupAppTimezone, toVnDayjs } from "@workspace/libs/timezone"
-import { chunk, genOriginalDiplomaNumber } from "@workspace/libs/utils"
+import { chunk, convertScoreWithCourseConfig, courseScoreConfigFrom, genOriginalDiplomaNumber } from "@workspace/libs/utils"
 import Decimal from "decimal.js"
 import { Automizer } from "pptx-automizer"
 import dayjs from "dayjs"
@@ -2629,12 +2629,16 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         const credits = safeNumber(record.subjectVersion?.credit)
 
         const scoreConverts = course?.scoreConverts || []
-        const conversion = scoreConverts.find((c) => score >= c.base10Min && score <= c.base10Max)
+        const conversion = convertScoreWithCourseConfig(
+          score,
+          scoreConverts,
+          courseScoreConfigFrom(course, record)
+        )
 
         if (credits) {
           totalCredits += credits
           totalPoints10 += score * credits
-          if (conversion) {
+          if (conversion.base4 != null) {
             totalPoints4 += safeNumber(conversion.base4) * credits
           }
         }

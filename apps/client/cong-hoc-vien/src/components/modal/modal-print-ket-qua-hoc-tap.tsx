@@ -3,6 +3,7 @@ import { useScoreConverter } from "@hooks/scoreConverter"
 import { SubjectRequirementType } from "@workspace/db/client"
 import { useFindUniqueCurriculumVersion } from "@workspace/db/hooks"
 import { useAcademicRankingConverter } from "@workspace/libs/hook/academicRankingConvert"
+import { courseScoreConfigFrom } from "@workspace/libs/utils"
 import { Button, Input, Modal } from "antd"
 import dayjs from "dayjs"
 import { useEffect, useRef, useState } from "react"
@@ -16,6 +17,9 @@ type SubjectScoreRow = {
   createdAt?: Date | string
   manualFinalScore?: unknown
   finalScore?: unknown
+  attendanceScore?: number | null
+  midtermScore?: number | null
+  examScore?: number | null
 }
 
 /** Điểm lớp (mới nhất) nếu có; không thì phiên chứng chỉ (mới nhất). */
@@ -92,6 +96,16 @@ const ModalPrintToKQHT = () => {
   const trainingCourseFromFixedClass = subjectScoreData?.fixedClasses?.[0]?.trainingCourse
 
   const { convertScore } = useScoreConverter(trainingCourseFromFixedClass?.scoreConverts)
+
+  const quyDoiMon = (
+    score10: unknown,
+    score?: SubjectScoreRow,
+    flags?: { isGraduation?: boolean; isConditional?: boolean }
+  ) =>
+    convertScore(
+      Number(score10) || 0,
+      courseScoreConfigFrom(trainingCourseFromFixedClass, score, flags)
+    )
 
   const { convertAcademicRanking } = useAcademicRankingConverter(
     trainingCourseFromFixedClass?.academicRankingConvert,
@@ -207,8 +221,12 @@ const ModalPrintToKQHT = () => {
       const credits = subject.credit || 0
 
       if (score) {
-        const score10 = score.manualFinalScore || score.finalScore || 0
-        const score4 = convertScore(score10).base4 || 0
+        const score10 = Number(score.manualFinalScore ?? score.finalScore ?? 0) || 0
+        const score4 =
+          quyDoiMon(score10, score, {
+            isGraduation: subjectItem.graduation,
+            isConditional: !subjectItem.useForFinalScore,
+          }).base4 || 0
 
         const finalScore = baseScore === "Base10" ? score10 : score4
 
@@ -341,8 +359,12 @@ const ModalPrintToKQHT = () => {
                   const notForFinalScore = !subjectItem.useForFinalScore
 
                   const score10 = score?.manualFinalScore || score?.finalScore || 0
-                  const score4 = convertScore(score10).base4
-                  const letterGrade = convertScore(score10).letter
+                  const converted = quyDoiMon(score10, score, {
+                    isGraduation: subjectItem.graduation,
+                    isConditional: !subjectItem.useForFinalScore,
+                  })
+                  const score4 = converted.base4
+                  const letterGrade = converted.letter
 
                   return (
                     <tr key={subject.id}>
@@ -379,8 +401,12 @@ const ModalPrintToKQHT = () => {
                   const notForFinalScore = !subjectItem.useForFinalScore
 
                   const score10 = score?.manualFinalScore || score?.finalScore || 0
-                  const score4 = convertScore(score10).base4
-                  const letterGrade = convertScore(score10).letter
+                  const converted = quyDoiMon(score10, score, {
+                    isGraduation: subjectItem.graduation,
+                    isConditional: !subjectItem.useForFinalScore,
+                  })
+                  const score4 = converted.base4
+                  const letterGrade = converted.letter
 
                   return (
                     <tr key={subject.id}>

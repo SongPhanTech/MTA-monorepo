@@ -2,6 +2,7 @@ import { GridBlock } from "@components/commons/grid-block"
 import { useScoreConverter } from "@hooks/scoreConverter"
 import { $Enums } from "@workspace/db/client"
 import { useFindManyStudentResearchTopic, useFindUniqueStudent } from "@workspace/db/hooks"
+import { courseScoreConfigFrom } from "@workspace/libs/utils"
 import { Button, Modal, Space } from "antd"
 import dayjs from "dayjs"
 import { Printer } from "lucide-react"
@@ -228,7 +229,16 @@ export const ModalPhuLucThacSi = () => {
       const subject = item.subject
       const score = pickOfficialScore(subject.studentSubjectScore)
       const score10 = toScoreNumber(score?.manualFinalScore) ?? toScoreNumber(score?.finalScore)
-      const converted = score10 != null ? convertScore(score10) : null
+      const converted =
+        score10 != null
+          ? convertScore(
+              score10,
+              courseScoreConfigFrom(data?.fixedClass?.trainingCourse, score, {
+                isGraduation: item.graduation === true,
+                isConditional: item.useForFinalScore === false,
+              })
+            )
+          : null
       return {
         id: subject.id,
         name: subject.name,
@@ -246,7 +256,13 @@ export const ModalPhuLucThacSi = () => {
     return researchTopicData.map((topic, index) => {
       const score = topic.studentSubjectScore
       const score10 = toScoreNumber(score?.manualFinalScore) ?? toScoreNumber(score?.finalScore)
-      const converted = score10 != null ? convertScore(score10) : null
+      const converted =
+        score10 != null
+          ? convertScore(
+              score10,
+              courseScoreConfigFrom(data?.fixedClass?.trainingCourse, score)
+            )
+          : null
       return {
         id: topic.id,
         name: topic.name || score?.subjectVersion?.name || `Chuyên đề nghiên cứu ${index + 1}`,
@@ -262,7 +278,17 @@ export const ModalPhuLucThacSi = () => {
     toScoreNumber(thesisProject?.defenseRecord?.finalScore) ??
     toScoreNumber(thesisReg?.studentSubjectScore?.manualFinalScore) ??
     toScoreNumber(thesisReg?.studentSubjectScore?.finalScore)
-  const thesisConverted = thesisScore10 != null ? convertScore(thesisScore10) : null
+  const thesisConverted =
+    thesisScore10 != null
+      ? convertScore(
+          thesisScore10,
+          courseScoreConfigFrom(
+            data?.fixedClass?.trainingCourse,
+            thesisReg?.studentSubjectScore,
+            { isGraduation: true }
+          )
+        )
+      : null
   const thesisCredits =
     thesisReg?.studentSubjectScore?.subjectVersion?.credit ??
     thesisProject?.subjectClass?.subject?.credit ??

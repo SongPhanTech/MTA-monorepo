@@ -2,7 +2,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums, Prisma, type ScoreConvert } from "@workspace/db"
 import { examTypeOptions } from "@workspace/libs/constants"
 import { formatDateTimeVn, formatDateVn, nowVn } from "@workspace/libs/timezone"
-import { getMinioUrl, getScoreStatistics } from "@workspace/libs/utils"
+import { getMinioUrl, getScoreStatistics, convertScoreWithCourseConfig, courseScoreConfigFrom } from "@workspace/libs/utils"
 import { read, utils } from "xlsx"
 import XlsxTemplate from "xlsx-template"
 import ExcelJS from "exceljs"
@@ -1198,31 +1198,22 @@ app.openapi(exportSubjectClassScore, async (c) => {
   const nodeBuffer = Buffer.from(buffer)
   const template = new XlsxTemplate(nodeBuffer)
 
-  const scoreConvert = (finalScore: number, scoreRanges: ScoreConvert[] = []) => {
-    const sortedRanges = [...scoreRanges].sort((a, b) => b.base10Min - a.base10Min)
-
-    const matched = sortedRanges.find(
-      (range) => finalScore >= range.base10Min && finalScore <= range.base10Max
-    )
-
-    if (!matched) {
-      return {
-        base4: null,
-        letter: "-",
-        classification: "Không xác định",
-        pass: false,
-        improvementRegister: false,
-      }
-    }
-
-    return {
-      base4: matched.base4,
-      letter: matched.letter,
-      classification: matched.classification,
-      pass: matched.pass,
-      improvementRegister: matched.improvementRegister,
-    }
-  }
+  const scoreConvert = (
+    finalScore: number,
+    scoreRanges: ScoreConvert[] = [],
+    scores?: {
+      attendanceScore?: number | null
+      midtermScore?: number | null
+      examScore?: number | null
+    },
+    course?: {
+      scoreToTakeExam?: number | null
+      examScoreToPass?: number | null
+      scoreToPass?: number | null
+      scoreToPassGraduation?: number | null
+      scoreToPassConditional?: number | null
+    } | null
+  ) => convertScoreWithCourseConfig(finalScore, scoreRanges, courseScoreConfigFrom(course, scores))
 
   const statistics = getScoreStatistics(subjectClass.subjectClassStudent || [])
   const printedAt = nowVn()
@@ -1280,10 +1271,13 @@ app.openapi(exportSubjectClassScore, async (c) => {
       if (scs.examBanned) statusTexts.push("Cấm thi")
       if (scs.suspended) statusTexts.push("Đình chỉ")
 
+      const trainingCourse = scs.student.fixedClass?.trainingCourse
       const scoreConverted = scs?.finalScore
         ? scoreConvert(
             scs?.finalScore?.toNumber(),
-            scs.student.fixedClass?.trainingCourse?.scoreConverts || []
+            trainingCourse?.scoreConverts || [],
+            scs,
+            trainingCourse
           )
         : null
       return {

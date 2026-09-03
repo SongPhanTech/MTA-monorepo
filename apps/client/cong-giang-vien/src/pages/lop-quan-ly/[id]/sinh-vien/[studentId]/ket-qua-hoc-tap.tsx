@@ -5,6 +5,7 @@ import TheHeaderKetQuaHocTap, {
 import { chiTietLopQuanLyPath } from "@/utils/cong-giang-vien-path-helper"
 import { useScoreConverter } from "@hooks/scoreConverter"
 import { useFindManyStudentSubjectScore, useFindUniqueStudent } from "@workspace/db/hooks"
+import { courseScoreConfigFrom } from "@workspace/libs/utils"
 import { Alert, Button, Skeleton } from "antd"
 import dayjs from "dayjs"
 import { ArrowLeft } from "lucide-react"
@@ -71,6 +72,11 @@ export default function KetQuaHocTapSinhVienPage() {
                 code: true,
                 admissionStartDate: true,
                 scoreConverts: true,
+                scoreToTakeExam: true,
+                examScoreToPass: true,
+                scoreToPass: true,
+                scoreToPassGraduation: true,
+                scoreToPassConditional: true,
               },
             },
           },
@@ -160,7 +166,10 @@ export default function KetQuaHocTapSinhVienPage() {
           item.manualFinalScore != null
             ? Number(item.manualFinalScore)
             : Number(item.finalScore ?? 0)
-        const quyDoi = convertScore(diemHp)
+        const quyDoi = convertScore(
+          diemHp,
+          courseScoreConfigFrom(student?.fixedClass?.trainingCourse, item)
+        )
         return {
           id: item.id,
           maHocPhan: item.subjectClass?.subject?.code ?? "",
@@ -174,7 +183,7 @@ export default function KetQuaHocTapSinhVienPage() {
           ketQuaDat: quyDoi?.pass ?? null,
         }
       }),
-    [diemMonHoc, convertScore]
+    [diemMonHoc, convertScore, student?.fixedClass?.trainingCourse]
   )
 
   const tongTinChi = useMemo(() => rows.reduce((acc, item) => acc + item.tinChi, 0), [rows])

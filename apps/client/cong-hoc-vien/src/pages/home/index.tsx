@@ -3,6 +3,7 @@ import { useScoreConverter } from "@hooks/scoreConverter"
 import DefaultLayout from "@layouts/default-layout"
 import { useSession } from "@workspace/auth/react"
 import { useFindUniqueCurriculumVersion, useFindUniqueUserProfile } from "@workspace/db/hooks"
+import { courseScoreConfigFrom } from "@workspace/libs/utils"
 import { LichCongTac } from "@workspace/ui"
 import { DanhSachThongBao } from "@components/commons/thong-bao"
 import { Col, Divider, Row, Typography } from "antd"
@@ -135,7 +136,17 @@ function Page() {
 
           scores.forEach((score: any) => {
             const score10 = score.manualFinalScore ?? score.finalScore?.toNumber() ?? 0
-            const scoreResult = convertScore(score10)
+            const scoreResult = convertScore(
+              score10,
+              courseScoreConfigFrom(
+                curriculumVersion?.fixedClasses?.[0]?.trainingCourse,
+                score,
+                {
+                  isGraduation: subjectItem.graduation,
+                  isConditional: !subjectItem.useForFinalScore,
+                }
+              )
+            )
 
             if (!bestScoreResult || score10 > bestScore10) {
               bestScore10 = score10

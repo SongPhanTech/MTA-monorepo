@@ -50,6 +50,9 @@ const PutAddCertificateScoreModal = () => {
         },
       },
     },
+    include: {
+      trainingObjectType: { include: { trainingLevel: true } },
+    },
   })
 
   const { data: dataTable = [], refetch } = useFindManyArchivedCertificate({
