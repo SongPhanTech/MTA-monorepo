@@ -1331,15 +1331,15 @@ app.openapi(exportSubjectClassScore, async (c) => {
       const hasContentAfterStudents = lastUsedRowBeforePagination > lastStudentRow
 
       if (hasStudents && hasContentAfterStudents) {
-        worksheet.pageSetup.printTitlesRow = undefined
+        worksheet.pageSetup.printTitlesRow = ""
         repeatTableHeadersOnEachPage(worksheet, headerRange)
       } else if (hasStudents) {
         worksheet.pageSetup = {
           ...worksheet.pageSetup,
           printTitlesRow: `${headerRange.start}:${headerRange.end}`,
         }
-      } else { 
-        worksheet.pageSetup.printTitlesRow = undefined
+      } else {
+        worksheet.pageSetup.printTitlesRow = ""
       }
 
       const lastUsedRow = findLastUsedRow(worksheet)
@@ -1447,14 +1447,13 @@ function findTableHeaderRange(
       if (parsed && parsed.top === rowNumber && parsed.bottom > endRow) endRow = parsed.bottom
     }
 
-    const nextRow = worksheet.getRow(endRow + 1)
-    const firstNext = excelCellText(nextRow.getCell(1))
-    if (!/^\d+$/.test(firstNext)) {
-      let nextHasText = false
-      nextRow.eachCell({ includeEmpty: false }, () => {
-        nextHasText = true
-      })
-      if (nextHasText) endRow += 1
+    // Sub-header row (C.cần / T.xuyên...) — only if not already covered by vertical merges
+    if (endRow === rowNumber) {
+      const nextRow = worksheet.getRow(endRow + 1)
+      const firstNext = excelCellText(nextRow.getCell(1))
+      if (!/^\d+$/.test(firstNext) && rowHasUniqueSubheaderText(nextRow, texts)) {
+        endRow += 1
+      }
     }
 
     return { start: rowNumber, end: endRow }
@@ -1489,6 +1488,47 @@ function rowHasTableContent(row: ExcelJS.Row): boolean {
     populatedCells += 1
   })
   return populatedCells >= 3
+}
+
+function isMergedSlaveCell(cell: ExcelJS.Cell): boolean {
+  if (!cell.isMerged) return false
+  const master = cell.master
+  if (!master) return false
+  return master.address !== cell.address
+}
+
+/** True when next row has sub-labels (C.cần, T.xuyên...) rather than a duplicate of the main header. */
+function rowHasUniqueSubheaderText(row: ExcelJS.Row, headerTexts: string[]): boolean {
+  const nextTexts: string[] = []
+  row.eachCell({ includeEmpty: false }, (cell) => {
+    if (isMergedSlaveCell(cell)) return
+    const text = normalizeHeaderText(excelCellText(cell))
+    if (text) nextTexts.push(text)
+  })
+  if (!nextTexts.length) return false
+  const headerSet = new Set(headerTexts)
+  return nextTexts.some((text) => !headerSet.has(text))
+}
+
+function columnLetterToNumber(letter: string): number {
+  let n = 0
+  for (const ch of letter) {
+    n = n * 26 + (ch.toUpperCase().charCodeAt(0) - 64)
+  }
+  return n
+}
+
+function unmergeRows(worksheet: ExcelJS.Worksheet, start: number, end: number) {
+  for (const merge of [...getWorksheetMerges(worksheet)]) {
+    const parsed = parseMerge(merge)
+    if (!parsed) continue
+    if (parsed.bottom < start || parsed.top > end) continue
+    try {
+      worksheet.unMergeCells(`${parsed.tlCol}${parsed.top}:${parsed.brCol}${parsed.bottom}`)
+    } catch {
+      // already unmerged
+    }
+  }
 }
 
 function findLastDataRow(worksheet: ExcelJS.Worksheet, firstDataRow: number): number {
@@ -1561,7 +1601,12 @@ type HeaderSnapshot = {
   end: number
   rows: {
     height?: number
-    cells: { col: number; value: ExcelJS.CellValue; style?: Partial<ExcelJS.Style> }[]
+    cells: {
+      col: number
+      value: ExcelJS.CellValue
+      style?: Partial<ExcelJS.Style>
+      slave?: boolean
+    }[]
   }[]
   merges: { tlCol: string; brCol: string; topOffset: number; bottomOffset: number }[]
 }
@@ -1572,15 +1617,23 @@ function snapshotHeaderRows(
   end: number
 ): HeaderSnapshot {
   const rows: HeaderSnapshot["rows"] = []
+  const previousValues = new Map<number, string>()
   for (let rowNumber = start; rowNumber <= end; rowNumber++) {
     const row = worksheet.getRow(rowNumber)
     const cells: HeaderSnapshot["rows"][number]["cells"] = []
     row.eachCell({ includeEmpty: true }, (cell, col) => {
+      const text = normalizeHeaderText(excelCellText(cell))
+      const repeatedFromAbove = Boolean(text && previousValues.get(col) === text)
+      const slave = isMergedSlaveCell(cell) || repeatedFromAbove
       cells.push({
         col,
-        value: cell.value,
+        // ExcelJS returns the master value on slave cells; copying it makes
+        // OnlyOffice draw the same header labels on both rowspan rows.
+        value: slave ? null : cell.value,
         style: cell.style ? JSON.parse(JSON.stringify(cell.style)) : undefined,
+        slave,
       })
+      if (text && !slave) previousValues.set(col, text)
     })
     rows.push({ height: row.height, cells })
   }
@@ -1605,23 +1658,43 @@ function insertHeaderCopy(
   snapshot: HeaderSnapshot,
   insertAt: number
 ) {
+  const headerCount = snapshot.rows.length
   worksheet.spliceRows(insertAt, 0, ...snapshot.rows.map(() => []))
+  unmergeRows(worksheet, insertAt, insertAt + headerCount - 1)
+
   snapshot.rows.forEach((src, index) => {
     const dest = worksheet.getRow(insertAt + index)
     if (src.height) dest.height = src.height
-    src.cells.forEach(({ col, value, style }) => {
+    src.cells.forEach(({ col, value, style, slave }) => {
       const cell = dest.getCell(col)
-      cell.value = value
+      if (!slave) cell.value = value
       if (style) cell.style = JSON.parse(JSON.stringify(style))
     })
   })
   for (const merge of snapshot.merges) {
+    const range = `${merge.tlCol}${insertAt + merge.topOffset}:${merge.brCol}${insertAt + merge.bottomOffset}`
     try {
-      worksheet.mergeCells(
-        `${merge.tlCol}${insertAt + merge.topOffset}:${merge.brCol}${insertAt + merge.bottomOffset}`
-      )
+      worksheet.mergeCells(range)
     } catch {
-      // ignore overlap after splice
+      try {
+        worksheet.unMergeCells(range)
+        worksheet.mergeCells(range)
+      } catch {
+        // ignore overlap after splice
+      }
+    }
+  }
+
+  for (const merge of snapshot.merges) {
+    const top = insertAt + merge.topOffset
+    const bottom = insertAt + merge.bottomOffset
+    const left = columnLetterToNumber(merge.tlCol)
+    const right = columnLetterToNumber(merge.brCol)
+    for (let r = top; r <= bottom; r++) {
+      for (let c = left; c <= right; c++) {
+        if (r === top && c === left) continue
+        worksheet.getRow(r).getCell(c).value = null
+      }
     }
   }
 }
