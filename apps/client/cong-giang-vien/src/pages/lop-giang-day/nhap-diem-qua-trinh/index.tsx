@@ -353,7 +353,22 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
       // để không bị rỗng cột "Điểm chữ".
       ...(function () {
         const trainingCourse = r.student?.fixedClass?.trainingCourse
-        const finalScore = r.finalScore != null ? Number(r.finalScore) : null
+        const storedHp = r.finalScore != null ? Number(r.finalScore) : null
+        const computed =
+          r.attendanceScore == null || r.midtermScore == null || r.examScore == null
+            ? null
+            : calcFinalScore(
+                trainingCourse ?? HE_SO_MAC_DINH,
+                {
+                  attendanceScore: r.attendanceScore,
+                  midtermScore: r.midtermScore,
+                  examScore: r.examScore,
+                  certificates: [],
+                  awards: [],
+                },
+                r.subjectClass?.type ?? $Enums.SubjectClassType.NORMAL
+              )
+        const finalScore = r.examBanned ? 0 : computed != null ? Number(computed) : storedHp
         const convert =
           finalScore != null
             ? scoreConvert(
@@ -366,10 +381,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
                 })
               )
             : null
-        return {
-          finalScore,
-          letter: convert?.letter ?? "",
-        }
+        return { finalScore, letter: convert?.letter ?? "" }
       })(),
       id: r.id,
       mssv: r.student?.code ?? "",

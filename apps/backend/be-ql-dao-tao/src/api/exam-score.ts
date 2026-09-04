@@ -349,8 +349,15 @@ app.openapi(saveExamScore, async (c) => {
       { ...p.studentSubjectScore, attendanceScore, midtermScore, examScore },
       p.studentSubjectScore.subjectClass?.type || $Enums.SubjectClassType.NORMAL
     )
+    const finalScoreNumber = finalScore == null ? null : Number(finalScore)
 
-    return { examPaperId: p.id, examScore, attendanceScore, midtermScore, finalScore }
+    return {
+      examPaperId: p.id,
+      examScore,
+      attendanceScore,
+      midtermScore,
+      finalScore: finalScoreNumber,
+    }
   })
 
   await prisma.$transaction(async (tx) => {

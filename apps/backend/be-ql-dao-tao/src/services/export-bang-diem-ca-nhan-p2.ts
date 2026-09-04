@@ -33,6 +33,11 @@ function toNumber(value: unknown): number | null {
   return Number.isFinite(n) ? n : null
 }
 
+function roundTo(value: number | null | undefined, decimals: number): number | null {
+  if (value == null || !Number.isFinite(value)) return null
+  return Number.parseFloat(value.toFixed(decimals))
+}
+
 function convertScore(finalScore: number, scoreRanges: ScoreRange[]): ConvertedScore {
   const sortedRanges = [...scoreRanges].sort((a, b) => b.base10Min - a.base10Min)
   const matched = sortedRanges.find(
@@ -583,13 +588,13 @@ async function exportBangDiemCaNhanMau({
           { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
           { value: monHoc.MaMH ?? "" },
           { value: monHoc.soTC, align: "center" },
-          { value: monHoc.diem01 ?? null, align: "right", numFmt: "0.00" },
-          { value: monHoc.diem02 ?? null, align: "right", numFmt: "0.00" },
-          { value: monHoc.diem07 ?? null, align: "right", numFmt: "0.00" },
+          { value: roundTo(monHoc.diem01, 1), align: "right", numFmt: "0.0" },
+          { value: roundTo(monHoc.diem02, 1), align: "right", numFmt: "0.0" },
+          { value: roundTo(monHoc.diem07, 1), align: "right", numFmt: "0.0" },
           { value: null },
           { value: null },
-          { value: monHoc.diemhe10 ?? null, align: "right", numFmt: "0.00" },
-          { value: monHoc.diemhe4 ?? null, align: "right", numFmt: "0.00" },
+          { value: roundTo(monHoc.diemhe10, 1), align: "right", numFmt: "0.0" },
+          { value: roundTo(monHoc.diemhe4, 1), align: "right", numFmt: "0.0" },
           { value: monHoc.diemchu ?? "", align: "center" },
           { value: null },
           { value: monHoc.ghichu ?? "" },

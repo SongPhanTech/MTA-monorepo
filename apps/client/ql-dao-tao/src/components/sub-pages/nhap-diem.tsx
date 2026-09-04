@@ -866,17 +866,50 @@ export default function NhapDiem({
     if (dataTable.length > 0) {
       form.resetFields()
       const newRowData: Record<string, RowDisplayData> = {}
+      const defaultCoef = {
+        coef_1: 0.1,
+        coef_2: 0.3,
+        coef_3: 0.6,
+        scoreToTakeExam: 1,
+        scoreToPass: 4,
+        maxReExamScore: 10,
+        reduceReExamScore: 0,
+        examScoreToPass: 5,
+      }
       for (const cur of dataTable) {
-        const { finalScoreBase4, letter } = quyDoiDiemHp(
-          cur.finalScore != null ? Number(cur.finalScore) : null,
-          cur.student?.fixedClass?.trainingCourse,
+        const trainingCourse = cur.student?.fixedClass?.trainingCourse
+        const storedHp = cur.finalScore != null ? Number(cur.finalScore) : null
+        const isOnePoint = !!dataDetailSubjectClass?.subject.onePoint
+        const scores = {
+          attendanceScore: isOnePoint ? cur.examScore : cur.attendanceScore,
+          midtermScore: isOnePoint ? cur.examScore : cur.midtermScore,
+          examScore: cur.examScore,
+        }
+
+        const computed = calcFinalScore(
+          trainingCourse || defaultCoef,
           {
-            attendanceScore: cur.attendanceScore,
-            midtermScore: cur.midtermScore,
-            examScore: cur.examScore,
+            ...scores,
+            awards:
+              cur.awards?.map?.((a) => ({
+                status: a.status,
+                archivedAward: { bonusScore: a.archivedAward.bonusScore ?? 0 },
+              })) || [],
+            certificates:
+              cur.certificates?.map?.((c) => ({
+                archivedCertificate: { finalScore: c.archivedCertificate.finalScore ?? 0 },
+              })) || [],
           },
-          { isGraduation, isConditional }
-        )
+          cur.subjectClass?.type || "NORMAL"
+        )?.toNumber()
+
+        // Import script / đánh phách không đi qua nhập điểm UI — luôn tính HP theo cấu hình khi đủ CC/ĐK/thi.
+        const displayHp = cur.examBanned ? 0 : (computed ?? storedHp)
+
+        const { finalScoreBase4, letter } = quyDoiDiemHp(displayHp, trainingCourse, scores, {
+          isGraduation,
+          isConditional,
+        })
         newRowData[cur.id] = {
           attendanceScore: cur.attendanceScore,
           midtermScore: cur.midtermScore,
@@ -886,8 +919,8 @@ export default function NhapDiem({
           examBannedReason: cur.examBannedReason,
           examPostponed: cur.examPostponed,
           examPostponedReason: cur.examPostponedReason,
-          scoreToTakeExam: cur.student?.fixedClass?.trainingCourse?.scoreToTakeExam,
-          finalScore: cur.finalScore,
+          scoreToTakeExam: trainingCourse?.scoreToTakeExam,
+          finalScore: displayHp as RowDisplayData["finalScore"],
           finalScoreBase4,
           letter,
           suspended: cur.suspended,
@@ -897,7 +930,7 @@ export default function NhapDiem({
       }
       setRowData(newRowData)
     }
-  }, [dataTable, isGraduation, isConditional])
+  }, [dataTable, isGraduation, isConditional, dataDetailSubjectClass?.subject.onePoint])
 
   useEffect(() => {
     setManualEnableLockPrint(false)

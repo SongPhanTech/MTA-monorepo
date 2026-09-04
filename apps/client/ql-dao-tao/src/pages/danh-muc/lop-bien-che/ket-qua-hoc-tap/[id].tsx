@@ -133,9 +133,12 @@ export default function StudentScoreClassPage() {
           },
         },
         studentYearResult: {
+          where: { deletedAt: null, active: true },
           include: {
             rank: true,
+            schoolYear: { select: { id: true, name: true, startDate: true } },
           },
+          orderBy: [{ schoolYear: { startDate: "desc" } }],
         },
       },
     },
@@ -362,8 +365,10 @@ export default function StudentScoreClassPage() {
     orderBy: { startDate: "asc" },
   })
 
+  const latestYearResult = student?.studentYearResult?.[0]
+
   const dataWithSummary = useMemo(() => {
-    return data
+    const semesters = data
       .filter((s) => !semesterId || semesterId === s.id)
       .map((semester) => {
         const result = semester.studentSemesterResult[0]
@@ -381,7 +386,23 @@ export default function StudentScoreClassPage() {
           ],
         }
       })
-  }, [data, semesterId])
+
+    if (!latestYearResult) return semesters
+
+    return [
+      ...semesters,
+      {
+        id: "toan-khoa",
+        key: "toan-khoa",
+        code: "Toàn khóa",
+        name: "",
+        schoolYear: { name: "" },
+        studentSemesterResult: [],
+        yearResult: latestYearResult,
+        subjectClasses: [],
+      },
+    ]
+  }, [data, semesterId, latestYearResult])
 
   const exportTemplate = async () => {
     if (!studentId) {
@@ -617,7 +638,23 @@ export default function StudentScoreClassPage() {
                 { colSpan: 1 },
                 {
                   render: (_, semester) => {
-                    const { code, name, schoolYear } = semester
+                    const { code, name, schoolYear, id } = semester
+                    if (id === "toan-khoa") {
+                      const yearResult = (semester as { yearResult?: { cumulativeGpaBase4?: unknown } })
+                        .yearResult
+                      const tbctl4 =
+                        yearResult?.cumulativeGpaBase4 != null
+                          ? Number(yearResult.cumulativeGpaBase4).toFixed(2)
+                          : "—"
+                      return (
+                        <div className="flex items-center gap-20">
+                          <p className="font-medium text-base">Toàn khóa</p>
+                          <span className="font-semibold text-xs text-black-500">
+                            TBCTL hệ 4: {tbctl4}
+                          </span>
+                        </div>
+                      )
+                    }
                     const r = semester.studentSemesterResult?.[0]
                     return (
                       <div className="flex items-center gap-20">

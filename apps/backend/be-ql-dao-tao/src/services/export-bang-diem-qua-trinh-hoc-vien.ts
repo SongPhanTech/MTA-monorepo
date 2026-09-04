@@ -33,6 +33,11 @@ function toNumber(value: unknown): number | null {
   return Number.isFinite(n) ? n : null
 }
 
+function roundTo(value: number | null | undefined, decimals: number): number | null {
+  if (value == null || !Number.isFinite(value)) return null
+  return Number.parseFloat(value.toFixed(decimals))
+}
+
 function convertScore(finalScore: number, scoreRanges: ScoreRange[]): ConvertedScore {
   const sortedRanges = [...scoreRanges].sort((a, b) => b.base10Min - a.base10Min)
   const matched = sortedRanges.find(
@@ -447,8 +452,18 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
         { value: stt++, align: "center" as const, ...cellStyle },
         { value: monHoc.tenMonHoc, colSpan: 6, border: true, ...cellStyle },
         { value: monHoc.soTC, align: "center" as const, ...cellStyle },
-        { value: monHoc.diemhe10, align: "right" as const, ...cellStyle },
-        { value: monHoc.diemhe4, align: "right" as const, ...cellStyle },
+        {
+          value: roundTo(monHoc.diemhe10, 2),
+          align: "right" as const,
+          numFmt: "0.00",
+          ...cellStyle,
+        },
+        {
+          value: roundTo(monHoc.diemhe4, 2),
+          align: "right" as const,
+          numFmt: "0.00",
+          ...cellStyle,
+        },
         { value: monHoc.diemchu, align: "center" as const, ...cellStyle },
       ],
     }
