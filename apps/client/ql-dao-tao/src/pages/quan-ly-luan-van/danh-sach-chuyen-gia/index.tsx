@@ -6,6 +6,7 @@ import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
+import type { Prisma } from "@workspace/db/client"
 import {
   useCountExpertProfile,
   useFindManyExpertProfile,
@@ -20,10 +21,97 @@ import type React from "react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
+type SortOrder = "asc" | "desc"
+
+const DEFAULT_ORDER_BY = { name: "asc" as const }
+
+function compareAlphabet(a?: string | null, b?: string | null) {
+  return (a || "").localeCompare(b || "", "vi", { numeric: true, sensitivity: "base" })
+}
+
+function getAcademicRank(record: any) {
+  return record.lecturer?.userProfile?.academicRankType?.sMa || record?.academicRankType?.sMa || ""
+}
+
+function getAcademicDegree(record: any) {
+  return (
+    record.lecturer?.userProfile?.academicDegreeType?.sMa || record?.academicDegreeType?.sMa || ""
+  )
+}
+
+function getWorkplace(record: any) {
+  return record.lecturer
+    ? `${record.lecturer?.organization?.sMa || ""}-${record.lecturer?.organization?.sTen || ""}`
+    : record?.workplace || ""
+}
+
+function getPhone(record: any) {
+  return (
+    record?.phone ||
+    record?.lecturer?.userProfile?.phoneNumber ||
+    record?.lecturer?.userProfile?.phone ||
+    ""
+  )
+}
+
+function getBankAccountNumber(record: any) {
+  return record?.bankAccountNumber || record?.lecturer?.userProfile?.bankAccountNumber || ""
+}
+
+function getBankName(record: any) {
+  return record?.bankName || record?.lecturer?.userProfile?.bankName || ""
+}
+
+function getOrderBy(
+  field: string | null,
+  order: SortOrder | null
+): Prisma.ExpertProfileOrderByWithRelationInput | Prisma.ExpertProfileOrderByWithRelationInput[] {
+  if (!field || !order) return DEFAULT_ORDER_BY
+
+  switch (field) {
+    case "name":
+      return { name: order }
+    case "academicRank":
+      return [
+        { academicRankType: { sMa: order } },
+        { lecturer: { userProfile: { academicRankType: { sMa: order } } } },
+      ]
+    case "academicDegree":
+      return [
+        { academicDegreeType: { sMa: order } },
+        { lecturer: { userProfile: { academicDegreeType: { sMa: order } } } },
+      ]
+    case "position":
+      return { position: order }
+    case "workplace":
+      return [{ lecturer: { organization: { sMa: order } } }, { workplace: order }]
+    case "phone":
+    case "phoneRaw":
+      return [{ phone: order }, { lecturer: { userProfile: { phoneNumber: order } } }]
+    case "bankAccountNumber":
+      return [
+        { bankAccountNumber: order },
+        { lecturer: { userProfile: { bankAccountNumber: order } } },
+      ]
+    case "bankName":
+      return [{ bankName: order }, { lecturer: { userProfile: { bankName: order } } }]
+    case "email":
+      return { email: order }
+    case "inAcademy":
+      return { lecturerId: order }
+    default:
+      return DEFAULT_ORDER_BY
+  }
+}
+
 export default function ExpertProfile() {
   const { can, canSome } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [sorter, setSorter] = useState<{ field: string | null; order: SortOrder | null }>({
+    field: "name",
+    order: "asc",
+  })
   const [filters, setFilters] = useState<FilterProps>({
     code: undefined,
     name: undefined,
@@ -116,6 +204,16 @@ export default function ExpertProfile() {
     [filters]
   )
 
+  const orderBy = useMemo(() => getOrderBy(sorter.field, sorter.order), [sorter])
+  const sortOrderOf = (field: string) =>
+    sorter.field === field
+      ? sorter.order === "asc"
+        ? ("ascend" as const)
+        : sorter.order === "desc"
+          ? ("descend" as const)
+          : undefined
+      : undefined
+
   const { data: expertProfileData } = useFindManyExpertProfile({
     where,
     include: {
@@ -134,6 +232,7 @@ export default function ExpertProfile() {
         },
       },
     },
+    orderBy,
     take: numberOfPages,
     skip: (currentPage - 1) * numberOfPages,
   })
@@ -208,6 +307,24 @@ export default function ExpertProfile() {
               setFilters(value)
               setCurrentPage(1)
             }}
+            onChange={(_, __, sorterInfo: any) => {
+              const info = Array.isArray(sorterInfo) ? sorterInfo[0] : sorterInfo
+              const field = String(info?.columnKey || info?.field || "")
+              const order =
+                info?.order === "ascend" ? "asc" : info?.order === "descend" ? "desc" : null
+
+              if (field && order) {
+                if (sorter.field !== field || sorter.order !== order) {
+                  setSorter({ field, order })
+                  setCurrentPage(1)
+                }
+                return
+              }
+
+              if (sorter.field || sorter.order) {
+                setSorter({ field: null, order: null })
+              }
+            }}
             columns={[
               {
                 title: "STT",
@@ -222,6 +339,8 @@ export default function ExpertProfile() {
                 width: 150,
                 type: "input",
                 align: "center",
+                sorter: (a: any, b: any) => compareAlphabet(a.name, b.name),
+                sortOrder: sortOrderOf("name"),
               },
               {
                 title: "Học hàm",
@@ -229,9 +348,9 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
-                render: (__, record) =>
-                  record.lecturer?.userProfile?.academicRankType?.sMa ||
-                  record?.academicRankType?.sMa,
+                sorter: (a: any, b: any) => compareAlphabet(getAcademicRank(a), getAcademicRank(b)),
+                sortOrder: sortOrderOf("academicRank"),
+                render: (__, record) => getAcademicRank(record),
               },
               {
                 title: "Hàm vị",
@@ -239,9 +358,10 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
-                render: (__, record) =>
-                  record.lecturer?.userProfile?.academicDegreeType?.sMa ||
-                  record?.academicDegreeType?.sMa,
+                sorter: (a: any, b: any) =>
+                  compareAlphabet(getAcademicDegree(a), getAcademicDegree(b)),
+                sortOrder: sortOrderOf("academicDegree"),
+                render: (__, record) => getAcademicDegree(record),
               },
               {
                 title: "Chức vụ",
@@ -249,6 +369,8 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
+                sorter: (a: any, b: any) => compareAlphabet(a.position, b.position),
+                sortOrder: sortOrderOf("position"),
               },
               // {
               //   title: "Chuyên ngành",
@@ -264,8 +386,9 @@ export default function ExpertProfile() {
                 width: 150,
                 align: "center",
                 type: "input",
-                render: (__, record) =>
-                  `${record.lecturer ? record.lecturer?.organization?.sMa + "-" + record.lecturer?.organization?.sTen : record?.workplace}`,
+                sorter: (a: any, b: any) => compareAlphabet(getWorkplace(a), getWorkplace(b)),
+                sortOrder: sortOrderOf("workplace"),
+                render: (__, record) => getWorkplace(record),
               },
               {
                 title: "SĐT",
@@ -273,7 +396,9 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
-                render: (__, record) => record?.phone || record?.lecturer?.userProfile?.phone || "",
+                sorter: (a: any, b: any) => compareAlphabet(getPhone(a), getPhone(b)),
+                sortOrder: sortOrderOf("phone"),
+                render: (__, record) => getPhone(record),
               },
               {
                 title: "STK",
@@ -281,10 +406,10 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
-                render: (__, record) =>
-                  record?.bankAccountNumber ||
-                  record?.lecturer?.userProfile?.bankAccountNumber ||
-                  "",
+                sorter: (a: any, b: any) =>
+                  compareAlphabet(getBankAccountNumber(a), getBankAccountNumber(b)),
+                sortOrder: sortOrderOf("bankAccountNumber"),
+                render: (__, record) => getBankAccountNumber(record),
               },
               {
                 title: "Tên ngân hàng",
@@ -292,15 +417,19 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
-                render: (__, record) =>
-                  record?.bankName || record?.lecturer?.userProfile?.bankName || "",
+                sorter: (a: any, b: any) => compareAlphabet(getBankName(a), getBankName(b)),
+                sortOrder: sortOrderOf("bankName"),
+                render: (__, record) => getBankName(record),
               },
               {
                 title: "Số điện thoại",
+                key: "phoneRaw",
                 dataIndex: "phone",
                 width: 150,
                 align: "center",
                 type: "input",
+                sorter: (a: any, b: any) => compareAlphabet(a.phone, b.phone),
+                sortOrder: sortOrderOf("phoneRaw"),
               },
               {
                 title: "Email",
@@ -308,13 +437,20 @@ export default function ExpertProfile() {
                 width: 150,
                 align: "center",
                 type: "input",
+                sorter: (a: any, b: any) => compareAlphabet(a.email, b.email),
+                sortOrder: sortOrderOf("email"),
               },
               {
                 title: "Trong học viện",
+                key: "inAcademy",
+                dataIndex: "inAcademy",
                 width: 120,
                 align: "center",
-                type: "input",
-                render: (__, record) => {
+                sorter: (a: any, b: any) =>
+                  Number(Boolean(a.lecturer?.userProfile)) -
+                  Number(Boolean(b.lecturer?.userProfile)),
+                sortOrder: sortOrderOf("inAcademy"),
+                render: (__, record: any) => {
                   const hasUserProfile = Boolean(record.lecturer?.userProfile)
                   if (!hasUserProfile) return null
                   return (

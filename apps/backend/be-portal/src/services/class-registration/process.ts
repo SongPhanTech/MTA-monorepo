@@ -70,8 +70,9 @@ export async function processRegistration(
   const studentCourse =
     profile.educationAndTraining.find((item) => item.id === studentId) ??
     profile.educationAndTraining[0]
-  const courseBaseScore =
-    studentCourse?.fixedClass?.trainingCourse?.baseScore ?? AcademicRankingBaseType.Base10
+  const trainingCourse = studentCourse?.fixedClass?.trainingCourse
+  const courseBaseScore = trainingCourse?.baseScore ?? AcademicRankingBaseType.Base10
+  const scoreToPass = trainingCourse?.scoreToPass ?? 5
 
   const semester = await prisma.semester.findUniqueOrThrow({
     where: { id: registerSession.semesterId },
@@ -111,11 +112,15 @@ export async function processRegistration(
   ]
 
   if (allPrerequisiteIds.length > 0 || allCoRequisiteIds.length > 0) {
+    // Đạt tiên quyết theo scoreToPass của khóa: finalScore hoặc manualFinalScore (phiên chứng chỉ)
     const passedPrerequisites = await prisma.studentSubjectScore.findMany({
       where: {
         studentId,
         subjectVersionId: { in: allPrerequisiteIds },
-        finalScore: { gt: 4.0 },
+        OR: [
+          { finalScore: { gte: scoreToPass } },
+          { manualFinalScore: { gte: scoreToPass } },
+        ],
       },
       select: { subjectVersionId: true },
     })
