@@ -138,7 +138,7 @@ const DiemTrungBinhKyHoc = () => {
     }
   }, [filters, semesterId, trainingObjectTypeId, trainingCourseId])
 
-  const { data: dataStudents, refetch } = useFindManyStudent(
+  const { data: dataStudents, refetch, isLoading, isFetching } = useFindManyStudent(
     {
       where,
       include: {
@@ -373,6 +373,7 @@ const DiemTrungBinhKyHoc = () => {
           <Table
             rowKey="id"
             className="m-0"
+            loading={isLoading || isFetching}
             rowClassName={(record: any) => {
               const gpa4 = record?.studentSemesterResult?.[0]?.gpaBase4
               const gpa10 = record?.studentSemesterResult?.[0]?.gpaBase10

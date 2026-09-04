@@ -28,7 +28,7 @@ export default function HSSVThiLai({ subjectVersionId, viewOnly }: RegisterClass
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const { id: trainingCourseId } = useTrainingCourseStore()
 
-  const { data: res, refetch } = useOpenSubjectClassReExamStudents(
+  const { data: res, refetch, isLoading, isFetching } = useOpenSubjectClassReExamStudents(
     {
       search: filters.searchText || undefined,
       trainingObjectTypeId: trainingObjectTypeId || "",
@@ -96,6 +96,7 @@ export default function HSSVThiLai({ subjectVersionId, viewOnly }: RegisterClass
           rowKey="id"
           className="mt-0"
           data={data}
+          loading={isLoading || isFetching}
           onRow={(record) => ({
             onClick: () => {
               const isSelected = selectedRowKeys.includes(record.id)

@@ -291,7 +291,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
     planTraining?.planTrainingSubjects?.map((e) => e.trainingBlockSubjectId) || []
   const conditions = [
     PrismaNamespace.sql`TBS."subjectId" = sv.id`,
-    PrismaNamespace.sql`S."status" = ${$Enums.StudentStatus.ENROLLED}`,
+    PrismaNamespace.sql`S."status"::text = ${$Enums.StudentStatus.ENROLLED}`,
   ]
   if (trainingObjectTypeId) {
     conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
@@ -502,7 +502,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
 
   const conditions = [
     PrismaNamespace.sql`TBS."subjectId" = sv.id`,
-    PrismaNamespace.sql`S."status" = ${$Enums.StudentStatus.ENROLLED}`,
+    PrismaNamespace.sql`S."status"::text = ${$Enums.StudentStatus.ENROLLED}`,
   ]
   if (trainingObjectTypeId) {
     conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
@@ -749,7 +749,7 @@ app.openapi(openSubjectClassReExam, async (c) => {
     planTraining?.planTrainingSubjects?.map((e) => e.trainingBlockSubjectId) || []
   const conditions = [
     PrismaNamespace.sql`TBS."subjectId" = sv.id`,
-    PrismaNamespace.sql`S."status" = ${$Enums.StudentStatus.ENROLLED}`,
+    PrismaNamespace.sql`S."status"::text = ${$Enums.StudentStatus.ENROLLED}`,
   ]
   if (trainingObjectTypeId) {
     conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)
@@ -933,7 +933,7 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
 
   const conditions = [
     PrismaNamespace.sql`TBS."subjectId" = sv.id`,
-    PrismaNamespace.sql`S."status" = ${$Enums.StudentStatus.ENROLLED}`,
+    PrismaNamespace.sql`S."status"::text = ${$Enums.StudentStatus.ENROLLED}`,
   ]
   if (trainingObjectTypeId) {
     conditions.push(PrismaNamespace.sql`sv."trainingObjectTypeId" = ${trainingObjectTypeId}`)

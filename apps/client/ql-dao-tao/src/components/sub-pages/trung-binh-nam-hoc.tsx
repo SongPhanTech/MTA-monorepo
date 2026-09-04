@@ -103,7 +103,7 @@ const DiemTrungBinhKyHoc = () => {
     }
   }, [filters, semesterId, trainingObjectTypeId, trainingCourseId])
 
-  const { data: dataStudents, refetch } = useFindManyStudent(
+  const { data: dataStudents, refetch, isLoading, isFetching } = useFindManyStudent(
     {
       where,
       include: {
@@ -297,6 +297,7 @@ const DiemTrungBinhKyHoc = () => {
           <Table
             rowKey="id"
             className="m-0"
+            loading={isLoading || isFetching}
             filters={filters}
             setFilters={(value) => {
               setFilters(value)

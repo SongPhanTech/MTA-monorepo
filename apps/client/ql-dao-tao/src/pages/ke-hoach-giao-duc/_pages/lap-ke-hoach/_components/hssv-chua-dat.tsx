@@ -29,7 +29,7 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
   const { id: trainingCourseId } = useTrainingCourseStore()
   const { id: semesterId } = useSemesterStore()
 
-  const { data: res, refetch } = useOpenSubjectClassRetakeStudents(
+  const { data: res, refetch, isLoading, isFetching } = useOpenSubjectClassRetakeStudents(
     {
       search: filters.searchText || undefined,
       trainingObjectTypeId: trainingObjectTypeId || "",
@@ -98,6 +98,7 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
           rowKey="id"
           className="mt-0"
           data={data}
+          loading={isLoading || isFetching}
           scroll={{ y: "calc(100vh - 270px)" }}
           onRow={(record) => ({
             onClick: () => {

@@ -74,7 +74,7 @@ export default function ThongKeNoThiLai() {
     }
   }
 
-  const { data: res } = useOpenSubjectClassReExam(
+  const { data: res, isLoading, isFetching } = useOpenSubjectClassReExam(
     {
       search: searchText || undefined,
       trainingCourseId: trainingCourseId as string,
@@ -110,6 +110,7 @@ export default function ThongKeNoThiLai() {
         <Table
           data={rawData}
           rowKey={"id"}
+          loading={isLoading || isFetching}
           rowSelection={{
             type: "radio",
             selectedRowKeys: subjectVersionId ? [subjectVersionId] : [],

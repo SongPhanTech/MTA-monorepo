@@ -74,7 +74,7 @@ export default function ThongKeNoHocLai() {
     }
   }
 
-  const { data: res } = useOpenSubjectClassRetake(
+  const { data: res, isLoading, isFetching } = useOpenSubjectClassRetake(
     {
       search: searchText || undefined,
       trainingCourseId: trainingCourseId as string,
@@ -123,6 +123,7 @@ export default function ThongKeNoHocLai() {
         <Table
           data={rawData}
           rowKey={"id"}
+          loading={isLoading || isFetching}
           rowSelection={{
             type: "radio",
             selectedRowKeys: subjectVersionId ? [subjectVersionId] : [],
