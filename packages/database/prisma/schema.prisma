@@ -2677,6 +2677,8 @@ model StudentSubjectScore {
   @@unique([subjectClassId, studentId])
   @@index([subjectClassId])
   @@index([subjectVersionId])
+  @@index([studentId])
+  @@index([studentId, subjectVersionId, createdAt])
   @@schema("ql-dao-tao")
 }
 
@@ -3128,6 +3130,7 @@ model FixedClass {
   planTrainingSubjectId    String?
 
   @@unique([name, trainingCourseId, curriculumVersionId])
+  @@index([trainingCourseId])
   @@schema("ql-dao-tao")
 }
 
@@ -3405,6 +3408,8 @@ model TrainingBlockSubject {
   graduation                         Boolean
   planTrainingSubjects               PlanTrainingSubject[]
 
+  @@index([subjectId])
+  @@index([trainingBlockOnCurriculumVersionId])
   @@schema("ql-dao-tao")
 }
 
@@ -4437,6 +4442,9 @@ model Student {
   subjectClassAttendanceStudent  SubjectClassAttendanceStudent[]
   trainingActivity               TrainingActivity[]
 
+  @@index([fixedClassId])
+  @@index([curriculumVersionId])
+  @@index([status, fixedClassId])
   @@schema("ql-dao-tao")
 }
 

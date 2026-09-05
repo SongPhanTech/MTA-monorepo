@@ -221,16 +221,6 @@ const openSubjectClassReExamStudents = createRoute({
   },
 })
 
-/** Equivalent to correlated COUNT(*) per (studentId, subjectVersionId), computed once. */
-const attemptCountJoin = PrismaNamespace.sql`
-                                 inner join (
-                                   SELECT "studentId", "subjectVersionId", COUNT(*)::INTEGER AS attempt_count
-                                   FROM "ql-dao-tao"."StudentSubjectScore"
-                                   GROUP BY "studentId", "subjectVersionId"
-                                 ) att ON att."studentId" = SSS."studentId"
-                                    AND att."subjectVersionId" = SSS."subjectVersionId"
-`
-
 /**
  * openSubjectClassRetake — Danh sách môn HỌC LẠI (học lại toàn bộ môn)
  *
@@ -353,12 +343,14 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                  ORDER BY SSS."createdAt" ASC
                                  ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
                                )                              as first_attempt_exam_banned,
-                               att.attempt_count                     as attempt_count,
+                               (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
+                                WHERE s2."studentId" = SSS."studentId"
+                                  AND s2."subjectVersionId" = SSS."subjectVersionId"
+                               )::INTEGER                     as attempt_count,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
                                  inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
-                                 ${attemptCountJoin}
                                  inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
                                  inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
                                  inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
@@ -371,8 +363,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
                                   inner join "ql-dao-tao"."TrainingBlock" TB on TB.id = TBOCV."trainingBlockId"
                                   left join "ql-dao-tao"."TrainingObjectType" TOT on TOT.id = TC."trainingObjectTypeId"
-                        where ${whereClause}),
-        grouped as (
+                        where ${whereClause})
         select id, code, name, trainingBlockSubjectId as "trainingBlockSubjectId", count("studentId") ::INTEGER as count
         from mon_no
         where rn = 1
@@ -390,16 +381,82 @@ app.openapi(openSubjectClassRetake, async (c) => {
                        ("isRetakeExam" = true and (training_object_type != 'CIVILIAN' or training_object_type is null))
                        or is_national_defense = true
                    ))
+          
         group by id, code, name, trainingBlockSubjectId
-        )
-        select grouped.*, (select count(DISTINCT grouped2.id)::INTEGER from grouped grouped2) as "totalCount"
-        from grouped
         order by code
         limit ${limit} offset ${limit} * (${page} - 1)
     `
 
-  const rows = (res as { totalCount: number }[]) || []
-  return c.json({ data: res, count: rows[0]?.totalCount ?? 0 }, 200)
+  const countRaw: { count: number }[] = await prisma.$queryRaw`
+        with mon_no as (select sv.id,
+                               sv.code,
+                               sv.name,
+                               sv."trainingObjectTypeId",
+                               C."trainingMajorId",
+                               TC.id                                                                                    as trainingCourseId,
+                               TC."isRetakeExam"                                                                        as "isRetakeExam",
+                               TOT.type                                                                                 as training_object_type,
+                               TB.code                                                                                  as training_block_code,
+                               TB."isNationalDefense"                                                                   as is_national_defense,
+                               SSS."studentId",
+                               SSS."finalScore"                                                                         as diem_cuoi,
+                               SSS.withdrew,
+                               SSS.exempted,
+                               SSS."examPostponed",
+                               SSS."examBanned"                                                                         as cam_thi,
+                               SSS."examBannedReason"                                                                   as ly_do_cam_thi,
+                               SSS.suspended                                                                            as dinh_chi,
+                               SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
+                               (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
+                               SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam" as truot_mon,
+                               FIRST_VALUE(SSS."examBanned") OVER (
+                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
+                                 ORDER BY SSS."createdAt" ASC
+                                 ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+                               )                                                                                         as first_attempt_exam_banned,
+                               (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
+                                WHERE s2."studentId" = SSS."studentId"
+                                  AND s2."subjectVersionId" = SSS."subjectVersionId"
+                               )::INTEGER                                                                                as attempt_count,
+                               row_number()
+                               over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
+                        from "ql-dao-tao"."SubjectVersion" as sv
+                                 inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
+                                 inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                                 inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                                 inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                                 inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
+                                 inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
+                                            on CV.id = TBOCV."curriculumVersionId"
+                                 inner join "ql-dao-tao"."TrainingBlockSubject" TBS
+                                            on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+                                 inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                                 inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                                  inner join "ql-dao-tao"."TrainingBlock" TB on TB.id = TBOCV."trainingBlockId"
+                                  left join "ql-dao-tao"."TrainingObjectType" TOT on TOT.id = TC."trainingObjectTypeId"
+                        where ${whereClause})
+        select count(DISTINCT id) ::INTEGER as count
+        from mon_no
+        where rn = 1
+          and (truot_mon = true
+            or cam_thi = true
+            or dinh_chi = true)
+          and withdrew = false        -- rút khỏi lớp
+          and exempted = false        -- miễn học
+          and "examPostponed" = false -- hoãn thi
+          -- exclude students eligible for ReExam (thi lại)
+          -- only exclude on first attempt: if they already did a ReExam but still fail → belongs in Retake
+          and not (attempt_count = 1 and first_attempt_exam_banned = false
+                   and truot_mon = true and cam_thi = false and dinh_chi = false
+                   and (
+                       ("isRetakeExam" = true and (training_object_type != 'CIVILIAN' or training_object_type is null))
+                       or is_national_defense = true
+                   ))
+          
+    `
+  return c.json({ data: res, count: countRaw[0]?.count }, 200)
 })
 
 /**
@@ -500,7 +557,10 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                  ORDER BY SSS."createdAt" ASC
                                  ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
                                )                                                                                                  as first_attempt_exam_banned,
-                               att.attempt_count                                                                                         as attempt_count,
+                               (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
+                                WHERE s2."studentId" = SSS."studentId"
+                                  AND s2."subjectVersionId" = SSS."subjectVersionId"
+                               )::INTEGER                                                                                         as attempt_count,
                                SC."code"                                                                                         as ma_lop_mon_hoc,
                                Sem."name"                                                                                        as ky_hoc,
                                Sch."name"                                                                                        as nam_hoc,
@@ -508,7 +568,6 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc)::INTEGER as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
                                  inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
-                                 ${attemptCountJoin}
                                  inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
                                  left join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
                                  inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
@@ -739,12 +798,14 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
                                SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam" as truot_mon,
                                TBS.id                         as trainingBlockSubjectId,
-                               att.attempt_count                     as attempt_count,
+                               (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
+                                WHERE s2."studentId" = SSS."studentId"
+                                  AND s2."subjectVersionId" = SSS."subjectVersionId"
+                               )::INTEGER                     as attempt_count,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
                                  inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
-                                 ${attemptCountJoin}
                                  inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
                                  inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
                                  inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
@@ -757,8 +818,7 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                  inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
                                   inner join "ql-dao-tao"."TrainingBlock" TB on TB.id = TBOCV."trainingBlockId"
                                   left join "ql-dao-tao"."TrainingObjectType" TOT on TOT.id = TC."trainingObjectTypeId"
-                        where ${whereClause}),
-        grouped as (
+                        where ${whereClause})
         select id, code, name, trainingBlockSubjectId as "trainingBlockSubjectId", count("studentId") ::INTEGER as count
         from mon_no
         where rn = 1
@@ -772,16 +832,73 @@ app.openapi(openSubjectClassReExam, async (c) => {
           )
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
+          
         group by id, code, name, trainingBlockSubjectId
-        )
-        select grouped.*, (select count(DISTINCT grouped2.id)::INTEGER from grouped grouped2) as "totalCount"
-        from grouped
         order by code
         limit ${limit} offset ${limit} * (${page} - 1)
     `
 
-  const rows = (res as { totalCount: number }[]) || []
-  return c.json({ data: res || [], count: rows[0]?.totalCount || 0 }, 200)
+  const countRaw: { count: number }[] = await prisma.$queryRaw`
+        with mon_no as (select sv.id,
+                               sv.code,
+                               sv.name,
+                               sv."trainingObjectTypeId",
+                               C."trainingMajorId",
+                               TC.id                                                                                    as trainingCourseId,
+                               TC."isRetakeExam"                                                                        as "isRetakeExam",
+                               TOT.type                                                                                 as training_object_type,
+                               TB.code                                                                                  as training_block_code,
+                               TB."isNationalDefense"                                                                   as is_national_defense,
+                               SSS."studentId",
+                               SSS."finalScore"                                                                         as diem_cuoi,
+                               SSS.withdrew,
+                               SSS.exempted,
+                               SSS."examPostponed",
+                               SSS."examBanned"                                                                         as cam_thi,
+                               SSS."examBannedReason"                                                                   as ly_do_cam_thi,
+                               SSS.suspended                                                                            as dinh_chi,
+                               SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
+                               (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
+                               (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
+                               SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam" as truot_mon,
+                               (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
+                                WHERE s2."studentId" = SSS."studentId"
+                                  AND s2."subjectVersionId" = SSS."subjectVersionId"
+                               )::INTEGER                                                                                as attempt_count,
+                               row_number()
+                               over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
+                        from "ql-dao-tao"."SubjectVersion" as sv
+                                 inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
+                                 inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                                 inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                                 inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                                 inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
+                                 inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
+                                            on CV.id = TBOCV."curriculumVersionId"
+                                 inner join "ql-dao-tao"."TrainingBlockSubject" TBS
+                                            on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+                                 inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                                 inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                                  inner join "ql-dao-tao"."TrainingBlock" TB on TB.id = TBOCV."trainingBlockId"
+                                  left join "ql-dao-tao"."TrainingObjectType" TOT on TOT.id = TC."trainingObjectTypeId"
+                        where ${whereClause})
+        select count(DISTINCT id) ::INTEGER as count
+        from mon_no
+        where rn = 1
+          and (truot_mon = true or "examPostponed" = true)
+          and cam_thi = false
+          and dinh_chi = false
+          and attempt_count = 1      -- only first attempt: if they failed ReExam, they belong in Retake
+          and (
+               ("isRetakeExam" = true and (training_object_type != 'CIVILIAN' or training_object_type is null))
+               or is_national_defense = true
+          )
+          and withdrew = false        -- rút khỏi lớp
+          and exempted = false        -- miễn học
+          
+    `
+  return c.json({ data: res || [], count: countRaw[0]?.count || 0 }, 200)
 })
 
 /**
@@ -869,12 +986,14 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
                                SC."code"                                                                                         as ma_lop_mon_hoc,
                                Sem."name"                                                                                        as ky_hoc,
                                Sch."name"                                                                                        as nam_hoc,
-                               att.attempt_count                                                                                         as attempt_count,
+                               (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
+                                WHERE s2."studentId" = SSS."studentId"
+                                  AND s2."subjectVersionId" = SSS."subjectVersionId"
+                               )::INTEGER                                                                                         as attempt_count,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc)::INTEGER as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
                                  inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
-                                 ${attemptCountJoin}
                                  inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
                                  left join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
                                  inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"

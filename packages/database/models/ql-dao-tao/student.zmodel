@@ -135,6 +135,9 @@ model Student extends Base {
   subjectClassAttendanceStudent  SubjectClassAttendanceStudent[]
   trainingActivity               TrainingActivity[]
 
+  @@index([fixedClassId])
+  @@index([curriculumVersionId])
+  @@index([status, fixedClassId])
   @@schema("ql-dao-tao")
 }
 

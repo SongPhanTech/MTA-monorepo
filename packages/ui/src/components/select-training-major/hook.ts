@@ -9,7 +9,7 @@ export const trainingMajorStore = new Store<TrainingMajorState>({
   selectedTrainingMajorId: undefined,
 })
 
-export const selectTrainingMajor = (id: string) => {
+export const selectTrainingMajor = (id?: string) => {
   if (id) {
     localStorage.setItem("selectedTrainingMajorId", id)
   } else {

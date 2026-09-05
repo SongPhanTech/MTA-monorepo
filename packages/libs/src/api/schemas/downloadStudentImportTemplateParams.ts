@@ -86,13 +86,4 @@ export type DownloadStudentImportTemplateParams = {
  * ID hệ đào tạo.
  */
 trainingObjectTypeId: string;
-/**
- * ID khoá học. Bỏ trống nếu xuất toàn bộ / allCourses=true.
- */
-trainingCourseId?: string;
-/**
- * true = xuất ngành/chuyên ngành/CTĐT của mọi khoá.
- * @nullable
- */
-allCourses?: boolean | null;
 };

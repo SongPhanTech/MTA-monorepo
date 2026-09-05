@@ -14,7 +14,7 @@ import {
 } from "@workspace/ui"
 import { Flex, Form, Tabs } from "antd"
 import type React from "react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import KeHoachMoLopMonHoc from "./_pages/ke-hoach-mo-lop-mon-hoc"
 import LapKeHoach from "./_pages/lap-ke-hoach"
 import PhanCongGiangDay from "./_pages/phan-cong-giang-day"
@@ -178,6 +178,13 @@ export default function KeHoachDaoTao({ type = "NORMAL", role }: KeHoachDaoTaoPa
       deletedAt: null,
     },
   })
+
+  useEffect(() => {
+    if (!trainingMajorId || trainingMajorData.length === 0) return
+    if (!trainingMajorData.some((i) => i.id === trainingMajorId)) {
+      onSelectTrainingMajor()
+    }
+  }, [trainingMajorId, trainingMajorData, onSelectTrainingMajor])
 
   const { data: fixedClassData = [] } = useFindManyFixedClass({
     orderBy: { name: "asc" },

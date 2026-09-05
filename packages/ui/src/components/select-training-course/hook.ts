@@ -10,7 +10,7 @@ export const trainingCourseStore = new Store<TrainingCourseState>({
   selectedTrainingCourseId: undefined,
 })
 
-export const selectTrainingCourse = (id: string) => {
+export const selectTrainingCourse = (id?: string) => {
   if (id) {
     localStorage.setItem("selectedTrainingCourseId", id)
   } else {

@@ -7,6 +7,9 @@ import { useGetUserPermissionsPermissionAppCodeUserId } from "@workspace/libs/ap
 import { isDevEnvironment } from "@workspace/libs/utils"
 import type { ExtraQueryOptions } from "@zenstackhq/tanstack-query/runtime-v5"
 import { useEffect, useMemo } from "react"
+import { selectFixedClass } from "../select-fixed-class"
+import { selectTrainingCourse } from "../select-training-course"
+import { selectTrainingMajor } from "../select-training-major"
 
 export type TrainingObjectTypeState = {
   selectedTrainingObjectTypeId?: string
@@ -17,11 +20,18 @@ export const trainingObjectTypeStore = new Store<TrainingObjectTypeState>({
 })
 
 export const selectTrainingObjectType = (id: string) => {
+  const prevId = trainingObjectTypeStore.state.selectedTrainingObjectTypeId
   localStorage.setItem("selectedTrainingObjectTypeId", id)
   trainingObjectTypeStore.setState((prev) => ({
     ...prev,
     selectedTrainingObjectTypeId: id,
   }))
+  // Đổi ĐTĐT → khóa/ngành/lớp cũ (localStorage) không còn hợp lệ; nếu giữ sẽ gọi API 200 với data []
+  if (prevId && prevId !== id) {
+    selectTrainingCourse()
+    selectTrainingMajor()
+    selectFixedClass()
+  }
 }
 
 export const useTrainingObjectTypeStore = () => {

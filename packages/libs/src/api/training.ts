@@ -133,6 +133,14 @@ import type {
   ExamCodes,
   ExportArchivedCertificateExcelParams,
   ExportArchivedCertificateMultiInput,
+  ExportBangDiemCaNhanP2Request,
+  ExportBangDiemCaNhanP7Request,
+  ExportBangDiemCaNhanRequest,
+  ExportBangDiemNganDaiHanRequest,
+  ExportBangDiemQuaTrinhHocVienRequest,
+  ExportBangDiemQuaTrinhRequest,
+  ExportBangDiemTheoLopRequest,
+  ExportChuongTrinhDaoTaoRequest,
   ExportDiplomaVerificationParams,
   ExportGraduationDecisionPptxBody,
   ExportGraduationRegisterMasterBody,
@@ -6947,6 +6955,117 @@ export function useFixedClassStudentCount<TData = Awaited<ReturnType<typeof fixe
 
 
 /**
+ * Xuất file Word chương trình / kế hoạch toàn khóa theo mẫu CTTK hoặc KHTK.
+
+**Bảng dữ liệu nguồn:** FixedClass, CurriculumVersion, TrainingBlockSubject.
+
+**Tham số:** fixedClassId, mau — cttk-dai-han | cttk-ngan-han | khtk-nghien-cuu | khtk-ung-dung.
+ * @summary Xuất CTTK / KHTK lớp quản lý
+ */
+export type exportChuongTrinhDaoTaoResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportChuongTrinhDaoTaoResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type exportChuongTrinhDaoTaoResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type exportChuongTrinhDaoTaoResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type exportChuongTrinhDaoTaoResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type exportChuongTrinhDaoTaoResponseSuccess = (exportChuongTrinhDaoTaoResponse200) & {
+  headers: Headers;
+};
+export type exportChuongTrinhDaoTaoResponseError = (exportChuongTrinhDaoTaoResponse400 | exportChuongTrinhDaoTaoResponse404 | exportChuongTrinhDaoTaoResponse409 | exportChuongTrinhDaoTaoResponse500) & {
+  headers: Headers;
+};
+
+export type exportChuongTrinhDaoTaoResponse = (exportChuongTrinhDaoTaoResponseSuccess | exportChuongTrinhDaoTaoResponseError)
+
+export const getExportChuongTrinhDaoTaoUrl = () => {
+
+
+  
+
+  return `/api/fixed-class/export-chuong-trinh-dao-tao`
+}
+
+export const exportChuongTrinhDaoTao = async (exportChuongTrinhDaoTaoRequest: ExportChuongTrinhDaoTaoRequest, options?: RequestInit): Promise<exportChuongTrinhDaoTaoResponse> => {
+  
+  return customTrainingFetch<exportChuongTrinhDaoTaoResponse>(getExportChuongTrinhDaoTaoUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportChuongTrinhDaoTaoRequest,)
+  }
+);}
+
+
+
+
+export const getExportChuongTrinhDaoTaoMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportChuongTrinhDaoTao>>, TError,{data: ExportChuongTrinhDaoTaoRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportChuongTrinhDaoTao>>, TError,{data: ExportChuongTrinhDaoTaoRequest}, TContext> => {
+
+const mutationKey = ['exportChuongTrinhDaoTao'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportChuongTrinhDaoTao>>, {data: ExportChuongTrinhDaoTaoRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportChuongTrinhDaoTao(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportChuongTrinhDaoTaoMutationResult = NonNullable<Awaited<ReturnType<typeof exportChuongTrinhDaoTao>>>
+    export type ExportChuongTrinhDaoTaoMutationBody = ExportChuongTrinhDaoTaoRequest
+    export type ExportChuongTrinhDaoTaoMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xuất CTTK / KHTK lớp quản lý
+ */
+export const useExportChuongTrinhDaoTao = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportChuongTrinhDaoTao>>, TError,{data: ExportChuongTrinhDaoTaoRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportChuongTrinhDaoTao>>,
+        TError,
+        {data: ExportChuongTrinhDaoTaoRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getExportChuongTrinhDaoTaoMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
  * Danh sách học phần có thể mở lớp học phần theo học kỳ / khóa.
 
 **Bảng dữ liệu nguồn:** SubjectVersion, TrainingBlockSubject, FixedClass, Student.
@@ -7693,7 +7812,7 @@ export function useExportSubjectClassListExcel<TData = Awaited<ReturnType<typeof
 
 **Bảng dữ liệu nguồn:** SubjectClass, StudentSubjectScore, Exam.
 
-**Tham số:** id (lớp HP), examId, type (query).
+**Tham số:** id (lớp HP), examId, type, role, userId (query).
  * @summary Xuất điểm lớp HP
  */
 export type exportSubjectClassScoreResponse200 = {
@@ -9802,7 +9921,7 @@ export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatisti
 
 **Bảng dữ liệu nguồn:** (file mẫu, không ghi DB).
 
-**Tham số:** trainingObjectTypeId (query). allCourses=true xuất toàn bộ; hoặc truyền trainingCourseId để lọc theo khoá.
+**Tham số:** trainingObjectTypeId (query).
  * @summary Tải mẫu import học viên
  */
 export type downloadStudentImportTemplateResponse200 = {
@@ -15584,6 +15703,783 @@ export const useExportStudentSemesterResultV2 = <TError = ErrorMessageResponse,
       > => {
 
       const mutationOptions = getExportStudentSemesterResultV2MutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Xuất file Excel bảng điểm cá nhân (mẫu quatrinh.xlsx / BDCN).
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion, Semester, ScoreConvert.
+
+**Tham số:** studentIds — danh sách ID học viên cần xuất (theo thứ tự bảng).
+ * @summary Xuất bảng điểm cá nhân
+ */
+export type exportBangDiemCaNhanResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportBangDiemCaNhanResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type exportBangDiemCaNhanResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type exportBangDiemCaNhanResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type exportBangDiemCaNhanResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type exportBangDiemCaNhanResponseSuccess = (exportBangDiemCaNhanResponse200) & {
+  headers: Headers;
+};
+export type exportBangDiemCaNhanResponseError = (exportBangDiemCaNhanResponse400 | exportBangDiemCaNhanResponse404 | exportBangDiemCaNhanResponse409 | exportBangDiemCaNhanResponse500) & {
+  headers: Headers;
+};
+
+export type exportBangDiemCaNhanResponse = (exportBangDiemCaNhanResponseSuccess | exportBangDiemCaNhanResponseError)
+
+export const getExportBangDiemCaNhanUrl = () => {
+
+
+  
+
+  return `/api/student-result/export-bang-diem-ca-nhan`
+}
+
+export const exportBangDiemCaNhan = async (exportBangDiemCaNhanRequest: ExportBangDiemCaNhanRequest, options?: RequestInit): Promise<exportBangDiemCaNhanResponse> => {
+  
+  return customTrainingFetch<exportBangDiemCaNhanResponse>(getExportBangDiemCaNhanUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportBangDiemCaNhanRequest,)
+  }
+);}
+
+
+
+
+export const getExportBangDiemCaNhanMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemCaNhan>>, TError,{data: ExportBangDiemCaNhanRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemCaNhan>>, TError,{data: ExportBangDiemCaNhanRequest}, TContext> => {
+
+const mutationKey = ['exportBangDiemCaNhan'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportBangDiemCaNhan>>, {data: ExportBangDiemCaNhanRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportBangDiemCaNhan(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportBangDiemCaNhanMutationResult = NonNullable<Awaited<ReturnType<typeof exportBangDiemCaNhan>>>
+    export type ExportBangDiemCaNhanMutationBody = ExportBangDiemCaNhanRequest
+    export type ExportBangDiemCaNhanMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xuất bảng điểm cá nhân
+ */
+export const useExportBangDiemCaNhan = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemCaNhan>>, TError,{data: ExportBangDiemCaNhanRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportBangDiemCaNhan>>,
+        TError,
+        {data: ExportBangDiemCaNhanRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getExportBangDiemCaNhanMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Xuất file Excel bảng điểm quá trình (mẫu quatrinh.xlsx / BDQT).
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion, Semester, ScoreConvert.
+
+**Tham số:** studentIds — danh sách ID học viên cần xuất (theo thứ tự bảng).
+ * @summary Xuất bảng điểm quá trình
+ */
+export type exportBangDiemQuaTrinhResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportBangDiemQuaTrinhResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type exportBangDiemQuaTrinhResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type exportBangDiemQuaTrinhResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type exportBangDiemQuaTrinhResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type exportBangDiemQuaTrinhResponseSuccess = (exportBangDiemQuaTrinhResponse200) & {
+  headers: Headers;
+};
+export type exportBangDiemQuaTrinhResponseError = (exportBangDiemQuaTrinhResponse400 | exportBangDiemQuaTrinhResponse404 | exportBangDiemQuaTrinhResponse409 | exportBangDiemQuaTrinhResponse500) & {
+  headers: Headers;
+};
+
+export type exportBangDiemQuaTrinhResponse = (exportBangDiemQuaTrinhResponseSuccess | exportBangDiemQuaTrinhResponseError)
+
+export const getExportBangDiemQuaTrinhUrl = () => {
+
+
+  
+
+  return `/api/student-result/export-bang-diem-qua-trinh`
+}
+
+export const exportBangDiemQuaTrinh = async (exportBangDiemQuaTrinhRequest: ExportBangDiemQuaTrinhRequest, options?: RequestInit): Promise<exportBangDiemQuaTrinhResponse> => {
+  
+  return customTrainingFetch<exportBangDiemQuaTrinhResponse>(getExportBangDiemQuaTrinhUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportBangDiemQuaTrinhRequest,)
+  }
+);}
+
+
+
+
+export const getExportBangDiemQuaTrinhMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemQuaTrinh>>, TError,{data: ExportBangDiemQuaTrinhRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemQuaTrinh>>, TError,{data: ExportBangDiemQuaTrinhRequest}, TContext> => {
+
+const mutationKey = ['exportBangDiemQuaTrinh'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportBangDiemQuaTrinh>>, {data: ExportBangDiemQuaTrinhRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportBangDiemQuaTrinh(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportBangDiemQuaTrinhMutationResult = NonNullable<Awaited<ReturnType<typeof exportBangDiemQuaTrinh>>>
+    export type ExportBangDiemQuaTrinhMutationBody = ExportBangDiemQuaTrinhRequest
+    export type ExportBangDiemQuaTrinhMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xuất bảng điểm quá trình
+ */
+export const useExportBangDiemQuaTrinh = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemQuaTrinh>>, TError,{data: ExportBangDiemQuaTrinhRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportBangDiemQuaTrinh>>,
+        TError,
+        {data: ExportBangDiemQuaTrinhRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getExportBangDiemQuaTrinhMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Xuất file Excel bảng điểm cá nhân theo mẫu P2 (BangDiemCaNhan(P2).xlsx).
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion, Semester, StudentSemesterResult, StudentYearResult, ScoreConvert.
+
+**Tham số:** studentId — ID học viên.
+ * @summary Xuất bảng điểm cá nhân (Mẫu P2)
+ */
+export type exportBangDiemCaNhanP2Response200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportBangDiemCaNhanP2Response400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type exportBangDiemCaNhanP2Response404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type exportBangDiemCaNhanP2Response409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type exportBangDiemCaNhanP2Response500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type exportBangDiemCaNhanP2ResponseSuccess = (exportBangDiemCaNhanP2Response200) & {
+  headers: Headers;
+};
+export type exportBangDiemCaNhanP2ResponseError = (exportBangDiemCaNhanP2Response400 | exportBangDiemCaNhanP2Response404 | exportBangDiemCaNhanP2Response409 | exportBangDiemCaNhanP2Response500) & {
+  headers: Headers;
+};
+
+export type exportBangDiemCaNhanP2Response = (exportBangDiemCaNhanP2ResponseSuccess | exportBangDiemCaNhanP2ResponseError)
+
+export const getExportBangDiemCaNhanP2Url = () => {
+
+
+  
+
+  return `/api/student-result/export-bang-diem-ca-nhan-p2`
+}
+
+export const exportBangDiemCaNhanP2 = async (exportBangDiemCaNhanP2Request: ExportBangDiemCaNhanP2Request, options?: RequestInit): Promise<exportBangDiemCaNhanP2Response> => {
+  
+  return customTrainingFetch<exportBangDiemCaNhanP2Response>(getExportBangDiemCaNhanP2Url(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportBangDiemCaNhanP2Request,)
+  }
+);}
+
+
+
+
+export const getExportBangDiemCaNhanP2MutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemCaNhanP2>>, TError,{data: ExportBangDiemCaNhanP2Request}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemCaNhanP2>>, TError,{data: ExportBangDiemCaNhanP2Request}, TContext> => {
+
+const mutationKey = ['exportBangDiemCaNhanP2'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportBangDiemCaNhanP2>>, {data: ExportBangDiemCaNhanP2Request}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportBangDiemCaNhanP2(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportBangDiemCaNhanP2MutationResult = NonNullable<Awaited<ReturnType<typeof exportBangDiemCaNhanP2>>>
+    export type ExportBangDiemCaNhanP2MutationBody = ExportBangDiemCaNhanP2Request
+    export type ExportBangDiemCaNhanP2MutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xuất bảng điểm cá nhân (Mẫu P2)
+ */
+export const useExportBangDiemCaNhanP2 = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemCaNhanP2>>, TError,{data: ExportBangDiemCaNhanP2Request}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportBangDiemCaNhanP2>>,
+        TError,
+        {data: ExportBangDiemCaNhanP2Request},
+        TContext
+      > => {
+
+      const mutationOptions = getExportBangDiemCaNhanP2MutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Xuất file Excel bảng điểm cá nhân theo mẫu P7 (BangDiemCaNhan(P7).xlsx).
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion, Semester, StudentSemesterResult, StudentYearResult, ScoreConvert.
+
+**Tham số:** studentId — ID học viên.
+ * @summary Xuất bảng điểm cá nhân (Mẫu P7)
+ */
+export type exportBangDiemCaNhanP7Response200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportBangDiemCaNhanP7Response400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type exportBangDiemCaNhanP7Response404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type exportBangDiemCaNhanP7Response409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type exportBangDiemCaNhanP7Response500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type exportBangDiemCaNhanP7ResponseSuccess = (exportBangDiemCaNhanP7Response200) & {
+  headers: Headers;
+};
+export type exportBangDiemCaNhanP7ResponseError = (exportBangDiemCaNhanP7Response400 | exportBangDiemCaNhanP7Response404 | exportBangDiemCaNhanP7Response409 | exportBangDiemCaNhanP7Response500) & {
+  headers: Headers;
+};
+
+export type exportBangDiemCaNhanP7Response = (exportBangDiemCaNhanP7ResponseSuccess | exportBangDiemCaNhanP7ResponseError)
+
+export const getExportBangDiemCaNhanP7Url = () => {
+
+
+  
+
+  return `/api/student-result/export-bang-diem-ca-nhan-p7`
+}
+
+export const exportBangDiemCaNhanP7 = async (exportBangDiemCaNhanP7Request: ExportBangDiemCaNhanP7Request, options?: RequestInit): Promise<exportBangDiemCaNhanP7Response> => {
+  
+  return customTrainingFetch<exportBangDiemCaNhanP7Response>(getExportBangDiemCaNhanP7Url(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportBangDiemCaNhanP7Request,)
+  }
+);}
+
+
+
+
+export const getExportBangDiemCaNhanP7MutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemCaNhanP7>>, TError,{data: ExportBangDiemCaNhanP7Request}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemCaNhanP7>>, TError,{data: ExportBangDiemCaNhanP7Request}, TContext> => {
+
+const mutationKey = ['exportBangDiemCaNhanP7'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportBangDiemCaNhanP7>>, {data: ExportBangDiemCaNhanP7Request}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportBangDiemCaNhanP7(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportBangDiemCaNhanP7MutationResult = NonNullable<Awaited<ReturnType<typeof exportBangDiemCaNhanP7>>>
+    export type ExportBangDiemCaNhanP7MutationBody = ExportBangDiemCaNhanP7Request
+    export type ExportBangDiemCaNhanP7MutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xuất bảng điểm cá nhân (Mẫu P7)
+ */
+export const useExportBangDiemCaNhanP7 = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemCaNhanP7>>, TError,{data: ExportBangDiemCaNhanP7Request}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportBangDiemCaNhanP7>>,
+        TError,
+        {data: ExportBangDiemCaNhanP7Request},
+        TContext
+      > => {
+
+      const mutationOptions = getExportBangDiemCaNhanP7MutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Xuất file Excel bảng điểm quá trình của một học viên (mẫu BangDiemQuaTrinh.xlsx).
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion, Semester, ScoreConvert.
+
+**Tham số:** studentId — ID học viên. Điểm lấy lần học mới nhất của mỗi môn.
+ * @summary Xuất bảng điểm quá trình học viên
+ */
+export type exportBangDiemQuaTrinhHocVienResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportBangDiemQuaTrinhHocVienResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type exportBangDiemQuaTrinhHocVienResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type exportBangDiemQuaTrinhHocVienResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type exportBangDiemQuaTrinhHocVienResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type exportBangDiemQuaTrinhHocVienResponseSuccess = (exportBangDiemQuaTrinhHocVienResponse200) & {
+  headers: Headers;
+};
+export type exportBangDiemQuaTrinhHocVienResponseError = (exportBangDiemQuaTrinhHocVienResponse400 | exportBangDiemQuaTrinhHocVienResponse404 | exportBangDiemQuaTrinhHocVienResponse409 | exportBangDiemQuaTrinhHocVienResponse500) & {
+  headers: Headers;
+};
+
+export type exportBangDiemQuaTrinhHocVienResponse = (exportBangDiemQuaTrinhHocVienResponseSuccess | exportBangDiemQuaTrinhHocVienResponseError)
+
+export const getExportBangDiemQuaTrinhHocVienUrl = () => {
+
+
+  
+
+  return `/api/student-result/export-bang-diem-qua-trinh-hoc-vien`
+}
+
+export const exportBangDiemQuaTrinhHocVien = async (exportBangDiemQuaTrinhHocVienRequest: ExportBangDiemQuaTrinhHocVienRequest, options?: RequestInit): Promise<exportBangDiemQuaTrinhHocVienResponse> => {
+  
+  return customTrainingFetch<exportBangDiemQuaTrinhHocVienResponse>(getExportBangDiemQuaTrinhHocVienUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportBangDiemQuaTrinhHocVienRequest,)
+  }
+);}
+
+
+
+
+export const getExportBangDiemQuaTrinhHocVienMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemQuaTrinhHocVien>>, TError,{data: ExportBangDiemQuaTrinhHocVienRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemQuaTrinhHocVien>>, TError,{data: ExportBangDiemQuaTrinhHocVienRequest}, TContext> => {
+
+const mutationKey = ['exportBangDiemQuaTrinhHocVien'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportBangDiemQuaTrinhHocVien>>, {data: ExportBangDiemQuaTrinhHocVienRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportBangDiemQuaTrinhHocVien(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportBangDiemQuaTrinhHocVienMutationResult = NonNullable<Awaited<ReturnType<typeof exportBangDiemQuaTrinhHocVien>>>
+    export type ExportBangDiemQuaTrinhHocVienMutationBody = ExportBangDiemQuaTrinhHocVienRequest
+    export type ExportBangDiemQuaTrinhHocVienMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xuất bảng điểm quá trình học viên
+ */
+export const useExportBangDiemQuaTrinhHocVien = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemQuaTrinhHocVien>>, TError,{data: ExportBangDiemQuaTrinhHocVienRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportBangDiemQuaTrinhHocVien>>,
+        TError,
+        {data: ExportBangDiemQuaTrinhHocVienRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getExportBangDiemQuaTrinhHocVienMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Xuất file Excel bảng điểm ngắn hạn / dài hạn (mẫu bang-diem-ngan-dai-han.xlsx).
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, Semester.
+
+**Tham số:** studentIds — danh sách ID học viên cần xuất (theo thứ tự bảng).
+ * @summary Xuất bảng điểm ngắn hạn, dài hạn
+ */
+export type exportBangDiemNganDaiHanResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportBangDiemNganDaiHanResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type exportBangDiemNganDaiHanResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type exportBangDiemNganDaiHanResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type exportBangDiemNganDaiHanResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type exportBangDiemNganDaiHanResponseSuccess = (exportBangDiemNganDaiHanResponse200) & {
+  headers: Headers;
+};
+export type exportBangDiemNganDaiHanResponseError = (exportBangDiemNganDaiHanResponse400 | exportBangDiemNganDaiHanResponse404 | exportBangDiemNganDaiHanResponse409 | exportBangDiemNganDaiHanResponse500) & {
+  headers: Headers;
+};
+
+export type exportBangDiemNganDaiHanResponse = (exportBangDiemNganDaiHanResponseSuccess | exportBangDiemNganDaiHanResponseError)
+
+export const getExportBangDiemNganDaiHanUrl = () => {
+
+
+  
+
+  return `/api/student-result/export-bang-diem-ngan-dai-han`
+}
+
+export const exportBangDiemNganDaiHan = async (exportBangDiemNganDaiHanRequest: ExportBangDiemNganDaiHanRequest, options?: RequestInit): Promise<exportBangDiemNganDaiHanResponse> => {
+  
+  return customTrainingFetch<exportBangDiemNganDaiHanResponse>(getExportBangDiemNganDaiHanUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportBangDiemNganDaiHanRequest,)
+  }
+);}
+
+
+
+
+export const getExportBangDiemNganDaiHanMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemNganDaiHan>>, TError,{data: ExportBangDiemNganDaiHanRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemNganDaiHan>>, TError,{data: ExportBangDiemNganDaiHanRequest}, TContext> => {
+
+const mutationKey = ['exportBangDiemNganDaiHan'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportBangDiemNganDaiHan>>, {data: ExportBangDiemNganDaiHanRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportBangDiemNganDaiHan(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportBangDiemNganDaiHanMutationResult = NonNullable<Awaited<ReturnType<typeof exportBangDiemNganDaiHan>>>
+    export type ExportBangDiemNganDaiHanMutationBody = ExportBangDiemNganDaiHanRequest
+    export type ExportBangDiemNganDaiHanMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xuất bảng điểm ngắn hạn, dài hạn
+ */
+export const useExportBangDiemNganDaiHan = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemNganDaiHan>>, TError,{data: ExportBangDiemNganDaiHanRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportBangDiemNganDaiHan>>,
+        TError,
+        {data: ExportBangDiemNganDaiHanRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getExportBangDiemNganDaiHanMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Xuất file Excel bảng điểm theo lớp / toàn khoá (mẫu BangdiemTheoLop_v3.xlsx).
+
+**Bảng dữ liệu nguồn:** FixedClass, Student, StudentSubjectScore, TrainingBlockSubject.
+
+**Tham số:** trainingCourseId — ID khóa học. Xuất tất cả lớp biên chế đang hoạt động trong khóa.
+ * @summary Xuất bảng điểm theo lớp, kết quả đào tạo toàn khoá
+ */
+export type exportBangDiemTheoLopResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportBangDiemTheoLopResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type exportBangDiemTheoLopResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type exportBangDiemTheoLopResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type exportBangDiemTheoLopResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type exportBangDiemTheoLopResponseSuccess = (exportBangDiemTheoLopResponse200) & {
+  headers: Headers;
+};
+export type exportBangDiemTheoLopResponseError = (exportBangDiemTheoLopResponse400 | exportBangDiemTheoLopResponse404 | exportBangDiemTheoLopResponse409 | exportBangDiemTheoLopResponse500) & {
+  headers: Headers;
+};
+
+export type exportBangDiemTheoLopResponse = (exportBangDiemTheoLopResponseSuccess | exportBangDiemTheoLopResponseError)
+
+export const getExportBangDiemTheoLopUrl = () => {
+
+
+  
+
+  return `/api/student-result/export-bang-diem-theo-lop`
+}
+
+export const exportBangDiemTheoLop = async (exportBangDiemTheoLopRequest: ExportBangDiemTheoLopRequest, options?: RequestInit): Promise<exportBangDiemTheoLopResponse> => {
+  
+  return customTrainingFetch<exportBangDiemTheoLopResponse>(getExportBangDiemTheoLopUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportBangDiemTheoLopRequest,)
+  }
+);}
+
+
+
+
+export const getExportBangDiemTheoLopMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemTheoLop>>, TError,{data: ExportBangDiemTheoLopRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemTheoLop>>, TError,{data: ExportBangDiemTheoLopRequest}, TContext> => {
+
+const mutationKey = ['exportBangDiemTheoLop'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportBangDiemTheoLop>>, {data: ExportBangDiemTheoLopRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportBangDiemTheoLop(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportBangDiemTheoLopMutationResult = NonNullable<Awaited<ReturnType<typeof exportBangDiemTheoLop>>>
+    export type ExportBangDiemTheoLopMutationBody = ExportBangDiemTheoLopRequest
+    export type ExportBangDiemTheoLopMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xuất bảng điểm theo lớp, kết quả đào tạo toàn khoá
+ */
+export const useExportBangDiemTheoLop = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportBangDiemTheoLop>>, TError,{data: ExportBangDiemTheoLopRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportBangDiemTheoLop>>,
+        TError,
+        {data: ExportBangDiemTheoLopRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getExportBangDiemTheoLopMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

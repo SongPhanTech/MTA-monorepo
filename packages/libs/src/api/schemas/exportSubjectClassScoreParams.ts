@@ -82,11 +82,12 @@ Một số endpoint đặc biệt:
  */
 import type { Id } from './id';
 import type { ExamId } from './examId';
+import type { UserId } from './userId';
 
 export type ExportSubjectClassScoreParams = {
 id?: Id;
 examId?: ExamId;
 type?: string;
 role?: string;
-userId?: string;
+userId?: UserId;
 };

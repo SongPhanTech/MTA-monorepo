@@ -78,10 +78,11 @@ export default function ThongKeNoHocLai() {
     {
       search: searchText || undefined,
       trainingCourseId: trainingCourseId as string,
-      trainingMajorId,
+      trainingMajorId: trainingMajorId || undefined,
       semesterId: semesterId as string,
       trainingObjectTypeId: trainingObjectTypeId as string,
       viewAll: 1,
+      limit: 100,
     },
     { query: { enabled: !!trainingObjectTypeId && !!semesterId && !!trainingCourseId } }
   )
