@@ -190,8 +190,7 @@ model StudentSubjectScore extends Base {
 
   @@index([subjectClassId])
   @@index([subjectVersionId])
-  @@index([studentId])
-  @@index([studentId, subjectVersionId, createdAt])
+
   @@unique([subjectClassId, studentId])
   @@schema("ql-dao-tao")
 }
@@ -609,7 +608,7 @@ model FixedClass extends Base {
   planTrainingSubject      PlanTrainingSubject? @relation(fields: [planTrainingSubjectId], references: [id])
   planTrainingSubjectId    String?
   @@unique([name, trainingCourseId, curriculumVersionId])
-  @@index([trainingCourseId])
+
   @@schema("ql-dao-tao")
 }
 
@@ -901,8 +900,7 @@ model TrainingBlockSubject extends Base {
   planTrainingSubjects               PlanTrainingSubject[]
 
   // @@unique([subjectId, trainingBlockOnCurriculumVersionId])
-  @@index([subjectId])
-  @@index([trainingBlockOnCurriculumVersionId])
+
   @@schema("ql-dao-tao")
 }
 
