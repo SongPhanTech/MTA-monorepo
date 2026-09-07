@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
-import { $Enums, Prisma, Prisma as PrismaNamespace } from "@workspace/db"
+import { $Enums, Prisma as PrismaNamespace } from "@workspace/db"
 import { prisma } from ".."
 import {
   DataListResponseSchema,
@@ -14,17 +14,16 @@ import {
 import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
+import {
+  attemptCountExpr,
+  firstAttemptExamBannedExpr,
+  latestAttemptRnExpr,
+  reexamEligibleExpr,
+  trainingBlockSubjectJoin,
+  truotMonExpr,
+} from "../services/student-debt"
 
 const app = new OpenAPIHono({ strict: false })
-
-/** Join TBS sớm theo subjectId để tránh fan-out toàn bộ khối CTĐT rồi mới lọc môn. */
-const trainingBlockSubjectJoin = PrismaNamespace.sql`
-                                 inner join "ql-dao-tao"."TrainingBlockSubject" TBS
-                                            on TBS."subjectId" = sv.id
-                                 inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
-                                            on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
-                                           and TBOCV."curriculumVersionId" = CV.id
-`
 
 /** Default page/limit — tránh LIMIT/OFFSET NULL khi FE không gửi. */
 const ListPaginationSchema = PaginationQuerySchema.omit({ page: true, limit: true }).extend({
@@ -268,8 +267,7 @@ const openSubjectClassReExamStudents = createRoute({
  * Key SQL columns used for the above logic:
  *   first_attempt_exam_banned — FIRST_VALUE(examBanned ORDER BY createdAt ASC): whether the
  *     student was exam-banned on their very first registration of the subject.
- *   attempt_count — COUNT(*) OVER PARTITION: total number of StudentSubjectScore records for
- *     that student+subject combination (1 = only original attempt, 2+ = had a ReExam).
+ *   attempt_count — số bản ghi StudentSubjectScore (DENSE_RANK trên SSS.id, không bị nhân khi join khối CTĐT).
  *
  * viewAll=0 (default): hides subjects already added to the plan (subjectAlreadyInPlan).
  * viewAll=1: shows all subjects regardless of plan status.
@@ -355,22 +353,11 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                SSS."examBannedReason" as ly_do_cam_thi,
                                SSS.suspended as dinh_chi,
                                SSS."suspendedReason" as ly_do_dinh_chi,
-                               (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation") or
-                               (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
-                               (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
-                               SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam"
-                                    as truot_mon,
+                               ${truotMonExpr} as truot_mon,
                                TBS.id                         as trainingBlockSubjectId,
-                               FIRST_VALUE(SSS."examBanned") OVER (
-                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
-                                 ORDER BY SSS."createdAt" ASC
-                                 ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-                               )                              as first_attempt_exam_banned,
-                               COUNT(*) OVER (
-                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
-                               )::INTEGER                            as attempt_count,
-                               row_number()
-                               over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
+                               ${firstAttemptExamBannedExpr} as first_attempt_exam_banned,
+                               ${attemptCountExpr} as attempt_count,
+                               ${latestAttemptRnExpr} as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
                                  inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
                                  inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
@@ -384,7 +371,8 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                   inner join "ql-dao-tao"."TrainingBlock" TB on TB.id = TBOCV."trainingBlockId"
                         where ${whereClause}),
         grouped as (
-        select id, code, name, trainingBlockSubjectId as "trainingBlockSubjectId", count("studentId") ::INTEGER as count
+        select id, code, name, min(trainingBlockSubjectId) as "trainingBlockSubjectId",
+               count(DISTINCT "studentId")::INTEGER as count
         from mon_no
         where rn = 1
           and (truot_mon = true
@@ -397,13 +385,10 @@ app.openapi(openSubjectClassRetake, async (c) => {
           -- only exclude on first attempt: if they already did a ReExam but still fail → belongs in Retake
           and not (attempt_count = 1 and first_attempt_exam_banned = false
                    and truot_mon = true and cam_thi = false and dinh_chi = false
-                   and (
-                       ("isRetakeExam" = true and (training_object_type != 'CIVILIAN' or training_object_type is null))
-                       or is_national_defense = true
-                   ))
-        group by id, code, name, trainingBlockSubjectId
+                   and (${reexamEligibleExpr}))
+        group by id, code, name
         )
-        select grouped.*, (select count(DISTINCT grouped2.id)::INTEGER from grouped grouped2) as "totalCount"
+        select grouped.*, (select count(*)::INTEGER from grouped) as "totalCount"
         from grouped
         order by code
         limit ${limit} offset ${limit} * (${page} - 1)
@@ -499,23 +484,13 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                SSS."examBannedReason"                                                                            as ly_do_cam_thi,
                                SSS.suspended                                                                                     as dinh_chi,
                                SSS."suspendedReason"                                                                             as ly_do_dinh_chi,
-                               (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation") or
-                               (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
-                               (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
-                               SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam" as truot_mon,
-                               FIRST_VALUE(SSS."examBanned") OVER (
-                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
-                                 ORDER BY SSS."createdAt" ASC
-                                 ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-                               )                                                                                                  as first_attempt_exam_banned,
-                               COUNT(*) OVER (
-                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
-                               )::INTEGER                            as attempt_count,
+                               ${truotMonExpr} as truot_mon,
+                               ${firstAttemptExamBannedExpr} as first_attempt_exam_banned,
+                               ${attemptCountExpr} as attempt_count,
                                SC."code"                                                                                         as ma_lop_mon_hoc,
                                Sem."name"                                                                                        as ky_hoc,
                                Sch."name"                                                                                        as nam_hoc,
-                               row_number()
-                               over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc)::INTEGER as rn
+                               ${latestAttemptRnExpr} as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
                                  inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
                                  inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
@@ -548,21 +523,19 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                ky_hoc,
                nam_hoc,
                attempt_count
-        from mon_no
-        where rn = 1
-          and (truot_mon = true or cam_thi = true or dinh_chi = true)
-          and withdrew = false -- rút khỏi lớp
-          and mien_thi = false -- miễn học
-          and hoan_thi = false -- hoãn thi
-          -- exclude students eligible for ReExam (thi lại)
-          -- only exclude on first attempt: if they already did a ReExam but still fail → belongs in Retake
-          and not (attempt_count = 1 and first_attempt_exam_banned = false
-                   and truot_mon = true and cam_thi = false and dinh_chi = false
-                   and (
-                       ("isRetakeExam" = true and (training_object_type != 'CIVILIAN' or training_object_type is null))
-                       or is_national_defense = true
-                   ))
-          
+        from (
+          select DISTINCT ON ("studentId") *
+          from mon_no
+          where rn = 1
+            and (truot_mon = true or cam_thi = true or dinh_chi = true)
+            and withdrew = false
+            and mien_thi = false
+            and hoan_thi = false
+            and not (attempt_count = 1 and first_attempt_exam_banned = false
+                     and truot_mon = true and cam_thi = false and dinh_chi = false
+                     and (${reexamEligibleExpr}))
+          order by "studentId", truot_mon DESC NULLS LAST, cam_thi DESC, dinh_chi DESC
+        ) t
         limit ${pageSize} offset ${pageSize} * (${page} - 1)
     `
 
@@ -737,16 +710,10 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                SSS."examBannedReason"                                                                   as ly_do_cam_thi,
                                SSS.suspended                                                                            as dinh_chi,
                                SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
-                               (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation") or
-                               (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
-                               (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
-                               SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam" as truot_mon,
+                               ${truotMonExpr} as truot_mon,
                                TBS.id                         as trainingBlockSubjectId,
-                               COUNT(*) OVER (
-                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
-                               )::INTEGER                            as attempt_count,
-                               row_number()
-                               over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
+                               ${attemptCountExpr} as attempt_count,
+                               ${latestAttemptRnExpr} as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
                                  inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
                                  inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
@@ -760,22 +727,20 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                   inner join "ql-dao-tao"."TrainingBlock" TB on TB.id = TBOCV."trainingBlockId"
                         where ${whereClause}),
         grouped as (
-        select id, code, name, trainingBlockSubjectId as "trainingBlockSubjectId", count("studentId") ::INTEGER as count
+        select id, code, name, min(trainingBlockSubjectId) as "trainingBlockSubjectId",
+               count(DISTINCT "studentId")::INTEGER as count
         from mon_no
         where rn = 1
           and (truot_mon = true or "examPostponed" = true)
           and cam_thi = false
           and dinh_chi = false
           and attempt_count = 1      -- only first attempt: if they failed ReExam, they belong in Retake
-          and (
-               ("isRetakeExam" = true and (training_object_type != 'CIVILIAN' or training_object_type is null))
-               or is_national_defense = true
-          )
+          and (${reexamEligibleExpr})
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
-        group by id, code, name, trainingBlockSubjectId
+        group by id, code, name
         )
-        select grouped.*, (select count(DISTINCT grouped2.id)::INTEGER from grouped grouped2) as "totalCount"
+        select grouped.*, (select count(*)::INTEGER from grouped) as "totalCount"
         from grouped
         order by code
         limit ${limit} offset ${limit} * (${page} - 1)
@@ -860,18 +825,12 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
                                SSS."examBannedReason"                                                                            as ly_do_cam_thi,
                                SSS.suspended                                                                                     as dinh_chi,
                                SSS."suspendedReason"                                                                             as ly_do_dinh_chi,
-                               (TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation") or
-                               (TBS."graduation" = false and TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
-                               (TBS."graduation" = false and TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
-                               SSS."examScore" < TC."examScoreToPass" or SSS."attendanceScore" < TC."scoreToTakeExam" or SSS."midtermScore" < TC."scoreToTakeExam" as truot_mon,
+                               ${truotMonExpr} as truot_mon,
                                SC."code"                                                                                         as ma_lop_mon_hoc,
                                Sem."name"                                                                                        as ky_hoc,
                                Sch."name"                                                                                        as nam_hoc,
-                               COUNT(*) OVER (
-                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
-                               )::INTEGER                            as attempt_count,
-                               row_number()
-                               over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc)::INTEGER as rn
+                               ${attemptCountExpr} as attempt_count,
+                               ${latestAttemptRnExpr} as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
                                  inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
                                  inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
@@ -903,17 +862,17 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
                truot_mon,
                ky_hoc,
                nam_hoc
-        from mon_no
-        where rn = 1
-          and (truot_mon = true or hoan_thi = true) and cam_thi = false and dinh_chi = false
-          and attempt_count = 1      -- only first attempt: if they failed ReExam, they belong in Retake
-          and (
-               ("isRetakeExam" = true and (training_object_type != 'CIVILIAN' or training_object_type is null))
-               or is_national_defense = true
-          )
-          and withdrew = false -- rút khỏi lớp
-          and mien_thi = false -- miễn học
-          
+        from (
+          select DISTINCT ON ("studentId") *
+          from mon_no
+          where rn = 1
+            and (truot_mon = true or hoan_thi = true) and cam_thi = false and dinh_chi = false
+            and attempt_count = 1
+            and (${reexamEligibleExpr})
+            and withdrew = false
+            and mien_thi = false
+          order by "studentId", truot_mon DESC NULLS LAST, hoan_thi DESC
+        ) t
         limit ${pageSize} offset ${pageSize} * (${page} - 1)
     `
 

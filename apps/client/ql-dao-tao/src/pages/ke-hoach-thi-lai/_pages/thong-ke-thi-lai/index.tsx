@@ -95,7 +95,19 @@ export default function ThongKeNoThiLai() {
     { query: { enabled: !!trainingObjectTypeId && !!semesterId && !!trainingCourseId } }
   )
 
-  const rawData = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
+  const rawData = useMemo(() => {
+    const items = res?.status === 200 ? res?.data.data : []
+    const merged = new Map<string, (typeof items)[0]>()
+    for (const item of items) {
+      const existing = merged.get(item.id)
+      if (existing) {
+        merged.set(item.id, { ...existing, count: existing.count + item.count })
+      } else {
+        merged.set(item.id, { ...item })
+      }
+    }
+    return Array.from(merged.values())
+  }, [res])
   const total = res?.status === 200 ? (res.data.count ?? 0) : 0
 
   return (

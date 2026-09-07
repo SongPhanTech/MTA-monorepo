@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
-import { AcademicActionType, StudentStatus, Prisma as PrismaNamespace } from "@workspace/db"
+import { AcademicActionType, StudentStatus } from "@workspace/db"
 import { getTemplateBuffer } from "@workspace/libs/server"
 import { formatDateVn } from "@workspace/libs/timezone"
 import XlsxTemplate from "xlsx-template"
@@ -35,6 +35,7 @@ import {
 import { fieldDesc } from "../dto/openapi-helpers"
 import { CalculateSemesterResultResponseSchema } from "../dto/student-result-openapi.dto"
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
+import { queryDebtExportRows, type DebtExportRow } from "../services/student-debt"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -669,340 +670,53 @@ app.openapi(debtStatistics, async (c) => {
 
   const trainingCourse = trainingCourseId
     ? await prisma.trainingCourse.findUnique({
-      where: { id: trainingCourseId },
-      select: { name: true },
-    })
+        where: { id: trainingCourseId },
+        select: { name: true },
+      })
     : null
 
-  type Result = {
-    studentId: string
-    studentCode: string
-    fullname: string
-    dateOfBirth: string
-    fixedClassCode: string
-    subjectCode: string
-    subjectName: string
-    subjectCredit: number
-    semesterCode: string
-    finalScore: number | null
-    examBanned: boolean
-    examBannedReason: string | null
-  }[]
-
-  const trainingCourses = await prisma.trainingCourse.findMany({ include: { trainingObjectType: { select: { type: true } } } })
-  const coursesMap = Object.fromEntries(trainingCourses.map((c) => [c.id, c]))
-
-  const scores = await prisma.studentSubjectScore.findMany({
-    where: {
-      withdrew: false,
-      exempted: false,
-      examPostponed: false,
-      subjectVersion: {
-        trainingObjectTypeId,
-      },
-      student: (trainingCourseId || trainingMajorId)
-        ? {
-          fixedClass: {
-            ...(trainingCourseId ? { trainingCourseId } : {}),
-            ...(trainingMajorId
-              ? {
-                curriculumVersion: {
-                  curriculum: { trainingMajorId },
-                },
-              }
-              : {}),
-          },
-        }
-        : undefined,
-    },
-    select: {
-      studentId: true,
-      finalScore: true,
-      manualFinalScore: true,
-      examScore: true,
-      examBanned: true,
-      examBannedReason: true,
-      suspended: true,
-      subjectVersionId: true,
-      subjectClass: {
-        select: {
-          cancelled: true,
-          semester: {
-            select: {
-              code: true,
-              endDate: true,
-            },
-          },
-        },
-      },
-      subjectVersion: {
-        select: {
-          code: true,
-          name: true,
-          credit: true,
-        },
-      },
-      student: {
-        select: {
-          code: true,
-          curriculumVersionId: true,
-          userProfile: {
-            select: {
-              fullname: true,
-              dateOfBirth: true,
-            },
-          },
-          fixedClass: {
-            select: {
-              code: true,
-              trainingCourseId: true,
-            },
-          },
-        },
-      },
-    },
-    orderBy: [
-      { studentId: "asc" },
-      { subjectVersionId: "asc" },
-      { subjectClass: { semester: { endDate: "asc" } } },
-    ],
+  const debtRows = await queryDebtExportRows(prisma, {
+    trainingObjectTypeId,
+    trainingCourseId,
+    trainingMajorId,
   })
 
-  const cvIds = Array.from(
-    new Set(scores.map((s) => s.student.curriculumVersionId).filter(Boolean))
-  ) as string[]
-
-  const tbSubjects = await prisma.trainingBlockSubject.findMany({
-    where: {
-      trainingBlockOnCurriculumVersion: {
-        curriculumVersionId: { in: cvIds },
-      },
-    },
-    select: {
-      subjectId: true,
-      graduation: true,
-      useForFinalScore: true,
-      trainingBlockOnCurriculumVersion: {
-        select: {
-          curriculumVersionId: true,
-          trainingBlock: { select: { isNationalDefense: true } }
-        },
-      },
-    },
-  })
-
-  const tbsMap: Record<string, Record<string, (typeof tbSubjects)[0]>> = {}
-  for (const tbs of tbSubjects) {
-    const cvId = tbs.trainingBlockOnCurriculumVersion.curriculumVersionId
-    if (!cvId) continue
-    if (!tbsMap[cvId]) tbsMap[cvId] = {}
-    tbsMap[cvId][tbs.subjectId] = tbs
-  }
-
-  type SubjectAttempt = {
-    semesterCode: string
-    semesterEndDate: Date | null
-    finalScore: number | null
-    manualFinalScore: number | null
-    examScore: number | null
-    examBanned: boolean
-    examBannedReason: string | null
-    suspended: boolean
-    cancelled: boolean
-    isPassed: boolean
-    isFailed: boolean
-  }
-
-  type DebtSubject = {
-    subjectCode: string
-    subjectName: string
-    subjectCredit: number
-    attempts: SubjectAttempt[]
-    hasPassed: boolean
-    hasFailed: boolean
-    isNationalDefense: boolean
-  }
-
-  type StudentDebtSummary = {
-    studentId: string
-    studentCode: string
-    fullname: string
-    dateOfBirth: string | null
-    fixedClassCode: string
-    courseId: string
-    subjects: Record<string, DebtSubject>
-  }
-
-  const studentDebtMap: Record<string, StudentDebtSummary> = {}
-
-  for (const score of scores) {
-    const studentId = score.studentId
-    const subjectId = score.subjectVersionId
-    const cvId = score.student.curriculumVersionId
-    const courseId = score.student.fixedClass?.trainingCourseId
-
-    if (!courseId || !cvId) continue
-    const tc = coursesMap[courseId]
-    const tbs = tbsMap[cvId]?.[subjectId]
-
-    if (!tc || !tbs) continue
-
-    const finalScore = score.finalScore ? Number(score.finalScore) : null
-    const manualFinalScore = score.manualFinalScore
-
-    let isPassed = false
-    if (!score.examBanned && !score.suspended) {
-      if (tbs.graduation) {
-        isPassed =
-          (finalScore !== null && finalScore >= tc.scoreToPassGraduation) ||
-          (manualFinalScore !== null && manualFinalScore >= tc.scoreToPassGraduation)
-      } else if (tbs.useForFinalScore) {
-        isPassed =
-          (finalScore !== null && finalScore >= tc.scoreToPass) ||
-          (manualFinalScore !== null && manualFinalScore >= tc.scoreToPass)
-      } else {
-        isPassed =
-          (finalScore !== null && finalScore >= tc.scoreToPassConditional) ||
-          (manualFinalScore !== null && manualFinalScore >= tc.scoreToPassConditional)
-      }
+  const toExcelRow = (r: DebtExportRow, idx: number) => {
+    let note = "Đã thi trượt 1 lần"
+    if (r.type === "THI LẠI") {
+      note = r.examPostponed ? "Hoãn thi" : "Đã thi trượt 1 lần"
+    } else if (r.examBanned) {
+      note = `Bị cấm thi${r.examBannedReason ? `: ${r.examBannedReason}` : ""}`
+    } else if (r.suspended) {
+      note = "Đình chỉ thi"
+    } else if (r.attempt_count > 1) {
+      note = `Đã thi trượt ít nhất ${r.attempt_count} lần`
+    } else {
+      note = "Không thuộc đối tượng được thi lại"
     }
 
-    const endDate = score.subjectClass?.semester?.endDate
-    const isBeforeOrOnDate = !endDate || endDate <= date
-    const cancelled = score.subjectClass?.cancelled ?? false
-
-    let isFailed = false
-    if (!cancelled && isBeforeOrOnDate) {
-      if (score.examBanned || score.suspended) {
-        isFailed = true
-      } else {
-        if (tbs.graduation) {
-          isFailed =
-            (finalScore === null || finalScore < tc.scoreToPassGraduation) &&
-            (manualFinalScore === null || manualFinalScore < tc.scoreToPassGraduation)
-        } else if (tbs.useForFinalScore) {
-          isFailed =
-            (finalScore === null || finalScore < tc.scoreToPass) &&
-            (manualFinalScore === null || manualFinalScore < tc.scoreToPass)
-        } else {
-          isFailed =
-            (finalScore === null || finalScore < tc.scoreToPassConditional) &&
-            (manualFinalScore === null || manualFinalScore < tc.scoreToPassConditional)
-        }
-      }
-    }
-
-    if (!studentDebtMap[studentId]) {
-      studentDebtMap[studentId] = {
-        studentId,
-        studentCode: score.student.code || "",
-        fullname: score.student.userProfile?.fullname || "",
-        dateOfBirth: score.student.userProfile?.dateOfBirth
-          ? score.student.userProfile.dateOfBirth.toISOString()
-          : null,
-        fixedClassCode: score.student.fixedClass?.code || "",
-        courseId,
-        subjects: {},
-      }
-    }
-
-    if (!studentDebtMap[studentId].subjects[subjectId]) {
-      studentDebtMap[studentId].subjects[subjectId] = {
-        subjectCode: score.subjectVersion.code || "",
-        subjectName: score.subjectVersion.name || "",
-        subjectCredit: score.subjectVersion.credit,
-        isNationalDefense: tbs.trainingBlockOnCurriculumVersion?.trainingBlock?.isNationalDefense ?? false,
-        attempts: [],
-        hasPassed: false,
-        hasFailed: false,
-      }
-    }
-
-    const subj = studentDebtMap[studentId].subjects[subjectId]
-    if (isPassed) subj.hasPassed = true
-
-    if (isFailed) {
-      subj.hasFailed = true
-      subj.attempts.push({
-        semesterCode: score.subjectClass?.semester?.code || "",
-        semesterEndDate: endDate || null,
-        finalScore,
-        manualFinalScore,
-        examScore: score.examScore ? Number(score.examScore) : null,
-        examBanned: score.examBanned,
-        examBannedReason: score.examBannedReason,
-        suspended: score.suspended,
-        cancelled,
-        isPassed,
-        isFailed,
-      })
+    return {
+      no: idx + 1,
+      studentCode: r.studentCode || "",
+      fullname: r.fullname || "",
+      birthday: r.dateOfBirth ? formatDateVn(r.dateOfBirth) : "",
+      dateOfBirth: r.dateOfBirth ? formatDateVn(r.dateOfBirth) : "",
+      fixedClassCode: r.fixedClassCode || "",
+      totalDebtSubject: r.totalDebtSubject,
+      totalDebtCredit: r.totalDebtCredit,
+      subjectCode: r.subjectCode,
+      subjectName: r.subjectName,
+      subjectCredit: r.subjectCredit,
+      semesters: r.semesterCode || "",
+      finalScores: r.finalScore === null ? "Chưa có điểm" : String(r.finalScore),
+      examScores: r.examScore === null ? "Chưa có" : String(r.examScore),
+      type: r.type,
+      note,
     }
   }
 
-  const rows = Object.values(studentDebtMap).flatMap((s) => {
-    const debtSubjects = Object.values(s.subjects).filter((sub) => sub.hasFailed && !sub.hasPassed)
-    if (debtSubjects.length === 0) return []
-
-    const totalDebtSubject = debtSubjects.length
-    const totalDebtCredit = debtSubjects.reduce((sum, sub) => sum + sub.subjectCredit, 0)
-
-    return debtSubjects.map((subject) => {
-      const lastAttempt = subject.attempts[subject.attempts.length - 1]
-
-      const tc = coursesMap[s.courseId]
-      const isCivilian = tc?.trainingObjectType?.type === 'CIVILIAN'
-
-      let type = "THI LẠI"
-      let note = "Đã thi trượt 1 lần"
-
-      if (!lastAttempt) {
-        type = "CHƯA THI"
-        note = "Chưa có dữ liệu thi"
-      } else if (lastAttempt.examBanned) {
-        type = "HỌC LẠI"
-        note = `Bị cấm thi${lastAttempt.examBannedReason ? `: ${lastAttempt.examBannedReason}` : ""}`
-      } else if (lastAttempt.finalScore === null) {
-        type = "CHƯA THI"
-        note = "Chưa thi hoặc GV chưa nhập điểm thi"
-      } else if (subject.attempts.length > 1) {
-        type = "HỌC LẠI"
-        note = `Đã thi trượt ít nhất ${subject.attempts.length} lần`
-      } else {
-        const eligibleForReExam = subject.isNationalDefense || (tc?.isRetakeExam && !isCivilian)
-        if (!eligibleForReExam) {
-          type = "HỌC LẠI"
-          note = "Không thuộc đối tượng được thi lại"
-        }
-      }
-
-      return {
-        studentCode: s.studentCode,
-        fullname: s.fullname,
-        birthday: s.dateOfBirth ? formatDateVn(s.dateOfBirth) : "",
-        dateOfBirth: s.dateOfBirth ? formatDateVn(s.dateOfBirth) : "",
-        fixedClassCode: s.fixedClassCode,
-        totalDebtSubject,
-        totalDebtCredit,
-        subjectCode: subject.subjectCode,
-        subjectName: subject.subjectName,
-        subjectCredit: subject.subjectCredit,
-        semesters: subject.attempts.map((attempt) => attempt.semesterCode).join("/"),
-        finalScores: subject.attempts
-          .map((attempt) =>
-            attempt.finalScore === null ? "Chưa có điểm" : String(attempt.finalScore)
-          )
-          .join("/"),
-        examScores: subject.attempts
-          .map((attempt) => (attempt.examScore === null ? "Chưa có" : String(attempt.examScore)))
-          .join("/"),
-        type,
-        note,
-      }
-    })
-  })
-
-  const hocLaiRows = rows.filter((r) => r.type === "HỌC LẠI" || r.type === "CHƯA THI")
-  const thiLaiRows = rows.filter((r) => r.type === "THI LẠI")
+  const hocLaiRows = debtRows.filter((r) => r.type === "HỌC LẠI").map(toExcelRow)
+  const thiLaiRows = debtRows.filter((r) => r.type === "THI LẠI").map(toExcelRow)
 
   const buffer = await getTemplateBuffer(prisma, "thong_ke_no")
   const template = new XlsxTemplate(buffer)
@@ -1011,14 +725,14 @@ app.openapi(debtStatistics, async (c) => {
     ĐTĐT: trainingObjectType.name,
     KHOÁ: trainingCourse?.name || "Tất cả các khoá",
     DATE: formatDateVn(date),
-    data: hocLaiRows.map((r, idx) => ({ no: idx + 1, ...r })),
+    data: hocLaiRows,
   })
 
   template.substitute("Thi lại", {
     ĐTĐT: trainingObjectType.name,
     KHOÁ: trainingCourse?.name || "Tất cả các khoá",
     DATE: formatDateVn(date),
-    data: thiLaiRows.map((r, idx) => ({ no: idx + 1, ...r })),
+    data: thiLaiRows,
   })
 
   const result = await template.generate({ type: "arraybuffer" })
