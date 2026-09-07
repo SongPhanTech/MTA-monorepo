@@ -8,7 +8,8 @@ import type { FilterProps } from "@constants/type"
 import { getWarningLevelColor } from "@hooks/getWarningLevelColor"
 import useSpinner from "@hooks/spinner"
 import { $Enums, type AcademicWarning, type StudentSemesterResult } from "@workspace/db/client"
-import { useCreateAcademicWarning, useFindManyAcademicWarning } from "@workspace/db/hooks"
+import { useFindManyAcademicWarning } from "@workspace/db/hooks"
+import { useSqlTransaction } from "@workspace/libs/api/model"
 import { useExportStudentDecreaseAcademicWarningJson } from "@workspace/libs/api/training"
 import { normalizeVietnamese } from "@workspace/libs/utils"
 import { BookPlus } from "lucide-react"
@@ -28,7 +29,7 @@ const GiamCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: GiamCanhCaoHocT
   const [filters, setFilters] = useState<FilterProps>({ name: "", fixedClass: undefined })
 
   const { showSpinner, hideSpinner } = useSpinner()
-  const { mutateAsync: createAcademicWarning } = useCreateAcademicWarning()
+  const { mutateAsync: sqlTransaction } = useSqlTransaction()
 
   const { data: decreaseStudents = [], isFetching: isLoadingStudents } =
     useExportStudentDecreaseAcademicWarningJson<any[] | { data: any[] }>(
@@ -111,26 +112,57 @@ const GiamCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: GiamCanhCaoHocT
       onOk: async () => {
         try {
           showSpinner()
-          const promises = selectedRecords
-            .filter((record: any) => !!record.studentSemesterResult)
-            .map((record: any) => {
-              const previousLevel = record.previousAcademicWarningLevel ?? 0
-              return createAcademicWarning({
-                data: {
-                  student: { connect: { id: record.id } },
-                  semester: { connect: { id: semesterId } },
-                  level: Math.max(0, previousLevel - 1),
-                  decreasedFrom: previousLevel,
-                  description: record.reason,
-                },
-              })
-            })
-
-          await Promise.all(promises)
+          await sqlTransaction({
+            data: selectedRecords
+              .filter((record: any) => !!record.studentSemesterResult)
+              .flatMap((record: any) => {
+                const previousLevel = record.previousAcademicWarningLevel ?? 0
+                const newLevel = Math.max(0, previousLevel - 1)
+                return [
+                  {
+                    model: "AcademicWarning",
+                    operation: "create",
+                    data: {
+                      data: {
+                        studentId: record.id,
+                        semesterId,
+                        level: newLevel,
+                        decreasedFrom: previousLevel,
+                        description: record.reason,
+                      },
+                    },
+                  },
+                  {
+                    model: "Student",
+                    operation: "update",
+                    data: {
+                      where: { id: record.id },
+                      data: { academicWarningLevel: newLevel },
+                    },
+                  },
+                  {
+                    model: "StudentSemesterResult",
+                    operation: "update",
+                    data: {
+                      where: {
+                        studentId_semesterId: { studentId: record.id, semesterId },
+                      },
+                      data: { academicWarningLevel: newLevel },
+                    },
+                  },
+                ]
+              }),
+          })
           await refetch()
           setSelectedRowKeys([])
           queryClient.invalidateQueries({
-            queryKey: ["AcademicWarning"],
+            queryKey: ["zenstack", "AcademicWarning"],
+          })
+          queryClient.invalidateQueries({
+            queryKey: ["zenstack", "Student"],
+          })
+          queryClient.invalidateQueries({
+            queryKey: ["zenstack", "StudentSemesterResult"],
           })
           message.success("Duyệt giảm cảnh cáo thành công")
         } catch (error) {

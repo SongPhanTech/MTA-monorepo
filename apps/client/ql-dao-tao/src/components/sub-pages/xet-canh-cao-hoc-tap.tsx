@@ -10,13 +10,20 @@ import { getWarningLevelColor } from "@hooks/getWarningLevelColor"
 import useSpinner from "@hooks/spinner"
 import { buildOrgTree } from "@lib/utils"
 import { emptyObjectIf } from "@workspace/constant"
-import { type FixedClass, type Prisma, type TrainingCourse } from "@workspace/db/client"
 import {
-  useDeleteAcademicWarning,
+  type AcademicWarning,
+  type FixedClass,
+  type Prisma,
+  type TrainingCourse,
+} from "@workspace/db/client"
+import {
   useFindManyAcademicWarning,
   useFindManyDM_DonVi,
   useFindManyFixedClass,
   useFindManyTrainingCourse,
+  useUpdateAcademicWarning,
+  useUpdateManyStudentSemesterResult,
+  useUpdateStudent,
 } from "@workspace/db/hooks"
 import { whereOrganization } from "@workspace/libs/constants"
 import { BookPlus } from "lucide-react"
@@ -84,7 +91,9 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
   )
 
   const { showSpinner, hideSpinner } = useSpinner()
-  const { mutateAsync: deleteAcademicWarning } = useDeleteAcademicWarning()
+  const { mutateAsync: updateAcademicWarning } = useUpdateAcademicWarning()
+  const { mutateAsync: updateStudent } = useUpdateStudent()
+  const { mutateAsync: updateManyStudentSemesterResult } = useUpdateManyStudentSemesterResult()
 
   const { data: academicWarningData } = useFindManyAcademicWarning({
     where: {
@@ -136,10 +145,47 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
     tag: "PutAcademicWarning",
   })
 
-  async function handleDeleteAcademicWarning(id: string) {
+  async function handleDeleteAcademicWarning(record: {
+    id: string
+    studentId: string
+    semesterId: string
+    level: number
+    increasedFrom?: number | null
+    decreasedFrom?: number | null
+    student?: { academicWarningLevel?: number } | null
+  }) {
     try {
       showSpinner()
-      await deleteAcademicWarning({ where: { id } })
+      const {
+        id,
+        studentId,
+        semesterId: warningSemesterId,
+        level,
+        increasedFrom,
+        decreasedFrom,
+        student,
+      } = record
+      const delta =
+        increasedFrom != null
+          ? level - increasedFrom
+          : decreasedFrom != null
+            ? level - decreasedFrom
+            : level
+      const restoredStudentLevel = Math.max(0, (student?.academicWarningLevel ?? 0) - delta)
+      const restoredSemesterLevel = increasedFrom ?? decreasedFrom ?? 0
+
+      await updateAcademicWarning({
+        where: { id },
+        data: { deletedAt: new Date() },
+      })
+      await updateStudent({
+        where: { id: studentId },
+        data: { academicWarningLevel: restoredStudentLevel },
+      })
+      await updateManyStudentSemesterResult({
+        where: { studentId, semesterId: warningSemesterId },
+        data: { academicWarningLevel: restoredSemesterLevel },
+      })
     } catch (error: any) {
       if (error?.info?.message) {
         message.error(error?.info?.message)
@@ -289,7 +335,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                         />
                         <DeleteIcon
                           popConfirm={{
-                            onConfirm: () => handleDeleteAcademicWarning(record?.id),
+                            onConfirm: () => handleDeleteAcademicWarning(record as AcademicWarning),
                           }}
                         />
                       </Row>

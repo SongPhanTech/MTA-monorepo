@@ -210,6 +210,16 @@ const NangCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: NangCanhCaoHocT
                     data: { academicWarningLevel: currentLevel + severity },
                   },
                 },
+                {
+                  model: "StudentSemesterResult",
+                  operation: "update",
+                  data: {
+                    where: {
+                      studentId_semesterId: { studentId: record.id, semesterId },
+                    },
+                    data: { academicWarningLevel: currentLevel + severity },
+                  },
+                },
               ]
             }),
           })
