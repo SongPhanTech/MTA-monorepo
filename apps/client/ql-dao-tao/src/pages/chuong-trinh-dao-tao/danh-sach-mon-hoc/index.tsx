@@ -92,6 +92,9 @@ export default function SubjectList() {
             examType: { in: filters.examType },
           }
         : {}),
+      ...(filters.active?.length === 1 && {
+        active: filters.active[0],
+      }),
       ...(filters.isTeaching !== undefined &&
         filters.isTeaching.length === 1 && {
           subjectClass: filters.isTeaching[0]
@@ -99,18 +102,41 @@ export default function SubjectList() {
             : { none: {} },
         }),
     }
-  }, [filters.name, filters.code, filters.examType, filters.isTeaching, trainingObjectTypeId])
+  }, [
+    filters.name,
+    filters.code,
+    filters.examType,
+    filters.active,
+    filters.isTeaching,
+    trainingObjectTypeId,
+  ])
+
+  const hasSubjectVersionFilters = !!(
+    filters.name ||
+    filters.code ||
+    filters.examType ||
+    filters.active?.length === 1 ||
+    (filters.isTeaching !== undefined && filters.isTeaching.length === 1)
+  )
 
   const where = useMemo(() => {
     return {
       ...(trainingObjectTypeId
-        ? {
-            OR: [
-              { subjectVersion: { some: { trainingObjectTypeId } } },
-              { subjectVersion: { none: {} } },
-            ],
-          }
-        : {}),
+        ? hasSubjectVersionFilters
+          ? {
+              subjectVersion: { some: subjectVersionWhere },
+            }
+          : {
+              OR: [
+                { subjectVersion: { some: { trainingObjectTypeId } } },
+                { subjectVersion: { none: {} } },
+              ],
+            }
+        : hasSubjectVersionFilters
+          ? {
+              subjectVersion: { some: subjectVersionWhere },
+            }
+          : {}),
       ...(filters.searchText
         ? {
             name: {
@@ -122,23 +148,14 @@ export default function SubjectList() {
       ...(filters.managementOrganizationIds?.length
         ? { managementOrganizationId: { in: filters.managementOrganizationIds } }
         : {}),
-      ...(filters.examType
-        ? {
-            subjectVersion: { some: { examType: { in: filters.examType } } },
-          }
-        : {}),
-      ...(filters.active?.length === 1
-        ? {
-            subjectVersion: {
-              some: { active: filters.active[0] },
-            },
-          }
-        : {}),
-      ...(Object.keys(subjectVersionWhere).length > 0 && {
-        subjectVersion: { some: subjectVersionWhere },
-      }),
     }
-  }, [trainingObjectTypeId, filters, subjectVersionWhere])
+  }, [
+    trainingObjectTypeId,
+    filters.searchText,
+    filters.managementOrganizationIds,
+    subjectVersionWhere,
+    hasSubjectVersionFilters,
+  ])
 
   const { data: SubjectData, refetch } = useFindManySubject({
     where,

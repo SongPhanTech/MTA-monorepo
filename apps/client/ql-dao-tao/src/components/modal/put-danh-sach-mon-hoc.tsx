@@ -72,7 +72,7 @@ const PutSubjectListModal = () => {
         message.success("Thêm mới thành công")
       }
 
-      queryClient.invalidateQueries({ queryKey: ["Subject"] })
+      queryClient.invalidateQueries({ queryKey: ["zenstack", "Subject"] })
       onClose()
     } catch (error: any) {
       if (error?.info?.message) {
