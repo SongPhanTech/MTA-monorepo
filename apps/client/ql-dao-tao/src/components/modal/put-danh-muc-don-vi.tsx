@@ -91,7 +91,7 @@ const PutDMDonViModal = () => {
     onClose,
     input,
   } = useDisclosure<PutDMDonViInput>({
-    tag: "PutDMDonVi",
+    tag: "PutDMDonViModal",
     onClose: form.resetFields,
   })
 
