@@ -12,7 +12,7 @@ import { evaluationPeriodStore } from "@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gi
 import { useStore } from "@tanstack/react-store"
 import { useSession } from "@workspace/auth/react"
 import { $Enums } from "@workspace/db/client"
-import { useFindFirstEvaluationCouncilMember, useFindUniqueLecturer } from "@workspace/db/hooks"
+import { useFindManyEvaluationCouncilMember, useFindUniqueLecturer } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { KHAO_THI_PERMISSION } from "@workspace/router"
 import { Col, Row, Tabs, type TabsProps } from "antd"
@@ -37,7 +37,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
     }
   )
 
-  const { data: councilMember } = useFindFirstEvaluationCouncilMember(
+  const { data: councilMembers } = useFindManyEvaluationCouncilMember(
     {
       where: {
         lecturerId: lecturer?.id,
@@ -63,23 +63,27 @@ export default function CriteriaAnalysisAndEvaluationPage() {
       },
     ]
 
-    const isAdvisoryBoard = councilMember?.role?.includes(
-      $Enums.EvaluationMemberRole.ADVISORY_BOARD
+    const allRoles = councilMembers?.map((m) => m.role) || []
+
+    const isAdvisoryBoard = allRoles.some((role) =>
+      role?.includes($Enums.EvaluationMemberRole.ADVISORY_BOARD)
     )
 
-    const isHeadSpecialized = councilMember?.role?.includes(
-      $Enums.EvaluationMemberRole.HEAD_SPECIALIZED
+    const isHeadSpecialized = allRoles.some((role) =>
+      role?.includes($Enums.EvaluationMemberRole.HEAD_SPECIALIZED)
     )
 
-    const isSecretary =
-      councilMember?.role?.includes($Enums.EvaluationMemberRole.SECRETARY) ||
-      councilMember?.role?.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY)
-
-    const isNonCouncilMember = councilMember?.role?.includes(
-      $Enums.EvaluationMemberRole.NONCOUNCIL_MEMBERS
+    const isSecretary = allRoles.some(
+      (role) =>
+        role?.includes($Enums.EvaluationMemberRole.SECRETARY) ||
+        role?.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY)
     )
 
-    const isCouncilMember = !!councilMember
+    const isNonCouncilMember = allRoles.some((role) =>
+      role?.includes($Enums.EvaluationMemberRole.NONCOUNCIL_MEMBERS)
+    )
+
+    const isCouncilMember = (councilMembers?.length || 0) > 0
 
     if (can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA, "THEM")) {
       tabs.push({
@@ -154,7 +158,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
     }
 
     return tabs
-  }, [can, selectedEvaluationPeriodId, councilMember])
+  }, [can, selectedEvaluationPeriodId, councilMembers])
 
   return (
     <Row gutter={[12, 0]}>
