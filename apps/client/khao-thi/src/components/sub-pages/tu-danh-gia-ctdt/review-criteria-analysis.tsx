@@ -3,7 +3,11 @@ import DatePicker from "@components/commons/date-picker"
 import { RichTextEditor } from "@components/commons/rich-text-editor"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
-import { DEADLINE_OPTIONS, getStatusEvaluation } from "@constants/constants"
+import {
+  DEADLINE_OPTIONS,
+  getRejectedBy,
+  getStatusEvaluation,
+} from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import { formatDate } from "@lib/utils"
 import type { ReviewDataTabType } from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-analysis"
@@ -36,9 +40,14 @@ type CommentType = {
 type Props = {
   data: ReviewDataTabType
   idx: number
+  userRole?: "SECRETARY" | "ADVISORY_BOARD"
 }
 
-const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
+const ReviewCriteriaAnalysisSubPage = ({
+  data,
+  idx,
+  userRole = "SECRETARY",
+}: Props) => {
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
   const [deadlineFilter, setDeadlineFilter] = useState<string | null>(null)
   const { showSpinner, hideSpinner } = useSpinner()
@@ -85,8 +94,12 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
       const updateData: {
         status: $Enums.EvaluationCriterionStatus
         deadline?: string
+        description?: string
       } = {
         status: $Enums.EvaluationCriterionStatus.REVISION,
+        description: JSON.stringify({
+          rejectedBy: userRole === "ADVISORY_BOARD" ? "ADVISORY_BOARD" : "SECRETARY",
+        }),
       }
 
       if (isOverdue && filteredCommentData?.newDeadline) {
@@ -114,7 +127,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
         ["comment", requirementCriterionId, "newDeadline"],
       ])
       toggleCommentRow(requirementCriterionId)
-      message.success("Gửi yêu cầu chỉnh sửa tiêu chí thành công")
+      message.success("Gửi yêu cầu chỉnh sửa tiêu chí thành công (trả lại cho GV)")
     } catch (error) {
       message.error("Gửi yêu cầu chỉnh sửa tiêu chí thất bại, vui lòng thử lại")
     } finally {
@@ -124,29 +137,44 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
 
   const handleApproveCriterionAnalysisFinal = async (
     analysisCriterionId: string,
-    criterionPeriodId: string
+    criterionPeriodId?: string
   ) => {
     try {
       showSpinner()
-      await updateAnalysisCriterion({
-        where: {
-          id: analysisCriterionId,
-        },
-        data: {
-          status: $Enums.EvaluationCriterionStatus.COMPLETED,
-        },
-      })
+      if (userRole === "ADVISORY_BOARD") {
+        await updateAnalysisCriterion({
+          where: {
+            id: analysisCriterionId,
+          },
+          data: {
+            status: $Enums.EvaluationCriterionStatus.COMPLETED,
+          },
+        })
 
-      await updateEvaluationCriterion({
-        where: {
-          criterionPeriodId: criterionPeriodId,
-        },
-        data: {
-          status: $Enums.EvaluationStatus.PENDING,
-        },
-      })
+        if (criterionPeriodId) {
+          await updateEvaluationCriterion({
+            where: {
+              criterionPeriodId: criterionPeriodId,
+            },
+            data: {
+              status: $Enums.EvaluationStatus.PENDING,
+            },
+          })
+        }
 
-      message.success("Phê duyệt tiêu chí thành công")
+        message.success("Ban tư vấn phê duyệt tiêu chí thành công, đã mở khoá phiếu đánh giá")
+      } else {
+        await updateAnalysisCriterion({
+          where: {
+            id: analysisCriterionId,
+          },
+          data: {
+            status: $Enums.EvaluationCriterionStatus.APPROVED,
+          },
+        })
+
+        message.success("Phê duyệt tiêu chí thành công, đã chuyển Ban tư vấn duyệt")
+      }
     } catch (error) {
       message.error("Phê duyệt tiêu chí thất bại, vui lòng thử lại")
     } finally {
@@ -161,9 +189,14 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
       return false
     }
 
+    const requiredStatus =
+      userRole === "ADVISORY_BOARD"
+        ? $Enums.EvaluationCriterionStatus.APPROVED
+        : $Enums.EvaluationCriterionStatus.SUBMITTED
+
     return filteredCriteria?.some((item) => {
       const status = item.analysisCriterions?.status
-      return status === $Enums.EvaluationCriterionStatus.SUBMITTED
+      return status === requiredStatus
     })
   }
 
@@ -176,9 +209,14 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
         return
       }
 
+      const requiredStatus =
+        userRole === "ADVISORY_BOARD"
+          ? $Enums.EvaluationCriterionStatus.APPROVED
+          : $Enums.EvaluationCriterionStatus.SUBMITTED
+
       const approvableCriteria = filteredCriteria.filter((item) => {
         const status = item.analysisCriterions?.status
-        return status === $Enums.EvaluationCriterionStatus.SUBMITTED
+        return status === requiredStatus
       })
 
       if (approvableCriteria.length === 0) {
@@ -186,32 +224,49 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
         return
       }
 
-      await Promise.all(
-        approvableCriteria
-          .filter((item) => item.analysisCriterions?.id)
-          .map((item) =>
-            Promise.all([
+      if (userRole === "ADVISORY_BOARD") {
+        await Promise.all(
+          approvableCriteria
+            .filter((item) => item.analysisCriterions?.id)
+            .map((item) =>
+              Promise.all([
+                updateAnalysisCriterion({
+                  where: {
+                    id: item.analysisCriterions?.id as string,
+                  },
+                  data: {
+                    status: $Enums.EvaluationCriterionStatus.COMPLETED,
+                  },
+                }),
+                updateEvaluationCriterion({
+                  where: {
+                    criterionPeriodId: item.id,
+                  },
+                  data: {
+                    status: $Enums.EvaluationStatus.PENDING,
+                  },
+                }),
+              ])
+            )
+        )
+        message.success(`Ban tư vấn phê duyệt thành công ${approvableCriteria.length} tiêu chí`)
+      } else {
+        await Promise.all(
+          approvableCriteria
+            .filter((item) => item.analysisCriterions?.id)
+            .map((item) =>
               updateAnalysisCriterion({
                 where: {
                   id: item.analysisCriterions?.id as string,
                 },
                 data: {
-                  status: $Enums.EvaluationCriterionStatus.COMPLETED,
+                  status: $Enums.EvaluationCriterionStatus.APPROVED,
                 },
-              }),
-              updateEvaluationCriterion({
-                where: {
-                  criterionPeriodId: item.id,
-                },
-                data: {
-                  status: $Enums.EvaluationStatus.PENDING,
-                },
-              }),
-            ])
-          )
-      )
-
-      message.success(`Phê duyệt thành công ${approvableCriteria.length} tiêu chí`)
+              })
+            )
+        )
+        message.success(`Phê duyệt thành công ${approvableCriteria.length} tiêu chí, đã chuyển Ban tư vấn duyệt`)
+      }
     } catch (error) {
       message.error("Phê duyệt tiêu chí thất bại. Vui lòng thử lại.")
       console.error("Error approving all criteria:", error)
@@ -299,12 +354,28 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                     </Tag>
                   )}
                   {item?.analysisCriterions?.status && (
-                    <Tag color={getStatusEvaluation(item.analysisCriterions.status)?.color}>
-                      {getStatusEvaluation(item.analysisCriterions.status)?.label}
+                    <Tag
+                      color={
+                        getStatusEvaluation(
+                          item.analysisCriterions.status,
+                          getRejectedBy(item.analysisCriterions.description)
+                        )?.color
+                      }
+                    >
+                      {
+                        getStatusEvaluation(
+                          item.analysisCriterions.status,
+                          getRejectedBy(item.analysisCriterions.description)
+                        )?.label
+                      }
                     </Tag>
                   )}
-                  {item?.analysisCriterions?.status ===
-                    $Enums.EvaluationCriterionStatus.SUBMITTED &&
+                  {((userRole === "ADVISORY_BOARD" &&
+                    item?.analysisCriterions?.status ===
+                      $Enums.EvaluationCriterionStatus.APPROVED) ||
+                    (userRole !== "ADVISORY_BOARD" &&
+                      item?.analysisCriterions?.status ===
+                        $Enums.EvaluationCriterionStatus.SUBMITTED)) &&
                     can(
                       KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
                       "DUYET"
@@ -312,7 +383,11 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                       <Popconfirm
                         className="ml-auto"
                         placement="topLeft"
-                        title="Xác nhận phê duyệt?"
+                        title={
+                          userRole === "ADVISORY_BOARD"
+                            ? "Xác nhận Ban tư vấn phê duyệt tiêu chí này?"
+                            : "Xác nhận phê duyệt tiêu chí và chuyển Ban tư vấn duyệt?"
+                        }
                         okText="Đồng ý"
                         cancelText="Hủy"
                         onConfirm={(e) => {
@@ -326,7 +401,15 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                           e?.stopPropagation()
                         }}
                       >
-                        <Button type="primary" size="small">
+                        <Button
+                          type="primary"
+                          size="small"
+                          className={
+                            userRole === "ADVISORY_BOARD"
+                              ? "!bg-[#0f8a4b] hover:!bg-[#0c703d] text-white border-none"
+                              : ""
+                          }
+                        >
                           Phê duyệt tiêu chí
                         </Button>
                       </Popconfirm>

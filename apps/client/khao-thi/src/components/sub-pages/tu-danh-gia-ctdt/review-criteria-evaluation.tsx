@@ -1,6 +1,6 @@
 import CommentList from "@components/commons/comment-list"
 import { RichTextEditor } from "@components/commons/rich-text-editor"
-import { getStatusConfig } from "@constants/constants"
+import { getRejectedBy, getStatusConfig } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import type { DataReviewCriteriaEvaluationType } from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-evaluation"
 import { useSession } from "@workspace/auth/react"
@@ -64,6 +64,7 @@ const ReviewCriteriaEvaluationSubpage = ({
             },
             data: {
               status: $Enums.EvaluationStatus.REVISION,
+              description: JSON.stringify({ rejectedBy: "SECRETARY" }),
             },
           },
         },
@@ -186,7 +187,8 @@ const ReviewCriteriaEvaluationSubpage = ({
                   const item = data.criteria[name]
                   const criterionStatus =
                     item.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
-                  const criterionStatusConfig = getStatusConfig(criterionStatus)
+                  const rejectedBy = getRejectedBy(item.evaluationCriterion?.description)
+                  const criterionStatusConfig = getStatusConfig(criterionStatus, rejectedBy)
                   const reviewDeadline = item.evaluationCriterion?.deadlineReview
                   const deadlineStatus = reviewDeadline ? getDeadlineStatus(reviewDeadline) : null
                   const evaluatorName = item.evaluationCriterion?.lecturer?.userProfile?.fullname

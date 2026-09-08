@@ -1,7 +1,7 @@
 import CommentList from "@components/commons/comment-list"
 import { RichTextEditor } from "@components/commons/rich-text-editor"
 import ExportCriteriaEvaluation from "@components/modal/export-criteria-evaluation"
-import { getStatusConfig } from "@constants/constants"
+import { getRejectedBy, getStatusConfig } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import {
   $Enums,
@@ -38,7 +38,13 @@ export type PutRequirementCriterion = {
   criteria: Record<string, any>
 }
 
-const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionType }) => {
+const CriteriaEvaluationSubPage = ({
+  data,
+  readOnly = false,
+}: {
+  data: DataTabEvaluationCriterionType
+  readOnly?: boolean
+}) => {
   const [form] = Form.useForm<PutRequirementCriterion>()
   const [showCommentsCriterionId, setShowCommentsCriterionId] = useState<string | null>(null)
   const [activeCollapseKeys, setActiveCollapseKeys] = useState<string[]>([])
@@ -48,10 +54,11 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
   })
   const { can } = useAbility()
 
-  const canEdit = can(
-    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
-    "THEM"
-  )
+  const canEdit =
+    can(
+      KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
+      "THEM"
+    ) && !readOnly
 
   const { hideSpinner, showSpinner } = useSpinner()
 
@@ -116,6 +123,11 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
   const handleCriterionSubmit = async (criterionId: string, fieldIndex: number) => {
     const allCriteria = form.getFieldValue("criteria")
     const criterionData = allCriteria?.[fieldIndex]?.evaluationCriterion
+    const rejectedBy = getRejectedBy(criterionData?.description)
+    const isAdvisoryRejected = rejectedBy === "ADVISORY_BOARD"
+    const targetStatus = isAdvisoryRejected
+      ? $Enums.EvaluationStatus.APPROVED
+      : $Enums.EvaluationStatus.SUBMITTED
 
     try {
       showSpinner()
@@ -131,7 +143,7 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
               weakness: criterionData?.weakness || "",
               actionPlan: criterionData?.actionPlan || "",
               score: criterionData?.score || "",
-              status: $Enums.EvaluationStatus.SUBMITTED,
+              status: targetStatus,
             },
           },
         },
@@ -142,7 +154,11 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
         return
       }
 
-      message.success("Nộp phiếu tiêu chí thành công")
+      if (isAdvisoryRejected) {
+        message.success("Đã nộp lại phiếu đánh giá tiêu chí lên Ban tư vấn phê duyệt")
+      } else {
+        message.success("Đã nộp phiếu đánh giá tiêu chí lên Trưởng ban thư ký phê duyệt")
+      }
 
       queryClient.invalidateQueries({
         queryKey: ["zenstack", "EvaluationPeriod"],
@@ -241,7 +257,9 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                   const criterionDeadlineStatus = criterionDeadline
                     ? getDeadlineStatus(criterionDeadline)
                     : null
-                  const criterionStatusConfig = getStatusConfig(criterionStatus)
+                  const rejectedBy = getRejectedBy(item.evaluationCriterion?.description)
+                  const criterionStatusConfig = getStatusConfig(criterionStatus, rejectedBy)
+                  const isAdvisoryRejected = rejectedBy === "ADVISORY_BOARD"
                   return (
                     <div key={key} style={{ marginBottom: 24 }}>
                       <Collapse
@@ -323,7 +341,11 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                         $Enums.EvaluationStatus.COMPLETED && (
                                         <Button
                                           type="primary"
-                                          className="bg-blue-500"
+                                          className={
+                                            isAdvisoryRejected
+                                              ? "!bg-[#0f8a4b] hover:!bg-[#0c703d]"
+                                              : "bg-blue-500"
+                                          }
                                           size="small"
                                           onClick={() =>
                                             handleCriterionSubmit(
@@ -332,7 +354,12 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                             )
                                           }
                                         >
-                                          Nộp phiếu
+                                          {item.evaluationCriterion.status ===
+                                          $Enums.EvaluationStatus.REVISION
+                                            ? isAdvisoryRejected
+                                              ? "Nộp cho Ban tư vấn"
+                                              : "Nộp cho Thư ký"
+                                            : "Nộp phiếu"}
                                         </Button>
                                       )}
                                   </div>

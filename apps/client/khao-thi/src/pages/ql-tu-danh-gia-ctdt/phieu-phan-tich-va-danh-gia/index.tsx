@@ -5,7 +5,7 @@ import CrossReview from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/
 import CrossReviewAssignment from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review-assignment"
 import CrossReviewExternal from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review-external"
 import EvaluationPeriod from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/evaluation-period"
-import ReviewCriteriaEvaluationAdvisory from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-evaluation-advisory"
+import ReviewAdvisory from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-advisory"
 import ReviewSecretary from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-secretary"
 import StandardReports from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports"
 import { evaluationPeriodStore } from "@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia"
@@ -112,7 +112,7 @@ export default function CriteriaAnalysisAndEvaluationPage() {
       tabs.push({
         key: "5",
         label: "Xét duyệt phiếu (Ban tư vấn)",
-        children: <ReviewCriteriaEvaluationAdvisory />,
+        children: <ReviewAdvisory />,
         disabled: !selectedEvaluationPeriodId,
       })
     }
