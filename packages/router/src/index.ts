@@ -94,6 +94,12 @@ const NAVIGATION: NavigationType = {
         path: ROUTER_PATH.CONG_SINH_VIEN.THOI_KHOA_BIEU,
       },
       {
+        id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_LICH_THI,
+        label: "Lịch thi",
+        icon: CalendarDays,
+        path: ROUTER_PATH.CONG_SINH_VIEN.LICH_THI,
+      },
+      {
         id: CONG_SINH_VIEN_PERMISSION.CONG_SINH_VIEN_CHUONG_TRINH_DAO_TAO,
         label: "Chương trình đào tạo",
         icon: Library,
@@ -1179,6 +1185,13 @@ const NAVIGATION: NavigationType = {
         icon: CalendarDays,
         path: ROUTER_PATH.CONG_GIANG_VIEN.LICH_CUA_TOI,
         description: "Lịch của tôi",
+      },
+      {
+        id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_LICH_COI_THI,
+        label: "Lịch coi thi",
+        icon: BookOpenCheck,
+        path: ROUTER_PATH.CONG_GIANG_VIEN.LICH_COI_THI,
+        description: "Lịch coi thi",
       },
       {
         id: CONG_GIANG_VIEN_PERMISSION.CONG_GIANG_VIEN_LOP_QUAN_LY,

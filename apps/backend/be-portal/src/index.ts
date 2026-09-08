@@ -10,6 +10,7 @@ import type { ContentfulStatusCode } from "hono/utils/http-status"
 import AuthApp from "./api/auth"
 import ClassRegisterApp from "./api/class-register"
 import DataSyncHistoryApp from "./api/data-sync-history"
+import ExamScheduleApp from "./api/exam-schedule"
 import ExportRegistrationResultsApp from "./api/export-registration-results"
 import ImportTrainingDataApp from "./api/import-training-data"
 import { prisma } from "./prisma"
@@ -71,7 +72,7 @@ const audience = config.keycloak.clientId
 const portalAppCodes = (
   process.env.PORTAL_APP_CODES ||
   process.env.PORTAL_APP_CODE ||
-  "congsinhvien,conghocvien"
+  "congsinhvien,conghocvien,dangkyhoc"
 )
   .split(",")
   .map((c) => c.trim())
@@ -80,6 +81,7 @@ const portalAppCodes = (
 app.use("/api/*", jwtAuth(portalAppCodes))
 
 app.route("/api/class-register", ClassRegisterApp)
+app.route("/api/exam-schedules", ExamScheduleApp)
 app.route("/api/data-sync", DataSyncHistoryApp)
 app.route("/api/data-sync", ImportTrainingDataApp)
 app.route("/api/data-sync", ExportRegistrationResultsApp)

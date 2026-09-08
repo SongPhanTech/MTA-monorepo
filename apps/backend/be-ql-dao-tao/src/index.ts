@@ -14,6 +14,7 @@ import CurriculumApp from "./api/curriculum"
 import CurriculumSubjectApp from "./api/curriculum-subject"
 import DiplomaVerificationApp from "./api/diploma-verification"
 import ExamApp from "./api/exam"
+import ExamScheduleApp from "./api/exam-schedule"
 import ExamScoreApp from "./api/exam-score"
 import ExportStudentSemesterResultApp from "./api/export-student-result"
 import ExportStudentYearResultApp from "./api/export-student-year-result"
@@ -114,6 +115,7 @@ app.route("/api/guest-teaching-payment", GuestTeachingPaymentApp)
 app.route("/api/score-correction", ScoreCorrectionApp)
 app.route("/api/archived-score", ArchivedScoreApp)
 app.route("/api/exam", ExamApp)
+app.route("/api/exam-schedules", ExamScheduleApp)
 app.route("/api/exam-score", ExamScoreApp)
 app.route("/api/student-result", ExportStudentSemesterResultApp)
 app.route("/api/student-result", ExportStudentYearResultApp)

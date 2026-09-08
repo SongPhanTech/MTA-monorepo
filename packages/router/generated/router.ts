@@ -5,6 +5,7 @@ export default {
     "HOME": "/home",
     "INDEX": "/",
     "KHAO_SAT": "/khao-sat",
+    "LICH_COI_THI": "/lich-coi-thi",
     "LICH_CUA_TOI": "/lich-cua-toi",
     "LOP_GIANG_DAY_CHI_TIET": "/lop-giang-day/chi-tiet",
     "LOP_GIANG_DAY_DANH_SACH_LOP_GIANG_DAY": "/lop-giang-day/danh-sach-lop-giang-day",
@@ -45,10 +46,10 @@ export default {
     "KET_QUA_HOC_TAP": "/ket-qua-hoc-tap",
     "KHAO_SAT": "/khao-sat",
     "LICH_SU_DANG_KY_HOC": "/lich-su-dang-ky-hoc",
+    "LICH_THI": "/lich-thi",
     "THOI_KHOA_BIEU": "/thoi-khoa-bieu",
     "THONG_KE_DANG_KY": "/thong-ke-dang-ky"
   },
-  "DANG_KY_HOC": {},
   "KHAO_THI": {
     "BAO_CAO_KHAO_SAT_GIANG_VIEN": "/bao-cao-khao-sat-giang-vien",
     "HOME": "/home",
