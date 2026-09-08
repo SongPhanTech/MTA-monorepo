@@ -30,12 +30,9 @@ const EVALUATION_MEMBER_ROLE_MAP: Record<$Enums.EvaluationMemberRole, string> = 
 
 const EVALUATION_CRITERION_STATUS_OPTIONS = [
   { value: $Enums.EvaluationCriterionStatus.PENDING, label: "Chưa nộp" },
-  { value: $Enums.EvaluationCriterionStatus.SUBMITTED, label: "Đã nộp" },
+  { value: $Enums.EvaluationCriterionStatus.SUBMITTED, label: "Chờ Thư ký duyệt" },
+  { value: $Enums.EvaluationCriterionStatus.APPROVED, label: "Chờ Ban tư vấn duyệt" },
   { value: $Enums.EvaluationCriterionStatus.REVISION, label: "Yêu cầu sửa đổi" },
-  {
-    value: $Enums.EvaluationCriterionStatus.APPROVED,
-    label: "Đã duyệt",
-  },
   { value: $Enums.EvaluationCriterionStatus.COMPLETED, label: "Hoàn thành" },
 ]
 
@@ -88,7 +85,23 @@ const isSurveyStudentObjectType = (value: string) =>
 
 const hasSurveyStudentObjectType = (values: string[] = []) => values.some(isSurveyStudentObjectType)
 
-const getStatusEvaluation = (status: $Enums.EvaluationCriterionStatus) => {
+const getRejectedBy = (rawDesc?: string | null): "ADVISORY_BOARD" | "SECRETARY" | null => {
+  if (!rawDesc) return null
+  try {
+    const parsed = JSON.parse(rawDesc)
+    if (typeof parsed === "object" && parsed !== null) {
+      return parsed.rejectedBy || null
+    }
+  } catch {
+    return null
+  }
+  return null
+}
+
+const getStatusEvaluation = (
+  status: $Enums.EvaluationCriterionStatus,
+  rejectedBy?: string | null
+) => {
   switch (status) {
     case $Enums.EvaluationCriterionStatus.PENDING:
       return {
@@ -98,41 +111,47 @@ const getStatusEvaluation = (status: $Enums.EvaluationCriterionStatus) => {
     case $Enums.EvaluationCriterionStatus.SUBMITTED:
       return {
         color: "blue",
-        label: "Đã nộp",
+        label: "Chờ Thư ký duyệt",
+      }
+    case $Enums.EvaluationCriterionStatus.APPROVED:
+      return {
+        color: "cyan",
+        label: "Chờ Ban tư vấn duyệt",
       }
     case $Enums.EvaluationCriterionStatus.REVISION:
       return {
         color: "orange",
-        label: "Yêu cầu sửa đổi",
-      }
-    case $Enums.EvaluationCriterionStatus.APPROVED:
-      return {
-        color: "green",
-        label: "Đã duyệt",
+        label:
+          rejectedBy === "ADVISORY_BOARD"
+            ? "Ban tư vấn yêu cầu sửa đổi"
+            : "Thư ký yêu cầu sửa đổi",
       }
     case $Enums.EvaluationCriterionStatus.COMPLETED:
       return {
-        color: "purple",
+        color: "green",
         label: "Hoàn thành",
       }
   }
 }
 
-const getStatusConfig = (status: $Enums.EvaluationStatus) => {
+const getStatusConfig = (status: $Enums.EvaluationStatus, rejectedBy?: string | null) => {
   switch (status) {
     case $Enums.EvaluationStatus.LOCK:
       return { color: "default", text: "Khoá" }
     case $Enums.EvaluationStatus.PENDING:
       return { color: "warning", text: "Chưa nộp" }
     case $Enums.EvaluationStatus.SUBMITTED:
-      return { color: "processing", text: "Đã nộp" }
+      return { color: "processing", text: "Chờ Thư ký duyệt" }
+    case $Enums.EvaluationStatus.APPROVED:
+      return { color: "cyan", text: "Chờ Ban tư vấn duyệt" }
     case $Enums.EvaluationStatus.REVISION:
       return {
         color: "error",
-        text: "Yêu cầu chỉnh sửa",
+        text:
+          rejectedBy === "ADVISORY_BOARD"
+            ? "Ban tư vấn yêu cầu chỉnh sửa"
+            : "Thư ký yêu cầu chỉnh sửa",
       }
-    case $Enums.EvaluationStatus.APPROVED:
-      return { color: "success", text: "Đã duyệt" }
     case $Enums.EvaluationStatus.COMPLETED:
       return { color: "success", text: "Hoàn thành" }
     default:
@@ -256,6 +275,7 @@ export {
   hasSurveyStudentObjectType,
   getStatusEvaluation,
   getStatusConfig,
+  getRejectedBy,
   EVALUATION_PERIOD_STATUS_LABELS,
   EVALUATION_CRITERION_STATUS_OPTIONS,
   DEADLINE_OPTIONS,

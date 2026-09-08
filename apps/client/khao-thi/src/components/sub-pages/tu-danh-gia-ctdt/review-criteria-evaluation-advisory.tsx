@@ -1,12 +1,12 @@
 import CommentList from "@components/commons/comment-list"
 import { RichTextEditor } from "@components/commons/rich-text-editor"
-import { getStatusConfig } from "@constants/constants"
+import { getRejectedBy, getStatusConfig } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import type { DataReviewCriteriaEvaluationType } from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-evaluation"
 import { useSession } from "@workspace/auth/react"
 import { $Enums, type CriterionPeriod, type EvaluationCriterion } from "@workspace/db/client"
 import { sqlTransaction } from "@workspace/libs/api/model"
-import { Badge, Button, Card, Collapse, Form, message, Tag } from "antd"
+import { Badge, Button, Card, Collapse, Form, message, Popconfirm, Tag } from "antd"
 import dayjs from "dayjs"
 import { useEffect, useState } from "react"
 import { getDeadlineStatus } from "@/utils/getDeadlineStatus"
@@ -64,6 +64,7 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
             },
             data: {
               status: $Enums.EvaluationStatus.REVISION,
+              description: JSON.stringify({ rejectedBy: "ADVISORY_BOARD" }),
             },
           },
         },
@@ -75,11 +76,37 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
         return
       }
 
-      message.success("Gửi ý kiến phản biện thành công")
+      message.success("Gửi ý kiến phản biện thành công (trả lại cho GV)")
       commentForm.resetFields()
       setShowCommentsCriterionId(null)
       onRefetch()
     } catch (error) {
+      message.error("Có lỗi xảy ra, vui lòng thử lại")
+    } finally {
+      hideSpinner()
+    }
+  }
+
+  const handleApproveSingle = async (evaluationCriterionId: string) => {
+    try {
+      showSpinner()
+      const res = await sqlTransaction([
+        {
+          model: "EvaluationCriterion",
+          operation: "update",
+          data: {
+            where: { id: evaluationCriterionId },
+            data: { status: $Enums.EvaluationStatus.COMPLETED },
+          },
+        },
+      ])
+      if (res.status !== 200) {
+        message.error("Có lỗi xảy ra, vui lòng thử lại")
+        return
+      }
+      message.success("Ban tư vấn phê duyệt tiêu chí thành công")
+      onRefetch()
+    } catch {
       message.error("Có lỗi xảy ra, vui lòng thử lại")
     } finally {
       hideSpinner()
@@ -91,33 +118,37 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
       showSpinner()
       const dataSubmit = form.getFieldsValue()
 
-      let listSqlTransaction: any[] = []
+      const approvableItems =
+        dataSubmit.criteria?.filter(
+          (i: any) => i.evaluationCriterion?.status === $Enums.EvaluationStatus.APPROVED
+        ) || []
 
-      if (dataSubmit.criteria && dataSubmit.criteria.length > 0) {
-        listSqlTransaction = [
-          ...dataSubmit.criteria.map(
-            (
-              i: CriterionPeriod & {
-                evaluationCriterion: EvaluationCriterion
-              }
-            ) => {
-              return {
-                model: "EvaluationCriterion",
-                operation: "update",
-                data: {
-                  where: {
-                    id: i.evaluationCriterion.id,
-                    criterionPeriodId: i.evaluationCriterion.criterionPeriodId,
-                  },
-                  data: {
-                    status: $Enums.EvaluationStatus.COMPLETED,
-                  },
-                },
-              }
-            }
-          ),
-        ]
+      if (approvableItems.length === 0) {
+        message.warning("Không có tiêu chí nào ở trạng thái chờ Ban tư vấn phê duyệt")
+        return
       }
+
+      const listSqlTransaction = approvableItems.map(
+        (
+          i: CriterionPeriod & {
+            evaluationCriterion: EvaluationCriterion
+          }
+        ) => {
+          return {
+            model: "EvaluationCriterion",
+            operation: "update",
+            data: {
+              where: {
+                id: i.evaluationCriterion.id,
+                criterionPeriodId: i.evaluationCriterion.criterionPeriodId,
+              },
+              data: {
+                status: $Enums.EvaluationStatus.COMPLETED,
+              },
+            },
+          }
+        }
+      )
 
       const res = await sqlTransaction(listSqlTransaction)
 
@@ -126,7 +157,7 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
         return
       }
 
-      message.success("Phê duyệt thành công")
+      message.success(`Ban tư vấn phê duyệt thành công ${approvableItems.length} tiêu chí`)
       onRefetch()
     } catch (error) {
       message.error("Có lỗi xảy ra, vui lòng thử lại")
@@ -157,8 +188,7 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
   const hasApprovableItems = data.criteria.some(
     (c) =>
       c.evaluationCriterion &&
-      c.evaluationCriterion.status !== $Enums.EvaluationStatus.PENDING &&
-      c.evaluationCriterion.status !== $Enums.EvaluationStatus.COMPLETED
+      c.evaluationCriterion.status === $Enums.EvaluationStatus.APPROVED
   )
 
   return (
@@ -169,7 +199,12 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
         </span>
         {hasApprovableItems && (
           <div className="flex gap-2 mr-2">
-            <Button type="primary" size="small" onClick={handleSubmitCross}>
+            <Button
+              type="primary"
+              size="small"
+              className="!bg-[#0f8a4b] hover:!bg-[#0c703d] text-white border-none"
+              onClick={handleSubmitCross}
+            >
               Phê duyệt tất cả
             </Button>
           </div>
@@ -185,7 +220,8 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
                   const item = data.criteria[name]
                   const criterionStatus =
                     item.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
-                  const criterionStatusConfig = getStatusConfig(criterionStatus)
+                  const rejectedBy = getRejectedBy(item.evaluationCriterion?.description)
+                  const criterionStatusConfig = getStatusConfig(criterionStatus, rejectedBy)
                   const reviewDeadline = item.evaluationCriterion?.deadlineReview
                   const deadlineStatus = reviewDeadline ? getDeadlineStatus(reviewDeadline) : null
                   const evaluatorName = item.evaluationCriterion?.lecturer?.userProfile?.fullname
@@ -217,34 +253,58 @@ const ReviewCriteriaEvaluationAdvisorySubpage = ({
                                   </div>
                                   {item.evaluationCriterion &&
                                     criterionStatus !== $Enums.EvaluationStatus.PENDING && (
-                                      <Badge
-                                        count={
-                                          item.evaluationCriterion?.evaluationCriterionComments
-                                            ?.length || 0
-                                        }
-                                        size="small"
-                                      >
-                                        <Button
-                                          type="primary"
+                                      <div className="flex items-center gap-2">
+                                        <Badge
+                                          count={
+                                            item.evaluationCriterion?.evaluationCriterionComments
+                                              ?.length || 0
+                                          }
                                           size="small"
-                                          className="bg-yellow-400"
-                                          onClick={() => {
-                                            const id = item.evaluationCriterion?.id
-                                            const isOpen = showCommentsCriterionId === id
-                                            setShowCommentsCriterionId(isOpen ? null : id || null)
-                                            if (!isOpen && id) {
-                                              setOpenCollapseKeys((prev) => ({
-                                                ...prev,
-                                                [item.id]: true,
-                                              }))
-                                            }
-                                          }}
                                         >
-                                          {showCommentsCriterionId === item.evaluationCriterion?.id
-                                            ? "Đóng"
-                                            : "Gửi ý kiến phản biện"}
-                                        </Button>
-                                      </Badge>
+                                          <Button
+                                            type="primary"
+                                            size="small"
+                                            className="bg-yellow-400"
+                                            onClick={() => {
+                                              const id = item.evaluationCriterion?.id
+                                              const isOpen = showCommentsCriterionId === id
+                                              setShowCommentsCriterionId(isOpen ? null : id || null)
+                                              if (!isOpen && id) {
+                                                setOpenCollapseKeys((prev) => ({
+                                                  ...prev,
+                                                  [item.id]: true,
+                                                }))
+                                              }
+                                            }}
+                                          >
+                                            {showCommentsCriterionId === item.evaluationCriterion?.id
+                                              ? "Đóng"
+                                              : "Gửi ý kiến phản biện"}
+                                          </Button>
+                                        </Badge>
+
+                                        {criterionStatus === $Enums.EvaluationStatus.APPROVED && (
+                                          <Popconfirm
+                                            placement="topLeft"
+                                            title="Xác nhận Ban tư vấn phê duyệt tiêu chí này?"
+                                            okText="Đồng ý"
+                                            cancelText="Hủy"
+                                            onConfirm={() =>
+                                              handleApproveSingle(
+                                                item.evaluationCriterion?.id as string
+                                              )
+                                            }
+                                          >
+                                            <Button
+                                              type="primary"
+                                              size="small"
+                                              className="!bg-[#0f8a4b] hover:!bg-[#0c703d] text-white border-none"
+                                            >
+                                              Phê duyệt tiêu chí
+                                            </Button>
+                                          </Popconfirm>
+                                        )}
+                                      </div>
                                     )}
                                 </div>
                                 <div className="flex gap-3 items-center mt-1 flex-wrap">

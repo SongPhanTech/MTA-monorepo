@@ -7,6 +7,7 @@ import ImportCriteriaAnalysis from "@components/modal/import-criteria-analysis"
 import {
   DEADLINE_OPTIONS,
   EVALUATION_CRITERION_STATUS_OPTIONS,
+  getRejectedBy,
   getStatusEvaluation,
 } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
@@ -84,19 +85,33 @@ const CriteriaAnalysisSubPage = ({
 
   const { mutateAsync: updateCriterion } = useUpdateAnalysisCriterion()
 
-  const handleSubmitCriterion = async (analysisCriterionId: string) => {
+  const handleSubmitCriterion = async (
+    analysisCriterionId: string,
+    description?: string | null
+  ) => {
     try {
       showSpinner()
+      const rejectedBy = getRejectedBy(description)
+      const isAdvisoryRejected = rejectedBy === "ADVISORY_BOARD"
+      const targetStatus = isAdvisoryRejected
+        ? $Enums.EvaluationCriterionStatus.APPROVED
+        : $Enums.EvaluationCriterionStatus.SUBMITTED
+
       await updateCriterion({
         where: {
           id: analysisCriterionId,
         },
         data: {
-          status: $Enums.EvaluationCriterionStatus.SUBMITTED,
+          status: targetStatus,
         },
       })
 
-      message.success("Nộp tiêu chí thành công.")
+      if (isAdvisoryRejected) {
+        message.success("Đã nộp lại phiếu phân tích tiêu chí lên Ban tư vấn phê duyệt.")
+      } else {
+        message.success("Đã nộp phiếu phân tích tiêu chí lên Trưởng ban thư ký phê duyệt.")
+      }
+      refetch()
     } catch (error) {
       message.error("Nộp tiêu chí thất bại. Vui lòng thử lại.")
     } finally {
@@ -122,16 +137,21 @@ const CriteriaAnalysisSubPage = ({
       }
 
       await Promise.all(
-        criteriaToSubmit.map((item) =>
-          updateCriterion({
+        criteriaToSubmit.map((item) => {
+          const rejectedBy = getRejectedBy(item.analysisCriterions?.description)
+          const targetStatus =
+            rejectedBy === "ADVISORY_BOARD"
+              ? $Enums.EvaluationCriterionStatus.APPROVED
+              : $Enums.EvaluationCriterionStatus.SUBMITTED
+          return updateCriterion({
             where: {
               id: item.analysisCriterions?.id,
             },
             data: {
-              status: $Enums.EvaluationCriterionStatus.SUBMITTED,
+              status: targetStatus,
             },
           })
-        )
+        })
       )
 
       message.success(`Nộp thành công ${criteriaToSubmit.length} tiêu chí.`)
@@ -245,9 +265,23 @@ const CriteriaAnalysisSubPage = ({
         filteredCriteria?.map((item) => {
           if (!item.analysisCriterions) return null
           const status = item.analysisCriterions?.status
-          const statusConfig = getStatusEvaluation(status)
+          const rejectedBy = getRejectedBy(item.analysisCriterions?.description)
+          const statusConfig = getStatusEvaluation(status, rejectedBy)
           const deadline = item.analysisCriterions?.deadline
           const deadlineStatus = deadline ? getDeadlineStatus(deadline) : null
+          const isAdvisoryRejected = rejectedBy === "ADVISORY_BOARD"
+          const submitBtnText =
+            status === $Enums.EvaluationCriterionStatus.REVISION
+              ? isAdvisoryRejected
+                ? "Nộp cho Ban tư vấn"
+                : "Nộp cho Thư ký"
+              : "Nộp tiêu chí"
+          const confirmTitle =
+            status === $Enums.EvaluationCriterionStatus.REVISION
+              ? isAdvisoryRejected
+                ? "Bạn chắc chắn muốn nộp lại tiêu chí này lên Ban tư vấn phê duyệt?"
+                : "Bạn chắc chắn muốn nộp lại tiêu chí này lên Trưởng ban thư ký phê duyệt?"
+              : "Bạn chắc chắn muốn nộp tiêu chí này?"
 
           return (
             <div key={item.id} className="ml-4 mb-6">
@@ -298,19 +332,30 @@ const CriteriaAnalysisSubPage = ({
                         status !== $Enums.EvaluationCriterionStatus.SUBMITTED && (
                           <Popconfirm
                             title="Xác nhận nộp tiêu chí"
-                            description="Bạn chắc chắn muốn nộp tiêu chí này?"
+                            description={confirmTitle}
                             onConfirm={() => {
                               const id = item.analysisCriterions?.id
                               if (id) {
-                                handleSubmitCriterion(id)
+                                handleSubmitCriterion(
+                                  id,
+                                  item.analysisCriterions?.description
+                                )
                               }
                             }}
                             okText="Đồng ý"
                             cancelText="Hủy"
                             placement="topRight"
                           >
-                            <Button type="primary" size="small" className="bg-blue-500">
-                              Nộp tiêu chí
+                            <Button
+                              type="primary"
+                              size="small"
+                              className={
+                                isAdvisoryRejected
+                                  ? "!bg-[#0f8a4b] hover:!bg-[#0c703d]"
+                                  : "bg-blue-500"
+                              }
+                            >
+                              {submitBtnText}
                             </Button>
                           </Popconfirm>
                         )}

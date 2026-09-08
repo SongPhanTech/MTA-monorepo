@@ -62,6 +62,7 @@ export default function EvaluationPeriodTabPage() {
 
   const isHeadSecretary = councilMember?.role?.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY)
   const isVicePeresident = councilMember?.role?.includes($Enums.EvaluationMemberRole.VICE_PRESIDENT)
+  const isAdvisoryBoard = councilMember?.role?.includes($Enums.EvaluationMemberRole.ADVISORY_BOARD)
   const isNonCouncilMember = councilMember?.role?.includes(
     $Enums.EvaluationMemberRole.NONCOUNCIL_MEMBERS
   )
@@ -124,14 +125,21 @@ export default function EvaluationPeriodTabPage() {
           label: "Báo cáo tiêu chuẩn",
           children: <CrossReviewPeriod />,
           disabled: !selectedEvaluationPeriodId,
-        },
-        {
-          key: "8",
-          label: "Viết báo cáo tự đánh giá",
-          children: <SumaryReport />,
-          disabled: !selectedEvaluationPeriodId,
         }
       )
+    }
+
+    if (
+      can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, "XEM_CHI_TIET") ||
+      isHeadSecretary ||
+      isAdvisoryBoard
+    ) {
+      tabs.push({
+        key: "8",
+        label: "Viết báo cáo tự đánh giá",
+        children: <SumaryReport />,
+        disabled: !selectedEvaluationPeriodId,
+      })
     }
 
     tabs.push({
@@ -157,7 +165,7 @@ export default function EvaluationPeriodTabPage() {
     })
 
     return tabs
-  }, [selectedEvaluationPeriodId, councilMember, can])
+  }, [selectedEvaluationPeriodId, councilMember, can, isHeadSecretary, isAdvisoryBoard])
 
   return (
     <Row gutter={[12, 0]}>
