@@ -48,6 +48,7 @@ export default {
     "THOI_KHOA_BIEU": "/thoi-khoa-bieu",
     "THONG_KE_DANG_KY": "/thong-ke-dang-ky"
   },
+  "DANG_KY_HOC": {},
   "KHAO_THI": {
     "BAO_CAO_KHAO_SAT_GIANG_VIEN": "/bao-cao-khao-sat-giang-vien",
     "HOME": "/home",
@@ -92,6 +93,7 @@ export default {
     "DANH_MUC_DANH_MUC_CHUAN_DAU_RA": "/danh-muc/danh-muc-chuan-dau-ra",
     "DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM": "/danh-muc/danh-muc-chuyen-doi-diem",
     "DANH_MUC_DANH_MUC_CHUYEN_NGANH": "/danh-muc/danh-muc-chuyen-nganh",
+    "DANH_MUC_DANH_MUC_DON_VI": "/danh-muc/danh-muc-don-vi",
     "DANH_MUC_DANH_MUC_HOC_BONG": "/danh-muc/danh-muc-hoc-bong",
     "DANH_MUC_DANH_MUC_NGANH": "/danh-muc/danh-muc-nganh",
     "DANH_MUC_DANH_MUC_PHONG_HOC": "/danh-muc/danh-muc-phong-hoc",

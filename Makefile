@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= swan1
+SERVER_PROFILE ?= swantech_x52
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -42,12 +42,12 @@ ifeq ($(SERVER_PROFILE),swan1)
 else ifeq ($(SERVER_PROFILE),swantech_x52)
   SERVER_HOST      := swantech_x52
   SERVER_PASSWORD  :=
-  BE_DEPLOY_DIR    := ~/app_mta_sso/mta-be
-  BE_APP_DIR       := ~/app_mta_sso/mta-be
-  FE_APP_DIR       := ~/app_mta_sso
+  BE_DEPLOY_DIR    := ~/mta-be
+  BE_APP_DIR       := ~/mta-be
+  FE_APP_DIR       := ~/mta-app
   FE_COMPOSE_FILE  := app-docker-compose.yml
-  FE_APP_URL       := https://demodaotao.swantech.vn
-  ONLY_OFFICE_ENDPOINT := https://doc.x52.swantech.vn
+  FE_APP_URL       := https://mta.swantech.vn
+  ONLY_OFFICE_ENDPOINT := https://doc.mta.swantech.vn
 
 # ── Profile: local_mta ─────────────────────────────────────────────────────────────
 else ifeq ($(SERVER_PROFILE),local_mta)

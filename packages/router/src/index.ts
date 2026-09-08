@@ -479,6 +479,13 @@ const NAVIGATION: NavigationType = {
         icon: ListTree,
         children: [
           {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_DON_VI,
+            label: "Đơn vị",
+            icon: Landmark,
+            path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_DON_VI,
+            description: "Danh mục đơn vị",
+          },
+          {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
             label: "Lớp quản lý",
             icon: TeamOutlined,

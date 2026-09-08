@@ -51,6 +51,7 @@ import PutTrainingMajorModal from "./put-chuyen-nganh"
 import PutCloneAcademicRanking from "./put-clone-acdemic-ranking"
 import PutCloneConvertScore from "./put-clone-convert-score"
 import PutCurriculum from "./put-danh-muc-chuong-trinh-dao-dao"
+import PutDMDonViModal from "./put-danh-muc-don-vi"
 import PutSubjectListModal from "./put-danh-sach-mon-hoc"
 import PutOlympicScoreModal from "./put-diem-cong"
 import PutRankingCondition from "./put-dieu-kien-xep-loai-tn"
@@ -154,6 +155,7 @@ export {
   PutCurriculumVersion,
   PutVersionSubjectModal,
   PutCurriculum,
+  PutDMDonViModal,
   PutTrainingBlockOnCurriculumVersion,
   PutTrainingBlockSubject,
   PutConvertScore,
