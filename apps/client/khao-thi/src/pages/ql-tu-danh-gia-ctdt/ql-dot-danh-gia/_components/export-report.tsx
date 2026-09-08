@@ -882,6 +882,91 @@ export default function ExportReport({
           ...(await htmlToParagraphs(processHtmlContent(data?.conclude || "", evidenceTags)))
         )
 
+        // ==== Phần Ⅳ. PHỤ LỤC ====
+        let appendixDb = ""
+        let appendixDocs = ""
+        let appendixEvs = ""
+        if (data?.description) {
+          try {
+            const parsed = JSON.parse(data.description)
+            if (typeof parsed === "object" && parsed !== null) {
+              appendixDb = parsed.appendixDatabase || ""
+              appendixDocs = parsed.appendixDocuments || ""
+              appendixEvs = parsed.appendixEvidences || ""
+            }
+          } catch {
+            // not json
+          }
+        }
+
+        const appendixChildren: any[] = []
+        appendixChildren.push(
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            heading: HeadingLevel.HEADING_1,
+            children: [
+              new TextRun({
+                text: "Phần Ⅳ. PHỤ LỤC",
+                bold: true,
+                size: 32,
+                color: "000000",
+              }),
+            ],
+          }),
+          new Paragraph({
+            indent: { firstLine: 720 },
+            alignment: AlignmentType.JUSTIFIED,
+            children: [
+              new TextRun({
+                text: "1. Cơ sở dữ liệu kiểm định chất lượng CTĐT",
+                bold: true,
+                size: 28,
+              }),
+            ],
+          })
+        )
+        if (appendixDb) {
+          appendixChildren.push(
+            ...(await htmlToParagraphs(processHtmlContent(appendixDb, evidenceTags)))
+          )
+        }
+        appendixChildren.push(
+          new Paragraph({
+            indent: { firstLine: 720 },
+            alignment: AlignmentType.JUSTIFIED,
+            children: [
+              new TextRun({
+                text: "2. Các tư liệu, tài liệu liên quan",
+                bold: true,
+                size: 28,
+              }),
+            ],
+          })
+        )
+        if (appendixDocs) {
+          appendixChildren.push(
+            ...(await htmlToParagraphs(processHtmlContent(appendixDocs, evidenceTags)))
+          )
+        }
+        appendixChildren.push(
+          new Paragraph({
+            indent: { firstLine: 720 },
+            alignment: AlignmentType.JUSTIFIED,
+            children: [
+              new TextRun({
+                text: "3. Danh mục minh chứng sử dụng trong quá trình TĐG và viết báo cáo TĐG",
+                bold: true,
+                size: 28,
+              }),
+            ],
+          })
+        )
+        if (appendixEvs) {
+          appendixChildren.push(
+            ...(await htmlToParagraphs(processHtmlContent(appendixEvs, evidenceTags)))
+          )
+        }
+
         const doc = new Document({
           features: {
             updateFields: true,
@@ -917,6 +1002,9 @@ export default function ExportReport({
             ...sections,
             {
               children: conclusionChildren,
+            },
+            {
+              children: appendixChildren,
             },
             {
               children: exportDanhSachMinhchung(result),
