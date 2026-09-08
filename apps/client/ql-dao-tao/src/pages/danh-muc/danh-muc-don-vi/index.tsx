@@ -42,7 +42,7 @@ export default function DanhMucDonViPage() {
   })
 
   const { onOpen } = useDisclosure<PutDMDonViInput>({
-    tag: "PutDMDonVi",
+    tag: "PutDMDonViModal",
   })
 
   const { mutateAsync: updateDM_DonVi } = useUpdateDM_DonVi()
