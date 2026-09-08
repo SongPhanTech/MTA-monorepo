@@ -474,7 +474,7 @@ export default function ModalChiTietMonHoc() {
               render: (value) => getSubjectClassTypeLabel(value),
             },
             {
-              title: "Số SV tối đa",
+              title: "Số HV tối đa",
               dataIndex: "maxStudent",
               width: 100,
               align: "center",

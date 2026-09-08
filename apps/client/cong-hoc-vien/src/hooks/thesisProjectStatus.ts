@@ -14,7 +14,7 @@ export const useThesisProjectStatusOptions = () => {
       label: "Khoa/Bộ môn đã duyệt",
       color: "cyan",
     },
-    { value: ThesisProjectStatus.ASSIGNED, label: "Đã giao cho SV", color: "purple" },
+    { value: ThesisProjectStatus.ASSIGNED, label: "Đã giao cho HV", color: "purple" },
     { value: ThesisProjectStatus.IN_PROGRESS, label: "Đang thực hiện", color: "orange" },
     {
       value: ThesisProjectStatus.DEFENSE_ELIGIBLE,

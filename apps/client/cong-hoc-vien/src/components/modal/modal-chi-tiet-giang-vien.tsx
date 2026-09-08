@@ -797,7 +797,7 @@ const ModalChiTietGiangVien = () => {
               align: "center",
             },
             {
-              title: "Sĩ số sinh viên hiện tại",
+              title: "Sĩ số học viên hiện tại",
               dataIndex: "currentStudents",
               width: 100,
               align: "center",
@@ -835,7 +835,7 @@ const ModalChiTietGiangVien = () => {
               render: (_: any, __: any, index: number) => index + 1,
             },
             {
-              title: "Sinh viên",
+              title: "Học viên",
               width: 200,
               render: (_: any, record: any) =>
                 record.student?.userProfile
@@ -887,7 +887,7 @@ const ModalChiTietGiangVien = () => {
               render: (_: any, __: any, index: number) => index + 1,
             },
             {
-              title: "Sinh viên",
+              title: "Học viên",
               width: 200,
               render: (_: any, record: any) =>
                 record.student?.userProfile

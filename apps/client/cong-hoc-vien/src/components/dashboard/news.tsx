@@ -17,7 +17,7 @@
 //     },
 //     {
 //         id: 2,
-//         message: 'Kết quả xét chọn đề xuất đề tài NCKH sinh viên năm học 2023',
+//         message: 'Kết quả xét chọn đề xuất đề tài NCKH học viên năm học 2023',
 //         name: 'Cán bộ giảng viên',
 //         avatar: 'https://static.vecteezy.com/ti/vetor-gratis/p3/2002300-icone-de-personagem-de-avatar-de-mulher-bonita-gratis-vetor.jpg',
 //         image: 'https://icdn.dantri.com.vn/thumb_w/640/2020/09/27/nghien-cuu-khoa-hoc-1601167698407.png',

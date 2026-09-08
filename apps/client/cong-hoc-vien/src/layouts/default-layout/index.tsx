@@ -17,7 +17,7 @@ const SIDER_WIDTH = 250
 const SIDER_COLLAPSED_WIDTH = 80
 const HEADER_HEIGHT = 64
 const CONTENT_VERTICAL_OFFSET = HEADER_HEIGHT + 32
-const PORTAL_TITLE = "Cổng sinh viên"
+const PORTAL_TITLE = "Cổng học viên"
 
 const readSidebarCollapsed = () =>
   typeof window !== "undefined" && localStorage.getItem("collapsed") === "true"

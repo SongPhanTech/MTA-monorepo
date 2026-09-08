@@ -168,6 +168,12 @@ const NAVIGATION: NavigationType = {
         path: ROUTER_PATH.CONG_HOC_VIEN.THOI_KHOA_BIEU,
       },
       {
+        id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_LICH_THI,
+        label: "Lịch thi",
+        icon: CalendarDays,
+        path: ROUTER_PATH.CONG_HOC_VIEN.LICH_THI,
+      },
+      {
         id: CONG_HOC_VIEN_PERMISSION.CONG_HOC_VIEN_CHUONG_TRINH_DAO_TAO,
         label: "Chương trình đào tạo",
         icon: Library,

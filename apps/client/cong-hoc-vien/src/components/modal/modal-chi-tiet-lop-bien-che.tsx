@@ -241,13 +241,13 @@ export default function ModalChiTietLopBienChe() {
           <Descriptions.Item label="Lớp trưởng" span={1}>
             {fixedClassData?.classMonitor?.userProfile?.fullname || ""}
           </Descriptions.Item>
-          <Descriptions.Item label="Mã SV" span={1}>
+          <Descriptions.Item label="Mã HV" span={1}>
             {fixedClassData?.classMonitor?.userProfile?.code || ""}
           </Descriptions.Item>
           <Descriptions.Item label="Bí thư" span={1}>
             {fixedClassData?.unionLeader?.userProfile?.fullname || ""}
           </Descriptions.Item>
-          <Descriptions.Item label="Mã SV" span={1}>
+          <Descriptions.Item label="Mã HV" span={1}>
             {fixedClassData?.unionLeader?.userProfile?.code || ""}
           </Descriptions.Item>
         </Descriptions>
@@ -255,7 +255,7 @@ export default function ModalChiTietLopBienChe() {
     },
     {
       key: "4",
-      label: `Danh sách sinh viên (${fixedClassData?.students?.length || 0})`,
+      label: `Danh sách học viên (${fixedClassData?.students?.length || 0})`,
       children: (
         <Table
           rowKey="id"
@@ -284,7 +284,7 @@ export default function ModalChiTietLopBienChe() {
               render: (_, __, index) => index + 1,
             },
             {
-              title: "Mã sinh viên",
+              title: "Mã học viên",
               dataIndex: ["userProfile", "code"],
               width: 120,
               align: "center",

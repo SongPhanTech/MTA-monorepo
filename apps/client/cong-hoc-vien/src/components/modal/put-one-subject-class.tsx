@@ -516,12 +516,12 @@ const PutOneSubjectClassModal = () => {
                 </FormItem>
               </Col>
               <Col span={6}>
-                <FormItem form={form} name="maxStudent" label="Số SV tối đa">
+                <FormItem form={form} name="maxStudent" label="Số HV tối đa">
                   <InputNumber
                     type="number"
                     min={1}
                     step={1}
-                    placeholder="Nhập số SV tối đa"
+                    placeholder="Nhập số HV tối đa"
                     className="w-full"
                   />
                 </FormItem>
@@ -724,7 +724,7 @@ const PutOneSubjectClassModal = () => {
               </Col>
             </Row>
           </Tabs.TabPane>
-          <Tabs.TabPane tab={"Danh sách sinh viên"} key="danh-sach-sinh-vien">
+          {/* <Tabs.TabPane tab={"Danh sách học viên"} key="danh-sach-sinh-vien">
             <Table
               filters={filterTable}
               setFilters={setFilterTable}
@@ -752,7 +752,7 @@ const PutOneSubjectClassModal = () => {
                   render: (_, __, index) => index + 1,
                 },
                 {
-                  title: "Mã sinh viên",
+                  title: "Mã học viên",
                   dataIndex: "code",
                   align: "center",
                   width: 150,
@@ -880,7 +880,7 @@ const PutOneSubjectClassModal = () => {
               data={dataTable}
               pagination={false}
             />
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
           <Tabs.TabPane tab={"Lịch học"} key="lich-hoc">
             <Table
               data={classSchedules}

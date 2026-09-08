@@ -34,7 +34,9 @@ export default {
     "KET_QUA_HOC_TAP": "/ket-qua-hoc-tap",
     "KHAO_SAT": "/khao-sat",
     "LICH_SU_DANG_KY_HOC": "/lich-su-dang-ky-hoc",
-    "THOI_KHOA_BIEU": "/thoi-khoa-bieu"
+    "LICH_THI": "/lich-thi",
+    "THOI_KHOA_BIEU": "/thoi-khoa-bieu",
+    "THONG_KE_DANG_KY": "/thong-ke-dang-ky"
   },
   "CONG_SINH_VIEN": {
     "CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao",

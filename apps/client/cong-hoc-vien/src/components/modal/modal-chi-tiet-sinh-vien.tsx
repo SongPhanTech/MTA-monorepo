@@ -1,6 +1,6 @@
-import { Descriptions, Modal, Table, Tabs, Tag } from "antd"
+import { Descriptions, Input, Modal, Select, Table, Tabs, Tag } from "antd"
 import dayjs from "dayjs"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
 import { FIXED_CLASS_STUDENT_STATUS, SCORE_CONVERT_STATUS } from "@constants/constants"
@@ -8,9 +8,63 @@ import { useAcademicRankingBaseTypeOptions } from "@hooks/academicRankingBaseTyp
 import { useStudentTrainingTypeOptions } from "@hooks/studentTrainingType"
 import { useFindUniqueStudent } from "@workspace/db/hooks"
 
+import type {
+  AcademicRankingConvert,
+  SchoolYear,
+  Semester,
+  StudentSemesterResult,
+  StudentTrainingType,
+  StudentYearResult,
+} from "@workspace/db"
+
 dayjs.locale("vi")
 
-const getRowSTT = (dataSource: any[] | undefined, record: any, fallbackIndex: number) => {
+type StudentSemesterResultWithRelations = StudentSemesterResult & {
+  semester?: Semester | null
+  rank?: AcademicRankingConvert | null
+}
+
+type StudentYearResultWithRelations = StudentYearResult & {
+  schoolYear?: SchoolYear | null
+  rank?: AcademicRankingConvert | null
+}
+
+const TRAINING_TYPE_COLOR_MAP: Record<StudentTrainingType, string> = {
+  EXCELLENT: "green",
+  GOOD: "blue",
+  FAIR: "cyan",
+  MEDIUM: "geekblue",
+  AVERAGE: "orange",
+  POOR: "red",
+  VERY_POOR: "volcano",
+}
+
+const TRAINING_TYPE_LABEL_MAP: Record<StudentTrainingType, string> = {
+  EXCELLENT: "Xuất sắc",
+  GOOD: "Tốt",
+  FAIR: "Khá",
+  MEDIUM: "TB Khá",
+  AVERAGE: "Trung bình",
+  POOR: "Yếu",
+  VERY_POOR: "Kém",
+}
+
+function resolveTrainingType(
+  trainingType: StudentTrainingType | null | undefined,
+  conductScore: number | null | undefined
+): StudentTrainingType | null {
+  if (trainingType) return trainingType
+  if (conductScore == null) return null
+  const score = Number(conductScore)
+  if (score >= 90) return "EXCELLENT"
+  if (score >= 80) return "GOOD"
+  if (score >= 65) return "FAIR"
+  if (score >= 50) return "MEDIUM"
+  if (score >= 35) return "POOR"
+  return "VERY_POOR"
+}
+
+const getRowSTT = <T,>(dataSource: T[] | undefined, record: T, fallbackIndex: number): number => {
   if (dataSource && Array.isArray(dataSource)) {
     const idx = dataSource.indexOf(record)
     if (idx !== -1) return idx + 1
@@ -262,6 +316,193 @@ const ModalChiTietSinhVien = () => {
     return [...list1, ...list2]
   }, [studentData])
 
+  // ── Search states per tab ──────────────────────────────────────────────────
+  const [searchDiemMonHoc, setSearchDiemMonHoc] = useState("")
+  const [searchKetQuaHocKy, setSearchKetQuaHocKy] = useState("")
+  const [filterXepLoaiRLHocKy, setFilterXepLoaiRLHocKy] = useState<string>("ALL")
+  const [filterXepLoaiHTHocKy, setFilterXepLoaiHTHocKy] = useState<string>("ALL")
+  const [searchKetQuaNamHoc, setSearchKetQuaNamHoc] = useState("")
+  const [filterXepLoaiRLNamHoc, setFilterXepLoaiRLNamHoc] = useState<string>("ALL")
+  const [filterXepLoaiHTNamHoc, setFilterXepLoaiHTNamHoc] = useState<string>("ALL")
+  const [searchHocBong, setSearchHocBong] = useState("")
+  const [searchChungChi, setSearchChungChi] = useState("")
+  const [searchGiaiThuong, setSearchGiaiThuong] = useState("")
+  const [searchCanhBaoHocTap, setSearchCanhBaoHocTap] = useState("")
+  const [searchCanhCaoHocDuong, setSearchCanhCaoHocDuong] = useState("")
+  const [searchDiemRenLuyen, setSearchDiemRenLuyen] = useState("")
+  const [filterStatusDiemRenLuyen, setFilterStatusDiemRenLuyen] = useState<string>("ALL")
+  const [searchScoreConvert, setSearchScoreConvert] = useState("")
+  const [searchClassLog, setSearchClassLog] = useState("")
+  const [searchNotes, setSearchNotes] = useState("")
+
+  // ── Filtered data per tab ──────────────────────────────────────────────────
+  const filteredDiemMonHoc = useMemo(() => {
+    const q = searchDiemMonHoc.toLowerCase().trim()
+    if (!q) return studentData?.subjectClassStudent || []
+    return (studentData?.subjectClassStudent || []).filter((r) => {
+      const subj = r.subjectClass?.subject
+      return [subj?.code, subj?.name].some((v) =>
+        String(v ?? "")
+          .toLowerCase()
+          .includes(q)
+      )
+    })
+  }, [studentData, searchDiemMonHoc])
+
+  const filteredKetQuaHocKy = useMemo(() => {
+    const q = searchKetQuaHocKy.toLowerCase().trim()
+    let list = (studentData?.studentSemesterResult || []) as StudentSemesterResultWithRelations[]
+    if (filterXepLoaiRLHocKy !== "ALL") {
+      list = list.filter(
+        (r) => resolveTrainingType(r.studentTrainingType, r.conductScore) === filterXepLoaiRLHocKy
+      )
+    }
+    if (filterXepLoaiHTHocKy !== "ALL") {
+      list = list.filter((r) => r.rank?.classification === filterXepLoaiHTHocKy)
+    }
+    if (!q) return list
+    return list.filter((r) =>
+      [r.code, r.semester?.code, r.semester?.name, r.rank?.classification].some((v) =>
+        String(v ?? "")
+          .toLowerCase()
+          .includes(q)
+      )
+    )
+  }, [studentData, searchKetQuaHocKy, filterXepLoaiRLHocKy, filterXepLoaiHTHocKy])
+
+  const filteredKetQuaNamHoc = useMemo(() => {
+    const q = searchKetQuaNamHoc.toLowerCase().trim()
+    let list = (studentData?.studentYearResult || []) as StudentYearResultWithRelations[]
+    if (filterXepLoaiRLNamHoc !== "ALL") {
+      list = list.filter(
+        (r) => resolveTrainingType(r.studentTrainingType, r.conductScore) === filterXepLoaiRLNamHoc
+      )
+    }
+    if (filterXepLoaiHTNamHoc !== "ALL") {
+      list = list.filter((r) => r.rank?.classification === filterXepLoaiHTNamHoc)
+    }
+    if (!q) return list
+    return list.filter((r) =>
+      [r.code, r.schoolYear?.code, r.schoolYear?.name, r.rank?.classification].some((v) =>
+        String(v ?? "")
+          .toLowerCase()
+          .includes(q)
+      )
+    )
+  }, [studentData, searchKetQuaNamHoc, filterXepLoaiRLNamHoc, filterXepLoaiHTNamHoc])
+
+  const filteredHocBong = useMemo(() => {
+    const q = searchHocBong.toLowerCase().trim()
+    if (!q) return studentData?.scholarshipAwards || []
+    return (studentData?.scholarshipAwards || []).filter((r) =>
+      [r.scholarship?.name, r.semester?.name].some((v) =>
+        String(v ?? "")
+          .toLowerCase()
+          .includes(q)
+      )
+    )
+  }, [studentData, searchHocBong])
+
+  const filteredChungChi = useMemo(() => {
+    const q = searchChungChi.toLowerCase().trim()
+    if (!q) return studentData?.archivedCertificate || []
+    return (studentData?.archivedCertificate || []).filter((r) =>
+      [r.certificate?.name, r.certificate?.code, r.issuedBy].some((v) =>
+        String(v ?? "")
+          .toLowerCase()
+          .includes(q)
+      )
+    )
+  }, [studentData, searchChungChi])
+
+  const filteredGiaiThuong = useMemo(() => {
+    const q = searchGiaiThuong.toLowerCase().trim()
+    if (!q) return studentData?.archivedAward || []
+    return (studentData?.archivedAward || []).filter((r) =>
+      [r.award?.name].some((v) =>
+        String(v ?? "")
+          .toLowerCase()
+          .includes(q)
+      )
+    )
+  }, [studentData, searchGiaiThuong])
+
+  const filteredCanhBaoHocTap = useMemo(() => {
+    const q = searchCanhBaoHocTap.toLowerCase().trim()
+    if (!q) return studentData?.academicWarning || []
+    return (studentData?.academicWarning || []).filter((r) =>
+      [r.semester?.name, r.description].some((v) =>
+        String(v ?? "")
+          .toLowerCase()
+          .includes(q)
+      )
+    )
+  }, [studentData, searchCanhBaoHocTap])
+
+  const filteredCanhCaoHocDuong = useMemo(() => {
+    const q = searchCanhCaoHocDuong.toLowerCase().trim()
+    if (!q) return studentData?.disciplinaryWarning || []
+    return (studentData?.disciplinaryWarning || []).filter((r) =>
+      [r.semester?.name, r.description].some((v) =>
+        String(v ?? "")
+          .toLowerCase()
+          .includes(q)
+      )
+    )
+  }, [studentData, searchCanhCaoHocDuong])
+
+  const filteredDiemRenLuyen = useMemo(() => {
+    const q = searchDiemRenLuyen.toLowerCase().trim()
+    let list = combinedTrainingScores
+    if (filterStatusDiemRenLuyen !== "ALL") {
+      list = list.filter((r) => r.status === filterStatusDiemRenLuyen)
+    }
+    if (!q) return list
+    return list.filter((r) =>
+      [r.semesterName, r.sessionName, r.status].some((v) =>
+        String(v ?? "")
+          .toLowerCase()
+          .includes(q)
+      )
+    )
+  }, [combinedTrainingScores, searchDiemRenLuyen, filterStatusDiemRenLuyen])
+
+  const filteredScoreConvert = useMemo(() => {
+    const q = searchScoreConvert.toLowerCase().trim()
+    if (!q) return studentData?.studentScoreConvert || []
+    return (studentData?.studentScoreConvert || []).filter((r: Record<string, unknown>) =>
+      Object.values(r).some((v) =>
+        String(v ?? "")
+          .toLowerCase()
+          .includes(q)
+      )
+    )
+  }, [studentData, searchScoreConvert])
+
+  const filteredClassLog = useMemo(() => {
+    const q = searchClassLog.toLowerCase().trim()
+    if (!q) return studentData?.classRegisterLogs || []
+    return (studentData?.classRegisterLogs || []).filter((r: Record<string, unknown>) =>
+      Object.values(r).some((v) =>
+        String(v ?? "")
+          .toLowerCase()
+          .includes(q)
+      )
+    )
+  }, [studentData, searchClassLog])
+
+  const filteredNotes = useMemo(() => {
+    const q = searchNotes.toLowerCase().trim()
+    if (!q) return studentData?.notes || []
+    return (studentData?.notes || []).filter((r: Record<string, unknown>) =>
+      Object.values(r).some((v) =>
+        String(v ?? "")
+          .toLowerCase()
+          .includes(q)
+      )
+    )
+  }, [studentData, searchNotes])
+
   const tabItems = [
     {
       key: "thong-tin-co-ban",
@@ -269,7 +510,7 @@ const ModalChiTietSinhVien = () => {
       children: (
         <div className="space-y-4">
           <Descriptions bordered column={2} size="small">
-            <Descriptions.Item label="Mã sinh viên">{studentData?.code}</Descriptions.Item>
+            <Descriptions.Item label="Mã học viên">{studentData?.code}</Descriptions.Item>
             <Descriptions.Item label="Họ và tên">
               {studentData?.userProfile?.fullname}
             </Descriptions.Item>
@@ -433,449 +674,534 @@ const ModalChiTietSinhVien = () => {
       key: "diem-mon-hoc",
       label: `Điểm môn học (${studentData?.subjectClassStudent?.length || 0})`,
       children: (
-        <Table
-          dataSource={studentData?.subjectClassStudent || []}
-          rowKey="id"
-          size="small"
-          pagination={{ pageSize: 10 }}
-          scroll={{ x: 1200 }}
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              render: (_, record, index) =>
-                getRowSTT(studentData?.subjectClassStudent, record, index),
-            },
-            {
-              title: "Mã môn",
-              dataIndex: ["subjectClass", "subject", "code"],
-              width: 100,
-            },
-            {
-              title: "Tên môn học",
-              dataIndex: ["subjectClass", "subject", "name"],
-              width: 250,
-            },
-            {
-              title: "Tín chỉ",
-              dataIndex: ["subjectClass", "subject", "credit"],
-              width: 80,
-              align: "center",
-            },
-            {
-              title: "Điểm TX",
-              dataIndex: "attendanceScore",
-              width: 90,
-              align: "center",
-              render: (score) => (score ? Number(score).toFixedSmart(2) : ""),
-            },
-            {
-              title: "Điểm ĐK",
-              dataIndex: "midtermScore",
-              width: 90,
-              align: "center",
-              render: (score) => (score ? Number(score).toFixedSmart(2) : ""),
-            },
-            {
-              title: "Điểm thi",
-              dataIndex: "examScore",
-              width: 90,
-              align: "center",
-              render: (score) => (score ? Number(score).toFixedSmart(2) : ""),
-            },
-            {
-              title: "Điểm hệ 10",
-              dataIndex: "finalScore",
-              width: 90,
-              align: "center",
-              render: (score) => (
-                <span className={score && Number(score) >= 5 ? "text-green-600" : "text-red-600"}>
-                  {score ? Number(score).toFixedSmart(2) : ""}
-                </span>
-              ),
-            },
-          ]}
-        />
+        <div className="space-y-3">
+          <Input.Search
+            placeholder="Tìm theo mã môn, tên môn học..."
+            allowClear
+            value={searchDiemMonHoc}
+            onChange={(e) => setSearchDiemMonHoc(e.target.value)}
+            style={{ maxWidth: 360 }}
+          />
+          <Table
+            dataSource={filteredDiemMonHoc}
+            rowKey="id"
+            size="small"
+            pagination={{ pageSize: 10 }}
+            scroll={{ x: 1200 }}
+            columns={[
+              {
+                title: "STT",
+                width: 50,
+                align: "center",
+                render: (_, record, index) =>
+                  getRowSTT(studentData?.subjectClassStudent, record, index),
+              },
+              {
+                title: "Mã môn",
+                dataIndex: ["subjectClass", "subject", "code"],
+                width: 100,
+              },
+              {
+                title: "Tên môn học",
+                dataIndex: ["subjectClass", "subject", "name"],
+                width: 250,
+              },
+              {
+                title: "Tín chỉ",
+                dataIndex: ["subjectClass", "subject", "credit"],
+                width: 80,
+                align: "center",
+              },
+              {
+                title: "Điểm TX",
+                dataIndex: "attendanceScore",
+                width: 90,
+                align: "center",
+                render: (score) => (score ? Number(score).toFixedSmart(2) : ""),
+              },
+              {
+                title: "Điểm ĐK",
+                dataIndex: "midtermScore",
+                width: 90,
+                align: "center",
+                render: (score) => (score ? Number(score).toFixedSmart(2) : ""),
+              },
+              {
+                title: "Điểm thi",
+                dataIndex: "examScore",
+                width: 90,
+                align: "center",
+                render: (score) => (score ? Number(score).toFixedSmart(2) : ""),
+              },
+              {
+                title: "Điểm hệ 10",
+                dataIndex: "finalScore",
+                width: 90,
+                align: "center",
+                render: (score) => (
+                  <span className={score && Number(score) >= 5 ? "text-green-600" : "text-red-600"}>
+                    {score ? Number(score).toFixedSmart(2) : ""}
+                  </span>
+                ),
+              },
+            ]}
+          />
+        </div>
       ),
     },
     {
       key: "ket-qua-hoc-ky",
       label: `Kết quả học kỳ (${studentData?.studentSemesterResult?.length || 0})`,
       children: (
-        <Table
-          dataSource={studentData?.studentSemesterResult || []}
-          rowKey="id"
-          size="small"
-          pagination={{ pageSize: 10 }}
-          scroll={{ x: 2400 }}
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              render: (_, record, index) =>
-                getRowSTT(studentData?.studentSemesterResult, record, index),
-            },
-            {
-              title: "Mã",
-              dataIndex: "code",
-              width: 100,
-            },
-            {
-              title: "Học kỳ",
-              dataIndex: ["semester", "name"],
-              width: 150,
-            },
-            {
-              title: "Năm học thứ",
-              dataIndex: "studyYear",
-              width: 100,
-              align: "center",
-            },
-            {
-              title: "HK thứ",
-              dataIndex: "semesterIndexInCourse",
-              width: 80,
-              align: "center",
-            },
-            {
-              title: "HK cuối",
-              dataIndex: "isLastSemester",
-              width: 80,
-              align: "center",
-              render: (isLast) => (
-                <Tag color={isLast ? "green" : "default"}>{isLast ? "Có" : "Không"}</Tag>
-              ),
-            },
-            {
-              title: "GPA (4)",
-              dataIndex: "gpaBase4",
-              width: 90,
-              align: "center",
-              render: (val) => (val ? Number(val).toFixed(2) : ""),
-            },
-            {
-              title: "GPA(4)",
-              dataIndex: "cumulativeGpaBase4",
-              width: 90,
-              align: "center",
-              render: (val) => (val ? Number(val).toFixed(2) : ""),
-            },
-            {
-              title: "GPA (10)",
-              dataIndex: "gpaBase10",
-              width: 90,
-              align: "center",
-              render: (val) => (val ? Number(val).toFixed(2) : ""),
-            },
-            {
-              title: "GPA(10)",
-              dataIndex: "cumulativeGpaBase10",
-              width: 90,
-              align: "center",
-              render: (val) => (val ? Number(val).toFixed(2) : ""),
-            },
-            {
-              title: "Điểm RL",
-              dataIndex: "conductScore",
-              width: 90,
-              align: "center",
-              render: (score) => (score ? Number(score).toFixed(1) : ""),
-            },
-            {
-              title: "Xếp loại RL",
-              dataIndex: "studentTrainingType",
-              width: 120,
-              align: "center",
-              render: (type) => {
-                const colorMap: Record<string, string> = {
-                  EXCELLENT: "green",
-                  GOOD: "blue",
-                  FAIR: "cyan",
-                  MEDIUM: "geekblue",
-                  AVERAGE: "orange",
-                  POOR: "red",
-                  VERY_POOR: "volcano",
-                }
-                const labelMap: Record<string, string> = {
-                  EXCELLENT: "Xuất sắc",
-                  GOOD: "Tốt",
-                  FAIR: "Khá",
-                  MEDIUM: "TB Khá",
-                  AVERAGE: "Trung bình",
-                  POOR: "Yếu",
-                  VERY_POOR: "Kém",
-                }
-                return type ? (
-                  <Tag color={colorMap[type] || "default"}>{labelMap[type] || type}</Tag>
-                ) : (
-                  ""
-                )
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-2">
+            <Input.Search
+              placeholder="Tìm theo mã, học kỳ, xếp loại..."
+              allowClear
+              value={searchKetQuaHocKy}
+              onChange={(e) => setSearchKetQuaHocKy(e.target.value)}
+              style={{ width: 300 }}
+            />
+            <Select
+              value={filterXepLoaiRLHocKy}
+              onChange={setFilterXepLoaiRLHocKy}
+              style={{ width: 160 }}
+              options={[
+                { value: "ALL", label: "Tất cả xếp loại RL" },
+                { value: "EXCELLENT", label: "Xuất sắc" },
+                { value: "GOOD", label: "Tốt" },
+                { value: "FAIR", label: "Khá" },
+                { value: "MEDIUM", label: "TB Khá" },
+                { value: "AVERAGE", label: "Trung bình" },
+                { value: "POOR", label: "Yếu" },
+                { value: "VERY_POOR", label: "Kém" },
+              ]}
+            />
+            <Select
+              value={filterXepLoaiHTHocKy}
+              onChange={setFilterXepLoaiHTHocKy}
+              style={{ width: 160 }}
+              options={[
+                { value: "ALL", label: "Tất cả xếp loại HT" },
+                { value: "Xuất sắc", label: "Xuất sắc" },
+                { value: "Giỏi", label: "Giỏi" },
+                { value: "Khá", label: "Khá" },
+                { value: "Trung bình", label: "Trung bình" },
+                { value: "Yếu", label: "Yếu" },
+                { value: "Kém", label: "Kém" },
+              ]}
+            />
+          </div>
+          <Table
+            dataSource={filteredKetQuaHocKy}
+            rowKey="id"
+            size="small"
+            pagination={{ pageSize: 10 }}
+            scroll={{ x: 2400 }}
+            columns={[
+              {
+                title: "STT",
+                width: 50,
+                align: "center",
+                render: (_, record, index) =>
+                  getRowSTT(studentData?.studentSemesterResult, record, index),
               },
-            },
-            {
-              title: "Xếp loại HT",
-              dataIndex: ["rank", "name"],
-              width: 120,
-            },
-            {
-              title: "TC đăng ký",
-              dataIndex: "registeredCredits",
-              width: 100,
-              align: "center",
-            },
-            {
-              title: "TC đạt",
-              dataIndex: "passedCredits",
-              width: 90,
-              align: "center",
-            },
-            {
-              title: "TC nợ",
-              dataIndex: "failedCredits",
-              width: 90,
-              align: "center",
-            },
-            {
-              title: "TC tích lũy",
-              dataIndex: "accumulatedCredits",
-              width: 100,
-              align: "center",
-            },
-            {
-              title: "TC học lại",
-              dataIndex: "retakingCredits",
-              width: 100,
-              align: "center",
-            },
-            {
-              title: "TC theo CTDT",
-              dataIndex: "totalCreditsByCurriculum",
-              width: 110,
-              align: "center",
-            },
-            {
-              title: "Tổng TC nợ",
-              dataIndex: "totalFailedCredits",
-              width: 100,
-              align: "center",
-            },
-            {
-              title: "Điểm thấp nhất",
-              dataIndex: "lowestFinalScore",
-              width: 100,
-              align: "center",
-              render: (score) => (score ? Number(score).toFixed(1) : ""),
-            },
-            {
-              title: "Lớp trưởng",
-              dataIndex: "isClassMonitor",
-              width: 80,
-              align: "center",
-              render: (isMonitor) => (
-                <Tag color={isMonitor ? "gold" : "default"}>{isMonitor ? "Có" : "Không"}</Tag>
-              ),
-            },
-            {
-              title: "Chức vụ Đoàn",
-              dataIndex: "isUnionLeader",
-              width: 90,
-              align: "center",
-              render: (isLeader) => (
-                <Tag color={isLeader ? "purple" : "default"}>{isLeader ? "Có" : "Không"}</Tag>
-              ),
-            },
-            {
-              title: "Học cải thiện",
-              dataIndex: "isImproving",
-              width: 90,
-              align: "center",
-              render: (isImproving) => (
-                <Tag color={isImproving ? "blue" : "default"}>{isImproving ? "Có" : "Không"}</Tag>
-              ),
-            },
-            {
-              title: "Tạm ngưng có lý do",
-              dataIndex: "postponeWithReason",
-              width: 120,
-              align: "center",
-              render: (postpone) => (
-                <Tag color={postpone ? "orange" : "default"}>{postpone ? "Có" : "Không"}</Tag>
-              ),
-            },
-            {
-              title: "Cảnh cáo HT",
-              dataIndex: "academicWarningLevel",
-              width: 100,
-              align: "center",
-              render: (level) => <Tag color={level > 0 ? "orange" : "green"}>{level}</Tag>,
-            },
-            {
-              title: "Cảnh cáo HĐ",
-              dataIndex: "disciplinaryWarningLevel",
-              width: 100,
-              align: "center",
-              render: (level) => <Tag color={level > 0 ? "orange" : "green"}>{level}</Tag>,
-            },
-          ]}
-        />
+
+              {
+                title: "Học kỳ",
+                dataIndex: ["semester", "name"],
+                width: 150,
+              },
+              {
+                title: "Năm học thứ",
+                dataIndex: "studyYear",
+                width: 100,
+                align: "center",
+              },
+              {
+                title: "HK thứ",
+                dataIndex: "semesterIndexInCourse",
+                width: 80,
+                align: "center",
+              },
+              {
+                title: "HK cuối",
+                dataIndex: "isLastSemester",
+                width: 80,
+                align: "center",
+                render: (isLast) => (
+                  <Tag color={isLast ? "green" : "default"}>{isLast ? "Có" : "Không"}</Tag>
+                ),
+              },
+              {
+                title: "GPA (4)",
+                dataIndex: "gpaBase4",
+                width: 90,
+                align: "center",
+                render: (val) => (val ? Number(val).toFixed(2) : ""),
+              },
+              {
+                title: "GPA(4)",
+                dataIndex: "cumulativeGpaBase4",
+                width: 90,
+                align: "center",
+                render: (val) => (val ? Number(val).toFixed(2) : ""),
+              },
+              {
+                title: "GPA (10)",
+                dataIndex: "gpaBase10",
+                width: 90,
+                align: "center",
+                render: (val) => (val ? Number(val).toFixed(2) : ""),
+              },
+              {
+                title: "GPA(10)",
+                dataIndex: "cumulativeGpaBase10",
+                width: 90,
+                align: "center",
+                render: (val) => (val ? Number(val).toFixed(2) : ""),
+              },
+              {
+                title: "Điểm RL",
+                dataIndex: "conductScore",
+                width: 90,
+                align: "center",
+                render: (score) => (score ? Number(score).toFixed(1) : ""),
+              },
+              {
+                title: "Xếp loại RL",
+                dataIndex: "studentTrainingType",
+                width: 120,
+                align: "center",
+                render: (type) => {
+                  const colorMap: Record<string, string> = {
+                    EXCELLENT: "green",
+                    GOOD: "blue",
+                    FAIR: "cyan",
+                    MEDIUM: "geekblue",
+                    AVERAGE: "orange",
+                    POOR: "red",
+                    VERY_POOR: "volcano",
+                  }
+                  const labelMap: Record<string, string> = {
+                    EXCELLENT: "Xuất sắc",
+                    GOOD: "Tốt",
+                    FAIR: "Khá",
+                    MEDIUM: "TB Khá",
+                    AVERAGE: "Trung bình",
+                    POOR: "Yếu",
+                    VERY_POOR: "Kém",
+                  }
+                  return type ? (
+                    <Tag color={colorMap[type] || "default"}>{labelMap[type] || type}</Tag>
+                  ) : (
+                    ""
+                  )
+                },
+              },
+              {
+                title: "Xếp loại HT",
+                dataIndex: ["rank", "name"],
+                width: 120,
+              },
+              {
+                title: "TC đăng ký",
+                dataIndex: "registeredCredits",
+                width: 100,
+                align: "center",
+              },
+              {
+                title: "TC đạt",
+                dataIndex: "passedCredits",
+                width: 90,
+                align: "center",
+              },
+              {
+                title: "TC nợ",
+                dataIndex: "failedCredits",
+                width: 90,
+                align: "center",
+              },
+              {
+                title: "TC tích lũy",
+                dataIndex: "accumulatedCredits",
+                width: 100,
+                align: "center",
+              },
+              {
+                title: "TC học lại",
+                dataIndex: "retakingCredits",
+                width: 100,
+                align: "center",
+              },
+              {
+                title: "TC theo CTDT",
+                dataIndex: "totalCreditsByCurriculum",
+                width: 110,
+                align: "center",
+              },
+              {
+                title: "Tổng TC nợ",
+                dataIndex: "totalFailedCredits",
+                width: 100,
+                align: "center",
+              },
+              {
+                title: "Điểm thấp nhất",
+                dataIndex: "lowestFinalScore",
+                width: 100,
+                align: "center",
+                render: (score) => (score ? Number(score).toFixed(1) : ""),
+              },
+              {
+                title: "Lớp trưởng",
+                dataIndex: "isClassMonitor",
+                width: 80,
+                align: "center",
+                render: (isMonitor) => (
+                  <Tag color={isMonitor ? "gold" : "default"}>{isMonitor ? "Có" : "Không"}</Tag>
+                ),
+              },
+              {
+                title: "Chức vụ Đoàn",
+                dataIndex: "isUnionLeader",
+                width: 90,
+                align: "center",
+                render: (isLeader) => (
+                  <Tag color={isLeader ? "purple" : "default"}>{isLeader ? "Có" : "Không"}</Tag>
+                ),
+              },
+              {
+                title: "Học cải thiện",
+                dataIndex: "isImproving",
+                width: 90,
+                align: "center",
+                render: (isImproving) => (
+                  <Tag color={isImproving ? "blue" : "default"}>{isImproving ? "Có" : "Không"}</Tag>
+                ),
+              },
+              {
+                title: "Tạm ngưng có lý do",
+                dataIndex: "postponeWithReason",
+                width: 120,
+                align: "center",
+                render: (postpone) => (
+                  <Tag color={postpone ? "orange" : "default"}>{postpone ? "Có" : "Không"}</Tag>
+                ),
+              },
+              {
+                title: "Cảnh cáo HT",
+                dataIndex: "academicWarningLevel",
+                width: 100,
+                align: "center",
+                render: (level) => <Tag color={level > 0 ? "orange" : "green"}>{level}</Tag>,
+              },
+              {
+                title: "Cảnh cáo HĐ",
+                dataIndex: "disciplinaryWarningLevel",
+                width: 100,
+                align: "center",
+                render: (level) => <Tag color={level > 0 ? "orange" : "green"}>{level}</Tag>,
+              },
+            ]}
+          />
+        </div>
       ),
     },
     {
       key: "ket-qua-nam-hoc",
       label: `Kết quả năm học (${studentData?.studentYearResult?.length || 0})`,
       children: (
-        <Table
-          dataSource={studentData?.studentYearResult || []}
-          rowKey="id"
-          size="small"
-          pagination={{ pageSize: 10 }}
-          scroll={{ x: 1400 }}
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              render: (_, record, index) =>
-                getRowSTT(studentData?.studentYearResult, record, index),
-            },
-            {
-              title: "Mã",
-              dataIndex: "code",
-              width: 100,
-            },
-            {
-              title: "Năm học",
-              dataIndex: ["schoolYear", "name"],
-              width: 150,
-            },
-            {
-              title: "Năm học thứ",
-              dataIndex: "studyYear",
-              width: 100,
-              align: "center",
-            },
-            {
-              title: "GPA (4)",
-              dataIndex: "gpaBase4",
-              width: 90,
-              align: "center",
-              render: (val) => val?.toString(),
-            },
-            {
-              title: "GPA(4)",
-              dataIndex: "cumulativeGpaBase4",
-              width: 90,
-              align: "center",
-              render: (val) => val?.toString(),
-            },
-            {
-              title: "GPA (10)",
-              dataIndex: "gpaBase10",
-              width: 90,
-              align: "center",
-              render: (val) => val?.toString(),
-            },
-            {
-              title: "GPA(10)",
-              dataIndex: "cumulativeGpaBase10",
-              width: 90,
-              align: "center",
-              render: (val) => val?.toString(),
-            },
-            {
-              title: "Điểm RL",
-              dataIndex: "conductScore",
-              width: 90,
-              align: "center",
-            },
-            {
-              title: "Xếp loại RL",
-              dataIndex: "studentTrainingType",
-              width: 120,
-              align: "center",
-              render: (type) => (
-                <Tag color={getStudentTrainingTypeColor(type)}>
-                  {getStudentTrainingTypeLabel(type)}
-                </Tag>
-              ),
-            },
-            {
-              title: "Xếp loại HT",
-              dataIndex: ["rank", "name"],
-              width: 120,
-            },
-            {
-              title: "Tổng TC",
-              dataIndex: "totalCredits",
-              width: 90,
-              align: "center",
-            },
-            {
-              title: "TC nợ",
-              dataIndex: "failedCredits",
-              width: 90,
-              align: "center",
-            },
-            {
-              title: "Năm cuối",
-              dataIndex: "isLastStudyYear",
-              width: 80,
-              align: "center",
-              render: (val) => <Tag color={val ? "green" : "default"}>{val ? "Có" : "Không"}</Tag>,
-            },
-            {
-              title: "Thang điểm",
-              dataIndex: "baseScore",
-              width: 90,
-              align: "center",
-              render: (val) => getAcademicRankingBaseTypeLabel(val),
-            },
-            {
-              title: "Lớp trưởng",
-              dataIndex: "isClassMonitor",
-              width: 90,
-              align: "center",
-              render: (val) => <Tag color={val ? "blue" : "default"}>{val ? "Có" : "Không"}</Tag>,
-            },
-            {
-              title: "Cán bộ Đoàn",
-              dataIndex: "isUnionLeader",
-              width: 100,
-              align: "center",
-              render: (val) => <Tag color={val ? "purple" : "default"}>{val ? "Có" : "Không"}</Tag>,
-            },
-            {
-              title: "Cảnh cáo HT",
-              dataIndex: "academicWarningLevel",
-              width: 100,
-              align: "center",
-              render: (level) => <Tag color={level > 0 ? "red" : "green"}>{level}</Tag>,
-            },
-            {
-              title: "Cảnh cáo KL",
-              dataIndex: "disciplinaryWarningLevel",
-              width: 100,
-              align: "center",
-              render: (level) => <Tag color={level > 0 ? "orange" : "green"}>{level}</Tag>,
-            },
-            {
-              title: "Đình chỉ",
-              dataIndex: "suspended",
-              width: 80,
-              align: "center",
-              render: (val) => <Tag color={val ? "red" : "default"}>{val ? "Có" : "Không"}</Tag>,
-            },
-            {
-              title: "Khai trừ",
-              dataIndex: "expelled",
-              width: 80,
-              align: "center",
-              render: (val) => <Tag color={val ? "red" : "default"}>{val ? "Có" : "Không"}</Tag>,
-            },
-          ]}
-        />
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-2">
+            <Input.Search
+              placeholder="Tìm theo mã, năm học, xếp loại..."
+              allowClear
+              value={searchKetQuaNamHoc}
+              onChange={(e) => setSearchKetQuaNamHoc(e.target.value)}
+              style={{ width: 300 }}
+            />
+            <Select
+              value={filterXepLoaiRLNamHoc}
+              onChange={setFilterXepLoaiRLNamHoc}
+              style={{ width: 160 }}
+              options={[
+                { value: "ALL", label: "Tất cả xếp loại RL" },
+                { value: "EXCELLENT", label: "Xuất sắc" },
+                { value: "GOOD", label: "Tốt" },
+                { value: "FAIR", label: "Khá" },
+                { value: "MEDIUM", label: "TB Khá" },
+                { value: "AVERAGE", label: "Trung bình" },
+                { value: "POOR", label: "Yếu" },
+                { value: "VERY_POOR", label: "Kém" },
+              ]}
+            />
+            <Select
+              value={filterXepLoaiHTNamHoc}
+              onChange={setFilterXepLoaiHTNamHoc}
+              style={{ width: 160 }}
+              options={[
+                { value: "ALL", label: "Tất cả xếp loại HT" },
+                { value: "Xuất sắc", label: "Xuất sắc" },
+                { value: "Giỏi", label: "Giỏi" },
+                { value: "Khá", label: "Khá" },
+                { value: "Trung bình", label: "Trung bình" },
+                { value: "Yếu", label: "Yếu" },
+                { value: "Kém", label: "Kém" },
+              ]}
+            />
+          </div>
+          <Table
+            dataSource={filteredKetQuaNamHoc}
+            rowKey="id"
+            size="small"
+            pagination={{ pageSize: 10 }}
+            scroll={{ x: 1400 }}
+            columns={[
+              {
+                title: "STT",
+                width: 50,
+                align: "center",
+                render: (_, record, index) =>
+                  getRowSTT(studentData?.studentYearResult, record, index),
+              },
+
+              {
+                title: "Năm học",
+                dataIndex: ["schoolYear", "name"],
+                width: 150,
+              },
+              {
+                title: "Năm học thứ",
+                dataIndex: "studyYear",
+                width: 100,
+                align: "center",
+              },
+              {
+                title: "GPA (4)",
+                dataIndex: "gpaBase4",
+                width: 90,
+                align: "center",
+                render: (val) => val?.toString(),
+              },
+              {
+                title: "GPA(4)",
+                dataIndex: "cumulativeGpaBase4",
+                width: 90,
+                align: "center",
+                render: (val) => val?.toString(),
+              },
+              {
+                title: "GPA (10)",
+                dataIndex: "gpaBase10",
+                width: 90,
+                align: "center",
+                render: (val) => val?.toString(),
+              },
+              {
+                title: "GPA(10)",
+                dataIndex: "cumulativeGpaBase10",
+                width: 90,
+                align: "center",
+                render: (val) => val?.toString(),
+              },
+              {
+                title: "Điểm RL",
+                dataIndex: "conductScore",
+                width: 90,
+                align: "center",
+              },
+              {
+                title: "Xếp loại RL",
+                dataIndex: "studentTrainingType",
+                width: 120,
+                align: "center",
+                render: (type) => (
+                  <Tag color={getStudentTrainingTypeColor(type)}>
+                    {getStudentTrainingTypeLabel(type)}
+                  </Tag>
+                ),
+              },
+              {
+                title: "Xếp loại HT",
+                dataIndex: ["rank", "name"],
+                width: 120,
+              },
+              {
+                title: "Tổng TC",
+                dataIndex: "totalCredits",
+                width: 90,
+                align: "center",
+              },
+              {
+                title: "TC nợ",
+                dataIndex: "failedCredits",
+                width: 90,
+                align: "center",
+              },
+              {
+                title: "Năm cuối",
+                dataIndex: "isLastStudyYear",
+                width: 80,
+                align: "center",
+                render: (val) => (
+                  <Tag color={val ? "green" : "default"}>{val ? "Có" : "Không"}</Tag>
+                ),
+              },
+              {
+                title: "Thang điểm",
+                dataIndex: "baseScore",
+                width: 90,
+                align: "center",
+                render: (val) => getAcademicRankingBaseTypeLabel(val),
+              },
+              {
+                title: "Lớp trưởng",
+                dataIndex: "isClassMonitor",
+                width: 90,
+                align: "center",
+                render: (val) => <Tag color={val ? "blue" : "default"}>{val ? "Có" : "Không"}</Tag>,
+              },
+              {
+                title: "Cán bộ Đoàn",
+                dataIndex: "isUnionLeader",
+                width: 100,
+                align: "center",
+                render: (val) => (
+                  <Tag color={val ? "purple" : "default"}>{val ? "Có" : "Không"}</Tag>
+                ),
+              },
+              {
+                title: "Cảnh cáo HT",
+                dataIndex: "academicWarningLevel",
+                width: 100,
+                align: "center",
+                render: (level) => <Tag color={level > 0 ? "red" : "green"}>{level}</Tag>,
+              },
+              {
+                title: "Cảnh cáo KL",
+                dataIndex: "disciplinaryWarningLevel",
+                width: 100,
+                align: "center",
+                render: (level) => <Tag color={level > 0 ? "orange" : "green"}>{level}</Tag>,
+              },
+              {
+                title: "Đình chỉ",
+                dataIndex: "suspended",
+                width: 80,
+                align: "center",
+                render: (val) => <Tag color={val ? "red" : "default"}>{val ? "Có" : "Không"}</Tag>,
+              },
+              {
+                title: "Khai trừ",
+                dataIndex: "expelled",
+                width: 80,
+                align: "center",
+                render: (val) => <Tag color={val ? "red" : "default"}>{val ? "Có" : "Không"}</Tag>,
+              },
+            ]}
+          />
+        </div>
       ),
     },
     {
@@ -1506,99 +1832,121 @@ const ModalChiTietSinhVien = () => {
       key: "diem-ren-luyen",
       label: `Điểm rèn luyện (${combinedTrainingScores.length})`,
       children: (
-        <Table
-          dataSource={combinedTrainingScores}
-          rowKey="id"
-          size="small"
-          pagination={{ pageSize: 10 }}
-          scroll={{ x: 800 }}
-          columns={[
-            {
-              title: "STT",
-              width: 50,
-              align: "center",
-              render: (_, record, index) => getRowSTT(combinedTrainingScores, record, index),
-            },
-            {
-              title: "Học kỳ",
-              dataIndex: "semesterName",
-              width: 150,
-            },
-            {
-              title: "Đợt đánh giá",
-              dataIndex: "sessionName",
-              width: 180,
-            },
-            {
-              title: "Điểm rèn luyện",
-              dataIndex: "score",
-              width: 120,
-              align: "center",
-              render: (score) => (score != null ? Number(score).toFixed(1) : ""),
-            },
-            {
-              title: "Xếp loại",
-              dataIndex: "studentTrainingType",
-              width: 150,
-              align: "center",
-              render: (type, record) => {
-                let resolvedType = type
-                if (!resolvedType && record.score != null) {
-                  const score = Number(record.score)
-                  if (score >= 90) resolvedType = "EXCELLENT"
-                  else if (score >= 80) resolvedType = "GOOD"
-                  else if (score >= 65) resolvedType = "FAIR"
-                  else if (score >= 50) resolvedType = "MEDIUM"
-                  else if (score >= 35) resolvedType = "POOR"
-                  else resolvedType = "VERY_POOR"
-                }
-
-                const colorMap: Record<string, string> = {
-                  EXCELLENT: "green",
-                  GOOD: "blue",
-                  FAIR: "cyan",
-                  MEDIUM: "geekblue",
-                  AVERAGE: "orange",
-                  POOR: "red",
-                  VERY_POOR: "volcano",
-                }
-                const labelMap: Record<string, string> = {
-                  EXCELLENT: "Xuất sắc",
-                  GOOD: "Tốt",
-                  FAIR: "Khá",
-                  MEDIUM: "Trung bình khá",
-                  AVERAGE: "Trung bình",
-                  POOR: "Yếu",
-                  VERY_POOR: "Kém",
-                }
-                return resolvedType ? (
-                  <Tag color={colorMap[resolvedType] || "default"}>
-                    {labelMap[resolvedType] || resolvedType}
-                  </Tag>
-                ) : (
-                  "-"
-                )
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-2">
+            <Input.Search
+              placeholder="Tìm theo học kỳ, đợt đánh giá..."
+              allowClear
+              value={searchDiemRenLuyen}
+              onChange={(e) => setSearchDiemRenLuyen(e.target.value)}
+              style={{ width: 300 }}
+            />
+            <Select
+              value={filterStatusDiemRenLuyen}
+              onChange={setFilterStatusDiemRenLuyen}
+              style={{ width: 160 }}
+              options={[
+                { value: "ALL", label: "Tất cả trạng thái" },
+                { value: "APPROVED", label: "Đã duyệt" },
+                { value: "PENDING", label: "Chờ duyệt" },
+              ]}
+            />
+          </div>
+          <Table
+            dataSource={filteredDiemRenLuyen}
+            rowKey="id"
+            bordered
+            size="small"
+            pagination={{ pageSize: 10 }}
+            scroll={{ x: 800 }}
+            columns={[
+              {
+                title: "STT",
+                width: 50,
+                align: "center",
+                render: (_, record, index) => getRowSTT(combinedTrainingScores, record, index),
               },
-            },
-            {
-              title: "Trạng thái",
-              dataIndex: "status",
-              width: 120,
-              align: "center",
-              render: (status) => (
-                <Tag color={status === "APPROVED" ? "green" : "orange"}>
-                  {status === "APPROVED" ? "Đã duyệt" : "Chờ duyệt"}
-                </Tag>
-              ),
-            },
-            {
-              title: "Ngày tạo",
-              dataIndex: "createdAt",
-              width: 150,
-              render: (date) => (date ? dayjs(date).format("DD/MM/YYYY") : ""),
-            },
-          ]}
-        />
+              {
+                title: "Học kỳ",
+                dataIndex: "semesterName",
+                width: 150,
+              },
+              {
+                title: "Đợt đánh giá",
+                dataIndex: "sessionName",
+                width: 180,
+              },
+              {
+                title: "Điểm rèn luyện",
+                dataIndex: "score",
+                width: 120,
+                align: "center",
+                render: (score) => (score != null ? Number(score).toFixed(1) : ""),
+              },
+              {
+                title: "Xếp loại",
+                dataIndex: "studentTrainingType",
+                width: 150,
+                align: "center",
+                render: (type, record) => {
+                  let resolvedType = type
+                  if (!resolvedType && record.score != null) {
+                    const score = Number(record.score)
+                    if (score >= 90) resolvedType = "EXCELLENT"
+                    else if (score >= 80) resolvedType = "GOOD"
+                    else if (score >= 65) resolvedType = "FAIR"
+                    else if (score >= 50) resolvedType = "MEDIUM"
+                    else if (score >= 35) resolvedType = "POOR"
+                    else resolvedType = "VERY_POOR"
+                  }
+
+                  const colorMap: Record<string, string> = {
+                    EXCELLENT: "green",
+                    GOOD: "blue",
+                    FAIR: "cyan",
+                    MEDIUM: "geekblue",
+                    AVERAGE: "orange",
+                    POOR: "red",
+                    VERY_POOR: "volcano",
+                  }
+                  const labelMap: Record<string, string> = {
+                    EXCELLENT: "Xuất sắc",
+                    GOOD: "Tốt",
+                    FAIR: "Khá",
+                    MEDIUM: "Trung bình khá",
+                    AVERAGE: "Trung bình",
+                    POOR: "Yếu",
+                    VERY_POOR: "Kém",
+                  }
+                  return resolvedType ? (
+                    <Tag color={colorMap[resolvedType] || "default"}>
+                      {labelMap[resolvedType] || resolvedType}
+                    </Tag>
+                  ) : (
+                    "-"
+                  )
+                },
+              },
+              {
+                title: "Trạng thái",
+                dataIndex: "status",
+                width: 120,
+                align: "center",
+                render: (status) => (
+                  <Tag color={status === "APPROVED" ? "green" : "orange"}>
+                    {status === "APPROVED" ? "Đã duyệt" : "Chờ duyệt"}
+                  </Tag>
+                ),
+              },
+              {
+                title: "Ngày tạo",
+                dataIndex: "createdAt",
+                width: 150,
+                render: (date) => (date ? dayjs(date).format("DD/MM/YYYY") : ""),
+              },
+            ]}
+          />
+        </div>
       ),
     },
     {
@@ -1737,7 +2085,7 @@ const ModalChiTietSinhVien = () => {
 
   return (
     <Modal
-      title={`Chi tiết sinh viên: ${studentData?.code || ""} - ${studentData?.userProfile?.fullname || ""}`}
+      title={`Chi tiết học viên: ${studentData?.code || ""} - ${studentData?.userProfile?.fullname || ""}`}
       open={isOpen}
       onCancel={onClose}
       width="95vw"

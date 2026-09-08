@@ -145,7 +145,7 @@ const ModalPrintToKQHT = () => {
       value: <span className="uppercase">{input?.dataStudent?.userProfile?.fullname}</span>,
     },
     {
-      title: "Mã sinh viên:",
+      title: "Mã học viên:",
       value: <span>{input?.dataStudent?.code}</span>,
     },
     {
@@ -222,11 +222,10 @@ const ModalPrintToKQHT = () => {
 
       if (score) {
         const score10 = Number(score.manualFinalScore ?? score.finalScore ?? 0) || 0
-        const score4 =
-          quyDoiMon(score10, score, {
-            isGraduation: subjectItem.graduation,
-            isConditional: !subjectItem.useForFinalScore,
-          }).base4 || 0
+        const score4 = quyDoiMon(score10, score, {
+          isGraduation: subjectItem.graduation,
+          isConditional: !subjectItem.useForFinalScore,
+        }).base4 || 0
 
         const finalScore = baseScore === "Base10" ? score10 : score4
 

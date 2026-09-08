@@ -91,7 +91,7 @@ function App({ Component, pageProps }: AppProps) {
           onLoaderFinished={onRouteDone}
         />
         <Head>
-          <title>Cổng Sinh Viên</title>
+          <title>Cổng Học Viên</title>
         </Head>
         <ConfigProvider theme={lightThemeCustom}>
           <QueryClientProvider client={queryClient}>

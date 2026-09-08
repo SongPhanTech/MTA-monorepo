@@ -66,6 +66,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
     if (classStudentData?.status !== 200) return null
 
     const data = classStudentData.data
+    if (!data || typeof data !== "object") return null
 
     return {
       studentName: data?.userProfile?.fullname,
@@ -81,11 +82,11 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
       value: studentData?.studentName,
     },
     {
-      label: "Mã sinh viên",
+      label: "Mã học viên",
       value: studentData?.studentCode,
     },
     {
-      label: "Xếp loại",
+      label: "Xếp loại kỳ gần nhất",
       value: studentData?.classification,
     },
     {
@@ -276,7 +277,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
         <div className="lg:col-span-2 rounded-sm border border-gray-300 bg-white">
           <div className="flex items-center justify-between bg-green-700 border-b border-gray-200 px-5 py-3">
             <h2 className="text-sm font-semibold text-white uppercase tracking-tight">
-              Thông tin sinh viên
+              Thông tin học viên
             </h2>
             <span className="rounded-sm border border-white bg-white px-2 py-0.5 text-[10px] font-semibold text-green-600 uppercase tracking-wider">
               Hệ chính quy
@@ -320,7 +321,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
           </div>
 
           <p className="text-[11px] px-5 py-3 leading-relaxed text-gray-400 ">
-            Sinh viên cần kiểm tra kỹ số tín chỉ tối thiểu và tối đa được phép đăng ký trong học kỳ
+            Học viên cần kiểm tra kỹ số tín chỉ tối thiểu và tối đa được phép đăng ký trong học kỳ
             này. Mọi thắc mắc vui lòng liên hệ phòng đào tạo.
           </p>
         </div>

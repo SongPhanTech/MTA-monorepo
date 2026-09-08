@@ -17,6 +17,7 @@ const IndexPage = () => {
     const isIndex = router.pathname === "/" || router.pathname === "/index"
     if (!isIndex) return
 
+    // CDN try_files fallback về index.html khi mở deep link → giữ đúng URL, không đẩy /home
     if (asPath && asPath !== "/" && asPath !== "/index") {
       void router.replace(asPath)
       return

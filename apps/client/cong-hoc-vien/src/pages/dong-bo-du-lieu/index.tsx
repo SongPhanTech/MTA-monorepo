@@ -2,13 +2,17 @@ import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import Loading from "@components/commons/loading"
 import DefaultLayout from "@layouts/default-layout"
 import { usePagination } from "@hooks/usePagination"
+import ModalPreviewImportJson from "@components/modal/modal-preview-import-json"
 import { type ImportJsonPreview, parseImportJsonFile } from "@/utils/parse-import-json"
 import {
   finishDataSync,
   startDataSync,
   useGetDataSyncHistory,
 } from "@workspace/libs/api/data-sync-history"
-import { importFromInternal } from "@workspace/libs/api/portal-import-training-data"
+import {
+  importFromInternal,
+  isImportFromInternalOk,
+} from "@workspace/libs/api/portal-import-training-data"
 import {
   downloadExportJson,
   exportToInternal,
@@ -44,7 +48,7 @@ import {
   Info,
   Upload as UploadIcon,
 } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 dayjs.locale("vi")
 
@@ -54,7 +58,7 @@ const { Dragger } = Upload
 const IMPORT_DATA_ITEMS = [
   "Đợt đăng ký học",
   "Lớp học phần, thời khóa biểu",
-  "Sinh viên, hồ sơ ",
+  "Học viên, hồ sơ ",
   "Danh mục hệ thống ",
   "Chương trình đào tạo, môn học ",
 ]
@@ -62,7 +66,7 @@ const IMPORT_DATA_ITEMS = [
 const EXPORT_DATA_ITEMS = [
   "Nhật ký đăng ký học (ClassRegisterLogs)",
   "Điểm môn học sau đăng ký (StudentSubjectScore)",
-  "Sinh viên / hồ sơ liên quan (Student, UserProfile)",
+  "Học viên / hồ sơ liên quan (Student, UserProfile)",
   "Lớp học phần đã đăng ký (SubjectClass, SubjectVersion)",
   "Thông tin đợt đăng ký (ClassRegisterSession)",
 ]
@@ -72,10 +76,13 @@ function DongBoDuLieuPage() {
   const [exportSessionId, setExportSessionId] = useState<string>()
   const [importFiles, setImportFiles] = useState<UploadFile[]>([])
   const [importPreview, setImportPreview] = useState<ImportJsonPreview | null>(null)
+  const [previewModalOpen, setPreviewModalOpen] = useState(false)
   const [parsingImportFile, setParsingImportFile] = useState(false)
   const [importParseError, setImportParseError] = useState<string | null>(null)
   const [importing, setImporting] = useState(false)
   const [exporting, setExporting] = useState(false)
+  const [activeImportId, setActiveImportId] = useState<string>()
+  const prevImportStatus = useRef<string>()
   const queryClient = useQueryClient()
   const {
     currentPage,
@@ -87,8 +94,18 @@ function DongBoDuLieuPage() {
     data: history = [],
     isLoading: historyLoading,
     refetch: refetchHistory,
-  } = useGetDataSyncHistory()
-  const { data: classRegisterSession, isFetching, isLoading } = useGetClassRegisterSession()
+  } = useGetDataSyncHistory(50, {
+    refetchOnWindowFocus: false,
+    refetchInterval: (query) => {
+      const res = query.state.data as { status?: number; data?: Array<{ status: string }> } | undefined
+      const items = res?.status === 200 ? res.data : undefined
+      const hasPending = items?.some((h) => h.status === "PENDING")
+      return hasPending ? 3000 : false
+    },
+  })
+  const { data: classRegisterSession, isLoading: sessionLoading } = useGetClassRegisterSession({
+    query: { refetchOnWindowFocus: false, staleTime: 60_000 },
+  })
 
   const sessions = useMemo(() => {
     if (classRegisterSession?.status !== 200) return []
@@ -109,6 +126,7 @@ function DongBoDuLieuPage() {
   )
 
   const selectedExportSession = sessions.find((s) => s.id === exportSessionId)
+  const pendingImport = history.find((h) => h.type === "IMPORT" && h.status === "PENDING")
 
   const handleImportFileChange = async (fileList: UploadFile[]) => {
     const nextFiles = fileList.slice(-1)
@@ -116,6 +134,7 @@ function DongBoDuLieuPage() {
 
     if (nextFiles.length === 0) {
       setImportPreview(null)
+      setPreviewModalOpen(false)
       setImportParseError(null)
       return
     }
@@ -123,6 +142,7 @@ function DongBoDuLieuPage() {
     const file = nextFiles[0]?.originFileObj
     if (!file) {
       setImportPreview(null)
+      setPreviewModalOpen(false)
       setImportParseError("Không đọc được file đã chọn")
       return
     }
@@ -132,8 +152,10 @@ function DongBoDuLieuPage() {
     try {
       const preview = await parseImportJsonFile(file)
       setImportPreview(preview)
+      setPreviewModalOpen(true)
     } catch (error) {
       setImportPreview(null)
+      setPreviewModalOpen(false)
       setImportParseError(
         error instanceof Error ? error.message : "Không đọc được thông tin từ file JSON"
       )
@@ -144,6 +166,24 @@ function DongBoDuLieuPage() {
       setParsingImportFile(false)
     }
   }
+
+  useEffect(() => {
+    const trackedId = activeImportId || pendingImport?.id
+    if (!trackedId) return
+    const item = history.find((h) => h.id === trackedId)
+    if (!item) return
+
+    if (item.status === "SUCCESS" && prevImportStatus.current !== "SUCCESS") {
+      message.success(`Nhập dữ liệu thành công: ${item.sessionName}`)
+      void queryClient.invalidateQueries({ queryKey: getGetClassRegisterSessionQueryKey() })
+      setActiveImportId(undefined)
+    }
+    if (item.status === "FAILED" && prevImportStatus.current !== "FAILED") {
+      message.error(item.errorMessage || `Nhập dữ liệu thất bại: ${item.sessionName}`)
+      setActiveImportId(undefined)
+    }
+    prevImportStatus.current = item.status
+  }, [history, activeImportId, pendingImport?.id, queryClient])
 
   const handleImport = async () => {
     if (importFiles.length === 0) {
@@ -188,7 +228,21 @@ function DongBoDuLieuPage() {
 
       await refetchHistory()
 
-      if (importRes.status === 200 && "sessionName" in importRes.data) {
+      if (
+        isImportFromInternalOk(importRes) &&
+        (importRes.status === 202 || importRes.data.status === "PENDING")
+      ) {
+        prevImportStatus.current = "PENDING"
+        setActiveImportId(importRes.data.syncHistoryId || syncId)
+        message.success(
+          importRes.data.message ||
+            "Đã nhận file. Hệ thống đang nhập nền — theo dõi tab Lịch sử đồng bộ."
+        )
+        setActiveTab("history")
+        return
+      }
+
+      if (isImportFromInternalOk(importRes) && importRes.data.sessionName) {
         await queryClient.invalidateQueries({ queryKey: getGetClassRegisterSessionQueryKey() })
         const warningCount = importRes.data.warnings?.length ?? 0
         if (warningCount > 0) {
@@ -198,23 +252,45 @@ function DongBoDuLieuPage() {
         } else {
           message.success(`Nhập dữ liệu thành công: ${importRes.data.sessionName}`)
         }
-      } else {
-        const errMessage =
-          importRes.data && "message" in importRes.data
-            ? String(importRes.data.message ?? "Nhập dữ liệu thất bại")
-            : "Nhập dữ liệu thất bại"
-        message.error(errMessage)
+        return
       }
+
+      const errMessage = isImportFromInternalOk(importRes)
+        ? "Nhập dữ liệu thất bại"
+        : String(importRes.data.message ?? "Nhập dữ liệu thất bại")
+      if (syncId && importRes.status >= 400) {
+        await finishDataSync({
+          id: syncId,
+          status: "FAILED",
+          errorMessage: errMessage,
+        })
+        await refetchHistory()
+      }
+      message.error(errMessage)
     } catch (error) {
+      const errText = error instanceof Error ? error.message : String(error)
+      const isNetworkError =
+        error instanceof TypeError ||
+        /failed to fetch|network|err_connection|aborted|load failed|econnreset/i.test(errText)
+      if (syncId && isNetworkError) {
+        prevImportStatus.current = "PENDING"
+        setActiveImportId(syncId)
+        message.warning(
+          "Mất kết nối khi gửi file. Nếu máy chủ đã nhận, tiến trình vẫn chạy — theo dõi tab Lịch sử đồng bộ."
+        )
+        setActiveTab("history")
+        await refetchHistory()
+        return
+      }
       if (syncId) {
         await finishDataSync({
           id: syncId,
           status: "FAILED",
-          errorMessage: error instanceof Error ? error.message : "Đồng bộ thất bại",
+          errorMessage: errText || "Đồng bộ thất bại",
         })
         await refetchHistory()
       }
-      message.error(error instanceof Error ? error.message : "Nhập dữ liệu thất bại")
+      message.error(errText || "Nhập dữ liệu thất bại")
     } finally {
       setImporting(false)
     }
@@ -285,7 +361,7 @@ function DongBoDuLieuPage() {
     }
   }
 
-  const exportTabLoading = activeTab === "export" && (isFetching || isLoading)
+  const exportTabLoading = activeTab === "export" && sessionLoading && !hasSessions
 
   return (
     <div className="flex flex-col gap-4">
@@ -307,7 +383,7 @@ function DongBoDuLieuPage() {
           <ol className="mb-0 pl-4 list-decimal space-y-1">
             <li>
               <Text strong>Nội bộ → Internet:</Text> Xuất JSON từ QL đào tạo và nhập vào đây. Đợt
-              đăng ký, lớp HP, sinh viên sẽ được tạo từ file — hệ thống internet ban đầu chưa có dữ
+              đăng ký, lớp HP, học viên sẽ được tạo từ file — hệ thống internet ban đầu chưa có dữ
               liệu.
             </li>
             <li>
@@ -325,6 +401,7 @@ function DongBoDuLieuPage() {
         activeKey={activeTab}
         onChange={setActiveTab}
         type="card"
+        destroyInactiveTabPane={false}
         items={[
           {
             key: "import",
@@ -338,13 +415,22 @@ function DongBoDuLieuPage() {
               <Row gutter={[16, 16]}>
                 <Col xs={24} lg={14}>
                   <Card title="Nhập dữ liệu từ phần mềm nội bộ" className="h-full">
-                    <Alert
+                    {/* <Alert
                       type="info"
                       showIcon
                       className="mb-4"
                       message="Hệ thống internet chưa có đợt đăng ký"
-                      // description="Không cần chọn đợt trước khi nhập. Thông tin đợt đăng ký học nằm trong file JSON xuất từ QL đào tạo và sẽ được tạo sau khi import thành công."
-                    />
+                      description="File lớn được nhập nền (bất đồng bộ) để tránh lỗi 504. Sau khi bấm nhập, theo dõi tab Lịch sử đồng bộ."
+                    /> */}
+                    {pendingImport && (
+                      <Alert
+                        type="warning"
+                        showIcon
+                        className="mb-4"
+                        message="Đang nhập dữ liệu nền"
+                        description={`Đợt «${pendingImport.sessionName}» đang được xử lý. Có thể chuyển tab hoặc rời trang — tiến trình vẫn chạy trên server.`}
+                      />
+                    )}
 
                     <Steps
                       direction="vertical"
@@ -387,15 +473,28 @@ function DongBoDuLieuPage() {
                       </Dragger>
                     </div>
 
-                    <Button
-                      type="primary"
-                      icon={<UploadIcon className="size-4" />}
-                      loading={importing || parsingImportFile}
-                      onClick={handleImport}
-                      disabled={importFiles.length === 0 || !importPreview || parsingImportFile}
-                    >
-                      Nhập dữ liệu
-                    </Button>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        onClick={() => setPreviewModalOpen(true)}
+                        disabled={!importPreview || parsingImportFile}
+                      >
+                        Xem dữ liệu file
+                      </Button>
+                      <Button
+                        type="primary"
+                        icon={<UploadIcon className="size-4" />}
+                        loading={importing || parsingImportFile}
+                        onClick={handleImport}
+                        disabled={
+                          importFiles.length === 0 ||
+                          !importPreview ||
+                          parsingImportFile ||
+                          Boolean(pendingImport)
+                        }
+                      >
+                        {pendingImport ? "Đang nhập nền..." : "Nhập dữ liệu"}
+                      </Button>
+                    </div>
                   </Card>
                 </Col>
 
@@ -411,7 +510,9 @@ function DongBoDuLieuPage() {
                       </Descriptions.Item>
                       <Descriptions.Item label="Kích thước">
                         {importFiles[0]?.size
-                          ? `${(importFiles[0].size / 1024).toFixed(1)} KB`
+                          ? importFiles[0].size >= 1024 * 1024
+                            ? `${(importFiles[0].size / (1024 * 1024)).toFixed(1)} MB`
+                            : `${(importFiles[0].size / 1024).toFixed(1)} KB`
                           : "—"}
                       </Descriptions.Item>
                       <Descriptions.Item label="Phiên bản file">
@@ -622,12 +723,18 @@ function DongBoDuLieuPage() {
                     {
                       title: "Trạng thái",
                       dataIndex: "status",
-                      width: 120,
+                      width: 130,
                       render: (status: "PENDING" | "SUCCESS" | "FAILED") => {
                         if (status === "SUCCESS") return <Tag color="success">Thành công</Tag>
                         if (status === "FAILED") return <Tag color="error">Thất bại</Tag>
                         return <Tag color="processing">Đang xử lý</Tag>
                       },
+                    },
+                    {
+                      title: "Ghi chú / lỗi",
+                      dataIndex: "errorMessage",
+                      ellipsis: true,
+                      render: (value: string | null) => value || "—",
                     },
                     {
                       title: "Thời gian",
@@ -642,6 +749,18 @@ function DongBoDuLieuPage() {
             ),
           },
         ]}
+      />
+
+      <ModalPreviewImportJson
+        open={previewModalOpen}
+        preview={importPreview}
+        fileName={importFiles[0]?.name}
+        importing={importing}
+        onClose={() => setPreviewModalOpen(false)}
+        onConfirmImport={() => {
+          setPreviewModalOpen(false)
+          void handleImport()
+        }}
       />
     </div>
   )

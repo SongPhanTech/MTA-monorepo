@@ -81,10 +81,18 @@ else ifeq ($(SERVER_PROFILE),mta_online)
   FE_APP_URL       := https://mta.edu.vn
   ONLY_OFFICE_ENDPOINT := 
 
-# ── Fallback: unknown profile ─────────────────────────────────────────────────
+# Fallback: unknown profile ─────────────────────────────────────────────────
 else
   $(error Unknown SERVER_PROFILE "$(SERVER_PROFILE)". \
     Add a new profile block in the Makefile or choose from: swan1, swantech_x52, local_mta, app2)
+endif
+
+# Router API compose service name prefix
+# swantech_x52 → mta-router-lms-api ; other profiles → router-lms-api
+ifeq ($(SERVER_PROFILE),swantech_x52)
+  ROUTER_SVC_PREFIX := mta-
+else
+  ROUTER_SVC_PREFIX :=
 endif
 
 # SSH / SCP helpers (automatically use sshpass when a password is set)
@@ -144,7 +152,7 @@ ROUTER_NAME_cong-giang-vien = cong-giang-vien
 
 # Danh sách thư mục CDN + service compose (dùng cho deploy-cdn, tránh docker compose down xóa fe_default)
 FE_CDN_DIRS := $(foreach pkg,$(FE_PKGS),$(CDN_NAME_$(pkg)))
-FE_CDN_SERVICES := $(foreach pkg,$(FE_DEPLOY_PKGS),mta-$(CDN_NAME_$(pkg)) router-$(ROUTER_NAME_$(pkg))-api)
+FE_CDN_SERVICES := $(foreach pkg,$(FE_DEPLOY_PKGS),mta-$(CDN_NAME_$(pkg)) $(ROUTER_SVC_PREFIX)router-$(ROUTER_NAME_$(pkg))-api)
 
 # Per-app URL suffix appended to FE_APP_URL → NEXT_PUBLIC_APP_URL
 # Format: <domain from profile><suffix below>  e.g. https://mta.swantech.vn/lms/home
@@ -367,15 +375,16 @@ _build-fe:
 _deploy-fe:
 	$(eval CDN_NAME := $(CDN_NAME_$(PACKAGE)))
 	$(eval ROUTER_NAME := $(ROUTER_NAME_$(PACKAGE)))
-	@echo "Deploying FE package $(PACKAGE) -> cdn:$(CDN_NAME), router:$(ROUTER_NAME)"
+	$(eval ROUTER_SVC := $(ROUTER_SVC_PREFIX)router-$(ROUTER_NAME)-api)
+	@echo "Deploying FE package $(PACKAGE) -> cdn:$(CDN_NAME), router:$(ROUTER_SVC)"
 	cd apps/client/$(PACKAGE) && \
 	$(SCP) $(CDN_NAME).zip $(SERVER_HOST):$(FE_APP_DIR)/ && \
 	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
-		docker compose -f $(FE_COMPOSE_FILE) stop mta-$(CDN_NAME) router-$(ROUTER_NAME)-api && \
-		docker compose -f $(FE_COMPOSE_FILE) rm -f mta-$(CDN_NAME) router-$(ROUTER_NAME)-api && \
+		docker compose -f $(FE_COMPOSE_FILE) stop mta-$(CDN_NAME) $(ROUTER_SVC) && \
+		docker compose -f $(FE_COMPOSE_FILE) rm -f mta-$(CDN_NAME) $(ROUTER_SVC) && \
 		rm -rf $(CDN_NAME) && \
 		unzip -o $(CDN_NAME).zip && \
-		docker compose -f $(FE_COMPOSE_FILE) up mta-$(CDN_NAME) router-$(ROUTER_NAME)-api -d"
+		docker compose -f $(FE_COMPOSE_FILE) up mta-$(CDN_NAME) $(ROUTER_SVC) -d"
 
 _package-fe-cdn-copy:
 	$(eval CDN_NAME := $(CDN_NAME_$(PACKAGE)))

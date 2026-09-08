@@ -38,7 +38,7 @@ const ImportScoreModal = ({
 
       // Tìm vị trí bắt đầu của bảng dữ liệu (dòng có STT)
       const tableStartIndex = jsonData.findIndex(
-        (item: any) => item["IMPORT ĐIỂM"] === "STT" || item.__EMPTY === "Mã sinh viên"
+        (item: any) => item["IMPORT ĐIỂM"] === "STT" || item.__EMPTY === "Mã học viên"
       )
 
       if (tableStartIndex === -1) {
@@ -52,8 +52,8 @@ const ImportScoreModal = ({
       // Format dữ liệu theo cấu trúc mong muốn
       const formattedData = tableData
         .map((row: any) => ({
-          key: row.__EMPTY, // Sử dụng mã sinh viên làm key
-          studentCode: row.__EMPTY, // Mã sinh viên
+          key: row.__EMPTY, // Sử dụng mã học viên làm key
+          studentCode: row.__EMPTY, // Mã học viên
           studentName: row.__EMPTY_1, // Họ và Tên
           dobStudent: row.__EMPTY_2, // Ngày sinh
           className: row.__EMPTY_3, // Tên lớp
@@ -86,22 +86,22 @@ const ImportScoreModal = ({
 
   const handleConfirm = () => {
     if (selectedRowKeys.length === 0) {
-      message.error("Vui lòng chọn ít nhất một sinh viên để import")
+      message.error("Vui lòng chọn ít nhất một học viên để import")
       return
     }
 
-    // Lọc chỉ những sinh viên được chọn
+    // Lọc chỉ những học viên được chọn
     const selectedData = previewData.filter((item) => selectedRowKeys.includes(item.key))
 
     // Validate data
     const errors: string[] = []
 
     selectedData.forEach((item) => {
-      // Kiểm tra mã sinh viên
+      // Kiểm tra mã học viên
       const existingStudent = existingStudents.find((s) => s.student?.code === item.studentCode)
 
       if (!existingStudent) {
-        errors.push(`Mã sinh viên ${item.studentCode} không tồn tại trong lớp`)
+        errors.push(`Mã học viên ${item.studentCode} không tồn tại trong lớp`)
       }
 
       // Kiểm tra điểm có đủ 3 loại không
@@ -110,14 +110,14 @@ const ImportScoreModal = ({
         item.midtermScore === undefined ||
         item.examScore === undefined
       ) {
-        errors.push(`Thiếu điểm cho sinh viên ${item.studentCode}`)
+        errors.push(`Thiếu điểm cho học viên ${item.studentCode}`)
       }
 
       // Kiểm tra điểm nằm trong khoảng 0-10
       const checkScoreRange = (score: number, scoreName: string) => {
         if (score < 0 || score > 10) {
           errors.push(
-            `${scoreName} của sinh viên ${item.studentCode} phải từ 0 đến 10 (hiện tại: ${score})`
+            `${scoreName} của học viên ${item.studentCode} phải từ 0 đến 10 (hiện tại: ${score})`
           )
         }
       }
@@ -144,7 +144,7 @@ const ImportScoreModal = ({
 
   const columns = [
     {
-      title: "Mã sinh viên",
+      title: "Mã học viên",
       dataIndex: "studentCode",
       key: "studentCode",
     },
@@ -223,7 +223,7 @@ const ImportScoreModal = ({
           onClick={handleConfirm}
           disabled={previewData.length === 0}
         >
-          Xác nhận ({selectedRowKeys.length} sinh viên được chọn)
+          Xác nhận ({selectedRowKeys.length} học viên được chọn)
         </Button>,
       ]}
     >

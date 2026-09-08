@@ -315,7 +315,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                     ),
                   },
                   {
-                    title: "Số SV",
+                    title: "Số HV",
                     width: 100,
                     align: "center",
                     type: "order",
