@@ -317,7 +317,8 @@ const NhapDiemThiGiangDayPage = () => {
   const khoaNhapDiem = disabledForm
 
   const daKhoaDiem = !!lopMonHoc?.isLockExamScore || !!lopMonHoc?.scoreSubmitted
-  const coTheInPhieuDiem = !!lopId && daKhoaDiem
+  // Kỳ thi đánh phách: chỉ in phiếu chính sau khi khoá điểm. Kỳ khác: in bình thường khi đã chọn lớp.
+  const coTheInPhieuDiem = !!lopId && (!laKyThiDanhPhach || daKhoaDiem)
 
   const { data: scoreRows = [], refetch } = useFindManyStudentSubjectScore(
     {
@@ -614,8 +615,8 @@ const NhapDiemThiGiangDayPage = () => {
       message.warning("Vui lòng chọn lớp học trước khi in")
       return
     }
-    if (!daKhoaDiem) {
-      message.warning("Chỉ được in phiếu điểm khi lớp đã được khoá điểm")
+    if (laKyThiDanhPhach && !daKhoaDiem) {
+      message.warning("Kỳ thi đánh phách chỉ được in phiếu điểm khi lớp đã được khoá điểm")
       return
     }
     const baseUrl =
