@@ -1,6 +1,11 @@
 import type { $Enums, Prisma } from "@workspace/db"
 import PizZip from "pizzip"
 import { prisma } from ".."
+import {
+  fetchSubjectClassExamDates,
+  parseExamDateValue,
+  resolveSubjectClassIdFromExamDateDto,
+} from "./exam-schedule"
 import { renderXlsxTemplate } from "./render-xlsx-template"
 
 type SubjectClassExport = Prisma.SubjectClassGetPayload<{
@@ -302,4 +307,131 @@ export async function exportThoiKhoaBieu({
   })
 
   return applyWeekdayPeriodMerges(buffer, sheetMergeInfos)
+}
+
+export type SyncExamDatesResult = {
+  message: string
+  totalClasses: number
+  matched: number
+  updated: number
+  unchanged: number
+  unmatched: number
+  unmatchedIds: string[]
+}
+
+/** Lấy lịch thi từ ExamScheduling Public API và cập nhật SubjectClass.examDate. */
+export async function syncSubjectClassExamDates({
+  semesterId,
+  trainingObjectTypeId,
+  trainingCourseId,
+  fixedClassId,
+  type,
+}: {
+  semesterId: string
+  trainingObjectTypeId: string
+  trainingCourseId?: string
+  fixedClassId?: string
+  type?: $Enums.SubjectClassType
+}): Promise<SyncExamDatesResult> {
+  const subjectClasses = await prisma.subjectClass.findMany({
+    where: {
+      semesterId,
+      trainingObjectTypeId,
+      ...(type ? { type } : {}),
+      active: true,
+      deletedAt: null,
+      cancelled: false,
+      status: "OFFICIAL",
+      ...(trainingCourseId
+        ? { fixedClasses: { some: { trainingCourseId, deletedAt: null } } }
+        : {}),
+      ...(fixedClassId ? { fixedClasses: { some: { id: fixedClassId, deletedAt: null } } } : {}),
+    },
+    select: { id: true, code: true, examDate: true },
+  })
+
+  if (subjectClasses.length === 0) {
+    return {
+      message: "Không có lớp môn học phù hợp bộ lọc để đồng bộ lịch thi",
+      totalClasses: 0,
+      matched: 0,
+      updated: 0,
+      unchanged: 0,
+      unmatched: 0,
+      unmatchedIds: [],
+    }
+  }
+
+  const sourceIds = subjectClasses.map((item) => item.id)
+  const codeById = new Map(subjectClasses.map((item) => [item.id, item.code]))
+  const idByCode = new Map(
+    subjectClasses
+      .filter((item) => item.code)
+      .map((item) => [item.code.trim().toLowerCase(), item.id])
+  )
+  const examRows = await fetchSubjectClassExamDates(sourceIds)
+
+  // Mỗi LMH có thể có nhiều lớp thi → lấy ngày thi sớm nhất có exam_date
+  const examDateBySubjectClassId = new Map<string, Date>()
+  for (const row of examRows) {
+    const byId = resolveSubjectClassIdFromExamDateDto(row)
+    const byCode = row.subject_class_code?.trim().toLowerCase()
+    const subjectClassId =
+      (byId && codeById.has(byId) ? byId : null) ||
+      (byCode ? idByCode.get(byCode) : null) ||
+      (byId && sourceIds.includes(byId) ? byId : null)
+    const examDate = parseExamDateValue(row.exam_date)
+    if (!subjectClassId || !examDate) continue
+    const current = examDateBySubjectClassId.get(subjectClassId)
+    if (!current || examDate.getTime() < current.getTime()) {
+      examDateBySubjectClassId.set(subjectClassId, examDate)
+    }
+  }
+
+  let updated = 0
+  let unchanged = 0
+  const unmatchedIds: string[] = []
+  const updates: { id: string; examDate: Date }[] = []
+
+  for (const subjectClass of subjectClasses) {
+    const nextExamDate = examDateBySubjectClassId.get(subjectClass.id)
+    if (!nextExamDate) {
+      unmatchedIds.push(subjectClass.id)
+      continue
+    }
+
+    const prevTime = subjectClass.examDate?.getTime()
+    if (prevTime != null && prevTime === nextExamDate.getTime()) {
+      unchanged += 1
+      continue
+    }
+
+    updates.push({ id: subjectClass.id, examDate: nextExamDate })
+  }
+
+  const UPDATE_CHUNK = 50
+  for (let i = 0; i < updates.length; i += UPDATE_CHUNK) {
+    const chunk = updates.slice(i, i + UPDATE_CHUNK)
+    await prisma.$transaction(
+      chunk.map((item) =>
+        prisma.subjectClass.update({
+          where: { id: item.id },
+          data: { examDate: item.examDate },
+        })
+      )
+    )
+    updated += chunk.length
+  }
+
+  const matched = examDateBySubjectClassId.size
+
+  return {
+    message: `Đồng bộ lịch thi xong: cập nhật ${updated}, giữ nguyên ${unchanged}, chưa có lịch ${unmatchedIds.length}`,
+    totalClasses: subjectClasses.length,
+    matched,
+    updated,
+    unchanged,
+    unmatched: unmatchedIds.length,
+    unmatchedIds: unmatchedIds.slice(0, 50),
+  }
 }

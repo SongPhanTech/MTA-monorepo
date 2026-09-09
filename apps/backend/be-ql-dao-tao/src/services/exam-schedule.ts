@@ -62,3 +62,79 @@ export async function fetchLecturerExamSchedules(
     Data: Array.isArray(data.Data) ? data.Data : Array.isArray(data.data) ? data.data : [],
   }
 }
+
+export type SubjectClassExamDateDto = {
+  Id?: string
+  id?: string
+  subjectClassId?: string | null
+  subject_class_id?: string | null
+  subject_class_code?: string | null
+  subject_class_name?: string | null
+  exam_date?: string | null
+  start_time?: string | null
+  end_time?: string | null
+  exam_period_name?: string | null
+  room_name?: string | null
+  exam_class_code?: string | null
+  exam_class_name?: string | null
+  schedule_status?: string | null
+}
+
+const EXAM_DATES_CHUNK_SIZE = 200
+
+function normalizeExamDateList(payload: unknown): SubjectClassExamDateDto[] {
+  if (Array.isArray(payload)) return payload
+  if (payload && typeof payload === "object") {
+    const data = payload as Record<string, unknown>
+    if (Array.isArray(data.Data)) return data.Data
+    if (Array.isArray(data.data)) return data.data
+  }
+  return []
+}
+
+/** POST public `/subject-classes/exam-dates` — body = danh sách SubjectClass.id (sourceIds). */
+export async function fetchSubjectClassExamDates(
+  sourceIds: string[]
+): Promise<SubjectClassExamDateDto[]> {
+  if (sourceIds.length === 0) return []
+
+  const headers = {
+    "x-clientid": env.LMS_CLIENT_ID,
+    "x-clientsecret": env.LMS_SECRET_KEY,
+    "Content-Type": "application/json",
+  }
+  const url = `${env.MTA_API_URL.replace(/\/$/, "")}/subject-classes/exam-dates`
+  const results: SubjectClassExamDateDto[] = []
+
+  for (let i = 0; i < sourceIds.length; i += EXAM_DATES_CHUNK_SIZE) {
+    const chunk = sourceIds.slice(i, i + EXAM_DATES_CHUNK_SIZE)
+    const res = await axios.post(url, chunk, {
+      headers,
+      timeout: 60_000,
+    })
+    results.push(...normalizeExamDateList(res.data))
+  }
+
+  return results
+}
+
+export function resolveSubjectClassIdFromExamDateDto(
+  item: SubjectClassExamDateDto
+): string | null {
+  const raw = item.subjectClassId ?? item.subject_class_id
+  if (raw == null) return null
+  const value = String(raw).trim()
+  return value || null
+}
+
+export function parseExamDateValue(value: string | null | undefined): Date | null {
+  if (!value) return null
+  const trimmed = String(value).trim()
+  if (!trimmed) return null
+  // Date-only → giữ ngày theo UTC noon để tránh lệch timezone khi format VN
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    return new Date(`${trimmed}T12:00:00.000Z`)
+  }
+  const parsed = new Date(trimmed)
+  return Number.isNaN(parsed.getTime()) ? null : parsed
+}

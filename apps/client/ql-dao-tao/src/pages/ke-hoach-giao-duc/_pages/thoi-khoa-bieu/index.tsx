@@ -29,6 +29,7 @@ import {
 import { whereOrganization } from "@workspace/libs/constants"
 import { ExportThoiKhoaBieuRequestType } from "@workspace/libs/api/schemas"
 import { useExportThoiKhoaBieu } from "@workspace/libs/api/training"
+import { useSyncExamDates } from "@workspace/libs/api/training-sync-exam-dates"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import {
@@ -114,6 +115,7 @@ export default function ThoiKhoaBieu({
   const { id: trainingCourseId } = useTrainingCourseStore()
   const { id: fixedClassId } = useFixedClassStore()
   const { mutateAsync: exportToTrinh } = useExportThoiKhoaBieu()
+  const { mutateAsync: syncExamDates } = useSyncExamDates()
   const canXemTatCa = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "XEM_TAT_CA")
   const orgId = window.contextData?.organizationId
   const where = useMemo(
@@ -591,12 +593,52 @@ export default function ThoiKhoaBieu({
     }
   }
 
+  const handleSyncExamDates = async () => {
+    if (!semesterId) {
+      message.warning("Vui lòng chọn học kỳ")
+      return
+    }
+
+    if (!trainingObjectTypeId) {
+      message.warning("Vui lòng chọn đối tượng đào tạo")
+      return
+    }
+
+    try {
+      showSpinner()
+      const res = await syncExamDates({
+        semesterId,
+        trainingObjectTypeId,
+        ...(trainingCourseId ? { trainingCourseId } : {}),
+        ...(fixedClassId ? { fixedClassId } : {}),
+        ...(type && type in ExportThoiKhoaBieuRequestType
+          ? {
+              type: type as (typeof ExportThoiKhoaBieuRequestType)[keyof typeof ExportThoiKhoaBieuRequestType],
+            }
+          : {}),
+      })
+
+      if (res.status === 200) {
+        message.success(res.data.message || "Đồng bộ lịch thi thành công")
+        await refetch()
+        return
+      }
+
+      message.error(res.data?.message || "Đồng bộ lịch thi thất bại")
+    } catch {
+      message.error("Đã xảy ra lỗi khi đồng bộ lịch thi")
+    } finally {
+      hideSpinner()
+    }
+  }
+
   return (
     <div>
       <Row gutter={[8, 8]}>
         <Col span={24}>
           <Affix offsetTop={105} style={{ zIndex: 1000 }}>
             <Flex gap={4} justify="end">
+              <Button onClick={handleSyncExamDates}>Lấy lịch thi</Button>
               <Button type="primary" onClick={handleExportToTrinh}>
                 Xuất tờ trình
               </Button>
