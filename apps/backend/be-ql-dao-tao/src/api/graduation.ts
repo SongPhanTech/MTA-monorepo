@@ -3,6 +3,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import {
   AcademicActionType,
   ApplicationStatus,
+  FixedClassType,
   RankingContext,
   StudentStatus,
   SubjectRequirementType,
@@ -59,6 +60,56 @@ import {
 } from "../dto/graduation-response.dto"
 
 const app = new OpenAPIHono({ strict: false })
+
+function isApplicationOrientation(
+  classType: FixedClassType | null | undefined,
+  fallbackIsProject: boolean
+) {
+  if (classType === FixedClassType.APPLICATION) return true
+  if (classType === FixedClassType.RESEARCH) return false
+  return fallbackIsProject
+}
+
+function preparePhoiBangCaoHocTemplate(templateBuffer: Buffer): Buffer {
+  const zip = new PizZip(templateBuffer)
+  const ssFile = zip.file("xl/sharedStrings.xml")
+  const sheetFile = zip.file("xl/worksheets/sheet1.xml")
+  if (!ssFile || !sheetFile) return templateBuffer
+
+  let ssXml = ssFile.asText().replace(/\$\{so_quyet_dinh\}/g, "${so_hieu_bang}")
+  const uniqueCount = Number(ssXml.match(/uniqueCount="(\d+)"/)?.[1] ?? 0)
+  const usedCount = Number(ssXml.match(/\scount="(\d+)"/)?.[1] ?? uniqueCount)
+  const leftIdx = uniqueCount
+  const rightIdx = uniqueCount + 1
+
+  if (!ssXml.includes("${so_vao_so_goc}")) {
+    const extra = [
+      `<si><t xml:space="preserve">${" ".repeat(30)}\${so_vao_so_goc}</t></si>`,
+      `<si><t xml:space="preserve">${" ".repeat(37)}\${so_vao_so_goc}</t></si>`,
+    ].join("")
+    ssXml = ssXml
+      .replace(/<\/sst>/, `${extra}</sst>`)
+      .replace(/\suniqueCount="\d+"/, ` uniqueCount="${uniqueCount + 2}"`)
+      .replace(/\scount="\d+"/, ` count="${usedCount + 2}"`)
+  }
+
+  let sheetXml = sheetFile.asText()
+  if (!sheetXml.includes('ref="C23:H23"')) {
+    sheetXml = sheetXml.replace(
+      /<row r="23"[^>]*>[\s\S]*?<\/row>/,
+      `<row r="23" spans="1:17" ht="36" customHeight="1"><c r="A23" s="12"/><c r="B23" s="12"/><c r="C23" s="35" t="s"><v>${leftIdx}</v></c><c r="D23" s="35"/><c r="E23" s="35"/><c r="F23" s="35"/><c r="G23" s="35"/><c r="H23" s="35"/><c r="I23" s="11"/><c r="J23" s="35" t="s"><v>${rightIdx}</v></c><c r="K23" s="35"/><c r="L23" s="35"/><c r="M23" s="35"/><c r="N23" s="35"/><c r="O23" s="35"/><c r="P23" s="12"/><c r="Q23" s="1"/></row>`
+    )
+    sheetXml = sheetXml.replace(
+      /<mergeCells count="(\d+)">/,
+      (_match, count) =>
+        `<mergeCells count="${Number(count) + 2}"><mergeCell ref="C23:H23"/><mergeCell ref="J23:O23"/>`
+    )
+  }
+
+  zip.file("xl/sharedStrings.xml", ssXml)
+  zip.file("xl/worksheets/sheet1.xml", sheetXml)
+  return zip.generate({ type: "nodebuffer" }) as Buffer
+}
 
 const graduationApplicationInit = createRoute({
   operationId: "graduationApplicationInit",
@@ -2074,13 +2125,15 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
         ngay_sinh_vi: dobParts?.day ? `${dobParts.day}/${dobParts.monthVi}/${dobParts.year}` : "",
         ngay_sinh_en: dobParts?.day ? `${dobParts.day} ${dobParts.monthEn} ${dobParts.year}` : "",
         nganh_hoc_vi: major?.name || "",
-        nganh_hoc_en: (major as any)?.englishName?.toUpperCase() || "",
+        nganh_hoc_en: (major as any)?.englishName || "",
         ngay_tn: graduationDateParts?.day || "",
         thang_tn: graduationDateParts?.monthVi || "",
         nam_tn: graduationDateParts?.year || "",
         ngay_tot_nghiep: graduationDateParts?.day
           ? `Ngày ${graduationDateParts.day} tháng ${graduationDateParts.monthVi} năm ${graduationDateParts.year}`
           : "",
+        so_hieu_bang: gD?.diplomaNumber || "",
+        so_vao_so_goc: gD?.originalDiplomaNumber || "",
         so_quyet_dinh: gD?.diplomaNumber || "",
         ...signerInfo,
         ho_ten_nguoi_ky: signerInfo.ten_day_du,
@@ -2089,7 +2142,9 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
   })
 
   try {
-    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhoiBangCaoHoc_v1.xlsx")
+    const templateBuffer = preparePhoiBangCaoHocTemplate(
+      await getLuanVanTemplateBuffer(prisma, "PhoiBangCaoHoc_v1.xlsx")
+    )
     const result = await generateExcelFromTemplate(templateBuffer, payload, {
       showGridLines: true,
       wrapText: true,
@@ -2721,6 +2776,10 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         .filter(Boolean)
         .map(safeString)
         .join("; ")
+      const isApplicationProgram = isApplicationOrientation(
+        student.fixedClass?.classType,
+        tP?.thesisType === ThesisType.PROJECT
+      )
 
       return {
         data: {
@@ -2738,7 +2797,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           thoi_gian_dao_tao: safeString(curriculumVersion?.trainingTime?.name || "24 tháng"),
           ngon_ngu_dao_tao: "Tiếng Việt",
           hinh_thuc_dao_tao: safeString(course?.trainingObjectType?.trainingForm?.name),
-          dinh_huong: tP?.thesisType === ThesisType.THESIS ? "nghiên cứu" : "ứng dụng",
+          dinh_huong: isApplicationProgram ? "ứng dụng" : "nghiên cứu",
           academic_year: safeString(academicYear),
           data: subjectRows,
           tong_so_tc: totalCredits,
@@ -2748,8 +2807,9 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           ten_de_an_tot_nghiep: safeString(tP?.title),
           danh_sach_can_bo_huong_dan: safeString(supervisors),
           ngay_bao_ve: safeString(defenseDateParts?.fullVi),
-          hoc_phan_tot_nghiep:
-            tP?.thesisType === ThesisType.THESIS ? "luận văn tốt nghiệp" : "đề án tốt nghiệp",
+          hoc_phan_tot_nghiep: isApplicationProgram
+            ? "đề án tốt nghiệp"
+            : "luận văn tốt nghiệp",
           ngay_in: safeString(pDateParts?.day),
           thang_in: safeString(pDateParts?.monthVi),
           nam_in: safeString(pDateParts?.year),
