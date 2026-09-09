@@ -434,6 +434,373 @@ export default function ExportReport({
     return doc.body
   }
 
+  const exportBangTongHopKetQua = (
+    standards: any[],
+    programName: string,
+    programCode: string,
+    summaryTable: Record<string, "Đ" | "K">,
+    evaluationResult?: string,
+    signDate?: string,
+    signTitle?: string,
+    signPosition?: string,
+    signerName?: string
+  ) => {
+    const headerRow1 = new TableRow({
+      children: [
+        new TableCell({
+          rowSpan: 2,
+          width: { size: 36, type: WidthType.PERCENTAGE },
+          verticalAlign: VerticalAlign.CENTER,
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun({ text: "Tiêu chuẩn, tiêu chí", bold: true, size: 24 })],
+            }),
+          ],
+        }),
+        new TableCell({
+          columnSpan: 2,
+          width: { size: 18, type: WidthType.PERCENTAGE },
+          verticalAlign: VerticalAlign.CENTER,
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun({ text: "Kết quả đánh giá", bold: true, size: 24 })],
+            }),
+          ],
+        }),
+        new TableCell({
+          columnSpan: 4,
+          width: { size: 46, type: WidthType.PERCENTAGE },
+          verticalAlign: VerticalAlign.CENTER,
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun({ text: "Tổng hợp theo tiêu chuẩn", bold: true, size: 24 })],
+            }),
+          ],
+        }),
+      ],
+    })
+
+    const headerRow2 = new TableRow({
+      children: [
+        new TableCell({
+          width: { size: 9, type: WidthType.PERCENTAGE },
+          verticalAlign: VerticalAlign.CENTER,
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun({ text: "K", bold: true, size: 22 })],
+            }),
+          ],
+        }),
+        new TableCell({
+          width: { size: 9, type: WidthType.PERCENTAGE },
+          verticalAlign: VerticalAlign.CENTER,
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun({ text: "Đ", bold: true, size: 22 })],
+            }),
+          ],
+        }),
+        new TableCell({
+          width: { size: 10, type: WidthType.PERCENTAGE },
+          verticalAlign: VerticalAlign.CENTER,
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun({ text: "Số tiêu chí K", bold: true, size: 20 })],
+            }),
+          ],
+        }),
+        new TableCell({
+          width: { size: 13, type: WidthType.PERCENTAGE },
+          verticalAlign: VerticalAlign.CENTER,
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun({ text: "Tỷ lệ số tiêu chí K (%)", bold: true, size: 20 })],
+            }),
+          ],
+        }),
+        new TableCell({
+          width: { size: 10, type: WidthType.PERCENTAGE },
+          verticalAlign: VerticalAlign.CENTER,
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun({ text: "Số tiêu chí Đ", bold: true, size: 20 })],
+            }),
+          ],
+        }),
+        new TableCell({
+          width: { size: 13, type: WidthType.PERCENTAGE },
+          verticalAlign: VerticalAlign.CENTER,
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun({ text: "Tỷ lệ số tiêu chí Đ (%)", bold: true, size: 20 })],
+            }),
+          ],
+        }),
+      ],
+    })
+
+    const dataRows: TableRow[] = []
+
+    standards?.forEach((std: any) => {
+      const criteria = std.criteria || []
+      const totalCrit = criteria.length
+
+      const countD = criteria.filter((c: any) => summaryTable[c.id] === "Đ").length
+      const countK = criteria.filter((c: any) => summaryTable[c.id] === "K").length
+
+      const rateD = totalCrit > 0 ? ((countD / totalCrit) * 100).toFixed(1) : "0.0"
+      const rateK = totalCrit > 0 ? ((countK / totalCrit) * 100).toFixed(1) : "0.0"
+      const rowSpanCount = totalCrit + 1
+
+      dataRows.push(
+        new TableRow({
+          children: [
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: `Tiêu chuẩn ${std.order}: ${std.name}`,
+                      bold: true,
+                      italics: true,
+                      size: 22,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableCell({ children: [new Paragraph("")] }),
+            new TableCell({ children: [new Paragraph("")] }),
+            new TableCell({
+              rowSpan: rowSpanCount,
+              verticalAlign: VerticalAlign.CENTER,
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [new TextRun({ text: `${countK}`, bold: true, size: 22 })],
+                }),
+              ],
+            }),
+            new TableCell({
+              rowSpan: rowSpanCount,
+              verticalAlign: VerticalAlign.CENTER,
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [new TextRun({ text: `${rateK}%`, size: 22 })],
+                }),
+              ],
+            }),
+            new TableCell({
+              rowSpan: rowSpanCount,
+              verticalAlign: VerticalAlign.CENTER,
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [new TextRun({ text: `${countD}`, bold: true, size: 22 })],
+                }),
+              ],
+            }),
+            new TableCell({
+              rowSpan: rowSpanCount,
+              verticalAlign: VerticalAlign.CENTER,
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [new TextRun({ text: `${rateD}%`, size: 22 })],
+                }),
+              ],
+            }),
+          ],
+        })
+      )
+
+      criteria.forEach((crit: any) => {
+        const val = summaryTable[crit.id]
+        dataRows.push(
+          new TableRow({
+            children: [
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    indent: { left: 360 },
+                    children: [
+                      new TextRun({
+                        text: `Tiêu chí ${std.order}.${crit.order}: ${crit.name}`,
+                        size: 22,
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+              new TableCell({
+                verticalAlign: VerticalAlign.CENTER,
+                children: [
+                  new Paragraph({
+                    alignment: AlignmentType.CENTER,
+                    children: [new TextRun({ text: val === "K" ? "X" : "", bold: true, size: 22 })],
+                  }),
+                ],
+              }),
+              new TableCell({
+                verticalAlign: VerticalAlign.CENTER,
+                children: [
+                  new Paragraph({
+                    alignment: AlignmentType.CENTER,
+                    children: [new TextRun({ text: val === "Đ" ? "X" : "", bold: true, size: 22 })],
+                  }),
+                ],
+              }),
+            ],
+          })
+        )
+      })
+    })
+
+    const table = new Table({
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      borders: {
+        top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+        bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+        left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+        right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+        insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+        insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+      },
+      rows: [headerRow1, headerRow2, ...dataRows],
+    })
+
+    return [
+      new Paragraph({
+        indent: { firstLine: 720 },
+        alignment: AlignmentType.JUSTIFIED,
+        heading: HeadingLevel.HEADING_2,
+        children: [
+          new TextRun({
+            text: "4. Tổng hợp kết quả TĐG CTĐT.",
+            bold: true,
+            size: 28,
+            color: "000000",
+          }),
+        ],
+      }),
+      new Paragraph({
+        indent: { firstLine: 720 },
+        children: [
+          new TextRun({ text: "Tên CTĐT: ", bold: true, size: 24 }),
+          new TextRun({ text: programName || "", size: 24 }),
+        ],
+      }),
+      new Paragraph({
+        indent: { firstLine: 720 },
+        children: [
+          new TextRun({ text: "Mã CTĐT: ", bold: true, size: 24 }),
+          new TextRun({ text: programCode || "", size: 24 }),
+        ],
+      }),
+      new Paragraph(""),
+      table,
+      new Paragraph(""),
+      new Paragraph({
+        indent: { firstLine: 720 },
+        children: [
+          new TextRun({ text: "Tự đánh giá CTĐT: ", bold: true, size: 24 }),
+          new TextRun({ text: `${evaluationResult || "..."} `, bold: !!evaluationResult, size: 24 }),
+          new TextRun({ text: "(Đạt/Đạt có điều kiện/Không đạt).", italics: true, size: 24 }),
+        ],
+      }),
+      new Paragraph(""),
+      new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        borders: {
+          top: { style: BorderStyle.NONE },
+          bottom: { style: BorderStyle.NONE },
+          left: { style: BorderStyle.NONE },
+          right: { style: BorderStyle.NONE },
+          insideHorizontal: { style: BorderStyle.NONE },
+          insideVertical: { style: BorderStyle.NONE },
+        },
+        rows: [
+          new TableRow({
+            children: [
+              new TableCell({
+                width: { size: 50, type: WidthType.PERCENTAGE },
+                children: [new Paragraph("")],
+              }),
+              new TableCell({
+                width: { size: 50, type: WidthType.PERCENTAGE },
+                children: [
+                  new Paragraph({
+                    alignment: AlignmentType.CENTER,
+                    children: [
+                      new TextRun({
+                        text: signDate || "Hà Nội, ngày    tháng    năm 20...",
+                        italics: true,
+                        size: 24,
+                      }),
+                    ],
+                  }),
+                  new Paragraph({
+                    alignment: AlignmentType.CENTER,
+                    children: [
+                      new TextRun({
+                        text: signTitle || "CHỦ TỊCH HỘI ĐỒNG",
+                        bold: true,
+                        size: 24,
+                      }),
+                    ],
+                  }),
+                  new Paragraph(""),
+                  new Paragraph(""),
+                  new Paragraph(""),
+                  ...(signPosition
+                    ? [
+                        new Paragraph({
+                          alignment: AlignmentType.CENTER,
+                          children: [
+                            new TextRun({
+                              text: signPosition,
+                              bold: true,
+                              size: 24,
+                            }),
+                          ],
+                        }),
+                      ]
+                    : []),
+                  ...(signerName
+                    ? [
+                        new Paragraph({
+                          alignment: AlignmentType.CENTER,
+                          children: [
+                            new TextRun({
+                              text: signerName,
+                              bold: true,
+                              color: "000000",
+                              size: 24,
+                            }),
+                          ],
+                        }),
+                      ]
+                    : []),
+                ],
+              }),
+            ],
+          }),
+        ],
+      }),
+      new Paragraph(""),
+    ]
+  }
+
   const exportToWord = async () => {
     try {
       const res = await sqlTransaction([
@@ -557,7 +924,7 @@ export default function ExportReport({
           })
         )
         overviewChildren.push(
-          ...(await htmlToParagraphs(processHtmlContent(data?.overviewProblem || "", evidenceTags)))
+          ...(await htmlToParagraphs(processHtmlContent(data?.overviewGeneral || "", evidenceTags)))
         )
 
         // 3. Kết quả rà soát việc đáp ứng quy định về chuẩn chương trình đào tạo
@@ -863,6 +1230,44 @@ export default function ExportReport({
         ])
 
         // ==== Phần Ⅲ. KẾT LUẬN ====
+        let conclusionStrengths = ""
+        let conclusionWeaknesses = ""
+        let conclusionPlans = ""
+        let conclusionProgramName = ""
+        let conclusionProgramCode = ""
+        let conclusionEvaluationResult = ""
+        let conclusionSignDate = ""
+        let conclusionSignTitle = ""
+        let conclusionSignPosition = ""
+        let conclusionSignerName = ""
+        let conclusionSummaryTable: Record<string, "Đ" | "K"> = {}
+        let appendixDb = ""
+        let appendixDocs = ""
+        let appendixEvs = ""
+        if (data?.description) {
+          try {
+            const parsed = JSON.parse(data.description)
+            if (typeof parsed === "object" && parsed !== null) {
+              conclusionStrengths = parsed.conclusionStrengths || ""
+              conclusionWeaknesses = parsed.conclusionWeaknesses || ""
+              conclusionPlans = parsed.conclusionPlans || ""
+              conclusionProgramName = parsed.conclusionProgramName || ""
+              conclusionProgramCode = parsed.conclusionProgramCode || ""
+              conclusionEvaluationResult = parsed.conclusionEvaluationResult || ""
+              conclusionSignDate = parsed.conclusionSignDate || ""
+              conclusionSignTitle = parsed.conclusionSignTitle || ""
+              conclusionSignPosition = parsed.conclusionSignPosition || ""
+              conclusionSignerName = parsed.conclusionSignerName || ""
+              conclusionSummaryTable = parsed.conclusionSummaryTable || {}
+              appendixDb = parsed.appendixDatabase || ""
+              appendixDocs = parsed.appendixDocuments || ""
+              appendixEvs = parsed.appendixEvidences || ""
+            }
+          } catch {
+            // not json
+          }
+        }
+
         const conclusionChildren: any[] = []
         conclusionChildren.push(
           new Paragraph({
@@ -878,26 +1283,84 @@ export default function ExportReport({
             ],
           })
         )
+
+        if (conclusionStrengths || conclusionWeaknesses || conclusionPlans) {
+          if (conclusionStrengths) {
+            conclusionChildren.push(
+              new Paragraph({
+                indent: { firstLine: 720 },
+                alignment: AlignmentType.JUSTIFIED,
+                heading: HeadingLevel.HEADING_2,
+                children: [
+                  new TextRun({
+                    text: "1. Tóm tắt những điểm mạnh và những điểm cần phát huy của CTĐT (tổng hợp theo từng tiêu chuẩn).",
+                    bold: true,
+                    size: 28,
+                    color: "000000",
+                  }),
+                ],
+              }),
+              ...(await htmlToParagraphs(processHtmlContent(conclusionStrengths, evidenceTags)))
+            )
+          }
+          if (conclusionWeaknesses) {
+            conclusionChildren.push(
+              new Paragraph({
+                indent: { firstLine: 720 },
+                alignment: AlignmentType.JUSTIFIED,
+                heading: HeadingLevel.HEADING_2,
+                children: [
+                  new TextRun({
+                    text: "2. Tóm tắt những điểm tồn tại và những vấn đề cần cải tiến chất lượng của CTĐT (tổng hợp theo từng tiêu chuẩn).",
+                    bold: true,
+                    size: 28,
+                    color: "000000",
+                  }),
+                ],
+              }),
+              ...(await htmlToParagraphs(processHtmlContent(conclusionWeaknesses, evidenceTags)))
+            )
+          }
+          if (conclusionPlans) {
+            conclusionChildren.push(
+              new Paragraph({
+                indent: { firstLine: 720 },
+                alignment: AlignmentType.JUSTIFIED,
+                heading: HeadingLevel.HEADING_2,
+                children: [
+                  new TextRun({
+                    text: "3. Tóm tắt các kế hoạch cải tiến chất lượng CTĐT (tổng hợp theo từng tiêu chuẩn).",
+                    bold: true,
+                    size: 28,
+                    color: "000000",
+                  }),
+                ],
+              }),
+              ...(await htmlToParagraphs(processHtmlContent(conclusionPlans, evidenceTags)))
+            )
+          }
+        } else {
+          conclusionChildren.push(
+            ...(await htmlToParagraphs(processHtmlContent(data?.conclude || "", evidenceTags)))
+          )
+        }
+
+        // 4. Tổng hợp kết quả TĐG CTĐT
         conclusionChildren.push(
-          ...(await htmlToParagraphs(processHtmlContent(data?.conclude || "", evidenceTags)))
+          ...exportBangTongHopKetQua(
+            data?.standards || [],
+            conclusionProgramName || "",
+            conclusionProgramCode || "",
+            conclusionSummaryTable,
+            conclusionEvaluationResult,
+            conclusionSignDate,
+            conclusionSignTitle,
+            conclusionSignPosition,
+            conclusionSignerName
+          )
         )
 
         // ==== Phần Ⅳ. PHỤ LỤC ====
-        let appendixDb = ""
-        let appendixDocs = ""
-        let appendixEvs = ""
-        if (data?.description) {
-          try {
-            const parsed = JSON.parse(data.description)
-            if (typeof parsed === "object" && parsed !== null) {
-              appendixDb = parsed.appendixDatabase || ""
-              appendixDocs = parsed.appendixDocuments || ""
-              appendixEvs = parsed.appendixEvidences || ""
-            }
-          } catch {
-            // not json
-          }
-        }
 
         const appendixChildren: any[] = []
         appendixChildren.push(
