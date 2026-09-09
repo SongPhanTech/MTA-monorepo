@@ -384,6 +384,26 @@ const CriteriaAnalysisSubPage = ({
                     </div>
                   )}
                 </div>
+                {item?.analysisCriterions?.evaluationCriterionComments &&
+                  item.analysisCriterions.evaluationCriterionComments.filter(
+                    (c) => !c.requirementCriterionId
+                  ).length > 0 && (
+                    <div className="my-2 p-3 bg-red-50 border border-red-200 rounded text-sm text-red-800">
+                      <div className="font-semibold mb-2 flex items-center gap-2">
+                        <MessageCircle size={15} />
+                        Ý kiến yêu cầu chỉnh sửa tiêu chí:
+                      </div>
+                      <CommentList
+                        comments={item.analysisCriterions.evaluationCriterionComments.filter(
+                          (c) => !c.requirementCriterionId
+                        )}
+                        lecturerUserProfileId={
+                          item.analysisCriterions?.lecturer?.userProfileId ||
+                          item.analysisCriterions?.lecturer?.userProfile?.id
+                        }
+                      />
+                    </div>
+                  )}
               </div>
               <div>
                 <Table

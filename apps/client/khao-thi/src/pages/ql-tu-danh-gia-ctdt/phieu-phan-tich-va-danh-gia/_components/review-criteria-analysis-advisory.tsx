@@ -10,7 +10,7 @@ import type { ReviewDataTabType } from "./review-criteria-analysis"
 export default function ReviewCriteriaAnalysisAdvisory() {
   const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
-  const { data } = useFindUniqueEvaluationPeriod(
+  const { data, refetch } = useFindUniqueEvaluationPeriod(
     {
       where: {
         id: selectedEvaluationPeriodId,
@@ -108,12 +108,13 @@ export default function ReviewCriteriaAnalysisAdvisory() {
             data={standard as ReviewDataTabType}
             idx={standard.order}
             userRole="ADVISORY_BOARD"
+            refetch={refetch}
           />
         ),
       }))
 
     return standardsWithSubmittedCriteria
-  }, [data])
+  }, [data, refetch])
 
   return (
     <div className="h-full">

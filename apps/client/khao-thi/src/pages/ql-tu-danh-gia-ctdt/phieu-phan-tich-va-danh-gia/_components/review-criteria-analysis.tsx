@@ -39,7 +39,7 @@ export type ReviewDataTabType = StandardPeriod & {
 export default function ReviewCriteriaAnalysis() {
   const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
-  const { data } = useFindUniqueEvaluationPeriod(
+  const { data, refetch } = useFindUniqueEvaluationPeriod(
     {
       where: {
         id: selectedEvaluationPeriodId,
@@ -136,12 +136,13 @@ export default function ReviewCriteriaAnalysis() {
             key={standard.id}
             data={standard as ReviewDataTabType}
             idx={standard.order}
+            refetch={refetch}
           />
         ),
       }))
 
     return standardsWithSubmittedCriteria
-  }, [data])
+  }, [data, refetch])
 
   return (
     <div className="h-full">

@@ -21,9 +21,9 @@ import {
 } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { KHAO_THI_PERMISSION } from "@workspace/router"
-import { Badge, Button, Empty, Form, message, Popconfirm, Tag, Tooltip } from "antd"
+import { Badge, Button, Empty, Form, Input, message, Modal, Popconfirm, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
-import { FileEdit } from "lucide-react"
+import { FileEdit, MessageCircle } from "lucide-react"
 import { useState } from "react"
 import { getDeadlineStatus } from "@/utils/getDeadlineStatus"
 
@@ -41,15 +41,24 @@ type Props = {
   data: ReviewDataTabType
   idx: number
   userRole?: "SECRETARY" | "ADVISORY_BOARD"
+  refetch?: () => void
 }
 
 const ReviewCriteriaAnalysisSubPage = ({
   data,
   idx,
   userRole = "SECRETARY",
+  refetch,
 }: Props) => {
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
   const [deadlineFilter, setDeadlineFilter] = useState<string | null>(null)
+  const [rejectModalOpen, setRejectModalOpen] = useState(false)
+  const [rejectingCriterion, setRejectingCriterion] = useState<{
+    analysisCriterionId: string
+    criterionName: string
+    isOverdue: boolean
+  } | null>(null)
+  const [rejectForm] = Form.useForm<{ content: string; newDeadline?: any }>()
   const { showSpinner, hideSpinner } = useSpinner()
   const { data: me } = useSession()
   const idProfile = me?.sDM_NhanVienId || "f1218263-341e-40c4-b269-a711a0186c74"
@@ -59,6 +68,59 @@ const ReviewCriteriaAnalysisSubPage = ({
   const { mutateAsync: updateAnalysisCriterion } = useUpdateAnalysisCriterion()
   const { mutateAsync: createEvaluationCriterionComment } = useCreateEvaluationCriterionComment()
   const { mutateAsync: updateEvaluationCriterion } = useUpdateEvaluationCriterion()
+
+  const handleConfirmRejectCriterion = async () => {
+    try {
+      const values = await rejectForm.validateFields()
+      if (!rejectingCriterion) return
+      showSpinner()
+
+      const updateData: {
+        status: $Enums.EvaluationCriterionStatus
+        deadline?: string
+        description?: string
+      } = {
+        status: $Enums.EvaluationCriterionStatus.REVISION,
+        description: JSON.stringify({
+          rejectedBy: userRole === "ADVISORY_BOARD" ? "ADVISORY_BOARD" : "SECRETARY",
+        }),
+      }
+
+      if (rejectingCriterion.isOverdue && values.newDeadline) {
+        updateData.deadline = dayjs(values.newDeadline).toISOString()
+      }
+
+      await updateAnalysisCriterion({
+        where: {
+          id: rejectingCriterion.analysisCriterionId,
+        },
+        data: updateData,
+      })
+
+      await createEvaluationCriterionComment({
+        data: {
+          reviewerId: idProfile,
+          analysisCriterionId: rejectingCriterion.analysisCriterionId,
+          content: values.content,
+        },
+      })
+
+      setRejectModalOpen(false)
+      rejectForm.resetFields()
+      setRejectingCriterion(null)
+      refetch?.()
+      message.success(
+        userRole === "ADVISORY_BOARD"
+          ? "Ban tư vấn đã yêu cầu chỉnh sửa tiêu chí (trả lại cho GV)."
+          : "Trưởng ban thư ký đã yêu cầu chỉnh sửa tiêu chí (trả lại cho GV)."
+      )
+    } catch (error) {
+      if ((error as any)?.errorFields) return
+      message.error("Gửi yêu cầu chỉnh sửa tiêu chí thất bại, vui lòng thử lại")
+    } finally {
+      hideSpinner()
+    }
+  }
 
   const toggleCommentRow = (recordId: string) => {
     setExpandedRowKeys((prev) =>
@@ -380,41 +442,81 @@ const ReviewCriteriaAnalysisSubPage = ({
                       KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
                       "DUYET"
                     ) && (
-                      <Popconfirm
-                        className="ml-auto"
-                        placement="topLeft"
-                        title={
-                          userRole === "ADVISORY_BOARD"
-                            ? "Xác nhận Ban tư vấn phê duyệt tiêu chí này?"
-                            : "Xác nhận phê duyệt tiêu chí và chuyển Ban tư vấn duyệt?"
-                        }
-                        okText="Đồng ý"
-                        cancelText="Hủy"
-                        onConfirm={(e) => {
-                          e?.stopPropagation()
-                          handleApproveCriterionAnalysisFinal(
-                            item.analysisCriterions?.id as string,
-                            item.id
-                          )
-                        }}
-                        onCancel={(e) => {
-                          e?.stopPropagation()
-                        }}
-                      >
+                      <div className="ml-auto flex items-center gap-2">
                         <Button
-                          type="primary"
+                          danger
                           size="small"
-                          className={
-                            userRole === "ADVISORY_BOARD"
-                              ? "!bg-[#0f8a4b] hover:!bg-[#0c703d] text-white border-none"
-                              : ""
-                          }
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            const deadline = item?.analysisCriterions?.deadline
+                            const isOverdue = deadline
+                              ? dayjs(deadline).diff(dayjs(), "day") < 0
+                              : false
+                            setRejectingCriterion({
+                              analysisCriterionId: item.analysisCriterions?.id as string,
+                              criterionName: `Tiêu chí ${idx}.${item.order}: ${item.name}`,
+                              isOverdue: !!isOverdue,
+                            })
+                            rejectForm.resetFields()
+                            setRejectModalOpen(true)
+                          }}
                         >
-                          Phê duyệt tiêu chí
+                          Yêu cầu chỉnh sửa
                         </Button>
-                      </Popconfirm>
+                        <Popconfirm
+                          placement="topLeft"
+                          title={
+                            userRole === "ADVISORY_BOARD"
+                              ? "Xác nhận Ban tư vấn phê duyệt tiêu chí này?"
+                              : "Xác nhận phê duyệt tiêu chí và chuyển Ban tư vấn duyệt?"
+                          }
+                          okText="Đồng ý"
+                          cancelText="Hủy"
+                          onConfirm={(e) => {
+                            e?.stopPropagation()
+                            handleApproveCriterionAnalysisFinal(
+                              item.analysisCriterions?.id as string,
+                              item.id
+                            )
+                          }}
+                          onCancel={(e) => {
+                            e?.stopPropagation()
+                          }}
+                        >
+                          <Button
+                            type="primary"
+                            size="small"
+                            className={
+                              userRole === "ADVISORY_BOARD"
+                                ? "!bg-[#0f8a4b] hover:!bg-[#0c703d] text-white border-none"
+                                : ""
+                            }
+                          >
+                            Phê duyệt tiêu chí
+                          </Button>
+                        </Popconfirm>
+                      </div>
                     )}
                 </div>
+                {item?.analysisCriterions?.evaluationCriterionComments &&
+                  item.analysisCriterions.evaluationCriterionComments.filter(
+                    (c) => !c.requirementCriterionId
+                  ).length > 0 && (
+                    <div className="my-2 p-3 bg-red-50 border border-red-200 rounded text-sm text-red-800">
+                      <div className="font-semibold mb-2 flex items-center gap-2">
+                        <MessageCircle size={15} />
+                        Ý kiến yêu cầu chỉnh sửa tiêu chí:
+                      </div>
+                      <CommentList
+                        comments={item.analysisCriterions.evaluationCriterionComments.filter(
+                          (c) => !c.requirementCriterionId
+                        )}
+                        lecturerUserProfileId={
+                          item.analysisCriterions?.lecturer?.userProfileId
+                        }
+                      />
+                    </div>
+                  )}
               </div>
               <div>
                 <Table
@@ -500,39 +602,33 @@ const ReviewCriteriaAnalysisSubPage = ({
                       width: 100,
                       align: "center",
                       hidden:
-                        (item.analysisCriterions?.status !==
-                          $Enums.EvaluationCriterionStatus.SUBMITTED &&
-                          item.analysisCriterions?.status !==
-                            $Enums.EvaluationCriterionStatus.REVISION &&
-                          item.analysisCriterions?.status !==
-                            $Enums.EvaluationCriterionStatus.COMPLETED) ||
                         !can(
                           KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
                           "DUYET"
-                        ),
+                        ) ||
+                        (userRole === "ADVISORY_BOARD"
+                          ? item.analysisCriterions?.status !==
+                            $Enums.EvaluationCriterionStatus.APPROVED
+                          : item.analysisCriterions?.status !==
+                            $Enums.EvaluationCriterionStatus.SUBMITTED),
                       render: (__, record) => {
                         return (
                           <div className="flex gap-2 items-center justify-center">
-                            {can(
-                              KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA,
-                              "DUYET"
-                            ) && (
-                              <Tooltip title="Yêu cầu chỉnh sửa">
-                                <Badge
-                                  count={record?.evaluationCriterionComment?.length || 0}
-                                  size="small"
-                                >
-                                  <FileEdit
-                                    size={16}
-                                    strokeWidth={1.5}
-                                    className={"text-blue-600 cursor-pointer"}
-                                    onClick={() => {
-                                      toggleCommentRow(record.id)
-                                    }}
-                                  />
-                                </Badge>
-                              </Tooltip>
-                            )}
+                            <Tooltip title="Yêu cầu chỉnh sửa">
+                              <Badge
+                                count={record?.evaluationCriterionComment?.length || 0}
+                                size="small"
+                              >
+                                <FileEdit
+                                  size={16}
+                                  strokeWidth={1.5}
+                                  className={"text-blue-600 cursor-pointer"}
+                                  onClick={() => {
+                                    toggleCommentRow(record.id)
+                                  }}
+                                />
+                              </Badge>
+                            </Tooltip>
                           </div>
                         )
                       },
@@ -636,6 +732,63 @@ const ReviewCriteriaAnalysisSubPage = ({
           )
         })
       )}
+
+      <Modal
+        title="Yêu cầu chỉnh sửa tiêu chí"
+        open={rejectModalOpen}
+        onCancel={() => {
+          setRejectModalOpen(false)
+          rejectForm.resetFields()
+          setRejectingCriterion(null)
+        }}
+        onOk={handleConfirmRejectCriterion}
+        okText="Gửi yêu cầu"
+        cancelText="Hủy"
+        okButtonProps={{ danger: true }}
+        destroyOnClose
+      >
+        <div className="mb-3 text-sm font-semibold text-gray-800">
+          {rejectingCriterion?.criterionName}
+        </div>
+        <Form form={rejectForm} layout="vertical">
+          <Form.Item
+            label="Lý do / Nội dung yêu cầu chỉnh sửa"
+            name="content"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập lý do / nội dung yêu cầu chỉnh sửa",
+              },
+            ]}
+          >
+            <Input.TextArea
+              rows={4}
+              placeholder="Nhập nội dung nhận xét hoặc yêu cầu giảng viên chỉnh sửa, bổ sung..."
+            />
+          </Form.Item>
+          {rejectingCriterion?.isOverdue && (
+            <Form.Item
+              label="Gia hạn mới"
+              name="newDeadline"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng chọn ngày gia hạn mới",
+                },
+              ]}
+            >
+              <DatePicker
+                format="DD/MM/YYYY"
+                placeholder="Chọn ngày gia hạn"
+                disabledDate={(current) =>
+                  current && current < dayjs().startOf("day")
+                }
+                className="w-full"
+              />
+            </Form.Item>
+          )}
+        </Form>
+      </Modal>
     </div>
   )
 }
