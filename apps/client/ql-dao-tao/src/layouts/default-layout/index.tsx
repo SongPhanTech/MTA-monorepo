@@ -5,14 +5,13 @@ import { cn } from "@lib/utils"
 import { CONFIG_KEY } from "@workspace/constant"
 import { useFindUniqueConfig } from "@workspace/db/hooks"
 import { useGetUnitInfosInfo } from "@workspace/libs/api/system"
-import { getVersion } from "@workspace/libs/api/training"
 import { getDynamicBreadcrumb } from "@workspace/permissions/hooks"
 import { SelectTrainingObjectType, TreeSelectSemester } from "@workspace/ui"
 import { Breadcrumb, Divider, Layout, Tooltip, theme } from "antd"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { type ReactNode, useEffect, useMemo, useState } from "react"
+import { type ReactNode, useMemo } from "react"
 import { IdleTimerProvider } from "react-idle-timer"
 import HeaderApp from "@/components/header"
 import packageInfo from "../../../package.json"
@@ -22,13 +21,6 @@ interface BreadcrumbListProps {
   title: string
   href?: string
 }
-type Version = {
-  Id: string
-  sTenVersion: string
-  sDescription: string
-  dNgayPhatHanh: string
-}
-const APP_CODE = "lms"
 const DefaultLayout = ({
   children,
   className,
@@ -40,7 +32,6 @@ const DefaultLayout = ({
   breadcrumbList?: BreadcrumbListProps[]
   unLayout?: boolean
 }) => {
-  const [version, setVersion] = useState<string>()
   const router = useRouter()
   const currentPath = router.pathname
   const { data: unitInfoResponse } = useGetUnitInfosInfo()
@@ -71,16 +62,6 @@ const DefaultLayout = ({
           })
         : []
   }, [breadcrumb, breadcrumbList])
-  useEffect(() => {
-    const fetchVersion = async () => {
-      const res = await getVersion(APP_CODE)
-      if (res.status === 200) {
-        const versionData = res.data as unknown as Version[]
-        setVersion(versionData?.[0]?.sTenVersion)
-      }
-    }
-    fetchVersion()
-  }, [])
   const menus = useMenuList()
 
   const menusFlat = menus.flatten("children")
@@ -153,7 +134,7 @@ const DefaultLayout = ({
             {unitInfo?.sTenDayDu || "Học viện Kỹ thuật Quân sự"} - Địa chỉ:{" "}
             {unitInfo?.sDiaChi || "Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà Nội"}
           </div>
-          <div className="ml-auto">Phiên bản: {(version || packageInfo.version) ?? "..."}</div>
+          <div className="ml-auto">Phiên bản: {packageInfo.version}</div>
         </Footer>
       </Layout>
     </IdleTimerProvider>

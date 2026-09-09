@@ -82,6 +82,11 @@ export interface NhanVien {
    */
   sMa?: string | null;
   /**
+   * Số hiệu sĩ quan
+   * @nullable
+   */
+  sSoHieuSQ?: string | null;
+  /**
    * Họ và đệm
    * @nullable
    */

@@ -16,5 +16,3 @@ export const QL_HO_SO_SIDEBAR_COLLAPSE_STORAGE_KEY = "collapsed"
 export const QL_HO_SO_DEFAULT_SCHOOL_NAME = "Học viện Kỹ thuật Quân sự"
 
 export const QL_HO_SO_PORTAL_TITLE = "Quản lý hồ sơ"
-
-export const QL_HO_SO_APP_CODE = "hrm"

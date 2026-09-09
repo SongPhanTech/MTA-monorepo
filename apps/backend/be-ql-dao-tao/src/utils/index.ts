@@ -322,8 +322,8 @@ export const buildCurriculumMapOrThrow = async (
       !existing.some(
         (version) =>
           version.name === curriculum &&
-          (!trainingMajor || trainingMajor === version.curriculum.trainingMajor.name) &&
-          (!trainingField || trainingField === version.curriculum.trainingMajor.trainingField.name)
+          (!trainingMajor || trainingMajor === version.curriculum.trainingMajor?.name) &&
+          (!trainingField || trainingField === version.curriculum.trainingMajor?.trainingField.name)
       )
   )
 
@@ -1056,6 +1056,41 @@ export const parseSignerInfo = (signerStr: string) => {
     quan_ham: rank,
     ten_day_du: nameWithDegree,
   }
+}
+
+/** Người ký phụ lục văn bằng SĐH: Trưởng phòng hoặc Phó trưởng phòng sau đại học. */
+export const parsePostgraduateDeptSignerInfo = (signerName: string, isChief = true) => {
+  const ten_day_du = (signerName || "").trim().replace(/^,\s*/, "")
+  if (isChief) {
+    return {
+      chuc_vi: "TL. GIÁM ĐỐC",
+      chuc_vi_ky_thay: "TRƯỞNG PHÒNG SAU ĐẠI HỌC",
+      quan_ham: "",
+      ten_day_du,
+    }
+  }
+  return {
+    chuc_vi: "KT. TRƯỞNG PHÒNG",
+    chuc_vi_ky_thay: "PHÓ TRƯỞNG PHÒNG SAU ĐẠI HỌC",
+    quan_ham: "",
+    ten_day_du,
+  }
+}
+
+/**
+ * Template Word ghép `{quan_ham}, {ten_nguoi_ky}`. Khi không có quân hàm,
+ * còn dấu phẩy mồ côi trước tên (ví dụ `, An Hoàng Minh`).
+ */
+export const stripLeadingCommaBeforeSignerName = (docXml: string, signerName: string) => {
+  const name = (signerName || "").trim()
+  if (!name) return docXml
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  return docXml
+    .replace(new RegExp(`,\\s*${escaped}`, "g"), name)
+    .replace(
+      new RegExp(`,\\s*</w:t>((?:(?!<w:t\\b)[\\s\\S])*?)<w:t([^>]*)>\\s*${escaped}`, "g"),
+      `</w:t>$1<w:t$2>${name}`
+    )
 }
 
 export const generateExcelFromTemplate = async (

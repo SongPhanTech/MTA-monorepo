@@ -23,15 +23,3 @@ export const ClassDivisionResultSchema = z
     ])
   )
   .openapi("ClassDivisionResult")
-
-export const VersionAppResponseSchema = z.record(z.string(), z.any()).openapi({
-  description: "Payload phiên bản ứng dụng trả về từ API MTA (cấu trúc do dịch vụ MTA quy định).",
-})
-
-export const VersionAppErrorResponseSchema = z
-  .object({
-    message: z
-      .union([z.string(), z.array(z.object({ message: z.string() }))])
-      .openapi(fieldDesc("Chi tiết lỗi — chuỗi hoặc danh sách lỗi.")),
-  })
-  .openapi("VersionAppErrorResponse")

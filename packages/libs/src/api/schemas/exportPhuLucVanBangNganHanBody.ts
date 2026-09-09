@@ -89,4 +89,5 @@ export type ExportPhuLucVanBangNganHanBody = {
   managementOrganizationId?: string;
   printDate?: string;
   signerName?: string;
+  isChief?: boolean;
 };

@@ -180,9 +180,13 @@ import type {
   GetDanhSachHVChuaTotNghiepTAParams,
   GetDanhSachTotNghiepData200,
   GetDanhSachTotNghiepDataParams,
+  GetLecturerExamSchedule200,
+  GetLecturerExamSchedule400,
+  GetLecturerExamSchedule401,
+  GetLecturerExamSchedule500,
+  GetLecturerExamScheduleParams,
   GetPhuLucIXData200,
   GetPhuLucIXDataParams,
-  GetVersion200,
   GraduationApplicationInitBody,
   GraduationCheckBody,
   GraduationCheckResponse,
@@ -294,6 +298,8 @@ import type {
   StatsStudentsOfInterestRequest,
   SuccessBooleanResponse,
   SuccessMessageResponse,
+  SyncExamDatesRequest,
+  SyncExamDatesResponse,
   TrainingField200Item,
   UnmergeExamBadResponse,
   UnmergeExamRequest,
@@ -304,8 +310,7 @@ import type {
   UploadExcelImportScore200,
   UploadExcelImportTrainingScore,
   UploadExcelImportTrainingScore200,
-  UploadExcelUpdateUserProfile,
-  VersionAppErrorResponse
+  UploadExcelUpdateUserProfile
 } from './schemas';
 
 import { customTrainingFetch } from './custom-instance';
@@ -15264,6 +15269,144 @@ export const useUnmergeExam = <TError = UnmergeExamBadResponse | ErrorMessageRes
     }
     
 /**
+ * Proxy tới system public `/ExamSchedules/lecturer`. Ưu tiên `userProfileId` từ session JWT; nếu không có thì lấy từ query.
+ * @summary Lịch coi thi của giảng viên
+ */
+export type getLecturerExamScheduleResponse200 = {
+  data: GetLecturerExamSchedule200
+  status: 200
+}
+
+export type getLecturerExamScheduleResponse400 = {
+  data: GetLecturerExamSchedule400
+  status: 400
+}
+
+export type getLecturerExamScheduleResponse401 = {
+  data: GetLecturerExamSchedule401
+  status: 401
+}
+
+export type getLecturerExamScheduleResponse500 = {
+  data: GetLecturerExamSchedule500
+  status: 500
+}
+    
+export type getLecturerExamScheduleResponseSuccess = (getLecturerExamScheduleResponse200) & {
+  headers: Headers;
+};
+export type getLecturerExamScheduleResponseError = (getLecturerExamScheduleResponse400 | getLecturerExamScheduleResponse401 | getLecturerExamScheduleResponse500) & {
+  headers: Headers;
+};
+
+export type getLecturerExamScheduleResponse = (getLecturerExamScheduleResponseSuccess | getLecturerExamScheduleResponseError)
+
+export const getGetLecturerExamScheduleUrl = (params?: GetLecturerExamScheduleParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/exam-schedules/lecturer?${stringifiedParams}` : `/api/exam-schedules/lecturer`
+}
+
+export const getLecturerExamSchedule = async (params?: GetLecturerExamScheduleParams, options?: RequestInit): Promise<getLecturerExamScheduleResponse> => {
+  
+  return customTrainingFetch<getLecturerExamScheduleResponse>(getGetLecturerExamScheduleUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetLecturerExamScheduleQueryKey = (params?: GetLecturerExamScheduleParams,) => {
+    return [
+    `/api/exam-schedules/lecturer`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetLecturerExamScheduleQueryOptions = <TData = Awaited<ReturnType<typeof getLecturerExamSchedule>>, TError = GetLecturerExamSchedule400 | GetLecturerExamSchedule401 | GetLecturerExamSchedule500>(params?: GetLecturerExamScheduleParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLecturerExamSchedule>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetLecturerExamScheduleQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLecturerExamSchedule>>> = ({ signal }) => getLecturerExamSchedule(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getLecturerExamSchedule>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetLecturerExamScheduleQueryResult = NonNullable<Awaited<ReturnType<typeof getLecturerExamSchedule>>>
+export type GetLecturerExamScheduleQueryError = GetLecturerExamSchedule400 | GetLecturerExamSchedule401 | GetLecturerExamSchedule500
+
+
+export function useGetLecturerExamSchedule<TData = Awaited<ReturnType<typeof getLecturerExamSchedule>>, TError = GetLecturerExamSchedule400 | GetLecturerExamSchedule401 | GetLecturerExamSchedule500>(
+ params: undefined |  GetLecturerExamScheduleParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLecturerExamSchedule>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getLecturerExamSchedule>>,
+          TError,
+          Awaited<ReturnType<typeof getLecturerExamSchedule>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetLecturerExamSchedule<TData = Awaited<ReturnType<typeof getLecturerExamSchedule>>, TError = GetLecturerExamSchedule400 | GetLecturerExamSchedule401 | GetLecturerExamSchedule500>(
+ params?: GetLecturerExamScheduleParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLecturerExamSchedule>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getLecturerExamSchedule>>,
+          TError,
+          Awaited<ReturnType<typeof getLecturerExamSchedule>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetLecturerExamSchedule<TData = Awaited<ReturnType<typeof getLecturerExamSchedule>>, TError = GetLecturerExamSchedule400 | GetLecturerExamSchedule401 | GetLecturerExamSchedule500>(
+ params?: GetLecturerExamScheduleParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLecturerExamSchedule>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lịch coi thi của giảng viên
+ */
+
+export function useGetLecturerExamSchedule<TData = Awaited<ReturnType<typeof getLecturerExamSchedule>>, TError = GetLecturerExamSchedule400 | GetLecturerExamSchedule401 | GetLecturerExamSchedule500>(
+ params?: GetLecturerExamScheduleParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLecturerExamSchedule>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetLecturerExamScheduleQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
  * Sinh số phách cho các bài thi trong kỳ thi.
 
 **Bảng dữ liệu nguồn:** Exam, ExamRoom, ExamList, ExamPaper.
@@ -16707,6 +16850,114 @@ export const useExportThoiKhoaBieu = <TError = ErrorMessageResponse,
     }
     
 /**
+ * Gọi public POST `/subject-classes/exam-dates` với danh sách SubjectClass.id (sourceIds),
+rồi cập nhật `SubjectClass.examDate` theo ngày thi sớm nhất của từng lớp.
+ * @summary Đồng bộ ngày thi từ ExamScheduling Public API
+ */
+export type syncExamDatesResponse200 = {
+  data: SyncExamDatesResponse
+  status: 200
+}
+
+export type syncExamDatesResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type syncExamDatesResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type syncExamDatesResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type syncExamDatesResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type syncExamDatesResponseSuccess = (syncExamDatesResponse200) & {
+  headers: Headers;
+};
+export type syncExamDatesResponseError = (syncExamDatesResponse400 | syncExamDatesResponse404 | syncExamDatesResponse409 | syncExamDatesResponse500) & {
+  headers: Headers;
+};
+
+export type syncExamDatesResponse = (syncExamDatesResponseSuccess | syncExamDatesResponseError)
+
+export const getSyncExamDatesUrl = () => {
+
+
+  
+
+  return `/api/thoi-khoa-bieu/sync-exam-dates`
+}
+
+export const syncExamDates = async (syncExamDatesRequest: SyncExamDatesRequest, options?: RequestInit): Promise<syncExamDatesResponse> => {
+  
+  return customTrainingFetch<syncExamDatesResponse>(getSyncExamDatesUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      syncExamDatesRequest,)
+  }
+);}
+
+
+
+
+export const getSyncExamDatesMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncExamDates>>, TError,{data: SyncExamDatesRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof syncExamDates>>, TError,{data: SyncExamDatesRequest}, TContext> => {
+
+const mutationKey = ['syncExamDates'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncExamDates>>, {data: SyncExamDatesRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  syncExamDates(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SyncExamDatesMutationResult = NonNullable<Awaited<ReturnType<typeof syncExamDates>>>
+    export type SyncExamDatesMutationBody = SyncExamDatesRequest
+    export type SyncExamDatesMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Đồng bộ ngày thi từ ExamScheduling Public API
+ */
+export const useSyncExamDates = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncExamDates>>, TError,{data: SyncExamDatesRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof syncExamDates>>,
+        TError,
+        {data: SyncExamDatesRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getSyncExamDatesMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
  * Render file Excel từ template xlsx-template và giữ nguyên shape/drawing có sẵn.
 
 **Cách dùng:**
@@ -17376,139 +17627,3 @@ export const useEnrollApprovedStudents = <TError = ErrorMessageResponse,
 
       return useMutation(mutationOptions, queryClient);
     }
-    
-/**
- * Lấy thông tin phiên bản client từ dịch vụ MTA theo mã ứng dụng.
-
-**Bảng dữ liệu nguồn:** không dùng Prisma (gọi API MTA).
-
-**Tham số:** appCode — mã ứng dụng (path).
- * @summary Phiên bản ứng dụng MTA
- */
-export type getVersionResponse200 = {
-  data: GetVersion200
-  status: 200
-}
-
-export type getVersionResponse400 = {
-  data: VersionAppErrorResponse
-  status: 400
-}
-
-export type getVersionResponse404 = {
-  data: ErrorMessageResponse
-  status: 404
-}
-
-export type getVersionResponse409 = {
-  data: ErrorMessageResponse
-  status: 409
-}
-
-export type getVersionResponse500 = {
-  data: ErrorMessageResponse
-  status: 500
-}
-    
-export type getVersionResponseSuccess = (getVersionResponse200) & {
-  headers: Headers;
-};
-export type getVersionResponseError = (getVersionResponse400 | getVersionResponse404 | getVersionResponse409 | getVersionResponse500) & {
-  headers: Headers;
-};
-
-export type getVersionResponse = (getVersionResponseSuccess | getVersionResponseError)
-
-export const getGetVersionUrl = (appCode: string,) => {
-
-
-  
-
-  return `/api/version/${appCode}`
-}
-
-export const getVersion = async (appCode: string, options?: RequestInit): Promise<getVersionResponse> => {
-  
-  return customTrainingFetch<getVersionResponse>(getGetVersionUrl(appCode),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-
-
-export const getGetVersionQueryKey = (appCode?: string,) => {
-    return [
-    `/api/version/${appCode}`
-    ] as const;
-    }
-
-    
-export const getGetVersionQueryOptions = <TData = Awaited<ReturnType<typeof getVersion>>, TError = VersionAppErrorResponse | ErrorMessageResponse>(appCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetVersionQueryKey(appCode);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getVersion>>> = ({ signal }) => getVersion(appCode, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(appCode), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetVersionQueryResult = NonNullable<Awaited<ReturnType<typeof getVersion>>>
-export type GetVersionQueryError = VersionAppErrorResponse | ErrorMessageResponse
-
-
-export function useGetVersion<TData = Awaited<ReturnType<typeof getVersion>>, TError = VersionAppErrorResponse | ErrorMessageResponse>(
- appCode: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getVersion>>,
-          TError,
-          Awaited<ReturnType<typeof getVersion>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetVersion<TData = Awaited<ReturnType<typeof getVersion>>, TError = VersionAppErrorResponse | ErrorMessageResponse>(
- appCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getVersion>>,
-          TError,
-          Awaited<ReturnType<typeof getVersion>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetVersion<TData = Awaited<ReturnType<typeof getVersion>>, TError = VersionAppErrorResponse | ErrorMessageResponse>(
- appCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Phiên bản ứng dụng MTA
- */
-
-export function useGetVersion<TData = Awaited<ReturnType<typeof getVersion>>, TError = VersionAppErrorResponse | ErrorMessageResponse>(
- appCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetVersionQueryOptions(appCode,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}

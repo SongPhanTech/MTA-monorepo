@@ -22,7 +22,7 @@ import {
   graduationSessionDecision,
 } from "@workspace/libs/api/training"
 import { exportFromTemplate } from "@workspace/libs/template-excel"
-import { genOriginalDiplomaNumber, getMinioUrl } from "@workspace/libs/utils"
+import { genOriginalDiplomaNumber, getMinioUrl, formatPlaceOfBirth } from "@workspace/libs/utils"
 import {
   Button,
   Col,
@@ -201,6 +201,8 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
               gender: true,
               ethnicity: true,
               newProvinceHometown: true,
+              newProvinceOfBirth: true,
+              provinceOfBirth: true,
             },
           },
           curriculumVersion: {
@@ -679,7 +681,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                 dataIndex: ["student", "userProfile", "placeOfBirth"],
                 width: 100,
                 align: "center",
-                render: (_, record) => record?.student?.userProfile?.newProvinceHometown?.sTen,
+                render: (_, record) => formatPlaceOfBirth(record?.student?.userProfile),
               },
               {
                 title: "Dân tộc",

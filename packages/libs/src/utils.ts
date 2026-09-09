@@ -73,6 +73,21 @@ export function isNullish<T>(value: T) {
   return value === null || value === undefined
 }
 
+type PlaceOfBirthSource = {
+  newProvinceOfBirth?: { sTen?: string | null } | null
+  provinceOfBirth?: { sTen?: string | null } | null
+  placeOfBirth?: string | null
+} | null
+
+export function formatPlaceOfBirth(profile: PlaceOfBirthSource | undefined): string {
+  return (
+    profile?.newProvinceOfBirth?.sTen ||
+    profile?.provinceOfBirth?.sTen ||
+    profile?.placeOfBirth ||
+    ""
+  )
+}
+
 export function normalizeVietnamese(str: string): string {
   return str
     .normalize("NFD")
@@ -534,8 +549,8 @@ export const calcFinalScore = (
   // 1. Find max certificate final score
   const maxCertFinalScore = subjectScore.certificates?.length
     ? Decimal.max(
-        ...subjectScore.certificates.map((cert) => cert?.archivedCertificate?.finalScore)
-      ).toDecimalPlaces(1)
+      ...subjectScore.certificates.map((cert) => cert?.archivedCertificate?.finalScore)
+    ).toDecimalPlaces(1)
     : null
 
   // 2. Check if any score is null

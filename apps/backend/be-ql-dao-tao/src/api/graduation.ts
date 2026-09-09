@@ -17,7 +17,7 @@ import {
 import { getFilesEmployeeUserIdImage } from "@workspace/libs/api/system-share"
 import { getLuanVanTemplateBuffer, getTemplateBuffer } from "@workspace/libs/server"
 import { APP_TIMEZONE, formatDateVn, nowVn, setupAppTimezone, toVnDayjs } from "@workspace/libs/timezone"
-import { chunk, convertScoreWithCourseConfig, courseScoreConfigFrom, genOriginalDiplomaNumber } from "@workspace/libs/utils"
+import { chunk, convertScoreWithCourseConfig, courseScoreConfigFrom, formatPlaceOfBirth, genOriginalDiplomaNumber } from "@workspace/libs/utils"
 import Decimal from "decimal.js"
 import { Automizer } from "pptx-automizer"
 import dayjs from "dayjs"
@@ -34,6 +34,8 @@ import type { StudentDataContext } from "../types/student-context"
 import { criteriaFieldLabels, criteriaOperatorLabels } from "@workspace/libs/constants"
 import {
   parseSignerInfo,
+  parsePostgraduateDeptSignerInfo,
+  stripLeadingCommaBeforeSignerName,
   generateExcelFromTemplate,
   getScoreClassification,
   getReportDateParts,
@@ -1613,6 +1615,8 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
           gender: true,
           ethnicity: true,
           nationality: true,
+          newProvinceOfBirth: true,
+          provinceOfBirth: true,
         },
       },
       fixedClass: {
@@ -1759,7 +1763,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       ngaySinh: user?.dateOfBirth ? formatDateVn(user.dateOfBirth) : "",
       soDinhDanh: user?.idCardNumber || "",
       khoa: student.fixedClass?.trainingCourse?.name || "",
-      noiSinh: user?.placeOfBirth || "",
+      noiSinh: formatPlaceOfBirth(user),
       gioiTinh: user?.gender?.sTen || "",
       danToc: user?.ethnicity?.sTen || "",
       quyetDinhTrungTuyen: student?.fixedClass?.trainingCourse?.admissionDecision || "",
@@ -2017,6 +2021,8 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
       userProfile: {
         include: {
           gender: true,
+          newProvinceOfBirth: true,
+          provinceOfBirth: true,
         },
       },
       graduationDecision: true,
@@ -2214,6 +2220,8 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
       userProfile: {
         include: {
           gender: true,
+          newProvinceOfBirth: true,
+          provinceOfBirth: true,
         },
       },
       graduationDecision: true,
@@ -2392,6 +2400,7 @@ const exportPhuLucVanBangCaoHoc = createRoute({
             managementOrganizationId: z.string().optional(),
             printDate: z.string().optional(),
             signerName: z.string().optional(),
+            isChief: z.boolean().optional(),
           }),
         },
       },
@@ -2427,6 +2436,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
     managementOrganizationId,
     printDate,
     signerName,
+    isChief,
   } = c.req.valid("json")
 
   const students = await prisma.student.findMany({
@@ -2481,6 +2491,8 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
       userProfile: {
         include: {
           gender: true,
+          newProvinceOfBirth: true,
+          provinceOfBirth: true,
         },
       },
       graduationDecision: true,
@@ -2563,7 +2575,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
     return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
   }
 
-  const signerInfo = parseSignerInfo(signerName || "")
+  const signerInfo = parsePostgraduateDeptSignerInfo(signerName || "", isChief !== false)
   const pDateRaw = printDate ? new Date(printDate) : new Date()
   const pDateParts = getReportDateParts(pDateRaw)
 
@@ -2718,7 +2730,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           ngay_sinh: safeString(dobParts?.dateVi),
           gioi_tinh: safeString(user?.gender?.sTen),
           so_dinh_danh_ca_nhan: safeString(user?.idCardNumber),
-          noi_sinh: safeString(user?.placeOfBirth),
+          noi_sinh: safeString(formatPlaceOfBirth(user)),
           khoa: safeString(course?.name),
           ngay_nhap_hoc: safeString(enrollDateParts?.dateVi),
           nganh: safeString(major?.trainingField?.name),
@@ -2782,6 +2794,9 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
       throw new Error("Invalid DOCX: word/document.xml not found")
     }
     let docXml = file.asText()
+    if (!signerInfo.quan_ham) {
+      docXml = stripLeadingCommaBeforeSignerName(docXml, signerInfo.ten_day_du)
+    }
 
     const pRegex = /<w:p\b[^>]*?>(?:(?!<w:p\b).)*?ngắt trang(?:(?!<\/w:p>).)*?<\/w:p>/g
     const matches = docXml.match(pRegex)
@@ -2836,6 +2851,7 @@ const exportPhuLucVanBangNganHan = createRoute({
             managementOrganizationId: z.string().optional(),
             printDate: z.string().optional(),
             signerName: z.string().optional(),
+            isChief: z.boolean().optional(),
           }),
         },
       },
@@ -2871,6 +2887,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
     managementOrganizationId,
     printDate,
     signerName,
+    isChief,
   } = c.req.valid("json")
 
   const students = await prisma.student.findMany({
@@ -2925,6 +2942,8 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
       userProfile: {
         include: {
           gender: true,
+          newProvinceOfBirth: true,
+          provinceOfBirth: true,
         },
       },
       graduationDecision: true,
@@ -2977,7 +2996,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
     return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
   }
 
-  const signerInfo = parseSignerInfo(signerName || "")
+  const signerInfo = parsePostgraduateDeptSignerInfo(signerName || "", isChief !== false)
   const pDateRaw = printDate ? new Date(printDate) : new Date()
   const pDateParts = getReportDateParts(pDateRaw)
 
@@ -3081,7 +3100,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
           ngay_sinh: safeString(dobParts?.dateVi),
           gioi_tinh: safeString(user?.gender?.sTen),
           so_dinh_danh_ca_nhan: safeString(user?.idCardNumber),
-          noi_sinh: safeString(user?.placeOfBirth),
+          noi_sinh: safeString(formatPlaceOfBirth(user)),
           khoa: safeString(course?.name),
           academic_year: safeString(academicYear),
           ngay_nhap_hoc: safeString(enrollDateParts?.dateVi),
@@ -3137,6 +3156,9 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
       throw new Error("Invalid DOCX: word/document.xml not found")
     }
     let docXml = file.asText()
+    if (!signerInfo.quan_ham) {
+      docXml = stripLeadingCommaBeforeSignerName(docXml, signerInfo.ten_day_du)
+    }
 
     const pRegex = /<w:p\b[^>]*?>(?:(?!<w:p\b).)*?ngắt trang(?:(?!<\/w:p>).)*?<\/w:p>/g
     const matches = docXml.match(pRegex)
@@ -3237,7 +3259,7 @@ app.openapi(getPhuLucIXData, async (c) => {
             },
           },
           userProfile: {
-            include: { gender: true, ethnicity: true, newProvinceOfBirth: true },
+            include: { gender: true, ethnicity: true, newProvinceOfBirth: true, provinceOfBirth: true },
           },
         },
       },
@@ -3362,7 +3384,7 @@ app.openapi(getPhuLucIXData, async (c) => {
       chuyenNganh: app.trainingMajor?.shortName ?? app.trainingMajor?.name ?? "",
       gioiTinh: u?.gender?.sTen ?? "",
       danToc: u?.ethnicity?.sTen ?? "",
-      noiSinh: u?.newProvinceOfBirth?.sTen ?? u?.placeOfBirth ?? "",
+      noiSinh: formatPlaceOfBirth(u),
       diemTBTL: formatScore(app.gpa, 2),
       diemDATN: mark(formatScore(sDATN, 1), satisfies(sDATN)),
       diemNN: mark(formatScore(sNN, 1), satisfies(sNN)),
@@ -3450,7 +3472,7 @@ app.openapi(getDanhSachTotNghiepData, async (c) => {
         include: {
           fixedClass: { include: { trainingCourse: true } },
           userProfile: {
-            include: { gender: true, ethnicity: true, newProvinceOfBirth: true },
+            include: { gender: true, ethnicity: true, newProvinceOfBirth: true, provinceOfBirth: true },
           },
         },
       },
@@ -3506,7 +3528,7 @@ app.openapi(getDanhSachTotNghiepData, async (c) => {
       ngaySinh: u?.dateOfBirth ? formatDateVn(u.dateOfBirth) : "",
       gioiTinh: u?.gender?.sTen ?? "",
       danToc: u?.ethnicity?.sTen ?? "",
-      noiSinh: u?.newProvinceOfBirth?.sTen ?? u?.placeOfBirth ?? "",
+      noiSinh: formatPlaceOfBirth(u),
       nganh,
       chuyenNganh,
       diemTBTL: formatScore(app.gpa, 2),
@@ -3619,7 +3641,7 @@ app.openapi(getDanhSachHVChuaTotNghiepTA, async (c) => {
             },
           },
           userProfile: {
-            include: { gender: true, ethnicity: true, newProvinceOfBirth: true },
+            include: { gender: true, ethnicity: true, newProvinceOfBirth: true, provinceOfBirth: true },
           },
         },
       },
@@ -3701,7 +3723,7 @@ app.openapi(getDanhSachHVChuaTotNghiepTA, async (c) => {
       chuyenNganh: app.trainingMajor?.shortName,
       gioiTinh: u?.gender?.sTen ?? "",
       danToc: u?.ethnicity?.sTen ?? "",
-      noiSinh: u?.newProvinceOfBirth?.sTen ?? u?.placeOfBirth ?? "",
+      noiSinh: formatPlaceOfBirth(u),
       diemTBTL: formatScore(app.gpa, 2),
       diemDATN: formatScore(sDATN, 1),
       diemNN: formatScore(sNN, 1),

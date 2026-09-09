@@ -44,7 +44,6 @@ import { startQuetHanGiangVienCron } from "./cron/quet-han-giang-vien"
 import { startQuetNhacLichCaNhanCron } from "./cron/quet-nhac-lich-ca-nhan"
 import { startDonDepThongBaoCron } from "./cron/don-dep-thong-bao"
 import { setupOpenApi } from "./utils/openapi"
-import VersionApp from "./api/public-version"
 
 setupAppTimezone()
 
@@ -124,7 +123,6 @@ app.route("/api/export-template", ExportTemplateApp)
 app.route("/api/export-training-data", ExportTrainingDataApp)
 app.route("/api/import-training-data", ImportTrainingDataApp)
 app.route("/api/class-register-session", InvalidateClassRegisterCacheApp)
-app.route("/api/version", VersionApp)
 const nv = await prisma.userProfile.findFirstOrThrow()
 
 app.use(

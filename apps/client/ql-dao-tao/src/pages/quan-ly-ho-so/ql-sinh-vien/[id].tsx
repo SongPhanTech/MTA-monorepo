@@ -4,6 +4,7 @@ import { useAcademicRankingBaseTypeOptions } from "@hooks/academicRankingBaseTyp
 import { useStudentTrainingTypeOptions } from "@hooks/studentTrainingType"
 import DefaultLayout from "@layouts/default-layout"
 import { useFindUniqueStudent } from "@workspace/db/hooks"
+import { formatPlaceOfBirth } from "@workspace/libs/utils"
 import { ROUTER_PATH } from "@workspace/router"
 import {
   getThesisTitle,
@@ -29,6 +30,11 @@ export default function StudentDetailV2Page() {
           include: {
             rank: true,
             gender: true,
+            provinceOfBirth: true,
+            newProvinceOfBirth: true,
+            position: true,
+            positionCPV: true,
+            chucVuChinhQuyen: true,
           },
         },
         fixedClass: {
@@ -380,6 +386,9 @@ export default function StudentDetailV2Page() {
                 ? dayjs(studentData.userProfile.dateOfBirth).format("DD/MM/YYYY")
                 : ""}
             </Descriptions.Item>
+            <Descriptions.Item label="Nơi sinh">
+              {formatPlaceOfBirth(studentData?.userProfile)}
+            </Descriptions.Item>
             <Descriptions.Item label="Giới tính">
               {studentData?.userProfile?.gender?.sTen || ""}
             </Descriptions.Item>
@@ -389,6 +398,12 @@ export default function StudentDetailV2Page() {
             </Descriptions.Item>
             <Descriptions.Item label="Cấp bậc">
               {studentData?.userProfile?.rank?.sTen}
+            </Descriptions.Item>
+            <Descriptions.Item label="Chức vụ">
+              {studentData?.userProfile?.position?.sTen ||
+                studentData?.userProfile?.positionCPV?.sTen ||
+                studentData?.userProfile?.chucVuChinhQuyen?.sTen ||
+                ""}
             </Descriptions.Item>
             <Descriptions.Item label="Trạng thái">
               {getStatusTag(studentData?.status || "")}

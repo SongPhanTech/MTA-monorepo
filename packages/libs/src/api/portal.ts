@@ -55,6 +55,11 @@ import type {
   GetRegistrationStatus200,
   GetRegistrationStatus404,
   GetSessionParams,
+  GetStudentExamSchedule200,
+  GetStudentExamSchedule400,
+  GetStudentExamSchedule401,
+  GetStudentExamSchedule500,
+  GetStudentExamScheduleParams,
   GetStudentInfo200,
   GetStudentInfo404,
   GetStudentInfoParams,
@@ -1128,6 +1133,144 @@ export const useInvalidateRegistrationCache = <TError = InvalidateRegistrationCa
       return useMutation(mutationOptions, queryClient);
     }
     
+/**
+ * Proxy tới system public `/ExamSchedules/student`. `userProfileId` lấy từ phiên đăng nhập, không nhận từ client.
+ * @summary Lịch thi của sinh viên đang đăng nhập
+ */
+export type getStudentExamScheduleResponse200 = {
+  data: GetStudentExamSchedule200
+  status: 200
+}
+
+export type getStudentExamScheduleResponse400 = {
+  data: GetStudentExamSchedule400
+  status: 400
+}
+
+export type getStudentExamScheduleResponse401 = {
+  data: GetStudentExamSchedule401
+  status: 401
+}
+
+export type getStudentExamScheduleResponse500 = {
+  data: GetStudentExamSchedule500
+  status: 500
+}
+    
+export type getStudentExamScheduleResponseSuccess = (getStudentExamScheduleResponse200) & {
+  headers: Headers;
+};
+export type getStudentExamScheduleResponseError = (getStudentExamScheduleResponse400 | getStudentExamScheduleResponse401 | getStudentExamScheduleResponse500) & {
+  headers: Headers;
+};
+
+export type getStudentExamScheduleResponse = (getStudentExamScheduleResponseSuccess | getStudentExamScheduleResponseError)
+
+export const getGetStudentExamScheduleUrl = (params?: GetStudentExamScheduleParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/exam-schedules/student?${stringifiedParams}` : `/api/exam-schedules/student`
+}
+
+export const getStudentExamSchedule = async (params?: GetStudentExamScheduleParams, options?: RequestInit): Promise<getStudentExamScheduleResponse> => {
+  
+  return customPortalFetch<getStudentExamScheduleResponse>(getGetStudentExamScheduleUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetStudentExamScheduleQueryKey = (params?: GetStudentExamScheduleParams,) => {
+    return [
+    `/api/exam-schedules/student`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetStudentExamScheduleQueryOptions = <TData = Awaited<ReturnType<typeof getStudentExamSchedule>>, TError = GetStudentExamSchedule400 | GetStudentExamSchedule401 | GetStudentExamSchedule500>(params?: GetStudentExamScheduleParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentExamSchedule>>, TError, TData>>, request?: SecondParameter<typeof customPortalFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetStudentExamScheduleQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getStudentExamSchedule>>> = ({ signal }) => getStudentExamSchedule(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getStudentExamSchedule>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetStudentExamScheduleQueryResult = NonNullable<Awaited<ReturnType<typeof getStudentExamSchedule>>>
+export type GetStudentExamScheduleQueryError = GetStudentExamSchedule400 | GetStudentExamSchedule401 | GetStudentExamSchedule500
+
+
+export function useGetStudentExamSchedule<TData = Awaited<ReturnType<typeof getStudentExamSchedule>>, TError = GetStudentExamSchedule400 | GetStudentExamSchedule401 | GetStudentExamSchedule500>(
+ params: undefined |  GetStudentExamScheduleParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentExamSchedule>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getStudentExamSchedule>>,
+          TError,
+          Awaited<ReturnType<typeof getStudentExamSchedule>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetStudentExamSchedule<TData = Awaited<ReturnType<typeof getStudentExamSchedule>>, TError = GetStudentExamSchedule400 | GetStudentExamSchedule401 | GetStudentExamSchedule500>(
+ params?: GetStudentExamScheduleParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentExamSchedule>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getStudentExamSchedule>>,
+          TError,
+          Awaited<ReturnType<typeof getStudentExamSchedule>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetStudentExamSchedule<TData = Awaited<ReturnType<typeof getStudentExamSchedule>>, TError = GetStudentExamSchedule400 | GetStudentExamSchedule401 | GetStudentExamSchedule500>(
+ params?: GetStudentExamScheduleParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentExamSchedule>>, TError, TData>>, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lịch thi của sinh viên đang đăng nhập
+ */
+
+export function useGetStudentExamSchedule<TData = Awaited<ReturnType<typeof getStudentExamSchedule>>, TError = GetStudentExamSchedule400 | GetStudentExamSchedule401 | GetStudentExamSchedule500>(
+ params?: GetStudentExamScheduleParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentExamSchedule>>, TError, TData>>, request?: SecondParameter<typeof customPortalFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetStudentExamScheduleQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
 /**
  * @summary Lấy lịch sử đồng bộ dữ liệu
  */

@@ -30,6 +30,7 @@ import {
   graduationApplicationInit,
   useGraduationCheck,
 } from "@workspace/libs/api/training"
+import { formatPlaceOfBirth } from "@workspace/libs/utils"
 import { ROUTER_PATH } from "@workspace/router"
 import { Button, Col, Dropdown, Flex, Modal, message, Row, Tag, Tooltip } from "antd"
 import type { TableRowSelection } from "antd/es/table/interface"
@@ -164,6 +165,7 @@ export default function StudentGraduationApplication() {
                   ethnicity: true,
                   gender: true,
                   newProvinceOfBirth: true,
+                  provinceOfBirth: true,
                 },
               },
               fixedClass: true,
@@ -830,7 +832,7 @@ export default function StudentGraduationApplication() {
                           width: 100,
                           align: "center",
                           render: (_, record) =>
-                            record?.student?.userProfile?.newProvinceOfBirth?.sTen,
+                            formatPlaceOfBirth(record?.student?.userProfile),
                         },
                         {
                           title: "Dân tộc",

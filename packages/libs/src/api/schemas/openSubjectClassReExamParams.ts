@@ -89,13 +89,13 @@ import type { ViewAll } from './viewAll';
 
 export type OpenSubjectClassReExamParams = {
 /**
- * Số trang (phân trang, nếu API hỗ trợ).
+ * Số trang.
  * @minimum 1
- * @maximum 100
+ * @maximum 1000
  */
 page?: number;
 /**
- * Số bản ghi mỗi trang.
+ * Số bản ghi mỗi trang (tối đa 100).
  * @minimum 1
  * @maximum 100
  */

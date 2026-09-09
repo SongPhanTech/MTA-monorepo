@@ -31,6 +31,7 @@ import {
   downloadStudentImportTemplate,
   useExportStudentProfiles,
 } from "@workspace/libs/api/training"
+import { formatPlaceOfBirth } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
@@ -263,7 +264,7 @@ export default function UserProfilePageDs() {
     where,
     include: {
       userProfile: {
-        include: { rank: true },
+        include: { rank: true, provinceOfBirth: true, newProvinceOfBirth: true },
       },
       fixedClass: {
         include: {
@@ -715,6 +716,12 @@ export default function UserProfilePageDs() {
                   record.userProfile?.dateOfBirth
                     ? dayjs(record.userProfile.dateOfBirth).format("DD/MM/YYYY")
                     : "",
+              },
+              {
+                title: "Nơi sinh",
+                align: "center",
+                width: 150,
+                render: (__, record) => formatPlaceOfBirth(record.userProfile),
               },
               {
                 title: "CCCD",

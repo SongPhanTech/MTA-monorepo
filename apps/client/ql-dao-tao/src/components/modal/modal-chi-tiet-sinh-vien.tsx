@@ -6,6 +6,7 @@ import { FIXED_CLASS_STUDENT_STATUS, SCORE_CONVERT_STATUS } from "@constants/con
 import { useAcademicRankingBaseTypeOptions } from "@hooks/academicRankingBaseType"
 import { useStudentTrainingTypeOptions } from "@hooks/studentTrainingType"
 import { useFindUniqueStudent } from "@workspace/db/hooks"
+import { formatPlaceOfBirth } from "@workspace/libs/utils"
 
 dayjs.locale("vi")
 
@@ -27,6 +28,11 @@ const ModalChiTietSinhVien = () => {
           include: {
             rank: true,
             gender: true,
+            provinceOfBirth: true,
+            newProvinceOfBirth: true,
+            position: true,
+            positionCPV: true,
+            chucVuChinhQuyen: true,
           },
         },
         fixedClass: {
@@ -378,6 +384,9 @@ const ModalChiTietSinhVien = () => {
                 ? dayjs(studentData.userProfile.dateOfBirth).format("DD/MM/YYYY")
                 : ""}
             </Descriptions.Item>
+            <Descriptions.Item label="Nơi sinh">
+              {formatPlaceOfBirth(studentData?.userProfile)}
+            </Descriptions.Item>
             <Descriptions.Item label="Giới tính">
               {studentData?.userProfile?.gender?.sTen || ""}
             </Descriptions.Item>
@@ -387,6 +396,12 @@ const ModalChiTietSinhVien = () => {
             </Descriptions.Item>
             <Descriptions.Item label="Cấp bậc">
               {studentData?.userProfile?.rank?.sTen}
+            </Descriptions.Item>
+            <Descriptions.Item label="Chức vụ">
+              {studentData?.userProfile?.position?.sTen ||
+                studentData?.userProfile?.positionCPV?.sTen ||
+                studentData?.userProfile?.chucVuChinhQuyen?.sTen ||
+                ""}
             </Descriptions.Item>
             <Descriptions.Item label="Trạng thái">
               {getStatusTag(studentData?.status || "")}

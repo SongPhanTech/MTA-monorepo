@@ -74,6 +74,8 @@ import type {
   DeleteDMNhanViensId400,
   DeleteDMNhanViensId401,
   DeleteDMNhanViensId403,
+  ExamSchedulePublicResultDtoLecturerExamScheduleDto,
+  ExamSchedulePublicResultDtoStudentExamScheduleDto,
   GetDMCapBacsHealthz400,
   GetDMCapBacsHealthz401,
   GetDMCapBacsHealthz403,
@@ -267,6 +269,9 @@ import type {
   GetDMXaPhuongsId401,
   GetDMXaPhuongsId403,
   GetDMXaPhuongsIdParams,
+  GetExamScheduleRequestDto,
+  GetExamSchedulesLecturerParams,
+  GetExamSchedulesStudentParams,
   GetMenusPermissionDTO,
   GetUserPermissionDTO,
   GetUserPermissionsAccessLevelAppCodeUserId400,
@@ -397,6 +402,7 @@ import type {
   PutDMNhanViens400,
   PutDMNhanViens401,
   PutDMNhanViens403,
+  SubjectClassExamDateDto,
   UnitInfoEditDto
 } from './schemas';
 
@@ -10341,6 +10347,617 @@ export function useGetDMXaPhuongNewsHealthz<TData = Awaited<ReturnType<typeof ge
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetDMXaPhuongNewsHealthzQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * Lấy danh sách lịch thi của sinh viên theo userProfileId hoặc các tiêu chí lọc động (FilterItemDto). Cần header x-clientid / x-clientsecret.
+ * @summary Tra cứu lịch thi của sinh viên (POST - hỗ trợ dynamic FilterItemDto)
+ */
+export type postExamSchedulesStudentResponse200 = {
+  data: ExamSchedulePublicResultDtoStudentExamScheduleDto
+  status: 200
+}
+    
+export type postExamSchedulesStudentResponseSuccess = (postExamSchedulesStudentResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postExamSchedulesStudentResponse = (postExamSchedulesStudentResponseSuccess)
+
+export const getPostExamSchedulesStudentUrl = () => {
+
+
+  
+
+  return `/ExamSchedules/student`
+}
+
+export const postExamSchedulesStudent = async (getExamScheduleRequestDto: GetExamScheduleRequestDto, options?: RequestInit): Promise<postExamSchedulesStudentResponse> => {
+  
+  return customSystemFetch<postExamSchedulesStudentResponse>(getPostExamSchedulesStudentUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+    body: JSON.stringify(
+      getExamScheduleRequestDto,)
+  }
+);}
+
+
+
+
+export const getPostExamSchedulesStudentMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postExamSchedulesStudent>>, TError,{data: GetExamScheduleRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postExamSchedulesStudent>>, TError,{data: GetExamScheduleRequestDto}, TContext> => {
+
+const mutationKey = ['postExamSchedulesStudent'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postExamSchedulesStudent>>, {data: GetExamScheduleRequestDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postExamSchedulesStudent(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostExamSchedulesStudentMutationResult = NonNullable<Awaited<ReturnType<typeof postExamSchedulesStudent>>>
+    export type PostExamSchedulesStudentMutationBody = GetExamScheduleRequestDto
+    export type PostExamSchedulesStudentMutationError = unknown
+
+    /**
+ * @summary Tra cứu lịch thi của sinh viên (POST - hỗ trợ dynamic FilterItemDto)
+ */
+export const usePostExamSchedulesStudent = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postExamSchedulesStudent>>, TError,{data: GetExamScheduleRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postExamSchedulesStudent>>,
+        TError,
+        {data: GetExamScheduleRequestDto},
+        TContext
+      > => {
+
+      const mutationOptions = getPostExamSchedulesStudentMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Lấy danh sách lịch thi của sinh viên theo userProfileId, kỳ học, năm học, ngày bắt đầu / kết thúc. Cần header x-clientid / x-clientsecret.
+ * @summary Tra cứu lịch thi của sinh viên (GET - URL query params)
+ */
+export type getExamSchedulesStudentResponse200 = {
+  data: ExamSchedulePublicResultDtoStudentExamScheduleDto
+  status: 200
+}
+    
+export type getExamSchedulesStudentResponseSuccess = (getExamSchedulesStudentResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getExamSchedulesStudentResponse = (getExamSchedulesStudentResponseSuccess)
+
+export const getGetExamSchedulesStudentUrl = (params?: GetExamSchedulesStudentParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/ExamSchedules/student?${stringifiedParams}` : `/ExamSchedules/student`
+}
+
+export const getExamSchedulesStudent = async (params?: GetExamSchedulesStudentParams, options?: RequestInit): Promise<getExamSchedulesStudentResponse> => {
+  
+  return customSystemFetch<getExamSchedulesStudentResponse>(getGetExamSchedulesStudentUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetExamSchedulesStudentQueryKey = (params?: GetExamSchedulesStudentParams,) => {
+    return [
+    `/ExamSchedules/student`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetExamSchedulesStudentQueryOptions = <TData = Awaited<ReturnType<typeof getExamSchedulesStudent>>, TError = unknown>(params?: GetExamSchedulesStudentParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesStudent>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetExamSchedulesStudentQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getExamSchedulesStudent>>> = ({ signal }) => getExamSchedulesStudent(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesStudent>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetExamSchedulesStudentQueryResult = NonNullable<Awaited<ReturnType<typeof getExamSchedulesStudent>>>
+export type GetExamSchedulesStudentQueryError = unknown
+
+
+export function useGetExamSchedulesStudent<TData = Awaited<ReturnType<typeof getExamSchedulesStudent>>, TError = unknown>(
+ params: undefined |  GetExamSchedulesStudentParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesStudent>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getExamSchedulesStudent>>,
+          TError,
+          Awaited<ReturnType<typeof getExamSchedulesStudent>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetExamSchedulesStudent<TData = Awaited<ReturnType<typeof getExamSchedulesStudent>>, TError = unknown>(
+ params?: GetExamSchedulesStudentParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesStudent>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getExamSchedulesStudent>>,
+          TError,
+          Awaited<ReturnType<typeof getExamSchedulesStudent>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetExamSchedulesStudent<TData = Awaited<ReturnType<typeof getExamSchedulesStudent>>, TError = unknown>(
+ params?: GetExamSchedulesStudentParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesStudent>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Tra cứu lịch thi của sinh viên (GET - URL query params)
+ */
+
+export function useGetExamSchedulesStudent<TData = Awaited<ReturnType<typeof getExamSchedulesStudent>>, TError = unknown>(
+ params?: GetExamSchedulesStudentParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesStudent>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetExamSchedulesStudentQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * Lấy danh sách lịch coi thi của giảng viên theo userProfileId hoặc các tiêu chí lọc động (FilterItemDto). Cần header x-clientid / x-clientsecret.
+ * @summary Tra cứu lịch coi thi của giảng viên (POST - hỗ trợ dynamic FilterItemDto)
+ */
+export type postExamSchedulesLecturerResponse200 = {
+  data: ExamSchedulePublicResultDtoLecturerExamScheduleDto
+  status: 200
+}
+    
+export type postExamSchedulesLecturerResponseSuccess = (postExamSchedulesLecturerResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postExamSchedulesLecturerResponse = (postExamSchedulesLecturerResponseSuccess)
+
+export const getPostExamSchedulesLecturerUrl = () => {
+
+
+  
+
+  return `/ExamSchedules/lecturer`
+}
+
+export const postExamSchedulesLecturer = async (getExamScheduleRequestDto: GetExamScheduleRequestDto, options?: RequestInit): Promise<postExamSchedulesLecturerResponse> => {
+  
+  return customSystemFetch<postExamSchedulesLecturerResponse>(getPostExamSchedulesLecturerUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+    body: JSON.stringify(
+      getExamScheduleRequestDto,)
+  }
+);}
+
+
+
+
+export const getPostExamSchedulesLecturerMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postExamSchedulesLecturer>>, TError,{data: GetExamScheduleRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postExamSchedulesLecturer>>, TError,{data: GetExamScheduleRequestDto}, TContext> => {
+
+const mutationKey = ['postExamSchedulesLecturer'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postExamSchedulesLecturer>>, {data: GetExamScheduleRequestDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postExamSchedulesLecturer(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostExamSchedulesLecturerMutationResult = NonNullable<Awaited<ReturnType<typeof postExamSchedulesLecturer>>>
+    export type PostExamSchedulesLecturerMutationBody = GetExamScheduleRequestDto
+    export type PostExamSchedulesLecturerMutationError = unknown
+
+    /**
+ * @summary Tra cứu lịch coi thi của giảng viên (POST - hỗ trợ dynamic FilterItemDto)
+ */
+export const usePostExamSchedulesLecturer = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postExamSchedulesLecturer>>, TError,{data: GetExamScheduleRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postExamSchedulesLecturer>>,
+        TError,
+        {data: GetExamScheduleRequestDto},
+        TContext
+      > => {
+
+      const mutationOptions = getPostExamSchedulesLecturerMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Lấy danh sách lịch coi thi của giảng viên theo userProfileId, kỳ học, năm học, ngày bắt đầu / kết thúc. Cần header x-clientid / x-clientsecret.
+ * @summary Tra cứu lịch coi thi của giảng viên (GET - URL query params)
+ */
+export type getExamSchedulesLecturerResponse200 = {
+  data: ExamSchedulePublicResultDtoLecturerExamScheduleDto
+  status: 200
+}
+    
+export type getExamSchedulesLecturerResponseSuccess = (getExamSchedulesLecturerResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getExamSchedulesLecturerResponse = (getExamSchedulesLecturerResponseSuccess)
+
+export const getGetExamSchedulesLecturerUrl = (params?: GetExamSchedulesLecturerParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/ExamSchedules/lecturer?${stringifiedParams}` : `/ExamSchedules/lecturer`
+}
+
+export const getExamSchedulesLecturer = async (params?: GetExamSchedulesLecturerParams, options?: RequestInit): Promise<getExamSchedulesLecturerResponse> => {
+  
+  return customSystemFetch<getExamSchedulesLecturerResponse>(getGetExamSchedulesLecturerUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetExamSchedulesLecturerQueryKey = (params?: GetExamSchedulesLecturerParams,) => {
+    return [
+    `/ExamSchedules/lecturer`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetExamSchedulesLecturerQueryOptions = <TData = Awaited<ReturnType<typeof getExamSchedulesLecturer>>, TError = unknown>(params?: GetExamSchedulesLecturerParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesLecturer>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetExamSchedulesLecturerQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getExamSchedulesLecturer>>> = ({ signal }) => getExamSchedulesLecturer(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesLecturer>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetExamSchedulesLecturerQueryResult = NonNullable<Awaited<ReturnType<typeof getExamSchedulesLecturer>>>
+export type GetExamSchedulesLecturerQueryError = unknown
+
+
+export function useGetExamSchedulesLecturer<TData = Awaited<ReturnType<typeof getExamSchedulesLecturer>>, TError = unknown>(
+ params: undefined |  GetExamSchedulesLecturerParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesLecturer>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getExamSchedulesLecturer>>,
+          TError,
+          Awaited<ReturnType<typeof getExamSchedulesLecturer>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetExamSchedulesLecturer<TData = Awaited<ReturnType<typeof getExamSchedulesLecturer>>, TError = unknown>(
+ params?: GetExamSchedulesLecturerParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesLecturer>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getExamSchedulesLecturer>>,
+          TError,
+          Awaited<ReturnType<typeof getExamSchedulesLecturer>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetExamSchedulesLecturer<TData = Awaited<ReturnType<typeof getExamSchedulesLecturer>>, TError = unknown>(
+ params?: GetExamSchedulesLecturerParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesLecturer>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Tra cứu lịch coi thi của giảng viên (GET - URL query params)
+ */
+
+export function useGetExamSchedulesLecturer<TData = Awaited<ReturnType<typeof getExamSchedulesLecturer>>, TError = unknown>(
+ params?: GetExamSchedulesLecturerParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesLecturer>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetExamSchedulesLecturerQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * Nhận danh sách sourceId của lớp học phần bên MTA và trả về thông tin lớp thi, ngày thi, ca thi, phòng thi tương ứng. DTO trả về có Id là ExamClassId, subjectClassId là sourceId của lớp học phần.
+ * @summary Tra cứu lịch thi theo danh sách sourceId của lớp học phần (POST)
+ */
+export type postExamSchedulesSubjectClassesExamDatesResponse200 = {
+  data: SubjectClassExamDateDto[]
+  status: 200
+}
+    
+export type postExamSchedulesSubjectClassesExamDatesResponseSuccess = (postExamSchedulesSubjectClassesExamDatesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postExamSchedulesSubjectClassesExamDatesResponse = (postExamSchedulesSubjectClassesExamDatesResponseSuccess)
+
+export const getPostExamSchedulesSubjectClassesExamDatesUrl = () => {
+
+
+  
+
+  return `/ExamSchedules/subject-classes/exam-dates`
+}
+
+export const postExamSchedulesSubjectClassesExamDates = async (postExamSchedulesSubjectClassesExamDatesBody: string[], options?: RequestInit): Promise<postExamSchedulesSubjectClassesExamDatesResponse> => {
+  
+  return customSystemFetch<postExamSchedulesSubjectClassesExamDatesResponse>(getPostExamSchedulesSubjectClassesExamDatesUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+    body: JSON.stringify(
+      postExamSchedulesSubjectClassesExamDatesBody,)
+  }
+);}
+
+
+
+
+export const getPostExamSchedulesSubjectClassesExamDatesMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postExamSchedulesSubjectClassesExamDates>>, TError,{data: string[]}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postExamSchedulesSubjectClassesExamDates>>, TError,{data: string[]}, TContext> => {
+
+const mutationKey = ['postExamSchedulesSubjectClassesExamDates'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postExamSchedulesSubjectClassesExamDates>>, {data: string[]}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postExamSchedulesSubjectClassesExamDates(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostExamSchedulesSubjectClassesExamDatesMutationResult = NonNullable<Awaited<ReturnType<typeof postExamSchedulesSubjectClassesExamDates>>>
+    export type PostExamSchedulesSubjectClassesExamDatesMutationBody = string[]
+    export type PostExamSchedulesSubjectClassesExamDatesMutationError = unknown
+
+    /**
+ * @summary Tra cứu lịch thi theo danh sách sourceId của lớp học phần (POST)
+ */
+export const usePostExamSchedulesSubjectClassesExamDates = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postExamSchedulesSubjectClassesExamDates>>, TError,{data: string[]}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postExamSchedulesSubjectClassesExamDates>>,
+        TError,
+        {data: string[]},
+        TContext
+      > => {
+
+      const mutationOptions = getPostExamSchedulesSubjectClassesExamDatesMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Kiểm tra tình trạng API
+ * @summary Kiểm tra tình trạng API
+ */
+export type getExamSchedulesHealthzResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getExamSchedulesHealthzResponseSuccess = (getExamSchedulesHealthzResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getExamSchedulesHealthzResponse = (getExamSchedulesHealthzResponseSuccess)
+
+export const getGetExamSchedulesHealthzUrl = () => {
+
+
+  
+
+  return `/ExamSchedules/healthz`
+}
+
+export const getExamSchedulesHealthz = async ( options?: RequestInit): Promise<getExamSchedulesHealthzResponse> => {
+  
+  return customSystemFetch<getExamSchedulesHealthzResponse>(getGetExamSchedulesHealthzUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetExamSchedulesHealthzQueryKey = () => {
+    return [
+    `/ExamSchedules/healthz`
+    ] as const;
+    }
+
+    
+export const getGetExamSchedulesHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getExamSchedulesHealthz>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetExamSchedulesHealthzQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getExamSchedulesHealthz>>> = ({ signal }) => getExamSchedulesHealthz({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetExamSchedulesHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getExamSchedulesHealthz>>>
+export type GetExamSchedulesHealthzQueryError = unknown
+
+
+export function useGetExamSchedulesHealthz<TData = Awaited<ReturnType<typeof getExamSchedulesHealthz>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesHealthz>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getExamSchedulesHealthz>>,
+          TError,
+          Awaited<ReturnType<typeof getExamSchedulesHealthz>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetExamSchedulesHealthz<TData = Awaited<ReturnType<typeof getExamSchedulesHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesHealthz>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getExamSchedulesHealthz>>,
+          TError,
+          Awaited<ReturnType<typeof getExamSchedulesHealthz>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetExamSchedulesHealthz<TData = Awaited<ReturnType<typeof getExamSchedulesHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Kiểm tra tình trạng API
+ */
+
+export function useGetExamSchedulesHealthz<TData = Awaited<ReturnType<typeof getExamSchedulesHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExamSchedulesHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetExamSchedulesHealthzQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

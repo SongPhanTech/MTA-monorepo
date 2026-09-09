@@ -132,6 +132,7 @@ type TExportPayload = {
   managementOrganizationId?: string
   printDate?: string
   signerName?: string
+  isChief?: boolean
 }
 
 type TExportApiResponse = {
@@ -253,6 +254,9 @@ export default function StudentGradeSystem() {
   const [signModalOpen, setSignModalOpen] = useState(false)
   const [signRole, setSignRole] = useState<"chief" | "deputy">("deputy")
   const [signingDate, setSigningDate] = useState<Dayjs>(dayjs())
+  const [pendingSignKind, setPendingSignKind] = useState<
+    "quyetDinhCongNhan" | "phuLucVanBangCaoHoc" | "phuLucVanBangNganHan" | null
+  >(null)
   const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectType({
     where: { active: true },
   })
@@ -313,10 +317,34 @@ export default function StudentGradeSystem() {
     }
   )
 
+  const { data: postgraduateSessions = [] } = useFindManyThesisSession(
+    {
+      where: {
+        active: true,
+        deletedAt: null,
+        ...(trainingObjectTypeId && { trainingObjectTypeId }),
+        ...(trainingCourseIds?.length && {
+          trainingCourses: { some: { id: { in: trainingCourseIds } } },
+        }),
+      },
+      orderBy: { createdAt: "desc" },
+    },
+    {
+      enabled: !!trainingObjectTypeId || trainingCourseData?.length > 0,
+    }
+  )
+
   const selectedThesisSession = useMemo(() => {
     const selectedSessionId = thesisSessionIds?.[0]
     return thesisSessionData.find((s) => s.id === selectedSessionId)
   }, [thesisSessionIds, thesisSessionData])
+
+  const selectedPostgraduateSession = useMemo(() => {
+    const selectedIds = thesisSessionIds ?? []
+    return (
+      postgraduateSessions.find((s) => selectedIds.includes(s.id)) || postgraduateSessions[0]
+    )
+  }, [postgraduateSessions, thesisSessionIds])
 
   const { data: dm_DonVi = [] } = useFindManyDM_DonVi({
     where: {
@@ -1285,7 +1313,10 @@ export default function StudentGradeSystem() {
     })
   }
 
-  const handleCommonExport = async (config: TExportConfig) => {
+  const handleCommonExport = async (
+    config: TExportConfig,
+    signerOverride?: { signerName: string; isChief?: boolean; printDate?: string }
+  ) => {
     if (!trainingObjectTypeId) {
       message.warning("Vui lòng chọn loại đối tượng đào tạo")
       return
@@ -1297,8 +1328,9 @@ export default function StudentGradeSystem() {
       fixedClassIds,
       thesisSessionIds,
       managementOrganizationId: managementOrganizationIds?.[0],
-      printDate,
-      signerName: signerName || "",
+      printDate: signerOverride?.printDate ?? printDate,
+      signerName: signerOverride?.signerName ?? signerName ?? "",
+      isChief: signerOverride?.isChief,
     }
 
     try {
@@ -1351,6 +1383,23 @@ export default function StudentGradeSystem() {
     }
 
     const chiefName = session.chief?.trim() || session.graduationDecisionSigner?.trim() || ""
+    setPendingSignKind("quyetDinhCongNhan")
+    setSignRole(chiefName ? "chief" : "deputy")
+    const sidebarDate = form.getFieldValue("date")
+    setSigningDate(sidebarDate ? dayjs(sidebarDate) : dayjs())
+    setSignModalOpen(true)
+  }
+
+  const handleExportPhuLucVanBang = async (
+    kind: "phuLucVanBangCaoHoc" | "phuLucVanBangNganHan"
+  ) => {
+    if (!trainingObjectTypeId) {
+      message.warning("Vui lòng chọn loại đối tượng đào tạo")
+      return
+    }
+    const session = selectedPostgraduateSession
+    const chiefName = session?.chief?.trim() || ""
+    setPendingSignKind(kind)
     setSignRole(chiefName ? "chief" : "deputy")
     const sidebarDate = form.getFieldValue("date")
     setSigningDate(sidebarDate ? dayjs(sidebarDate) : dayjs())
@@ -1358,6 +1407,33 @@ export default function StudentGradeSystem() {
   }
 
   const handleConfirmSignExport = async () => {
+    if (pendingSignKind === "phuLucVanBangCaoHoc" || pendingSignKind === "phuLucVanBangNganHan") {
+      const session = selectedPostgraduateSession
+      const chiefName = session?.chief?.trim() || ""
+      const deputyName = session?.deputy?.trim() || ""
+      const signerNameTS = signRole === "chief" ? chiefName : deputyName
+      if (!signerNameTS.trim()) {
+        message.warning(
+          `Chưa có họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó trưởng phòng"} sau đại học trong đợt xét.`
+        )
+        return
+      }
+
+      const config =
+        pendingSignKind === "phuLucVanBangCaoHoc"
+          ? exportHandlers.phuLucVanBangCaoHoc
+          : exportHandlers.phuLucVanBangNganHan
+      setSignModalOpen(false)
+      setPendingSignKind(null)
+      form.setFieldValue("date", signingDate)
+      await handleCommonExport(config, {
+        signerName: signerNameTS,
+        isChief: signRole === "chief",
+        printDate: signingDate?.toISOString?.() ?? String(signingDate),
+      })
+      return
+    }
+
     const selectedSessionId = thesisSessionIds?.[0]
     const session = thesisSessionData.find((s) => s.id === selectedSessionId) as
       | SessionSignerInfo
@@ -1369,12 +1445,13 @@ export default function StudentGradeSystem() {
     const signerNameTS = signRole === "chief" ? chiefName : deputyName
     if (!signerNameTS.trim()) {
       message.warning(
-        `Chưa có họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó phòng"} sau đại học trong đợt xét.`
+        `Chưa có họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó trưởng phòng"} sau đại học trong đợt xét.`
       )
       return
     }
 
     setSignModalOpen(false)
+    setPendingSignKind(null)
     form.setFieldValue("date", signingDate)
     await doExportQuyetDinhCongNhan(signerNameTS, signingDate)
   }
@@ -1539,7 +1616,7 @@ export default function StudentGradeSystem() {
       {
         id: 7,
         name: "Phụ lục văn bằng ngắn hạn",
-        onClick: () => handleCommonExport(exportHandlers.phuLucVanBangNganHan),
+        onClick: () => handleExportPhuLucVanBang("phuLucVanBangNganHan"),
       },
       // { id: 7, name: "In phôi bảng ngắn/DÀI hạn SDH (Mỹ)" },
       // { id: 8, name: "In quyết định tốt nghiệp ngắn hạn (ĐẠI HÀN) SDH" },
@@ -1571,7 +1648,7 @@ export default function StudentGradeSystem() {
       {
         id: 22,
         name: "Phụ lục văn bằng cao học",
-        onClick: () => handleCommonExport(exportHandlers.phuLucVanBangCaoHoc),
+        onClick: () => handleExportPhuLucVanBang("phuLucVanBangCaoHoc"),
       },
       // { id: 22, name: "Thống kê KQ đào tạo" },
       // { id: 23, name: "Thống kê kết quả bảo vệ luận văn" },
@@ -1945,9 +2022,18 @@ export default function StudentGradeSystem() {
       <Modal
         title="Tham số xuất file"
         open={signModalOpen}
-        onCancel={() => setSignModalOpen(false)}
+        onCancel={() => {
+          setSignModalOpen(false)
+          setPendingSignKind(null)
+        }}
         footer={[
-          <Button key="cancel" onClick={() => setSignModalOpen(false)}>
+          <Button
+            key="cancel"
+            onClick={() => {
+              setSignModalOpen(false)
+              setPendingSignKind(null)
+            }}
+          >
             Hủy
           </Button>,
           <Button key="ok" type="primary" onClick={() => void handleConfirmSignExport()}>
@@ -1958,7 +2044,11 @@ export default function StudentGradeSystem() {
         maskClosable={false}
       >
         <p className="mb-3 text-gray-600">
-          Đợt xét hiện tại: {selectedThesisSession?.name ?? "—"}.
+          Đợt xét hiện tại:{" "}
+          {pendingSignKind === "phuLucVanBangCaoHoc" || pendingSignKind === "phuLucVanBangNganHan"
+            ? (selectedPostgraduateSession?.name ?? "—")
+            : (selectedThesisSession?.name ?? "—")}
+          .
         </p>
         <Radio.Group
           value={signRole}
@@ -1968,16 +2058,22 @@ export default function StudentGradeSystem() {
           <Radio value="chief">
             Trưởng phòng sau đại học:{" "}
             <strong>
-              {(selectedThesisSession as SessionSignerInfo | undefined)?.chief?.trim() ||
-                selectedThesisSession?.graduationDecisionSigner?.trim() ||
-                "(chưa nhập)"}
+              {pendingSignKind === "phuLucVanBangCaoHoc" ||
+              pendingSignKind === "phuLucVanBangNganHan"
+                ? selectedPostgraduateSession?.chief?.trim() || "(chưa nhập)"
+                : (selectedThesisSession as SessionSignerInfo | undefined)?.chief?.trim() ||
+                  selectedThesisSession?.graduationDecisionSigner?.trim() ||
+                  "(chưa nhập)"}
             </strong>
           </Radio>
           <Radio value="deputy">
-            Phó phòng sau đại học:{" "}
+            Phó trưởng phòng sau đại học:{" "}
             <strong>
-              {(selectedThesisSession as SessionSignerInfo | undefined)?.deputy?.trim() ||
-                "(chưa nhập)"}
+              {pendingSignKind === "phuLucVanBangCaoHoc" ||
+              pendingSignKind === "phuLucVanBangNganHan"
+                ? selectedPostgraduateSession?.deputy?.trim() || "(chưa nhập)"
+                : (selectedThesisSession as SessionSignerInfo | undefined)?.deputy?.trim() ||
+                  "(chưa nhập)"}
             </strong>
           </Radio>
         </Radio.Group>

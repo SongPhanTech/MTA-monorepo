@@ -2,6 +2,7 @@ import { TrainingObjectTypes } from "@workspace/db"
 import PizZip from "pizzip"
 import { getTemplateBuffer } from "@workspace/libs/server"
 import { formatDateVn, nowVn } from "@workspace/libs/timezone"
+import { formatPlaceOfBirth } from "@workspace/libs/utils"
 import ExcelJS from "exceljs"
 import type { Alignment } from "exceljs"
 import XlsxTemplate from "xlsx-template"
@@ -53,6 +54,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
           dateOfBirth: true,
           idCardNumber: true,
           phoneNumber: true,
+          placeOfBirth: true,
           gender: { select: { sTen: true } },
           ethnicity: { select: { sTen: true } },
           provinceHometown: { select: { sTen: true } },
@@ -163,7 +165,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
       officerNumber: student.userProfile.officerNumber,
       rank: student.userProfile.rank?.sTen,
       chucvu: student.userProfile.chucVuChinhQuyen?.sTen,
-      provinceOfBirth: student.userProfile.provinceOfBirth?.sTen,
+      provinceOfBirth: formatPlaceOfBirth(student.userProfile),
       department: student.department,
       departmentAddress: student.departmentAddress,
       priorityReason: student.priorityReason,
@@ -1266,7 +1268,12 @@ export const exportArchivedCertificate = async ({
       certificate: true,
       student: {
         include: {
-          userProfile: true,
+          userProfile: {
+            include: {
+              newProvinceOfBirth: true,
+              provinceOfBirth: true,
+            },
+          },
           fixedClass: {
             include: {
               trainingCourse: true,
@@ -1319,7 +1326,7 @@ export const exportArchivedCertificate = async ({
       dateOfBirth: userProfile?.dateOfBirth
         ? `'${formatDateVn(userProfile.dateOfBirth)}`
         : "",
-      placeOfBirth: userProfile?.placeOfBirth || "",
+      placeOfBirth: formatPlaceOfBirth(userProfile),
       idCardNumber: userProfile?.idCardNumber || "",
       fixedClass: fixedClass?.name || "",
       trainingCourse: fixedClass?.trainingCourse?.name || "",
@@ -1417,7 +1424,12 @@ export const exportArchivedCertificateMulti = async ({
       },
     },
     include: {
-      userProfile: true,
+      userProfile: {
+        include: {
+          newProvinceOfBirth: true,
+          provinceOfBirth: true,
+        },
+      },
       fixedClass: {
         include: {
           trainingCourse: true,
@@ -1486,7 +1498,7 @@ export const exportArchivedCertificateMulti = async ({
       dateOfBirth: userProfile?.dateOfBirth
         ? `'${formatDateVn(userProfile.dateOfBirth)}`
         : "",
-      placeOfBirth: userProfile?.placeOfBirth || "",
+      placeOfBirth: formatPlaceOfBirth(userProfile),
       idCardNumber: userProfile?.idCardNumber || "",
       fixedClass: fixedClass?.name || "",
       trainingCourse: fixedClass?.trainingCourse?.name || "",
@@ -1554,7 +1566,12 @@ export const exportStudentsMissingCertificate = async ({
   const students = await prisma.student.findMany({
     where,
     include: {
-      userProfile: true,
+      userProfile: {
+        include: {
+          newProvinceOfBirth: true,
+          provinceOfBirth: true,
+        },
+      },
       fixedClass: {
         include: {
           trainingCourse: true,
@@ -1607,7 +1624,7 @@ export const exportStudentsMissingCertificate = async ({
       trainingCourse: fixedClass?.trainingCourse?.name || "",
       trainingField: trainingMajor?.trainingField?.name || "",
       trainingMajorName: trainingMajor?.name || "",
-      placeOfBirth: userProfile?.placeOfBirth || "",
+      placeOfBirth: formatPlaceOfBirth(userProfile),
       idCardNumber: userProfile?.idCardNumber || "",
       certificateName: certificateName || "Tất cả",
       status: "Chưa có",

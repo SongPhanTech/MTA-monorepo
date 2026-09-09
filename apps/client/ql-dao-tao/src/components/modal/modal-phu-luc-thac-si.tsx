@@ -2,11 +2,11 @@ import { GridBlock } from "@components/commons/grid-block"
 import { useScoreConverter } from "@hooks/scoreConverter"
 import { $Enums } from "@workspace/db/client"
 import { useFindManyStudentResearchTopic, useFindUniqueStudent } from "@workspace/db/hooks"
-import { courseScoreConfigFrom } from "@workspace/libs/utils"
-import { Button, Modal, Space } from "antd"
+import { courseScoreConfigFrom, formatPlaceOfBirth } from "@workspace/libs/utils"
+import { Button, Modal, Radio, Space } from "antd"
 import dayjs from "dayjs"
 import { Printer } from "lucide-react"
-import { useMemo, useRef } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 
@@ -65,6 +65,15 @@ function formatScore(value: number | null | undefined, digits: number) {
   return Number(value).toFixedSmart(digits)
 }
 
+function isApplicationOrientation(
+  classType: $Enums.FixedClassType | null | undefined,
+  fallbackIsProject: boolean
+) {
+  if (classType === $Enums.FixedClassType.APPLICATION) return true
+  if (classType === $Enums.FixedClassType.RESEARCH) return false
+  return fallbackIsProject
+}
+
 const SubjectTable: React.FC<{ data: Subject[]; startIndex: number }> = ({ data, startIndex }) => (
   <table className="table-auto border-collapse border border-black w-full text-sm">
     <thead>
@@ -105,7 +114,14 @@ export const ModalPhuLucThacSi = () => {
       where: { id },
       include: {
         userProfile: {
-          include: { gender: true, ethnicity: true, religion: true, nationality: true },
+          include: {
+            gender: true,
+            ethnicity: true,
+            religion: true,
+            nationality: true,
+            provinceOfBirth: true,
+            newProvinceOfBirth: true,
+          },
         },
         graduationDecision: true,
         studentYearResult: {
@@ -128,6 +144,9 @@ export const ModalPhuLucThacSi = () => {
                 coSupervisor: true,
                 defenseRecord: true,
                 subjectClass: { include: { subject: true } },
+                thesisSession: {
+                  select: { id: true, name: true, chief: true, deputy: true },
+                },
                 council: {
                   include: {
                     members: {
@@ -220,6 +239,22 @@ export const ModalPhuLucThacSi = () => {
   const thesisReg = data?.thesisRegistrations?.[0]
   const thesisProject = thesisReg?.thesisProject
   const isProject = thesisProject?.thesisType === $Enums.ThesisType.PROJECT
+  const isApplicationProgram = isApplicationOrientation(data?.fixedClass?.classType, isProject)
+  const orientationLabel = isApplicationProgram ? "định hướng ứng dụng" : "định hướng nghiên cứu"
+  const thesisSession = thesisProject?.thesisSession
+  const chiefName = thesisSession?.chief?.trim() || ""
+  const deputyName = thesisSession?.deputy?.trim() || ""
+  const [signRole, setSignRole] = useState<"chief" | "deputy">("chief")
+  const isChiefSigner = signRole === "chief"
+  const signerDisplayName = isChiefSigner ? chiefName : deputyName
+  const signerTitle1 = isChiefSigner ? "TL. GIÁM ĐỐC" : "KT. TRƯỞNG PHÒNG"
+  const signerTitle2 = isChiefSigner
+    ? "Trưởng phòng sau đại học"
+    : "Phó trưởng phòng sau đại học"
+
+  useEffect(() => {
+    setSignRole(chiefName ? "chief" : "deputy")
+  }, [id, chiefName])
 
   const courseRows = useMemo(() => {
     const subjects = (data?.curriculumVersion?.trainingBlocks ?? []).flatMap((block) =>
@@ -293,7 +328,7 @@ export const ModalPhuLucThacSi = () => {
     thesisReg?.studentSubjectScore?.subjectVersion?.credit ??
     thesisProject?.subjectClass?.subject?.credit ??
     null
-  const thesisName = isProject ? "Đề án tốt nghiệp" : "Luận văn tốt nghiệp"
+  const thesisName = isApplicationProgram ? "Đề án tốt nghiệp" : "Luận văn tốt nghiệp"
 
   const page1Rows = useMemo(() => {
     const rows = [
@@ -428,7 +463,7 @@ export const ModalPhuLucThacSi = () => {
     },
     {
       title: "Nơi sinh:",
-      value: <span>{data?.userProfile?.placeOfBirth}</span>,
+      value: <span>{formatPlaceOfBirth(data?.userProfile)}</span>,
     },
     {
       title: "Ngày nhập học:",
@@ -477,7 +512,19 @@ export const ModalPhuLucThacSi = () => {
       footer={null}
     >
       <div className="space-y-4">
-        <div className="flex justify-end w-full mb-4">
+        <div className="flex justify-between items-start w-full mb-4 gap-4">
+          <Radio.Group
+            value={signRole}
+            onChange={(e) => setSignRole(e.target.value)}
+            className="flex flex-col gap-1"
+          >
+            <Radio value="chief">
+              Trưởng phòng sau đại học: <strong>{chiefName || "(chưa nhập)"}</strong>
+            </Radio>
+            <Radio value="deputy">
+              Phó trưởng phòng sau đại học: <strong>{deputyName || "(chưa nhập)"}</strong>
+            </Radio>
+          </Radio.Group>
           <Space>
             <Button type="primary" onClick={() => handlePrint()} icon={<Printer />}>
               In phụ lục
@@ -539,8 +586,7 @@ export const ModalPhuLucThacSi = () => {
               </div>
             </div>
             <div className="text-[#656565] text-sm py-2">
-              Đã hoàn thành chương trình đào tạo thạc sĩ theo{" "}
-              {isProject ? "định hướng ứng dụng" : "định hướng nghiên cứu"}
+              Đã hoàn thành chương trình đào tạo thạc sĩ theo {orientationLabel}
             </div>
             <div className="flex justify-between gap-5">
               <div className="flex flex-col gap-2.5 w-[50%]">
@@ -704,8 +750,7 @@ export const ModalPhuLucThacSi = () => {
               </div>
             </div>
             <div className="text-[#656565] text-sm py-2">
-              Đã hoàn thành chương trình đào tạo thạc sĩ theo{" "}
-              {isProject ? "định hướng ứng dụng" : "định hướng nghiên cứu"}
+              Đã hoàn thành chương trình đào tạo thạc sĩ theo {orientationLabel}
             </div>
             <div className="flex justify-between gap-5">
               <div className="flex flex-col gap-2.5 w-[50%]">
@@ -759,7 +804,7 @@ export const ModalPhuLucThacSi = () => {
                   <tr>
                     <td className="border border-black px-1 py-1 text-center" />
                     <td className="border border-black px-1 py-1 font-bold">
-                      {isProject
+                      {isApplicationProgram
                         ? "Đề án tốt nghiệp (với UD)"
                         : "Luận văn tốt nghiệp (Đối với NC)"}
                     </td>
@@ -825,10 +870,13 @@ export const ModalPhuLucThacSi = () => {
                   {/* Bên phải */}
                   <td className="align-top w-1/2 p-2 text-center">
                     <span className="italic">{formattedDate}</span>
-                    <span className="font-bold uppercase flex flex-col w-full">
-                      <span>TL. GIÁM ĐỐC</span>
-                      <span>Trưởng phòng sau đại học</span>
+                    <span className="flex flex-col w-full items-center">
+                      <span className="font-bold uppercase">{signerTitle1}</span>
+                      <span className="font-bold uppercase">{signerTitle2}</span>
                       <div className="h-20" />
+                      {signerDisplayName ? (
+                        <span className="font-bold">{signerDisplayName}</span>
+                      ) : null}
                     </span>
                   </td>
                 </tr>
@@ -1013,7 +1061,7 @@ export const ModalPhuLucThacSi = () => {
                 },
                 {
                   key: "noi-sinh",
-                  content: <>Nơi sinh: {data?.userProfile?.placeOfBirth}</>,
+                  content: <>Nơi sinh: {formatPlaceOfBirth(data?.userProfile)}</>,
                 },
               ]}
             />

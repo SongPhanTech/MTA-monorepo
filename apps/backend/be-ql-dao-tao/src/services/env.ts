@@ -18,10 +18,4 @@ export const env = {
   get LMS_SECRET_KEY() {
     return getEnv("LMS_SECRET_KEY")
   },
-  get HRM_CLIENT_ID() {
-    return getEnv("HRM_CLIENT_ID")
-  },
-  get HRM_CLIENT_SECRET() {
-    return getEnv("HRM_CLIENT_SECRET")
-  },
 }

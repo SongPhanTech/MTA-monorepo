@@ -3,7 +3,6 @@ import logo_mta from "@assets/images/hoso.svg"
 import HeaderApp from "@components/header"
 import SiderHoSo from "@components/layouts/sider"
 import {
-  QL_HO_SO_APP_CODE,
   QL_HO_SO_CONTENT_VERTICAL_OFFSET,
   QL_HO_SO_DEFAULT_SCHOOL_NAME,
   QL_HO_SO_HEADER_HEIGHT,
@@ -17,7 +16,6 @@ import { cn } from "@lib/utils"
 import { CONFIG_KEY } from "@workspace/constant"
 import { useFindUniqueConfig } from "@workspace/db/hooks"
 import { useGetUnitInfosInfo } from "@workspace/libs/api/system"
-import { getVersion } from "@workspace/libs/api/training"
 import { getDynamicBreadcrumb } from "@workspace/permissions/hooks"
 import { Breadcrumb, Button, Layout } from "antd"
 import { Menu as MenuIcon } from "lucide-react"
@@ -26,19 +24,13 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { type ReactNode, useEffect, useMemo, useState } from "react"
 import { IdleTimerProvider } from "react-idle-timer"
+import packageInfo from "../../../package.json"
 
 const { Header, Content, Footer } = Layout
 
 interface BreadcrumbListProps {
   title: string
   href?: string
-}
-
-type Version = {
-  Id: string
-  sTenVersion: string
-  sDescription: string
-  dNgayPhatHanh: string
 }
 
 const readSidebarCollapsed = () =>
@@ -91,7 +83,6 @@ const HoSoShell = ({
   )
 
   const [collapsed, setCollapsed] = useState(readSidebarCollapsed)
-  const [version, setVersion] = useState<string>()
 
   const handleCollapsed = (value?: boolean) => {
     if (typeof window === "undefined") return
@@ -102,17 +93,6 @@ const HoSoShell = ({
 
   useEffect(() => {
     setCollapsed(readSidebarCollapsed())
-  }, [])
-
-  useEffect(() => {
-    const fetchVersion = async () => {
-      const res = await getVersion(QL_HO_SO_APP_CODE)
-      if (res.status === 200) {
-        const versionData = res.data as unknown as Version[]
-        setVersion(versionData?.[0]?.sTenVersion)
-      }
-    }
-    fetchVersion()
   }, [])
 
   const { data: userSessionTimeout } = useFindUniqueConfig({
@@ -198,7 +178,7 @@ const HoSoShell = ({
                   {unitInfo?.sTenDayDu || QL_HO_SO_DEFAULT_SCHOOL_NAME} - Địa chỉ:{" "}
                   {unitInfo?.sDiaChi || "Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà Nội"}
                 </div>
-                <div className="ml-auto">Phiên bản: {version ?? "..."}</div>
+                <div className="ml-auto">Phiên bản: {packageInfo.version}</div>
               </Footer>
             ) : null}
           </Layout>
