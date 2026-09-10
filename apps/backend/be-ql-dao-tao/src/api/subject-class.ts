@@ -22,6 +22,7 @@ import {
   FailureBooleanResponseSchema,
   SuccessMessageResponseSchema,
 } from "../dto/common-response.dto"
+import { deleteSubjectClassCascade } from "../services/delete-subject-class"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -1556,5 +1557,79 @@ function addStudentPageBreaks(
     worksheet.getRow(rowNumber).addPageBreak()
   }
 }
+
+const deleteSubjectClassCascadeRoute = createRoute({
+  operationId: "deleteSubjectClassCascade",
+  path: "/{id}/cascade",
+  method: "delete",
+  summary: "Xóa lớp môn học và toàn bộ dữ liệu liên quan",
+  description: `Xóa cứng SubjectClass kèm: StudentSubjectScore, ClassSchedule, SubjectClassTime,
+SubjectClassHistory, ExamBank, SubjectClassAttendance, Survey, ClassRegisterLogs, ScoreLinkSubjectVersion.`,
+  tags: ["Lớp học phần"],
+  request: {
+    params: z.object({
+      id: z.string().openapi(fieldDesc("ID lớp môn học.")),
+    }),
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Đã xóa thành công",
+      content: {
+        "application/json": {
+          schema: z.object({
+            success: z.boolean(),
+            message: z.string(),
+            data: z
+              .object({
+                id: z.string(),
+                code: z.string(),
+                name: z.string(),
+              })
+              .optional(),
+          }),
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy lớp môn học",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+    500: {
+      description: "Lỗi khi xóa",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(deleteSubjectClassCascadeRoute, async (c) => {
+  const { id } = c.req.valid("param")
+  try {
+    const data = await deleteSubjectClassCascade(id)
+    return c.json(
+      {
+        success: true,
+        message: `Đã xóa lớp môn học ${data.code} và toàn bộ dữ liệu liên quan`,
+        data,
+      },
+      200
+    )
+  } catch (error: any) {
+    const message = error?.message || "Xóa lớp môn học thất bại"
+    if (String(message).includes("không tồn tại")) {
+      return c.json({ message }, 404)
+    }
+    console.error("[subject-class] cascade delete failed", message, error)
+    return c.json({ message: String(message) }, 500)
+  }
+})
 
 export default app

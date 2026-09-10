@@ -20,7 +20,6 @@ import {
 } from "@workspace/db/client"
 import {
   useCountDM_DonVi,
-  useDeleteSubjectClass,
   useFindManyDM_DonVi,
   useFindManyClassSchedule,
   useUpdateClassSchedule,
@@ -29,6 +28,7 @@ import {
 import { whereOrganization } from "@workspace/libs/constants"
 import { ExportThoiKhoaBieuRequestType } from "@workspace/libs/api/schemas"
 import { useExportThoiKhoaBieu } from "@workspace/libs/api/training"
+import { useDeleteSubjectClassCascade } from "@workspace/libs/api/training-delete-subject-class"
 import { useSyncExamDates } from "@workspace/libs/api/training-sync-exam-dates"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
@@ -42,6 +42,7 @@ import {
 import {
   Affix,
   Button,
+  Checkbox,
   Col,
   Divider,
   Flex,
@@ -458,22 +459,38 @@ export default function ThoiKhoaBieu({
     tag: "ModalChiTietGiangVien",
   })
 
-  const { mutateAsync: deleteSubjectClass } = useDeleteSubjectClass()
+  const { mutateAsync: deleteSubjectClassCascade } = useDeleteSubjectClassCascade()
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: string
+    code?: string
+    name?: string
+  } | null>(null)
+  const [deleteUnderstood, setDeleteUnderstood] = useState(false)
 
-  async function handleDelete(id: string) {
+  async function handleDeleteConfirm() {
+    if (!deleteTarget?.id || !deleteUnderstood) {
+      throw new Error("Chưa xác nhận")
+    }
     try {
       showSpinner()
-      await deleteSubjectClass({
-        where: {
-          id,
-        },
-      })
-    } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message)
+      const res = await deleteSubjectClassCascade(deleteTarget.id)
+      if (res.status === 200) {
+        message.success(res.data.message || "Xóa lớp môn học thành công")
+        setDeleteTarget(null)
+        setDeleteUnderstood(false)
+        await refetch()
         return
       }
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      message.error(res.data?.message || "Xóa lớp môn học thất bại")
+      throw new Error(res.data?.message || "Xóa thất bại")
+    } catch (error: any) {
+      if (error?.message === "Chưa xác nhận") throw error
+      if (error?.info?.message) {
+        message.error(error.info.message)
+      } else if (!error?.message?.includes("Xóa thất bại")) {
+        message.error(error?.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      }
+      throw error
     } finally {
       hideSpinner()
     }
@@ -946,10 +963,14 @@ export default function ThoiKhoaBieu({
                                   )}
                                 {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC, "XOA") && (
                                   <DeleteIcon
-                                    popConfirm={{
-                                      onConfirm: () => handleDelete(id),
+                                    onClick={() => {
+                                      setDeleteUnderstood(false)
+                                      setDeleteTarget({
+                                        id,
+                                        code: record?.code,
+                                        name: record?.name,
+                                      })
                                     }}
-                                    disabled={record?.status !== $Enums.SubjectClassStatus.DRAFT}
                                   />
                                 )}
                               </Row>
@@ -981,6 +1002,34 @@ export default function ThoiKhoaBieu({
           </Form>
         </Col>
       </Row>
+      <Modal
+        title="Xác nhận xóa lớp môn học"
+        open={!!deleteTarget}
+        okText="Xóa vĩnh viễn"
+        cancelText="Hủy"
+        okButtonProps={{ danger: true, disabled: !deleteUnderstood }}
+        onCancel={() => {
+          setDeleteTarget(null)
+          setDeleteUnderstood(false)
+        }}
+        onOk={handleDeleteConfirm}
+        destroyOnClose
+      >
+        <div className="space-y-3">
+          <p className="mb-0 text-red-600">
+            Nếu xóa lớp môn học
+            {deleteTarget?.code ? ` "${deleteTarget.code}"` : ""} sẽ xóa toàn bộ dữ liệu liên quan
+            (danh sách sinh viên, thời khoá biểu, lịch sử lớp, đề thi, điểm danh, khảo sát, tiết học,
+            nhật ký đăng ký, điểm liên kết…) và <strong>không thể hoàn tác</strong>.
+          </p>
+          <Checkbox
+            checked={deleteUnderstood}
+            onChange={(e) => setDeleteUnderstood(e.target.checked)}
+          >
+            Tôi đã hiểu rõ
+          </Checkbox>
+        </div>
+      </Modal>
       <style>
         {`
                 .readonly-checkbox.ant-checkbox-wrapper-disabled {

@@ -30,6 +30,14 @@ const DeleteIcon = ({ title, popConfirm, disabled = false, ...props }: DeleteIco
     )
   }
 
+  if (!popConfirm) {
+    return (
+      <Tooltip title={title ?? "Xóa"} placement="top">
+        {icon}
+      </Tooltip>
+    )
+  }
+
   return (
     <Tooltip title={title ?? "Xóa"} placement="top">
       <Popconfirm
