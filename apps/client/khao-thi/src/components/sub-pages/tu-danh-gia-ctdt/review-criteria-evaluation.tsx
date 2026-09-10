@@ -6,7 +6,7 @@ import type { DataReviewCriteriaEvaluationType } from "@pages/ql-tu-danh-gia-ctd
 import { useSession } from "@workspace/auth/react"
 import { $Enums, type CriterionPeriod, type EvaluationCriterion } from "@workspace/db/client"
 import { sqlTransaction } from "@workspace/libs/api/model"
-import { Badge, Button, Card, Collapse, Form, message, Tag } from "antd"
+import { Badge, Button, Card, Collapse, Form, message, Popconfirm, Tag } from "antd"
 import dayjs from "dayjs"
 import { useEffect, useState } from "react"
 import { getDeadlineStatus } from "@/utils/getDeadlineStatus"
@@ -87,38 +87,61 @@ const ReviewCriteriaEvaluationSubpage = ({
     }
   }
 
+  const handleApproveSingle = async (evaluationCriterionId: string) => {
+    try {
+      showSpinner()
+      const res = await sqlTransaction([
+        {
+          model: "EvaluationCriterion",
+          operation: "update",
+          data: {
+            where: { id: evaluationCriterionId },
+            data: { status: $Enums.EvaluationStatus.APPROVED },
+          },
+        },
+      ])
+      if (res.status !== 200) {
+        message.error("Có lỗi xảy ra, vui lòng thử lại")
+        return
+      }
+      message.success("Thư ký phê duyệt tiêu chí thành công, đã chuyển Ban tư vấn duyệt")
+      onRefetch()
+    } catch {
+      message.error("Có lỗi xảy ra, vui lòng thử lại")
+    } finally {
+      hideSpinner()
+    }
+  }
+
   const handleSubmitCross = async () => {
     try {
       showSpinner()
-      const dataSubmit = form.getFieldsValue()
+      const approvableItems =
+        data.criteria.filter(
+          (i: any) =>
+            i.evaluationCriterion?.status === $Enums.EvaluationStatus.SUBMITTED
+        ) || []
 
-      let listSqlTransaction: any[] = []
-
-      if (dataSubmit.criteria && dataSubmit.criteria.length > 0) {
-        listSqlTransaction = [
-          ...dataSubmit.criteria.map(
-            (
-              i: CriterionPeriod & {
-                evaluationCriterion: EvaluationCriterion
-              }
-            ) => {
-              return {
-                model: "EvaluationCriterion",
-                operation: "update",
-                data: {
-                  where: {
-                    id: i.evaluationCriterion.id,
-                    criterionPeriodId: i.evaluationCriterion.criterionPeriodId,
-                  },
-                  data: {
-                    status: $Enums.EvaluationStatus.APPROVED,
-                  },
-                },
-              }
-            }
-          ),
-        ]
+      if (approvableItems.length === 0) {
+        message.warning("Không có tiêu chí nào ở trạng thái chờ Thư ký phê duyệt")
+        return
       }
+
+      const listSqlTransaction: any[] = approvableItems.map((i: any) => {
+        return {
+          model: "EvaluationCriterion",
+          operation: "update",
+          data: {
+            where: {
+              id: i.evaluationCriterion.id,
+              criterionPeriodId: i.evaluationCriterion.criterionPeriodId,
+            },
+            data: {
+              status: $Enums.EvaluationStatus.APPROVED,
+            },
+          },
+        }
+      })
 
       const res = await sqlTransaction(listSqlTransaction)
 
@@ -127,7 +150,7 @@ const ReviewCriteriaEvaluationSubpage = ({
         return
       }
 
-      message.success("Phê duyệt tất cả tiêu chí thành công")
+      message.success("Phê duyệt tất cả tiêu chí thành công, đã chuyển Ban tư vấn duyệt")
       onRefetch()
     } catch (error) {
       message.error("Có lỗi xảy ra, vui lòng thử lại")
@@ -158,9 +181,7 @@ const ReviewCriteriaEvaluationSubpage = ({
   const hasApprovableItems = data.criteria.some(
     (c) =>
       c.evaluationCriterion &&
-      c.evaluationCriterion.status !== $Enums.EvaluationStatus.PENDING &&
-      c.evaluationCriterion.status !== $Enums.EvaluationStatus.COMPLETED &&
-      c.evaluationCriterion.status !== $Enums.EvaluationStatus.APPROVED
+      c.evaluationCriterion.status === $Enums.EvaluationStatus.SUBMITTED
   )
 
   return (
@@ -250,6 +271,32 @@ const ReviewCriteriaEvaluationSubpage = ({
                                         </Button>
                                       </Badge>
                                     )}
+
+                                  {criterionStatus === $Enums.EvaluationStatus.SUBMITTED && (
+                                    <Popconfirm
+                                      placement="topLeft"
+                                      title="Xác nhận Thư ký phê duyệt tiêu chí này và chuyển Ban tư vấn duyệt?"
+                                      okText="Đồng ý"
+                                      cancelText="Hủy"
+                                      onConfirm={(e) => {
+                                        e?.stopPropagation()
+                                        handleApproveSingle(
+                                          item.evaluationCriterion?.id as string
+                                        )
+                                      }}
+                                      onCancel={(e) => {
+                                        e?.stopPropagation()
+                                      }}
+                                    >
+                                      <Button
+                                        type="primary"
+                                        size="small"
+                                        className="bg-blue-600 hover:bg-blue-700 text-white border-none"
+                                      >
+                                        Phê duyệt tiêu chí
+                                      </Button>
+                                    </Popconfirm>
+                                  )}
                                 </div>
                                 <div className="flex gap-3 items-center mt-1 flex-wrap">
                                   <span className="text-xs text-gray-500">
