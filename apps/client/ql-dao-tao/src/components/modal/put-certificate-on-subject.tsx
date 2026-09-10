@@ -3,7 +3,6 @@ import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import Select from "@components/commons/select"
 import useSpinner from "@hooks/spinner"
-import type { Subject } from "@workspace/db"
 import type { CertificateOnSubject } from "@workspace/db/client"
 import {
   useCreateCertificateOnSubject,
@@ -81,6 +80,12 @@ const PutCertificateOnSubjectScoreModal = () => {
         some: { trainingObjectTypeId },
       },
     },
+    include: {
+      subjectVersion: {
+        where: { trainingObjectTypeId },
+        select: { code: true, credit: true },
+      },
+    },
   })
   const { data: level } = useFindUniqueCertificateOnSubject(
     {
@@ -136,10 +141,18 @@ const PutCertificateOnSubjectScoreModal = () => {
             mode="multiple"
             style={{ width: "100%" }}
             placeholder="Chọn môn học"
-            options={subjectData.map((item: Subject) => ({
-              label: [item.code, item.name].filter(Boolean).join(" - "),
-              value: item.id,
-            }))}
+            options={subjectData.map((item) => {
+              const version = item.subjectVersion?.[0]
+              const code = item.code || version?.code
+              const credit = version?.credit
+              const extras = [code, credit != null ? `${credit} TC` : null]
+                .filter(Boolean)
+                .join(" - ")
+              return {
+                label: extras ? `${item.name} (${extras})` : item.name,
+                value: item.id,
+              }
+            })}
           />
         </FormItem>
       </Col>
