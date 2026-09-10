@@ -1,6 +1,7 @@
+import { useState } from "react"
 import { calcEvidenceTags as calcEvidenceTagsApi } from "@workspace/libs/api/exam"
 import { sqlTransaction } from "@workspace/libs/api/model"
-import { Button, message, Tooltip } from "antd"
+import { Button, Input, message, Modal, Tooltip } from "antd"
 import {
   AlignmentType,
   BorderStyle,
@@ -27,6 +28,9 @@ export default function ExportReport({
   id: string
   variant?: "icon" | "button"
 }) {
+  const [isOpen, setIsOpen] = useState(false)
+  const [prefix, setPrefix] = useState<string>("PM")
+  const [isExporting, setIsExporting] = useState(false)
   const role = {
     CHAIRMAN: "Chủ tịch hội đồng",
     VICE_PRESIDENT: "Phó chủ tịch hội đồng",
@@ -179,7 +183,7 @@ export default function ExportReport({
 
     return [title, new Paragraph(""), table]
   }
-  const exportDanhSachMinhchung = (dataTable: any) => {
+  const exportDanhSachMinhchung = (dataTable: any, prefixStr: string = "PM") => {
     const title = new Paragraph({
       alignment: AlignmentType.CENTER,
       heading: HeadingLevel.HEADING_1,
@@ -230,7 +234,7 @@ export default function ExportReport({
           children: [
             new TableCell({ children: [new Paragraph(`${index + 1}`)] }),
             new TableCell({
-              children: [new Paragraph(`PM.${item?.tag || ""}`)],
+              children: [new Paragraph(`${prefixStr}.${item?.tag || ""}`)],
             }),
             new TableCell({
               children: [new Paragraph(`${item?.evidence?.name || ""}`)],
@@ -801,8 +805,9 @@ export default function ExportReport({
     ]
   }
 
-  const exportToWord = async () => {
+  const exportToWord = async (selectedPrefix: string = "PM") => {
     try {
+      setIsExporting(true)
       const res = await sqlTransaction([
         {
           model: "EvaluationPeriod",
@@ -867,7 +872,15 @@ export default function ExportReport({
           message.error("Không thể tính tag minh chứng")
           return
         }
-        const evidenceTags = new Map<string, string>(Object.entries(calcRes.data.evidenceTags))
+        const prefixStr = (selectedPrefix || "PM").trim()
+        const evidenceTags = new Map<string, string>(
+          Object.entries(calcRes.data.evidenceTags).map(([k, v]) => [
+            k,
+            typeof v === "string"
+              ? v.replace(/^\[(?:PM|MC|[A-Za-z0-9_-]+)\./i, `[${prefixStr}.`)
+              : v,
+          ])
+        )
         const result = calcRes.data.result
 
         // ==== Phần Ⅰ. KHÁI QUÁT ====
@@ -1470,38 +1483,105 @@ export default function ExportReport({
               children: appendixChildren,
             },
             {
-              children: exportDanhSachMinhchung(result),
+              children: exportDanhSachMinhchung(result, prefixStr),
             },
           ],
         })
 
         const blob = await Packer.toBlob(doc)
         saveAs(blob, `bao_cao_dot_danh_gia_${data?.name}.docx`)
+        setIsOpen(false)
       }
     } catch (error) {
       message.error("Không thể tải file mẫu")
       console.error("Lỗi tải file:", error)
+    } finally {
+      setIsExporting(false)
     }
   }
+
+  const renderModal = () => (
+    <Modal
+      title="Xuất báo cáo tự đánh giá"
+      open={isOpen}
+      onCancel={() => {
+        if (!isExporting) setIsOpen(false)
+      }}
+      footer={
+        <div className="flex items-center justify-end gap-2">
+          <Button onClick={() => setIsOpen(false)} disabled={isExporting}>
+            Hủy
+          </Button>
+          <Button
+            type="primary"
+            loading={isExporting}
+            icon={<FileDown size={14} />}
+            onClick={() => {
+              const trimmed = prefix.trim()
+              if (!trimmed) {
+                message.warning("Vui lòng nhập tiền tố minh chứng")
+                return
+              }
+              exportToWord(trimmed)
+            }}
+            className="flex items-center justify-center"
+          >
+            Xuất báo cáo
+          </Button>
+        </div>
+      }
+      centered
+      destroyOnClose
+      width={400}
+    >
+      <div className="py-2">
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+          Tiền tố minh chứng:
+        </label>
+        <Input
+          value={prefix}
+          onChange={(e) => setPrefix(e.target.value)}
+          placeholder="Nhập tiền tố (vd: PM, MC)"
+          allowClear
+          className="w-full"
+          onPressEnter={() => {
+            const trimmed = prefix.trim()
+            if (!trimmed) {
+              message.warning("Vui lòng nhập tiền tố minh chứng")
+              return
+            }
+            exportToWord(trimmed)
+          }}
+        />
+      </div>
+    </Modal>
+  )
+
   if (variant === "button") {
     return (
-      <Button
-        onClick={exportToWord}
-        icon={<FileDown size={14} style={{ display: "inline-flex" }} />}
-      >
-        Xuất báo cáo
-      </Button>
+      <>
+        <Button
+          onClick={() => setIsOpen(true)}
+          icon={<FileDown size={14} style={{ display: "inline-flex" }} />}
+        >
+          Xuất báo cáo
+        </Button>
+        {renderModal()}
+      </>
     )
   }
 
   return (
-    <Tooltip title="Xuất báo cáo" placement="top">
-      <FileDown
-        size={17}
-        strokeWidth={1.5}
-        className="text-base text-green-600"
-        onClick={() => exportToWord()}
-      />
-    </Tooltip>
+    <>
+      <Tooltip title="Xuất báo cáo" placement="top">
+        <FileDown
+          size={17}
+          strokeWidth={1.5}
+          className="text-base text-green-600 cursor-pointer"
+          onClick={() => setIsOpen(true)}
+        />
+      </Tooltip>
+      {renderModal()}
+    </>
   )
 }
