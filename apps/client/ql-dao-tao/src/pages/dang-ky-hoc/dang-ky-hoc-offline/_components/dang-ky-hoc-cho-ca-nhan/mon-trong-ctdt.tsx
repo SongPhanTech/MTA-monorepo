@@ -273,6 +273,7 @@ export default function MonTrongCTDT() {
               subjectClass: {
                 semesterId,
                 trainingObjectTypeId,
+                type: $Enums.SubjectClassType.NORMAL,
               },
             },
           },

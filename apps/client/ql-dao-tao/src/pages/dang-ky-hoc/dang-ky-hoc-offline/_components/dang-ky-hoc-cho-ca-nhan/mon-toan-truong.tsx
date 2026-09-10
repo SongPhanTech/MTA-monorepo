@@ -250,6 +250,7 @@ export default function MonToanTruong() {
               subjectClass: {
                 semesterId,
                 trainingObjectTypeId,
+                type: $Enums.SubjectClassType.NORMAL,
               },
             },
           },

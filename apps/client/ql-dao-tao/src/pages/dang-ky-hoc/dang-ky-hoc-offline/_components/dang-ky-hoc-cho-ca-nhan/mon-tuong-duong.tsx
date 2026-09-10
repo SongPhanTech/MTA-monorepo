@@ -254,6 +254,7 @@ export default function MonTuongDuong() {
               subjectClass: {
                 semesterId,
                 trainingObjectTypeId,
+                type: $Enums.SubjectClassType.NORMAL,
               },
             },
           },

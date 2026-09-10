@@ -15,7 +15,7 @@ import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Checkbox, Col, Form, Input, message, Row, Select } from "antd"
 import _ from "lodash"
 import { Search } from "lucide-react"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { dangKyHocLaiStore } from "../.."
 
 interface FilterProps {
@@ -35,11 +35,19 @@ export default function CaNhanHocLai() {
   })
 
   const { subjectClassId, studentIds = [] } = useStore(dangKyHocLaiStore)
+  const initedSubjectClassIdRef = useRef<string | undefined>()
+  const selectedRecordsRef = useRef(new Map<string, any>())
+  const lastSubjectClassIdRef = useRef(subjectClassId)
+  if (lastSubjectClassIdRef.current !== subjectClassId) {
+    lastSubjectClassIdRef.current = subjectClassId
+    selectedRecordsRef.current.clear()
+  }
 
   const { data: subjectClassData } = useFindUniqueSubjectClass(
     {
       where: { id: subjectClassId },
       select: {
+        id: true,
         subjectId: true,
         subjectClassStudent: {
           where: { deletedAt: null },
@@ -132,7 +140,7 @@ export default function CaNhanHocLai() {
 
   const handleSaveStudentClass = async () => {
     try {
-      if (!subjectClassData) return
+      if (!subjectClassId || !subjectClassData || subjectClassData.id !== subjectClassId) return
 
       // Lấy danh sách students hiện có trong database
       const existingStudents = subjectClassData.subjectClassStudent.map((s) => ({
@@ -208,14 +216,33 @@ export default function CaNhanHocLai() {
     }
   }
 
-  const data = useMemo(
-    () => (res?.status === 200 ? [...res.data.data, ...studentList] : [...studentList]),
-    [res, studentList]
-  )
-  const countData = useMemo(
-    () => (res?.status === 200 ? res.data.data.length + studentList.length : 0),
-    [res, studentList]
-  )
+  const data = useMemo(() => {
+    const eligible = res?.status === 200 ? res.data.data : []
+    const byId = new Map<string, any>()
+    for (const student of studentList) {
+      byId.set(student.id, student)
+    }
+    for (const student of eligible) {
+      const existing = byId.get(student.id)
+      byId.set(student.id, existing ? { ...existing, ...student } : student)
+    }
+    for (const student of byId.values()) {
+      selectedRecordsRef.current.set(student.id, student)
+    }
+    for (const id of studentIds) {
+      if (!byId.has(id)) {
+        const cached = selectedRecordsRef.current.get(id)
+        if (cached) byId.set(id, cached)
+      }
+    }
+    return Array.from(byId.values())
+  }, [res, studentList, studentIds])
+  const countData = useMemo(() => {
+    if (res?.status !== 200) return studentList.length
+    const eligibleIds = new Set(res.data.data.map((student) => student.id))
+    const extraEnrolled = studentList.filter((student) => !eligibleIds.has(student.id)).length
+    return res.data.data.length + extraEnrolled
+  }, [res, studentList])
 
   const debouncedRefetch = useCallback(
     _.debounce(() => {
@@ -225,15 +252,26 @@ export default function CaNhanHocLai() {
   )
 
   useEffect(() => {
-    if (subjectClassData) {
+    if (!subjectClassId) {
+      initedSubjectClassIdRef.current = undefined
       dangKyHocLaiStore.setState((prev) => ({
         ...prev,
-        studentIds: subjectClassData.subjectClassStudent.map((s) => s.studentId),
+        studentIds: [],
       }))
+      return
     }
-  }, [subjectClassData])
+    if (!subjectClassData || subjectClassData.id !== subjectClassId) return
+    if (initedSubjectClassIdRef.current === subjectClassId) return
+    initedSubjectClassIdRef.current = subjectClassId
+    setCurrentPage(1)
+    dangKyHocLaiStore.setState((prev) => ({
+      ...prev,
+      studentIds: subjectClassData.subjectClassStudent.map((s) => s.studentId),
+    }))
+  }, [subjectClassId, subjectClassData])
 
   const handleFilterChange = (key: string, value: string) => {
+    setCurrentPage(1)
     setFilters((prev) => {
       const newFilters = { ...prev, [key]: value }
       debouncedRefetch()
@@ -241,11 +279,26 @@ export default function CaNhanHocLai() {
     })
   }
 
-  const handleRowSelection = (ids: string[]) => {
-    dangKyHocLaiStore.setState((prev) => ({
-      ...prev,
-      studentIds: ids,
-    }))
+  const handleSelectStudent = (studentId: string, selected: boolean) => {
+    dangKyHocLaiStore.setState((prev) => {
+      const current = prev.studentIds ?? []
+      if (selected) {
+        if (current.includes(studentId)) return prev
+        return { ...prev, studentIds: [...current, studentId] }
+      }
+      return { ...prev, studentIds: current.filter((id) => id !== studentId) }
+    })
+  }
+
+  const handleSelectStudents = (ids: string[], selected: boolean) => {
+    dangKyHocLaiStore.setState((prev) => {
+      const current = prev.studentIds ?? []
+      if (selected) {
+        return { ...prev, studentIds: [...new Set([...current, ...ids])] }
+      }
+      const removing = new Set(ids)
+      return { ...prev, studentIds: current.filter((id) => !removing.has(id)) }
+    })
   }
 
   return (
@@ -315,21 +368,25 @@ export default function CaNhanHocLai() {
           className="mt-0"
           data={data}
           onRow={(record) => ({
-            onClick: () => {
-              const isSelected = studentIds.includes(record.id)
-              if (isSelected) {
-                handleRowSelection(studentIds.filter((key) => key !== record.id))
-              } else {
-                handleRowSelection([...studentIds, record.id])
-              }
+            onClick: (event) => {
+              const target = event.target as HTMLElement
+              if (target.closest(".ant-checkbox-wrapper, .ant-checkbox")) return
+              handleSelectStudent(record.id, !studentIds.includes(record.id))
             },
             style: { cursor: "pointer" },
             columnWidth: 35,
           })}
           rowSelection={{
             selectedRowKeys: studentIds,
-            onChange: (selectedRowKeys) => {
-              handleRowSelection(selectedRowKeys as string[])
+            preserveSelectedRowKeys: true,
+            onSelect: (record, selected) => {
+              handleSelectStudent(record.id, selected)
+            },
+            onSelectAll: (selected, _selectedRows, changeRows) => {
+              handleSelectStudents(
+                changeRows.map((row) => row.id),
+                selected
+              )
             },
             type: "checkbox",
             columnWidth: 35,

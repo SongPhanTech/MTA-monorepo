@@ -2083,7 +2083,11 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
             include: {
               curriculum: {
                 include: {
-                  trainingMajor: true,
+                  trainingMajor: {
+                    include: {
+                      trainingField: true,
+                    },
+                  },
                 },
               },
             },
@@ -2101,31 +2105,29 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
 
   const payload = students.map((student) => {
     const user = student.userProfile
-    const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+    const field = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField
     const gD = student.graduationDecision
 
     const dobParts = getReportDateParts(user?.dateOfBirth)
     const graduationDateParts =
       getReportDateParts(gD?.decisionDate) || getReportDateParts(new Date())
 
-    const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ"
-    const prefixVi = isFemale ? "Bà" : "Ông"
-    const prefixEn = isFemale ? "Ms" : "Mr"
+    const fullnameVi = user?.fullname?.toUpperCase() || ""
+    const fullnameEn =
+      user?.fullname
+        ?.toUpperCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/Đ/g, "D") || ""
 
     return {
       data: {
-        ho_ten_vi: `${prefixVi} ${user?.fullname?.toUpperCase() || ""}`,
-        ho_ten_en: `${prefixEn} ${
-          user?.fullname
-            ?.toUpperCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/Đ/g, "D") || ""
-        }`,
+        ho_ten_vi: fullnameVi,
+        ho_ten_en: fullnameEn,
         ngay_sinh_vi: dobParts?.day ? `${dobParts.day}/${dobParts.monthVi}/${dobParts.year}` : "",
         ngay_sinh_en: dobParts?.day ? `${dobParts.day} ${dobParts.monthEn} ${dobParts.year}` : "",
-        nganh_hoc_vi: major?.name || "",
-        nganh_hoc_en: (major as any)?.englishName || "",
+        nganh_hoc_vi: field?.name || "",
+        nganh_hoc_en: field?.englishName || "",
         ngay_tn: graduationDateParts?.day || "",
         thang_tn: graduationDateParts?.monthVi || "",
         nam_tn: graduationDateParts?.year || "",
