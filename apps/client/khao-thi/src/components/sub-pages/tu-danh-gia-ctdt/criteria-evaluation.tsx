@@ -120,10 +120,18 @@ const CriteriaEvaluationSubPage = ({
   }
 
   // Nộp phiếu đánh giá tiêu chí — tự động lưu nội dung trước khi đổi trạng thái
-  const handleCriterionSubmit = async (criterionId: string, fieldIndex: number) => {
+  const handleCriterionSubmit = async (
+    criterionId: string,
+    fieldIndex: number,
+    rawDescription?: string | null
+  ) => {
     const allCriteria = form.getFieldValue("criteria")
     const criterionData = allCriteria?.[fieldIndex]?.evaluationCriterion
-    const rejectedBy = getRejectedBy(criterionData?.description)
+    const desc =
+      rawDescription ??
+      data?.criteria?.[fieldIndex]?.evaluationCriterion?.description ??
+      criterionData?.description
+    const rejectedBy = getRejectedBy(desc)
     const isAdvisoryRejected = rejectedBy === "ADVISORY_BOARD"
     const targetStatus = isAdvisoryRejected
       ? $Enums.EvaluationStatus.APPROVED
@@ -187,6 +195,7 @@ const CriteriaEvaluationSubPage = ({
             weakness: item.evaluationCriterion?.weakness || "",
             actionPlan: item.evaluationCriterion?.actionPlan || "",
             score: item.evaluationCriterion?.score || "",
+            description: item.evaluationCriterion?.description || "",
           },
         })),
       })
@@ -350,7 +359,8 @@ const CriteriaEvaluationSubPage = ({
                                           onClick={() =>
                                             handleCriterionSubmit(
                                               item.evaluationCriterion?.id ?? "",
-                                              name
+                                              name,
+                                              item.evaluationCriterion?.description
                                             )
                                           }
                                         >
