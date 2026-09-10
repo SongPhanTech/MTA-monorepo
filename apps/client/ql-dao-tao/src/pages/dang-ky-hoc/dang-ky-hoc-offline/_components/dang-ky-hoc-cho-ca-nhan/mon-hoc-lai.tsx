@@ -8,6 +8,7 @@ import {
   useFindManySubjectClass,
   useFindUniqueStudent,
 } from "@workspace/db/hooks"
+import { diffArrays } from "@workspace/libs"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
@@ -17,11 +18,17 @@ import { Button, Checkbox, Col, Form, Input, message, Row } from "antd"
 import _ from "lodash"
 import { Search } from "lucide-react"
 import type React from "react"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { dangKyHocChoCaNhanStore } from "../.."
 
 interface FilterProps {
   searchText: string | null
+}
+
+function mergePageSelection(previousIds: React.Key[], pageIds: React.Key[], selectedOnPage: React.Key[]) {
+  const pageIdSet = new Set(pageIds.map(String))
+  const preserved = previousIds.filter((id) => !pageIdSet.has(String(id)))
+  return [...new Set([...preserved, ...selectedOnPage].map(String))]
 }
 
 export default function MonHocLai() {
@@ -30,10 +37,13 @@ export default function MonHocLai() {
   const [numberOfPages, setNumberOfPages] = useState(20)
   const [selectedSubjectClassRowKeys, setSelectedSubjectClassRowKeys] = useState<React.Key[]>([])
   const [subjectVersionIds, setSubjectVersionIds] = useState<string[]>([])
+  const [selectionReady, setSelectionReady] = useState(false)
   const [filters, setFilters] = useState<FilterProps>({
     searchText: "",
   })
   const { studentId } = useStore(dangKyHocChoCaNhanStore)
+  const prevStudentIdRef = useRef<string | undefined>()
+  const subjectIdByClassIdRef = useRef<Record<string, string>>({})
 
   const { data: student } = useFindUniqueStudent(
     {
@@ -60,6 +70,32 @@ export default function MonHocLai() {
 
   const { id: semesterId } = useSemesterStore()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+  const { data: enrolledRetakeClasses, isLoading: enrolledLoading } = useFindManySubjectClass(
+    {
+      where: {
+        semesterId,
+        trainingObjectTypeId,
+        cancelled: false,
+        active: true,
+        type: $Enums.SubjectClassType.RETAKE,
+        status: "OFFICIAL",
+        subjectClassStudent: {
+          some: {
+            studentId: studentId as string,
+            deletedAt: null,
+          },
+        },
+      },
+      select: {
+        id: true,
+        subjectId: true,
+      },
+    },
+    {
+      enabled: !!studentId && !!semesterId,
+    }
+  )
 
   const { data: subjectClassData = [], refetch } = useFindManySubjectClass(
     {
@@ -186,37 +222,76 @@ export default function MonHocLai() {
     })
   }
 
+  if (enrolledRetakeClasses) {
+    for (const item of enrolledRetakeClasses) {
+      subjectIdByClassIdRef.current[item.id] = item.subjectId
+    }
+  }
+  for (const item of subjectClassData) {
+    subjectIdByClassIdRef.current[item.id] = item.subject.id
+  }
+
+  const applySubjectClassSelection = (nextKeys: React.Key[]) => {
+    setSelectedSubjectClassRowKeys(nextKeys)
+    setSubjectVersionIds(
+      nextKeys
+        .map((key) => subjectIdByClassIdRef.current[String(key)])
+        .filter((id): id is string => Boolean(id))
+    )
+  }
+
   const handleSaveStudentClass = async () => {
-    if (!studentId) return
+    if (!studentId || !selectionReady) return
     try {
-      const allSubjectClassInfo = await sqlTransaction(
-        selectedSubjectClassRowKeys.map((subjectClassId) => ({
-          model: "SubjectClass",
-          operation: "findUnique",
+      const enrolledIds = (enrolledRetakeClasses ?? []).map((item) => ({ id: item.id }))
+      const selectedIds = selectedSubjectClassRowKeys.map((id) => ({ id: String(id) }))
+      const { onlyInA, onlyInB } = diffArrays(enrolledIds, selectedIds, "id")
+      const idsToDelete = onlyInA.map((item: { id: string }) => item.id)
+      const idsToCreate = onlyInB.map((item: { id: string }) => item.id)
+
+      const operations: any[] = []
+      if (idsToDelete.length > 0) {
+        operations.push({
+          model: "StudentSubjectScore",
+          operation: "deleteMany",
           data: {
-            where: { id: subjectClassId },
-            select: {
-              id: true,
-              subjectId: true,
-              subject: {
-                select: {
-                  // Lấy điểm cao nhất của sinh viên trong các lần đăng ký học cải thiện
-                  studentSubjectScore: {
-                    where: {
-                      studentId,
-                    },
-                    orderBy: {
-                      finalScore: "desc",
-                    },
-                    select: {
-                      finalScore: true,
-                      student: {
-                        select: {
-                          fixedClass: {
-                            select: {
-                              trainingCourse: {
-                                select: {
-                                  scoreConverts: true,
+            where: {
+              studentId,
+              subjectClassId: { in: idsToDelete },
+            },
+          },
+        })
+      }
+
+      if (idsToCreate.length > 0) {
+        const allSubjectClassInfo = await sqlTransaction(
+          idsToCreate.map((subjectClassId) => ({
+            model: "SubjectClass",
+            operation: "findUnique",
+            data: {
+              where: { id: subjectClassId },
+              select: {
+                id: true,
+                subjectId: true,
+                subject: {
+                  select: {
+                    studentSubjectScore: {
+                      where: {
+                        studentId,
+                      },
+                      orderBy: {
+                        finalScore: "desc",
+                      },
+                      select: {
+                        finalScore: true,
+                        student: {
+                          select: {
+                            fixedClass: {
+                              select: {
+                                trainingCourse: {
+                                  select: {
+                                    scoreConverts: true,
+                                  },
                                 },
                               },
                             },
@@ -228,53 +303,43 @@ export default function MonHocLai() {
                 },
               },
             },
-          },
-        }))
-      )
-      if (allSubjectClassInfo.status !== 200) {
-        throw new Error("Có lỗi xảy ra khi lấy thông tin lớp học phần!")
-      }
-      const res = await sqlTransaction([
-        {
-          model: "StudentSubjectScore",
-          operation: "deleteMany",
-          data: {
-            where: {
-              studentId,
-              subjectClass: {
-                semesterId,
-                trainingObjectTypeId,
-                type: $Enums.SubjectClassType.RETAKE,
+          }))
+        )
+        if (allSubjectClassInfo.status !== 200) {
+          throw new Error("Có lỗi xảy ra khi lấy thông tin lớp học phần!")
+        }
+        operations.push(
+          ...allSubjectClassInfo.data.map((subjectClass: any) => ({
+            model: "StudentSubjectScore" as const,
+            operation: "create",
+            data: {
+              data: {
+                studentId,
+                subjectClassId: subjectClass.id,
+                subjectVersionId: subjectClass.subjectId,
+                isImproving:
+                  subjectClass.subject.studentSubjectScore.length > 0 &&
+                  subjectClass.subject.studentSubjectScore[0]?.finalScore !== null
+                    ? subjectClass.subject.studentSubjectScore[0].student?.fixedClass?.trainingCourse?.scoreConverts?.some(
+                        (sc: ScoreConvert) =>
+                          sc?.base10Min <= subjectClass.subject.studentSubjectScore[0]?.finalScore &&
+                          subjectClass.subject.studentSubjectScore[0]?.finalScore <= sc?.base10Max &&
+                          sc?.improvementRegister
+                      )
+                    : false,
               },
             },
-          },
-        },
-        ...allSubjectClassInfo.data.map((subjectClass: any) => ({
-          model: "StudentSubjectScore" as const,
-          operation: "create",
-          data: {
-            data: {
-              studentId,
-              subjectClassId: subjectClass.id,
-              subjectVersionId: subjectClass.subjectId,
-              isImproving:
-                subjectClass.subject.studentSubjectScore.length > 0 &&
-                subjectClass.subject.studentSubjectScore[0]?.finalScore !== null
-                  ? subjectClass.subject.studentSubjectScore[0].student?.fixedClass?.trainingCourse?.scoreConverts?.some(
-                      (sc: ScoreConvert) =>
-                        sc?.base10Min <= subjectClass.subject.studentSubjectScore[0]?.finalScore &&
-                        subjectClass.subject.studentSubjectScore[0]?.finalScore <= sc?.base10Max &&
-                        sc?.improvementRegister
-                    )
-                  : false,
-            },
-          },
-        })),
-      ])
-      if (res.status !== 200) {
-        throw new Error("Có lỗi xảy ra khi lưu đăng ký học!")
+          }))
+        )
       }
-      message.success("Lưu đăng ký học cải thiện thành công!")
+
+      if (operations.length > 0) {
+        const res = await sqlTransaction(operations)
+        if (res.status !== 200) {
+          throw new Error("Có lỗi xảy ra khi lưu đăng ký học!")
+        }
+      }
+      message.success("Lưu đăng ký học lại thành công!")
       queryClient.invalidateQueries({ queryKey: ["zenstack", "StudentSubjectScore"] })
       queryClient.invalidateQueries({ queryKey: ["zenstack", "SubjectClass"] })
     } catch (error: any) {
@@ -287,19 +352,25 @@ export default function MonHocLai() {
   }
 
   useEffect(() => {
-    if (subjectClassData && studentId) {
-      setSubjectVersionIds(
-        subjectClassData
-          .filter((item) => item.subjectClassStudent.length > 0)
-          .map((item) => item.subject.id)
-      )
-      setSelectedSubjectClassRowKeys(
-        subjectClassData
-          .filter((item) => item.subjectClassStudent.length > 0)
-          .map((item) => item.id)
-      )
+    if (!studentId) {
+      prevStudentIdRef.current = undefined
+      setSelectedSubjectClassRowKeys([])
+      setSubjectVersionIds([])
+      setSelectionReady(false)
+      return
     }
-  }, [subjectClassData, studentId])
+    const studentChanged = prevStudentIdRef.current !== studentId
+    if (studentChanged) {
+      prevStudentIdRef.current = studentId
+      setSelectionReady(false)
+      setCurrentPage(1)
+    }
+    if (enrolledLoading || enrolledRetakeClasses === undefined) return
+    if (studentChanged || !selectionReady) {
+      applySubjectClassSelection(enrolledRetakeClasses.map((item) => item.id))
+      setSelectionReady(true)
+    }
+  }, [studentId, enrolledRetakeClasses, enrolledLoading, selectionReady])
 
   return (
     <Row>
@@ -328,7 +399,7 @@ export default function MonHocLai() {
             type="primary"
             className="h-[32px] px-4"
             onClick={handleSaveStudentClass}
-            disabled={!studentId || !semesterId}
+            disabled={!studentId || !semesterId || !selectionReady}
           >
             Lưu
           </Button>
@@ -348,12 +419,12 @@ export default function MonHocLai() {
               onClick: () => {
                 if (notAllowSelect) return
                 if (selectedSubjectClassRowKeys.includes(record.id)) {
-                  setSelectedSubjectClassRowKeys((prev) => prev.filter((key) => key !== record.id))
-                  setSubjectVersionIds((prev) => prev.filter((id) => id !== record.subject.id))
+                  applySubjectClassSelection(
+                    selectedSubjectClassRowKeys.filter((key) => key !== record.id)
+                  )
                   return
                 }
-                setSelectedSubjectClassRowKeys((prev) => [...prev, record.id])
-                setSubjectVersionIds((prev) => [...prev, record.subject.id])
+                applySubjectClassSelection([...selectedSubjectClassRowKeys, record.id])
               },
               className: cn(notAllowSelect && "bg-yellow-100 cursor-not-allowed"),
               columnWidth: 35,
@@ -361,8 +432,15 @@ export default function MonHocLai() {
           }}
           rowSelection={{
             selectedRowKeys: selectedSubjectClassRowKeys,
+            preserveSelectedRowKeys: true,
             onChange: (selectedRowKeys) => {
-              setSelectedSubjectClassRowKeys(selectedRowKeys)
+              applySubjectClassSelection(
+                mergePageSelection(
+                  selectedSubjectClassRowKeys,
+                  subjectClassData.map((row) => row.id),
+                  selectedRowKeys
+                )
+              )
             },
             getCheckboxProps: (record) => ({
               disabled:
