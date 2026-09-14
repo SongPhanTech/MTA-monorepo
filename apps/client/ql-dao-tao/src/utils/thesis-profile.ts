@@ -33,11 +33,21 @@ export interface PersonLike {
 export interface ExpertProfileLike extends PersonLike {
   id?: string | null
   lecturerId?: string | null
+  inAcademy?: boolean | null
+  expertId?: string | null
+  expert?: {
+    id?: string | null
+    lecturerId?: string | null
+    lecturer?: PersonLike["lecturer"]
+  } | null
 }
 
 export interface CouncilMemberLike {
   role?: CouncilRole | string | null
+  expertId?: string | null
+  /** @deprecated dùng expertProfileVersion */
   expert?: PersonLike | null
+  expertProfileVersion?: PersonLike | null
   [key: string]: unknown
 }
 
@@ -127,7 +137,8 @@ export function formatPersonName(
     }
   }
 
-  const profile = person.lecturer?.userProfile || person.userProfile
+  const nestedLecturer = (person as ExpertProfileLike).expert?.lecturer
+  const profile = nestedLecturer?.userProfile || person.lecturer?.userProfile || person.userProfile
   const rank = profile?.academicRankType?.sMa || person.academicRankType?.sMa || ""
   const degree = profile?.academicDegreeType?.sMa || person.academicDegreeType?.sMa || ""
   const titleDegree = [rank, degree].filter(Boolean).join(".")
@@ -302,7 +313,7 @@ export function getCouncilMembersFormatted(
     })
 
     for (const member of sortedMembers) {
-      const info = formatPersonName(member.expert)
+      const info = formatPersonName(member.expertProfileVersion || member.expert)
       const roleKey = member.role || ""
       const roleLabel = COUNCIL_ROLE_LABELS[roleKey] || roleKey || "Ủy viên"
       result.push({

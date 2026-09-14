@@ -39,7 +39,7 @@ import {
   useFindManyDefaultCouncilRolePayAmount,
   useFindManyDefaultSupervisorPayAmount,
   useFindManyDefenseSession,
-  useFindManyExpertProfile,
+  useFindManyExpert,
   useFindManyRoom,
   useFindUniqueThesisProject,
   useUpdateCouncilMember,
@@ -51,7 +51,7 @@ import {
 } from "@workspace/db/hooks"
 import dayjs from "dayjs"
 import Decimal from "decimal.js"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { validateScore } from "@lib/utils"
 
 // import  {useEffect} from 'react'
@@ -213,18 +213,26 @@ const ModalCauHinhLuanVan = () => {
     const memberPromises = rolesMapping
       .filter((item) => !!item.expertId)
       .map((item) => {
+        const expertProfileVersionId = expertVersionMap.get(item.expertId!)
+        if (!expertProfileVersionId) {
+          throw new Error("Chuyên gia chưa có phiên bản hồ sơ hiện tại.")
+        }
         const existingMember = currentMembers.find((m) => m.role === item.role)
 
         if (existingMember) {
           return updateCouncilMember({
             where: { id: existingMember.id },
-            data: { expertId: item.expertId },
+            data: {
+              expertId: item.expertId,
+              expertProfileVersionId,
+            },
           })
         }
         return createCouncilMember({
           data: {
             role: item.role,
             expertId: item.expertId || "",
+            expertProfileVersionId,
             councilId: councilId || "",
           },
         })
@@ -443,7 +451,24 @@ const ModalCauHinhLuanVan = () => {
     }
   }
 
-  const { data: expertProfileData = [] } = useFindManyExpertProfile()
+  const { data: expertProfileData = [] } = useFindManyExpert({
+    where: {
+      deletedAt: null,
+      currentVersion: { thesisExpert: true },
+    },
+    include: {
+      currentVersion: true,
+      lecturer: { include: { userProfile: true } },
+    },
+  })
+  const expertVersionMap = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const expert of expertProfileData) {
+      const versionId = expert.currentVersionId ?? expert.currentVersion?.id
+      if (versionId) map.set(expert.id, versionId)
+    }
+    return map
+  }, [expertProfileData])
   const { data: roomData = [] } = useFindManyRoom()
   const { data: defenseSessionData = [] } = useFindManyDefenseSession()
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
@@ -465,6 +490,7 @@ const ModalCauHinhLuanVan = () => {
         include: {
           members: {
             include: {
+              expertProfileVersion: true,
               expert: true,
               payment: true,
             },
@@ -483,8 +509,8 @@ const ModalCauHinhLuanVan = () => {
           documentFile: true,
         },
       },
-      supervisor: true,
-      coSupervisor: true,
+      supervisor: { include: { expert: { include: { lecturer: true } } } },
+      coSupervisor: { include: { expert: { include: { lecturer: true } } } },
       supervisorPayment: true,
       coSupervisorPayment: true,
     },
@@ -497,7 +523,7 @@ const ModalCauHinhLuanVan = () => {
   const isInAcademy = (expertId?: string) => {
     if (!expertId) return true
     const expert = expertProfileData.find((e) => e.id === expertId)
-    return !!(expert as any)?.lecturerId
+    return expert?.currentVersion?.inAcademy ?? !!expert?.lecturerId
   }
 
   const getDefaultCouncilAmount = useCallback(
@@ -537,18 +563,18 @@ const ModalCauHinhLuanVan = () => {
 
     const chairmanId = thesisProjectData?.council?.members.find(
       (m) => m.role === CouncilRole.CHAIRMAN
-    )?.expert?.id
+    )?.expertId
     const secretaryId = thesisProjectData?.council?.members.find(
       (m) => m.role === CouncilRole.SECRETARY
-    )?.expert?.id
+    )?.expertId
     const rev1Id = thesisProjectData?.council?.members.find(
       (m) => m.role === CouncilRole.REVIEWER_1
-    )?.expert?.id
+    )?.expertId
     const rev2Id = thesisProjectData?.council?.members.find(
       (m) => m.role === CouncilRole.REVIEWER_2
-    )?.expert?.id
+    )?.expertId
     const memberId = thesisProjectData?.council?.members.find((m) => m.role === CouncilRole.MEMBER)
-      ?.expert?.id
+      ?.expertId
 
     const getDisplayAmount = (role: CouncilRole, expertId?: string) => {
       const savedAmount = thesisProjectData?.council?.members.find((m) => m.role === role)?.payment
@@ -558,19 +584,19 @@ const ModalCauHinhLuanVan = () => {
     form.setFieldsValue({
       chairman: thesisProjectData?.council?.members.find(
         (member) => member.role === CouncilRole.CHAIRMAN
-      )?.expert?.id,
+      )?.expertId,
       secretary: thesisProjectData?.council?.members.find(
         (member) => member.role === CouncilRole.SECRETARY
-      )?.expert?.id,
+      )?.expertId,
       reviewer1: thesisProjectData?.council?.members.find(
         (member) => member.role === CouncilRole.REVIEWER_1
-      )?.expert?.id,
+      )?.expertId,
       reviewer2: thesisProjectData?.council?.members.find(
         (member) => member.role === CouncilRole.REVIEWER_2
-      )?.expert?.id,
+      )?.expertId,
       member: thesisProjectData?.council?.members.find(
         (member) => member.role === CouncilRole.MEMBER
-      )?.expert?.id,
+      )?.expertId,
       roomId: thesisProjectData?.room?.id,
       defenseDate: thesisProjectData?.defenseDate
         ? dayjs(thesisProjectData?.defenseDate)
@@ -582,22 +608,22 @@ const ModalCauHinhLuanVan = () => {
       isHardcopy: thesisProjectData?.librarySubmission?.isHardcopy,
       isSoftcopy: thesisProjectData?.librarySubmission?.isSoftcopy,
       librarianNote: thesisProjectData?.librarySubmission?.librarianNote ?? "",
-      supervisorId: thesisProjectData?.supervisorId ?? "",
+      supervisorId: thesisProjectData?.supervisor?.expertId ?? "",
       supervisorName: thesisProjectData?.supervisor?.name ?? "",
-      coSupervisorId: thesisProjectData?.coSupervisorId ?? "",
+      coSupervisorId: thesisProjectData?.coSupervisor?.expertId ?? "",
       coSupervisorName: thesisProjectData?.coSupervisor?.name ?? "",
       supervisorPaymentAmount: thesisProjectData?.supervisorPayment?.amount
         ? formatDecimal(thesisProjectData.supervisorPayment.amount)
         : getDefaultSupervisorAmount(
             SupervisorRole.SUPERVISOR,
-            thesisProjectData.supervisorId ?? undefined
+            thesisProjectData.supervisor?.expertId ?? undefined
           ),
 
       coSupervisorPaymentAmount: thesisProjectData?.coSupervisorPayment?.amount
         ? formatDecimal(thesisProjectData.coSupervisorPayment.amount)
         : getDefaultSupervisorAmount(
             SupervisorRole.CO_SUPERVISOR,
-            thesisProjectData.coSupervisorId ?? undefined
+            thesisProjectData.coSupervisor?.expertId ?? undefined
           ),
       supervisorPaymentTransactionCode: thesisProjectData?.supervisorPayment?.transactionCode ?? "",
       coSupervisorPaymentTransactionCode:
@@ -613,34 +639,34 @@ const ModalCauHinhLuanVan = () => {
       councilMemberPaymentAmount: getDisplayAmount(CouncilRole.MEMBER, memberId),
       councilChairmanName:
         thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.CHAIRMAN)
-          ?.expert?.name ?? "",
+          ?.expertProfileVersion?.name ?? "",
       councilMemberName:
         thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.MEMBER)
-          ?.expert?.name ?? "",
+          ?.expertProfileVersion?.name ?? "",
       councilSecretaryName:
         thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.SECRETARY)
-          ?.expert?.name ?? "",
+          ?.expertProfileVersion?.name ?? "",
       councilReviewer1Name:
         thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.REVIEWER_1)
-          ?.expert?.name ?? "",
+          ?.expertProfileVersion?.name ?? "",
       councilReviewer2Name:
         thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.REVIEWER_2)
-          ?.expert?.name ?? "",
+          ?.expertProfileVersion?.name ?? "",
       councilChairmanId:
         thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.CHAIRMAN)
-          ?.expert?.id ?? "",
+          ?.expertId ?? "",
       councilSecretaryId:
         thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.SECRETARY)
-          ?.expert?.id ?? "",
+          ?.expertId ?? "",
       councilReviewer1Id:
         thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.REVIEWER_1)
-          ?.expert?.id ?? "",
+          ?.expertId ?? "",
       councilReviewer2Id:
         thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.REVIEWER_2)
-          ?.expert?.id ?? "",
+          ?.expertId ?? "",
       councilMemberId:
         thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.MEMBER)
-          ?.expert?.id ?? "",
+          ?.expertId ?? "",
     })
     setDocument(thesisProjectData?.librarySubmission?.documentFile ?? [])
     setAttachments(thesisProjectData?.defenseRecord?.documents ?? [])
@@ -689,7 +715,7 @@ const ModalCauHinhLuanVan = () => {
                 }}
                 options={expertProfileData.map((expert) => ({
                   value: expert.id,
-                  label: expert.name,
+                  label: expert.currentVersion?.name ?? "",
                 }))}
               />
             </FormItem>
@@ -717,7 +743,7 @@ const ModalCauHinhLuanVan = () => {
                 }}
                 options={expertProfileData.map((expert) => ({
                   value: expert.id,
-                  label: expert.name,
+                  label: expert.currentVersion?.name ?? "",
                 }))}
               />
             </FormItem>
@@ -745,7 +771,7 @@ const ModalCauHinhLuanVan = () => {
                 }}
                 options={expertProfileData.map((expert) => ({
                   value: expert.id,
-                  label: expert.name,
+                  label: expert.currentVersion?.name ?? "",
                 }))}
               />
             </FormItem>
@@ -773,7 +799,7 @@ const ModalCauHinhLuanVan = () => {
                 }}
                 options={expertProfileData.map((expert) => ({
                   value: expert.id,
-                  label: expert.name,
+                  label: expert.currentVersion?.name ?? "",
                 }))}
               />
             </FormItem>
@@ -801,7 +827,7 @@ const ModalCauHinhLuanVan = () => {
                 }}
                 options={expertProfileData.map((expert) => ({
                   value: expert.id,
-                  label: expert.name,
+                  label: expert.currentVersion?.name ?? "",
                 }))}
               />
             </FormItem>

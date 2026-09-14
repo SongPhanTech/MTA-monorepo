@@ -5,7 +5,7 @@ import type { ThesisProject } from "@workspace/db/client"
 import {
   useCreateThesisProject,
   useFindManyDM_DonVi,
-  useFindManyExpertProfile,
+  useFindManyExpert,
   useFindUniqueThesisProject,
   useUpdateThesisProject,
 } from "@workspace/db/hooks"
@@ -21,7 +21,20 @@ import { whereOrganization } from "@workspace/libs/constants"
 import { debounce } from "lodash"
 import { useCallback, useEffect, useState } from "react"
 import TreeSelect from "@/components/commons/tree-select"
-export type PutThesisProject = ThesisProject
+import { flattenExpertForSelect } from "@/utils/expert-select"
+
+type PutThesisProjectForm = Omit<
+  ThesisProject,
+  "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd"
+> & {
+  supervisorId?: string | null
+  coSupervisorId?: string | null
+  registrationStart?: dayjs.Dayjs
+  registrationEnd?: dayjs.Dayjs
+  projectStart?: dayjs.Dayjs
+  projectEnd?: dayjs.Dayjs
+}
+
 dayjs.locale("vi")
 
 const PutThesisProject = () => {
@@ -30,7 +43,7 @@ const PutThesisProject = () => {
   const [searchOrganization, setSearchOrganization] = useState("")
   const [supervisorId, setSupervisorId] = useState<string | undefined>()
   const [coSupervisorId, setCoSupervisorId] = useState<string | undefined>()
-  const [form] = Form.useForm<PutThesisProject>()
+  const [form] = Form.useForm<PutThesisProjectForm>()
   const { isOpen, onClose, input } = useDisclosure<{
     subjectClassId: string
     thesisProjectId: string
@@ -54,24 +67,36 @@ const PutThesisProject = () => {
 
   const treeData = buildOrgTree(organization)
 
-  const { data: expert = [], refetch } = useFindManyExpertProfile({
-    where: searchExpert
-      ? {
-          OR: [
-            {
-              lecturer: {
-                userProfile: {
-                  fullname: { contains: searchExpert, mode: "insensitive" },
+  const { data: expert = [], refetch } = useFindManyExpert({
+    where: {
+      deletedAt: null,
+      active: true,
+      AND: [
+        { OR: [{ lecturerId: null }, { lecturer: { active: true } }] },
+        { currentVersion: { is: { projectExpert: true } } },
+      ],
+      ...(searchExpert
+        ? {
+            OR: [
+              {
+                currentVersion: {
+                  name: { contains: searchExpert, mode: "insensitive" },
                 },
               },
-            },
-            {
-              name: { contains: searchExpert, mode: "insensitive" },
-            },
-          ],
-        }
-      : {},
+              {
+                lecturer: {
+                  userProfile: {
+                    fullname: { contains: searchExpert, mode: "insensitive" },
+                  },
+                },
+              },
+              { code: { contains: searchExpert, mode: "insensitive" } },
+            ],
+          }
+        : {}),
+    },
     include: {
+      currentVersion: true,
       lecturer: {
         include: {
           userProfile: true,
@@ -79,8 +104,12 @@ const PutThesisProject = () => {
       },
     },
   })
+
   const { data: thesisProject } = useFindUniqueThesisProject(
-    { where: { id: input?.thesisProjectId } },
+    {
+      where: { id: input?.thesisProjectId },
+      include: { supervisor: true, coSupervisor: true },
+    },
     { enabled: !!input?.thesisProjectId }
   )
 
@@ -115,8 +144,12 @@ const PutThesisProject = () => {
 
   useEffect(() => {
     if (thesisProject) {
+      const supervisorExpertId = thesisProject.supervisor?.expertId
+      const coSupervisorExpertId = thesisProject.coSupervisor?.expertId
       form.setFieldsValue({
         ...thesisProject,
+        supervisorId: supervisorExpertId,
+        coSupervisorId: coSupervisorExpertId,
         registrationStart: thesisProject.registrationStart
           ? dayjs(thesisProject.registrationStart)
           : undefined,
@@ -126,14 +159,20 @@ const PutThesisProject = () => {
         projectStart: thesisProject.projectStart ? dayjs(thesisProject.projectStart) : undefined,
         projectEnd: thesisProject.projectEnd ? dayjs(thesisProject.projectEnd) : undefined,
       })
-      setSupervisorId(thesisProject.supervisorId || undefined)
-      setCoSupervisorId(thesisProject.coSupervisorId || undefined)
+      setSupervisorId(supervisorExpertId || undefined)
+      setCoSupervisorId(coSupervisorExpertId || undefined)
     }
   }, [thesisProject, form])
 
   const { mutateAsync: createThesisProject } = useCreateThesisProject()
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
-  async function onOk(output?: PutThesisProject) {
+
+  const versionId = (expertId?: string | null) => {
+    const found = expert.find((e) => e.id === expertId)
+    return found?.currentVersionId ?? found?.currentVersion?.id ?? null
+  }
+
+  async function onOk(output?: PutThesisProjectForm) {
     if (!output) return
     const payload = {
       title: output.title,
@@ -146,8 +185,8 @@ const PutThesisProject = () => {
       expectedResults: output.expectedResults,
       requirements: output.requirements,
       technologies: output.technologies,
-      supervisorId: output.supervisorId,
-      coSupervisorId: output.coSupervisorId,
+      supervisorVersionId: versionId(output.supervisorId),
+      coSupervisorVersionId: versionId(output.coSupervisorId),
       organizationId: output.organizationId,
       maxStudents: output.maxStudents,
       registrationStart: output.registrationStart,
@@ -187,6 +226,14 @@ const PutThesisProject = () => {
     }
   }
 
+  const expertOptions = expert.map((item) => {
+    const flat = flattenExpertForSelect(item)
+    return {
+      label: `${item.code ? `${item.code} -` : ""} ${item.lecturer?.userProfile.fullname || flat.name}`,
+      value: item.id,
+    }
+  })
+
   return (
     <PutFormModal
       open={isOpen}
@@ -216,10 +263,7 @@ const PutThesisProject = () => {
         <FormItem form={form} name="supervisorId" label="Chuyên gia hướng dẫn" required>
           <Select
             placeholder="Chọn chuyên gia hướng dẫn"
-            options={expert.map((item) => ({
-              label: `${item.code ? `${item.code} -` : ""} ${item.lecturer?.userProfile.fullname || item.name}`,
-              value: item.id,
-            }))}
+            options={expertOptions}
             showSearch
             onSearch={handleSearchExpert}
             filterOption={false}
@@ -232,10 +276,7 @@ const PutThesisProject = () => {
         <FormItem form={form} name="coSupervisorId" label="Chuyên gia hướng dẫn phụ">
           <Select
             placeholder="Chọn chuyên gia hướng dẫn phụ"
-            options={expert.map((item) => ({
-              label: `${item.code ? `${item.code} -` : ""} ${item.lecturer?.userProfile.fullname || item.name}`,
-              value: item.id,
-            }))}
+            options={expertOptions}
             showSearch
             onSearch={handleSearchExpert}
             filterOption={false}
@@ -304,11 +345,6 @@ const PutThesisProject = () => {
               type: "mask",
             }}
             className="w-full"
-            // disabledDate={(current) => {
-            //     const startTime = form.getFieldValue('registrationStart')
-            //     if (!startTime) return false
-            //     return current && current < dayjs(startTime).startOf('day')
-            // }}
             placeholder="Chọn thời gian đóng đăng ký"
           />
         </FormItem>

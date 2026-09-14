@@ -196,7 +196,7 @@ model TrainingMajor extends Base {
   trainingObjectTypes          TrainingMajorOnTrainingObjectType[]
   curriculum                   Curriculum[]
   graduationDecision           GraduationDecision[]
-  expertProfile                ExpertProfile[]
+  expert                       Expert[]
   studentGraduationApplication StudentGraduationApplication[]
 
   surveyObjectTypes            SurveyObjectType[]

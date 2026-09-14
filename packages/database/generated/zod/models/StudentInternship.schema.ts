@@ -51,8 +51,8 @@ const relationSchema = z.object({
 );
 const fkSchema = z.object({
     studentSubjectScoreId: z.string(),
-    supervisorId: z.string().nullish(),
-    coSupervisorId: z.string().nullish(),
+    supervisorVersionId: z.string().nullish(),
+    coSupervisorVersionId: z.string().nullish(),
 }
 );
 

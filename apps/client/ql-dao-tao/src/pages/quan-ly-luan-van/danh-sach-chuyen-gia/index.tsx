@@ -7,11 +7,7 @@ import type { FilterProps } from "@constants/type"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import type { Prisma } from "@workspace/db/client"
-import {
-  useCountExpertProfile,
-  useFindManyExpertProfile,
-  useUpdateExpertProfile,
-} from "@workspace/db/hooks"
+import { useCountExpert, useFindManyExpert, useUpdateExpert } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { CheckCircleFilled } from "@ant-design/icons"
@@ -23,80 +19,116 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 
 type SortOrder = "asc" | "desc"
 
-const DEFAULT_ORDER_BY = { name: "asc" as const }
+type ExpertRow = {
+  id: string
+  name?: string | null
+  position?: string | null
+  phone?: string | null
+  email?: string | null
+  bankAccountNumber?: string | null
+  bankName?: string | null
+  workplace?: string | null
+  inAcademy?: boolean | null
+  academicRankType?: { sMa?: string | null } | null
+  academicDegreeType?: { sMa?: string | null } | null
+  lecturer?: {
+    organization?: { sMa?: string | null; sTen?: string | null } | null
+    userProfile?: {
+      phoneNumber?: string | null
+      phone?: string | null
+      bankAccountNumber?: string | null
+      bankName?: string | null
+      academicRankType?: { sMa?: string | null } | null
+      academicDegreeType?: { sMa?: string | null } | null
+    } | null
+  } | null
+}
+
+const DEFAULT_ORDER_BY = {
+  currentVersion: { name: "asc" as const },
+}
 
 function compareAlphabet(a?: string | null, b?: string | null) {
   return (a || "").localeCompare(b || "", "vi", { numeric: true, sensitivity: "base" })
 }
 
-function getAcademicRank(record: any) {
-  return record.lecturer?.userProfile?.academicRankType?.sMa || record?.academicRankType?.sMa || ""
+function getAcademicRank(record: ExpertRow) {
+  return record.lecturer?.userProfile?.academicRankType?.sMa || record.academicRankType?.sMa || ""
 }
 
-function getAcademicDegree(record: any) {
+function getAcademicDegree(record: ExpertRow) {
   return (
-    record.lecturer?.userProfile?.academicDegreeType?.sMa || record?.academicDegreeType?.sMa || ""
+    record.lecturer?.userProfile?.academicDegreeType?.sMa || record.academicDegreeType?.sMa || ""
   )
 }
 
-function getWorkplace(record: any) {
+function getWorkplace(record: ExpertRow) {
   return record.lecturer
     ? `${record.lecturer?.organization?.sMa || ""}-${record.lecturer?.organization?.sTen || ""}`
-    : record?.workplace || ""
+    : record.workplace || ""
 }
 
-function getPhone(record: any) {
+function getPhone(record: ExpertRow) {
   return (
-    record?.phone ||
-    record?.lecturer?.userProfile?.phoneNumber ||
-    record?.lecturer?.userProfile?.phone ||
+    record.phone ||
+    record.lecturer?.userProfile?.phoneNumber ||
+    record.lecturer?.userProfile?.phone ||
     ""
   )
 }
 
-function getBankAccountNumber(record: any) {
-  return record?.bankAccountNumber || record?.lecturer?.userProfile?.bankAccountNumber || ""
+function getBankAccountNumber(record: ExpertRow) {
+  return record.bankAccountNumber || record.lecturer?.userProfile?.bankAccountNumber || ""
 }
 
-function getBankName(record: any) {
-  return record?.bankName || record?.lecturer?.userProfile?.bankName || ""
+function getBankName(record: ExpertRow) {
+  return record.bankName || record.lecturer?.userProfile?.bankName || ""
 }
 
 function getOrderBy(
   field: string | null,
   order: SortOrder | null
-): Prisma.ExpertProfileOrderByWithRelationInput | Prisma.ExpertProfileOrderByWithRelationInput[] {
+): Prisma.ExpertOrderByWithRelationInput | Prisma.ExpertOrderByWithRelationInput[] {
   if (!field || !order) return DEFAULT_ORDER_BY
 
   switch (field) {
     case "name":
-      return { name: order }
+      return { currentVersion: { name: order } }
     case "academicRank":
       return [
-        { academicRankType: { sMa: order } },
+        { currentVersion: { academicRankType: { sMa: order } } },
         { lecturer: { userProfile: { academicRankType: { sMa: order } } } },
       ]
     case "academicDegree":
       return [
-        { academicDegreeType: { sMa: order } },
+        { currentVersion: { academicDegreeType: { sMa: order } } },
         { lecturer: { userProfile: { academicDegreeType: { sMa: order } } } },
       ]
     case "position":
-      return { position: order }
+      return { currentVersion: { position: order } }
     case "workplace":
-      return [{ lecturer: { organization: { sMa: order } } }, { workplace: order }]
+      return [
+        { lecturer: { organization: { sMa: order } } },
+        { currentVersion: { workplace: order } },
+      ]
     case "phone":
     case "phoneRaw":
-      return [{ phone: order }, { lecturer: { userProfile: { phoneNumber: order } } }]
+      return [
+        { currentVersion: { phone: order } },
+        { lecturer: { userProfile: { phoneNumber: order } } },
+      ]
     case "bankAccountNumber":
       return [
-        { bankAccountNumber: order },
+        { currentVersion: { bankAccountNumber: order } },
         { lecturer: { userProfile: { bankAccountNumber: order } } },
       ]
     case "bankName":
-      return [{ bankName: order }, { lecturer: { userProfile: { bankName: order } } }]
+      return [
+        { currentVersion: { bankName: order } },
+        { lecturer: { userProfile: { bankName: order } } },
+      ]
     case "email":
-      return { email: order }
+      return { currentVersion: { email: order } }
     case "inAcademy":
       return { lecturerId: order }
     default:
@@ -105,7 +137,7 @@ function getOrderBy(
 }
 
 export default function ExpertProfile() {
-  const { can, canSome } = useAbility()
+  const { can } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [sorter, setSorter] = useState<{ field: string | null; order: SortOrder | null }>({
@@ -123,86 +155,61 @@ export default function ExpertProfile() {
     email: undefined,
   })
 
-  const where = useMemo(
-    () => ({
-      thesisExpert: true,
+  const where = useMemo((): Prisma.ExpertWhereInput => {
+    const versionAnd: Prisma.ExpertProfileVersionWhereInput[] = [{ thesisExpert: true }]
+
+    if (filters.name) {
+      versionAnd.push({ name: { contains: filters.name, mode: "insensitive" } })
+    }
+    if (filters.specialization) {
+      versionAnd.push({
+        specialization: { contains: filters.specialization, mode: "insensitive" },
+      })
+    }
+    if (filters.workplace) {
+      versionAnd.push({ workplace: { contains: filters.workplace, mode: "insensitive" } })
+    }
+    if (filters.phone) {
+      versionAnd.push({ phone: { contains: filters.phone, mode: "insensitive" } })
+    }
+    if (filters.email) {
+      versionAnd.push({ email: { contains: filters.email, mode: "insensitive" } })
+    }
+    if (filters.academicRank) {
+      versionAnd.push({
+        OR: [
+          { academicRankType: { sTen: { contains: filters.academicRank, mode: "insensitive" } } },
+          { academicRankType: { sMa: { contains: filters.academicRank, mode: "insensitive" } } },
+        ],
+      })
+    }
+    if (filters.academicDegree) {
+      versionAnd.push({
+        OR: [
+          {
+            academicDegreeType: {
+              sTen: { contains: filters.academicDegree, mode: "insensitive" },
+            },
+          },
+          {
+            academicDegreeType: {
+              sMa: { contains: filters.academicDegree, mode: "insensitive" },
+            },
+          },
+        ],
+      })
+    }
+
+    return {
       deletedAt: null,
       active: true,
       AND: [
-        {
-          OR: [{ lecturerId: null }, { lecturer: { active: true } }],
-        },
+        { OR: [{ lecturerId: null }, { lecturer: { active: true } }] },
+        { currentVersion: { is: { AND: versionAnd } } },
       ],
-      ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" as const } } : {}),
-      ...(filters.name ? { name: { contains: filters.name, mode: "insensitive" as const } } : {}),
-      ...(filters.academicRank
-        ? {
-            OR: [
-              {
-                academicRank: {
-                  contains: filters.academicRank,
-                  mode: "insensitive" as const,
-                },
-              },
-              {
-                lecturer: {
-                  userProfile: {
-                    academicRankType: {
-                      sTen: {
-                        contains: filters.academicRank,
-                        mode: "insensitive" as const,
-                      },
-                    },
-                  },
-                },
-              },
-            ],
-          }
-        : {}),
-      ...(filters.academicDegree
-        ? {
-            OR: [
-              {
-                academicDegree: {
-                  contains: filters.academicDegree,
-                  mode: "insensitive" as const,
-                },
-              },
-              {
-                lecturer: {
-                  userProfile: {
-                    academicDegreeType: {
-                      sTen: {
-                        contains: filters.academicDegree,
-                        mode: "insensitive" as const,
-                      },
-                    },
-                  },
-                },
-              },
-            ],
-          }
-        : {}),
-      ...(filters.specialization
-        ? {
-            specialization: {
-              contains: filters.specialization,
-              mode: "insensitive" as const,
-            },
-          }
-        : {}),
-      ...(filters.workplace
-        ? { workplace: { contains: filters.workplace, mode: "insensitive" as const } }
-        : {}),
-      ...(filters.phone
-        ? { phone: { contains: filters.phone, mode: "insensitive" as const } }
-        : {}),
-      ...(filters.email
-        ? { email: { contains: filters.email, mode: "insensitive" as const } }
-        : {}),
-    }),
-    [filters]
-  )
+      ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" } } : {}),
+    }
+  }, [filters])
 
   const orderBy = useMemo(() => getOrderBy(sorter.field, sorter.order), [sorter])
   const sortOrderOf = (field: string) =>
@@ -214,11 +221,15 @@ export default function ExpertProfile() {
           : undefined
       : undefined
 
-  const { data: expertProfileData } = useFindManyExpertProfile({
+  const { data: expertData } = useFindManyExpert({
     where,
     include: {
-      academicDegreeType: true,
-      academicRankType: true,
+      currentVersion: {
+        include: {
+          academicDegreeType: true,
+          academicRankType: true,
+        },
+      },
       lecturer: {
         include: {
           organization: true,
@@ -237,38 +248,44 @@ export default function ExpertProfile() {
     skip: (currentPage - 1) * numberOfPages,
   })
 
-  const { data: count } = useCountExpertProfile({
-    where,
-  })
+  const { data: count } = useCountExpert({ where })
 
-  const { onOpen } = useDisclosure<PutExpertProfileProps>({
-    tag: "PutExpertProfile",
-  })
+  const rows = useMemo(
+    () =>
+      (expertData ?? []).map((e) => ({
+        id: e.id,
+        lecturer: e.lecturer,
+        name: e.currentVersion?.name,
+        position: e.currentVersion?.position,
+        phone: e.currentVersion?.phone,
+        email: e.currentVersion?.email,
+        bankAccountNumber: e.currentVersion?.bankAccountNumber,
+        bankName: e.currentVersion?.bankName,
+        workplace: e.currentVersion?.workplace,
+        inAcademy: e.currentVersion?.inAcademy,
+        academicRankType: e.currentVersion?.academicRankType,
+        academicDegreeType: e.currentVersion?.academicDegreeType,
+      })) as ExpertRow[],
+    [expertData]
+  )
 
+  const { onOpen } = useDisclosure<PutExpertProfileProps>({ tag: "PutExpertProfile" })
   const { showSpinner, hideSpinner } = useSpinner()
+  const { mutateAsync: updateExpert } = useUpdateExpert()
 
-  const handleModal = () => {
-    const input: PutExpertProfileProps = {
-      thesisExpert: true,
-    }
-    onOpen(input)
-  }
-  const { mutateAsync: updateExpertProfile } = useUpdateExpertProfile()
+  const handleModal = () => onOpen({ thesisExpert: true })
+
   async function handleDelete(id: string) {
     try {
       showSpinner()
-      await updateExpertProfile({
-        where: {
-          id,
-        },
-        data: {
-          deletedAt: new Date(),
-        },
+      await updateExpert({
+        where: { id },
+        data: { deletedAt: new Date() },
       })
       message.success("Xóa thành công")
     } catch (error: any) {
       if (error?.info?.message) {
-        message.error(error?.info?.message)
+        message.error(error.info.message)
         return
       }
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -339,7 +356,7 @@ export default function ExpertProfile() {
                 width: 150,
                 type: "input",
                 align: "center",
-                sorter: (a: any, b: any) => compareAlphabet(a.name, b.name),
+                sorter: (a: ExpertRow, b: ExpertRow) => compareAlphabet(a.name, b.name),
                 sortOrder: sortOrderOf("name"),
               },
               {
@@ -348,9 +365,10 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
-                sorter: (a: any, b: any) => compareAlphabet(getAcademicRank(a), getAcademicRank(b)),
+                sorter: (a: ExpertRow, b: ExpertRow) =>
+                  compareAlphabet(getAcademicRank(a), getAcademicRank(b)),
                 sortOrder: sortOrderOf("academicRank"),
-                render: (__, record) => getAcademicRank(record),
+                render: (_: unknown, record: ExpertRow) => getAcademicRank(record),
               },
               {
                 title: "Hàm vị",
@@ -358,10 +376,10 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
-                sorter: (a: any, b: any) =>
+                sorter: (a: ExpertRow, b: ExpertRow) =>
                   compareAlphabet(getAcademicDegree(a), getAcademicDegree(b)),
                 sortOrder: sortOrderOf("academicDegree"),
-                render: (__, record) => getAcademicDegree(record),
+                render: (_: unknown, record: ExpertRow) => getAcademicDegree(record),
               },
               {
                 title: "Chức vụ",
@@ -369,26 +387,19 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
-                sorter: (a: any, b: any) => compareAlphabet(a.position, b.position),
+                sorter: (a: ExpertRow, b: ExpertRow) => compareAlphabet(a.position, b.position),
                 sortOrder: sortOrderOf("position"),
               },
-              // {
-              //   title: "Chuyên ngành",
-              //   dataIndex: "specialization",
-              //   width: 150,
-              //   align: "center",
-              //   type: "input",
-              // },
-
               {
                 title: "Đơn vị công tác",
                 dataIndex: "workplace",
                 width: 150,
                 align: "center",
                 type: "input",
-                sorter: (a: any, b: any) => compareAlphabet(getWorkplace(a), getWorkplace(b)),
+                sorter: (a: ExpertRow, b: ExpertRow) =>
+                  compareAlphabet(getWorkplace(a), getWorkplace(b)),
                 sortOrder: sortOrderOf("workplace"),
-                render: (__, record) => getWorkplace(record),
+                render: (_: unknown, record: ExpertRow) => getWorkplace(record),
               },
               {
                 title: "SĐT",
@@ -396,9 +407,9 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
-                sorter: (a: any, b: any) => compareAlphabet(getPhone(a), getPhone(b)),
+                sorter: (a: ExpertRow, b: ExpertRow) => compareAlphabet(getPhone(a), getPhone(b)),
                 sortOrder: sortOrderOf("phone"),
-                render: (__, record) => getPhone(record),
+                render: (_: unknown, record: ExpertRow) => getPhone(record),
               },
               {
                 title: "STK",
@@ -406,10 +417,10 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
-                sorter: (a: any, b: any) =>
+                sorter: (a: ExpertRow, b: ExpertRow) =>
                   compareAlphabet(getBankAccountNumber(a), getBankAccountNumber(b)),
                 sortOrder: sortOrderOf("bankAccountNumber"),
-                render: (__, record) => getBankAccountNumber(record),
+                render: (_: unknown, record: ExpertRow) => getBankAccountNumber(record),
               },
               {
                 title: "Tên ngân hàng",
@@ -417,9 +428,10 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
-                sorter: (a: any, b: any) => compareAlphabet(getBankName(a), getBankName(b)),
+                sorter: (a: ExpertRow, b: ExpertRow) =>
+                  compareAlphabet(getBankName(a), getBankName(b)),
                 sortOrder: sortOrderOf("bankName"),
-                render: (__, record) => getBankName(record),
+                render: (_: unknown, record: ExpertRow) => getBankName(record),
               },
               {
                 title: "Số điện thoại",
@@ -428,7 +440,7 @@ export default function ExpertProfile() {
                 width: 150,
                 align: "center",
                 type: "input",
-                sorter: (a: any, b: any) => compareAlphabet(a.phone, b.phone),
+                sorter: (a: ExpertRow, b: ExpertRow) => compareAlphabet(a.phone, b.phone),
                 sortOrder: sortOrderOf("phoneRaw"),
               },
               {
@@ -437,7 +449,7 @@ export default function ExpertProfile() {
                 width: 150,
                 align: "center",
                 type: "input",
-                sorter: (a: any, b: any) => compareAlphabet(a.email, b.email),
+                sorter: (a: ExpertRow, b: ExpertRow) => compareAlphabet(a.email, b.email),
                 sortOrder: sortOrderOf("email"),
               },
               {
@@ -446,13 +458,13 @@ export default function ExpertProfile() {
                 dataIndex: "inAcademy",
                 width: 120,
                 align: "center",
-                sorter: (a: any, b: any) =>
-                  Number(Boolean(a.lecturer?.userProfile)) -
-                  Number(Boolean(b.lecturer?.userProfile)),
+                sorter: (a: ExpertRow, b: ExpertRow) =>
+                  Number(Boolean(a.inAcademy ?? a.lecturer?.userProfile)) -
+                  Number(Boolean(b.inAcademy ?? b.lecturer?.userProfile)),
                 sortOrder: sortOrderOf("inAcademy"),
-                render: (__, record: any) => {
-                  const hasUserProfile = Boolean(record.lecturer?.userProfile)
-                  if (!hasUserProfile) return null
+                render: (_: unknown, record: ExpertRow) => {
+                  const inAcademy = record.inAcademy ?? Boolean(record.lecturer?.userProfile)
+                  if (!inAcademy) return null
                   return (
                     <Flex justify="center" align="center">
                       <Tooltip title="Người trong học viện">
@@ -467,28 +479,21 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 fixed: "right",
-                
-                render: (_, { id }) => {
-                  if (id) {
-                    return (
-                      <Row className="justify-center gap-2">
-                       
-                          <EditIcon
-                            onClick={() => onOpen({ id, thesisExpert: true })}
-                            className="text-sm text-blue-700 cursor-pointer"
-                          />
-                        
-                        
-                          <DeleteIcon
-                            popConfirm={{
-                              onConfirm: () => handleDelete(id),
-                            }}
-                          />
-                        
-                      </Row>
-                    )
-                  }
-                  return ""
+                render: (_: unknown, { id }: ExpertRow) => {
+                  if (!id) return ""
+                  return (
+                    <Row className="justify-center gap-2">
+                      <EditIcon
+                        onClick={() => onOpen({ id, thesisExpert: true })}
+                        className="text-sm text-blue-700 cursor-pointer"
+                      />
+                      <DeleteIcon
+                        popConfirm={{
+                          onConfirm: () => handleDelete(id),
+                        }}
+                      />
+                    </Row>
+                  )
                 },
               },
             ]}
@@ -505,7 +510,7 @@ export default function ExpertProfile() {
                 }
               },
             }}
-            data={expertProfileData}
+            data={rows}
           />
         </Col>
       </Row>

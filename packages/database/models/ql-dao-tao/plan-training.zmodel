@@ -240,16 +240,16 @@ model StudentResearchTopic extends Base {
   mainContent           String?
 
   /// GVHD 1
-  supervisor            ExpertProfile?      @relation("SupervisorToResearchTopic", fields: [supervisorId], references: [id])
-  supervisorId          String?
+  supervisor            ExpertProfileVersion? @relation("SupervisorToResearchTopic", fields: [supervisorVersionId], references: [id])
+  supervisorVersionId   String?
 
   /// GVHD 2
-  coSupervisor          ExpertProfile?      @relation("CoSupervisorToResearchTopic", fields: [coSupervisorId], references: [id])
-  coSupervisorId        String?
+  coSupervisor          ExpertProfileVersion? @relation("CoSupervisorToResearchTopic", fields: [coSupervisorVersionId], references: [id])
+  coSupervisorVersionId String?
 
   /// GVHD 3
-  thirdSupervisor       ExpertProfile?      @relation("ThirdSupervisorToResearchTopic", fields: [thirdSupervisorId], references: [id])
-  thirdSupervisorId     String?
+  thirdSupervisor       ExpertProfileVersion? @relation("ThirdSupervisorToResearchTopic", fields: [thirdSupervisorVersionId], references: [id])
+  thirdSupervisorVersionId String?
 
   /// ngày báo cáo
   reportDate            DateTime?
@@ -272,11 +272,11 @@ model StudentInternship extends Base {
   /// địa chỉ thực tập
   address               String?
   /// GVHD 1
-  supervisor            ExpertProfile?      @relation("SupervisorToInternship", fields: [supervisorId], references: [id])
-  supervisorId          String?
+  supervisor            ExpertProfileVersion? @relation("SupervisorToInternship", fields: [supervisorVersionId], references: [id])
+  supervisorVersionId   String?
   /// GVHD 2
-  coSupervisor          ExpertProfile?      @relation("CoSupervisorToInternship", fields: [coSupervisorId], references: [id])
-  coSupervisorId        String?
+  coSupervisor          ExpertProfileVersion? @relation("CoSupervisorToInternship", fields: [coSupervisorVersionId], references: [id])
+  coSupervisorVersionId String?
   /// thời gian bắt đầu thực tập
   startDate             DateTime?
   /// thời gian kết thúc thực tập
@@ -1125,7 +1125,7 @@ model SubjectClass extends BaseNoCode {
 
   // Môn đồ án
   thesisProjects              ThesisProject[] // DS đồ án
-  expertProfile               ExpertProfile[] // DS chuyên gia hướng dẫn -> tạo hội đồng tự động
+  expert                      Expert[] // DS chuyên gia hướng dẫn -> tạo hội đồng tự động
   defenseRooms                Room[]                   @relation("DefenseRooms") // DS phòng -> chọn phòng tự động
 
   surveyObjectTypes           SurveyObjectType[]

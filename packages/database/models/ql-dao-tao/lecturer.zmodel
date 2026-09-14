@@ -38,7 +38,7 @@ model Lecturer extends Base {
   researchProjects                 ResearchProject[]         // Đề tài đang hướng dẫn
   reviewedRegistrations            StudentResearchRegistration[] // Đăng ký đã phê duyệt
   reviewedThesisRegistrations      StudentThesisRegistration[] // Đăng ký đã phê duyệt
-  expertProfile                    ExpertProfile[]
+  expert                           Expert[]
   survey                           Survey[]
   clusterSurvey                    ClusterSurvey[]
   examRoomsMain                    ExamList[]                    @relation("FirstSupervisor")

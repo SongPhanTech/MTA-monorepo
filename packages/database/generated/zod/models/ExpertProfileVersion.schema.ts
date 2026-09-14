@@ -19,6 +19,7 @@ const baseSchema = z.object({
     position: z.string().nullish(),
     specialization: z.string().nullish(),
     workplace: z.string().nullish(),
+    inAcademy: z.boolean().default(true),
     phone: z.string().nullish(),
     email: z.string().email().nullish(),
     bankAccountNumber: z.string().nullish(),
@@ -27,6 +28,8 @@ const baseSchema = z.object({
     thesisExpert: z.boolean().default(false),
     eligiblePresident: z.boolean().default(false),
     eligibleSecretary: z.boolean().default(false),
+    validFrom: z.coerce.date().default(() => new Date()),
+    validTo: z.coerce.date().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -43,6 +46,7 @@ const baseSchemaWithoutDefaults = z.object({
     position: z.string().nullish(),
     specialization: z.string().nullish(),
     workplace: z.string().nullish(),
+    inAcademy: z.boolean(),
     phone: z.string().nullish(),
     email: z.string().email().nullish(),
     bankAccountNumber: z.string().nullish(),
@@ -51,13 +55,15 @@ const baseSchemaWithoutDefaults = z.object({
     thesisExpert: z.boolean(),
     eligiblePresident: z.boolean(),
     eligibleSecretary: z.boolean(),
+    validFrom: z.coerce.date(),
+    validTo: z.coerce.date().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
-    lecturer: z.record(z.string(), z.unknown()).optional(),
+    expert: z.record(z.string(), z.unknown()),
     academicDegreeType: z.record(z.string(), z.unknown()).optional(),
     academicRankType: z.record(z.string(), z.unknown()).optional(),
-    major: z.array(z.unknown()).optional(),
+    currentForExpert: z.record(z.string(), z.unknown()).optional(),
     supervisedTheses: z.array(z.unknown()).optional(),
     coSupervisedTheses: z.array(z.unknown()).optional(),
     thirdSupervisedTheses: z.array(z.unknown()).optional(),
@@ -66,41 +72,40 @@ const relationSchema = z.object({
     thirdSupervisorResearchTopic: z.array(z.unknown()).optional(),
     supervisorInternship: z.array(z.unknown()).optional(),
     coSupervisorInternship: z.array(z.unknown()).optional(),
-    subjectClass: z.array(z.unknown()).optional(),
     councilMemberships: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
-    lecturerId: z.string().nullish(),
+    expertId: z.string(),
     academicDegreeTypeId: z.string().uuid().nullish(),
     academicRankTypeId: z.string().uuid().nullish(),
 }
 );
 
 /**
- * `ExpertProfile` schema excluding foreign keys and relations.
+ * `ExpertProfileVersion` schema excluding foreign keys and relations.
  */
-export const ExpertProfileScalarSchema = baseSchema;
+export const ExpertProfileVersionScalarSchema = baseSchema;
 
 
 /**
- * `ExpertProfile` schema including all fields (scalar, foreign key, and relations) and validations.
+ * `ExpertProfileVersion` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const ExpertProfileSchema = ExpertProfileScalarSchema.merge(fkSchema).merge(relationSchema.partial());
+export const ExpertProfileVersionSchema = ExpertProfileVersionScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ExpertProfilePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const ExpertProfileVersionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
  * Schema used for validating Prisma update input. For internal use only.
  * @private
  */
-export const ExpertProfilePrismaUpdateSchema = z.object({
+export const ExpertProfileVersionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
     active: z.boolean(),
@@ -114,6 +119,7 @@ export const ExpertProfilePrismaUpdateSchema = z.object({
     position: z.string().nullish(),
     specialization: z.string().nullish(),
     workplace: z.string().nullish(),
+    inAcademy: z.boolean(),
     phone: z.string().nullish(),
     email: z.string().email().nullish(),
     bankAccountNumber: z.string().nullish(),
@@ -121,32 +127,34 @@ export const ExpertProfilePrismaUpdateSchema = z.object({
     projectExpert: z.boolean(),
     thesisExpert: z.boolean(),
     eligiblePresident: z.boolean(),
-    eligibleSecretary: z.boolean()
+    eligibleSecretary: z.boolean(),
+    validFrom: z.coerce.date(),
+    validTo: z.coerce.date().nullish()
 }).partial().passthrough();
 
 
 /**
- * `ExpertProfile` schema for create operations excluding foreign keys and relations.
+ * `ExpertProfileVersion` schema for create operations excluding foreign keys and relations.
  */
-export const ExpertProfileCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, projectExpert: true, thesisExpert: true, eligiblePresident: true, eligibleSecretary: true
+export const ExpertProfileVersionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, inAcademy: true, projectExpert: true, thesisExpert: true, eligiblePresident: true, eligibleSecretary: true, validFrom: true
 });
 
 
 /**
- * `ExpertProfile` schema for create operations including scalar fields, foreign key fields, and validations.
+ * `ExpertProfileVersion` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const ExpertProfileCreateSchema = ExpertProfileCreateScalarSchema.merge(fkSchema);
+export const ExpertProfileVersionCreateSchema = ExpertProfileVersionCreateScalarSchema.merge(fkSchema);
 
 
 /**
- * `ExpertProfile` schema for update operations excluding foreign keys and relations.
+ * `ExpertProfileVersion` schema for update operations excluding foreign keys and relations.
  */
-export const ExpertProfileUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const ExpertProfileVersionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**
- * `ExpertProfile` schema for update operations including scalar fields, foreign key fields, and validations.
+ * `ExpertProfileVersion` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const ExpertProfileUpdateSchema = ExpertProfileUpdateScalarSchema.merge(fkSchema.partial());
+export const ExpertProfileVersionUpdateSchema = ExpertProfileVersionUpdateScalarSchema.merge(fkSchema.partial());
 

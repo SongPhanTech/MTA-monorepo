@@ -119,9 +119,9 @@ model ThesisProject extends Base {
   secondarySupervisor       Lecturer?                   @relation("SecondarySupervisorToThesis", fields: [secondarySupervisorId], references: [id])
   secondarySupervisorId     String?
 
-  //GVHD3 cho đồ án
-  thirdSupervisor           ExpertProfile?              @relation("ThirdSupervisorToThesis", fields: [thirdSupervisorId], references: [id])
-  thirdSupervisorId         String?
+  //GVHD3 cho đồ án — trỏ version hồ sơ tại thời điểm gán
+  thirdSupervisor           ExpertProfileVersion?       @relation("ThirdSupervisorToThesis", fields: [thirdSupervisorVersionId], references: [id])
+  thirdSupervisorVersionId  String?
 
   isProductProject          Boolean                     @default(false) // Đồ án sản phẩm
   isGroupProject            Boolean                     @default(false) // Đồ án nhóm
@@ -135,16 +135,16 @@ model ThesisProject extends Base {
   thesisSessionId           String?
 
   supervisorName            String?
-  /// Chuyên gia hướng dẫn
-  supervisor                ExpertProfile?              @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
-  supervisorId              String?
+  /// Chuyên gia hướng dẫn (version hồ sơ tại thời điểm gán)
+  supervisor                ExpertProfileVersion?       @relation("SupervisorToThesis", fields: [supervisorVersionId], references: [id])
+  supervisorVersionId       String?
   supervisorPayment         SupervisorPaymentRecord?    @relation("SupervisorToSupervisorPayment", fields: [supervisorPaymentId], references: [id])
   supervisorPaymentId       String?
 
   coSupervisorName          String?
-  /// Chuyên gia hướng dẫn bảo vệ phụ
-  coSupervisor              ExpertProfile?              @relation("CoSupervisorToThesis", fields: [coSupervisorId], references: [id])
-  coSupervisorId            String?
+  /// Chuyên gia hướng dẫn bảo vệ phụ (version hồ sơ tại thời điểm gán)
+  coSupervisor              ExpertProfileVersion?       @relation("CoSupervisorToThesis", fields: [coSupervisorVersionId], references: [id])
+  coSupervisorVersionId     String?
   coSupervisorPayment       SupervisorPaymentRecord?    @relation("CoSupervisorToSupervisorPayment", fields: [coSupervisorPaymentId], references: [id])
   coSupervisorPaymentId     String?
   singleSupervisorPayment   SupervisorPaymentRecord?    @relation("SingleSupervisorPayment", fields: [singleSupervisorPaymentId], references: [id])
@@ -240,30 +240,53 @@ model StudentThesisRegistration extends Base {
   @@schema("ql-dao-tao")
 }
 
-/// Model cho Chuyên gia (Giảng viên trong và ngoài trường)
-model ExpertProfile extends Base {
-  lecturer                     Lecturer?              @relation(fields: [lecturerId], references: [id])
-  lecturerId                   String?                @unique // Null nếu là chuyên gia ngoài trường
-  name                         String?   // Họ tên
+/// Identity chuyên gia (ổn định theo người). Hồ sơ giấy tờ nằm ở ExpertProfileVersion.
+model Expert extends Base {
+  lecturer         Lecturer?              @relation(fields: [lecturerId], references: [id])
+  lecturerId       String?                @unique // Null nếu là chuyên gia ngoài trường
+
+  currentVersionId String?                @unique
+  currentVersion   ExpertProfileVersion?  @relation("CurrentExpertVersion", fields: [currentVersionId], references: [id])
+
+  versions         ExpertProfileVersion[] @relation("ExpertVersions")
+  major            TrainingMajor[]
+  subjectClass     SubjectClass[] // DS lớp đồ án chuyên gia tham gia hội đồng (pool)
+  councilMemberships CouncilMember[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Hồ sơ chuyên gia theo thời điểm (học vị, trong/ngoài HV, cờ vai trò, liên hệ…).
+model ExpertProfileVersion extends Base {
+  expert                       Expert                 @relation("ExpertVersions", fields: [expertId], references: [id])
+  expertId                     String
+
+  name                         String? // Họ tên
   academicDegreeType           DM_HocVi?              @relation(fields: [academicDegreeTypeId], references: [Id])
   academicDegreeTypeId         String?                @db.Uuid
   academicRankType             DM_HocHam?             @relation(fields: [academicRankTypeId], references: [Id])
   academicRankTypeId           String?                @db.Uuid
-  organization                 String?   // Đơn vị
-  position                     String?   // Chức vụ
-  specialization               String?   // Chuyên ngành
-  major                        TrainingMajor[]
-  workplace                    String?   // Đơn vị công tác
+  organization                 String? // Đơn vị
+  position                     String? // Chức vụ
+  specialization               String? // Chuyên ngành
+  workplace                    String? // Đơn vị công tác
+  /// Trong học viện — lưu tường minh, không suy từ lecturerId lúc in
+  inAcademy                    Boolean                @default(true)
+
   phone                        String?
-  email                        String?                @email // Dùng email này để liên lạc nếu là chuyên gia ngoài
-  bankAccountNumber            String? // số tài khoản ngân hàng
-  bankName                     String? // tên ngân hàng
+  email                        String?                @email
+  bankAccountNumber            String?
+  bankName                     String?
 
   projectExpert                Boolean                @default(false)
   thesisExpert                 Boolean                @default(false)
+  eligiblePresident            Boolean                @default(false)
+  eligibleSecretary            Boolean                @default(false)
 
-  eligiblePresident            Boolean                @default(false) // có thể làm chủ tịch
-  eligibleSecretary            Boolean                @default(false) // có thể làm thư ký
+  validFrom                    DateTime               @default(now())
+  validTo                      DateTime? // null = đang hiệu lực
+
+  currentForExpert             Expert?                @relation("CurrentExpertVersion")
 
   supervisedTheses             ThesisProject[]        @relation("SupervisorToThesis")
   coSupervisedTheses           ThesisProject[]        @relation("CoSupervisorToThesis")
@@ -273,11 +296,9 @@ model ExpertProfile extends Base {
   thirdSupervisorResearchTopic StudentResearchTopic[] @relation("ThirdSupervisorToResearchTopic")
   supervisorInternship         StudentInternship[]    @relation("SupervisorToInternship")
   coSupervisorInternship       StudentInternship[]    @relation("CoSupervisorToInternship")
-  subjectClass                 SubjectClass[] // DS lớp đồ án chuyên gia tham gia hội đồng
-  councilMemberships           CouncilMember[]
-  // payments                PaymentRecord[]
-  // supervisorPaymentRecord SupervisorPaymentRecord[]
+  councilMemberships           CouncilMember[]        @relation("CouncilMemberVersion")
 
+  @@index([expertId, validFrom])
   @@schema("ql-dao-tao")
 }
 
@@ -355,16 +376,20 @@ enum SupervisorRole {
 }
 /// Thành viên trong một Hội đồng
 model CouncilMember extends Base {
-  role        CouncilRole
-  councilId   String
-  council     Council        @relation(fields: [councilId], references: [id])
-  expertId    String?
-  expert      ExpertProfile?  @relation(fields: [expertId], references: [id])
-  payment     PaymentRecord?
+  role                   CouncilRole
+  councilId              String
+  council                Council               @relation(fields: [councilId], references: [id])
 
-  invitations Invitation?
+  /// Version hồ sơ đã chốt khi gán vào hội đồng (dùng để in / thanh toán)
+  expertProfileVersionId String?
+  expertProfileVersion   ExpertProfileVersion? @relation("CouncilMemberVersion", fields: [expertProfileVersionId], references: [id])
 
-  // @@unique([councilId, expertId ?? ""])
+  /// Identity (denorm) — filter/thống kê theo người qua nhiều đợt
+  expertId               String?
+  expert                 Expert?               @relation(fields: [expertId], references: [id])
+
+  payment                PaymentRecord?
+  invitations            Invitation?
 
   @@schema("ql-dao-tao")
 }

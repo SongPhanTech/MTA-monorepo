@@ -4,7 +4,7 @@ import useSpinner from "@hooks/spinner"
 import type { CouncilMember } from "@workspace/db/client"
 import {
   useCreateCouncilMember,
-  useFindManyExpertProfile,
+  useFindManyExpert,
   useFindUniqueCouncilMember,
   useUpdateCouncilMember,
 } from "@workspace/db/hooks"
@@ -39,11 +39,18 @@ const PutCouncilMember = () => {
     { enabled: !!input?.councilMemberId }
   )
 
-  const { data: expert = [] } = useFindManyExpertProfile({
+  const { data: expert = [] } = useFindManyExpert({
     where: {
+      deletedAt: null,
+      currentVersion: { thesisExpert: true },
       ...(searchExpert
         ? {
             OR: [
+              {
+                currentVersion: {
+                  name: { contains: searchExpert, mode: "insensitive" },
+                },
+              },
               {
                 lecturer: {
                   userProfile: {
@@ -77,6 +84,7 @@ const PutCouncilMember = () => {
       ],
     },
     include: {
+      currentVersion: true,
       lecturer: {
         include: {
           userProfile: true,
@@ -102,10 +110,19 @@ const PutCouncilMember = () => {
         hideSpinner()
         return
       }
+      const selectedExpert = expert.find((item) => item.id === output.expertId)
+      const expertProfileVersionId =
+        selectedExpert?.currentVersionId ?? selectedExpert?.currentVersion?.id
+      if (!expertProfileVersionId) {
+        message.error("Chuyên gia chưa có phiên bản hồ sơ hiện tại.")
+        hideSpinner()
+        return
+      }
       const payload = {
         councilId: input.councilId,
         role: output.role,
         expertId: output.expertId,
+        expertProfileVersionId,
       }
       if (input?.councilMemberId) {
         await updateCouncilMember({
@@ -160,7 +177,7 @@ const PutCouncilMember = () => {
           <Select
             placeholder="Chọn chuyên gia"
             options={expert.map((item) => ({
-              label: `${item.code ? `${item.code} -` : ""} ${item.lecturer?.userProfile.fullname || item.name}`,
+              label: `${item.code ? `${item.code} -` : ""} ${item.currentVersion?.name || item.lecturer?.userProfile?.fullname || ""}`,
               value: item.id,
             }))}
             showSearch

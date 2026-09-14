@@ -328,7 +328,7 @@ export function useSuspenseCountCouncilMember<TArgs extends Prisma.CouncilMember
 }
 import type { CouncilRole } from '../zenstack/models';
 
-export function useCheckCouncilMember<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; role?: CouncilRole; councilId?: string; expertId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckCouncilMember<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; role?: CouncilRole; councilId?: string; expertProfileVersionId?: string; expertId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('CouncilMember', `${endpoint}/councilMember/check`, args, options, fetch);
 }

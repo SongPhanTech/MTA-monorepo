@@ -1907,49 +1907,49 @@ model DM_ChucVu {
 }
 
 model DM_HocHam {
-  Id                String              @id() @default(uuid()) @db.Uuid()
-  sMa               String?
-  sTen              String?
-  sGhiChu           String?
-  iSTT              Int?                @default(0)
-  bActive           Boolean?            @default(true)
-  bDeleted          Boolean?            @default(false)
-  bSystem           Boolean?            @default(false)
-  iDictionaryKey    Int?                @default(0)
-  dNgayTao          DateTime?
-  dNgaySua          DateTime?
-  sNguoiTao         String?
-  sNguoiSua         String?
-  sThietBiTao       String?
-  sThietBiSua       String?
-  profiles          UserProfile[]
-  hocHam            HocHam[]
-  expertProfile     ExpertProfile[]
-  guestTeachingRate GuestTeachingRate[]
+  Id                   String                 @id() @default(uuid()) @db.Uuid()
+  sMa                  String?
+  sTen                 String?
+  sGhiChu              String?
+  iSTT                 Int?                   @default(0)
+  bActive              Boolean?               @default(true)
+  bDeleted             Boolean?               @default(false)
+  bSystem              Boolean?               @default(false)
+  iDictionaryKey       Int?                   @default(0)
+  dNgayTao             DateTime?
+  dNgaySua             DateTime?
+  sNguoiTao            String?
+  sNguoiSua            String?
+  sThietBiTao          String?
+  sThietBiSua          String?
+  profiles             UserProfile[]
+  hocHam               HocHam[]
+  expertProfileVersion ExpertProfileVersion[]
+  guestTeachingRate    GuestTeachingRate[]
 
   @@schema("mta")
 }
 
 model DM_HocVi {
-  Id                String              @id() @default(uuid()) @db.Uuid()
-  sMa               String?
-  sTen              String?
-  sGhiChu           String?
-  iSTT              Int?                @default(0)
-  bActive           Boolean?            @default(true)
-  bDeleted          Boolean?            @default(false)
-  bSystem           Boolean?            @default(false)
-  iDictionaryKey    Int?                @default(0)
-  dNgayTao          DateTime?
-  dNgaySua          DateTime?
-  sNguoiTao         String?
-  sNguoiSua         String?
-  sThietBiTao       String?
-  sThietBiSua       String?
-  profiles          UserProfile[]
-  hocVi             HocVi[]
-  expertProfile     ExpertProfile[]
-  guestTeachingRate GuestTeachingRate[]
+  Id                   String                 @id() @default(uuid()) @db.Uuid()
+  sMa                  String?
+  sTen                 String?
+  sGhiChu              String?
+  iSTT                 Int?                   @default(0)
+  bActive              Boolean?               @default(true)
+  bDeleted             Boolean?               @default(false)
+  bSystem              Boolean?               @default(false)
+  iDictionaryKey       Int?                   @default(0)
+  dNgayTao             DateTime?
+  dNgaySua             DateTime?
+  sNguoiTao            String?
+  sNguoiSua            String?
+  sThietBiTao          String?
+  sThietBiSua          String?
+  profiles             UserProfile[]
+  hocVi                HocVi[]
+  expertProfileVersion ExpertProfileVersion[]
+  guestTeachingRate    GuestTeachingRate[]
 
   @@schema("mta")
 }
@@ -2718,48 +2718,48 @@ model StudentSubjectScoreHistory {
 
 /// chuyên đề nghiên cứu
 model StudentResearchTopic {
-  id                    String              @id() @default(cuid())
-  code                  String?             @unique()
-  active                Boolean             @default(true)
-  description           String?             @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @default(now()) @updatedAt()
-  createdBy             String?             @db.Uuid()
-  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
-  studentSubjectScoreId String              @unique()
+  id                       String                @id() @default(cuid())
+  code                     String?               @unique()
+  active                   Boolean               @default(true)
+  description              String?               @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime              @default(now())
+  updatedAt                DateTime              @default(now()) @updatedAt()
+  createdBy                String?               @db.Uuid()
+  studentSubjectScore      StudentSubjectScore   @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId    String                @unique()
   /// hạn nhập chuyên đề
-  deadline              DateTime?
+  deadline                 DateTime?
   /// tên chuyên đề
-  name                  String?
+  name                     String?
   /// nội dung chính
-  mainContent           String?
+  mainContent              String?
   /// GVHD 1
-  supervisor            ExpertProfile?      @relation("SupervisorToResearchTopic", fields: [supervisorId], references: [id])
-  supervisorId          String?
+  supervisor               ExpertProfileVersion? @relation("SupervisorToResearchTopic", fields: [supervisorVersionId], references: [id])
+  supervisorVersionId      String?
   /// GVHD 2
-  coSupervisor          ExpertProfile?      @relation("CoSupervisorToResearchTopic", fields: [coSupervisorId], references: [id])
-  coSupervisorId        String?
+  coSupervisor             ExpertProfileVersion? @relation("CoSupervisorToResearchTopic", fields: [coSupervisorVersionId], references: [id])
+  coSupervisorVersionId    String?
   /// GVHD 3
-  thirdSupervisor       ExpertProfile?      @relation("ThirdSupervisorToResearchTopic", fields: [thirdSupervisorId], references: [id])
-  thirdSupervisorId     String?
+  thirdSupervisor          ExpertProfileVersion? @relation("ThirdSupervisorToResearchTopic", fields: [thirdSupervisorVersionId], references: [id])
+  thirdSupervisorVersionId String?
   /// ngày báo cáo
-  reportDate            DateTime?
+  reportDate               DateTime?
 
   @@schema("ql-dao-tao")
 }
 
 model StudentInternship {
-  id                    String              @id() @default(cuid())
-  code                  String?             @unique()
-  active                Boolean             @default(true)
-  description           String?             @db.Text()
+  id                    String                @id() @default(cuid())
+  code                  String?               @unique()
+  active                Boolean               @default(true)
+  description           String?               @db.Text()
   deletedAt             DateTime?
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @default(now()) @updatedAt()
-  createdBy             String?             @db.Uuid()
-  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
-  studentSubjectScoreId String              @unique()
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @default(now()) @updatedAt()
+  createdBy             String?               @db.Uuid()
+  studentSubjectScore   StudentSubjectScore   @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String                @unique()
   /// hạn nhập thực tập
   deadline              DateTime?
   /// nội dung thực tập
@@ -2771,11 +2771,11 @@ model StudentInternship {
   /// địa chỉ thực tập
   address               String?
   /// GVHD 1
-  supervisor            ExpertProfile?      @relation("SupervisorToInternship", fields: [supervisorId], references: [id])
-  supervisorId          String?
+  supervisor            ExpertProfileVersion? @relation("SupervisorToInternship", fields: [supervisorVersionId], references: [id])
+  supervisorVersionId   String?
   /// GVHD 2
-  coSupervisor          ExpertProfile?      @relation("CoSupervisorToInternship", fields: [coSupervisorId], references: [id])
-  coSupervisorId        String?
+  coSupervisor          ExpertProfileVersion? @relation("CoSupervisorToInternship", fields: [coSupervisorVersionId], references: [id])
+  coSupervisorVersionId String?
   /// thời gian bắt đầu thực tập
   startDate             DateTime?
   /// thời gian kết thúc thực tập
@@ -3576,7 +3576,7 @@ model SubjectClass {
   fixedClasses                FixedClass[]
   classSchedules              ClassSchedule[]
   thesisProjects              ThesisProject[]
-  expertProfile               ExpertProfile[]
+  expert                      Expert[]
   defenseRooms                Room[]                   @relation("DefenseRooms")
   surveyObjectTypes           SurveyObjectType[]
   classRegisterLogs           ClassRegisterLogs[]
@@ -4039,7 +4039,7 @@ model TrainingMajor {
   trainingObjectTypes          TrainingMajorOnTrainingObjectType[]
   curriculum                   Curriculum[]
   graduationDecision           GraduationDecision[]
-  expertProfile                ExpertProfile[]
+  expert                       Expert[]
   studentGraduationApplication StudentGraduationApplication[]
   surveyObjectTypes            SurveyObjectType[]
 
@@ -4671,7 +4671,7 @@ model Lecturer {
   researchProjects                 ResearchProject[]
   reviewedRegistrations            StudentResearchRegistration[]
   reviewedThesisRegistrations      StudentThesisRegistration[]
-  expertProfile                    ExpertProfile[]
+  expert                           Expert[]
   survey                           Survey[]
   clusterSurvey                    ClusterSurvey[]
   examRoomsMain                    ExamList[]                    @relation("FirstSupervisor")
@@ -5027,8 +5027,8 @@ model ThesisProject {
   primarySupervisorId       String?
   secondarySupervisor       Lecturer?                   @relation("SecondarySupervisorToThesis", fields: [secondarySupervisorId], references: [id])
   secondarySupervisorId     String?
-  thirdSupervisor           ExpertProfile?              @relation("ThirdSupervisorToThesis", fields: [thirdSupervisorId], references: [id])
-  thirdSupervisorId         String?
+  thirdSupervisor           ExpertProfileVersion?       @relation("ThirdSupervisorToThesis", fields: [thirdSupervisorVersionId], references: [id])
+  thirdSupervisorVersionId  String?
   isProductProject          Boolean                     @default(false)
   isGroupProject            Boolean                     @default(false)
   isLanguage                Boolean                     @default(false)
@@ -5038,15 +5038,15 @@ model ThesisProject {
   thesisSession             ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
   thesisSessionId           String?
   supervisorName            String?
-  /// Chuyên gia hướng dẫn
-  supervisor                ExpertProfile?              @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
-  supervisorId              String?
+  /// Chuyên gia hướng dẫn (version hồ sơ tại thời điểm gán)
+  supervisor                ExpertProfileVersion?       @relation("SupervisorToThesis", fields: [supervisorVersionId], references: [id])
+  supervisorVersionId       String?
   supervisorPayment         SupervisorPaymentRecord?    @relation("SupervisorToSupervisorPayment", fields: [supervisorPaymentId], references: [id])
   supervisorPaymentId       String?
   coSupervisorName          String?
-  /// Chuyên gia hướng dẫn bảo vệ phụ
-  coSupervisor              ExpertProfile?              @relation("CoSupervisorToThesis", fields: [coSupervisorId], references: [id])
-  coSupervisorId            String?
+  /// Chuyên gia hướng dẫn bảo vệ phụ (version hồ sơ tại thời điểm gán)
+  coSupervisor              ExpertProfileVersion?       @relation("CoSupervisorToThesis", fields: [coSupervisorVersionId], references: [id])
+  coSupervisorVersionId     String?
   coSupervisorPayment       SupervisorPaymentRecord?    @relation("CoSupervisorToSupervisorPayment", fields: [coSupervisorPaymentId], references: [id])
   coSupervisorPaymentId     String?
   singleSupervisorPayment   SupervisorPaymentRecord?    @relation("SingleSupervisorPayment", fields: [singleSupervisorPaymentId], references: [id])
@@ -5129,8 +5129,30 @@ model StudentThesisRegistration {
   @@schema("ql-dao-tao")
 }
 
-/// Model cho Chuyên gia (Giảng viên trong và ngoài trường)
-model ExpertProfile {
+/// Identity chuyên gia (ổn định theo người). Hồ sơ giấy tờ nằm ở ExpertProfileVersion.
+model Expert {
+  id                 String                 @id() @default(cuid())
+  code               String?                @unique()
+  active             Boolean                @default(true)
+  description        String?                @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @default(now()) @updatedAt()
+  createdBy          String?                @db.Uuid()
+  lecturer           Lecturer?              @relation(fields: [lecturerId], references: [id])
+  lecturerId         String?                @unique()
+  currentVersionId   String?                @unique()
+  currentVersion     ExpertProfileVersion?  @relation("CurrentExpertVersion", fields: [currentVersionId], references: [id])
+  versions           ExpertProfileVersion[] @relation("ExpertVersions")
+  major              TrainingMajor[]
+  subjectClass       SubjectClass[]
+  councilMemberships CouncilMember[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Hồ sơ chuyên gia theo thời điểm (học vị, trong/ngoài HV, cờ vai trò, liên hệ…).
+model ExpertProfileVersion {
   id                           String                 @id() @default(cuid())
   code                         String?                @unique()
   active                       Boolean                @default(true)
@@ -5139,8 +5161,8 @@ model ExpertProfile {
   createdAt                    DateTime               @default(now())
   updatedAt                    DateTime               @default(now()) @updatedAt()
   createdBy                    String?                @db.Uuid()
-  lecturer                     Lecturer?              @relation(fields: [lecturerId], references: [id])
-  lecturerId                   String?                @unique()
+  expert                       Expert                 @relation("ExpertVersions", fields: [expertId], references: [id])
+  expertId                     String
   name                         String?
   academicDegreeType           DM_HocVi?              @relation(fields: [academicDegreeTypeId], references: [Id])
   academicDegreeTypeId         String?                @db.Uuid()
@@ -5149,8 +5171,9 @@ model ExpertProfile {
   organization                 String?
   position                     String?
   specialization               String?
-  major                        TrainingMajor[]
   workplace                    String?
+  /// Trong học viện — lưu tường minh, không suy từ lecturerId lúc in
+  inAcademy                    Boolean                @default(true)
   phone                        String?
   email                        String?
   bankAccountNumber            String?
@@ -5159,6 +5182,9 @@ model ExpertProfile {
   thesisExpert                 Boolean                @default(false)
   eligiblePresident            Boolean                @default(false)
   eligibleSecretary            Boolean                @default(false)
+  validFrom                    DateTime               @default(now())
+  validTo                      DateTime?
+  currentForExpert             Expert?                @relation("CurrentExpertVersion")
   supervisedTheses             ThesisProject[]        @relation("SupervisorToThesis")
   coSupervisedTheses           ThesisProject[]        @relation("CoSupervisorToThesis")
   thirdSupervisedTheses        ThesisProject[]        @relation("ThirdSupervisorToThesis")
@@ -5167,9 +5193,9 @@ model ExpertProfile {
   thirdSupervisorResearchTopic StudentResearchTopic[] @relation("ThirdSupervisorToResearchTopic")
   supervisorInternship         StudentInternship[]    @relation("SupervisorToInternship")
   coSupervisorInternship       StudentInternship[]    @relation("CoSupervisorToInternship")
-  subjectClass                 SubjectClass[]
-  councilMemberships           CouncilMember[]
+  councilMemberships           CouncilMember[]        @relation("CouncilMemberVersion")
 
+  @@index([expertId, validFrom])
   @@schema("ql-dao-tao")
 }
 
@@ -5232,21 +5258,25 @@ model Council {
 
 /// Thành viên trong một Hội đồng
 model CouncilMember {
-  id          String         @id() @default(cuid())
-  code        String?        @unique()
-  active      Boolean        @default(true)
-  description String?        @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @default(now()) @updatedAt()
-  createdBy   String?        @db.Uuid()
-  role        CouncilRole
-  councilId   String
-  council     Council        @relation(fields: [councilId], references: [id])
-  expertId    String?
-  expert      ExpertProfile? @relation(fields: [expertId], references: [id])
-  payment     PaymentRecord?
-  invitations Invitation?
+  id                     String                @id() @default(cuid())
+  code                   String?               @unique()
+  active                 Boolean               @default(true)
+  description            String?               @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @default(now()) @updatedAt()
+  createdBy              String?               @db.Uuid()
+  role                   CouncilRole
+  councilId              String
+  council                Council               @relation(fields: [councilId], references: [id])
+  /// Version hồ sơ đã chốt khi gán vào hội đồng (dùng để in / thanh toán)
+  expertProfileVersionId String?
+  expertProfileVersion   ExpertProfileVersion? @relation("CouncilMemberVersion", fields: [expertProfileVersionId], references: [id])
+  /// Identity (denorm) — filter/thống kê theo người qua nhiều đợt
+  expertId               String?
+  expert                 Expert?               @relation(fields: [expertId], references: [id])
+  payment                PaymentRecord?
+  invitations            Invitation?
 
   @@schema("ql-dao-tao")
 }

@@ -654,8 +654,12 @@
       "description": "StudentThesisRegistration operations"
     },
     {
-      "name": "expertProfile",
-      "description": "ExpertProfile operations"
+      "name": "expert",
+      "description": "Expert operations"
+    },
+    {
+      "name": "expertProfileVersion",
+      "description": "ExpertProfileVersion operations"
     },
     {
       "name": "decision",
@@ -6621,10 +6625,10 @@
               "$ref": "#/components/schemas/HocHam"
             }
           },
-          "expertProfile": {
+          "expertProfileVersion": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ExpertProfile"
+              "$ref": "#/components/schemas/ExpertProfileVersion"
             }
           },
           "guestTeachingRate": {
@@ -6714,10 +6718,10 @@
               "$ref": "#/components/schemas/HocVi"
             }
           },
-          "expertProfile": {
+          "expertProfileVersion": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ExpertProfile"
+              "$ref": "#/components/schemas/ExpertProfileVersion"
             }
           },
           "guestTeachingRate": {
@@ -9538,36 +9542,36 @@
           "supervisor": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfile"
+                "$ref": "#/components/schemas/ExpertProfileVersion"
               }
             ],
             "nullable": true
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "string",
             "nullable": true
           },
           "coSupervisor": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfile"
+                "$ref": "#/components/schemas/ExpertProfileVersion"
               }
             ],
             "nullable": true
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
           "thirdSupervisor": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfile"
+                "$ref": "#/components/schemas/ExpertProfileVersion"
               }
             ],
             "nullable": true
           },
-          "thirdSupervisorId": {
+          "thirdSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -9650,24 +9654,24 @@
           "supervisor": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfile"
+                "$ref": "#/components/schemas/ExpertProfileVersion"
               }
             ],
             "nullable": true
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "string",
             "nullable": true
           },
           "coSupervisor": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfile"
+                "$ref": "#/components/schemas/ExpertProfileVersion"
               }
             ],
             "nullable": true
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -12632,10 +12636,10 @@
               "$ref": "#/components/schemas/ThesisProject"
             }
           },
-          "expertProfile": {
+          "expert": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ExpertProfile"
+              "$ref": "#/components/schemas/Expert"
             }
           },
           "defenseRooms": {
@@ -14401,10 +14405,10 @@
               "$ref": "#/components/schemas/GraduationDecision"
             }
           },
-          "expertProfile": {
+          "expert": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ExpertProfile"
+              "$ref": "#/components/schemas/Expert"
             }
           },
           "studentGraduationApplication": {
@@ -16794,10 +16798,10 @@
               "$ref": "#/components/schemas/StudentThesisRegistration"
             }
           },
-          "expertProfile": {
+          "expert": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ExpertProfile"
+              "$ref": "#/components/schemas/Expert"
             }
           },
           "survey": {
@@ -18096,12 +18100,12 @@
           "thirdSupervisor": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfile"
+                "$ref": "#/components/schemas/ExpertProfileVersion"
               }
             ],
             "nullable": true
           },
-          "thirdSupervisorId": {
+          "thirdSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -18148,12 +18152,12 @@
           "supervisor": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfile"
+                "$ref": "#/components/schemas/ExpertProfileVersion"
               }
             ],
             "nullable": true
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -18176,12 +18180,12 @@
           "coSupervisor": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfile"
+                "$ref": "#/components/schemas/ExpertProfileVersion"
               }
             ],
             "nullable": true
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -18534,7 +18538,7 @@
           "status"
         ]
       },
-      "ExpertProfile": {
+      "Expert": {
         "type": "object",
         "properties": {
           "id": {
@@ -18580,6 +18584,90 @@
             "type": "string",
             "nullable": true
           },
+          "currentVersionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentVersion": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ExpertProfileVersion"
+              }
+            ],
+            "nullable": true
+          },
+          "versions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpertProfileVersion"
+            }
+          },
+          "major": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingMajor"
+            }
+          },
+          "subjectClass": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubjectClass"
+            }
+          },
+          "councilMemberships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CouncilMember"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "active",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ExpertProfileVersion": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "expert": {
+            "$ref": "#/components/schemas/Expert"
+          },
+          "expertId": {
+            "type": "string"
+          },
           "name": {
             "type": "string",
             "nullable": true
@@ -18620,15 +18708,12 @@
             "type": "string",
             "nullable": true
           },
-          "major": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TrainingMajor"
-            }
-          },
           "workplace": {
             "type": "string",
             "nullable": true
+          },
+          "inAcademy": {
+            "type": "boolean"
           },
           "phone": {
             "type": "string",
@@ -18657,6 +18742,23 @@
           },
           "eligibleSecretary": {
             "type": "boolean"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "currentForExpert": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Expert"
+              }
+            ],
+            "nullable": true
           },
           "supervisedTheses": {
             "type": "array",
@@ -18706,12 +18808,6 @@
               "$ref": "#/components/schemas/StudentInternship"
             }
           },
-          "subjectClass": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SubjectClass"
-            }
-          },
           "councilMemberships": {
             "type": "array",
             "items": {
@@ -18724,10 +18820,14 @@
           "active",
           "createdAt",
           "updatedAt",
+          "expert",
+          "expertId",
+          "inAcademy",
           "projectExpert",
           "thesisExpert",
           "eligiblePresident",
-          "eligibleSecretary"
+          "eligibleSecretary",
+          "validFrom"
         ]
       },
       "Decision": {
@@ -18972,6 +19072,18 @@
           "council": {
             "$ref": "#/components/schemas/Council"
           },
+          "expertProfileVersionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "expertProfileVersion": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ExpertProfileVersion"
+              }
+            ],
+            "nullable": true
+          },
           "expertId": {
             "type": "string",
             "nullable": true
@@ -18979,7 +19091,7 @@
           "expert": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfile"
+                "$ref": "#/components/schemas/Expert"
               }
             ],
             "nullable": true
@@ -39300,15 +39412,15 @@
             "type": "string",
             "nullable": true
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "string",
             "nullable": true
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
-          "thirdSupervisorId": {
+          "thirdSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -39437,11 +39549,11 @@
             "type": "string",
             "nullable": true
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "string",
             "nullable": true
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -50979,7 +51091,7 @@
             "type": "string",
             "nullable": true
           },
-          "thirdSupervisorId": {
+          "thirdSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -51007,7 +51119,7 @@
             "type": "string",
             "nullable": true
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -51019,7 +51131,7 @@
             "type": "string",
             "nullable": true
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -51404,13 +51516,13 @@
           "status"
         ]
       },
-      "AggregateExpertProfile": {
+      "AggregateExpert": {
         "type": "object",
         "properties": {
           "_count": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfileCountAggregateOutputType"
+                "$ref": "#/components/schemas/ExpertCountAggregateOutputType"
               }
             ],
             "nullable": true
@@ -51418,7 +51530,7 @@
           "_min": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfileMinAggregateOutputType"
+                "$ref": "#/components/schemas/ExpertMinAggregateOutputType"
               }
             ],
             "nullable": true
@@ -51426,14 +51538,14 @@
           "_max": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfileMaxAggregateOutputType"
+                "$ref": "#/components/schemas/ExpertMaxAggregateOutputType"
               }
             ],
             "nullable": true
           }
         }
       },
-      "ExpertProfileGroupByOutputType": {
+      "ExpertGroupByOutputType": {
         "type": "object",
         "properties": {
           "id": {
@@ -51471,6 +51583,108 @@
             "type": "string",
             "nullable": true
           },
+          "currentVersionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "_count": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ExpertCountAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_min": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ExpertMinAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_max": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ExpertMaxAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "active",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "AggregateExpertProfileVersion": {
+        "type": "object",
+        "properties": {
+          "_count": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ExpertProfileVersionCountAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_min": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ExpertProfileVersionMinAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_max": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ExpertProfileVersionMaxAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
+      "ExpertProfileVersionGroupByOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "expertId": {
+            "type": "string"
+          },
           "name": {
             "type": "string",
             "nullable": true
@@ -51498,6 +51712,9 @@
           "workplace": {
             "type": "string",
             "nullable": true
+          },
+          "inAcademy": {
+            "type": "boolean"
           },
           "phone": {
             "type": "string",
@@ -51527,10 +51744,19 @@
           "eligibleSecretary": {
             "type": "boolean"
           },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
           "_count": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfileCountAggregateOutputType"
+                "$ref": "#/components/schemas/ExpertProfileVersionCountAggregateOutputType"
               }
             ],
             "nullable": true
@@ -51538,7 +51764,7 @@
           "_min": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfileMinAggregateOutputType"
+                "$ref": "#/components/schemas/ExpertProfileVersionMinAggregateOutputType"
               }
             ],
             "nullable": true
@@ -51546,7 +51772,7 @@
           "_max": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ExpertProfileMaxAggregateOutputType"
+                "$ref": "#/components/schemas/ExpertProfileVersionMaxAggregateOutputType"
               }
             ],
             "nullable": true
@@ -51557,10 +51783,13 @@
           "active",
           "createdAt",
           "updatedAt",
+          "expertId",
+          "inAcademy",
           "projectExpert",
           "thesisExpert",
           "eligiblePresident",
-          "eligibleSecretary"
+          "eligibleSecretary",
+          "validFrom"
         ]
       },
       "AggregateDecision": {
@@ -51955,6 +52184,10 @@
           },
           "councilId": {
             "type": "string"
+          },
+          "expertProfileVersionId": {
+            "type": "string",
+            "nullable": true
           },
           "expertId": {
             "type": "string",
@@ -85362,13 +85595,13 @@
           "mainContent": {
             "type": "integer"
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "integer"
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "integer"
           },
-          "thirdSupervisorId": {
+          "thirdSupervisorVersionId": {
             "type": "integer"
           },
           "reportDate": {
@@ -85391,9 +85624,9 @@
           "deadline",
           "name",
           "mainContent",
-          "supervisorId",
-          "coSupervisorId",
-          "thirdSupervisorId",
+          "supervisorVersionId",
+          "coSupervisorVersionId",
+          "thirdSupervisorVersionId",
           "reportDate",
           "_all"
         ]
@@ -85453,15 +85686,15 @@
             "type": "string",
             "nullable": true
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "string",
             "nullable": true
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
-          "thirdSupervisorId": {
+          "thirdSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -85527,15 +85760,15 @@
             "type": "string",
             "nullable": true
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "string",
             "nullable": true
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
-          "thirdSupervisorId": {
+          "thirdSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -85591,10 +85824,10 @@
           "address": {
             "type": "integer"
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "integer"
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "integer"
           },
           "startDate": {
@@ -85625,8 +85858,8 @@
           "institution",
           "unit",
           "address",
-          "supervisorId",
-          "coSupervisorId",
+          "supervisorVersionId",
+          "coSupervisorVersionId",
           "startDate",
           "endDate",
           "reportDate",
@@ -85696,11 +85929,11 @@
             "type": "string",
             "nullable": true
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "string",
             "nullable": true
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -85784,11 +86017,11 @@
             "type": "string",
             "nullable": true
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "string",
             "nullable": true
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -105353,7 +105586,7 @@
           "secondarySupervisorId": {
             "type": "integer"
           },
-          "thirdSupervisorId": {
+          "thirdSupervisorVersionId": {
             "type": "integer"
           },
           "isProductProject": {
@@ -105377,7 +105610,7 @@
           "supervisorName": {
             "type": "integer"
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "integer"
           },
           "supervisorPaymentId": {
@@ -105386,7 +105619,7 @@
           "coSupervisorName": {
             "type": "integer"
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "integer"
           },
           "coSupervisorPaymentId": {
@@ -105477,7 +105710,7 @@
           "isEligibleForDefense",
           "primarySupervisorId",
           "secondarySupervisorId",
-          "thirdSupervisorId",
+          "thirdSupervisorVersionId",
           "isProductProject",
           "isGroupProject",
           "isLanguage",
@@ -105485,10 +105718,10 @@
           "subjectClassId",
           "thesisSessionId",
           "supervisorName",
-          "supervisorId",
+          "supervisorVersionId",
           "supervisorPaymentId",
           "coSupervisorName",
-          "coSupervisorId",
+          "coSupervisorVersionId",
           "coSupervisorPaymentId",
           "singleSupervisorPaymentId",
           "singlePayment",
@@ -105696,7 +105929,7 @@
             "type": "string",
             "nullable": true
           },
-          "thirdSupervisorId": {
+          "thirdSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -105728,7 +105961,7 @@
             "type": "string",
             "nullable": true
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -105740,7 +105973,7 @@
             "type": "string",
             "nullable": true
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -105960,7 +106193,7 @@
             "type": "string",
             "nullable": true
           },
-          "thirdSupervisorId": {
+          "thirdSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -105992,7 +106225,7 @@
             "type": "string",
             "nullable": true
           },
-          "supervisorId": {
+          "supervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -106004,7 +106237,7 @@
             "type": "string",
             "nullable": true
           },
-          "coSupervisorId": {
+          "coSupervisorVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -106498,7 +106731,7 @@
           }
         }
       },
-      "ExpertProfileCountAggregateOutputType": {
+      "ExpertCountAggregateOutputType": {
         "type": "object",
         "properties": {
           "id": {
@@ -106528,49 +106761,7 @@
           "lecturerId": {
             "type": "integer"
           },
-          "name": {
-            "type": "integer"
-          },
-          "academicDegreeTypeId": {
-            "type": "integer"
-          },
-          "academicRankTypeId": {
-            "type": "integer"
-          },
-          "organization": {
-            "type": "integer"
-          },
-          "position": {
-            "type": "integer"
-          },
-          "specialization": {
-            "type": "integer"
-          },
-          "workplace": {
-            "type": "integer"
-          },
-          "phone": {
-            "type": "integer"
-          },
-          "email": {
-            "type": "integer"
-          },
-          "bankAccountNumber": {
-            "type": "integer"
-          },
-          "bankName": {
-            "type": "integer"
-          },
-          "projectExpert": {
-            "type": "integer"
-          },
-          "thesisExpert": {
-            "type": "integer"
-          },
-          "eligiblePresident": {
-            "type": "integer"
-          },
-          "eligibleSecretary": {
+          "currentVersionId": {
             "type": "integer"
           },
           "_all": {
@@ -106587,6 +106778,204 @@
           "updatedAt",
           "createdBy",
           "lecturerId",
+          "currentVersionId",
+          "_all"
+        ]
+      },
+      "ExpertMinAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "lecturerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentVersionId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ExpertMaxAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "lecturerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentVersionId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ExpertProfileVersionCountAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "code": {
+            "type": "integer"
+          },
+          "active": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "integer"
+          },
+          "deletedAt": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "integer"
+          },
+          "updatedAt": {
+            "type": "integer"
+          },
+          "createdBy": {
+            "type": "integer"
+          },
+          "expertId": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "integer"
+          },
+          "academicDegreeTypeId": {
+            "type": "integer"
+          },
+          "academicRankTypeId": {
+            "type": "integer"
+          },
+          "organization": {
+            "type": "integer"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "specialization": {
+            "type": "integer"
+          },
+          "workplace": {
+            "type": "integer"
+          },
+          "inAcademy": {
+            "type": "integer"
+          },
+          "phone": {
+            "type": "integer"
+          },
+          "email": {
+            "type": "integer"
+          },
+          "bankAccountNumber": {
+            "type": "integer"
+          },
+          "bankName": {
+            "type": "integer"
+          },
+          "projectExpert": {
+            "type": "integer"
+          },
+          "thesisExpert": {
+            "type": "integer"
+          },
+          "eligiblePresident": {
+            "type": "integer"
+          },
+          "eligibleSecretary": {
+            "type": "integer"
+          },
+          "validFrom": {
+            "type": "integer"
+          },
+          "validTo": {
+            "type": "integer"
+          },
+          "_all": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "active",
+          "description",
+          "deletedAt",
+          "createdAt",
+          "updatedAt",
+          "createdBy",
+          "expertId",
           "name",
           "academicDegreeTypeId",
           "academicRankTypeId",
@@ -106594,6 +106983,7 @@
           "position",
           "specialization",
           "workplace",
+          "inAcademy",
           "phone",
           "email",
           "bankAccountNumber",
@@ -106602,10 +106992,12 @@
           "thesisExpert",
           "eligiblePresident",
           "eligibleSecretary",
+          "validFrom",
+          "validTo",
           "_all"
         ]
       },
-      "ExpertProfileMinAggregateOutputType": {
+      "ExpertProfileVersionMinAggregateOutputType": {
         "type": "object",
         "properties": {
           "id": {
@@ -106643,7 +107035,7 @@
             "type": "string",
             "nullable": true
           },
-          "lecturerId": {
+          "expertId": {
             "type": "string",
             "nullable": true
           },
@@ -106673,6 +107065,10 @@
           },
           "workplace": {
             "type": "string",
+            "nullable": true
+          },
+          "inAcademy": {
+            "type": "boolean",
             "nullable": true
           },
           "phone": {
@@ -106705,11 +107101,21 @@
           },
           "eligibleSecretary": {
             "type": "boolean",
+            "nullable": true
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           }
         }
       },
-      "ExpertProfileMaxAggregateOutputType": {
+      "ExpertProfileVersionMaxAggregateOutputType": {
         "type": "object",
         "properties": {
           "id": {
@@ -106747,7 +107153,7 @@
             "type": "string",
             "nullable": true
           },
-          "lecturerId": {
+          "expertId": {
             "type": "string",
             "nullable": true
           },
@@ -106777,6 +107183,10 @@
           },
           "workplace": {
             "type": "string",
+            "nullable": true
+          },
+          "inAcademy": {
+            "type": "boolean",
             "nullable": true
           },
           "phone": {
@@ -106809,6 +107219,16 @@
           },
           "eligibleSecretary": {
             "type": "boolean",
+            "nullable": true
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           }
         }
@@ -107345,6 +107765,9 @@
           "councilId": {
             "type": "integer"
           },
+          "expertProfileVersionId": {
+            "type": "integer"
+          },
           "expertId": {
             "type": "integer"
           },
@@ -107363,6 +107786,7 @@
           "createdBy",
           "role",
           "councilId",
+          "expertProfileVersionId",
           "expertId",
           "_all"
         ]
@@ -107414,6 +107838,10 @@
             "nullable": true
           },
           "councilId": {
+            "type": "string",
+            "nullable": true
+          },
+          "expertProfileVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -107470,6 +107898,10 @@
             "nullable": true
           },
           "councilId": {
+            "type": "string",
+            "nullable": true
+          },
+          "expertProfileVersionId": {
             "type": "string",
             "nullable": true
           },
@@ -181918,7 +182350,7 @@
           }
         }
       },
-      "ExpertProfileCreateArgs": {
+      "ExpertCreateArgs": {
         "type": "object",
         "required": [
           "data"
@@ -181938,7 +182370,7 @@
           }
         }
       },
-      "ExpertProfileCreateManyArgs": {
+      "ExpertCreateManyArgs": {
         "type": "object",
         "required": [
           "data"
@@ -181966,7 +182398,7 @@
           }
         }
       },
-      "ExpertProfileFindUniqueArgs": {
+      "ExpertFindUniqueArgs": {
         "type": "object",
         "required": [
           "where"
@@ -181986,7 +182418,7 @@
           }
         }
       },
-      "ExpertProfileFindFirstArgs": {
+      "ExpertFindFirstArgs": {
         "type": "object",
         "properties": {
           "select": {
@@ -182003,7 +182435,7 @@
           }
         }
       },
-      "ExpertProfileFindManyArgs": {
+      "ExpertFindManyArgs": {
         "type": "object",
         "properties": {
           "select": {
@@ -182042,7 +182474,7 @@
           }
         }
       },
-      "ExpertProfileUpdateArgs": {
+      "ExpertUpdateArgs": {
         "type": "object",
         "required": [
           "where",
@@ -182066,7 +182498,7 @@
           }
         }
       },
-      "ExpertProfileUpdateManyArgs": {
+      "ExpertUpdateManyArgs": {
         "type": "object",
         "required": [
           "data"
@@ -182083,7 +182515,7 @@
           }
         }
       },
-      "ExpertProfileUpsertArgs": {
+      "ExpertUpsertArgs": {
         "type": "object",
         "required": [
           "create",
@@ -182111,7 +182543,7 @@
           }
         }
       },
-      "ExpertProfileDeleteUniqueArgs": {
+      "ExpertDeleteUniqueArgs": {
         "type": "object",
         "required": [
           "where"
@@ -182131,7 +182563,7 @@
           }
         }
       },
-      "ExpertProfileDeleteManyArgs": {
+      "ExpertDeleteManyArgs": {
         "type": "object",
         "properties": {
           "where": {
@@ -182142,7 +182574,7 @@
           }
         }
       },
-      "ExpertProfileCountArgs": {
+      "ExpertCountArgs": {
         "type": "object",
         "properties": {
           "select": {
@@ -182156,7 +182588,7 @@
           }
         }
       },
-      "ExpertProfileAggregateArgs": {
+      "ExpertAggregateArgs": {
         "type": "object",
         "properties": {
           "where": {
@@ -182195,7 +182627,326 @@
           }
         }
       },
-      "ExpertProfileGroupByArgs": {
+      "ExpertGroupByArgs": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "orderBy": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "by": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "having": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "take": {
+            "type": "integer"
+          },
+          "skip": {
+            "type": "integer"
+          },
+          "_count": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/_AnyObject"
+              }
+            ]
+          },
+          "_min": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ExpertProfileVersionCreateArgs": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "data": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ExpertProfileVersionCreateManyArgs": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/_AnyObject"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/_AnyObject"
+                }
+              }
+            ]
+          },
+          "skipDuplicates": {
+            "type": "boolean",
+            "description": "Do not insert records with unique fields or ID fields that already exist."
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ExpertProfileVersionFindUniqueArgs": {
+        "type": "object",
+        "required": [
+          "where"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ExpertProfileVersionFindFirstArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ExpertProfileVersionFindManyArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "orderBy": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/_AnyObject"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/_AnyObject"
+                }
+              }
+            ]
+          },
+          "cursor": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "take": {
+            "type": "integer"
+          },
+          "skip": {
+            "type": "integer"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ExpertProfileVersionUpdateArgs": {
+        "type": "object",
+        "required": [
+          "where",
+          "data"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "data": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ExpertProfileVersionUpdateManyArgs": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "data": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ExpertProfileVersionUpsertArgs": {
+        "type": "object",
+        "required": [
+          "create",
+          "update",
+          "where"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "create": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "update": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ExpertProfileVersionDeleteUniqueArgs": {
+        "type": "object",
+        "required": [
+          "where"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ExpertProfileVersionDeleteManyArgs": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ExpertProfileVersionCountArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ExpertProfileVersionAggregateArgs": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "orderBy": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "cursor": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "take": {
+            "type": "integer"
+          },
+          "skip": {
+            "type": "integer"
+          },
+          "_count": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/_AnyObject"
+              }
+            ]
+          },
+          "_min": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ExpertProfileVersionGroupByArgs": {
         "type": "object",
         "properties": {
           "where": {
@@ -397310,12 +398061,12 @@
         ]
       }
     },
-    "/api/model/expertProfile/create": {
+    "/api/model/expert/create": {
       "post": {
-        "operationId": "createExpertProfile",
-        "description": "Create a new ExpertProfile",
+        "operationId": "createExpert",
+        "description": "Create a new Expert",
         "tags": [
-          "expertProfile"
+          "expert"
         ],
         "responses": {
           "201": {
@@ -397329,7 +398080,7 @@
                   ],
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/ExpertProfile",
+                      "$ref": "#/components/schemas/Expert",
                       "description": "The Prisma response data serialized with superjson"
                     },
                     "meta": {
@@ -397376,19 +398127,19 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ExpertProfileCreateArgs"
+                "$ref": "#/components/schemas/ExpertCreateArgs"
               }
             }
           }
         }
       }
     },
-    "/api/model/expertProfile/createMany": {
+    "/api/model/expert/createMany": {
       "post": {
-        "operationId": "createManyExpertProfile",
-        "description": "Create several ExpertProfile",
+        "operationId": "createManyExpert",
+        "description": "Create several Expert",
         "tags": [
-          "expertProfile"
+          "expert"
         ],
         "responses": {
           "201": {
@@ -397449,19 +398200,19 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ExpertProfileCreateManyArgs"
+                "$ref": "#/components/schemas/ExpertCreateManyArgs"
               }
             }
           }
         }
       }
     },
-    "/api/model/expertProfile/findUnique": {
+    "/api/model/expert/findUnique": {
       "get": {
-        "operationId": "findUniqueExpertProfile",
-        "description": "Find one unique ExpertProfile",
+        "operationId": "findUniqueExpert",
+        "description": "Find one unique Expert",
         "tags": [
-          "expertProfile"
+          "expert"
         ],
         "responses": {
           "200": {
@@ -397475,7 +398226,7 @@
                   ],
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/ExpertProfile",
+                      "$ref": "#/components/schemas/Expert",
                       "description": "The Prisma response data serialized with superjson"
                     },
                     "meta": {
@@ -397527,7 +398278,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExpertProfileFindUniqueArgs"
+                  "$ref": "#/components/schemas/ExpertFindUniqueArgs"
                 }
               }
             }
@@ -397545,12 +398296,12 @@
         ]
       }
     },
-    "/api/model/expertProfile/findFirst": {
+    "/api/model/expert/findFirst": {
       "get": {
-        "operationId": "findFirstExpertProfile",
-        "description": "Find the first ExpertProfile matching the given condition",
+        "operationId": "findFirstExpert",
+        "description": "Find the first Expert matching the given condition",
         "tags": [
-          "expertProfile"
+          "expert"
         ],
         "responses": {
           "200": {
@@ -397564,7 +398315,7 @@
                   ],
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/ExpertProfile",
+                      "$ref": "#/components/schemas/Expert",
                       "description": "The Prisma response data serialized with superjson"
                     },
                     "meta": {
@@ -397616,7 +398367,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExpertProfileFindFirstArgs"
+                  "$ref": "#/components/schemas/ExpertFindFirstArgs"
                 }
               }
             }
@@ -397634,12 +398385,12 @@
         ]
       }
     },
-    "/api/model/expertProfile/findMany": {
+    "/api/model/expert/findMany": {
       "get": {
-        "operationId": "findManyExpertProfile",
-        "description": "Find a list of ExpertProfile",
+        "operationId": "findManyExpert",
+        "description": "Find a list of Expert",
         "tags": [
-          "expertProfile"
+          "expert"
         ],
         "responses": {
           "200": {
@@ -397655,7 +398406,7 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/ExpertProfile"
+                        "$ref": "#/components/schemas/Expert"
                       },
                       "description": "The Prisma response data serialized with superjson"
                     },
@@ -397708,7 +398459,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExpertProfileFindManyArgs"
+                  "$ref": "#/components/schemas/ExpertFindManyArgs"
                 }
               }
             }
@@ -397726,12 +398477,12 @@
         ]
       }
     },
-    "/api/model/expertProfile/update": {
+    "/api/model/expert/update": {
       "patch": {
-        "operationId": "updateExpertProfile",
-        "description": "Update a ExpertProfile",
+        "operationId": "updateExpert",
+        "description": "Update a Expert",
         "tags": [
-          "expertProfile"
+          "expert"
         ],
         "responses": {
           "200": {
@@ -397745,7 +398496,7 @@
                   ],
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/ExpertProfile",
+                      "$ref": "#/components/schemas/Expert",
                       "description": "The Prisma response data serialized with superjson"
                     },
                     "meta": {
@@ -397792,19 +398543,19 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ExpertProfileUpdateArgs"
+                "$ref": "#/components/schemas/ExpertUpdateArgs"
               }
             }
           }
         }
       }
     },
-    "/api/model/expertProfile/updateMany": {
+    "/api/model/expert/updateMany": {
       "patch": {
-        "operationId": "updateManyExpertProfile",
-        "description": "Update ExpertProfiles matching the given condition",
+        "operationId": "updateManyExpert",
+        "description": "Update Experts matching the given condition",
         "tags": [
-          "expertProfile"
+          "expert"
         ],
         "responses": {
           "200": {
@@ -397865,19 +398616,19 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ExpertProfileUpdateManyArgs"
+                "$ref": "#/components/schemas/ExpertUpdateManyArgs"
               }
             }
           }
         }
       }
     },
-    "/api/model/expertProfile/upsert": {
+    "/api/model/expert/upsert": {
       "post": {
-        "operationId": "upsertExpertProfile",
-        "description": "Upsert a ExpertProfile",
+        "operationId": "upsertExpert",
+        "description": "Upsert a Expert",
         "tags": [
-          "expertProfile"
+          "expert"
         ],
         "responses": {
           "200": {
@@ -397891,7 +398642,7 @@
                   ],
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/ExpertProfile",
+                      "$ref": "#/components/schemas/Expert",
                       "description": "The Prisma response data serialized with superjson"
                     },
                     "meta": {
@@ -397938,19 +398689,19 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ExpertProfileUpsertArgs"
+                "$ref": "#/components/schemas/ExpertUpsertArgs"
               }
             }
           }
         }
       }
     },
-    "/api/model/expertProfile/delete": {
+    "/api/model/expert/delete": {
       "delete": {
-        "operationId": "deleteExpertProfile",
-        "description": "Delete one unique ExpertProfile",
+        "operationId": "deleteExpert",
+        "description": "Delete one unique Expert",
         "tags": [
-          "expertProfile"
+          "expert"
         ],
         "responses": {
           "200": {
@@ -397964,7 +398715,7 @@
                   ],
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/ExpertProfile",
+                      "$ref": "#/components/schemas/Expert",
                       "description": "The Prisma response data serialized with superjson"
                     },
                     "meta": {
@@ -398016,7 +398767,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExpertProfileDeleteUniqueArgs"
+                  "$ref": "#/components/schemas/ExpertDeleteUniqueArgs"
                 }
               }
             }
@@ -398034,12 +398785,12 @@
         ]
       }
     },
-    "/api/model/expertProfile/deleteMany": {
+    "/api/model/expert/deleteMany": {
       "delete": {
-        "operationId": "deleteManyExpertProfile",
-        "description": "Delete ExpertProfiles matching the given condition",
+        "operationId": "deleteManyExpert",
+        "description": "Delete Experts matching the given condition",
         "tags": [
-          "expertProfile"
+          "expert"
         ],
         "responses": {
           "200": {
@@ -398105,7 +398856,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExpertProfileDeleteManyArgs"
+                  "$ref": "#/components/schemas/ExpertDeleteManyArgs"
                 }
               }
             }
@@ -398123,12 +398874,12 @@
         ]
       }
     },
-    "/api/model/expertProfile/count": {
+    "/api/model/expert/count": {
       "get": {
-        "operationId": "countExpertProfile",
-        "description": "Find a list of ExpertProfile",
+        "operationId": "countExpert",
+        "description": "Find a list of Expert",
         "tags": [
-          "expertProfile"
+          "expert"
         ],
         "responses": {
           "200": {
@@ -398147,7 +398898,7 @@
                           "type": "integer"
                         },
                         {
-                          "$ref": "#/components/schemas/ExpertProfileCountAggregateOutputType"
+                          "$ref": "#/components/schemas/ExpertCountAggregateOutputType"
                         }
                       ],
                       "description": "The Prisma response data serialized with superjson"
@@ -398201,7 +398952,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExpertProfileCountArgs"
+                  "$ref": "#/components/schemas/ExpertCountArgs"
                 }
               }
             }
@@ -398219,12 +398970,12 @@
         ]
       }
     },
-    "/api/model/expertProfile/aggregate": {
+    "/api/model/expert/aggregate": {
       "get": {
-        "operationId": "aggregateExpertProfile",
-        "description": "Aggregate ExpertProfiles",
+        "operationId": "aggregateExpert",
+        "description": "Aggregate Experts",
         "tags": [
-          "expertProfile"
+          "expert"
         ],
         "responses": {
           "200": {
@@ -398238,7 +398989,7 @@
                   ],
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/AggregateExpertProfile",
+                      "$ref": "#/components/schemas/AggregateExpert",
                       "description": "The Prisma response data serialized with superjson"
                     },
                     "meta": {
@@ -398290,7 +399041,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExpertProfileAggregateArgs"
+                  "$ref": "#/components/schemas/ExpertAggregateArgs"
                 }
               }
             }
@@ -398308,12 +399059,12 @@
         ]
       }
     },
-    "/api/model/expertProfile/groupBy": {
+    "/api/model/expert/groupBy": {
       "get": {
-        "operationId": "groupByExpertProfile",
-        "description": "Group ExpertProfiles by fields",
+        "operationId": "groupByExpert",
+        "description": "Group Experts by fields",
         "tags": [
-          "expertProfile"
+          "expert"
         ],
         "responses": {
           "200": {
@@ -398329,7 +399080,7 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/ExpertProfileGroupByOutputType"
+                        "$ref": "#/components/schemas/ExpertGroupByOutputType"
                       },
                       "description": "The Prisma response data serialized with superjson"
                     },
@@ -398382,7 +399133,1097 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExpertProfileGroupByArgs"
+                  "$ref": "#/components/schemas/ExpertGroupByArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/expertProfileVersion/create": {
+      "post": {
+        "operationId": "createExpertProfileVersion",
+        "description": "Create a new ExpertProfileVersion",
+        "tags": [
+          "expertProfileVersion"
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ExpertProfileVersion",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpertProfileVersionCreateArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/expertProfileVersion/createMany": {
+      "post": {
+        "operationId": "createManyExpertProfileVersion",
+        "description": "Create several ExpertProfileVersion",
+        "tags": [
+          "expertProfileVersion"
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BatchPayload",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpertProfileVersionCreateManyArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/expertProfileVersion/findUnique": {
+      "get": {
+        "operationId": "findUniqueExpertProfileVersion",
+        "description": "Find one unique ExpertProfileVersion",
+        "tags": [
+          "expertProfileVersion"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ExpertProfileVersion",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpertProfileVersionFindUniqueArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/expertProfileVersion/findFirst": {
+      "get": {
+        "operationId": "findFirstExpertProfileVersion",
+        "description": "Find the first ExpertProfileVersion matching the given condition",
+        "tags": [
+          "expertProfileVersion"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ExpertProfileVersion",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpertProfileVersionFindFirstArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/expertProfileVersion/findMany": {
+      "get": {
+        "operationId": "findManyExpertProfileVersion",
+        "description": "Find a list of ExpertProfileVersion",
+        "tags": [
+          "expertProfileVersion"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ExpertProfileVersion"
+                      },
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpertProfileVersionFindManyArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/expertProfileVersion/update": {
+      "patch": {
+        "operationId": "updateExpertProfileVersion",
+        "description": "Update a ExpertProfileVersion",
+        "tags": [
+          "expertProfileVersion"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ExpertProfileVersion",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpertProfileVersionUpdateArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/expertProfileVersion/updateMany": {
+      "patch": {
+        "operationId": "updateManyExpertProfileVersion",
+        "description": "Update ExpertProfileVersions matching the given condition",
+        "tags": [
+          "expertProfileVersion"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BatchPayload",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpertProfileVersionUpdateManyArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/expertProfileVersion/upsert": {
+      "post": {
+        "operationId": "upsertExpertProfileVersion",
+        "description": "Upsert a ExpertProfileVersion",
+        "tags": [
+          "expertProfileVersion"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ExpertProfileVersion",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpertProfileVersionUpsertArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/expertProfileVersion/delete": {
+      "delete": {
+        "operationId": "deleteExpertProfileVersion",
+        "description": "Delete one unique ExpertProfileVersion",
+        "tags": [
+          "expertProfileVersion"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ExpertProfileVersion",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpertProfileVersionDeleteUniqueArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/expertProfileVersion/deleteMany": {
+      "delete": {
+        "operationId": "deleteManyExpertProfileVersion",
+        "description": "Delete ExpertProfileVersions matching the given condition",
+        "tags": [
+          "expertProfileVersion"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BatchPayload",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpertProfileVersionDeleteManyArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/expertProfileVersion/count": {
+      "get": {
+        "operationId": "countExpertProfileVersion",
+        "description": "Find a list of ExpertProfileVersion",
+        "tags": [
+          "expertProfileVersion"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "oneOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "$ref": "#/components/schemas/ExpertProfileVersionCountAggregateOutputType"
+                        }
+                      ],
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpertProfileVersionCountArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/expertProfileVersion/aggregate": {
+      "get": {
+        "operationId": "aggregateExpertProfileVersion",
+        "description": "Aggregate ExpertProfileVersions",
+        "tags": [
+          "expertProfileVersion"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AggregateExpertProfileVersion",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpertProfileVersionAggregateArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/expertProfileVersion/groupBy": {
+      "get": {
+        "operationId": "groupByExpertProfileVersion",
+        "description": "Group ExpertProfileVersions by fields",
+        "tags": [
+          "expertProfileVersion"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ExpertProfileVersionGroupByOutputType"
+                      },
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpertProfileVersionGroupByArgs"
                 }
               }
             }
