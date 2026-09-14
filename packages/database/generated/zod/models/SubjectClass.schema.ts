@@ -101,7 +101,7 @@ const relationSchema = z.object({
     fixedClasses: z.array(z.unknown()).optional(),
     classSchedules: z.array(z.unknown()).optional(),
     thesisProjects: z.array(z.unknown()).optional(),
-    expertProfile: z.array(z.unknown()).optional(),
+    expert: z.array(z.unknown()).optional(),
     defenseRooms: z.array(z.unknown()).optional(),
     surveyObjectTypes: z.array(z.unknown()).optional(),
     classRegisterLogs: z.array(z.unknown()).optional(),

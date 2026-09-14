@@ -22,7 +22,7 @@ import {
   useCountThesisProject,
   useFindFirstLecturer,
   useFindManyDefenseSession,
-  useFindManyExpertProfile,
+  useFindManyExpert,
   useFindManyRoom,
   useFindManySubjectClass,
   useCreateLibrarySubmission,
@@ -66,6 +66,7 @@ import {
   exportDanhSachTieuBanChamDATN,
   exportPhuLucHuongDanDoAn,
 } from "../../../utils/thesis-excel"
+import { flattenExpertForSelect } from "@/utils/expert-select"
 
 dayjs.extend(utc)
 interface DoAnForm {
@@ -117,18 +118,24 @@ const THESIS_PROJECT_INCLUDE = {
   },
   thirdSupervisor: {
     include: {
-      lecturer: {
+      academicRankType: true,
+      academicDegreeType: true,
+      expert: {
         include: {
-          userProfile: {
+          lecturer: {
             include: {
-              academicRankType: true,
-              academicDegreeType: true,
-              level: true,
-              rank: true,
-              positionCPV: true,
+              userProfile: {
+                include: {
+                  academicRankType: true,
+                  academicDegreeType: true,
+                  level: true,
+                  rank: true,
+                  positionCPV: true,
+                },
+              },
+              organization: true,
             },
           },
-          organization: true,
         },
       },
     },
@@ -168,11 +175,15 @@ const THESIS_PROJECT_INCLUDE = {
     include: {
       members: {
         include: {
-          expert: {
+          expertProfileVersion: {
             include: {
-              lecturer: {
+              expert: {
                 include: {
-                  userProfile: true,
+                  lecturer: {
+                    include: {
+                      userProfile: true,
+                    },
+                  },
                 },
               },
             },
@@ -327,9 +338,11 @@ export default function DanhMucDoAn() {
   const { data: defenseSessionData = [] } = useFindManyDefenseSession()
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
   const { data: roomsData = [] } = useFindManyRoom()
-  const { data: expertProfiles = [] } = useFindManyExpertProfile({
-    include: { lecturer: { include: { userProfile: true } } },
+  const { data: experts } = useFindManyExpert({
+    where: { currentVersion: { projectExpert: true } },
+    include: { lecturer: { include: { userProfile: true } }, currentVersion: true },
   })
+  const expertProfiles = useMemo(() => (experts ?? []).map(flattenExpertForSelect), [experts])
 
   const { data: thesisProjectDataCount = 0 } = useCountThesisProject({
     where: where,
@@ -440,29 +453,29 @@ export default function DanhMucDoAn() {
           title: record.title || "",
           primarySupervisorId: record.primarySupervisorId || "",
           secondarySupervisorId: record.secondarySupervisorId || "",
-          thirdSupervisorId: record.thirdSupervisorId || "",
+          thirdSupervisorId: record.thirdSupervisor?.expertId || "",
           thirdSupervisorName:
-            record.thirdSupervisor?.lecturer?.userProfile?.fullname ||
             record.thirdSupervisor?.name ||
+            record.thirdSupervisor?.expert?.lecturer?.userProfile?.fullname ||
             "",
           defenseDate: record.defenseDate || "",
           editProject: record.editProject || "",
           defenseSession: record.defenseSession?.id || "",
           room: record.room?.id || "",
           chairman:
-            record.council?.members.find((x: any) => x.role === CouncilRole.CHAIRMAN)?.expert?.id ||
+            record.council?.members.find((x: any) => x.role === CouncilRole.CHAIRMAN)?.expertId ||
             "",
           secretary:
-            record.council?.members.find((x: any) => x.role === CouncilRole.SECRETARY)?.expert
-              ?.id || "",
+            record.council?.members.find((x: any) => x.role === CouncilRole.SECRETARY)?.expertId ||
+            "",
           reviewer1:
-            record.council?.members.find((x: any) => x.role === CouncilRole.REVIEWER_1)?.expert
-              ?.id || "",
+            record.council?.members.find((x: any) => x.role === CouncilRole.REVIEWER_1)?.expertId ||
+            "",
           reviewer2:
-            record.council?.members.find((x: any) => x.role === CouncilRole.REVIEWER_2)?.expert
-              ?.id || "",
+            record.council?.members.find((x: any) => x.role === CouncilRole.REVIEWER_2)?.expertId ||
+            "",
           councilMember:
-            record.council?.members.find((x: any) => x.role === CouncilRole.MEMBER)?.expert?.id ||
+            record.council?.members.find((x: any) => x.role === CouncilRole.MEMBER)?.expertId ||
             "",
           status: record.status || "",
           defenseRecordComments: record.defenseRecord?.comments || "",
@@ -484,11 +497,21 @@ export default function DanhMucDoAn() {
     }
 
     try {
+      const versionByExpertId = new Map(
+        expertProfiles
+          .filter((e) => e.currentVersionId)
+          .map((e) => [e.id, e.currentVersionId!])
+      )
       const transactions: any[] = []
 
       for (const thesisId of Object.keys(editingValues)) {
         const values = editingValues[thesisId]
         const originalRecord = thesisProjectData.find((t) => t.id === thesisId)
+
+        if (values.thirdSupervisorId && !versionByExpertId.get(values.thirdSupervisorId)) {
+          message.error("Chuyên gia GVHD3 chưa có phiên bản hồ sơ hiện tại.")
+          return
+        }
 
         // 1. Xử lý điểm số
         const finalScore =
@@ -533,13 +556,24 @@ export default function DanhMucDoAn() {
         const memberUpserts = expertRolesMapping
           .filter((m) => values[m.key])
           .map((m) => {
+            const versionId = versionByExpertId.get(values[m.key])
+            if (!versionId) {
+              throw new Error(`Thành viên hội đồng chưa có phiên bản hồ sơ hiện tại.`)
+            }
             const existingMember = originalRecord?.council?.members?.find(
               (em: any) => em.role === m.role
             )
             return {
               where: { id: existingMember?.id || "new-id" },
-              create: { role: m.role, expertId: values[m.key] },
-              update: { expertId: values[m.key] },
+              create: {
+                role: m.role,
+                expertId: values[m.key],
+                expertProfileVersionId: versionId,
+              },
+              update: {
+                expertId: values[m.key],
+                expertProfileVersionId: versionId,
+              },
             }
           })
 
@@ -554,7 +588,9 @@ export default function DanhMucDoAn() {
           externalUnit: values.externalUnit ?? false,
           primarySupervisor: relation(values.primarySupervisorId),
           secondarySupervisor: relation(values.secondarySupervisorId),
-          thirdSupervisor: relation(values.thirdSupervisorId),
+          thirdSupervisor: values.thirdSupervisorId
+            ? { connect: { id: versionByExpertId.get(values.thirdSupervisorId)! } }
+            : { disconnect: true },
           room: relation(values.room),
           defenseSession: relation(values.defenseSessionId),
           defenseRecord: {
@@ -1035,8 +1071,9 @@ export default function DanhMucDoAn() {
                         {record?.thirdSupervisor && (
                           <div>
                             HD 3:{" "}
-                            {getSupervisorName(record.thirdSupervisor.lecturer?.userProfile) ||
-                              record.thirdSupervisor.name}
+                            {getSupervisorName(
+                              record.thirdSupervisor.expert?.lecturer?.userProfile
+                            ) || record.thirdSupervisor.name}
                           </div>
                         )}
                       </div>
@@ -1061,7 +1098,8 @@ export default function DanhMucDoAn() {
                       )}
                       {record?.thirdSupervisor && (
                         <div>
-                          {record.thirdSupervisor.lecturer?.userProfile?.positionCPV?.sTen || "---"}
+                          {record.thirdSupervisor.expert?.lecturer?.userProfile?.positionCPV
+                            ?.sTen || "---"}
                         </div>
                       )}
                     </div>
@@ -1080,7 +1118,9 @@ export default function DanhMucDoAn() {
                         <div>{record.secondarySupervisor.organization?.sMa || "---"}</div>
                       )}
                       {record?.thirdSupervisor && (
-                        <div>{record.thirdSupervisor.lecturer?.organization?.sMa || "---"}</div>
+                        <div>
+                          {record.thirdSupervisor.expert?.lecturer?.organization?.sMa || "---"}
+                        </div>
                       )}
                     </div>
                   ),

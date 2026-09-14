@@ -3317,13 +3317,33 @@ const policy: PolicyDef = {
             },
 
         },
-        expertProfile: {
+        expert: {
             modelLevel: {
-                read: { guard: ExpertProfile_read, },
-                create: { guard: ExpertProfile_create, inputChecker: ExpertProfile_create_input, },
-                update: { guard: ExpertProfile_update, },
-                postUpdate: { guard: ExpertProfile_postUpdate, },
-                delete: { guard: ExpertProfile_delete, }
+                read: { guard: Expert_read, },
+                create: { guard: Expert_create, inputChecker: Expert_create_input, },
+                update: { guard: Expert_update, },
+                postUpdate: { guard: Expert_postUpdate, },
+                delete: { guard: Expert_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        expertProfileVersion: {
+            modelLevel: {
+                read: { guard: ExpertProfileVersion_read, },
+                create: { guard: ExpertProfileVersion_create, inputChecker: ExpertProfileVersion_create_input, },
+                update: { guard: ExpertProfileVersion_update, },
+                postUpdate: { guard: ExpertProfileVersion_postUpdate, },
+                delete: { guard: ExpertProfileVersion_delete, }
             },
             fieldLevel: {
                 read:
@@ -5881,7 +5901,8 @@ const policy: PolicyDef = {
         thesisProject: { hasValidation: false },
         defenseSession: { hasValidation: false },
         studentThesisRegistration: { hasValidation: false },
-        expertProfile: { hasValidation: true },
+        expert: { hasValidation: false },
+        expertProfileVersion: { hasValidation: true },
         decision: { hasValidation: false },
         invitation: { hasValidation: false },
         council: { hasValidation: false },
@@ -16514,12 +16535,12 @@ function $check_StudentThesisRegistration_delete(input: any, context: QueryConte
     return false;
 }
 
-function ExpertProfile_read(context: QueryContext, db: CrudContract): any {
+function Expert_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_ExpertProfile_read(input: any, context: QueryContext): any {
+function $check_Expert_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -16530,49 +16551,114 @@ function $check_ExpertProfile_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function ExpertProfile_create(context: QueryContext, db: CrudContract): any {
+function Expert_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ExpertProfile_create(input: any, context: QueryContext): any {
+function $check_Expert_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ExpertProfile_create_input(input: any, context: QueryContext): boolean {
+function Expert_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function ExpertProfile_update(context: QueryContext, db: CrudContract): any {
+function Expert_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ExpertProfile_update(input: any, context: QueryContext): any {
+function $check_Expert_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ExpertProfile_postUpdate(context: QueryContext, db: CrudContract): any {
+function Expert_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_ExpertProfile_postUpdate(input: any, context: QueryContext): any {
+function $check_Expert_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function ExpertProfile_delete(context: QueryContext, db: CrudContract): any {
+function Expert_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ExpertProfile_delete(input: any, context: QueryContext): any {
+function $check_Expert_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExpertProfileVersion_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ExpertProfileVersion_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExpertProfileVersion_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExpertProfileVersion_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExpertProfileVersion_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ExpertProfileVersion_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExpertProfileVersion_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExpertProfileVersion_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ExpertProfileVersion_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ExpertProfileVersion_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExpertProfileVersion_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

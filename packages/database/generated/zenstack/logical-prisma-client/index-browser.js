@@ -1646,9 +1646,9 @@ exports.Prisma.StudentResearchTopicScalarFieldEnum = {
   deadline: 'deadline',
   name: 'name',
   mainContent: 'mainContent',
-  supervisorId: 'supervisorId',
-  coSupervisorId: 'coSupervisorId',
-  thirdSupervisorId: 'thirdSupervisorId',
+  supervisorVersionId: 'supervisorVersionId',
+  coSupervisorVersionId: 'coSupervisorVersionId',
+  thirdSupervisorVersionId: 'thirdSupervisorVersionId',
   reportDate: 'reportDate'
 };
 
@@ -1667,8 +1667,8 @@ exports.Prisma.StudentInternshipScalarFieldEnum = {
   institution: 'institution',
   unit: 'unit',
   address: 'address',
-  supervisorId: 'supervisorId',
-  coSupervisorId: 'coSupervisorId',
+  supervisorVersionId: 'supervisorVersionId',
+  coSupervisorVersionId: 'coSupervisorVersionId',
   startDate: 'startDate',
   endDate: 'endDate',
   reportDate: 'reportDate'
@@ -3178,7 +3178,7 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   isEligibleForDefense: 'isEligibleForDefense',
   primarySupervisorId: 'primarySupervisorId',
   secondarySupervisorId: 'secondarySupervisorId',
-  thirdSupervisorId: 'thirdSupervisorId',
+  thirdSupervisorVersionId: 'thirdSupervisorVersionId',
   isProductProject: 'isProductProject',
   isGroupProject: 'isGroupProject',
   isLanguage: 'isLanguage',
@@ -3186,10 +3186,10 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorName: 'supervisorName',
-  supervisorId: 'supervisorId',
+  supervisorVersionId: 'supervisorVersionId',
   supervisorPaymentId: 'supervisorPaymentId',
   coSupervisorName: 'coSupervisorName',
-  coSupervisorId: 'coSupervisorId',
+  coSupervisorVersionId: 'coSupervisorVersionId',
   coSupervisorPaymentId: 'coSupervisorPaymentId',
   singleSupervisorPaymentId: 'singleSupervisorPaymentId',
   singlePayment: 'singlePayment',
@@ -3244,7 +3244,7 @@ exports.Prisma.StudentThesisRegistrationScalarFieldEnum = {
   reviewNote: 'reviewNote'
 };
 
-exports.Prisma.ExpertProfileScalarFieldEnum = {
+exports.Prisma.ExpertScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -3254,6 +3254,19 @@ exports.Prisma.ExpertProfileScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   lecturerId: 'lecturerId',
+  currentVersionId: 'currentVersionId'
+};
+
+exports.Prisma.ExpertProfileVersionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  expertId: 'expertId',
   name: 'name',
   academicDegreeTypeId: 'academicDegreeTypeId',
   academicRankTypeId: 'academicRankTypeId',
@@ -3261,6 +3274,7 @@ exports.Prisma.ExpertProfileScalarFieldEnum = {
   position: 'position',
   specialization: 'specialization',
   workplace: 'workplace',
+  inAcademy: 'inAcademy',
   phone: 'phone',
   email: 'email',
   bankAccountNumber: 'bankAccountNumber',
@@ -3268,7 +3282,9 @@ exports.Prisma.ExpertProfileScalarFieldEnum = {
   projectExpert: 'projectExpert',
   thesisExpert: 'thesisExpert',
   eligiblePresident: 'eligiblePresident',
-  eligibleSecretary: 'eligibleSecretary'
+  eligibleSecretary: 'eligibleSecretary',
+  validFrom: 'validFrom',
+  validTo: 'validTo'
 };
 
 exports.Prisma.DecisionScalarFieldEnum = {
@@ -3324,6 +3340,7 @@ exports.Prisma.CouncilMemberScalarFieldEnum = {
   createdBy: 'createdBy',
   role: 'role',
   councilId: 'councilId',
+  expertProfileVersionId: 'expertProfileVersionId',
   expertId: 'expertId'
 };
 
@@ -6133,9 +6150,9 @@ exports.Prisma.StudentResearchTopicOrderByRelevanceFieldEnum = {
   studentSubjectScoreId: 'studentSubjectScoreId',
   name: 'name',
   mainContent: 'mainContent',
-  supervisorId: 'supervisorId',
-  coSupervisorId: 'coSupervisorId',
-  thirdSupervisorId: 'thirdSupervisorId'
+  supervisorVersionId: 'supervisorVersionId',
+  coSupervisorVersionId: 'coSupervisorVersionId',
+  thirdSupervisorVersionId: 'thirdSupervisorVersionId'
 };
 
 exports.Prisma.StudentInternshipOrderByRelevanceFieldEnum = {
@@ -6148,8 +6165,8 @@ exports.Prisma.StudentInternshipOrderByRelevanceFieldEnum = {
   institution: 'institution',
   unit: 'unit',
   address: 'address',
-  supervisorId: 'supervisorId',
-  coSupervisorId: 'coSupervisorId'
+  supervisorVersionId: 'supervisorVersionId',
+  coSupervisorVersionId: 'coSupervisorVersionId'
 };
 
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum = {
@@ -7022,14 +7039,14 @@ exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {
   researchTopicAssociated: 'researchTopicAssociated',
   primarySupervisorId: 'primarySupervisorId',
   secondarySupervisorId: 'secondarySupervisorId',
-  thirdSupervisorId: 'thirdSupervisorId',
+  thirdSupervisorVersionId: 'thirdSupervisorVersionId',
   subjectClassId: 'subjectClassId',
   thesisSessionId: 'thesisSessionId',
   supervisorName: 'supervisorName',
-  supervisorId: 'supervisorId',
+  supervisorVersionId: 'supervisorVersionId',
   supervisorPaymentId: 'supervisorPaymentId',
   coSupervisorName: 'coSupervisorName',
-  coSupervisorId: 'coSupervisorId',
+  coSupervisorVersionId: 'coSupervisorVersionId',
   coSupervisorPaymentId: 'coSupervisorPaymentId',
   singleSupervisorPaymentId: 'singleSupervisorPaymentId',
   CHUTICH: 'CHUTICH',
@@ -7065,12 +7082,21 @@ exports.Prisma.StudentThesisRegistrationOrderByRelevanceFieldEnum = {
   reviewNote: 'reviewNote'
 };
 
-exports.Prisma.ExpertProfileOrderByRelevanceFieldEnum = {
+exports.Prisma.ExpertOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
   lecturerId: 'lecturerId',
+  currentVersionId: 'currentVersionId'
+};
+
+exports.Prisma.ExpertProfileVersionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  expertId: 'expertId',
   name: 'name',
   academicDegreeTypeId: 'academicDegreeTypeId',
   academicRankTypeId: 'academicRankTypeId',
@@ -7114,6 +7140,7 @@ exports.Prisma.CouncilMemberOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   councilId: 'councilId',
+  expertProfileVersionId: 'expertProfileVersionId',
   expertId: 'expertId'
 };
 
@@ -8910,7 +8937,8 @@ exports.Prisma.ModelName = {
   ThesisProject: 'ThesisProject',
   DefenseSession: 'DefenseSession',
   StudentThesisRegistration: 'StudentThesisRegistration',
-  ExpertProfile: 'ExpertProfile',
+  Expert: 'Expert',
+  ExpertProfileVersion: 'ExpertProfileVersion',
   Decision: 'Decision',
   Invitation: 'Invitation',
   Council: 'Council',

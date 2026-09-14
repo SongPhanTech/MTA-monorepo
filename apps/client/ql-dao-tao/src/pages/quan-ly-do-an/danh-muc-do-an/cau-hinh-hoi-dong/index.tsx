@@ -3,17 +3,18 @@ import useSpinner from "@hooks/spinner"
 import {
   CouncilProposalStatus,
   CouncilRole,
-  type ExpertProfile,
+  type Prisma,
   type SubjectClass,
 } from "@workspace/db/client"
 import {
   useCreateManyCouncil,
   useFindManyDefenseSession,
-  useFindManyExpertProfile,
+  useFindManyExpert,
   useFindManyRoom,
   useFindUniqueSubjectClass,
   useUpdateThesisProject,
 } from "@workspace/db/hooks"
+import { flattenExpertForSelect } from "@/utils/expert-select"
 import { Button, Col, Form, message, Select } from "antd"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
@@ -31,6 +32,29 @@ export type PutSettingClass = SubjectClass & {
   defenseSessionIds?: string[]
   defenseDate?: Date
 }
+
+type FlattenedExpert = ReturnType<typeof flattenExpertForSelect> & {
+  specialization?: string | null
+  academicRank?: string
+  academicDegree?: string
+}
+
+function toTableExpert(
+  expert: Parameters<typeof flattenExpertForSelect>[0] & {
+    currentVersion?: { specialization?: string | null } | null
+  }
+): FlattenedExpert {
+  const flat = flattenExpertForSelect(expert)
+  return {
+    ...flat,
+    specialization: expert.currentVersion?.specialization,
+    academicRank:
+      flat.academicRankType?.sMa ?? expert.lecturer?.userProfile?.academicRankType?.sMa ?? "",
+    academicDegree:
+      flat.academicDegreeType?.sMa ?? expert.lecturer?.userProfile?.academicDegreeType?.sMa ?? "",
+  }
+}
+
 dayjs.locale("vi")
 
 export default function SettingClass() {
@@ -41,8 +65,8 @@ export default function SettingClass() {
   const [selectedRightKeys, setSelectedRightKeys] = useState<React.Key[]>([])
   const [selectedRoomIds, setSelectedRoomIds] = useState<string[]>([])
   const [selectedDefenseSessionIds, setSelectedDefenseSessionIds] = useState<string[]>([])
-  const [leftData, setLeftData] = useState<ExpertProfile[]>([])
-  const [rightData, setRightData] = useState<ExpertProfile[]>([])
+  const [leftData, setLeftData] = useState<FlattenedExpert[]>([])
+  const [rightData, setRightData] = useState<FlattenedExpert[]>([])
   const [filters, setFilters] = useState<FilterProps>({
     code: undefined,
     name: undefined,
@@ -56,57 +80,90 @@ export default function SettingClass() {
   const { subjectClassId } = router.query
   const subjectClassIdStr = Array.isArray(subjectClassId) ? subjectClassId[0] : subjectClassId || ""
 
-  const where = useMemo(
-    () => ({
-      ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" as const } } : {}),
-      ...(filters.name ? { name: { contains: filters.name, mode: "insensitive" as const } } : {}),
-      ...(filters.academicRank
-        ? { academicRank: { contains: filters.academicRank, mode: "insensitive" as const } }
-        : {}),
-      ...(filters.academicDegree
-        ? {
-            academicDegree: {
-              contains: filters.academicDegree,
-              mode: "insensitive" as const,
-            },
-          }
-        : {}),
-      ...(filters.specialization
-        ? {
-            specialization: {
-              contains: filters.specialization,
-              mode: "insensitive" as const,
-            },
-          }
-        : {}),
-      ...(filters.workplace
-        ? { workplace: { contains: filters.workplace, mode: "insensitive" as const } }
-        : {}),
-      ...(filters.phone
-        ? { phone: { contains: filters.phone, mode: "insensitive" as const } }
-        : {}),
-      ...(filters.email
-        ? { email: { contains: filters.email, mode: "insensitive" as const } }
-        : {}),
-    }),
-    [
-      filters.code,
-      filters.name,
-      filters.academicRank,
-      filters.academicDegree,
-      filters.specialization,
-      filters.workplace,
-      filters.phone,
-      filters.email,
-    ]
-  )
+  const where = useMemo((): Prisma.ExpertWhereInput => {
+    const versionAnd: Prisma.ExpertProfileVersionWhereInput[] = [{ projectExpert: true }]
 
-  const { data: expertProfileData } = useFindManyExpertProfile(
+    if (filters.name) {
+      versionAnd.push({ name: { contains: filters.name, mode: "insensitive" } })
+    }
+    if (filters.specialization) {
+      versionAnd.push({
+        specialization: { contains: filters.specialization, mode: "insensitive" },
+      })
+    }
+    if (filters.workplace) {
+      versionAnd.push({ workplace: { contains: filters.workplace, mode: "insensitive" } })
+    }
+    if (filters.phone) {
+      versionAnd.push({ phone: { contains: filters.phone, mode: "insensitive" } })
+    }
+    if (filters.email) {
+      versionAnd.push({ email: { contains: filters.email, mode: "insensitive" } })
+    }
+    if (filters.academicRank) {
+      versionAnd.push({
+        OR: [
+          { academicRankType: { sTen: { contains: filters.academicRank, mode: "insensitive" } } },
+          { academicRankType: { sMa: { contains: filters.academicRank, mode: "insensitive" } } },
+        ],
+      })
+    }
+    if (filters.academicDegree) {
+      versionAnd.push({
+        OR: [
+          {
+            academicDegreeType: {
+              sTen: { contains: filters.academicDegree, mode: "insensitive" },
+            },
+          },
+          {
+            academicDegreeType: {
+              sMa: { contains: filters.academicDegree, mode: "insensitive" },
+            },
+          },
+        ],
+      })
+    }
+
+    return {
+      deletedAt: null,
+      active: true,
+      AND: [
+        { OR: [{ lecturerId: null }, { lecturer: { active: true } }] },
+        { currentVersion: { is: { AND: versionAnd } } },
+      ],
+      ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" } } : {}),
+    }
+  }, [
+    filters.code,
+    filters.name,
+    filters.academicRank,
+    filters.academicDegree,
+    filters.specialization,
+    filters.workplace,
+    filters.phone,
+    filters.email,
+  ])
+
+  const { data: expertData } = useFindManyExpert(
     {
       where,
-      include: { lecturer: { include: { userProfile: true } } },
+      include: {
+        currentVersion: {
+          include: {
+            academicDegreeType: true,
+            academicRankType: true,
+          },
+        },
+        lecturer: { include: { userProfile: true } },
+      },
     },
     { refetchOnWindowFocus: false }
+  )
+
+  const flattenedCatalog = useMemo(
+    () => (expertData ?? []).map((item) => toTableExpert(item)),
+    [expertData]
   )
 
   const { showSpinner, hideSpinner } = useSpinner()
@@ -117,13 +174,42 @@ export default function SettingClass() {
         id: subjectClassIdStr,
       },
       include: {
-        expertProfile: true,
+        expert: {
+          include: {
+            currentVersion: {
+              include: {
+                academicDegreeType: true,
+                academicRankType: true,
+              },
+            },
+            lecturer: { include: { userProfile: true } },
+          },
+        },
         thesisProjects: {
           include: {
             registrations: { include: { student: { include: { userProfile: true } } } },
             supervisor: true,
             room: true,
-            council: { include: { members: { include: { expert: true } } } },
+            council: {
+              include: {
+                members: {
+                  include: {
+                    expertProfileVersion: true,
+                    expert: {
+                      include: {
+                        currentVersion: {
+                          include: {
+                            academicDegreeType: true,
+                            academicRankType: true,
+                          },
+                        },
+                        lecturer: { include: { userProfile: true } },
+                      },
+                    },
+                  },
+                },
+              },
+            },
             defenseSession: true,
           },
         },
@@ -141,7 +227,7 @@ export default function SettingClass() {
 
     const uniqueExperts = Array.from(new Map(allExperts.map((exp) => [exp?.id, exp])).values())
 
-    return uniqueExperts
+    return uniqueExperts.map((exp) => toTableExpert(exp!))
   }, [subjectClass])
 
   const { data: room = [], refetch } = useFindManyRoom({
@@ -512,10 +598,20 @@ export default function SettingClass() {
             { ...committee.candidates[0], role: CouncilRole.REVIEWER_1 },
             { ...committee.candidates[1], role: CouncilRole.REVIEWER_2 },
             { ...committee.candidates[2], role: CouncilRole.MEMBER },
-          ].map((member) => ({
-            expert: { connect: { id: member.expertId } },
-            role: member.role,
-          }))
+          ].map((member) => {
+            const expertFlat = rightData.find((e) => e.id === member.expertId)
+            const expertProfileVersionId = expertFlat?.currentVersionId
+            if (!member.expertId || !expertProfileVersionId) {
+              throw new Error(
+                `Chuyên gia ${member.name || member.expertId || ""} chưa có phiên bản hồ sơ hiện tại.`
+              )
+            }
+            return {
+              expertId: member.expertId,
+              expertProfileVersionId,
+              role: member.role,
+            }
+          })
 
           return {
             members: { create: membersData },
@@ -575,16 +671,16 @@ export default function SettingClass() {
 
   useEffect(() => {
     if (experts.length) {
-      setRightData(experts as ExpertProfile[])
+      setRightData(experts)
 
-      const filtered = (expertProfileData || []).filter(
-        (item) => !experts.some((exp) => exp?.id === item.id)
+      const filtered = flattenedCatalog.filter(
+        (item) => !experts.some((exp) => exp.id === item.id)
       )
       setLeftData(filtered)
     } else {
-      setLeftData(expertProfileData || [])
+      setLeftData(flattenedCatalog)
     }
-  }, [expertProfileData, experts])
+  }, [flattenedCatalog, experts])
 
   const moveRight = () => {
     const selectedItems = leftData.filter((item) => selectedLeftKeys.includes(item.id))
@@ -953,7 +1049,7 @@ export default function SettingClass() {
                         return (
                           <React.Fragment key={`${r.room.id}-${index}-ch`}>
                             <td style={cell}>CT</td>
-                            <td style={cell}>{ct?.expert?.name || ""}</td>
+                            <td style={cell}>{ct?.expertProfileVersion?.name || ""}</td>
                             <td style={cell}> </td>
                           </React.Fragment>
                         )
@@ -968,7 +1064,7 @@ export default function SettingClass() {
                         return (
                           <React.Fragment key={`${r.room.id} ${index} se`}>
                             <td style={cell}>TK</td>
-                            <td style={cell}>{tk?.expert?.name || ""}</td>
+                            <td style={cell}>{tk?.expertProfileVersion?.name || ""}</td>
                             <td style={cell}> </td>
                           </React.Fragment>
                         )
@@ -983,7 +1079,7 @@ export default function SettingClass() {
                         return (
                           <React.Fragment key={`${r.room.id} ${index} rv1`}>
                             <td style={cell}>UV</td>
-                            <td style={cell}>{pb1?.expert?.name || ""}</td>
+                            <td style={cell}>{pb1?.expertProfileVersion?.name || ""}</td>
                             <td style={cell}>PB1</td>
                           </React.Fragment>
                         )
@@ -998,7 +1094,7 @@ export default function SettingClass() {
                         return (
                           <React.Fragment key={`${r.room.id}-${index}-rv2`}>
                             <td style={cell}>UV</td>
-                            <td style={cell}>{pb2?.expert?.name || ""}</td>
+                            <td style={cell}>{pb2?.expertProfileVersion?.name || ""}</td>
                             <td style={cell}>PB2</td>
                           </React.Fragment>
                         )
@@ -1013,7 +1109,7 @@ export default function SettingClass() {
                         return (
                           <React.Fragment key={`${r.room.id} ${index}-me`}>
                             <td style={cell}>UV</td>
-                            <td style={cell}>{uv?.expert?.name || ""}</td>
+                            <td style={cell}>{uv?.expertProfileVersion?.name || ""}</td>
                             <td style={cell}> </td>
                           </React.Fragment>
                         )

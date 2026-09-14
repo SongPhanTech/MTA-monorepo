@@ -5399,9 +5399,9 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'academicRankType',
-                }, expertProfile: {
-                    name: "expertProfile",
-                    type: "ExpertProfile",
+                }, expertProfileVersion: {
+                    name: "expertProfileVersion",
+                    type: "ExpertProfileVersion",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'academicRankType',
@@ -5499,9 +5499,9 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'academicDegreeType',
-                }, expertProfile: {
-                    name: "expertProfile",
-                    type: "ExpertProfile",
+                }, expertProfileVersion: {
+                    name: "expertProfileVersion",
+                    type: "ExpertProfileVersion",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'academicDegreeType',
@@ -8559,42 +8559,42 @@ const metadata: ModelMeta = {
                     isOptional: true,
                 }, supervisor: {
                     name: "supervisor",
-                    type: "ExpertProfile",
+                    type: "ExpertProfileVersion",
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'supervisorResearchTopic',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "supervisorId" },
-                }, supervisorId: {
-                    name: "supervisorId",
+                    foreignKeyMapping: { "id": "supervisorVersionId" },
+                }, supervisorVersionId: {
+                    name: "supervisorVersionId",
                     type: "String",
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'supervisor',
                 }, coSupervisor: {
                     name: "coSupervisor",
-                    type: "ExpertProfile",
+                    type: "ExpertProfileVersion",
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'coSupervisorResearchTopic',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "coSupervisorId" },
-                }, coSupervisorId: {
-                    name: "coSupervisorId",
+                    foreignKeyMapping: { "id": "coSupervisorVersionId" },
+                }, coSupervisorVersionId: {
+                    name: "coSupervisorVersionId",
                     type: "String",
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'coSupervisor',
                 }, thirdSupervisor: {
                     name: "thirdSupervisor",
-                    type: "ExpertProfile",
+                    type: "ExpertProfileVersion",
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'thirdSupervisorResearchTopic',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "thirdSupervisorId" },
-                }, thirdSupervisorId: {
-                    name: "thirdSupervisorId",
+                    foreignKeyMapping: { "id": "thirdSupervisorVersionId" },
+                }, thirdSupervisorVersionId: {
+                    name: "thirdSupervisorVersionId",
                     type: "String",
                     isOptional: true,
                     isForeignKey: true,
@@ -8688,28 +8688,28 @@ const metadata: ModelMeta = {
                     isOptional: true,
                 }, supervisor: {
                     name: "supervisor",
-                    type: "ExpertProfile",
+                    type: "ExpertProfileVersion",
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'supervisorInternship',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "supervisorId" },
-                }, supervisorId: {
-                    name: "supervisorId",
+                    foreignKeyMapping: { "id": "supervisorVersionId" },
+                }, supervisorVersionId: {
+                    name: "supervisorVersionId",
                     type: "String",
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'supervisor',
                 }, coSupervisor: {
                     name: "coSupervisor",
-                    type: "ExpertProfile",
+                    type: "ExpertProfileVersion",
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'coSupervisorInternship',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "coSupervisorId" },
-                }, coSupervisorId: {
-                    name: "coSupervisorId",
+                    foreignKeyMapping: { "id": "coSupervisorVersionId" },
+                }, coSupervisorVersionId: {
+                    name: "coSupervisorVersionId",
                     type: "String",
                     isOptional: true,
                     isForeignKey: true,
@@ -11990,9 +11990,9 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
-                }, expertProfile: {
-                    name: "expertProfile",
-                    type: "ExpertProfile",
+                }, expert: {
+                    name: "expert",
+                    type: "Expert",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
@@ -13941,9 +13941,9 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingMajor',
-                }, expertProfile: {
-                    name: "expertProfile",
-                    type: "ExpertProfile",
+                }, expert: {
+                    name: "expert",
+                    type: "Expert",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'major',
@@ -16427,9 +16427,9 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'reviewedBy',
-                }, expertProfile: {
-                    name: "expertProfile",
-                    type: "ExpertProfile",
+                }, expert: {
+                    name: "expert",
+                    type: "Expert",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'lecturer',
@@ -17877,14 +17877,14 @@ const metadata: ModelMeta = {
                     relationField: 'secondarySupervisor',
                 }, thirdSupervisor: {
                     name: "thirdSupervisor",
-                    type: "ExpertProfile",
+                    type: "ExpertProfileVersion",
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'thirdSupervisedTheses',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "thirdSupervisorId" },
-                }, thirdSupervisorId: {
-                    name: "thirdSupervisorId",
+                    foreignKeyMapping: { "id": "thirdSupervisorVersionId" },
+                }, thirdSupervisorVersionId: {
+                    name: "thirdSupervisorVersionId",
                     type: "String",
                     isOptional: true,
                     isForeignKey: true,
@@ -17939,14 +17939,14 @@ const metadata: ModelMeta = {
                     isOptional: true,
                 }, supervisor: {
                     name: "supervisor",
-                    type: "ExpertProfile",
+                    type: "ExpertProfileVersion",
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'supervisedTheses',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "supervisorId" },
-                }, supervisorId: {
-                    name: "supervisorId",
+                    foreignKeyMapping: { "id": "supervisorVersionId" },
+                }, supervisorVersionId: {
+                    name: "supervisorVersionId",
                     type: "String",
                     isOptional: true,
                     isForeignKey: true,
@@ -17971,14 +17971,14 @@ const metadata: ModelMeta = {
                     isOptional: true,
                 }, coSupervisor: {
                     name: "coSupervisor",
-                    type: "ExpertProfile",
+                    type: "ExpertProfileVersion",
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'coSupervisedTheses',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "coSupervisorId" },
-                }, coSupervisorId: {
-                    name: "coSupervisorId",
+                    foreignKeyMapping: { "id": "coSupervisorVersionId" },
+                }, coSupervisorVersionId: {
+                    name: "coSupervisorVersionId",
                     type: "String",
                     isOptional: true,
                     isForeignKey: true,
@@ -18344,8 +18344,8 @@ const metadata: ModelMeta = {
                 },
             },
         },
-        expertProfile: {
-            name: 'ExpertProfile', fields: {
+        expert: {
+            name: 'Expert', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -18380,13 +18380,13 @@ const metadata: ModelMeta = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ExpertProfile$createdBy,
+                    defaultValueProvider: $default$Expert$createdBy,
                 }, lecturer: {
                     name: "lecturer",
                     type: "Lecturer",
                     isDataModel: true,
                     isOptional: true,
-                    backLink: 'expertProfile',
+                    backLink: 'expert',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "lecturerId" },
                 }, lecturerId: {
@@ -18395,6 +18395,112 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'lecturer',
+                }, currentVersionId: {
+                    name: "currentVersionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'currentVersion',
+                }, currentVersion: {
+                    name: "currentVersion",
+                    type: "ExpertProfileVersion",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'currentForExpert',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "currentVersionId" },
+                }, versions: {
+                    name: "versions",
+                    type: "ExpertProfileVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'expert',
+                }, major: {
+                    name: "major",
+                    type: "TrainingMajor",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'expert',
+                    isRelationOwner: true,
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'expert',
+                    isRelationOwner: true,
+                }, councilMemberships: {
+                    name: "councilMemberships",
+                    type: "CouncilMember",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'expert',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, lecturerId: {
+                    name: "lecturerId",
+                    fields: ["lecturerId"]
+                }, currentVersionId: {
+                    name: "currentVersionId",
+                    fields: ["currentVersionId"]
+                },
+            },
+        },
+        expertProfileVersion: {
+            name: 'ExpertProfileVersion', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExpertProfileVersion$createdBy,
+                }, expert: {
+                    name: "expert",
+                    type: "Expert",
+                    isDataModel: true,
+                    backLink: 'versions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "expertId" },
+                }, expertId: {
+                    name: "expertId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'expert',
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18404,7 +18510,7 @@ const metadata: ModelMeta = {
                     type: "DM_HocVi",
                     isDataModel: true,
                     isOptional: true,
-                    backLink: 'expertProfile',
+                    backLink: 'expertProfileVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "academicDegreeTypeId" },
                 }, academicDegreeTypeId: {
@@ -18418,7 +18524,7 @@ const metadata: ModelMeta = {
                     type: "DM_HocHam",
                     isDataModel: true,
                     isOptional: true,
-                    backLink: 'expertProfile',
+                    backLink: 'expertProfileVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "academicRankTypeId" },
                 }, academicRankTypeId: {
@@ -18439,17 +18545,14 @@ const metadata: ModelMeta = {
                     name: "specialization",
                     type: "String",
                     isOptional: true,
-                }, major: {
-                    name: "major",
-                    type: "TrainingMajor",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'expertProfile',
-                    isRelationOwner: true,
                 }, workplace: {
                     name: "workplace",
                     type: "String",
                     isOptional: true,
+                }, inAcademy: {
+                    name: "inAcademy",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, phone: {
                     name: "phone",
                     type: "String",
@@ -18482,6 +18585,20 @@ const metadata: ModelMeta = {
                     name: "eligibleSecretary",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, validFrom: {
+                    name: "validFrom",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, validTo: {
+                    name: "validTo",
+                    type: "DateTime",
+                    isOptional: true,
+                }, currentForExpert: {
+                    name: "currentForExpert",
+                    type: "Expert",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'currentVersion',
                 }, supervisedTheses: {
                     name: "supervisedTheses",
                     type: "ThesisProject",
@@ -18530,19 +18647,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'coSupervisor',
-                }, subjectClass: {
-                    name: "subjectClass",
-                    type: "SubjectClass",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'expertProfile',
-                    isRelationOwner: true,
                 }, councilMemberships: {
                     name: "councilMemberships",
                     type: "CouncilMember",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'expert',
+                    backLink: 'expertProfileVersion',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18551,9 +18661,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, lecturerId: {
-                    name: "lecturerId",
-                    fields: ["lecturerId"]
                 },
             },
         },
@@ -18837,6 +18944,20 @@ const metadata: ModelMeta = {
                     backLink: 'members',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "councilId" },
+                }, expertProfileVersionId: {
+                    name: "expertProfileVersionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'expertProfileVersion',
+                }, expertProfileVersion: {
+                    name: "expertProfileVersion",
+                    type: "ExpertProfileVersion",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'councilMemberships',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "expertProfileVersionId" },
                 }, expertId: {
                     name: "expertId",
                     type: "String",
@@ -18845,7 +18966,7 @@ const metadata: ModelMeta = {
                     relationField: 'expert',
                 }, expert: {
                     name: "expert",
-                    type: "ExpertProfile",
+                    type: "Expert",
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'councilMemberships',
@@ -29461,7 +29582,11 @@ function $default$StudentThesisRegistration$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$ExpertProfile$createdBy(user: any): unknown {
+function $default$Expert$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExpertProfileVersion$createdBy(user: any): unknown {
     return user?.id;
 }
 

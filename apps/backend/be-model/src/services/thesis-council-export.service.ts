@@ -12,11 +12,22 @@ export type ExportCouncilImportTemplateResult = {
 }
 
 type ExpertLike = {
-  id: string
+  id?: string
+  expertId?: string | null
   name?: string | null
   workplace?: string | null
   academicRankType?: { sMa?: string | null } | null
   academicDegreeType?: { sMa?: string | null } | null
+  expert?: {
+    lecturer?: {
+      lectureID?: string | null
+      userProfile?: {
+        fullname?: string | null
+        academicRankType?: { sMa?: string | null } | null
+        academicDegreeType?: { sMa?: string | null } | null
+      } | null
+    } | null
+  } | null
   lecturer?: {
     lectureID?: string | null
     userProfile?: {
@@ -37,7 +48,7 @@ const EDITABLE_FILL: ExcelJS.Fill = {
 
 function formatExpertName(expert: ExpertLike) {
   if (!expert) return ""
-  const profile = expert.lecturer?.userProfile
+  const profile = expert.expert?.lecturer?.userProfile ?? expert.lecturer?.userProfile
   const rank = profile?.academicRankType?.sMa || expert.academicRankType?.sMa || ""
   const degree = profile?.academicDegreeType?.sMa || expert.academicDegreeType?.sMa || ""
   const title = [rank, degree].filter(Boolean).join(".")
@@ -185,12 +196,45 @@ function writeMapRows(
   return startRow + options.length
 }
 
-const expertSelect = {
+const versionSelect = {
   id: true,
+  expertId: true,
   name: true,
   workplace: true,
   academicRankType: { select: { sMa: true } },
   academicDegreeType: { select: { sMa: true } },
+  expert: {
+    select: {
+      id: true,
+      lecturer: {
+        select: {
+          lectureID: true,
+          userProfile: {
+            select: {
+              fullname: true,
+              academicRankType: { select: { sMa: true } },
+              academicDegreeType: { select: { sMa: true } },
+            },
+          },
+        },
+      },
+    },
+  },
+} as const
+
+const expertCatalogSelect = {
+  id: true,
+  currentVersionId: true,
+  currentVersion: {
+    select: {
+      name: true,
+      workplace: true,
+      eligiblePresident: true,
+      eligibleSecretary: true,
+      academicRankType: { select: { sMa: true } },
+      academicDegreeType: { select: { sMa: true } },
+    },
+  },
   lecturer: {
     select: {
       lectureID: true,
@@ -233,12 +277,10 @@ export async function exportCouncilImportTemplate(
         id: true,
         title: true,
         defenseDate: true,
-        supervisorId: true,
-        coSupervisorId: true,
         roomId: true,
         defenseSessionId: true,
-        supervisor: { select: expertSelect },
-        coSupervisor: { select: expertSelect },
+        supervisor: { select: versionSelect },
+        coSupervisor: { select: versionSelect },
         room: { select: { id: true, name: true } },
         defenseSession: { select: { id: true, startTime: true } },
         council: {
@@ -248,7 +290,7 @@ export async function exportCouncilImportTemplate(
               select: {
                 role: true,
                 expertId: true,
-                expert: { select: expertSelect },
+                expertProfileVersion: { select: versionSelect },
               },
             },
           },
@@ -271,14 +313,10 @@ export async function exportCouncilImportTemplate(
       },
       orderBy: { createdAt: "asc" },
     }),
-    prisma.expertProfile.findMany({
-      where: { deletedAt: null, thesisExpert: true },
-      select: {
-        ...expertSelect,
-        eligiblePresident: true,
-        eligibleSecretary: true,
-      },
-      orderBy: [{ name: "asc" }],
+    prisma.expert.findMany({
+      where: { deletedAt: null, currentVersion: { thesisExpert: true } },
+      select: expertCatalogSelect,
+      orderBy: [{ currentVersion: { name: "asc" } }],
     }),
     prisma.room.findMany({
       where: { deletedAt: null },
@@ -296,14 +334,23 @@ export async function exportCouncilImportTemplate(
     throw new Error("Đợt xét chưa có luận văn/đề án để xuất.")
   }
 
-  const allExpertOptions = makeUniqueLabels(experts, (expert) => formatExpertName(expert))
+  const formatCatalogExpert = (expert: (typeof experts)[number]) =>
+    formatExpertName({
+      name: expert.currentVersion?.name,
+      workplace: expert.currentVersion?.workplace,
+      academicRankType: expert.currentVersion?.academicRankType,
+      academicDegreeType: expert.currentVersion?.academicDegreeType,
+      lecturer: expert.lecturer,
+    })
+
+  const allExpertOptions = makeUniqueLabels(experts, formatCatalogExpert)
   const presidentOptions = makeUniqueLabels(
-    experts.filter((expert) => expert.eligiblePresident),
-    (expert) => formatExpertName(expert)
+    experts.filter((expert) => expert.currentVersion?.eligiblePresident),
+    formatCatalogExpert
   )
   const secretaryOptions = makeUniqueLabels(
-    experts.filter((expert) => expert.eligibleSecretary),
-    (expert) => formatExpertName(expert)
+    experts.filter((expert) => expert.currentVersion?.eligibleSecretary),
+    formatCatalogExpert
   )
   const roomOptions = makeUniqueLabels(rooms, (room) => room.name || room.id)
   const sessionOptions = makeUniqueLabels(defenseSessions, (item) =>
@@ -423,21 +470,32 @@ export async function exportCouncilImportTemplate(
         formatDate(student?.userProfile?.dateOfBirth),
         student?.fixedClass?.name || "",
         project.title || "",
-        allExpertLabelById.get(project.supervisorId || "") || formatExpertName(project.supervisor),
-        allExpertLabelById.get(project.coSupervisorId || "") ||
+        allExpertLabelById.get(project.supervisor?.expertId || "") ||
+          formatExpertName(project.supervisor),
+        allExpertLabelById.get(project.coSupervisor?.expertId || "") ||
           formatExpertName(project.coSupervisor),
         presidentLabelById.get(chairmanId) ||
           allExpertLabelById.get(chairmanId) ||
-          formatExpertName(members?.find((m) => m.role === CouncilRole.CHAIRMAN)?.expert ?? null),
+          formatExpertName(
+            members?.find((m) => m.role === CouncilRole.CHAIRMAN)?.expertProfileVersion ?? null
+          ),
         secretaryLabelById.get(secretaryId) ||
           allExpertLabelById.get(secretaryId) ||
-          formatExpertName(members?.find((m) => m.role === CouncilRole.SECRETARY)?.expert ?? null),
+          formatExpertName(
+            members?.find((m) => m.role === CouncilRole.SECRETARY)?.expertProfileVersion ?? null
+          ),
         allExpertLabelById.get(reviewer1Id) ||
-          formatExpertName(members?.find((m) => m.role === CouncilRole.REVIEWER_1)?.expert ?? null),
+          formatExpertName(
+            members?.find((m) => m.role === CouncilRole.REVIEWER_1)?.expertProfileVersion ?? null
+          ),
         allExpertLabelById.get(reviewer2Id) ||
-          formatExpertName(members?.find((m) => m.role === CouncilRole.REVIEWER_2)?.expert ?? null),
+          formatExpertName(
+            members?.find((m) => m.role === CouncilRole.REVIEWER_2)?.expertProfileVersion ?? null
+          ),
         allExpertLabelById.get(memberId) ||
-          formatExpertName(members?.find((m) => m.role === CouncilRole.MEMBER)?.expert ?? null),
+          formatExpertName(
+            members?.find((m) => m.role === CouncilRole.MEMBER)?.expertProfileVersion ?? null
+          ),
         roomLabelById.get(project.roomId || "") || project.room?.name || "",
         sessionLabelById.get(project.defenseSessionId || "") ||
           formatDefenseSessionClock(project.defenseSession?.startTime),

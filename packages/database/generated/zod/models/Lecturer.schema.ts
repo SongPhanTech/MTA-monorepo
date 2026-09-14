@@ -46,7 +46,7 @@ const relationSchema = z.object({
     researchProjects: z.array(z.unknown()).optional(),
     reviewedRegistrations: z.array(z.unknown()).optional(),
     reviewedThesisRegistrations: z.array(z.unknown()).optional(),
-    expertProfile: z.array(z.unknown()).optional(),
+    expert: z.array(z.unknown()).optional(),
     survey: z.array(z.unknown()).optional(),
     clusterSurvey: z.array(z.unknown()).optional(),
     examRoomsMain: z.array(z.unknown()).optional(),

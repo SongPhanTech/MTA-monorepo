@@ -1,15 +1,16 @@
 // biome-ignore assist/source/organizeImports: biomes auto organize imports
 import useSpinner from "@hooks/spinner"
-import type { ExpertProfile, SubjectClass } from "@workspace/db/client"
+import type { Prisma, SubjectClass } from "@workspace/db/client"
 import {
   useCreateCouncil,
   useFindManyCouncil,
   useFindManyDefenseSession,
-  useFindManyExpertProfile,
+  useFindManyExpert,
   useFindManyRoom,
   useFindUniqueThesisSession,
   useUpdateManyThesisProject,
 } from "@workspace/db/hooks"
+import { flattenExpertForSelect } from "@utils/expert-select"
 import { Button, Col, Empty, Form, message, Modal, Tag, Typography } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
 import "dayjs/locale/vi"
@@ -31,6 +32,33 @@ export type PutSettingClass = SubjectClass & {
   defenseSessionIds?: string[]
   defenseDate?: Date[]
 }
+
+type FlattenedExpert = ReturnType<typeof flattenExpertForSelect> & {
+  specialization?: string | null
+  academicRank?: string
+  academicDegree?: string
+}
+
+function toTableExpert(
+  expert: Parameters<typeof flattenExpertForSelect>[0] & {
+    currentVersion?: { specialization?: string | null } | null
+  }
+): FlattenedExpert {
+  const flat = flattenExpertForSelect(expert)
+  return {
+    ...flat,
+    specialization: expert.currentVersion?.specialization,
+    academicRank:
+      flat.academicRankType?.sMa ??
+      expert.lecturer?.userProfile?.academicRankType?.sMa ??
+      "",
+    academicDegree:
+      flat.academicDegreeType?.sMa ??
+      expert.lecturer?.userProfile?.academicDegreeType?.sMa ??
+      "",
+  }
+}
+
 dayjs.locale("vi")
 
 export default function SettingCouncil() {
@@ -48,7 +76,7 @@ export default function SettingCouncil() {
     },
     include: {
       members: {
-        include: { expert: true },
+        include: { expertProfileVersion: true, expert: true },
       },
       thesis: {
         include: {
@@ -67,8 +95,8 @@ export default function SettingCouncil() {
   const [selectedRoomIds, setSelectedRoomIds] = useState<string[]>([])
   const [selectedDefenseSessionIds, setSelectedDefenseSessionIds] = useState<string[]>([])
   const [selectedDefenseDate, setSelectedDefenseDate] = useState<string[]>([])
-  const [leftData, setLeftData] = useState<ExpertProfile[]>([])
-  const [rightData, setRightData] = useState<ExpertProfile[]>([])
+  const [leftData, setLeftData] = useState<FlattenedExpert[]>([])
+  const [rightData, setRightData] = useState<FlattenedExpert[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [filters, setFilters] = useState<FilterProps>({
@@ -81,66 +109,76 @@ export default function SettingCouncil() {
     phone: undefined,
     email: undefined,
   })
-  const where = useMemo(
-    () => ({
-      thesisExpert: true,
-      ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" as const } } : {}),
-      ...(filters.name ? { name: { contains: filters.name, mode: "insensitive" as const } } : {}),
-      ...(filters.academicRank
-        ? {
-            academicRank: {
-              contains: filters.academicRank,
-              mode: "insensitive" as const,
+  const where = useMemo((): Prisma.ExpertWhereInput => {
+    const versionAnd: Prisma.ExpertProfileVersionWhereInput[] = [{ thesisExpert: true }]
+
+    if (filters.name) {
+      versionAnd.push({ name: { contains: filters.name, mode: "insensitive" } })
+    }
+    if (filters.specialization) {
+      versionAnd.push({
+        specialization: { contains: filters.specialization, mode: "insensitive" },
+      })
+    }
+    if (filters.workplace) {
+      versionAnd.push({ workplace: { contains: filters.workplace, mode: "insensitive" } })
+    }
+    if (filters.phone) {
+      versionAnd.push({ phone: { contains: filters.phone, mode: "insensitive" } })
+    }
+    if (filters.email) {
+      versionAnd.push({ email: { contains: filters.email, mode: "insensitive" } })
+    }
+    if (filters.academicRank) {
+      versionAnd.push({
+        OR: [
+          { academicRankType: { sTen: { contains: filters.academicRank, mode: "insensitive" } } },
+          { academicRankType: { sMa: { contains: filters.academicRank, mode: "insensitive" } } },
+        ],
+      })
+    }
+    if (filters.academicDegree) {
+      versionAnd.push({
+        OR: [
+          {
+            academicDegreeType: {
+              sTen: { contains: filters.academicDegree, mode: "insensitive" },
             },
-          }
-        : {}),
-      ...(filters.academicDegree
-        ? {
-            academicDegree: {
-              contains: filters.academicDegree,
-              mode: "insensitive" as const,
+          },
+          {
+            academicDegreeType: {
+              sMa: { contains: filters.academicDegree, mode: "insensitive" },
             },
-          }
-        : {}),
-      ...(filters.specialization
-        ? {
-            specialization: {
-              contains: filters.specialization,
-              mode: "insensitive" as const,
-            },
-          }
-        : {}),
-      ...(filters.workplace
-        ? {
-            workplace: {
-              contains: filters.workplace,
-              mode: "insensitive" as const,
-            },
-          }
-        : {}),
-      ...(filters.phone
-        ? { phone: { contains: filters.phone, mode: "insensitive" as const } }
-        : {}),
-      ...(filters.email
-        ? { email: { contains: filters.email, mode: "insensitive" as const } }
-        : {}),
-    }),
-    [
-      filters.code,
-      filters.name,
-      filters.academicRank,
-      filters.academicDegree,
-      filters.specialization,
-      filters.workplace,
-      filters.phone,
-      filters.email,
-    ]
-  )
+          },
+        ],
+      })
+    }
+
+    return {
+      deletedAt: null,
+      active: true,
+      AND: [
+        { OR: [{ lecturerId: null }, { lecturer: { active: true } }] },
+        { currentVersion: { is: { AND: versionAnd } } },
+      ],
+      ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" } } : {}),
+    }
+  }, [
+    filters.code,
+    filters.name,
+    filters.academicRank,
+    filters.academicDegree,
+    filters.specialization,
+    filters.workplace,
+    filters.phone,
+    filters.email,
+  ])
   const { data: thesisSession } = useFindUniqueThesisSession({
     where: { id: thesisSessionId },
     include: {
       thesisProject: {
         include: {
+          supervisor: { select: { expertId: true } },
           registrations: {
             include: { student: { include: { userProfile: true } } },
           },
@@ -148,8 +186,17 @@ export default function SettingCouncil() {
             include: {
               members: {
                 include: {
+                  expertProfileVersion: true,
                   expert: {
-                    include: { lecturer: { include: { userProfile: true } } },
+                    include: {
+                      currentVersion: {
+                        include: {
+                          academicDegreeType: true,
+                          academicRankType: true,
+                        },
+                      },
+                      lecturer: { include: { userProfile: true } },
+                    },
                   },
                 },
               },
@@ -169,12 +216,24 @@ export default function SettingCouncil() {
 
   const { data: defenseSession } = useFindManyDefenseSession({})
 
-  const { data: expertProfileData } = useFindManyExpertProfile(
+  const { data: expertData } = useFindManyExpert(
     {
       where,
-      include: { lecturer: { include: { userProfile: true } } },
+      include: {
+        currentVersion: {
+          include: {
+            academicDegreeType: true,
+            academicRankType: true,
+          },
+        },
+        lecturer: { include: { userProfile: true } },
+      },
     },
     { refetchOnWindowFocus: false }
+  )
+  const flattenedCatalog = useMemo(
+    () => (expertData ?? []).map((item) => toTableExpert(item)),
+    [expertData]
   )
   const experts = useMemo(() => {
     if (!thesisSession) return []
@@ -185,20 +244,20 @@ export default function SettingCouncil() {
 
     const uniqueExperts = Array.from(new Map(allExperts.map((exp) => [exp?.id, exp])).values())
 
-    return uniqueExperts
+    return uniqueExperts.map((exp) => toTableExpert(exp!))
   }, [thesisSession])
   useEffect(() => {
     if (experts.length) {
-      setRightData(experts as ExpertProfile[])
+      setRightData(experts)
 
-      const filtered = (expertProfileData || []).filter(
-        (item) => !experts.some((exp) => exp?.id === item.id)
+      const filtered = flattenedCatalog.filter(
+        (item) => !experts.some((exp) => exp.id === item.id)
       )
       setLeftData(filtered)
     } else {
-      setLeftData(expertProfileData || [])
+      setLeftData(flattenedCatalog)
     }
-  }, [expertProfileData, experts])
+  }, [flattenedCatalog, experts])
   const handleSearchRoom = (value: string) => {
     setSearchRoom(value)
     debouncedRefetch()
@@ -249,7 +308,9 @@ export default function SettingCouncil() {
 
         const shuffledExperts = shuffle([...expertPool])
 
-        const validExperts = shuffledExperts.filter((exp) => exp.id !== project.supervisorId)
+        const validExperts = shuffledExperts.filter(
+          (exp) => exp.id !== project.supervisor?.expertId
+        )
 
         const chairman = validExperts.find((exp) => exp.eligiblePresident)
         const secretary = validExperts.find(
@@ -275,11 +336,31 @@ export default function SettingCouncil() {
             description: `Hội đồng đề tài: ${project.registrations?.[0]?.student?.userProfile?.fullname}`,
             members: {
               create: [
-                { expertId: chairman.id, role: "CHAIRMAN" },
-                { expertId: secretary.id, role: "SECRETARY" },
-                { expertId: reviewer1.id, role: "REVIEWER_1" },
-                { expertId: reviewer2.id, role: "REVIEWER_2" },
-                { expertId: member.id, role: "MEMBER" },
+                {
+                  expertId: chairman.id,
+                  expertProfileVersionId: chairman.currentVersionId!,
+                  role: "CHAIRMAN",
+                },
+                {
+                  expertId: secretary.id,
+                  expertProfileVersionId: secretary.currentVersionId!,
+                  role: "SECRETARY",
+                },
+                {
+                  expertId: reviewer1.id,
+                  expertProfileVersionId: reviewer1.currentVersionId!,
+                  role: "REVIEWER_1",
+                },
+                {
+                  expertId: reviewer2.id,
+                  expertProfileVersionId: reviewer2.currentVersionId!,
+                  role: "REVIEWER_2",
+                },
+                {
+                  expertId: member.id,
+                  expertProfileVersionId: member.currentVersionId!,
+                  role: "MEMBER",
+                },
               ],
             },
           },
@@ -401,7 +482,7 @@ export default function SettingCouncil() {
             {members.map((m) => (
               <div key={m.id} className="text-[13px] leading-5">
                 <span className="font-semibold text-gray-700">{getRoleText(m.role)}:</span>{" "}
-                <span className="text-gray-600">{m.expert?.name}</span>
+                <span className="text-gray-600">{m.expertProfileVersion?.name}</span>
               </div>
             ))}
           </div>

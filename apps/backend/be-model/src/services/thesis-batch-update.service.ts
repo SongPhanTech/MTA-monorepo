@@ -5,6 +5,7 @@ import {
   ThesisType,
 } from "@workspace/db/client"
 import { prisma } from ".."
+import { resolveCurrentVersionIds } from "./expert-version"
 
 export type BatchUpdateThesisItem = {
   thesisProjectId: string
@@ -16,7 +17,9 @@ export type BatchUpdateThesisItem = {
   defenseDate?: string | Date | null
   researchTopicAssociated?: string | null
   organizationId?: string | null
+  /** Expert.id — BE resolve → supervisorVersionId */
   supervisorId?: string | null
+  /** Expert.id — BE resolve → coSupervisorVersionId */
   coSupervisorId?: string | null
   roomId?: string | null
   defenseSessionId?: string | null
@@ -81,14 +84,19 @@ function hasSupervisorConflictWithCouncil(item: BatchUpdateThesisItem) {
   return supervisorIds.some((id) => councilIds.has(id))
 }
 
-function buildCouncilMembers(item: BatchUpdateThesisItem) {
+function buildCouncilMembers(item: BatchUpdateThesisItem, versionByExpertId: Map<string, string>) {
   return [
     { role: CouncilRole.CHAIRMAN, expertId: normalizeId(item.councilChairman) },
     { role: CouncilRole.SECRETARY, expertId: normalizeId(item.councilSecretary) },
     { role: CouncilRole.REVIEWER_1, expertId: normalizeId(item.reviewer1) },
     { role: CouncilRole.REVIEWER_2, expertId: normalizeId(item.reviewer2) },
     { role: CouncilRole.MEMBER, expertId: normalizeId(item.councilMember) },
-  ].filter((member): member is { role: CouncilRole; expertId: string } => member.expertId !== null)
+  ]
+    .filter((member): member is { role: CouncilRole; expertId: string } => member.expertId !== null)
+    .map((member) => ({
+      ...member,
+      expertProfileVersionId: versionByExpertId.get(member.expertId)!,
+    }))
 }
 
 function parseFinalScore(score: BatchUpdateThesisItem["score"]) {
@@ -155,6 +163,16 @@ export async function batchUpdateThesisProjects(
     }
   }
 
+  const allExpertIds = items.flatMap((item) => [
+    ...getCouncilExpertIds(item),
+    ...(allowSupervisorEdit
+      ? [normalizeId(item.supervisorId), normalizeId(item.coSupervisorId)].filter(
+          (id): id is string => !!id
+        )
+      : []),
+  ])
+  const versionByExpertId = await resolveCurrentVersionIds(allExpertIds)
+
   const projectIds = items.map((item) => item.thesisProjectId)
   const projects = await prisma.thesisProject.findMany({
     where: {
@@ -166,8 +184,8 @@ export async function batchUpdateThesisProjects(
     select: {
       id: true,
       councilId: true,
-      supervisorId: true,
-      coSupervisorId: true,
+      supervisor: { select: { expertId: true } },
+      coSupervisor: { select: { expertId: true } },
       defenseRecord: { select: { id: true } },
     },
   })
@@ -183,8 +201,8 @@ export async function batchUpdateThesisProjects(
       if (!project) continue
       const newSupervisorId = normalizeId(item.supervisorId)
       const newCoSupervisorId = normalizeId(item.coSupervisorId)
-      const oldSupervisorId = project.supervisorId ?? null
-      const oldCoSupervisorId = project.coSupervisorId ?? null
+      const oldSupervisorId = project.supervisor?.expertId ?? null
+      const oldCoSupervisorId = project.coSupervisor?.expertId ?? null
       if (
         (newSupervisorId !== oldSupervisorId || newCoSupervisorId !== oldCoSupervisorId) &&
         !isWithinGvhdSupervisorEditWindow(session.topicEntryDeadline)
@@ -224,13 +242,14 @@ export async function batchUpdateThesisProjects(
         })
       }
 
-      const members = buildCouncilMembers(item)
+      const members = buildCouncilMembers(item, versionByExpertId)
       if (members.length > 0) {
         await tx.councilMember.createMany({
           data: members.map((member) => ({
             councilId: councilId!,
             role: member.role,
             expertId: member.expertId,
+            expertProfileVersionId: member.expertProfileVersionId,
           })),
         })
       }
@@ -258,6 +277,9 @@ export async function batchUpdateThesisProjects(
           ? (item.status as ThesisProjectStatus)
           : undefined
 
+      const supervisorExpertId = normalizeId(item.supervisorId)
+      const coSupervisorExpertId = normalizeId(item.coSupervisorId)
+
       await tx.thesisProject.update({
         where: { id: project.id },
         data: {
@@ -274,8 +296,12 @@ export async function batchUpdateThesisProjects(
           defenseSessionId: normalizeId(item.defenseSessionId),
           ...(allowSupervisorEdit
             ? {
-                supervisorId: normalizeId(item.supervisorId),
-                coSupervisorId: normalizeId(item.coSupervisorId),
+                supervisorVersionId: supervisorExpertId
+                  ? versionByExpertId.get(supervisorExpertId)!
+                  : null,
+                coSupervisorVersionId: coSupervisorExpertId
+                  ? versionByExpertId.get(coSupervisorExpertId)!
+                  : null,
               }
             : {}),
         },

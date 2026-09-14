@@ -2111,13 +2111,26 @@ const policy = {
                 update: {},
             },
         },
-        expertProfile: {
+        expert: {
             modelLevel: {
-                read: { guard: ExpertProfile_read, },
-                create: { guard: ExpertProfile_create, inputChecker: ExpertProfile_create_input, },
-                update: { guard: ExpertProfile_update, },
-                postUpdate: { guard: ExpertProfile_postUpdate, },
-                delete: { guard: ExpertProfile_delete, }
+                read: { guard: Expert_read, },
+                create: { guard: Expert_create, inputChecker: Expert_create_input, },
+                update: { guard: Expert_update, },
+                postUpdate: { guard: Expert_postUpdate, },
+                delete: { guard: Expert_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        expertProfileVersion: {
+            modelLevel: {
+                read: { guard: ExpertProfileVersion_read, },
+                create: { guard: ExpertProfileVersion_create, inputChecker: ExpertProfileVersion_create_input, },
+                update: { guard: ExpertProfileVersion_update, },
+                postUpdate: { guard: ExpertProfileVersion_postUpdate, },
+                delete: { guard: ExpertProfileVersion_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -3835,7 +3848,8 @@ const policy = {
         thesisProject: { hasValidation: false },
         defenseSession: { hasValidation: false },
         studentThesisRegistration: { hasValidation: false },
-        expertProfile: { hasValidation: true },
+        expert: { hasValidation: false },
+        expertProfileVersion: { hasValidation: true },
         decision: { hasValidation: false },
         invitation: { hasValidation: false },
         council: { hasValidation: false },
@@ -16548,12 +16562,12 @@ function $check_StudentThesisRegistration_delete(input, context) {
     }
     return false;
 }
-function ExpertProfile_read(context, db) {
+function Expert_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_ExpertProfile_read(input, context) {
+function $check_Expert_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -16567,7 +16581,7 @@ function $check_ExpertProfile_read(input, context) {
     }
     return false;
 }
-function ExpertProfile_create(context, db) {
+function Expert_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -16575,7 +16589,7 @@ function ExpertProfile_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExpertProfile_create(input, context) {
+function $check_Expert_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -16583,12 +16597,12 @@ function $check_ExpertProfile_create(input, context) {
     }
     return false;
 }
-function ExpertProfile_create_input(input, context) {
+function Expert_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function ExpertProfile_update(context, db) {
+function Expert_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -16596,7 +16610,7 @@ function ExpertProfile_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExpertProfile_update(input, context) {
+function $check_Expert_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -16604,13 +16618,13 @@ function $check_ExpertProfile_update(input, context) {
     }
     return false;
 }
-function ExpertProfile_postUpdate(context, db) {
+function Expert_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_ExpertProfile_postUpdate(input, context) {
+function $check_Expert_postUpdate(input, context) {
     return true;
 }
-function ExpertProfile_delete(context, db) {
+function Expert_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -16618,7 +16632,85 @@ function ExpertProfile_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExpertProfile_delete(input, context) {
+function $check_Expert_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExpertProfileVersion_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ExpertProfileVersion_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExpertProfileVersion_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExpertProfileVersion_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExpertProfileVersion_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ExpertProfileVersion_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExpertProfileVersion_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExpertProfileVersion_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ExpertProfileVersion_postUpdate(input, context) {
+    return true;
+}
+function ExpertProfileVersion_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExpertProfileVersion_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

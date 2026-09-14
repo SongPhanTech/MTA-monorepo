@@ -1,6 +1,7 @@
 import { CouncilProposalStatus, CouncilRole, ThesisType } from "@workspace/db/client"
 import ExcelJS from "exceljs"
 import { prisma } from ".."
+import { resolveCurrentVersionIds } from "./expert-version"
 
 export type ImportCouncilFromExcelParams = {
   thesisSessionId: string
@@ -156,9 +157,15 @@ async function buildLabelMapsFromDb(): Promise<LabelMaps> {
   // Fallback when _Map sheet is missing: match by exact current display labels is unreliable,
   // so we only support ID-as-label and room/session names from DB.
   const [experts, rooms, defenseSessions] = await Promise.all([
-    prisma.expertProfile.findMany({
-      where: { deletedAt: null, thesisExpert: true },
-      select: { id: true, eligiblePresident: true, eligibleSecretary: true },
+    prisma.expert.findMany({
+      where: { deletedAt: null, currentVersion: { thesisExpert: true } },
+      select: {
+        id: true,
+        currentVersionId: true,
+        currentVersion: {
+          select: { eligiblePresident: true, eligibleSecretary: true },
+        },
+      },
     }),
     prisma.room.findMany({
       where: { deletedAt: null },
@@ -180,8 +187,8 @@ async function buildLabelMapsFromDb(): Promise<LabelMaps> {
 
   for (const expert of experts) {
     maps.expert.set(expert.id, expert.id)
-    if (expert.eligiblePresident) maps.president.set(expert.id, expert.id)
-    if (expert.eligibleSecretary) maps.secretary.set(expert.id, expert.id)
+    if (expert.currentVersion?.eligiblePresident) maps.president.set(expert.id, expert.id)
+    if (expert.currentVersion?.eligibleSecretary) maps.secretary.set(expert.id, expert.id)
   }
   for (const room of rooms) {
     maps.room.set(room.id, room.id)
@@ -394,6 +401,19 @@ export async function importCouncilFromExcel(
     throw new Error("File Excel có ID đề tài bị trùng. Mỗi đề tài chỉ được xuất hiện một dòng.")
   }
 
+  const allExpertIds = resolved.flatMap((item) =>
+    [
+      item.supervisorId,
+      item.coSupervisorId,
+      item.councilChairman,
+      item.councilSecretary,
+      item.reviewer1,
+      item.reviewer2,
+      item.councilMember,
+    ].filter((id): id is string => !!id)
+  )
+  const versionByExpertId = await resolveCurrentVersionIds(allExpertIds)
+
   const projects = await prisma.thesisProject.findMany({
     where: {
       id: { in: uniqueProjectIds },
@@ -404,8 +424,8 @@ export async function importCouncilFromExcel(
     select: {
       id: true,
       councilId: true,
-      supervisorId: true,
-      coSupervisorId: true,
+      supervisor: { select: { expertId: true } },
+      coSupervisor: { select: { expertId: true } },
     },
   })
   const projectById = new Map(projects.map((project) => [project.id, project]))
@@ -420,8 +440,8 @@ export async function importCouncilFromExcel(
 
   for (const item of resolved) {
     const project = projectById.get(item.thesisProjectId)!
-    const oldSupervisorId = project.supervisorId ?? null
-    const oldCoSupervisorId = project.coSupervisorId ?? null
+    const oldSupervisorId = project.supervisor?.expertId ?? null
+    const oldCoSupervisorId = project.coSupervisor?.expertId ?? null
     if (
       (item.supervisorId !== oldSupervisorId || item.coSupervisorId !== oldCoSupervisorId) &&
       !isWithinGvhdSupervisorEditWindow(session.topicEntryDeadline)
@@ -473,6 +493,7 @@ export async function importCouncilFromExcel(
             councilId: councilId!,
             role: member.role,
             expertId: member.expertId,
+            expertProfileVersionId: versionByExpertId.get(member.expertId)!,
           })),
         })
       }
@@ -481,8 +502,12 @@ export async function importCouncilFromExcel(
         where: { id: project.id },
         data: {
           title: item.title,
-          supervisorId: item.supervisorId,
-          coSupervisorId: item.coSupervisorId,
+          supervisorVersionId: item.supervisorId
+            ? versionByExpertId.get(item.supervisorId)!
+            : null,
+          coSupervisorVersionId: item.coSupervisorId
+            ? versionByExpertId.get(item.coSupervisorId)!
+            : null,
           councilId,
           roomId: item.roomId,
           defenseSessionId: item.defenseSessionId,
