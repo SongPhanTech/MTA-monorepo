@@ -242,10 +242,43 @@ export default function ArchivedCertificate() {
       certificate: true,
       studentSubjectScore: true,
       documentFiles: true,
+      subjectScores: {
+        include: {
+          subjectVersion: {
+            select: {
+              id: true,
+              name: true,
+              code: true,
+              credit: true,
+            },
+          },
+        },
+      },
       student: {
         include: {
           userProfile: {
             include: { rank: true },
+          },
+          curriculumVersion: {
+            include: {
+              trainingBlocks: {
+                include: {
+                  subjects: {
+                    include: {
+                      subject: {
+                        select: {
+                          id: true,
+                          name: true,
+                          code: true,
+                          credit: true,
+                          subjectId: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
           fixedClass: {
             include: {
@@ -261,6 +294,23 @@ export default function ArchivedCertificate() {
                       trainingMajor: {
                         include: {
                           trainingField: true,
+                        },
+                      },
+                    },
+                  },
+                  trainingBlocks: {
+                    include: {
+                      subjects: {
+                        include: {
+                          subject: {
+                            select: {
+                              id: true,
+                              name: true,
+                              code: true,
+                              credit: true,
+                              subjectId: true,
+                            },
+                          },
                         },
                       },
                     },
@@ -783,6 +833,27 @@ export default function ArchivedCertificate() {
               align: "center",
               width: 160,
               render: (__, record) => record?.certificate?.name || "-",
+            },
+            {
+              title: "Điểm phiên",
+              align: "left",
+              width: 220,
+              render: (__, record) => {
+                const scores = (record as any)?.subjectScores || []
+                if (!scores.length) return "-"
+                return (
+                  <div className="flex flex-col gap-0.5 text-xs">
+                    {scores.map((s: any) => (
+                      <div key={s.id}>
+                        {s.subjectVersion?.code
+                          ? `${s.subjectVersion.code} - `
+                          : ""}
+                        {s.subjectVersion?.name || "?"}: <b>{s.finalScore}</b>
+                      </div>
+                    ))}
+                  </div>
+                )
+              },
             },
             ...((showLanguageScoreColumns
               ? [

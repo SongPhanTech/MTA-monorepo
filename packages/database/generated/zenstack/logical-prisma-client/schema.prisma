@@ -3106,7 +3106,35 @@ model ArchivedCertificate {
   documentFiles       DocumentFile[]
   decisionNumber      String?
   studentSubjectScore ArchivedCertificateOnStudentSubjectScore[]
+  /// môn + điểm phiên chọn theo SV (trước phê duyệt)
+  subjectScores       ArchivedCertificateSubjectScore[]
 
+  @@schema("ql-dao-tao")
+}
+
+/// Điểm phiên từng môn của chứng chỉ SV
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ArchivedCertificateSubjectScore {
+  id                    String              @id() @default(cuid())
+  code                  String?             @unique()
+  active                Boolean             @default(true)
+  description           String?             @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @default(now()) @updatedAt()
+  createdBy             String?             @default("") @db.Uuid()
+  /// điểm phiên môn học
+  /// @gte(0, 'Điểm tối thiểu là 0')
+  /// @lte(10, 'Điểm tối đa là 10')
+  finalScore            Float
+  archivedCertificate   ArchivedCertificate @relation(fields: [archivedCertificateId], references: [id])
+  archivedCertificateId String
+  subjectVersion        SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId      String
+
+  @@unique([archivedCertificateId, subjectVersionId])
   @@schema("ql-dao-tao")
 }
 
@@ -3566,69 +3594,70 @@ model SubjectVersionCategory {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model SubjectVersion {
-  id                       String                    @id() @default(cuid())
-  active                   Boolean                   @default(true)
-  description              String?                   @db.Text()
-  deletedAt                DateTime?
-  createdAt                DateTime                  @default(now())
-  updatedAt                DateTime                  @default(now()) @updatedAt()
-  createdBy                String?                   @default("") @db.Uuid()
-  code                     String
-  isLocked                 Boolean                   @default(false)
-  name                     String
-  codeTkb                  String?
-  examType                 ExamType
+  id                               String                            @id() @default(cuid())
+  active                           Boolean                           @default(true)
+  description                      String?                           @db.Text()
+  deletedAt                        DateTime?
+  createdAt                        DateTime                          @default(now())
+  updatedAt                        DateTime                          @default(now()) @updatedAt()
+  createdBy                        String?                           @default("") @db.Uuid()
+  code                             String
+  isLocked                         Boolean                           @default(false)
+  name                             String
+  codeTkb                          String?
+  examType                         ExamType
   /// loại học phần
-  type                     SubjectVersionType        @default(Normal)
+  type                             SubjectVersionType                @default(Normal)
   /// 1 đầu điểm
-  onePoint                 Boolean                   @default(false)
-  credit                   Int
-  week                     Int?
+  onePoint                         Boolean                           @default(false)
+  credit                           Int
+  week                             Int?
   /// số tiết
-  period                   Int?
+  period                           Int?
   /// số tiết TKB
-  schedulePeriod           Int?
-  numberOfTheory           Int?
-  numberOfPractical        Int?
-  numberOfSelfStudy        Int?
-  numberOfPractice         Int?
-  numberOfReview           Int?
-  numberOfExam             Int?
-  numberOfOther            Int?
-  objectives               String?
-  learningOutcome          String?
-  structure                String?
-  guild                    String?
-  academicResults          String?
-  materials                String?
-  rules                    String?
-  managementOrganization   DM_DonVi?                 @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String?                   @db.Uuid()
-  subject                  Subject                   @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
-  subjectId                String
-  trainingObjectType       TrainingObjectType        @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId     String
-  subjectVersionCategory   SubjectVersionCategory?   @relation(fields: [subjectVersionCategoryId], references: [id])
-  subjectVersionCategoryId String?
+  schedulePeriod                   Int?
+  numberOfTheory                   Int?
+  numberOfPractical                Int?
+  numberOfSelfStudy                Int?
+  numberOfPractice                 Int?
+  numberOfReview                   Int?
+  numberOfExam                     Int?
+  numberOfOther                    Int?
+  objectives                       String?
+  learningOutcome                  String?
+  structure                        String?
+  guild                            String?
+  academicResults                  String?
+  materials                        String?
+  rules                            String?
+  managementOrganization           DM_DonVi?                         @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId         String?                           @db.Uuid()
+  subject                          Subject                           @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
+  subjectId                        String
+  trainingObjectType               TrainingObjectType                @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId             String
+  subjectVersionCategory           SubjectVersionCategory?           @relation(fields: [subjectVersionCategoryId], references: [id])
+  subjectVersionCategoryId         String?
   /// môn học khối kiến thức - CTĐT
-  trainingBlocks           TrainingBlockSubject[]
+  trainingBlocks                   TrainingBlockSubject[]
   /// môn học tiên quyết
-  prerequisiteSubject      SubjectVersion[]          @relation(name: "PrerequisiteSubject")
-  dependentSubject         SubjectVersion[]          @relation(name: "PrerequisiteSubject")
-  coRequisiteSubject       SubjectVersion[]          @relation(name: "CoRequisiteSubject")
-  depCoRequisiteSubject    SubjectVersion[]          @relation(name: "CoRequisiteSubject")
-  equivalencyGroups        SubjectInGroup[]
-  knowledgeBlocks          KnowledgeBlock[]
-  subjectClass             SubjectClass[]
-  studentSubjectScore      StudentSubjectScore[]
-  documentFiles            DocumentFile[]
-  questionBanks            QuestionBank[]
-  subjectScoreConvert      SubjectScoreConvert[]
-  subjectVersionHistory    SubjectVersionHistory[]
-  exams                    Exam[]
-  examFramework            ExamFramework[]
-  scoreLinkSubjectVersion  ScoreLinkSubjectVersion[]
-  certificate              Certificate[]
+  prerequisiteSubject              SubjectVersion[]                  @relation(name: "PrerequisiteSubject")
+  dependentSubject                 SubjectVersion[]                  @relation(name: "PrerequisiteSubject")
+  coRequisiteSubject               SubjectVersion[]                  @relation(name: "CoRequisiteSubject")
+  depCoRequisiteSubject            SubjectVersion[]                  @relation(name: "CoRequisiteSubject")
+  equivalencyGroups                SubjectInGroup[]
+  knowledgeBlocks                  KnowledgeBlock[]
+  subjectClass                     SubjectClass[]
+  studentSubjectScore              StudentSubjectScore[]
+  documentFiles                    DocumentFile[]
+  questionBanks                    QuestionBank[]
+  subjectScoreConvert              SubjectScoreConvert[]
+  subjectVersionHistory            SubjectVersionHistory[]
+  exams                            Exam[]
+  examFramework                    ExamFramework[]
+  scoreLinkSubjectVersion          ScoreLinkSubjectVersion[]
+  certificate                      Certificate[]
+  archivedCertificateSubjectScores ArchivedCertificateSubjectScore[]
 
   @@index([name, trainingObjectTypeId])
   @@index([subjectId])

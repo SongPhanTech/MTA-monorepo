@@ -9412,6 +9412,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'archivedCertificate',
+                }, subjectScores: {
+                    name: "subjectScores",
+                    type: "ArchivedCertificateSubjectScore",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'archivedCertificate',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -9423,6 +9429,90 @@ const metadata = {
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        archivedCertificateSubjectScore: {
+            name: 'ArchivedCertificateSubjectScore', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ArchivedCertificateSubjectScore$createdBy,
+                }, finalScore: {
+                    name: "finalScore",
+                    type: "Float",
+                    attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
+                }, archivedCertificate: {
+                    name: "archivedCertificate",
+                    type: "ArchivedCertificate",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'subjectScores',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "archivedCertificateId" },
+                }, archivedCertificateId: {
+                    name: "archivedCertificateId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'archivedCertificate',
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'archivedCertificateSubjectScores',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionId" },
+                }, subjectVersionId: {
+                    name: "subjectVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectVersion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, archivedCertificateId_subjectVersionId: {
+                    name: "archivedCertificateId_subjectVersionId",
+                    fields: ["archivedCertificateId", "subjectVersionId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         archivedAwardOnStudentSubjectScore: {
             name: 'ArchivedAwardOnStudentSubjectScore', fields: {
@@ -11551,6 +11641,12 @@ const metadata = {
                     isArray: true,
                     backLink: 'subjectVersions',
                     isRelationOwner: true,
+                }, archivedCertificateSubjectScores: {
+                    name: "archivedCertificateSubjectScores",
+                    type: "ArchivedCertificateSubjectScore",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectVersion',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -30828,6 +30924,9 @@ function $default$ArchivedCertificateOnStudentSubjectScore$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$ArchivedCertificate$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$ArchivedCertificateSubjectScore$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$ArchivedAwardOnStudentSubjectScore$createdBy(user) {

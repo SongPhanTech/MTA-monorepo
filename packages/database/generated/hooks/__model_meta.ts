@@ -8932,6 +8932,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'archivedCertificate',
+                }, subjectScores: {
+                    name: "subjectScores",
+                    type: "ArchivedCertificateSubjectScore",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'archivedCertificate',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -8940,6 +8946,84 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                },
+            },
+        },
+        archivedCertificateSubjectScore: {
+            name: 'ArchivedCertificateSubjectScore', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ArchivedCertificateSubjectScore$createdBy,
+                }, finalScore: {
+                    name: "finalScore",
+                    type: "Float",
+                }, archivedCertificate: {
+                    name: "archivedCertificate",
+                    type: "ArchivedCertificate",
+                    isDataModel: true,
+                    backLink: 'subjectScores',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "archivedCertificateId" },
+                }, archivedCertificateId: {
+                    name: "archivedCertificateId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'archivedCertificate',
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    backLink: 'archivedCertificateSubjectScores',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionId" },
+                }, subjectVersionId: {
+                    name: "subjectVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectVersion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, archivedCertificateId_subjectVersionId: {
+                    name: "archivedCertificateId_subjectVersionId",
+                    fields: ["archivedCertificateId", "subjectVersionId"]
                 },
             },
         },
@@ -10985,6 +11069,12 @@ const metadata: ModelMeta = {
                     isArray: true,
                     backLink: 'subjectVersions',
                     isRelationOwner: true,
+                }, archivedCertificateSubjectScores: {
+                    name: "archivedCertificateSubjectScores",
+                    type: "ArchivedCertificateSubjectScore",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectVersion',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -29263,6 +29353,10 @@ function $default$ArchivedCertificateOnStudentSubjectScore$createdBy(user: any):
 }
 
 function $default$ArchivedCertificate$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ArchivedCertificateSubjectScore$createdBy(user: any): unknown {
     return user?.id;
 }
 

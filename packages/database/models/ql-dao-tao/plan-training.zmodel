@@ -344,6 +344,23 @@ model ArchivedCertificate extends Base {
   documentFiles       DocumentFile[]
   decisionNumber      String? // Số QĐ công nhận chứng chỉ
   studentSubjectScore ArchivedCertificateOnStudentSubjectScore[]
+  /// môn + điểm phiên chọn theo SV (trước phê duyệt)
+  subjectScores       ArchivedCertificateSubjectScore[]
+  @@schema("ql-dao-tao")
+}
+
+/// Điểm phiên từng môn của chứng chỉ SV
+model ArchivedCertificateSubjectScore extends Base {
+  /// điểm phiên môn học
+  finalScore            Float               @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
+
+  archivedCertificate   ArchivedCertificate @relation(fields: [archivedCertificateId], references: [id])
+  archivedCertificateId String
+
+  subjectVersion        SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId      String
+
+  @@unique([archivedCertificateId, subjectVersionId])
   @@schema("ql-dao-tao")
 }
 
@@ -820,8 +837,9 @@ model SubjectVersion extends BaseNoCode {
   subjectVersionHistory    SubjectVersionHistory[]
   exams                    Exam[]
   examFramework            ExamFramework[]
-  scoreLinkSubjectVersion  ScoreLinkSubjectVersion[]
-  certificate              Certificate[]
+  scoreLinkSubjectVersion          ScoreLinkSubjectVersion[]
+  certificate                      Certificate[]
+  archivedCertificateSubjectScores ArchivedCertificateSubjectScore[]
 
   // @@unique([trainingObjectTypeId, name, credit, period, managementOrganizationId])
   // @@unique([trainingObjectTypeId, codeTkb])

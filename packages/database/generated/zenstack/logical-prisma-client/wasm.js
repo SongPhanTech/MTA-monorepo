@@ -1711,6 +1711,20 @@ exports.Prisma.ArchivedCertificateScalarFieldEnum = {
   decisionNumber: 'decisionNumber'
 };
 
+exports.Prisma.ArchivedCertificateSubjectScoreScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  finalScore: 'finalScore',
+  archivedCertificateId: 'archivedCertificateId',
+  subjectVersionId: 'subjectVersionId'
+};
+
 exports.Prisma.ArchivedAwardOnStudentSubjectScoreScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6189,6 +6203,15 @@ exports.Prisma.ArchivedCertificateOrderByRelevanceFieldEnum = {
   decisionNumber: 'decisionNumber'
 };
 
+exports.Prisma.ArchivedCertificateSubjectScoreOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  archivedCertificateId: 'archivedCertificateId',
+  subjectVersionId: 'subjectVersionId'
+};
+
 exports.Prisma.ArchivedAwardOnStudentSubjectScoreOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -8858,6 +8881,7 @@ exports.Prisma.ModelName = {
   StudentInternship: 'StudentInternship',
   ArchivedCertificateOnStudentSubjectScore: 'ArchivedCertificateOnStudentSubjectScore',
   ArchivedCertificate: 'ArchivedCertificate',
+  ArchivedCertificateSubjectScore: 'ArchivedCertificateSubjectScore',
   ArchivedAwardOnStudentSubjectScore: 'ArchivedAwardOnStudentSubjectScore',
   ArchivedAward: 'ArchivedAward',
   SchoolYear: 'SchoolYear',

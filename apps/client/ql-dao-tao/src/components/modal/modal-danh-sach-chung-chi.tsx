@@ -1,30 +1,36 @@
 import Table from "@components/commons/table"
-// import DeleteIcon from '@components/icons/delete'
-// import EditIcon from '@components/icons/edit'
 import {
   CloseOutlined,
+  DeleteOutlined,
   DownloadOutlined,
   PaperClipOutlined,
+  PlusOutlined,
   UploadOutlined,
 } from "@ant-design/icons"
 import { useArchivedCertificateStatusOptions } from "@hooks/paymentStatus"
 import useSpinner from "@hooks/spinner"
 import { formatDate, formatDateVN } from "@lib/utils"
 import { $Enums, ArchivedCertificate } from "@workspace/db/client"
-import { useFindManyCertificate, useUpdateArchivedCertificate } from "@workspace/db/hooks"
+import {
+  useCreateManyArchivedCertificateSubjectScore,
+  useDeleteManyArchivedCertificateSubjectScore,
+  useFindManyCertificate,
+  useUpdateArchivedCertificate,
+} from "@workspace/db/hooks"
 import {
   confirmViolations,
   useCertificateExpirationCheck,
 } from "./utils/check-certificate-expiration"
 import { generatePresignedUrl } from "@workspace/libs/api/model"
 import { getMinioUrl } from "@workspace/libs/utils"
-import { Button, Flex, InputNumber, Modal, Switch, Tag, Tooltip, Upload, message } from "antd"
+import { Button, Flex, InputNumber, Modal, Select, Switch, Tag, Tooltip, Upload, message } from "antd"
 import axios from "axios"
 import { saveAs } from "file-saver"
 import dayjs from "dayjs"
 import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import DatePicker from "@components/commons/date-picker"
+import { queryClient } from "@api/index"
 
 interface StudentCertificatesInput {
   studentId: string
@@ -46,12 +52,24 @@ type DraftValue = {
 
 type DraftValues = Record<string, DraftValue>
 
+type SubjectScoreDraft = {
+  subjectVersionId: string
+  finalScore: number
+}
+
 type DocFileItem = {
   id?: string
   name: string
   path: string
   size: bigint
   mimeType?: string
+}
+
+type CurriculumSubject = {
+  id: string
+  name: string
+  code?: string | null
+  credit?: number | null
 }
 
 const initializeDrafts = (certificates: any[]): DraftValues =>
@@ -72,6 +90,41 @@ const initializeDrafts = (certificates: any[]): DraftValues =>
     {}
   )
 
+const initializeSubjectScoreDrafts = (certificates: any[]): Record<string, SubjectScoreDraft[]> =>
+  certificates.reduce(
+    (acc, cert) => ({
+      ...acc,
+      [cert.id]:
+        (cert.subjectScores || []).map((s: any) => ({
+          subjectVersionId: s.subjectVersionId,
+          finalScore: s.finalScore,
+        })) || [],
+    }),
+    {}
+  )
+
+function getCurriculumSubjects(cert: any): CurriculumSubject[] {
+  const student = cert?.student
+  const curriculumVersion =
+    student?.curriculumVersion || student?.fixedClass?.curriculumVersion
+  if (!curriculumVersion?.trainingBlocks) return []
+
+  const map = new Map<string, CurriculumSubject>()
+  for (const block of curriculumVersion.trainingBlocks) {
+    for (const tbs of block.subjects || []) {
+      const sv = tbs.subject
+      if (!sv?.id || map.has(sv.id)) continue
+      map.set(sv.id, {
+        id: sv.id,
+        name: sv.name,
+        code: sv.code,
+        credit: sv.credit,
+      })
+    }
+  }
+  return [...map.values()]
+}
+
 const ModalDanhSachChungChi = () => {
   const { showSpinner, hideSpinner } = useSpinner()
 
@@ -83,6 +136,8 @@ const ModalDanhSachChungChi = () => {
   })
 
   const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
+  const { mutateAsync: deleteManySubjectScores } = useDeleteManyArchivedCertificateSubjectScore()
+  const { mutateAsync: createManySubjectScores } = useCreateManyArchivedCertificateSubjectScore()
 
   const { data: certificateForCheck = [] } = useFindManyCertificate({
     include: {
@@ -95,6 +150,9 @@ const ModalDanhSachChungChi = () => {
   const [displayCertificates, setDisplayCertificates] = useState<any[]>([])
   const [editingCertId, setEditingCertId] = useState<string | null>(null)
   const [draftValues, setDraftValues] = useState<DraftValues>({})
+  const [draftSubjectScores, setDraftSubjectScores] = useState<Record<string, SubjectScoreDraft[]>>(
+    {}
+  )
   const [draftDocFiles, setDraftDocFiles] = useState<Record<string, DocFileItem[]>>({})
   const [uploadingCertId, setUploadingCertId] = useState<string | null>(null)
 
@@ -111,6 +169,7 @@ const ModalDanhSachChungChi = () => {
   useEffect(() => {
     setDisplayCertificates(certificates)
     setDraftValues(initializeDrafts(certificates))
+    setDraftSubjectScores(initializeSubjectScoreDrafts(certificates))
     setDraftDocFiles(
       certificates.reduce(
         (acc: Record<string, DocFileItem[]>, cert: any) => ({
@@ -181,6 +240,12 @@ const ModalDanhSachChungChi = () => {
     const draft = draftValues[certId]
     if (!draft) return
 
+    const subjectScores = draftSubjectScores[certId] || []
+    if (!subjectScores.length) {
+      message.warning("Vui lòng chọn ít nhất một môn phiên điểm")
+      return
+    }
+
     try {
       const cert = displayCertificates.find((c) => c.id === certId)
       if (cert?.certificateId && draft.expiredDate) {
@@ -236,19 +301,44 @@ const ModalDanhSachChungChi = () => {
         } as any,
       })
 
+      // Xóa mapping cũ (hard delete vì unique archivedCertificateId+subjectVersionId), tạo lại theo draft
+      await deleteManySubjectScores({
+        where: { archivedCertificateId: certId },
+      })
+      await createManySubjectScores({
+        data: subjectScores.map((s) => ({
+          archivedCertificateId: certId,
+          subjectVersionId: s.subjectVersionId,
+          finalScore: s.finalScore,
+        })),
+      })
+
+      const curriculumSubjects = getCurriculumSubjects(cert)
+      const subjectMap = new Map(curriculumSubjects.map((s) => [s.id, s]))
+
       setDisplayCertificates((prev) =>
-        prev.map((cert) =>
-          cert.id === certId
+        prev.map((c) =>
+          c.id === certId
             ? {
-                ...cert,
-                ...saveData,
-                issuedDate: draft.issuedDate ? draft.issuedDate.toISOString() : null,
-                expiredDate: draft.expiredDate ? draft.expiredDate.toISOString() : null,
-              }
-            : cert
+              ...c,
+              ...saveData,
+              issuedDate: draft.issuedDate ? draft.issuedDate.toISOString() : null,
+              expiredDate: draft.expiredDate ? draft.expiredDate.toISOString() : null,
+              subjectScores: subjectScores.map((s, idx) => ({
+                id: `temp-${idx}`,
+                subjectVersionId: s.subjectVersionId,
+                finalScore: s.finalScore,
+                subjectVersion: subjectMap.get(s.subjectVersionId) || {
+                  id: s.subjectVersionId,
+                  name: s.subjectVersionId,
+                },
+              })),
+            }
+            : c
         )
       )
       setEditingCertId(null)
+      queryClient.invalidateQueries({ queryKey: ["ArchivedCertificate"] })
       message.success("Cập nhật chứng chỉ thành công")
     } catch (error: any) {
       message.error(error?.info?.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -285,12 +375,108 @@ const ModalDanhSachChungChi = () => {
     )
   }
 
+  const renderSubjectScores = (cert: any) => {
+    const isEditing = editingCertId === cert.id
+    const curriculumSubjects = getCurriculumSubjects(cert)
+
+    if (!isEditing) {
+      const scores = cert.subjectScores || []
+      if (!scores.length) return "-"
+      return (
+        <div className="flex flex-col gap-0.5 text-xs text-left">
+          {scores.map((s: any) => (
+            <div key={s.id || s.subjectVersionId}>
+              {s.subjectVersion?.code ? `${s.subjectVersion.code} - ` : ""}
+              {s.subjectVersion?.name || "?"}: <b>{s.finalScore}</b>
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    const scores = draftSubjectScores[cert.id] || []
+    const selectedIds = new Set(scores.map((s) => s.subjectVersionId))
+    const available = curriculumSubjects.filter((s) => !selectedIds.has(s.id))
+
+    return (
+      <div className="flex flex-col gap-1 py-1">
+        {scores.map((item, idx) => (
+          <div key={`${item.subjectVersionId}-${idx}`} className="flex items-center gap-1">
+            <Select
+              className="flex-1 min-w-0"
+              size="small"
+              value={item.subjectVersionId}
+              options={curriculumSubjects
+                .filter((s) => s.id === item.subjectVersionId || !selectedIds.has(s.id))
+                .map((s) => ({
+                  label: `${s.code ? `${s.code} - ` : ""}${s.name}`,
+                  value: s.id,
+                }))}
+              onChange={(value: string) => {
+                const next = [...scores]
+                next[idx] = { ...next[idx], subjectVersionId: value }
+                setDraftSubjectScores((prev) => ({ ...prev, [cert.id]: next }))
+              }}
+            />
+            <InputNumber
+              min={0}
+              max={10}
+              step={0.1}
+              size="small"
+              className="w-[64px]"
+              value={item.finalScore}
+              onChange={(value) => {
+                const next = [...scores]
+                next[idx] = { ...next[idx], finalScore: value ?? 0 }
+                setDraftSubjectScores((prev) => ({ ...prev, [cert.id]: next }))
+              }}
+            />
+            <Button
+              type="text"
+              danger
+              size="small"
+              icon={<DeleteOutlined />}
+              onClick={() => {
+                setDraftSubjectScores((prev) => ({
+                  ...prev,
+                  [cert.id]: scores.filter((_, i) => i !== idx),
+                }))
+              }}
+            />
+          </div>
+        ))}
+        {available.length > 0 && (
+          <Button
+            type="link"
+            size="small"
+            icon={<PlusOutlined />}
+            className="px-0 self-start"
+            onClick={() => {
+              setDraftSubjectScores((prev) => ({
+                ...prev,
+                [cert.id]: [
+                  ...(prev[cert.id] || []),
+                  { subjectVersionId: available[0].id, finalScore: 0 },
+                ],
+              }))
+            }}
+          >
+            Thêm môn
+          </Button>
+        )}
+        {!curriculumSubjects.length && (
+          <span className="text-orange-500 text-xs">SV chưa có CTĐT / không có môn</span>
+        )}
+      </div>
+    )
+  }
+
   return (
     <Modal
       title={`Danh sách chứng chỉ - ${input?.studentName || ""}`}
       open={isOpen}
       onCancel={onClose}
-      width={showLanguageScoreColumns ? 1600 : 1200}
+      width={showLanguageScoreColumns ? 1700 : 1300}
       footer={null}
       destroyOnClose
     >
@@ -318,6 +504,12 @@ const ModalDanhSachChungChi = () => {
             render: (__, cert) => cert?.certificate?.name || "",
           },
           {
+            title: "Điểm phiên",
+            width: 280,
+            align: "left",
+            render: (_, cert) => renderSubjectScores(cert),
+          },
+          {
             title: "Điểm chứng chỉ",
             dataIndex: "score",
             align: "center",
@@ -337,35 +529,35 @@ const ModalDanhSachChungChi = () => {
           },
           ...((showLanguageScoreColumns
             ? [
-                {
-                  title: "Nghe",
-                  align: "center",
-                  width: 100,
-                  render: (_: any, cert: any) =>
-                    renderEditableNumber(cert?.listeningScore, cert, "listeningScore"),
-                },
-                {
-                  title: "Nói",
-                  align: "center",
-                  width: 100,
-                  render: (_: any, cert: any) =>
-                    renderEditableNumber(cert?.speakingScore, cert, "speakingScore"),
-                },
-                {
-                  title: "Đọc",
-                  align: "center",
-                  width: 100,
-                  render: (_: any, cert: any) =>
-                    renderEditableNumber(cert?.readingScore, cert, "readingScore"),
-                },
-                {
-                  title: "Viết",
-                  align: "center",
-                  width: 100,
-                  render: (_: any, cert: any) =>
-                    renderEditableNumber(cert?.writingScore, cert, "writingScore"),
-                },
-              ]
+              {
+                title: "Nghe",
+                align: "center",
+                width: 100,
+                render: (_: any, cert: any) =>
+                  renderEditableNumber(cert?.listeningScore, cert, "listeningScore"),
+              },
+              {
+                title: "Nói",
+                align: "center",
+                width: 100,
+                render: (_: any, cert: any) =>
+                  renderEditableNumber(cert?.speakingScore, cert, "speakingScore"),
+              },
+              {
+                title: "Đọc",
+                align: "center",
+                width: 100,
+                render: (_: any, cert: any) =>
+                  renderEditableNumber(cert?.readingScore, cert, "readingScore"),
+              },
+              {
+                title: "Viết",
+                align: "center",
+                width: 100,
+                render: (_: any, cert: any) =>
+                  renderEditableNumber(cert?.writingScore, cert, "writingScore"),
+              },
+            ]
             : []) as any[]),
           {
             title: "Ngày cấp",
