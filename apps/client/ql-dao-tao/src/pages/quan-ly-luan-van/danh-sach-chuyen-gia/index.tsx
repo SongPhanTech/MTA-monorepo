@@ -130,7 +130,7 @@ function getOrderBy(
     case "email":
       return { currentVersion: { email: order } }
     case "inAcademy":
-      return { lecturerId: order }
+      return { currentVersion: { inAcademy: order } }
     default:
       return DEFAULT_ORDER_BY
   }
@@ -459,16 +459,22 @@ export default function DanhSachChuyenGiaLuanVan() {
                 width: 120,
                 align: "center",
                 sorter: (a: ExpertRow, b: ExpertRow) =>
-                  Number(Boolean(a.inAcademy ?? a.lecturer?.userProfile)) -
-                  Number(Boolean(b.inAcademy ?? b.lecturer?.userProfile)),
+                  Number(Boolean(a.inAcademy)) - Number(Boolean(b.inAcademy)),
                 sortOrder: sortOrderOf("inAcademy"),
-                render: (_: unknown, record: any) => {
-                  const inAcademy = record.inAcademy ?? Boolean(record.lecturer?.userProfile)
-                  if (!inAcademy) return null
+                render: (_: unknown, record: ExpertRow) => {
+                  if (record.inAcademy) {
+                    return (
+                      <Flex justify="center" align="center">
+                        <Tooltip title="Trong học viện (theo hồ sơ đang áp dụng)">
+                          <CheckCircleFilled style={{ color: "#16a34a", fontSize: 18 }} />
+                        </Tooltip>
+                      </Flex>
+                    )
+                  }
                   return (
                     <Flex justify="center" align="center">
-                      <Tooltip title="Người trong học viện">
-                        <CheckCircleFilled style={{ color: "#16a34a", fontSize: 18 }} />
+                      <Tooltip title="Ngoài học viện (theo hồ sơ đang áp dụng)">
+                        <span className="text-gray-400">—</span>
                       </Tooltip>
                     </Flex>
                   )

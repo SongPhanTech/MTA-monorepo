@@ -76,7 +76,7 @@ import {
   exportThongKeCoQuanDonViCanBoNgoaiHv,
 } from "@/utils/thesis-excel"
 import type { FilterProps } from "@constants/type"
-import { flattenExpertForSelect, versionToPersonLike } from "@/utils/expert-select"
+import { flattenExpertForSelect, versionInAcademy, versionToPersonLike } from "@/utils/expert-select"
 import type { ExpertProfileLike, PersonLike } from "@/utils/thesis-profile"
 
 export function formatDefenseSessionClock(startTime: Date | string | null | undefined): string {
@@ -273,8 +273,7 @@ export function formatPersonNameWithWorkplace(
     })
 
     if (matched) {
-      const inAcad =
-        (matched as ExpertProfileLike).inAcademy ?? !!(matched as ExpertProfileLike).lecturerId
+      const inAcad = versionInAcademy(matched)
       const wp = matched.workplace || ""
       const textWithWp = [trimmed, wp].filter(Boolean).join(", ")
       return { textWithWorkplace: textWithWp, inAcademy: inAcad }
@@ -283,17 +282,17 @@ export function formatPersonNameWithWorkplace(
     return { textWithWorkplace: trimmed, inAcademy: true }
   }
 
-  const expertPerson = person as ExpertProfileLike
+  const expertPerson = (versionToPersonLike(person as ExpertProfileLike) ??
+    person) as ExpertProfileLike
   const profile =
     expertPerson?.lecturer?.userProfile ?? expertPerson?.expert?.lecturer?.userProfile
   const rank = profile?.academicRankType?.sMa || expertPerson?.academicRankType?.sMa || ""
   const degree = profile?.academicDegreeType?.sMa || expertPerson?.academicDegreeType?.sMa || ""
   const title = [rank, degree].filter(Boolean).join(".")
   const fullname = expertPerson?.name || profile?.fullname || ""
-  const inAcademy =
-    expertPerson.inAcademy ??
-    !!(expertPerson.lecturerId || expertPerson.expert?.lecturerId)
-  let workplace = expertPerson?.workplace || ""
+  // Ưu tiên inAcademy trên version đã gán / current; không suy từ lecturerId live
+  const inAcademy = versionInAcademy(expertPerson)
+  let workplace = expertPerson?.workplace || profile?.workplace || ""
 
   if (!inAcademy && !workplace && allExperts.length) {
     const cleanedFullname = cleanTitle(fullname)
@@ -369,13 +368,30 @@ export function getSupervisorName(
 ) {
   if (!record) return ""
 
-  const { textWithWorkplace, inAcademy } = formatPersonNameWithWorkplace(record, allExperts)
+  // Version đã gán / flatten catalog → PersonLike có inAcademy tường minh
+  const person =
+    versionToPersonLike(record as ExpertProfileLike) ?? (record as ExpertProfileLike)
+
+  const { textWithWorkplace, inAcademy } = formatPersonNameWithWorkplace(person, allExperts)
 
   if (!textWithWorkplace) return ""
-  if (!htmlRender) return textWithWorkplace
+
+  // showWorkplace=false → chỉ tên + học hàm/học vị (bỏ đơn vị công tác)
+  let displayText = textWithWorkplace
+  if (!showWorkplace) {
+    const rank =
+      person.academicRankType?.sMa || person.lecturer?.userProfile?.academicRankType?.sMa || ""
+    const degree =
+      person.academicDegreeType?.sMa || person.lecturer?.userProfile?.academicDegreeType?.sMa || ""
+    const title = [rank, degree].filter(Boolean).join(".")
+    const fullname = person.name || person.lecturer?.userProfile?.fullname || ""
+    displayText = [title, fullname].filter(Boolean).join(" ").trim() || fullname || textWithWorkplace
+  }
+
+  if (!htmlRender) return displayText
 
   const kw = searchKeyword ? searchKeyword.trim().toLowerCase() : ""
-  const isMatched = kw ? textWithWorkplace.toLowerCase().includes(kw) : false
+  const isMatched = kw ? displayText.toLowerCase().includes(kw) : false
 
   return (
     <span
@@ -387,9 +403,60 @@ export function getSupervisorName(
       }
       style={!isMatched ? { color: inAcademy ? "#000000" : "#16a34a" } : undefined}
     >
-      {textWithWorkplace}
+      {displayText}
     </span>
   )
+}
+
+/** Options Select chuyên gia: label = tên; luôn gắn value đang chọn nếu bị lọc khỏi catalog. */
+function buildExpertSelectOptions(
+  experts: ExpertProfileLike[] | undefined,
+  filterFn?: (item: ExpertProfileLike) => boolean,
+  ensure?: {
+    id?: string | null
+    person?: ExpertProfileLike | PersonLike | null
+  }
+) {
+  const list = (experts ?? []).filter((item) => (filterFn ? filterFn(item) : true))
+  const options = list.map((item) => {
+    const searchString = String(getSupervisorName(item, false, true) || item.name || "")
+    const inAcademy = versionInAcademy(item)
+    return {
+      value: String(item.id),
+      searchString,
+      label: (
+        <span
+          title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
+          style={{ color: inAcademy ? "#000000" : "#16a34a" }}
+        >
+          {searchString || String(item.id)}
+        </span>
+      ),
+    }
+  })
+
+  const ensureId = ensure?.id ? String(ensure.id) : ""
+  if (ensureId && !options.some((o) => o.value === ensureId)) {
+    const person = ensure.person
+    const searchString = person
+      ? String(getSupervisorName(person as ExpertProfileLike, false, true) || "")
+      : ""
+    const inAcademy = person ? versionInAcademy(person as ExpertProfileLike) : false
+    options.unshift({
+      value: ensureId,
+      searchString: searchString || ensureId,
+      label: (
+        <span
+          title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
+          style={{ color: inAcademy ? "#000000" : "#16a34a" }}
+        >
+          {searchString || ensureId}
+        </span>
+      ),
+    })
+  }
+
+  return options
 }
 
 export function getMatchedLecturerRoles(
@@ -2464,28 +2531,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinGvhdSupervisorEditWindow()}
-                          options={expertProfileData
-                            ?.filter(
-                              (item) =>
-                                !coSupervisorPeerId || item.id !== String(coSupervisorPeerId)
-                            )
-                            .map((item) => {
-                              const text = getSupervisorName(item, true, true)
-                              const searchString = getSupervisorName(item, false, true) as string
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                  >
-                                    {text}
-                                  </span>
-                                ),
-                                value: item.id,
-                                searchString,
-                              }
-                            })}
+                          options={buildExpertSelectOptions(
+                            expertProfileData,
+                            (item) =>
+                              !coSupervisorPeerId || item.id !== String(coSupervisorPeerId),
+                            {
+                              id: currentValue,
+                              person: versionToPersonLike(
+                                getThesisProjectForSession(record, searchParams.thesisSessionId)
+                                  ?.supervisor
+                              ),
+                            }
+                          )}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -2561,27 +2618,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           className="w-full"
                           disabled={!isWithinGvhdSupervisorEditWindow()}
-                          options={expertProfileData
-                            ?.filter(
-                              (item) => !supervisorPeerId || item.id !== String(supervisorPeerId)
-                            )
-                            .map((item) => {
-                              const text = getSupervisorName(item, true, true)
-                              const searchString = getSupervisorName(item, false, true) as string
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                  >
-                                    {text}
-                                  </span>
-                                ),
-                                value: item.id,
-                                searchString,
-                              }
-                            })}
+                          options={buildExpertSelectOptions(
+                            expertProfileData,
+                            (item) => !supervisorPeerId || item.id !== String(supervisorPeerId),
+                            {
+                              id: currentValue,
+                              person: versionToPersonLike(
+                                getThesisProjectForSession(record, searchParams.thesisSessionId)
+                                  ?.coSupervisor
+                              ),
+                            }
+                          )}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -2727,7 +2774,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
 
               {
-                title: "Chủ tịch ",
+                title: "Chủ tịch",
                 sorter: (a: StudentRow, b: StudentRow) =>
                   String(
                     getCouncilMemberName(
@@ -2775,28 +2822,23 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           className="w-full"
                           disabled={!isWithinCouncilEditWindow()}
-                          options={expertProfileData
-                            ?.filter(
-                              (item) =>
-                                item.eligiblePresident === true && !excludedCouncilIds.has(item.id)
-                            )
-                            .map((item) => {
-                              const text = getSupervisorName(item, true, true)
-                              const searchString = getSupervisorName(item, false, true) as string
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                  >
-                                    {text}
-                                  </span>
-                                ),
-                                value: item.id,
-                                searchString,
-                              }
-                            })}
+                          options={buildExpertSelectOptions(
+                            expertProfileData,
+                            (item) =>
+                              item.eligiblePresident === true && !excludedCouncilIds.has(item.id),
+                            {
+                              id: currentValue,
+                              person: versionToPersonLike(
+                                getThesisProjectForSession(
+                                  record,
+                                  searchParams.thesisSessionId
+                                )?.council?.members?.find(
+                                  (member: { role?: string | null }) =>
+                                    member.role === CouncilRole.CHAIRMAN
+                                )?.expertProfileVersion
+                              ),
+                            }
+                          )}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -2869,28 +2911,23 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
-                          options={expertProfileData
-                            ?.filter(
-                              (item) =>
-                                item.eligibleSecretary === true && !excludedCouncilIds.has(item.id)
-                            )
-                            .map((item) => {
-                              const text = getSupervisorName(item, true, true)
-                              const searchString = getSupervisorName(item, false, true) as string
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                  >
-                                    {text}
-                                  </span>
-                                ),
-                                value: item.id,
-                                searchString,
-                              }
-                            })}
+                          options={buildExpertSelectOptions(
+                            expertProfileData,
+                            (item) =>
+                              item.eligibleSecretary === true && !excludedCouncilIds.has(item.id),
+                            {
+                              id: currentValue,
+                              person: versionToPersonLike(
+                                getThesisProjectForSession(
+                                  record,
+                                  searchParams.thesisSessionId
+                                )?.council?.members?.find(
+                                  (member: { role?: string | null }) =>
+                                    member.role === CouncilRole.SECRETARY
+                                )?.expertProfileVersion
+                              ),
+                            }
+                          )}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -2963,25 +3000,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
-                          options={expertProfileData
-                            ?.filter((item) => !excludedCouncilIds.has(item.id))
-                            .map((item) => {
-                              const text = getSupervisorName(item, true, true)
-                              const searchString = getSupervisorName(item, false, true) as string
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                  >
-                                    {text}
-                                  </span>
-                                ),
-                                value: item.id,
-                                searchString,
-                              }
-                            })}
+                          options={buildExpertSelectOptions(
+                            expertProfileData,
+                            (item) => !excludedCouncilIds.has(item.id),
+                            {
+                              id: currentValue,
+                              person: versionToPersonLike(
+                                getThesisProjectForSession(
+                                  record,
+                                  searchParams.thesisSessionId
+                                )?.council?.members?.find(
+                                  (member: { role?: string | null }) =>
+                                    member.role === CouncilRole.REVIEWER_1
+                                )?.expertProfileVersion
+                              ),
+                            }
+                          )}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -3054,23 +3088,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
-                          options={expertProfileData
-                            ?.filter((item) => !excludedCouncilIds.has(item.id))
-                            .map((item) => {
-                              const text = getSupervisorName(item, true, true)
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                  >
-                                    {text}
-                                  </span>
-                                ),
-                                value: item.id,
-                              }
-                            })}
+                          options={buildExpertSelectOptions(
+                            expertProfileData,
+                            (item) => !excludedCouncilIds.has(item.id),
+                            {
+                              id: currentValue,
+                              person: versionToPersonLike(
+                                getThesisProjectForSession(
+                                  record,
+                                  searchParams.thesisSessionId
+                                )?.council?.members?.find(
+                                  (member: { role?: string | null }) =>
+                                    member.role === CouncilRole.REVIEWER_2
+                                )?.expertProfileVersion
+                              ),
+                            }
+                          )}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -3137,25 +3170,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
-                          options={expertProfileData
-                            ?.filter((item) => !excludedCouncilIds.has(item.id))
-                            .map((item) => {
-                              const text = getSupervisorName(item, true, true)
-                              const searchString = getSupervisorName(item, false, true) as string
-                              const hasLecturer = item.lecturer != null
-                              return {
-                                label: (
-                                  <span
-                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                  >
-                                    {text}
-                                  </span>
-                                ),
-                                value: item.id,
-                                searchString,
-                              }
-                            })}
+                          options={buildExpertSelectOptions(
+                            expertProfileData,
+                            (item) => !excludedCouncilIds.has(item.id),
+                            {
+                              id: currentValue,
+                              person: versionToPersonLike(
+                                getThesisProjectForSession(
+                                  record,
+                                  searchParams.thesisSessionId
+                                )?.council?.members?.find(
+                                  (member: { role?: string | null }) =>
+                                    member.role === CouncilRole.MEMBER
+                                )?.expertProfileVersion
+                              ),
+                            }
+                          )}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
