@@ -57,7 +57,6 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
           placeOfBirth: true,
           gender: { select: { sTen: true } },
           ethnicity: { select: { sTen: true } },
-          provinceHometown: { select: { sTen: true } },
           newProvinceOfBirth: {
             select: {
               sTen: true,
@@ -124,7 +123,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
         orderBy: { semester: { startDate: "desc" } },
       },
     },
-    orderBy: [{ userProfile: { firstName: "asc" } }, { userProfile: { lastName: "asc" } }],
+    orderBy: { code: "asc" },
   })
 
   const TrainingObjectType = {
@@ -148,7 +147,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
       gender: student.userProfile.gender?.sTen,
       ethnicity: student.userProfile.ethnicity?.sTen,
       nationality: student.userProfile.nationality?.sTen,
-      provinceHometown: student.userProfile.provinceHometown?.sTen,
+      provinceHometown: formatPlaceOfBirth(student.userProfile),
       idCardNumber: student.userProfile.idCardNumber,
       phoneNumber: student.userProfile.phoneNumber,
       admissionCombination: student.admissionCombination,
