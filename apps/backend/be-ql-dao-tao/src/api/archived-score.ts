@@ -28,7 +28,7 @@ const certificateScore = createRoute({
   summary: "Phiên điểm chứng chỉ",
   description: `Tính / ghi điểm từ phiên chứng chỉ đã lưu trữ.
 
-**Bảng dữ liệu nguồn:** ArchivedCertificate, Certificate, StudentSubjectScore.
+**Bảng dữ liệu nguồn:** ArchivedCertificate, ArchivedCertificateSubjectScore (ưu tiên), CertificateOnSubject (fallback đơn cũ), StudentSubjectScore.
 
 **Tham số:** archivedCertificateIds.`,
   method: "post",
@@ -91,11 +91,11 @@ app.openapi(certificateScore, async (c) => {
     },
   })
 
+  // Fallback catalog: CertificateOnSubject → mọi SubjectVersion thuộc Subject
   const certMap = new Map(
     certificates.map((cert) => {
       const subjectVersions = cert.subjects.flatMap((s) =>
         s.subject.subjectVersion.map((sv) => ({
-          // subjectId: s.subjectId,
           subjectVersionId: sv.id,
           finalScore: s.finalScore,
         }))
@@ -111,6 +111,9 @@ app.openapi(certificateScore, async (c) => {
       active: true,
     },
     include: {
+      subjectScores: {
+        where: { deletedAt: null, active: true },
+      },
       student: {
         include: {
           curriculumVersion: {
@@ -140,9 +143,7 @@ app.openapi(certificateScore, async (c) => {
     const curriculumVersion =
       archived.student.curriculumVersion || archived.student.fixedClass?.curriculumVersion
 
-    const cert = certMap.get(archived.certificateId)
-
-    if (!curriculumVersion || !cert) {
+    if (!curriculumVersion) {
       return []
     }
 
@@ -150,7 +151,8 @@ app.openapi(certificateScore, async (c) => {
       subjects.map(({ subjectId }) => subjectId)
     )
 
-    const translateSubject = cert
+    // Ưu tiên mapping theo SV (ArchivedCertificateSubjectScore)
+    const perStudentScores = archived.subjectScores
       .filter(({ subjectVersionId }) => curriculumSubjects.includes(subjectVersionId))
       .map(({ subjectVersionId, finalScore }) => ({
         id: createId(),
@@ -160,7 +162,25 @@ app.openapi(certificateScore, async (c) => {
         manualFinalScore: finalScore,
       }))
 
-    return translateSubject
+    if (perStudentScores.length > 0) {
+      return perStudentScores
+    }
+
+    // Fallback đơn cũ: catalog CertificateOnSubject
+    const cert = certMap.get(archived.certificateId)
+    if (!cert) {
+      return []
+    }
+
+    return cert
+      .filter(({ subjectVersionId }) => curriculumSubjects.includes(subjectVersionId))
+      .map(({ subjectVersionId, finalScore }) => ({
+        id: createId(),
+        archivedCertificateId: archived.id,
+        studentId: archived.studentId,
+        subjectVersionId,
+        manualFinalScore: finalScore,
+      }))
   })
 
   await prisma.$transaction(async (tx) => {

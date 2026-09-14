@@ -572,69 +572,36 @@ async function exportBangDiemCaNhanMau({
       monHocs: builder.monHocs,
     }))
 
-  const tableRows: TableRow[] = []
+  // Cá nhân: danh sách phẳng toàn khóa, không chia header theo kỳ
+  const bestBySubject = new Map<string, (typeof hocKis)[number]["monHocs"][number]>()
   for (const hocKi of hocKis) {
-    tableRows.push({
-      cells: [
-        { value: hocKi.TenHocKi ?? "", colSpan: 19, bold: true, align: "left", border: true },
-      ],
-    })
-
-    const monHocs = hocKi.monHocs
-    monHocs.forEach((monHoc, index) => {
-      tableRows.push({
-        cells: [
-          { value: index + 1, align: "center" },
-          { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
-          { value: monHoc.MaMH ?? "" },
-          { value: monHoc.soTC, align: "center" },
-          { value: roundTo(monHoc.diem01, 1), align: "right", numFmt: "0.0" },
-          { value: roundTo(monHoc.diem02, 1), align: "right", numFmt: "0.0" },
-          { value: roundTo(monHoc.diem07, 1), align: "right", numFmt: "0.0" },
-          { value: null },
-          { value: null },
-          { value: roundTo(monHoc.diemhe10, 1), align: "right", numFmt: "0.0" },
-          { value: roundTo(monHoc.diemhe4, 1), align: "right", numFmt: "0.0" },
-          { value: monHoc.diemchu ?? "", align: "center" },
-          { value: null },
-          { value: monHoc.ghichu ?? "" },
-        ],
-      })
-    })
-
-    tableRows.push({
-      cells: [
-        { value: null },
-        { value: "Điểm trung bình học kỳ:", colSpan: 6, bold: true, align: "center" },
-        { value: null },
-        {
-          value: hocKi.SoTinChiKy,
-          bold: true,
-          align: "center",
-        },
-        { value: null },
-        { value: null },
-        { value: null },
-        { value: null },
-        { value: null },
-        {
-          value: hocKi.DiemTBKyHe10,
-          bold: true,
-          align: "right",
-          numFmt: "0.00",
-        },
-        {
-          value: hocKi.DiemTBKyHe4,
-          bold: true,
-          align: "right",
-          numFmt: "0.00",
-        },
-        { value: null },
-        { value: null },
-        { value: null },
-      ],
-    })
+    for (const monHoc of hocKi.monHocs) {
+      const existing = bestBySubject.get(monHoc.subjectVersionId)
+      if (!existing || (monHoc.diemhe10 ?? 0) >= (existing.diemhe10 ?? 0)) {
+        bestBySubject.set(monHoc.subjectVersionId, monHoc)
+      }
+    }
   }
+  const flatMonHocs = [...bestBySubject.values()]
+
+  const tableRows: TableRow[] = flatMonHocs.map((monHoc, index) => ({
+    cells: [
+      { value: index + 1, align: "center" },
+      { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
+      { value: monHoc.MaMH ?? "" },
+      { value: monHoc.soTC, align: "center" },
+      { value: roundTo(monHoc.diem01, 1), align: "right", numFmt: "0.0" },
+      { value: roundTo(monHoc.diem02, 1), align: "right", numFmt: "0.0" },
+      { value: roundTo(monHoc.diem07, 1), align: "right", numFmt: "0.0" },
+      { value: null },
+      { value: null },
+      { value: roundTo(monHoc.diemhe10, 1), align: "right", numFmt: "0.0" },
+      { value: roundTo(monHoc.diemhe4, 1), align: "right", numFmt: "0.0" },
+      { value: monHoc.diemchu ?? "", align: "center" },
+      { value: null },
+      { value: monHoc.ghichu ?? "" },
+    ],
+  }))
 
   const lastYearResult =
     student.studentYearResult.find((r) => r.isLastStudyYear) ??

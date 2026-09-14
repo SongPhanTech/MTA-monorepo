@@ -87,6 +87,7 @@ export * from './StudentResearchTopic.schema';
 export * from './StudentInternship.schema';
 export * from './ArchivedCertificateOnStudentSubjectScore.schema';
 export * from './ArchivedCertificate.schema';
+export * from './ArchivedCertificateSubjectScore.schema';
 export * from './ArchivedAwardOnStudentSubjectScore.schema';
 export * from './ArchivedAward.schema';
 export * from './SchoolYear.schema';

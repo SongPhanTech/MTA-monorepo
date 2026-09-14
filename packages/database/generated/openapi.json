@@ -338,6 +338,10 @@
       "description": "ArchivedCertificate operations"
     },
     {
+      "name": "archivedCertificateSubjectScore",
+      "description": "ArchivedCertificateSubjectScore operations"
+    },
+    {
       "name": "archivedAwardOnStudentSubjectScore",
       "description": "ArchivedAwardOnStudentSubjectScore operations"
     },
@@ -9859,6 +9863,12 @@
             "items": {
               "$ref": "#/components/schemas/ArchivedCertificateOnStudentSubjectScore"
             }
+          },
+          "subjectScores": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ArchivedCertificateSubjectScore"
+            }
           }
         },
         "required": [
@@ -9872,6 +9882,68 @@
           "studentId",
           "finalScore",
           "status"
+        ]
+      },
+      "ArchivedCertificateSubjectScore": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "finalScore": {
+            "type": "number"
+          },
+          "archivedCertificate": {
+            "$ref": "#/components/schemas/ArchivedCertificate"
+          },
+          "archivedCertificateId": {
+            "type": "string"
+          },
+          "subjectVersion": {
+            "$ref": "#/components/schemas/SubjectVersion"
+          },
+          "subjectVersionId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "active",
+          "createdAt",
+          "updatedAt",
+          "finalScore",
+          "archivedCertificate",
+          "archivedCertificateId",
+          "subjectVersion",
+          "subjectVersionId"
         ]
       },
       "ArchivedAwardOnStudentSubjectScore": {
@@ -11744,6 +11816,12 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Certificate"
+            }
+          },
+          "archivedCertificateSubjectScores": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ArchivedCertificateSubjectScore"
             }
           }
         },
@@ -39887,6 +39965,145 @@
           "studentId",
           "finalScore",
           "status"
+        ]
+      },
+      "AggregateArchivedCertificateSubjectScore": {
+        "type": "object",
+        "properties": {
+          "_count": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreCountAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_avg": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreAvgAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_sum": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreSumAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_min": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreMinAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_max": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreMaxAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreGroupByOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "finalScore": {
+            "type": "number"
+          },
+          "archivedCertificateId": {
+            "type": "string"
+          },
+          "subjectVersionId": {
+            "type": "string"
+          },
+          "_count": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreCountAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_avg": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreAvgAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_sum": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreSumAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_min": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreMinAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          },
+          "_max": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreMaxAggregateOutputType"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "active",
+          "createdAt",
+          "updatedAt",
+          "finalScore",
+          "archivedCertificateId",
+          "subjectVersionId"
         ]
       },
       "AggregateArchivedAwardOnStudentSubjectScore": {
@@ -86533,6 +86750,183 @@
             "nullable": true
           },
           "decisionNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreCountAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "code": {
+            "type": "integer"
+          },
+          "active": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "integer"
+          },
+          "deletedAt": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "integer"
+          },
+          "updatedAt": {
+            "type": "integer"
+          },
+          "createdBy": {
+            "type": "integer"
+          },
+          "finalScore": {
+            "type": "integer"
+          },
+          "archivedCertificateId": {
+            "type": "integer"
+          },
+          "subjectVersionId": {
+            "type": "integer"
+          },
+          "_all": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "active",
+          "description",
+          "deletedAt",
+          "createdAt",
+          "updatedAt",
+          "createdBy",
+          "finalScore",
+          "archivedCertificateId",
+          "subjectVersionId",
+          "_all"
+        ]
+      },
+      "ArchivedCertificateSubjectScoreAvgAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "finalScore": {
+            "type": "number",
+            "nullable": true
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreSumAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "finalScore": {
+            "type": "number",
+            "nullable": true
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreMinAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "finalScore": {
+            "type": "number",
+            "nullable": true
+          },
+          "archivedCertificateId": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectVersionId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreMaxAggregateOutputType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "finalScore": {
+            "type": "number",
+            "nullable": true
+          },
+          "archivedCertificateId": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectVersionId": {
             "type": "string",
             "nullable": true
           }
@@ -156676,6 +157070,337 @@
         }
       },
       "ArchivedCertificateGroupByArgs": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "orderBy": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "by": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "having": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "take": {
+            "type": "integer"
+          },
+          "skip": {
+            "type": "integer"
+          },
+          "_count": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/_AnyObject"
+              }
+            ]
+          },
+          "_min": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "_sum": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "_avg": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreCreateArgs": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "data": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreCreateManyArgs": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/_AnyObject"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/_AnyObject"
+                }
+              }
+            ]
+          },
+          "skipDuplicates": {
+            "type": "boolean",
+            "description": "Do not insert records with unique fields or ID fields that already exist."
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreFindUniqueArgs": {
+        "type": "object",
+        "required": [
+          "where"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreFindFirstArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreFindManyArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "orderBy": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/_AnyObject"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/_AnyObject"
+                }
+              }
+            ]
+          },
+          "cursor": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "take": {
+            "type": "integer"
+          },
+          "skip": {
+            "type": "integer"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreUpdateArgs": {
+        "type": "object",
+        "required": [
+          "where",
+          "data"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "data": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreUpdateManyArgs": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "data": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreUpsertArgs": {
+        "type": "object",
+        "required": [
+          "create",
+          "update",
+          "where"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "create": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "update": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreDeleteUniqueArgs": {
+        "type": "object",
+        "required": [
+          "where"
+        ],
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "include": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreDeleteManyArgs": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreCountArgs": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreAggregateArgs": {
+        "type": "object",
+        "properties": {
+          "where": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "orderBy": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "cursor": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "take": {
+            "type": "integer"
+          },
+          "skip": {
+            "type": "integer"
+          },
+          "_count": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/_AnyObject"
+              }
+            ]
+          },
+          "_min": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "_max": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "_sum": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "_avg": {
+            "$ref": "#/components/schemas/_AnyObject"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/_Meta"
+          }
+        }
+      },
+      "ArchivedCertificateSubjectScoreGroupByArgs": {
         "type": "object",
         "properties": {
           "where": {
@@ -311934,6 +312659,1096 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ArchivedCertificateGroupByArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/archivedCertificateSubjectScore/create": {
+      "post": {
+        "operationId": "createArchivedCertificateSubjectScore",
+        "description": "Create a new ArchivedCertificateSubjectScore",
+        "tags": [
+          "archivedCertificateSubjectScore"
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ArchivedCertificateSubjectScore",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreCreateArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/archivedCertificateSubjectScore/createMany": {
+      "post": {
+        "operationId": "createManyArchivedCertificateSubjectScore",
+        "description": "Create several ArchivedCertificateSubjectScore",
+        "tags": [
+          "archivedCertificateSubjectScore"
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BatchPayload",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreCreateManyArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/archivedCertificateSubjectScore/findUnique": {
+      "get": {
+        "operationId": "findUniqueArchivedCertificateSubjectScore",
+        "description": "Find one unique ArchivedCertificateSubjectScore",
+        "tags": [
+          "archivedCertificateSubjectScore"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ArchivedCertificateSubjectScore",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreFindUniqueArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/archivedCertificateSubjectScore/findFirst": {
+      "get": {
+        "operationId": "findFirstArchivedCertificateSubjectScore",
+        "description": "Find the first ArchivedCertificateSubjectScore matching the given condition",
+        "tags": [
+          "archivedCertificateSubjectScore"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ArchivedCertificateSubjectScore",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreFindFirstArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/archivedCertificateSubjectScore/findMany": {
+      "get": {
+        "operationId": "findManyArchivedCertificateSubjectScore",
+        "description": "Find a list of ArchivedCertificateSubjectScore",
+        "tags": [
+          "archivedCertificateSubjectScore"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ArchivedCertificateSubjectScore"
+                      },
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreFindManyArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/archivedCertificateSubjectScore/update": {
+      "patch": {
+        "operationId": "updateArchivedCertificateSubjectScore",
+        "description": "Update a ArchivedCertificateSubjectScore",
+        "tags": [
+          "archivedCertificateSubjectScore"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ArchivedCertificateSubjectScore",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreUpdateArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/archivedCertificateSubjectScore/updateMany": {
+      "patch": {
+        "operationId": "updateManyArchivedCertificateSubjectScore",
+        "description": "Update ArchivedCertificateSubjectScores matching the given condition",
+        "tags": [
+          "archivedCertificateSubjectScore"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BatchPayload",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreUpdateManyArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/archivedCertificateSubjectScore/upsert": {
+      "post": {
+        "operationId": "upsertArchivedCertificateSubjectScore",
+        "description": "Upsert a ArchivedCertificateSubjectScore",
+        "tags": [
+          "archivedCertificateSubjectScore"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ArchivedCertificateSubjectScore",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreUpsertArgs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model/archivedCertificateSubjectScore/delete": {
+      "delete": {
+        "operationId": "deleteArchivedCertificateSubjectScore",
+        "description": "Delete one unique ArchivedCertificateSubjectScore",
+        "tags": [
+          "archivedCertificateSubjectScore"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ArchivedCertificateSubjectScore",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreDeleteUniqueArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/archivedCertificateSubjectScore/deleteMany": {
+      "delete": {
+        "operationId": "deleteManyArchivedCertificateSubjectScore",
+        "description": "Delete ArchivedCertificateSubjectScores matching the given condition",
+        "tags": [
+          "archivedCertificateSubjectScore"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/BatchPayload",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreDeleteManyArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/archivedCertificateSubjectScore/count": {
+      "get": {
+        "operationId": "countArchivedCertificateSubjectScore",
+        "description": "Find a list of ArchivedCertificateSubjectScore",
+        "tags": [
+          "archivedCertificateSubjectScore"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "oneOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreCountAggregateOutputType"
+                        }
+                      ],
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreCountArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/archivedCertificateSubjectScore/aggregate": {
+      "get": {
+        "operationId": "aggregateArchivedCertificateSubjectScore",
+        "description": "Aggregate ArchivedCertificateSubjectScores",
+        "tags": [
+          "archivedCertificateSubjectScore"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/AggregateArchivedCertificateSubjectScore",
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreAggregateArgs"
+                }
+              }
+            }
+          },
+          {
+            "name": "meta",
+            "in": "query",
+            "description": "Superjson serialization metadata for parameter \"q\"",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/model/archivedCertificateSubjectScore/groupBy": {
+      "get": {
+        "operationId": "groupByArchivedCertificateSubjectScore",
+        "description": "Group ArchivedCertificateSubjectScores by fields",
+        "tags": [
+          "archivedCertificateSubjectScore"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreGroupByOutputType"
+                      },
+                      "description": "The Prisma response data serialized with superjson"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/_Meta",
+                      "description": "The superjson serialization metadata for the \"data\" field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Invalid request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/_Error"
+                }
+              }
+            },
+            "description": "Request is unprocessable due to validation errors"
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Superjson-serialized Prisma query object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArchivedCertificateSubjectScoreGroupByArgs"
                 }
               }
             }

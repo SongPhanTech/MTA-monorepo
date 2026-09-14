@@ -87,6 +87,7 @@ export * from './student-research-topic';
 export * from './student-internship';
 export * from './archived-certificate-on-student-subject-score';
 export * from './archived-certificate';
+export * from './archived-certificate-subject-score';
 export * from './archived-award-on-student-subject-score';
 export * from './archived-award';
 export * from './school-year';

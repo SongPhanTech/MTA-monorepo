@@ -1,8 +1,35 @@
 import { HTTPException } from "hono/http-exception"
+import ExcelJS from "exceljs"
 import { formatDateVn, nowVn } from "@workspace/libs/timezone"
 import type { SheetExportOptions, TableRow } from "@workspace/libs/template-excel-core"
 import { prisma } from ".."
 import { buildFromTemplate } from "./build-from-template"
+
+/** Template quatrinh.xlsx dùng chung; đổi tiêu đề khi xuất bảng điểm cá nhân. */
+async function retitleBangDiemCaNhan(buffer: Buffer): Promise<Buffer> {
+  const workbook = new ExcelJS.Workbook()
+  await workbook.xlsx.load(
+    buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength) as ArrayBuffer
+  )
+  const replacements: Array<[RegExp, string]> = [
+    [/BẢNG ĐIỂM QUÁ TRÌNH/gi, "BẢNG ĐIỂM CÁ NHÂN"],
+    [/BANG DIEM QUA TRINH/gi, "BANG DIEM CA NHAN"],
+  ]
+  for (const sheet of workbook.worksheets) {
+    sheet.eachRow((row) => {
+      row.eachCell((cell) => {
+        if (typeof cell.value === "string") {
+          let next = cell.value
+          for (const [pattern, replacement] of replacements) {
+            next = next.replace(pattern, replacement)
+          }
+          if (next !== cell.value) cell.value = next
+        }
+      })
+    })
+  }
+  return Buffer.from(await workbook.xlsx.writeBuffer())
+}
 
 type ScoreRange = {
   base10Min: number
@@ -375,20 +402,20 @@ async function loadBangDiemExportData(studentIds: string[]) {
   const [trainingBlockSubjects, semesterResults] = await Promise.all([
     curriculumVersionIds.length
       ? prisma.trainingBlockSubject.findMany({
-          where: {
-            trainingBlockOnCurriculumVersion: {
-              curriculumVersionId: { in: curriculumVersionIds },
-            },
-            deletedAt: null,
+        where: {
+          trainingBlockOnCurriculumVersion: {
+            curriculumVersionId: { in: curriculumVersionIds },
           },
-          select: {
-            subjectId: true,
-            semester: true,
-            graduation: true,
-            useForFinalScore: true,
-            trainingBlockOnCurriculumVersion: { select: { curriculumVersionId: true } },
-          },
-        })
+          deletedAt: null,
+        },
+        select: {
+          subjectId: true,
+          semester: true,
+          graduation: true,
+          useForFinalScore: true,
+          trainingBlockOnCurriculumVersion: { select: { curriculumVersionId: true } },
+        },
+      })
       : Promise.resolve([]),
     prisma.studentSemesterResult.findMany({
       where: { studentId: { in: orderedStudents.map((s) => s.id) } },
@@ -466,13 +493,8 @@ async function loadBangDiemExportData(studentIds: string[]) {
 }
 
 type ExportStudent = Awaited<ReturnType<typeof loadBangDiemExportData>>["orderedStudents"][number]
-type ScoreRow = Awaited<ReturnType<typeof loadBangDiemExportData>>["scoresByStudent"] extends Map<
-  string,
-  infer R
->
-  ? R[number]
-  : never
 type BangDiemExportData = Awaited<ReturnType<typeof loadBangDiemExportData>>
+type ScoreRow = BangDiemExportData["scoresByStudent"] extends Map<string, (infer E)[]> ? E : never
 
 function resolveScoreSemester(
   row: ScoreRow,
@@ -663,112 +685,50 @@ export async function exportBangDiemCaNhan({ studentIds }: { studentIds: string[
   const exportData = await loadBangDiemExportData(studentIds)
   const { orderedStudents, scoresByStudent } = exportData
   const signatureDate = signatureDateLabel()
+  const gapRow: TableRow = {
+    cells: [{ value: null, colSpan: 18, border: false }],
+  }
 
   const sheets: SheetExportOptions[] = orderedStudents.map((student) => {
     const studentScores = scoresByStudent.get(student.id) ?? []
 
-    const bestAttemptsMap = new Map<string, { score: number; semesterId: string }>()
+    // Cá nhân: lấy điểm tốt nhất mỗi môn, KHÔNG chia theo kỳ
+    const bestRowBySubject = new Map<string, ScoreRow>()
     for (const row of scoresForExport(studentScores)) {
-      const semester = resolveScoreSemester(row, student, exportData)
       const subjectId = row.subjectVersion?.id
-      if (!semester?.id || !subjectId) continue
-
+      if (!subjectId) continue
       const currentScore = getFinalScore(row.manualFinalScore, row.finalScore)
-      const existingBest = bestAttemptsMap.get(subjectId)
-      if (!existingBest || currentScore >= existingBest.score) {
-        bestAttemptsMap.set(subjectId, { score: currentScore, semesterId: semester.id })
+      const existing = bestRowBySubject.get(subjectId)
+      if (!existing) {
+        bestRowBySubject.set(subjectId, row)
+        continue
       }
+      const existingScore = getFinalScore(existing.manualFinalScore, existing.finalScore)
+      if (currentScore >= existingScore) bestRowBySubject.set(subjectId, row)
     }
 
-    const hocKis: HocKi[] = sortSemesters(
-      groupScoresBySemester(student, studentScores, exportData),
-      "startDate"
-    ).map(({ meta, rows }) => {
-      const monHocs: MonHoc[] = []
-      for (const row of rows) {
-        const subjectId = row.subjectVersion?.id
-        if (!subjectId) continue
+    const monHocs = [...bestRowBySubject.values()]
+      .map((row) => toMonHocRow(row, student, exportData))
+      .filter((monHoc): monHoc is MonHoc => Boolean(monHoc))
 
-        const bestAttempt = bestAttemptsMap.get(subjectId)
-        const currentScore = getFinalScore(row.manualFinalScore, row.finalScore)
-        if (!bestAttempt || bestAttempt.semesterId !== meta.id) continue
-        if (bestAttempt.score !== currentScore) continue
-
-        const monHoc = toMonHocRow(row, student, exportData)
-        if (monHoc) monHocs.push(monHoc)
-      }
-
-      const stats = exportData.ssrStatsByStudentSemester.get(`${student.id}:${meta.id}`)
-      return {
-        TenHocKi: semesterTitle(meta),
-        SoTinChiKy: stats?.registeredCredits ?? null,
-        DiemTBKyHe10: stats?.gpaBase10 ?? null,
-        DiemTBKyHe4: stats?.gpaBase4 ?? null,
-        monHocs,
-      }
-    })
-
-    const tableRows = hocKis.flatMap((hocKi) => {
-      const hocKiRow: TableRow = {
-        cells: [
-          {
-            value: hocKi.TenHocKi ?? "",
-            colSpan: 19,
-            bold: true,
-            align: "left",
-            border: true,
-          },
-        ],
-      }
-      const monHocRows: TableRow[] = hocKi.monHocs.map((monHoc, index) => ({
-        cells: [
-          { value: index + 1 },
-          { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
-          { value: monHoc.MaMH ?? "" },
-          { value: monHoc.soTC, align: "center" },
-          { value: monHoc.diem01, align: "right", numFmt: "0.00" },
-          { value: monHoc.diem02, align: "right", numFmt: "0.00" },
-          { value: monHoc.diem07, align: "right", numFmt: "0.00" },
-          { value: null },
-          { value: null },
-          { value: monHoc.diemhe10, align: "right", numFmt: "0.00" },
-          { value: monHoc.diemhe4, align: "right", numFmt: "0.00" },
-          { value: monHoc.diemchu ?? "", align: "center" },
-          { value: null },
-          { value: monHoc.ghichu ?? "" },
-        ],
-      }))
-
-      const trungBinhRow: TableRow = {
-        cells: [
-          { value: null },
-          {
-            value: "Điểm trung bình học kỳ:",
-            colSpan: 6,
-            bold: true,
-            align: "center",
-          },
-          { value: null },
-          { value: hocKi.SoTinChiKy, bold: true, align: "center" },
-          { value: null },
-          { value: null },
-          { value: null },
-          { value: null },
-          { value: null },
-          { value: hocKi.DiemTBKyHe10, bold: true, align: "right" },
-          { value: hocKi.DiemTBKyHe4, bold: true, align: "right" },
-          { value: null },
-          { value: null },
-          { value: null },
-        ],
-      }
-
-      return [hocKiRow, ...monHocRows, trungBinhRow]
-    })
-
-    const gapRow: TableRow = {
-      cells: [{ value: null, colSpan: 18, border: false }],
-    }
+    const monHocRows: TableRow[] = monHocs.map((monHoc, index) => ({
+      cells: [
+        { value: index + 1 },
+        { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
+        { value: monHoc.MaMH ?? "" },
+        { value: monHoc.soTC, align: "center" },
+        { value: monHoc.diem01, align: "right", numFmt: "0.00" },
+        { value: monHoc.diem02, align: "right", numFmt: "0.00" },
+        { value: monHoc.diem07, align: "right", numFmt: "0.00" },
+        { value: null },
+        { value: null },
+        { value: monHoc.diemhe10, align: "right", numFmt: "0.00" },
+        { value: monHoc.diemhe4, align: "right", numFmt: "0.00" },
+        { value: monHoc.diemchu ?? "", align: "center" },
+        { value: null },
+        { value: monHoc.ghichu ?? "" },
+      ],
+    }))
 
     const yearResult =
       student.studentYearResult.find((r) => r.isLastStudyYear) ??
@@ -786,7 +746,7 @@ export async function exportBangDiemCaNhan({ studentIds }: { studentIds: string[
       ...studentSheetData(student),
       tableStartCell: { row: 11, col: 1 },
       rows: [
-        ...tableRows,
+        ...monHocRows,
         gapRow,
         gapRow,
         {
@@ -821,17 +781,20 @@ export async function exportBangDiemCaNhan({ studentIds }: { studentIds: string[
         },
         ...signatureRows(signatureDate),
       ],
+      // Cá nhân: ẩn cột điểm thành phần (J,K,L) và điểm × TC (M,N)
       hiddenColumns: ["H", "M", "N", "R", "J", "K", "L"],
     }
   })
 
-  return buildFromTemplate(prisma, {
-    templatePath: "/mta/template/quatrinh.xlsx",
-    fileName: "BDCN",
-    mergeSheetsToOne: true,
-    sheetName: "BDCN",
-    sheets,
-  })
+  return retitleBangDiemCaNhan(
+    await buildFromTemplate(prisma, {
+      templatePath: "/mta/template/quatrinh.xlsx",
+      fileName: "BDCN",
+      mergeSheetsToOne: true,
+      sheetName: "BDCN",
+      sheets,
+    })
+  )
 }
 
 export async function exportBangDiemQuaTrinh({ studentIds }: { studentIds: string[] }) {
@@ -883,19 +846,21 @@ export async function exportBangDiemQuaTrinh({ studentIds }: { studentIds: strin
           { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
           { value: monHoc.MaMH ?? "" },
           { value: monHoc.soTC, align: "center" },
-          { value: monHoc.diem01, align: "right", numFmt: "0.00" },
-          { value: monHoc.diem02, align: "right", numFmt: "0.00" },
-          { value: monHoc.diem07, align: "right", numFmt: "0.00" },
+          { value: monHoc.diem01, align: "right", numFmt: "0.0" },
+          { value: monHoc.diem02, align: "right", numFmt: "0.0" },
+          { value: monHoc.diem07, align: "right", numFmt: "0.0" },
           {
-            value: ((monHoc.diemhe10 || 0) * (monHoc.soTC || 0)).toFixed(1),
+            value: (monHoc.diemhe10 || 0) * (monHoc.soTC || 0),
             align: "right",
+            numFmt: "0.0",
           },
           {
-            value: ((monHoc.diemhe4 || 0) * (monHoc.soTC || 0)).toFixed(1),
+            value: (monHoc.diemhe4 || 0) * (monHoc.soTC || 0),
             align: "right",
+            numFmt: "0.0",
           },
-          { value: monHoc.diemhe10, align: "right", numFmt: "0.00" },
-          { value: monHoc.diemhe4, align: "right", numFmt: "0.00" },
+          { value: monHoc.diemhe10, align: "right", numFmt: "0.0" },
+          { value: monHoc.diemhe4, align: "right", numFmt: "0.0" },
           { value: monHoc.diemchu ?? "", align: "center" },
           { value: null },
           { value: monHoc.ghichu ?? "" },
@@ -918,8 +883,18 @@ export async function exportBangDiemQuaTrinh({ studentIds }: { studentIds: strin
           { value: null },
           { value: null },
           { value: null },
-          { value: hocKi.DiemTBKyHe10, bold: true, align: "right" },
-          { value: hocKi.DiemTBKyHe4, bold: true, align: "right" },
+          {
+            value: hocKi.DiemTBKyHe10,
+            bold: true,
+            align: "right",
+            numFmt: "0.0",
+          },
+          {
+            value: hocKi.DiemTBKyHe4,
+            bold: true,
+            align: "right",
+            numFmt: "0.0",
+          },
           { value: null },
           { value: null },
           { value: null },
@@ -933,7 +908,8 @@ export async function exportBangDiemQuaTrinh({ studentIds }: { studentIds: strin
       ...studentSheetData(student),
       tableStartCell: { row: 11, col: 1 },
       rows: [...tableRows, gapRow, gapRow, ...signatureRows(signatureDate)],
-      hiddenColumns: ["H", "M", "N", "R", "J", "K", "L"],
+      // Quá trình: hiện cột điểm CC/GK/thi (J,K,L) và điểm × TC (M,N)
+      hiddenColumns: ["H", "R"],
     }
   })
 

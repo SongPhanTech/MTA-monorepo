@@ -1,4 +1,4 @@
-import { DeleteOutlined } from "@ant-design/icons"
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons"
 import { queryClient } from "@api/index"
 import DatePicker from "@components/commons/date-picker"
 import DocumentPaths from "@components/commons/documentPaths"
@@ -28,6 +28,19 @@ import {
   useCertificateExpirationCheck,
 } from "./utils/check-certificate-expiration"
 
+type CurriculumSubject = {
+  id: string
+  name: string
+  code?: string | null
+  credit?: number | null
+  subjectId?: string | null
+}
+
+type SubjectScoreItem = {
+  subjectVersionId: string
+  finalScore: number
+}
+
 type SelectedStudentRow = {
   rowId: string
   studentId: string
@@ -35,6 +48,7 @@ type SelectedStudentRow = {
   fullname: string
   dateOfBirth: Date | string | null
   fixedClassId: string | null
+  curriculumSubjects: CurriculumSubject[]
 }
 
 export type PutArchivedCertificate = {
@@ -55,12 +69,62 @@ export type PutArchivedCertificate = {
       issuedDate?: dayjs.Dayjs
       expiredDate?: dayjs.Dayjs
       documentFiles?: DocumentFile[]
+      subjectScores?: SubjectScoreItem[]
     }
   >
 }
 dayjs.locale("vi")
 
 const { Title } = Typography
+
+function getCurriculumSubjects(student: any): CurriculumSubject[] {
+  const curriculumVersion =
+    student?.curriculumVersion || student?.fixedClass?.curriculumVersion
+  if (!curriculumVersion?.trainingBlocks) return []
+
+  const map = new Map<string, CurriculumSubject>()
+  for (const block of curriculumVersion.trainingBlocks) {
+    for (const tbs of block.subjects || []) {
+      const sv = tbs.subject
+      if (!sv?.id || map.has(sv.id)) continue
+      map.set(sv.id, {
+        id: sv.id,
+        name: sv.name,
+        code: sv.code,
+        credit: sv.credit,
+        subjectId: sv.subjectId,
+      })
+    }
+  }
+  return [...map.values()]
+}
+
+function buildPrefillSubjectScores(
+  cert: any,
+  curriculumSubjects: CurriculumSubject[]
+): SubjectScoreItem[] {
+  if (!cert?.subjects?.length || !curriculumSubjects.length) return []
+
+  const byParentSubject = new Map(
+    curriculumSubjects
+      .filter((s) => s.subjectId)
+      .map((s) => [s.subjectId as string, s])
+  )
+
+  const result: SubjectScoreItem[] = []
+  const used = new Set<string>()
+
+  for (const mapping of cert.subjects) {
+    const matched = byParentSubject.get(mapping.subjectId)
+    if (!matched || used.has(matched.id)) continue
+    used.add(matched.id)
+    result.push({
+      subjectVersionId: matched.id,
+      finalScore: mapping.finalScore ?? 0,
+    })
+  }
+  return result
+}
 
 const PutCertificateArchivedModal = () => {
   const [documentFiles, setDocumentFiles] = useState<DocumentFile[]>([])
@@ -125,6 +189,26 @@ const PutCertificateArchivedModal = () => {
     }
   }, [trainingCoursesId, fixedClassId])
 
+  const curriculumInclude = {
+    trainingBlocks: {
+      include: {
+        subjects: {
+          include: {
+            subject: {
+              select: {
+                id: true,
+                name: true,
+                code: true,
+                credit: true,
+                subjectId: true,
+              },
+            },
+          },
+        },
+      },
+    },
+  }
+
   const { data: studentData = [] } = useFindManyStudent(
     {
       where: studentWhere || {},
@@ -136,7 +220,16 @@ const PutCertificateArchivedModal = () => {
             fullname: true,
           },
         },
-        fixedClass: true,
+        curriculumVersion: {
+          include: curriculumInclude,
+        },
+        fixedClass: {
+          include: {
+            curriculumVersion: {
+              include: curriculumInclude,
+            },
+          },
+        },
       },
       orderBy: {
         userProfile: {
@@ -163,6 +256,7 @@ const PutCertificateArchivedModal = () => {
           fullname: student.userProfile?.fullname || "",
           dateOfBirth: student.userProfile?.dateOfBirth || null,
           fixedClassId: student.fixedClassId ?? student.fixedClass?.id ?? null,
+          curriculumSubjects: getCurriculumSubjects(student),
         },
       ])
     },
@@ -179,6 +273,23 @@ const PutCertificateArchivedModal = () => {
     [form]
   )
 
+  const handleCertificateChange = useCallback(
+    (rowId: string, certificateId: string, curriculumSubjects: CurriculumSubject[]) => {
+      const cert = certificate.find((c) => c.id === certificateId)
+      const prefill = buildPrefillSubjectScores(cert, curriculumSubjects)
+      form.setFieldValue(["student", rowId, "certificateId"], certificateId)
+      form.setFieldValue(["student", rowId, "subjectScores"], prefill)
+    },
+    [certificate, form]
+  )
+
+  const getSubjectScores = (rowId: string): SubjectScoreItem[] =>
+    studentFormData?.[rowId]?.subjectScores || []
+
+  const setSubjectScores = (rowId: string, scores: SubjectScoreItem[]) => {
+    form.setFieldValue(["student", rowId, "subjectScores"], scores)
+  }
+
   async function onOk({ ...rest }: PutArchivedCertificate) {
     try {
       if (!id && selectedStudents.length === 0) {
@@ -191,6 +302,21 @@ const PutCertificateArchivedModal = () => {
       if (id) {
       } else {
         const latestStudentFormData = form.getFieldValue("student") || {}
+
+        for (const row of selectedStudents) {
+          const data = latestStudentFormData[row.rowId] || studentFormData[row.rowId] || {}
+          if (!data?.certificateId) continue
+          if (!data?.subjectScores?.length) {
+            message.warning(
+              `Vui lòng chọn ít nhất một môn phiên điểm cho ${row.fullname || row.code}`
+            )
+            return
+          }
+          if (data.subjectScores.some((s: SubjectScoreItem) => s.finalScore == null)) {
+            message.warning(`Vui lòng nhập điểm phiên cho ${row.fullname || row.code}`)
+            return
+          }
+        }
 
         const itemsForCheck = selectedStudents
           .map((row) => {
@@ -225,6 +351,8 @@ const PutCertificateArchivedModal = () => {
             studentDataForRow.documentFiles ||
             []
 
+          const subjectScores: SubjectScoreItem[] = studentDataForRow.subjectScores || []
+
           const result = await createArchivedCertificate({
             data: {
               studentId: row.studentId,
@@ -246,6 +374,12 @@ const PutCertificateArchivedModal = () => {
                   path: file.path,
                   mimeType: file.mimeType,
                   size: file.size,
+                })),
+              },
+              subjectScores: {
+                create: subjectScores.map((s) => ({
+                  subjectVersionId: s.subjectVersionId,
+                  finalScore: s.finalScore,
                 })),
               },
             },
@@ -362,7 +496,7 @@ const PutCertificateArchivedModal = () => {
             <Table
               rowKey="rowId"
               data={selectedStudents}
-              scroll={{ y: 300 }}
+              scroll={{ y: 400, x: 1800 }}
               columns={[
                 {
                   title: "TT",
@@ -379,7 +513,7 @@ const PutCertificateArchivedModal = () => {
                 {
                   title: "Họ và tên",
                   align: "left",
-                  width: 200,
+                  width: 180,
                   render: (_, record) => record.fullname,
                 },
                 {
@@ -391,7 +525,7 @@ const PutCertificateArchivedModal = () => {
                 },
                 {
                   title: "Chứng chỉ",
-                  width: 250,
+                  width: 220,
                   align: "center",
                   render: (_, record) => (
                     <FormItem
@@ -401,31 +535,139 @@ const PutCertificateArchivedModal = () => {
                     >
                       <Select
                         variant="underlined"
-                        options={certificate.map((item) => ({
+                        options={certificate.map((item: any) => ({
                           label: item.name,
                           value: item.id,
                         }))}
                         placeholder="Chọn chứng chỉ"
+                        onChange={(value: string) =>
+                          handleCertificateChange(record.rowId, value, record.curriculumSubjects)
+                        }
                       />
                     </FormItem>
                   ),
                 },
                 {
                   title: "Điểm phiên",
-                  width: 250,
-                  align: "center",
-                  render: (_, record) =>
-                    certificate
-                      .find((c) => c.id === studentFormData?.[record.rowId]?.certificateId)
-                      ?.subjects.map((sub) => (
-                        <p>
-                          {sub.subject.name}: <b>{sub.finalScore}</b>
-                        </p>
-                      )),
+                  width: 320,
+                  align: "left",
+                  render: (_, record: SelectedStudentRow) => {
+                    const scores = getSubjectScores(record.rowId)
+                    const selectedIds = new Set(scores.map((s) => s.subjectVersionId))
+                    const availableSubjects = record.curriculumSubjects.filter(
+                      (s: CurriculumSubject) => !selectedIds.has(s.id)
+                    )
+
+                    if (!record.curriculumSubjects.length) {
+                      return (
+                        <span className="text-orange-500 text-xs">
+                          SV chưa có CTĐT / không có môn
+                        </span>
+                      )
+                    }
+
+                    return (
+                      <div className="flex flex-col gap-1 py-1">
+                        {scores.map((item, idx) => {
+                          return (
+                            <div key={item.subjectVersionId} className="flex items-center gap-1">
+                              <Select
+                                variant="underlined"
+                                className="flex-1 min-w-0"
+                                value={item.subjectVersionId}
+                                options={record.curriculumSubjects
+                                  .filter(
+                                    (s: CurriculumSubject) =>
+                                      s.id === item.subjectVersionId || !selectedIds.has(s.id)
+                                  )
+                                  .map((s: CurriculumSubject) => ({
+                                    label: `${s.code ? `${s.code} - ` : ""}${s.name}${
+                                      s.credit != null ? ` (${s.credit} TC)` : ""
+                                    }`,
+                                    value: s.id,
+                                  }))}
+                                onChange={(value: string) => {
+                                  const next = [...scores]
+                                  next[idx] = { ...next[idx], subjectVersionId: value }
+                                  setSubjectScores(record.rowId, next)
+                                }}
+                              />
+                              <InputNumber
+                                min={0}
+                                max={10}
+                                step={0.1}
+                                variant="underlined"
+                                className="w-[70px]"
+                                value={item.finalScore}
+                                onChange={(value) => {
+                                  const next = [...scores]
+                                  next[idx] = {
+                                    ...next[idx],
+                                    finalScore: value ?? 0,
+                                  }
+                                  setSubjectScores(record.rowId, next)
+                                }}
+                              />
+                              <Button
+                                type="text"
+                                danger
+                                size="small"
+                                icon={<DeleteOutlined />}
+                                onClick={() => {
+                                  setSubjectScores(
+                                    record.rowId,
+                                    scores.filter((_, i) => i !== idx)
+                                  )
+                                }}
+                              />
+                            </div>
+                          )
+                        })}
+                        {availableSubjects.length > 0 && (
+                          <Button
+                            type="link"
+                            size="small"
+                            icon={<PlusOutlined />}
+                            className="px-0 self-start"
+                            onClick={() => {
+                              setSubjectScores(record.rowId, [
+                                ...scores,
+                                {
+                                  subjectVersionId: availableSubjects[0].id,
+                                  finalScore: 0,
+                                },
+                              ])
+                            }}
+                          >
+                            Thêm môn
+                          </Button>
+                        )}
+                        <FormItem
+                          form={form}
+                          name={["student", record.rowId, "subjectScores"]}
+                          rules={[
+                            {
+                              validator: (_, value) => {
+                                if (!value?.length) {
+                                  return Promise.reject(
+                                    new Error("Chọn ít nhất một môn phiên điểm")
+                                  )
+                                }
+                                return Promise.resolve()
+                              },
+                            },
+                          ]}
+                          className="mb-0 hidden"
+                        >
+                          <Input />
+                        </FormItem>
+                      </div>
+                    )
+                  },
                 },
                 {
                   title: "Điểm chứng chỉ",
-                  width: 150,
+                  width: 130,
                   align: "center",
                   render: (_, record) => {
                     const selectedCert = certificate.find(
@@ -446,7 +688,7 @@ const PutCertificateArchivedModal = () => {
                           min={1}
                           variant="underlined"
                           className="w-full"
-                          placeholder="Nhập điểm phiên cho môn học"
+                          placeholder="Điểm chứng chỉ"
                           disabled={!selectedCert?.isUsingScore}
                         />
                       </FormItem>

@@ -100,6 +100,7 @@ const relationSchema = z.object({
     examFramework: z.array(z.unknown()).optional(),
     scoreLinkSubjectVersion: z.array(z.unknown()).optional(),
     certificate: z.array(z.unknown()).optional(),
+    archivedCertificateSubjectScores: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

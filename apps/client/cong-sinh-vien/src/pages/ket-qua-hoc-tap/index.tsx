@@ -119,13 +119,12 @@ export default function StudentScoreClassPage() {
     tag: "ModalPrintToKQHT",
   })
   const exportTemplate = async () => {
-    const hocKis: IHocKi[] = []
+    const monhocAll: IMonHoc[] = []
     if (data.length > 0) {
       data.forEach((item) => {
-        const monhoc: IMonHoc[] = []
         item.subjectClasses.forEach((subjectClass) => {
           subjectClass.subjectClassStudent.forEach((subjectClassStudent) => {
-            monhoc.push({
+            monhocAll.push({
               TenMonhoc: subjectClassStudent.subjectVersion.name,
               MaMH: subjectClassStudent.subjectVersion.code?.slice(0, 2) ?? "",
               soTC: subjectClassStudent.subjectVersion.credit,
@@ -152,32 +151,20 @@ export default function StudentScoreClassPage() {
             })
           })
         })
-        const tongSoTinChi = monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
-
-        const tongDiemNhanTinChiHe10 = monhoc.reduce(
-          (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
-          0
-        )
-        const tongDiemNhanTinChiHe4 = monhoc.reduce(
-          (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
-          0
-        )
-
-        const diemTBHe10_Raw = tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi
-        const diemTBHe4_Raw = tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi
-
-        const diemTBHe10 = Number.parseFloat(diemTBHe10_Raw.toFixed(1))
-        const diemTBHe4 = Number.parseFloat(diemTBHe4_Raw.toFixed(1))
-
-        hocKis.push({
-          TenHocKi: `${item.code}-${item.name}-${item.schoolYear?.name}`,
-          SoTinChiKy: tongSoTinChi,
-          DiemTBKyHe10: diemTBHe10,
-          DiemTBKyHe4: diemTBHe4,
-          monHocs: monhoc,
-        })
       })
     }
+
+    // Cá nhân: lấy điểm tốt nhất mỗi môn, không chia theo kỳ
+    const bestBySubject = new Map<string, IMonHoc>()
+    for (const monHoc of monhocAll) {
+      const key = `${monHoc.MaMH}|${monHoc.TenMonhoc}`
+      const existing = bestBySubject.get(key)
+      if (!existing || (monHoc.diemhe10 ?? 0) >= (existing.diemhe10 ?? 0)) {
+        bestBySubject.set(key, monHoc)
+      }
+    }
+    const monHocs = [...bestBySubject.values()]
+
     const sampleStudentData = {
       fullname: student?.userProfile?.fullname,
       dateOfBirth: student?.userProfile?.dateOfBirth,
@@ -186,79 +173,37 @@ export default function StudentScoreClassPage() {
       htdt: student?.fixedClass?.trainingCourse.trainingObjectType?.name || "",
       nganh: student?.curriculumVersion?.curriculum.trainingMajor?.name || "",
       lop: student?.fixedClass?.trainingCourse?.name || "",
-      hocKis: hocKis,
     }
 
-    const tableRows = sampleStudentData.hocKis.flatMap((hocKi) => {
-      const hocKiRow: TableRow = {
-        cells: [
-          {
-            value: hocKi.TenHocKi ?? "",
-            colSpan: 19,
-            bold: true,
-            align: "left",
-            border: true,
-          },
-        ],
-      }
-      const monHocRows: TableRow[] =
-        hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
-          cells: [
-            { value: index + 1 },
-            { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
-            { value: monHoc.MaMH ?? "" },
-            { value: monHoc.soTC, align: "center" },
-            { value: monHoc.diem01 ?? 0, align: "right" },
-            { value: monHoc.diem02 ?? 0, align: "right" },
-            { value: monHoc.diem07 ?? 0, align: "right" },
-            { value: null },
-            { value: null },
-            { value: monHoc.diemhe10 ?? 0, align: "right" },
-            { value: monHoc.diemhe4 ?? 0, align: "right" },
-            { value: monHoc.diemchu ?? "", align: "center" },
-            { value: null },
-            { value: monHoc.ghichu ?? "" },
-          ],
-        })) ?? []
-
-      // Dòng trung bình học kỳ
-      const trungBinhRow: TableRow = {
-        cells: [
-          { value: null },
-          { value: "Điểm trung bình học kỳ:", colSpan: 6, bold: true, align: "center" },
-          { value: null }, // Cột 7
-          { value: hocKi.SoTinChiKy ?? 0, bold: true, align: "center" }, // Cột 8
-          { value: null }, // Cột 9
-          { value: null }, // Cột 10
-          { value: null }, // Cột 11
-          { value: null }, // Cột 12
-          { value: null }, // Cột 13
-          { value: hocKi.DiemTBKyHe10 ?? 0, bold: true, align: "right" }, // Cột 14
-          { value: hocKi.DiemTBKyHe4 ?? 0, bold: true, align: "right" }, // Cột 15
-          { value: null }, // Cột 16
-          { value: null }, // Cột 17
-          { value: null }, // Cột 18
-        ],
-      }
-
-      return [hocKiRow, ...monHocRows, trungBinhRow]
-    })
+    const monHocRows: TableRow[] = monHocs.map((monHoc: IMonHoc, index: number) => ({
+      cells: [
+        { value: index + 1 },
+        { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
+        { value: monHoc.MaMH ?? "" },
+        { value: monHoc.soTC, align: "center" },
+        { value: monHoc.diem01 ?? 0, align: "right" },
+        { value: monHoc.diem02 ?? 0, align: "right" },
+        { value: monHoc.diem07 ?? 0, align: "right" },
+        { value: null },
+        { value: null },
+        { value: monHoc.diemhe10 ?? 0, align: "right" },
+        { value: monHoc.diemhe4 ?? 0, align: "right" },
+        { value: monHoc.diemchu ?? "", align: "center" },
+        { value: null },
+        { value: monHoc.ghichu ?? "" },
+      ],
+    }))
 
     const gapRow: TableRow = {
       cells: [{ value: null, colSpan: 18, border: false }],
     }
-    const tongtinchi = sampleStudentData.hocKis.reduce(
-      (acc, curr) => acc + (curr.SoTinChiKy ?? 0),
+    const tongtinchi = monHocs.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
+    const tongDiemNhanTinChiHe10 = monHocs.reduce(
+      (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
       0
     )
-
-    // Tính điểm trung bình hệ 10 toàn khoá: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
-    const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
-      (acc, curr) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
-      0
-    )
-    const tongDiemNhanTinChiHe4 = sampleStudentData.hocKis.reduce(
-      (acc, curr) => acc + (curr.DiemTBKyHe4 ?? 0) * (curr.SoTinChiKy ?? 0),
+    const tongDiemNhanTinChiHe4 = monHocs.reduce(
+      (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
       0
     )
 
@@ -345,7 +290,7 @@ export default function StudentScoreClassPage() {
           },
           tableStartCell: { row: 11, col: 1 },
           rows: [
-            ...tableRows,
+            ...monHocRows,
             gapRow,
             gapRow,
             totalRow,

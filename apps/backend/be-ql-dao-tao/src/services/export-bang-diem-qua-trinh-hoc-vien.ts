@@ -184,6 +184,9 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
       orderBy: { startDate: "asc" },
       select: {
         id: true,
+        code: true,
+        name: true,
+        schoolYear: { select: { name: true } },
         subjectClasses: {
           where: {
             subjectClassStudent: { some: { studentId } },
@@ -426,48 +429,95 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
     includedSubjectIds.add(subject.id)
   }
 
-  const monhocList: MonHocRow[] = []
-  const emittedGroups = new Set<string>()
-  for (const semester of semesters) {
-    monhocList.push(...(classRowsByGroup.get(semester.id) ?? []))
-    monhocList.push(...(phienRowsByGroup.get(semester.id) ?? []))
-    emittedGroups.add(semester.id)
+  const scoredMonhocs = (rows: MonHocRow[]) =>
+    rows.filter((monHoc) => monHoc.diemhe10 != null || monHoc.diemhe4 != null || monHoc.diemchu != null)
+
+  const toMonHocTableRows = (monHocs: MonHocRow[], startStt: number) => {
+    let stt = startStt
+    return monHocs.map((monHoc) => {
+      const hasScore = monHoc.diemhe10 != null || monHoc.diemhe4 != null || monHoc.diemchu != null
+      const isFail = hasScore && monHoc.pass === false
+      const cellStyle = isFail ? { bgColor: "FFFFC7CE", color: "FFFF0000" } : {}
+      return {
+        cells: [
+          { value: stt++, align: "center" as const, ...cellStyle },
+          { value: monHoc.tenMonHoc, colSpan: 6, border: true, ...cellStyle },
+          { value: monHoc.soTC, align: "center" as const, ...cellStyle },
+          {
+            value: roundTo(monHoc.diemhe10, 1),
+            align: "right" as const,
+            numFmt: "0.0",
+            ...cellStyle,
+          },
+          {
+            value: roundTo(monHoc.diemhe4, 1),
+            align: "right" as const,
+            numFmt: "0.0",
+            ...cellStyle,
+          },
+          { value: monHoc.diemchu, align: "center" as const, ...cellStyle },
+        ],
+      }
+    })
   }
+
+  const tableRows: TableRow[] = []
+  const emittedGroups = new Set<string>()
+  let stt = 1
+
+  for (const semester of semesters) {
+    const monHocs = scoredMonhocs([
+      ...(classRowsByGroup.get(semester.id) ?? []),
+      ...(phienRowsByGroup.get(semester.id) ?? []),
+    ])
+    emittedGroups.add(semester.id)
+    if (monHocs.length === 0) continue
+
+    const tenHocKi = [semester.code, semester.name, semester.schoolYear?.name]
+      .filter(Boolean)
+      .join(" - ")
+    tableRows.push({
+      cells: [
+        {
+          value: tenHocKi || semester.name || semester.code || "Học kỳ",
+          colSpan: 9,
+          bold: true,
+          align: "left",
+          border: true,
+        },
+      ],
+    })
+    const rows = toMonHocTableRows(monHocs, stt)
+    tableRows.push(...rows)
+    stt += rows.length
+  }
+
   for (const [groupKey, rows] of phienRowsByGroup) {
     if (emittedGroups.has(groupKey)) continue
-    monhocList.push(...rows)
-  }
+    const monHocs = scoredMonhocs(rows)
+    if (monHocs.length === 0) continue
 
-  const scoredMonhocs = monhocList.filter(
-    (monHoc) => monHoc.diemhe10 != null || monHoc.diemhe4 != null || monHoc.diemchu != null
-  )
-
-  let stt = 1
-  const tableRows: TableRow[] = scoredMonhocs.map((monHoc) => {
-    const hasScore = monHoc.diemhe10 != null || monHoc.diemhe4 != null || monHoc.diemchu != null
-    const isFail = hasScore && monHoc.pass === false
-    const cellStyle = isFail ? { bgColor: "FFFFC7CE", color: "FFFF0000" } : {}
-    return {
+    const tenHocKi =
+      groupKey === "phien-diem"
+        ? "Phiên điểm"
+        : groupKey.startsWith("ctdt-")
+          ? `Học kỳ ${groupKey.replace("ctdt-", "")}`
+          : groupKey
+    tableRows.push({
       cells: [
-        { value: stt++, align: "center" as const, ...cellStyle },
-        { value: monHoc.tenMonHoc, colSpan: 6, border: true, ...cellStyle },
-        { value: monHoc.soTC, align: "center" as const, ...cellStyle },
         {
-          value: roundTo(monHoc.diemhe10, 2),
-          align: "right" as const,
-          numFmt: "0.00",
-          ...cellStyle,
+          value: tenHocKi,
+          colSpan: 9,
+          bold: true,
+          align: "left",
+          border: true,
         },
-        {
-          value: roundTo(monHoc.diemhe4, 2),
-          align: "right" as const,
-          numFmt: "0.00",
-          ...cellStyle,
-        },
-        { value: monHoc.diemchu, align: "center" as const, ...cellStyle },
       ],
-    }
-  })
+    })
+    const monHocRows = toMonHocTableRows(monHocs, stt)
+    tableRows.push(...monHocRows)
+    stt += monHocRows.length
+  }
 
   const gapRow: TableRow = { cells: [{ value: null, colSpan: 9, border: false }] }
   const today = nowVn()
