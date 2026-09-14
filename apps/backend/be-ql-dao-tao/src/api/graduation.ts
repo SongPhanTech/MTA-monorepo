@@ -243,47 +243,6 @@ function sortDiplomaAppendixSubjects<
   })
 }
 
-function preparePhoiBangCaoHocTemplate(templateBuffer: Buffer): Buffer {
-  const zip = new PizZip(templateBuffer)
-  const ssFile = zip.file("xl/sharedStrings.xml")
-  const sheetFile = zip.file("xl/worksheets/sheet1.xml")
-  if (!ssFile || !sheetFile) return templateBuffer
-
-  let ssXml = ssFile.asText().replace(/\$\{so_quyet_dinh\}/g, "${so_hieu_bang}")
-  const uniqueCount = Number(ssXml.match(/uniqueCount="(\d+)"/)?.[1] ?? 0)
-  const usedCount = Number(ssXml.match(/\scount="(\d+)"/)?.[1] ?? uniqueCount)
-  const leftIdx = uniqueCount
-  const rightIdx = uniqueCount + 1
-
-  if (!ssXml.includes("${so_vao_so_goc}")) {
-    const extra = [
-      `<si><t xml:space="preserve">${" ".repeat(30)}\${so_vao_so_goc}</t></si>`,
-      `<si><t xml:space="preserve">${" ".repeat(37)}\${so_vao_so_goc}</t></si>`,
-    ].join("")
-    ssXml = ssXml
-      .replace(/<\/sst>/, `${extra}</sst>`)
-      .replace(/\suniqueCount="\d+"/, ` uniqueCount="${uniqueCount + 2}"`)
-      .replace(/\scount="\d+"/, ` count="${usedCount + 2}"`)
-  }
-
-  let sheetXml = sheetFile.asText()
-  if (!sheetXml.includes('ref="C23:H23"')) {
-    sheetXml = sheetXml.replace(
-      /<row r="23"[^>]*>[\s\S]*?<\/row>/,
-      `<row r="23" spans="1:17" ht="36" customHeight="1"><c r="A23" s="12"/><c r="B23" s="12"/><c r="C23" s="35" t="s"><v>${leftIdx}</v></c><c r="D23" s="35"/><c r="E23" s="35"/><c r="F23" s="35"/><c r="G23" s="35"/><c r="H23" s="35"/><c r="I23" s="11"/><c r="J23" s="35" t="s"><v>${rightIdx}</v></c><c r="K23" s="35"/><c r="L23" s="35"/><c r="M23" s="35"/><c r="N23" s="35"/><c r="O23" s="35"/><c r="P23" s="12"/><c r="Q23" s="1"/></row>`
-    )
-    sheetXml = sheetXml.replace(
-      /<mergeCells count="(\d+)">/,
-      (_match, count) =>
-        `<mergeCells count="${Number(count) + 2}"><mergeCell ref="C23:H23"/><mergeCell ref="J23:O23"/>`
-    )
-  }
-
-  zip.file("xl/sharedStrings.xml", ssXml)
-  zip.file("xl/worksheets/sheet1.xml", sheetXml)
-  return zip.generate({ type: "nodebuffer" }) as Buffer
-}
-
 const graduationApplicationInit = createRoute({
   operationId: "graduationApplicationInit",
   tags: ["Tốt nghiệp"],
@@ -2232,9 +2191,7 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
   })
 
   try {
-    const templateBuffer = preparePhoiBangCaoHocTemplate(
-      await getLuanVanTemplateBuffer(prisma, "PhoiBangCaoHoc_v1.xlsx")
-    )
+    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhoiBangCaoHoc_v1.xlsx")
     const result = await generateExcelFromTemplate(templateBuffer, payload, {
       showGridLines: true,
       wrapText: true,
@@ -2451,6 +2408,9 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
         ngay_tn: pDateParts?.day || "",
         thang_tn: pDateParts?.monthVi || "",
         nam_tn: pDateParts?.year || "",
+
+        so_hieu_bang: gD?.diplomaNumber || "",
+        so_vao_so_goc: gD?.originalDiplomaNumber || "",
 
         ...signerInfo,
         ho_ten_nguoi_ky: signerInfo.ten_day_du,
