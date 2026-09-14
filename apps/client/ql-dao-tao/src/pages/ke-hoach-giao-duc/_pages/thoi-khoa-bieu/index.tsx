@@ -655,7 +655,7 @@ export default function ThoiKhoaBieu({
         <Col span={24}>
           <Affix offsetTop={105} style={{ zIndex: 1000 }}>
             <Flex gap={4} justify="end">
-              <Button onClick={handleSyncExamDates}>Lấy lịch thi</Button>
+              {/* <Button onClick={handleSyncExamDates}>Lấy lịch thi</Button> */}
               <Button type="primary" onClick={handleExportToTrinh}>
                 Xuất tờ trình
               </Button>
