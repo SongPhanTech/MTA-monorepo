@@ -34,13 +34,15 @@ export default function DanhSachKeHoachThi() {
     examRoom: undefined,
     examDay: undefined,
   })
+  /** Tick: lọc tất cả đối tượng; bỏ tick: theo đối tượng đang chọn ở store */
+  const [allTrainingObjects, setAllTrainingObjects] = useState(false)
 
   const where = useMemo(() => {
     const result: any = {
       semesterId,
       deletedAt: null,
       subjectVersion: {
-        ...(trainingObjectTypeId && { trainingObjectTypeId }),
+        ...(trainingObjectTypeId && !allTrainingObjects && { trainingObjectTypeId }),
         ...(filters.searchText && {
           OR: [
             { code: { contains: filters.searchText, mode: "insensitive" } },
@@ -103,6 +105,7 @@ export default function DanhSachKeHoachThi() {
     filters.examRoom,
     semesterId,
     trainingObjectTypeId,
+    allTrainingObjects,
   ])
 
   const { data: exams = [] } = useFindManyExam(
@@ -221,7 +224,7 @@ export default function DanhSachKeHoachThi() {
     <Row gutter={[8, 0]}>
       <Col span={24}>
         <Flex justify="space-between" align="center">
-          <Flex gap={8}>
+          <Flex gap={8} align="center">
             <Input
               placeholder="Tìm kiếm"
               className="w-60"
@@ -244,6 +247,16 @@ export default function DanhSachKeHoachThi() {
               }}
               value={filters.examDay ? dayjs(filters.examDay) : null}
             />
+            <Checkbox
+              className="!flex !items-center !leading-none"
+              checked={allTrainingObjects}
+              onChange={(e) => {
+                setAllTrainingObjects(e.target.checked)
+                setCurrentPage(1)
+              }}
+            >
+              Tất cả đối tượng
+            </Checkbox>
           </Flex>
         </Flex>
       </Col>
