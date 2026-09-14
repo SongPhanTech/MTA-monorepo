@@ -1,4 +1,5 @@
 import { PaymentStatus, SupervisorRole } from "@workspace/db/client"
+import { versionInAcademy } from "./expert-select"
 
 const THESIS_PAY_DESCRIPTION = "THESIS"
 
@@ -137,8 +138,8 @@ async function recreateAllSupervisorPaymentsForProject(
   const oldSinglePayId = project.singleSupervisorPaymentId as string | undefined
 
   if (supExpert && coExpert) {
-    const inAcSup = !!(supExpert.lecturer || supExpert.lecturerId)
-    const inAcCo = !!(coExpert.lecturer || coExpert.lecturerId)
+    const inAcSup = versionInAcademy(supExpert)
+    const inAcCo = versionInAcademy(coExpert)
     const amtSup = getDefaultPay(project, SupervisorRole.SUPERVISOR, inAcSup)
     const amtCo = getDefaultPay(project, SupervisorRole.CO_SUPERVISOR, inAcCo)
 
@@ -172,7 +173,7 @@ async function recreateAllSupervisorPaymentsForProject(
   const expert = supExpert || coExpert
   if (!expert) return
 
-  const inAc = !!(expert.lecturer || expert.lecturerId)
+  const inAc = versionInAcademy(expert)
   const amtSingle = getDefaultPay(project, SupervisorRole.SINGLE, inAc)
 
   queueDelete(oldSupPayId)
@@ -230,8 +231,8 @@ export async function ensureSupervisorPaymentForProject(
   const oldSinglePayId = project.singleSupervisorPaymentId as string | undefined
 
   if (supExpert && coExpert) {
-    const inAcSup = !!(supExpert.lecturer || supExpert.lecturerId)
-    const inAcCo = !!(coExpert.lecturer || coExpert.lecturerId)
+    const inAcSup = versionInAcademy(supExpert)
+    const inAcCo = versionInAcademy(coExpert)
     const amtSup = getDefaultPay(project, SupervisorRole.SUPERVISOR, inAcSup)
     const amtCo = getDefaultPay(project, SupervisorRole.CO_SUPERVISOR, inAcCo)
 
@@ -304,7 +305,7 @@ export async function ensureSupervisorPaymentForProject(
   const expert = supExpert || coExpert
   if (!expert) return
 
-  const inAc = !!(expert.lecturer || expert.lecturerId)
+  const inAc = versionInAcademy(expert)
   const amtSingle = getDefaultPay(project, SupervisorRole.SINGLE, inAc)
 
   const singleMissing =
@@ -399,14 +400,13 @@ export function buildSupervisorPaymentRows(
   ) => {
     const amount = readDecimalAmount(recorded)
     if (amount > 0) return amount
-    const inAcademy = !!(expert?.lecturer || expert?.lecturerId)
+    const inAcademy = versionInAcademy(expert)
     return getSupervisorDefaultPayAmount(defaults, role, inAcademy)
   }
 
   if (project.singleSupervisorPaymentId || project.singleSupervisorPayment) {
     const expert = project.supervisor || project.coSupervisor
     if (expert) {
-      const inAc = !!(expert.lecturer || expert.lecturerId)
       rows.push({
         expert,
         amount: resolveAmount(

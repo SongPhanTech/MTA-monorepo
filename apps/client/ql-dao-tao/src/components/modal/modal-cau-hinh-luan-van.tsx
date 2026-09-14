@@ -584,19 +584,19 @@ const ModalCauHinhLuanVan = () => {
     form.setFieldsValue({
       chairman: thesisProjectData?.council?.members.find(
         (member) => member.role === CouncilRole.CHAIRMAN
-      )?.expertId,
+      )?.expertId ?? undefined,
       secretary: thesisProjectData?.council?.members.find(
         (member) => member.role === CouncilRole.SECRETARY
-      )?.expertId,
+      )?.expertId ?? undefined,
       reviewer1: thesisProjectData?.council?.members.find(
         (member) => member.role === CouncilRole.REVIEWER_1
-      )?.expertId,
+      )?.expertId ?? undefined,
       reviewer2: thesisProjectData?.council?.members.find(
         (member) => member.role === CouncilRole.REVIEWER_2
-      )?.expertId,
+      )?.expertId ?? undefined,
       member: thesisProjectData?.council?.members.find(
         (member) => member.role === CouncilRole.MEMBER
-      )?.expertId,
+      )?.expertId ?? undefined,
       roomId: thesisProjectData?.room?.id,
       defenseDate: thesisProjectData?.defenseDate
         ? dayjs(thesisProjectData?.defenseDate)
@@ -632,11 +632,11 @@ const ModalCauHinhLuanVan = () => {
       commentsCouncil: thesisProjectData?.defenseRecord?.comments ?? "",
       isCompleteCouncil: thesisProjectData?.defenseRecord?.isProfileComplete ?? false,
       attachments: thesisProjectData?.defenseRecord?.documents ?? [],
-      councilChairmanPaymentAmount: getDisplayAmount(CouncilRole.CHAIRMAN, chairmanId),
-      councilSecretaryPaymentAmount: getDisplayAmount(CouncilRole.SECRETARY, secretaryId),
-      councilReviewer1PaymentAmount: getDisplayAmount(CouncilRole.REVIEWER_1, rev1Id),
-      councilReviewer2PaymentAmount: getDisplayAmount(CouncilRole.REVIEWER_2, rev2Id),
-      councilMemberPaymentAmount: getDisplayAmount(CouncilRole.MEMBER, memberId),
+      councilChairmanPaymentAmount: getDisplayAmount(CouncilRole.CHAIRMAN, chairmanId ?? undefined),
+      councilSecretaryPaymentAmount: getDisplayAmount(CouncilRole.SECRETARY, secretaryId ?? undefined),
+      councilReviewer1PaymentAmount: getDisplayAmount(CouncilRole.REVIEWER_1, rev1Id ?? undefined),
+      councilReviewer2PaymentAmount: getDisplayAmount(CouncilRole.REVIEWER_2, rev2Id ?? undefined),
+      councilMemberPaymentAmount: getDisplayAmount(CouncilRole.MEMBER, memberId ?? undefined),
       councilChairmanName:
         thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.CHAIRMAN)
           ?.expertProfileVersion?.name ?? "",

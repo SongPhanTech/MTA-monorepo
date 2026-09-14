@@ -196,6 +196,8 @@ export * from './deleteObject200';
 export * from './deleteObjectParams';
 export * from './deleteStudentThesisBody';
 export * from './deleteStudentThesisResponse';
+export * from './deleteSubjectClassCascade200';
+export * from './deleteSubjectClassCascade200Data';
 export * from './docxTemplateBody';
 export * from './docxTemplateBodyData';
 export * from './docxTemplatePreview200';

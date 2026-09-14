@@ -1,7 +1,7 @@
 import Table from "@components/commons/table"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
-import type { PutExpertProfileProps } from "@components/modal/put-chuyen-gia"
+import type { PutExpertProps } from "@components/modal/put-chuyen-gia"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import useSpinner from "@hooks/spinner"
@@ -136,7 +136,7 @@ function getOrderBy(
   }
 }
 
-export default function ExpertProfile() {
+export default function DanhSachChuyenGiaLuanVan() {
   const { can } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -269,7 +269,7 @@ export default function ExpertProfile() {
     [expertData]
   )
 
-  const { onOpen } = useDisclosure<PutExpertProfileProps>({ tag: "PutExpertProfile" })
+  const { onOpen } = useDisclosure<PutExpertProps>({ tag: "PutExpert" })
   const { showSpinner, hideSpinner } = useSpinner()
   const { mutateAsync: updateExpert } = useUpdateExpert()
 
@@ -368,7 +368,7 @@ export default function ExpertProfile() {
                 sorter: (a: ExpertRow, b: ExpertRow) =>
                   compareAlphabet(getAcademicRank(a), getAcademicRank(b)),
                 sortOrder: sortOrderOf("academicRank"),
-                render: (_: unknown, record: ExpertRow) => getAcademicRank(record),
+                render: (_: unknown, record: any) => getAcademicRank(record),
               },
               {
                 title: "Hàm vị",
@@ -379,7 +379,7 @@ export default function ExpertProfile() {
                 sorter: (a: ExpertRow, b: ExpertRow) =>
                   compareAlphabet(getAcademicDegree(a), getAcademicDegree(b)),
                 sortOrder: sortOrderOf("academicDegree"),
-                render: (_: unknown, record: ExpertRow) => getAcademicDegree(record),
+                render: (_: unknown, record: any) => getAcademicDegree(record),
               },
               {
                 title: "Chức vụ",
@@ -399,7 +399,7 @@ export default function ExpertProfile() {
                 sorter: (a: ExpertRow, b: ExpertRow) =>
                   compareAlphabet(getWorkplace(a), getWorkplace(b)),
                 sortOrder: sortOrderOf("workplace"),
-                render: (_: unknown, record: ExpertRow) => getWorkplace(record),
+                render: (_: unknown, record: any) => getWorkplace(record),
               },
               {
                 title: "SĐT",
@@ -409,7 +409,7 @@ export default function ExpertProfile() {
                 type: "input",
                 sorter: (a: ExpertRow, b: ExpertRow) => compareAlphabet(getPhone(a), getPhone(b)),
                 sortOrder: sortOrderOf("phone"),
-                render: (_: unknown, record: ExpertRow) => getPhone(record),
+                render: (_: unknown, record: any) => getPhone(record),
               },
               {
                 title: "STK",
@@ -420,7 +420,7 @@ export default function ExpertProfile() {
                 sorter: (a: ExpertRow, b: ExpertRow) =>
                   compareAlphabet(getBankAccountNumber(a), getBankAccountNumber(b)),
                 sortOrder: sortOrderOf("bankAccountNumber"),
-                render: (_: unknown, record: ExpertRow) => getBankAccountNumber(record),
+                render: (_: unknown, record: any) => getBankAccountNumber(record),
               },
               {
                 title: "Tên ngân hàng",
@@ -431,7 +431,7 @@ export default function ExpertProfile() {
                 sorter: (a: ExpertRow, b: ExpertRow) =>
                   compareAlphabet(getBankName(a), getBankName(b)),
                 sortOrder: sortOrderOf("bankName"),
-                render: (_: unknown, record: ExpertRow) => getBankName(record),
+                render: (_: unknown, record: any) => getBankName(record),
               },
               {
                 title: "Số điện thoại",
@@ -462,7 +462,7 @@ export default function ExpertProfile() {
                   Number(Boolean(a.inAcademy ?? a.lecturer?.userProfile)) -
                   Number(Boolean(b.inAcademy ?? b.lecturer?.userProfile)),
                 sortOrder: sortOrderOf("inAcademy"),
-                render: (_: unknown, record: ExpertRow) => {
+                render: (_: unknown, record: any) => {
                   const inAcademy = record.inAcademy ?? Boolean(record.lecturer?.userProfile)
                   if (!inAcademy) return null
                   return (
@@ -479,7 +479,7 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 fixed: "right",
-                render: (_: unknown, { id }: ExpertRow) => {
+                render: (_: unknown, { id }: any) => {
                   if (!id) return ""
                   return (
                     <Row className="justify-center gap-2">
@@ -518,6 +518,6 @@ export default function ExpertProfile() {
   )
 }
 
-ExpertProfile.getLayout = function getLayout(page: React.ReactElement) {
+DanhSachChuyenGiaLuanVan.getLayout = function getLayout(page: React.ReactElement) {
   return <DefaultLayout>{page}</DefaultLayout>
 }

@@ -9,6 +9,7 @@ import { Printer } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
+import { versionToPersonLike } from "@/utils/expert-select"
 
 dayjs.locale("vi")
 
@@ -151,11 +152,30 @@ export const ModalPhuLucThacSi = () => {
                   include: {
                     members: {
                       include: {
-                        expert: {
+                        expertProfileVersion: {
                           include: {
                             academicDegreeType: true,
                             academicRankType: true,
-                            lecturer: { include: { organization: true } },
+                            expert: {
+                              include: {
+                                lecturer: {
+                                  include: {
+                                    userProfile: true,
+                                    organization: true,
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                        expert: {
+                          include: {
+                            lecturer: {
+                              include: {
+                                userProfile: true,
+                                organization: true,
+                              },
+                            },
                           },
                         },
                       },
@@ -383,9 +403,13 @@ export const ModalPhuLucThacSi = () => {
     return [...(thesisProject?.council?.members ?? [])]
       .sort((a, b) => (roleOrder[a.role] ?? 99) - (roleOrder[b.role] ?? 99))
       .map((member) => {
-        const expert = member.expert
-        const rank = expert?.academicRankType?.sMa ?? ""
-        const degree = expert?.academicDegreeType?.sMa ?? ""
+        const expert = (versionToPersonLike(member.expertProfileVersion) ?? member.expert) as any
+        const rank =
+          expert?.academicRankType?.sMa ?? expert?.lecturer?.userProfile?.academicRankType?.sMa ?? ""
+        const degree =
+          expert?.academicDegreeType?.sMa ??
+          expert?.lecturer?.userProfile?.academicDegreeType?.sMa ??
+          ""
         const title = [rank, degree].filter(Boolean).join(".")
         const name = [title, expert?.name].filter(Boolean).join(" ").trim()
         return {

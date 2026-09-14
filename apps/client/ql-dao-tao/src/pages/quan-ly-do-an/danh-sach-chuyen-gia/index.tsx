@@ -1,7 +1,7 @@
 import Table from "@components/commons/table"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
-import type { PutExpertProfileProps } from "@components/modal/put-chuyen-gia"
+import type { PutExpertProps } from "@components/modal/put-chuyen-gia"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import useSpinner from "@hooks/spinner"
@@ -37,7 +37,7 @@ type ExpertRow = {
   } | null
 }
 
-export default function ExpertProfile() {
+export default function DanhSachChuyenGiaDoAn() {
   const { can, canSome } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -154,7 +154,7 @@ export default function ExpertProfile() {
     [expertData]
   )
 
-  const { onOpen } = useDisclosure<PutExpertProfileProps>({ tag: "PutExpertProfile" })
+  const { onOpen } = useDisclosure<PutExpertProps>({ tag: "PutExpert" })
   const { showSpinner, hideSpinner } = useSpinner()
   const { mutateAsync: updateExpert } = useUpdateExpert()
 
@@ -205,7 +205,7 @@ export default function ExpertProfile() {
         </Col>
 
         <Col span={24}>
-          <Table
+          <Table<ExpertRow>
             rowKey="id"
             id="expert-profile"
             filters={filters}
@@ -235,7 +235,7 @@ export default function ExpertProfile() {
                 width: 150,
                 align: "center",
                 type: "input",
-                render: (_: unknown, record: ExpertRow) =>
+                render: (_: unknown, record: any) =>
                   record.lecturer?.userProfile?.academicRankType?.sMa ||
                   record.academicRankType?.sMa,
               },
@@ -245,7 +245,7 @@ export default function ExpertProfile() {
                 width: 150,
                 align: "center",
                 type: "input",
-                render: (_: unknown, record: ExpertRow) =>
+                render: (_: unknown, record: any) =>
                   record.lecturer?.userProfile?.academicDegreeType?.sMa ||
                   record.academicDegreeType?.sMa,
               },
@@ -255,7 +255,7 @@ export default function ExpertProfile() {
                 width: 150,
                 align: "center",
                 type: "input",
-                render: (_: unknown, record: ExpertRow) =>
+                render: (_: unknown, record: any) =>
                   record.lecturer
                     ? `${record.lecturer?.organization?.sMa || ""}-${record.lecturer?.organization?.sTen || ""}`
                     : record.workplace || "",
@@ -280,7 +280,7 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
-                render: (_: unknown, record: ExpertRow) =>
+                render: (_: unknown, record: any) =>
                   record.bankName || record.lecturer?.userProfile?.bankName || "",
               },
               {
@@ -289,7 +289,7 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
-                render: (_: unknown, record: ExpertRow) =>
+                render: (_: unknown, record: any) =>
                   record.bankAccountNumber ||
                   record.lecturer?.userProfile?.bankAccountNumber ||
                   "",
@@ -304,7 +304,7 @@ export default function ExpertProfile() {
                   "SUA",
                   "XOA"
                 ),
-                render: (_: unknown, { id }: ExpertRow) => {
+                render: (_: unknown, { id }: any) => {
                   if (!id) return ""
                   return (
                     <Row className="justify-center gap-2">
@@ -353,6 +353,6 @@ export default function ExpertProfile() {
   )
 }
 
-ExpertProfile.getLayout = function getLayout(page: React.ReactElement) {
+DanhSachChuyenGiaDoAn.getLayout = function getLayout(page: React.ReactElement) {
   return <DefaultLayout>{page}</DefaultLayout>
 }

@@ -20,6 +20,7 @@ import { sqlTransaction } from "@workspace/libs/api/model"
 import { renderXlsxTemplate } from "@workspace/libs/api/training"
 import { whereOrganization } from "@workspace/libs/constants"
 import { previewExcelTemplate } from "../../../utils/excel-template"
+import { versionInAcademy, versionToPersonLike } from "@/utils/expert-select"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
 import { Button, Col, Flex, Form, Modal, message, Row, Tooltip } from "antd"
@@ -158,13 +159,17 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
           include: {
             academicDegreeType: true,
             academicRankType: true,
-            lecturer: {
-              select: {
-                userProfile: {
+            expert: {
+              include: {
+                lecturer: {
                   select: {
-                    fullname: true,
-                    academicRankType: true,
-                    academicDegreeType: true,
+                    userProfile: {
+                      select: {
+                        fullname: true,
+                        academicRankType: true,
+                        academicDegreeType: true,
+                      },
+                    },
                   },
                 },
               },
@@ -175,13 +180,17 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
           include: {
             academicDegreeType: true,
             academicRankType: true,
-            lecturer: {
-              select: {
-                userProfile: {
+            expert: {
+              include: {
+                lecturer: {
                   select: {
-                    fullname: true,
-                    academicRankType: true,
-                    academicDegreeType: true,
+                    userProfile: {
+                      select: {
+                        fullname: true,
+                        academicRankType: true,
+                        academicDegreeType: true,
+                      },
+                    },
                   },
                 },
               },
@@ -409,22 +418,69 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
       if (dataToUpdate.length === 0) {
         return message.warning("Không tìm thấy dữ liệu hợp lệ trong file.")
       }
+      const fixValue = (val: any) => (val === "[object Object]" ? null : val)
+      const expertIds = [
+        ...new Set(
+          dataToUpdate
+            .flatMap((item) => [
+              fixValue(item.data.update.supervisorId),
+              fixValue(item.data.update.coSupervisorId),
+            ])
+            .filter((id): id is string => !!id)
+        ),
+      ]
+
+      const versionByExpertId = new Map<string, string>()
+      if (expertIds.length) {
+        const expertsRes = await sqlTransaction([
+          {
+            model: "Expert",
+            operation: "findMany",
+            data: {
+              where: { id: { in: expertIds }, deletedAt: null },
+              select: { id: true, currentVersionId: true },
+            },
+          },
+        ])
+        const expertRows = Array.isArray(expertsRes.data) ? expertsRes.data[0] : []
+        const experts = (Array.isArray(expertRows) ? expertRows : []) as Array<{
+          id: string
+          currentVersionId: string | null
+        }>
+        for (const e of experts) {
+          if (e.currentVersionId) versionByExpertId.set(e.id, e.currentVersionId)
+        }
+      }
+
+      const toVersionId = (expertId: any) => {
+        const id = fixValue(expertId)
+        if (!id) return null
+        return versionByExpertId.get(id) ?? null
+      }
+
       const finalData = dataToUpdate.map((item) => {
-        const fixValue = (val: any) => (val === "[object Object]" ? null : val)
+        const supervisorVersionId = toVersionId(item.data.update.supervisorId)
+        const coSupervisorVersionId = toVersionId(item.data.update.coSupervisorId)
+        const { supervisorId: _s, coSupervisorId: _c, ...updateRest } = item.data.update
+        const {
+          supervisorId: _s2,
+          coSupervisorId: _c2,
+          ...createRest
+        } = item.data.create
 
         return {
           ...item,
           data: {
             ...item.data,
             update: {
-              ...item.data.update,
-              supervisorId: fixValue(item.data.update.supervisorId),
-              coSupervisorId: fixValue(item.data.update.coSupervisorId),
+              ...updateRest,
+              supervisorVersionId,
+              coSupervisorVersionId,
             },
             create: {
-              ...item.data.create,
-              supervisorId: fixValue(item.data.create.supervisorId),
-              coSupervisorId: fixValue(item.data.create.coSupervisorId),
+              ...createRest,
+              supervisorVersionId,
+              coSupervisorVersionId,
             },
           },
         }
@@ -666,9 +722,17 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                             globalIndex++
                             const studentCode = e.studentSubjectScore.student?.code
                             const supervisorName =
-                              (getSupervisorName(e.supervisor, false, true) as string) || ""
+                              (getSupervisorName(
+                                versionToPersonLike(e.supervisor),
+                                false,
+                                true
+                              ) as string) || ""
                             const coSupervisorName =
-                              (getSupervisorName(e.coSupervisor, false, true) as string) || ""
+                              (getSupervisorName(
+                                versionToPersonLike(e.coSupervisor),
+                                false,
+                                true
+                              ) as string) || ""
                             acc[ma_cn].students.push({
                               tt: globalIndex,
                               ten: `${e.studentSubjectScore.student?.userProfile?.fullname}\n${
@@ -795,43 +859,40 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                       ])
                       const khoaVaKyData = khoaVaKy.data as [{ name: string }, { name: string }]
 
+                      const topicScoreFilter = {
+                        subjectClass: {
+                          semesterId,
+                          trainingObjectTypeId,
+                        },
+                        student: {
+                          fixedClass: {
+                            trainingCourseId,
+                          },
+                        },
+                      }
+
                       const expertProfiles = await sqlTransaction([
                         {
-                          model: "ExpertProfile",
+                          model: "Expert",
                           operation: "findMany",
                           data: {
                             where: {
+                              deletedAt: null,
                               OR: [
                                 {
-                                  supervisorResearchTopic: {
+                                  versions: {
                                     some: {
-                                      studentSubjectScore: {
-                                        subjectClass: {
-                                          semesterId,
-                                          trainingObjectTypeId,
-                                        },
-                                        student: {
-                                          fixedClass: {
-                                            trainingCourseId,
-                                          },
-                                        },
+                                      supervisorResearchTopic: {
+                                        some: { studentSubjectScore: topicScoreFilter },
                                       },
                                     },
                                   },
                                 },
                                 {
-                                  coSupervisorResearchTopic: {
+                                  versions: {
                                     some: {
-                                      studentSubjectScore: {
-                                        subjectClass: {
-                                          semesterId,
-                                          trainingObjectTypeId,
-                                        },
-                                        student: {
-                                          fixedClass: {
-                                            trainingCourseId,
-                                          },
-                                        },
+                                      coSupervisorResearchTopic: {
+                                        some: { studentSubjectScore: topicScoreFilter },
                                       },
                                     },
                                   },
@@ -839,37 +900,10 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                               ],
                             },
                             include: {
-                              academicDegreeType: true,
-                              academicRankType: true,
-                              supervisorResearchTopic: {
-                                select: {
-                                  id: true,
-                                  coSupervisorId: true,
-                                  studentSubjectScore: {
-                                    select: {
-                                      subjectVersion: {
-                                        select: {
-                                          credit: true,
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                              },
-                              coSupervisorResearchTopic: {
-                                select: {
-                                  id: true,
-                                  supervisorId: true,
-
-                                  studentSubjectScore: {
-                                    select: {
-                                      subjectVersion: {
-                                        select: {
-                                          credit: true,
-                                        },
-                                      },
-                                    },
-                                  },
+                              currentVersion: {
+                                include: {
+                                  academicDegreeType: true,
+                                  academicRankType: true,
                                 },
                               },
                               lecturer: {
@@ -877,14 +911,34 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                   userProfile: {
                                     select: {
                                       fullname: true,
-                                      academicRankType: {
+                                      academicRankType: { select: { sMa: true } },
+                                      academicDegreeType: { select: { sMa: true } },
+                                    },
+                                  },
+                                },
+                              },
+                              versions: {
+                                include: {
+                                  supervisorResearchTopic: {
+                                    where: { studentSubjectScore: topicScoreFilter },
+                                    select: {
+                                      id: true,
+                                      coSupervisorVersionId: true,
+                                      studentSubjectScore: {
                                         select: {
-                                          sMa: true,
+                                          subjectVersion: { select: { credit: true } },
                                         },
                                       },
-                                      academicDegreeType: {
+                                    },
+                                  },
+                                  coSupervisorResearchTopic: {
+                                    where: { studentSubjectScore: topicScoreFilter },
+                                    select: {
+                                      id: true,
+                                      supervisorVersionId: true,
+                                      studentSubjectScore: {
                                         select: {
-                                          sMa: true,
+                                          subjectVersion: { select: { credit: true } },
                                         },
                                       },
                                     },
@@ -900,94 +954,102 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         return message.error("Không thể lấy danh sách chuyên gia")
                       }
 
-                      const expertProfilesData = expertProfiles
-                        .data[0] as Prisma.ExpertProfileGetPayload<{
-                        include: {
-                          supervisorResearchTopic: {
-                            select: {
-                              id: true
-                              coSupervisorId: true
-                              studentSubjectScore: {
-                                select: {
-                                  subjectVersion: {
-                                    select: {
-                                      credit: true
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                          coSupervisorResearchTopic: {
-                            select: {
-                              id: true
-                              supervisorId: true
-                              studentSubjectScore: {
-                                select: {
-                                  subjectVersion: {
-                                    select: {
-                                      credit: true
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                          lecturer: {
-                            select: {
-                              userProfile: {
-                                select: {
-                                  fullname: true
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }>[]
+                      type ExpertStatRow = {
+                        id: string
+                        lecturerId: string | null
+                        currentVersion: {
+                          inAcademy?: boolean | null
+                          name?: string | null
+                          academicDegreeType?: { sMa?: string | null } | null
+                          academicRankType?: { sMa?: string | null } | null
+                        } | null
+                        lecturer?: {
+                          userProfile?: {
+                            fullname?: string | null
+                            academicRankType?: { sMa?: string | null } | null
+                            academicDegreeType?: { sMa?: string | null } | null
+                          } | null
+                        } | null
+                        versions: Array<{
+                          supervisorResearchTopic: Array<{
+                            id: string
+                            coSupervisorVersionId: string | null
+                            studentSubjectScore: { subjectVersion: { credit: number } }
+                          }>
+                          coSupervisorResearchTopic: Array<{
+                            id: string
+                            supervisorVersionId: string | null
+                            studentSubjectScore: { subjectVersion: { credit: number } }
+                          }>
+                        }>
+                      }
+
+                      const expertProfilesData = (expertProfiles.data[0] || []) as ExpertStatRow[]
+
+                      const flattenTopics = (profile: ExpertStatRow) => ({
+                        supervisorResearchTopic: profile.versions.flatMap(
+                          (v) => v.supervisorResearchTopic
+                        ),
+                        coSupervisorResearchTopic: profile.versions.flatMap(
+                          (v) => v.coSupervisorResearchTopic
+                        ),
+                      })
 
                       const inAcademyExperts = expertProfilesData.filter(
-                        (profile) => profile.lecturerId != null
+                        (profile) =>
+                          profile.currentVersion?.inAcademy ?? profile.lecturerId != null
                       )
                       const outAcademyExperts = expertProfilesData.filter(
-                        (profile) => profile.lecturerId == null
+                        (profile) =>
+                          !(profile.currentVersion?.inAcademy ?? profile.lecturerId != null)
                       )
 
-                      const mapExpertRows = (profiles: typeof expertProfilesData) =>
-                        profiles.map((profile, idx) => ({
+                      const mapExpertRows = (profiles: ExpertStatRow[]) =>
+                        profiles.map((profile, idx) => {
+                          const topics = flattenTopics(profile)
+                          const person = {
+                            ...profile.currentVersion,
+                            lecturer: profile.lecturer,
+                            lecturerId: profile.lecturerId,
+                            inAcademy:
+                              profile.currentVersion?.inAcademy ?? profile.lecturerId != null,
+                          }
+                          return {
                           tt: idx + 1,
-                          ho_ten: (getSupervisorName(profile, false, true) as string) || "",
+                          ho_ten: (getSupervisorName(person, false, true) as string) || "",
                           cd_dl:
-                            profile.supervisorResearchTopic.filter((t) => !t.coSupervisorId)
+                            topics.supervisorResearchTopic.filter((t) => !t.coSupervisorVersionId)
                               .length +
-                            profile.coSupervisorResearchTopic.filter((t) => !t.supervisorId).length,
+                            topics.coSupervisorResearchTopic.filter((t) => !t.supervisorVersionId)
+                              .length,
                           tc_dl:
-                            profile.supervisorResearchTopic
-                              .filter((t) => !t.coSupervisorId)
+                            topics.supervisorResearchTopic
+                              .filter((t) => !t.coSupervisorVersionId)
                               .map((e) => e.studentSubjectScore.subjectVersion.credit)
                               .reduce((a, b) => a + b, 0) +
-                            profile.coSupervisorResearchTopic
-                              .filter((t) => !t.supervisorId)
+                            topics.coSupervisorResearchTopic
+                              .filter((t) => !t.supervisorVersionId)
                               .map((e) => e.studentSubjectScore.subjectVersion.credit)
                               .reduce((a, b) => a + b, 0),
                           cd_dhd:
-                            profile.coSupervisorResearchTopic.filter((t) => !!t.supervisorId)
+                            topics.coSupervisorResearchTopic.filter((t) => !!t.supervisorVersionId)
                               .length +
-                            profile.supervisorResearchTopic.filter((t) => !!t.coSupervisorId)
+                            topics.supervisorResearchTopic.filter((t) => !!t.coSupervisorVersionId)
                               .length,
                           tc_dhd:
-                            profile.coSupervisorResearchTopic
-                              .filter((t) => !!t.supervisorId)
+                            topics.coSupervisorResearchTopic
+                              .filter((t) => !!t.supervisorVersionId)
                               .map((e) => e.studentSubjectScore.subjectVersion.credit)
                               .reduce((a, b) => a + b, 0) +
-                            profile.supervisorResearchTopic
-                              .filter((t) => !!t.coSupervisorId)
+                            topics.supervisorResearchTopic
+                              .filter((t) => !!t.coSupervisorVersionId)
                               .map((e) => e.studentSubjectScore.subjectVersion.credit)
                               .reduce((a, b) => a + b, 0),
                           cd_tong: `=E${9 + idx}+C${9 + idx}`,
                           tai_tong: `=D${9 + idx}*H${9 + idx}+(F${9 + idx}*H${9 + idx}/2)`,
                           dinh_muc: 3.75,
                           ghi_chu: "",
-                        }))
+                        }})
 
                       const sheetHeaderData = {
                         khoa: khoaVaKyData?.[0]?.name?.toUpperCase?.(),
@@ -1334,15 +1396,21 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                           khoaName
 
                         const supName =
-                          (getSupervisorName(e.supervisor, false, true) as string) || ""
+                          (getSupervisorName(
+                            versionToPersonLike(e.supervisor),
+                            false,
+                            true
+                          ) as string) || ""
                         const coSupName =
-                          (getSupervisorName(e.coSupervisor, false, true) as string) || ""
+                          (getSupervisorName(
+                            versionToPersonLike(e.coSupervisor),
+                            false,
+                            true
+                          ) as string) || ""
 
                         const isDual = !!(supName && coSupName)
-                        const supInAcademy = !!(e.supervisor?.lecturerId || e.supervisor?.lecturer)
-                        const coSupInAcademy = !!(
-                          e.coSupervisor?.lecturerId || e.coSupervisor?.lecturer
-                        )
+                        const supInAcademy = versionInAcademy(e.supervisor)
+                        const coSupInAcademy = versionInAcademy(e.coSupervisor)
 
                         let cbhdText = ""
                         let moneyText = ""
@@ -1550,7 +1618,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
               width: 150,
               align: "left",
               render: (_, record) => {
-                return getSupervisorName(record?.supervisor, true, true)
+                return getSupervisorName(versionToPersonLike(record?.supervisor), true, true)
               },
             },
             {
@@ -1558,7 +1626,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
               width: 150,
               align: "left",
               render: (_, record) => {
-                return getSupervisorName(record?.coSupervisor, true, true)
+                return getSupervisorName(versionToPersonLike(record?.coSupervisor), true, true)
               },
             },
             {

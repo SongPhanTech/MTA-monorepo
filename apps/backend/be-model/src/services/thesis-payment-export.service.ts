@@ -1,12 +1,14 @@
 import { CouncilRole, SupervisorRole } from "@workspace/db/client"
 import { formatDateVn, nowVn } from "@workspace/libs/timezone"
 import {
+  councilMemberProfile,
   councilRoleOrder,
   formatAmountWithComma,
   getSupervisorDefaultPayAmount,
   getSupervisorName,
   readDecimalAmount,
   resolveCouncilMemberPayAmount,
+  resolveInAcademy,
   tenDoiTuong,
 } from "./thesis-payment.helpers"
 import { loadThesisProjectsForPayment } from "./thesis-payment-query"
@@ -31,11 +33,11 @@ function buildSupervisorPaymentRows(
   const resolveAmount = (
     recorded: unknown,
     role: SupervisorRole,
-    expert: { lecturer?: unknown; lecturerId?: string | null } | null | undefined
+    expert: Parameters<typeof resolveInAcademy>[0] | null | undefined
   ) => {
     const amount = readDecimalAmount(recorded)
     if (amount > 0) return amount
-    const inAcademy = !!(expert?.lecturer || expert?.lecturerId)
+    const inAcademy = resolveInAcademy(expert)
     return getSupervisorDefaultPayAmount(defaults, role, inAcademy)
   }
 
@@ -136,7 +138,7 @@ export async function buildCouncilPaymentExportPayload(params: {
     let studentTotal = 0
 
     for (const member of sortedMembers) {
-      const expert = member.expert
+      const expert = councilMemberProfile(member)
       let rolePrefix = "UV"
       let roleSuffix = ""
       if (member.role === CouncilRole.CHAIRMAN) rolePrefix = "CT"
@@ -152,12 +154,16 @@ export async function buildCouncilPaymentExportPayload(params: {
       studentTotal += rawAmount
       ttLines.push(formatAmountWithComma(rawAmount))
       const bankNumber =
+        expert?.expert?.lecturer?.userProfile?.bankAccountNumber ||
         expert?.lecturer?.userProfile?.bankAccountNumber ||
         expert?.bankAccountNumber ||
         "Chưa có thông tin"
       stkLines.push(bankNumber || "")
       const bankName =
-        expert?.lecturer?.userProfile?.bankName || expert?.bankName || "Chưa có thông tin"
+        expert?.expert?.lecturer?.userProfile?.bankName ||
+        expert?.lecturer?.userProfile?.bankName ||
+        expert?.bankName ||
+        "Chưa có thông tin"
       nhLines.push(bankName || "")
     }
 

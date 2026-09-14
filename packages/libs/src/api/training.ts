@@ -123,6 +123,7 @@ import type {
   DataListRetakeStudentItem,
   DataSuccessEnrollFixedClassOnSubjectClass,
   DebtStatisticsParams,
+  DeleteSubjectClassCascade200,
   DownloadCurriculumImportTemplateParams,
   DownloadStudentImportTemplateParams,
   EnrollApprovedStudentsRequest,
@@ -7959,6 +7960,113 @@ export function useExportSubjectClassScore<TData = Awaited<ReturnType<typeof exp
 
 
 
+/**
+ * Xóa cứng SubjectClass kèm: StudentSubjectScore, ClassSchedule, SubjectClassTime,
+SubjectClassHistory, ExamBank, SubjectClassAttendance, Survey, ClassRegisterLogs, ScoreLinkSubjectVersion.
+ * @summary Xóa lớp môn học và toàn bộ dữ liệu liên quan
+ */
+export type deleteSubjectClassCascadeResponse200 = {
+  data: DeleteSubjectClassCascade200
+  status: 200
+}
+
+export type deleteSubjectClassCascadeResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type deleteSubjectClassCascadeResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type deleteSubjectClassCascadeResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type deleteSubjectClassCascadeResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type deleteSubjectClassCascadeResponseSuccess = (deleteSubjectClassCascadeResponse200) & {
+  headers: Headers;
+};
+export type deleteSubjectClassCascadeResponseError = (deleteSubjectClassCascadeResponse400 | deleteSubjectClassCascadeResponse404 | deleteSubjectClassCascadeResponse409 | deleteSubjectClassCascadeResponse500) & {
+  headers: Headers;
+};
+
+export type deleteSubjectClassCascadeResponse = (deleteSubjectClassCascadeResponseSuccess | deleteSubjectClassCascadeResponseError)
+
+export const getDeleteSubjectClassCascadeUrl = (id: string,) => {
+
+
+  
+
+  return `/api/subject-class/${id}/cascade`
+}
+
+export const deleteSubjectClassCascade = async (id: string, options?: RequestInit): Promise<deleteSubjectClassCascadeResponse> => {
+  
+  return customTrainingFetch<deleteSubjectClassCascadeResponse>(getDeleteSubjectClassCascadeUrl(id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+
+export const getDeleteSubjectClassCascadeMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSubjectClassCascade>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteSubjectClassCascade>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['deleteSubjectClassCascade'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteSubjectClassCascade>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteSubjectClassCascade(id,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteSubjectClassCascadeMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSubjectClassCascade>>>
+    
+    export type DeleteSubjectClassCascadeMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xóa lớp môn học và toàn bộ dữ liệu liên quan
+ */
+export const useDeleteSubjectClassCascade = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSubjectClassCascade>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteSubjectClassCascade>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteSubjectClassCascadeMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Danh sách học phần có học viên cần học lại.
 

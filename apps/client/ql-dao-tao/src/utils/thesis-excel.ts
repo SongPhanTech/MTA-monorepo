@@ -25,6 +25,7 @@ import {
 } from "@workspace/libs/api/thesis-payment"
 import { docxTemplate } from "./docx-template"
 import { renderXlsxTemplate } from "@workspace/libs/api/training"
+import { versionInAcademy, versionToPersonLike } from "./expert-select"
 import { buildSupervisorPaymentRows } from "./thesis-supervisor-payment-export"
 interface ExportOptions {
   thesisSessionId?: string
@@ -136,19 +137,29 @@ export function resolveSupervisorPayAmountsForProject(
 
 export function resolveCouncilMemberPayAmount(
   member: { role: CouncilRole; payment?: { amount?: unknown } | null },
-  expert: { lecturerId?: string | null; lecturer?: unknown } | null | undefined,
+  expert:
+    | {
+        inAcademy?: boolean | null
+        lecturerId?: string | null
+        lecturer?: unknown
+        expert?: { lecturerId?: string | null; lecturer?: unknown } | null
+      }
+    | null
+    | undefined,
   councilDefaults: DefaultCouncilPayAmountRow[]
 ): number {
   const recorded = readDecimalAmount(member.payment?.amount)
   if (recorded > 0) return recorded
-  const inAcademy = !!(expert?.lecturerId || expert?.lecturer)
+  const inAcademy = versionInAcademy(expert)
   return getCouncilDefaultPayAmount(councilDefaults, member.role, inAcademy)
 }
 /** Phạm vi chuyên gia khi gom dữ liệu giấy mời chấm LV PB (cán bộ trong / ngoài học viện). */
 type GmcLvPbExpertScope = "all" | "inAcademy" | "outsideAcademy"
 
-/** Cán bộ trong học viện: có liên kết giảng viên (lecturer / lecturerId). Ngoài HV = không có. */
-const isExpertInAcademy = (expert: any) => !!(expert?.lecturer || expert?.lecturerId)
+const councilMemberProfile = (member: any) =>
+  versionToPersonLike(member?.expertProfileVersion) ??
+  member?.expertProfileVersion ??
+  member?.expert
 
 interface GmcLvPbData {
   data: {
@@ -1932,10 +1943,10 @@ export const convertToGmcLvPbData = (
 
     const members = project.council?.members || []
     members.forEach((member: any) => {
-      const expert = member.expert
+      const expert = councilMemberProfile(member)
       if (!expert?.id) return
 
-      const internal = isExpertInAcademy(expert)
+      const internal = versionInAcademy(expert)
       if (expertScope === "inAcademy" && !internal) return
       if (expertScope === "outsideAcademy" && internal) return
 
@@ -2280,7 +2291,7 @@ const convertToTthdbvData = async (
     let studentTotal = 0
 
     for (const m of sortedMembers) {
-      const expert = m.expert
+      const expert = councilMemberProfile(m)
       let rolePrefix = "UV"
       let roleSuffix = ""
 
@@ -2294,7 +2305,7 @@ const convertToTthdbvData = async (
       hdLines.push(`${rolePrefix}: ${name || ""}${org}${roleSuffix}`)
 
       const councilDefaults = resolveCouncilPayAmountsForProject(project, defaultCouncilPayAmounts)
-      const inAcademy = !!(expert?.lecturerId || expert?.lecturer)
+      const inAcademy = versionInAcademy(expert)
       const defaultAmount = getCouncilDefaultPayAmount(councilDefaults, m.role, inAcademy)
 
       let rawAmount = defaultAmount
@@ -2331,12 +2342,16 @@ const convertToTthdbvData = async (
       studentTotal += rawAmount
       ttLines.push(formatAmountWithComma(rawAmount))
       const bankNumber =
+        expert?.expert?.lecturer?.userProfile?.bankAccountNumber ||
         expert?.lecturer?.userProfile?.bankAccountNumber ||
         expert?.bankAccountNumber ||
         "Chưa có thông tin"
       stkLines.push(bankNumber || "")
       const bankName =
-        expert?.lecturer?.userProfile?.bankName || expert?.bankName || "Chưa có thông tin"
+        expert?.expert?.lecturer?.userProfile?.bankName ||
+        expert?.lecturer?.userProfile?.bankName ||
+        expert?.bankName ||
+        "Chưa có thông tin"
 
       nhLines.push(bankName || "")
     }
@@ -2628,12 +2643,23 @@ const convertToThongKeCbThamGiaHdData = (
     if (!project?.council?.members?.length) return
 
     project.council.members.forEach((member: any) => {
-      const expert = member.expert
+      const expert = councilMemberProfile(member)
       const name = (getSupervisorName(expert, false, false) as string) || ""
-      const donViQuanLi = expert?.workplace || expert?.lecturer?.organization?.sTen || ""
+      const donViQuanLi =
+        expert?.workplace ||
+        expert?.expert?.lecturer?.organization?.sTen ||
+        expert?.lecturer?.organization?.sTen ||
+        ""
       const stk =
-        expert?.bankAccountNumber || expert?.lecturer?.userProfile?.bankAccountNumber || ""
-      const tennganhang = expert?.bankName || expert?.lecturer?.userProfile?.bankName || ""
+        expert?.bankAccountNumber ||
+        expert?.expert?.lecturer?.userProfile?.bankAccountNumber ||
+        expert?.lecturer?.userProfile?.bankAccountNumber ||
+        ""
+      const tennganhang =
+        expert?.bankName ||
+        expert?.expert?.lecturer?.userProfile?.bankName ||
+        expert?.lecturer?.userProfile?.bankName ||
+        ""
       if (!expert?.id) return
       const thanhtoan = resolveCouncilMemberPayAmount(member, expert, councilDefaults)
 
@@ -3077,11 +3103,9 @@ export const exportBanSaoHDDGLV = async ({
     })
     .filter(Boolean)
 
-
   try {
     showSpinner?.()
     const dataConvert = convertToBanSaoHDDGLV(project, signerName, isChief, signingDate)
-
 
     if (!dataConvert || dataConvert.length === 0) {
       console.warn(`${logPrefix} STOP: dataConvert rỗng sau convert`)
@@ -3108,7 +3132,6 @@ export const exportBanSaoHDDGLV = async ({
         errorBodyText = undefined
       }
     }
-
 
     if (response.status !== 200) {
       console.error(`${logPrefix} STOP: status !== 200`, {
@@ -3174,6 +3197,11 @@ const convertToBanSaoHDDGLV = (
       const member = findMember(CouncilRole.MEMBER)
       const pb1 = findMember(CouncilRole.REVIEWER_1)
       const pb2 = findMember(CouncilRole.REVIEWER_2)
+      const chairmanExpert = councilMemberProfile(chairman)
+      const secretaryExpert = councilMemberProfile(secretary)
+      const memberExpert = councilMemberProfile(member)
+      const pb1Expert = councilMemberProfile(pb1)
+      const pb2Expert = councilMemberProfile(pb2)
       const qdDate = session?.defenseDecisionDate ? dayjs(session.defenseDecisionDate) : null
       let gvhd1 = ""
       if (project?.supervisor) {
@@ -3226,17 +3254,17 @@ const convertToBanSaoHDDGLV = (
           khoaHoc: khoaHoc,
           nienkhoahoc: nienkhoahoc,
           gvhd: gvhd,
-          tenChuTich: (getSupervisorName(chairman?.expert, false, false) as string) || "",
-          toChucChuTich: chairman?.expert?.workplace || "HVKTQS",
+          tenChuTich: (getSupervisorName(chairmanExpert, false, false) as string) || "",
+          toChucChuTich: chairmanExpert?.workplace || "HVKTQS",
 
-          tenThuKy: (getSupervisorName(secretary?.expert, false, false) as string) || "",
-          toChucThuKy: secretary?.expert?.workplace || "HVKTQS",
-          tenUyVien: (getSupervisorName(member?.expert, false, false) as string) || "",
-          toChucUyVien: member?.expert?.workplace || "HVKTQS",
-          tenPb1: (getSupervisorName(pb1?.expert, false, false) as string) || "",
-          toChucPb1: pb1?.expert?.workplace || "HVKTQS",
-          tenPb2: (getSupervisorName(pb2?.expert, false, false) as string) || "",
-          toChucPb2: pb2?.expert?.workplace || "HVKTQS",
+          tenThuKy: (getSupervisorName(secretaryExpert, false, false) as string) || "",
+          toChucThuKy: secretaryExpert?.workplace || "HVKTQS",
+          tenUyVien: (getSupervisorName(memberExpert, false, false) as string) || "",
+          toChucUyVien: memberExpert?.workplace || "HVKTQS",
+          tenPb1: (getSupervisorName(pb1Expert, false, false) as string) || "",
+          toChucPb1: pb1Expert?.workplace || "HVKTQS",
+          tenPb2: (getSupervisorName(pb2Expert, false, false) as string) || "",
+          toChucPb2: pb2Expert?.workplace || "HVKTQS",
           ngay: currentDay,
           thang: currentMonth,
           nam: currentYear,
@@ -3388,6 +3416,11 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
       const reviewer1 = getMember(CouncilRole.REVIEWER_1)
       const reviewer2 = getMember(CouncilRole.REVIEWER_2)
       const member = getMember(CouncilRole.MEMBER)
+      const chairmanExpert = councilMemberProfile(chairman)
+      const secretaryExpert = councilMemberProfile(secretary)
+      const memberExpert = councilMemberProfile(member)
+      const reviewer1Expert = councilMemberProfile(reviewer1)
+      const reviewer2Expert = councilMemberProfile(reviewer2)
       const ngaySinhStr = formatBirthDate(student.userProfile?.dateOfBirth)
       const khoaHocStr = student.fixedClass?.trainingCourse?.name || ""
       const rawGvhd1 = (getSupervisorName(project?.supervisor, false, false) as string) || ""
@@ -3406,20 +3439,20 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
         gvhd1,
         gvhd2,
 
-        tenChuTich: (getSupervisorName(chairman?.expert, false, false) as string) || "",
-        toChucChuTich: chairman?.expert?.workplace || "Học viện KTQS",
+        tenChuTich: (getSupervisorName(chairmanExpert, false, false) as string) || "",
+        toChucChuTich: chairmanExpert?.workplace || "Học viện KTQS",
 
-        tenThuKy: (getSupervisorName(secretary?.expert, false, false) as string) || "",
-        toChucThuKy: secretary?.expert?.workplace || "Học viện KTQS",
+        tenThuKy: (getSupervisorName(secretaryExpert, false, false) as string) || "",
+        toChucThuKy: secretaryExpert?.workplace || "Học viện KTQS",
 
-        tenUyVien: (getSupervisorName(member?.expert, false, false) as string) || "",
-        toChucUyVien: member?.expert?.workplace || "Học viện KTQS",
+        tenUyVien: (getSupervisorName(memberExpert, false, false) as string) || "",
+        toChucUyVien: memberExpert?.workplace || "Học viện KTQS",
 
-        tenPb1: (getSupervisorName(reviewer1?.expert, false, false) as string) || "",
-        toChucPb1: reviewer1?.expert?.workplace || "Học viện KTQS",
+        tenPb1: (getSupervisorName(reviewer1Expert, false, false) as string) || "",
+        toChucPb1: reviewer1Expert?.workplace || "Học viện KTQS",
 
-        tenPb2: (getSupervisorName(reviewer2?.expert, false, false) as string) || "",
-        toChucPb2: reviewer2?.expert?.workplace || "Học viện KTQS",
+        tenPb2: (getSupervisorName(reviewer2Expert, false, false) as string) || "",
+        toChucPb2: reviewer2Expert?.workplace || "Học viện KTQS",
       }
     })
 
@@ -3560,8 +3593,8 @@ const convertToDsChuyenGiaData = (
         nguoiki = project.thesisSession?.chief?.trim() || nguoiki
 
         members.forEach((member: any) => {
-          const expert = member.expert
-          if (!expert || expert.lecturerId || expert.lecturer) return
+          const expert = councilMemberProfile(member)
+          if (!expert || versionInAcademy(expert)) return
 
           const expertId = expert.id
           const amount = Number(member.payment?.amount || 0)
@@ -3569,7 +3602,11 @@ const convertToDsChuyenGiaData = (
           if (!expertAggregator.has(expertId)) {
             expertAggregator.set(expertId, {
               tenChuyenGia: (getSupervisorName(expert, false, false) as string) || "",
-              chucVu: expert.position || expert.lecturer?.userProfile?.position || "",
+              chucVu:
+                expert.position ||
+                expert.expert?.lecturer?.userProfile?.position ||
+                expert.lecturer?.userProfile?.position ||
+                "",
               donViQuanLi: expert.organization || expert.workplace || "",
               soTienRaw: 0,
               stk: expert.bankAccountNumber || "",
@@ -3854,11 +3891,6 @@ const convertToThongKeCoQuanDonViCanBoNgoaiHvData = (
     ""
   const dotxet = firstProject?.thesisSession?.name || ""
 
-  const isOutsideExpert = (expert: any) => {
-    if (!expert) return false
-    return !(expert?.lecturer || expert?.lecturerId)
-  }
-
   const getExpertKey = (expert: any, workplace: string) => {
     if (expert?.id) return String(expert.id)
     const fullName = getSupervisorName(expert, false, true) as string
@@ -3896,7 +3928,7 @@ const convertToThongKeCoQuanDonViCanBoNgoaiHvData = (
 
     const supervisors = [project?.supervisor, project?.coSupervisor]
     supervisors.forEach((expert) => {
-      if (!isOutsideExpert(expert)) return
+      if (!expert || versionInAcademy(expert)) return
       const workplace = expert?.workplace?.trim() || "Chưa có đơn vị"
       const unit = ensureUnit(workplace)
       unit.gvhd.add(getExpertKey(expert, workplace))
@@ -3904,8 +3936,8 @@ const convertToThongKeCoQuanDonViCanBoNgoaiHvData = (
 
     const members = project?.council?.members || []
     members.forEach((member: any) => {
-      const expert = member?.expert
-      if (!isOutsideExpert(expert)) return
+      const expert = councilMemberProfile(member)
+      if (!expert || versionInAcademy(expert)) return
 
       const workplace = expert?.workplace?.trim() || "Chưa có đơn vị"
       const unit = ensureUnit(workplace)
@@ -4580,6 +4612,9 @@ export interface ThesisCouncilMemberExpert {
 export interface ThesisCouncilMember {
   role: string
   expert?: ThesisCouncilMemberExpert | null
+  expertProfileVersion?:
+    | (ThesisCouncilMemberExpert & { expert?: ThesisCouncilMemberExpert | null })
+    | null
 }
 
 export interface ThesisCouncil {
@@ -4722,7 +4757,8 @@ export const exportDanhSachTieuBanChamDATN = async ({
           )
 
           const formatMember = (m: ThesisCouncilMember) => {
-            const profile = m.expert?.lecturer?.userProfile
+            const expert = councilMemberProfile(m)
+            const profile = expert?.expert?.lecturer?.userProfile || expert?.lecturer?.userProfile
             const rank = profile?.rank?.sTen || profile?.rank?.name || profile?.rank?.sMa || ""
             let degree =
               profile?.academicDegreeType?.sMa ||
@@ -4736,14 +4772,15 @@ export const exportDanhSachTieuBanChamDATN = async ({
               profile?.academicRankType?.name ||
               profile?.academicRankType?.sTen ||
               ""
-            const nameStr = profile?.fullname || m.expert?.name || "Chưa có tên"
+            const nameStr = profile?.fullname || expert?.name || "Chưa có tên"
             const posStr =
               profile?.positionCPV?.sTen ||
               profile?.positionCPV?.name ||
-              m.expert?.position ||
+              expert?.position ||
               "Giảng viên"
-            const rawLecOrg = m.expert?.lecturer?.organization
-            const rawExpOrg = m.expert?.organization
+            const rawLecOrg =
+              expert?.expert?.lecturer?.organization || expert?.lecturer?.organization
+            const rawExpOrg = expert?.organization
             const orgStr =
               typeof rawLecOrg === "string"
                 ? rawLecOrg

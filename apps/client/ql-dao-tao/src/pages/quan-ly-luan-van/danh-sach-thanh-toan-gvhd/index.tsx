@@ -7,6 +7,7 @@ import { usePaymentStatusOptions } from "@hooks/paymentStatus"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { getSupervisorName } from "@pages/quan-ly-luan-van/dm-luan-van"
+import { versionToPersonLike } from "@/utils/expert-select"
 import type { ExpertProfileLike, PersonLike } from "@/utils/thesis-profile"
 import { PaymentStatus, ThesisType } from "@workspace/db/client"
 import {
@@ -46,10 +47,14 @@ function buildSupervisorPaymentSessionWhere(thesisSessionId?: string) {
 const expertInclude = {
   academicRankType: true,
   academicDegreeType: true,
-  lecturer: {
+  expert: {
     include: {
-      userProfile: true,
-      organization: true,
+      lecturer: {
+        include: {
+          userProfile: true,
+          organization: true,
+        },
+      },
     },
   },
 } as const
@@ -96,11 +101,15 @@ function getExpertFromPaymentRecord(record: {
   }>
 }): ExpertProfileLike | PersonLike | null | undefined {
   const supProject = record.thesisProjects?.[0]
-  if (supProject?.supervisor) return supProject.supervisor
+  if (supProject?.supervisor)
+    return versionToPersonLike(supProject.supervisor) ?? supProject.supervisor
   const coProject = record.coThesisProjects?.[0]
-  if (coProject?.coSupervisor) return coProject.coSupervisor
+  if (coProject?.coSupervisor) {
+    return versionToPersonLike(coProject.coSupervisor) ?? coProject.coSupervisor
+  }
   const singleProject = record.singleSupervisorPayment?.[0]
-  return singleProject?.supervisor || singleProject?.coSupervisor
+  const expert = singleProject?.supervisor || singleProject?.coSupervisor
+  return versionToPersonLike(expert) ?? expert
 }
 
 function getSupervisorRoleLabel(record: {

@@ -484,8 +484,7 @@ model PaymentRecord  extends Base {
   paymentDate     DateTime?
   transactionCode String?
 
-  // expert          ExpertProfile  @relation(fields: [expertId], references: [id])
-  // expertId        String
+  // Liên kết thanh toán qua councilMember (không còn FK Expert trực tiếp)
 
   // Có thể liên kết với thành viên hội đồng
   councilMemberId String?        @unique
@@ -496,10 +495,7 @@ model PaymentRecord  extends Base {
 
 /// Quản lý việc thanh toán hướng dẫn
 model SupervisorPaymentRecord  extends Base {
-  // thesisProject   ThesisProject @relation(fields: [thesisProjectId], references: [id])
-  // thesisProjectId String
-  // expert          ExpertProfile @relation(fields: [expertId], references: [id])
-  // expertId        String
+  // Liên kết qua ThesisProject *Payment relations (không FK Expert trực tiếp)
   amount                  Decimal
   status                  PaymentStatus   @default(PENDING)
   paymentDate             DateTime?

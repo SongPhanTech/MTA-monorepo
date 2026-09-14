@@ -24,7 +24,13 @@ const ModalPrintInvitation = () => {
       include: {
         councilMember: {
           include: {
-            expert: true,
+            expertProfileVersion: true,
+            expert: {
+              include: {
+                currentVersion: true,
+                lecturer: { include: { userProfile: true } },
+              },
+            },
             council: {
               include: {
                 thesis: {
@@ -125,7 +131,11 @@ const ModalPrintInvitation = () => {
               <div className="mt-4 text-[20px]">Giám đốc học viện kỹ thuật quân sự</div>
               <div className="text-left font-normal normal-case text-[18px] indent-6">
                 Trân trọng kính mời Ông/bà:{" "}
-                <strong className="uppercase">{invitation?.councilMember?.expert?.name}</strong>{" "}
+                <strong className="uppercase">
+                  {invitation?.councilMember?.expertProfileVersion?.name ||
+                    invitation?.councilMember?.expert?.currentVersion?.name ||
+                    invitation?.councilMember?.expert?.lecturer?.userProfile?.fullname}
+                </strong>{" "}
                 tham gia hội đồng phản biện luận văn
               </div>
               <div className="text-left font-normal normal-case text-[18px] indent-6">Ngành:</div>

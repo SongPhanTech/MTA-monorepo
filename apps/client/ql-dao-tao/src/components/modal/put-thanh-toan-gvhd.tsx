@@ -6,7 +6,7 @@ import useSpinner from "@hooks/spinner"
 import type { SupervisorPaymentRecord } from "@workspace/db/client"
 import {
   useCreateSupervisorPaymentRecord,
-  useFindManyExpertProfile,
+  useFindManyExpert,
   useFindUniqueSupervisorPaymentRecord,
   useUpdateSupervisorPaymentRecord,
 } from "@workspace/db/hooks"
@@ -71,8 +71,9 @@ const PutSupervisorPaymentRecord = () => {
     { enabled: !!id }
   )
 
-  const { data: expert = [] } = useFindManyExpertProfile({
+  const { data: expert = [] } = useFindManyExpert({
     include: {
+      currentVersion: true,
       lecturer: {
         include: {
           userProfile: true,

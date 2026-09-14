@@ -209,12 +209,17 @@ const ModalChiTietSinhVien = () => {
                   include: {
                     academicRankType: true,
                     academicDegreeType: true,
-                    lecturer: {
+                    expert: {
                       include: {
-                        userProfile: {
+                        lecturer: {
                           include: {
-                            academicRankType: true,
-                            academicDegreeType: true,
+                            userProfile: {
+                              include: {
+                                academicRankType: true,
+                                academicDegreeType: true,
+                              },
+                            },
+                            organization: true,
                           },
                         },
                       },
@@ -225,12 +230,17 @@ const ModalChiTietSinhVien = () => {
                   include: {
                     academicRankType: true,
                     academicDegreeType: true,
-                    lecturer: {
+                    expert: {
                       include: {
-                        userProfile: {
+                        lecturer: {
                           include: {
-                            academicRankType: true,
-                            academicDegreeType: true,
+                            userProfile: {
+                              include: {
+                                academicRankType: true,
+                                academicDegreeType: true,
+                              },
+                            },
+                            organization: true,
                           },
                         },
                       },
@@ -241,12 +251,17 @@ const ModalChiTietSinhVien = () => {
                   include: {
                     academicRankType: true,
                     academicDegreeType: true,
-                    lecturer: {
+                    expert: {
                       include: {
-                        userProfile: {
+                        lecturer: {
                           include: {
-                            academicRankType: true,
-                            academicDegreeType: true,
+                            userProfile: {
+                              include: {
+                                academicRankType: true,
+                                academicDegreeType: true,
+                              },
+                            },
+                            organization: true,
                           },
                         },
                       },
@@ -260,10 +275,29 @@ const ModalChiTietSinhVien = () => {
                   include: {
                     members: {
                       include: {
-                        expert: {
+                        expertProfileVersion: {
                           include: {
                             academicRankType: true,
                             academicDegreeType: true,
+                            expert: {
+                              include: {
+                                lecturer: {
+                                  include: {
+                                    userProfile: {
+                                      include: {
+                                        academicRankType: true,
+                                        academicDegreeType: true,
+                                      },
+                                    },
+                                    organization: true,
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                        expert: {
+                          include: {
                             lecturer: {
                               include: {
                                 userProfile: {
@@ -286,10 +320,29 @@ const ModalChiTietSinhVien = () => {
               include: {
                 members: {
                   include: {
-                    expert: {
+                    expertProfileVersion: {
                       include: {
                         academicRankType: true,
                         academicDegreeType: true,
+                        expert: {
+                          include: {
+                            lecturer: {
+                              include: {
+                                userProfile: {
+                                  include: {
+                                    academicRankType: true,
+                                    academicDegreeType: true,
+                                  },
+                                },
+                                organization: true,
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                    expert: {
+                      include: {
                         lecturer: {
                           include: {
                             userProfile: {

@@ -60,13 +60,52 @@ export function getSupervisorDefaultPayAmount(
 
 export function resolveCouncilMemberPayAmount(
   member: { role: CouncilRole; payment?: { amount?: unknown } | null },
-  expert: { lecturerId?: string | null; lecturer?: unknown } | null | undefined,
+  expert:
+    | {
+        inAcademy?: boolean | null
+        lecturerId?: string | null
+        lecturer?: unknown
+        expert?: { lecturerId?: string | null; lecturer?: unknown } | null
+      }
+    | null
+    | undefined,
   councilDefaults: DefaultCouncilRolePayAmount[]
 ): number {
   const recorded = readDecimalAmount(member.payment?.amount)
   if (recorded > 0) return recorded
-  const inAcademy = !!(expert?.lecturerId || expert?.lecturer)
+  const inAcademy = resolveInAcademy(expert)
   return getCouncilDefaultPayAmount(councilDefaults, member.role, inAcademy)
+}
+
+export function resolveInAcademy(
+  person?: {
+    inAcademy?: boolean | null
+    lecturerId?: string | null
+    lecturer?: unknown
+    expert?: { lecturerId?: string | null; lecturer?: unknown } | null
+  } | null
+): boolean {
+  if (!person) return true
+  if (typeof person.inAcademy === "boolean") return person.inAcademy
+  return !!(
+    person.expert?.lecturerId ||
+    person.expert?.lecturer ||
+    person.lecturerId ||
+    person.lecturer
+  )
+}
+
+/** Prefer assigned version snapshot for council member. */
+export function councilMemberProfile(
+  member:
+    | {
+        expertProfileVersion?: unknown
+        expert?: unknown
+      }
+    | null
+    | undefined
+) {
+  return (member?.expertProfileVersion ?? member?.expert ?? null) as any
 }
 
 export function getSupervisorName(
@@ -75,6 +114,15 @@ export function getSupervisorName(
         name?: string | null
         workplace?: string | null
         lecturerId?: string | null
+        expert?: {
+          lecturer?: {
+            userProfile?: {
+              fullname?: string | null
+              academicRankType?: { sMa?: string | null } | null
+              academicDegreeType?: { sMa?: string | null } | null
+            } | null
+          } | null
+        } | null
         academicRankType?: { sMa?: string | null } | null
         academicDegreeType?: { sMa?: string | null } | null
         lecturer?: {
@@ -90,7 +138,7 @@ export function getSupervisorName(
   showWorkplace = false
 ) {
   if (!expert) return ""
-  const profile = expert.lecturer?.userProfile
+  const profile = expert.expert?.lecturer?.userProfile || expert.lecturer?.userProfile
   const rank = profile?.academicRankType?.sMa || expert.academicRankType?.sMa || ""
   const degree = profile?.academicDegreeType?.sMa || expert.academicDegreeType?.sMa || ""
   const title = [rank, degree].filter(Boolean).join(".")

@@ -55,7 +55,11 @@ const PutStudentThesisRegistration = () => {
         id: input?.thesisProjectId,
       },
       include: {
-        supervisor: true,
+        supervisor: {
+          include: {
+            expert: true,
+          },
+        },
       },
     },
     {
@@ -134,9 +138,9 @@ const PutStudentThesisRegistration = () => {
             userProfile: { fullname: { contains: searchReviewer, mode: "insensitive" } },
           }
         : {}),
-      ...(thesisProject?.supervisor?.lecturerId
+      ...(thesisProject?.supervisor?.expert?.lecturerId
         ? {
-            id: { not: thesisProject.supervisor.lecturerId },
+            id: { not: thesisProject.supervisor.expert.lecturerId },
           }
         : {}),
     },

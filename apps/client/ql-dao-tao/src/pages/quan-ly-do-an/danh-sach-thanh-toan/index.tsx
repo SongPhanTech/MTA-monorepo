@@ -6,7 +6,7 @@ import type { FilterProps } from "@constants/type"
 import { usePaymentStatusOptions } from "@hooks/paymentStatus"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
-import { PaymentStatus, ThesisType } from "@workspace/db/client"
+import { PaymentStatus, Prisma, ThesisType } from "@workspace/db/client"
 import {
   useCountPaymentRecord,
   useDeletePaymentRecord,
@@ -37,15 +37,16 @@ export default function PaymentRecordPage() {
     role: undefined,
   })
 
-  const where = useMemo(
-    () => ({
+  const where = useMemo<Prisma.PaymentRecordWhereInput>(() => {
+    const thesisFilter: Prisma.ThesisProjectWhereInput = {
+      thesisType: ThesisType.PROJECT,
+      ...(semesterId ? { subjectClass: { semesterId } } : {}),
+    }
+
+    return {
       councilMember: {
         council: {
-          thesis: {
-            some: {
-              thesisType: ThesisType.PROJECT,
-            },
-          },
+          thesis: { some: thesisFilter },
         },
       },
       ...(filters.transactionCode
@@ -59,7 +60,7 @@ export default function PaymentRecordPage() {
       ...(filters.name
         ? {
             councilMember: {
-              expert: {
+              expertProfileVersion: {
                 name: {
                   contains: filters.name,
                   mode: "insensitive" as const,
@@ -81,18 +82,8 @@ export default function PaymentRecordPage() {
             },
           }
         : {}),
-      ...(semesterId
-        ? {
-            councilMember: {
-              council: {
-                thesis: {
-                  some: { subjectClass: { semesterId } },
-                },
-              },
-            },
-          }
-        : {}),
-    }),
+    }
+  },
     [filters.name, filters.transactionCode, filters.paymentStatus, filters.paymentDate, semesterId]
   )
 
@@ -103,7 +94,13 @@ export default function PaymentRecordPage() {
     include: {
       councilMember: {
         include: {
-          expert: true,
+          expertProfileVersion: true,
+          expert: {
+            include: {
+              currentVersion: true,
+              lecturer: { include: { userProfile: true } },
+            },
+          },
           council: {
             include: {
               thesis: {
@@ -200,7 +197,7 @@ export default function PaymentRecordPage() {
           </Row>
         </Col>
         <Col span={24}>
-          <Table
+          <Table<any>
             rowKey="id"
             id="payment-record"
             filters={filters}
@@ -233,7 +230,11 @@ export default function PaymentRecordPage() {
                 width: 150,
                 type: "input",
                 align: "center",
-                render: (_, record) => record.councilMember.expert.name,
+                render: (_, record) =>
+                  record.councilMember?.expertProfileVersion?.name ||
+                  record.councilMember?.expert?.currentVersion?.name ||
+                  record.councilMember?.expert?.lecturer?.userProfile?.fullname ||
+                  "",
               },
               {
                 title: "Mã giao dịch",

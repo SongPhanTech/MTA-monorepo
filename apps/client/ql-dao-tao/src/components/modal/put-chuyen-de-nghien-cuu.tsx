@@ -1,7 +1,7 @@
 import PutFormModal from "@components/commons/put-modal"
 import useSpinner from "@hooks/spinner"
 import {
-  useFindManyExpertProfile,
+  useFindManyExpert,
   useFindUniqueStudentResearchTopic,
   useUpdateStudentResearchTopic,
 } from "@workspace/db/hooks"
@@ -12,9 +12,10 @@ import "dayjs/locale/vi"
 import DatePicker from "@components/commons/date-picker"
 import type { StudentResearchTopic } from "@workspace/db/client"
 import { FormItem } from "@workspace/ui"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { getSupervisorName } from "@pages/quan-ly-luan-van/dm-luan-van"
 import { fuzzyMatch } from "@workspace/libs/utils"
+import { flattenExpertForSelect } from "@/utils/expert-select"
 
 dayjs.locale("vi")
 const { TextArea } = Input
@@ -23,7 +24,10 @@ type PutResearchTopicForm = {
   studentFullname?: string | null
   studentCode?: string | null
   studentDateOfBirth?: Date | null
-} & StudentResearchTopic
+  /** Expert.id — save resolve → *VersionId */
+  supervisorId?: string | null
+  coSupervisorId?: string | null
+} & Omit<StudentResearchTopic, "supervisorId" | "coSupervisorId">
 
 const PutResearchTopicModal = () => {
   const [form] = Form.useForm<PutResearchTopicForm>()
@@ -36,8 +40,19 @@ const PutResearchTopicModal = () => {
   })
 
   const { showSpinner, hideSpinner } = useSpinner()
-  const { data: expertProfile = [] } = useFindManyExpertProfile({
+  const { data: experts = [] } = useFindManyExpert({
+    where: {
+      deletedAt: null,
+      active: true,
+      OR: [{ lecturerId: null }, { lecturer: { active: true } }],
+    },
     include: {
+      currentVersion: {
+        include: {
+          academicDegreeType: true,
+          academicRankType: true,
+        },
+      },
       lecturer: {
         select: {
           code: true,
@@ -49,10 +64,10 @@ const PutResearchTopicModal = () => {
           },
         },
       },
-      academicDegreeType: true,
-      academicRankType: true,
     },
   })
+
+  const expertFlat = useMemo(() => experts.map(flattenExpertForSelect), [experts])
 
   const { data: studentResearchTopic } = useFindUniqueStudentResearchTopic(
     {
@@ -60,18 +75,30 @@ const PutResearchTopicModal = () => {
       include: {
         supervisor: {
           include: {
-            lecturer: {
-              select: {
-                userProfile: true,
+            academicDegreeType: true,
+            academicRankType: true,
+            expert: {
+              include: {
+                lecturer: {
+                  select: {
+                    userProfile: true,
+                  },
+                },
               },
             },
           },
         },
         coSupervisor: {
           include: {
-            lecturer: {
-              select: {
-                userProfile: true,
+            academicDegreeType: true,
+            academicRankType: true,
+            expert: {
+              include: {
+                lecturer: {
+                  select: {
+                    userProfile: true,
+                  },
+                },
               },
             },
           },
@@ -94,25 +121,31 @@ const PutResearchTopicModal = () => {
   )
 
   const { mutateAsync: updateStudentResearchTopic } = useUpdateStudentResearchTopic()
+
+  const versionId = (expertId?: string | null) => {
+    const found = experts.find((e) => e.id === expertId)
+    return found?.currentVersionId ?? found?.currentVersion?.id ?? null
+  }
+
   async function onOk(values: PutResearchTopicForm) {
     try {
       showSpinner()
       if (input?.studentResearchTopicId) {
         const score = values.score ? Number(values.score) : null
+        const supervisorVersionId = versionId(values.supervisorId)
+        const coSupervisorVersionId = versionId(values.coSupervisorId)
 
         await updateStudentResearchTopic({
           where: { id: input?.studentResearchTopicId },
           data: {
             name: values.name,
             mainContent: values.mainContent,
-            supervisor: {
-              connect: { id: values.supervisorId ?? "" },
-            },
-            ...(values.coSupervisorId
-              ? {
-                  coSupervisor: { connect: { id: values.coSupervisorId } },
-                }
-              : {}),
+            ...(supervisorVersionId
+              ? { supervisor: { connect: { id: supervisorVersionId } } }
+              : { supervisor: { disconnect: true } }),
+            ...(coSupervisorVersionId
+              ? { coSupervisor: { connect: { id: coSupervisorVersionId } } }
+              : { coSupervisor: { disconnect: true } }),
             reportDate: values.reportDate,
             deadline: values.deadline,
             studentSubjectScore: {
@@ -140,8 +173,8 @@ const PutResearchTopicModal = () => {
       form.setFieldsValue({
         name: studentResearchTopic?.name ?? "",
         mainContent: studentResearchTopic?.mainContent ?? "",
-        supervisorId: studentResearchTopic?.supervisorId ?? undefined,
-        coSupervisorId: studentResearchTopic?.coSupervisorId ?? undefined,
+        supervisorId: studentResearchTopic?.supervisor?.expertId ?? undefined,
+        coSupervisorId: studentResearchTopic?.coSupervisor?.expertId ?? undefined,
         reportDate: studentResearchTopic?.reportDate
           ? dayjs(studentResearchTopic?.reportDate)
           : undefined,
@@ -161,13 +194,13 @@ const PutResearchTopicModal = () => {
     }
   }, [input?.studentResearchTopicId, studentResearchTopic, form])
 
-  const expertOptions = expertProfile.map((item) => ({
+  const expertOptions = expertFlat.map((item) => ({
     label: getSupervisorName(item, true, true),
     value: item.id,
     searchString: getSupervisorName(item, false, true) as string,
   }))
-  const filterExpertOption = (input: string, option?: { searchString?: string }) =>
-    fuzzyMatch(input, String(option?.searchString ?? ""))
+  const filterExpertOption = (inputValue: string, option?: { searchString?: string }) =>
+    fuzzyMatch(inputValue, String(option?.searchString ?? ""))
 
   return (
     <PutFormModal

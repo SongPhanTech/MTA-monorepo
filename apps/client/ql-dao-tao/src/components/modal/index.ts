@@ -46,7 +46,7 @@ import PutChuanDauRaModal from "./put-chuan-dau-ra"
 import PutCertificateScoreModal from "./put-chung-chi-score"
 import PutResearchTopicModal from "./put-chuyen-de-nghien-cuu"
 import PutConvertScore from "./put-chuyen-doi-diem"
-import PutExpertProfile from "./put-chuyen-gia"
+import PutExpert, { PutExpertProfile } from "./put-chuyen-gia"
 import PutTrainingMajorModal from "./put-chuyen-nganh"
 import PutCloneAcademicRanking from "./put-clone-acdemic-ranking"
 import PutCloneConvertScore from "./put-clone-convert-score"
@@ -197,6 +197,7 @@ export {
   PutAcademicWarning,
   PutDiplomaType,
   PutThesisProject,
+  PutExpert,
   PutExpertProfile,
   PutDecision,
   PutStudentThesisRegistration,

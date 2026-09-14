@@ -25,6 +25,7 @@ import dayjs from "dayjs"
 import { ArrowRightLeft, BookOpen, Calendar, Users } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { versionToPersonLike } from "@/utils/expert-select"
 
 export type ModalChuyenDotXetLuanVanInput = {
   thesisProjectId: string
@@ -44,10 +45,14 @@ function getExpertDisplayName(
   expert?: {
     name?: string | null
     lecturer?: { userProfile?: { fullname?: string | null } | null } | null
+    expert?: {
+      lecturer?: { userProfile?: { fullname?: string | null } | null } | null
+    } | null
   } | null,
   fallbackName?: string | null
 ) {
-  return expert?.lecturer?.userProfile?.fullname || expert?.name || fallbackName || "—"
+  const person = versionToPersonLike(expert)
+  return person?.lecturer?.userProfile?.fullname || person?.name || fallbackName || "—"
 }
 
 function formatDateRange(start?: Date | string | null, end?: Date | string | null) {
@@ -88,12 +93,38 @@ const ModalChuyenDotXetLuanVan = () => {
         },
         supervisor: {
           include: {
-            lecturer: { include: { userProfile: true } },
+            academicRankType: true,
+            academicDegreeType: true,
+            expert: {
+              include: {
+                lecturer: {
+                  include: {
+                    userProfile: {
+                      include: { academicRankType: true, academicDegreeType: true },
+                    },
+                    organization: true,
+                  },
+                },
+              },
+            },
           },
         },
         coSupervisor: {
           include: {
-            lecturer: { include: { userProfile: true } },
+            academicRankType: true,
+            academicDegreeType: true,
+            expert: {
+              include: {
+                lecturer: {
+                  include: {
+                    userProfile: {
+                      include: { academicRankType: true, academicDegreeType: true },
+                    },
+                    organization: true,
+                  },
+                },
+              },
+            },
           },
         },
         primarySupervisor: {

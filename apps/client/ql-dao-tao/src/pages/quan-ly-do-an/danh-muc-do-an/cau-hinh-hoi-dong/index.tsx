@@ -280,8 +280,8 @@ export default function SettingClass() {
       expertId: item.id,
       internal: true,
       name: item.name || "",
-      eligiblePresident: item.eligiblePresident,
-      eligibleSecretary: item.eligibleSecretary,
+      eligiblePresident: item.eligiblePresident ?? false,
+      eligibleSecretary: item.eligibleSecretary ?? false,
     })) || []
 
   type Person = {

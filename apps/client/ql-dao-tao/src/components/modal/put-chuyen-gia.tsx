@@ -19,11 +19,14 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
 import { useEffect, useMemo, useState } from "react"
 
-export interface PutExpertProfileProps {
+export interface PutExpertProps {
   id?: string
   /** true = danh mục luận văn; false = danh mục đồ án */
   thesisExpert?: boolean
 }
+
+/** @deprecated dùng PutExpertProps */
+export type PutExpertProfileProps = PutExpertProps
 
 type ExpertFormValues = {
   lecturerId?: string | null
@@ -43,10 +46,10 @@ type ExpertFormValues = {
 
 dayjs.locale("vi")
 
-const PutExpertProfile = () => {
+const PutExpert = () => {
   const [form] = Form.useForm<ExpertFormValues>()
-  const { isOpen, onClose, input } = useDisclosure<PutExpertProfileProps>({
-    tag: "PutExpertProfile",
+  const { isOpen, onClose, input } = useDisclosure<PutExpertProps>({
+    tag: "PutExpert",
     onClose: form.resetFields,
   })
   const { showSpinner, hideSpinner } = useSpinner()
@@ -430,4 +433,6 @@ const PutExpertProfile = () => {
   )
 }
 
-export default PutExpertProfile
+export default PutExpert
+/** @deprecated dùng default PutExpert */
+export { PutExpert as PutExpertProfile }

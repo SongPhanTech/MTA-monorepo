@@ -1,5 +1,6 @@
 import { ThesisType } from "@workspace/db/client"
 import { prisma } from ".."
+import { expertVersionInclude } from "./expert-version"
 
 export function thesisProjectWhere(thesisSessionId: string, studentIds?: string[]) {
   return {
@@ -38,6 +39,9 @@ export async function loadThesisProjectsForPayment(thesisSessionId: string, stud
         include: {
           members: {
             include: {
+              expertProfileVersion: {
+                include: expertVersionInclude,
+              },
               expert: {
                 include: {
                   lecturer: {
@@ -53,36 +57,10 @@ export async function loadThesisProjectsForPayment(thesisSessionId: string, stud
         },
       },
       supervisor: {
-        include: {
-          academicRankType: true,
-          academicDegreeType: true,
-          lecturer: {
-            include: {
-              userProfile: {
-                include: {
-                  academicRankType: true,
-                  academicDegreeType: true,
-                },
-              },
-            },
-          },
-        },
+        include: expertVersionInclude,
       },
       coSupervisor: {
-        include: {
-          academicRankType: true,
-          academicDegreeType: true,
-          lecturer: {
-            include: {
-              userProfile: {
-                include: {
-                  academicRankType: true,
-                  academicDegreeType: true,
-                },
-              },
-            },
-          },
-        },
+        include: expertVersionInclude,
       },
       supervisorPayment: true,
       coSupervisorPayment: true,

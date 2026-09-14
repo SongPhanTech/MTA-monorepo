@@ -8,6 +8,7 @@ import { usePaymentStatusOptions } from "@hooks/paymentStatus"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { getSupervisorName } from "@pages/quan-ly-luan-van/dm-luan-van"
+import { versionToPersonLike } from "@/utils/expert-select"
 import { CouncilRole, PaymentStatus, ThesisType } from "@workspace/db/client"
 import {
   useCountPaymentRecord,
@@ -92,12 +93,24 @@ export default function PaymentRecordPage() {
     }
 
     if (filters.name) {
-      councilMemberWhere.expert = {
-        name: {
-          contains: filters.name,
-          mode: "insensitive",
-        },
+      const nameFilter = {
+        contains: filters.name,
+        mode: "insensitive" as const,
       }
+      councilMemberWhere.OR = [
+        {
+          expertProfileVersion: {
+            name: nameFilter,
+          },
+        },
+        {
+          expert: {
+            currentVersion: {
+              name: nameFilter,
+            },
+          },
+        },
+      ]
     }
 
     if (filters.role) {
@@ -143,11 +156,26 @@ export default function PaymentRecordPage() {
     () => ({
       councilMember: {
         include: {
-          expert: {
+          expertProfileVersion: {
             include: {
-              lecturer: { include: { userProfile: true } },
               academicDegreeType: true,
               academicRankType: true,
+              expert: {
+                include: {
+                  lecturer: { include: { userProfile: true } },
+                },
+              },
+            },
+          },
+          expert: {
+            include: {
+              currentVersion: {
+                include: {
+                  academicDegreeType: true,
+                  academicRankType: true,
+                },
+              },
+              lecturer: { include: { userProfile: true } },
             },
           },
           council: {
@@ -319,7 +347,14 @@ export default function PaymentRecordPage() {
                 type: "input",
                 align: "left",
                 render: (_, record) =>
-                  getSupervisorName(record.councilMember?.expert, false, true) || "-",
+                  getSupervisorName(
+                    versionToPersonLike(record.councilMember?.expertProfileVersion) ??
+                      record.councilMember?.expertProfileVersion ??
+                      record.councilMember?.expert?.currentVersion ??
+                      record.councilMember?.expert,
+                    false,
+                    true
+                  ) || "-",
               },
               {
                 title: "Vai trò",

@@ -183,7 +183,7 @@ export async function deleteSubjectClassCascade(subjectClassId: string) {
           fixedClasses: { set: [] },
           surveyObjectTypes: { set: [] },
           defenseRooms: { set: [] },
-          expertProfile: { set: [] },
+          expert: { set: [] },
           scoreLinkSubjectVersionId: null,
           examId: null,
         },

@@ -3,7 +3,7 @@ import { useCouncilRoleOptions } from "@hooks/councilRole"
 import type {
   Council,
   CouncilMember,
-  ExpertProfile,
+  ExpertProfileVersion,
   FixedClass,
   Student,
   StudentThesisRegistration,
@@ -25,23 +25,30 @@ type ModalPrintDecisionInput = SubjectClass &
     thesisProjects: ThesisProject[]
   }[]
 
+type PrintExpertProfile = Partial<ExpertProfileVersion> & {
+  expert?: { lecturer?: { userProfile?: { fullname?: string | null } | null } | null } | null
+}
+
 type ThesisProjectInput = ThesisProject & {
-  supervisor?: ExpertProfile
+  supervisor?: PrintExpertProfile
   council?: Council & {
-    members: CouncilMember &
-      {
-        expert?: ExpertProfile
-      }[]
+    members: Array<
+      CouncilMember & {
+        expert?: PrintExpertProfile
+        expertProfileVersion?: PrintExpertProfile
+      }
+    >
   }
-  registrations: StudentThesisRegistration &
-    {
+  registrations: Array<
+    StudentThesisRegistration & {
       student?: Student & {
         userProfile?: UserProfile
         fixedClass?: FixedClass & {
           trainingCourse?: TrainingCourse
         }
       }
-    }[]
+    }
+  >
 }
 
 const ModalPrintDecision = () => {
@@ -55,6 +62,10 @@ const ModalPrintDecision = () => {
   const { getCouncilRoleLabel } = useCouncilRoleOptions()
 
   const allThesisProjects = input?.subjecClassData.flatMap((sc: any) => sc.thesisProjects) ?? []
+  const getMemberProfile = (member: {
+    expertProfileVersion?: PrintExpertProfile
+    expert?: PrintExpertProfile
+  }) => member.expertProfileVersion ?? member.expert
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
@@ -171,15 +182,18 @@ const ModalPrintDecision = () => {
                 {tp.council?.members
                   ?.slice()
                   .reverse()
-                  .map((mem: any) => (
-                    <li key={mem.id} className="grid grid-cols-3 gap-2 mb-1">
-                      <span className="col-span-1 before:content-['-'] before:mr-1">
-                        {mem.expert.name}
-                      </span>
-                      <span>{mem.expert.workplace}</span>
-                      <span>{getCouncilRoleLabel(mem.role)}</span>
-                    </li>
-                  ))}
+                  .map((mem: any) => {
+                    const profile = getMemberProfile(mem)
+                    return (
+                      <li key={mem.id} className="grid grid-cols-3 gap-2 mb-1">
+                        <span className="col-span-1 before:content-['-'] before:mr-1">
+                          {profile?.name || profile?.expert?.lecturer?.userProfile?.fullname}
+                        </span>
+                        <span>{profile?.workplace}</span>
+                        <span>{getCouncilRoleLabel(mem.role)}</span>
+                      </li>
+                    )
+                  })}
               </ul>
               <div className="indent-6 mt-1">
                 <strong>Điều 2.</strong> Nhiệm vụ của Hội đồng được quy định theo Quy chế đào tạo

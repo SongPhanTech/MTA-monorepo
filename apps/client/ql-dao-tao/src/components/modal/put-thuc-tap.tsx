@@ -1,7 +1,7 @@
 import PutFormModal from "@components/commons/put-modal"
 import useSpinner from "@hooks/spinner"
 import {
-  useFindManyExpertProfile,
+  useFindManyExpert,
   useFindUniqueStudentInternship,
   useUpdateStudentInternship,
 } from "@workspace/db/hooks"
@@ -12,7 +12,10 @@ import "dayjs/locale/vi"
 import DatePicker from "@components/commons/date-picker"
 import type { StudentInternship } from "@workspace/db/client"
 import { FormItem } from "@workspace/ui"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
+import { getSupervisorName } from "@pages/quan-ly-luan-van/dm-luan-van"
+import { fuzzyMatch } from "@workspace/libs/utils"
+import { flattenExpertForSelect } from "@/utils/expert-select"
 
 dayjs.locale("vi")
 const { TextArea } = Input
@@ -21,6 +24,9 @@ type PutInternshipForm = {
   studentFullname?: string | null
   studentCode?: string | null
   studentDateOfBirth?: Date | null
+  /** Expert.id — save resolve → *VersionId */
+  supervisorId?: string | null
+  coSupervisorId?: string | null
 } & StudentInternship
 
 const PutInternshipModal = () => {
@@ -34,8 +40,19 @@ const PutInternshipModal = () => {
   })
 
   const { showSpinner, hideSpinner } = useSpinner()
-  const { data: expertProfile = [] } = useFindManyExpertProfile({
+  const { data: experts = [] } = useFindManyExpert({
+    where: {
+      deletedAt: null,
+      active: true,
+      OR: [{ lecturerId: null }, { lecturer: { active: true } }],
+    },
     include: {
+      currentVersion: {
+        include: {
+          academicDegreeType: true,
+          academicRankType: true,
+        },
+      },
       lecturer: {
         select: {
           code: true,
@@ -47,10 +64,10 @@ const PutInternshipModal = () => {
           },
         },
       },
-      academicDegreeType: true,
-      academicRankType: true,
     },
   })
+
+  const expertFlat = useMemo(() => experts.map(flattenExpertForSelect), [experts])
 
   const { data: studentInternship } = useFindUniqueStudentInternship(
     {
@@ -58,18 +75,30 @@ const PutInternshipModal = () => {
       include: {
         supervisor: {
           include: {
-            lecturer: {
-              select: {
-                userProfile: true,
+            academicDegreeType: true,
+            academicRankType: true,
+            expert: {
+              include: {
+                lecturer: {
+                  select: {
+                    userProfile: true,
+                  },
+                },
               },
             },
           },
         },
         coSupervisor: {
           include: {
-            lecturer: {
-              select: {
-                userProfile: true,
+            academicDegreeType: true,
+            academicRankType: true,
+            expert: {
+              include: {
+                lecturer: {
+                  select: {
+                    userProfile: true,
+                  },
+                },
               },
             },
           },
@@ -92,11 +121,19 @@ const PutInternshipModal = () => {
   )
 
   const { mutateAsync: updateStudentInternship } = useUpdateStudentInternship()
+
+  const versionId = (expertId?: string | null) => {
+    const found = experts.find((e) => e.id === expertId)
+    return found?.currentVersionId ?? found?.currentVersion?.id ?? null
+  }
+
   async function onOk(values: PutInternshipForm) {
     try {
       showSpinner()
       if (input?.studentInternshipId) {
         const score = values.score ? Number(values.score) : null
+        const supervisorVersionId = versionId(values.supervisorId)
+        const coSupervisorVersionId = versionId(values.coSupervisorId)
 
         await updateStudentInternship({
           where: { id: input?.studentInternshipId },
@@ -104,14 +141,12 @@ const PutInternshipModal = () => {
             unit: values.unit,
             institution: values.institution,
             internshipContent: values.internshipContent,
-            supervisor: {
-              connect: { id: values.supervisorId ?? "" },
-            },
-            ...(values.coSupervisorId
-              ? {
-                  coSupervisor: { connect: { id: values.coSupervisorId } },
-                }
-              : {}),
+            ...(supervisorVersionId
+              ? { supervisor: { connect: { id: supervisorVersionId } } }
+              : { supervisor: { disconnect: true } }),
+            ...(coSupervisorVersionId
+              ? { coSupervisor: { connect: { id: coSupervisorVersionId } } }
+              : { coSupervisor: { disconnect: true } }),
             reportDate: values.reportDate,
             startDate: values.startDate,
             endDate: values.endDate,
@@ -143,8 +178,8 @@ const PutInternshipModal = () => {
         unit: studentInternship?.unit ?? "",
         institution: studentInternship?.institution ?? "",
         internshipContent: studentInternship?.internshipContent ?? "",
-        supervisorId: studentInternship?.supervisorId ?? undefined,
-        coSupervisorId: studentInternship?.coSupervisorId ?? undefined,
+        supervisorId: studentInternship?.supervisor?.expertId ?? undefined,
+        coSupervisorId: studentInternship?.coSupervisor?.expertId ?? undefined,
         reportDate: studentInternship?.reportDate
           ? dayjs(studentInternship?.reportDate)
           : undefined,
@@ -164,6 +199,15 @@ const PutInternshipModal = () => {
       })
     }
   }, [input?.studentInternshipId, studentInternship, form])
+
+  const expertOptions = expertFlat.map((item) => ({
+    label: getSupervisorName(item, true, true),
+    value: item.id,
+    searchString: getSupervisorName(item, false, true) as string,
+  }))
+  const filterExpertOption = (inputValue: string, option?: { searchString?: string }) =>
+    fuzzyMatch(inputValue, String(option?.searchString ?? ""))
+
   return (
     <PutFormModal
       open={isOpen}
@@ -223,22 +267,9 @@ const PutInternshipModal = () => {
           <FormItem form={form} name="supervisorId" label="Hướng dẫn 1" required>
             <Select
               placeholder="Chọn giảng viên hướng dẫn"
-              options={expertProfile.map((item) => ({
-                label: item.lecturer
-                  ? [
-                      item.lecturer?.userProfile.academicRankType?.sMa,
-                      item.lecturer?.userProfile.academicDegreeType?.sMa,
-                      item.lecturer?.userProfile.fullname,
-                    ]
-                      .filter(Boolean)
-                      .join(". ")
-                  : [item.academicRankType?.sMa, item.academicDegreeType?.sMa, item.name]
-                      .filter(Boolean)
-                      .join(". "),
-                value: item.id,
-              }))}
+              options={expertOptions}
               showSearch
-              filterOption={false}
+              filterOption={filterExpertOption}
               allowClear
             />
           </FormItem>
@@ -247,22 +278,9 @@ const PutInternshipModal = () => {
           <FormItem form={form} name="coSupervisorId" label="Hướng dẫn 2">
             <Select
               placeholder="Chọn giảng viên hướng dẫn"
-              options={expertProfile.map((item) => ({
-                label: item.lecturer
-                  ? [
-                      item.lecturer?.userProfile.academicRankType?.sMa,
-                      item.lecturer?.userProfile.academicDegreeType?.sMa,
-                      item.lecturer?.userProfile.fullname,
-                    ]
-                      .filter(Boolean)
-                      .join(". ")
-                  : [item.academicRankType?.sMa, item.academicDegreeType?.sMa, item.name]
-                      .filter(Boolean)
-                      .join(". "),
-                value: item.id,
-              }))}
+              options={expertOptions}
               showSearch
-              filterOption={false}
+              filterOption={filterExpertOption}
               allowClear
             />
           </FormItem>
@@ -272,7 +290,7 @@ const PutInternshipModal = () => {
             <DatePicker
               format={{ format: "DD/MM/YYYY", type: "mask" }}
               className="w-full"
-              placeholder="Chọn ngày bắt đầu thực tập`"
+              placeholder="Chọn ngày bắt đầu thực tập"
             />
           </FormItem>
         </Col>

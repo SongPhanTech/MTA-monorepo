@@ -497,10 +497,10 @@ export default function DanhMucDoAn() {
     }
 
     try {
-      const versionByExpertId = new Map(
+      const versionByExpertId = new Map<string, string>(
         expertProfiles
           .filter((e) => e.currentVersionId)
-          .map((e) => [e.id, e.currentVersionId!])
+          .map((e) => [e.id, e.currentVersionId as string])
       )
       const transactions: any[] = []
 
@@ -556,7 +556,8 @@ export default function DanhMucDoAn() {
         const memberUpserts = expertRolesMapping
           .filter((m) => values[m.key])
           .map((m) => {
-            const versionId = versionByExpertId.get(values[m.key])
+            const expertId = values[m.key] as string
+            const versionId = versionByExpertId.get(expertId)
             if (!versionId) {
               throw new Error(`Thành viên hội đồng chưa có phiên bản hồ sơ hiện tại.`)
             }
@@ -567,11 +568,11 @@ export default function DanhMucDoAn() {
               where: { id: existingMember?.id || "new-id" },
               create: {
                 role: m.role,
-                expertId: values[m.key],
+                expertId,
                 expertProfileVersionId: versionId,
               },
               update: {
-                expertId: values[m.key],
+                expertId,
                 expertProfileVersionId: versionId,
               },
             }
@@ -589,7 +590,7 @@ export default function DanhMucDoAn() {
           primarySupervisor: relation(values.primarySupervisorId),
           secondarySupervisor: relation(values.secondarySupervisorId),
           thirdSupervisor: values.thirdSupervisorId
-            ? { connect: { id: versionByExpertId.get(values.thirdSupervisorId)! } }
+            ? { connect: { id: versionByExpertId.get(values.thirdSupervisorId as string)! } }
             : { disconnect: true },
           room: relation(values.room),
           defenseSession: relation(values.defenseSessionId),

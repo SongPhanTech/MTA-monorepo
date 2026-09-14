@@ -138,7 +138,16 @@ const ModalChiTietGiangVien = () => {
             thesisProject: true,
           },
         },
-        expertProfile: true,
+        expert: {
+          include: {
+            currentVersion: {
+              include: {
+                academicRankType: true,
+                academicDegreeType: true,
+              },
+            },
+          },
+        },
         evaluationCouncilMember: {
           include: {
             evaluationCouncil: true,
@@ -923,14 +932,14 @@ const ModalChiTietGiangVien = () => {
     },
     {
       key: "ho-so-chuyen-gia",
-      label: `Hồ sơ chuyên gia (${lecturer?.expertProfile?.length || 0})`,
+      label: `Hồ sơ chuyên gia (${lecturer?.expert?.length || 0})`,
       children: (
         <Table
-          dataSource={lecturer?.expertProfile || []}
+          dataSource={lecturer?.expert || []}
           rowKey="id"
           size="small"
           pagination={{ pageSize: 10, showSizeChanger: false }}
-          scroll={{ x: 2000 }}
+          scroll={{ x: 2200 }}
           columns={[
             {
               title: "STT",
@@ -945,58 +954,83 @@ const ModalChiTietGiangVien = () => {
             },
             {
               title: "Họ tên",
-              dataIndex: "name",
               width: 180,
+              render: (_: unknown, record: any) => record.currentVersion?.name || "",
             },
             {
               title: "Học hàm",
-              dataIndex: "academicRank",
               width: 120,
+              render: (_: unknown, record: any) =>
+                record.currentVersion?.academicRankType?.sTen ||
+                record.currentVersion?.academicRankType?.sMa ||
+                "",
             },
             {
               title: "Học vị",
-              dataIndex: "academicDegree",
               width: 120,
+              render: (_: unknown, record: any) =>
+                record.currentVersion?.academicDegreeType?.sTen ||
+                record.currentVersion?.academicDegreeType?.sMa ||
+                "",
+            },
+            {
+              title: "Trong HV",
+              width: 90,
+              align: "center",
+              render: (_: unknown, record: any) =>
+                record.currentVersion?.inAcademy ? <Tag color="blue">Trong</Tag> : <Tag>Ngoài</Tag>,
+            },
+            {
+              title: "LV / ĐA",
+              width: 100,
+              align: "center",
+              render: (_: unknown, record: any) => {
+                const flags = [
+                  record.currentVersion?.thesisExpert ? "LV" : null,
+                  record.currentVersion?.projectExpert ? "ĐA" : null,
+                ].filter(Boolean)
+                return flags.length ? flags.join(" / ") : ""
+              },
             },
             {
               title: "Đơn vị",
-              dataIndex: "organization",
               width: 200,
+              render: (_: unknown, record: any) => record.currentVersion?.organization || "",
             },
             {
               title: "Chức vụ",
-              dataIndex: "position",
               width: 150,
+              render: (_: unknown, record: any) => record.currentVersion?.position || "",
             },
             {
               title: "Chuyên môn",
-              dataIndex: "specialization",
               width: 180,
+              render: (_: unknown, record: any) => record.currentVersion?.specialization || "",
             },
             {
               title: "Nơi làm việc",
-              dataIndex: "workplace",
               width: 200,
+              render: (_: unknown, record: any) => record.currentVersion?.workplace || "",
             },
             {
               title: "Điện thoại",
-              dataIndex: "phone",
               width: 120,
+              render: (_: unknown, record: any) => record.currentVersion?.phone || "",
             },
             {
               title: "Email",
-              dataIndex: "email",
               width: 200,
+              render: (_: unknown, record: any) => record.currentVersion?.email || "",
             },
             {
               title: "Số TK ngân hàng",
-              dataIndex: "bankAccountNumber",
               width: 150,
+              render: (_: unknown, record: any) => record.currentVersion?.bankAccountNumber || "",
             },
             {
               title: "Tên ngân hàng",
-              dataIndex: "bankName",
               width: 150,
+              render: (_: unknown, record: any) => record.currentVersion?.bankName || "",
             },
             {
               title: "Mô tả",

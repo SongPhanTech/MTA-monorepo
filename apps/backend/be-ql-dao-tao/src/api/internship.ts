@@ -76,12 +76,18 @@ app.openapi(exportInternshipProfile, async (c) => {
       },
       supervisor: {
         include: {
-          lecturer: {
+          academicDegreeType: true,
+          academicRankType: true,
+          expert: {
             include: {
-              userProfile: {
+              lecturer: {
                 include: {
-                  academicRankType: true,
-                  academicDegreeType: true,
+                  userProfile: {
+                    include: {
+                      academicRankType: true,
+                      academicDegreeType: true,
+                    },
+                  },
                 },
               },
             },
@@ -90,12 +96,18 @@ app.openapi(exportInternshipProfile, async (c) => {
       },
       coSupervisor: {
         include: {
-          lecturer: {
+          academicDegreeType: true,
+          academicRankType: true,
+          expert: {
             include: {
-              userProfile: {
+              lecturer: {
                 include: {
-                  academicRankType: true,
-                  academicDegreeType: true,
+                  userProfile: {
+                    include: {
+                      academicRankType: true,
+                      academicDegreeType: true,
+                    },
+                  },
                 },
               },
             },
@@ -104,6 +116,19 @@ app.openapi(exportInternshipProfile, async (c) => {
       },
     },
   })
+
+  const formatSupervisor = (
+    supervisor: (typeof internships)[number]["supervisor"] | (typeof internships)[number]["coSupervisor"]
+  ) => {
+    const userProfile = supervisor?.expert?.lecturer?.userProfile
+    return [
+      userProfile?.academicRankType?.sMa ?? supervisor?.academicRankType?.sMa,
+      userProfile?.academicDegreeType?.sMa ?? supervisor?.academicDegreeType?.sMa,
+      userProfile?.fullname ?? supervisor?.name,
+    ]
+      .filter(Boolean)
+      .join(". ")
+  }
 
   const data = internships.map((internship, idx) => ({
     no: idx + 1,
@@ -121,36 +146,8 @@ app.openapi(exportInternshipProfile, async (c) => {
         : internship.unit || internship.institution || "",
     address: internship.address || "",
     internshipContent: internship.internshipContent || "",
-    supervisor: internship.supervisor?.lecturer
-      ? [
-          internship.supervisor.lecturer.userProfile?.academicRankType?.sMa,
-          internship.supervisor.lecturer.userProfile?.academicDegreeType?.sMa,
-          internship.supervisor.lecturer.userProfile?.fullname,
-        ]
-          .filter(Boolean)
-          .join(". ")
-      : [
-          internship.supervisor?.academicRank,
-          internship.supervisor?.academicDegree,
-          internship.supervisor?.name,
-        ]
-          .filter(Boolean)
-          .join(". "),
-    coSupervisor: internship.coSupervisor?.lecturer
-      ? [
-          internship.coSupervisor.lecturer.userProfile?.academicRankType?.sMa,
-          internship.coSupervisor.lecturer.userProfile?.academicDegreeType?.sMa,
-          internship.coSupervisor.lecturer.userProfile?.fullname,
-        ]
-          .filter(Boolean)
-          .join(". ")
-      : [
-          internship.coSupervisor?.academicRank,
-          internship.coSupervisor?.academicDegree,
-          internship.coSupervisor?.name,
-        ]
-          .filter(Boolean)
-          .join(". "),
+    supervisor: formatSupervisor(internship.supervisor),
+    coSupervisor: formatSupervisor(internship.coSupervisor),
     startDate: internship.startDate ? formatDateVn(internship.startDate) : "",
     endDate: internship.endDate ? formatDateVn(internship.endDate) : "",
     reportDate: internship.reportDate ? formatDateVn(internship.reportDate) : "",

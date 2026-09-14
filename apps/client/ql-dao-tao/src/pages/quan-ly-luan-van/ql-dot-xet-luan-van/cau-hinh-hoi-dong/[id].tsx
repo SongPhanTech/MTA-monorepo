@@ -10,7 +10,7 @@ import {
   useFindUniqueThesisSession,
   useUpdateManyThesisProject,
 } from "@workspace/db/hooks"
-import { flattenExpertForSelect } from "@utils/expert-select"
+import { flattenExpertForSelect } from "@/utils/expert-select"
 import { Button, Col, Empty, Form, message, Modal, Tag, Typography } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
 import "dayjs/locale/vi"

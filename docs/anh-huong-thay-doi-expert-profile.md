@@ -8,13 +8,13 @@
 
 ## Quyết định đã chốt
 
-| Mục | Quyết định |
-| --- | --- |
-| Hướng | **Chỉ** `Expert` (identity) + `ExpertProfileVersion` (hồ sơ theo thời điểm) |
-| Không làm | Tách `ThesisExpertProfile` / `ProjectExpertProfile` |
-| Soft-split module | Flag `thesisExpert` / `projectExpert` nằm trên **`ExpertProfileVersion`** (danh mục UI filter theo `currentVersion`) |
-| FK nghiệp vụ | Trỏ **`ExpertProfileVersion`** (không trỏ identity khi cần lịch sử in/thanh toán) |
-| Research / Internship / SubjectClass | Cùng identity `Expert`; quan hệ gán HD/HĐ lưu `versionId` |
+| Mục                                  | Quyết định                                                                                                           |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| Hướng                                | **Chỉ** `Expert` (identity) + `ExpertProfileVersion` (hồ sơ theo thời điểm)                                          |
+| Không làm                            | Tách `ThesisExpertProfile` / `ProjectExpertProfile`                                                                  |
+| Soft-split module                    | Flag `thesisExpert` / `projectExpert` nằm trên **`ExpertProfileVersion`** (danh mục UI filter theo `currentVersion`) |
+| FK nghiệp vụ                         | Trỏ **`ExpertProfileVersion`** (không trỏ identity khi cần lịch sử in/thanh toán)                                    |
+| Research / Internship / SubjectClass | Cùng identity `Expert`; quan hệ gán HD/HĐ lưu `versionId`                                                            |
 
 Ngày chốt: **2026-09-14**.
 
@@ -22,10 +22,10 @@ Ngày chốt: **2026-09-14**.
 
 ## 1. Vấn đề nghiệp vụ
 
-| Tình huống | Kỳ vọng | Hiện tại |
-| --- | --- | --- |
-| Đợt 1: chuyên gia là Thạc sĩ → đợt 2 lên Tiến sĩ | In mẫu đợt 1 vẫn Thạc sĩ | In đợt 1 cũng thành Tiến sĩ |
-| Đợt 1: trong học viện → đợt 2 ngoài học viện | Đợt 1 vẫn “trong HV” (kể cả định mức thanh toán) | Đợt 1 bị đổi thành ngoài HV |
+| Tình huống                                       | Kỳ vọng                                          | Hiện tại                    |
+| ------------------------------------------------ | ------------------------------------------------ | --------------------------- |
+| Đợt 1: chuyên gia là Thạc sĩ → đợt 2 lên Tiến sĩ | In mẫu đợt 1 vẫn Thạc sĩ                         | In đợt 1 cũng thành Tiến sĩ |
+| Đợt 1: trong học viện → đợt 2 ngoài học viện     | Đợt 1 vẫn “trong HV” (kể cả định mức thanh toán) | Đợt 1 bị đổi thành ngoài HV |
 
 **Nguyên nhân kỹ thuật:**
 
@@ -74,29 +74,29 @@ ExpertProfileVersion                ← hồ sơ tại một thời điểm (m�
 
 ### 3.1. Phân field
 
-| Thuộc `Expert` (identity) | Thuộc `ExpertProfileVersion` |
-| --- | --- |
-| `lecturerId` | `name` |
-| `currentVersionId` | `academicDegreeTypeId`, `academicRankTypeId` |
-| `major` (TrainingMajor M:N) | `organization`, `position`, `specialization`, `workplace` |
-| `subjectClass` M:N (pool theo người) | **`inAcademy`** (bắt buộc lưu, không suy từ lecturer) |
-| | `phone`, `email`, `bankAccountNumber`, `bankName` |
-| | `thesisExpert`, `projectExpert` |
-| | `eligiblePresident`, `eligibleSecretary` |
-| | `validFrom`, `validTo` |
+| Thuộc `Expert` (identity)            | Thuộc `ExpertProfileVersion`                              |
+| ------------------------------------ | --------------------------------------------------------- |
+| `lecturerId`                         | `name`                                                    |
+| `currentVersionId`                   | `academicDegreeTypeId`, `academicRankTypeId`              |
+| `major` (TrainingMajor M:N)          | `organization`, `position`, `specialization`, `workplace` |
+| `subjectClass` M:N (pool theo người) | **`inAcademy`** (bắt buộc lưu, không suy từ lecturer)     |
+|                                      | `phone`, `email`, `bankAccountNumber`, `bankName`         |
+|                                      | `thesisExpert`, `projectExpert`                           |
+|                                      | `eligiblePresident`, `eligibleSecretary`                  |
+|                                      | `validFrom`, `validTo`                                    |
 
 > Đổi cờ LV/ĐA, đủ điều kiện chủ tịch/thư ký, SĐT/email/TKNH cũng tạo **version mới** (không update in-place), vì có thể ảnh hưởng mẫu in / thanh toán / xếp HĐ theo đợt.
 
 ### 3.2. Remap FK nghiệp vụ
 
-| Hiện tại | Đích |
-| --- | --- |
-| `ThesisProject.supervisorId` → ExpertProfile | `supervisorVersionId` → ExpertProfileVersion |
-| `coSupervisorId`, `thirdSupervisorId` | `*VersionId` tương tự |
-| `CouncilMember.expertId` | `expertProfileVersionId` (+ optional `expertId` denorm để filter) |
-| Research topic / Internship supervisors | `*VersionId` |
-| Danh mục UI / select list | Query `Expert` + `include: { currentVersion }`; filter flag trên **currentVersion** |
-| In mẫu / thanh toán | **Chỉ** đọc version đã gán trên quan hệ |
+| Hiện tại                                     | Đích                                                                                |
+| -------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `ThesisProject.supervisorId` → ExpertProfile | `supervisorVersionId` → ExpertProfileVersion                                        |
+| `coSupervisorId`, `thirdSupervisorId`        | `*VersionId` tương tự                                                               |
+| `CouncilMember.expertId`                     | `expertProfileVersionId` (+ optional `expertId` denorm để filter)                   |
+| Research topic / Internship supervisors      | `*VersionId`                                                                        |
+| Danh mục UI / select list                    | Query `Expert` + `include: { currentVersion }`; filter flag trên **currentVersion** |
+| In mẫu / thanh toán                          | **Chỉ** đọc version đã gán trên quan hệ                                             |
 
 ### 3.3. Quy tắc nghiệp vụ
 
@@ -112,11 +112,11 @@ ExpertProfileVersion                ← hồ sơ tại một thời điểm (m�
 
 ### 3.4. Migrate dữ liệu (một lần)
 
-1. Mỗi `ExpertProfile` cũ → 1 `Expert` (giữ **cùng `id`** nếu được, giảm remap) + 1 `ExpertProfileVersion`.  
-2. Version đầu: copy toàn bộ field hồ sơ + cờ + phone/email/bank; `inAcademy = !!lecturerId`; `validFrom = createdAt` (hoặc now); `validTo = null`.  
-3. `Expert.currentVersionId` = version vừa tạo; `Expert.lecturerId` giữ từ bản cũ.  
-4. Remap mọi FK nghiệp vụ cũ → `versionId` tương ứng.  
-5. Đổi tên / drop model `ExpertProfile` cũ sau khi FE/BE chuyển xong.  
+1. Mỗi `ExpertProfile` cũ → 1 `Expert` (giữ **cùng `id`** nếu được, giảm remap) + 1 `ExpertProfileVersion`.
+2. Version đầu: copy toàn bộ field hồ sơ + cờ + phone/email/bank; `inAcademy = !!lecturerId`; `validFrom = createdAt` (hoặc now); `validTo = null`.
+3. `Expert.currentVersionId` = version vừa tạo; `Expert.lecturerId` giữ từ bản cũ.
+4. Remap mọi FK nghiệp vụ cũ → `versionId` tương ứng.
+5. Đổi tên / drop model `ExpertProfile` cũ sau khi FE/BE chuyển xong.
 6. **Lịch sử đã méo trước migrate** không khôi phục được — chỉ chặn sai từ sau migrate.
 
 ---
@@ -132,44 +132,44 @@ Mức độ:
 
 ### 4.1. CRUD danh mục — P0
 
-| # | Route / UI | File | Việc |
-| --- | --- | --- | --- |
-| 1 | `/quan-ly-luan-van/danh-sach-chuyen-gia` | `danh-sach-chuyen-gia` (LV) | CRUD `Expert` + current version; filter `currentVersion.thesisExpert` |
-| 2 | `/quan-ly-do-an/danh-sach-chuyen-gia` | `danh-sach-chuyen-gia` (ĐA) | Như trên; filter `currentVersion.projectExpert` |
-| 3 | Modal chuyên gia | `put-chuyen-gia.tsx` | Create Expert + version 1; mọi sửa field version = **tạo version mới** |
+| #   | Route / UI                               | File                        | Việc                                                                   |
+| --- | ---------------------------------------- | --------------------------- | ---------------------------------------------------------------------- |
+| 1   | `/quan-ly-luan-van/danh-sach-chuyen-gia` | `danh-sach-chuyen-gia` (LV) | CRUD `Expert` + current version; filter `currentVersion.thesisExpert`  |
+| 2   | `/quan-ly-do-an/danh-sach-chuyen-gia`    | `danh-sach-chuyen-gia` (ĐA) | Như trên; filter `currentVersion.projectExpert`                        |
+| 3   | Modal chuyên gia                         | `put-chuyen-gia.tsx`        | Create Expert + version 1; mọi sửa field version = **tạo version mới** |
 
 ### 4.2. Gán HD / hội đồng — P0
 
-| # | Route / UI | File | Việc |
-| --- | --- | --- | --- |
-| 4 | `/quan-ly-luan-van/dm-luan-van` | `dm-luan-van` | Select Expert; lưu `*VersionId` |
-| 5 | Cấu hình HĐ đợt LV | `cau-hinh-hoi-dong/[id]` | Member → version |
-| 6 | Modal cấu hình LV | `modal-cau-hinh-luan-van.tsx` | Như trên |
-| 7 | Modal thành viên HĐ | `put-thanh-vien-hoi-dong.tsx` | FK version |
-| 8 | `/quan-ly-do-an/dm-do-an` | `dm-do-an` | Như luận văn |
-| 9 | Cấu hình HĐ đồ án | `cau-hinh-hoi-dong` | + `SubjectClass.experts` nếu giữ |
-| 10 | Modal đồ án | `put-do-an.tsx` | Lưu version |
-| 11 | Chuyên đề NC | page + `put-chuyen-de-nghien-cuu` | Remap version |
-| 12 | Thực tập | page + `put-thuc-tap` | Remap version |
+| #   | Route / UI                      | File                              | Việc                             |
+| --- | ------------------------------- | --------------------------------- | -------------------------------- |
+| 4   | `/quan-ly-luan-van/dm-luan-van` | `dm-luan-van`                     | Select Expert; lưu `*VersionId`  |
+| 5   | Cấu hình HĐ đợt LV              | `cau-hinh-hoi-dong/[id]`          | Member → version                 |
+| 6   | Modal cấu hình LV               | `modal-cau-hinh-luan-van.tsx`     | Như trên                         |
+| 7   | Modal thành viên HĐ             | `put-thanh-vien-hoi-dong.tsx`     | FK version                       |
+| 8   | `/quan-ly-do-an/dm-do-an`       | `dm-do-an`                        | Như luận văn                     |
+| 9   | Cấu hình HĐ đồ án               | `cau-hinh-hoi-dong`               | + `SubjectClass.experts` nếu giữ |
+| 10  | Modal đồ án                     | `put-do-an.tsx`                   | Lưu version                      |
+| 11  | Chuyên đề NC                    | page + `put-chuyen-de-nghien-cuu` | Remap version                    |
+| 12  | Thực tập                        | page + `put-thuc-tap`             | Remap version                    |
 
 ### 4.3. In / thanh toán — P1 (đóng bug)
 
-| # | UI / util | Việc |
-| --- | --- | --- |
-| 13 | `thesis-excel.ts`, `thesis-profile.ts` | Đọc version đã gán; `inAcademy` từ version |
-| 14 | `thesis-supervisor-payment-export.ts` | Như trên |
-| 15 | `modal-print-quyet-dinh-hoi-dong.tsx` | Include version |
-| 16–19 | Pages thanh toán HĐ / GVHD (LV + ĐA) | Join version |
-| 20 | `put-thanh-toan*.tsx` | Lookup Expert / version |
+| #     | UI / util                              | Việc                                       |
+| ----- | -------------------------------------- | ------------------------------------------ |
+| 13    | `thesis-excel.ts`, `thesis-profile.ts` | Đọc version đã gán; `inAcademy` từ version |
+| 14    | `thesis-supervisor-payment-export.ts`  | Như trên                                   |
+| 15    | `modal-print-quyet-dinh-hoi-dong.tsx`  | Include version                            |
+| 16–19 | Pages thanh toán HĐ / GVHD (LV + ĐA)   | Join version                               |
+| 20    | `put-thanh-toan*.tsx`                  | Lookup Expert / version                    |
 
 ### 4.4. P2 / P3 / Backend
 
-| # | Chỗ | Việc |
-| --- | --- | --- |
-| 21–23 | Modal chi tiết GV (ql-dao-tao, cong-HV, cong-SV) | `lecturer.experts` + current version |
-| 24 | tro-ly-ao types | Generate lại |
-| 25–26 | `thesis-council-import/export` (be-model) | Map version khi import; export theo version đã gán |
-| P3 | `SubjectClass` M:N | Giữ trên `Expert`; reconnect join table |
+| #     | Chỗ                                              | Việc                                               |
+| ----- | ------------------------------------------------ | -------------------------------------------------- |
+| 21–23 | Modal chi tiết GV (ql-dao-tao, cong-HV, cong-SV) | `lecturer.experts` + current version               |
+| 24    | tro-ly-ao types                                  | Generate lại                                       |
+| 25–26 | `thesis-council-import/export` (be-model)        | Map version khi import; export theo version đã gán |
+| P3    | `SubjectClass` M:N                               | Giữ trên `Expert`; reconnect join table            |
 
 ---
 
@@ -180,8 +180,8 @@ Mức độ:
 - [x] Hướng: **Expert + ExpertProfileVersion only**
 - [x] Không tách bảng luận văn / đồ án
 - [x] `phone` / `email` / `bank*` / cờ LV-ĐA / eligible CT-TK → **`ExpertProfileVersion`**
-- [ ] Chi tiết: giữ nguyên `id` Expert = id ExpertProfile cũ khi migrate? (khuyến nghị: **có**)
-- [ ] SubjectClass M:N: **giữ trên Expert** (đề xuất)
+- [x] Chi tiết: giữ nguyên `id` Expert = id ExpertProfile cũ khi migrate (đã làm trong migrate)
+- [x] SubjectClass M:N: **giữ trên Expert** (`SubjectClass.expert`)
 
 ### Phần 1 — Schema + migrate
 
@@ -210,46 +210,47 @@ Mức độ:
 
 ### Phần 5 — Chuyên đề NC + Thực tập (P0)
 
-- [ ] Remap FK + modal/page
+- [x] Remap FK + modal/page
 
 ### Phần 6 — In mẫu + thanh toán (P1)
 
-- [ ] Utils + pages đọc version
-- [ ] Bỏ `inAcademy = !!lecturerId` live
+- [x] Utils + pages đọc version
+- [x] Bỏ `inAcademy = !!lecturerId` live
 
 ### Phần 7 — Portal (P2)
 
-- [ ] Modal chi tiết GV
+- [x] Modal chi tiết GV
 
 ### Phần 8 — Dọn dẹp
 
-- [ ] Drop `ExpertProfile` cũ / đổi tên xong
-- [ ] Regression: đổi current → in lại đợt cũ vẫn đúng
+- [x] Drop `ExpertProfile` cũ / đổi tên xong
+- [x] Regression: đổi current → in lại đợt cũ vẫn đúng
+- [x] SubjectClass M:N giữ trên Expert (đã chốt)
 
 ---
 
 ## 6. Tiêu chí chấp nhận
 
-1. Sau khi đổi học vị / trong↔ngoài HV / bank / cờ eligible trên hồ sơ current, **in lại đợt/hội đồng đã gán** vẫn giữ version cũ.  
-2. Định mức thanh toán dùng `inAcademy` trên **version đã gán**.  
-3. Danh mục LV/ĐA filter bằng flag trên **`currentVersion`**; một người có thể vừa LV vừa ĐA tùy version hiện tại.  
+1. Sau khi đổi học vị / trong↔ngoài HV / bank / cờ eligible trên hồ sơ current, **in lại đợt/hội đồng đã gán** vẫn giữ version cũ.
+2. Định mức thanh toán dùng `inAcademy` trên **version đã gán**.
+3. Danh mục LV/ĐA filter bằng flag trên **`currentVersion`**; một người có thể vừa LV vừa ĐA tùy version hiện tại.
 4. Select list luôn ưu tiên hiển thị `currentVersion`; quan hệ nghiệp vụ không tự nhảy theo current.
 
 ---
 
 ## 7. Tham chiếu code
 
-| Chủ đề | Path |
-| --- | --- |
-| Model | `packages/database/models/ql-dao-tao/thesis.zmodel` |
-| Migrate | `packages/database/prisma/migrations/20260914040000_expert_profile_version/` |
-| SubjectClass pool | `plan-training.zmodel` (`SubjectClass.expert` → `Expert[]`) |
-| FE helper select | `apps/client/ql-dao-tao/src/utils/expert-select.ts` |
-| BE resolve version | `apps/backend/be-model/src/services/expert-version.ts` |
-| Format / PersonLike | `apps/client/ql-dao-tao/src/utils/thesis-profile.ts` |
-| Modal CRUD | `apps/client/ql-dao-tao/src/components/modal/put-chuyen-gia.tsx` |
+| Chủ đề              | Path                                                                                                |
+| ------------------- | --------------------------------------------------------------------------------------------------- |
+| Model               | `packages/database/models/ql-dao-tao/thesis.zmodel`                                                 |
+| Migrate             | `packages/database/prisma/migrations/20260914040000_expert_profile_version/`                        |
+| SubjectClass pool   | `plan-training.zmodel` (`SubjectClass.expert` → `Expert[]`)                                         |
+| FE helper select    | `apps/client/ql-dao-tao/src/utils/expert-select.ts`                                                 |
+| BE resolve version  | `apps/backend/be-model/src/services/expert-version.ts`                                              |
+| Format / PersonLike | `apps/client/ql-dao-tao/src/utils/thesis-profile.ts`                                                |
+| Modal CRUD          | `apps/client/ql-dao-tao/src/components/modal/put-chuyen-gia.tsx`                                    |
 | Import/export HĐ LV | `apps/backend/be-model/src/services/thesis-council-*.service.ts` + `thesis-batch-update.service.ts` |
-| In / Excel | `apps/client/ql-dao-tao/src/utils/thesis-excel.ts` *(Phần 6)* |
+| In / Excel          | `apps/client/ql-dao-tao/src/utils/thesis-excel.ts` _(Phần 6)_                                       |
 
 ---
 
@@ -257,12 +258,12 @@ Mức độ:
 
 ### 8.1. Quyết định thiết kế
 
-| Ngày | Quyết định | Chi tiết |
-| --- | --- | --- |
-| 2026-09-14 | Chỉ **Expert + ExpertProfileVersion** | Không tách bảng ThesisExpert / ProjectExpert |
-| 2026-09-14 | FK nghiệp vụ → **versionId** | Đóng bug lịch sử in/thanh toán khi sửa hồ sơ |
-| 2026-09-14 | Cờ LV/ĐA, eligible CT-TK, phone/email/bank* → **Version** | `Expert` chỉ còn identity + `lecturerId` + quan hệ M:N |
-| (chưa) | SubjectClass M:N | Giữ trên `Expert` (`_ExpertToSubjectClass`) |
+| Ngày       | Quyết định                                                 | Chi tiết                                               |
+| ---------- | ---------------------------------------------------------- | ------------------------------------------------------ |
+| 2026-09-14 | Chỉ **Expert + ExpertProfileVersion**                      | Không tách bảng ThesisExpert / ProjectExpert           |
+| 2026-09-14 | FK nghiệp vụ → **versionId**                               | Đóng bug lịch sử in/thanh toán khi sửa hồ sơ           |
+| 2026-09-14 | Cờ LV/ĐA, eligible CT-TK, phone/email/bank\* → **Version** | `Expert` chỉ còn identity + `lecturerId` + quan hệ M:N |
+| (chưa)     | SubjectClass M:N                                           | Giữ trên `Expert` (`_ExpertToSubjectClass`)            |
 
 ### 8.2. Quy tắc FE/BE đã áp dụng (Phần 2+)
 
@@ -287,11 +288,11 @@ Mức độ:
 
 **Đã làm gì**
 
-| File / màn | Thay đổi |
-| --- | --- |
-| `quan-ly-luan-van/danh-sach-chuyen-gia` | `useFindManyExpert`; filter `currentVersion.thesisExpert`; cột/sort/search trên `currentVersion` + lecturer |
-| `quan-ly-do-an/danh-sach-chuyen-gia` | Như trên với `currentVersion.projectExpert` |
-| `put-chuyen-gia.tsx` | **Tạo mới:** `Expert` + version 1 + gắn `currentVersionId`. **Sửa:** đóng version cũ (`validTo = now`) → tạo version mới → cập nhật `Expert.currentVersionId` / `lecturerId`. Không update in-place field giấy tờ. Alert: đợt/HĐ đã gán giữ version cũ |
+| File / màn                              | Thay đổi                                                                                                                                                                                                                                               |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `quan-ly-luan-van/danh-sach-chuyen-gia` | `useFindManyExpert`; filter `currentVersion.thesisExpert`; cột/sort/search trên `currentVersion` + lecturer                                                                                                                                            |
+| `quan-ly-do-an/danh-sach-chuyen-gia`    | Như trên với `currentVersion.projectExpert`                                                                                                                                                                                                            |
+| `put-chuyen-gia.tsx`                    | **Tạo mới:** `Expert` + version 1 + gắn `currentVersionId`. **Sửa:** đóng version cũ (`validTo = now`) → tạo version mới → cập nhật `Expert.currentVersionId` / `lecturerId`. Không update in-place field giấy tờ. Alert: đợt/HĐ đã gán giữ version cũ |
 
 **Cách hoạt động:** danh mục chỉ hiện hồ sơ **current**; lịch sử gán không bị sửa khi CRUD.
 
@@ -299,16 +300,16 @@ Mức độ:
 
 **Đã làm gì**
 
-| File | Thay đổi |
-| --- | --- |
-| `dm-luan-van/index.tsx` | Catalog `useFindManyExpert` + `thesisExpert`; include `supervisor`/`coSupervisor`/`expertProfileVersion` (version + `expert.lecturer`); hydrate/peer-exclude bằng `expertId`; batch payload vẫn gửi `supervisorId` = Expert.id |
-| `cau-hinh-hoi-dong/[id].tsx` (LV) | Flatten expert; tạo HĐ ghi `expertId` + `expertProfileVersionId`; loại GVHD qua `supervisor.expertId` |
-| `modal-cau-hinh-luan-van.tsx` | Save member/HD → version map; hydrate `expertId`; `inAcademy` từ `currentVersion` |
-| `put-thanh-vien-hoi-dong.tsx` | Select Expert; save `expertId` + `expertProfileVersionId` |
-| `thesis-batch-update.service.ts` | `resolveCurrentVersionIds`; update `supervisorVersionId`/`coSupervisorVersionId`; `councilMember` kèm version |
-| `thesis-council-import.service.ts` | Label map = Expert.id; trước TX resolve version; ghi version FK |
-| `thesis-council-export.service.ts` | Catalog từ Expert+currentVersion; cột data lookup `supervisor.expertId` |
-| `thesis-profile.ts` | `formatPersonName` / council format ưu tiên `expertProfileVersion` |
+| File                               | Thay đổi                                                                                                                                                                                                                       |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `dm-luan-van/index.tsx`            | Catalog `useFindManyExpert` + `thesisExpert`; include `supervisor`/`coSupervisor`/`expertProfileVersion` (version + `expert.lecturer`); hydrate/peer-exclude bằng `expertId`; batch payload vẫn gửi `supervisorId` = Expert.id |
+| `cau-hinh-hoi-dong/[id].tsx` (LV)  | Flatten expert; tạo HĐ ghi `expertId` + `expertProfileVersionId`; loại GVHD qua `supervisor.expertId`                                                                                                                          |
+| `modal-cau-hinh-luan-van.tsx`      | Save member/HD → version map; hydrate `expertId`; `inAcademy` từ `currentVersion`                                                                                                                                              |
+| `put-thanh-vien-hoi-dong.tsx`      | Select Expert; save `expertId` + `expertProfileVersionId`                                                                                                                                                                      |
+| `thesis-batch-update.service.ts`   | `resolveCurrentVersionIds`; update `supervisorVersionId`/`coSupervisorVersionId`; `councilMember` kèm version                                                                                                                  |
+| `thesis-council-import.service.ts` | Label map = Expert.id; trước TX resolve version; ghi version FK                                                                                                                                                                |
+| `thesis-council-export.service.ts` | Catalog từ Expert+currentVersion; cột data lookup `supervisor.expertId`                                                                                                                                                        |
+| `thesis-profile.ts`                | `formatPersonName` / council format ưu tiên `expertProfileVersion`                                                                                                                                                             |
 
 **Cách hoạt động:** FE chọn Expert → BE/FE resolve current version lúc lưu → in lại đợt cũ vẫn đọc version đã gắn trên quan hệ.
 
@@ -316,25 +317,79 @@ Mức độ:
 
 **Đã làm gì**
 
-| File | Thay đổi |
-| --- | --- |
-| `put-do-an.tsx` | Catalog `projectExpert`; form giữ `supervisorId`/`coSupervisorId` = Expert.id; payload `supervisorVersionId`/`coSupervisorVersionId`; hydrate từ `supervisor.expertId` |
-| `dm-do-an/index.tsx` | **GVHD1–2 vẫn `Lecturer`** (`primarySupervisor`/`secondarySupervisor`). **GVHD3** = Expert → connect `thirdSupervisor` bằng version id. Hội đồng upsert `expertId` + `expertProfileVersionId`. Include/display HD3 qua `thirdSupervisor.expert.lecturer` |
-| `danh-muc-do-an/cau-hinh-hoi-dong` | `useFindManyExpert` + `projectExpert`; `SubjectClass.expert` (không còn `expertProfile`); tạo HĐ bắt buộc có `expertProfileVersionId` |
-| `danh-muc-do-an/index.tsx` | Không đổi logic — đã filter/hiển thị `supervisor.name` trên version |
+| File                               | Thay đổi                                                                                                                                                                                                                                                 |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `put-do-an.tsx`                    | Catalog `projectExpert`; form giữ `supervisorId`/`coSupervisorId` = Expert.id; payload `supervisorVersionId`/`coSupervisorVersionId`; hydrate từ `supervisor.expertId`                                                                                   |
+| `dm-do-an/index.tsx`               | **GVHD1–2 vẫn `Lecturer`** (`primarySupervisor`/`secondarySupervisor`). **GVHD3** = Expert → connect `thirdSupervisor` bằng version id. Hội đồng upsert `expertId` + `expertProfileVersionId`. Include/display HD3 qua `thirdSupervisor.expert.lecturer` |
+| `danh-muc-do-an/cau-hinh-hoi-dong` | `useFindManyExpert` + `projectExpert`; `SubjectClass.expert` (không còn `expertProfile`); tạo HĐ bắt buộc có `expertProfileVersionId`                                                                                                                    |
+| `danh-muc-do-an/index.tsx`         | Không đổi logic — đã filter/hiển thị `supervisor.name` trên version                                                                                                                                                                                      |
 
 **Cách hoạt động:** giống Phần 3; flag catalog = `projectExpert`; riêng ĐA vẫn tách GV trong HV (Lecturer) vs chuyên gia ngoài/thứ 3 (Expert version).
 
-### 8.7. Chưa làm
+### 8.7. Phần 5 — Chuyên đề NC + Thực tập (2026-09-14)
 
-| Phần | Nội dung |
+**Đã làm gì**
+
+| File                                                    | Thay đổi                                                                                                                                  |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `put-chuyen-de-nghien-cuu.tsx`                          | Catalog `Expert`; form `supervisorId` = Expert.id; save `*VersionId`; hydrate từ `supervisor.expertId`                                    |
+| `put-thuc-tap.tsx`                                      | Như trên                                                                                                                                  |
+| `chuyen-de-nghien-cuu/index.tsx`                        | Include version + `expert.lecturer`; import Excel resolve Expert → currentVersion; thống kê tải giảng theo Expert; `inAcademy` từ version |
+| `thuc-tap/index.tsx`                                    | Như trên; thống kê dùng `supervisorInternship` / `coSupervisorInternship`                                                                 |
+| `be-ql-dao-tao` internship export + `ql-dao-tao-models` | Format HD từ version/`expert.lecturer`; allowlist `Expert` / `ExpertProfileVersion`                                                       |
+
+**Cách hoạt động:** giống Phần 3–4; Excel cột HD vẫn là Expert.id, lúc import map sang version hiện tại.
+
+### 8.8. Phần 6 — In mẫu + thanh toán (2026-09-14)
+
+**Đã làm gì**
+
+| File / nhóm                                                          | Thay đổi                                                                                                                                          |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `thesis-payment.helpers.ts`                                          | Thêm `resolveInAcademy` / `councilMemberProfile`; định mức HĐ ưu tiên `inAcademy` trên version; tên GVHD đọc `expert.lecturer` khi truyền version |
+| `thesis-payment-query.ts`                                            | Supervisor/coSupervisor include bằng `expertVersionInclude`; council member include thêm `expertProfileVersion`                                   |
+| `thesis-payment-sync.service.ts`, `thesis-payment-export.service.ts` | Tính định mức GVHD/HĐ bằng snapshot version; HĐ dùng `councilMemberProfile(member)`                                                               |
+| `thesis-excel.ts`, `thesis-supervisor-payment-export.ts`             | Bỏ suy `inAcademy` từ live lecturer; pay/print/name/bank của HĐ ưu tiên `expertProfileVersion`                                                    |
+| Pages/modal thanh toán                                               | List include version + nested lecturer; modal lookup `Expert` + `currentVersion`                                                                  |
+| `modal-print-quyet-dinh-hoi-dong.tsx`                                | Type theo version; tên thành viên HĐ ưu tiên `expertProfileVersion`                                                                               |
+
+**Cách hoạt động:** mọi đường in/thanh toán luận văn dùng hồ sơ đã gán để xác định trong/ngoài học viện, tên hiển thị và thông tin tài khoản; `Expert.lecturer` chỉ còn là fallback phụ khi thiếu snapshot.
+
+### 8.9. Phần 7 — Portal modal chi tiết GV (2026-09-14)
+
+**Đã làm gì**
+
+| File | Thay đổi |
 | --- | --- |
-| 5 | Chuyên đề NC + Thực tập (modal/page + FK version trên FE) |
-| 6 | In mẫu / Excel / thanh toán — bỏ suy `inAcademy = !!lecturerId` live |
-| 7 | Portal modal chi tiết GV |
-| 8 | Dọn hook/tên cũ + regression đổi current vẫn in đúng đợt cũ |
-| — | SubjectClass M:N: giữ trên Expert (chốt khi đụng pool lớp) |
+| `ql-dao-tao/.../modal-chi-tiet-giang-vien.tsx` | Include `expert.currentVersion` (+ học hàm/học vị); tab hồ sơ đọc version; thêm cột Trong HV, LV/ĐA |
+| `cong-hoc-vien/.../modal-chi-tiet-giang-vien.tsx` | Như trên |
+| `cong-sinh-vien/.../modal-chi-tiet-giang-vien.tsx` | Như trên |
+
+**Cách hoạt động:** portal chỉ hiện hồ sơ **current** của Expert gắn Lecturer; không còn quan hệ `expertProfile`.
+
+### 8.10. Phần 8 — Dọn dẹp + regression (2026-09-14)
+
+**Đã làm gì**
+
+| Hạng mục | Thay đổi |
+| --- | --- |
+| Runtime sót | `delete-subject-class`: `expert` M2M (không còn `expertProfile`); sqlTransaction model enum → `Expert` / `ExpertProfileVersion`; tro-ly-ao union type tương tự |
+| Script | `packages/database/src/script/expert.ts` cập nhật theo `Expert.currentVersion` |
+| Đổi tên FE | Modal `PutExpert` (tag `PutExpert`); alias deprecated `PutExpertProfile`; pages `DanhSachChuyenGia*`; type `ExpertLike` (+ alias `ExpertProfileLike`) |
+| Regression in đợt cũ | `put-chuyen-gia` vẫn **revise = đóng version cũ + tạo mới** (không update in-place); helper `assignedExpertProfile` / `versionInAcademy` — in/thanh toán đọc FK version đã gán, không đọc `currentVersion` |
+| SubjectClass | Chốt giữ M:N trên `Expert` |
+
+**Cách regression thủ công**
+
+1. Gán chuyên gia A vào đợt/HĐ (lưu version V1).
+2. Sửa hồ sơ A (học vị / trong↔ngoài HV) → tạo V2 = current.
+3. In lại mẫu / xuất thanh toán đợt cũ → vẫn V1 (`inAcademy`, tên, bank của V1).
+4. Gán mới sau bước 2 → dùng V2.
+
+**Còn lại (không chặn)**
+
+- Orval OpenAPI schemas `packages/libs/src/api/schemas/expertProfile*` vẫn tên cũ → chạy `pnpm generate:api` khi BE OpenAPI đã expose `Expert` / `ExpertProfileVersion`.
 
 ---
 
-*Tài liệu living: tick checklist khi triển khai từng phần; cập nhật mục 8 khi xong một phần.*
+_Tài liệu living: tick checklist khi triển khai từng phần; cập nhật mục 8 khi xong một phần._

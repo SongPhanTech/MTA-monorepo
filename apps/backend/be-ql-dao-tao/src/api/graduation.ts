@@ -2594,11 +2594,24 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
                 include: {
                   members: {
                     include: {
-                      expert: {
+                      expertProfileVersion: {
                         include: {
-                          lecturer: { include: { userProfile: true, organization: true } },
                           academicDegreeType: true,
                           academicRankType: true,
+                          expert: {
+                            include: {
+                              lecturer: {
+                                include: { userProfile: true, organization: true },
+                              },
+                            },
+                          },
+                        },
+                      },
+                      expert: {
+                        include: {
+                          lecturer: {
+                            include: { userProfile: true, organization: true },
+                          },
                         },
                       },
                     },
@@ -2762,15 +2775,16 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
       const councilMembers = [...(tP?.council?.members || [])]
         .sort((a, b) => (roleOrder[a.role] ?? 99) - (roleOrder[b.role] ?? 99))
         .map((m, idx) => {
-          const expert = m.expert
-          const rank = safeString(expert?.academicRankType?.sMa)
-          const degree = safeString(expert?.academicDegreeType?.sMa)
+          const version = m.expertProfileVersion
+          const lecturer = version?.expert?.lecturer ?? m.expert?.lecturer
+          const rank = safeString(version?.academicRankType?.sMa)
+          const degree = safeString(version?.academicDegreeType?.sMa)
           const title = [rank, degree].filter(Boolean).join(".")
           const chucVi = chucViByRole[m.role] ?? "Ủy viên"
           return {
             chuc_vi: `${idx + 1}. ${chucVi}`,
-            ten_day_du: [title, safeString(expert?.name)].filter(Boolean).join(" ").trim(),
-            don_vi: safeString(expert?.lecturer?.organization?.sTen || expert?.workplace),
+            ten_day_du: [title, safeString(version?.name)].filter(Boolean).join(" ").trim(),
+            don_vi: safeString(lecturer?.organization?.sTen || version?.workplace || version?.organization),
             vai_tro_hoi_dong: vaiTroByRole[m.role] ?? "",
           }
         })

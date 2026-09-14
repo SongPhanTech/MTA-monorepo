@@ -7,6 +7,8 @@ import ImportInternshipModal from "@components/modal/import-excel-internship"
 import type { FilterProps } from "@constants/type"
 import DefaultLayout from "@layouts/default-layout"
 import { buildOrgFlat, buildOrgTree } from "@lib/utils"
+import { getSupervisorName } from "@pages/quan-ly-luan-van/dm-luan-van"
+import { versionToPersonLike } from "@/utils/expert-select"
 import { SubjectVersionType } from "@workspace/db"
 import type { Prisma } from "@workspace/db/client"
 import {
@@ -193,13 +195,19 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
       include: {
         supervisor: {
           include: {
-            lecturer: {
-              select: {
-                userProfile: {
+            academicDegreeType: true,
+            academicRankType: true,
+            expert: {
+              include: {
+                lecturer: {
                   select: {
-                    fullname: true,
-                    academicRankType: true,
-                    academicDegreeType: true,
+                    userProfile: {
+                      select: {
+                        fullname: true,
+                        academicRankType: true,
+                        academicDegreeType: true,
+                      },
+                    },
                   },
                 },
               },
@@ -208,13 +216,19 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
         },
         coSupervisor: {
           include: {
-            lecturer: {
-              select: {
-                userProfile: {
+            academicDegreeType: true,
+            academicRankType: true,
+            expert: {
+              include: {
+                lecturer: {
                   select: {
-                    fullname: true,
-                    academicRankType: true,
-                    academicDegreeType: true,
+                    userProfile: {
+                      select: {
+                        fullname: true,
+                        academicRankType: true,
+                        academicDegreeType: true,
+                      },
+                    },
                   },
                 },
               },
@@ -456,22 +470,69 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
       if (dataToUpdate.length === 0) {
         return message.warning("Không tìm thấy dữ liệu hợp lệ trong file.")
       }
+      const fixValue = (val: any) => (val === "[object Object]" ? null : val)
+      const expertIds = [
+        ...new Set(
+          dataToUpdate
+            .flatMap((item) => [
+              fixValue(item.data.update.supervisorId),
+              fixValue(item.data.update.coSupervisorId),
+            ])
+            .filter((id): id is string => !!id)
+        ),
+      ]
+
+      const versionByExpertId = new Map<string, string>()
+      if (expertIds.length) {
+        const expertsRes = await sqlTransaction([
+          {
+            model: "Expert",
+            operation: "findMany",
+            data: {
+              where: { id: { in: expertIds }, deletedAt: null },
+              select: { id: true, currentVersionId: true },
+            },
+          },
+        ])
+        const expertRows = Array.isArray(expertsRes.data) ? expertsRes.data[0] : []
+        const experts = (Array.isArray(expertRows) ? expertRows : []) as Array<{
+          id: string
+          currentVersionId: string | null
+        }>
+        for (const e of experts) {
+          if (e.currentVersionId) versionByExpertId.set(e.id, e.currentVersionId)
+        }
+      }
+
+      const toVersionId = (expertId: any) => {
+        const id = fixValue(expertId)
+        if (!id) return null
+        return versionByExpertId.get(id) ?? null
+      }
+
       const finalData = dataToUpdate.map((item) => {
-        const fixValue = (val: any) => (val === "[object Object]" ? null : val)
+        const supervisorVersionId = toVersionId(item.data.update.supervisorId)
+        const coSupervisorVersionId = toVersionId(item.data.update.coSupervisorId)
+        const { supervisorId: _s, coSupervisorId: _c, ...updateRest } = item.data.update
+        const {
+          supervisorId: _s2,
+          coSupervisorId: _c2,
+          ...createRest
+        } = item.data.create
 
         return {
           ...item,
           data: {
             ...item.data,
             update: {
-              ...item.data.update,
-              supervisorId: fixValue(item.data.update.supervisorId),
-              coSupervisorId: fixValue(item.data.update.coSupervisorId),
+              ...updateRest,
+              supervisorVersionId,
+              coSupervisorVersionId,
             },
             create: {
-              ...item.data.create,
-              supervisorId: fixValue(item.data.create.supervisorId),
-              coSupervisorId: fixValue(item.data.create.coSupervisorId),
+              ...createRest,
+              supervisorVersionId,
+              coSupervisorVersionId,
             },
           },
         }
@@ -817,7 +878,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                                                       ).format('DD/MM/YYYY')
                                                                     : ''
                                                             }`.trim(),
-                                                            cbhd: `1.${e.supervisor?.lecturer?.userProfile?.fullname ?? ''}\n2.${e.coSupervisor?.lecturer?.userProfile?.fullname ?? ''}`.trim(),
+                                                            cbhd: `1.${getSupervisorName(versionToPersonLike(e.supervisor), false, true) || ''}\n2.${getSupervisorName(versionToPersonLike(e.coSupervisor), false, true) || ''}`.trim(),
                                                             ten_cd: e.name,
                                                             macd: e.studentSubjectScore
                                                                 .subjectVersion?.code,
@@ -954,22 +1015,26 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
 
                                             const expertProfiles = await sqlTransaction([
                                                 {
-                                                    model: 'ExpertProfile',
+                                                    model: 'Expert',
                                                     operation: 'findMany',
                                                     data: {
                                                         where: {
                                                             OR: [
                                                                 {
-                                                                    supervisorResearchTopic: {
+                                                                    versions: {
                                                                         some: {
-                                                                            studentSubjectScore: {
-                                                                                subjectClass: {
-                                                                                    semesterId,
-                                                                                    trainingObjectTypeId,
-                                                                                },
-                                                                                student: {
-                                                                                    fixedClass: {
-                                                                                        trainingCourseId,
+                                                                            supervisorInternship: {
+                                                                                some: {
+                                                                                    studentSubjectScore: {
+                                                                                        subjectClass: {
+                                                                                            semesterId,
+                                                                                            trainingObjectTypeId,
+                                                                                        },
+                                                                                        student: {
+                                                                                            fixedClass: {
+                                                                                                trainingCourseId,
+                                                                                            },
+                                                                                        },
                                                                                     },
                                                                                 },
                                                                             },
@@ -977,16 +1042,20 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                                                     },
                                                                 },
                                                                 {
-                                                                    coSupervisorResearchTopic: {
+                                                                    versions: {
                                                                         some: {
-                                                                            studentSubjectScore: {
-                                                                                subjectClass: {
-                                                                                    semesterId,
-                                                                                    trainingObjectTypeId,
-                                                                                },
-                                                                                student: {
-                                                                                    fixedClass: {
-                                                                                        trainingCourseId,
+                                                                            coSupervisorInternship: {
+                                                                                some: {
+                                                                                    studentSubjectScore: {
+                                                                                        subjectClass: {
+                                                                                            semesterId,
+                                                                                            trainingObjectTypeId,
+                                                                                        },
+                                                                                        student: {
+                                                                                            fixedClass: {
+                                                                                                trainingCourseId,
+                                                                                            },
+                                                                                        },
                                                                                     },
                                                                                 },
                                                                             },
@@ -996,34 +1065,10 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                                             ],
                                                         },
                                                         include: {
-                                                            supervisorResearchTopic: {
-                                                                select: {
-                                                                    id: true,
-                                                                    coSupervisorId: true,
-                                                                    studentSubjectScore: {
-                                                                        select: {
-                                                                            subjectVersion: {
-                                                                                select: {
-                                                                                    credit: true,
-                                                                                },
-                                                                            },
-                                                                        },
-                                                                    },
-                                                                },
-                                                            },
-                                                            coSupervisorResearchTopic: {
-                                                                select: {
-                                                                    id: true,
-                                                                    supervisorId: true,
-                                                                    studentSubjectScore: {
-                                                                        select: {
-                                                                            subjectVersion: {
-                                                                                select: {
-                                                                                    credit: true,
-                                                                                },
-                                                                            },
-                                                                        },
-                                                                    },
+                                                            currentVersion: {
+                                                                include: {
+                                                                    academicDegreeType: true,
+                                                                    academicRankType: true,
                                                                 },
                                                             },
                                                             lecturer: {
@@ -1031,6 +1076,68 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                                                     userProfile: {
                                                                         select: {
                                                                             fullname: true,
+                                                                            academicRankType: { select: { sMa: true } },
+                                                                            academicDegreeType: { select: { sMa: true } },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                            versions: {
+                                                                include: {
+                                                                    supervisorInternship: {
+                                                                        where: {
+                                                                            studentSubjectScore: {
+                                                                                subjectClass: {
+                                                                                    semesterId,
+                                                                                    trainingObjectTypeId,
+                                                                                },
+                                                                                student: {
+                                                                                    fixedClass: {
+                                                                                        trainingCourseId,
+                                                                                    },
+                                                                                },
+                                                                            },
+                                                                        },
+                                                                        select: {
+                                                                            id: true,
+                                                                            coSupervisorVersionId: true,
+                                                                            studentSubjectScore: {
+                                                                                select: {
+                                                                                    subjectVersion: {
+                                                                                        select: {
+                                                                                            credit: true,
+                                                                                        },
+                                                                                    },
+                                                                                },
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                    coSupervisorInternship: {
+                                                                        where: {
+                                                                            studentSubjectScore: {
+                                                                                subjectClass: {
+                                                                                    semesterId,
+                                                                                    trainingObjectTypeId,
+                                                                                },
+                                                                                student: {
+                                                                                    fixedClass: {
+                                                                                        trainingCourseId,
+                                                                                    },
+                                                                                },
+                                                                            },
+                                                                        },
+                                                                        select: {
+                                                                            id: true,
+                                                                            supervisorVersionId: true,
+                                                                            studentSubjectScore: {
+                                                                                select: {
+                                                                                    subjectVersion: {
+                                                                                        select: {
+                                                                                            credit: true,
+                                                                                        },
+                                                                                    },
+                                                                                },
+                                                                            },
                                                                         },
                                                                     },
                                                                 },
@@ -1040,50 +1147,47 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                                 },
                                             ])
 
-                                            const expertProfilesData = expertProfiles
-                                                .data[0] as Prisma.ExpertProfileGetPayload<{
-                                                include: {
-                                                    supervisorResearchTopic: {
-                                                        select: {
-                                                            id: true
-                                                            coSupervisorId: true
-                                                            studentSubjectScore: {
-                                                                select: {
-                                                                    subjectVersion: {
-                                                                        select: {
-                                                                            credit: true
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    coSupervisorResearchTopic: {
-                                                        select: {
-                                                            id: true
-                                                            supervisorId: true
-                                                            studentSubjectScore: {
-                                                                select: {
-                                                                    subjectVersion: {
-                                                                        select: {
-                                                                            credit: true
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    lecturer: {
-                                                        select: {
-                                                            userProfile: {
-                                                                select: {
-                                                                    fullname: true
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }>[]
+                                            type ExpertStatRow = {
+                                                id: string
+                                                lecturerId: string | null
+                                                currentVersion: {
+                                                    inAcademy?: boolean | null
+                                                    name?: string | null
+                                                    academicDegreeType?: { sMa?: string | null } | null
+                                                    academicRankType?: { sMa?: string | null } | null
+                                                } | null
+                                                lecturer?: {
+                                                    userProfile?: {
+                                                        fullname?: string | null
+                                                        academicRankType?: { sMa?: string | null } | null
+                                                        academicDegreeType?: { sMa?: string | null } | null
+                                                    } | null
+                                                } | null
+                                                versions: Array<{
+                                                    supervisorInternship: Array<{
+                                                        id: string
+                                                        coSupervisorVersionId: string | null
+                                                        studentSubjectScore: { subjectVersion: { credit: number } }
+                                                    }>
+                                                    coSupervisorInternship: Array<{
+                                                        id: string
+                                                        supervisorVersionId: string | null
+                                                        studentSubjectScore: { subjectVersion: { credit: number } }
+                                                    }>
+                                                }>
+                                            }
+
+                                            const expertProfilesData = (expertProfiles
+                                                .data[0] || []) as ExpertStatRow[]
+
+                                            const flattenTopics = (profile: ExpertStatRow) => ({
+                                                supervisorInternship: profile.versions.flatMap(
+                                                    (v) => v.supervisorInternship
+                                                ),
+                                                coSupervisorInternship: profile.versions.flatMap(
+                                                    (v) => v.coSupervisorInternship
+                                                ),
+                                            })
 
                                             const res = await excelTemplate({
                                                 fileName: 'TK_TaiGiangDayCuaGiangVien.xlsx',
@@ -1097,27 +1201,30 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                                             hoc_ky: khoaVaKyData?.[1]?.name?.toUpperCase?.(),
                                                             data: expertProfilesData.map(
                                                                 (profile, idx) => {
+                                                                    const topics = flattenTopics(profile)
+                                                                    const person = {
+                                                                        ...profile.currentVersion,
+                                                                        lecturer: profile.lecturer,
+                                                                        lecturerId: profile.lecturerId,
+                                                                        inAcademy: profile.currentVersion?.inAcademy ?? profile.lecturerId != null,
+                                                                    }
                                                                     return {
                                                                         tt: idx + 1,
-                                                                        ho_ten:
-                                                                            profile?.name ??
-                                                                            profile?.lecturer
-                                                                                ?.userProfile
-                                                                                ?.fullname,
+                                                                        ho_ten: getSupervisorName(person, false, true) || '',
                                                                         cd_dl:
-                                                                            profile.supervisorResearchTopic.filter(
+                                                                            topics.supervisorInternship.filter(
                                                                                 (t) =>
-                                                                                    !t.coSupervisorId
+                                                                                    !t.coSupervisorVersionId
                                                                             ).length +
-                                                                            profile.coSupervisorResearchTopic.filter(
+                                                                            topics.coSupervisorInternship.filter(
                                                                                 (t) =>
-                                                                                    !t.supervisorId
+                                                                                    !t.supervisorVersionId
                                                                             ).length,
                                                                         tc_dl:
-                                                                            profile.supervisorResearchTopic
+                                                                            topics.supervisorInternship
                                                                                 .filter(
                                                                                     (t) =>
-                                                                                        !t.coSupervisorId
+                                                                                        !t.coSupervisorVersionId
                                                                                 )
                                                                                 .map(
                                                                                     (e) =>
@@ -1130,10 +1237,10 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                                                                     (a, b) => a + b,
                                                                                     0
                                                                                 ) +
-                                                                            profile.coSupervisorResearchTopic
+                                                                            topics.coSupervisorInternship
                                                                                 .filter(
                                                                                     (t) =>
-                                                                                        !t.supervisorId
+                                                                                        !t.supervisorVersionId
                                                                                 )
                                                                                 .map(
                                                                                     (e) =>
@@ -1147,19 +1254,19 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                                                                     0
                                                                                 ),
                                                                         cd_dhd:
-                                                                            profile.coSupervisorResearchTopic.filter(
+                                                                            topics.coSupervisorInternship.filter(
                                                                                 (t) =>
-                                                                                    !!t.supervisorId
+                                                                                    !!t.supervisorVersionId
                                                                             ).length +
-                                                                            profile.supervisorResearchTopic.filter(
+                                                                            topics.supervisorInternship.filter(
                                                                                 (t) =>
-                                                                                    !!t.coSupervisorId
+                                                                                    !!t.coSupervisorVersionId
                                                                             ).length,
                                                                         tc_dhd:
-                                                                            profile.coSupervisorResearchTopic
+                                                                            topics.coSupervisorInternship
                                                                                 .filter(
                                                                                     (t) =>
-                                                                                        !!t.supervisorId
+                                                                                        !!t.supervisorVersionId
                                                                                 )
                                                                                 .map(
                                                                                     (e) =>
@@ -1172,10 +1279,10 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                                                                     (a, b) => a + b,
                                                                                     0
                                                                                 ) +
-                                                                            profile.supervisorResearchTopic
+                                                                            topics.supervisorInternship
                                                                                 .filter(
                                                                                     (t) =>
-                                                                                        !!t.coSupervisorId
+                                                                                        !!t.coSupervisorVersionId
                                                                                 )
                                                                                 .map(
                                                                                     (e) =>
@@ -1620,21 +1727,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
               width: 170,
               align: "left",
               render: (_, record) => {
-                return record?.supervisor?.lecturer
-                  ? [
-                      record?.supervisor?.lecturer?.userProfile.academicRankType?.sMa,
-                      record?.supervisor?.lecturer?.userProfile.academicDegreeType?.sMa,
-                      record?.supervisor?.lecturer?.userProfile.fullname,
-                    ]
-                      .filter(Boolean)
-                      .join(". ")
-                  : [
-                      record?.supervisor?.academicRank,
-                      record?.supervisor?.academicDegree,
-                      record?.supervisor?.name,
-                    ]
-                      .filter(Boolean)
-                      .join(". ")
+                return getSupervisorName(versionToPersonLike(record?.supervisor), true, true)
               },
             },
             {
@@ -1642,21 +1735,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
               width: 170,
               align: "left",
               render: (_, record) => {
-                return record?.coSupervisor?.lecturer
-                  ? [
-                      record?.coSupervisor?.lecturer?.userProfile?.academicRankType?.sMa,
-                      record?.coSupervisor?.lecturer?.userProfile?.academicDegreeType?.sMa,
-                      record?.coSupervisor?.lecturer?.userProfile?.fullname,
-                    ]
-                      .filter(Boolean)
-                      .join(". ")
-                  : [
-                      record?.coSupervisor?.academicRank,
-                      record?.coSupervisor?.academicDegree,
-                      record?.coSupervisor?.name,
-                    ]
-                      .filter(Boolean)
-                      .join(". ")
+                return getSupervisorName(versionToPersonLike(record?.coSupervisor), true, true)
               },
             },
             {

@@ -124,7 +124,7 @@ const PutPaymentRecord = () => {
         ?.filter((thesis) => thesis.supervisor)
         .map((thesisProject) => {
           return {
-            expertId: thesisProject.supervisor?.id as string,
+            expertId: thesisProject.supervisor?.expertId as string,
             amount: values.supervisor,
             thesisProjectId: thesisProject.id,
           }
@@ -153,12 +153,12 @@ const PutPaymentRecord = () => {
                 OR: [
                   {
                     thesisProjects: {
-                      some: { supervisorId: { in: ids } },
+                      some: { supervisor: { is: { expertId: { in: ids } } } },
                     },
                   },
                   {
                     coThesisProjects: {
-                      some: { coSupervisorId: { in: ids } },
+                      some: { coSupervisor: { is: { expertId: { in: ids } } } },
                     },
                   },
                 ],
@@ -167,12 +167,12 @@ const PutPaymentRecord = () => {
                 OR: [
                   {
                     thesisProjects: {
-                      some: { supervisorId: { in: ids } },
+                      some: { supervisor: { is: { expertId: { in: ids } } } },
                     },
                   },
                   {
                     coThesisProjects: {
-                      some: { coSupervisorId: { in: ids } },
+                      some: { coSupervisor: { is: { expertId: { in: ids } } } },
                     },
                   },
                 ],

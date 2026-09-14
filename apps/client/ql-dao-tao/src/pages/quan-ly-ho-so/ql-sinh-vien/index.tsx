@@ -334,9 +334,19 @@ export default function UserProfilePageDs() {
                 include: {
                   academicRankType: true,
                   academicDegreeType: true,
-                  lecturer: {
+                  expert: {
                     include: {
-                      userProfile: true,
+                      lecturer: {
+                        include: {
+                          userProfile: {
+                            include: {
+                              academicRankType: true,
+                              academicDegreeType: true,
+                            },
+                          },
+                          organization: true,
+                        },
+                      },
                     },
                   },
                 },
@@ -345,9 +355,19 @@ export default function UserProfilePageDs() {
                 include: {
                   academicRankType: true,
                   academicDegreeType: true,
-                  lecturer: {
+                  expert: {
                     include: {
-                      userProfile: true,
+                      lecturer: {
+                        include: {
+                          userProfile: {
+                            include: {
+                              academicRankType: true,
+                              academicDegreeType: true,
+                            },
+                          },
+                          organization: true,
+                        },
+                      },
                     },
                   },
                 },
@@ -356,9 +376,19 @@ export default function UserProfilePageDs() {
                 include: {
                   academicRankType: true,
                   academicDegreeType: true,
-                  lecturer: {
+                  expert: {
                     include: {
-                      userProfile: true,
+                      lecturer: {
+                        include: {
+                          userProfile: {
+                            include: {
+                              academicRankType: true,
+                              academicDegreeType: true,
+                            },
+                          },
+                          organization: true,
+                        },
+                      },
                     },
                   },
                 },
@@ -370,10 +400,34 @@ export default function UserProfilePageDs() {
                 include: {
                   members: {
                     include: {
+                    expertProfileVersion: {
+                      include: {
+                        academicRankType: true,
+                        academicDegreeType: true,
+                        expert: {
+                          include: {
+                            lecturer: {
+                              include: {
+                                userProfile: {
+                                  include: {
+                                    academicRankType: true,
+                                    academicDegreeType: true,
+                                  },
+                                },
+                                organization: true,
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
                       expert: {
                         include: {
-                          academicRankType: true,
-                          academicDegreeType: true,
+                        lecturer: {
+                          include: {
+                            userProfile: true,
+                          },
+                        },
                         },
                       },
                     },
@@ -386,10 +440,34 @@ export default function UserProfilePageDs() {
             include: {
               members: {
                 include: {
+                expertProfileVersion: {
+                  include: {
+                    academicRankType: true,
+                    academicDegreeType: true,
+                    expert: {
+                      include: {
+                        lecturer: {
+                          include: {
+                            userProfile: {
+                              include: {
+                                academicRankType: true,
+                                academicDegreeType: true,
+                              },
+                            },
+                            organization: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
                   expert: {
                     include: {
-                      academicRankType: true,
-                      academicDegreeType: true,
+                    lecturer: {
+                      include: {
+                        userProfile: true,
+                      },
+                    },
                     },
                   },
                 },

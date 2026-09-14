@@ -30,7 +30,8 @@ export interface PersonLike {
   [key: string]: unknown
 }
 
-export interface ExpertProfileLike extends PersonLike {
+/** PersonLike từ Expert / ExpertProfileVersion (đã gán hoặc current). */
+export interface ExpertLike extends PersonLike {
   id?: string | null
   lecturerId?: string | null
   inAcademy?: boolean | null
@@ -41,6 +42,9 @@ export interface ExpertProfileLike extends PersonLike {
     lecturer?: PersonLike["lecturer"]
   } | null
 }
+
+/** @deprecated dùng ExpertLike */
+export type ExpertProfileLike = ExpertLike
 
 export interface CouncilMemberLike {
   role?: CouncilRole | string | null
@@ -137,7 +141,7 @@ export function formatPersonName(
     }
   }
 
-  const nestedLecturer = (person as ExpertProfileLike).expert?.lecturer
+  const nestedLecturer = (person as ExpertLike).expert?.lecturer
   const profile = nestedLecturer?.userProfile || person.lecturer?.userProfile || person.userProfile
   const rank = profile?.academicRankType?.sMa || person.academicRankType?.sMa || ""
   const degree = profile?.academicDegreeType?.sMa || person.academicDegreeType?.sMa || ""

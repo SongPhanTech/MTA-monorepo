@@ -2,9 +2,11 @@ import { PaymentStatus, SupervisorRole } from "@workspace/db/client"
 import Decimal from "decimal.js"
 import { prisma } from ".."
 import {
+  councilMemberProfile,
   getCouncilDefaultPayAmount,
   getSupervisorDefaultPayAmount,
   readDecimalAmount,
+  resolveInAcademy,
 } from "./thesis-payment.helpers"
 import { loadThesisProjectsForPayment } from "./thesis-payment-query"
 
@@ -23,6 +25,7 @@ async function runWithConcurrency<T>(
       while (nextIndex < items.length) {
         const current = items[nextIndex]
         nextIndex += 1
+        if (current === undefined) continue
         await worker(current)
       }
     })
@@ -42,8 +45,8 @@ function projectHasSupervisor(project: {
 
 function projectNeedsSupervisorPaymentSync(project: {
   id: string
-  supervisor?: { lecturer?: unknown; lecturerId?: string | null } | null
-  coSupervisor?: { lecturer?: unknown; lecturerId?: string | null } | null
+  supervisor?: Parameters<typeof resolveInAcademy>[0] | null
+  coSupervisor?: Parameters<typeof resolveInAcademy>[0] | null
   supervisorPaymentId?: string | null
   coSupervisorPaymentId?: string | null
   singleSupervisorPaymentId?: string | null
@@ -119,8 +122,8 @@ async function recreateSupervisorPaymentsForProject(
   const oldSinglePayId = project.singleSupervisorPaymentId
 
   if (supExpert && coExpert) {
-    const inAcSup = !!(supExpert.lecturer || supExpert.lecturerId)
-    const inAcCo = !!(coExpert.lecturer || coExpert.lecturerId)
+    const inAcSup = resolveInAcademy(supExpert)
+    const inAcCo = resolveInAcademy(coExpert)
     const amtSup = getSupervisorDefaultPayAmount(defaults, SupervisorRole.SUPERVISOR, inAcSup)
     const amtCo = getSupervisorDefaultPayAmount(defaults, SupervisorRole.CO_SUPERVISOR, inAcCo)
 
@@ -148,7 +151,7 @@ async function recreateSupervisorPaymentsForProject(
   const expert = supExpert || coExpert
   if (!expert) return
 
-  const inAc = !!(expert.lecturer || expert.lecturerId)
+  const inAc = resolveInAcademy(expert)
   const amtSingle = getSupervisorDefaultPayAmount(defaults, SupervisorRole.SINGLE, inAc)
 
   queueDelete(oldSupPayId)
@@ -193,8 +196,8 @@ async function ensureSupervisorPaymentForProject(
   const oldSinglePayId = project.singleSupervisorPaymentId
 
   if (supExpert && coExpert) {
-    const inAcSup = !!(supExpert.lecturer || supExpert.lecturerId)
-    const inAcCo = !!(coExpert.lecturer || coExpert.lecturerId)
+    const inAcSup = resolveInAcademy(supExpert)
+    const inAcCo = resolveInAcademy(coExpert)
     const amtSup = getSupervisorDefaultPayAmount(defaults, SupervisorRole.SUPERVISOR, inAcSup)
     const amtCo = getSupervisorDefaultPayAmount(defaults, SupervisorRole.CO_SUPERVISOR, inAcCo)
 
@@ -236,7 +239,7 @@ async function ensureSupervisorPaymentForProject(
 
     if (mustClearSingle) queueDelete(oldSinglePayId)
     if (supMissing && oldSupPayId && newSupId && oldSupPayId !== newSupId) queueDelete(oldSupPayId)
-    if (coMissing && oldCoPayId && newCoId && oldCoPayId !== newCoPayId) queueDelete(oldCoPayId)
+    if (coMissing && oldCoPayId && newCoId && oldCoPayId !== newCoId) queueDelete(oldCoPayId)
     await deleteSupervisorPayments(pendingDeleteIds)
     return
   }
@@ -244,7 +247,7 @@ async function ensureSupervisorPaymentForProject(
   const expert = supExpert || coExpert
   if (!expert) return
 
-  const inAc = !!(expert.lecturer || expert.lecturerId)
+  const inAc = resolveInAcademy(expert)
   const amtSingle = getSupervisorDefaultPayAmount(defaults, SupervisorRole.SINGLE, inAc)
   const singleMissing =
     !project.singleSupervisorPaymentId || paymentAmount(project.singleSupervisorPayment) <= 0
@@ -323,8 +326,8 @@ export async function syncCouncilPaymentsForThesisSession(params: {
       if (!member.id || processedMemberIds.has(member.id)) continue
       processedMemberIds.add(member.id)
 
-      const expert = member.expert
-      const inAcademy = !!(expert?.lecturerId || expert?.lecturer)
+      const profile = councilMemberProfile(member)
+      const inAcademy = resolveInAcademy(profile)
       const defaultAmount = getCouncilDefaultPayAmount(councilDefaults, member.role, inAcademy)
 
       if (params.recreateAll) {

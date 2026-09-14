@@ -96,10 +96,16 @@ const PutThesisProject = () => {
         : {}),
     },
     include: {
-      currentVersion: true,
+      currentVersion: {
+        include: {
+          academicRankType: true,
+          academicDegreeType: true,
+        },
+      },
       lecturer: {
         include: {
           userProfile: true,
+          organization: true,
         },
       },
     },
@@ -189,10 +195,10 @@ const PutThesisProject = () => {
       coSupervisorVersionId: versionId(output.coSupervisorId),
       organizationId: output.organizationId,
       maxStudents: output.maxStudents,
-      registrationStart: output.registrationStart,
-      registrationEnd: output.registrationEnd,
-      projectStart: output.projectStart,
-      projectEnd: output.projectEnd,
+      registrationStart: output.registrationStart?.toDate(),
+      registrationEnd: output.registrationEnd?.toDate(),
+      projectStart: output.projectStart?.toDate(),
+      projectEnd: output.projectEnd?.toDate(),
       subjectClassId: input?.subjectClassId || "",
       firstCheckProgress: output.firstCheckProgress,
       secondCheckProgress: output.secondCheckProgress,

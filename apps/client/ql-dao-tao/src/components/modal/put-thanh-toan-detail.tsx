@@ -6,7 +6,7 @@ import useSpinner from "@hooks/spinner"
 import type { PaymentRecord } from "@workspace/db/client"
 import {
   useCreatePaymentRecord,
-  useFindManyExpertProfile,
+  useFindManyExpert,
   useFindUniquePaymentRecord,
   useUpdatePaymentRecord,
 } from "@workspace/db/hooks"
@@ -71,8 +71,9 @@ const PutPaymentRecordDetail = () => {
     { enabled: !!id }
   )
 
-  const { data: expert = [] } = useFindManyExpertProfile({
+  const { data: expert = [] } = useFindManyExpert({
     include: {
+      currentVersion: true,
       lecturer: {
         include: {
           userProfile: true,
@@ -110,7 +111,7 @@ const PutPaymentRecordDetail = () => {
           <Select
             placeholder="Chọn chuyên gia"
             options={expert.map((item) => ({
-              label: `${item.code ? `${item.code} -` : ""} ${item.lecturer?.userProfile.fullname || item.name}`,
+              label: item.currentVersion?.name || item.lecturer?.userProfile?.fullname || "",
               value: item.id,
             }))}
             disabled={true}
