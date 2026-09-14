@@ -1,10 +1,15 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
 import { excelSuccess, jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
+import { ThesisExportFilterSchema } from "../dto/thesis-export.dto"
 import { batchUpdateThesisProjects } from "../services/thesis-batch-update.service"
 import { exportCouncilImportTemplate } from "../services/thesis-council-export.service"
 import { importCouncilFromExcel } from "../services/thesis-council-import.service"
 import { deleteStudentThesis } from "../services/thesis-delete.service"
+import {
+  buildThesisExport,
+  thesisExportTemplateKinds,
+} from "../services/thesis-export-builders.service"
 import { createSampleThesisData } from "../services/thesis-sample-data.service"
 
 const XLSX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -12,6 +17,11 @@ const XLSX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreads
 const app = new OpenAPIHono({ strict: false })
 
 const optionalIdSchema = z.string().nullable().optional()
+const ThesisExportKindSchema = z.enum(
+  thesisExportTemplateKinds as unknown as [string, ...string[]]
+).openapi({
+  description: "Mã mẫu in/xuất luận văn.",
+})
 
 const BatchUpdateThesisItemSchema = z.object({
   thesisProjectId: z.string().min(1).openapi({ description: "ID đề tài/luận văn." }),
@@ -222,6 +232,44 @@ app.openapi(exportCouncilImportTemplateRoute, async (c) => {
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(result.fileName)}`
     return c.body(new Uint8Array(result.buffer), 200, {
       "Content-Type": XLSX_CONTENT_TYPE,
+      "Content-Disposition": disposition,
+    })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Xuất file thất bại."
+    return c.json({ message }, 400)
+  }
+})
+
+const exportThesisTemplateRoute = createRoute({
+  operationId: "exportThesisTemplate",
+  tags: ["Luận văn"],
+  path: "/export/{kind}",
+  method: "post",
+  summary: "Xuất mẫu in luận văn theo bộ lọc",
+  request: {
+    params: z.object({ kind: ThesisExportKindSchema }),
+    body: {
+      content: { "application/json": { schema: ThesisExportFilterSchema } },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    ...excelSuccess("File xuất luận văn"),
+    400: {
+      description: "Chưa có dữ liệu hoặc lỗi xuất file",
+      content: { "application/json": { schema: ErrorMessageResponseSchema } },
+    },
+  },
+})
+
+app.openapi(exportThesisTemplateRoute, async (c) => {
+  const { kind } = c.req.valid("param")
+  const body = c.req.valid("json")
+  try {
+    const result = await buildThesisExport(kind, body)
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(result.fileName)}`
+    return c.body(new Uint8Array(result.buffer), 200, {
+      "Content-Type": result.contentType,
       "Content-Disposition": disposition,
     })
   } catch (error) {

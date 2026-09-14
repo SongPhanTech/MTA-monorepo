@@ -333,7 +333,7 @@ async function copyMode() {
     console.error("copy mode cần SOURCE_DATABASE_URL (hoặc DATABASE_URL) và TARGET_DATABASE_URL")
     console.error(`Ví dụ:
   SOURCE_DATABASE_URL="postgres://admin:123456654321@192.168.100.132:5432/mta" \\
-  TARGET_DATABASE_URL="postgresql://root:SwanT3chDB@45.117.177.26:5432/mta_in" \\
+  TARGET_DATABASE_URL="postgres://admin:123456654321@103.172.78.68:5432/mta_internet" \\
     bun scripts/sync-student-subject-score-from-registration.mjs --mode=copy`)
     process.exit(1)
   }

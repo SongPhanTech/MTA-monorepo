@@ -158,3 +158,40 @@ export const importCouncilFromExcel = async (
     body: formData,
   })
 }
+
+export type ThesisExportFilter = {
+  thesisSessionId: string
+  trainingCourseIds?: string[]
+  fixedClassIds?: string[]
+  organizationId?: string
+  signerName?: string
+  isChief?: boolean
+  signingDate?: string
+  moneyAmount?: number
+  recreateAllPayments?: boolean
+}
+
+export type ThesisExportTemplateResponse = {
+  status: number
+  data: Blob
+  headers: Headers
+}
+
+export type ThesisExportTemplateErrorResponse = {
+  status: number
+  data: { message: string }
+  headers: Headers
+}
+
+const getThesisExportTemplateUrl = (kind: string) => `/api/thesis/export/${kind}`
+
+export const exportThesisTemplate = async (
+  kind: string,
+  body: ThesisExportFilter
+): Promise<ThesisExportTemplateResponse | ThesisExportTemplateErrorResponse> => {
+  return customModelFetch(getThesisExportTemplateUrl(kind), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  })
+}

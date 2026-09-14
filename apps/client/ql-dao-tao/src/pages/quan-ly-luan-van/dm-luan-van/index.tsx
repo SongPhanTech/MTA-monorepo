@@ -10,17 +10,17 @@ import useSpinner from "@hooks/spinner"
 import { useThesisProjectStatusOptions } from "@hooks/thesisProjectStatus"
 import DefaultLayout from "@layouts/default-layout"
 import { buildOrgTree } from "@lib/utils"
-import { CouncilMember, CouncilRole, ThesisProjectStatus, ThesisType } from "@workspace/db/client"
+import { CouncilRole, ThesisProjectStatus, ThesisType } from "@workspace/db/client"
 import { queryClient } from "@api/index"
 import {
-  useCountStudent,
-  useFindManyDefaultCouncilRolePayAmount,
+  useCountThesisProject,
   useFindManyDefenseSession,
   useFindManyDM_DonVi,
   useFindManyExpert,
   useFindManyFixedClass,
   useFindManyRoom,
   useFindManyStudent,
+  useFindManyThesisProject,
   useFindManyThesisSession,
   useUpdateThesisProject,
   useUpdateThesisSession,
@@ -29,6 +29,7 @@ import {
   batchUpdateThesisProjects,
   deleteStudentThesis,
   exportCouncilImportTemplate,
+  exportThesisTemplate,
   importCouncilFromExcel,
 } from "@workspace/libs/api/thesis"
 import { whereOrganization } from "@workspace/libs/constants"
@@ -51,30 +52,10 @@ import {
   Tag,
 } from "antd"
 import { ArrowRightLeft, SquarePen } from "lucide-react"
+import { saveAs } from "file-saver"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import TreeSelect from "@/components/commons/tree-select"
-import {
-  exportBanSaoHDDGLV,
-  exportDanhSachBaoVe,
-  exportDanhSachBaoVeDanNgoaiPhong,
-  exportDanhSachNopLuanVanThuVien,
-  exportDsChuyenGia,
-  exportGiayMoiChamLvPb,
-  exportGiayMoiHdlv,
-  exportHDDanhGiaLuanVan,
-  exportHosobvlv,
-  exportKetQuaBaoVeLuanVan,
-  exportKiemTraTienDo,
-  exportPhuLucDsLuanVan,
-  exportPhuLucQdhdd,
-  exportSaoQDHDLV,
-  exportThanhToanHoiDongBaoVe,
-  exportThanhToanHuongDanTrongHv,
-  exportThongKeCbHdlv,
-  exportThongKeCbThamGiaHd,
-  exportThongKeCoQuanDonViCanBoNgoaiHv,
-} from "@/utils/thesis-excel"
 import type { FilterProps } from "@constants/type"
 import { flattenExpertForSelect, versionInAcademy, versionToPersonLike } from "@/utils/expert-select"
 import type { ExpertProfileLike, PersonLike } from "@/utils/thesis-profile"
@@ -239,6 +220,250 @@ export function getCouncilExpertIdsExcludingField(
   return excluded
 }
 
+/** workplace ưu tiên; fallback organization (nhiều bản ngoài HV chỉ có organization). */
+function resolveExpertWorkplace(
+  person?: ExpertProfileLike | PersonLike | null,
+  profile?: { workplace?: string | null } | null
+): string {
+  if (!person && !profile) return ""
+  const organization =
+    typeof person?.organization === "string" ? person.organization.trim() : ""
+  return person?.workplace?.trim() || profile?.workplace?.trim() || organization || ""
+}
+
+/** Select gọn cho ExpertProfileVersion (hiển thị tên / đơn vị / trong-ngoài HV). */
+const expertVersionSelect = {
+  id: true,
+  expertId: true,
+  name: true,
+  workplace: true,
+  organization: true,
+  inAcademy: true,
+  academicRankType: { select: { sMa: true } },
+  academicDegreeType: { select: { sMa: true } },
+  expert: {
+    select: {
+      id: true,
+      lecturerId: true,
+      lecturer: {
+        select: {
+          organization: { select: { sMa: true, sTen: true } },
+          userProfile: {
+            select: {
+              fullname: true,
+              academicRankType: { select: { sMa: true } },
+              academicDegreeType: { select: { sMa: true } },
+            },
+          },
+        },
+      },
+    },
+  },
+} as const
+
+/** Select bảng luận văn — chỉ field UI cần. */
+const thesisProjectTableSelect = {
+  id: true,
+  title: true,
+  researchTopicAssociated: true,
+  language: true,
+  type: true,
+  status: true,
+  thesisSessionId: true,
+  thesisType: true,
+  deletedAt: true,
+  defenseDate: true,
+  CHUTICH: true,
+  THUKY: true,
+  PHANBIEN1: true,
+  PHANBIEN2: true,
+  UYVIEN3: true,
+  supervisorName: true,
+  coSupervisorName: true,
+  organization: { select: { Id: true, sMa: true, sTen: true } },
+  thesisSession: { select: { id: true } },
+  defenseSession: { select: { id: true, startTime: true } },
+  defenseRecord: { select: { finalScore: true } },
+  room: { select: { id: true, name: true } },
+  supervisor: { select: expertVersionSelect },
+  coSupervisor: { select: expertVersionSelect },
+  thirdSupervisor: { select: expertVersionSelect },
+  council: {
+    select: {
+      id: true,
+      members: {
+        select: {
+          id: true,
+          role: true,
+          expertId: true,
+          expertProfileVersion: { select: expertVersionSelect },
+        },
+      },
+    },
+  },
+  registrations: {
+    where: { deletedAt: null },
+    take: 1,
+    select: {
+      deletedAt: true,
+      student: {
+        select: {
+          id: true,
+          code: true,
+          userProfile: {
+            select: { fullname: true, firstName: true, lastName: true, dateOfBirth: true },
+          },
+          fixedClass: {
+            select: {
+              id: true,
+              name: true,
+              code: true,
+              trainingCourse: {
+                select: {
+                  id: true,
+                  name: true,
+                  trainingObjectType: { select: { id: true, name: true } },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+} as const
+
+/** Select xuất Excel — thêm payment / curriculum / session config. */
+const thesisProjectExportSelect = {
+  ...thesisProjectTableSelect,
+  thesisSession: {
+    select: {
+      id: true,
+      name: true,
+      defenseDecisionDate: true,
+      defenseDecisionNumber: true,
+      configPayment: {
+        select: {
+          councilPayAmounts: true,
+          supervisorPayAmounts: true,
+        },
+      },
+      trainingCourses: {
+        select: {
+          id: true,
+          name: true,
+          trainingObjectType: { select: { id: true, name: true } },
+        },
+      },
+    },
+  },
+  supervisorPayment: { select: { amount: true } },
+  coSupervisorPayment: { select: { amount: true } },
+  council: {
+    select: {
+      id: true,
+      members: {
+        select: {
+          id: true,
+          role: true,
+          expertId: true,
+          payment: { select: { amount: true } },
+          expertProfileVersion: { select: expertVersionSelect },
+        },
+      },
+    },
+  },
+  registrations: {
+    where: { deletedAt: null },
+    take: 1,
+    select: {
+      deletedAt: true,
+      student: {
+        select: {
+          id: true,
+          code: true,
+          userProfile: {
+            select: { fullname: true, firstName: true, lastName: true, dateOfBirth: true },
+          },
+          curriculumVersion: {
+            select: {
+              curriculum: {
+                select: {
+                  managementOrganization: { select: { Id: true, sMa: true, sTen: true } },
+                  trainingMajor: {
+                    select: {
+                      name: true,
+                      organization: { select: { Id: true, sMa: true, sTen: true } },
+                      trainingField: { select: { name: true } },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          fixedClass: {
+            select: {
+              id: true,
+              name: true,
+              code: true,
+              trainingCourse: {
+                select: {
+                  id: true,
+                  name: true,
+                  trainingObjectType: { select: { id: true, name: true } },
+                },
+              },
+              curriculumVersion: {
+                select: {
+                  curriculum: {
+                    select: {
+                      trainingMajor: {
+                        select: {
+                          name: true,
+                          organization: { select: { Id: true, sMa: true, sTen: true } },
+                          trainingField: { select: { name: true } },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+} as const
+
+function mapThesisProjectsToStudentRows(
+  projects: Array<{
+    registrations?: Array<{
+      deletedAt?: string | Date | null
+      student?: Record<string, unknown> | null
+    }> | null
+    [key: string]: unknown
+  }>
+): StudentRow[] {
+  return projects
+    .map((project) => {
+      const registration = project.registrations?.[0]
+      const student = registration?.student as StudentRow | undefined
+      if (!student?.id) return null
+      const { registrations: _regs, ...thesisProject } = project
+      return {
+        ...student,
+        thesisRegistrations: [
+          {
+            deletedAt: registration?.deletedAt ?? null,
+            thesisProject,
+          },
+        ],
+      } as StudentRow
+    })
+    .filter((row): row is StudentRow => row != null)
+}
+
 export function formatPersonNameWithWorkplace(
   person: ExpertProfileLike | PersonLike | string | null | undefined,
   allExperts: ExpertProfileLike[] = []
@@ -274,7 +499,7 @@ export function formatPersonNameWithWorkplace(
 
     if (matched) {
       const inAcad = versionInAcademy(matched)
-      const wp = matched.workplace || ""
+      const wp = resolveExpertWorkplace(matched)
       const textWithWp = [trimmed, wp].filter(Boolean).join(", ")
       return { textWithWorkplace: textWithWp, inAcademy: inAcad }
     }
@@ -292,7 +517,7 @@ export function formatPersonNameWithWorkplace(
   const fullname = expertPerson?.name || profile?.fullname || ""
   // Ưu tiên inAcademy trên version đã gán / current; không suy từ lecturerId live
   const inAcademy = versionInAcademy(expertPerson)
-  let workplace = expertPerson?.workplace || profile?.workplace || ""
+  let workplace = resolveExpertWorkplace(expertPerson, profile)
 
   if (!inAcademy && !workplace && allExperts.length) {
     const cleanedFullname = cleanTitle(fullname)
@@ -301,7 +526,8 @@ export function formatPersonNameWithWorkplace(
       const eName = e.name || e?.lecturer?.userProfile?.fullname || ""
       return eName === fullname || (cleanedFullname && cleanTitle(eName) === cleanedFullname)
     })
-    if (matched?.workplace) workplace = matched.workplace
+    const matchedWorkplace = resolveExpertWorkplace(matched)
+    if (matchedWorkplace) workplace = matchedWorkplace
   }
 
   const text = [title, fullname].filter(Boolean).join(" ").trim() || fullname
@@ -408,7 +634,7 @@ export function getSupervisorName(
   )
 }
 
-/** Options Select chuyên gia: label = tên; luôn gắn value đang chọn nếu bị lọc khỏi catalog. */
+/** Options Select chuyên gia: label giống chế độ xem (tên + đơn vị nếu ngoài HV). */
 function buildExpertSelectOptions(
   experts: ExpertProfileLike[] | undefined,
   filterFn?: (item: ExpertProfileLike) => boolean,
@@ -417,9 +643,13 @@ function buildExpertSelectOptions(
     person?: ExpertProfileLike | PersonLike | null
   }
 ) {
-  const list = (experts ?? []).filter((item) => (filterFn ? filterFn(item) : true))
+  const catalog = experts ?? []
+  const list = catalog.filter((item) => (filterFn ? filterFn(item) : true))
   const options = list.map((item) => {
-    const searchString = String(getSupervisorName(item, false, true) || item.name || "")
+    // Truyền catalog để backfill workplace giống getCouncilMemberName / chế độ xem
+    const searchString = String(
+      getSupervisorName(item, false, true, "", catalog) || item.name || ""
+    )
     const inAcademy = versionInAcademy(item)
     return {
       value: String(item.id),
@@ -439,7 +669,7 @@ function buildExpertSelectOptions(
   if (ensureId && !options.some((o) => o.value === ensureId)) {
     const person = ensure.person
     const searchString = person
-      ? String(getSupervisorName(person as ExpertProfileLike, false, true) || "")
+      ? String(getSupervisorName(person as ExpertProfileLike, false, true, "", catalog) || "")
       : ""
     const inAcademy = person ? versionInAcademy(person as ExpertProfileLike) : false
     options.unshift({
@@ -641,77 +871,79 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     }))
   }, [role, orgId, form])
   // biome-ignore lint/correctness/useExhaustiveDependencies: dùng cho searchParams
-  const studentWhere = useMemo(() => {
-    if (!searchParams.thesisSessionId) return { id: { in: [] } }
+  const thesisProjectWhere = useMemo(() => {
+    if (!searchParams.thesisSessionId) return { id: { in: [] as string[] } }
 
-    const andConditions: Record<string, unknown>[] = []
+    const fixedClassIds =
+      searchParams.fixedClassId && searchParams.fixedClassId.length > 0
+        ? searchParams.fixedClassId
+        : fixedClasses?.map((f) => f.id)
 
-    andConditions.push({
-      fixedClassId: {
-        in:
-          searchParams.fixedClassId && searchParams.fixedClassId.length > 0
-            ? searchParams.fixedClassId
-            : fixedClasses?.map((f) => f.id),
-      },
-    })
-
+    const studentAnd: Record<string, unknown>[] = [
+      { fixedClassId: { in: fixedClassIds ?? [] } },
+    ]
     if (filters.code) {
-      andConditions.push({ code: { contains: filters.code, mode: "insensitive" } })
+      studentAnd.push({ code: { contains: filters.code, mode: "insensitive" } })
     }
     if (filters.name) {
-      andConditions.push({
+      studentAnd.push({
         userProfile: { fullname: { contains: filters.name, mode: "insensitive" } },
       })
     }
 
-    const thesisProjectConditions: Record<string, unknown> = {
-      deletedAt: null,
-      thesisSessionId: searchParams.thesisSessionId,
-      thesisType: ThesisType.THESIS,
-      organizationId: searchParams.organizationId || undefined,
+    const andConditions: Record<string, unknown>[] = [
+      { deletedAt: null },
+      { thesisSessionId: searchParams.thesisSessionId },
+      { thesisType: ThesisType.THESIS },
+    ]
+    if (searchParams.organizationId) {
+      andConditions.push({ organizationId: searchParams.organizationId })
     }
-
     if (filters.title) {
-      thesisProjectConditions.title = { contains: filters.title, mode: "insensitive" }
+      andConditions.push({ title: { contains: filters.title, mode: "insensitive" } })
     }
-
     if (filters.supervisor) {
-      thesisProjectConditions.supervisor = {
-        OR: [
-          { name: { contains: filters.supervisor, mode: "insensitive" } },
-          {
-            expert: {
-              lecturer: {
-                userProfile: { fullname: { contains: filters.supervisor, mode: "insensitive" } },
-              },
-            },
-          },
-        ],
-      }
-    }
-
-    if (filters.coSupervisor) {
-      thesisProjectConditions.coSupervisor = {
-        OR: [
-          { name: { contains: filters.coSupervisor, mode: "insensitive" } },
-          {
-            expert: {
-              lecturer: {
-                userProfile: {
-                  fullname: { contains: filters.coSupervisor, mode: "insensitive" },
+      andConditions.push({
+        supervisor: {
+          OR: [
+            { name: { contains: filters.supervisor, mode: "insensitive" } },
+            {
+              expert: {
+                lecturer: {
+                  userProfile: {
+                    fullname: { contains: filters.supervisor, mode: "insensitive" },
+                  },
                 },
               },
             },
-          },
-        ],
-      }
+          ],
+        },
+      })
+    }
+    if (filters.coSupervisor) {
+      andConditions.push({
+        coSupervisor: {
+          OR: [
+            { name: { contains: filters.coSupervisor, mode: "insensitive" } },
+            {
+              expert: {
+                lecturer: {
+                  userProfile: {
+                    fullname: { contains: filters.coSupervisor, mode: "insensitive" },
+                  },
+                },
+              },
+            },
+          ],
+        },
+      })
     }
 
     andConditions.push({
-      thesisRegistrations: {
+      registrations: {
         some: {
-          thesisProject: thesisProjectConditions,
           deletedAt: null,
+          student: { AND: studentAnd },
         },
       },
     })
@@ -728,49 +960,42 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         userProfile: { fullname: containsKw },
       }
 
-      const thesisProjectKeywordConditions = [
-        { title: containsKw },
-        { researchTopicAssociated: containsKw },
-        { supervisorName: containsKw },
-        { coSupervisorName: containsKw },
-        { supervisor: expertKwFilter },
-        { coSupervisor: expertKwFilter },
-        { thirdSupervisor: expertKwFilter },
-        { primarySupervisor: lecturerKwFilter },
-        { secondarySupervisor: lecturerKwFilter },
-        { CHUTICH: containsKw },
-        { THUKY: containsKw },
-        { PHANBIEN1: containsKw },
-        { PHANBIEN2: containsKw },
-        { UYVIEN3: containsKw },
-        { language: containsKw },
-        { type: containsKw },
-        { room: { name: containsKw } },
-        {
-          council: {
-            members: {
-              some: {
-                expertProfileVersion: expertKwFilter,
+      andConditions.push({
+        OR: [
+          { title: containsKw },
+          { researchTopicAssociated: containsKw },
+          { supervisorName: containsKw },
+          { coSupervisorName: containsKw },
+          { supervisor: expertKwFilter },
+          { coSupervisor: expertKwFilter },
+          { thirdSupervisor: expertKwFilter },
+          { primarySupervisor: lecturerKwFilter },
+          { secondarySupervisor: lecturerKwFilter },
+          { CHUTICH: containsKw },
+          { THUKY: containsKw },
+          { PHANBIEN1: containsKw },
+          { PHANBIEN2: containsKw },
+          { UYVIEN3: containsKw },
+          { language: containsKw },
+          { type: containsKw },
+          { room: { name: containsKw } },
+          {
+            council: {
+              members: {
+                some: { expertProfileVersion: expertKwFilter },
               },
             },
           },
-        },
-      ]
-
-      andConditions.push({
-        OR: [
-          { userProfile: { fullname: containsKw } },
-          { code: containsKw },
-          { fixedClass: { name: containsKw } },
           {
-            thesisRegistrations: {
+            registrations: {
               some: {
                 deletedAt: null,
-                thesisProject: {
-                  deletedAt: null,
-                  thesisSessionId: searchParams.thesisSessionId,
-                  thesisType: ThesisType.THESIS,
-                  OR: thesisProjectKeywordConditions,
+                student: {
+                  OR: [
+                    { userProfile: { fullname: containsKw } },
+                    { code: containsKw },
+                    { fixedClass: { name: containsKw } },
+                  ],
                 },
               },
             },
@@ -783,55 +1008,92 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   }, [searchParams, fixedClasses, filters, debouncedNameKeyword])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: dùng cho searchParams
-  const allStudentWhere = useMemo(() => {
-    if (!searchParams.thesisSessionId) return { id: { in: [] } }
-    const containsKw = { contains: debouncedNameKeyword, mode: "insensitive" }
-    const expertKwFilter = {
-      OR: [
-        { name: containsKw },
-        { expert: { lecturer: { userProfile: { fullname: containsKw } } } },
-      ],
+  const exportThesisProjectWhere = useMemo(() => {
+    if (!searchParams.thesisSessionId) return { id: { in: [] as string[] } }
+
+    const fixedClassIds =
+      searchParams.fixedClassId && searchParams.fixedClassId.length > 0
+        ? searchParams.fixedClassId
+        : fixedClasses?.map((f) => f.id)
+
+    const andConditions: Record<string, unknown>[] = [
+      { deletedAt: null },
+      { thesisSessionId: searchParams.thesisSessionId },
+      { thesisType: ThesisType.THESIS },
+      {
+        registrations: {
+          some: {
+            deletedAt: null,
+            student: { fixedClassId: { in: fixedClassIds ?? [] } },
+          },
+        },
+      },
+    ]
+    if (searchParams.organizationId) {
+      andConditions.push({ organizationId: searchParams.organizationId })
     }
-    const lecturerKwFilter = {
-      userProfile: { fullname: containsKw },
-    }
-    const thesisProjectWhere: Record<string, any> = {
-      deletedAt: null,
-      thesisSessionId: searchParams.thesisSessionId,
-      thesisType: ThesisType.THESIS,
-      organizationId: searchParams.organizationId || undefined,
-    }
+
     if (debouncedNameKeyword) {
-      thesisProjectWhere.OR = [
-        { title: containsKw },
-        { researchTopicAssociated: containsKw },
-        { supervisorName: containsKw },
-        { coSupervisorName: containsKw },
-        { supervisor: expertKwFilter },
-        { coSupervisor: expertKwFilter },
-        { thirdSupervisor: expertKwFilter },
-        { primarySupervisor: lecturerKwFilter },
-        { secondarySupervisor: lecturerKwFilter },
-        { CHUTICH: containsKw },
-        { THUKY: containsKw },
-        { PHANBIEN1: containsKw },
-        { PHANBIEN2: containsKw },
-        { UYVIEN3: containsKw },
-        { language: containsKw },
-        { type: containsKw },
-        { room: { name: containsKw } },
-        {
-          council: {
-            members: {
-              some: {
-                expertProfileVersion: expertKwFilter,
+      const containsKw = { contains: debouncedNameKeyword, mode: "insensitive" }
+      const expertKwFilter = {
+        OR: [
+          { name: containsKw },
+          { expert: { lecturer: { userProfile: { fullname: containsKw } } } },
+        ],
+      }
+      const lecturerKwFilter = {
+        userProfile: { fullname: containsKw },
+      }
+      andConditions.push({
+        OR: [
+          { title: containsKw },
+          { researchTopicAssociated: containsKw },
+          { supervisorName: containsKw },
+          { coSupervisorName: containsKw },
+          { supervisor: expertKwFilter },
+          { coSupervisor: expertKwFilter },
+          { thirdSupervisor: expertKwFilter },
+          { primarySupervisor: lecturerKwFilter },
+          { secondarySupervisor: lecturerKwFilter },
+          { CHUTICH: containsKw },
+          { THUKY: containsKw },
+          { PHANBIEN1: containsKw },
+          { PHANBIEN2: containsKw },
+          { UYVIEN3: containsKw },
+          { language: containsKw },
+          { type: containsKw },
+          { room: { name: containsKw } },
+          {
+            council: {
+              members: {
+                some: { expertProfileVersion: expertKwFilter },
               },
             },
           },
-        },
-      ]
+          {
+            registrations: {
+              some: {
+                deletedAt: null,
+                student: {
+                  OR: [
+                    { userProfile: { fullname: containsKw } },
+                    { code: containsKw },
+                    { fixedClass: { name: containsKw } },
+                  ],
+                },
+              },
+            },
+          },
+        ],
+      })
     }
-    const filter: Record<string, any> = {
+
+    return { AND: andConditions }
+  }, [searchParams, fixedClasses, debouncedNameKeyword])
+
+  const sampleStudentWhere = useMemo(() => {
+    if (!searchParams.thesisSessionId) return { id: { in: [] as string[] } }
+    return {
       fixedClassId: {
         in:
           searchParams.fixedClassId && searchParams.fixedClassId.length > 0
@@ -839,257 +1101,78 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
             : fixedClasses?.map((f) => f.id),
       },
     }
-    if (!debouncedNameKeyword) return filter
-    return {
-      ...filter,
-      OR: [
-        {
-          userProfile: {
-            fullname: containsKw,
-          },
-        },
-        { code: containsKw },
-        { fixedClass: { name: containsKw } },
-        {
-          thesisRegistrations: {
-            some: {
+  }, [searchParams.thesisSessionId, searchParams.fixedClassId, fixedClasses])
+
+  const { data: thesisProjects = [], refetch: refetchThesisProjects } = useFindManyThesisProject(
+    {
+      where: thesisProjectWhere,
+      select: thesisProjectTableSelect,
+      orderBy: { id: "asc" },
+      skip: (currentPage - 1) * numberOfPages,
+      take: numberOfPages,
+    },
+    { enabled: !!searchParams.thesisSessionId }
+  )
+
+  const students = useMemo(
+    () => mapThesisProjectsToStudentRows(thesisProjects as any[]),
+    [thesisProjects]
+  )
+
+  type StudentRow = (typeof students)[number]
+
+  /** Chỉ fetch khi gán điểm LMH — xuất mẫu in dùng API server. */
+  const { refetch: refetchExportThesisProjects } = useFindManyThesisProject(
+    {
+      where: exportThesisProjectWhere,
+      select: thesisProjectExportSelect,
+    },
+    { enabled: false }
+  )
+
+  const getExportStudentRows = useCallback(async (): Promise<StudentRow[]> => {
+    if (!searchParams.thesisSessionId) return []
+    const result = await refetchExportThesisProjects()
+    return mapThesisProjectsToStudentRows((result.data ?? []) as any[])
+  }, [refetchExportThesisProjects, searchParams.thesisSessionId])
+
+  const { data: sampleStudents = [] } = useFindManyStudent(
+    {
+      where: sampleStudentWhere,
+      select: {
+        id: true,
+        code: true,
+        userProfile: { select: { fullname: true, dateOfBirth: true } },
+        fixedClass: { select: { name: true } },
+        thesisRegistrations: {
+          where: {
+            deletedAt: null,
+            thesisProject: {
               deletedAt: null,
-              thesisProject: thesisProjectWhere,
+              thesisType: ThesisType.THESIS,
+              thesisSessionId: searchParams.thesisSessionId || undefined,
             },
           },
-        },
-      ],
-    }
-  }, [searchParams, fixedClasses, debouncedNameKeyword])
-
-  const { data: students = [], refetch: refetchStudents } = useFindManyStudent({
-    where: studentWhere,
-    include: {
-      userProfile: true,
-      fixedClass: {
-        include: {
-          trainingCourse: {
-            include: { trainingObjectType: true },
-          },
-        },
-      },
-      thesisRegistrations: {
-        include: {
-          thesisProject: {
-            include: {
-              council: {
-                include: {
-                  members: {
-                    include: {
-                      expertProfileVersion: {
-                        include: {
-                          academicRankType: true,
-                          academicDegreeType: true,
-                          expert: {
-                            include: {
-                              lecturer: {
-                                include: {
-                                  userProfile: {
-                                    include: { academicRankType: true, academicDegreeType: true },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-              thesisSession: true,
-              defenseSession: true,
-              defenseRecord: true,
-              room: true,
-              organization: true,
-              supervisor: {
-                include: {
-                  academicRankType: true,
-                  academicDegreeType: true,
-                  expert: {
-                    include: {
-                      lecturer: {
-                        include: {
-                          userProfile: {
-                            include: { academicRankType: true, academicDegreeType: true },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-              coSupervisor: {
-                include: {
-                  academicRankType: true,
-                  academicDegreeType: true,
-                  expert: {
-                    include: {
-                      lecturer: {
-                        include: {
-                          userProfile: {
-                            include: { academicRankType: true, academicDegreeType: true },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
+          select: {
+            deletedAt: true,
+            thesisProject: {
+              select: {
+                deletedAt: true,
+                thesisType: true,
+                thesisSessionId: true,
+                title: true,
               },
             },
           },
         },
       },
     },
-    skip: (currentPage - 1) * numberOfPages,
-    take: numberOfPages,
-  })
-  type StudentRow = (typeof students)[number]
-  const { data: allStudentsInClasses = [], refetch: refetchAllStudentsInClasses } =
-    useFindManyStudent({
-      where: allStudentWhere,
-      include: {
-        userProfile: true,
-        curriculumVersion: {
-          include: {
-            curriculum: {
-              include: {
-                managementOrganization: true,
-                trainingMajor: { include: { organization: true } },
-              },
-            },
-          },
-        },
-        fixedClass: {
-          include: {
-            trainingCourse: {
-              include: { trainingObjectType: true },
-            },
-            curriculumVersion: {
-              include: {
-                curriculum: {
-                  include: {
-                    trainingMajor: {
-                      include: { trainingField: true, organization: true },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-        thesisRegistrations: {
-          include: {
-            thesisProject: {
-              // where: { thesisSession: { id: searchParams.thesisSessionId } },
-              include: {
-                defenseSession: true,
-                thesisSession: {
-                  include: {
-                    configPayment: {
-                      include: {
-                        councilPayAmounts: true,
-                        supervisorPayAmounts: true,
-                      },
-                    },
-                    trainingCourses: {
-                      include: {
-                        trainingObjectType: true,
-                      },
-                    },
-                  },
-                },
-                organization: true,
-                supervisor: {
-                  include: {
-                    academicRankType: true,
-                    academicDegreeType: true,
-                    expert: {
-                      include: {
-                        lecturer: {
-                          include: {
-                            organization: true,
-                            userProfile: {
-                              include: {
-                                academicRankType: true,
-                                academicDegreeType: true,
-                              },
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-                coSupervisor: {
-                  include: {
-                    academicRankType: true,
-                    academicDegreeType: true,
-                    expert: {
-                      include: {
-                        lecturer: {
-                          include: {
-                            organization: true,
-                            userProfile: {
-                              include: {
-                                academicRankType: true,
-                                academicDegreeType: true,
-                              },
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-                room: true,
-                defenseRecord: true,
-                supervisorPayment: true,
-                coSupervisorPayment: true,
-                council: {
-                  include: {
-                    members: {
-                      include: {
-                        expertProfileVersion: {
-                          include: {
-                            academicRankType: true,
-                            academicDegreeType: true,
-                            expert: {
-                              include: {
-                                lecturer: {
-                                  include: {
-                                    organization: true,
-                                    userProfile: {
-                                      include: {
-                                        academicRankType: true,
-                                        academicDegreeType: true,
-                                      },
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                        payment: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    })
-  const { data: countStudent, refetch: refetchCount } = useCountStudent(
+    { enabled: !!searchParams.thesisSessionId && role === "P7" }
+  )
+
+  const { data: countStudent, refetch: refetchCount } = useCountThesisProject(
     {
-      where: studentWhere,
+      where: thesisProjectWhere,
     },
     {
       enabled: !!searchParams.thesisSessionId,
@@ -1120,15 +1203,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
   const { mutateAsync: updateThesisSession } = useUpdateThesisSession()
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
-  const { data: defaultCouncilPayAmounts = [] } = useFindManyDefaultCouncilRolePayAmount(
-    {
-      where: {
-        configPaymentSessionId: thesisConfigPaymentSessionId,
-        description: "THESIS",
-      },
-    },
-    { enabled: !!searchParams.thesisSessionId }
-  )
   const isWithinGvhdSupervisorEditWindow = (): boolean => {
     const deadline = selectedThesisSession?.topicEntryDeadline
     if (!deadline) return true
@@ -1210,8 +1284,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   }
 
   const refetchThesisTableData = useCallback(async () => {
-    await Promise.all([refetchStudents(), refetchCount(), refetchAllStudentsInClasses()])
-  }, [refetchStudents, refetchCount, refetchAllStudentsInClasses])
+    await Promise.all([refetchThesisProjects(), refetchCount()])
+  }, [refetchThesisProjects, refetchCount])
 
   const handleDeleteStudentThesis = async (record: StudentRow) => {
     const thesisSessionId = searchParams.thesisSessionId?.trim()
@@ -1584,6 +1658,76 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     moneyAmount?: number
   }
 
+  const getThesisExportFilters = useCallback(
+    (payload?: SignerPayload & { recreateAllPayments?: boolean }) => {
+      const fixedClassIds =
+        searchParams.fixedClassId && searchParams.fixedClassId.length > 0
+          ? searchParams.fixedClassId
+          : fixedClasses?.map((f) => f.id).filter(Boolean)
+
+      return {
+        thesisSessionId: searchParams.thesisSessionId || "",
+        fixedClassIds,
+        trainingCourseIds: trainingCourseIds.length ? trainingCourseIds : undefined,
+        organizationId: searchParams.organizationId || undefined,
+        signerName: payload?.signerName,
+        isChief: payload?.isChief,
+        signingDate: payload?.signingDate ? dayjs(payload.signingDate).toISOString() : undefined,
+        moneyAmount: payload?.moneyAmount,
+        recreateAllPayments: payload?.recreateAllPayments,
+      }
+    },
+    [
+      fixedClasses,
+      searchParams.fixedClassId,
+      searchParams.organizationId,
+      searchParams.thesisSessionId,
+      trainingCourseIds,
+    ]
+  )
+
+  const getExportFileName = (headers: Headers, fallback: string) => {
+    const disposition = headers.get("Content-Disposition") || ""
+    const utf8Match = disposition.match(/filename\*=UTF-8''([^;]+)/i)
+    const plainMatch = disposition.match(/filename="?([^"]+)"?/i)
+    return utf8Match?.[1]
+      ? decodeURIComponent(utf8Match[1])
+      : plainMatch?.[1]
+        ? plainMatch[1]
+        : fallback
+  }
+
+  const runThesisExport = useCallback(
+    async (kind: string, fallbackFileName: string, payload?: SignerPayload & { recreateAllPayments?: boolean }) => {
+      const filters = getThesisExportFilters(payload)
+      if (!filters.thesisSessionId) {
+        message.warning("Vui lòng chọn đợt xét luận văn trước khi xuất.")
+        return
+      }
+
+      try {
+        showSpinner()
+        const response = await exportThesisTemplate(kind, filters)
+        if (response.status !== 200 || !(response.data instanceof Blob)) {
+          message.error(
+            response.data && typeof response.data === "object" && "message" in response.data
+              ? String(response.data.message)
+              : "Xuất file thất bại."
+          )
+          return
+        }
+        saveAs(response.data, getExportFileName(response.headers, fallbackFileName))
+        message.success("Xuất file thành công")
+      } catch (error) {
+        console.error(error)
+        message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      } finally {
+        hideSpinner()
+      }
+    },
+    [getThesisExportFilters, hideSpinner, showSpinner]
+  )
+
   const buttonList: Array<{
     id: number
     label: string
@@ -1598,134 +1742,74 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       label: "Phụ lục danh sách luận văn",
       needModal: true,
       needSign: true,
-      onClick: async () =>
-        await exportPhuLucDsLuanVan({
-          allStudentsInClasses,
-          thesisSessionId: searchParams.thesisSessionId,
-          showSpinner,
-          hideSpinner,
-          message,
-        }),
+      onClick: async () => {
+        return runThesisExport("phu-luc-ds-luan-van", "PhuLucDsLuanVan.xlsx")
+      },
     },
     {
       id: 2,
       label: "Sao quyết định hướng dẫn luận văn",
       needModal: true,
       needSign: true,
-      onClick: async (signer?: SignerPayload) =>
-        await exportSaoQDHDLV({
-          allStudentsInClasses,
-          thesisSessionId: searchParams.thesisSessionId,
-          showSpinner,
-          hideSpinner,
-          message,
-          signerName: signer?.signerName,
-          isChief: signer?.isChief,
-          signingDate: signer?.signingDate,
-        }),
+      onClick: async (signer?: SignerPayload) => {
+        return runThesisExport("sao-qd-huong-dan", "BanSaoQDHuongDanLuanVan.docx", signer)
+      },
     },
     {
       id: 3,
       label: "Giấy mời hướng dẫn luận văn",
       needModal: true,
       needSign: true,
-      onClick: async (signer?: SignerPayload) =>
-        await exportGiayMoiHdlv({
-          allStudentsInClasses,
-          thesisSessionId: searchParams.thesisSessionId,
-          showSpinner,
-          hideSpinner,
-          message,
-          isChief: signer?.isChief,
-          signerName: signer?.signerName,
-          signingDate: signer?.signingDate,
-        }),
+      onClick: async (signer?: SignerPayload) => {
+        return runThesisExport("giay-moi-hdlv", "GiayMoiHDLV.docx", signer)
+      },
     },
     {
       id: 5,
       label: "Giấy mời chấm luận văn phản biện",
       needModal: true,
       needSign: true,
-      onClick: async (signer?: SignerPayload) =>
-        await exportGiayMoiChamLvPb({
-          allStudentsInClasses,
-          thesisSessionId: searchParams.thesisSessionId,
-          showSpinner,
-          hideSpinner,
-          message,
-          signerName: signer?.signerName,
-          isChief: signer?.isChief,
-          signingDate: signer?.signingDate,
-        }),
+      onClick: async (signer?: SignerPayload) => {
+        return runThesisExport("giay-moi-cham-pb", "GiayMoiChamLuanVan.docx", signer)
+      },
     },
     {
       id: 6,
       label: "Phụ lục quyết định hội đồng bảo vệ",
-      onClick: async () =>
-        await exportPhuLucQdhdd({
-          allStudentsInClasses,
-          thesisSessionId: searchParams.thesisSessionId,
-          showSpinner,
-          hideSpinner,
-          message,
-        }),
+      onClick: async () => {
+        return runThesisExport("phu-luc-qd-hd", "PhuLucQdhd.docx")
+      },
     },
     {
       id: 6.1,
       label: "Bản sao hội đồng đánh giá luận văn",
       needModal: true,
       needSign: true,
-      onClick: async (signer?: SignerPayload) =>
-        await exportBanSaoHDDGLV({
-          allStudentsInClasses,
-          thesisSessionId: searchParams.thesisSessionId,
-          showSpinner,
-          hideSpinner,
-          message,
-          signerName: signer?.signerName,
-          isChief: signer?.isChief,
-          signingDate: signer?.signingDate,
-        }),
+      onClick: async (signer?: SignerPayload) => {
+        return runThesisExport("ban-sao-hddglv", "BanSaoHoiDongDanhGiaLuanVan.docx", signer)
+      },
     },
     {
       id: 8,
       label: "Hồ sơ bảo vệ luận văn",
       needModal: true,
       needSign: true,
-      onClick: async (signer?: SignerPayload) =>
-        await exportHosobvlv({
-          allStudentsInClasses,
-          thesisSessionId: searchParams.thesisSessionId,
-          showSpinner,
-          hideSpinner,
-          message,
-          signerName: signer?.signerName,
-          isChief: signer?.isChief,
-        }),
+      onClick: async (signer?: SignerPayload) => {
+        return runThesisExport("ho-so-bao-ve", "Hosobvlv.docx", signer)
+      },
     },
     {
       id: 9,
       label: "Danh sách bảo vệ",
-      onClick: async () =>
-        await exportDanhSachBaoVe({
-          allStudentsInClasses,
-          thesisSessionId: searchParams.thesisSessionId,
-          showSpinner,
-          hideSpinner,
-          message,
-        }),
+      onClick: async () => {
+        return runThesisExport("danh-sach-bao-ve", "DanhSachBaoVe.xlsx")
+      },
     },
     {
       id: 10,
       label: "Danh sách bảo vệ(Dán PBV)",
       onClick: async () => {
-        exportDanhSachBaoVeDanNgoaiPhong({
-          allStudentsInClasses,
-          thesisSessionId: searchParams.thesisSessionId,
-          showSpinner,
-          hideSpinner,
-          message,
-        })
+        return runThesisExport("ds-bao-ve-dan-phong", "DanhSachBaoVeDanPhong.xlsx")
       },
     },
     {
@@ -1735,14 +1819,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         if (!warnMissingThesisPaymentConfig()) return
         const recreateChoice = await askRecreatePayments()
         if (recreateChoice === null) return
-        await exportThanhToanHoiDongBaoVe({
-          allStudentsInClasses,
-          thesisSessionId: searchParams.thesisSessionId,
-          showSpinner,
-          hideSpinner,
-          message,
+        return runThesisExport("thanh-toan-hoi-dong", "ThanhToanHoiDongBaoVe.xlsx", {
           recreateAllPayments: recreateChoice,
-        })
+        } as SignerPayload & { recreateAllPayments: boolean })
       },
     },
     {
@@ -1751,16 +1830,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       needModal: true,
       needMoney: true,
       needSign: false,
-      onClick: async (signer?: SignerPayload) =>
-        await exportDsChuyenGia({
-          allStudentsInClasses,
-          showSpinner,
-          thesisSessionId: searchParams.thesisSessionId,
-          hideSpinner,
-          message,
-          moneyAmount: signer?.moneyAmount,
-          signingDate: signer?.signingDate,
-        }),
+      onClick: async (signer?: SignerPayload) => {
+        return runThesisExport("danh-sach-chuyen-gia", "DsChuyenGia.xlsx", signer)
+      },
     },
 
     {
@@ -1770,76 +1842,45 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         if (!warnMissingThesisPaymentConfig()) return
         const recreateChoice = await askRecreatePayments()
         if (recreateChoice === null) return
-        await exportThanhToanHuongDanTrongHv({
-          allStudentsInClasses,
-          showSpinner,
-          thesisSessionId: searchParams.thesisSessionId,
-          hideSpinner,
-          message,
+        return runThesisExport("thanh-toan-huong-dan", "ThanhToanHuongDan.xlsx", {
           recreateAllPayments: recreateChoice,
-        })
+        } as SignerPayload & { recreateAllPayments: boolean })
       },
     },
     {
       id: 14,
       label: "Thống kê chuyên gia hướng dẫn luận văn",
-      onClick: async () =>
-        await exportThongKeCbHdlv({
-          allStudentsInClasses,
-          showSpinner,
-          thesisSessionId: searchParams.thesisSessionId,
-          hideSpinner,
-          message,
-        }),
+      onClick: async () => {
+        return runThesisExport("thong-ke-gvhd", "ThongKeCanBoHuongDan.xlsx")
+      },
     },
     {
       id: 15,
       label: "Thống kê cán bộ tham gia hội đồng bảo vệ",
-      onClick: async () =>
-        await exportThongKeCbThamGiaHd({
-          allStudentsInClasses,
-          showSpinner,
-          thesisSessionId: searchParams.thesisSessionId,
-          hideSpinner,
-          message,
-          defaultCouncilPayAmounts,
-        }),
+      onClick: async () => {
+        return runThesisExport("thong-ke-hd", "ThongKeCbThamGiaHd.xlsx")
+      },
     },
     {
       id: 15.1,
       label: "Thống kê cơ quan đơn vị cán bộ (ngoài học viên)",
-      onClick: async () =>
-        await exportThongKeCoQuanDonViCanBoNgoaiHv({
-          allStudentsInClasses,
-          thesisSessionId: searchParams.thesisSessionId,
-          showSpinner,
-          hideSpinner,
-          message,
-        }),
+      onClick: async () => {
+        return runThesisExport("thong-ke-don-vi-ngoai", "ThongKeCoQuanDonViCanBoNgoaiHv.xlsx")
+      },
     },
     {
       id: 16,
       label: "Thống kê kết quả bảo vệ luận văn",
-      onClick: async () =>
-        await exportKetQuaBaoVeLuanVan({
-          allStudentsInClasses,
-          thesisSessionId: searchParams.thesisSessionId,
-          showSpinner,
-          hideSpinner,
-          message,
-        }),
+      onClick: async () => {
+        return runThesisExport("ket-qua-bao-ve", "KetQuaBaoVeLuanVan.xlsx")
+      },
     },
     {
       id: 19,
       label: "Danh sách nộp luận văn thư viện",
-      onClick: async () =>
-        await exportDanhSachNopLuanVanThuVien({
-          allStudentsInClasses,
-          thesisSessionId: searchParams.thesisSessionId,
-          showSpinner,
-          hideSpinner,
-          message,
-        }),
+      onClick: async () => {
+        return runThesisExport("nop-thu-vien", "DanhSachNopLuanVanThuVien.xlsx")
+      },
     },
   ]
 
@@ -2140,7 +2181,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           setEditingRowKeys([])
                           openModalTaoDuLieuMau({
                             thesisSessionId,
-                            students: allStudentsInClasses,
+                            students: sampleStudents,
                             onSuccess: refetchThesisTableData,
                           })
                         }}
@@ -2208,9 +2249,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     <Button
                       type="primary"
                       className="ml-2"
-                      onClick={() =>
+                      onClick={async () =>
                         openModalChuyenDiemLopMonHoc({
-                          allStudentsInClasses: allStudentsInClasses,
+                          allStudentsInClasses: await getExportStudentRows(),
                         })
                       }
                       disabled={!students?.length}
@@ -2286,13 +2327,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     <Button
                       type="primary"
                       onClick={async () => {
-                        await exportHDDanhGiaLuanVan({
-                          allStudentsInClasses,
-                          thesisSessionId: searchParams.thesisSessionId,
-                          showSpinner,
-                          hideSpinner,
-                          message,
-                        })
+                        await runThesisExport("de-xuat-hd", "DeNghiHDDanhGiaLuanVan.xlsx")
                       }}
                     >
                       Đề xuất hội đồng
@@ -2302,13 +2337,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     <Button
                       type="primary"
                       onClick={async () => {
-                        await exportKiemTraTienDo({
-                          allStudentsInClasses,
-                          thesisSessionId: searchParams.thesisSessionId,
-                          showSpinner,
-                          hideSpinner,
-                          message,
-                        })
+                        await runThesisExport("kiem-tra-tien-do", "KiemTraTienDo.xlsx")
                       }}
                     >
                       Kiểm tra tiến độ
@@ -2439,7 +2468,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   (a?.fixedClass?.name || "").localeCompare(b?.fixedClass?.name || ""),
                 width: 250,
                 dataIndex: "fixedClass",
-                align: "center",
+                // align: "center",
                 render: (_, record) => {
                   return record?.fixedClass?.name || ""
                 },
@@ -3313,7 +3342,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         ?.startTime
                     )
                   ),
-                width: 120,
+                width: 150,
                 dataIndex: "defenseSession",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {

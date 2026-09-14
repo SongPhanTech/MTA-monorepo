@@ -100,12 +100,29 @@ export function councilMemberProfile(
   member:
     | {
         expertProfileVersion?: unknown
-        expert?: unknown
+        expert?: { currentVersion?: unknown } | unknown
       }
     | null
     | undefined
 ) {
-  return (member?.expertProfileVersion ?? member?.expert ?? null) as any
+  const expert = member?.expert as { currentVersion?: unknown } | undefined
+  return (member?.expertProfileVersion ?? expert?.currentVersion ?? member?.expert ?? null) as any
+}
+
+/** workplace ưu tiên; fallback organization (nhiều bản ngoài HV chỉ có organization). */
+export function resolveExpertWorkplace(
+  expert?: {
+    workplace?: string | null
+    organization?: string | null
+    lecturer?: { organization?: { sTen?: string | null } | null } | null
+    expert?: { lecturer?: { organization?: { sTen?: string | null } | null } | null } | null
+  } | null
+): string {
+  if (!expert) return ""
+  const organization = typeof expert.organization === "string" ? expert.organization.trim() : ""
+  const lecturerOrganization =
+    expert.lecturer?.organization?.sTen?.trim() || expert.expert?.lecturer?.organization?.sTen?.trim() || ""
+  return expert.workplace?.trim() || organization || lecturerOrganization || ""
 }
 
 export function getSupervisorName(
@@ -113,9 +130,11 @@ export function getSupervisorName(
     | {
         name?: string | null
         workplace?: string | null
+        organization?: string | null
         lecturerId?: string | null
         expert?: {
           lecturer?: {
+            organization?: { sTen?: string | null } | null
             userProfile?: {
               fullname?: string | null
               academicRankType?: { sMa?: string | null } | null
@@ -126,6 +145,7 @@ export function getSupervisorName(
         academicRankType?: { sMa?: string | null } | null
         academicDegreeType?: { sMa?: string | null } | null
         lecturer?: {
+          organization?: { sTen?: string | null } | null
           userProfile?: {
             fullname?: string | null
             academicRankType?: { sMa?: string | null } | null
@@ -143,7 +163,7 @@ export function getSupervisorName(
   const degree = profile?.academicDegreeType?.sMa || expert.academicDegreeType?.sMa || ""
   const title = [rank, degree].filter(Boolean).join(".")
   const fullname = expert.name || profile?.fullname || ""
-  const workplace = expert.workplace || ""
+  const workplace = resolveExpertWorkplace(expert)
   const text = [title, fullname].filter(Boolean).join(" ").trim()
   return [text, showWorkplace ? workplace : ""].filter(Boolean).join(", ")
 }

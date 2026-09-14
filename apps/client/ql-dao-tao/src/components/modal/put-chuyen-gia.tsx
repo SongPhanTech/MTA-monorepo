@@ -13,6 +13,7 @@ import {
   useUpdateExpert,
   useUpdateExpertProfileVersion,
 } from "@workspace/db/hooks"
+import { CheckOutlined, EditOutlined } from "@ant-design/icons"
 import {
   Alert,
   Button,
@@ -26,6 +27,7 @@ import {
   Select,
   Table,
   Tag,
+  Tooltip,
   Typography,
 } from "antd"
 import dayjs from "dayjs"
@@ -579,7 +581,7 @@ const PutExpert = () => {
       {isEdit ? (
         <Col span={24}>
           <Typography.Title level={5} className="!mb-1 !mt-0">
-            Form phiên bản{" "}
+            
             {editingVersionLabel ? (
               <Tag color="processing">Đang sửa: {editingVersionLabel}</Tag>
             ) : null}
@@ -809,31 +811,33 @@ const PutExpert = () => {
               },
               {
                 title: "Thao tác",
-                width: 220,
+                width: 100,
                 fixed: "right",
                 align: "center",
                 render: (_: unknown, record: (typeof versions)[number]) => {
                   const isCurrent = record.id === expert?.currentVersionId
                   const isEditing = record.id === editingVersionId
                   return (
-                    <div className="flex flex-wrap gap-1 justify-center">
-                      <Button
-                        size="small"
-                        type={isEditing ? "default" : "dashed"}
-                        disabled={isEditing}
-                        onClick={() => loadVersionForEdit(record.id)}
-                      >
-                        {isEditing ? "Đang sửa" : "Sửa"}
-                      </Button>
-                      <Button
-                        type={isCurrent ? "default" : "primary"}
-                        size="small"
-                        disabled={isCurrent}
-                        loading={applyingVersionId === record.id}
-                        onClick={() => applyVersion(record.id)}
-                      >
-                        {isCurrent ? "Đang áp dụng" : "Áp dụng"}
-                      </Button>
+                    <div className="flex gap-1 justify-center">
+                      <Tooltip title={isEditing ? "Đang sửa" : "Sửa"}>
+                        <Button
+                          size="small"
+                          type={isEditing ? "default" : "dashed"}
+                          icon={<EditOutlined />}
+                          disabled={isEditing}
+                          onClick={() => loadVersionForEdit(record.id)}
+                        />
+                      </Tooltip>
+                      <Tooltip title={isCurrent ? "Đang áp dụng" : "Áp dụng"}>
+                        <Button
+                          type={isCurrent ? "default" : "primary"}
+                          size="small"
+                          icon={<CheckOutlined />}
+                          disabled={isCurrent}
+                          loading={applyingVersionId === record.id}
+                          onClick={() => applyVersion(record.id)}
+                        />
+                      </Tooltip>
                     </div>
                   )
                 },
