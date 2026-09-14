@@ -29,7 +29,11 @@ const PutGraduationApplication = () => {
   const [form] = Form.useForm<PutGraduationApplication>()
   const { isOpen, onClose, input } = useDisclosure<{ id: string; graduationSessionId: string }>({
     tag: "PutGraduationApplication",
-    onClose: form.resetFields,
+    onClose: () => {
+      form.resetFields()
+      setSelectedStudents([])
+      setSearchText("")
+    },
   })
   const [searchText, setSearchText] = useState("")
   const [selectedStudents, setSelectedStudents] = useState<string[]>([])
@@ -41,35 +45,52 @@ const PutGraduationApplication = () => {
     { enabled: !!input?.id }
   )
 
-  const { data: students, refetch } = useFindManyStudent({
-    where: {
-      ...(searchText
-        ? {
-            OR: [
-              { code: { contains: searchText, mode: "insensitive" } },
+  const currentStudentId = graduationApplication?.studentId
+  const selectedStudentIds = input?.id
+    ? currentStudentId
+      ? [currentStudentId]
+      : []
+    : selectedStudents
+
+  const { data: students, refetch } = useFindManyStudent(
+    {
+      where: {
+        OR: [
+          ...(selectedStudentIds.length ? [{ id: { in: selectedStudentIds } }] : []),
+          {
+            AND: [
+              ...(searchText
+                ? [
+                    {
+                      OR: [
+                        { code: { contains: searchText, mode: "insensitive" as const } },
+                        {
+                          userProfile: {
+                            fullname: { contains: searchText, mode: "insensitive" as const },
+                          },
+                        },
+                      ],
+                    },
+                  ]
+                : []),
               {
-                userProfile: {
-                  fullname: { contains: searchText, mode: "insensitive" },
+                graduationApplications: {
+                  none: {
+                    sessionId: input?.graduationSessionId,
+                  },
                 },
               },
             ],
-          }
-        : {}),
-      ...(input?.id
-        ? {}
-        : {
-            graduationApplications: {
-              none: {
-                sessionId: input?.graduationSessionId,
-              },
-            },
-          }),
+          },
+        ],
+      },
+      include: {
+        userProfile: true,
+      },
+      take: 500,
     },
-    include: {
-      userProfile: true,
-    },
-    take: 500,
-  })
+    { enabled: isOpen && !!input?.graduationSessionId && (!input?.id || !!currentStudentId) }
+  )
 
   const debouncedRefetch = useCallback(
     debounce(() => {
@@ -184,7 +205,7 @@ const PutGraduationApplication = () => {
             mode={input?.id ? undefined : "multiple"}
             placeholder={input?.id ? "Chọn sinh viên" : "Chọn nhiều sinh viên"}
             options={students?.map((item) => ({
-              label: [item.code, item.userProfile.fullname].filter(Boolean).join(" - "),
+              label: [item.code, item.userProfile?.fullname].filter(Boolean).join(" - "),
               value: item.id,
             }))}
             onSearch={handleSearch}
