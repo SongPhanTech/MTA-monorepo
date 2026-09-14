@@ -7,6 +7,7 @@ import {
   RankingContext,
   StudentStatus,
   SubjectRequirementType,
+  SubjectVersionType,
   ThesisType,
 } from "@workspace/db"
 import {
@@ -68,6 +69,178 @@ function isApplicationOrientation(
   if (classType === FixedClassType.APPLICATION) return true
   if (classType === FixedClassType.RESEARCH) return false
   return fallbackIsProject
+}
+
+function buildApprovedGraduateStudentWhere(params: {
+  trainingObjectTypeId?: string
+  trainingCourseIds?: string[]
+  thesisSessionIds?: string[]
+}) {
+  const { trainingObjectTypeId, trainingCourseIds, thesisSessionIds } = params
+
+  return {
+    active: true,
+    deletedAt: null,
+    ...(trainingObjectTypeId || trainingCourseIds?.length
+      ? {
+          fixedClass: {
+            ...(trainingObjectTypeId && {
+              trainingCourse: { trainingObjectTypeId },
+            }),
+            ...(trainingCourseIds?.length && {
+              trainingCourseId: { in: trainingCourseIds },
+            }),
+          },
+        }
+      : {}),
+    graduationApplications: {
+      some: {
+        status: ApplicationStatus.APPROVED,
+        graduation: true,
+        deletedAt: null,
+        ...(thesisSessionIds?.length && {
+          sessionId: { in: thesisSessionIds },
+        }),
+      },
+    },
+  }
+}
+
+function getDiplomaAppendixScore(record: {
+  manualFinalScore?: number | null
+  finalScore?: unknown
+}): number | null {
+  if (record.manualFinalScore != null && !Number.isNaN(Number(record.manualFinalScore))) {
+    return Number(record.manualFinalScore)
+  }
+  if (record.finalScore != null) {
+    const n = Number(record.finalScore)
+    return Number.isFinite(n) ? n : null
+  }
+  return null
+}
+
+function formatResearchTopicPrintName(topicName?: string | null, fallbackName?: string | null) {
+  const name = (topicName || fallbackName || "").trim()
+  if (!name) return "Chuyên đề"
+  if (/^chuyên đề\b/i.test(name)) return name
+  return `Chuyên đề ${name}`
+}
+
+function getDiplomaAppendixSubjectName(record: {
+  subjectVersion?: {
+    type?: string | null
+    name?: string | null
+    subject?: { name?: string | null } | null
+  } | null
+  studentResearchTopic?: { name?: string | null } | null
+}) {
+  const subjectName = record.subjectVersion?.subject?.name || record.subjectVersion?.name || ""
+  if (record.subjectVersion?.type !== SubjectVersionType.Research) return subjectName
+  return formatResearchTopicPrintName(record.studentResearchTopic?.name, subjectName)
+}
+
+function pickHighestSubjectScores<
+  T extends {
+    id?: string
+    subjectVersionId: string
+    subjectVersion?: {
+      type?: string | null
+      subjectId?: string
+      subject?: { id?: string } | null
+    } | null
+    manualFinalScore?: number | null
+    finalScore?: unknown
+  },
+>(records: T[]): T[] {
+  const bestMap = new Map<string, T>()
+  for (const record of records) {
+    const isResearch = record.subjectVersion?.type === SubjectVersionType.Research
+    const key = isResearch
+      ? record.id || record.subjectVersionId
+      : record.subjectVersion?.subjectId ||
+        record.subjectVersion?.subject?.id ||
+        record.subjectVersionId
+    const existing = bestMap.get(key)
+    if (!existing) {
+      bestMap.set(key, record)
+      continue
+    }
+    const score = getDiplomaAppendixScore(record)
+    const existingScore = getDiplomaAppendixScore(existing)
+    if (score != null && (existingScore == null || score > existingScore)) {
+      bestMap.set(key, record)
+    }
+  }
+  return Array.from(bestMap.values())
+}
+
+function isGraduationSubjectType(type?: string | null) {
+  return (
+    type === SubjectVersionType.Thesis ||
+    type === SubjectVersionType.Project ||
+    type === SubjectVersionType.Graduation
+  )
+}
+
+function getPlannedSemester(
+  record: {
+    subjectVersion?: {
+      trainingBlocks?: Array<{
+        semester?: number | null
+        trainingBlockOnCurriculumVersion?: { curriculumVersionId?: string | null } | null
+      }> | null
+    } | null
+  },
+  curriculumVersionId?: string | null
+) {
+  const matched = record.subjectVersion?.trainingBlocks?.find(
+    (block) =>
+      !curriculumVersionId ||
+      block.trainingBlockOnCurriculumVersion?.curriculumVersionId === curriculumVersionId
+  )
+  return matched?.semester ?? Number.MAX_SAFE_INTEGER
+}
+
+function sortDiplomaAppendixSubjects<
+  T extends {
+    subjectVersion?: {
+      type?: string | null
+      name?: string | null
+      subject?: { name?: string | null } | null
+      trainingBlocks?: Array<{
+        semester?: number | null
+        trainingBlockOnCurriculumVersion?: { curriculumVersionId?: string | null } | null
+      }> | null
+    } | null
+    subjectClass?: {
+      semester?: { startDate?: Date | string | null; name?: string | null } | null
+    } | null
+    semester?: { startDate?: Date | string | null; name?: string | null } | null
+  },
+>(records: T[], curriculumVersionId?: string | null): T[] {
+  return [...records].sort((a, b) => {
+    const aGrad = isGraduationSubjectType(a.subjectVersion?.type)
+    const bGrad = isGraduationSubjectType(b.subjectVersion?.type)
+    if (aGrad !== bGrad) return aGrad ? 1 : -1
+
+    const plannedA = getPlannedSemester(a, curriculumVersionId)
+    const plannedB = getPlannedSemester(b, curriculumVersionId)
+    if (plannedA !== plannedB) return plannedA - plannedB
+
+    const semesterA = a.subjectClass?.semester || a.semester
+    const semesterB = b.subjectClass?.semester || b.semester
+    const startA = semesterA?.startDate ? new Date(semesterA.startDate).getTime() : Number.MAX_SAFE_INTEGER
+    const startB = semesterB?.startDate ? new Date(semesterB.startDate).getTime() : Number.MAX_SAFE_INTEGER
+    if (startA !== startB) return startA - startB
+
+    const nameCompare = (semesterA?.name || "").localeCompare(semesterB?.name || "", "vi")
+    if (nameCompare !== 0) return nameCompare
+
+    const subjectA = a.subjectVersion?.subject?.name || a.subjectVersion?.name || ""
+    const subjectB = b.subjectVersion?.subject?.name || b.subjectVersion?.name || ""
+    return subjectA.localeCompare(subjectB, "vi")
+  })
 }
 
 function preparePhoiBangCaoHocTemplate(templateBuffer: Buffer): Buffer {
@@ -1608,58 +1781,17 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
   const {
     trainingObjectTypeId,
     trainingCourseIds,
-    fixedClassIds,
     thesisSessionIds,
-    managementOrganizationId,
     printDate,
     signerName,
   } = c.req.valid("json")
 
   const students = await prisma.student.findMany({
-    where: {
-      fixedClass: {
-        trainingCourse: {
-          trainingObjectTypeId,
-        },
-        ...(trainingCourseIds?.length && {
-          trainingCourseId: { in: trainingCourseIds },
-        }),
-        ...(fixedClassIds?.length && { id: { in: fixedClassIds } }),
-        ...(managementOrganizationId && { managementOrganizationId }),
-      },
-      ...(thesisSessionIds?.length && {
-        OR: [
-          {
-            thesisRegistrations: {
-              some: {
-                thesisProject: {
-                  thesisSessionId: { in: thesisSessionIds },
-                },
-              },
-            },
-          },
-          {
-            graduationApplications: {
-              some: {
-                sessionId: { in: thesisSessionIds },
-              },
-            },
-          },
-          {
-            fixedClass: {
-              trainingCourse: {
-                graduationSessions: {
-                  some: {
-                    id: { in: thesisSessionIds },
-                  },
-                },
-              },
-            },
-          },
-        ],
-      }),
-      deletedAt: null,
-    },
+    where: buildApprovedGraduateStudentWhere({
+      trainingObjectTypeId,
+      trainingCourseIds,
+      thesisSessionIds,
+    }),
     include: {
       userProfile: {
         include: {
@@ -2014,60 +2146,16 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
   const {
     trainingObjectTypeId,
     trainingCourseIds,
-    fixedClassIds,
     thesisSessionIds,
-    managementOrganizationId,
     signerName,
   } = c.req.valid("json")
 
   const students = await prisma.student.findMany({
-    where: {
-      fixedClass: {
-        ...(trainingObjectTypeId && {
-          trainingCourse: {
-            trainingObjectTypeId,
-          },
-        }),
-        ...(trainingCourseIds?.length && {
-          trainingCourseId: { in: trainingCourseIds },
-        }),
-        ...(fixedClassIds?.length && { id: { in: fixedClassIds } }),
-        ...(managementOrganizationId && { managementOrganizationId }),
-      },
-      ...(thesisSessionIds?.length && {
-        OR: [
-          {
-            thesisRegistrations: {
-              some: {
-                thesisProject: {
-                  thesisSessionId: { in: thesisSessionIds },
-                },
-              },
-            },
-          },
-          {
-            graduationApplications: {
-              some: {
-                sessionId: { in: thesisSessionIds },
-              },
-            },
-          },
-          {
-            fixedClass: {
-              trainingCourse: {
-                graduationSessions: {
-                  some: {
-                    id: { in: thesisSessionIds },
-                  },
-                },
-              },
-            },
-          },
-        ],
-      }),
-      deletedAt: null,
-      active: true,
-    },
+    where: buildApprovedGraduateStudentWhere({
+      trainingObjectTypeId,
+      trainingCourseIds,
+      thesisSessionIds,
+    }),
     include: {
       userProfile: {
         include: {
@@ -2218,61 +2306,17 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
   const {
     trainingObjectTypeId,
     trainingCourseIds,
-    fixedClassIds,
     thesisSessionIds,
-    managementOrganizationId,
     printDate,
     signerName,
   } = c.req.valid("json")
 
   const students = await prisma.student.findMany({
-    where: {
-      fixedClass: {
-        ...(trainingObjectTypeId && {
-          trainingCourse: {
-            trainingObjectTypeId,
-          },
-        }),
-        ...(trainingCourseIds?.length && {
-          trainingCourseId: { in: trainingCourseIds },
-        }),
-        ...(fixedClassIds?.length && { id: { in: fixedClassIds } }),
-        ...(managementOrganizationId && { managementOrganizationId }),
-      },
-      ...(thesisSessionIds?.length && {
-        OR: [
-          {
-            thesisRegistrations: {
-              some: {
-                thesisProject: {
-                  thesisSessionId: { in: thesisSessionIds },
-                },
-              },
-            },
-          },
-          {
-            graduationApplications: {
-              some: {
-                sessionId: { in: thesisSessionIds },
-              },
-            },
-          },
-          {
-            fixedClass: {
-              trainingCourse: {
-                graduationSessions: {
-                  some: {
-                    id: { in: thesisSessionIds },
-                  },
-                },
-              },
-            },
-          },
-        ],
-      }),
-      deletedAt: null,
-      active: true,
-    },
+    where: buildApprovedGraduateStudentWhere({
+      trainingObjectTypeId,
+      trainingCourseIds,
+      thesisSessionIds,
+    }),
     include: {
       userProfile: {
         include: {
@@ -2488,62 +2532,18 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
   const {
     trainingObjectTypeId,
     trainingCourseIds,
-    fixedClassIds,
     thesisSessionIds,
-    managementOrganizationId,
     printDate,
     signerName,
     isChief,
   } = c.req.valid("json")
 
   const students = await prisma.student.findMany({
-    where: {
-      fixedClass: {
-        ...(trainingObjectTypeId && {
-          trainingCourse: {
-            trainingObjectTypeId,
-          },
-        }),
-        ...(trainingCourseIds?.length && {
-          trainingCourseId: { in: trainingCourseIds },
-        }),
-        ...(fixedClassIds?.length && { id: { in: fixedClassIds } }),
-        ...(managementOrganizationId && { managementOrganizationId }),
-      },
-      ...(thesisSessionIds?.length && {
-        OR: [
-          {
-            thesisRegistrations: {
-              some: {
-                thesisProject: {
-                  thesisSessionId: { in: thesisSessionIds },
-                },
-              },
-            },
-          },
-          {
-            graduationApplications: {
-              some: {
-                sessionId: { in: thesisSessionIds },
-              },
-            },
-          },
-          {
-            fixedClass: {
-              trainingCourse: {
-                graduationSessions: {
-                  some: {
-                    id: { in: thesisSessionIds },
-                  },
-                },
-              },
-            },
-          },
-        ],
-      }),
-      deletedAt: null,
-      active: true,
-    },
+    where: buildApprovedGraduateStudentWhere({
+      trainingObjectTypeId,
+      trainingCourseIds,
+      thesisSessionIds,
+    }),
     include: {
       userProfile: {
         include: {
@@ -2627,10 +2627,27 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
       subjectClassStudent: {
         where: { deletedAt: null, active: true },
         include: {
+          semester: true,
+          subjectClass: {
+            include: {
+              semester: true,
+            },
+          },
           subjectVersion: {
             include: {
               subject: true,
+              trainingBlocks: {
+                select: {
+                  semester: true,
+                  trainingBlockOnCurriculumVersion: {
+                    select: { curriculumVersionId: true },
+                  },
+                },
+              },
             },
+          },
+          studentResearchTopic: {
+            select: { name: true },
           },
         },
       },
@@ -2704,35 +2721,38 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
       let totalPoints10 = 0
       let totalPoints4 = 0
 
-      const subjectRows = (student.subjectClassStudent || []).map((record, idx) => {
-        const rawScore =
-          record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null)
-        const score = safeNumber(rawScore)
-        const credits = safeNumber(record.subjectVersion?.credit)
+      const subjectRows = sortDiplomaAppendixSubjects(
+        pickHighestSubjectScores(student.subjectClassStudent || []),
+        curriculumVersion?.id
+      ).map((record, idx) => {
+          const rawScore = getDiplomaAppendixScore(record)
+          const score = safeNumber(rawScore)
+          const credits = safeNumber(record.subjectVersion?.credit)
 
-        const scoreConverts = course?.scoreConverts || []
-        const conversion = convertScoreWithCourseConfig(
-          score,
-          scoreConverts,
-          courseScoreConfigFrom(course, record)
-        )
+          const scoreConverts = course?.scoreConverts || []
+          const conversion = convertScoreWithCourseConfig(
+            score,
+            scoreConverts,
+            courseScoreConfigFrom(course, record)
+          )
 
-        if (credits) {
-          totalCredits += credits
-          totalPoints10 += score * credits
-          if (conversion.base4 != null) {
-            totalPoints4 += safeNumber(conversion.base4) * credits
+          if (credits) {
+            totalCredits += credits
+            totalPoints10 += score * credits
+            if (conversion.base4 != null) {
+              totalPoints4 += safeNumber(conversion.base4) * credits
+            }
+          }
+          return {
+            stt: idx + 1,
+            ten_hoc_phan: safeString(getDiplomaAppendixSubjectName(record)),
+            stc: credits,
+            diem_he_10: formatScore(score, 1) || "0,0",
+            diem_he_4: formatScore(conversion?.base4 || 0) || "0,0",
+            diem_he_chu: conversion?.letter,
           }
         }
-        return {
-          stt: idx + 1,
-          ten_hoc_phan: safeString(record.subjectVersion?.subject?.name),
-          stc: credits,
-          diem_he_10: formatScore(score, 1) || "0,0",
-          diem_he_4: formatScore(conversion?.base4 || 0) || "0,0",
-          diem_he_chu: conversion?.letter,
-        }
-      })
+      )
 
       const lastYearResult = student.studentYearResult?.find((r) => r.isLastStudyYear)
       const rawGpa10 = lastYearResult
@@ -2958,62 +2978,18 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
   const {
     trainingObjectTypeId,
     trainingCourseIds,
-    fixedClassIds,
     thesisSessionIds,
-    managementOrganizationId,
     printDate,
     signerName,
     isChief,
   } = c.req.valid("json")
 
   const students = await prisma.student.findMany({
-    where: {
-      fixedClass: {
-        ...(trainingObjectTypeId && {
-          trainingCourse: {
-            trainingObjectTypeId,
-          },
-        }),
-        ...(trainingCourseIds?.length && {
-          trainingCourseId: { in: trainingCourseIds },
-        }),
-        ...(fixedClassIds?.length && { id: { in: fixedClassIds } }),
-        ...(managementOrganizationId && { managementOrganizationId }),
-      },
-      ...(thesisSessionIds?.length && {
-        OR: [
-          {
-            thesisRegistrations: {
-              some: {
-                thesisProject: {
-                  thesisSessionId: { in: thesisSessionIds },
-                },
-              },
-            },
-          },
-          {
-            graduationApplications: {
-              some: {
-                sessionId: { in: thesisSessionIds },
-              },
-            },
-          },
-          {
-            fixedClass: {
-              trainingCourse: {
-                graduationSessions: {
-                  some: {
-                    id: { in: thesisSessionIds },
-                  },
-                },
-              },
-            },
-          },
-        ],
-      }),
-      deletedAt: null,
-      active: true,
-    },
+    where: buildApprovedGraduateStudentWhere({
+      trainingObjectTypeId,
+      trainingCourseIds,
+      thesisSessionIds,
+    }),
     include: {
       userProfile: {
         include: {
@@ -3054,10 +3030,27 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
       subjectClassStudent: {
         where: { deletedAt: null, active: true },
         include: {
+          semester: true,
+          subjectClass: {
+            include: {
+              semester: true,
+            },
+          },
           subjectVersion: {
             include: {
               subject: true,
+              trainingBlocks: {
+                select: {
+                  semester: true,
+                  trainingBlockOnCurriculumVersion: {
+                    select: { curriculumVersionId: true },
+                  },
+                },
+              },
             },
+          },
+          studentResearchTopic: {
+            select: { name: true },
           },
         },
       },
@@ -3136,24 +3129,27 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
       let totalCredits = 0
       let totalPoints10 = 0
 
-      const allSubjects = (student.subjectClassStudent || []).map((record, idx) => {
-        const rawScore =
-          record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null)
-        const score = safeNumber(rawScore)
-        const credits = safeNumber(record.subjectVersion?.credit)
+      const allSubjects = sortDiplomaAppendixSubjects(
+        pickHighestSubjectScores(student.subjectClassStudent || []),
+        curriculumVersion?.id
+      ).map((record, idx) => {
+          const rawScore = getDiplomaAppendixScore(record)
+          const score = safeNumber(rawScore)
+          const credits = safeNumber(record.subjectVersion?.credit)
 
-        if (credits) {
-          totalCredits += credits
-          totalPoints10 += score * credits
+          if (credits) {
+            totalCredits += credits
+            totalPoints10 += score * credits
+          }
+          return {
+            stt: idx + 1,
+            ten_hoc_phan: safeString(getDiplomaAppendixSubjectName(record)),
+            stc: credits,
+            diem_he_10: formatScore(score, 1) || "0,0",
+            type: record.subjectVersion?.type,
+          }
         }
-        return {
-          stt: idx + 1,
-          ten_hoc_phan: safeString(record.subjectVersion?.subject?.name),
-          stc: credits,
-          diem_he_10: formatScore(score, 1) || "0,0",
-          type: record.subjectVersion?.type,
-        }
-      })
+      )
 
       const gradTypes = ["Graduation", "Thesis", "Project"]
       const normalSubjectsRaw = allSubjects.filter((s) => !gradTypes.includes(s.type || ""))

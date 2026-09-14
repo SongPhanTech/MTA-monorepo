@@ -5,27 +5,27 @@ import TableCollapse from "@components/commons/tableCollapse"
 import { ExportDiplomaAppendix } from "@components/ui/export-button"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
-import { buildOrgTree, formatDateVN } from "@lib/utils"
+import { formatDateVN } from "@lib/utils"
 import type { Semester, Student } from "@workspace/db"
-import type {
-  CurriculumVersion,
-  FixedClass,
-  GraduationDecision,
-  ScoreConvert,
-  StudentSubjectScore,
-  SubjectClass,
-  SubjectVersion,
-  TrainingCourse,
-  TrainingLanguage,
-  TrainingField,
-  TrainingTime,
-  TrainingLevel,
-  UserProfile,
+import {
+  ApplicationStatus,
+  SubjectVersionType,
+  type CurriculumVersion,
+  type FixedClass,
+  type GraduationDecision,
+  type ScoreConvert,
+  type StudentSubjectScore,
+  type SubjectClass,
+  type SubjectVersion,
+  type TrainingCourse,
+  type TrainingLanguage,
+  type TrainingField,
+  type TrainingTime,
+  type TrainingLevel,
+  type UserProfile,
 } from "@workspace/db/client"
 import {
   useCountStudent,
-  useFindManyDM_DonVi,
-  useFindManyFixedClass,
   useFindManyGraduationSession,
   useFindManyStudent,
   useFindManyThesisSession,
@@ -39,9 +39,8 @@ import {
   exportPhuLucVanBangCaoHoc,
   exportPhuLucVanBangNganHan,
 } from "@workspace/libs/api/training"
-import { whereOrganization } from "@workspace/libs/constants"
 import { exportFromTemplate, TableRow } from "@workspace/libs/template-excel"
-import { fuzzyMatch, getMinioUrl } from "@workspace/libs/utils"
+import { getMinioUrl } from "@workspace/libs/utils"
 import { docxTemplate } from "../../../utils/docx-template"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import {
@@ -49,12 +48,10 @@ import {
   DatePicker,
   Form,
   Input,
-  InputNumber,
   message,
   Modal,
   notification,
   Radio,
-  TreeSelect,
 } from "antd"
 import { useWatch } from "antd/es/form/Form"
 import dayjs, { Dayjs } from "dayjs"
@@ -69,6 +66,75 @@ type TSubjectItem = StudentSubjectScore & {
         semester: Semester
       })
     | null
+  semester?: Semester | null
+  studentResearchTopic?: { name?: string | null } | null
+}
+
+function formatResearchTopicPrintName(topicName?: string | null, fallbackName?: string | null) {
+  const name = (topicName || fallbackName || "").trim()
+  if (!name) return "Chuyên đề"
+  if (/^chuyên đề\b/i.test(name)) return name
+  return `Chuyên đề ${name}`
+}
+
+function getDiplomaAppendixSubjectName(item: {
+  subjectVersion?: { type?: string | null; name?: string | null } | null
+  studentResearchTopic?: { name?: string | null } | null
+}) {
+  const subjectName = item.subjectVersion?.name || ""
+  if (item.subjectVersion?.type !== SubjectVersionType.Research) return subjectName
+  return formatResearchTopicPrintName(item.studentResearchTopic?.name, subjectName)
+}
+
+function getSubjectScoreValue(item: {
+  manualFinalScore?: number | null
+  finalScore?: unknown
+}): number | null {
+  if (item.manualFinalScore != null && !Number.isNaN(Number(item.manualFinalScore))) {
+    return Number(item.manualFinalScore)
+  }
+  if (item.finalScore != null) {
+    const n = Number(item.finalScore)
+    return Number.isFinite(n) ? n : null
+  }
+  return null
+}
+
+function pickHighestScoreBySubject<
+  T extends {
+    id?: string
+    subjectVersionId: string
+    subjectVersion?: { subjectId?: string; type?: string | null } | null
+    manualFinalScore?: number | null
+    finalScore?: unknown
+  },
+>(records: T[]): T[] {
+  const bestMap = new Map<string, T>()
+  for (const record of records) {
+    const isResearch = record.subjectVersion?.type === SubjectVersionType.Research
+    const key = isResearch
+      ? record.id || record.subjectVersionId
+      : record.subjectVersion?.subjectId || record.subjectVersionId
+    const existing = bestMap.get(key)
+    if (!existing) {
+      bestMap.set(key, record)
+      continue
+    }
+    const score = getSubjectScoreValue(record)
+    const existingScore = getSubjectScoreValue(existing)
+    if (score != null && (existingScore == null || score > existingScore)) {
+      bestMap.set(key, record)
+    }
+  }
+  return Array.from(bestMap.values())
+}
+
+function isGraduationSubjectType(type?: string | null) {
+  return (
+    type === SubjectVersionType.Thesis ||
+    type === SubjectVersionType.Project ||
+    type === SubjectVersionType.Graduation
+  )
 }
 
 type TTrainingCourse = TrainingCourse & {
@@ -127,9 +193,7 @@ export interface SessionSignerInfo {
 type TExportPayload = {
   trainingObjectTypeId: string
   trainingCourseIds?: string[]
-  fixedClassIds?: string[]
   thesisSessionIds?: string[]
-  managementOrganizationId?: string
   printDate?: string
   signerName?: string
   isChief?: boolean
@@ -169,6 +233,8 @@ export type TStudentWithSubjects = Student &
       subjectClass?: SubjectClass & {
         semester?: Semester
       }
+      semester?: Semester | null
+      studentResearchTopic?: { name?: string | null } | null
     })[]
     curriculumVersion?: CurriculumVersion & {
       trainingTime?: TrainingTime | null
@@ -205,10 +271,8 @@ const initialPagination = {
 
 export type StudentGradeSystemForm = {
   trainingObjectTypeId: string[]
-  fixedClassIds: string[]
   thesisSessionIds: string[]
   trainingCourseIds: string[]
-  managementOrganizationIds: string[]
   recordsPerPage: string
   date: string
   signer: string
@@ -242,9 +306,7 @@ export default function StudentGradeSystem() {
   const { showSpinner, hideSpinner } = useSpinner()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const trainingCourseIds: string[] = useWatch("trainingCourseIds", form)
-  const fixedClassIds: string[] = useWatch("fixedClassIds", form)
   const thesisSessionIds: string[] = useWatch("thesisSessionIds", form)
-  const managementOrganizationIds: string[] = useWatch("managementOrganizationIds", form)
   const signerName: string = useWatch("signer", form)
   const printDate: string = useWatch("date", form)
   const [page, setPage] = useState(initialPagination.page)
@@ -278,23 +340,6 @@ export default function StudentGradeSystem() {
     },
     {
       enabled: !!trainingObjectTypeId || trainingObjectTypes?.length > 0,
-    }
-  )
-
-  const { data: fixedClasses = [] } = useFindManyFixedClass(
-    {
-      where: {
-        active: true,
-        deletedAt: null,
-        ...(trainingCourseIds?.length && {
-          trainingCourseId: {
-            in: trainingCourseIds,
-          },
-        }),
-      },
-    },
-    {
-      enabled: trainingCourseIds?.length > 0,
     }
   )
 
@@ -346,66 +391,37 @@ export default function StudentGradeSystem() {
     )
   }, [postgraduateSessions, thesisSessionIds])
 
-  const { data: dm_DonVi = [] } = useFindManyDM_DonVi({
-    where: {
-      ...whereOrganization,
-      ...(fixedClassIds?.length && {
-        fixedClass: {
-          some: {
-            id: {
-              in: fixedClassIds,
-            },
-          },
-        },
-      }),
-    },
-  })
-
-  const treeData = buildOrgTree(dm_DonVi)
-
   const where = {
     active: true,
-    fixedClass: {
-      ...(fixedClassIds?.length > 0 && {
-        id: {
-          in: fixedClassIds,
-        },
-      }),
-      ...(trainingCourseIds?.length > 0 && {
-        trainingCourseId: {
-          in: trainingCourseIds,
-        },
-      }),
-      ...(managementOrganizationIds?.length > 0 && {
-        managementOrganizationId: {
-          in: managementOrganizationIds,
-        },
-      }),
+    deletedAt: null,
+    ...(trainingObjectTypeId || trainingCourseIds?.length
+      ? {
+          fixedClass: {
+            ...(trainingObjectTypeId && {
+              trainingCourse: {
+                trainingObjectTypeId,
+              },
+            }),
+            ...(trainingCourseIds?.length > 0 && {
+              trainingCourseId: {
+                in: trainingCourseIds,
+              },
+            }),
+          },
+        }
+      : {}),
+    graduationApplications: {
+      some: {
+        status: ApplicationStatus.APPROVED,
+        graduation: true,
+        deletedAt: null,
+        ...(thesisSessionIds?.length > 0 && {
+          sessionId: {
+            in: thesisSessionIds,
+          },
+        }),
+      },
     },
-    ...(thesisSessionIds?.length > 0 && {
-      OR: [
-        {
-          graduationApplications: {
-            some: {
-              sessionId: {
-                in: thesisSessionIds,
-              },
-            },
-          },
-        },
-        {
-          thesisRegistrations: {
-            some: {
-              thesisProject: {
-                thesisSessionId: {
-                  in: thesisSessionIds,
-                },
-              },
-            },
-          },
-        },
-      ],
-    }),
   }
 
   const { data: count } = useCountStudent(
@@ -480,7 +496,12 @@ export default function StudentGradeSystem() {
           },
         },
         subjectClassStudent: {
+          where: {
+            deletedAt: null,
+            active: true,
+          },
           include: {
+            semester: true,
             subjectVersion: {
               include: {
                 trainingBlocks: {
@@ -497,6 +518,11 @@ export default function StudentGradeSystem() {
             subjectClass: {
               include: {
                 semester: true,
+              },
+            },
+            studentResearchTopic: {
+              select: {
+                name: true,
               },
             },
           },
@@ -520,7 +546,13 @@ export default function StudentGradeSystem() {
       const curriculumVersionId =
         student?.fixedClass?.curriculumVersion?.id || student?.curriculumVersion?.id
 
-      const sortedSubjectClassStudent = [...(student.subjectClassStudent || [])].sort((a, b) => {
+      const sortedSubjectClassStudent = pickHighestScoreBySubject(
+        student.subjectClassStudent || []
+      ).sort((a, b) => {
+        const aGrad = isGraduationSubjectType(a.subjectVersion?.type)
+        const bGrad = isGraduationSubjectType(b.subjectVersion?.type)
+        if (aGrad !== bGrad) return aGrad ? 1 : -1
+
         const getPlannedSemester = (item: (typeof student.subjectClassStudent)[number]) => {
           const matchedTrainingBlock = item?.subjectVersion?.trainingBlocks?.find(
             (trainingBlock) =>
@@ -538,9 +570,17 @@ export default function StudentGradeSystem() {
           return plannedSemesterA - plannedSemesterB
         }
 
-        const semesterNameA = a?.subjectClass?.semester?.name || ""
-        const semesterNameB = b?.subjectClass?.semester?.name || ""
-        const semesterCompare = semesterNameA.localeCompare(semesterNameB, "vi")
+        const semesterA = a?.subjectClass?.semester || a?.semester
+        const semesterB = b?.subjectClass?.semester || b?.semester
+        const startA = semesterA?.startDate
+          ? new Date(semesterA.startDate).getTime()
+          : Number.MAX_SAFE_INTEGER
+        const startB = semesterB?.startDate
+          ? new Date(semesterB.startDate).getTime()
+          : Number.MAX_SAFE_INTEGER
+        if (startA !== startB) return startA - startB
+
+        const semesterCompare = (semesterA?.name || "").localeCompare(semesterB?.name || "", "vi")
         if (semesterCompare !== 0) {
           return semesterCompare
         }
@@ -549,10 +589,39 @@ export default function StudentGradeSystem() {
       })
 
       const semesterMap = new Map()
+      const graduationItems: typeof sortedSubjectClassStudent = []
+
+      const pushSubject = (
+        semesterGroup: { subjects: any[] },
+        item: (typeof sortedSubjectClassStudent)[number]
+      ) => {
+        const scoreValue = getSubjectScoreValue(item)
+        const scoreConvert = scoreConverts?.find(
+          (s) =>
+            scoreValue != null && s.base10Min <= scoreValue && s.base10Max >= scoreValue
+        )
+        semesterGroup.subjects.push({
+          id: item.id,
+          key: item.id,
+          stt: semesterGroup.subjects.length + 1,
+          tenHocPhan: getDiplomaAppendixSubjectName(item),
+          soTinChi: item.subjectVersion?.credit || "",
+          thangDiem10: scoreValue != null ? scoreValue.toFixed(2) : "-",
+          thangDiem4: scoreConvert?.base4 || "",
+          thangDiemChu: scoreConvert?.letter,
+        })
+      }
 
       sortedSubjectClassStudent.forEach((item) => {
-        const semester = item.subjectClass?.semester
-        if (!semester) return
+        if (isGraduationSubjectType(item.subjectVersion?.type)) {
+          graduationItems.push(item)
+          return
+        }
+
+        const semester = item.subjectClass?.semester || item.semester || {
+          id: `phien-diem-${student.id}`,
+          name: "Phiên điểm",
+        }
 
         if (!semesterMap.has(semester.id)) {
           semesterMap.set(semester.id, {
@@ -561,27 +630,26 @@ export default function StudentGradeSystem() {
             subjects: [],
           })
         }
-        const semesterGroup = semesterMap.get(semester.id)
-
-        const scoreConvert = scoreConverts?.find(
-          (s) => s.base10Min <= Number(item.finalScore) && s.base10Max >= Number(item.finalScore)
-        )
-
-        semesterGroup.subjects.push({
-          id: item.id,
-          key: item.id,
-          stt: semesterGroup.subjects.length + 1,
-          tenHocPhan: item.subjectVersion?.name || "",
-          soTinChi: item.subjectVersion?.credit || "",
-          thangDiem10: item?.finalScore ? Number(item?.finalScore).toFixed(2) : "-",
-          thangDiem4: scoreConvert?.base4 || "",
-          thangDiemChu: scoreConvert?.letter,
-        })
+        pushSubject(semesterMap.get(semester.id), item)
       })
+
+      const semesters = Array.from(semesterMap.values())
+      if (graduationItems.length) {
+        const graduationGroup = {
+          id: `graduation-${student.id}`,
+          name:
+            graduationItems[0]?.subjectClass?.semester?.name ||
+            graduationItems[0]?.semester?.name ||
+            "Luận văn/đề án tốt nghiệp",
+          subjects: [],
+        }
+        graduationItems.forEach((item) => pushSubject(graduationGroup, item))
+        semesters.push(graduationGroup)
+      }
 
       return {
         ...student,
-        semesters: Array.from(semesterMap.values()),
+        semesters,
       }
     }) as TStudentWithSemesters[]
   }, [students])
@@ -1325,9 +1393,7 @@ export default function StudentGradeSystem() {
     const payload: TExportPayload = {
       trainingObjectTypeId,
       trainingCourseIds,
-      fixedClassIds,
       thesisSessionIds,
-      managementOrganizationId: managementOrganizationIds?.[0],
       printDate: signerOverride?.printDate ?? printDate,
       signerName: signerOverride?.signerName ?? signerName ?? "",
       isChief: signerOverride?.isChief,
@@ -1676,14 +1742,7 @@ export default function StudentGradeSystem() {
             form={form}
             onValuesChange={(changed) => {
               if ("trainingCourseIds" in changed) {
-                form.setFieldsValue({
-                  fixedClassIds: [],
-                  managementOrganizationIds: [],
-                })
-              }
-
-              if ("fixedClassIds" in changed) {
-                form.setFieldValue("managementOrganizationIds", [])
+                form.setFieldValue("thesisSessionIds", [])
               }
             }}
             className="space-y-4"
@@ -1734,29 +1793,6 @@ export default function StudentGradeSystem() {
             <div className="flex items-center">
               <FormItem
                 form={form}
-                name="fixedClassIds"
-                label="Lớp"
-                labelAlign="left"
-                {...formItemLayout}
-              >
-                <Select
-                  mode="multiple"
-                  className="flex-1 w-64"
-                  maxTagCount={2}
-                  maxTagPlaceholder={(omittedValues) => `+${omittedValues?.length}`}
-                  placeholder="Chọn lớp quản lí"
-                  options={fixedClasses?.map((e) => ({
-                    label: e.name,
-                    value: e.id,
-                  }))}
-                  disabled={!trainingCourseIds?.length}
-                />
-              </FormItem>
-            </div>
-
-            <div className="flex items-center">
-              <FormItem
-                form={form}
                 name="thesisSessionIds"
                 label="Đợt xét "
                 labelAlign="left"
@@ -1773,32 +1809,6 @@ export default function StudentGradeSystem() {
                     value: e.id,
                   }))}
                   disabled={!trainingCourseIds?.length || !trainingObjectTypeId}
-                />
-              </FormItem>
-            </div>
-
-            <div className="flex items-center">
-              <FormItem
-                form={form}
-                name="managementOrganizationIds"
-                label="Khoa quản lý"
-                labelAlign="left"
-                {...formItemLayout}
-              >
-                <TreeSelect
-                  multiple
-                  className="flex-1 w-64"
-                  maxTagCount={2}
-                  maxTagPlaceholder={(omittedValues) => `+${omittedValues.length}`}
-                  treeData={treeData}
-                  placeholder="Chọn khoa quản lý"
-                  allowClear
-                  showSearch
-                  disabled={!fixedClassIds?.length}
-                  treeDefaultExpandAll
-                  filterTreeNode={(input, treeNode) =>
-                    fuzzyMatch(input, treeNode.label?.toString() || "")
-                  }
                 />
               </FormItem>
             </div>

@@ -318,9 +318,15 @@ export const ModalPhuLucThacSi = () => {
               courseScoreConfigFrom(data?.fixedClass?.trainingCourse, score)
             )
           : null
+      const topicTitle = (topic.name || score?.subjectVersion?.name || "").trim()
+      const name = topicTitle
+        ? /^chuyên đề\b/i.test(topicTitle)
+          ? topicTitle
+          : `Chuyên đề ${topicTitle}`
+        : `Chuyên đề ${index + 1}`
       return {
         id: topic.id,
-        name: topic.name || score?.subjectVersion?.name || `Chuyên đề nghiên cứu ${index + 1}`,
+        name,
         credits: score?.subjectVersion?.credit ?? null,
         score10,
         score4: converted?.base4 ?? null,
