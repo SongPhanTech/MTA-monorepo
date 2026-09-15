@@ -86,6 +86,16 @@ export interface DanhMucLuanVanProps {
 /** StudentRow: shape tối thiểu cần thiết cho các hàm helper trong trang này */
 export type StudentRow = {
   id?: string
+  code?: string | null
+  userProfile?: {
+    fullname?: string | null
+    dateOfBirth?: string | Date | null
+    [key: string]: unknown
+  } | null
+  fixedClass?: {
+    name?: string | null
+    [key: string]: unknown
+  } | null
   thesisRegistrations?: Array<{
     deletedAt?: string | Date | null
     thesisProject?: {
@@ -667,7 +677,7 @@ function buildExpertSelectOptions(
 
   const ensureId = ensure?.id ? String(ensure.id) : ""
   if (ensureId && !options.some((o) => o.value === ensureId)) {
-    const person = ensure.person
+    const person = ensure?.person
     const searchString = person
       ? String(getSupervisorName(person as ExpertProfileLike, false, true, "", catalog) || "")
       : ""
@@ -1293,12 +1303,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       message.warning("Vui lòng chọn đợt luận văn trước khi xóa.")
       return
     }
+    const studentId = record.id
+    if (!studentId) {
+      message.warning("Không tìm thấy mã học viên.")
+      return
+    }
 
     try {
       showSpinner()
       const response = await deleteStudentThesis({
         thesisSessionId,
-        studentId: record.id,
+        studentId,
       })
       if (response.status !== 200 || !("deleted" in response.data)) {
         message.error(
@@ -1309,13 +1324,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         return
       }
 
-      setEditingRowKeys((prev) => prev.filter((k) => k !== record.id))
+      setEditingRowKeys((prev) => prev.filter((k) => k !== studentId))
       setEditingValues((prev) => {
         const next = { ...prev }
-        delete next[record.id]
+        delete next[studentId]
         return next
       })
-      setSelectedRowKeys((prev) => prev.filter((k) => k !== record.id))
+      setSelectedRowKeys((prev) => prev.filter((k) => k !== studentId))
 
       await refetchThesisTableData()
       message.success("Xóa luận văn thành công")
@@ -1467,7 +1482,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
       items.push({
         thesisProjectId,
-        studentCode: studentRecord?.code ?? null,
+        studentCode: typeof studentRecord?.code === "string" ? studentRecord.code : null,
         title: rowData.title ?? "",
         type: rowData.type ?? "",
         language: rowData.language ?? "",
@@ -1526,13 +1541,15 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       return
     }
 
-    const newEditingRowKeys = students.map((s) => s.id)
+    const newEditingRowKeys = students.map((s) => s.id).filter((id): id is string => Boolean(id))
     const initialEditingValues: Record<string, Record<string, any>> = {}
 
     students.forEach((record) => {
+      const studentId = record.id
+      if (!studentId) return
       const thesisProject = getThesisProjectForSession(record, searchParams.thesisSessionId)
       if (thesisProject) {
-        initialEditingValues[record.id] = {
+        initialEditingValues[studentId] = {
           title: thesisProject.title || "",
           supervisor: thesisProject.supervisor?.expertId || "",
           coSupervisor: thesisProject.coSupervisor?.expertId || "",
@@ -2854,7 +2871,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           options={buildExpertSelectOptions(
                             expertProfileData,
                             (item) =>
-                              item.eligiblePresident === true && !excludedCouncilIds.has(item.id),
+                              item.eligiblePresident === true &&
+                              !!item.id &&
+                              !excludedCouncilIds.has(item.id),
                             {
                               id: currentValue,
                               person: versionToPersonLike(
@@ -2943,7 +2962,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           options={buildExpertSelectOptions(
                             expertProfileData,
                             (item) =>
-                              item.eligibleSecretary === true && !excludedCouncilIds.has(item.id),
+                              item.eligibleSecretary === true &&
+                              !!item.id &&
+                              !excludedCouncilIds.has(item.id),
                             {
                               id: currentValue,
                               person: versionToPersonLike(
@@ -3031,7 +3052,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           disabled={!isWithinCouncilEditWindow()}
                           options={buildExpertSelectOptions(
                             expertProfileData,
-                            (item) => !excludedCouncilIds.has(item.id),
+                            (item) => !!item.id && !excludedCouncilIds.has(item.id),
                             {
                               id: currentValue,
                               person: versionToPersonLike(
@@ -3119,7 +3140,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           disabled={!isWithinCouncilEditWindow()}
                           options={buildExpertSelectOptions(
                             expertProfileData,
-                            (item) => !excludedCouncilIds.has(item.id),
+                            (item) => !!item.id && !excludedCouncilIds.has(item.id),
                             {
                               id: currentValue,
                               person: versionToPersonLike(
@@ -3201,7 +3222,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           disabled={!isWithinCouncilEditWindow()}
                           options={buildExpertSelectOptions(
                             expertProfileData,
-                            (item) => !excludedCouncilIds.has(item.id),
+                            (item) => !!item.id && !excludedCouncilIds.has(item.id),
                             {
                               id: currentValue,
                               person: versionToPersonLike(

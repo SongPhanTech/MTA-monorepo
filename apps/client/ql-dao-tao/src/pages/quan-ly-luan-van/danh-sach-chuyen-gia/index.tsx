@@ -461,7 +461,7 @@ export default function DanhSachChuyenGiaLuanVan() {
                 sorter: (a: ExpertRow, b: ExpertRow) =>
                   Number(Boolean(a.inAcademy)) - Number(Boolean(b.inAcademy)),
                 sortOrder: sortOrderOf("inAcademy"),
-                render: (_: unknown, record: ExpertRow) => {
+                render: (_: unknown, record: any) => {
                   if (record.inAcademy) {
                     return (
                       <Flex justify="center" align="center">

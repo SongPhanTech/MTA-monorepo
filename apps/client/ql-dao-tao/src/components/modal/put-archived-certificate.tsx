@@ -568,6 +568,8 @@ const PutCertificateArchivedModal = () => {
 
                     return (
                       <div className="flex flex-col gap-1 py-1">
+
+                        ádadasdasdasd
                         {scores.map((item, idx) => {
                           return (
                             <div key={item.subjectVersionId} className="flex items-center gap-1">
