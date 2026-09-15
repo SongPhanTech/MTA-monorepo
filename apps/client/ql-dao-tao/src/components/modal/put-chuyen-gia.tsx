@@ -1,13 +1,16 @@
 import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import useSpinner from "@hooks/spinner"
+import { CouncilRole, ThesisType } from "@workspace/db/client"
 import {
   useCreateExpert,
   useCreateExpertProfileVersion,
   useFindFirstExpert,
+  useFindManyCouncilMember,
   useFindManyDM_HocHam,
   useFindManyDM_HocVi,
   useFindManyLecturer,
+  useFindManyThesisProject,
   useFindUniqueExpert,
   useFindUniqueLecturer,
   useUpdateExpert,
@@ -15,7 +18,6 @@ import {
 } from "@workspace/db/hooks"
 import { CheckOutlined, EditOutlined } from "@ant-design/icons"
 import {
-  Alert,
   Button,
   Checkbox,
   Col,
@@ -24,8 +26,10 @@ import {
   Modal,
   message,
   Radio,
+  Row,
   Select,
   Table,
+  Tabs,
   Tag,
   Tooltip,
   Typography,
@@ -34,6 +38,14 @@ import dayjs from "dayjs"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
 import { useEffect, useMemo, useState } from "react"
+
+const COUNCIL_ROLE_LABEL: Record<CouncilRole, string> = {
+  [CouncilRole.CHAIRMAN]: "Chủ tịch",
+  [CouncilRole.SECRETARY]: "Thư ký",
+  [CouncilRole.REVIEWER_1]: "Phản biện 1",
+  [CouncilRole.REVIEWER_2]: "Phản biện 2",
+  [CouncilRole.MEMBER]: "Ủy viên",
+}
 
 export interface PutExpertProps {
   id?: string
@@ -72,7 +84,14 @@ const PutExpert = () => {
   const [form] = Form.useForm<ExpertFormValues>()
   const { isOpen, onClose, input } = useDisclosure<PutExpertProps>({
     tag: "PutExpert",
-    onClose: form.resetFields,
+    onClose: () => {
+      form.resetFields()
+      setActiveTab("profile")
+      setEditingVersionId(null)
+      setApplyingVersionId(null)
+      setSelectedLecturerId(undefined)
+      setSearch("")
+    },
   })
   const { showSpinner, hideSpinner } = useSpinner()
   const [isInternal, setIsInternal] = useState(true)
@@ -81,8 +100,13 @@ const PutExpert = () => {
   const [applyingVersionId, setApplyingVersionId] = useState<string | null>(null)
   /** Version đang mở trên form để sửa đè (in-place). */
   const [editingVersionId, setEditingVersionId] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<"profile" | "council" | "supervisor">("profile")
 
   const isThesisDomain = input?.thesisExpert !== false
+  const isEdit = !!input?.id
+  const councilHistoryEnabled = isOpen && isEdit && activeTab === "council" && !!input?.id
+  const supervisorHistoryEnabled =
+    isOpen && isEdit && activeTab === "supervisor" && !!input?.id
 
   const { data: expert, refetch: refetchExpert } = useFindUniqueExpert(
     {
@@ -132,6 +156,82 @@ const PutExpert = () => {
 
   const { data: academicRankType } = useFindManyDM_HocHam()
   const { data: academicDegreeType } = useFindManyDM_HocVi()
+
+  const { data: councilMemberships = [], isFetching: loadingCouncilHistory } =
+    useFindManyCouncilMember(
+      {
+        where: {
+          deletedAt: null,
+          expertId: input?.id || "__none__",
+        },
+        include: {
+          council: {
+            include: {
+              thesis: {
+                where: {
+                  deletedAt: null,
+                  thesisType: isThesisDomain ? ThesisType.THESIS : ThesisType.PROJECT,
+                },
+                include: {
+                  thesisSession: { select: { id: true, name: true } },
+                  organization: { select: { Id: true, sTen: true } },
+                  room: { select: { name: true } },
+                  registrations: {
+                    where: { deletedAt: null },
+                    take: 1,
+                    select: {
+                      student: {
+                        select: {
+                          code: true,
+                          userProfile: { select: { fullname: true } },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      },
+      { enabled: councilHistoryEnabled }
+    )
+
+  const { data: supervisedProjects = [], isFetching: loadingSupervisorHistory } =
+    useFindManyThesisProject(
+      {
+        where: {
+          deletedAt: null,
+          thesisType: isThesisDomain ? ThesisType.THESIS : ThesisType.PROJECT,
+          OR: [
+            { supervisor: { expertId: input?.id || "__none__" } },
+            { coSupervisor: { expertId: input?.id || "__none__" } },
+          ],
+        },
+        include: {
+          thesisSession: { select: { id: true, name: true } },
+          organization: { select: { Id: true, sTen: true } },
+          supervisor: { select: { expertId: true } },
+          coSupervisor: { select: { expertId: true } },
+          registrations: {
+            where: { deletedAt: null },
+            take: 1,
+            select: {
+              student: {
+                select: {
+                  code: true,
+                  userProfile: { select: { fullname: true, dateOfBirth: true } },
+                  fixedClass: { select: { name: true } },
+                },
+              },
+            },
+          },
+        },
+        orderBy: [{ defenseDate: "desc" }, { updatedAt: "desc" }],
+      },
+      { enabled: supervisorHistoryEnabled }
+    )
 
   const { mutateAsync: createExpert } = useCreateExpert()
   const { mutateAsync: updateExpert } = useUpdateExpert()
@@ -524,64 +624,86 @@ const PutExpert = () => {
     return formatRange(v.validFrom, v.validTo)
   }, [editingVersionId, versions])
 
-  const isEdit = !!input?.id
+  const councilHistoryRows = useMemo(() => {
+    const rows: Array<{
+      key: string
+      role: string
+      studentName: string
+      studentCode: string
+      title: string
+      sessionName: string
+      organization: string
+      defenseDate: string
+      room: string
+    }> = []
 
-  return (
-    <PutFormModal
-      open={isOpen}
-      form={form}
-      onFinish={onOk}
-      onCancel={onClose}
-      maskClosable={true}
-      title={isEdit ? "Thông tin hồ sơ của chuyên gia" : "Thêm mới chuyên gia"}
-      className="w-[70vw]"
-      okText={isEdit ? undefined : "Lưu"}
-      footer={
-        isEdit
-          ? [
-              <Button key="close" onClick={onClose}>
-                Đóng
-              </Button>,
-              <Button key="update-version" onClick={handleUpdateVersion}>
-                Cập nhật phiên bản
-              </Button>,
-              <Button key="add-version" type="primary" onClick={handleAddVersion}>
-                Lưu phiên bản mới
-              </Button>,
-            ]
-          : undefined
+    for (const membership of councilMemberships) {
+      const projects = membership.council?.thesis ?? []
+      const roleLabel = COUNCIL_ROLE_LABEL[membership.role as CouncilRole] || membership.role
+      if (!projects.length) {
+        rows.push({
+          key: membership.id,
+          role: roleLabel,
+          studentName: "—",
+          studentCode: "—",
+          title: "—",
+          sessionName: "—",
+          organization: "—",
+          defenseDate: "—",
+          room: "—",
+        })
+        continue
       }
-    >
-      {/* {isEdit ? (
-        <Col span={24} className="mb-4">
-          <Alert
-            type="info"
-            showIcon
-            message="Cách sửa hồ sơ"
-            description={
-              <div>
-                <div>
-                  • <strong>Cập nhật phiên bản</strong>: sửa đè phiên bản đang mở trên form (có
-                  thể làm đổi mẫu in/thanh toán của đợt đã gán version đó).
-                </div>
-                <div>
-                  • <strong>Lưu phiên bản mới</strong>: tạo version mới và áp dụng cho gán mới —
-                  đợt cũ giữ version cũ.
-                </div>
-                <div>
-                  • Trên bảng lịch sử: <strong>Sửa</strong> = nạp vào form;{" "}
-                  <strong>Áp dụng</strong> = đặt làm hồ sơ hiện tại cho select.
-                </div>
-              </div>
-            }
-          />
-        </Col>
-      ) : null} */}
+      for (const project of projects) {
+        const student = project.registrations?.[0]?.student
+        rows.push({
+          key: `${membership.id}-${project.id}`,
+          role: roleLabel,
+          studentName: student?.userProfile?.fullname || "—",
+          studentCode: student?.code || "—",
+          title: project.title || "—",
+          sessionName: project.thesisSession?.name || "—",
+          organization: project.organization?.sTen || "—",
+          defenseDate: project.defenseDate
+            ? dayjs(project.defenseDate).format("DD/MM/YYYY")
+            : "—",
+          room: project.room?.name || "—",
+        })
+      }
+    }
+    return rows
+  }, [councilMemberships])
 
+  const supervisorHistoryRows = useMemo(() => {
+    const expertId = input?.id
+    if (!expertId) return []
+    return supervisedProjects.map((project) => {
+      const student = project.registrations?.[0]?.student
+      const isGvhd1 = project.supervisor?.expertId === expertId
+      const isGvhd2 = project.coSupervisor?.expertId === expertId
+      const role =
+        isGvhd1 && isGvhd2 ? "GVHD1, GVHD2" : isGvhd1 ? "GVHD1" : isGvhd2 ? "GVHD2" : "—"
+      return {
+        key: project.id,
+        role,
+        studentName: student?.userProfile?.fullname || "—",
+        studentCode: student?.code || "—",
+        className: student?.fixedClass?.name || "—",
+        title: project.title || "—",
+        sessionName: project.thesisSession?.name || "—",
+        organization: project.organization?.sTen || "—",
+        defenseDate: project.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : "—",
+      }
+    })
+  }, [input?.id, supervisedProjects])
+
+  const domainLabel = isThesisDomain ? "luận văn" : "đồ án"
+
+  const profileContent = (
+    <>
       {isEdit ? (
         <Col span={24}>
           <Typography.Title level={5} className="!mb-1 !mt-0">
-            
             {editingVersionLabel ? (
               <Tag color="processing">Đang sửa: {editingVersionLabel}</Tag>
             ) : null}
@@ -731,11 +853,6 @@ const PutExpert = () => {
           <Typography.Title level={5} className="!mb-2">
             Lịch sử phiên bản hồ sơ
           </Typography.Title>
-          {/* <Typography.Paragraph type="secondary" className="!mb-3">
-            Điền form <strong>Soạn phiên bản mới</strong> rồi bấm <strong>Lưu phiên bản mới</strong>
-            . Hoặc chọn <strong>Áp dụng hồ sơ này</strong> trên một dòng lịch sử để dùng lại
-            version cũ (không tạo bản mới). Mẫu / đợt đã gán không đổi.
-          </Typography.Paragraph> */}
           <Table
             rowKey="id"
             size="small"
@@ -774,11 +891,7 @@ const PutExpert = () => {
                 width: 90,
                 align: "center",
                 render: (_: unknown, record: (typeof versions)[number]) =>
-                  record.inAcademy ? (
-                    <Tag color="blue">Trong</Tag>
-                  ) : (
-                    <Tag>Ngoài</Tag>
-                  ),
+                  record.inAcademy ? <Tag color="blue">Trong</Tag> : <Tag>Ngoài</Tag>,
               },
               {
                 title: "Đơn vị",
@@ -846,6 +959,149 @@ const PutExpert = () => {
           />
         </Col>
       ) : null}
+    </>
+  )
+
+  const councilHistoryContent = (
+    <Col span={24}>
+      <Typography.Paragraph type="secondary" className="!mb-2">
+        Thống kê các hội đồng bảo vệ {domainLabel} chuyên gia đã tham gia (theo vai trò đã gán).
+      </Typography.Paragraph>
+      <Table
+        rowKey="key"
+        size="small"
+        loading={loadingCouncilHistory}
+        pagination={false}
+        scroll={{ x: 1100, y: 420 }}
+        dataSource={councilHistoryRows}
+        locale={{ emptyText: "Chưa có dữ liệu hội đồng" }}
+        columns={[
+          {
+            title: "STT",
+            width: 56,
+            align: "center",
+            render: (_: unknown, __: unknown, index: number) => index + 1,
+          },
+          { title: "Vai trò", dataIndex: "role", width: 120 },
+          { title: "Học viên", dataIndex: "studentName", width: 160 },
+          { title: "Mã HV", dataIndex: "studentCode", width: 110 },
+          { title: "Đề tài", dataIndex: "title", width: 240 },
+          { title: "Đợt xét", dataIndex: "sessionName", width: 160 },
+          { title: "Khoa/đơn vị", dataIndex: "organization", width: 140 },
+          { title: "Ngày bảo vệ", dataIndex: "defenseDate", width: 110 },
+          { title: "Phòng", dataIndex: "room", width: 100 },
+        ]}
+      />
+    </Col>
+  )
+
+  const supervisorHistoryContent = (
+    <Col span={24}>
+      <Typography.Paragraph type="secondary" className="!mb-2">
+        Thống kê các đề tài {domainLabel} chuyên gia hướng dẫn với vai trò GVHD1 / GVHD2.
+      </Typography.Paragraph>
+      <Table
+        rowKey="key"
+        size="small"
+        loading={loadingSupervisorHistory}
+        pagination={false}
+        scroll={{ x: 1100, y: 420 }}
+        dataSource={supervisorHistoryRows}
+        locale={{ emptyText: "Chưa có dữ liệu hướng dẫn" }}
+        columns={[
+          {
+            title: "STT",
+            width: 56,
+            align: "center",
+            render: (_: unknown, __: unknown, index: number) => index + 1,
+          },
+          {
+            title: "Vai trò",
+            dataIndex: "role",
+            width: 110,
+            render: (role: string) => <Tag color="blue">{role}</Tag>,
+          },
+          { title: "Học viên", dataIndex: "studentName", width: 160 },
+          { title: "Mã HV", dataIndex: "studentCode", width: 110 },
+          { title: "Lớp", dataIndex: "className", width: 120 },
+          { title: "Đề tài", dataIndex: "title", width: 240 },
+          { title: "Đợt xét", dataIndex: "sessionName", width: 160 },
+          { title: "Khoa/đơn vị", dataIndex: "organization", width: 140 },
+          { title: "Ngày bảo vệ", dataIndex: "defenseDate", width: 110 },
+        ]}
+      />
+    </Col>
+  )
+
+  return (
+    <PutFormModal
+      open={isOpen}
+      form={form}
+      onFinish={onOk}
+      onCancel={onClose}
+      maskClosable={true}
+      title={isEdit ? "Thông tin hồ sơ của chuyên gia" : "Thêm mới chuyên gia"}
+      className="w-[90vw]"
+      okText={isEdit ? undefined : "Lưu"}
+      footer={
+        isEdit
+          ? [
+              <Button key="close" onClick={onClose}>
+                Đóng
+              </Button>,
+              ...(activeTab === "profile"
+                ? [
+                    <Button key="update-version" onClick={handleUpdateVersion}>
+                      Cập nhật phiên bản
+                    </Button>,
+                    <Button key="add-version" type="primary" onClick={handleAddVersion}>
+                      Lưu phiên bản mới
+                    </Button>,
+                  ]
+                : []),
+            ]
+          : undefined
+      }
+    >
+      {isEdit ? (
+        <Col span={24}>
+          <Tabs
+            activeKey={activeTab}
+            onChange={(key) => setActiveTab(key as "profile" | "council" | "supervisor")}
+            items={[
+              {
+                key: "profile",
+                label: "Thông tin hồ sơ",
+                children: (
+                  <div className="pt-2">
+                    <Row gutter={[8, 8]}>{profileContent}</Row>
+                  </div>
+                ),
+              },
+              {
+                key: "council",
+                label: "Lịch sử tham gia hội đồng",
+                children: (
+                  <div className="pt-2">
+                    <Row gutter={[8, 8]}>{councilHistoryContent}</Row>
+                  </div>
+                ),
+              },
+              {
+                key: "supervisor",
+                label: "Lịch sử tham gia hướng dẫn",
+                children: (
+                  <div className="pt-2">
+                    <Row gutter={[8, 8]}>{supervisorHistoryContent}</Row>
+                  </div>
+                ),
+              },
+            ]}
+          />
+        </Col>
+      ) : (
+        profileContent
+      )}
     </PutFormModal>
   )
 }
