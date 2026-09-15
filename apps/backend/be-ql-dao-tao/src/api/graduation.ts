@@ -517,21 +517,24 @@ app.openapi(graduationCheck, async (c) => {
 
     const reasons: string[] = []
 
-    // Kiểm tra chuẩn đầu ra
-    const lackOfOutputStandard = session.outputStandard.filter((standard) => {
-      const notCompleted = standard.certificates.every((cert) => {
-        const archived = student.archivedCertificate.find(
-          (archived) => archived.certificateId === cert.id
-        )
-        return !archived
+    // Chỉ xét chuẩn đầu ra khi đợt đã chọn; không chọn thì không bắt buộc
+    if (session.outputStandard.length > 0) {
+      const lackOfOutputStandard = session.outputStandard.filter((standard) => {
+        if (standard.certificates.length === 0) return false
+        const notCompleted = standard.certificates.every((cert) => {
+          const archived = student.archivedCertificate.find(
+            (archived) => archived.certificateId === cert.id
+          )
+          return !archived
+        })
+        return notCompleted
       })
-      return notCompleted
-    })
 
-    if (lackOfOutputStandard.length > 0) {
-      reasons.push(
-        `Chưa đạt chuẩn đầu ra: ${lackOfOutputStandard.map((standard) => standard.name).join(", ")}`
-      )
+      if (lackOfOutputStandard.length > 0) {
+        reasons.push(
+          `Chưa đạt chuẩn đầu ra: ${lackOfOutputStandard.map((standard) => standard.name).join(", ")}`
+        )
+      }
     }
 
     const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap(({ subjects }) => subjects)

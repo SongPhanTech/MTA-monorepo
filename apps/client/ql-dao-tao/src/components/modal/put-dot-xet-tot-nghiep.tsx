@@ -271,9 +271,9 @@ const PutGraduationSession = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="outputStandardIds" label="Chuẩn đầu ra" required>
+        <FormItem form={form} name="outputStandardIds" label="Chuẩn đầu ra">
           <Select
-            placeholder="Chọn chuẩn đầu ra"
+            placeholder="Chọn chuẩn đầu ra để xét (không bắt buộc)"
             options={outputStandards.map((item) => ({
               label: item.name,
               value: item.id,
