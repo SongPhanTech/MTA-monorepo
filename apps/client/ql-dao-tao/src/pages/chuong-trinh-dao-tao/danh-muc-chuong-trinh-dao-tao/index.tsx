@@ -159,11 +159,16 @@ export default function TrainingProgramCatalog() {
       }),
       ...(filters.trainingCourses &&
         filters.trainingCourses.length > 0 && {
-          fixedClasses: {
-            some: {
-              trainingCourseId: { in: filters.trainingCourses },
+          OR: [
+            { trainingCourseId: { in: filters.trainingCourses } },
+            {
+              fixedClasses: {
+                some: {
+                  trainingCourseId: { in: filters.trainingCourses },
+                },
+              },
             },
-          },
+          ],
         }),
       ...(filters.trainingTime && {
         trainingTimeId: { in: filters.trainingTime },
@@ -279,13 +284,22 @@ export default function TrainingProgramCatalog() {
           trainingObjectTypeId,
           ...(filters.trainingCourses && filters.trainingCourses.length > 0
             ? {
-                fixedClasses: {
-                  some: {
+                OR: [
+                  {
                     trainingCourseId: {
                       in: filters.trainingCourses,
                     },
                   },
-                },
+                  {
+                    fixedClasses: {
+                      some: {
+                        trainingCourseId: {
+                          in: filters.trainingCourses,
+                        },
+                      },
+                    },
+                  },
+                ],
               }
             : {}),
           ...(filters.trainingTime
@@ -328,6 +342,12 @@ export default function TrainingProgramCatalog() {
             },
           },
           trainingObjectType: true,
+          trainingCourse: {
+            select: { id: true, name: true },
+          },
+          trainingLevel: {
+            select: { id: true, name: true },
+          },
           documentFiles: true,
           fixedClasses: {
             include: {
@@ -682,6 +702,7 @@ export default function TrainingProgramCatalog() {
                 align: "center",
                 width: 120,
                 render: (__, record) => {
+                  if (record?.trainingCourse?.name) return record.trainingCourse.name
                   const courses = [
                     ...new Set(
                       record?.fixedClasses?.map((fc) => fc?.trainingCourse?.name).filter(Boolean) ??
@@ -690,6 +711,12 @@ export default function TrainingProgramCatalog() {
                   ]
                   return courses.join(", ")
                 },
+              },
+              {
+                title: "Bậc đào tạo",
+                align: "center",
+                width: 140,
+                render: (__, record) => record?.trainingLevel?.name ?? "",
               },
               {
                 title: <Tooltip title="Tổng số tín chỉ">Số tín chỉ</Tooltip>,

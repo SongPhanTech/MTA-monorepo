@@ -76,6 +76,8 @@ export default function TrainingProgramSubjects() {
           },
         },
         trainingTime: true,
+        trainingCourse: true,
+        trainingLevel: true,
         documentFiles: true,
       },
     },
@@ -467,6 +469,8 @@ export default function TrainingProgramSubjects() {
           {[
             initialValue?.code,
             initialValue?.name,
+            initialValue?.trainingCourse?.name,
+            initialValue?.trainingLevel?.name,
             initialValue?.curriculum?.trainingMajor?.name,
             initialValue?.curriculum?.managementOrganization?.sTen,
           ]

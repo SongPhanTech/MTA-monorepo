@@ -15,7 +15,7 @@ import {
   type DocumentFile,
   type Prisma,
   type TrainingCourse,
-  type TrainingForm,
+  type TrainingLevel,
   type TrainingObjectType,
   type TrainingTime,
 } from "@workspace/db/client"
@@ -42,7 +42,7 @@ import "dayjs/locale/vi"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { getMinioUrl } from "@workspace/libs/utils"
 import { Download } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { DownloadCurriculumTemplateButton } from "../ui/download-curriculum-template-button"
 
@@ -102,7 +102,9 @@ const PutCurriculumVersion = () => {
   const { data: trainingLevelData = [] } = useFindManyTrainingLevel()
   const { data: trainingTimeData = [] } = useFindManyTrainingTime()
   const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectTypePermission()
-  const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
+  const { data: diplomaTypeData = [] } = useFindManyDiplomaType({
+    orderBy: { name: "asc" },
+  })
   const { data: trainingTypeData = [] } = useFindManyTrainingType()
   const { data: trainingLanguageData = [] } = useFindManyTrainingLanguage({
     where: { active: true },
@@ -235,8 +237,8 @@ const PutCurriculumVersion = () => {
         yearCreation: output.yearCreation,
         yearApplication: output.yearApplication,
         trainingObjectTypeId: output.trainingObjectTypeId,
-        trainingLevelId: output.trainingLevelId || trainingObjectTypeSelected?.trainingLevelId,
-        trainingCourseId: output.trainingCourseId || null,
+        trainingLevelId: output.trainingLevelId ?? trainingObjectTypeSelected?.trainingLevelId ?? null,
+        trainingCourseId: output.trainingCourseId ?? null,
         trainingTypeId: output.trainingTypeId,
         trainingTimeId: output.trainingTimeId,
         diplomaTypeId: output.diplomaTypeId,
@@ -368,6 +370,12 @@ const PutCurriculumVersion = () => {
         message.success("Thêm mới thành công")
       }
       queryClient.invalidateQueries({
+        queryKey: ["Curriculum"],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ["CurriculumVersion"],
+      })
+      queryClient.invalidateQueries({
         queryKey: ["TrainingCourse"],
       })
       onClose()
@@ -411,6 +419,8 @@ const PutCurriculumVersion = () => {
       where: { id: input?.versionId },
       include: {
         documentFiles: true,
+        trainingCourse: true,
+        trainingLevel: true,
       },
     },
     {
@@ -419,17 +429,31 @@ const PutCurriculumVersion = () => {
     }
   )
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+  // biome-ignore lint/correctness/useExhaustiveDependencies: chỉ hydrate form khi mở bản ghi, không ghi đè lựa chọn khoá/bậc
   useEffect(() => {
-    if (initialValue && trainingObjectTypeSelected) {
-      form.setFieldsValue({
-        ...initialValue,
-        type: initialValue?.type || CurriculumVersionType.FULL_COURSE,
-        trainingLevelId: trainingObjectTypeSelected.trainingLevelId,
-      })
-      setDocument(initialValue?.documentFiles)
+    if (!isOpen || !input?.versionId || !initialValue) return
+    form.setFieldsValue({
+      ...initialValue,
+      type: initialValue?.type || CurriculumVersionType.FULL_COURSE,
+      trainingCourseId: initialValue.trainingCourseId ?? null,
+      trainingLevelId:
+        initialValue.trainingLevelId ?? trainingObjectTypeSelected?.trainingLevelId ?? null,
+    })
+    setDocument(initialValue?.documentFiles)
+  }, [isOpen, input?.versionId, initialValue?.id])
+
+  const trainingCourseOptions = useMemo(() => {
+    const courses = [...trainingCourseData]
+    const currentCourse = initialValue?.trainingCourse
+    if (currentCourse && !courses.some((course) => course.id === currentCourse.id)) {
+      courses.unshift(currentCourse)
     }
-  }, [initialValue, trainingObjectTypeSelected])
+    return courses.map((i: TrainingCourse) => ({
+      value: i.id,
+      label: i.name,
+    }))
+  }, [trainingCourseData, initialValue?.trainingCourse])
+
   const ctdtTypeLabel = input?.isFramework ? "CTĐT khung" : "CTĐT toàn khoá"
   return (
     <PutFormModal
@@ -573,10 +597,7 @@ const PutCurriculumVersion = () => {
                     <FormItem form={form} label="Khoá học" name="trainingCourseId">
                       <Select
                         placeholder="Chọn khoá học"
-                        options={trainingCourseData.map((i: TrainingCourse) => ({
-                          value: i.id,
-                          label: i.name,
-                        }))}
+                        options={trainingCourseOptions}
                         allowClear
                         showSearch
                         optionFilterProp="label"
@@ -587,7 +608,7 @@ const PutCurriculumVersion = () => {
                     <FormItem form={form} label="Bậc đào tạo" name="trainingLevelId">
                       <Select
                         placeholder="Chọn bậc đào tạo"
-                        options={trainingLevelData.map((i: TrainingForm) => ({
+                        options={trainingLevelData.map((i: TrainingLevel) => ({
                           value: i.id,
                           label: i.name,
                         }))}
