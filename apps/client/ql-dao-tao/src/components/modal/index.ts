@@ -19,6 +19,7 @@ import ModalChuyenDoiChungChiThanhDiem from "./modal-chuyen-doi-chung-chi-thanh-
 import ModalChuyenLop from "./modal-chuyen-lop"
 import ModalChuyenLopLuuBan from "./modal-chuyen-lop-luu-ban"
 import ModalDanhSachChungChi from "./modal-danh-sach-chung-chi"
+import ModalThongKeChungChiTheoLop from "./modal-thong-ke-chung-chi-theo-lop"
 import HanNhapDiem from "./modal-han-nhap-diem"
 import ModalNhapTKB from "./modal-import-tkb"
 import ModalPrintStudentSubjectScore from "./modal-in-phieu-diem"
@@ -240,6 +241,7 @@ export {
   ModalCauHinhLuanVan,
   ModalTaoDuLieuMauLuanVan,
   ModalDanhSachChungChi,
+  ModalThongKeChungChiTheoLop,
   ModalChuyenDoiChungChiThanhDiem,
   PutResearchTopicModal,
   PutInternshipModal,

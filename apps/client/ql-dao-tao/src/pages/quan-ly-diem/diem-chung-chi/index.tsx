@@ -1,4 +1,4 @@
-import { DownloadOutlined } from "@ant-design/icons"
+import { BarChartOutlined, DownloadOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
@@ -119,6 +119,13 @@ export default function ArchivedCertificate() {
     archivedCertificateId: string
   }>({
     tag: "ModalPhienDiemKyHoc",
+  })
+
+  const { onOpen: onOpenThongKeLop } = useDisclosure<{
+    certificateId?: string
+    trainingCourseId?: string
+  }>({
+    tag: "ModalThongKeChungChiTheoLop",
   })
 
   const handleModal = () => {
@@ -681,6 +688,24 @@ export default function ArchivedCertificate() {
                     type="primary"
                   >
                     Chi tiết
+                  </Button>
+                  <Button
+                    className="ml-3"
+                    icon={<BarChartOutlined />}
+                    onClick={() => {
+                      const courseId = Array.isArray(filters.trainingCourseId)
+                        ? filters.trainingCourseId[0]
+                        : filters.trainingCourseId
+                      const certId = Array.isArray(filters.certificateId)
+                        ? filters.certificateId[0]
+                        : filters.certificateId
+                      onOpenThongKeLop({
+                        certificateId: certId as string | undefined,
+                        trainingCourseId: courseId as string | undefined,
+                      })
+                    }}
+                  >
+                    Thống kê
                   </Button>
                   {/* <Button
                     className="ml-3"
