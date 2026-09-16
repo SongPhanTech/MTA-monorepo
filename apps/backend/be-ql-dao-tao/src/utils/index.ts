@@ -211,6 +211,26 @@ type CurriculumData = {
   managementOrganization?: string
 }
 
+/** Cùng điều kiện ĐTĐT với dropdown file mẫu import sinh viên. */
+export const curriculumVersionForTrainingObjectTypeWhere = (trainingObjectTypeId: string) => ({
+  active: true,
+  deletedAt: null,
+  OR: [
+    { trainingObjectTypeId },
+    { curriculum: { trainingObjectTypeId, deletedAt: null } },
+    {
+      trainingCourse: {
+        trainingObjectTypeId,
+        deletedAt: null,
+        active: true,
+      },
+    },
+  ],
+})
+
+const namesEqual = (left?: string | null, right?: string | null) =>
+  (left?.trim() ?? "").toLowerCase() === (right?.trim() ?? "").toLowerCase()
+
 export const buildCurriculumMapOrThrow = async (
   prisma: PrismaClient,
   students: CurriculumData[],
@@ -283,48 +303,73 @@ export const buildCurriculumMapOrThrow = async (
     uniqueTuples.map((s) => s.managementOrganization)
   )
 
-  const existing = await prisma.curriculumVersion.findMany({
-    where: {
-      OR: uniqueTuples.map(({ curriculum, trainingMajor, trainingField }) => ({
-        name: curriculum,
-        curriculum: {
-          trainingMajor: {
-            name: trainingMajor,
-            trainingObjectTypes: { some: { trainingObjectTypeId } },
-            trainingField: {
-              name: trainingField,
-              trainingObjectTypes: { some: { trainingObjectTypeId } },
-            },
-          },
-        },
-      })),
-    },
-    select: {
-      id: true,
-      name: true,
-      curriculum: {
-        select: {
-          trainingMajor: {
-            select: {
-              name: true,
-              trainingField: { select: { name: true } },
-            },
-          },
-        },
-      },
-    },
-  })
+  const uniqueNames = Array.from(
+    new Set(uniqueTuples.map(({ curriculum }) => normalize(curriculum)).filter(Boolean))
+  )
 
-  const createdItems: { id: string; name: string }[] = []
+  const existing =
+    uniqueNames.length === 0
+      ? []
+      : await prisma.curriculumVersion.findMany({
+          where: {
+            AND: [
+              curriculumVersionForTrainingObjectTypeWhere(trainingObjectTypeId),
+              {
+                OR: [
+                  { name: { in: uniqueNames, mode: "insensitive" } },
+                  { code: { in: uniqueNames, mode: "insensitive" } },
+                ],
+              },
+            ],
+          },
+          select: {
+            id: true,
+            name: true,
+            code: true,
+            curriculum: {
+              select: {
+                trainingField: { select: { name: true } },
+                trainingMajor: {
+                  select: {
+                    name: true,
+                    trainingField: { select: { name: true } },
+                  },
+                },
+              },
+            },
+          },
+        })
+
+  const versionMatchesTuple = (
+    version: (typeof existing)[number],
+    tuple: CurriculumData
+  ) => {
+    const curriculumName = normalize(tuple.curriculum)
+    const nameOrCodeMatched =
+      namesEqual(version.name, curriculumName) || namesEqual(version.code, curriculumName)
+    if (!nameOrCodeMatched) return false
+
+    const majorName = normalize(tuple.trainingMajor)
+    if (majorName && !namesEqual(version.curriculum.trainingMajor?.name, majorName)) {
+      return false
+    }
+
+    const fieldName = normalize(tuple.trainingField)
+    if (fieldName) {
+      const fieldFromCurriculum = version.curriculum.trainingField?.name
+      const fieldFromMajor = version.curriculum.trainingMajor?.trainingField?.name
+      if (!namesEqual(fieldFromCurriculum, fieldName) && !namesEqual(fieldFromMajor, fieldName)) {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  const createdItems: { id: string; name: string; code?: string | null }[] = []
 
   const missing = uniqueTuples.filter(
-    ({ curriculum, trainingMajor, trainingField }) =>
-      !existing.some(
-        (version) =>
-          version.name === curriculum &&
-          (!trainingMajor || trainingMajor === version.curriculum.trainingMajor?.name) &&
-          (!trainingField || trainingField === version.curriculum.trainingMajor?.trainingField.name)
-      )
+    (tuple) => !existing.some((version) => versionMatchesTuple(version, tuple))
   )
 
   if (missing.length && !createMissing) {
@@ -451,7 +496,26 @@ ${missing
     })
   }
 
-  return new Map([...existing, ...createdItems].map(({ name, id }) => [name, id]))
+  const result = new Map<string, string>()
+  const setLookupKeys = (
+    excelName: string,
+    version: { id: string; name: string; code?: string | null }
+  ) => {
+    if (excelName) result.set(excelName, version.id)
+    if (version.name) result.set(version.name, version.id)
+    if (version.code) result.set(version.code, version.id)
+  }
+
+  for (const tuple of uniqueTuples) {
+    const version = existing.find((item) => versionMatchesTuple(item, tuple))
+    if (version) setLookupKeys(normalize(tuple.curriculum), version)
+  }
+
+  for (const created of createdItems) {
+    setLookupKeys(created.name, created)
+  }
+
+  return result
 }
 
 export const buildTrainingBlockMapOrThrow = async (

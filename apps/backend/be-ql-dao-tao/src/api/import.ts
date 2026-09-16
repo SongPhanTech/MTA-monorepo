@@ -35,6 +35,7 @@ import {
   buildOrgNameMapOrThrow,
   buildPositionMapOrThrow,
   buildRankMapOrThrow,
+  curriculumVersionForTrainingObjectTypeWhere,
 } from "../utils"
 
 const app = new OpenAPIHono({ strict: false })
@@ -1120,13 +1121,26 @@ app.openapi(importStudent, async (c) => {
     where: {
       OR: uniqueCurriculumMajorCombos.map((s) => ({
         curriculumVersion: {
-          name: s.curriculum,
-          trainingObjectTypeId: trainingObjectType.id,
-          curriculum: {
-            trainingMajor: {
-              name: s.trainingMajor,
+          AND: [
+            curriculumVersionForTrainingObjectTypeWhere(trainingObjectType.id),
+            {
+              OR: [
+                { name: { equals: s.curriculum, mode: "insensitive" as const } },
+                { code: { equals: s.curriculum, mode: "insensitive" as const } },
+              ],
             },
-          },
+            ...(s.trainingMajor
+              ? [
+                  {
+                    curriculum: {
+                      trainingMajor: {
+                        name: { equals: s.trainingMajor, mode: "insensitive" as const },
+                      },
+                    },
+                  },
+                ]
+              : []),
+          ],
         },
       })),
     },
@@ -1151,8 +1165,9 @@ app.openapi(importStudent, async (c) => {
 
     const matchingInput = data.students.find(
       (s) =>
-        s.curriculum === conflictCurriculumName &&
-        (!s.trainingMajor || s.trainingMajor === conflictMajorName)
+        s.curriculum?.trim().toLowerCase() === conflictCurriculumName?.trim().toLowerCase() &&
+        (!s.trainingMajor ||
+          s.trainingMajor.trim().toLowerCase() === conflictMajorName?.trim().toLowerCase())
     )
 
     if (matchingInput) {
@@ -1172,40 +1187,6 @@ app.openapi(importStudent, async (c) => {
 
   if (dbConflictErrors.length > 0) {
     return c.json({ message: `Xung đột dữ liệu: ${dbConflictErrors.join("; ")}` }, 400)
-  }
-
-  const uniqueNames = [...new Set(data.students.map((s) => s.curriculum?.trim()))].filter(
-    Boolean
-  ) as string[]
-
-  const existingCVs = await prisma.curriculumVersion.findMany({
-    where: {
-      name: { in: uniqueNames },
-      trainingObjectTypeId: trainingObjectType.id,
-      deletedAt: null,
-    },
-    select: { id: true, name: true },
-  })
-
-  const cvIdMap = new Map(existingCVs.map((cv) => [cv.name.trim(), cv.id]))
-
-  const missing = uniqueNames.filter((name) => !cvIdMap.has(name))
-
-  const MAX_DISPLAY = 5
-
-  const errorMessage =
-    missing.length <= MAX_DISPLAY
-      ? `Lỗi: Các CTĐT [${missing.join(", ")}] không tồn tại.`
-      : `Lỗi: Các CTĐT [${missing.slice(0, MAX_DISPLAY).join(", ")}, ... và ${missing.length - MAX_DISPLAY} CTĐT khác] không tồn tại.`
-
-  if (!createCurriculumVersion && missing.length > 0) {
-    return c.json(
-      {
-        message: errorMessage,
-        details: missing,
-      },
-      400
-    )
   }
 
   const curriculumVersionMap = await buildCurriculumMapOrThrow(

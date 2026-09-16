@@ -7,6 +7,7 @@ import ExcelJS from "exceljs"
 import type { Alignment } from "exceljs"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
+import { curriculumVersionForTrainingObjectTypeWhere } from "../utils"
 import {
   listStudentResultInfo,
   resultCourseStudentAcademicWarning,
@@ -616,21 +617,7 @@ export async function _generateStudentImportTemplate(
   trainingObjectTypeId: string
 ): Promise<ArrayBuffer> {
   // CTĐT / ngành / CN / đơn vị / lớp QL: luôn theo ĐTĐT (không lọc theo khoá).
-  const curriculumVersionWhere = {
-    active: true,
-    deletedAt: null,
-    OR: [
-      { trainingObjectTypeId },
-      { curriculum: { trainingObjectTypeId, deletedAt: null } },
-      {
-        trainingCourse: {
-          trainingObjectTypeId,
-          deletedAt: null,
-          active: true,
-        },
-      },
-    ],
-  }
+  const curriculumVersionWhere = curriculumVersionForTrainingObjectTypeWhere(trainingObjectTypeId)
 
   const orgSelect = { sTen: true, bActive: true, bDeleted: true } as const
 
