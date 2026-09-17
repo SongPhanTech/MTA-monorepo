@@ -7,6 +7,7 @@ import ApproveIcon from "@components/icons/approve"
 import DeleteIcon from "@components/icons/delete"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
+import { useLecturerHienTai } from "@hooks/use-lecturer-hien-tai"
 import { useThesisProjectStatusOptions } from "@hooks/thesisProjectStatus"
 import DefaultLayout from "@layouts/default-layout"
 import { buildOrgTree } from "@lib/utils"
@@ -74,7 +75,7 @@ export function formatDefenseSessionClock(startTime: Date | string | null | unde
 interface ThesisProjectForm {
   thesisSessionId: string
   fixedClassId: string[]
-  organizationId: string
+  organizationId: string[]
   topicEntryDeadline?: ReturnType<typeof dayjs>
   councilDeadline?: ReturnType<typeof dayjs>
 }
@@ -770,7 +771,14 @@ const { TextArea } = Input
 const NAME_SEARCH_DEBOUNCE_MS = 400
 
 export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
-  const orgId = window.contextData?.organizationId
+  const contextOrgId = window.contextData?.organizationId
+  const { organizationId: lecturerOrgId } = useLecturerHienTai()
+  const orgIds = useMemo(() => {
+    const ids = [contextOrgId, lecturerOrgId]
+      .map((id) => id?.trim())
+      .filter((id): id is string => Boolean(id))
+    return [...new Set(ids)]
+  }, [contextOrgId, lecturerOrgId])
   const [form] = Form.useForm<ThesisProjectForm>()
   const [searchParams, setSearchParams] = useState<Partial<ThesisProjectForm>>({})
   const { showSpinner, hideSpinner } = useSpinner()
@@ -873,13 +881,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   })
   const expertProfileData = useMemo(() => (experts ?? []).map(flattenExpertForSelect), [experts])
   useEffect(() => {
-    if (role !== "Khoa" || !orgId) return
-    form.setFieldValue("organizationId", orgId)
+    if (role !== "Khoa" || orgIds.length === 0) return
+    form.setFieldValue("organizationId", orgIds)
     setSearchParams((prev) => ({
       ...prev,
-      organizationId: orgId,
+      organizationId: orgIds,
     }))
-  }, [role, orgId, form])
+  }, [role, orgIds, form])
   // biome-ignore lint/correctness/useExhaustiveDependencies: dùng cho searchParams
   const thesisProjectWhere = useMemo(() => {
     if (!searchParams.thesisSessionId) return { id: { in: [] as string[] } }
@@ -906,8 +914,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       { thesisSessionId: searchParams.thesisSessionId },
       { thesisType: ThesisType.THESIS },
     ]
-    if (searchParams.organizationId) {
-      andConditions.push({ organizationId: searchParams.organizationId })
+    if (searchParams.organizationId?.length) {
+      andConditions.push({ organizationId: { in: searchParams.organizationId } })
     }
     if (filters.title) {
       andConditions.push({ title: { contains: filters.title, mode: "insensitive" } })
@@ -1039,8 +1047,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         },
       },
     ]
-    if (searchParams.organizationId) {
-      andConditions.push({ organizationId: searchParams.organizationId })
+    if (searchParams.organizationId?.length) {
+      andConditions.push({ organizationId: { in: searchParams.organizationId } })
     }
 
     if (debouncedNameKeyword) {
@@ -1686,7 +1694,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         thesisSessionId: searchParams.thesisSessionId || "",
         fixedClassIds,
         trainingCourseIds: trainingCourseIds.length ? trainingCourseIds : undefined,
-        organizationId: searchParams.organizationId || undefined,
+        organizationIds: searchParams.organizationId?.length
+          ? searchParams.organizationId
+          : undefined,
         signerName: payload?.signerName,
         isChief: payload?.isChief,
         signingDate: payload?.signingDate ? dayjs(payload.signingDate).toISOString() : undefined,
@@ -2170,13 +2180,15 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       placeholder="Chọn khoa quản lý"
                       allowClear={role !== "Khoa"}
                       disabled={role === "Khoa"}
+                      multiple
+                      maxTagCount="responsive"
                       showSearch
                       treeDefaultExpandAll
                       treeData={treeOrgData}
                       onChange={(value) => {
                         setSearchParams({
                           ...searchParams,
-                          organizationId: value as string,
+                          organizationId: (value as string[]) || [],
                         })
                         setCurrentPage(1)
                         setEditingRowKeys([])

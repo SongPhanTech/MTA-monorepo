@@ -164,6 +164,7 @@ export type ThesisExportFilter = {
   trainingCourseIds?: string[]
   fixedClassIds?: string[]
   organizationId?: string
+  organizationIds?: string[]
   signerName?: string
   isChief?: boolean
   signingDate?: string

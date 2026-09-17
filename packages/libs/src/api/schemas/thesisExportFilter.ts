@@ -68,8 +68,10 @@ export interface ThesisExportFilter {
   trainingCourseIds?: string[];
   /** Danh sách ID lớp biên chế trong phạm vi lọc. */
   fixedClassIds?: string[];
-  /** ID khoa quản lý (organization) của đề tài. */
+  /** ID khoa quản lý (organization) của đề tài (một giá trị). */
   organizationId?: string;
+  /** Danh sách ID khoa quản lý (organization) của đề tài. */
+  organizationIds?: string[];
   /** Tên người ký (mẫu needSign). */
   signerName?: string;
   /** true = ký với tư cách thủ trưởng. */
