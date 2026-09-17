@@ -51,6 +51,12 @@ export interface IHocKi {
   monHocs?: IMonHoc[]
 }
 
+function formatGpa(value: unknown) {
+  if (value == null || value === "") return "—"
+  const n = Number(value)
+  return Number.isFinite(n) ? n.toFixed(2) : "—"
+}
+
 export default function StudentScoreClassPage() {
   const router = useRouter()
   const { can } = useAbility()
@@ -132,6 +138,9 @@ export default function StudentScoreClassPage() {
             },
           },
         },
+        studentSemesterResult: {
+          include: { rank: true },
+        },
         studentYearResult: {
           where: { deletedAt: null, active: true },
           include: {
@@ -194,6 +203,7 @@ export default function StudentScoreClassPage() {
       where: {
         studentId: studentId,
         manualFinalScore: { gt: 0 },
+        deletedAt: null,
       },
       include: { subjectVersion: true },
     },
@@ -206,6 +216,7 @@ export default function StudentScoreClassPage() {
         studentSubjectScore: {
           some: {
             studentId: studentId,
+            deletedAt: null,
             subjectClass: { cancelled: false },
           },
         },
@@ -232,6 +243,7 @@ export default function StudentScoreClassPage() {
   const subjectScoreWhere: Prisma.StudentSubjectScoreWhereInput = useMemo(() => {
     return {
       studentId,
+      deletedAt: null,
       ...(filters.attendanceScoreCmp
         ? {
             attendanceScore: {
@@ -355,7 +367,10 @@ export default function StudentScoreClassPage() {
         },
         orderBy: [{ subject: { name: "asc" } }, { createdAt: "asc" }],
       },
-      studentSemesterResult: { where: { studentId } },
+      studentSemesterResult: {
+        where: { studentId },
+        include: { rank: true },
+      },
       trainingCoursesStart: {
         where: { id: student?.fixedClass?.trainingCourseId ?? undefined },
         include: { scoreConverts: true },
@@ -367,14 +382,27 @@ export default function StudentScoreClassPage() {
 
   const latestYearResult = student?.studentYearResult?.[0]
 
+  const semesterResultById = useMemo(() => {
+    const map = new Map<string, (typeof data)[number]["studentSemesterResult"][number]>()
+    for (const result of student?.studentSemesterResult ?? []) {
+      map.set(result.semesterId, result)
+    }
+    for (const semester of data) {
+      const nested = semester.studentSemesterResult?.[0]
+      if (nested && !map.has(semester.id)) map.set(semester.id, nested)
+    }
+    return map
+  }, [data, student?.studentSemesterResult])
+
   const dataWithSummary = useMemo(() => {
     const semesters = data
       .filter((s) => !semesterId || semesterId === s.id)
       .map((semester) => {
-        const result = semester.studentSemesterResult[0]
+        const result = semesterResultById.get(semester.id)
         if (!result) return semester
         return {
           ...semester,
+          studentSemesterResult: [result],
           subjectClasses: [
             ...semester.subjectClasses,
             {
@@ -402,7 +430,7 @@ export default function StudentScoreClassPage() {
         subjectClasses: [],
       },
     ]
-  }, [data, semesterId, latestYearResult])
+  }, [data, semesterId, latestYearResult, semesterResultById])
 
   const exportTemplate = async () => {
     if (!studentId) {
@@ -663,8 +691,8 @@ export default function StudentScoreClassPage() {
                         </p>
                         {r && (
                           <span className="font-semibold text-xs text-black-500">
-                            TBTL10: {r.cumulativeGpaBase10?.toFixed(2)} | TBTL4:{" "}
-                            {r.cumulativeGpaBase4?.toFixed(2)}
+                            TBTL10: {formatGpa(r.cumulativeGpaBase10)} | TBTL4:{" "}
+                            {formatGpa(r.cumulativeGpaBase4)}
                           </span>
                         )}
                       </div>
@@ -937,7 +965,7 @@ export default function StudentScoreClassPage() {
                       const r = record.semesterResult
                       return (
                         <span className="font-semibold text-xs">
-                          TBHK10: {r.gpaBase10?.toFixed(2)} | TBHK4: {r.gpaBase4?.toFixed(2)}
+                          TBHK10: {formatGpa(r.gpaBase10)} | TBHK4: {formatGpa(r.gpaBase4)}
                         </span>
                       )
                     }

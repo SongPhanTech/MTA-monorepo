@@ -146,6 +146,7 @@ import type {
   SyncThesisSupervisorPaymentsBody,
   TableName,
   TemplatePreviewResponse,
+  ThesisExportFilter,
   ThesisPaymentSyncResponse,
   ThroughputParams,
   UnauthorizedResponse,
@@ -4343,6 +4344,123 @@ export const useExportCouncilImportTemplate = <TError = ErrorMessageResponse | U
       > => {
 
       const mutationOptions = getExportCouncilImportTemplateMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * @summary Xuất mẫu in luận văn theo bộ lọc
+ */
+export type exportThesisTemplateResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportThesisTemplateResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type exportThesisTemplateResponse401 = {
+  data: UnauthorizedResponse
+  status: 401
+}
+
+export type exportThesisTemplateResponse403 = {
+  data: ErrorMessageResponse
+  status: 403
+}
+
+export type exportThesisTemplateResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type exportThesisTemplateResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type exportThesisTemplateResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type exportThesisTemplateResponseSuccess = (exportThesisTemplateResponse200) & {
+  headers: Headers;
+};
+export type exportThesisTemplateResponseError = (exportThesisTemplateResponse400 | exportThesisTemplateResponse401 | exportThesisTemplateResponse403 | exportThesisTemplateResponse404 | exportThesisTemplateResponse409 | exportThesisTemplateResponse500) & {
+  headers: Headers;
+};
+
+export type exportThesisTemplateResponse = (exportThesisTemplateResponseSuccess | exportThesisTemplateResponseError)
+
+export const getExportThesisTemplateUrl = (kind: 'phu-luc-ds-luan-van' | 'danh-sach-bao-ve' | 'ds-bao-ve-dan-phong' | 'sao-qd-huong-dan' | 'giay-moi-hdlv' | 'giay-moi-cham-pb' | 'ho-so-bao-ve' | 'ban-sao-hddglv' | 'phu-luc-qd-hd' | 'danh-sach-chuyen-gia' | 'thong-ke-gvhd' | 'thong-ke-hd' | 'thong-ke-don-vi-ngoai' | 'ket-qua-bao-ve' | 'nop-thu-vien' | 'de-xuat-hd' | 'kiem-tra-tien-do' | 'thanh-toan-hoi-dong' | 'thanh-toan-huong-dan',) => {
+
+
+  
+
+  return `/api/thesis/export/${kind}`
+}
+
+export const exportThesisTemplate = async (kind: 'phu-luc-ds-luan-van' | 'danh-sach-bao-ve' | 'ds-bao-ve-dan-phong' | 'sao-qd-huong-dan' | 'giay-moi-hdlv' | 'giay-moi-cham-pb' | 'ho-so-bao-ve' | 'ban-sao-hddglv' | 'phu-luc-qd-hd' | 'danh-sach-chuyen-gia' | 'thong-ke-gvhd' | 'thong-ke-hd' | 'thong-ke-don-vi-ngoai' | 'ket-qua-bao-ve' | 'nop-thu-vien' | 'de-xuat-hd' | 'kiem-tra-tien-do' | 'thanh-toan-hoi-dong' | 'thanh-toan-huong-dan',
+    thesisExportFilter: ThesisExportFilter, options?: RequestInit): Promise<exportThesisTemplateResponse> => {
+  
+  return customModelFetch<exportThesisTemplateResponse>(getExportThesisTemplateUrl(kind),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      thesisExportFilter,)
+  }
+);}
+
+
+
+
+export const getExportThesisTemplateMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportThesisTemplate>>, TError,{kind: 'phu-luc-ds-luan-van' | 'danh-sach-bao-ve' | 'ds-bao-ve-dan-phong' | 'sao-qd-huong-dan' | 'giay-moi-hdlv' | 'giay-moi-cham-pb' | 'ho-so-bao-ve' | 'ban-sao-hddglv' | 'phu-luc-qd-hd' | 'danh-sach-chuyen-gia' | 'thong-ke-gvhd' | 'thong-ke-hd' | 'thong-ke-don-vi-ngoai' | 'ket-qua-bao-ve' | 'nop-thu-vien' | 'de-xuat-hd' | 'kiem-tra-tien-do' | 'thanh-toan-hoi-dong' | 'thanh-toan-huong-dan';data: ThesisExportFilter}, TContext>, request?: SecondParameter<typeof customModelFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportThesisTemplate>>, TError,{kind: 'phu-luc-ds-luan-van' | 'danh-sach-bao-ve' | 'ds-bao-ve-dan-phong' | 'sao-qd-huong-dan' | 'giay-moi-hdlv' | 'giay-moi-cham-pb' | 'ho-so-bao-ve' | 'ban-sao-hddglv' | 'phu-luc-qd-hd' | 'danh-sach-chuyen-gia' | 'thong-ke-gvhd' | 'thong-ke-hd' | 'thong-ke-don-vi-ngoai' | 'ket-qua-bao-ve' | 'nop-thu-vien' | 'de-xuat-hd' | 'kiem-tra-tien-do' | 'thanh-toan-hoi-dong' | 'thanh-toan-huong-dan';data: ThesisExportFilter}, TContext> => {
+
+const mutationKey = ['exportThesisTemplate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportThesisTemplate>>, {kind: 'phu-luc-ds-luan-van' | 'danh-sach-bao-ve' | 'ds-bao-ve-dan-phong' | 'sao-qd-huong-dan' | 'giay-moi-hdlv' | 'giay-moi-cham-pb' | 'ho-so-bao-ve' | 'ban-sao-hddglv' | 'phu-luc-qd-hd' | 'danh-sach-chuyen-gia' | 'thong-ke-gvhd' | 'thong-ke-hd' | 'thong-ke-don-vi-ngoai' | 'ket-qua-bao-ve' | 'nop-thu-vien' | 'de-xuat-hd' | 'kiem-tra-tien-do' | 'thanh-toan-hoi-dong' | 'thanh-toan-huong-dan';data: ThesisExportFilter}> = (props) => {
+          const {kind,data} = props ?? {};
+
+          return  exportThesisTemplate(kind,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportThesisTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof exportThesisTemplate>>>
+    export type ExportThesisTemplateMutationBody = ThesisExportFilter
+    export type ExportThesisTemplateMutationError = ErrorMessageResponse | UnauthorizedResponse
+
+    /**
+ * @summary Xuất mẫu in luận văn theo bộ lọc
+ */
+export const useExportThesisTemplate = <TError = ErrorMessageResponse | UnauthorizedResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportThesisTemplate>>, TError,{kind: 'phu-luc-ds-luan-van' | 'danh-sach-bao-ve' | 'ds-bao-ve-dan-phong' | 'sao-qd-huong-dan' | 'giay-moi-hdlv' | 'giay-moi-cham-pb' | 'ho-so-bao-ve' | 'ban-sao-hddglv' | 'phu-luc-qd-hd' | 'danh-sach-chuyen-gia' | 'thong-ke-gvhd' | 'thong-ke-hd' | 'thong-ke-don-vi-ngoai' | 'ket-qua-bao-ve' | 'nop-thu-vien' | 'de-xuat-hd' | 'kiem-tra-tien-do' | 'thanh-toan-hoi-dong' | 'thanh-toan-huong-dan';data: ThesisExportFilter}, TContext>, request?: SecondParameter<typeof customModelFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportThesisTemplate>>,
+        TError,
+        {kind: 'phu-luc-ds-luan-van' | 'danh-sach-bao-ve' | 'ds-bao-ve-dan-phong' | 'sao-qd-huong-dan' | 'giay-moi-hdlv' | 'giay-moi-cham-pb' | 'ho-so-bao-ve' | 'ban-sao-hddglv' | 'phu-luc-qd-hd' | 'danh-sach-chuyen-gia' | 'thong-ke-gvhd' | 'thong-ke-hd' | 'thong-ke-don-vi-ngoai' | 'ket-qua-bao-ve' | 'nop-thu-vien' | 'de-xuat-hd' | 'kiem-tra-tien-do' | 'thanh-toan-hoi-dong' | 'thanh-toan-huong-dan';data: ThesisExportFilter},
+        TContext
+      > => {
+
+      const mutationOptions = getExportThesisTemplateMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

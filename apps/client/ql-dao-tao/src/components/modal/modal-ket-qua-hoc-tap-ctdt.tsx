@@ -27,6 +27,7 @@ const ModalLearningResult = () => {
     include: {
       userProfile: true,
       subjectClassStudent: {
+        where: { deletedAt: null },
         include: {
           subjectVersion: true,
         },
@@ -44,6 +45,7 @@ const ModalLearningResult = () => {
                           studentSubjectScore: {
                             where: {
                               studentId: id,
+                              deletedAt: null,
                               finalScore: { not: null },
                             },
                             orderBy: {

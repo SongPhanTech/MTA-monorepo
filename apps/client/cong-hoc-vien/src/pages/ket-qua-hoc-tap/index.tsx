@@ -77,6 +77,7 @@ export default function StudentScoreClassPage() {
         manualFinalScore: {
           gt: 0,
         },
+        deletedAt: null,
       },
       include: {
         subjectVersion: true,
@@ -172,7 +173,7 @@ export default function StudentScoreClassPage() {
       // TODO: check htdt
       htdt: student?.fixedClass?.trainingCourse.trainingObjectType?.name || "",
       nganh: student?.curriculumVersion?.curriculum.trainingMajor?.name || "",
-      lop: student?.fixedClass?.trainingCourse?.name || "",
+      lop: student?.fixedClass?.name || "",
     }
 
     const monHocRows: TableRow[] = monHocs.map((monHoc: IMonHoc, index: number) => ({
@@ -350,6 +351,7 @@ export default function StudentScoreClassPage() {
         studentSubjectScore: {
           some: {
             studentId: studentId,
+            deletedAt: null,
             subjectClass: { cancelled: false },
           },
         },
@@ -400,6 +402,7 @@ export default function StudentScoreClassPage() {
   const subjectScoreWhere: Prisma.StudentSubjectScoreWhereInput = useMemo(() => {
     return {
       studentId,
+      deletedAt: null,
       ...(filters.attendanceScoreCmp
         ? {
             attendanceScore: {

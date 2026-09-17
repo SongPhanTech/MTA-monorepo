@@ -821,4 +821,140 @@ app.openapi(exportStudentsMissingCertificateExcel, async (c) => {
   }
 })
 
+const deleteArchivedCertificate = createRoute({
+  operationId: "delete-archived-certificate",
+  path: "/delete-archived-certificate",
+  tags: ["Điểm chứng chỉ / Thưởng"],
+  summary: "Xóa chứng chỉ đã lưu (kể cả đã duyệt)",
+  description: `Xóa chứng chỉ của sinh viên. Nếu chứng chỉ đã duyệt, gỡ điểm phiên đã ghi từ chứng chỉ đó.
+
+**Bảng dữ liệu nguồn:** ArchivedCertificate, ArchivedCertificateOnStudentSubjectScore, StudentSubjectScore.
+
+**Tham số:** archivedCertificateIds.`,
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              archivedCertificateIds: z
+                .string()
+                .array()
+                .min(1)
+                .openapi(fieldDesc("Danh sách ID chứng chỉ cần xóa.")),
+            })
+            .openapi("DeleteArchivedCertificateInput"),
+        },
+      },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Success",
+      content: {
+        "application/json": {
+          schema: SuccessBooleanResponseSchema.openapi("DeleteArchivedCertificateResult"),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(deleteArchivedCertificate, async (c) => {
+  const { archivedCertificateIds } = c.req.valid("json")
+  const now = new Date()
+
+  try {
+    const certificates = await prisma.archivedCertificate.findMany({
+      where: {
+        id: { in: archivedCertificateIds },
+        deletedAt: null,
+      },
+      include: {
+        studentSubjectScore: {
+          include: {
+            studentSubjectScore: {
+              select: {
+                id: true,
+                subjectClassId: true,
+              },
+            },
+          },
+        },
+      },
+    })
+
+    if (certificates.length === 0) {
+      return c.json({ message: "Không tìm thấy chứng chỉ cần xóa" }, 404)
+    }
+
+    const certificateIds = certificates.map((cert) => cert.id)
+    const generatedScoreIds = [
+      ...new Set(
+        certificates.flatMap((cert) =>
+          cert.studentSubjectScore
+            .filter((link) => !link.studentSubjectScore.subjectClassId)
+            .map((link) => link.studentSubjectScoreId)
+        )
+      ),
+    ]
+
+    await prisma.$transaction(
+      async (tx) => {
+        await tx.archivedCertificateOnStudentSubjectScore.deleteMany({
+          where: { archivedCertificateId: { in: certificateIds } },
+        })
+
+        if (generatedScoreIds.length > 0) {
+          const stillLinked = await tx.archivedCertificateOnStudentSubjectScore.findMany({
+            where: { studentSubjectScoreId: { in: generatedScoreIds } },
+            select: { studentSubjectScoreId: true },
+          })
+          const stillLinkedIds = new Set(stillLinked.map((item) => item.studentSubjectScoreId))
+          const scoreIdsToRemove = generatedScoreIds.filter((id) => !stillLinkedIds.has(id))
+
+          if (scoreIdsToRemove.length > 0) {
+            await tx.studentSubjectScoreHistory.deleteMany({
+              where: { studentSubjectScoreId: { in: scoreIdsToRemove } },
+            })
+            await tx.archivedAwardOnStudentSubjectScore.deleteMany({
+              where: { studentSubjectScoreId: { in: scoreIdsToRemove } },
+            })
+            for (const scoreId of scoreIdsToRemove) {
+              await tx.studentSubjectScore.update({
+                where: { id: scoreId },
+                data: {
+                  graduationGpaScores: { set: [] },
+                  graduationSupplementaryScore: { set: [] },
+                  deletedAt: now,
+                },
+              })
+            }
+          }
+        }
+
+        await tx.archivedCertificateSubjectScore.updateMany({
+          where: { archivedCertificateId: { in: certificateIds }, deletedAt: null },
+          data: { deletedAt: now },
+        })
+
+        await tx.archivedCertificate.updateMany({
+          where: { id: { in: certificateIds } },
+          data: {
+            deletedAt: now,
+            status: $Enums.ArchivedCertificateStatus.CANCEL,
+          },
+        })
+      },
+      { timeout: 60_000 }
+    )
+
+    return c.json({ success: true, message: "Xóa chứng chỉ thành công" }, 200)
+  } catch (error: any) {
+    return c.json({ message: error?.message || "Đã xảy ra lỗi khi xóa chứng chỉ" }, 500)
+  }
+})
+
 export default app

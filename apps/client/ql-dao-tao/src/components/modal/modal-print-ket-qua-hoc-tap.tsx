@@ -35,7 +35,7 @@ const ModalPrintToKQHT = () => {
         subjectClasses: {
           some: {
             subjectClassStudent: {
-              some: { studentId },
+              some: { studentId, deletedAt: null },
             },
           },
         },
@@ -44,12 +44,12 @@ const ModalPrintToKQHT = () => {
         subjectClasses: {
           where: {
             subjectClassStudent: {
-              some: { studentId },
+              some: { studentId, deletedAt: null },
             },
           },
           include: {
             subjectClassStudent: {
-              where: { studentId },
+              where: { studentId, deletedAt: null },
               include: {
                 subjectVersion: true,
                 certificates: { include: { archivedCertificate: true } },

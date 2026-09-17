@@ -206,7 +206,7 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
               },
             },
             subjectClassStudent: {
-              where: { studentId },
+              where: { studentId, deletedAt: null },
               select: {
                 manualFinalScore: true,
                 finalScore: true,
@@ -223,6 +223,7 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
       where: {
         studentId,
         subjectClassId: null,
+        deletedAt: null,
         OR: [{ manualFinalScore: { not: null } }, { finalScore: { not: null } }],
       },
       select: {

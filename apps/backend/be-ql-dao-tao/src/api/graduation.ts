@@ -3,6 +3,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import {
   AcademicActionType,
   ApplicationStatus,
+  ArchivedCertificateStatus,
   FixedClassType,
   RankingContext,
   StudentStatus,
@@ -460,12 +461,15 @@ app.openapi(graduationCheck, async (c) => {
         studentAcademicDecision: true,
         curriculumVersion: { select: curriculumSelect },
         semesterTrainingScore: {
+          where: { deletedAt: null },
           take: 1,
           orderBy: { semester: { startDate: "desc" } },
         },
-        studentSemesterResult: { take: 1, orderBy: { createdAt: "desc" } },
-        studentYearResult: { take: 1, orderBy: { createdAt: "desc" } },
-        archivedCertificate: true,
+        studentSemesterResult: { where: { deletedAt: null }, take: 1, orderBy: { createdAt: "desc" } },
+        studentYearResult: { where: { deletedAt: null }, take: 1, orderBy: { createdAt: "desc" } },
+        archivedCertificate: {
+          where: { deletedAt: null, status: ArchivedCertificateStatus.APPROVED },
+        },
         fixedClass: {
           select: {
             trainingCourse: {

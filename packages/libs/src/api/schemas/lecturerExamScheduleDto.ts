@@ -75,6 +75,8 @@ export interface LecturerExamScheduleDto {
   /** @nullable */
   exam_plan_name?: string | null;
   /** @nullable */
+  exam_plan_status?: number | null;
+  /** @nullable */
   semester_id?: string | null;
   /** @nullable */
   semester_name?: string | null;

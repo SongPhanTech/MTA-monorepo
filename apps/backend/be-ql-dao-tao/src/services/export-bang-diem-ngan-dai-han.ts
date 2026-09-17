@@ -125,7 +125,7 @@ export async function exportBangDiemNganDaiHan({ studentIds }: { studentIds: str
           where: { subjectClassStudent: { some: { studentId: { in: ids } } } },
           select: {
             subjectClassStudent: {
-              where: { studentId: { in: ids } },
+              where: { studentId: { in: ids }, deletedAt: null },
               select: {
                 studentId: true,
                 subjectVersionId: true,
@@ -142,6 +142,7 @@ export async function exportBangDiemNganDaiHan({ studentIds }: { studentIds: str
       where: {
         studentId: { in: ids },
         subjectClassId: null,
+        deletedAt: null,
         OR: [{ manualFinalScore: { not: null } }, { finalScore: { not: null } }],
       },
       select: {

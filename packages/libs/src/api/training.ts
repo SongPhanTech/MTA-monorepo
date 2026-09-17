@@ -123,6 +123,8 @@ import type {
   DataListRetakeStudentItem,
   DataSuccessEnrollFixedClassOnSubjectClass,
   DebtStatisticsParams,
+  DeleteArchivedCertificateInput,
+  DeleteArchivedCertificateResult,
   DeleteSubjectClassCascade200,
   DownloadCurriculumImportTemplateParams,
   DownloadStudentImportTemplateParams,
@@ -13975,7 +13977,7 @@ export const useApproveScoreCorrection = <TError = FailureBooleanResponse | Erro
 /**
  * Tính / ghi điểm từ phiên chứng chỉ đã lưu trữ.
 
-**Bảng dữ liệu nguồn:** ArchivedCertificate, Certificate, StudentSubjectScore.
+**Bảng dữ liệu nguồn:** ArchivedCertificate, ArchivedCertificateSubjectScore (ưu tiên), CertificateOnSubject (fallback đơn cũ), StudentSubjectScore.
 
 **Tham số:** archivedCertificateIds.
  * @summary Phiên điểm chứng chỉ
@@ -14932,6 +14934,117 @@ export function useExportStudentsMissingCertificateExcel<TData = Awaited<ReturnT
 
 
 
+/**
+ * Xóa chứng chỉ của sinh viên. Nếu chứng chỉ đã duyệt, gỡ điểm phiên đã ghi từ chứng chỉ đó.
+
+**Bảng dữ liệu nguồn:** ArchivedCertificate, ArchivedCertificateOnStudentSubjectScore, StudentSubjectScore.
+
+**Tham số:** archivedCertificateIds.
+ * @summary Xóa chứng chỉ đã lưu (kể cả đã duyệt)
+ */
+export type deleteArchivedCertificateResponse200 = {
+  data: DeleteArchivedCertificateResult
+  status: 200
+}
+
+export type deleteArchivedCertificateResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type deleteArchivedCertificateResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type deleteArchivedCertificateResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type deleteArchivedCertificateResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type deleteArchivedCertificateResponseSuccess = (deleteArchivedCertificateResponse200) & {
+  headers: Headers;
+};
+export type deleteArchivedCertificateResponseError = (deleteArchivedCertificateResponse400 | deleteArchivedCertificateResponse404 | deleteArchivedCertificateResponse409 | deleteArchivedCertificateResponse500) & {
+  headers: Headers;
+};
+
+export type deleteArchivedCertificateResponse = (deleteArchivedCertificateResponseSuccess | deleteArchivedCertificateResponseError)
+
+export const getDeleteArchivedCertificateUrl = () => {
+
+
+  
+
+  return `/api/archived-score/delete-archived-certificate`
+}
+
+export const deleteArchivedCertificate = async (deleteArchivedCertificateInput: DeleteArchivedCertificateInput, options?: RequestInit): Promise<deleteArchivedCertificateResponse> => {
+  
+  return customTrainingFetch<deleteArchivedCertificateResponse>(getDeleteArchivedCertificateUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      deleteArchivedCertificateInput,)
+  }
+);}
+
+
+
+
+export const getDeleteArchivedCertificateMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteArchivedCertificate>>, TError,{data: DeleteArchivedCertificateInput}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteArchivedCertificate>>, TError,{data: DeleteArchivedCertificateInput}, TContext> => {
+
+const mutationKey = ['deleteArchivedCertificate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteArchivedCertificate>>, {data: DeleteArchivedCertificateInput}> = (props) => {
+          const {data} = props ?? {};
+
+          return  deleteArchivedCertificate(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteArchivedCertificateMutationResult = NonNullable<Awaited<ReturnType<typeof deleteArchivedCertificate>>>
+    export type DeleteArchivedCertificateMutationBody = DeleteArchivedCertificateInput
+    export type DeleteArchivedCertificateMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xóa chứng chỉ đã lưu (kể cả đã duyệt)
+ */
+export const useDeleteArchivedCertificate = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteArchivedCertificate>>, TError,{data: DeleteArchivedCertificateInput}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteArchivedCertificate>>,
+        TError,
+        {data: DeleteArchivedCertificateInput},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteArchivedCertificateMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Tạo kỳ thi / danh sách thi từ các lớp học phần chưa có examId.
 

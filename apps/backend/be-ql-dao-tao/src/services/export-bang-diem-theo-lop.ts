@@ -135,6 +135,7 @@ export async function exportBangDiemTheoLop({ trainingCourseId }: { trainingCour
             },
           },
           subjectClassStudent: {
+            where: { deletedAt: null },
             orderBy: { createdAt: "asc" },
             select: {
               subjectVersionId: true,

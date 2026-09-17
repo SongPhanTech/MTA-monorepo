@@ -147,6 +147,7 @@ async function exportBangDiemCaNhanMau({
       },
       fixedClass: {
         select: {
+          name: true,
           curriculumVersionId: true,
           trainingCourse: {
             select: {
@@ -239,7 +240,7 @@ async function exportBangDiemCaNhanMau({
               },
             },
             subjectClassStudent: {
-              where: { studentId },
+              where: { studentId, deletedAt: null },
               select: {
                 subjectVersionId: true,
                 manualFinalScore: true,
@@ -259,6 +260,7 @@ async function exportBangDiemCaNhanMau({
       where: {
         studentId,
         subjectClassId: null,
+        deletedAt: null,
         OR: [{ manualFinalScore: { not: null } }, { finalScore: { not: null } }],
       },
       select: {
@@ -703,7 +705,7 @@ async function exportBangDiemCaNhanMau({
           htdt: course?.trainingObjectType?.name ?? "",
           maSV,
           nganh,
-          lop: course?.name ?? "",
+          lop: student.fixedClass?.name ?? "",
         },
         tableStartCell: { row: 14, col: 1 },
         rows: [

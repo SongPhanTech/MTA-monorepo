@@ -222,7 +222,7 @@ export const ModalPhuLucThacSi = () => {
                     subject: {
                       include: {
                         studentSubjectScore: {
-                          where: { studentId: id },
+                          where: { studentId: id, deletedAt: null },
                           orderBy: { createdAt: "asc" },
                         },
                       },
@@ -242,7 +242,7 @@ export const ModalPhuLucThacSi = () => {
     {
       where: {
         deletedAt: null,
-        studentSubjectScore: { studentId: id },
+        studentSubjectScore: { studentId: id, deletedAt: null },
       },
       include: {
         studentSubjectScore: {

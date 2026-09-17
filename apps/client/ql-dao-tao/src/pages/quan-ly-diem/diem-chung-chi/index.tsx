@@ -1,5 +1,7 @@
 import { BarChartOutlined, DownloadOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
+import DeleteIcon from "@components/icons/delete"
+import EditIcon from "@components/icons/edit"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import useSpinner from "@hooks/spinner"
@@ -20,6 +22,7 @@ import {
   useCertificateScore,
   exportArchivedCertificateMultiExcel,
   exportStudentsMissingCertificateExcel,
+  useDeleteArchivedCertificate,
 } from "@workspace/libs/api/training"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
@@ -31,10 +34,9 @@ import { InfoIcon } from "lucide-react"
 import type React from "react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-import EditIcon from "@components/icons/edit"
 
 export default function ArchivedCertificate() {
-  const { can } = useAbility()
+  const { can, canSome } = useAbility()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -133,6 +135,7 @@ export default function ArchivedCertificate() {
   }
 
   const { mutateAsync: updateManyArchivedCertificate } = useUpdateManyArchivedCertificate()
+  const { mutateAsync: deleteArchivedCertificates } = useDeleteArchivedCertificate()
 
   const where = useMemo(() => {
     const conditions: any = {
@@ -342,12 +345,59 @@ export default function ArchivedCertificate() {
 
   const rowSelection = {
     selectedRowKeys,
-    getCheckboxProps: (record: any) => ({
-      disabled: record.status === "APPROVED" || record.status === "REJECTED",
-    }),
     onChange: (newSelectedRowKeys: React.Key[]) => {
       setSelectedRowKeys(newSelectedRowKeys)
     },
+  }
+
+  const canDeleteCertificate = can(
+    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_CHUNG_CHI,
+    "XOA"
+  )
+
+  const handleDeleteCertificates = async (ids: string[]) => {
+    if (!ids.length) {
+      message.warning("Vui lòng chọn chứng chỉ cần xóa")
+      return
+    }
+    try {
+      showSpinner()
+      const res = await deleteArchivedCertificates({
+        data: { archivedCertificateIds: ids },
+      })
+      if (res?.status === 200) {
+        message.success("Xóa chứng chỉ thành công")
+        setSelectedRowKeys((prev) => prev.filter((key) => !ids.includes(String(key))))
+        refetch()
+        return
+      }
+      message.error(res?.data?.message || "Không thể xóa chứng chỉ")
+    } catch (error: any) {
+      message.error(error?.info?.message || error?.data?.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } finally {
+      hideSpinner()
+    }
+  }
+
+  const handleOpenDelete = (ids?: string[]) => {
+    const targetIds = ids?.length ? ids : (selectedRowKeys as string[])
+    if (!targetIds.length) {
+      message.warning("Vui lòng chọn chứng chỉ cần xóa")
+      return
+    }
+    const hasApproved = dataTable.some(
+      (item) => targetIds.includes(item.id) && item.status === "APPROVED"
+    )
+    Modal.confirm({
+      title: hasApproved ? "Xóa chứng chỉ đã duyệt?" : "Xác nhận xóa",
+      content: hasApproved
+        ? "Có chứng chỉ đã được phê duyệt. Hệ thống sẽ gỡ điểm phiên đã ghi từ chứng chỉ đó. Bạn có chắc chắn muốn xóa?"
+        : "Bạn có chắc chắn muốn xóa những chứng chỉ đã chọn không?",
+      okText: "Xóa",
+      okButtonProps: { danger: true },
+      cancelText: "Hủy",
+      onOk: () => handleDeleteCertificates(targetIds),
+    })
   }
 
   const handleOpenAprove = () => {
@@ -715,6 +765,16 @@ export default function ArchivedCertificate() {
                   >
                     Xuất DS SV chưa có CC
                   </Button> */}
+                  {canDeleteCertificate && (
+                    <Button
+                      className="ml-3"
+                      onClick={() => handleOpenDelete()}
+                      disabled={!selectedRowKeys.length}
+                      danger
+                    >
+                      Xóa
+                    </Button>
+                  )}
                   <Button
                     className="ml-3"
                     onClick={handleOpenReject}
@@ -963,11 +1023,12 @@ export default function ArchivedCertificate() {
             },
             {
               title: "Thao tác",
-              width: 100,
+              width: 120,
               align: "center",
               fixed: "right",
               render: (_, record) => {
                 const studentName = record?.student?.userProfile?.fullname || ""
+                const isApproved = record.status === "APPROVED"
                 return (
                   <Row className="justify-center gap-2 flex items-center">
                     <InfoIcon
@@ -992,17 +1053,18 @@ export default function ArchivedCertificate() {
                       }}
                       className="text-sm text-green-700 cursor-pointer"
                     />
-                    {/* <Tooltip title="Phiên điểm môn học">
-                      <GraduationCap
-                        onClick={() => {
-                          onOpenPhienDiemKyHoc({
-                            archivedCertificateId: record.id,
-                            isEditMode: true,
-                          })
+                    {canDeleteCertificate && (
+                      <DeleteIcon
+                        title={isApproved ? "Xóa chứng chỉ đã duyệt" : "Xóa"}
+                        popConfirm={{
+                          title: isApproved ? "Xóa chứng chỉ đã duyệt?" : "Xác nhận xóa dữ liệu?",
+                          description: isApproved
+                            ? "Hệ thống sẽ gỡ điểm phiên đã ghi từ chứng chỉ này"
+                            : "Dữ liệu sẽ bị xóa vĩnh viễn",
+                          onConfirm: () => handleDeleteCertificates([record.id]),
                         }}
-                        className="text-sm"
                       />
-                    </Tooltip> */}
+                    )}
                   </Row>
                 )
               },

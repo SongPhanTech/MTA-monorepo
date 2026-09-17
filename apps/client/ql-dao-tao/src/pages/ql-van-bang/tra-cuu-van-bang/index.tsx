@@ -311,6 +311,7 @@ export default function GraduationDecisionDiploma() {
             subjectClassStudent: {
               some: {
                 studentId: student?.id,
+                deletedAt: null,
               },
             },
           },
@@ -322,6 +323,7 @@ export default function GraduationDecisionDiploma() {
             subjectClassStudent: {
               some: {
                 studentId: student?.id,
+                deletedAt: null,
               },
             },
           },
@@ -329,6 +331,7 @@ export default function GraduationDecisionDiploma() {
             subjectClassStudent: {
               where: {
                 studentId: student?.id,
+                deletedAt: null,
               },
               include: {
                 subjectVersion: true,

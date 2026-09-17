@@ -51,6 +51,7 @@ async function calcStudentYearResult({
   const allScores = await prisma.studentSubjectScore.findMany({
     where: {
       studentId: studentId,
+      deletedAt: null,
       finalScore: { not: null },
       subjectClass: {
         // Lọc để đảm bảo chỉ lấy điểm của các kỳ học kết thúc trước hoặc trong năm học này

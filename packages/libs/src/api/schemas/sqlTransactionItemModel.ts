@@ -149,6 +149,7 @@ export const SqlTransactionItemModel = {
   StudentInternship: 'StudentInternship',
   ArchivedCertificateOnStudentSubjectScore: 'ArchivedCertificateOnStudentSubjectScore',
   ArchivedCertificate: 'ArchivedCertificate',
+  ArchivedCertificateSubjectScore: 'ArchivedCertificateSubjectScore',
   ArchivedAwardOnStudentSubjectScore: 'ArchivedAwardOnStudentSubjectScore',
   ArchivedAward: 'ArchivedAward',
   SchoolYear: 'SchoolYear',

@@ -79,6 +79,7 @@ const ModalPrintToKQHT = () => {
                     studentSubjectScore: {
                       where: {
                         studentId: input?.dataStudent?.id,
+                        deletedAt: null,
                       },
                       orderBy: { createdAt: "asc" },
                     },

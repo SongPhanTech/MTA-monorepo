@@ -17,6 +17,7 @@ import {
   useFindManyCertificate,
   useUpdateArchivedCertificate,
 } from "@workspace/db/hooks"
+import { useDeleteArchivedCertificate } from "@workspace/libs/api/training"
 import {
   confirmViolations,
   useCertificateExpirationCheck,
@@ -138,6 +139,7 @@ const ModalDanhSachChungChi = () => {
   const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
   const { mutateAsync: deleteManySubjectScores } = useDeleteManyArchivedCertificateSubjectScore()
   const { mutateAsync: createManySubjectScores } = useCreateManyArchivedCertificateSubjectScore()
+  const { mutateAsync: deleteArchivedCertificates } = useDeleteArchivedCertificate()
 
   const { data: certificateForCheck = [] } = useFindManyCertificate({
     include: {
@@ -342,6 +344,27 @@ const ModalDanhSachChungChi = () => {
       message.success("Cập nhật chứng chỉ thành công")
     } catch (error: any) {
       message.error(error?.info?.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } finally {
+      hideSpinner()
+    }
+  }
+
+  const handleDelete = async (certId: string) => {
+    try {
+      showSpinner()
+      const res = await deleteArchivedCertificates({
+        data: { archivedCertificateIds: [certId] },
+      })
+      if (res?.status !== 200) {
+        message.error(res?.data?.message || "Không thể xóa chứng chỉ")
+        return
+      }
+      setDisplayCertificates((prev) => prev.filter((c) => c.id !== certId))
+      if (editingCertId === certId) setEditingCertId(null)
+      queryClient.invalidateQueries({ queryKey: ["ArchivedCertificate"] })
+      message.success("Xóa chứng chỉ thành công")
+    } catch (error: any) {
+      message.error(error?.info?.message || error?.data?.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()
     }
@@ -670,13 +693,12 @@ const ModalDanhSachChungChi = () => {
           },
           {
             title: "Thao tác",
-            width: 160,
+            width: 200,
             align: "center",
-            hidden: !input?.isEditMode || displayCertificates.every((c) => c.status === "APPROVED"),
+            hidden: !input?.isEditMode,
             render: (_: any, cert: any) => {
               const isEditing = editingCertId === cert.id
-
-              if (cert.status === "APPROVED") return null
+              const isApproved = cert.status === "APPROVED"
 
               if (isEditing) {
                 return (
@@ -692,9 +714,31 @@ const ModalDanhSachChungChi = () => {
               }
 
               return (
-                <Button size="small" onClick={() => setEditingCertId(cert.id)}>
-                  Sửa
-                </Button>
+                <Flex justify="center" gap={8}>
+                  {!isApproved && (
+                    <Button size="small" onClick={() => setEditingCertId(cert.id)}>
+                      Sửa
+                    </Button>
+                  )}
+                  <Button
+                    size="small"
+                    danger
+                    onClick={() => {
+                      Modal.confirm({
+                        title: isApproved ? "Xóa chứng chỉ đã duyệt?" : "Xác nhận xóa",
+                        content: isApproved
+                          ? "Hệ thống sẽ gỡ điểm phiên đã ghi từ chứng chỉ này. Bạn có chắc chắn muốn xóa?"
+                          : "Bạn có chắc chắn muốn xóa chứng chỉ này không?",
+                        okText: "Xóa",
+                        okButtonProps: { danger: true },
+                        cancelText: "Hủy",
+                        onOk: () => handleDelete(cert.id),
+                      })
+                    }}
+                  >
+                    Xóa
+                  </Button>
+                </Flex>
               )
             },
           },

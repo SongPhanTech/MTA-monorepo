@@ -333,7 +333,7 @@ async function loadBangDiemExportData(studentIds: string[]) {
     .filter((s): s is (typeof students)[number] => Boolean(s))
 
   const scores = await prisma.studentSubjectScore.findMany({
-    where: { studentId: { in: orderedStudents.map((s) => s.id) } },
+    where: { studentId: { in: orderedStudents.map((s) => s.id) }, deletedAt: null },
     select: {
       studentId: true,
       semesterId: true,
@@ -676,7 +676,7 @@ function studentSheetData(student: ExportStudent) {
       htdt: student.fixedClass?.trainingCourse?.trainingObjectType?.name ?? "",
       maSV,
       nganh,
-      lop: student.fixedClass?.trainingCourse?.name ?? "",
+      lop: student.fixedClass?.name ?? "",
     },
   }
 }
