@@ -9,6 +9,7 @@ import {
   SubjectRequirementType,
   SubjectVersionType,
   ThesisType,
+  TrainingObjectTypes,
 } from "@workspace/db"
 import {
   AcademicRankingConvertScalarSchema,
@@ -2142,6 +2143,11 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
               },
             },
           },
+          trainingCourse: {
+            include: {
+              trainingObjectType: true,
+            },
+          },
         },
       },
     },
@@ -2162,13 +2168,20 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
     const graduationDateParts =
       getReportDateParts(gD?.decisionDate) || getReportDateParts(new Date())
 
-    const fullnameVi = user?.fullname?.toUpperCase() || ""
-    const fullnameEn =
+    const isCivilian =
+      student.fixedClass?.trainingCourse?.trainingObjectType?.type === TrainingObjectTypes.CIVILIAN
+    const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ"
+    const prefixVi = isCivilian ? (isFemale ? "Bà " : "Ông ") : ""
+    const prefixEn = isCivilian ? (isFemale ? "Miss " : "Mr ") : ""
+
+    const fullnameVi = `${prefixVi}${user?.fullname?.toUpperCase() || ""}`
+    const fullnameEn = `${prefixEn}${
       user?.fullname
         ?.toUpperCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/Đ/g, "D") || ""
+    }`
 
     return {
       data: {
