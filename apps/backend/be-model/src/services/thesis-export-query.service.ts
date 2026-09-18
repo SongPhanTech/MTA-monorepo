@@ -271,7 +271,9 @@ export async function findThesisProjectsForExport(filters: ThesisExportFilter) {
     })
   }
 
-  if (filters.organizationId) {
+  if (filters.organizationIds?.length) {
+    andConditions.push({ organizationId: { in: filters.organizationIds } })
+  } else if (filters.organizationId) {
     andConditions.push({ organizationId: filters.organizationId })
   }
 

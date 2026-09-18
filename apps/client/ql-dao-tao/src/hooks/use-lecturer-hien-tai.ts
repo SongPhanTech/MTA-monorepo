@@ -6,12 +6,16 @@ const useLecturerHienTai = () => {
   const profileId = me?.sDM_NhanVienId
 
   const { data: lecturer, isLoading: lecturerLoading } = useFindFirstLecturer(
-    { where: { userProfileId: profileId ?? "" }, select: { id: true } },
+    {
+      where: { userProfileId: profileId ?? "", deletedAt: null },
+      select: { id: true, organizationId: true },
+    },
     { enabled: !!profileId }
   )
 
   return {
     lecturerId: lecturer?.id,
+    organizationId: lecturer?.organizationId ?? undefined,
     isLoading: sessionStatus === "loading" || lecturerLoading,
   }
 }

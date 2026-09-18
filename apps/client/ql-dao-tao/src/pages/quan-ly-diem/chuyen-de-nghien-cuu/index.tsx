@@ -3,6 +3,7 @@ import DatePicker from "@components/commons/date-picker"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import TreeSelect from "@components/commons/tree-select"
+import { useLecturerHienTai } from "@hooks/use-lecturer-hien-tai"
 import DefaultLayout from "@layouts/default-layout"
 import { getSupervisorName } from "@pages/quan-ly-luan-van/dm-luan-van"
 import { buildOrgFlat, buildOrgTree } from "@lib/utils"
@@ -28,12 +29,12 @@ import dayjs from "dayjs"
 import { saveAs } from "file-saver"
 import ExcelJS from "exceljs"
 import { SquarePen } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 interface ChuyenDeNghienCuuForm {
   trainingCourseId: string
-  organizationId: string
+  organizationId: string | string[]
   subjectClassId: string
   reportDate: string
 }
@@ -80,19 +81,31 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
     },
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
-  const orgId = window.contextData?.organizationId
-  const orgIds = [
-    ...buildOrgFlat(
-      organizationData.map((e) => ({
-        Id: e.Id,
-        sTen: null,
-        sParentId: e.sParentId,
-        sMa: null,
-      })),
-      orgId || "0"
-    ).map((org) => org.value),
-    orgId,
-  ].filter(Boolean)
+  const contextOrgId = window.contextData?.organizationId
+  const { organizationId: lecturerOrgId } = useLecturerHienTai()
+  const orgIds = useMemo(() => {
+    const orgList = organizationData.map((e) => ({
+      Id: e.Id,
+      sTen: null as string | null,
+      sParentId: e.sParentId,
+      sMa: null as string | null,
+    }))
+    const roots = [
+      ...new Set(
+        [contextOrgId, lecturerOrgId]
+          .map((id) => id?.trim())
+          .filter((id): id is string => Boolean(id))
+      ),
+    ]
+    return [
+      ...new Set(
+        roots.flatMap((rootId) => [
+          ...buildOrgFlat(orgList, rootId).map((org) => org.value),
+          rootId,
+        ])
+      ),
+    ]
+  }, [organizationData, contextOrgId, lecturerOrgId])
 
   const { data: subjectClassData = [] } = useFindManySubjectClass({
     where: {
@@ -113,13 +126,21 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
     },
   })
   const where = useMemo(() => {
+    const subjectFilter: Prisma.SubjectVersionWhereInput = {
+      type: SubjectVersionType.Research,
+    }
+    if (role === "KHOA_BO_MON") {
+      subjectFilter.managementOrganizationId = { in: orgIds }
+    } else if (organizationId) {
+      subjectFilter.managementOrganizationId = Array.isArray(organizationId)
+        ? { in: organizationId }
+        : organizationId
+    }
+
     const filter: Prisma.StudentResearchTopicWhereInput = {
       studentSubjectScore: {
         subjectClass: {
-          subject: {
-            type: SubjectVersionType.Research,
-            managementOrganizationId: role === "KHOA_BO_MON" ? { in: orgIds } : organizationId,
-          },
+          subject: subjectFilter,
           trainingObjectTypeId,
           semesterId,
           cancelled: false,
@@ -130,7 +151,6 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
           fixedClass: {
             trainingCourseId: trainingCourseId || undefined,
           },
-          status: "ENROLLED",
           active: true,
           deletedAt: null,
         },
@@ -151,6 +171,12 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
     orgIds,
     role,
   ])
+
+  useEffect(() => {
+    if (role !== "KHOA_BO_MON") return
+    form.setFieldValue("organizationId", orgIds.length === 1 ? orgIds[0] : orgIds)
+  }, [role, orgIds, form])
+
   const { data: studentResearchTopicData = [], refetch: refetchStudentResearchTopic } =
     useFindManyStudentResearchTopic({
       where,
@@ -231,6 +257,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
             },
             subjectVersion: {
               include: {
+                managementOrganization: true,
                 subject: {
                   include: {
                     managementOrganization: true,
@@ -308,7 +335,16 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
           model: "StudentSubjectScore",
           operation: "findMany",
           data: {
-            where: { subjectClassId: subjectClassId },
+            where: {
+              subjectClassId,
+              student: {
+                active: true,
+                deletedAt: null,
+                ...(trainingCourseId
+                  ? { fixedClass: { trainingCourseId } }
+                  : {}),
+              },
+            },
           },
         },
       ])
@@ -318,14 +354,34 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
       const studentSubjectScoreData = subjectStudent
         .data[0] as Prisma.StudentSubjectScoreGetPayload<{}>[]
       if (studentSubjectScoreData.length === 0) {
-        return message.error("Lớp môn học này không có sinh viên nào.")
+        return message.error(
+          "Lớp môn học này không có sinh viên thuộc khóa đã chọn."
+        )
       }
+      const scoreIds = studentSubjectScoreData.map((record) => record.id)
       await createManyStudentResearchTopic({
-        data: studentSubjectScoreData.map((record) => ({
-          studentSubjectScoreId: record.id,
+        data: scoreIds.map((studentSubjectScoreId) => ({
+          studentSubjectScoreId,
         })),
         skipDuplicates: true,
       })
+      // Khôi phục bản ghi đã soft-delete (skipDuplicates không tạo lại)
+      await sqlTransaction([
+        {
+          model: "StudentResearchTopic",
+          operation: "updateMany",
+          data: {
+            where: {
+              studentSubjectScoreId: { in: scoreIds },
+              deletedAt: { not: null },
+            },
+            data: {
+              deletedAt: null,
+              active: true,
+            },
+          },
+        },
+      ])
       message.success("Lấy dữ liệu thành công!")
     } catch (error) {
       console.error("getData Error:", error)
@@ -547,7 +603,10 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
               <TreeSelect
                 className="w-80"
                 placeholder="Chọn khoa quản lý"
-                allowClear
+                allowClear={role !== "KHOA_BO_MON"}
+                disabled={role === "KHOA_BO_MON"}
+                multiple={role === "KHOA_BO_MON"}
+                maxTagCount="responsive"
                 showSearch
                 treeDefaultExpandAll
                 treeData={treeOrgData}
@@ -1581,22 +1640,22 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                   : ""
               },
             },
-            // {
-            //     title: 'Lớp môn học',
-            //     width: 150,
-            //     align: 'left',
-            //     render: (_, record) => {
-            //         return record?.subjectClass?.name || ''
-            //     },
-            // },
-            // {
-            //     title: 'STC',
-            //     width: 50,
-            //     align: 'center',
-            //     render: (_, record) => {
-            //         return record?.subjectVersion?.credit || ''
-            //     },
-            // },
+            {
+              title: "Đơn vị quản lý",
+              width: 180,
+              align: "left",
+              render: (_, record) => {
+                const org =
+                  record?.studentSubjectScore?.subjectVersion?.managementOrganization ||
+                  record?.studentSubjectScore?.subjectVersion?.subject?.managementOrganization
+                if (!org) return ""
+                return (
+                  <Tooltip title={org.sTen}>
+                    {org.sMa ? `${org.sMa} - ${org.sTen}` : org.sTen}
+                  </Tooltip>
+                )
+              },
+            },
             {
               title: "Tên chuyên đề",
               width: 250,

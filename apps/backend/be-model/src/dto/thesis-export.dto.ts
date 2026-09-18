@@ -15,7 +15,11 @@ export const ThesisExportFilterSchema = z
     organizationId: z
       .string()
       .optional()
-      .openapi({ description: "ID khoa quản lý (organization) của đề tài." }),
+      .openapi({ description: "ID khoa quản lý (organization) của đề tài (một giá trị)." }),
+    organizationIds: z
+      .array(z.string())
+      .optional()
+      .openapi({ description: "Danh sách ID khoa quản lý (organization) của đề tài." }),
     signerName: z.string().optional().openapi({ description: "Tên người ký (mẫu needSign)." }),
     isChief: z.boolean().optional().openapi({ description: "true = ký với tư cách thủ trưởng." }),
     signingDate: z

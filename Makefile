@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= swantech_x52
+SERVER_PROFILE ?= app
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -309,7 +309,7 @@ build-backup:
 			$(DOCKER) pull --platform linux/amd64 "$$img" && return 0; \
 			echo "  pull $$img failed ($$i/5), retry in 12s"; \
 			sleep 12; \
-		done; \
+		done; 
 		return 1; \
 	}; \
 	if ! pull_img golang:1.23.5-bookworm; then \

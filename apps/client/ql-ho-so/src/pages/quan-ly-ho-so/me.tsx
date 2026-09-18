@@ -1134,6 +1134,7 @@ export default function UpdateUserPage() {
         staffPositionId: userData.staffs?.staffPositionId,
         staffTypeId: userData.staffs?.staffTypeId,
         lecturerTypeId: userData.lecturer?.lecturerTypeId,
+        organizationId: userData.lecturer?.organizationId,
         lectureCode: userData.lecturer?.code,
       })
       if (userData?.avatar) {
