@@ -1,6 +1,10 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import type { Prisma } from "@workspace/db"
-import { postDMNhanViens, putDMNhanViens } from "@workspace/libs/api/system"
+import {
+  postDMNhanViens,
+  postDMNhanViensList,
+  putDMNhanViens,
+} from "@workspace/libs/api/system"
 import {
   parseSheetGuestLecturer,
   parseSheetHeQuanSu,
@@ -40,6 +44,59 @@ import {
 } from "../utils"
 
 const app = new OpenAPIHono({ strict: false })
+
+const lsbRequestOptions = () => ({
+  headers: {
+    "x-clientid": process.env.KEYCLOAK_CLIENT_ID_LMS || "",
+    "x-clientsecret": process.env.KEYCLOAK_CLIENT_SECRET_LMS || "",
+  },
+})
+
+const isLsbDuplicate = (extra?: ErrorExtra, raw?: unknown) => {
+  if (extra?.code?.toLowerCase() === "duplicate") return true
+  const rawText =
+    raw && typeof raw === "object" && "message" in raw && typeof raw.message === "string"
+      ? raw.message
+      : ""
+  const text = [extra?.message, extra?.code, rawText].filter(Boolean).join(" ")
+  return /đã tồn tại|duplicate/i.test(text)
+}
+
+const extractLsbId = (data: unknown): string | undefined => {
+  if (!data) return undefined
+  if (typeof data === "string" && data) return data
+  if (Array.isArray(data)) return extractLsbId(data[0])
+  if (typeof data === "object") {
+    const obj = data as Record<string, unknown>
+    if (typeof obj.Id === "string" && obj.Id) return obj.Id
+    if (typeof obj.id === "string" && obj.id) return obj.id
+    if ("data" in obj) return extractLsbId(obj.data)
+    if (Array.isArray(obj.items)) return extractLsbId(obj.items[0])
+  }
+  return undefined
+}
+
+const findLsbNhanVienId = async (values: string[]) => {
+  const uniqueValues = [...new Set(values.map((value) => value.trim()).filter(Boolean))]
+  if (uniqueValues.length === 0) return undefined
+
+  const conditions = uniqueValues.flatMap((value) => [
+    { field: "sMa", operator: "=", value },
+    { field: "sCCCD", operator: "=", value },
+    { field: "sEmail", operator: "=", value },
+  ])
+  const filter =
+    conditions.length === 1
+      ? JSON.stringify(conditions)
+      : JSON.stringify([{ ors: conditions }])
+
+  const res = await postDMNhanViensList(
+    { Filter: filter, Take: 10, Skip: 0, IsGetTotal: false },
+    lsbRequestOptions()
+  )
+  if (res.status !== 200) return undefined
+  return extractLsbId(res.data)
+}
 
 const importLecturer = createRoute({
   operationId: "import-lecturer",
@@ -1115,6 +1172,7 @@ app.openapi(importStudent, async (c) => {
               OR: [
                 { name: { equals: s.curriculum, mode: "insensitive" as const } },
                 { code: { equals: s.curriculum, mode: "insensitive" as const } },
+                { id: s.curriculum },
               ],
             },
             ...(s.trainingMajor
@@ -1122,7 +1180,15 @@ app.openapi(importStudent, async (c) => {
                   {
                     curriculum: {
                       trainingMajor: {
-                        name: { equals: s.trainingMajor, mode: "insensitive" as const },
+                        OR: [
+                          {
+                            name: {
+                              equals: s.trainingMajor,
+                              mode: "insensitive" as const,
+                            },
+                          },
+                          { id: s.trainingMajor },
+                        ],
                       },
                     },
                   },
@@ -1139,8 +1205,10 @@ app.openapi(importStudent, async (c) => {
       trainingCourseId: true,
       curriculumVersion: {
         select: {
+          id: true,
           name: true,
-          curriculum: { select: { trainingMajor: { select: { name: true } } } },
+          code: true,
+          curriculum: { select: { trainingMajor: { select: { id: true, name: true } } } },
         },
       },
     },
@@ -1151,12 +1219,19 @@ app.openapi(importStudent, async (c) => {
     const conflictCurriculumName = conflict.curriculumVersion?.name
     const conflictMajorName = conflict.curriculumVersion?.curriculum?.trainingMajor?.name
 
-    const matchingInput = data.students.find(
-      (s) =>
-        s.curriculum?.trim().toLowerCase() === conflictCurriculumName?.trim().toLowerCase() &&
-        (!s.trainingMajor ||
-          s.trainingMajor.trim().toLowerCase() === conflictMajorName?.trim().toLowerCase())
-    )
+    const matchingInput = data.students.find((s) => {
+      const excelCurriculum = s.curriculum?.trim().toLowerCase()
+      const excelMajor = s.trainingMajor?.trim().toLowerCase()
+      const curriculumMatched =
+        excelCurriculum === conflictCurriculumName?.trim().toLowerCase() ||
+        excelCurriculum === conflict.curriculumVersion?.id?.toLowerCase() ||
+        excelCurriculum === conflict.curriculumVersion?.code?.trim().toLowerCase()
+      const majorMatched =
+        !s.trainingMajor ||
+        excelMajor === conflictMajorName?.trim().toLowerCase() ||
+        excelMajor === conflict.curriculumVersion?.curriculum?.trainingMajor?.id?.toLowerCase()
+      return curriculumMatched && majorMatched
+    })
 
     if (matchingInput) {
       const isSameClass =
@@ -1219,14 +1294,26 @@ app.openapi(importStudent, async (c) => {
     ])
   )
 
+  const studentCodes = data.students.map((student) => student.code)
+  const studentCCCDs = data.students.map((student) => student.idCardNumber)
   const existingProfile = await prisma.userProfile.findMany({
-    where: { idCardNumber: { in: data.students.map((student) => student.idCardNumber) } },
+    where: {
+      OR: [
+        { idCardNumber: { in: studentCCCDs } },
+        { code: { in: [...studentCCCDs, ...studentCodes] } },
+      ],
+    },
     select: { id: true, code: true, idCardNumber: true },
   })
 
-  const existingProfileMap = new Map(
-    existingProfile.map(({ idCardNumber, id, code }) => [idCardNumber, { id, code }])
-  )
+  const existingProfileMap = new Map<string, { id: string; code: string | null }>()
+  for (const profile of existingProfile) {
+    existingProfileMap.set(profile.idCardNumber, {
+      id: profile.id,
+      code: profile.code,
+    })
+    if (profile.code) existingProfileMap.set(profile.code, { id: profile.id, code: profile.code })
+  }
 
   // validate duplicate student.code identify by student.userProfile.idCardNumber
   const duplicateCode: string[] = []
@@ -1330,7 +1417,7 @@ app.openapi(importStudent, async (c) => {
 
           const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
             ...splitFullName(student.fullname),
-            code: student.idCardNumber,
+            code: student.code,
             fullname: student.fullname,
             email: `${student.idCardNumber}@gmail.com`,
             bLaGiangVien: false,
@@ -1348,7 +1435,8 @@ app.openapi(importStudent, async (c) => {
             sDM_DonViId: organizationMap.get(student.managementOrganization?.trim() || "") || null,
           }
 
-          const existingProfile = existingProfileMap.get(student.idCardNumber)
+          const existingProfile =
+            existingProfileMap.get(student.idCardNumber) || existingProfileMap.get(student.code)
           const existing = existingStudentMap.get(student.code)
 
           const createStudentFn = async (tx: Prisma.TransactionClient, id?: string) => {
@@ -1388,102 +1476,75 @@ app.openapi(importStudent, async (c) => {
           }
 
           try {
-            if (existingProfile) {
-              const res = await putDMNhanViens(
-                {
-                  Id: existingProfile.id,
-                  sMa: existingProfile.code || crypto.randomUUID(),
-                  bLaHocVien: true,
-                  bLaTaiKhoan: true,
-                  dNgaySinh: student.dateOfBirth
-                    ? new Date(student.dateOfBirth)?.toISOString()
-                    : null,
-                  sCCCD: student.idCardNumber,
-                  sHoVaDem: profileData.lastName,
-                  sTen: profileData.firstName,
-                  sTenDayDu: student.fullname,
-                  sSDTDiDong: student.phoneNumber ?? "",
-                  //! TODO: fix this
-                  sEmail: `${student.idCardNumber}@gmail.com`,
-                  sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
-                  sDM_DonViId: organizationMap.get(student.managementOrganization?.trim() || ""),
-                },
-                {
-                  headers: {
-                    "x-clientid": process.env.KEYCLOAK_CLIENT_ID_LMS || "",
-                    "x-clientsecret": process.env.KEYCLOAK_CLIENT_SECRET_LMS || "",
-                  },
-                }
-              )
+            const lsbPayload = {
+              sMa: student.code,
+              bLaHocVien: true,
+              bLaTaiKhoan: true,
+              dNgaySinh: student.dateOfBirth
+                ? new Date(student.dateOfBirth)?.toISOString()
+                : null,
+              sCCCD: student.idCardNumber,
+              sHoVaDem: profileData.lastName,
+              sTen: profileData.firstName,
+              sTenDayDu: student.fullname,
+              sSDTDiDong: student.phoneNumber ?? "",
+              sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
+              sDM_DonViId: organizationMap.get(student.managementOrganization?.trim() || ""),
+            }
 
-              await tx.userProfile.update({
-                where: { id: existingProfile.id },
-                data: profileData,
-              })
+            let lsbProfileId = existingProfile?.id
+            let lsbRes = existingProfile
+              ? await putDMNhanViens({ Id: existingProfile.id, ...lsbPayload }, lsbRequestOptions())
+              : await postDMNhanViens(lsbPayload, lsbRequestOptions())
 
-              if (existing) {
-                if (res.status === 200) {
-                  await tx.student.update({
-                    where: { id: existing.id },
-                    data: {
-                      ...studentData,
-                      userProfile: { update: profileData },
-                      deletedAt: null,
-                      active: true,
-                    },
-                  })
-                } else {
-                  const extra = res.data?.extra as unknown as ErrorExtra | undefined
-                  importErrors.push({
-                    code: student.code,
-                    name: student.fullname,
-                    error: formatLsbError(extra, `LSB API error: ${res.status}`),
-                  })
+            if (lsbRes.status !== 200) {
+              const extra = (lsbRes.data as { extra?: ErrorExtra } | undefined)?.extra
+              if (isLsbDuplicate(extra, lsbRes.data)) {
+                const foundId = await findLsbNhanVienId([
+                  student.code,
+                  student.idCardNumber,
+                  `${student.idCardNumber}@gmail.com`,
+                ])
+                if (foundId) {
+                  lsbRes = await putDMNhanViens(
+                    { Id: foundId, ...lsbPayload },
+                    lsbRequestOptions()
+                  )
+                  if (lsbRes.status === 200) lsbProfileId = foundId
                 }
-              } else {
-                await createStudentFn(tx, existingProfile.id)
               }
             } else {
-              const res = await postDMNhanViens(
-                {
-                  sMa: student.idCardNumber,
-                  bLaHocVien: true,
-                  bLaTaiKhoan: true,
-                  dNgaySinh: student.dateOfBirth
-                    ? new Date(student.dateOfBirth)?.toISOString()
-                    : null,
-                  sCCCD: student.idCardNumber,
-                  sHoVaDem: profileData.lastName,
-                  sTen: profileData.firstName,
-                  sTenDayDu: student.fullname,
-                  sSDTDiDong: student.phoneNumber ?? "",
-                  sEmail: `${student.idCardNumber}@gmail.com`,
-                  sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
-                  sDM_DonViId: organizationMap.get(student.managementOrganization?.trim() || ""),
-                },
-                {
-                  headers: {
-                    "x-clientid": process.env.KEYCLOAK_CLIENT_ID_LMS || "",
-                    "x-clientsecret": process.env.KEYCLOAK_CLIENT_SECRET_LMS || "",
-                  },
-                }
-              )
+              lsbProfileId = extractLsbId(lsbRes.data) || lsbProfileId
+            }
 
-              if (res.status === 200) {
-                await tx.userProfile.upsert({
-                  where: { id: res.data as string },
-                  update: profileData,
-                  create: { id: res.data as string, ...profileData },
-                })
-                await createStudentFn(tx, res.data as string)
-              } else {
-                const extra = res.data?.extra as ErrorExtra | undefined
-                importErrors.push({
-                  code: student.code,
-                  name: student.fullname,
-                  error: formatLsbError(extra, `LSB API error: ${res.status}`),
-                })
-              }
+            if (lsbRes.status !== 200 || !lsbProfileId) {
+              const extra = (lsbRes.data as { extra?: ErrorExtra } | undefined)?.extra
+              importErrors.push({
+                code: student.code,
+                name: student.fullname,
+                error: formatLsbError(extra, `LSB API error: ${lsbRes.status}`),
+              })
+              continue
+            }
+
+            await tx.userProfile.upsert({
+              where: { id: lsbProfileId },
+              update: profileData,
+              create: { id: lsbProfileId, ...profileData },
+            })
+
+            if (existing) {
+              await tx.student.update({
+                where: { id: existing.id },
+                data: {
+                  ...studentData,
+                  userProfile: { connect: { id: lsbProfileId } },
+                  deletedAt: null,
+                  active: true,
+                },
+              })
+            } else {
+              await createStudentFn(tx, lsbProfileId)
             }
           } catch (error) {
             const errMsg = error instanceof Error ? error.message : String(error)

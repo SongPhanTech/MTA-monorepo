@@ -43,6 +43,9 @@ export function formatLsbError(extra?: ErrorExtra, fallback?: string): string {
       if (code === "require") {
         return `Thiếu trường bắt buộc: ${fields || "không xác định"}`
       }
+      if (code === "duplicate") {
+        return `Đã tồn tại trên hệ thống hồ sơ nhân sự (LSB): ${fields || "không xác định"}`
+      }
       return extra.code ? `${extra.code}: ${fields}` : fields
     }
 
@@ -52,6 +55,9 @@ export function formatLsbError(extra?: ErrorExtra, fallback?: string): string {
       )
       if (code === "require") {
         return `Thiếu trường bắt buộc: ${fields.join(", ") || "không xác định"}`
+      }
+      if (code === "duplicate") {
+        return `Đã tồn tại trên hệ thống hồ sơ nhân sự (LSB): ${fields.join(", ") || "không xác định"}`
       }
       return extra.code ? `${extra.code}: ${JSON.stringify(extra.data)}` : JSON.stringify(extra.data)
     }

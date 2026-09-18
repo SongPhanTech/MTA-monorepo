@@ -231,6 +231,22 @@ export const curriculumVersionForTrainingObjectTypeWhere = (trainingObjectTypeId
 const namesEqual = (left?: string | null, right?: string | null) =>
   (left?.trim() ?? "").toLowerCase() === (right?.trim() ?? "").toLowerCase()
 
+const looksLikeRecordId = (value?: string | null) => {
+  const text = value?.trim() ?? ""
+  return (
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(text) ||
+    /^c[a-z0-9]{24,}$/i.test(text)
+  )
+}
+
+const catalogValueMatches = (
+  value: string,
+  record?: { id?: string | null; name?: string | null; code?: string | null } | null
+) => {
+  if (!value || !record) return false
+  return record.id === value || namesEqual(record.name, value) || namesEqual(record.code, value)
+}
+
 export const buildCurriculumMapOrThrow = async (
   prisma: PrismaClient,
   students: CurriculumData[],
@@ -318,6 +334,7 @@ export const buildCurriculumMapOrThrow = async (
                 OR: [
                   { name: { in: uniqueNames, mode: "insensitive" } },
                   { code: { in: uniqueNames, mode: "insensitive" } },
+                  { id: { in: uniqueNames } },
                 ],
               },
             ],
@@ -328,11 +345,13 @@ export const buildCurriculumMapOrThrow = async (
             code: true,
             curriculum: {
               select: {
-                trainingField: { select: { name: true } },
+                trainingField: { select: { id: true, name: true } },
                 trainingMajor: {
                   select: {
+                    id: true,
                     name: true,
-                    trainingField: { select: { name: true } },
+                    code: true,
+                    trainingField: { select: { id: true, name: true } },
                   },
                 },
               },
@@ -345,20 +364,21 @@ export const buildCurriculumMapOrThrow = async (
     tuple: CurriculumData
   ) => {
     const curriculumName = normalize(tuple.curriculum)
-    const nameOrCodeMatched =
-      namesEqual(version.name, curriculumName) || namesEqual(version.code, curriculumName)
-    if (!nameOrCodeMatched) return false
+    if (!catalogValueMatches(curriculumName, version)) return false
 
-    const majorName = normalize(tuple.trainingMajor)
-    if (majorName && !namesEqual(version.curriculum.trainingMajor?.name, majorName)) {
+    const majorName = normalize(tuple.trainingMajor) || normalize(tuple.trainingMajorId)
+    if (majorName && !catalogValueMatches(majorName, version.curriculum.trainingMajor)) {
       return false
     }
 
     const fieldName = normalize(tuple.trainingField)
     if (fieldName) {
-      const fieldFromCurriculum = version.curriculum.trainingField?.name
-      const fieldFromMajor = version.curriculum.trainingMajor?.trainingField?.name
-      if (!namesEqual(fieldFromCurriculum, fieldName) && !namesEqual(fieldFromMajor, fieldName)) {
+      const fieldFromCurriculum = version.curriculum.trainingField
+      const fieldFromMajor = version.curriculum.trainingMajor?.trainingField
+      if (
+        !catalogValueMatches(fieldName, fieldFromCurriculum) &&
+        !catalogValueMatches(fieldName, fieldFromMajor)
+      ) {
         return false
       }
     }
@@ -387,6 +407,21 @@ ${missing
   }
 
   if (missing.length && createMissing) {
+    const missingRecordIds = missing.filter((item) => looksLikeRecordId(item.curriculum))
+    if (missingRecordIds.length) {
+      throw new HTTPException(400, {
+        message: `Chương trình đào tạo không tồn tại:
+${missingRecordIds
+  .map(
+    ({ curriculum, trainingMajor, trainingField }) =>
+      `${curriculum}${
+        trainingMajor && trainingField ? ` - ${trainingMajor} - ${trainingField}` : ""
+      }`
+  )
+  .join("; \n")}`,
+      })
+    }
+
     await prisma.$transaction(async (tx) => {
       const course = await tx.trainingCourse.findFirst({
         where: {
@@ -404,12 +439,23 @@ ${missing
       }
 
       for (const item of missing) {
+        const majorKey = normalize(item.trainingMajor)
         const curriculumName = `${item.trainingMajor} - ${course.name}`
         let curriculum = await tx.curriculum.findFirst({
           where: {
             name: curriculumName,
             trainingObjectTypeId,
-            ...(item.trainingMajor ? { trainingMajor: { name: item.trainingMajor } } : {}),
+            ...(majorKey
+              ? {
+                  trainingMajor: {
+                    OR: [
+                      { name: { equals: majorKey, mode: "insensitive" as const } },
+                      { code: { equals: majorKey, mode: "insensitive" as const } },
+                      { id: majorKey },
+                    ],
+                  },
+                }
+              : {}),
           },
         })
 
@@ -447,8 +493,12 @@ ${missing
 
           const major = await tx.trainingMajor.findFirst({
             where: {
-              name: { equals: normalize(item.trainingMajor), mode: "insensitive" },
               trainingObjectTypes: { some: { trainingObjectTypeId } },
+              OR: [
+                { name: { equals: normalize(item.trainingMajor), mode: "insensitive" } },
+                { code: { equals: normalize(item.trainingMajor), mode: "insensitive" } },
+                { id: normalize(item.trainingMajor) },
+              ],
             },
           })
 
@@ -502,6 +552,7 @@ ${missing
     version: { id: string; name: string; code?: string | null }
   ) => {
     if (excelName) result.set(excelName, version.id)
+    if (version.id) result.set(version.id, version.id)
     if (version.name) result.set(version.name, version.id)
     if (version.code) result.set(version.code, version.id)
   }

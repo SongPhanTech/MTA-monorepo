@@ -71,7 +71,15 @@ const PutStudentModal = () => {
     }
   )
   const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
-    where: { trainingObjectTypeId },
+    where: {
+      deletedAt: null,
+      OR: [
+        { trainingObjectTypeId },
+        { curriculum: { trainingObjectTypeId } },
+        { trainingCourse: { trainingObjectTypeId } },
+        ...(studentData?.curriculumVersionId ? [{ id: studentData.curriculumVersionId }] : []),
+      ],
+    },
     orderBy: { name: "asc" },
   })
 

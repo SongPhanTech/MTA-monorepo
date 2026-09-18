@@ -46,6 +46,7 @@ const ModalChiTietSinhVien = () => {
               include: {
                 curriculum: {
                   include: {
+                    trainingField: true,
                     trainingMajor: {
                       include: {
                         trainingField: true,
@@ -62,6 +63,7 @@ const ModalChiTietSinhVien = () => {
             trainingLevel: true,
             curriculum: {
               include: {
+                trainingField: true,
                 trainingMajor: {
                   include: {
                     trainingField: true,
@@ -483,15 +485,24 @@ const ModalChiTietSinhVien = () => {
             </Descriptions.Item>
             <Descriptions.Item label="Ngành đào tạo">
               {
-                studentData?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField
-                  ?.name
+                (
+                  studentData?.curriculumVersion || studentData?.fixedClass?.curriculumVersion
+                )?.curriculum?.trainingMajor?.trainingField?.name ||
+                (studentData?.curriculumVersion || studentData?.fixedClass?.curriculumVersion)
+                  ?.curriculum?.trainingField?.name
               }
             </Descriptions.Item>
             <Descriptions.Item label="Chuyên ngành">
-              {studentData?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name}
+              {
+                (studentData?.curriculumVersion || studentData?.fixedClass?.curriculumVersion)
+                  ?.curriculum?.trainingMajor?.name
+              }
             </Descriptions.Item>
             <Descriptions.Item label="CTĐT">
-              {studentData?.curriculumVersion?.name}
+              {
+                (studentData?.curriculumVersion || studentData?.fixedClass?.curriculumVersion)
+                  ?.name
+              }
             </Descriptions.Item>
             <Descriptions.Item label="CTĐT song song">
               {studentData?.curriculumVersionParallel?.name}
