@@ -125,6 +125,7 @@ import type {
   DebtStatisticsParams,
   DeleteArchivedCertificateInput,
   DeleteArchivedCertificateResult,
+  DeleteGraduationSession200,
   DeleteSubjectClassCascade200,
   DownloadCurriculumImportTemplateParams,
   DownloadStudentImportTemplateParams,
@@ -285,6 +286,7 @@ import type {
   PostApiStatsSubjectsHighFailRates200,
   PostApiStatsSubjectsHighFailRatesBody,
   PostApiStatsSummaryAdmissionStatistics200,
+  ReclaimStaleGraduation200,
   RenderXlsxTemplateRequest,
   RetestRelearnRatesResponse,
   Room200Item,
@@ -11300,6 +11302,222 @@ export const useGraduationApplicationInit = <TError = ErrorMessageResponse,
       > => {
 
       const mutationOptions = getGraduationApplicationInitMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Khôi phục học viên leftover của các đợt xét đã xóa (trả về đang học, gỡ quyết định TN cũ) để có thể xét lại.
+
+**Bảng dữ liệu nguồn:** GraduationSession, StudentGraduationApplication, GraduationDecision, Student.
+ * @summary Dọn dữ liệu đợt xét đã xóa
+ */
+export type reclaimStaleGraduationResponse200 = {
+  data: ReclaimStaleGraduation200
+  status: 200
+}
+
+export type reclaimStaleGraduationResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type reclaimStaleGraduationResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type reclaimStaleGraduationResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type reclaimStaleGraduationResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type reclaimStaleGraduationResponseSuccess = (reclaimStaleGraduationResponse200) & {
+  headers: Headers;
+};
+export type reclaimStaleGraduationResponseError = (reclaimStaleGraduationResponse400 | reclaimStaleGraduationResponse404 | reclaimStaleGraduationResponse409 | reclaimStaleGraduationResponse500) & {
+  headers: Headers;
+};
+
+export type reclaimStaleGraduationResponse = (reclaimStaleGraduationResponseSuccess | reclaimStaleGraduationResponseError)
+
+export const getReclaimStaleGraduationUrl = () => {
+
+
+  
+
+  return `/api/graduation/reclaim-stale`
+}
+
+export const reclaimStaleGraduation = async ( options?: RequestInit): Promise<reclaimStaleGraduationResponse> => {
+  
+  return customTrainingFetch<reclaimStaleGraduationResponse>(getReclaimStaleGraduationUrl(),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+);}
+
+
+
+
+export const getReclaimStaleGraduationMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reclaimStaleGraduation>>, TError,void, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof reclaimStaleGraduation>>, TError,void, TContext> => {
+
+const mutationKey = ['reclaimStaleGraduation'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reclaimStaleGraduation>>, void> = () => {
+          
+
+          return  reclaimStaleGraduation(requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReclaimStaleGraduationMutationResult = NonNullable<Awaited<ReturnType<typeof reclaimStaleGraduation>>>
+    
+    export type ReclaimStaleGraduationMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Dọn dữ liệu đợt xét đã xóa
+ */
+export const useReclaimStaleGraduation = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reclaimStaleGraduation>>, TError,void, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reclaimStaleGraduation>>,
+        TError,
+        void,
+        TContext
+      > => {
+
+      const mutationOptions = getReclaimStaleGraduationMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Xóa đợt xét tốt nghiệp và dữ liệu liên quan (đơn xét, quyết định TN), đồng thời trả học viên về trạng thái đang học nếu chỉ tốt nghiệp ở đợt này.
+
+**Bảng dữ liệu nguồn:** GraduationSession, StudentGraduationApplication, GraduationDecision, Student.
+ * @summary Xóa đợt xét tốt nghiệp
+ */
+export type deleteGraduationSessionResponse200 = {
+  data: DeleteGraduationSession200
+  status: 200
+}
+
+export type deleteGraduationSessionResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type deleteGraduationSessionResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type deleteGraduationSessionResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type deleteGraduationSessionResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type deleteGraduationSessionResponseSuccess = (deleteGraduationSessionResponse200) & {
+  headers: Headers;
+};
+export type deleteGraduationSessionResponseError = (deleteGraduationSessionResponse400 | deleteGraduationSessionResponse404 | deleteGraduationSessionResponse409 | deleteGraduationSessionResponse500) & {
+  headers: Headers;
+};
+
+export type deleteGraduationSessionResponse = (deleteGraduationSessionResponseSuccess | deleteGraduationSessionResponseError)
+
+export const getDeleteGraduationSessionUrl = (id: string,) => {
+
+
+  
+
+  return `/api/graduation/session/${id}`
+}
+
+export const deleteGraduationSession = async (id: string, options?: RequestInit): Promise<deleteGraduationSessionResponse> => {
+  
+  return customTrainingFetch<deleteGraduationSessionResponse>(getDeleteGraduationSessionUrl(id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+
+export const getDeleteGraduationSessionMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGraduationSession>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteGraduationSession>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['deleteGraduationSession'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteGraduationSession>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteGraduationSession(id,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteGraduationSessionMutationResult = NonNullable<Awaited<ReturnType<typeof deleteGraduationSession>>>
+    
+    export type DeleteGraduationSessionMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xóa đợt xét tốt nghiệp
+ */
+export const useDeleteGraduationSession = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGraduationSession>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteGraduationSession>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteGraduationSessionMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

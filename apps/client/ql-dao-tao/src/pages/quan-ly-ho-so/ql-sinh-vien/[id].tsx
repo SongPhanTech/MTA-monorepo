@@ -48,6 +48,7 @@ export default function StudentDetailV2Page() {
               include: {
                 curriculum: {
                   include: {
+                    trainingField: true,
                     trainingMajor: {
                       include: {
                         trainingField: true,
@@ -64,6 +65,7 @@ export default function StudentDetailV2Page() {
             trainingLevel: true,
             curriculum: {
               include: {
+                trainingField: true,
                 trainingMajor: {
                   include: {
                     trainingField: true,
@@ -485,15 +487,24 @@ export default function StudentDetailV2Page() {
             </Descriptions.Item>
             <Descriptions.Item label="Ngành đào tạo">
               {
-                studentData?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField
-                  ?.name
+                (
+                  studentData?.curriculumVersion || studentData?.fixedClass?.curriculumVersion
+                )?.curriculum?.trainingMajor?.trainingField?.name ||
+                (studentData?.curriculumVersion || studentData?.fixedClass?.curriculumVersion)
+                  ?.curriculum?.trainingField?.name
               }
             </Descriptions.Item>
             <Descriptions.Item label="Chuyên ngành">
-              {studentData?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name}
+              {
+                (studentData?.curriculumVersion || studentData?.fixedClass?.curriculumVersion)
+                  ?.curriculum?.trainingMajor?.name
+              }
             </Descriptions.Item>
             <Descriptions.Item label="CTĐT">
-              {studentData?.curriculumVersion?.name}
+              {
+                (studentData?.curriculumVersion || studentData?.fixedClass?.curriculumVersion)
+                  ?.name
+              }
             </Descriptions.Item>
             <Descriptions.Item label="CTĐT song song">
               {studentData?.curriculumVersionParallel?.name}

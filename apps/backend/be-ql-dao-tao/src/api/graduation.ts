@@ -2,6 +2,7 @@ import { Readable } from "node:stream"
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import {
   AcademicActionType,
+  AcademicRankingBaseType,
   ApplicationStatus,
   ArchivedCertificateStatus,
   FixedClassType,
@@ -33,6 +34,12 @@ import Docxtemplater from "docxtemplater"
 import PizZip from "pizzip"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
+import {
+  deleteGraduationSessionCascade,
+  eligibleStudentForGraduationWhere,
+  reclaimAllStaleGraduationData,
+  reclaimStudentsFromStaleGraduation,
+} from "../services/delete-graduation-session"
 import { evaluateCondition } from "../services/student-result.service"
 import type { StudentDataContext } from "../types/student-context"
 import { criteriaFieldLabels, criteriaOperatorLabels } from "@workspace/libs/constants"
@@ -71,6 +78,30 @@ function isApplicationOrientation(
   if (classType === FixedClassType.APPLICATION) return true
   if (classType === FixedClassType.RESEARCH) return false
   return fallbackIsProject
+}
+
+/** So TBTL với khoảng xếp loại cùng hệ với điểm đang hiển thị (hệ điểm khoá). */
+function isGpaInGraduationRankRange(
+  rank: {
+    base10Min: number | null
+    base10Max: number | null
+    base4Min: number | null
+    base4Max: number | null
+  },
+  cumulativeBase10: Decimal,
+  cumulativeBase4: Decimal,
+  displayBaseScore: AcademicRankingBaseType | string | null | undefined
+) {
+  const useBase10 =
+    displayBaseScore === AcademicRankingBaseType.Base10 || displayBaseScore === "Base10"
+
+  if (useBase10) {
+    if (rank.base10Min == null || rank.base10Max == null) return false
+    return cumulativeBase10.gte(rank.base10Min) && cumulativeBase10.lte(rank.base10Max)
+  }
+
+  if (rank.base4Min == null || rank.base4Max == null) return false
+  return cumulativeBase4.gte(rank.base4Min) && cumulativeBase4.lte(rank.base4Max)
 }
 
 function buildApprovedGraduateStudentWhere(params: {
@@ -305,29 +336,142 @@ app.openapi(graduationApplicationInit, async (c) => {
     where: { id: sessionId },
   })
 
+  // Đợt đã xóa trước đó vẫn giữ HV GRADUATED + quyết định TN; dọn leftover trước khi khởi tạo.
+  await reclaimAllStaleGraduationData()
+
   const students = await prisma.student.findMany({
-    where: {
+    where: eligibleStudentForGraduationWhere({
       ...(trainingCourseId ? { fixedClass: { trainingCourseId } } : {}),
       ...(fixedClassId ? { fixedClassId } : {}),
-      deletedAt: null,
-      status: {
-        in: [StudentStatus.ENROLLED, StudentStatus.PENDING_GRADUATION_REVIEW],
-      },
-    },
+    }),
   })
 
   if (students.length === 0) {
     return c.json({ message: "Không tìm thấy sinh viên chưa tốt nghiệp" }, 400)
   }
-  const result = await prisma.studentGraduationApplication.createMany({
-    data: students.map((s) => ({
-      studentId: s.id,
-      sessionId: session.id,
-    })),
-    skipDuplicates: true,
+
+  const leftoverStudentIds = students
+    .filter((student) => student.status === StudentStatus.GRADUATED)
+    .map((student) => student.id)
+
+  const result = await prisma.$transaction(async (tx) => {
+    await reclaimStudentsFromStaleGraduation(tx, leftoverStudentIds)
+    return tx.studentGraduationApplication.createMany({
+      data: students.map((s) => ({
+        studentId: s.id,
+        sessionId: session.id,
+      })),
+      skipDuplicates: true,
+    })
   })
 
   return c.json({ message: `Đã tạo ${result.count} đơn xét tốt nghiệp` }, 200)
+})
+
+const reclaimStaleGraduationRoute = createRoute({
+  operationId: "reclaimStaleGraduation",
+  tags: ["Tốt nghiệp"],
+  path: "/reclaim-stale",
+  method: "post",
+  summary: "Dọn dữ liệu đợt xét đã xóa",
+  description: `Khôi phục học viên leftover của các đợt xét đã xóa (trả về đang học, gỡ quyết định TN cũ) để có thể xét lại.
+
+**Bảng dữ liệu nguồn:** GraduationSession, StudentGraduationApplication, GraduationDecision, Student.`,
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Đã dọn leftover",
+      content: {
+        "application/json": {
+          schema: z.object({
+            success: z.boolean(),
+            message: z.string(),
+            studentCount: z.number(),
+            applicationCount: z.number(),
+          }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(reclaimStaleGraduationRoute, async (c) => {
+  try {
+    const data = await reclaimAllStaleGraduationData()
+    return c.json(
+      {
+        success: true,
+        message:
+          data.studentCount > 0
+            ? `Đã khôi phục ${data.studentCount} học viên từ đợt xét đã xóa`
+            : "Không còn dữ liệu leftover cần khôi phục",
+        ...data,
+      },
+      200
+    )
+  } catch (error: any) {
+    const message = error?.message || "Khôi phục dữ liệu đợt xét thất bại"
+    console.error("[graduation] reclaim stale failed", message, error)
+    return c.json({ message: String(message) }, 500)
+  }
+})
+
+const deleteGraduationSessionRoute = createRoute({
+  operationId: "deleteGraduationSession",
+  tags: ["Tốt nghiệp"],
+  path: "/session/{id}",
+  method: "delete",
+  summary: "Xóa đợt xét tốt nghiệp",
+  description: `Xóa đợt xét tốt nghiệp và dữ liệu liên quan (đơn xét, quyết định TN), đồng thời trả học viên về trạng thái đang học nếu chỉ tốt nghiệp ở đợt này.
+
+**Bảng dữ liệu nguồn:** GraduationSession, StudentGraduationApplication, GraduationDecision, Student.`,
+  request: {
+    params: z.object({
+      id: z.string().openapi(fieldDesc("ID đợt xét tốt nghiệp.")),
+    }),
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Đã xóa thành công",
+      content: {
+        "application/json": {
+          schema: z.object({
+            success: z.boolean(),
+            message: z.string(),
+            data: z
+              .object({
+                id: z.string(),
+                name: z.string(),
+              })
+              .optional(),
+          }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(deleteGraduationSessionRoute, async (c) => {
+  const { id } = c.req.valid("param")
+  try {
+    const data = await deleteGraduationSessionCascade(id)
+    return c.json(
+      {
+        success: true,
+        message: `Đã xóa đợt xét tốt nghiệp ${data.name}`,
+        data,
+      },
+      200
+    )
+  } catch (error: any) {
+    const message = error?.message || "Xóa đợt xét tốt nghiệp thất bại"
+    if (String(message).includes("không tồn tại")) {
+      return c.json({ message }, 404)
+    }
+    console.error("[graduation] cascade delete failed", message, error)
+    return c.json({ message: String(message) }, 500)
+  }
 })
 
 const GraduationCheckResult = z
@@ -478,7 +622,6 @@ app.openapi(graduationCheck, async (c) => {
                 academicRankingConvert: {
                   where: {
                     context: RankingContext.GRADUATION,
-                    graduated: true,
                   },
                   include: {
                     rankingCondition: true,
@@ -544,6 +687,7 @@ app.openapi(graduationCheck, async (c) => {
 
     const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap(({ subjects }) => subjects)
 
+    const trainingCourse = student.fixedClass.trainingCourse
     const {
       scoreToPass,
       scoreToPassConditional,
@@ -551,7 +695,8 @@ app.openapi(graduationCheck, async (c) => {
       baseScore,
       scoreToRetain,
       scoreConverts,
-    } = student.fixedClass.trainingCourse
+    } = trainingCourse
+    const useCourseBase10 = baseScore === AcademicRankingBaseType.Base10
 
     // Kiểm tra các môn có lỗi (hoãn thi, cấm thi, đình chỉ, học lại)
     const subjectScoresWithIssues = await prisma.studentSubjectScore.findMany({
@@ -943,12 +1088,12 @@ app.openapi(graduationCheck, async (c) => {
       ? totalScoreBase4.div(totalPassCredit).toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
       : new Decimal(0)
 
-    const rankLevels = student.fixedClass?.trainingCourse.academicRankingConvert
-    if (!rankLevels?.length) {
+    const rankLevels = trainingCourse.academicRankingConvert
+    if (!rankLevels.length) {
       reasons.push("Không có hạng xếp loại")
     }
 
-    const CUMULATIVE_GPA = (baseScore === "Base10" ? cumulativeBase10 : cumulativeBase4).toNumber()
+    const CUMULATIVE_GPA = (useCourseBase10 ? cumulativeBase10 : cumulativeBase4).toNumber()
 
     const semesterRegisteredCredits = student.studentSemesterResult[0]?.passedCredits || 0
     const semesterFailedCredits = student.studentSemesterResult[0]?.failedCredits || 0
@@ -964,14 +1109,12 @@ app.openapi(graduationCheck, async (c) => {
     }
 
     const studentDataContext: StudentDataContext = {
-      SEMESTER_GPA:
-        baseScore === "Base10"
-          ? student.studentSemesterResult[0]?.gpaBase10.toNumber() || 0
-          : student.studentSemesterResult[0]?.gpaBase4.toNumber() || 0,
-      YEARLY_GPA:
-        baseScore === "Base10"
-          ? student.studentYearResult[0]?.gpaBase10.toNumber() || 0
-          : student.studentYearResult[0]?.gpaBase4.toNumber() || 0,
+      SEMESTER_GPA: useCourseBase10
+        ? student.studentSemesterResult[0]?.gpaBase10.toNumber() || 0
+        : student.studentSemesterResult[0]?.gpaBase4.toNumber() || 0,
+      YEARLY_GPA: useCourseBase10
+        ? student.studentYearResult[0]?.gpaBase10.toNumber() || 0
+        : student.studentYearResult[0]?.gpaBase4.toNumber() || 0,
       CUMULATIVE_GPA,
       ENTRY_SCORE: student.entryScore || 0,
       COURSE_GRADE_LOWEST: courseGradeLowest,
@@ -1017,8 +1160,8 @@ app.openapi(graduationCheck, async (c) => {
       continue
     }
 
-    // Xếp loại tốt nghiệp
-    const sortedRankLevels = student.fixedClass.trainingCourse.academicRankingConvert
+    // Xếp loại tốt nghiệp: so khoảng theo hệ số xét của từng hạng
+    const sortedRankLevels = rankLevels
 
     for (const [rankIdx, rank] of sortedRankLevels.entries()) {
       const eligibilityResults = await Promise.all(
@@ -1049,10 +1192,12 @@ app.openapi(graduationCheck, async (c) => {
       )
       const isEligible = eligibilityResults.every((p) => p)
 
-      const isCorrectScore =
-        rank.baseScore === "Base10"
-          ? cumulativeBase10.gte(rank.base10Min || 0) && cumulativeBase10.lte(rank.base10Max || 0)
-          : cumulativeBase4.gte(rank.base4Min || 0) && cumulativeBase4.lte(rank.base4Max || 0)
+      const isCorrectScore = isGpaInGraduationRankRange(
+        rank,
+        cumulativeBase10,
+        cumulativeBase4,
+        baseScore
+      )
 
       const eligibleRank = isEligible && isCorrectScore ? rank : null
 
@@ -1071,7 +1216,7 @@ app.openapi(graduationCheck, async (c) => {
             .join("\n")}`
           results.push({
             applicationId: application.id,
-            graduation: !!rankDowngrade,
+            graduation: !!rankDowngrade?.graduated,
             gpa: CUMULATIVE_GPA,
             rank: rankDowngrade || null,
             reason,
@@ -1087,7 +1232,7 @@ app.openapi(graduationCheck, async (c) => {
 
         results.push({
           applicationId: application.id,
-          graduation: true,
+          graduation: !!rank.graduated,
           gpa: CUMULATIVE_GPA,
           rank,
           reason: "",
@@ -1242,7 +1387,12 @@ app.openapi(generateDiplomaNumber, async (c) => {
   const existing = await prisma.graduationDecision.findMany({
     where: {
       [field]: { in: generatedNumbers },
-      ...(rewrite ? { application: { sessionId: { not: sessionId } } } : {}),
+      deletedAt: null,
+      application: {
+        deletedAt: null,
+        session: { deletedAt: null },
+        ...(rewrite ? { sessionId: { not: sessionId } } : {}),
+      },
     },
     select: { [field]: true },
   })

@@ -122,6 +122,17 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
         resetState()
         onCancel()
       } else {
+        const failedData = (res?.data as any)?.failed
+        if (failedData && Array.isArray(failedData)) {
+          const importErrors = failedData.map(
+            (item: { code: string; name: string; error: string }) => ({
+              cellRef: item.code,
+              message: `${item.name}: ${item.error}`,
+            })
+          )
+          setErrorData(importErrors)
+          setDisabledButton(true)
+        }
         message.error(res?.data?.message || "Nhập dữ liệu sinh viên từ file thất bại")
       }
     } catch (error: any) {
@@ -422,6 +433,13 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
             align: "center",
             width: 200,
             render: (value: string) => <div className={!value ? "td-error" : ""}>{value}</div>,
+          },
+          {
+            title: "Đơn vị quản lý",
+            dataIndex: "managementOrganization",
+            key: "managementOrganization",
+            align: "center",
+            width: 200,
           },
           // {
           //     title: 'Đối tượng đào tạo',

@@ -24,9 +24,8 @@ import {
   useFindManyTrainingCourse,
   useFindManyTrainingField,
   useFindManyTrainingMajor,
-  useDeleteStudent,
-  useDeleteUserProfile,
 } from "@workspace/db/hooks"
+import { customTrainingFetch } from "@workspace/libs/api/custom-instance"
 import {
   downloadStudentImportTemplate,
   useExportStudentProfiles,
@@ -295,6 +294,7 @@ export default function UserProfilePageDs() {
           trainingLevel: true,
           curriculum: {
             include: {
+              trainingField: true,
               trainingMajor: {
                 include: {
                   trainingField: true,
@@ -406,7 +406,14 @@ export default function UserProfilePageDs() {
   })
 
   const { data: TrainingCurriculumVersionData = [] } = useFindManyCurriculumVersion({
-    where: { trainingObjectTypeId },
+    where: {
+      deletedAt: null,
+      OR: [
+        { trainingObjectTypeId },
+        { curriculum: { trainingObjectTypeId } },
+        { trainingCourse: { trainingObjectTypeId } },
+      ],
+    },
     orderBy: { name: "asc" },
   })
 
@@ -436,12 +443,8 @@ export default function UserProfilePageDs() {
       preSelectedValues: {},
     })
   }
-  const { mutateAsync: deleteStudent } = useDeleteStudent()
-  const { mutateAsync: deleteUserProfile } = useDeleteUserProfile()
-
   async function handleDelete(record: any) {
     const id = record.id
-    const userProfileId = record.userProfileId
     const hasScores =
       (record._count?.subjectClassStudent || 0) > 0 ||
       (record._count?.studentSemesterResult || 0) > 0 ||
@@ -454,9 +457,16 @@ export default function UserProfilePageDs() {
 
     try {
       showSpinner()
-      await deleteStudent({ where: { id } })
-      await deleteUserProfile({ where: { id: userProfileId } })
-      message.success("Xóa thành công")
+      const res = await customTrainingFetch<{ status: number; data?: { message?: string } }>(
+        `/api/student/${id}`,
+        { method: "DELETE" }
+      )
+      if (res.status === 200) {
+        message.success("Xóa thành công")
+        await refetch()
+      } else {
+        message.error(res.data?.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      }
     } catch (error) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
@@ -695,10 +705,11 @@ export default function UserProfilePageDs() {
                   value: item.id,
                 })),
                 render: (__, record: any) => {
+                  const curriculum =
+                    record.curriculumVersion || record.fixedClass?.curriculumVersion
                   return (
-                    record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField
-                      ?.name ||
-                    record?.fixedClass?.curriculumVersion?.curriculum?.trainingField?.name
+                    curriculum?.curriculum?.trainingMajor?.trainingField?.name ||
+                    curriculum?.curriculum?.trainingField?.name
                   )
                 },
               },
@@ -713,7 +724,9 @@ export default function UserProfilePageDs() {
                   value: item.id,
                 })),
                 render: (__, record: any) => {
-                  return record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name
+                  const curriculum =
+                    record.curriculumVersion || record.fixedClass?.curriculumVersion
+                  return curriculum?.curriculum?.trainingMajor?.name
                 },
               },
               {

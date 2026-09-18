@@ -1,3 +1,4 @@
+import { queryClient } from "@api/index"
 import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
@@ -11,7 +12,7 @@ import { useApplicationStatusOptions } from "@hooks/applicationStatus"
 import { useCriteriaFieldOptions } from "@hooks/criteriaField"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
-import { ApplicationStatus, GraduationSessionStatus, StudentStatus } from "@workspace/db/client"
+import { ApplicationStatus, GraduationSessionStatus, type Prisma, StudentStatus } from "@workspace/db/client"
 import {
   useCountStudentGraduationApplication,
   useFindManyCertificate,
@@ -28,6 +29,7 @@ import {
   getDanhSachHVChuaTotNghiepTA,
   getPhuLucIXData,
   graduationApplicationInit,
+  reclaimStaleGraduation,
   useGraduationCheck,
 } from "@workspace/libs/api/training"
 import { formatPlaceOfBirth } from "@workspace/libs/utils"
@@ -40,7 +42,7 @@ import { BookPlus, Download, SearchCheck, X } from "lucide-react"
 import { docxTemplate } from "../../../utils/docx-template"
 import { useRouter } from "next/router"
 import type React from "react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 export default function StudentGraduationApplication() {
@@ -203,6 +205,54 @@ export default function StudentGraduationApplication() {
     { enabled: !!graduationSessionId }
   )
 
+  useEffect(() => {
+    if (!graduationSessionId) return
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await reclaimStaleGraduation()
+        if (cancelled || res.status !== 200) return
+        if (res.data.studentCount > 0) {
+          await Promise.all([
+            queryClient.invalidateQueries({ queryKey: ["zenstack", "Student"] }),
+            queryClient.invalidateQueries({ queryKey: ["zenstack", "TrainingCourse"] }),
+            queryClient.invalidateQueries({ queryKey: ["zenstack", "FixedClass"] }),
+            queryClient.invalidateQueries({ queryKey: ["zenstack", "GraduationDecision"] }),
+          ])
+        }
+      } catch {
+        // leftover sẽ được dọn lại khi bấm Khởi tạo
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [graduationSessionId])
+
+  const eligibleStudentWhere: Prisma.StudentWhereInput = useMemo(
+    () => ({
+      deletedAt: null,
+      OR: [
+        {
+          status: {
+            in: [StudentStatus.ENROLLED, StudentStatus.PENDING_GRADUATION_REVIEW],
+          },
+        },
+        {
+          status: StudentStatus.GRADUATED,
+          graduationApplications: {
+            none: {
+              deletedAt: null,
+              status: ApplicationStatus.APPROVED,
+              session: { deletedAt: null },
+            },
+          },
+        },
+      ],
+    }),
+    []
+  )
+
   const { data: trainingCourseData = [] } = useFindManyTrainingCourse(
     {
       where: {
@@ -210,9 +260,7 @@ export default function StudentGraduationApplication() {
         fixedClass: {
           some: {
             students: {
-              some: {
-                status: "ENROLLED",
-              },
+              some: eligibleStudentWhere,
             },
           },
         },
@@ -232,7 +280,7 @@ export default function StudentGraduationApplication() {
     {
       where: {
         trainingCourseId: trainingCourseSelected,
-        students: { some: { status: "ENROLLED" } },
+        students: { some: eligibleStudentWhere },
       },
     },
     { enabled: !!graduationSessionId && !!trainingCourseSelected }
@@ -494,7 +542,6 @@ export default function StudentGraduationApplication() {
                 operation: "upsert" as const,
                 data: {
                   where: {
-                    applicationId: record.id,
                     studentId: record.student.id,
                   },
                   create: createData,
