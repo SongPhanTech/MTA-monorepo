@@ -19,7 +19,7 @@ import {
 } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
-import type { ErrorExtra } from "../types/error-extra"
+import { formatLsbError, type ErrorExtra } from "../types/error-extra"
 import {
   buildCurriculumMapOrThrow,
   buildDegreeRankTypeMapOrThrow,
@@ -32,6 +32,7 @@ import {
   buildLecturerTypeMapOrThrow,
   buildNationalityMapOrThrow,
   buildNewProvinceMapOrThrow,
+  buildOrgLookupMapOrThrow,
   buildOrgNameMapOrThrow,
   buildPositionMapOrThrow,
   buildRankMapOrThrow,
@@ -331,10 +332,7 @@ app.openapi(importLecturer, async (c) => {
                   })
                 } else {
                   const extra = res.data?.extra as ErrorExtra | undefined
-                  const errMsg =
-                    extra?.message ||
-                    [extra?.code, extra?.data].join(" ") ||
-                    `LSB API error: ${res.status}`
+                  const errMsg = formatLsbError(extra, `LSB API error: ${res.status}`)
                   importErrors.push({
                     code: lecturer.code,
                     name: lecturer.fullname,
@@ -378,10 +376,7 @@ app.openapi(importLecturer, async (c) => {
                   }
                 } else {
                   const extra = res.data?.extra as ErrorExtra | undefined
-                  const errMsg =
-                    extra?.message ||
-                    [extra?.code, extra?.data].join(" ") ||
-                    `LSB API error: ${res.status}`
+                  const errMsg = formatLsbError(extra, `LSB API error: ${res.status}`)
                   importErrors.push({
                     code: lecturer.code,
                     name: lecturer.fullname,
@@ -444,10 +439,7 @@ app.openapi(importLecturer, async (c) => {
                 }
               } else {
                 const extra = res.data?.extra as ErrorExtra | undefined
-                const errMsg =
-                  extra?.message ||
-                  [extra?.code, extra?.data].join(" ") ||
-                  `LSB API error: ${res.status}`
+                const errMsg = formatLsbError(extra, `LSB API error: ${res.status}`)
                 importErrors.push({
                   code: lecturer.code,
                   name: lecturer.fullname,
@@ -797,10 +789,7 @@ app.openapi(importGuestLecturer, async (c) => {
                   })
                 } else {
                   const extra = res.data?.extra as ErrorExtra | undefined
-                  const errMsg =
-                    extra?.message ||
-                    [extra?.code, extra?.data].join(" ") ||
-                    `LSB API error: ${res.status}`
+                  const errMsg = formatLsbError(extra, `LSB API error: ${res.status}`)
                   importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
                 }
               } else {
@@ -836,10 +825,7 @@ app.openapi(importGuestLecturer, async (c) => {
                   }
                 } else {
                   const extra = res.data?.extra as ErrorExtra | undefined
-                  const errMsg =
-                    extra?.message ||
-                    [extra?.code, extra?.data].join(" ") ||
-                    `LSB API error: ${res.status}`
+                  const errMsg = formatLsbError(extra, `LSB API error: ${res.status}`)
                   importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
                 }
               }
@@ -890,10 +876,7 @@ app.openapi(importGuestLecturer, async (c) => {
                 }
               } else {
                 const extra = res.data?.extra as ErrorExtra | undefined
-                const errMsg =
-                  extra?.message ||
-                  [extra?.code, extra?.data].join(" ") ||
-                  `LSB API error: ${res.status}`
+                const errMsg = formatLsbError(extra, `LSB API error: ${res.status}`)
                 importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
               }
             }
@@ -1052,6 +1035,11 @@ app.openapi(importStudent, async (c) => {
   const positionMap = await buildPositionMapOrThrow(
     prisma,
     data.students.map((student) => student.position)
+  )
+
+  const organizationMap = await buildOrgLookupMapOrThrow(
+    prisma,
+    data.students.map((student) => student.managementOrganization)
   )
 
   const classConsistencyMap = new Map<string, { className: string; curriculum: string }>()
@@ -1283,6 +1271,9 @@ app.openapi(importStudent, async (c) => {
         for (const s of uniqueClasses) {
           const curriculumName = s.curriculum?.trim()
           const cvId = curriculumVersionMap.get(curriculumName)
+          const managementOrganizationId = organizationMap.get(
+            s.managementOrganization?.trim() || ""
+          )
 
           await tx.fixedClass.upsert({
             where: { code: s.fixedClassCode },
@@ -1290,6 +1281,7 @@ app.openapi(importStudent, async (c) => {
               name: s.fixedClass,
               trainingCourseId: trainingCourse.id,
               curriculumVersionId: cvId,
+              ...(managementOrganizationId ? { managementOrganizationId } : {}),
             },
             create: {
               name: s.fixedClass,
@@ -1297,6 +1289,7 @@ app.openapi(importStudent, async (c) => {
               trainingCourseId: trainingCourse.id,
               curriculumVersionId: cvId,
               startYear: new Date().getFullYear(),
+              ...(managementOrganizationId ? { managementOrganizationId } : {}),
             },
           })
         }
@@ -1352,6 +1345,7 @@ app.openapi(importStudent, async (c) => {
             officerNumber: student.officerNumber,
             rankId: rankMap.get(student.rank ?? "") || null,
             positionCPVId: positionMap.get(normalizeCatalogName(student.position)) || null,
+            sDM_DonViId: organizationMap.get(student.managementOrganization?.trim() || "") || null,
           }
 
           const existingProfile = existingProfileMap.get(student.idCardNumber)
@@ -1412,6 +1406,7 @@ app.openapi(importStudent, async (c) => {
                   //! TODO: fix this
                   sEmail: `${student.idCardNumber}@gmail.com`,
                   sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
+                  sDM_DonViId: organizationMap.get(student.managementOrganization?.trim() || ""),
                 },
                 {
                   headers: {
@@ -1442,7 +1437,7 @@ app.openapi(importStudent, async (c) => {
                   importErrors.push({
                     code: student.code,
                     name: student.fullname,
-                    error: extra?.message || [extra?.code, extra?.data].join(" "),
+                    error: formatLsbError(extra, `LSB API error: ${res.status}`),
                   })
                 }
               } else {
@@ -1464,6 +1459,7 @@ app.openapi(importStudent, async (c) => {
                   sSDTDiDong: student.phoneNumber ?? "",
                   sEmail: `${student.idCardNumber}@gmail.com`,
                   sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
+                  sDM_DonViId: organizationMap.get(student.managementOrganization?.trim() || ""),
                 },
                 {
                   headers: {
@@ -1485,7 +1481,7 @@ app.openapi(importStudent, async (c) => {
                 importErrors.push({
                   code: student.code,
                   name: student.fullname,
-                  error: extra?.message || [extra?.code, extra?.data].join(" "),
+                  error: formatLsbError(extra, `LSB API error: ${res.status}`),
                 })
               }
             }

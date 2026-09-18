@@ -7,11 +7,16 @@ import type { FilterProps } from "@constants/type"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import type { Prisma } from "@workspace/db/client"
-import { useCountExpert, useFindManyExpert, useUpdateExpert } from "@workspace/db/hooks"
+import {
+  useCountExpert,
+  useFindManyExpert,
+  useUpdateExpert,
+  useUpdateExpertProfileVersion,
+} from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { CheckCircleFilled } from "@ant-design/icons"
-import { Button, Col, Flex, message, Row, Tooltip } from "antd"
+import { Button, Col, Flex, message, Row, Tag, Tooltip } from "antd"
 import { BookPlus } from "lucide-react"
 import type React from "react"
 import { useMemo, useState } from "react"
@@ -21,6 +26,8 @@ type SortOrder = "asc" | "desc"
 
 type ExpertRow = {
   id: string
+  currentVersionId?: string | null
+  active?: boolean | null
   name?: string | null
   position?: string | null
   phone?: string | null
@@ -202,12 +209,9 @@ export default function DanhSachChuyenGiaLuanVan() {
 
     return {
       deletedAt: null,
-      active: true,
-      AND: [
-        { OR: [{ lecturerId: null }, { lecturer: { active: true } }] },
-        { currentVersion: { is: { AND: versionAnd } } },
-      ],
+      currentVersion: { is: { AND: versionAnd } },
       ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" } } : {}),
+      ...(filters.active?.length === 1 ? { active: filters.active[0] } : {}),
     }
   }, [filters])
 
@@ -254,6 +258,8 @@ export default function DanhSachChuyenGiaLuanVan() {
     () =>
       (expertData ?? []).map((e) => ({
         id: e.id,
+        currentVersionId: e.currentVersionId ?? e.currentVersion?.id,
+        active: e.active,
         lecturer: e.lecturer,
         name: e.currentVersion?.name,
         position: e.currentVersion?.position,
@@ -272,16 +278,24 @@ export default function DanhSachChuyenGiaLuanVan() {
   const { onOpen } = useDisclosure<PutExpertProps>({ tag: "PutExpert" })
   const { showSpinner, hideSpinner } = useSpinner()
   const { mutateAsync: updateExpert } = useUpdateExpert()
+  const { mutateAsync: updateVersion } = useUpdateExpertProfileVersion()
 
   const handleModal = () => onOpen({ thesisExpert: true })
 
-  async function handleDelete(id: string) {
+  async function handleDelete(record: ExpertRow) {
     try {
       showSpinner()
-      await updateExpert({
-        where: { id },
-        data: { deletedAt: new Date() },
-      })
+      if (record.currentVersionId) {
+        await updateVersion({
+          where: { id: record.currentVersionId },
+          data: { thesisExpert: false },
+        })
+      } else {
+        await updateExpert({
+          where: { id: record.id },
+          data: { deletedAt: new Date() },
+        })
+      }
       message.success("Xóa thành công")
     } catch (error: any) {
       if (error?.info?.message) {
@@ -481,21 +495,38 @@ export default function DanhSachChuyenGiaLuanVan() {
                 },
               },
               {
+                title: "Trạng thái",
+                dataIndex: "active",
+                width: 140,
+                align: "center",
+                type: "select",
+                options: [
+                  { label: "Đang hoạt động", value: true },
+                  { label: "Không hoạt động", value: false },
+                ],
+                render: (_: unknown, record: any) =>
+                  record.active === false ? (
+                    <Tag color="error">Không hoạt động</Tag>
+                  ) : (
+                    <Tag color="success">Đang hoạt động</Tag>
+                  ),
+              },
+              {
                 title: "Thao tác",
                 width: 100,
                 align: "center",
                 fixed: "right",
-                render: (_: unknown, { id }: any) => {
-                  if (!id) return ""
+                render: (_: unknown, record: any) => {
+                  if (!record.id) return ""
                   return (
                     <Row className="justify-center gap-2">
                       <EditIcon
-                        onClick={() => onOpen({ id, thesisExpert: true })}
+                        onClick={() => onOpen({ id: record.id, thesisExpert: true })}
                         className="text-sm text-blue-700 cursor-pointer"
                       />
                       <DeleteIcon
                         popConfirm={{
-                          onConfirm: () => handleDelete(id),
+                          onConfirm: () => handleDelete(record),
                         }}
                       />
                     </Row>

@@ -6,11 +6,15 @@ import type { FilterProps } from "@constants/type"
 import { useGraduationSessionStatusOptions } from "@hooks/graduationSessionStatus"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
+import { queryClient } from "@api/index"
 import {
   useCountGraduationSession,
   useFindManyGraduationSession,
-  useUpdateGraduationSession,
 } from "@workspace/db/hooks"
+import {
+  deleteGraduationSession,
+  reclaimStaleGraduation,
+} from "@workspace/libs/api/training"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
@@ -18,7 +22,7 @@ import { Button, Col, Flex, message, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { BookPlus, Eye } from "lucide-react"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 export default function GraduationSession() {
@@ -39,6 +43,29 @@ export default function GraduationSession() {
     statusGraduationSession: undefined,
   })
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await reclaimStaleGraduation()
+        if (cancelled || res.status !== 200) return
+        if (res.data.studentCount > 0) {
+          await Promise.all([
+            queryClient.invalidateQueries({ queryKey: ["zenstack", "Student"] }),
+            queryClient.invalidateQueries({ queryKey: ["zenstack", "TrainingCourse"] }),
+            queryClient.invalidateQueries({ queryKey: ["zenstack", "FixedClass"] }),
+            queryClient.invalidateQueries({ queryKey: ["zenstack", "GraduationDecision"] }),
+          ])
+        }
+      } catch {
+        // leftover từ đợt đã xóa sẽ được dọn lại khi khởi tạo
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const { data: graduationSessionData } = useFindManyGraduationSession({
     where: {
@@ -157,19 +184,23 @@ export default function GraduationSession() {
   const handleModal = () => {
     onOpen()
   }
-  const { mutateAsync: updateGraduationSession } = useUpdateGraduationSession()
   async function handleDelete(id: string) {
     try {
       showSpinner()
-      await updateGraduationSession({
-        where: {
-          id,
-        },
-        data: {
-          deletedAt: new Date(),
-        },
-      })
-      message.success("Xóa thành công")
+      const res = await deleteGraduationSession(id)
+      if (res.status !== 200) {
+        message.error(res.data?.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
+        return
+      }
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["zenstack", "GraduationSession"] }),
+        queryClient.invalidateQueries({ queryKey: ["zenstack", "Student"] }),
+        queryClient.invalidateQueries({ queryKey: ["zenstack", "StudentGraduationApplication"] }),
+        queryClient.invalidateQueries({ queryKey: ["zenstack", "GraduationDecision"] }),
+        queryClient.invalidateQueries({ queryKey: ["zenstack", "TrainingCourse"] }),
+        queryClient.invalidateQueries({ queryKey: ["zenstack", "FixedClass"] }),
+      ])
+      message.success(res.data?.message || "Xóa thành công")
     } catch (error: any) {
       if (error?.info?.message) {
         message.error(error?.info?.message)

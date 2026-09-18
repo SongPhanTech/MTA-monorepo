@@ -16,6 +16,7 @@ import {
   useUpdateExpert,
   useUpdateExpertProfileVersion,
 } from "@workspace/db/hooks"
+import { sqlTransaction } from "@workspace/libs/api/model"
 import { CheckOutlined, EditOutlined } from "@ant-design/icons"
 import {
   Button,
@@ -70,9 +71,60 @@ type ExpertFormValues = {
   bankName?: string | null
   eligiblePresident?: boolean
   eligibleSecretary?: boolean
+  active?: boolean
 }
 
 dayjs.locale("vi")
+
+type ExistingExpert = {
+  id: string
+  currentVersionId?: string | null
+  currentVersion?: {
+    id?: string | null
+    thesisExpert?: boolean | null
+    projectExpert?: boolean | null
+  } | null
+}
+
+function resolveActive(output: ExpertFormValues) {
+  return output.active !== false
+}
+
+function isUniqueConstraintError(error: any) {
+  const code = error?.code || error?.info?.code || error?.info?.prisma
+  if (code === "P2002") return true
+  const msg = String(error?.info?.message || error?.message || "")
+  return /unique constraint/i.test(msg)
+}
+
+async function restoreDeletedExpertByLecturer(lecturerId: string): Promise<ExistingExpert | null> {
+  const res = await sqlTransaction([
+    {
+      model: "Expert",
+      operation: "findFirst",
+      data: {
+        where: { lecturerId },
+        include: { currentVersion: true },
+      },
+    },
+  ])
+  if (res.status !== 200) return null
+  const found = (Array.isArray(res.data) ? res.data[0] : null) as ExistingExpert | null
+  if (!found?.id) return null
+
+  const restored = await sqlTransaction([
+    {
+      model: "Expert",
+      operation: "update",
+      data: {
+        where: { id: found.id },
+        data: { deletedAt: null, active: true },
+      },
+    },
+  ])
+  if (restored.status !== 200) return null
+  return found
+}
 
 const formatRange = (from?: Date | string | null, to?: Date | string | null) => {
   const start = from ? dayjs(from).format("DD/MM/YYYY HH:mm") : "—"
@@ -295,6 +347,7 @@ const PutExpert = () => {
     const versionId = expert.currentVersionId ?? expert.currentVersion?.id ?? null
     setEditingVersionId(versionId)
     fillFormFromVersion(expert.currentVersion, expert.lecturerId)
+    form.setFieldValue("active", expert.active !== false)
   }, [expert, form])
 
   useEffect(() => {
@@ -302,6 +355,7 @@ const PutExpert = () => {
       form.setFieldsValue({
         eligiblePresident: isInternal,
         eligibleSecretary: isInternal,
+        active: true,
       })
     }
   }, [isInternal, form, expert])
@@ -366,11 +420,21 @@ const PutExpert = () => {
     })
   }
 
+  const attachToExistingExpert = async (found: ExistingExpert, output: ExpertFormValues) => {
+    await reviseExpertVersion(
+      found.id,
+      found.currentVersionId ?? found.currentVersion?.id,
+      output,
+      found.currentVersion
+    )
+  }
+
   const createExpertWithVersion = async (output: ExpertFormValues) => {
     const created = await createExpert({
       data: {
         lecturerId: isInternal && selectedLecturer ? selectedLecturer.id : null,
         deletedAt: null,
+        active: resolveActive(output),
       },
     })
     if (!created?.id) throw new Error("Không tạo được Expert")
@@ -414,6 +478,7 @@ const PutExpert = () => {
         currentVersionId: version.id,
         lecturerId: isInternal && selectedLecturer ? selectedLecturer.id : null,
         deletedAt: null,
+        active: resolveActive(output),
       },
     })
   }
@@ -500,14 +565,28 @@ const PutExpert = () => {
 
       if (isInternal && selectedLecturer) {
         const existing = await findExpertByLecturer()
-        const found = existing.data
+        const found = existing.data as ExistingExpert | undefined
         if (found?.id) {
-          message.warning(
-            "Giảng viên này đã có hồ sơ chuyên gia. Hãy mở hồ sơ đó và dùng «Thêm phiên bản hồ sơ»."
-          )
-          return
+          const alreadyInDomain = isThesisDomain
+            ? found.currentVersion?.thesisExpert
+            : found.currentVersion?.projectExpert
+          if (alreadyInDomain) {
+            message.warning(
+              "Giảng viên này đã có hồ sơ chuyên gia. Hãy mở hồ sơ đó và dùng «Thêm phiên bản hồ sơ»."
+            )
+            return
+          }
+          await attachToExistingExpert(found, output)
+        } else {
+          try {
+            await createExpertWithVersion(output)
+          } catch (error: any) {
+            if (!isUniqueConstraintError(error)) throw error
+            const restored = await restoreDeletedExpertByLecturer(selectedLecturer.id)
+            if (!restored?.id) throw error
+            await attachToExistingExpert(restored, output)
+          }
         }
-        await createExpertWithVersion(output)
       } else {
         await createExpertWithVersion(output)
       }
@@ -560,14 +639,17 @@ const PutExpert = () => {
               where: { id: editingVersionId },
               data: buildVersionFields(output, editing ?? expert.currentVersion),
             })
-            if (editingVersionId === expert.currentVersionId) {
-              await updateExpert({
-                where: { id: expert.id },
-                data: {
-                  lecturerId: isInternal && selectedLecturer ? selectedLecturer.id : null,
-                },
-              })
-            }
+            await updateExpert({
+              where: { id: expert.id },
+              data: {
+                ...(editingVersionId === expert.currentVersionId
+                  ? {
+                      lecturerId: isInternal && selectedLecturer ? selectedLecturer.id : null,
+                    }
+                  : {}),
+                active: resolveActive(output),
+              },
+            })
             await refetchExpert()
             message.success("Đã cập nhật phiên bản hồ sơ.")
           } catch (error: any) {
@@ -846,6 +928,15 @@ const PutExpert = () => {
             <Checkbox>Có thể là Thư ký hội đồng</Checkbox>
           </FormItem>
         </Col>
+      </Col>
+
+      <Col span={24}>
+        <FormItem form={form} name="active" label="Trạng thái">
+          <Radio.Group buttonStyle="solid">
+            <Radio value={true}>Đang hoạt động</Radio>
+            <Radio value={false}>Ngừng hoạt động</Radio>
+          </Radio.Group>
+        </FormItem>
       </Col>
 
       {isEdit ? (

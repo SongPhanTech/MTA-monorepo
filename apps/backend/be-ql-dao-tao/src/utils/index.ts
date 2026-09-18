@@ -825,6 +825,48 @@ export const buildOrgCodeMapOrThrow = async (prisma: PrismaClient, codes: (strin
   }
 }
 
+export const buildOrgLookupMapOrThrow = async (
+  prisma: PrismaClient,
+  values: (string | undefined)[]
+) => {
+  const uniqValues = Array.from(
+    new Set(
+      values
+        .filter((value): value is string => Boolean(value?.trim()))
+        .map((value) => value.trim())
+    )
+  )
+
+  if (!uniqValues.length) return new Map<string, string>()
+
+  const existing = await prisma.dM_DonVi.findMany({
+    where: {
+      OR: [
+        { sTen: { in: uniqValues } },
+        { sMa: { in: uniqValues } },
+        { sTenVietTat: { in: uniqValues } },
+      ],
+    },
+    select: { sTen: true, sMa: true, sTenVietTat: true, Id: true },
+  })
+
+  const map = new Map<string, string>()
+  for (const org of existing) {
+    if (org.sTen) map.set(org.sTen, org.Id)
+    if (org.sMa) map.set(org.sMa, org.Id)
+    if (org.sTenVietTat) map.set(org.sTenVietTat, org.Id)
+  }
+
+  const missing = uniqValues.filter((value) => !map.has(value))
+  if (missing.length) {
+    throw new HTTPException(400, {
+      message: `Đơn vị không tồn tại: ${missing.join(", ")}`,
+    })
+  }
+
+  return map
+}
+
 export const buildOrgNameMapOrThrow = async (
   prisma: PrismaClient,
   names: (string | undefined)[]

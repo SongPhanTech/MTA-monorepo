@@ -7,10 +7,15 @@ import type { FilterProps } from "@constants/type"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import type { Prisma } from "@workspace/db/client"
-import { useCountExpert, useFindManyExpert, useUpdateExpert } from "@workspace/db/hooks"
+import {
+  useCountExpert,
+  useFindManyExpert,
+  useUpdateExpert,
+  useUpdateExpertProfileVersion,
+} from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
-import { Button, Col, Flex, message, Row } from "antd"
+import { Button, Col, Flex, message, Row, Tag } from "antd"
 import { BookPlus } from "lucide-react"
 import type React from "react"
 import { useMemo, useState } from "react"
@@ -18,6 +23,8 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 
 type ExpertRow = {
   id: string
+  currentVersionId?: string | null
+  active?: boolean | null
   name?: string | null
   phone?: string | null
   email?: string | null
@@ -99,12 +106,9 @@ export default function DanhSachChuyenGiaDoAn() {
 
     return {
       deletedAt: null,
-      active: true,
-      AND: [
-        { OR: [{ lecturerId: null }, { lecturer: { active: true } }] },
-        { currentVersion: { is: { AND: versionAnd } } },
-      ],
+      currentVersion: { is: { AND: versionAnd } },
       ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" } } : {}),
+      ...(filters.active?.length === 1 ? { active: filters.active[0] } : {}),
     }
   }, [filters])
 
@@ -141,6 +145,8 @@ export default function DanhSachChuyenGiaDoAn() {
     () =>
       (expertData ?? []).map((e) => ({
         id: e.id,
+        currentVersionId: e.currentVersionId ?? e.currentVersion?.id,
+        active: e.active,
         lecturer: e.lecturer,
         name: e.currentVersion?.name,
         phone: e.currentVersion?.phone,
@@ -157,16 +163,24 @@ export default function DanhSachChuyenGiaDoAn() {
   const { onOpen } = useDisclosure<PutExpertProps>({ tag: "PutExpert" })
   const { showSpinner, hideSpinner } = useSpinner()
   const { mutateAsync: updateExpert } = useUpdateExpert()
+  const { mutateAsync: updateVersion } = useUpdateExpertProfileVersion()
 
   const handleModal = () => onOpen({ thesisExpert: false })
 
-  async function handleDelete(id: string) {
+  async function handleDelete(record: ExpertRow) {
     try {
       showSpinner()
-      await updateExpert({
-        where: { id },
-        data: { deletedAt: new Date() },
-      })
+      if (record.currentVersionId) {
+        await updateVersion({
+          where: { id: record.currentVersionId },
+          data: { projectExpert: false },
+        })
+      } else {
+        await updateExpert({
+          where: { id: record.id },
+          data: { deletedAt: new Date() },
+        })
+      }
       message.success("Xóa thành công")
     } catch (error: any) {
       if (error?.code === "P2004") {
@@ -295,6 +309,23 @@ export default function DanhSachChuyenGiaDoAn() {
                   "",
               },
               {
+                title: "Trạng thái",
+                dataIndex: "active",
+                width: 140,
+                align: "center",
+                type: "select",
+                options: [
+                  { label: "Đang hoạt động", value: true },
+                  { label: "Không hoạt động", value: false },
+                ],
+                render: (_: unknown, record: any) =>
+                  record.active === false ? (
+                    <Tag color="error">Không hoạt động</Tag>
+                  ) : (
+                    <Tag color="success">Đang hoạt động</Tag>
+                  ),
+              },
+              {
                 title: "Thao tác",
                 width: 100,
                 align: "center",
@@ -304,8 +335,8 @@ export default function DanhSachChuyenGiaDoAn() {
                   "SUA",
                   "XOA"
                 ),
-                render: (_: unknown, { id }: any) => {
-                  if (!id) return ""
+                render: (_: unknown, record: any) => {
+                  if (!record.id) return ""
                   return (
                     <Row className="justify-center gap-2">
                       {can(
@@ -313,7 +344,7 @@ export default function DanhSachChuyenGiaDoAn() {
                         "SUA"
                       ) && (
                         <EditIcon
-                          onClick={() => onOpen({ id, thesisExpert: false })}
+                          onClick={() => onOpen({ id: record.id, thesisExpert: false })}
                           className="text-sm text-blue-700 cursor-pointer"
                         />
                       )}
@@ -323,7 +354,7 @@ export default function DanhSachChuyenGiaDoAn() {
                       ) && (
                         <DeleteIcon
                           popConfirm={{
-                            onConfirm: () => handleDelete(id),
+                            onConfirm: () => handleDelete(record),
                           }}
                         />
                       )}
