@@ -1,6 +1,7 @@
 import PutFormModal from "@components/commons/put-modal"
 import useSpinner from "@hooks/spinner"
 import {
+  useFindManyDM_DonVi,
   useFindManyExpert,
   useFindUniqueStudentResearchTopic,
   useUpdateStudentResearchTopic,
@@ -10,12 +11,15 @@ import dayjs from "dayjs"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
 import DatePicker from "@components/commons/date-picker"
+import TreeSelect from "@components/commons/tree-select"
 import type { StudentResearchTopic } from "@workspace/db/client"
 import { FormItem } from "@workspace/ui"
 import { useEffect, useMemo } from "react"
 import { getSupervisorName } from "@pages/quan-ly-luan-van/dm-luan-van"
 import { fuzzyMatch } from "@workspace/libs/utils"
 import { flattenExpertForSelect } from "@/utils/expert-select"
+import { buildOrgTree } from "@lib/utils"
+import { whereOrganization } from "@workspace/libs/constants"
 
 dayjs.locale("vi")
 const { TextArea } = Input
@@ -24,6 +28,7 @@ type PutResearchTopicForm = {
   studentFullname?: string | null
   studentCode?: string | null
   studentDateOfBirth?: Date | null
+  managementOrganizationId?: string | null
   /** Expert.id — save resolve → *VersionId */
   supervisorId?: string | null
   coSupervisorId?: string | null
@@ -67,6 +72,12 @@ const PutResearchTopicModal = () => {
     },
   })
 
+  const { data: organizationData = [] } = useFindManyDM_DonVi({
+    where: whereOrganization,
+    orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
+  })
+  const treeOrgData = useMemo(() => buildOrgTree(organizationData ?? [], "0"), [organizationData])
+
   const expertFlat = useMemo(() => experts.map(flattenExpertForSelect), [experts])
 
   const { data: studentResearchTopic } = useFindUniqueStudentResearchTopic(
@@ -109,6 +120,16 @@ const PutResearchTopicModal = () => {
               select: {
                 code: true,
                 userProfile: true,
+              },
+            },
+            subjectVersion: {
+              include: {
+                managementOrganization: true,
+                subject: {
+                  select: {
+                    managementOrganizationId: true,
+                  },
+                },
               },
             },
           },
@@ -170,6 +191,7 @@ const PutResearchTopicModal = () => {
   }
   useEffect(() => {
     if (input?.studentResearchTopicId) {
+      const subjectVersion = studentResearchTopic?.studentSubjectScore?.subjectVersion
       form.setFieldsValue({
         name: studentResearchTopic?.name ?? "",
         mainContent: studentResearchTopic?.mainContent ?? "",
@@ -190,6 +212,10 @@ const PutResearchTopicModal = () => {
               studentResearchTopic?.studentSubjectScore?.student?.userProfile?.dateOfBirth
             ).format("DD/MM/YYYY")
           : undefined,
+        managementOrganizationId:
+          subjectVersion?.managementOrganizationId ||
+          subjectVersion?.subject?.managementOrganizationId ||
+          undefined,
       })
     }
   }, [input?.studentResearchTopicId, studentResearchTopic, form])
@@ -265,6 +291,17 @@ const PutResearchTopicModal = () => {
               showSearch
               filterOption={filterExpertOption}
               allowClear
+            />
+          </FormItem>
+        </Col>
+        <Col span={24}>
+          <FormItem form={form} name="managementOrganizationId" label="Đơn vị quản lý">
+            <TreeSelect
+              placeholder="Chọn đơn vị quản lý"
+              treeDefaultExpandAll
+              treeData={treeOrgData}
+              disabled
+              className="w-full"
             />
           </FormItem>
         </Col>
