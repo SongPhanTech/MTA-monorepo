@@ -36,7 +36,7 @@ import { fieldDesc } from "../dto/openapi-helpers"
 import { CalculateSemesterResultResponseSchema } from "../dto/student-result-openapi.dto"
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import { queryDebtExportRows, type DebtExportRow } from "../services/student-debt"
-import { deleteStudentWithLsb, DeleteStudentError } from "../services/delete-student"
+import { deleteStudent, DeleteStudentError } from "../services/delete-student"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -856,14 +856,14 @@ app.openapi(exportStudentProfiles, async (c) => {
 })
 
 const deleteStudentRoute = createRoute({
-  operationId: "deleteStudentWithLsb",
+  operationId: "deleteStudent",
   tags: ["Học viên / Sinh viên"],
   path: "/{id}",
   method: "delete",
   summary: "Xóa sinh viên",
-  description: `Xóa hồ sơ sinh viên trên QL đào tạo và hồ sơ nhân sự tương ứng trên LSB (DELETE /DM_NhanViens/{id}).
+  description: `Xóa hồ sơ sinh viên trên QL đào tạo.
 
-**Bảng dữ liệu nguồn:** Student, UserProfile, DM_NhanVien (LSB).`,
+**Bảng dữ liệu nguồn:** Student, UserProfile.`,
   request: {
     params: z.object({
       id: z.string().openapi(fieldDesc("ID sinh viên.")),
@@ -885,13 +885,13 @@ const deleteStudentRoute = createRoute({
 app.openapi(deleteStudentRoute, async (c) => {
   const { id } = c.req.valid("param")
   try {
-    await deleteStudentWithLsb(id)
+    await deleteStudent(id)
     return c.json({ message: "Xóa thành công" }, 200)
   } catch (error) {
     const message = error instanceof Error ? error.message : "Xóa sinh viên thất bại"
     const status = error instanceof DeleteStudentError ? error.status : 500
     if (status === 500) {
-      console.error("[student] delete with LSB failed", message, error)
+      console.error("[student] delete failed", message, error)
     }
     if (status === 404) return c.json({ message }, 404)
     if (status === 409) return c.json({ message }, 409)

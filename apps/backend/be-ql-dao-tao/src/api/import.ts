@@ -76,6 +76,20 @@ const extractLsbId = (data: unknown): string | undefined => {
   return undefined
 }
 
+const studentLsbEmail = (idCardNumber: string) => `${idCardNumber}@gmail.com`
+
+/** LSB bắt buộc SĐT khi tạo DM_NhanVien, trong khi file mẫu không bắt buộc. */
+const studentLsbPhone = (
+  phoneNumber: string | undefined,
+  idCardNumber: string,
+  code: string
+) => {
+  const phone = phoneNumber?.trim()
+  if (phone) return phone
+  const digits = `${idCardNumber}${code}`.replace(/\D/g, "")
+  return `09${digits.slice(-8).padStart(8, "0")}`
+}
+
 const findLsbNhanVienId = async (values: string[]) => {
   const uniqueValues = [...new Set(values.map((value) => value.trim()).filter(Boolean))]
   if (uniqueValues.length === 0) return undefined
@@ -1415,11 +1429,12 @@ app.openapi(importStudent, async (c) => {
             description: student.description,
           }
 
+          const studentEmail = studentLsbEmail(student.idCardNumber)
           const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
             ...splitFullName(student.fullname),
             code: student.code,
             fullname: student.fullname,
-            email: `${student.idCardNumber}@gmail.com`,
+            email: studentEmail,
             bLaGiangVien: false,
             bLaHocVien: true,
             dateOfBirth: student.dateOfBirth,
@@ -1487,7 +1502,12 @@ app.openapi(importStudent, async (c) => {
               sHoVaDem: profileData.lastName,
               sTen: profileData.firstName,
               sTenDayDu: student.fullname,
-              sSDTDiDong: student.phoneNumber ?? "",
+              sSDTDiDong: studentLsbPhone(
+                student.phoneNumber,
+                student.idCardNumber,
+                student.code
+              ),
+              sEmail: studentEmail,
               sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
               sDM_DonViId: organizationMap.get(student.managementOrganization?.trim() || ""),
             }
@@ -1503,7 +1523,7 @@ app.openapi(importStudent, async (c) => {
                 const foundId = await findLsbNhanVienId([
                   student.code,
                   student.idCardNumber,
-                  `${student.idCardNumber}@gmail.com`,
+                  studentEmail,
                 ])
                 if (foundId) {
                   lsbRes = await putDMNhanViens(

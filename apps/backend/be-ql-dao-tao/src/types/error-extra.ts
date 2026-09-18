@@ -40,7 +40,7 @@ export function formatLsbError(extra?: ErrorExtra, fallback?: string): string {
   if (extra?.data) {
     if (Array.isArray(extra.data)) {
       const fields = extra.data.filter(Boolean).map((field) => formatLsbField(field)).join(", ")
-      if (code === "require") {
+      if (code === "require" || code === "required") {
         return `Thiếu trường bắt buộc: ${fields || "không xác định"}`
       }
       if (code === "duplicate") {
@@ -53,7 +53,7 @@ export function formatLsbError(extra?: ErrorExtra, fallback?: string): string {
       const fields = extra.data.Master.flatMap((item) =>
         (item.fields ?? []).map((field) => formatLsbField(field, item.entityName))
       )
-      if (code === "require") {
+      if (code === "require" || code === "required") {
         return `Thiếu trường bắt buộc: ${fields.join(", ") || "không xác định"}`
       }
       if (code === "duplicate") {

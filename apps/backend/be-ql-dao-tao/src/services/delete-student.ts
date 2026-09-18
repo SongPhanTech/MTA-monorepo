@@ -1,12 +1,4 @@
-import { deleteDMNhanViensId } from "@workspace/libs/api/system"
 import { prisma } from ".."
-
-const lsbRequestOptions = () => ({
-  headers: {
-    "x-clientid": process.env.KEYCLOAK_CLIENT_ID_LMS || "",
-    "x-clientsecret": process.env.KEYCLOAK_CLIENT_SECRET_LMS || "",
-  },
-})
 
 export class DeleteStudentError extends Error {
   status: 400 | 404 | 409 | 500
@@ -18,7 +10,7 @@ export class DeleteStudentError extends Error {
   }
 }
 
-export async function deleteStudentWithLsb(studentId: string) {
+export async function deleteStudent(studentId: string) {
   const student = await prisma.student.findFirst({
     where: { id: studentId, deletedAt: null },
     include: {
@@ -55,16 +47,6 @@ export async function deleteStudentWithLsb(studentId: string) {
   ])
   const profileShared = lecturerCount > 0 || staffCount > 0 || otherStudentCount > 0
 
-  if (!profileShared) {
-    const lsbRes = await deleteDMNhanViensId(userProfileId, lsbRequestOptions())
-    if (![200, 204, 404].includes(lsbRes.status)) {
-      throw new DeleteStudentError(
-        "Không xóa được hồ sơ trên hệ thống nhân sự (LSB). Thử lại hoặc kiểm tra quyền xóa LSB.",
-        400
-      )
-    }
-  }
-
   await prisma.student.delete({ where: { id: studentId } })
 
   if (!profileShared) {
@@ -86,5 +68,5 @@ export async function deleteStudentWithLsb(studentId: string) {
     }
   }
 
-  return { id: studentId, userProfileId, lsbDeleted: !profileShared }
+  return { id: studentId, userProfileId }
 }

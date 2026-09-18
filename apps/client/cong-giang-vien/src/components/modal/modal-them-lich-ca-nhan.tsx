@@ -271,7 +271,7 @@ const ModalThemLichCaNhan = () => {
     if (!lecturerId) {
       message.warning("Không xác định được giảng viên. Vui lòng liên hệ quản trị viên.")
     }
-    modalStore.setState((state) => ({
+    modalStore.setState((state:any) => ({
       modalTags: {
         ...state.modalTags,
         ModalThemLoaiLich: {
@@ -288,7 +288,7 @@ const ModalThemLichCaNhan = () => {
     const tag = tags.find((item) => item.id === tagId)
     if (!tag) return
 
-    modalStore.setState((state) => ({
+    modalStore.setState((state:any) => ({
       modalTags: {
         ...state.modalTags,
         ModalThemLoaiLich: {
