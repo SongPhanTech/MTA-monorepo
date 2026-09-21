@@ -5,7 +5,6 @@
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
-    Roboto,
     "Helvetica Neue",
     Arial,
     "Noto Sans",
@@ -14,7 +13,7 @@
     "Segoe UI Emoji",
     "Segoe UI Symbol",
     "Noto Color Emoji";
-  border: 1px solid #f0f0f0;
+  border: 0.5px solid #f0f0f0;
   border-radius: 8px;
   background: white;
   box-shadow: none;
@@ -24,7 +23,7 @@
 .rbc-calendar .rbc-header {
   font-weight: 600;
   text-transform: capitalize;
-  /* border-bottom: 1px solid #f0f0f0; */
+  border: 0.5px solid #f0f0f0;
 }
 
 /* Hide default toolbar since we use external custom toolbar */
@@ -36,23 +35,146 @@
 .rbc-month-view {
   border: none;
   border-radius: 0 0 8px 8px;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Hàng thứ trong tháng — sticky + trong suốt giống tuần */
+.rbc-month-view > .rbc-row.rbc-month-header,
+.rbc-month-view .rbc-month-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.rbc-month-row + .rbc-month-row {
+  border-top: 0.5px solid #f0f0f0;
+}
+
+/* Tháng (compact): co giãn theo chiều cao thẻ, tối thiểu đủ 1 sự kiện + dòng "+ N sự kiện" */
+.rbc-compact .rbc-month-view .rbc-month-row {
+  flex: 1 1 0 !important;
+  min-height: 44px !important;
+  max-height: 72px !important;
+  height: auto !important;
+  overflow: hidden;
+}
+
+.rbc-month-view .rbc-month-more-event,
+.rbc-month-view .rbc-month-more-event.rbc-event,
+.rbc-month-view .rbc-month-more-event.custom-event-with-color {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+
+.rbc-month-view .rbc-month-more-event .rbc-event-content {
+  padding: 0 !important;
+  height: auto !important;
+}
+
+.rbc-month-view .rbc-month-more-event:hover {
+  opacity: 1 !important;
+  background: transparent !important;
+  transform: none !important;
+}
+
+.rbc-month-view .rbc-show-more {
+  display: inline-block;
+  margin: 0;
+  padding: 0 2px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #6b7280;
+  background: transparent !important;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.rbc-month-view .rbc-show-more:hover {
+  color: #1b7a4b;
+}
+
+/* Ẩn tuần chỉ gồm ngày tháng khác (compact) */
+.rbc-compact .rbc-month-view .rbc-month-row:not(:has(.rbc-day-bg:not(.rbc-off-range-bg))) {
+  display: none !important;
+}
+
+.rbc-day-bg + .rbc-day-bg {
+  border-left: 0.5px solid #f0f0f0;
+}
+
+.rbc-header + .rbc-header {
+  border-left: 0.5px solid #f0f0f0;
 }
 
 .rbc-date-cell {
   padding: 8px;
-  /* border-right: 1px solid #f0f0f0; */
 }
 
 .rbc-header {
-  background: #fafafa;
+  background: rgba(199, 238, 195, 0.45);
   padding: 12px 8px;
-  /* border-bottom: 2px solid #f0f0f0; */
+  border: none;
+  border-bottom: 0.5px solid rgba(240, 240, 240, 0.7);
   font-weight: 600;
   text-align: center;
   color: #262626;
 }
 
 /* Week view header styling - display day below weekday */
+.rbc-time-header {
+  display: grid !important;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto !important;
+  align-items: stretch;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Gutter "Lịch tuần" chỉ cao bằng hàng thứ ngày */
+.rbc-time-header-gutter {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.rbc-time-header-content {
+  display: contents;
+}
+
+.rbc-time-header-content > .rbc-row-resource {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.rbc-time-header-content > .rbc-time-header-cell {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.rbc-time-header-content > .rbc-allday-cell {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.rbc-time-header:has(.rbc-time-header-cell-single-day) {
+  display: none !important;
+}
+
 .rbc-time-header .rbc-header {
   display: flex;
   flex-direction: column;
@@ -61,8 +183,9 @@
   line-height: 1.2;
   font-size: 13px;
   padding: 16px 12px;
-  background: #fafafa;
-  /* border-bottom: 2px solid #f0f0f0; */
+  background: rgba(199, 238, 195, 0.45);
+  border: none;
+  border-bottom: 0.5px solid rgba(240, 240, 240, 0.7);
   overflow: hidden;
 }
 
@@ -80,14 +203,15 @@
 /* All-day label styling */
 .rbc-time-header .rbc-label {
   min-width: 60px;
-  padding: 8px;
+  padding: 16px 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fafafa;
+  background: rgba(199, 238, 195, 0.45);
   font-size: 12px;
   font-weight: 600;
   color: #595959;
+  box-sizing: border-box;
 }
 
 .rbc-time-header .rbc-header span {
@@ -111,9 +235,10 @@
 
 /* Month view header - only show weekday name */
 .rbc-month-view .rbc-header {
-  background: #fafafa;
+  background: rgba(199, 238, 195, 0.45);
   padding: 12px 8px;
-  /* border-bottom: 2px solid #f0f0f0; */
+  border: none;
+  border-bottom: 0.5px solid rgba(240, 240, 240, 0.7);
   font-weight: 600;
   text-align: center;
   color: #262626;
@@ -160,12 +285,13 @@
   z-index: 10;
 }
 
-/* Allow events to overlap in time views and add border only for time views */
+/* Allow events to overlap in time views */
 .rbc-time-view .rbc-event,
 .rbc-day-view .rbc-event {
   position: absolute;
   z-index: 1;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border: none;
+  box-shadow: none;
   max-width: 100%;
   overflow: hidden;
 }
@@ -182,8 +308,9 @@
 .rbc-time-view .rbc-event:hover,
 .rbc-day-view .rbc-event:hover {
   z-index: 10;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  transform: translateY(-1px);
+  opacity: 0.85;
+  box-shadow: none;
+  transform: none;
 }
 
 /* Month view events - keep original style without border */
@@ -202,28 +329,9 @@
   z-index: auto;
 }
 
+/* Giờ nằm trong EventComponent (title → giờ → địa điểm), ẩn label mặc định */
 .rbc-event-label {
-  font-size: 10px;
-  font-weight: 500;
-  padding: 2px 6px;
-  border-radius: 10px;
-  display: inline-block;
-  margin: 2px 0;
-  backdrop-filter: blur(4px);
-  opacity: 0.95;
-  line-height: 1.2;
-  width: fit-content;
-  max-width: max-content;
-  background: var(--event-label-bg, rgba(255, 255, 255, 0.2));
-  border: 1px solid var(--event-label-border, rgba(255, 255, 255, 0.3));
-}
-
-/* Specific styling for day view to prevent stretching */
-.rbc-day-view .rbc-event-label,
-.rbc-time-view .rbc-event-label {
-  width: auto;
-  max-width: fit-content;
-  align-self: flex-start;
+  display: none;
 }
 
 /* Event content styling */
@@ -240,9 +348,11 @@
 /* Time view specific event content optimization */
 .rbc-time-view .rbc-event-content,
 .rbc-day-view .rbc-event-content {
-  font-size: 11px;
-  line-height: 1.2;
+  font-size: 12px;
+  line-height: 1.25;
   padding: 1px 0;
+  justify-content: center;
+  align-items: stretch;
 }
 
 /* Apply default color if no custom color is set */
@@ -250,37 +360,17 @@
   background-color: #1890ff;
 }
 
-/* Week view event styling */
-.rbc-time-view .rbc-event {
-  border-radius: 4px;
-  padding: 4px 6px;
-  min-height: auto;
-  display: flex;
-  align-items: stretch;
-  position: relative;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-/* Day view event styling */
+/* Week/day: giữ absolute (RBC đặt top/height %) — relative làm lệch slot + trông như đúp */
+.rbc-time-view .rbc-event,
 .rbc-day-view .rbc-event {
   border-radius: 4px;
   padding: 4px 6px;
   min-height: auto;
   display: flex;
   align-items: stretch;
-  position: relative;
+  position: absolute;
   margin: 0;
   box-sizing: border-box;
-}
-
-/* Event container centering for both week and day views - adjusted for new heights */
-.rbc-time-view .rbc-event-container,
-.rbc-day-view .rbc-event-container {
-  position: relative;
-  height: 100%;
-  display: flex;
-  align-items: stretch;
 }
 
 /* Month view event styling */
@@ -292,15 +382,93 @@
 
 /* Week and Day view styles */
 .rbc-time-view {
-  /* border: 1px solid #f0f0f0; */
+  border: 0.5px solid #f0f0f0;
   border-radius: 8px;
-  overflow: hidden; /* Prevent events from overflowing */
+  /* cuộn cả view để header sticky nhìn xuyên lịch môn */
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
 }
 
-/* All-day events styling for week view */
-.rbc-time-view .rbc-allday-cell {
-  overflow: hidden;
+.rbc-time-content {
+  border-top: none;
+  /* scroll chuyển lên .rbc-time-view — content cao theo slot */
+  overflow: visible !important;
+  flex: none !important;
+  height: auto !important;
+}
+
+.rbc-time-view .rbc-time-header-gutter,
+.rbc-time-header-gutter {
+  border-right: none;
+}
+
+.rbc-time-header.rbc-overflowing {
+  border-right: none;
+}
+
+.rbc-time-header > .rbc-row:first-child,
+.rbc-time-header > .rbc-row.rbc-row-resource {
+  border-bottom: none;
+}
+
+.rbc-time-header-content {
+  border-left: none;
+}
+
+.rbc-time-view .rbc-allday-cell + .rbc-allday-cell {
+  border-left: none;
+}
+
+.rbc-time-content > * + * > * {
+  border-left: none;
+}
+
+.rbc-timeslot-group {
+  border-top: none;
+  border-bottom: none;
+  min-height: 80px;
+}
+
+.rbc-day-slot .rbc-timeslot-group {
+  border-top: 1px dotted #d9d9d9;
+}
+
+.rbc-day-slot .rbc-timeslot-group:first-child {
+  border-top: none;
+}
+
+.rbc-time-gutter .rbc-timeslot-group .rbc-label {
+  display: inline-block;
+  transform: translateY(-50%);
+  background: #fff;
+  padding: 0 4px;
   position: relative;
+  z-index: 1;
+  line-height: 1.2;
+}
+
+.rbc-time-gutter .rbc-timeslot-group:first-child .rbc-label {
+  transform: none;
+}
+
+.rbc-day-slot .rbc-time-slot {
+  border-top: none;
+}
+
+/* Ẩn hàng all-day thừa (ô trắng dưới header ngày) ở view Tuần/Ngày */
+.rbc-time-header-content > .rbc-row:not(.rbc-time-header-cell):not(.rbc-row-resource),
+.rbc-time-view .rbc-allday-cell {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.rbc-time-header-gutter {
+  min-height: 0 !important;
 }
 
 .rbc-time-view .rbc-row {
@@ -328,13 +496,8 @@
   max-height: 100px; /* Limit height of all-day section */
 }
 
-.rbc-timeslot-group {
-  /* border-bottom: 1px solid #f5f5f5; */
-  min-height: 80px;
-}
-
 .rbc-time-slot {
-  /* border-top: 1px solid #f5f5f5; */
+  border-top: none;
   min-height: 40px;
 }
 
@@ -357,300 +520,122 @@
   pointer-events: none;
 }
 
-/* Agenda view styles */
-.rbc-agenda-view {
-  /* border: 1px solid #f0f0f0; */
-  border-radius: 8px;
-  overflow: hidden;
-  background: white;
-}
-
-.rbc-agenda-view table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-/* Agenda table header */
-.rbc-agenda-view thead th {
-  background: #fafafa;
-  /* border-bottom: 2px solid #e8e8e8; */
-  padding: 16px;
-  font-weight: 600;
-  font-size: 14px;
-  color: #262626;
-  text-align: left;
-}
-
-/* Agenda date column */
-.rbc-agenda-view .rbc-agenda-date-cell {
-  background: #f8f9fa;
-  /* border-right: 1px solid #e8e8e8; */
-  /* border-bottom: 1px solid #f0f0f0; */
-  padding: 16px;
-  font-weight: 600;
-  font-size: 14px;
-  color: #262626;
-  width: 120px;
-  vertical-align: top;
-  text-align: center;
-}
-
-/* Agenda time column */
-.rbc-agenda-view .rbc-agenda-time-cell {
-  background: #f8f9fa;
-  /* border-right: 1px solid #e8e8e8; */
-  /* border-bottom: 1px solid #f0f0f0; */
-  padding: 16px;
-  font-weight: 500;
-  font-size: 13px;
-  color: #595959;
-  width: 100px;
-  vertical-align: top;
-  text-align: center;
-}
-
-/* Agenda event column */
-.rbc-agenda-view .rbc-agenda-event-cell {
-  padding: 16px;
-  /* border-bottom: 1px solid #f0f0f0; */
-  background: white;
-  vertical-align: top;
-}
-
-/* Agenda date column - back to normal */
-.rbc-agenda-view .rbc-agenda-date-cell {
-  background: #fafafa;
-  /* border-right: 1px solid #e8e8e8; */
-  /* border-bottom: 1px solid #f0f0f0; */
-  padding: 16px;
-  font-weight: 600;
-  font-size: 14px;
-  color: #262626;
-  width: 120px;
-  vertical-align: top;
-  text-align: center;
-}
-
-/* Agenda time column - back to normal */
-.rbc-agenda-view .rbc-agenda-time-cell {
-  background: #fafafa;
-  /* border-right: 1px solid #e8e8e8; */
-  /* border-bottom: 1px solid #f0f0f0; */
-  padding: 16px;
-  font-weight: 500;
-  font-size: 13px;
-  color: #595959;
-  width: 100px;
-  vertical-align: top;
-  text-align: center;
-}
-
-/* Agenda event column - back to normal */
-.rbc-agenda-view .rbc-agenda-event-cell {
-  padding: 16px;
-  /* border-bottom: 1px solid #f0f0f0; */
-  background: white;
-  vertical-align: top;
-}
-
-/* Event styling in agenda view - SIMPLE APPROACH */
-.rbc-agenda-view .rbc-event {
-  padding: 8px 12px;
-  border-radius: 6px;
-  margin: 4px 0;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-/* Default blue background for events without color */
-.rbc-agenda-view .rbc-event:not([style*="background-color"]) {
-  background-color: #1890ff;
-}
-
-/* Clean striped rows */
-.rbc-agenda-view tbody tr:nth-child(even) {
-  background: #fafafa;
-}
-
-.rbc-agenda-view tbody tr:nth-child(even) .rbc-agenda-date-cell,
-.rbc-agenda-view tbody tr:nth-child(even) .rbc-agenda-time-cell {
-  background: #f0f2f5;
-}
-
-.rbc-agenda-view tbody tr:nth-child(even) .rbc-agenda-event-cell {
-  background: #fafafa;
-}
-
-/* Hover effects */
-.rbc-agenda-view tbody tr:hover {
-  background: #e6f7ff;
-}
-
-.rbc-agenda-view tbody tr:hover .rbc-agenda-date-cell,
-.rbc-agenda-view tbody tr:hover .rbc-agenda-time-cell,
-.rbc-agenda-view tbody tr:hover .rbc-agenda-event-cell {
-  background: #e6f7ff;
-}
-
-/* Remove any pseudo elements */
-.rbc-agenda-view .rbc-event::before,
-.rbc-agenda-view .rbc-event::after {
-  display: none;
-}
-
-/* Striped rows for better readability */
-.rbc-agenda-view tbody tr:nth-child(even) {
-  background: #fafafa;
-}
-
-.rbc-agenda-view tbody tr:nth-child(even) .rbc-agenda-date-cell,
-.rbc-agenda-view tbody tr:nth-child(even) .rbc-agenda-time-cell {
-  background: #f0f2f5;
-}
-
-.rbc-agenda-view tbody tr:nth-child(even) .rbc-agenda-event-cell {
-  background: #fafafa;
-}
-
-/* Hover effects */
-.rbc-agenda-view tbody tr:hover {
-  background: #e6f7ff;
-}
-
-.rbc-agenda-view tbody tr:hover .rbc-agenda-date-cell,
-.rbc-agenda-view tbody tr:hover .rbc-agenda-time-cell,
-.rbc-agenda-view tbody tr:hover .rbc-agenda-event-cell {
-  background: #e6f7ff;
-}
-
-/* No events message */
-.rbc-agenda-view .rbc-agenda-no-events {
-  text-align: center;
-  padding: 40px 20px;
-  color: #8c8c8c;
-  font-style: italic;
-  font-size: 14px;
-}
-
-/* Custom context menu styles */
-.calendar-context-menu {
-  background: white;
-  /* border: 1px solid #d9d9d9; */
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 8px 0;
-  min-width: 160px;
-  z-index: 1000;
-}
-
-.calendar-context-menu-item {
-  padding: 8px 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  transition: background-color 0.2s;
-}
-
-.calendar-context-menu-item:hover {
-  background-color: #f5f5f5;
-}
-
-.calendar-context-menu-item.danger {
-  color: #ff4d4f;
-}
-
-.calendar-context-menu-item.danger:hover {
-  background-color: #fff2f0;
-}
-
-.calendar-context-menu-divider {
-  height: 1px;
-  background-color: #f0f0f0;
-  margin: 4px 0;
-}
-
-/* Loading overlay */
-.calendar-loading {
-  position: relative;
-}
-
-.calendar-loading::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.8);
-  z-index: 10;
-}
-
 /* Responsive styles */
 @media (max-width: 768px) {
-  .rbc-toolbar {
-    flex-direction: column;
-    gap: 8px;
-    align-items: stretch;
-  }
-
-  .rbc-toolbar-label {
-    text-align: center;
-    margin: 8px 0;
-  }
-
-  .rbc-btn-group {
-    display: flex;
-    justify-content: center;
-  }
-
   .rbc-event {
     font-size: 11px;
     padding: 1px 3px;
   }
 }
 
-/* Force light mode - removed dark mode support to prevent browser interference */
-
-/* Custom agenda table styles */
-.react-big-calendar-agenda-table .ant-table {
-  border-radius: 8px;
-  overflow: hidden;
+/* Compact — ô/padding sát như lịch nhỏ (CalendarFilter) */
+.rbc-compact {
+  min-height: 0;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
-.react-big-calendar-agenda-table .ant-table-thead > tr > th {
-  background: #fafafa;
-  /* border-bottom: 2px solid #f0f0f0; */
-  font-weight: 600;
-  color: #262626;
-  padding: 12px 16px;
+.rbc-compact .rbc-calendar {
+  border-radius: 6px;
+  overflow-x: hidden;
 }
 
-.react-big-calendar-agenda-table .ant-table-tbody > tr > td {
-  padding: 12px 16px;
-  /* border-bottom: 1px solid #f0f0f0; */
-  vertical-align: top;
+.rbc-compact .rbc-date-cell {
+  padding: 1px 2px;
 }
 
-.react-big-calendar-agenda-table .ant-table-tbody > tr:hover > td {
-  background: #f5f5f5;
+.rbc-compact .rbc-header,
+.rbc-compact .rbc-month-view .rbc-header {
+  padding: 3px 2px;
+  font-size: 11px;
 }
 
-.react-big-calendar-agenda-table .ant-tag {
-  border: none;
-  font-weight: 500;
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.rbc-compact .rbc-event {
+  padding: 0 3px;
+  margin: 0;
+  min-height: 14px;
+  font-size: 10px;
+  border-radius: 2px;
 }
 
-.react-big-calendar-agenda-table .ant-tag:hover {
-  opacity: 0.8;
-  transform: translateY(-1px);
+.rbc-compact .rbc-month-view .rbc-event {
+  padding: 0 3px;
+  font-size: 10px;
+  min-height: 14px;
 }
 
-.react-big-calendar-agenda-table .ant-table-small > .ant-table-tbody > tr > td {
-  padding: 8px 12px;
+.rbc-compact .rbc-month-view .rbc-month-row {
+  max-height: 72px !important;
+}
+
+.rbc-compact .rbc-row-content {
+  min-height: 0;
+}
+
+.rbc-compact .rbc-row-segment {
+  padding: 0 1px 1px;
+}
+
+.rbc-compact .rbc-show-more {
+  font-size: 10px;
+  margin: 0;
+  padding: 0 2px;
+  color: #6b7280;
+}
+
+/* Tuần / Ngày — cùng mật độ & typography với tháng compact */
+.rbc-compact .rbc-time-view {
+  border-radius: 6px;
+}
+
+.rbc-compact .rbc-time-header .rbc-header {
+  padding: 4px 2px;
+  font-size: 11px;
+}
+
+.rbc-compact .rbc-time-header .rbc-header span:first-child {
+  font-size: 10px;
+}
+
+.rbc-compact .rbc-time-header .rbc-header span:last-child {
+  font-size: 12px;
+  margin-top: 0;
+}
+
+.rbc-compact .rbc-time-header .rbc-label {
+  min-width: 36px;
+  padding: 4px 2px;
+  font-size: 10px;
+}
+
+.rbc-compact .rbc-time-gutter {
+  min-width: 36px;
+}
+
+.rbc-compact .rbc-timeslot-group,
+.rbc-compact .rbc-time-gutter .rbc-timeslot-group {
+  min-height: 44px;
+}
+
+.rbc-compact .rbc-time-slot {
+  min-height: 22px;
+}
+
+.rbc-compact .rbc-time-gutter .rbc-timeslot-group .rbc-label {
+  font-size: 10px;
+  padding: 0 2px;
+}
+
+.rbc-compact .rbc-time-view .rbc-event,
+.rbc-compact .rbc-day-view .rbc-event {
+  padding: 1px 3px;
+  border-radius: 2px;
+  font-size: 10px;
+}
+
+.rbc-compact .rbc-time-view .rbc-event-content,
+.rbc-compact .rbc-day-view .rbc-event-content {
+  font-size: 10px;
+  line-height: 1.2;
+  padding: 0;
 }

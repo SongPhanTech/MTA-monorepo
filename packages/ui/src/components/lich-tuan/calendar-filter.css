@@ -1,0 +1,106 @@
+/* Lịch tháng thu nhỏ dùng làm bộ lọc ngày (CalendarFilter) */
+.calendar-filter-mini {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.calendar-filter-mini .ant-picker-calendar {
+  height: auto !important;
+  background: transparent;
+  width: 100% !important;
+}
+
+.calendar-filter-mini .ant-picker-panel {
+  border: none;
+  background: transparent;
+  width: 100% !important;
+}
+
+.calendar-filter-mini .ant-picker-panel,
+.calendar-filter-mini .ant-picker-body,
+.calendar-filter-mini .ant-picker-content {
+  height: auto !important;
+  width: 100% !important;
+}
+
+.calendar-filter-mini .ant-picker-content table {
+  width: 100% !important;
+  table-layout: fixed;
+}
+
+.calendar-filter-mini .ant-picker-content th {
+  height: 20px;
+  line-height: 20px;
+  padding: 0;
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.calendar-filter-mini .ant-picker-cell {
+  padding: 0;
+  min-width: 0 !important;
+}
+
+.calendar-filter-mini .ant-picker-calendar-date {
+  height: 22px !important;
+  width: 22px !important;
+  max-width: 100%;
+  margin: 1px auto !important;
+  padding: 0 !important;
+  line-height: 22px !important;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.calendar-filter-mini .ant-picker-calendar-date:hover {
+  background: #f3f4f6;
+}
+
+.calendar-filter-mini .ant-picker-calendar-date-value {
+  line-height: 20px !important;
+  font-size: 11px;
+}
+
+.calendar-filter-mini .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-calendar-date,
+.calendar-filter-mini .ant-picker-calendar-date-selected {
+  background: #1b7a4b !important;
+  border-color: #1b7a4b !important;
+  color: #fff !important;
+}
+
+.calendar-filter-mini
+  .ant-picker-cell-in-view.ant-picker-cell-selected
+  .ant-picker-calendar-date-value,
+.calendar-filter-mini .ant-picker-calendar-date-selected .ant-picker-calendar-date-value {
+  color: #fff !important;
+}
+
+.calendar-filter-mini
+  .ant-picker-cell-in-view.ant-picker-cell-today
+  .ant-picker-calendar-date-today,
+.calendar-filter-mini .ant-picker-calendar-date-today {
+  border-color: #47a1dd !important;
+}
+
+.calendar-filter-mini
+  .ant-picker-cell:not(.ant-picker-cell-in-view)
+  .ant-picker-calendar-date-value {
+  color: #d1d5db;
+}
+
+.calendar-filter-mini .ant-picker-calendar-date-content {
+  height: 0 !important;
+  position: absolute;
+  inset: auto 0 1px;
+  pointer-events: none;
+}
+
+.calendar-filter-mini .ant-picker-content tbody tr:not(:has(td.ant-picker-cell-in-view)) {
+  display: none;
+}

@@ -1,5 +1,6 @@
 import { CalendarOutlined, TableOutlined } from "@ant-design/icons"
 import { useSession } from "@workspace/auth/react"
+import { STORAGE_KEY } from "@workspace/constant"
 import { PeriodType, type Prisma, type UserProfile } from "@workspace/db"
 import { useFindManyClassSchedule } from "@workspace/db/hooks"
 import { useLocalStorage } from "@workspace/libs/hook/use-localstorage"
@@ -216,12 +217,76 @@ const transformProfileDataTableCalendar = (profiles: UserProfile[]) => {
   }))
 }
 
+export type LichCongTacViewType = "calendar" | "table"
+
+/**
+ * Kiểu hiển thị lịch công tác (lịch / bảng), lưu trong localStorage.
+ * Dùng chung cho cả LichCongTac và nơi đặt LichCongTacViewSwitcher ở ngoài (vd: header thẻ dashboard).
+ */
+export function useLichCongTacView() {
+  return useLocalStorage<LichCongTacViewType>(STORAGE_KEY.VIEW_CALENDAR_TYPE, "calendar")
+}
+
+export function LichCongTacViewSwitcher({
+  value,
+  onChange,
+  size = "middle",
+  className = "",
+}: {
+  value: LichCongTacViewType
+  onChange: (value: LichCongTacViewType) => void
+  size?: "small" | "middle" | "large"
+  className?: string
+}) {
+  return (
+    <Segmented
+      value={value}
+      onChange={(v) => onChange(v as LichCongTacViewType)}
+      className={`p-[3.5px] ${className}`}
+      size={size}
+      options={[
+        {
+          value: "calendar",
+          className: "flex",
+          icon: (
+            <div className="flex h-full items-center">
+              <CalendarOutlined size={20} />
+            </div>
+          ),
+        },
+        {
+          value: "table",
+          className: "flex",
+          icon: (
+            <div className="flex h-full items-center">
+              <TableOutlined size={20} />
+            </div>
+          ),
+        },
+      ]}
+    />
+  )
+}
+
 export function LichCongTac({
   hiddenCalendarFilter = false,
   onlyMySchedule,
+  enabled = true,
+  compact = false,
+  hideViewSwitcher = false,
+  viewCalendarType: controlledView,
+  onViewCalendarTypeChange,
 }: {
   hiddenCalendarFilter?: boolean
   onlyMySchedule?: boolean
+  /** Cho phép gọi query hay không (dùng để gác theo quyền xem). */
+  enabled?: boolean
+  /** Thu hẹp ô lịch + chiều cao theo parent (dashboard). */
+  compact?: boolean
+  /** Ẩn Segmented trong body — dùng khi đã đặt LichCongTacViewSwitcher ở header thẻ. */
+  hideViewSwitcher?: boolean
+  viewCalendarType?: LichCongTacViewType
+  onViewCalendarTypeChange?: (value: LichCongTacViewType) => void
 }) {
   const { data: profile } = useSession()
   const profileIdLogin = profile?.sDM_NhanVienId || undefined
@@ -231,10 +296,9 @@ export function LichCongTac({
   const [selectedColors, setSelectedColors] = useState<string[]>(
     TYPE_WORK_SCHEDULE_COLOR_OPTIONS.map((opt) => opt.value)
   )
-  const [viewCalendarType, setViewCalendarType] = useLocalStorage<"calendar" | "table">(
-    "view_calendar_type",
-    "calendar"
-  )
+  const [storedView, setStoredView] = useLichCongTacView()
+  const viewCalendarType = controlledView ?? storedView
+  const setViewCalendarType = onViewCalendarTypeChange ?? setStoredView
 
   const { data: eventsDataTableCalendar = [] } = useFindManyClassSchedule(
     {
@@ -337,7 +401,7 @@ export function LichCongTac({
       },
     },
     {
-      enabled: !!onlyMySchedule,
+      enabled: enabled && !!onlyMySchedule,
     }
   )
 
@@ -520,59 +584,94 @@ export function LichCongTac({
 
   // ============ RENDER COMPONENTS ============
   // Shared component for both calendar types
+  // Không dùng Checkbox.Group + Col (antd hay mất value khi tick lại)
   const renderColorCheckboxes = () => (
-    <div className="mt-4 mx-2">
-      <Checkbox.Group style={{ width: "100%" }} value={selectedColors} onChange={setSelectedColors}>
-        <Row gutter={[16, 16]}>
-          {TYPE_WORK_SCHEDULE_COLOR_OPTIONS.map((opt) => (
-            <Col span={24} key={opt.value}>
-              <Checkbox
-                value={opt.value}
+    <div className={compact ? "mx-0.5 mt-2 border-t border-[#f0f0f0] pt-2" : "mx-2 mt-4"}>
+      <Row gutter={compact ? [4, 4] : [16, 16]}>
+        {TYPE_WORK_SCHEDULE_COLOR_OPTIONS.map((opt) => (
+          <Col span={24} key={opt.value}>
+            <Checkbox
+              checked={selectedColors.includes(opt.value)}
+              onChange={(e) => {
+                const checked = e.target.checked
+                setSelectedColors((prev) =>
+                  checked ? [...prev, opt.value] : prev.filter((c) => c !== opt.value)
+                )
+              }}
+              className={
+                compact
+                  ? "min-w-0 [&_.ant-checkbox+span]:!ps-1.5 [&_.ant-checkbox+span]:break-words [&_.ant-checkbox+span]:text-[11px] [&_.ant-checkbox+span]:leading-snug"
+                  : undefined
+              }
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: compact ? "2px" : "8px",
+                marginInlineStart: 0,
+              }}
+            >
+              <span
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
+                  display: "inline-block",
+                  width: compact ? "8px" : "13px",
+                  height: compact ? "8px" : "13px",
+                  borderRadius: "50%",
+                  backgroundColor: opt.value,
+                  marginRight: compact ? "2px" : "4px",
+                  flexShrink: 0,
                 }}
-              >
-                <span
-                  style={{
-                    display: "inline-block",
-                    width: "13px",
-                    height: "13px",
-                    borderRadius: "50%",
-                    backgroundColor: opt.value,
-                    marginRight: "4px",
-                  }}
-                />
-                {opt.label}
-              </Checkbox>
-            </Col>
-          ))}
-        </Row>
-      </Checkbox.Group>
+              />
+              {opt.label}
+            </Checkbox>
+          </Col>
+        ))}
+      </Row>
     </div>
   )
 
+  const renderFilterColumn = () => (
+    <Col
+      span={6}
+      className={
+        compact
+          ? "flex h-full min-h-0 min-w-0 flex-col overflow-x-hidden overflow-y-hidden"
+          : undefined
+      }
+    >
+      <div className={compact ? "min-w-0 shrink-0 overflow-x-hidden" : undefined}>
+        <CalendarFilter
+          value={filterDate ? dayjs(filterDate) : undefined}
+          onChange={(date) => setFilterDate(date?.toDate())}
+          events={calendarEvents}
+        />
+      </div>
+      {compact ? (
+        <div className="min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden pr-0.5">
+          {renderColorCheckboxes()}
+        </div>
+      ) : (
+        renderColorCheckboxes()
+      )}
+    </Col>
+  )
+
+  const rowClassName = compact ? "mt-1 min-h-0 min-w-0 flex-1 overflow-x-hidden" : "mt-4"
+  const rowStyle = compact ? { height: "100%", marginLeft: 0, marginRight: 0 } : undefined
+
   // ReactBigCalendar view
   const renderCalendarView = () => (
-    <Row gutter={[16, 16]} className="mt-4">
-      {!hiddenCalendarFilter && (
-        <Col span={6}>
-          <div>
-            <CalendarFilter
-              value={filterDate ? dayjs(filterDate) : undefined}
-              onChange={(date) => setFilterDate(date?.toDate())}
-              events={calendarEvents}
-            />
-          </div>
-          {renderColorCheckboxes()}
-        </Col>
-      )}
+    <Row gutter={compact ? [10, 8] : [16, 16]} className={rowClassName} style={rowStyle}>
+      {!hiddenCalendarFilter && renderFilterColumn()}
 
-      <Col span={!hiddenCalendarFilter ? 18 : 24}>
+      <Col
+        span={!hiddenCalendarFilter ? 18 : 24}
+        className={compact ? "h-full min-h-0 min-w-0 overflow-x-hidden" : undefined}
+        style={compact ? { height: "100%", display: "flex", flexDirection: "column" } : undefined}
+      >
         <ReactBigCalendarCustom
           events={convertApiToCalendarEventReactBigCalendar(eventsDataTableCalendar)}
-          height={700}
+          height={compact ? "100%" : 700}
+          compact={compact}
           filterDate={filterDate}
           onSelectSlot={handleSelectSlotReactBigCalendar}
           onSelectEvent={handleSelectEventReactBigCalendar}
@@ -582,11 +681,16 @@ export function LichCongTac({
     </Row>
   )
 
-  // TableWeekCalendar view
+  // TableWeekCalendar view — compact: có cột filter bên trái như view calendar
   const renderTableView = () => (
-    <Row gutter={[16, 16]} className="mt-4">
-      <Col span={24}>
+    <Row gutter={compact ? [10, 8] : [16, 16]} className={rowClassName} style={rowStyle}>
+      {compact && !hiddenCalendarFilter && renderFilterColumn()}
+      <Col
+        span={compact && !hiddenCalendarFilter ? 18 : 24}
+        className={compact ? "h-full min-h-0 min-w-0 overflow-x-hidden overflow-y-auto" : undefined}
+      >
         <TableWeekCalendar
+          compact={compact}
           eventsData={transformedEventsDataTableCalendar}
           showWeekNavigation={true}
           // showAddButtons={canCreate}
@@ -599,7 +703,7 @@ export function LichCongTac({
           // onCreateWeekEvent={handleCreateWeekEventTableCalendar}
           filterDate={filterDate}
           onFilterDateChange={setFilterDate}
-          showDateFilter={true}
+          showDateFilter={!compact}
         />
       </Col>
     </Row>
@@ -607,35 +711,21 @@ export function LichCongTac({
 
   return (
     <ConfigProvider theme={lightThemeCustom} locale={viVN}>
-      <div className="flex items-center justify-between">
-        <div />
-        <Segmented
-          value={viewCalendarType}
-          onChange={setViewCalendarType}
-          className="p-[3.5px]"
-          options={[
-            {
-              value: "calendar",
-              className: "flex",
-              icon: (
-                <div className="flex items-center h-full">
-                  <CalendarOutlined size={20} />
-                </div>
-              ),
-            },
-            {
-              className: "flex",
-              value: "table",
-              icon: (
-                <div className="flex items-center h-full">
-                  <TableOutlined size={20} />
-                </div>
-              ),
-            },
-          ]}
-        />
+      <div
+        className={compact ? "flex h-full min-h-0 min-w-0 flex-col overflow-x-hidden" : undefined}
+      >
+        {!hideViewSwitcher ? (
+          <div className="flex shrink-0 items-center justify-between">
+            <div />
+            <LichCongTacViewSwitcher
+              value={viewCalendarType}
+              onChange={setViewCalendarType}
+              size={compact ? "small" : "middle"}
+            />
+          </div>
+        ) : null}
+        {viewCalendarType === "calendar" ? renderCalendarView() : renderTableView()}
       </div>
-      {viewCalendarType === "calendar" ? renderCalendarView() : renderTableView()}
     </ConfigProvider>
   )
 }
