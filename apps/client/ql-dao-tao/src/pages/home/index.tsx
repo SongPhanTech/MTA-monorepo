@@ -34,7 +34,7 @@ const quyTrinhSteps: QuyTrinhStep[] = [
   },
   {
     key: "quan-ly-khoa-luan",
-    label: "6. Quản lý khóa luận / luận văn / luận án",
+    label: "6. Quản lý khóa luận / luận văn / đề án",
     view: "quan-ly-khoa-luan",
   },
   { key: "xet-tot-nghiep", label: "7. Xét tốt nghiệp", view: "xet-tot-nghiep" },

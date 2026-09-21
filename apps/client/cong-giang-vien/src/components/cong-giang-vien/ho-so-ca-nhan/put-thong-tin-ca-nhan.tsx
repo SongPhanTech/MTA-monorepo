@@ -419,8 +419,8 @@ const PutThongTinCaNhanModal = () => {
                   </Form.Item>
                 </Col>
                 <Col span={24}>
-                  <Form.Item name={[field.name, "tenLuanAn"]} label="Tên luận án / đề tài">
-                    <Input placeholder="Nhập tên luận án" />
+                  <Form.Item name={[field.name, "tenLuanAn"]} label="Tên luận văn / đề tài">
+                    <Input placeholder="Nhập tên luận văn / đề tài" />
                   </Form.Item>
                 </Col>
               </Row>

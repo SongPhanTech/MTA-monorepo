@@ -36,7 +36,7 @@ const ThongTinLienHeDaoTao = ({ lienHe, daoTao }: ThongTinLienHeDaoTaoProps) => 
             <InputRow label="Năm cấp bằng" value={daoTao.namCapBang} />
             <InputRow label="Chuyên ngành" value={daoTao.chuyenNganh} />
             <InputRow label="Nơi đào tạo" value={daoTao.noiDaoTao} />
-            <InputRow label="Tên luận án/đề tài" value={daoTao.tenLuanAn} />
+            <InputRow label="Tên luận vănß/đề tài" value={daoTao.tenLuanAn} />
           </div>
         </Card>
       </Col>
