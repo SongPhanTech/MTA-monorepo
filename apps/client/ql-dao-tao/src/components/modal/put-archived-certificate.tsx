@@ -68,6 +68,7 @@ export type PutArchivedCertificate = {
       decisionNumber?: string
       issuedDate?: dayjs.Dayjs
       expiredDate?: dayjs.Dayjs
+      description?: string
       documentFiles?: DocumentFile[]
       subjectScores?: SubjectScoreItem[]
     }
@@ -367,6 +368,7 @@ const PutCertificateArchivedModal = () => {
               decisionNumber: studentDataForRow.decisionNumber || null,
               issuedDate: studentDataForRow.issuedDate?.toDate() as Date,
               expiredDate: studentDataForRow.expiredDate?.toDate() || null,
+              description: studentDataForRow.description?.trim() || null,
               status: "PENDING",
               documentFiles: {
                 create: studentFiles.map((file: any) => ({
@@ -496,7 +498,7 @@ const PutCertificateArchivedModal = () => {
             <Table
               rowKey="rowId"
               data={selectedStudents}
-              scroll={{ y: 400, x: 1800 }}
+              scroll={{ y: 400, x: 2100 }}
               columns={[
                 {
                   title: "TT",
@@ -844,6 +846,16 @@ const PutCertificateArchivedModal = () => {
                       ]}
                     >
                       <DatePicker variant="underlined" className="w-full" placeholder="Chọn ngày" />
+                    </FormItem>
+                  ),
+                },
+                {
+                  title: "Ghi chú",
+                  width: 180,
+                  align: "center",
+                  render: (_, record) => (
+                    <FormItem form={form} name={["student", record.rowId, "description"]}>
+                      <Input variant="underlined" className="w-full" placeholder="Nhập ghi chú" />
                     </FormItem>
                   ),
                 },

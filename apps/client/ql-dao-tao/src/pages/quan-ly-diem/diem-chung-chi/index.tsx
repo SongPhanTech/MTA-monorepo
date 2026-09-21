@@ -1003,6 +1003,12 @@ export default function ArchivedCertificate() {
                   : "-",
             },
             {
+              title: "Ghi chú",
+              align: "left",
+              width: 180,
+              render: (__, record) => record?.description || "-",
+            },
+            {
               title: "Trạng thái",
               align: "center",
               fixed: "right",
