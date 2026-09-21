@@ -23,6 +23,8 @@ type StudentRow = {
   code: string
   fullname: string
   kind: CertKind
+  description: string
+  issuedDate: string
 }
 
 type ClassStatRow = {
@@ -36,14 +38,41 @@ type ClassStatRow = {
   students: StudentRow[]
 }
 
-const pickCertKind = (certs: { status: ArchivedCertificateStatus | string }[]): CertKind => {
-  if (certs.some((c) => c.status === ArchivedCertificateStatus.APPROVED || c.status === "APPROVED")) {
-    return "approved"
+const formatIssuedDate = (value?: string | Date | null) => {
+  if (!value) return ""
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return ""
+  return date.toLocaleDateString("vi-VN")
+}
+
+const pickCertKind = (
+  certs: {
+    status: ArchivedCertificateStatus | string
+    description?: string | null
+    issuedDate?: string | Date | null
+  }[]
+): { kind: CertKind; description: string; issuedDate: string } => {
+  const approved = certs.find(
+    (c) => c.status === ArchivedCertificateStatus.APPROVED || c.status === "APPROVED"
+  )
+  if (approved) {
+    return {
+      kind: "approved",
+      description: approved.description || "",
+      issuedDate: formatIssuedDate(approved.issuedDate),
+    }
   }
-  if (certs.some((c) => c.status === ArchivedCertificateStatus.PENDING || c.status === "PENDING")) {
-    return "pending"
+  const pending = certs.find(
+    (c) => c.status === ArchivedCertificateStatus.PENDING || c.status === "PENDING"
+  )
+  if (pending) {
+    return {
+      kind: "pending",
+      description: pending.description || "",
+      issuedDate: formatIssuedDate(pending.issuedDate),
+    }
   }
-  return "none"
+  return { kind: "none", description: "", issuedDate: "" }
 }
 
 const CERT_KIND_LABEL: Record<CertKind, string> = {
@@ -147,7 +176,7 @@ const ModalThongKeChungChiTheoLop = () => {
                   in: [ArchivedCertificateStatus.PENDING, ArchivedCertificateStatus.APPROVED],
                 },
               },
-              select: { id: true, status: true },
+              select: { id: true, status: true, description: true, issuedDate: true },
             },
           },
         },
@@ -165,11 +194,14 @@ const ModalThongKeChungChiTheoLop = () => {
 
       const studentRows: StudentRow[] = students.map((s: any) => {
         const certs = s.archivedCertificate || []
+        const picked = pickCertKind(certs)
         return {
           id: s.id,
           code: s.userProfile?.code || s.code || "",
           fullname: s.userProfile?.fullname || "",
-          kind: pickCertKind(certs),
+          kind: picked.kind,
+          description: picked.description,
+          issuedDate: picked.issuedDate,
         }
       })
 
@@ -233,13 +265,15 @@ const ModalThongKeChungChiTheoLop = () => {
           { key: "code", width: 16 },
           { key: "fullname", width: 28 },
           { key: "status", width: 18 },
+          { key: "issuedDate", width: 16 },
+          { key: "description", width: 32 },
         ]
 
-        sheet.mergeCells("A1:D1")
+        sheet.mergeCells("A1:F1")
         sheet.getCell("A1").value = `Lớp: ${cls.code} - ${cls.name}`
         sheet.getCell("A1").font = { bold: true, size: 13 }
 
-        sheet.mergeCells("A2:D2")
+        sheet.mergeCells("A2:F2")
         sheet.getCell("A2").value = `Chứng chỉ: ${certificateName}    Khóa: ${courseName}`
 
         const headerRow = sheet.getRow(3)
@@ -247,6 +281,8 @@ const ModalThongKeChungChiTheoLop = () => {
         headerRow.getCell(2).value = "Mã SV"
         headerRow.getCell(3).value = "Họ và tên"
         headerRow.getCell(4).value = "Tình trạng"
+        headerRow.getCell(5).value = "Ngày cấp"
+        headerRow.getCell(6).value = "Ghi chú"
         headerRow.font = { bold: true }
         headerRow.alignment = { horizontal: "center", vertical: "middle" }
 
@@ -257,6 +293,10 @@ const ModalThongKeChungChiTheoLop = () => {
           excelRow.getCell(3).value = s.fullname
           excelRow.getCell(4).value = CERT_KIND_LABEL[s.kind]
           applyStatusCell(excelRow.getCell(4), s.kind)
+          excelRow.getCell(5).value = s.issuedDate || ""
+          excelRow.getCell(5).alignment = { horizontal: "center", vertical: "middle" }
+          excelRow.getCell(6).value = s.description || ""
+          excelRow.getCell(6).alignment = { vertical: "middle", wrapText: true }
         })
       })
 
@@ -359,6 +399,18 @@ const ModalThongKeChungChiTheoLop = () => {
                             {CERT_KIND_LABEL[student.kind]}
                           </Tag>
                         ),
+                      },
+                      {
+                        title: "Ngày cấp",
+                        dataIndex: "issuedDate",
+                        width: 120,
+                        align: "center",
+                        render: (value: string) => value || "-",
+                      },
+                      {
+                        title: "Ghi chú",
+                        dataIndex: "description",
+                        render: (value: string) => value || "-",
                       },
                     ]}
                   />

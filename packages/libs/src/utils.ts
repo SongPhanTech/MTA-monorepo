@@ -88,6 +88,70 @@ export function formatPlaceOfBirth(profile: PlaceOfBirthSource | undefined): str
   )
 }
 
+/** Nút cây đơn vị dùng khi đi lên cấp nhà trường (Học viện). */
+export type OrgUnitNode = {
+  Id: string
+  sTen?: string | null
+  sParentId?: string | null
+  iCapDonVi?: number | null
+}
+
+const isMissingOrgParentId = (parentId?: string | null) => !parentId || parentId === "0"
+
+/** Học viện / Nhà trường (iCapDonVi = 0) hoặc nút gốc theo tên. */
+export function isAcademyLevelOrg(org?: OrgUnitNode | null): boolean {
+  if (!org) return false
+  if (org.iCapDonVi === 0) return true
+  return isMissingOrgParentId(org.sParentId) && /học viện/i.test(org.sTen || "")
+}
+
+function findAcademyOrgName(orgById: Map<string, OrgUnitNode>): string {
+  for (const org of orgById.values()) {
+    if (org.iCapDonVi === 0) return (org.sTen || "").trim()
+  }
+  for (const org of orgById.values()) {
+    if (isAcademyLevelOrg(org)) return (org.sTen || "").trim()
+  }
+  return ""
+}
+
+/** Đi lên cây đơn vị tới cấp nhà trường (Học viện / Nhà trường). */
+export function getAcademyLevelOrgName(
+  org: OrgUnitNode | null | undefined,
+  orgById: Map<string, OrgUnitNode>
+): string {
+  if (!org) return findAcademyOrgName(orgById)
+  let current: OrgUnitNode | undefined = org
+  const visited = new Set<string>()
+  while (current) {
+    if (visited.has(current.Id)) break
+    visited.add(current.Id)
+    if (isAcademyLevelOrg(current)) {
+      return (current.sTen || "").trim()
+    }
+    const parent: OrgUnitNode | undefined = current.sParentId
+      ? orgById.get(current.sParentId)
+      : undefined
+    if (!parent) break
+    current = parent
+  }
+  return findAcademyOrgName(orgById) || (org.sTen || "").trim()
+}
+
+/** Đơn vị hội đồng: trong HV = cấp nhà trường; ngoài HV = organization. */
+export function resolveCouncilMemberUnitName(args: {
+  inAcademy: boolean
+  lecturerOrg?: OrgUnitNode | null
+  organization?: string | null
+  orgById: Map<string, OrgUnitNode>
+}): string {
+  const organization = (args.organization || "").trim()
+  if (args.inAcademy) {
+    return getAcademyLevelOrgName(args.lecturerOrg, args.orgById)
+  }
+  return organization
+}
+
 export function normalizeVietnamese(str: string): string {
   return str
     .normalize("NFD")

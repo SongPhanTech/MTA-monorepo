@@ -158,7 +158,7 @@ export default function TrainingTypePage() {
                 render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
-                title: "Tên loại hình đào tạo",
+                title: "Tên hình thức đào tạo",
                 dataIndex: "name",
                 fixed: "left",
                 align: "left",

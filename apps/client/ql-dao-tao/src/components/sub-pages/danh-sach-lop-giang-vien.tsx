@@ -1,4 +1,5 @@
 import { CardLopMonHoc } from "@components/commons/card-lop-mon-hoc"
+import { Panel } from "@components/dashboard/tong-quan/shared"
 import { diemLopMonHocStore } from "@pages/quan-ly-diem/ql-diem-lop-mon-hoc"
 import { useSession } from "@workspace/auth/react"
 import type { Prisma } from "@workspace/db"
@@ -13,6 +14,11 @@ import { useAbility } from "@workspace/permissions/hooks"
 
 const { Title } = Typography
 const PAGE_SIZE = 8
+
+/** Compact (dashboard): 1 hàng ngang cuộn, không phân trang */
+const COMPACT_ROW_CLASS =
+  "flex h-full items-stretch gap-2 overflow-x-auto overflow-y-hidden pb-1 [scrollbar-width:thin] [scrollbar-color:#c4c4c4_transparent] [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#c4c4c4]"
+const COMPACT_CARD_CLASS = "w-[240px] shrink-0"
 
 type SubjectClassWithRelations = Prisma.LecturerGetPayload<{
   include: {
@@ -57,10 +63,12 @@ function DanhSachLopBienCheTab({
   data,
   isLoading,
   onCardClick,
+  compact,
 }: {
   data: FixedClassItem[]
   isLoading: boolean
   onCardClick?: (id: string) => void
+  compact?: boolean
 }) {
   const [page, setPage] = useState(0)
   const totalPages = Math.ceil(data.length / PAGE_SIZE)
@@ -75,7 +83,30 @@ function DanhSachLopBienCheTab({
   }
 
   if (!data || data.length === 0) {
-    return <Empty description="Không có dữ liệu" />
+    return (
+      <Empty
+        description="Không có dữ liệu"
+        image={compact ? Empty.PRESENTED_IMAGE_SIMPLE : undefined}
+        className={compact ? "!my-2" : undefined}
+      />
+    )
+  }
+
+  if (compact) {
+    return (
+      <div className={COMPACT_ROW_CLASS}>
+        {data.map((item, index) => (
+          <div key={item.id} className={COMPACT_CARD_CLASS}>
+            <CardLopMonHoc
+              index={index + 1}
+              subjectName={item.name}
+              subjectCode={item.code ?? undefined}
+              onClick={() => onCardClick?.(item.id)}
+            />
+          </div>
+        ))}
+      </div>
+    )
   }
 
   return (
@@ -117,10 +148,12 @@ function DanhSachLopTab({
   data,
   isLoading,
   onCardClick,
+  compact,
 }: {
   data: SubjectClassItem[]
   isLoading: boolean
   onCardClick?: (id: string) => void
+  compact?: boolean
 }) {
   const [page, setPage] = useState(0)
   const totalPages = Math.ceil(data.length / PAGE_SIZE)
@@ -135,7 +168,35 @@ function DanhSachLopTab({
   }
 
   if (!data || data.length === 0) {
-    return <Empty description="Không có dữ liệu" />
+    return (
+      <Empty
+        description="Không có dữ liệu"
+        image={compact ? Empty.PRESENTED_IMAGE_SIMPLE : undefined}
+        className={compact ? "!my-2" : undefined}
+      />
+    )
+  }
+
+  if (compact) {
+    return (
+      <div className={COMPACT_ROW_CLASS}>
+        {data.map((item, index) => (
+          <div key={item.id} className={COMPACT_CARD_CLASS}>
+            <CardLopMonHoc
+              index={index + 1}
+              subjectName={item.subject?.name}
+              subjectCode={item.subject?.code}
+              semesterName={item.semester?.name}
+              maxStudent={item._count?.subjectClassStudent}
+              startDate={item.startDate}
+              endDate={item.endDate}
+              status={item.status}
+              onClick={() => onCardClick?.(item.id)}
+            />
+          </div>
+        ))}
+      </div>
+    )
   }
 
   return (
@@ -178,7 +239,7 @@ function DanhSachLopTab({
   )
 }
 
-export default function DanhSachLopGiangVien() {
+export default function DanhSachLopGiangVien({ compact = false }: { compact?: boolean }) {
   const { data: me } = useSession()
   const router = useRouter()
   const { can } = useAbility()
@@ -242,6 +303,7 @@ export default function DanhSachLopGiangVien() {
       label: `Lớp nhập điểm (${lecturer?.enterGradeClasses?.length || 0})`,
       children: (
         <DanhSachLopTab
+          compact={compact}
           data={lecturer?.enterGradeClasses || []}
           isLoading={isLoading}
           onCardClick={() => router.push(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_CC_TX)}
@@ -253,6 +315,7 @@ export default function DanhSachLopGiangVien() {
       label: `Lớp giảng dạy (${lecturer?.mainSubjectClasses?.length || 0})`,
       children: (
         <DanhSachLopTab
+          compact={compact}
           data={lecturer?.mainSubjectClasses || []}
           isLoading={isLoading}
           onCardClick={(id) => {
@@ -267,6 +330,7 @@ export default function DanhSachLopGiangVien() {
       label: `Lớp trợ giảng (${lecturer?.extraSubjectClasses?.length || 0})`,
       children: (
         <DanhSachLopTab
+          compact={compact}
           data={lecturer?.extraSubjectClasses || []}
           isLoading={isLoading}
           onCardClick={(id) => {
@@ -281,6 +345,7 @@ export default function DanhSachLopGiangVien() {
       label: `Lớp quản lý (${lecturer?.manageFixedClass?.length || 0})`,
       children: (
         <DanhSachLopBienCheTab
+          compact={compact}
           data={lecturer?.manageFixedClass || []}
           isLoading={isLoading}
           onCardClick={(id) =>
@@ -290,6 +355,22 @@ export default function DanhSachLopGiangVien() {
       ),
     },
   ]
+
+  if (compact) {
+    return (
+      <Panel
+        title="Danh sách lớp của giảng viên"
+        className="h-full"
+        bodyClassName="flex min-h-0 flex-1 flex-col overflow-hidden px-3 pb-1"
+      >
+        <Tabs
+          size="small"
+          items={tabItems}
+          className="flex h-full min-h-0 flex-col [&_.ant-tabs-content]:h-full [&_.ant-tabs-content-holder]:min-h-0 [&_.ant-tabs-content-holder]:flex-1 [&_.ant-tabs-nav]:!mb-1.5 [&_.ant-tabs-tab]:!py-1 [&_.ant-tabs-tab]:text-[12px] [&_.ant-tabs-tabpane]:h-full"
+        />
+      </Panel>
+    )
+  }
 
   return (
     <div className="bg-white rounded shadow p-4">

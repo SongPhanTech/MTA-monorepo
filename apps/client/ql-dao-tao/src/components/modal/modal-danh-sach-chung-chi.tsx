@@ -24,7 +24,7 @@ import {
 } from "./utils/check-certificate-expiration"
 import { generatePresignedUrl } from "@workspace/libs/api/model"
 import { getMinioUrl } from "@workspace/libs/utils"
-import { Button, Flex, InputNumber, Modal, Select, Switch, Tag, Tooltip, Upload, message } from "antd"
+import { Button, Flex, Input, InputNumber, Modal, Select, Switch, Tag, Tooltip, Upload, message } from "antd"
 import axios from "axios"
 import { saveAs } from "file-saver"
 import dayjs from "dayjs"
@@ -49,6 +49,7 @@ type DraftValue = {
   writingScore?: number
   issuedDate: dayjs.Dayjs | null
   expiredDate: dayjs.Dayjs | null
+  description?: string
 }
 
 type DraftValues = Record<string, DraftValue>
@@ -86,6 +87,7 @@ const initializeDrafts = (certificates: any[]): DraftValues =>
         writingScore: cert?.writingScore,
         issuedDate: cert?.issuedDate ? dayjs(cert.issuedDate) : null,
         expiredDate: cert?.expiredDate ? dayjs(cert.expiredDate) : null,
+        description: cert?.description || "",
       },
     }),
     {}
@@ -276,6 +278,7 @@ const ModalDanhSachChungChi = () => {
         writingScore: draft.writingScore || 0,
         issuedDate: draft.issuedDate ? draft.issuedDate.toDate() : null,
         expiredDate: draft.expiredDate ? draft.expiredDate.toDate() : null,
+        description: draft.description?.trim() || null,
       }
 
       const files = draftDocFiles[certId] || []
@@ -398,6 +401,18 @@ const ModalDanhSachChungChi = () => {
     )
   }
 
+  const renderEditableNote = (value: string | null | undefined, cert: any) => {
+    if (editingCertId !== cert.id) return value || "-"
+    return (
+      <Input
+        className="w-full"
+        value={draftValues?.[cert.id]?.description ?? ""}
+        onChange={(e) => handleChangeDraft(cert.id, "description", e.target.value)}
+        placeholder="Nhập ghi chú"
+      />
+    )
+  }
+
   const renderSubjectScores = (cert: any) => {
     const isEditing = editingCertId === cert.id
     const curriculumSubjects = getCurriculumSubjects(cert)
@@ -499,7 +514,7 @@ const ModalDanhSachChungChi = () => {
       title={`Danh sách chứng chỉ - ${input?.studentName || ""}`}
       open={isOpen}
       onCancel={onClose}
-      width={showLanguageScoreColumns ? 1700 : 1300}
+      width={showLanguageScoreColumns ? 1900 : 1500}
       footer={null}
       destroyOnClose
     >
@@ -601,6 +616,14 @@ const ModalDanhSachChungChi = () => {
               cert.status === $Enums.ArchivedCertificateStatus.APPROVED
                 ? formatDateVN(date)
                 : renderEditableDate(date, cert, "expiredDate"),
+          },
+          {
+            title: "Ghi chú",
+            dataIndex: "description",
+            align: "left",
+            width: 180,
+            render: (description: string, cert: ArchivedCertificate) =>
+              renderEditableNote(description, cert),
           },
           {
             title: "Minh chứng",

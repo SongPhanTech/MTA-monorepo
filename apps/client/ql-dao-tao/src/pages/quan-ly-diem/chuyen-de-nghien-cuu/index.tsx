@@ -1,8 +1,9 @@
-import { FileOutlined } from "@ant-design/icons"
+import { FileOutlined, SearchOutlined } from "@ant-design/icons"
 import DatePicker from "@components/commons/date-picker"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import TreeSelect from "@components/commons/tree-select"
+import type { FilterProps } from "@constants/type"
 import { useLecturerHienTai } from "@hooks/use-lecturer-hien-tai"
 import DefaultLayout from "@layouts/default-layout"
 import { getSupervisorName } from "@pages/quan-ly-luan-van/dm-luan-van"
@@ -24,7 +25,7 @@ import { previewExcelTemplate } from "../../../utils/excel-template"
 import { versionInAcademy, versionToPersonLike } from "@/utils/expert-select"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
-import { Button, Col, Flex, Form, Modal, message, Row, Tooltip } from "antd"
+import { Button, Col, Flex, Form, Input, Modal, message, Row, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { saveAs } from "file-saver"
 import ExcelJS from "exceljs"
@@ -48,6 +49,9 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
   const [numberOfPages, setNumberOfPages] = useState(20)
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const { id: semesterId } = useSemesterStore()
+  const [filters, setFilters] = useState<FilterProps>({
+    name: "",
+  })
 
   const { onOpen: openPutResearchTopicModal } = useDisclosure<{
     studentResearchTopicId: string
@@ -124,6 +128,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
       semesterId,
       trainingObjectTypeId,
     },
+    orderBy: [{ semester: { startDate: "asc" } }, { startDate: "asc" }, { code: "asc" }],
   })
   const where = useMemo(() => {
     const subjectFilter: Prisma.SubjectVersionWhereInput = {
@@ -153,6 +158,16 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
           },
           active: true,
           deletedAt: null,
+          ...(filters.name
+            ? {
+                userProfile: {
+                  fullname: {
+                    contains: filters.name,
+                    mode: "insensitive" as const,
+                  },
+                },
+              }
+            : {}),
         },
       },
       deletedAt: null,
@@ -170,6 +185,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
     semesterId,
     orgIds,
     role,
+    filters,
   ])
 
   useEffect(() => {
@@ -271,6 +287,22 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
       orderBy: [
         {
           studentSubjectScore: {
+            subjectClass: {
+              semester: {
+                startDate: "asc",
+              },
+            },
+          },
+        },
+        {
+          studentSubjectScore: {
+            subjectClass: {
+              startDate: "asc",
+            },
+          },
+        },
+        {
+          studentSubjectScore: {
             student: {
               userProfile: {
                 firstName: "asc",
@@ -284,6 +316,13 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
               userProfile: {
                 lastName: "asc",
               },
+            },
+          },
+        },
+        {
+          studentSubjectScore: {
+            student: {
+              code: "asc",
             },
           },
         },
@@ -585,69 +624,66 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
     <Row gutter={[8, 8]}>
       <Col span={24}>
         <Form form={form}>
-          <Flex gap={6} wrap="wrap">
-            <Form.Item name="trainingCourseId" label="Khoá học" className="mb-0">
-              <Select
-                className="w-36"
-                options={
-                  trainingCourseData?.map((item) => ({
-                    label: item.name,
-                    value: item.id,
-                  })) || []
-                }
-                popupMatchSelectWidth={false}
-                placeholder="Chọn khoá học"
-              />
-            </Form.Item>
-            <Form.Item name="organizationId" label="Khoa quản lí" className="mb-0">
-              <TreeSelect
-                className="w-80"
-                placeholder="Chọn khoa quản lý"
-                allowClear={role !== "KHOA_BO_MON"}
-                disabled={role === "KHOA_BO_MON"}
-                multiple={role === "KHOA_BO_MON"}
-                maxTagCount="responsive"
-                showSearch
-                treeDefaultExpandAll
-                treeData={treeOrgData}
-              />
-            </Form.Item>
+          <Flex vertical gap={8}>
+            <Flex gap={6} wrap="wrap" align="center">
+              <Form.Item name="trainingCourseId" label="Khoá học" className="mb-0">
+                <Select
+                  className="w-36"
+                  options={
+                    trainingCourseData?.map((item) => ({
+                      label: item.name,
+                      value: item.id,
+                    })) || []
+                  }
+                  popupMatchSelectWidth={false}
+                  placeholder="Chọn khoá học"
+                />
+              </Form.Item>
+              <Form.Item name="organizationId" label="Khoa quản lí" className="mb-0">
+                <TreeSelect
+                  className="w-80"
+                  placeholder="Chọn khoa quản lý"
+                  allowClear={role !== "KHOA_BO_MON"}
+                  disabled={role === "KHOA_BO_MON"}
+                  multiple={role === "KHOA_BO_MON"}
+                  maxTagCount="responsive"
+                  showSearch
+                  treeDefaultExpandAll
+                  treeData={treeOrgData}
+                />
+              </Form.Item>
 
-            <Form.Item name="subjectClassId" label="Lớp môn học" className="mb-0">
-              <Select
-                className="w-46"
-                options={subjectClassData?.map((item) => ({
-                  label: `${item.code} - ${item.name}`,
-                  value: item.id,
-                }))}
-                popupMatchSelectWidth={false}
-                placeholder="Chọn lớp môn học"
-              />
-            </Form.Item>
-            <Form.Item className="mb-0">
-              <div className="flex gap-2">
+              <Form.Item name="subjectClassId" label="Lớp môn học" className="mb-0">
+                <Select
+                  className="w-46"
+                  options={subjectClassData?.map((item) => ({
+                    label: `${item.code} - ${item.name}`,
+                    value: item.id,
+                  }))}
+                  popupMatchSelectWidth={false}
+                  placeholder="Chọn lớp môn học"
+                />
+              </Form.Item>
+              <Form.Item className="mb-0">
                 <Button type="primary" onClick={async () => await getData()}>
                   Lấy dữ liệu
                 </Button>
-              </div>
-            </Form.Item>
+              </Form.Item>
+          
+         
+            </Flex>
             {role === "P7" && (
-              <>
-                <Form.Item name="reportDate" label="Hạn nhập chuyên đề" className="mb-0 ml-2">
+              <Flex gap={6} wrap="wrap" align="center">
+                <Form.Item name="reportDate" label="Hạn nhập chuyên đề" className="mb-0">
                   <DatePicker className="w-44" placeholder="Chọn hạn nhập chuyên đề" />
                 </Form.Item>
                 <Form.Item className="mb-0">
-                  <div className="flex gap-2">
-                    <Button type="primary" onClick={handleAssignDate}>
-                      Gán ngày
-                    </Button>
-                  </div>
+                  <Button type="primary" onClick={handleAssignDate}>
+                    Gán ngày
+                  </Button>
                 </Form.Item>
-              </>
-            )}
-            {role === "P7" && (
-              <Form.Item className="mb-0">
-                <div className="flex gap-2">
+                <Form.Item className="mb-0">
+                  <div className="flex gap-2">
                   <Button
                     type="primary"
                     icon={<FileOutlined />}
@@ -1550,12 +1586,31 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                   </Button>
                 </div>
               </Form.Item>
+              <Form.Item className="mb-0" >
+                <Input
+                  className="w-56"
+                  allowClear
+                  placeholder="Tìm theo tên học viên"
+                  prefix={<SearchOutlined className="text-gray-400" />}
+                  value={filters.name}
+                  onChange={(e) => {
+                    setFilters({ ...filters, name: e.target.value })
+                    setCurrentPage(1)
+                  }}
+                />
+              </Form.Item>
+              </Flex>
             )}
           </Flex>
         </Form>
         <Table
           scrollable
           maxHeight={"calc(100vh - 330px)"}
+          filters={filters}
+          setFilters={(value) => {
+            setFilters(value)
+            setCurrentPage(1)
+          }}
           columns={[
             {
               title: "",
@@ -1612,6 +1667,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
               width: 150,
               align: "left",
               fixed: "left",
+              dataIndex: "name",
+              type: "input",
               render: (_, record) => {
                 return record?.studentSubjectScore?.student?.userProfile?.fullname
               },

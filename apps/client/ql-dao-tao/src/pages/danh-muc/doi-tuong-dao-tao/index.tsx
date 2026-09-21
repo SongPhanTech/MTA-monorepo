@@ -250,7 +250,7 @@ export default function TrainingObjectTypePage() {
                 },
               },
               {
-                title: "Hình thức đào tạo",
+                title: "Loại hình đào tạo",
                 dataIndex: "trainingFormId",
                 fixed: "left",
                 align: "left",

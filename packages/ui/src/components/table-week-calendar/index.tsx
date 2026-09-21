@@ -45,10 +45,13 @@ interface TableWeekCalendarProps {
   onEventClick?: (eventId: string, eventRecord?: any) => void
   onCreateEvent?: (startTime: string, endTime: string) => void
   onCreateWeekEvent?: (weekStart: string, weekEnd: string) => void
+  /** Thu hẹp toolbar + bảng cho dashboard (khớp lịch tháng compact). */
+  compact?: boolean
 }
 
 export function TableWeekCalendar({
   eventsData = [],
+  compact = false,
   showWeekNavigation = true,
   showAddButtons = true,
   showLockToggle = true,
@@ -537,43 +540,29 @@ export function TableWeekCalendar({
     }
   }, [weeklySchedule])
 
-  return (
-    <div>
-      {/* <div
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: '16px',
-                }}
-            >
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                    }}
-                >
-                    <HeaderBox title={title} />
-                </div>
-            </div> */}
+  const btnSize = compact ? "small" : "middle"
+  const tableScrollY = compact ? 280 : 600
+  const rowEstimate = compact ? 36 : 48
 
+  return (
+    <div className={compact ? "twc-compact min-h-0 min-w-0 overflow-x-hidden" : undefined}>
       {showWeekNavigation && (
         <Row
-          gutter={[16, 16]}
-          // className="mt-4"
+          gutter={compact ? [8, 8] : [16, 16]}
           align="middle"
           justify="space-between"
+          style={{ marginBottom: compact ? 8 : undefined }}
         >
           <Col>
             <div
               style={{
                 display: "flex",
-                gap: "8px",
+                gap: compact ? "4px" : "8px",
                 alignItems: "center",
               }}
             >
               <Button
+                size={btnSize}
                 icon={<ArrowLeftOutlined />}
                 onClick={() => handleWeekOffsetChange(currentWeekOffset - 1)}
                 style={{
@@ -582,6 +571,7 @@ export function TableWeekCalendar({
                 }}
               />
               <Button
+                size={btnSize}
                 type={currentWeekOffset === 0 ? "primary" : "default"}
                 onClick={() => {
                   handleWeekOffsetChange(0)
@@ -596,6 +586,7 @@ export function TableWeekCalendar({
                 Tuần này
               </Button>
               <Button
+                size={btnSize}
                 icon={<ArrowRightOutlined />}
                 onClick={() => handleWeekOffsetChange(currentWeekOffset + 1)}
                 iconPosition="end"
@@ -606,6 +597,7 @@ export function TableWeekCalendar({
               />
               {showDateFilter && (
                 <DatePicker
+                  size={btnSize}
                   value={filterDate ? dayjs(filterDate) : null}
                   onChange={(date) => {
                     if (!date) {
@@ -625,7 +617,7 @@ export function TableWeekCalendar({
           <Col>
             <div
               style={{
-                fontSize: "18px",
+                fontSize: compact ? "14px" : "18px",
                 fontWeight: 600,
                 color: "rgb(38, 38, 38)",
               }}
@@ -645,12 +637,22 @@ export function TableWeekCalendar({
         </Row>
       )}
 
-      <Row gutter={[0, 8]} className="mt-2">
+      <Row gutter={[0, compact ? 4 : 8]} className={compact ? "mt-1" : "mt-2"}>
         <Col span={24}>
           <Table
             bordered
             rowKey="id"
-            scroll={{ x: 1200 }}
+            className={
+              compact
+                ? "[&_.ant-table]:text-[11px] [&_.ant-table-thead>tr>th]:!px-1.5 [&_.ant-table-thead>tr>th]:!py-1 [&_.ant-table-tbody>tr>td]:!px-1.5 [&_.ant-table-tbody>tr>td]:!py-1"
+                : undefined
+            }
+            scroll={{
+              x: compact ? 900 : 1200,
+              ...(weeklySchedule.flatData.length * rowEstimate > tableScrollY
+                ? { y: tableScrollY }
+                : {}),
+            }}
             rowClassName={(record) => {
               // Highlight toàn bộ hàng cùng thứ, không phân biệt sự kiện
               let baseClass = "day-row"
