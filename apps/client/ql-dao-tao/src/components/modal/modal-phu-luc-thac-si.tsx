@@ -1,15 +1,24 @@
 import { GridBlock } from "@components/commons/grid-block"
 import { useScoreConverter } from "@hooks/scoreConverter"
 import { $Enums } from "@workspace/db/client"
-import { useFindManyStudentResearchTopic, useFindUniqueStudent } from "@workspace/db/hooks"
-import { courseScoreConfigFrom, formatPlaceOfBirth } from "@workspace/libs/utils"
+import {
+  useFindManyDM_DonVi,
+  useFindManyStudentResearchTopic,
+  useFindUniqueStudent,
+} from "@workspace/db/hooks"
+import {
+  courseScoreConfigFrom,
+  formatPlaceOfBirth,
+  resolveCouncilMemberUnitName,
+  type OrgUnitNode,
+} from "@workspace/libs/utils"
 import { Button, Modal, Radio, Space } from "antd"
 import dayjs from "dayjs"
 import { Printer } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
-import { versionToPersonLike } from "@/utils/expert-select"
+import { versionInAcademy, versionToPersonLike } from "@/utils/expert-select"
 
 dayjs.locale("vi")
 
@@ -59,6 +68,23 @@ function toScoreNumber(value: unknown): number | null {
     return Number.isFinite(n) ? n : null
   }
   return null
+}
+
+function unwrapResearchTopicTitle(name?: string | null) {
+  return (name || "")
+    .trim()
+    .replace(/^chuyên đề\s*/i, "")
+    .replace(/^[“”"']+|[“”"']+$/g, "")
+    .trim()
+}
+
+function formatResearchTopicPrintName(topicName?: string | null, fallbackName?: string | null) {
+  const title = unwrapResearchTopicTitle(topicName)
+  if (title) return `Chuyên đề "${title}"`
+  const fallback = (fallbackName || "").trim()
+  if (!fallback) return "Chuyên đề"
+  if (/^chuyên đề\b/i.test(fallback)) return fallback
+  return `Chuyên đề "${fallback}"`
 }
 
 function formatScore(value: number | null | undefined, digits: number) {
@@ -138,7 +164,9 @@ export const ModalPhuLucThacSi = () => {
           orderBy: { createdAt: "desc" },
           take: 1,
           include: {
-            studentSubjectScore: { include: { subjectVersion: true } },
+            studentSubjectScore: {
+              include: { subjectVersion: { include: { subject: true } } },
+            },
             thesisProject: {
               include: {
                 supervisor: true,
@@ -191,17 +219,13 @@ export const ModalPhuLucThacSi = () => {
             trainingCourse: {
               include: {
                 scoreConverts: true,
-                trainingObjectType: {
-                  include: {
-                    trainingForm: true,
-                  },
-                },
               },
             },
           },
         },
         curriculumVersion: {
           include: {
+            trainingType: true,
             curriculum: {
               include: {
                 trainingMajor: {
@@ -236,6 +260,18 @@ export const ModalPhuLucThacSi = () => {
       },
     },
     { enabled: !!id }
+  )
+
+  const { data: organizations = [] } = useFindManyDM_DonVi(
+    {
+      where: { bDeleted: { not: true } },
+      select: { Id: true, sTen: true, sParentId: true, iCapDonVi: true },
+    },
+    { enabled: !!id }
+  )
+  const orgById = useMemo(
+    () => new Map<string, OrgUnitNode>(organizations.map((org) => [org.Id, org])),
+    [organizations]
   )
 
   const { data: researchTopicData = [] } = useFindManyStudentResearchTopic(
@@ -297,6 +333,7 @@ export const ModalPhuLucThacSi = () => {
       return {
         id: subject.id,
         name: subject.name,
+        type: subject.type,
         credits: subject.credit,
         score10,
         score4: converted?.base4 ?? null,
@@ -318,15 +355,14 @@ export const ModalPhuLucThacSi = () => {
               courseScoreConfigFrom(data?.fixedClass?.trainingCourse, score)
             )
           : null
-      const topicTitle = (topic.name || score?.subjectVersion?.name || "").trim()
+      const topicTitle = unwrapResearchTopicTitle(topic.name)
       const name = topicTitle
-        ? /^chuyên đề\b/i.test(topicTitle)
-          ? topicTitle
-          : `Chuyên đề ${topicTitle}`
+        ? formatResearchTopicPrintName(topic.name, score?.subjectVersion?.name)
         : `Chuyên đề ${index + 1}`
       return {
         id: topic.id,
         name,
+        topicTitle,
         credits: score?.subjectVersion?.credit ?? null,
         score10,
         score4: converted?.base4 ?? null,
@@ -354,7 +390,18 @@ export const ModalPhuLucThacSi = () => {
     thesisReg?.studentSubjectScore?.subjectVersion?.credit ??
     thesisProject?.subjectClass?.subject?.credit ??
     null
-  const thesisName = isApplicationProgram ? "Đề án tốt nghiệp" : "Luận văn tốt nghiệp"
+  const thesisName =
+    courseRows.find(
+      (row) =>
+        row.graduation ||
+        row.type === $Enums.SubjectVersionType.Thesis ||
+        row.type === $Enums.SubjectVersionType.Project ||
+        row.type === $Enums.SubjectVersionType.Graduation
+    )?.name?.trim() ||
+    thesisReg?.studentSubjectScore?.subjectVersion?.name?.trim() ||
+    thesisProject?.subjectClass?.subject?.name?.trim() ||
+    thesisReg?.studentSubjectScore?.subjectVersion?.subject?.name?.trim() ||
+    (isApplicationProgram ? "Đề án tốt nghiệp" : "Luận văn tốt nghiệp")
 
   const page1Rows = useMemo(() => {
     const rows = [
@@ -418,13 +465,20 @@ export const ModalPhuLucThacSi = () => {
           ""
         const title = [rank, degree].filter(Boolean).join(".")
         const name = [title, expert?.name].filter(Boolean).join(" ").trim()
+        const lecturerOrg = expert?.lecturer?.organization
         return {
           role: COUNCIL_ROLE_LABEL[member.role] ?? "Ủy viên",
           name,
-          unit: expert?.lecturer?.organization?.sTen || expert?.workplace || "",
+          unit: resolveCouncilMemberUnitName({
+            inAcademy: versionInAcademy(expert),
+            lecturerOrg: lecturerOrg?.Id ? lecturerOrg : undefined,
+            organization:
+              typeof expert?.organization === "string" ? expert.organization : undefined,
+            orgById,
+          }),
         }
       })
-  }, [thesisProject])
+  }, [orgById, thesisProject])
 
   const supervisors = [thesisProject?.supervisor?.name, thesisProject?.coSupervisor?.name]
     .filter(Boolean)
@@ -526,9 +580,7 @@ export const ModalPhuLucThacSi = () => {
     },
     {
       title: "Hình thức đào tạo:",
-      value: (
-        <span>{data?.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm?.name}</span>
-      ),
+      value: <span>{data?.curriculumVersion?.trainingType?.name}</span>,
     },
   ]
 
@@ -678,7 +730,7 @@ export const ModalPhuLucThacSi = () => {
                         {formatScore(row.score10, 1)}
                       </td>
                       <td className="border border-black px-1 py-1 text-center">
-                        {formatScore(row.score4, 2)}
+                        {formatScore(row.score4, 1)}
                       </td>
                       <td className="border border-black px-1 py-1 text-center">
                         {row.scoreLetter ?? ""}
@@ -695,7 +747,7 @@ export const ModalPhuLucThacSi = () => {
                       {formatScore(gpa10, 2)}
                     </td>
                     <td className="border border-black px-1 py-1 text-center">
-                      {formatScore(gpa4, 2)}
+                      {formatScore(gpa4, 1)}
                     </td>
                     <td className="border border-black px-1 py-1 text-center">
                       {gpaConverted?.letter ?? ""}
@@ -706,7 +758,8 @@ export const ModalPhuLucThacSi = () => {
             </div>
             {researchTopicRows.map((topic, index) => (
               <div key={topic.id} className="font-bold italic text-sm py-1">
-                Tên chuyên đề nghiên cứu {index + 1}: {topic.name}
+                Tên chuyên đề nghiên cứu {index + 1}:{" "}
+                {topic.topicTitle ? `"${topic.topicTitle}"` : topic.name}
               </div>
             ))}
             <div className="font-bold italic py-1">
@@ -834,9 +887,7 @@ export const ModalPhuLucThacSi = () => {
                   <tr>
                     <td className="border border-black px-1 py-1 text-center" />
                     <td className="border border-black px-1 py-1 font-bold">
-                      {isApplicationProgram
-                        ? "Đề án tốt nghiệp (với UD)"
-                        : "Luận văn tốt nghiệp (Đối với NC)"}
+                      {thesisName}
                     </td>
                     <td className="border border-black px-1 py-1 text-center">
                       {thesisCredits ?? ""}
@@ -845,7 +896,7 @@ export const ModalPhuLucThacSi = () => {
                       {formatScore(thesisScore10, 1)}
                     </td>
                     <td className="border border-black px-1 py-1 text-center">
-                      {formatScore(thesisConverted?.base4, 2)}
+                      {formatScore(thesisConverted?.base4, 1)}
                     </td>
                     <td className="border border-black px-1 py-1 text-center">
                       {thesisConverted?.letter ?? ""}
@@ -861,7 +912,7 @@ export const ModalPhuLucThacSi = () => {
                       {formatScore(gpa10, 2)}
                     </td>
                     <td className="border border-black px-1 py-1 text-center">
-                      {formatScore(gpa4, 2)}
+                      {formatScore(gpa4, 1)}
                     </td>
                     <td className="border border-black px-1 py-1 text-center">
                       {gpaConverted?.letter ?? ""}
@@ -1227,7 +1278,7 @@ export const ModalPhuLucThacSi = () => {
                       </li>
                       <li>
                         + Hình thức đào tạo:{" "}
-                        {data?.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm?.name}
+                        {data?.curriculumVersion?.trainingType?.name}
                       </li>
                     </ul>
                   </td>

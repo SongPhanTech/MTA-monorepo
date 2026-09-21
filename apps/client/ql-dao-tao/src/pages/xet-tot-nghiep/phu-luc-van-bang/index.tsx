@@ -70,18 +70,32 @@ type TSubjectItem = StudentSubjectScore & {
   studentResearchTopic?: { name?: string | null } | null
 }
 
+function unwrapResearchTopicTitle(name?: string | null) {
+  return (name || "")
+    .trim()
+    .replace(/^chuyên đề\s*/i, "")
+    .replace(/^[“”"']+|[“”"']+$/g, "")
+    .trim()
+}
+
 function formatResearchTopicPrintName(topicName?: string | null, fallbackName?: string | null) {
-  const name = (topicName || fallbackName || "").trim()
-  if (!name) return "Chuyên đề"
-  if (/^chuyên đề\b/i.test(name)) return name
-  return `Chuyên đề ${name}`
+  const title = unwrapResearchTopicTitle(topicName)
+  if (title) return `Chuyên đề "${title}"`
+  const fallback = (fallbackName || "").trim()
+  if (!fallback) return "Chuyên đề"
+  if (/^chuyên đề\b/i.test(fallback)) return fallback
+  return `Chuyên đề "${fallback}"`
 }
 
 function getDiplomaAppendixSubjectName(item: {
-  subjectVersion?: { type?: string | null; name?: string | null } | null
+  subjectVersion?: {
+    type?: string | null
+    name?: string | null
+    subject?: { name?: string | null } | null
+  } | null
   studentResearchTopic?: { name?: string | null } | null
 }) {
-  const subjectName = item.subjectVersion?.name || ""
+  const subjectName = item.subjectVersion?.name?.trim() || item.subjectVersion?.subject?.name?.trim() || ""
   if (item.subjectVersion?.type !== SubjectVersionType.Research) return subjectName
   return formatResearchTopicPrintName(item.studentResearchTopic?.name, subjectName)
 }
@@ -141,11 +155,6 @@ type TTrainingCourse = TrainingCourse & {
   scoreConverts: ScoreConvert[]
   academicRankingConvert?: any[]
   trainingLanguage: TrainingLanguage | null
-  trainingObjectType: {
-    trainingForm: {
-      name: string
-    } | null
-  } | null
   semesterStart?: Semester | null
 }
 
@@ -153,6 +162,7 @@ type TFixedClass = {
   fixedClass: FixedClass & {
     trainingCourse: TTrainingCourse
     curriculumVersion: CurriculumVersion & {
+      trainingType?: { name: string } | null
       curriculum: {
         trainingMajor: {
           name: string
@@ -239,6 +249,7 @@ export type TStudentWithSubjects = Student &
     curriculumVersion?: CurriculumVersion & {
       trainingTime?: TrainingTime | null
       trainingLevel?: TrainingLevel | null
+      trainingType?: { name: string } | null
     }
   }
 
@@ -473,15 +484,11 @@ export default function StudentGradeSystem() {
                 scoreConverts: true,
                 academicRankingConvert: true,
                 trainingLanguage: true,
-                trainingObjectType: {
-                  include: {
-                    trainingForm: true,
-                  },
-                },
               },
             },
             curriculumVersion: {
               include: {
+                trainingType: true,
                 curriculum: {
                   include: {
                     trainingMajor: {
@@ -504,6 +511,7 @@ export default function StudentGradeSystem() {
             semester: true,
             subjectVersion: {
               include: {
+                subject: true,
                 trainingBlocks: {
                   include: {
                     trainingBlockOnCurriculumVersion: {
@@ -531,6 +539,7 @@ export default function StudentGradeSystem() {
           include: {
             trainingTime: true,
             trainingLevel: true,
+            trainingType: true,
           },
         },
       },
@@ -638,6 +647,7 @@ export default function StudentGradeSystem() {
         const graduationGroup = {
           id: `graduation-${student.id}`,
           name:
+            getDiplomaAppendixSubjectName(graduationItems[0]) ||
             graduationItems[0]?.subjectClass?.semester?.name ||
             graduationItems[0]?.semester?.name ||
             "Luận văn/đề án tốt nghiệp",
@@ -1057,7 +1067,9 @@ export default function StudentGradeSystem() {
           ngay_sinh: formatDateVN(student.userProfile.dateOfBirth ?? ""),
           ngay_nhap_hoc: formatDateVN(student.fixedClass.createdAt),
           hinh_thuc_dao_tao:
-            student.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm?.name || "",
+            student.curriculumVersion?.trainingType?.name ||
+            student.fixedClass?.curriculumVersion?.trainingType?.name ||
+            "",
           nganh_hoc:
             student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
             "",
@@ -1333,7 +1345,9 @@ export default function StudentGradeSystem() {
           ngay_sinh: formatDateVN(student.userProfile.dateOfBirth ?? ""),
           ngay_nhap_hoc: formatDateVN(student.fixedClass.createdAt),
           hinh_thuc_dao_tao:
-            student.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm?.name || "",
+            student.curriculumVersion?.trainingType?.name ||
+            student.fixedClass?.curriculumVersion?.trainingType?.name ||
+            "",
           ngon_ngu_dao_tao: student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
           nganh_hoc:
             student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||

@@ -617,9 +617,9 @@ const PutCurriculumVersion = () => {
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem form={form} label="Loại hình đào tạo" name="trainingTypeId">
+                    <FormItem form={form} label="Hình thức đào tạo" name="trainingTypeId">
                       <Select
-                        placeholder="Chọn loại hình đào tạo"
+                        placeholder="Chọn hình thức đào tạo"
                         options={trainingTypeData.map((i: TrainingTime) => ({
                           value: i.id,
                           label: i.name,

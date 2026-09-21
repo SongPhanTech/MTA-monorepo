@@ -22,7 +22,15 @@ import {
 import { getFilesEmployeeUserIdImage } from "@workspace/libs/api/system-share"
 import { getLuanVanTemplateBuffer, getTemplateBuffer } from "@workspace/libs/server"
 import { APP_TIMEZONE, formatDateVn, nowVn, setupAppTimezone, toVnDayjs } from "@workspace/libs/timezone"
-import { chunk, convertScoreWithCourseConfig, courseScoreConfigFrom, formatPlaceOfBirth, genOriginalDiplomaNumber } from "@workspace/libs/utils"
+import {
+  chunk,
+  convertScoreWithCourseConfig,
+  courseScoreConfigFrom,
+  formatPlaceOfBirth,
+  genOriginalDiplomaNumber,
+  resolveCouncilMemberUnitName,
+  type OrgUnitNode,
+} from "@workspace/libs/utils"
 import Decimal from "decimal.js"
 import { Automizer } from "pptx-automizer"
 import dayjs from "dayjs"
@@ -153,24 +161,88 @@ function getDiplomaAppendixScore(record: {
   return null
 }
 
-function formatResearchTopicPrintName(topicName?: string | null, fallbackName?: string | null) {
-  const name = (topicName || fallbackName || "").trim()
-  if (!name) return "Chuyên đề"
-  if (/^chuyên đề\b/i.test(name)) return name
-  return `Chuyên đề ${name}`
+function unwrapResearchTopicTitle(name?: string | null) {
+  return (name || "")
+    .trim()
+    .replace(/^chuyên đề\s*/i, "")
+    .replace(/^[“”"']+|[“”"']+$/g, "")
+    .trim()
 }
 
-function getDiplomaAppendixSubjectName(record: {
-  subjectVersion?: {
-    type?: string | null
-    name?: string | null
-    subject?: { name?: string | null } | null
-  } | null
-  studentResearchTopic?: { name?: string | null } | null
-}) {
-  const subjectName = record.subjectVersion?.subject?.name || record.subjectVersion?.name || ""
+function formatResearchTopicPrintName(topicName?: string | null, fallbackName?: string | null) {
+  const title = unwrapResearchTopicTitle(topicName)
+  if (title) return `Chuyên đề "${title}"`
+  const fallback = (fallbackName || "").trim()
+  if (!fallback) return "Chuyên đề"
+  if (/^chuyên đề\b/i.test(fallback)) return fallback
+  return `Chuyên đề "${fallback}"`
+}
+
+function getDiplomaAppendixSubjectName(
+  record: {
+    subjectVersionId?: string
+    subjectVersion?: {
+      id?: string
+      type?: string | null
+      name?: string | null
+      subjectId?: string | null
+      subject?: { id?: string | null; name?: string | null } | null
+    } | null
+    studentResearchTopic?: { name?: string | null } | null
+  },
+  curriculumVersion?: Parameters<typeof getCurriculumGraduationSubjectName>[0]
+) {
+  if (isGraduationSubjectType(record.subjectVersion?.type)) {
+    const curriculumName = getCurriculumGraduationSubjectName(curriculumVersion, record)
+    if (curriculumName) return curriculumName
+  }
+  const subjectName =
+    record.subjectVersion?.name?.trim() || record.subjectVersion?.subject?.name?.trim() || ""
   if (record.subjectVersion?.type !== SubjectVersionType.Research) return subjectName
   return formatResearchTopicPrintName(record.studentResearchTopic?.name, subjectName)
+}
+
+function getCurriculumGraduationSubjectName(
+  curriculumVersion?: {
+    trainingBlocks?: Array<{
+      subjects?: Array<{
+        graduation?: boolean | null
+        subjectId?: string | null
+        subject?: {
+          id?: string | null
+          name?: string | null
+          type?: string | null
+          subjectId?: string | null
+        } | null
+      }> | null
+    }> | null
+  } | null,
+  record?: {
+    subjectVersionId?: string
+    subjectVersion?: {
+      id?: string
+      type?: string | null
+      subjectId?: string | null
+      name?: string | null
+      subject?: { id?: string | null; name?: string | null } | null
+    } | null
+  } | null
+) {
+  const subjects = curriculumVersion?.trainingBlocks?.flatMap((block) => block.subjects || []) || []
+  const versionId = record?.subjectVersion?.id || record?.subjectVersionId
+  const catalogId = record?.subjectVersion?.subjectId || record?.subjectVersion?.subject?.id
+  const matched =
+    subjects.find((item) => item.graduation && isGraduationSubjectType(item.subject?.type)) ||
+    subjects.find((item) => item.graduation) ||
+    subjects.find((item) => versionId && item.subjectId === versionId) ||
+    subjects.find(
+      (item) =>
+        catalogId &&
+        (item.subject?.subjectId === catalogId || item.subjectId === catalogId) &&
+        isGraduationSubjectType(item.subject?.type)
+    ) ||
+    subjects.find((item) => isGraduationSubjectType(item.subject?.type))
+  return (matched?.subject?.name || "").trim()
 }
 
 function pickHighestSubjectScores<
@@ -1921,17 +1993,10 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       },
       fixedClass: {
         include: {
-          trainingCourse: {
-            include: {
-              trainingObjectType: {
-                include: {
-                  trainingForm: true,
-                },
-              },
-            },
-          },
+          trainingCourse: true,
           curriculumVersion: {
             include: {
+              trainingType: true,
               curriculum: {
                 include: {
                   trainingMajor: {
@@ -1994,7 +2059,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
   }
 
-  const [courses, sessions, trainingObjectType] = await Promise.all([
+  const [courses, sessions] = await Promise.all([
     prisma.trainingCourse.findMany({
       where: { id: { in: trainingCourseIds || [] } },
       select: { name: true },
@@ -2003,14 +2068,16 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       where: { id: { in: thesisSessionIds || [] } },
       select: { id: true, name: true },
     }),
-    prisma.trainingObjectType.findUniqueOrThrow({
-      where: { id: trainingObjectTypeId },
-      include: { trainingForm: true },
-    }),
   ])
 
   const courseNames = courses.map((e) => e.name).join(", ")
-  const trainingForm = trainingObjectType.trainingForm?.name || ""
+  const trainingType = [
+    ...new Set(
+      students
+        .map((s) => s.fixedClass?.curriculumVersion?.trainingType?.name)
+        .filter((name): name is string => Boolean(name))
+    ),
+  ].join(", ")
   setupAppTimezone()
   let selectedDate = printDate ? dayjs.tz(printDate, "DD/MM/YYYY", APP_TIMEZONE) : nowVn()
   if (!selectedDate.isValid()) {
@@ -2097,7 +2164,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     tpl.substitute("PD", {
       khoa: courseNames,
       dot_xet: sessionName,
-      hinh_thuc_dao_tao: trainingForm,
+      hinh_thuc_dao_tao: trainingType,
       so_van_ban: sessionStudents[0]?.graduationDecision?.code || "",
       ngay_in: ngayInText,
       ...signerInfo,
@@ -2668,12 +2735,13 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
     isChief,
   } = c.req.valid("json")
 
-  const students = await prisma.student.findMany({
-    where: buildApprovedGraduateStudentWhere({
-      trainingObjectTypeId,
-      trainingCourseIds,
-      thesisSessionIds,
-    }),
+  const [students, organizations] = await Promise.all([
+    prisma.student.findMany({
+      where: buildApprovedGraduateStudentWhere({
+        trainingObjectTypeId,
+        trainingCourseIds,
+        thesisSessionIds,
+      }),
     include: {
       userProfile: {
         include: {
@@ -2687,17 +2755,25 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         include: {
           trainingCourse: {
             include: {
-              trainingObjectType: {
-                include: {
-                  trainingForm: true,
-                },
-              },
+              trainingObjectType: true,
               scoreConverts: true,
             },
           },
           curriculumVersion: {
             include: {
+              trainingType: true,
               trainingTime: true,
+              trainingBlocks: {
+                include: {
+                  subjects: {
+                    include: {
+                      subject: {
+                        select: { id: true, name: true, type: true, subjectId: true },
+                      },
+                    },
+                  },
+                },
+              },
               curriculum: {
                 include: {
                   trainingMajor: {
@@ -2714,11 +2790,17 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
       thesisRegistrations: {
         where: { deletedAt: null },
         include: {
+          studentSubjectScore: {
+            include: {
+              subjectVersion: { include: { subject: true } },
+            },
+          },
           thesisProject: {
             include: {
               supervisor: true,
               coSupervisor: true,
               defenseRecord: true,
+              subjectClass: { include: { subject: true } },
               thesisSession: true,
               council: {
                 include: {
@@ -2786,7 +2868,13 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         orderBy: { studyYear: "desc" },
       },
     },
-  })
+    }),
+    prisma.dM_DonVi.findMany({
+      where: { bDeleted: { not: true } },
+      select: { Id: true, sTen: true, sParentId: true, iCapDonVi: true },
+    }),
+  ])
+  const orgById = new Map<string, OrgUnitNode>(organizations.map((org) => [org.Id, org]))
 
   if (!students.length) {
     return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
@@ -2875,10 +2963,10 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           }
           return {
             stt: idx + 1,
-            ten_hoc_phan: safeString(getDiplomaAppendixSubjectName(record)),
+            ten_hoc_phan: safeString(getDiplomaAppendixSubjectName(record, curriculumVersion)),
             stc: credits,
             diem_he_10: formatScore(score, 1) || "0,0",
-            diem_he_4: formatScore(conversion?.base4 || 0) || "0,0",
+            diem_he_4: formatScore(conversion?.base4 || 0, 1) || "0,0",
             diem_he_chu: conversion?.letter,
           }
         }
@@ -2931,10 +3019,19 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           const degree = safeString(version?.academicDegreeType?.sMa)
           const title = [rank, degree].filter(Boolean).join(".")
           const chucVi = chucViByRole[m.role] ?? "Ủy viên"
+          const inAcademy =
+            typeof version?.inAcademy === "boolean" ? version.inAcademy : !!lecturer
           return {
             chuc_vi: `${idx + 1}. ${chucVi}`,
             ten_day_du: [title, safeString(version?.name)].filter(Boolean).join(" ").trim(),
-            don_vi: safeString(lecturer?.organization?.sTen || version?.workplace || version?.organization),
+            don_vi: safeString(
+              resolveCouncilMemberUnitName({
+                inAcademy,
+                lecturerOrg: lecturer?.organization,
+                organization: version?.organization,
+                orgById,
+              })
+            ),
             vai_tro_hoi_dong: vaiTroByRole[m.role] ?? "",
           }
         })
@@ -2962,20 +3059,26 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           chuyen_nganh: safeString(major?.name),
           thoi_gian_dao_tao: safeString(curriculumVersion?.trainingTime?.name || "24 tháng"),
           ngon_ngu_dao_tao: "Tiếng Việt",
-          hinh_thuc_dao_tao: safeString(course?.trainingObjectType?.trainingForm?.name),
+          hinh_thuc_dao_tao: safeString(curriculumVersion?.trainingType?.name),
           dinh_huong: isApplicationProgram ? "ứng dụng" : "nghiên cứu",
           academic_year: safeString(academicYear),
           data: subjectRows,
           tong_so_tc: totalCredits,
           diem_tb_he_10: formatScore(gpa10, 2) || "0,00",
-          diem_tb_he_4: formatScore(gpa4, 2) || "0,00",
+          diem_tb_he_4: formatScore(gpa4, 1) || "0,0",
 
           ten_de_an_tot_nghiep: safeString(tP?.title),
           danh_sach_can_bo_huong_dan: safeString(supervisors),
           ngay_bao_ve: safeString(defenseDateParts?.fullVi),
-          hoc_phan_tot_nghiep: isApplicationProgram
-            ? "đề án tốt nghiệp"
-            : "luận văn tốt nghiệp",
+          hoc_phan_tot_nghiep: safeString(
+            getCurriculumGraduationSubjectName(curriculumVersion, tR?.studentSubjectScore) ||
+              tR?.studentSubjectScore?.subjectVersion?.name ||
+              tP?.subjectClass?.subject?.name ||
+              (student.subjectClassStudent || []).find((record) =>
+                isGraduationSubjectType(record.subjectVersion?.type)
+              )?.subjectVersion?.name ||
+              (isApplicationProgram ? "Đề án tốt nghiệp" : "Luận văn tốt nghiệp")
+          ),
           ngay_in: safeString(pDateParts?.day),
           thang_in: safeString(pDateParts?.monthVi),
           nam_in: safeString(pDateParts?.year),
@@ -3133,17 +3236,25 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
         include: {
           trainingCourse: {
             include: {
-              trainingObjectType: {
-                include: {
-                  trainingForm: true,
-                },
-              },
+              trainingObjectType: true,
               scoreConverts: true,
             },
           },
           curriculumVersion: {
             include: {
+              trainingType: true,
               trainingTime: true,
+              trainingBlocks: {
+                include: {
+                  subjects: {
+                    include: {
+                      subject: {
+                        select: { id: true, name: true, type: true, subjectId: true },
+                      },
+                    },
+                  },
+                },
+              },
               curriculum: {
                 include: {
                   trainingMajor: {
@@ -3273,7 +3384,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
           }
           return {
             stt: idx + 1,
-            ten_hoc_phan: safeString(getDiplomaAppendixSubjectName(record)),
+            ten_hoc_phan: safeString(getDiplomaAppendixSubjectName(record, curriculumVersion)),
             stc: credits,
             diem_he_10: formatScore(score, 1) || "0,0",
             type: record.subjectVersion?.type,
@@ -3310,7 +3421,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
           chuyen_nganh_chuyen_sau: safeString(major?.name),
           thoi_gian_dao_tao: safeString(curriculumVersion?.trainingTime?.name || "24 tháng"),
           ngon_ngu_dao_tao: "Tiếng Việt",
-          hinh_thuc_dao_tao: safeString(course?.trainingObjectType?.trainingForm?.name),
+          hinh_thuc_dao_tao: safeString(curriculumVersion?.trainingType?.name),
           data: subjectRows,
           diem_tb_tn: formatScore(gpa10, 2) || "0,00",
           hoc_luc: getClassification(gpa10),
