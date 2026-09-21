@@ -19,6 +19,7 @@ export interface TableCell {
 
 export interface TableRow {
   cells: TableCell[]
+  height?: number
 }
 
 export interface SheetExportOptions {
@@ -29,6 +30,8 @@ export interface SheetExportOptions {
   rows?: TableRow[]
   tableStartCell?: { row: number; col: number }
   hiddenColumns?: string[]
+  /** Độ rộng cột theo index 0 = cột A. `undefined` giữ nguyên width template. */
+  columnWidths?: Array<number | undefined>
   thinBorderRange?: { top: number; left: number; bottom: number; right: number }
 }
 
@@ -57,31 +60,39 @@ function sanitizeExcelCellValue(value: unknown): ExcelJS.CellValue {
   return value.replace(INVALID_XML_CONTROL_CHARS, "")
 }
 
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+}
+
+function replacePlaceholdersInText(
+  text: string,
+  data: Record<string, string | number | null>
+): string {
+  let next = text
+  for (const key in data) {
+    const escaped = escapeRegExp(key)
+    const replacement = String(data[key] ?? "")
+    next = next.replace(new RegExp(`{{\\s*${escaped}\\s*}}`, "g"), () => replacement)
+    next = next.replace(new RegExp(`\\$\\{\\s*${escaped}\\s*}`, "g"), () => replacement)
+  }
+  return next
+}
+
 function replaceTemplatePlaceholders(
   value: ExcelJS.CellValue,
   data: Record<string, string | number | null>
 ): ExcelJS.CellValue {
   if (typeof value === "string") {
-    let text = value
-    for (const key in data) {
-      text = text.replace(new RegExp(`{{\\s*${key}\\s*}}`, "g"), String(data[key] ?? ""))
-    }
-    return sanitizeExcelCellValue(text)
+    return sanitizeExcelCellValue(replacePlaceholdersInText(value, data))
   }
 
   if (value && typeof value === "object" && "richText" in value && Array.isArray(value.richText)) {
     return {
       ...value,
-      richText: value.richText.map((part) => {
-        let text = part.text
-        for (const key in data) {
-          text = text.replace(new RegExp(`{{\\s*${key}\\s*}}`, "g"), String(data[key] ?? ""))
-        }
-        return {
-          ...part,
-          text: sanitizeExcelCellValue(text) as string,
-        }
-      }),
+      richText: value.richText.map((part) => ({
+        ...part,
+        text: sanitizeExcelCellValue(replacePlaceholdersInText(part.text, data)) as string,
+      })),
     } as ExcelJS.CellRichTextValue
   }
 
@@ -89,12 +100,22 @@ function replaceTemplatePlaceholders(
 }
 
 function cellContainsPlaceholder(value: ExcelJS.CellValue, key: string): boolean {
-  const pattern = new RegExp(`{{\\s*${key}\\s*}}`)
+  const escaped = escapeRegExp(key)
+  const pattern = new RegExp(`({{\\s*${escaped}\\s*}}|\\$\\{\\s*${escaped}\\s*})`)
   if (typeof value === "string") return pattern.test(value)
   if (value && typeof value === "object" && "richText" in value && Array.isArray(value.richText)) {
     return value.richText.some((part) => pattern.test(part.text))
   }
   return false
+}
+
+function applyColumnWidths(worksheet: ExcelJS.Worksheet, widths?: Array<number | undefined>) {
+  if (!widths?.length) return
+  widths.forEach((width, idx) => {
+    if (typeof width === "number") {
+      worksheet.getColumn(idx + 1).width = width
+    }
+  })
 }
 
 function applyBoldToCell(cell: ExcelJS.Cell) {
@@ -360,10 +381,16 @@ async function handleExcelJSDefault(
           currentCol += colSpan
         }
 
+        if (rowData.height != null) {
+          excelRow.height = rowData.height
+        }
+
         excelRow.commit()
         currentRow++
       }
     }
+
+    applyColumnWidths(worksheet, sheetOption.columnWidths)
 
     if (sheetOption.thinBorderRange) {
       const r = sheetOption.thinBorderRange
@@ -667,10 +694,15 @@ async function handleExcelJSMergeSheets(
           }
           currentCol += colSpan
         }
+        if (rowData.height != null) {
+          excelRow.height = rowData.height
+        }
         excelRow.commit()
         currentRow++
       }
     }
+
+    applyColumnWidths(worksheet, sheetOption.columnWidths)
 
     // 1d. Thêm sheet đã xử lý vào danh sách tạm
     tempWorksheets.push(worksheet)
