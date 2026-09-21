@@ -167,13 +167,13 @@ export function DetailedView({ view, setView }: DetailedViewProps) {
       title: "Khởi tạo\nđợt bảo vệ",
       icon: CalendarPlus,
       path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN,
-      tooltip: "Đợt xét luận văn/luận án",
+      tooltip: "Đợt xét luận văn/đề án",
     },
     {
       num: 2,
       title: "Giao\nđề tài",
       icon: FolderPlus,
-      tooltip: "Giao đề tài luận văn / luận án cho học viên",
+      tooltip: "Giao đề tài luận văn / đề án cho học viên",
     },
     {
       num: 3,
@@ -185,19 +185,19 @@ export function DetailedView({ view, setView }: DetailedViewProps) {
       num: 4,
       title: "Thực hiện\nđề tài",
       icon: FileText,
-      tooltip: "Học viên thực hiện đề tài luận văn / luận án",
+      tooltip: "Học viên thực hiện đề tài luận văn / đề án",
     },
     {
       num: 5,
       title: "Thành lập\nhội đồng",
       icon: Users2,
-      tooltip: "Thành lập hội đồng bảo vệ luận văn / luận án",
+      tooltip: "Thành lập hội đồng bảo vệ luận văn / đề án",
     },
     {
       num: 6,
       title: "Tổ chức\nbảo vệ",
       icon: Presentation,
-      tooltip: "Tổ chức bảo vệ luận văn / luận án",
+      tooltip: "Tổ chức bảo vệ luận văn / đề án",
     },
     {
       num: 7,
@@ -311,7 +311,7 @@ export function DetailedView({ view, setView }: DetailedViewProps) {
         track: "kltn",
       },
       {
-        label: "Kết quả bảo vệ luận văn / luận án",
+        label: "Kết quả bảo vệ luận văn / đề án",
         icon: Award,
         track: "luan-van",
       },
@@ -322,17 +322,17 @@ export function DetailedView({ view, setView }: DetailedViewProps) {
         track: "kltn",
       },
       {
-        label: "Danh sách học viên hoàn thành luận văn / luận án",
+        label: "Danh sách học viên hoàn thành luận văn / đề án",
         icon: Users2,
         track: "luan-van",
       },
       {
-        label: "Thanh toán hội đồng luận văn / luận án",
+        label: "Thanh toán hội đồng luận văn / đề án",
         icon: Coins,
         track: "luan-van",
       },
       {
-        label: "Thanh toán GVHD luận văn / luận án",
+        label: "Thanh toán GVHD luận văn / đề án",
         icon: Coins,
         track: "luan-van",
       },
@@ -357,8 +357,8 @@ export function DetailedView({ view, setView }: DetailedViewProps) {
     thesisTrack === "kltn"
       ? "Quy trình quản lý khóa luận tốt nghiệp"
       : thesisTrack === "luan-van"
-        ? "Quy trình quản lý luận văn / luận án"
-        : "Quy trình quản lý khóa luận tốt nghiệp / Luận văn / Luận án"
+        ? "Quy trình quản lý luận văn / đề án"
+        : "Quy trình quản lý khóa luận tốt nghiệp / Luận văn / Đề án"
 
   const subTitleMap: Record<QuyTrinhDetailView, string> = {
     "len-ke-hoach": "Nghiệp vụ lên kế hoạch và tổ chức giảng dạy",
@@ -487,7 +487,7 @@ export function DetailedView({ view, setView }: DetailedViewProps) {
                 <div className="flex min-w-0 flex-col gap-1.5">
                   {thesisTrack === "both" && (
                     <div className="px-1 text-[11px] max-xl:text-[9px] font-bold uppercase tracking-[0.06em] text-[#0f8a4b]">
-                      Luận văn / Luận án
+                      Luận văn / đề án
                     </div>
                   )}
                   <div className="flex w-full min-w-0 items-start">

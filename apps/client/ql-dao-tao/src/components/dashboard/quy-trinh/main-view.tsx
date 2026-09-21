@@ -58,7 +58,7 @@ export function MainView({ setView }: MainViewProps) {
     },
     {
       num: 6,
-      title: "Quản lý khóa luận\n/ Luận văn / Luận án",
+      title: "Quản lý khóa luận\n/ Luận văn / đề án",
       icon: FileText,
       action: () => setView("quan-ly-khoa-luan"),
     },

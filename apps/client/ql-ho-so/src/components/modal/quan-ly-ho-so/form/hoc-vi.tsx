@@ -145,7 +145,7 @@ export default function HocViForm({ expland, setExpland }: DomProps) {
               render: (_, record) => record.linhVuc || "",
             },
             {
-              title: "Tên luận án",
+              title: "Tên luận văn / đề án",
               align: "center",
               width: 200,
               render: (_, record) => record.tenLuanAn || "",
