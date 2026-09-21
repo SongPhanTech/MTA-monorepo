@@ -2,6 +2,7 @@
 import { Calendar, Select } from "antd"
 import { useEffect, useState } from "react"
 import { dayjs } from ".."
+import "./calendar-filter.css"
 
 interface EventData {
   date: string
@@ -13,6 +14,8 @@ interface CalendarFilterProps {
   defaultDate?: dayjs.Dayjs
   value?: dayjs.Dayjs
   onChange?: (date: dayjs.Dayjs) => void
+  /** Báo tháng/năm đang xem khi người dùng đổi ở header — dùng để tải đúng khoảng dữ liệu. */
+  onPanelChange?: (date: dayjs.Dayjs) => void
   events?: EventData[]
 }
 
@@ -20,6 +23,7 @@ export const CalendarFilter: React.FC<CalendarFilterProps> = ({
   defaultDate,
   value,
   onChange,
+  onPanelChange,
   events = [],
 }) => {
   const [yearOptions, setYearOptions] = useState(() => {
@@ -51,7 +55,7 @@ export const CalendarFilter: React.FC<CalendarFilterProps> = ({
       <div
         style={{
           position: "absolute",
-          bottom: -6,
+          bottom: 0,
           left: "50%",
           transform: "translateX(-50%)",
           display: "flex",
@@ -107,43 +111,38 @@ export const CalendarFilter: React.FC<CalendarFilterProps> = ({
   }
 
   return (
-    <Calendar
-      fullscreen={false}
-      value={selectedDate}
-      onSelect={(date) => {
-        setSelectedDate(date)
-        onChange?.(date)
-      }}
-      dateCellRender={dateCellRender}
-      headerRender={({ value, onChange }) => {
-        const current = value.clone()
+    <div className="calendar-filter-mini">
+      <Calendar
+        fullscreen={false}
+        value={selectedDate}
+        onSelect={(date) => {
+          setSelectedDate(date)
+          onChange?.(date)
+        }}
+        onPanelChange={(date) => {
+          onPanelChange?.(date)
+        }}
+        dateCellRender={dateCellRender}
+        headerRender={({ value, onChange }) => {
+          const current = value.clone()
 
-        const selectYear = (year: number) => {
-          onChange(current.year(year))
-        }
+          const selectYear = (year: number) => {
+            onChange(current.year(year))
+          }
 
-        const selectMonth = (month: number) => {
-          onChange(current.month(month))
-        }
+          const selectMonth = (month: number) => {
+            onChange(current.month(month))
+          }
 
-        return (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: 8,
-              padding: "18px 0px",
-              paddingTop: 0,
-            }}
-          >
-            <div style={{ flex: 1 }}>
+          return (
+            <div className="mb-1.5 flex items-center gap-1.5">
               <Select
+                size="small"
                 showSearch
                 value={current.month()}
                 onChange={selectMonth}
+                className="min-w-0 flex-1"
                 style={{ width: "100%" }}
-                // dropdownStyle={{ textAlign: 'center' }}
                 filterOption={(input, option) =>
                   (option?.label as string).toLowerCase().includes(input.toLowerCase()) ||
                   (option?.value !== undefined && Number.parseInt(input, 10) === option.value + 1)
@@ -162,16 +161,16 @@ export const CalendarFilter: React.FC<CalendarFilterProps> = ({
                   "Tháng 11",
                   "Tháng 12",
                 ].map((m, i) => ({
-                  label: m, // giữ nguyên là string
+                  label: m,
                   value: i,
                 }))}
               />
-            </div>
-            <div style={{ flex: 1 }}>
               <Select
+                size="small"
                 showSearch
                 value={current.year()}
                 onChange={selectYear}
+                className="min-w-0 flex-1"
                 style={{ width: "100%" }}
                 options={yearOptions}
                 filterOption={(input, option) => {
@@ -195,9 +194,9 @@ export const CalendarFilter: React.FC<CalendarFilterProps> = ({
                 }}
               />
             </div>
-          </div>
-        )
-      }}
-    />
+          )
+        }}
+      />
+    </div>
   )
 }

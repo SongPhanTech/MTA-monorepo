@@ -1,14 +1,10 @@
 import QuyTrinhDashboard, { type QuyTrinhView } from "@components/dashboard/quy-trinh"
-import DanhSachLopGiangVien from "@components/sub-pages/danh-sach-lop-giang-vien"
+import TongQuanDashboard from "@components/dashboard/tong-quan"
 import DefaultLayout from "@layouts/default-layout"
-import { useAbility } from "@workspace/permissions/hooks"
-import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
-import { DanhSachThongBao, LichCongTac, ThongKeDonVi, ThongKeTotNghiep } from "@workspace/ui"
-import { Col, Dropdown, type MenuProps, Row, Typography } from "antd"
+import { ROUTER_PATH } from "@workspace/router"
+import { Dropdown, type MenuProps } from "antd"
 import { useRouter } from "next/router"
 import { useState } from "react"
-
-const { Title } = Typography
 
 type QuyTrinhStep = {
   key: string
@@ -52,49 +48,6 @@ const menuItems: MenuProps["items"] = [
   ...numberedSteps.map(({ key, label }) => ({ key, label })),
 ]
 
-function TongQuan() {
-  const { can } = useAbility()
-
-  return (
-    <Row gutter={[8, 8]}>
-      <Col span={24}>
-        <DanhSachLopGiangVien />
-      </Col>
-
-      <Col span={18}>
-        <div className="bg-white rounded shadow h-full flex flex-col">
-          <div className="px-4">
-            <Title level={4}>Thời khoá biểu</Title>
-          </div>
-          <div className="flex-1 px-2">
-            <LichCongTac
-              onlyMySchedule={can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_TUAN_THANG, "XEM")}
-            />
-          </div>
-        </div>
-      </Col>
-      <Col span={6}>
-        <div className="bg-white rounded shadow h-full flex flex-col">
-          <div className="px-4">
-            <Title level={4}>Thông báo</Title>
-          </div>
-          <div className="flex-1 overflow-y-auto mb-2 px-2">
-            <DanhSachThongBao />
-          </div>
-        </div>
-      </Col>
-      <Col span={24}>
-        <Title level={4}>Thống kê số lượng học viên tốt nghiệp</Title>
-        <ThongKeTotNghiep />
-      </Col>
-      <Col span={24}>
-        <Title level={4}>Thống kê cơ cấu tổ chức đào tạo</Title>
-        <ThongKeDonVi />
-      </Col>
-    </Row>
-  )
-}
-
 function Page() {
   const router = useRouter()
   const [tab, setTab] = useState("tong-quan")
@@ -118,7 +71,8 @@ function Page() {
   }
 
   return (
-    <div className="flex h-full min-h-0 w-full flex-col overflow-hidden">
+    // Content của DefaultLayout: mt-[110px] + p-2 (8px trên) + pb-[35px] → khóa chiều cao đúng 1 màn hình
+    <div className="flex h-[calc(100vh-153px)] min-h-0 w-full flex-col overflow-hidden">
       <div className="mb-2 flex flex-col items-center gap-2 sm:relative sm:flex-row sm:justify-center shrink-0">
         <div className="inline-flex rounded-full border border-[#d9dee5] bg-white p-1 shadow-sm">
           <button
@@ -165,8 +119,8 @@ function Page() {
       </div>
 
       {tab === "tong-quan" ? (
-        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
-          <TongQuan />
+        <div className="flex min-h-0 flex-1 flex-col rounded-lg border border-[#e8eaed] bg-[#ebebeb] p-2 xl:p-3">
+          <TongQuanDashboard />
         </div>
       ) : (
         <div className="flex min-h-0 flex-1 flex-col rounded-lg border border-[#e8eaed] bg-[#f5f6f8] p-3 overflow-y-auto">

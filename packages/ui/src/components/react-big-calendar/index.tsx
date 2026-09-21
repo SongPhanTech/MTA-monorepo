@@ -51,6 +51,9 @@ export interface CustomCalendarEvent extends Event {
   attendees?: string
   allDay?: boolean
   subjectClassId?: string
+  /** Event giả trên view Tháng: dòng "+ N sự kiện" */
+  isShowMore?: boolean
+  moreEvents?: CustomCalendarEvent[]
 }
 
 interface ReactBigCalendarCustomProps {
@@ -64,6 +67,8 @@ interface ReactBigCalendarCustomProps {
   height?: number | string
   defaultView?: "month" | "week" | "day" | "agenda"
   filterDate?: Date
+  /** Thu hẹp ô/padding giống lịch nhỏ — dùng khi card thấp */
+  compact?: boolean
 }
 
 const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
@@ -77,6 +82,7 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
   height = 600,
   defaultView = "month",
   filterDate,
+  compact = false,
 }) => {
   // State for calendar navigation and view
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -332,6 +338,62 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
     setCurrentView(view)
   }, [])
 
+  // Tháng: chỉ hiện môn thuộc đúng tháng đang xem (ẩn ngày tháng trước/sau)
+  const visibleEvents = useMemo(() => {
+    if (currentView !== Views.MONTH) return events
+    const month = currentDate.getMonth()
+    const year = currentDate.getFullYear()
+    return events.filter((e) => {
+      if (!e.start) return false
+      return e.start.getMonth() === month && e.start.getFullYear() === year
+    })
+  }, [events, currentView, currentDate])
+
+  /**
+   * View Tháng ở chế độ compact (card thấp): mỗi ngày chỉ 1 sự kiện thật.
+   * Phần còn lại → link "+ N sự kiện" (đặt SAU event thật để nằm dưới, giống rbc-show-more).
+   * Lịch full-size giữ nguyên toàn bộ sự kiện.
+   */
+  const monthCappedEvents = useMemo(() => {
+    if (!compact || currentView !== Views.MONTH) return visibleEvents
+
+    const byDay = new Map<string, CustomCalendarEvent[]>()
+    for (const e of visibleEvents) {
+      if (!e.start || e.isShowMore) continue
+      const key = moment(e.start).format("YYYY-MM-DD")
+      const list = byDay.get(key) ?? []
+      list.push(e)
+      byDay.set(key, list)
+    }
+
+    const capped: CustomCalendarEvent[] = []
+    for (const [, list] of byDay) {
+      list.sort((a, b) => a.start.getTime() - b.start.getTime())
+      const first = list[0]
+      if (!first) continue
+      capped.push(first)
+      if (list.length > 1) {
+        // Neo sau event đầu → RBC xếp hàng dưới thẻ, không đè lên trên.
+        // Clamp trong ngày của event đầu để event qua nửa đêm không đẩy link sang ô ngày khác.
+        const dayEnd = moment(first.start).endOf("day")
+        const moreStart = moment
+          .min(moment(first.end ?? first.start).add(1, "minute"), dayEnd)
+          .toDate()
+        capped.push({
+          id: `__more__${moment(first.start).format("YYYY-MM-DD")}`,
+          title: `+ ${list.length - 1} sự kiện`,
+          start: moreStart,
+          end: moment.min(moment(moreStart).add(1, "minute"), dayEnd).toDate(),
+          allDay: false,
+          isShowMore: true,
+          moreEvents: list,
+          color: "transparent",
+        })
+      }
+    }
+    return capped
+  }, [visibleEvents, currentView, compact])
+
   const isLightColor = useCallback((color: string) => {
     const hex = color.replace("#", "")
     const r = Number.parseInt(hex.substr(0, 2), 16)
@@ -342,17 +404,40 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
     return luminance > 0.6
   }, [])
 
+  // hex → rgba; chỉ cover #RRGGBB (đủ cho color event hiện tại)
+  const hexToRgba = useCallback((color: string, alpha: number) => {
+    const hex = color.replace("#", "")
+    if (hex.length !== 6) return color
+    const r = Number.parseInt(hex.slice(0, 2), 16)
+    const g = Number.parseInt(hex.slice(2, 4), 16)
+    const b = Number.parseInt(hex.slice(4, 6), 16)
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`
+  }, [])
+
   const EventComponent = useCallback(
     ({ event }: { event: CustomCalendarEvent }) => {
+      if (event.isShowMore) {
+        return (
+          <button type="button" className="rbc-button-link rbc-show-more">
+            {event.title}
+          </button>
+        )
+      }
+
       const backgroundColor = event.color || "#47a1dd"
       const textColor = isLightColor(backgroundColor) ? "#000000" : "#ffffff"
+      const timeRange =
+        event.start && event.end
+          ? `${moment(event.start).format("HH:mm")} - ${moment(event.end).format("HH:mm")}`
+          : ""
 
       if (currentView === Views.MONTH) {
+        const startTime = event.start ? moment(event.start).format("HH:mm") : ""
         return (
           <span
             style={{
               color: textColor,
-              fontSize: "12px",
+              fontSize: compact ? "10px" : "12px",
               fontWeight: 500,
               overflow: "hidden",
               textOverflow: "ellipsis",
@@ -361,121 +446,59 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
               width: "100%",
             }}
           >
-            {event.title}
+            {startTime ? `${startTime} ${event.title}` : event.title}
           </span>
         )
       }
 
-      if (currentView === Views.WEEK) {
-        return (
-          <div
-            style={{
-              color: textColor,
-              fontSize: "10px",
-              fontWeight: 400,
-              overflow: "hidden",
-              display: "flex",
-              flexDirection: "column",
-              height: "100%",
-              width: "100%",
-              padding: "2px",
-              lineHeight: 1.1,
-              justifyContent: "flex-start",
-            }}
-          >
-            <div
-              style={{
-                fontWeight: 600,
-                fontSize: "11px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                marginBottom: "1px",
-                flexShrink: 0,
-              }}
-            >
-              {event.title}
-            </div>
-          </div>
-        )
+      // Tuần / Ngày: title → giờ → địa điểm, căn giữa dọc
+      const titleSize = compact ? "10px" : "12px"
+      const metaSize = compact ? "9px" : "11px"
+      const metaStyle: React.CSSProperties = {
+        fontSize: metaSize,
+        fontWeight: 400,
+        opacity: 0.75,
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+        flexShrink: 0,
       }
 
       return (
         <div
           style={{
             color: textColor,
-            fontSize: "10px",
+            fontSize: metaSize,
             fontWeight: 400,
             overflow: "hidden",
             display: "flex",
-            flexDirection: "row",
+            flexDirection: "column",
             height: "100%",
             width: "100%",
-            padding: "2px",
-            lineHeight: 1.1,
-            gap: "4px",
+            padding: compact ? "1px" : "2px",
+            lineHeight: 1.2,
+            gap: "1px",
+            justifyContent: "center",
           }}
         >
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              flex: 1,
-              gap: "1px",
-              justifyContent: "flex-start",
+              fontWeight: 600,
+              fontSize: titleSize,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              flexShrink: 0,
             }}
           >
-            <div
-              style={{
-                fontWeight: 600,
-                fontSize: "11px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                flexShrink: 0,
-              }}
-            >
-              {event.title}
-            </div>
+            {event.title}
           </div>
-
-          {/* Right column: Description - only for longer events */}
-          {event.description && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                flex: 1,
-                justifyContent: "flex-start",
-                minWidth: "0",
-                maxHeight: "100%",
-                borderLeft: `1px solid ${
-                  isLightColor(backgroundColor) ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.3)"
-                }`,
-                paddingLeft: "4px",
-                marginLeft: "4px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "10px",
-                  opacity: 0.85,
-                  overflow: "hidden",
-                  display: "-webkit-box",
-                  WebkitLineClamp: 3,
-                  WebkitBoxOrient: "vertical",
-                  lineHeight: 1.2,
-                  wordBreak: "break-word",
-                }}
-              >
-                Ghi chú: {event.description}
-              </div>
-            </div>
-          )}
+          {timeRange ? <div style={metaStyle}>{timeRange}</div> : null}
+          {event.location && !compact ? <div style={metaStyle}>{event.location}</div> : null}
         </div>
       )
     },
-    [currentView, isLightColor]
+    [currentView, isLightColor, compact]
   )
 
   // Format event times
@@ -540,16 +563,28 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
   // Handle event selection
   const handleSelectEvent = useCallback(
     (event: CustomCalendarEvent) => {
+      // "+ N sự kiện" — chuyển sang xem Ngày (giống drill-down mặc định của RBC).
+      // Lấy ngày từ event thật đầu tiên, vì start của link đã bị clamp theo cuối ngày.
+      if (event.isShowMore) {
+        const targetDate = event.moreEvents?.[0]?.start ?? event.start
+        setCurrentDate(targetDate)
+        setHighlightedDate(targetDate)
+        setOriginalDay(targetDate.getDate())
+        setCurrentView(Views.DAY)
+        onChange?.(targetDate)
+        return
+      }
       if (onSelectEvent) {
         onSelectEvent(event)
       }
     },
-    [onSelectEvent]
+    [onSelectEvent, onChange]
   )
 
   // Handle double click event
   const handleDoubleClickEvent = useCallback(
     (event: CustomCalendarEvent) => {
+      if (event.isShowMore) return
       if (onDoubleClickEvent) {
         onDoubleClickEvent(event)
       }
@@ -560,26 +595,36 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
   // Event prop getter for custom styling
   const eventPropGetter = useCallback(
     (event: CustomCalendarEvent) => {
+      if (event.isShowMore) {
+        return {
+          style: {
+            backgroundColor: "transparent",
+            border: "none",
+            boxShadow: "none",
+            padding: 0,
+            margin: 0,
+            minHeight: 0,
+            height: "auto",
+          } as React.CSSProperties,
+          className: "rbc-month-more-event",
+        }
+      }
+
       const backgroundColor = event.color || "#47a1dd"
       const isLight = isLightColor(backgroundColor)
       const textColor = isLight ? "#000000" : "#ffffff"
 
-      // Only add border for week and day views, keep month view clean
-      const isTimeView = currentView === Views.WEEK || currentView === Views.DAY
-
-      // Use dark border for light colors, light border for dark colors
-      const borderColor = isLight ? "rgba(0, 0, 0, 0.6)" : "rgba(255, 255, 255, 0.6)"
-
       return {
         style: {
-          backgroundColor,
-          borderColor: isTimeView ? borderColor : backgroundColor,
+          // Nền trong suốt; không viền — giống Tháng
+          backgroundColor: hexToRgba(backgroundColor, 0.72),
+          borderColor: "transparent",
           color: textColor,
-          border: isTimeView ? `0.5px solid ${borderColor}` : "none",
+          border: "none",
           borderRadius: "4px",
-          fontSize: "12px",
+          fontSize: "13px",
           fontWeight: 500,
-          boxShadow: isTimeView ? "0 1px 2px rgba(0, 0, 0, 0.15)" : "none",
+          boxShadow: "none",
           "--event-color": backgroundColor,
           "--event-label-bg": isLight ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.2)",
           "--event-label-border": isLight ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.3)",
@@ -591,7 +636,7 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
         className: "custom-event-with-color",
       }
     },
-    [currentView, isLightColor]
+    [isLightColor, hexToRgba]
   )
 
   // Custom week header component
@@ -600,8 +645,8 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
       const today = new Date()
       const isToday = isSameDay(date, today)
       const isHighlighted = highlightedDate && isSameDay(date, highlightedDate)
-      const dayName = moment(date).format("dddd")
-      const dayNumber = moment(date).format("DD/MM")
+      const raw = moment(date).format("dddd DD/MM")
+      const dayLabel = raw.charAt(0).toUpperCase() + raw.slice(1)
 
       const handleDateClick = (e: React.MouseEvent) => {
         e.preventDefault()
@@ -622,7 +667,6 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
             width: "100%",
             height: "100%",
             justifyContent: "center",
-            padding: "4px 8px",
             color: isToday ? "#1890ff" : isHighlighted ? "#ff4d4f" : "#262626",
             transition: "all 0.3s ease",
             cursor: "pointer",
@@ -631,30 +675,21 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
         >
           <span
             style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              color: isHighlighted && !isToday ? "#ff4d4f" : "#595959",
-              marginBottom: "4px",
-            }}
-          >
-            {dayName}
-          </span>
-          <span
-            style={{
-              fontSize: "14px",
+              fontSize: compact ? "11px" : "13px",
               fontWeight: isToday ? 700 : isHighlighted ? 700 : 600,
               color: isToday ? "#47a1dd" : isHighlighted ? "#ff4d4f" : "#262626",
               backgroundColor: isToday ? "rgba(71, 161, 221, 0.1)" : "transparent",
               borderRadius: isToday ? "6px" : "0",
-              padding: isToday ? "2px 6px" : "0",
+              padding: isToday ? (compact ? "1px 4px" : "2px 6px") : "0",
+              whiteSpace: "nowrap",
             }}
           >
-            {dayNumber}
+            {dayLabel}
           </span>
         </div>
       )
     },
-    [highlightedDate, onChange, isSameDay]
+    [highlightedDate, onChange, isSameDay, compact]
   )
 
   // Custom day header component
@@ -663,7 +698,9 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
       const today = new Date()
       const isToday = isSameDay(date, today)
       const isHighlighted = highlightedDate && isSameDay(date, highlightedDate)
-      const dayLabel = moment(date).format("dddd, DD MMMM YYYY")
+      const dayLabel = compact
+        ? moment(date).format("dddd, DD/MM")
+        : moment(date).format("dddd, DD MMMM YYYY")
 
       const handleDateClick = (e: React.MouseEvent) => {
         e.preventDefault()
@@ -682,7 +719,7 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
             justifyContent: "center",
             width: "100%",
             height: "100%",
-            fontSize: "16px",
+            fontSize: compact ? "12px" : "16px",
             fontWeight: isToday ? 700 : isHighlighted ? 700 : 600,
             color: isToday ? "#47a1dd" : isHighlighted ? "#ff4d4f" : "#262626",
             backgroundColor:
@@ -691,14 +728,14 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
                 : isToday
                   ? "rgba(71, 161, 221, 0.1)"
                   : "transparent",
-            borderRadius: isHighlighted || isToday ? "8px" : "0",
+            borderRadius: isHighlighted || isToday ? (compact ? "4px" : "8px") : "0",
             border:
               isHighlighted && !isToday
                 ? "2px solid rgba(255, 77, 79, 0.3)"
                 : isToday
                   ? "2px solid rgba(71, 161, 221, 0.3)"
                   : "2px solid transparent",
-            padding: "8px 16px",
+            padding: compact ? "2px 6px" : "8px 16px",
             transition: "all 0.3s ease",
             cursor: "pointer",
           }}
@@ -708,28 +745,31 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
         </div>
       )
     },
-    [highlightedDate, onChange, isSameDay]
+    [highlightedDate, onChange, isSameDay, compact]
   )
-  const MonthHeaderComponent = useCallback(({ date }: { date: Date; localizer: any }) => {
-    const dayName = moment(date).format("dddd")
+  const MonthHeaderComponent = useCallback(
+    ({ date }: { date: Date; localizer: any }) => {
+      const dayName = moment(date).format("dddd")
 
-    return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-          height: "100%",
-          fontSize: "13px",
-          fontWeight: 600,
-          color: "#262626",
-        }}
-      >
-        {dayName}
-      </div>
-    )
-  }, [])
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            height: "100%",
+            fontSize: compact ? "11px" : "13px",
+            fontWeight: 600,
+            color: "#262626",
+          }}
+        >
+          {dayName}
+        </div>
+      )
+    },
+    [compact]
+  )
 
   // Custom date cell component for month view
   const MonthDateCellComponent = useCallback(
@@ -738,6 +778,7 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
       const isToday = isSameDay(date, today)
       const isHighlighted = highlightedDate && isSameDay(date, highlightedDate)
       const dayNumber = date.getDate().toString()
+      const markSize = compact ? 18 : 24
 
       const handleDateClick = (e: React.MouseEvent) => {
         e.preventDefault()
@@ -757,23 +798,23 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "flex-end",
-            padding: "4px",
+            padding: compact ? "1px 2px" : "4px",
           }}
           onClick={handleDateClick}
         >
           <span
             style={{
-              fontSize: "14px",
+              fontSize: compact ? "11px" : "14px",
               fontWeight: isToday || isHighlighted ? 600 : 400,
               color: isToday ? "#fff" : isHighlighted ? "#fff" : "#262626",
               backgroundColor: isToday ? "#47a1dd" : isHighlighted ? "#ff4d4f" : "transparent",
               borderRadius: isToday || isHighlighted ? "50%" : "0",
-              width: isToday || isHighlighted ? "24px" : "auto",
-              height: isToday || isHighlighted ? "24px" : "auto",
+              width: isToday || isHighlighted ? markSize : "auto",
+              height: isToday || isHighlighted ? markSize : "auto",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              minWidth: isToday || isHighlighted ? "24px" : "auto",
+              minWidth: isToday || isHighlighted ? markSize : "auto",
               zIndex: 1,
               position: "relative",
               transition: "all 0.3s ease",
@@ -785,7 +826,7 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
         </div>
       )
     },
-    [highlightedDate, onChange, isSameDay]
+    [highlightedDate, onChange, isSameDay, compact]
   )
 
   return (
@@ -794,7 +835,7 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
         height: typeof height === "number" ? `${height}px` : height,
         ...style,
       }}
-      className={className}
+      className={cn(compact && "rbc-compact", className)}
     >
       {/* External Toolbar */}
       <div
@@ -802,23 +843,30 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: "16px",
+          marginBottom: compact ? "8px" : "16px",
           padding: "0",
           background: "transparent",
           border: "none",
+          flexShrink: 0,
         }}
       >
         {/* Navigation */}
-        <Space>
+        <Space size={compact ? 4 : undefined}>
           <Button
+            size={compact ? "small" : "middle"}
             icon={<ArrowLeftOutlined />}
             onClick={() => handleNavigate("PREV")}
             style={{ display: "flex", alignItems: "center" }}
           />
-          <Button onClick={() => handleNavigate("TODAY")} type="primary">
+          <Button
+            size={compact ? "small" : "middle"}
+            onClick={() => handleNavigate("TODAY")}
+            type="primary"
+          >
             Hôm nay
           </Button>
           <Button
+            size={compact ? "small" : "middle"}
             icon={<ArrowRightOutlined />}
             onClick={() => handleNavigate("NEXT")}
             iconPosition="end"
@@ -829,7 +877,7 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
         {/* Current date/period label */}
         <div
           style={{
-            fontSize: "18px",
+            fontSize: compact ? "14px" : "18px",
             fontWeight: 600,
             color: "#262626",
           }}
@@ -838,20 +886,23 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
         </div>
 
         {/* View switcher */}
-        <Space>
+        <Space size={compact ? 4 : undefined}>
           <Button
+            size={compact ? "small" : "middle"}
             type={currentView === Views.MONTH ? "primary" : "default"}
             onClick={() => handleViewChange(Views.MONTH)}
           >
             Tháng
           </Button>
           <Button
+            size={compact ? "small" : "middle"}
             type={currentView === Views.WEEK ? "primary" : "default"}
             onClick={() => handleViewChange(Views.WEEK)}
           >
             Tuần
           </Button>
           <Button
+            size={compact ? "small" : "middle"}
             type={currentView === Views.DAY ? "primary" : "default"}
             onClick={() => handleViewChange(Views.DAY)}
           >
@@ -871,10 +922,10 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
       {/* Calendar */}
       <Calendar
         localizer={localizer}
-        events={events}
+        events={monthCappedEvents}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: "calc(100% - 60px)" }}
+        style={{ height: compact ? "calc(100% - 40px)" : "calc(100% - 60px)" }}
         messages={messages}
         formats={formats}
         views={[Views.MONTH, Views.WEEK, Views.DAY]}
@@ -890,7 +941,9 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
         onSelectSlot={handleSelectSlot}
         onDoubleClickEvent={handleDoubleClickEvent}
         dayLayoutAlgorithm="overlap"
-        scrollToTime={new Date(new Date().setHours(6, 0, 0, 0))}
+        min={new Date(1970, 0, 1, 6, 0, 0)}
+        max={new Date(1970, 0, 1, 23, 59, 59)}
+        scrollToTime={new Date(1970, 0, 1, 6, 0, 0)}
         enableAutoScroll
         components={{
           event: EventComponent,
@@ -905,10 +958,16 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
             header: MonthHeaderComponent,
             dateHeader: MonthDateCellComponent,
           },
-          timeGutterHeader: () => <span className="w-[40px] text-center">Lịch tuần</span>, // Disable time gutter header
+          timeGutterHeader: () => null,
           timeGutterWrapper: (e: any) => {
             return (
-              <span className={cn(e.children.props.className, "text-center w-[40px]")}>
+              <span
+                className={cn(
+                  e.children.props.className,
+                  "text-center",
+                  compact ? "w-[36px]" : "w-[40px]"
+                )}
+              >
                 {e.children.props.children.map((child: any, idx: number) => (
                   <span key={child.key} id={`time-gutter-${child.key}`}>
                     {child}
