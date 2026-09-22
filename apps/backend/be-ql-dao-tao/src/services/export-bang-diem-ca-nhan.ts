@@ -81,6 +81,64 @@ function toNullableNumber(value: unknown): number | null {
   return Number.isFinite(n) ? n : null
 }
 
+/** Năm học mới nhất theo thời gian năm học, không phụ thuộc cờ isLastStudyYear cũ. */
+export function pickLatestYearResult<
+  T extends {
+    studyYear?: number | null
+    schoolYear?: { startDate?: Date | null; endDate?: Date | null } | null
+  },
+>(results: T[]): T | null {
+  if (results.length === 0) return null
+  return (
+    [...results].sort((a, b) => {
+      const aTime =
+        a.schoolYear?.endDate?.getTime() ?? a.schoolYear?.startDate?.getTime() ?? 0
+      const bTime =
+        b.schoolYear?.endDate?.getTime() ?? b.schoolYear?.startDate?.getTime() ?? 0
+      if (bTime !== aTime) return bTime - aTime
+      return (b.studyYear ?? 0) - (a.studyYear ?? 0)
+    })[0] ?? null
+  )
+}
+
+type CumulativeRankRange = {
+  classification: string
+  baseScore?: string | null
+  base10Min?: number | null
+  base10Max?: number | null
+  base4Min?: number | null
+  base4Max?: number | null
+  rankOrder?: number | null
+}
+
+/** Xếp loại toàn khoá theo GPA tích luỹ. */
+export function classificationFromCumulativeGpa({
+  gpa10,
+  gpa4,
+  baseScore,
+  ranks,
+}: {
+  gpa10: number | null
+  gpa4: number | null
+  baseScore?: string | null
+  ranks?: CumulativeRankRange[] | null
+}): string {
+  if (!ranks?.length) return ""
+  const useBase4 = baseScore === "Base4"
+  const gpa = useBase4 ? gpa4 : gpa10
+  if (gpa == null) return ""
+  const matched = [...ranks]
+    .filter((r) => !r.baseScore || !baseScore || r.baseScore === baseScore)
+    .sort((a, b) => (a.rankOrder ?? 99) - (b.rankOrder ?? 99))
+    .find((r) => {
+      if (useBase4) {
+        return r.base4Min != null && r.base4Max != null && gpa >= r.base4Min && gpa <= r.base4Max
+      }
+      return r.base10Min != null && r.base10Max != null && gpa >= r.base10Min && gpa <= r.base10Max
+    })
+  return matched?.classification ?? ""
+}
+
 function getFinalScore(manualFinalScore: unknown, finalScore: unknown): number {
   if (manualFinalScore != null) return toNullableNumber(manualFinalScore) ?? 0
   if (finalScore != null) return toNullableNumber(finalScore) ?? 0
@@ -285,6 +343,7 @@ async function loadBangDiemExportData(studentIds: string[]) {
           cumulativeGpaBase10: true,
           cumulativeGpaBase4: true,
           rank: { select: { classification: true } },
+          schoolYear: { select: { startDate: true, endDate: true } },
         },
       },
       fixedClass: {
@@ -294,6 +353,7 @@ async function loadBangDiemExportData(studentIds: string[]) {
           trainingCourse: {
             select: {
               name: true,
+              baseScore: true,
               scoreToPassGraduation: true,
               scoreToPassConditional: true,
               scoreToPass: true,
@@ -301,6 +361,19 @@ async function loadBangDiemExportData(studentIds: string[]) {
               examScoreToPass: true,
               trainingObjectType: { select: { name: true } },
               scoreConverts: true,
+              academicRankingConvert: {
+                where: { context: "STUDYING", deletedAt: null, active: true },
+                orderBy: { rankOrder: "asc" },
+                select: {
+                  classification: true,
+                  baseScore: true,
+                  base10Min: true,
+                  base10Max: true,
+                  base4Min: true,
+                  base4Max: true,
+                  rankOrder: true,
+                },
+              },
             },
           },
           curriculumVersion: {
@@ -730,17 +803,24 @@ export async function exportBangDiemCaNhan({ studentIds }: { studentIds: string[
       ],
     }))
 
-    const yearResult =
-      student.studentYearResult.find((r) => r.isLastStudyYear) ??
-      [...student.studentYearResult].sort((a, b) => (b.studyYear ?? 0) - (a.studyYear ?? 0))[0] ??
-      null
+    const yearResult = pickLatestYearResult(student.studentYearResult)
     const lastSemester = exportData.latestSsrByStudent.get(student.id)
     const tongtinchi = yearResult?.accumulatedCredits ?? lastSemester?.accumulatedCredits ?? ""
     const tongdiemhe10 =
       toNullableNumber(yearResult?.cumulativeGpaBase10) ?? lastSemester?.cumulativeGpaBase10 ?? ""
     const tongdiemhe4 =
       toNullableNumber(yearResult?.cumulativeGpaBase4) ?? lastSemester?.cumulativeGpaBase4 ?? ""
-    const xeploai = yearResult?.rank?.classification ?? lastSemester?.classification ?? ""
+    const course = student.fixedClass?.trainingCourse
+    const xeploai =
+      classificationFromCumulativeGpa({
+        gpa10: typeof tongdiemhe10 === "number" ? tongdiemhe10 : null,
+        gpa4: typeof tongdiemhe4 === "number" ? tongdiemhe4 : null,
+        baseScore: course?.baseScore,
+        ranks: course?.academicRankingConvert,
+      }) ||
+      yearResult?.rank?.classification ||
+      lastSemester?.classification ||
+      ""
 
     return {
       ...studentSheetData(student),

@@ -3,6 +3,7 @@ import { formatDateVn, nowVn } from "@workspace/libs/timezone"
 import type { TableRow } from "@workspace/libs/template-excel-core"
 import { prisma } from ".."
 import { buildFromTemplate } from "./build-from-template"
+import { pickLatestYearResult, classificationFromCumulativeGpa } from "./export-bang-diem-ca-nhan"
 
 type ScoreRange = {
   base10Min: number
@@ -143,6 +144,7 @@ async function exportBangDiemCaNhanMau({
           cumulativeGpaBase10: true,
           cumulativeGpaBase4: true,
           rank: { select: { classification: true } },
+          schoolYear: { select: { startDate: true, endDate: true } },
         },
       },
       fixedClass: {
@@ -152,6 +154,7 @@ async function exportBangDiemCaNhanMau({
           trainingCourse: {
             select: {
               name: true,
+              baseScore: true,
               scoreToPassGraduation: true,
               scoreToPassConditional: true,
               scoreToPass: true,
@@ -159,6 +162,19 @@ async function exportBangDiemCaNhanMau({
               examScoreToPass: true,
               trainingObjectType: { select: { name: true } },
               scoreConverts: true,
+              academicRankingConvert: {
+                where: { context: "STUDYING", deletedAt: null, active: true },
+                orderBy: { rankOrder: "asc" },
+                select: {
+                  classification: true,
+                  baseScore: true,
+                  base10Min: true,
+                  base10Max: true,
+                  base4Min: true,
+                  base4Max: true,
+                  rankOrder: true,
+                },
+              },
             },
           },
           curriculumVersion: {
@@ -605,10 +621,7 @@ async function exportBangDiemCaNhanMau({
     ],
   }))
 
-  const lastYearResult =
-    student.studentYearResult.find((r) => r.isLastStudyYear) ??
-    [...student.studentYearResult].sort((a, b) => (b.studyYear ?? 0) - (a.studyYear ?? 0))[0] ??
-    null
+  const lastYearResult = pickLatestYearResult(student.studentYearResult)
   const lastSemesterResult =
     [...semesterResults].sort((a, b) => b.semesterIndexInCourse - a.semesterIndexInCourse)[0] ??
     null
@@ -624,7 +637,15 @@ async function exportBangDiemCaNhanMau({
     toNumber(lastSemesterResult?.cumulativeGpaBase4) ??
     ""
   const xeploai =
-    lastYearResult?.rank?.classification ?? lastSemesterResult?.rank?.classification ?? ""
+    classificationFromCumulativeGpa({
+      gpa10: typeof tongdiemhe10 === "number" ? tongdiemhe10 : null,
+      gpa4: typeof tongdiemhe4 === "number" ? tongdiemhe4 : null,
+      baseScore: course?.baseScore,
+      ranks: course?.academicRankingConvert,
+    }) ||
+    lastYearResult?.rank?.classification ||
+    lastSemesterResult?.rank?.classification ||
+    ""
 
   const today = nowVn()
   const fullname = student.userProfile?.fullname ?? ""

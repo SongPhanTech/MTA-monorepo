@@ -1617,8 +1617,57 @@ export async function calculateStudentYearResult({
     }
   })
 
-  const cumulativeGpa10 = roundGpa(cumulativeTotalScore10, cumulativePassedCredits)
-  const cumulativeGpa4 = roundGpa(cumulativeTotalScore4, cumulativePassedCredits)
+  let cumulativeGpa10 = roundGpa(cumulativeTotalScore10, cumulativePassedCredits)
+  let cumulativeGpa4 = roundGpa(cumulativeTotalScore4, cumulativePassedCredits)
+  let studyYear = 1
+  let isLastStudyYear = false
+
+  const lastMainSemester =
+    [...schoolYear.semesters]
+      .filter(
+        (s) =>
+          !s.deletedAt &&
+          (s.semesterType === SemesterType.FIRST ||
+            s.semesterType === SemesterType.SECOND ||
+            s.semesterType == null)
+      )
+      .sort((a, b) => b.startDate.getTime() - a.startDate.getTime())[0] ??
+    [...schoolYear.semesters]
+      .filter((s) => !s.deletedAt)
+      .sort((a, b) => b.startDate.getTime() - a.startDate.getTime())[0] ??
+    null
+
+  const courseStartDate = student.fixedClass.trainingCourse.semesterStart?.startDate
+  if (courseStartDate) {
+    const yearsFromStart = await prisma.schoolYear.count({
+      where: {
+        startDate: { gte: courseStartDate, lte: schoolYear.startDate },
+        deletedAt: null,
+        active: true,
+      },
+    })
+    if (yearsFromStart > 0) studyYear = yearsFromStart
+  }
+
+  // Tích luỹ toàn khoá: cùng công thức với tổng kết học kỳ (ThongTinTichLuy)
+  if (lastMainSemester?.startDate) {
+    const thongTinTichLuy = await ThongTinTichLuy(
+      studentId,
+      curriculumVersionId,
+      student.fixedClass.trainingCourse.id,
+      lastMainSemester.startDate,
+      lastMainSemester.endDate ?? undefined,
+      lastMainSemester.id
+    )
+    if (thongTinTichLuy.kyDangHoc > 0) {
+      cumulativeGpa10 = thongTinTichLuy.diemTrungBinh10TichLuy
+      cumulativeGpa4 = thongTinTichLuy.diemTrungBinh4TichLuy
+      cumulativePassedCredits = thongTinTichLuy.tongTinChiDaTichLuy
+      cumulativeDebtCredits = thongTinTichLuy.tongTinChiNoTichLuy
+      studyYear = Math.floor((thongTinTichLuy.kyDangHoc + 1) / 2)
+      isLastStudyYear = thongTinTichLuy.kyCuoi
+    }
+  }
 
   const cgpa10 = cumulativeGpa10
   const cgpa4 = cumulativeGpa4
@@ -1650,11 +1699,9 @@ export async function calculateStudentYearResult({
     },
   })
 
-  // E. Xác định Xếp loại (RANKING)
-  // Cần query bảng AcademicRankingConvert để tìm rank phù hợp
-  // Giả sử hệ 4 là mặc định cho xếp loại
+  // E. Xếp loại theo GPA tích luỹ toàn khoá (không dùng GPA năm)
   const targetGpa =
-    student.fixedClass.trainingCourse.baseScore === "Base4" ? yearlyGpa4 : yearlyGpa10
+    student.fixedClass.trainingCourse.baseScore === "Base4" ? cumulativeGpa4 : cumulativeGpa10
 
   const rank = await prisma.academicRankingConvert.findFirst({
     where: {
@@ -1679,7 +1726,7 @@ export async function calculateStudentYearResult({
     isUnionLeader: (student.unionLeaderOf?.length ?? 0) > 0,
     studentId: studentId,
     schoolYearId: schoolYearId,
-    studyYear: new Date().getFullYear(),
+    studyYear,
     gpaBase10: yearlyGpa10,
     gpaBase4: yearlyGpa4,
     cumulativeGpaBase10: cumulativeGpa10,
@@ -1692,7 +1739,7 @@ export async function calculateStudentYearResult({
     rankId: rank?.id,
     academicWarningLevel: student.academicWarningLevel ?? academicWarning?.level ?? 0,
     disciplinaryWarningLevel: disciplinaryWarning?.level ?? 0,
-    isLastStudyYear: false,
+    isLastStudyYear,
     baseScore: student.fixedClass.trainingCourse.baseScore,
     lowestFinalScore: courseGradeLowest,
     lowestGraduationScore,
@@ -1714,6 +1761,13 @@ export async function calculateStudentYearResult({
     update: data,
     create: data,
   })
+
+  if (isLastStudyYear) {
+    await prisma.studentYearResult.updateMany({
+      where: { studentId, schoolYearId: { not: schoolYearId } },
+      data: { isLastStudyYear: false },
+    })
+  }
 
   return result
 }

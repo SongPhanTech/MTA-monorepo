@@ -257,9 +257,10 @@ async function buildPhuLucDsLuanVan(rows: StudentRow[]) {
   let count = 1
   const dataRows: TableRow[] = Array.from(groups.values()).flatMap((group, index) => {
     const orgRow: TableRow = {
+      height: 24,
       cells: [
         {
-          value: `${index + 1} Ngành ${group.majorName} (${group.specializationName}) : ${group.thesisProject.length} học viên`,
+          value: `${index + 1}. Ngành ${group.majorName} (chuyên ngành ${group.specializationName}): ${group.thesisProject.length} học viên`,
           border: true,
           align: "center",
           colSpan: 6,
@@ -269,15 +270,17 @@ async function buildPhuLucDsLuanVan(rows: StudentRow[]) {
       ],
     }
     const thesisRows: TableRow[] = group.thesisProject.map((thesis) => ({
+      height: 54,
       cells: [
-        { value: count++, border: true, align: "center", fontSize: 12 },
+        { value: `${count++}.`, border: true, align: "center", fontSize: 12 },
         {
-          value: `${thesis.hoTen}\nNS:${thesis.ngaySinh}\n${thesis.dt}-${thesis.khoaHoc}`,
+          value: `${thesis.hoTen}\nNS: ${thesis.ngaySinh}\n${thesis.dt}-${thesis.khoaHoc}`,
           border: true,
           align: "left",
+          wrapText: true,
           fontSize: 12,
         },
-        { value: thesis.tendetai, border: true, align: "left", fontSize: 12 },
+        { value: thesis.tendetai, border: true, align: "left", wrapText: true, fontSize: 12 },
         {
           value:
             thesis.gvhd1 && thesis.gvhd2
@@ -285,6 +288,7 @@ async function buildPhuLucDsLuanVan(rows: StudentRow[]) {
               : thesis.gvhd1 || thesis.gvhd2 || "",
           border: true,
           align: "left",
+          wrapText: true,
           fontSize: 12,
         },
         { value: thesis.project?.type || "", border: true, align: "center", fontSize: 12 },
@@ -326,12 +330,15 @@ async function buildPhuLucDsLuanVan(rows: StudentRow[]) {
           sheet: "PhuLucDanhSachLuanVan",
           rows: [...dataRows, gapRow, totalRow],
           tableStartCell: { row: 7, col: 1 },
+          columnWidths: [8, 24, 45, 50, 16, 12],
           data: {
             dotxet: (firstProject?.thesisSession?.name || "").trim().toUpperCase(),
             soQD: firstProject?.thesisSession?.decisionNumber || "",
             ngay: decisionDate.day,
             thang: decisionDate.month,
             nam: decisionDate.year,
+            groupTitle: "",
+            tongSo: "",
           },
         },
       ],
