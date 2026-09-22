@@ -241,9 +241,9 @@ export default function TongQuanDashboard() {
       />
 
       {/* Ngay dưới KPI: danh sách lớp của giảng viên (compact, cuộn ngang) */}
-      <div className="h-[190px] shrink-0 xl:h-[220px]">
+      {/* <div className="h-[190px] shrink-0 xl:h-[220px]">
         <DanhSachLopGiangVien compact />
-      </div>
+      </div> */}
 
       {/* Hàng dưới co giãn lấp hết chỗ trống; không min-w → không scroll ngang ở 1024 */}
       <div className="grid min-h-[280px] w-full min-w-0 flex-1 grid-cols-[200px_minmax(0,1fr)_240px] items-stretch gap-2 xl:grid-cols-[230px_minmax(0,1fr)_290px] xl:gap-3">

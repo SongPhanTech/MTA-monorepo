@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
 import { createId } from "@workspace/db"
 import { convertDocument } from "@workspace/libs/api/model"
+import { signOnlyOfficeConfig } from "@workspace/libs/api/onlyoffice"
 import { getMinioUrl } from "@workspace/libs/utils"
-import { Col, Image, Modal, Row } from "antd"
+import { Image, Modal } from "antd"
 import { useEffect, useId, useRef } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 export type DocumentType =
@@ -314,8 +315,8 @@ const OnlyOfficeViewer = ({
   fileType = "docx",
   mode = "view",
   allowDownload = true,
-  containerClassName = "w-full h-[90vh]",
-  editorHeight = "750px",
+  containerClassName = "w-full h-full",
+  editorHeight = "100%",
   callbackUrl,
   documentKey,
   onDownloadAsUrl,
@@ -326,104 +327,129 @@ const OnlyOfficeViewer = ({
   onDownloadAsUrlRef.current = onDownloadAsUrl
 
   useEffect(() => {
+    let cancelled = false
     const editorNodeId = documentKey || createId()
 
     const placeholderContainer = document.getElementById(containerId)
-    if (window.DocsAPI) {
-      while (placeholderContainer?.firstChild) {
-        if (placeholderContainer.lastChild)
-          placeholderContainer.removeChild(placeholderContainer.lastChild)
-      }
-      window.docEditor?.destroyEditor?.()
-      const placeholder = document.createElement("div")
-      placeholder.id = editorNodeId
-      placeholder.style.height = "100%"
-      placeholderContainer?.appendChild(placeholder)
-      const config = {
-        width: "100%",
-        height: editorHeight,
-        type: allowDownload || canEdit ? "desktop" : "embedded",
-        documentType: getDocumentType(fileType),
-        token: "",
-        document: {
-          fileType,
-          key: editorNodeId,
-          title,
-          url: uri,
-          permissions: {
-            download: allowDownload || !!onDownloadAsUrlRef.current,
-            print: allowDownload,
-            edit: canEdit,
-            copy: allowDownload,
-          },
+    if (!window.DocsAPI) return
+
+    while (placeholderContainer?.firstChild) {
+      if (placeholderContainer.lastChild)
+        placeholderContainer.removeChild(placeholderContainer.lastChild)
+    }
+    window.docEditor?.destroyEditor?.()
+    const placeholder = document.createElement("div")
+    placeholder.id = editorNodeId
+    placeholder.style.height = "100%"
+    placeholderContainer?.appendChild(placeholder)
+
+    const config = {
+      width: "100%",
+      height: editorHeight,
+      type: allowDownload || canEdit ? "desktop" : "embedded",
+      documentType: getDocumentType(fileType),
+      document: {
+        fileType,
+        key: editorNodeId,
+        title,
+        url: uri,
+        permissions: {
+          download: allowDownload || !!onDownloadAsUrlRef.current,
+          print: allowDownload,
+          edit: canEdit,
+          copy: allowDownload,
         },
-        events: {
-          onRequestSaveAs: () => {},
-          onDownloadAs(data: { data?: { url?: string } }) {
-            const fileUrl = data?.data?.url ?? ""
-            if (!fileUrl) return
-            if (onDownloadAsUrlRef.current) {
-              onDownloadAsUrlRef.current(fileUrl)
-              return
-            }
-            if (!allowDownload) return
-            const link = document.createElement("a")
-            link.href = fileUrl
-            link.setAttribute("download", title || "download")
-            document.body.appendChild(link)
-            link.click()
-            link.parentNode?.removeChild(link)
+      },
+      editorConfig: {
+        mode,
+        lang: "vi",
+        // Remote OnlyOffice cannot reach localhost callback — omit when unreachable
+        ...(canEdit && callbackUrl ? { callbackUrl } : {}),
+        customization: {
+          forcesave: Boolean(canEdit && callbackUrl),
+          toolbar: allowDownload || canEdit,
+          compactToolbar: !allowDownload && !canEdit,
+          statusBar: canEdit,
+          autosave: Boolean(canEdit && callbackUrl),
+          help: false,
+          logo: {
+            visible: false,
           },
-        },
-        editorConfig: {
-          mode,
-          lang: "vi",
-          // Remote OnlyOffice cannot reach localhost callback — omit when unreachable
-          ...(canEdit && callbackUrl ? { callbackUrl } : {}),
-          customization: {
-            forcesave: Boolean(canEdit && callbackUrl),
-            toolbar: allowDownload || canEdit,
-            compactToolbar: !allowDownload && !canEdit,
-            statusBar: canEdit,
-            autosave: Boolean(canEdit && callbackUrl),
-            help: false,
-            logo: {
-              visible: false,
-            },
-            chat: false,
-            comments: false,
-            anonymous: {
-              request: false,
-            },
-            plugins: false,
-            ...(allowDownload || canEdit
-              ? {}
-              : {
-                  layout: {
-                    toolbar: {
-                      file: false,
-                      home: true,
-                      layout: true,
-                      insert: false,
-                      draw: false,
-                      review: false,
-                      view: true,
-                    },
-                    header: {
-                      save: false,
-                      edit: false,
-                      users: false,
-                    },
+          chat: false,
+          comments: false,
+          anonymous: {
+            request: false,
+          },
+          plugins: false,
+          ...(allowDownload || canEdit
+            ? {}
+            : {
+                layout: {
+                  toolbar: {
+                    file: false,
+                    home: true,
+                    layout: true,
+                    insert: false,
+                    draw: false,
+                    review: false,
+                    view: true,
                   },
-                }),
-          },
-          region: "vn",
+                  header: {
+                    save: false,
+                    edit: false,
+                    users: false,
+                  },
+                },
+              }),
         },
-      } satisfies OnlyOfficeFullConfig
-      window.docEditor = new window.DocsAPI.DocEditor(editorNodeId, config)
+        region: "vn",
+      },
+    } satisfies OnlyOfficeFullConfig
+
+    const events = {
+      onRequestSaveAs: () => {},
+      onDownloadAs(data: { data?: { url?: string } }) {
+        const fileUrl = data?.data?.url ?? ""
+        if (!fileUrl) return
+        if (onDownloadAsUrlRef.current) {
+          onDownloadAsUrlRef.current(fileUrl)
+          return
+        }
+        if (!allowDownload) return
+        const link = document.createElement("a")
+        link.href = fileUrl
+        link.setAttribute("download", title || "download")
+        document.body.appendChild(link)
+        link.click()
+        link.parentNode?.removeChild(link)
+      },
     }
 
+    const initEditor = async () => {
+      let token = ""
+      try {
+        // Only sign serializable config (no event handlers)
+        const signed = await signOnlyOfficeConfig(config as Record<string, unknown>)
+        if (signed.status === 200 && signed.data && "token" in signed.data) {
+          token = signed.data.token
+        } else {
+          console.error("[OnlyOffice] Failed to sign config:", signed)
+        }
+      } catch (error) {
+        console.error("[OnlyOffice] Sign config error:", error)
+      }
+      if (cancelled) return
+      window.docEditor = new window.DocsAPI.DocEditor(editorNodeId, {
+        ...config,
+        events,
+        token,
+      })
+    }
+
+    void initEditor()
+
     return () => {
+      cancelled = true
       window.docEditor?.destroyEditor?.()
     }
   }, [
@@ -506,7 +532,19 @@ const XemTaiLieu = () => {
       style={{
         top: 0,
         maxWidth: "100vw",
+        paddingBottom: 0,
+        margin: 0,
         display: supportedImageFileTypes.includes(fileType) ? "none" : undefined,
+      }}
+      styles={{
+        body: {
+          height: "calc(100vh - 55px)",
+          padding: 0,
+          overflow: "hidden",
+        },
+        content: {
+          borderRadius: 0,
+        },
       }}
       onCancel={onClose}
       okButtonProps={{
@@ -515,57 +553,45 @@ const XemTaiLieu = () => {
       cancelButtonProps={{
         hidden: true,
       }}
+      footer={null}
     >
-      <Row gutter={[8, 8]}>
-        <Col span={24}>
-          {/* <Flex justify="end" className="mb-2" gap={1}>
-                        <Button
-                            type="primary"
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                e.preventDefault()
-
-                                window?.docEditor?.downloadAs?.(input?.mimeType)
-                            }}
-                        >
-                            Tải xuống
-                        </Button>
-                    </Flex> */}
-          {input?.convertTo && convertedDocumentUrlLoading ? (
-            <div>Đang chuyển đổi tài liệu...</div>
-          ) : (
-            documentUrl &&
-            supportedDocFileTypes.includes(fileType) && (
-              <OnlyOfficeViewer
-                uri={documentUrl}
-                fileType={input?.convertTo ?? fileType}
-                title={input?.name}
-                mode={input?.mode || "view"}
-              />
-            )
-          )}
-          {documentUrl && supportedImageFileTypes.includes(fileType) && (
-            <Image
-              preview={{
-                visible: isOpen,
-                src: documentUrl,
-                onVisibleChange: onChange,
-              }}
+      <div className="w-full h-full">
+        {input?.convertTo && convertedDocumentUrlLoading ? (
+          <div className="p-4">Đang chuyển đổi tài liệu...</div>
+        ) : (
+          documentUrl &&
+          supportedDocFileTypes.includes(fileType) && (
+            <OnlyOfficeViewer
+              uri={documentUrl}
+              fileType={input?.convertTo ?? fileType}
+              title={input?.name}
+              mode={input?.mode || "view"}
+              containerClassName="w-full h-[calc(100vh-55px)]"
+              editorHeight="100%"
             />
+          )
+        )}
+        {documentUrl && supportedImageFileTypes.includes(fileType) && (
+          <Image
+            preview={{
+              visible: isOpen,
+              src: documentUrl,
+              onVisibleChange: onChange,
+            }}
+          />
+        )}
+        {input?.uri &&
+          !supportedImageFileTypes.includes(fileType) &&
+          !supportedDocFileTypes.includes(fileType) && (
+            <span className="p-4 inline-block">
+              Không hỗ trợ xem tài liệu này. Vui lòng{" "}
+              <a href={input.uri} className="text-primary">
+                tải xuống
+              </a>{" "}
+              để xem.
+            </span>
           )}
-          {input?.uri &&
-            !supportedImageFileTypes.includes(fileType) &&
-            !supportedDocFileTypes.includes(fileType) && (
-              <span>
-                Không hỗ trợ xem tài liệu này. Vui lòng{" "}
-                <a href={input.uri} className="text-primary">
-                  tải xuống
-                </a>{" "}
-                để xem.
-              </span>
-            )}
-        </Col>
-      </Row>
+      </div>
     </Modal>
   )
 }
