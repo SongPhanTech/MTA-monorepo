@@ -5,7 +5,7 @@ import type {
 } from "@components/cong-giang-vien/giang-vien/types"
 import { useSession } from "@workspace/auth/react"
 import { $Enums } from "@workspace/db/client"
-import { useFindFirstLecturer } from "@workspace/db/hooks"
+import { useFindFirstLecturer, useFindUniqueSemester } from "@workspace/db/hooks"
 import { useSemesterStore } from "@workspace/ui"
 import dayjs from "dayjs"
 import { useMemo } from "react"
@@ -26,6 +26,10 @@ const useTrangChuGiangVien = () => {
   const { data: me } = useSession()
   const profileId = me?.sDM_NhanVienId
   const { id: semesterId } = useSemesterStore()
+  const { data: hocKyDangChon, isLoading: dangTaiHocKy } = useFindUniqueSemester(
+    { where: { id: semesterId }, select: { endDate: true } },
+    { enabled: !!semesterId }
+  )
 
   const subjectClassWhere = {
     semesterId,
@@ -57,7 +61,13 @@ const useTrangChuGiangVien = () => {
           where: {
             deletedAt: null,
             active: true,
-            ...(semesterId ? { trainingCourse: { semesterStartId: semesterId } } : {}),
+            ...(hocKyDangChon?.endDate
+              ? {
+                  trainingCourse: {
+                    semesterStart: { startDate: { lte: hocKyDangChon.endDate } },
+                  },
+                }
+              : {}),
           },
           include: {
             _count: { select: { students: true } },
@@ -65,7 +75,7 @@ const useTrangChuGiangVien = () => {
         },
       },
     },
-    { enabled: !!profileId }
+    { enabled: !!profileId && (!semesterId || !!hocKyDangChon) }
   )
 
   const lopGiangDay: LopMonHocRow[] = useMemo(
@@ -111,7 +121,7 @@ const useTrangChuGiangVien = () => {
     soLopGiangDay: lopGiangDay.length,
     soLopTroGiang: lopTroGiang.length,
     soLopQuanLy: lopQuanLy.length,
-    isLoading: !!profileId && isLoading,
+    isLoading: (!!profileId && !!semesterId && dangTaiHocKy) || (!!profileId && isLoading),
   }
 }
 
