@@ -5,7 +5,7 @@ import type {
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { demGioiTinhSinhVien } from "@lib/dem-gioi-tinh-sinh-vien"
 import { useSession } from "@workspace/auth/react"
-import { useCountFixedClass, useFindManyFixedClass } from "@workspace/db/hooks"
+import { useCountFixedClass, useFindManyFixedClass, useFindUniqueSemester } from "@workspace/db/hooks"
 import { useSemesterStore } from "@workspace/ui"
 import { useMemo, useState } from "react"
 
@@ -13,6 +13,10 @@ const useLopQuanLyGiangVien = () => {
   const { data: me } = useSession()
   const profileId = me?.sDM_NhanVienId ?? ""
   const { id: semesterId } = useSemesterStore()
+  const { data: hocKyDangChon, isLoading: dangTaiHocKy } = useFindUniqueSemester(
+    { where: { id: semesterId }, select: { endDate: true } },
+    { enabled: !!semesterId }
+  )
 
   const [boLocNhap, setBoLocNhap] = useState<BoLocLopQuanLy>({
     tuKhoa: "",
@@ -30,7 +34,11 @@ const useLopQuanLyGiangVien = () => {
       deletedAt: null,
       active: true,
       lecturerManagement: { userProfileId: profileId },
-      ...(semesterId ? { trainingCourse: { semesterStartId: semesterId } } : {}),
+      // Lớp quản lý gắn với khóa học, không gắn với từng học kỳ.
+      // Hiện các lớp có khóa đã bắt đầu tính đến hết học kỳ đang chọn.
+      ...(hocKyDangChon?.endDate
+        ? { trainingCourse: { semesterStart: { startDate: { lte: hocKyDangChon.endDate } } } }
+        : {}),
       ...(boLocApDung.loaiLop !== "tat_ca" ? { classType: boLocApDung.loaiLop } : {}),
       ...(boLocApDung.tuKhoa
         ? {
@@ -41,10 +49,10 @@ const useLopQuanLyGiangVien = () => {
           }
         : {}),
     }),
-    [profileId, semesterId, boLocApDung]
+    [profileId, hocKyDangChon?.endDate, boLocApDung]
   )
 
-  const queryEnabled = !!profileId
+  const queryEnabled = !!profileId && (!semesterId || !!hocKyDangChon)
 
   const { data = [], isLoading } = useFindManyFixedClass(
     {
@@ -147,7 +155,7 @@ const useLopQuanLyGiangVien = () => {
     setTrang,
     soTrang,
     setSoTrang,
-    isLoading: queryEnabled && isLoading,
+    isLoading: (!!profileId && !!semesterId && dangTaiHocKy) || (queryEnabled && isLoading),
   }
 }
 
