@@ -1,4 +1,4 @@
-import { CouncilRole, SupervisorRole } from "@workspace/db/client"
+import { CouncilRole, SupervisorRole, TrainingObjectTypes } from "@workspace/db/client"
 import { getMinioUrl } from "@workspace/libs"
 import { buildExcelFromTemplate, type TableRow } from "@workspace/libs/template-excel-core"
 import "@workspace/libs/utils"
@@ -28,6 +28,7 @@ import {
   syncSupervisorPaymentsForThesisSession,
 } from "./thesis-payment-sync.service"
 import { renderDocxTemplate } from "./docx-template-render.service"
+import { prisma } from ".."
 
 const DOCX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 const XLSX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -80,8 +81,22 @@ function studentMajor(student: StudentRow) {
   )
 }
 
+function studentCurriculum(student: StudentRow) {
+  return (
+    (student.fixedClass as any)?.curriculumVersion?.curriculum ??
+    (student.curriculumVersion as any)?.curriculum ??
+    null
+  )
+}
+
 function studentTrainingField(student: StudentRow) {
-  return studentMajor(student)?.trainingField?.name || ""
+  const curriculum = studentCurriculum(student)
+  const major = curriculum?.trainingMajor ?? studentMajor(student)
+  const majorName = String(major?.name || "")
+  const majorField = String(major?.trainingField?.name || "")
+  const curriculumField = String(curriculum?.trainingField?.name || "")
+  if (curriculumField && majorField === majorName && curriculumField !== majorField) return curriculumField
+  return majorField || curriculumField
 }
 
 function studentCourse(student: StudentRow) {
@@ -109,13 +124,27 @@ function getMemberProfile(project: Project | undefined, role: CouncilRole) {
 }
 
 function splitDecisionMaker(value?: string | null) {
-  const tokens = value?.trim().split(/\s+/).filter(Boolean) ?? []
-  const title = tokens[0] ?? ""
+  const raw = value?.trim().replace(/\s+/g, " ") ?? ""
+  const roles = [
+    { pattern: /^(PGĐ|PHÓ\s+GIÁM\s+ĐỐC)(?=\s|$)/i, text1: "KT. GIÁM ĐỐC", text2: "PHÓ GIÁM ĐỐC" },
+    { pattern: /^(GĐ|GIÁM\s+ĐỐC)(?=\s|$)/i, text1: "GIÁM ĐỐC", text2: "" },
+  ]
+  for (const role of roles) {
+    const match = raw.match(role.pattern)
+    const matched = match?.[0]
+    if (!match || !matched) continue
+    return {
+      title: match[1] ?? "",
+      name: raw.slice(matched.length).trim(),
+      text1: role.text1,
+      text2: role.text2,
+    }
+  }
   return {
-    title,
-    name: tokens.slice(1).join(" ").trim(),
-    text1: title === "GĐ" ? "GIÁM ĐỐC" : "KT. GIÁM ĐỐC",
-    text2: title === "GĐ" ? "" : "PHÓ GIÁM ĐỐC",
+    title: "",
+    name: raw,
+    text1: "KT. GIÁM ĐỐC",
+    text2: "PHÓ GIÁM ĐỐC",
   }
 }
 
@@ -186,8 +215,13 @@ async function renderMinioTemplate(
   return { buffer, fileName: normalizedName, contentType: XLSX_CONTENT_TYPE }
 }
 
-async function renderDocx(path: string, data: Record<string, unknown>, fileName: string) {
-  const buffer = await renderDocxTemplate({ path, prefix: TEMPLATE_PREFIX, data })
+async function renderDocx(
+  path: string,
+  data: Record<string, unknown>,
+  fileName: string,
+  patchDocumentXml?: (xml: string) => string
+) {
+  const buffer = await renderDocxTemplate({ path, prefix: TEMPLATE_PREFIX, data, patchDocumentXml })
   return { buffer, fileName, contentType: DOCX_CONTENT_TYPE }
 }
 
@@ -755,18 +789,149 @@ function councilNames(project?: Project) {
     .filter(Boolean)
 }
 
+type OrgNode = {
+  Id: string
+  sTen: string | null
+  sParentId: string | null
+  iLoaiDonVi: number | null
+  iCapDonVi: number | null
+}
+
+function guideDecisionHeader(type?: string | null) {
+  if (type === TrainingObjectTypes.CIVILIAN) {
+    return { coQuanCapTren: "BỘ GIÁO DỤC VÀ ĐÀO TẠO", heDaoTao: "hệ dân sự" }
+  }
+  if (type === TrainingObjectTypes.INTERNATIONAL_MILITARY) {
+    return { coQuanCapTren: "BỘ QUỐC PHÒNG", heDaoTao: "hệ quốc tế" }
+  }
+  return { coQuanCapTren: "BỘ QUỐC PHÒNG", heDaoTao: "hệ quân sự" }
+}
+
+function formatQuyChe(value?: string | null) {
+  return String(value || "")
+    .trim()
+    .replace(/^căn cứ\s+/i, "")
+    .trim()
+}
+
+function formatManagingUnit(name: string, faculty: boolean) {
+  const text = name.trim()
+  if (!text) return ""
+  if (/^(khoa|viện)\s+/i.test(text)) return text
+  if (!faculty) return text
+  return `Khoa ${text}`
+}
+
+function isFacultyOrg(org: OrgNode) {
+  return org.iLoaiDonVi === 5 || org.iLoaiDonVi === 6
+}
+
+async function loadOrgChain(ids: string[]) {
+  const map = new Map<string, OrgNode>()
+  let pending = [...new Set(ids.filter(Boolean))]
+  for (let depth = 0; depth < 5 && pending.length; depth++) {
+    const rows = await prisma.dM_DonVi.findMany({
+      where: { Id: { in: pending } },
+      select: { Id: true, sTen: true, sParentId: true, iLoaiDonVi: true, iCapDonVi: true },
+    })
+    pending = []
+    for (const row of rows) {
+      if (map.has(row.Id)) continue
+      map.set(row.Id, row)
+      if (row.sParentId && !map.has(row.sParentId)) pending.push(row.sParentId)
+    }
+  }
+  return map
+}
+
+function managingUnitName(startId: string | undefined, map: Map<string, OrgNode>) {
+  if (!startId) return ""
+  const start = map.get(startId)
+  if (!start?.sTen?.trim()) return ""
+  let current: OrgNode | undefined = start
+  for (let i = 0; i < 5 && current; i++) {
+    const name = current.sTen?.trim() || ""
+    if (isFacultyOrg(current) || /^(khoa|viện)\s+/i.test(name)) return formatManagingUnit(name, true)
+    current = current.sParentId ? map.get(current.sParentId) : undefined
+  }
+  return formatManagingUnit(start.sTen || "", false)
+}
+
+function resolveKhoa(student: StudentRow, project: Project | undefined, orgMap: Map<string, OrgNode>) {
+  const curriculum = studentCurriculum(student)
+  const ids = [
+    curriculum?.trainingMajor?.organization?.Id,
+    curriculum?.managementOrganization?.Id,
+    project?.organization?.Id,
+  ].filter(Boolean) as string[]
+  for (const id of ids) {
+    const name = managingUnitName(id, orgMap)
+    if (name) return name
+  }
+  return "Khoa"
+}
+
+function guideSupervisorLine(expert: any, index: number) {
+  if (!expert) return ""
+  const profile = expert.expert?.lecturer?.userProfile || expert.lecturer?.userProfile
+  const academicRank = profile?.academicRankType?.sMa || expert.academicRankType?.sMa || ""
+  const degree = profile?.academicDegreeType?.sMa || expert.academicDegreeType?.sMa || ""
+  const title = [academicRank, degree].filter(Boolean).join(".")
+  const fullname = expert.name || profile?.fullname || ""
+  const name = [title, fullname].filter(Boolean).join(" ").trim()
+  const militaryRank = profile?.rank?.sTen || profile?.rank?.sMa || ""
+  const position = String(expert.position || profile?.position?.sTen || "").trim()
+  const lecturerId = expert.expert?.lecturerId || expert.lecturerId
+  const parts = lecturerId
+    ? [militaryRank, name, position]
+    : [name, resolveExpertWorkplace(expert)]
+  const text = parts.filter(Boolean).join(", ")
+  return text ? `${index}. ${text}` : ""
+}
+
+function patchSaoQdHuongDanTemplate(xml: string) {
+  return xml
+    .replaceAll("BỘ QUỐC PHÒNG", "{coQuanCapTren}")
+    .replaceAll("hệ quân sự", "{heDaoTao}")
+    .replaceAll(
+      "ăn cứ Quy chế số 923/QC-HV ngày 28/3/2022 của Học viện Kỹ thuật quân sự về tuyển sinh và đào tạo trình độ thạc sĩ tại Học viện;",
+      "ăn cứ {quyChe}"
+    )
+    .replaceAll("{councilReport}", "{proposalReport}")
+    .replaceAll("Khoa {khoaquanli}", "{khoaquanli}")
+}
+
 async function buildSaoQdHuongDan(rows: StudentRow[], filters: ThesisExportFilter) {
   const sign = signer(filters)
   const now = formatDocDate(filters.signingDate)
-  const items = commonStudentRows(rows).map((r) => {
+  const studentRows = commonStudentRows(rows)
+  const orgIds = studentRows.flatMap((r) => {
+    const curriculum = studentCurriculum(r.student)
+    return [
+      curriculum?.trainingMajor?.organization?.Id,
+      curriculum?.managementOrganization?.Id,
+      r.project?.organization?.Id,
+    ]
+  })
+  const orgMap = await loadOrgChain(orgIds)
+  const items = studentRows.map((r) => {
     const project = r.project
     const session = project?.thesisSession
     const qd = formatDocDate(session?.decisionDate)
     const maker = splitDecisionMaker(session?.decisionMaker)
+    const trainingType =
+      studentCourse(r.student)?.trainingObjectType?.type || session?.trainingCourses?.[0]?.trainingObjectType?.type
+    const header = guideDecisionHeader(trainingType)
+    const courseRegulation =
+      studentCourse(r.student)?.regulation ||
+      session?.trainingCourses?.find((course: { regulation?: string | null }) => course.regulation)?.regulation
     return {
       soQD: session?.decisionNumber || "",
       councilReport: session?.councilReport || "",
       proposalReport: session?.proposalReport || "",
+      quyChe: formatQuyChe(courseRegulation),
+      coQuanCapTren: header.coQuanCapTren,
+      heDaoTao: header.heDaoTao,
       ngayQD: qd.day,
       thangQD: qd.month,
       namQD: qd.year,
@@ -778,9 +943,9 @@ async function buildSaoQdHuongDan(rows: StudentRow[], filters: ThesisExportFilte
       hoten: r.hoTen,
       ngaySinh: r.ngaySinh,
       khoaHoc: r.khoaHoc,
-      canbohuongdan1: project?.supervisor ? `1. ${getSupervisorName(project.supervisor, true)}` : "",
-      canbohuongdan2: project?.coSupervisor ? `2. ${getSupervisorName(project.coSupervisor, true)}` : "",
-      khoaquanli: project?.organization?.sTen || "",
+      canbohuongdan1: guideSupervisorLine(project?.supervisor, 1),
+      canbohuongdan2: guideSupervisorLine(project?.coSupervisor, 2),
+      khoaquanli: resolveKhoa(r.student, project, orgMap),
       text1: maker.text1,
       text2: maker.text2,
       nguoiky1: maker.name,
@@ -793,7 +958,12 @@ async function buildSaoQdHuongDan(rows: StudentRow[], filters: ThesisExportFilte
       data: [],
     }
   })
-  return renderDocx("BanSaoQDHuongDanLuanVan.docx", { items, councilReport: items[0]?.councilReport || "", proposalReport: items[0]?.proposalReport || "" }, "BanSaoQDHuongDanLuanVan.docx")
+  return renderDocx(
+    "BanSaoQDHuongDanLuanVan.docx",
+    { items, councilReport: items[0]?.councilReport || "", proposalReport: items[0]?.proposalReport || "" },
+    "BanSaoQDHuongDanLuanVan.docx",
+    patchSaoQdHuongDanTemplate
+  )
 }
 
 async function buildGiayMoiHdlv(rows: StudentRow[], filters: ThesisExportFilter) {

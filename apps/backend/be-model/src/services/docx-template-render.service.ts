@@ -1,6 +1,7 @@
 import { getMinioUrl } from "@workspace/libs"
 import { TemplateHandler } from "easy-template-x"
 import type { TemplateData } from "easy-template-x"
+import PizZip from "pizzip"
 import { deflateRawSync, inflateRawSync } from "node:zlib"
 
 export class TemplateNotFoundError extends Error {}
@@ -9,10 +10,12 @@ export async function renderDocxTemplate({
   path,
   prefix,
   data,
+  patchDocumentXml,
 }: {
   path: string
   prefix?: string | null
   data: Record<string, unknown>
+  patchDocumentXml?: (xml: string) => string
 }): Promise<Buffer> {
   const logPrefix = "[DOCX-TEMPLATE-RENDER]"
   const templatePrefix = (prefix ?? "/mta/luan-van").replace(/\/+$/, "")
@@ -107,7 +110,10 @@ export async function renderDocxTemplate({
   try {
     const handler = new TemplateHandler()
     const processStartedAt = Date.now()
-    const renderedBuffer = await handler.process(Buffer.from(buffer), data as TemplateData)
+    const templateBuffer = patchDocumentXml
+      ? patchDocxDocumentXml(Buffer.from(buffer), patchDocumentXml)
+      : Buffer.from(buffer)
+    const renderedBuffer = await handler.process(templateBuffer, data as TemplateData)
     console.log(`${logPrefix} Template processed`, {
       renderedBytes: renderedBuffer.byteLength ?? (renderedBuffer as Buffer).length,
       durationMs: Date.now() - processStartedAt,
@@ -127,6 +133,14 @@ export async function renderDocxTemplate({
     })
     throw processError
   }
+}
+
+function patchDocxDocumentXml(buffer: Buffer, patchDocumentXml: (xml: string) => string): Buffer {
+  const zip = new PizZip(buffer)
+  const document = zip.file("word/document.xml")
+  if (!document) return buffer
+  zip.file("word/document.xml", patchDocumentXml(document.asText()))
+  return zip.generate({ type: "nodebuffer" }) as Buffer
 }
 
 const CRC32_TABLE = (() => {

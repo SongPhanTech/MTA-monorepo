@@ -30,6 +30,15 @@ type PutThesisSessionForm = PutThesisSession & {
 }
 dayjs.locale("vi")
 
+function parseSignedRole(value: string) {
+  const raw = value.trim().replace(/\s+/g, " ")
+  const deputy = raw.match(/^(PGĐ|Phó\s+Giám\s+Đốc)\s+([\s\S]+)$/i)
+  if (deputy?.[2]) return { role: "PGĐ" as const, name: deputy[2].trim() }
+  const chief = raw.match(/^(GĐ|Giám\s+Đốc)\s+([\s\S]+)$/i)
+  if (chief?.[2]) return { role: "GĐ" as const, name: chief[2].trim() }
+  return { role: undefined, name: raw }
+}
+
 const PutThesisSession = () => {
   const [form] = Form.useForm<PutThesisSessionForm>()
   const {
@@ -55,17 +64,12 @@ const PutThesisSession = () => {
         defenseDecisionMaker: _defenseDecisionMaker,
         ...sessionRest
       } = thesisSession
-      const decisionMaker = thesisSession.decisionMaker?.trim() ?? ""
-      const [firstToken, ...rest] = decisionMaker.split(" ")
-      const decisionMakerRole = firstToken === "PGĐ" || firstToken === "GĐ" ? firstToken : undefined
-      const decisionMakerName = decisionMakerRole ? rest.join(" ").trim() : decisionMaker
-      const defenseDecisionMakerRaw = thesisSession.defenseDecisionMaker?.trim() ?? ""
-      const [defFirst, ...defRest] = defenseDecisionMakerRaw.split(" ")
-      const defenseDecisionMakerRole =
-        defFirst === "PGĐ" || defFirst === "GĐ" ? defFirst : undefined
-      const defenseDecisionMakerName = defenseDecisionMakerRole
-        ? defRest.join(" ").trim()
-        : defenseDecisionMakerRaw
+      const decisionMaker = parseSignedRole(thesisSession.decisionMaker?.trim() ?? "")
+      const decisionMakerRole = decisionMaker.role
+      const decisionMakerName = decisionMaker.name
+      const defenseDecisionMaker = parseSignedRole(thesisSession.defenseDecisionMaker?.trim() ?? "")
+      const defenseDecisionMakerRole = defenseDecisionMaker.role
+      const defenseDecisionMakerName = defenseDecisionMaker.name
       form.setFieldsValue({
         ...sessionRest,
         trainingCourseIds: thesisSession.trainingCourses?.map((c) => c.id) ?? [],
@@ -269,8 +273,8 @@ const PutThesisSession = () => {
                     className="w-24"
                     placeholder="PGĐ/GĐ"
                     options={[
-                      { label: "PGĐ", value: "Phó Giám Đốc" },
-                      { label: "GĐ", value: "Giám Đốc" },
+                      { label: "PGĐ", value: "PGĐ" },
+                      { label: "GĐ", value: "GĐ" },
                     ]}
                   />
                 </Form.Item>
