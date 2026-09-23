@@ -38,6 +38,7 @@ import SubjectClassApp from "./api/subject-class"
 import ReSubjectClassApp from "./api/re-subject-class"
 import TrainingFieldApp from "./api/training-field"
 import TrainingScoreApp from "./api/training-score"
+import UserPermissionsApp from "./api/user-permissions"
 import UserProfileApp from "./api/user-profile"
 import { checkIp } from "./middlewares/check-ip"
 import { startQuetHanGiangVienCron } from "./cron/quet-han-giang-vien"
@@ -97,6 +98,7 @@ app.route("/api/stats", Stats)
 setupOpenApi(app)
 
 app.route("/api/user-profile", UserProfileApp)
+app.route("/api/user-permissions", UserPermissionsApp)
 app.route("/api/fixed-class", FixedClassApp)
 app.route("/api/subject-class", SubjectClassApp)
 app.route("/api/subject-class", ReSubjectClassApp)

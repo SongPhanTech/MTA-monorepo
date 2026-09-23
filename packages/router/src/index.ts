@@ -883,6 +883,13 @@ const NAVIGATION: NavigationType = {
         description: "Lịch cron quét hạn nhập điểm & khảo sát cổng giảng viên",
       },
       {
+        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_UY_QUYEN_TRUY_CAP,
+        label: "Ủy quyền truy cập",
+        icon: Users,
+        path: ROUTER_PATH.QL_DAO_TAO.UY_QUYEN_TRUY_CAP,
+        description: "Giao vai trò và quyền hiện tại cho người dùng khác",
+      },
+      {
         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_TUAN_THANG,
         label: "Lịch tuần tháng",
         icon: CalendarRange,

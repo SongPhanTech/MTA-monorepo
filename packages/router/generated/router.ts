@@ -186,6 +186,7 @@ export default {
     "QUAN_LY_LUAN_VAN_QUAN_LY_MAU_BIEU": "/quan-ly-luan-van/quan-ly-mau-bieu",
     "QUAN_LY_THANH_TOAN": "/quan-ly-thanh-toan",
     "THONG_BAO": "/thong-bao",
+    "UY_QUYEN_TRUY_CAP": "/uy-quyen-truy-cap",
     "THONG_KE_HOC_LAI": "/thong-ke-hoc-lai",
     "THONG_KE_THI_LAI": "/thong-ke-thi-lai",
     "TO_CHUC_THI_DANH_SACH_THI": "/to-chuc-thi/danh-sach-thi",

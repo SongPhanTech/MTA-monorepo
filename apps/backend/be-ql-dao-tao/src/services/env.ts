@@ -12,10 +12,10 @@ export const env = {
   get MTA_API_URL() {
     return getEnv("MTA_API_URL")
   },
-  get LMS_CLIENT_ID() {
-    return getEnv("LMS_CLIENT_ID")
+  get KEYCLOAK_CLIENT_ID_LMS() {
+    return getEnv("KEYCLOAK_CLIENT_ID_LMS")
   },
-  get LMS_SECRET_KEY() {
-    return getEnv("LMS_SECRET_KEY")
+  get KEYCLOAK_CLIENT_SECRET_LMS() {
+    return getEnv("KEYCLOAK_CLIENT_SECRET_LMS")
   },
 }

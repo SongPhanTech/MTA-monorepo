@@ -49,8 +49,8 @@ export async function fetchLecturerExamSchedules(
 
   const res = await axios.get(`${env.MTA_API_URL}/ExamSchedules/lecturer?${params.toString()}`, {
     headers: {
-      "x-clientid": env.LMS_CLIENT_ID,
-      "x-clientsecret": env.LMS_SECRET_KEY,
+      "x-clientid": env.KEYCLOAK_CLIENT_ID_LMS,
+      "x-clientsecret": env.KEYCLOAK_CLIENT_SECRET_LMS,
       "Content-Type": "application/json",
     },
     timeout: 30_000,
@@ -99,8 +99,8 @@ export async function fetchSubjectClassExamDates(
   if (sourceIds.length === 0) return []
 
   const headers = {
-    "x-clientid": env.LMS_CLIENT_ID,
-    "x-clientsecret": env.LMS_SECRET_KEY,
+    "x-clientid": env.KEYCLOAK_CLIENT_ID_LMS,
+    "x-clientsecret": env.KEYCLOAK_CLIENT_SECRET_LMS,
     "Content-Type": "application/json",
   }
   const url = `${env.MTA_API_URL.replace(/\/$/, "")}/subject-classes/exam-dates`
