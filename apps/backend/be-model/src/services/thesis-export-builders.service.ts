@@ -99,6 +99,17 @@ function studentTrainingField(student: StudentRow) {
   return majorField || curriculumField
 }
 
+function normalizeDisplayName(value: string) {
+  return value.trim().replace(/\s+/g, " ").toLocaleLowerCase("vi")
+}
+
+/** Hiện "(chuyên ngành ...)" khi tên chuyên ngành khác tên ngành. */
+function shouldShowSpecialization(nganh: string, chuyenNganh: string) {
+  const specialization = normalizeDisplayName(chuyenNganh)
+  if (!specialization) return false
+  return specialization !== normalizeDisplayName(nganh)
+}
+
 function studentCourse(student: StudentRow) {
   return (student.fixedClass as any)?.trainingCourse ?? {}
 }
@@ -899,6 +910,8 @@ function patchSaoQdHuongDanTemplate(xml: string) {
     )
     .replaceAll("{councilReport}", "{proposalReport}")
     .replaceAll("Khoa {khoaquanli}", "{khoaquanli}")
+    .replaceAll("ngành {nganh} (", "ngành {nganh}{#hienChuyenNganh} (")
+    .replaceAll("{chuyennganh}) về đề tài:", "{chuyennganh}){/hienChuyenNganh} về đề tài:")
 }
 
 async function buildSaoQdHuongDan(rows: StudentRow[], filters: ThesisExportFilter) {
@@ -939,6 +952,7 @@ async function buildSaoQdHuongDan(rows: StudentRow[], filters: ThesisExportFilte
       khoa: r.khoa,
       nganh: r.nganh,
       chuyennganh: r.chuyennganh,
+      hienChuyenNganh: shouldShowSpecialization(r.nganh, r.chuyennganh),
       detai: r.tendetai,
       hoten: r.hoTen,
       ngaySinh: r.ngaySinh,
