@@ -4,7 +4,7 @@ import { convertDocument } from "@workspace/libs/api/model"
 import { signOnlyOfficeConfig } from "@workspace/libs/api/onlyoffice"
 import { getMinioUrl } from "@workspace/libs/utils"
 import { Image, Modal } from "antd"
-import { useEffect, useId, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 export type DocumentType =
   | "word"
@@ -309,6 +309,36 @@ declare global {
   }
 }
 
+function waitForDocsApi(timeoutMs = 8000) {
+  if (typeof window === "undefined") return Promise.resolve(false)
+  if (window.DocsAPI) return Promise.resolve(true)
+  return new Promise<boolean>((resolve) => {
+    const started = Date.now()
+    const timer = window.setInterval(() => {
+      if (window.DocsAPI) {
+        window.clearInterval(timer)
+        resolve(true)
+        return
+      }
+      if (Date.now() - started >= timeoutMs) {
+        window.clearInterval(timer)
+        resolve(false)
+      }
+    }, 100)
+  })
+}
+
+function waitNextPaint() {
+  return new Promise<void>((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+  })
+}
+
+function toOnlyOfficeKey(value: string) {
+  const sanitized = value.replace(/[^0-9a-zA-Z_-]/g, "").slice(0, 120)
+  return sanitized || createId()
+}
+
 const OnlyOfficeViewer = ({
   uri,
   title = "Tài liệu",
@@ -321,114 +351,139 @@ const OnlyOfficeViewer = ({
   documentKey,
   onDownloadAsUrl,
 }: Props) => {
-  const containerId = useId().replace(/:/g, "")
+  const hostRef = useRef<HTMLDivElement>(null)
+  const editorRef = useRef<{ destroyEditor?: () => void } | null>(null)
   const canEdit = mode === "edit"
   const onDownloadAsUrlRef = useRef(onDownloadAsUrl)
   onDownloadAsUrlRef.current = onDownloadAsUrl
 
   useEffect(() => {
     let cancelled = false
-    const editorNodeId = documentKey || createId()
+    const host = hostRef.current
+    if (!host || !uri) return
 
-    const placeholderContainer = document.getElementById(containerId)
-    if (!window.DocsAPI) return
+    const editorNodeId = toOnlyOfficeKey(documentKey || `oo-${createId()}`)
 
-    while (placeholderContainer?.firstChild) {
-      if (placeholderContainer.lastChild)
-        placeholderContainer.removeChild(placeholderContainer.lastChild)
-    }
-    window.docEditor?.destroyEditor?.()
-    const placeholder = document.createElement("div")
-    placeholder.id = editorNodeId
-    placeholder.style.height = "100%"
-    placeholderContainer?.appendChild(placeholder)
-
-    const config = {
-      width: "100%",
-      height: editorHeight,
-      type: allowDownload || canEdit ? "desktop" : "embedded",
-      documentType: getDocumentType(fileType),
-      document: {
-        fileType,
-        key: editorNodeId,
-        title,
-        url: uri,
-        permissions: {
-          download: allowDownload || !!onDownloadAsUrlRef.current,
-          print: allowDownload,
-          edit: canEdit,
-          copy: allowDownload,
-        },
-      },
-      editorConfig: {
-        mode,
-        lang: "vi",
-        // Remote OnlyOffice cannot reach localhost callback — omit when unreachable
-        ...(canEdit && callbackUrl ? { callbackUrl } : {}),
-        customization: {
-          forcesave: Boolean(canEdit && callbackUrl),
-          toolbar: allowDownload || canEdit,
-          compactToolbar: !allowDownload && !canEdit,
-          statusBar: canEdit,
-          autosave: Boolean(canEdit && callbackUrl),
-          help: false,
-          logo: {
-            visible: false,
-          },
-          chat: false,
-          comments: false,
-          anonymous: {
-            request: false,
-          },
-          plugins: false,
-          ...(allowDownload || canEdit
-            ? {}
-            : {
-                layout: {
-                  toolbar: {
-                    file: false,
-                    home: true,
-                    layout: true,
-                    insert: false,
-                    draw: false,
-                    review: false,
-                    view: true,
-                  },
-                  header: {
-                    save: false,
-                    edit: false,
-                    users: false,
-                  },
-                },
-              }),
-        },
-        region: "vn",
-      },
-    } satisfies OnlyOfficeFullConfig
-
-    const events = {
-      onRequestSaveAs: () => {},
-      onDownloadAs(data: { data?: { url?: string } }) {
-        const fileUrl = data?.data?.url ?? ""
-        if (!fileUrl) return
-        if (onDownloadAsUrlRef.current) {
-          onDownloadAsUrlRef.current(fileUrl)
-          return
-        }
-        if (!allowDownload) return
-        const link = document.createElement("a")
-        link.href = fileUrl
-        link.setAttribute("download", title || "download")
-        document.body.appendChild(link)
-        link.click()
-        link.parentNode?.removeChild(link)
-      },
+    const destroyEditor = () => {
+      try {
+        editorRef.current?.destroyEditor?.()
+      } catch {
+        // OnlyOffice may throw if iframe already gone
+      }
+      if (window.docEditor === editorRef.current) {
+        window.docEditor = undefined
+      }
+      editorRef.current = null
+      host.replaceChildren()
     }
 
     const initEditor = async () => {
-      let token = ""
+      const docsReady = await waitForDocsApi()
+      if (cancelled || !docsReady) {
+        if (!docsReady) console.error("[OnlyOffice] DocsAPI chưa sẵn sàng")
+        return
+      }
+
+      // Modal Ant Design animate bằng transform — chờ layout ổn định trước khi gắn iframe
+      await waitNextPaint()
+      if (cancelled || !host.isConnected) return
+
+      destroyEditor()
+      const placeholder = document.createElement("div")
+      placeholder.id = editorNodeId
+      placeholder.style.width = "100%"
+      placeholder.style.height = "100%"
+      host.appendChild(placeholder)
+
+      const measuredHeight = host.clientHeight
+      const height = measuredHeight > 0 ? `${measuredHeight}px` : editorHeight
+
+      const config = {
+        width: "100%",
+        height,
+        type: allowDownload || canEdit ? "desktop" : "embedded",
+        documentType: getDocumentType(fileType),
+        document: {
+          fileType,
+          key: editorNodeId,
+          title,
+          url: uri,
+          permissions: {
+            download: allowDownload || !!onDownloadAsUrlRef.current,
+            print: allowDownload,
+            edit: canEdit,
+            copy: allowDownload,
+          },
+        },
+        editorConfig: {
+          mode,
+          lang: "vi",
+          ...(canEdit && callbackUrl ? { callbackUrl } : {}),
+          customization: {
+            forcesave: Boolean(canEdit && callbackUrl),
+            toolbar: allowDownload || canEdit,
+            compactToolbar: !allowDownload && !canEdit,
+            statusBar: canEdit,
+            autosave: Boolean(canEdit && callbackUrl),
+            help: false,
+            logo: {
+              visible: false,
+            },
+            chat: false,
+            comments: false,
+            anonymous: {
+              request: false,
+            },
+            plugins: false,
+            ...(allowDownload || canEdit
+              ? {}
+              : {
+                  layout: {
+                    toolbar: {
+                      file: false,
+                      home: true,
+                      layout: true,
+                      insert: false,
+                      draw: false,
+                      review: false,
+                      view: true,
+                    },
+                    header: {
+                      save: false,
+                      edit: false,
+                      users: false,
+                    },
+                  },
+                }),
+          },
+          region: "vn",
+        },
+      } satisfies OnlyOfficeFullConfig
+
+      const events = {
+        onRequestSaveAs: () => {},
+        onError(error: { data?: { errorDescription?: string; errorCode?: number } }) {
+          console.error("[OnlyOffice] Editor error:", error?.data || error)
+        },
+        onDownloadAs(data: { data?: { url?: string } }) {
+          const fileUrl = data?.data?.url ?? ""
+          if (!fileUrl) return
+          if (onDownloadAsUrlRef.current) {
+            onDownloadAsUrlRef.current(fileUrl)
+            return
+          }
+          if (!allowDownload) return
+          const link = document.createElement("a")
+          link.href = fileUrl
+          link.setAttribute("download", title || "download")
+          document.body.appendChild(link)
+          link.click()
+          link.parentNode?.removeChild(link)
+        },
+      }
+
+      let token: string | undefined
       try {
-        // Only sign serializable config (no event handlers)
         const signed = await signOnlyOfficeConfig(config as Record<string, unknown>)
         if (signed.status === 200 && signed.data && "token" in signed.data) {
           token = signed.data.token
@@ -439,18 +494,21 @@ const OnlyOfficeViewer = ({
         console.error("[OnlyOffice] Sign config error:", error)
       }
       if (cancelled) return
-      window.docEditor = new window.DocsAPI.DocEditor(editorNodeId, {
+
+      const editor = new window.DocsAPI.DocEditor(editorNodeId, {
         ...config,
         events,
-        token,
+        ...(token ? { token } : {}),
       })
+      editorRef.current = editor
+      window.docEditor = editor
     }
 
     void initEditor()
 
     return () => {
       cancelled = true
-      window.docEditor?.destroyEditor?.()
+      destroyEditor()
     }
   }, [
     uri,
@@ -459,13 +517,12 @@ const OnlyOfficeViewer = ({
     mode,
     allowDownload,
     editorHeight,
-    containerId,
     callbackUrl,
     documentKey,
     canEdit,
   ])
 
-  return <div id={containerId} className={containerClassName} />
+  return <div ref={hostRef} className={containerClassName} />
 }
 
 function getDocumentType(fileType: string): DocumentType {
@@ -473,7 +530,7 @@ function getDocumentType(fileType: string): DocumentType {
     doc: "text",
     docx: "text",
     txt: "text",
-    pdf: "text",
+    pdf: "pdf",
     odt: "text",
     xls: "spreadsheet",
     xlsx: "spreadsheet",
@@ -487,6 +544,7 @@ function getDocumentType(fileType: string): DocumentType {
 }
 
 const XemTaiLieu = () => {
+  const [modalReady, setModalReady] = useState(false)
   const { isOpen, input, onClose, onChange } = useDisclosure<{
     uri: string
     name?: string
@@ -524,11 +582,23 @@ const XemTaiLieu = () => {
 
   const fileType = input?.mimeType?.toLowerCase() ?? ""
 
+  const showDocEditor =
+    modalReady &&
+    !!documentUrl &&
+    supportedDocFileTypes.includes(fileType) &&
+    !(input?.convertTo && convertedDocumentUrlLoading)
+
   return (
     <Modal
       title="Xem tài liệu"
       open={isOpen}
       width="100vw"
+      wrapClassName="xem-tai-lieu-modal-wrap"
+      className="xem-tai-lieu-modal"
+      destroyOnClose
+      transitionName=""
+      maskTransitionName=""
+      afterOpenChange={setModalReady}
       style={{
         top: 0,
         maxWidth: "100vw",
@@ -538,12 +608,17 @@ const XemTaiLieu = () => {
       }}
       styles={{
         body: {
+          flex: 1,
+          minHeight: 0,
           height: "calc(100vh - 55px)",
           padding: 0,
           overflow: "hidden",
         },
         content: {
           borderRadius: 0,
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
         },
       }}
       onCancel={onClose}
@@ -558,19 +633,19 @@ const XemTaiLieu = () => {
       <div className="w-full h-full">
         {input?.convertTo && convertedDocumentUrlLoading ? (
           <div className="p-4">Đang chuyển đổi tài liệu...</div>
-        ) : (
-          documentUrl &&
-          supportedDocFileTypes.includes(fileType) && (
-            <OnlyOfficeViewer
-              uri={documentUrl}
-              fileType={input?.convertTo ?? fileType}
-              title={input?.name}
-              mode={input?.mode || "view"}
-              containerClassName="w-full h-[calc(100vh-55px)]"
-              editorHeight="100%"
-            />
-          )
-        )}
+        ) : null}
+        {showDocEditor ? (
+          <OnlyOfficeViewer
+            key={documentUrl}
+            uri={documentUrl!}
+            fileType={input?.convertTo ?? fileType}
+            title={input?.name}
+            mode={input?.mode || "view"}
+            documentKey={toOnlyOfficeKey(`${documentUrl}-${input?.convertTo ?? fileType}`)}
+            containerClassName="w-full h-full"
+            editorHeight="100%"
+          />
+        ) : null}
         {documentUrl && supportedImageFileTypes.includes(fileType) && (
           <Image
             preview={{
@@ -592,6 +667,32 @@ const XemTaiLieu = () => {
             </span>
           )}
       </div>
+      <style>{`
+        .xem-tai-lieu-modal-wrap {
+          overflow: hidden;
+        }
+        .xem-tai-lieu-modal-wrap .ant-modal {
+          transform: none !important;
+          max-width: 100vw !important;
+          width: 100vw !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          top: 0 !important;
+        }
+        .xem-tai-lieu-modal-wrap .ant-modal-content {
+          border-radius: 0;
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+        .xem-tai-lieu-modal-wrap .ant-modal-header {
+          flex-shrink: 0;
+        }
+        .xem-tai-lieu-modal-wrap .ant-modal-body {
+          flex: 1;
+          min-height: 0;
+        }
+      `}</style>
     </Modal>
   )
 }
