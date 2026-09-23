@@ -122,7 +122,7 @@ function splitDecisionMaker(value?: string | null) {
 function signer(filters: ThesisExportFilter) {
   return {
     text1: filters.isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC",
-    text2: filters.isChief ? "" : "PHÓ TRƯỞNG PHÒNG SAU ĐẠI HỌC",
+    text2: filters.isChief ? "" : "PHÓ TRƯỞNG PHÒNG",
     name: filters.signerName || "",
   }
 }

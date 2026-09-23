@@ -1205,11 +1205,22 @@ export const parseSignerInfo = (signerStr: string) => {
   const rank = parts[1] || ""
   const nameWithDegree = parts[2] || ""
 
-  const isDirector = role.toLowerCase() === "giám đốc"
+  const roleKey = role
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/gi, "d")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim()
 
+  const isDeputyDirector = roleKey === "pho giam doc" || roleKey === "pgd"
+  const isDirector = roleKey === "giam doc" || roleKey === "gd"
+
+  // Trưởng phòng sau đại học: dòng trên là TL. GIÁM ĐỐC, dòng dưới là chức danh.
+  // Phó giám đốc: chỉ ghi KT. GIÁM ĐỐC, không thêm chức danh phía dưới.
   return {
-    chuc_vi: isDirector ? "GIÁM ĐỐC" : "TL. GIÁM ĐỐC",
-    chuc_vi_ky_thay: isDirector ? "" : role.toUpperCase(),
+    chuc_vi: isDeputyDirector ? "KT. GIÁM ĐỐC" : isDirector ? "GIÁM ĐỐC" : "TL. GIÁM ĐỐC",
+    chuc_vi_ky_thay: isDirector || isDeputyDirector ? "" : role.toUpperCase(),
     quan_ham: rank,
     ten_day_du: nameWithDegree,
   }
@@ -1228,7 +1239,7 @@ export const parsePostgraduateDeptSignerInfo = (signerName: string, isChief = tr
   }
   return {
     chuc_vi: "KT. TRƯỞNG PHÒNG",
-    chuc_vi_ky_thay: "PHÓ TRƯỞNG PHÒNG SAU ĐẠI HỌC",
+    chuc_vi_ky_thay: "PHÓ TRƯỞNG PHÒNG",
     quan_ham: "",
     ten_day_du,
   }

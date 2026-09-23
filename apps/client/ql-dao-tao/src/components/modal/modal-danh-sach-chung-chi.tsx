@@ -59,6 +59,9 @@ type SubjectScoreDraft = {
   finalScore: number
 }
 
+const OPTIONAL_SUBJECT_SCORE_HINT =
+  "Không chọn môn: chỉ ghi nhận chứng chỉ"
+
 type DocFileItem = {
   id?: string
   name: string
@@ -245,10 +248,6 @@ const ModalDanhSachChungChi = () => {
     if (!draft) return
 
     const subjectScores = draftSubjectScores[certId] || []
-    if (!subjectScores.length) {
-      message.warning("Vui lòng chọn ít nhất một môn phiên điểm")
-      return
-    }
 
     try {
       const cert = displayCertificates.find((c) => c.id === certId)
@@ -310,13 +309,15 @@ const ModalDanhSachChungChi = () => {
       await deleteManySubjectScores({
         where: { archivedCertificateId: certId },
       })
-      await createManySubjectScores({
-        data: subjectScores.map((s) => ({
-          archivedCertificateId: certId,
-          subjectVersionId: s.subjectVersionId,
-          finalScore: s.finalScore,
-        })),
-      })
+      if (subjectScores.length) {
+        await createManySubjectScores({
+          data: subjectScores.map((s) => ({
+            archivedCertificateId: certId,
+            subjectVersionId: s.subjectVersionId,
+            finalScore: s.finalScore,
+          })),
+        })
+      }
 
       const curriculumSubjects = getCurriculumSubjects(cert)
       const subjectMap = new Map(curriculumSubjects.map((s) => [s.id, s]))
@@ -419,7 +420,9 @@ const ModalDanhSachChungChi = () => {
 
     if (!isEditing) {
       const scores = cert.subjectScores || []
-      if (!scores.length) return "-"
+      if (!scores.length) {
+        return <span className="text-gray-500 text-xs">{OPTIONAL_SUBJECT_SCORE_HINT}</span>
+      }
       return (
         <div className="flex flex-col gap-0.5 text-xs text-left">
           {scores.map((s: any) => (
@@ -438,6 +441,9 @@ const ModalDanhSachChungChi = () => {
 
     return (
       <div className="flex flex-col gap-1 py-1">
+        {!scores.length && (
+          <span className="text-gray-500 text-xs">{OPTIONAL_SUBJECT_SCORE_HINT}</span>
+        )}
         {scores.map((item, idx) => (
           <div key={`${item.subjectVersionId}-${idx}`} className="flex items-center gap-1">
             <Select

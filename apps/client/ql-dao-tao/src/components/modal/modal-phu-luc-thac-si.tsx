@@ -306,7 +306,7 @@ export const ModalPhuLucThacSi = () => {
   const signerTitle1 = isChiefSigner ? "TL. GIÁM ĐỐC" : "KT. TRƯỞNG PHÒNG"
   const signerTitle2 = isChiefSigner
     ? "Trưởng phòng sau đại học"
-    : "Phó trưởng phòng sau đại học"
+    : "Phó trưởng phòng"
 
   useEffect(() => {
     setSignRole(chiefName ? "chief" : "deputy")

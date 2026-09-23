@@ -78,6 +78,9 @@ dayjs.locale("vi")
 
 const { Title } = Typography
 
+const OPTIONAL_SUBJECT_SCORE_HINT =
+  "Không chọn môn: chỉ ghi nhận chứng chỉ."
+
 function getCurriculumSubjects(student: any): CurriculumSubject[] {
   const curriculumVersion =
     student?.curriculumVersion || student?.fixedClass?.curriculumVersion
@@ -307,13 +310,7 @@ const PutCertificateArchivedModal = () => {
         for (const row of selectedStudents) {
           const data = latestStudentFormData[row.rowId] || studentFormData[row.rowId] || {}
           if (!data?.certificateId) continue
-          if (!data?.subjectScores?.length) {
-            message.warning(
-              `Vui lòng chọn ít nhất một môn phiên điểm cho ${row.fullname || row.code}`
-            )
-            return
-          }
-          if (data.subjectScores.some((s: SubjectScoreItem) => s.finalScore == null)) {
+          if (data.subjectScores?.some((s: SubjectScoreItem) => s.finalScore == null)) {
             message.warning(`Vui lòng nhập điểm phiên cho ${row.fullname || row.code}`)
             return
           }
@@ -378,12 +375,16 @@ const PutCertificateArchivedModal = () => {
                   size: file.size,
                 })),
               },
-              subjectScores: {
-                create: subjectScores.map((s) => ({
-                  subjectVersionId: s.subjectVersionId,
-                  finalScore: s.finalScore,
-                })),
-              },
+              ...(subjectScores.length
+                ? {
+                    subjectScores: {
+                      create: subjectScores.map((s) => ({
+                        subjectVersionId: s.subjectVersionId,
+                        finalScore: s.finalScore,
+                      })),
+                    },
+                  }
+                : {}),
             },
           })
           if (result) {
@@ -562,14 +563,20 @@ const PutCertificateArchivedModal = () => {
 
                     if (!record.curriculumSubjects.length) {
                       return (
-                        <span className="text-orange-500 text-xs">
-                          SV chưa có CTĐT / không có môn
-                        </span>
+                        <div className="flex flex-col gap-1 py-1">
+                          <span className="text-orange-500 text-xs">
+                            SV chưa có CTĐT / không có môn
+                          </span>
+                          <span className="text-gray-500 text-xs">{OPTIONAL_SUBJECT_SCORE_HINT}</span>
+                        </div>
                       )
                     }
 
                     return (
                       <div className="flex flex-col gap-1 py-1">
+                        {!scores.length && (
+                          <span className="text-gray-500 text-xs">{OPTIONAL_SUBJECT_SCORE_HINT}</span>
+                        )}
                         {scores.map((item, idx) => {
                           return (
                             <div key={item.subjectVersionId} className="flex items-center gap-1">
@@ -644,25 +651,6 @@ const PutCertificateArchivedModal = () => {
                             Thêm môn
                           </Button>
                         )}
-                        <FormItem
-                          form={form}
-                          name={["student", record.rowId, "subjectScores"]}
-                          rules={[
-                            {
-                              validator: (_, value) => {
-                                if (!value?.length) {
-                                  return Promise.reject(
-                                    new Error("Chọn ít nhất một môn phiên điểm")
-                                  )
-                                }
-                                return Promise.resolve()
-                              },
-                            },
-                          ]}
-                          className="mb-0 hidden"
-                        >
-                          <Input />
-                        </FormItem>
                       </div>
                     )
                   },
@@ -676,16 +664,7 @@ const PutCertificateArchivedModal = () => {
                       (c) => c.id === studentFormData?.[record.rowId]?.certificateId
                     )
                     return (
-                      <FormItem
-                        form={form}
-                        name={["student", record.rowId, "score"]}
-                        rules={[
-                          {
-                            required: !!selectedCert?.isUsingScore,
-                            message: "Vui lòng nhập điểm chứng chỉ",
-                          },
-                        ]}
-                      >
+                      <FormItem form={form} name={["student", record.rowId, "score"]}>
                         <InputNumber
                           min={1}
                           variant="underlined"
