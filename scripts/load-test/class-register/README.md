@@ -55,7 +55,7 @@ k6 run -e MODE=read -e BASE_URL=... -e SESSION_ID=... -e CURRICULUM_VERSION_ID=.
 
 # Ramp tới 500
 k6 run -e RAMP=true -e VUS_MAX=500 \
-  -e BASE_URL=https://mta.swantech.vn/api/portal \
+  -e BASE_URL=https://daotao.swantech.vn/api/portal \
   -e AUTH_TOKEN="$TOKEN" \
   -e SESSION_ID="$SESSION_ID" \
   -e CURRICULUM_VERSION_ID="$CV_ID" \

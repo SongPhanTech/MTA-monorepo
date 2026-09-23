@@ -6,7 +6,7 @@ x-clientid: <CLIENT_ID>
 x-clientsecret: <CLIENT_SECRET>
 Content-Type: application/json
 ```
-- **Base URL Prod:** `https://mta.swantech.vn/api/system/public`
+- **Base URL Prod:** `https://daotao.swantech.vn/api/system/public`
 - **Base URL Local:** `http://localhost:6083`
 
 ---
@@ -27,7 +27,7 @@ Content-Type: application/json
 
 #### Ví dụ gọi (GET):
 ```http
-GET https://mta.swantech.vn/api/system/public/ExamSchedules/student?userProfileId=USER_123&fromDate=2026-09-01&toDate=2026-09-30
+GET https://daotao.swantech.vn/api/system/public/ExamSchedules/student?userProfileId=USER_123&fromDate=2026-09-01&toDate=2026-09-30
 ```
 
 #### Dữ liệu trả về (200 OK):
@@ -79,7 +79,7 @@ GET https://mta.swantech.vn/api/system/public/ExamSchedules/student?userProfileI
 
 #### Ví dụ gọi (GET):
 ```http
-GET https://mta.swantech.vn/api/system/public/ExamSchedules/lecturer?userProfileId=GV_456&fromDate=2026-09-01&toDate=2026-09-30
+GET https://daotao.swantech.vn/api/system/public/ExamSchedules/lecturer?userProfileId=GV_456&fromDate=2026-09-01&toDate=2026-09-30
 ```
 
 #### Dữ liệu trả về (200 OK):

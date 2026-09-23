@@ -209,7 +209,7 @@ export const jwtAuth = (appCode: string | string[]): MiddlewareHandler => {
         console.warn(
           `[jwtAuth] WAF challenge HTML from ${userInfoUrl} (Server may be Cloudrity). ` +
             `D1N=${d1n ? "present" : "missing"}. Retrying once… ` +
-            `Hint: set SYSTEM_BASE_URL to internal URL (e.g. https://mta.swantech.vn) instead of public WAF domain.`
+            `Hint: set SYSTEM_BASE_URL to internal URL (e.g. https://daotao.swantech.vn) instead of public WAF domain.`
         )
         if (d1n) {
           cookie = upsertCookie(cookie, "D1N", d1n)

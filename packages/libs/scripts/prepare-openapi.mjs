@@ -6,11 +6,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const presets = {
   training: {
-    sourceUrl: process.env.TRAINING_OPENAPI_URL ?? "https://mta.swantech.vn/api/lms/openapi",
+    sourceUrl: process.env.TRAINING_OPENAPI_URL ?? "https://daotao.swantech.vn/api/lms/openapi",
     outputPath: path.join(__dirname, "../openapi/training.openapi.json"),
   },
   ems: {
-    sourceUrl: process.env.EMS_OPENAPI_URL ?? "https://mta.swantech.vn/api/ems/openapi",
+    sourceUrl: process.env.EMS_OPENAPI_URL ?? "https://daotao.swantech.vn/api/ems/openapi",
     outputPath: path.join(__dirname, "../openapi/ems.openapi.json"),
   },
 }

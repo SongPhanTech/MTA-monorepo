@@ -40,7 +40,7 @@ function getSystemPublicBaseUrl(): string {
   if (process.env.MTA_API_URL) return process.env.MTA_API_URL.replace(/\/$/, "")
   const systemBase = process.env.SYSTEM_BASE_URL?.replace(/\/$/, "")
   if (systemBase) return `${systemBase}/api/system/public`
-  return "https://mta.swantech.vn/api/system/public"
+  return "https://daotao.swantech.vn/api/system/public"
 }
 
 function getClientCredentials() {

@@ -2,7 +2,7 @@ import { MessageOutlined } from "@ant-design/icons"
 import { useEffect, useState } from "react"
 
 import "./chatbot.css"
-export const WidgetChatbot = ({ src = "https://mta.swantech.vn/chatbot/tro-ly-ao" }) => {
+export const WidgetChatbot = ({ src = "https://daotao.swantech.vn/chatbot/tro-ly-ao" }) => {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {

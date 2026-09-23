@@ -35,7 +35,7 @@ ifeq ($(SERVER_PROFILE),swan1)
   BE_APP_DIR       := ~/mta-be
   FE_APP_DIR       := ~/mta-app
   FE_COMPOSE_FILE  := app-docker-compose.yml
-  FE_APP_URL       := https://mta.swantech.vn
+  FE_APP_URL       := https://daotao.swantech.vn
   ONLY_OFFICE_ENDPOINT := https://doc.mta.swantech.vn
 
 # ── Profile: swantech_x52 ─────────────────────────────────────────────────────────────
@@ -46,7 +46,7 @@ else ifeq ($(SERVER_PROFILE),swantech_x52)
   BE_APP_DIR       := ~/mta-be
   FE_APP_DIR       := ~/mta-app
   FE_COMPOSE_FILE  := app-docker-compose.yml
-  FE_APP_URL       := https://mta.swantech.vn
+  FE_APP_URL       := https://daotao.swantech.vn
   ONLY_OFFICE_ENDPOINT := https://doc.mta.swantech.vn
 
 # ── Profile: local_mta ─────────────────────────────────────────────────────────────
@@ -131,8 +131,14 @@ BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL)
 BE_SERVICES := $(foreach pkg,$(BE_PKGS),$(IMG_PREFIX)$(pkg))
 # FE_PKGS := $(PKG_DAO_TAO) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_DANG_KY_HOC)
 FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_CONG_HOC_VIEN) $(PKG_CONG_GIANG_VIEN) $(PKG_CONG_SINH_VIEN)
-# App có build/package nhưng chưa có service trên docker-compose server (vd. cong-hoc-vien)
-FE_DEPLOY_PKGS := $(filter-out $(PKG_CONG_HOC_VIEN),$(FE_PKGS))
+# App có build/package nhưng chưa có service trên docker-compose server (vd. cong-hoc-vien).
+# swantech_x52: không stop/up chatbot (cổng 5189 đã dùng bởi service chatbot riêng).
+ifeq ($(SERVER_PROFILE),swantech_x52)
+  FE_DEPLOY_SKIP := $(PKG_CONG_HOC_VIEN) $(PKG_AI)
+else
+  FE_DEPLOY_SKIP := $(PKG_CONG_HOC_VIEN)
+endif
+FE_DEPLOY_PKGS := $(filter-out $(FE_DEPLOY_SKIP),$(FE_PKGS))
 
 # Client App Mappings
 CDN_NAME_ql-dao-tao = lms-cdn
@@ -151,11 +157,19 @@ CDN_NAME_cong-giang-vien = cong-giang-vien-cdn
 ROUTER_NAME_cong-giang-vien = cong-giang-vien
 
 # Danh sách thư mục CDN + service compose (dùng cho deploy-cdn, tránh docker compose down xóa fe_default)
-FE_CDN_DIRS := $(foreach pkg,$(FE_PKGS),$(CDN_NAME_$(pkg)))
+# swantech_x52: không xóa / ghi đè chatbot-cdn (service chatbot không được up/down).
+ifeq ($(SERVER_PROFILE),swantech_x52)
+  FE_CDN_DIR_PKGS := $(filter-out $(PKG_AI),$(FE_PKGS))
+  FE_CDN_UNZIP_SKIP := $(CDN_NAME_$(PKG_AI))
+else
+  FE_CDN_DIR_PKGS := $(FE_PKGS)
+  FE_CDN_UNZIP_SKIP :=
+endif
+FE_CDN_DIRS := $(foreach pkg,$(FE_CDN_DIR_PKGS),$(CDN_NAME_$(pkg)))
 FE_CDN_SERVICES := $(foreach pkg,$(FE_DEPLOY_PKGS),mta-$(CDN_NAME_$(pkg)) $(ROUTER_SVC_PREFIX)router-$(ROUTER_NAME_$(pkg))-api)
 
 # Per-app URL suffix appended to FE_APP_URL → NEXT_PUBLIC_APP_URL
-# Format: <domain from profile><suffix below>  e.g. https://mta.swantech.vn/lms/home
+# Format: <domain from profile><suffix below>  e.g. https://daotao.swantech.vn/lms/home
 APP_URL_SUFFIX_ql-dao-tao   = /lms/home
 APP_URL_SUFFIX_khao-thi     = /ems/home
 APP_URL_SUFFIX_cong-sinh-vien  = /cong-sinh-vien/home
@@ -253,6 +267,7 @@ deploy-cdn:
 	docker compose -f $(FE_COMPOSE_FILE) rm -f $(FE_CDN_SERVICES) 2>/dev/null || true && \
 	rm -rf $(FE_CDN_DIRS) && \
 	unzip -q -o cdn.zip && \
+	$(if $(FE_CDN_UNZIP_SKIP),rm -rf $(addprefix cdn/,$(FE_CDN_UNZIP_SKIP)) &&) \
 	mv -f cdn/* . && \
 	rm -rf cdn && \
 	docker compose -f $(FE_COMPOSE_FILE) up -d $(FE_CDN_SERVICES)"

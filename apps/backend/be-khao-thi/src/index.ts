@@ -31,7 +31,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://user.mta.swantech.vn",
-      "https://mta.swantech.vn",
+      "https://daotao.swantech.vn",
       "https://daotao.mta.swantech.vn",
       "https://am.swantech.vn",
       "https://api.am.swantech.vn",

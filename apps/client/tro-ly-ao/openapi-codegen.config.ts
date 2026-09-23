@@ -5,7 +5,7 @@ export default defineConfig({
   common: {
     from: {
       source: "url",
-      url: "https://mta.swantech.vn/api/model/openapi",
+      url: "https://daotao.swantech.vn/api/model/openapi",
     },
     outputDir: "src/lib/api/common",
     to: async (context) => {

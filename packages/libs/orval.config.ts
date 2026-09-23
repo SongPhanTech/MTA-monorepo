@@ -2,7 +2,7 @@ import { defineConfig } from "orval"
 
 export default defineConfig({
   model_api: {
-    input: "https://mta.swantech.vn/api/model/openapi",
+    input: "https://daotao.swantech.vn/api/model/openapi",
     output: {
       client: "react-query",
       httpClient: "fetch",
@@ -58,7 +58,7 @@ export default defineConfig({
   portal_api: {
     // input: 'http://localhost:3002/openapi',
     input: {
-      target: "https://mta.swantech.vn/api/portal/openapi",
+      target: "https://daotao.swantech.vn/api/portal/openapi",
       override: {
         transformer: "./scripts/openapi-transformer.mjs",
       },
@@ -80,7 +80,7 @@ export default defineConfig({
     },
   },
   system_share_api: {
-    input: "https://mta.swantech.vn/api/system/share/swagger/v1/swagger.json",
+    input: "https://daotao.swantech.vn/api/system/share/swagger/v1/swagger.json",
     output: {
       client: "react-query",
       httpClient: "fetch",
@@ -98,7 +98,7 @@ export default defineConfig({
     },
   },
   // storage_api: {
-  //     input: 'https://mta.swantech.vn/api/system/storage/swagger/v1/swagger.json',
+  //     input: 'https://daotao.swantech.vn/api/system/storage/swagger/v1/swagger.json',
   //     output: {
   //         client: 'react-query',
   //         httpClient: 'fetch',
@@ -116,7 +116,7 @@ export default defineConfig({
   //     },
   // },
   system_api: {
-    input: "https://mta.swantech.vn/api/system/public/swagger/v1/swagger.json",
+    input: "https://daotao.swantech.vn/api/system/public/swagger/v1/swagger.json",
     output: {
       client: "react-query",
       httpClient: "fetch",
