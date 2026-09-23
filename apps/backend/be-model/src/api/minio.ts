@@ -11,6 +11,7 @@ import {
 import { fieldDesc } from "../dto/openapi-helpers"
 import { jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 import { MinIOService } from "../services/minio"
+import { onlyOfficeAuthHeaders, signOnlyOfficeJwt } from "../utils/onlyoffice-jwt"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -136,37 +137,109 @@ app.openapi(
   }),
   async (c) => {
     const { fileType, outputtype, title, url } = c.req.valid("query")
-    const raw = JSON.stringify({
+    const payload = {
       async: false,
       filetype: fileType,
       outputtype: outputtype,
       title,
       key: createId(),
       url,
-    })
+    }
+    const authHeaders = await onlyOfficeAuthHeaders(payload)
 
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: raw,
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeaders,
+      },
+      body: JSON.stringify(payload),
     }
 
-    const res = await fetch(`${process?.env?.ONLY_OFFICE_ENDPOINT}/converter`, requestOptions)
-
-    console.log("Convert Document:", res.status)
-    if (res.status !== 200) {
-      const text = await res.text()
-      console.log("Convert Document:", text)
+    const onlyOfficeBase = (process.env.ONLY_OFFICE_ENDPOINT || "").replace(/\/+$/, "")
+    if (!onlyOfficeBase) {
+      return c.json({ message: "ONLY_OFFICE_ENDPOINT chưa được cấu hình trên server" }, 500)
     }
 
-    const resJson = (await res.json()) as {
-      fileUrl: string
-      fileType: string
-      percent: number
-      endConvert: boolean
+    const res = await fetch(`${onlyOfficeBase}/converter`, requestOptions)
+    const rawBody = await res.text()
+    console.log("Convert Document:", onlyOfficeBase, res.status, rawBody.slice(0, 500))
+
+    let resJson: {
+      fileUrl?: string
+      fileType?: string
+      percent?: number
+      endConvert?: boolean
+      error?: number | string
+      message?: string
+    }
+    try {
+      resJson = JSON.parse(rawBody) as typeof resJson
+    } catch {
+      return c.json(
+        {
+          message: `OnlyOffice converter trả về không hợp lệ (HTTP ${res.status}) từ ${onlyOfficeBase}. ${rawBody.slice(0, 120)}`,
+        },
+        500
+      )
+    }
+
+    if (res.status !== 200 || !resJson.fileUrl) {
+      return c.json(
+        {
+          message:
+            resJson.message ||
+            `Chuyển đổi tài liệu thất bại (HTTP ${res.status}${
+              resJson.error != null ? `, error=${resJson.error}` : ""
+            }) từ ${onlyOfficeBase}`,
+        },
+        500
+      )
     }
 
     return c.json({ fileUrl: resJson.fileUrl }, 200)
+  }
+)
+
+app.openapi(
+  createRoute({
+    operationId: "signOnlyOfficeConfig",
+    tags: ["Lưu trữ MinIO"],
+    summary: "Ký JWT cấu hình OnlyOffice Document Editor",
+    path: "/onlyoffice-sign",
+    method: "post",
+    request: {
+      body: {
+        content: {
+          "application/json": {
+            schema: z
+              .record(z.string(), z.any())
+              .openapi(fieldDesc("Config DocsAPI (không gồm token).")),
+          },
+        },
+      },
+    },
+    responses: {
+      ...standardErrorResponses(),
+      ...jsonSuccess(
+        z.object({
+          token: z.string().openapi(fieldDesc("JWT OnlyOffice.")),
+        }),
+        "Ký JWT thành công"
+      ),
+    },
+  }),
+  async (c) => {
+    const config = c.req.valid("json") as Record<string, unknown>
+    const { token: _ignored, ...payload } = config
+    const token = await signOnlyOfficeJwt(payload)
+    if (!token) {
+      return c.json(
+        { message: "ONLYOFFICE_JWT_SECRET chưa được cấu hình trên server" },
+        500
+      )
+    }
+    return c.json({ token }, 200)
   }
 )
 

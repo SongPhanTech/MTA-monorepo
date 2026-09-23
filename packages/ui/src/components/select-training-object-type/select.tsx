@@ -25,7 +25,8 @@ const SelectTrainingObjectType = ({ subsystem, ...props }: SelectTrainingObjectT
         <p>Đối tượng đào tạo</p>
       </Tooltip>
       <Select
-        dropdownStyle={{ maxHeight: 300, overflow: "auto", width: 250 }}
+        dropdownStyle={{ maxHeight: 300, overflow: "auto", minWidth: 480 }}
+        popupMatchSelectWidth={false}
         placeholder="Chọn đối tượng đào tạo"
         options={doiTuongDaoTao.map((e) => ({
           label: e.name,
@@ -34,7 +35,7 @@ const SelectTrainingObjectType = ({ subsystem, ...props }: SelectTrainingObjectT
         value={id}
         onChange={onSelect}
         allowClear={false}
-        style={{ width: 200 }}
+        style={{ width: 360 }}
         {...props}
       />
     </div>
