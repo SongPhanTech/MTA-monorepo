@@ -188,8 +188,7 @@ export const ModalPhuLucThacSi = () => {
                               include: {
                                 lecturer: {
                                   include: {
-                                    userProfile: true,
-                                    organization: true,
+                                    userProfile: { include: { donVi: true } },
                                   },
                                 },
                               },
@@ -200,8 +199,7 @@ export const ModalPhuLucThacSi = () => {
                           include: {
                             lecturer: {
                               include: {
-                                userProfile: true,
-                                organization: true,
+                                userProfile: { include: { donVi: true } },
                               },
                             },
                           },
@@ -465,7 +463,7 @@ export const ModalPhuLucThacSi = () => {
           ""
         const title = [rank, degree].filter(Boolean).join(".")
         const name = [title, expert?.name].filter(Boolean).join(" ").trim()
-        const lecturerOrg = expert?.lecturer?.organization
+        const lecturerOrg = expert?.lecturer?.userProfile?.donVi
         return {
           role: COUNCIL_ROLE_LABEL[member.role] ?? "Ủy viên",
           name,

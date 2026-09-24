@@ -217,11 +217,11 @@ const ModalChiTietSinhVien = () => {
                           include: {
                             userProfile: {
                               include: {
+                                donVi: true,
                                 academicRankType: true,
                                 academicDegreeType: true,
                               },
                             },
-                            organization: true,
                           },
                         },
                       },
@@ -238,11 +238,11 @@ const ModalChiTietSinhVien = () => {
                           include: {
                             userProfile: {
                               include: {
+                                donVi: true,
                                 academicRankType: true,
                                 academicDegreeType: true,
                               },
                             },
-                            organization: true,
                           },
                         },
                       },
@@ -259,11 +259,11 @@ const ModalChiTietSinhVien = () => {
                           include: {
                             userProfile: {
                               include: {
+                                donVi: true,
                                 academicRankType: true,
                                 academicDegreeType: true,
                               },
                             },
-                            organization: true,
                           },
                         },
                       },
@@ -287,11 +287,11 @@ const ModalChiTietSinhVien = () => {
                                   include: {
                                     userProfile: {
                                       include: {
+                                        donVi: true,
                                         academicRankType: true,
                                         academicDegreeType: true,
                                       },
                                     },
-                                    organization: true,
                                   },
                                 },
                               },
@@ -332,11 +332,11 @@ const ModalChiTietSinhVien = () => {
                               include: {
                                 userProfile: {
                                   include: {
+                                    donVi: true,
                                     academicRankType: true,
                                     academicDegreeType: true,
                                   },
                                 },
-                                organization: true,
                               },
                             },
                           },

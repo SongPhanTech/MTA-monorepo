@@ -108,25 +108,30 @@ const PutEvaluationCouncilMember = () => {
 
   const { data: organizations = [] } = useFindManyDM_DonVi({
     include: {
-      lecturers: {
-        include: {
-          userProfile: {
+      userProfiles: {
+        where: {
+          lecturer: { is: { active: true, deletedAt: null } },
+        },
+        select: {
+          id: true,
+          fullname: true,
+          firstName: true,
+          lastName: true,
+          avatar: true,
+          academicDegreeType: {
+            select: {
+              sTen: true,
+            },
+          },
+          academicRankType: {
+            select: {
+              sTen: true,
+            },
+          },
+          lecturer: {
             select: {
               id: true,
-              fullname: true,
-              firstName: true,
-              lastName: true,
-              avatar: true,
-              academicDegreeType: {
-                select: {
-                  sTen: true,
-                },
-              },
-              academicRankType: {
-                select: {
-                  sTen: true,
-                },
-              },
+              code: true,
             },
           },
         },

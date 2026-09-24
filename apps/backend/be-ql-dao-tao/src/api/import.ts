@@ -295,11 +295,6 @@ app.openapi(importLecturer, async (c) => {
             lecturerType: {
               connect: { id: lecturerTypeMap.get(lecturer.lecturerType) },
             },
-            organization: {
-              connect: {
-                Id: organizationMap.get(lecturer.departmentOrganization),
-              },
-            },
             userProfile: {},
             description: lecturer.description,
           }
@@ -316,6 +311,7 @@ app.openapi(importLecturer, async (c) => {
             phoneNumber: lecturer.phoneNumber,
             email: lecturer.email,
             idCardNumber: lecturer.idCardNumber,
+            sDM_DonViId: organizationMap.get(lecturer.departmentOrganization) ?? null,
           }
 
           const existingProfileId = existingProfileMap.get(lecturer.idCardNumber)
@@ -1447,7 +1443,6 @@ app.openapi(importStudent, async (c) => {
             officerNumber: student.officerNumber,
             rankId: rankMap.get(student.rank ?? "") || null,
             positionCPVId: positionMap.get(normalizeCatalogName(student.position)) || null,
-            sDM_DonViId: organizationMap.get(student.managementOrganization?.trim() || "") || null,
           }
 
           const existingProfile =

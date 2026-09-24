@@ -225,20 +225,20 @@ async function main() {
         code: true,
         lectureID: true,
         active: true,
-        organizationId: true,
         lecturerType: { select: { name: true, isExternal: true } },
-        organization: {
-          select: {
-            Id: true,
-            sMa: true,
-            sTen: true,
-            sParentId: true,
-            iLoaiDonVi: true,
-            iCapDonVi: true,
-          },
-        },
         userProfile: {
           select: {
+            sDM_DonViId: true,
+            donVi: {
+              select: {
+                Id: true,
+                sMa: true,
+                sTen: true,
+                sParentId: true,
+                iLoaiDonVi: true,
+                iCapDonVi: true,
+              },
+            },
             fullname: true,
             firstName: true,
             lastName: true,
@@ -278,8 +278,8 @@ async function main() {
   }
 
   for (const lec of lecturers) {
-    const chain = ancestors(lec.organizationId)
-    lec._donVi = chain[0] || lec.organization || null
+    const chain = ancestors(lec.userProfile?.sDM_DonViId)
+    lec._donVi = chain[0] || lec.userProfile?.donVi || null
     lec._boMon = chain.find(isBoMon) || null
     lec._khoaVien = chain.find(isKhoaVien) || null
   }

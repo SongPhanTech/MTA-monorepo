@@ -34,8 +34,7 @@ const ExportLecturerInSurvey = ({
                 subjectClass: true,
               },
             },
-            userProfile: true,
-            organization: true,
+            userProfile: { include: { donVi: true } },
           },
           orderBy: [
             {

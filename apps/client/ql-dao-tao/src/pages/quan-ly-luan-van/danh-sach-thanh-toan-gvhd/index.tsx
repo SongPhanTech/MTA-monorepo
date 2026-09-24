@@ -51,8 +51,7 @@ const expertInclude = {
     include: {
       lecturer: {
         include: {
-          userProfile: true,
-          organization: true,
+          userProfile: { include: { donVi: true } },
         },
       },
     },

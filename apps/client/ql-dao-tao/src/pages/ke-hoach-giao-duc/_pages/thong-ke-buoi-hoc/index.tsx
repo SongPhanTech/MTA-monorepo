@@ -49,8 +49,7 @@ export default function ThongKeBuoiHoc() {
       room: true,
       lecturer: {
         include: {
-          organization: true,
-          userProfile: true,
+          userProfile: { include: { donVi: true } },
         },
       },
       subjectClass: {
@@ -58,8 +57,7 @@ export default function ThongKeBuoiHoc() {
           room: true,
           mainLecturer: {
             include: {
-              organization: true,
-              userProfile: true,
+              userProfile: { include: { donVi: true } },
             },
           },
           subject: {
@@ -397,8 +395,8 @@ export default function ThongKeBuoiHoc() {
                   ""
                 ).toLowerCase()
                 const orgName = (
-                  s.lecturer?.organization?.sTen ||
-                  s.subjectClass?.mainLecturer?.organization?.sTen ||
+                  s.lecturer?.userProfile?.donVi?.sTen ||
+                  s.subjectClass?.mainLecturer?.userProfile?.donVi?.sTen ||
                   ""
                 ).toLowerCase()
                 const className = s.subjectClass?.name?.toLowerCase() || ""

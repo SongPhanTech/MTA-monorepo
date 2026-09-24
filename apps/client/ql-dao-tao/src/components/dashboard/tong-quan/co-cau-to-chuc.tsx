@@ -22,7 +22,7 @@ export const dashboardOrgSelect = {
   iLoaiDonVi: true,
   _count: {
     select: {
-      lecturers: { where: { active: true, deletedAt: null } },
+      userProfiles: { where: { lecturer: { is: { active: true, deletedAt: null } } } },
     },
   },
 } as const
@@ -34,7 +34,7 @@ export function mapDashboardOrgs(
     sParentId: string | null
     sMa: string | null
     iLoaiDonVi: number | null
-    _count: { lecturers: number }
+    _count: { userProfiles: number }
   }>
 ): DashboardOrg[] {
   return rows.map((o) => ({
@@ -43,7 +43,7 @@ export function mapDashboardOrgs(
     sParentId: o.sParentId,
     sMa: o.sMa,
     iLoaiDonVi: o.iLoaiDonVi,
-    lecturerCount: o._count.lecturers,
+    lecturerCount: o._count.userProfiles,
   }))
 }
 

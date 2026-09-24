@@ -11,8 +11,7 @@ function buildOrgTree(
   list: Array<{ id: string; name: string | null; parentId: string | null }>,
   lecturers: Array<{
     id: string
-    userProfile: { fullName: string }
-    organizationId: string | null
+    userProfile: { fullName: string; sDM_DonViId: string | null }
   }>,
   parentId: string | null = null
 ): Array<TreeNodeType> {
@@ -24,7 +23,7 @@ function buildOrgTree(
       selectable: item.parentId !== null,
       children: [
         ...lecturers
-          .filter((lecturer) => lecturer.organizationId === item.id)
+          .filter((lecturer) => lecturer.userProfile?.sDM_DonViId === item.id)
           .map((lecturer) => ({
             title: lecturer.userProfile?.fullName || "Giảng viên không tên",
             value: `${lecturer.id}`,
@@ -72,7 +71,6 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
     error: lecturersError,
   } = useFindManyLecturer({
     include: {
-      organization: true,
       userProfile: {
         include: {
           academicRankType: true,
@@ -101,8 +99,8 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
         id: lec.id,
         userProfile: {
           fullName: formatLecturerName(lec) || "Giảng viên không tên",
+          sDM_DonViId: lec.userProfile?.sDM_DonViId ?? null,
         },
-        organizationId: lec.organizationId,
       })),
       null
     )

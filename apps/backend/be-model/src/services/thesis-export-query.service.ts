@@ -21,7 +21,6 @@ const expertVersionSelect = {
       lecturerId: true,
       lecturer: {
         select: {
-          organization: { select: { sMa: true, sTen: true } },
           userProfile: {
             select: {
               fullname: true,
@@ -31,6 +30,7 @@ const expertVersionSelect = {
               academicDegreeType: { select: { sMa: true } },
               rank: { select: { sMa: true, sTen: true } },
               position: { select: { sTen: true } },
+              donVi: { select: { sMa: true, sTen: true, sParentId: true, iCapDonVi: true, iLoaiDonVi: true } },
             },
           },
         },

@@ -62,10 +62,10 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    lecturers: z.array(z.unknown()).optional(),
     lecturerHistory: z.array(z.unknown()).optional(),
     staffs: z.array(z.unknown()).optional(),
     staffHistory: z.array(z.unknown()).optional(),
+    userProfiles: z.array(z.unknown()).optional(),
     curriculum: z.array(z.unknown()).optional(),
     fixedClass: z.array(z.unknown()).optional(),
     subjectVersions: z.array(z.unknown()).optional(),

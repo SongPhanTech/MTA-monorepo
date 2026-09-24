@@ -49,6 +49,7 @@ export default function EvaluationCouncilTab() {
                 include: {
                   userProfile: {
                     include: {
+                      donVi: true,
                       academicDegreeType: {
                         select: { sTen: true },
                       },
@@ -57,7 +58,6 @@ export default function EvaluationCouncilTab() {
                       },
                     },
                   },
-                  organization: true,
                 },
               },
             },

@@ -95,7 +95,6 @@ export default function ThongTinCaNhanTab({
           type === "LECTURER"
             ? {
                 include: {
-                  organization: true,
                   lecturerType: true,
                 },
               }

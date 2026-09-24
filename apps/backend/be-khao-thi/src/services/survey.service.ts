@@ -265,8 +265,10 @@ export const getOrganizationsSurveyStats = async (
       surveySession: {
         survey: {
           lecture: {
-            organizationId: {
-              in: organizations.map((i: DM_DonVi) => i.Id),
+            userProfile: {
+              sDM_DonViId: {
+                in: organizations.map((i: DM_DonVi) => i.Id),
+              },
             },
           },
           clusterSurveyId,
@@ -416,8 +418,10 @@ export const getSurveyStatsforDonVi = async (
         survey: {
           clusterSurveyId,
           lecture: {
-            organizationId: {
-              in: organizations,
+            userProfile: {
+              sDM_DonViId: {
+                in: organizations,
+              },
             },
           },
         },
@@ -446,8 +450,10 @@ export const getSurveyStatsforDonVi = async (
         survey: {
           clusterSurveyId,
           lecture: {
-            organizationId: {
-              in: organizations,
+            userProfile: {
+              sDM_DonViId: {
+                in: organizations,
+              },
             },
           },
         },

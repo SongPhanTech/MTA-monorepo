@@ -22,7 +22,7 @@ import { useEffect, useRef, useState } from "react"
 //     lecturers: Array<{
 //         id: string
 //         userProfile: { fullName: string }
-//         organizationId: string
+//         donViId: string
 //         selectable: boolean
 //     }>,
 //     parentId: string | null = null
@@ -35,7 +35,7 @@ import { useEffect, useRef, useState } from "react"
 //             selectable: false,
 //             children: [
 //                 ...lecturers
-//                     .filter((lecturer) => lecturer.organizationId === item.id)
+//                     .filter((lecturer) => lecturer.donViId === item.id)
 //                     .map((lecturer) => ({
 //                         ...lecturer,
 //                         title: lecturer.userProfile?.fullName || 'Giảng viên không tên',
@@ -194,10 +194,12 @@ function SelectLecturer({
             ...(filters.organizationName && filters.organizationName !== ""
               ? {
                   mainLecturer: {
-                    organization: {
-                      sMa: {
-                        contains: filters.organizationName,
-                        mode: "insensitive" as const,
+                    userProfile: {
+                      donVi: {
+                        sMa: {
+                          contains: filters.organizationName,
+                          mode: "insensitive" as const,
+                        },
                       },
                     },
                   },
@@ -287,10 +289,12 @@ function SelectLecturer({
             ...(filters.organizationName && filters.organizationName !== ""
               ? {
                   mainLecturer: {
-                    organization: {
-                      sMa: {
-                        contains: filters.organizationName,
-                        mode: "insensitive" as const,
+                    userProfile: {
+                      donVi: {
+                        sMa: {
+                          contains: filters.organizationName,
+                          mode: "insensitive" as const,
+                        },
                       },
                     },
                   },
@@ -300,8 +304,7 @@ function SelectLecturer({
           include: {
             mainLecturer: {
               include: {
-                userProfile: true,
-                organization: true,
+                userProfile: { include: { donVi: true } },
               },
             },
           },
@@ -342,7 +345,7 @@ function SelectLecturer({
   //                     }`.trim() || 'Giảng viên không tên',
   //             },
   //             selectable: true,
-  //             organizationId: lec.organizationId,
+  //             donViId: lec.userProfile?.sDM_DonViId,
   //         })),
   //         null
   //     )
@@ -460,7 +463,7 @@ function SelectLecturer({
                 dataIndex: "organizationName",
                 width: 80,
                 type: "input",
-                render: (__, record: any) => <>{record?.mainLecturer?.organization?.sMa || ""}</>,
+                render: (__, record: any) => <>{record?.mainLecturer?.userProfile?.donVi?.sMa || ""}</>,
               },
               {
                 title: "Lớp môn học",

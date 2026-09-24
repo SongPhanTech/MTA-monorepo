@@ -22,10 +22,6 @@ model Lecturer extends Base {
   userProfile                      UserProfile                   @relation(fields: [userProfileId], references: [id])
   userProfileId                    String                        @db.Uuid @unique
 
-  // đơn vị nhà của GV cơ hữu; NULL với GV ngoài học viện (mời giảng)
-  organization                     DM_DonVi?                     @relation(fields: [organizationId], references: [Id])
-  organizationId                   String?                       @db.Uuid
-
   lecturerType                     LecturerType                  @relation(fields: [lecturerTypeId], references: [id])
   lecturerTypeId                   String
 

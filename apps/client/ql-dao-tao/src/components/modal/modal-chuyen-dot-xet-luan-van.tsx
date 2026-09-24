@@ -100,9 +100,8 @@ const ModalChuyenDotXetLuanVan = () => {
                 lecturer: {
                   include: {
                     userProfile: {
-                      include: { academicRankType: true, academicDegreeType: true },
+                      include: { donVi: true, academicRankType: true, academicDegreeType: true },
                     },
-                    organization: true,
                   },
                 },
               },
@@ -118,9 +117,8 @@ const ModalChuyenDotXetLuanVan = () => {
                 lecturer: {
                   include: {
                     userProfile: {
-                      include: { academicRankType: true, academicDegreeType: true },
+                      include: { donVi: true, academicRankType: true, academicDegreeType: true },
                     },
-                    organization: true,
                   },
                 },
               },

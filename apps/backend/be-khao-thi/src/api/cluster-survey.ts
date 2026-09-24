@@ -301,8 +301,10 @@ app.openapi(getClusterSurveyStatistics, async (c) => {
         where: {
           lecture: {
             id: lectureId,
-            organizationId: {
-              in: organizations,
+            userProfile: {
+              sDM_DonViId: {
+                in: organizations,
+              },
             },
           },
         },
@@ -392,8 +394,10 @@ app.openapi(getLectureSurveyStatistics, async (c) => {
         where: {
           ...(!!organizations && {
             lecture: {
-              organizationId: {
-                in: organizations.split(","),
+              userProfile: {
+                sDM_DonViId: {
+                  in: organizations.split(","),
+                },
               },
             },
           }),
@@ -420,8 +424,10 @@ app.openapi(getLectureSurveyStatistics, async (c) => {
         },
       },
       ...(!!organizations && {
-        organizationId: {
-          in: organizations.split(","),
+        userProfile: {
+          sDM_DonViId: {
+            in: organizations.split(","),
+          },
         },
       }),
     },
@@ -559,63 +565,6 @@ app.openapi(getOrganizationSurveyStatistics, async (c) => {
           },
         },
       ],
-      // lecturers: {
-      //     some: {
-      //         survey: {
-      //             some: {
-      //                 clusterSurveyId: id,
-      //             },
-      //         },
-      //     },
-      // },
-    },
-    include: {
-      lecturers: {
-        where: {
-          survey: {
-            some: {
-              clusterSurveyId: id,
-              surveySessions: {
-                some: {},
-              },
-            },
-          },
-        },
-        include: {
-          userProfile: true,
-          survey: {
-            where: {
-              clusterSurveyId: id,
-              surveySessions: {
-                some: {},
-              },
-            },
-            include: {
-              surveySessions: {
-                where: {
-                  survey: {
-                    clusterSurveyId: id,
-                  },
-                },
-                include: {
-                  survey: true,
-                },
-              },
-              subjectClass: true,
-              clusterSurvey: {
-                include: {
-                  surveyQuestion: {
-                    where: {
-                      type: "SINGLE_CHOICE",
-                    },
-                  },
-                  surveyChoice: true,
-                },
-              },
-            },
-          },
-        },
-      },
     },
   })
 
@@ -788,8 +737,10 @@ app.openapi(getClusterSurveyStatisticsForLecturer, async (c) => {
         where: {
           lecture: {
             id: lectureId,
-            organizationId: {
-              in: organizations,
+            userProfile: {
+              sDM_DonViId: {
+                in: organizations,
+              },
             },
           },
         },
@@ -875,8 +826,10 @@ app.openapi(getClusterSurveyStatisticsForDonVi, async (c) => {
       surveys: {
         where: {
           lecture: {
-            organizationId: {
-              in: organizations?.length ? organizations.map((i: any) => i.Id) : [organizationId],
+            userProfile: {
+              sDM_DonViId: {
+                in: organizations?.length ? organizations.map((i: any) => i.Id) : [organizationId],
+              },
             },
           },
         },
@@ -971,10 +924,12 @@ app.openapi(getClusterSurveyStatisticsForHocVien, async (c) => {
       surveys: {
         where: {
           lecture: {
-            organizationId: {
-              in: organizations?.length
-                ? [...organizations.map((i) => i.Id), organizationId]
-                : [organizationId],
+            userProfile: {
+              sDM_DonViId: {
+                in: organizations?.length
+                  ? [...organizations.map((i) => i.Id), organizationId]
+                  : [organizationId],
+              },
             },
           },
         },
@@ -1157,7 +1112,7 @@ app.openapi(getClusterSurveyInfoDepartment, async (c) => {
   const { semesterId, trainingObjectTypeId, organizationId, ...q } = c.req.valid("query")
 
   const survey = await prisma.survey.findMany({
-    where: { clusterSurveyId: id, lecture: { organizationId } },
+    where: { clusterSurveyId: id, lecture: { userProfile: { sDM_DonViId: organizationId } } },
     include: {
       surveySessions: true,
     },
@@ -1173,7 +1128,7 @@ app.openapi(getClusterSurveyInfoDepartment, async (c) => {
       surveySessions: {
         some: {},
       },
-      lecture: { organizationId },
+      lecture: { userProfile: { sDM_DonViId: organizationId } },
     },
   })
   let listStudentCount = 0
@@ -1183,7 +1138,7 @@ app.openapi(getClusterSurveyInfoDepartment, async (c) => {
       survey: {
         some: {
           clusterSurveyId: id,
-          lecture: { organizationId },
+          lecture: { userProfile: { sDM_DonViId: organizationId } },
         },
       },
     },
@@ -1200,7 +1155,7 @@ app.openapi(getClusterSurveyInfoDepartment, async (c) => {
     where: {
       survey: {
         clusterSurveyId: id,
-        lecture: { organizationId },
+        lecture: { userProfile: { sDM_DonViId: organizationId } },
       },
     },
     // include:{

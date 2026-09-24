@@ -39,8 +39,8 @@ type ExpertRow = {
   academicRankType?: { sMa?: string | null } | null
   academicDegreeType?: { sMa?: string | null } | null
   lecturer?: {
-    organization?: { sMa?: string | null; sTen?: string | null } | null
     userProfile?: {
+      donVi?: { sMa?: string | null; sTen?: string | null } | null
       phoneNumber?: string | null
       phone?: string | null
       bankAccountNumber?: string | null
@@ -71,7 +71,7 @@ function getAcademicDegree(record: ExpertRow) {
 
 function getWorkplace(record: ExpertRow) {
   return record.lecturer
-    ? `${record.lecturer?.organization?.sMa || ""}-${record.lecturer?.organization?.sTen || ""}`
+    ? `${record.lecturer?.userProfile?.donVi?.sMa || ""}-${record.lecturer?.userProfile?.donVi?.sTen || ""}`
     : record.workplace || ""
 }
 
@@ -115,7 +115,7 @@ function getOrderBy(
       return { currentVersion: { position: order } }
     case "workplace":
       return [
-        { lecturer: { organization: { sMa: order } } },
+        { lecturer: { userProfile: { donVi: { sMa: order } } } },
         { currentVersion: { workplace: order } },
       ]
     case "phone":
@@ -236,9 +236,9 @@ export default function DanhSachChuyenGiaLuanVan() {
       },
       lecturer: {
         include: {
-          organization: true,
           userProfile: {
             include: {
+              donVi: true,
               rank: true,
               academicDegreeType: true,
               academicRankType: true,

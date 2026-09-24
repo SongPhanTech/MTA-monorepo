@@ -147,11 +147,11 @@ app.openapi(getPublicSurvey, async (c) => {
               academicRankType: {
                 select: { sTen: true },
               },
-            },
-          },
-          organization: {
-            select: {
-              sTen: true,
+              donVi: {
+                select: {
+                  sTen: true,
+                },
+              },
             },
           },
         },
@@ -180,7 +180,7 @@ app.openapi(getPublicSurvey, async (c) => {
         lastName: lecture.userProfile.lastName ?? "",
         academicDegree: lecture.userProfile.academicDegreeType?.sTen,
         academicRank: lecture.userProfile.academicRankType?.sTen,
-        organization: lecture.organization?.sTen ?? null,
+        organization: lecture.userProfile?.donVi?.sTen ?? null,
       }
     : null
 

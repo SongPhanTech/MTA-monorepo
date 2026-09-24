@@ -34,8 +34,8 @@ type ExpertRow = {
   academicRankType?: { sMa?: string | null } | null
   academicDegreeType?: { sMa?: string | null } | null
   lecturer?: {
-    organization?: { sMa?: string | null; sTen?: string | null } | null
     userProfile?: {
+      donVi?: { sMa?: string | null; sTen?: string | null } | null
       bankAccountNumber?: string | null
       bankName?: string | null
       academicRankType?: { sMa?: string | null } | null
@@ -123,9 +123,9 @@ export default function DanhSachChuyenGiaDoAn() {
       },
       lecturer: {
         include: {
-          organization: true,
           userProfile: {
             include: {
+              donVi: true,
               rank: true,
               academicDegreeType: true,
               academicRankType: true,
@@ -271,7 +271,7 @@ export default function DanhSachChuyenGiaDoAn() {
                 type: "input",
                 render: (_: unknown, record: any) =>
                   record.lecturer
-                    ? `${record.lecturer?.organization?.sMa || ""}-${record.lecturer?.organization?.sTen || ""}`
+                    ? `${record.lecturer?.userProfile?.donVi?.sMa || ""}-${record.lecturer?.userProfile?.donVi?.sTen || ""}`
                     : record.workplace || "",
               },
               {

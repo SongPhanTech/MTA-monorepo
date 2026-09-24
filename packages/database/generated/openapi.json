@@ -2018,6 +2018,14 @@
             "type": "string",
             "nullable": true
           },
+          "donVi": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DM_DonVi"
+              }
+            ],
+            "nullable": true
+          },
           "sDM_DonViId": {
             "type": "string",
             "nullable": true
@@ -7017,12 +7025,6 @@
             "type": "integer",
             "nullable": true
           },
-          "lecturers": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Lecturer"
-            }
-          },
           "lecturerHistory": {
             "type": "array",
             "items": {
@@ -7039,6 +7041,12 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/StaffHistory"
+            }
+          },
+          "userProfiles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserProfile"
             }
           },
           "curriculum": {
@@ -16803,18 +16811,6 @@
           },
           "userProfileId": {
             "type": "string"
-          },
-          "organization": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DM_DonVi"
-              }
-            ],
-            "nullable": true
-          },
-          "organizationId": {
-            "type": "string",
-            "nullable": true
           },
           "lecturerType": {
             "$ref": "#/components/schemas/LecturerType"
@@ -49494,10 +49490,6 @@
           },
           "userProfileId": {
             "type": "string"
-          },
-          "organizationId": {
-            "type": "string",
-            "nullable": true
           },
           "lecturerTypeId": {
             "type": "string"
@@ -103020,9 +103012,6 @@
           "userProfileId": {
             "type": "integer"
           },
-          "organizationId": {
-            "type": "integer"
-          },
           "lecturerTypeId": {
             "type": "integer"
           },
@@ -103043,7 +103032,6 @@
           "lectureID",
           "serviceDate",
           "userProfileId",
-          "organizationId",
           "lecturerTypeId",
           "_all"
         ]
@@ -103101,10 +103089,6 @@
             "nullable": true
           },
           "userProfileId": {
-            "type": "string",
-            "nullable": true
-          },
-          "organizationId": {
             "type": "string",
             "nullable": true
           },
@@ -103167,10 +103151,6 @@
             "nullable": true
           },
           "userProfileId": {
-            "type": "string",
-            "nullable": true
-          },
-          "organizationId": {
             "type": "string",
             "nullable": true
           },

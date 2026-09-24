@@ -2942,7 +2942,6 @@ exports.Prisma.LecturerScalarFieldEnum = {
   lectureID: 'lectureID',
   serviceDate: 'serviceDate',
   userProfileId: 'userProfileId',
-  organizationId: 'organizationId',
   lecturerTypeId: 'lecturerTypeId'
 };
 
@@ -6901,7 +6900,6 @@ exports.Prisma.LecturerOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   lectureID: 'lectureID',
   userProfileId: 'userProfileId',
-  organizationId: 'organizationId',
   lecturerTypeId: 'lecturerTypeId'
 };
 

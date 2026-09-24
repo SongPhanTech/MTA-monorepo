@@ -8,14 +8,14 @@ const useLecturerHienTai = () => {
   const { data: lecturer, isLoading: lecturerLoading } = useFindFirstLecturer(
     {
       where: { userProfileId: profileId ?? "", deletedAt: null },
-      select: { id: true, organizationId: true },
+      select: { id: true, userProfile: { select: { sDM_DonViId: true } } },
     },
     { enabled: !!profileId }
   )
 
   return {
     lecturerId: lecturer?.id,
-    organizationId: lecturer?.organizationId ?? undefined,
+    organizationId: me?.sDM_DonViId || lecturer?.userProfile?.sDM_DonViId || undefined,
     isLoading: sessionStatus === "loading" || lecturerLoading,
   }
 }

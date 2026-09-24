@@ -128,9 +128,11 @@ export function buildSurveyObjectTypeProfileOrClauses(
       : objectType.organizations.map((org) => org.Id)
 
     clauses.push({
+      sDM_DonViId: { in: organizationIds },
       lecturer: {
-        ...(q.lecturerCode ? { code: { contains: q.lecturerCode, mode: "insensitive" } } : {}),
-        organizationId: { in: organizationIds },
+        is: {
+          ...(q.lecturerCode ? { code: { contains: q.lecturerCode, mode: "insensitive" } } : {}),
+        },
       },
     })
     clauses.push({

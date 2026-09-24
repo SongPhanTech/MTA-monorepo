@@ -3,7 +3,7 @@ import { useStudentThesisRegistrationStatusOptions } from "@hooks/studentThesisR
 import { useScheduleOptions } from "@hooks/subjectClassSchedule"
 import { useSubjectClassTypeOptions } from "@hooks/subjectClassType"
 import { useThesisProjectStatusOptions } from "@hooks/thesisProjectStatus"
-import { useFindUniqueLecturer } from "@workspace/db/hooks"
+import { useFindUniqueDM_DonVi, useFindUniqueLecturer } from "@workspace/db/hooks"
 import { Card, Col, Modal, Row, Table, Tabs, Tag, Typography } from "antd"
 import dayjs from "dayjs"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -42,7 +42,6 @@ const ModalChiTietGiangVien = () => {
             academicDegreeType: true,
           },
         },
-        organization: true,
         lecturerType: true,
         mainSubjectClasses: {
           include: {
@@ -210,6 +209,10 @@ const ModalChiTietGiangVien = () => {
 
   if (!lecturerData) return null // Type cast để tránh lỗi TypeScript
   const lecturer = lecturerData
+  const { data: donVi } = useFindUniqueDM_DonVi(
+    { where: { Id: lecturer?.userProfile?.sDM_DonViId || "" } },
+    { enabled: !!lecturer?.userProfile?.sDM_DonViId }
+  )
 
   const tabItems = [
     {
@@ -294,7 +297,7 @@ const ModalChiTietGiangVien = () => {
             <Col span={6}>
               <Text type="secondary">Đơn vị</Text>
               <div>
-                <Text>{lecturer.organization?.sTen || "-"}</Text>
+                <Text>{donVi?.sTen || "-"}</Text>
               </div>
             </Col>
             <Col span={6}>

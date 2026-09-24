@@ -117,7 +117,7 @@ const PutThongTinCaNhanModal = () => {
       dateOfBirth: data.dateOfBirth ? dayjs(data.dateOfBirth) : null,
       idCardNumber: data.idCardNumber,
       lectureCode: data.lecturer?.code,
-      organizationId: data.lecturer?.organizationId,
+      organizationId: data.sDM_DonViId,
       email: data.email,
       phoneNumber: data.phoneNumber,
       officePhone: data.officePhone,
@@ -178,12 +178,12 @@ const PutThongTinCaNhanModal = () => {
           trangThaiLamViecId: value.trangThaiLamViecId || null,
           recruitmentDate: toISO(value.recruitmentDate),
           // Mã GV + đơn vị công tác thuộc hồ sơ Lecturer -> cập nhật qua quan hệ.
+          sDM_DonViId: value.organizationId || null,
           ...(data?.lecturer
             ? {
                 lecturer: {
                   update: {
                     code: value.lectureCode || undefined,
-                    organizationId: value.organizationId || null,
                   },
                 },
               }

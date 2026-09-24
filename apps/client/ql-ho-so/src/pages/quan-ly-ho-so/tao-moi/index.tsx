@@ -553,6 +553,7 @@ export default function CreateUserPage() {
           bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
           bLaGiangVien: bLaGiangVien || undefined,
           bLaNguoiDung: values?.bLaNguoiDung,
+          sDM_DonViId: bLaGiangVien ? organizationId || null : values.sDM_DonViId,
           dateOfBirth: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
           idCardDate: values.idCardDate ? dayjs(values.idCardDate).toISOString() : null,
           unionDate: values.unionDate ? dayjs(values.unionDate).toISOString() : null,
@@ -912,7 +913,6 @@ export default function CreateUserPage() {
             data: {
               userProfileId: resProfile?.id,
               lecturerTypeId: lecturerTypeId,
-              organizationId: organizationId || "",
               code: lectureCode || "",
             },
           })
@@ -1057,7 +1057,10 @@ export default function CreateUserPage() {
 CreateUserPage.getLayout = function getLayout(page: React.ReactElement) {
   return (
     <CreateLayout
-      breadcrumbList={[{ title: "Quản lý hồ sơ", href: "/quan-ly-ho-so" }, { title: "Tạo mới" }]}
+      breadcrumbList={[
+        { title: "Hồ sơ giảng viên/cán bộ", href: "/quan-ly-ho-so" },
+        { title: "Tạo mới" },
+      ]}
     >
       {page}
     </CreateLayout>

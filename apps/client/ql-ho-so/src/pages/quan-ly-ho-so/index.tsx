@@ -49,6 +49,12 @@ export default function UserProfilePageDs() {
   const router = useRouter()
   const where = useMemo(() => {
     return {
+      OR: [
+        { lecturer: { isNot: null } },
+        { staffs: { isNot: null } },
+        { bLaGiangVien: true },
+        { bLaCanBoNhanVien: true },
+      ],
       ...(filters.originalPlace
         ? {
             originalPlace: {
@@ -119,6 +125,8 @@ export default function UserProfilePageDs() {
     include: {
       gender: true,
       rank: true,
+      lecturer: { select: { id: true, code: true } },
+      staffs: { select: { id: true, code: true } },
     },
     orderBy: {
       createdAt: "desc",
@@ -301,6 +309,13 @@ export default function UserProfilePageDs() {
                 render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
+                title: "Mã GV/CB",
+                align: "center",
+                width: 120,
+                fixed: "left",
+                render: (__, record) => record?.lecturer?.code || record?.staffs?.code || "",
+              },
+              {
                 title: "Họ và tên",
                 align: "center",
                 width: 180,
@@ -308,6 +323,17 @@ export default function UserProfilePageDs() {
                 render: (__, record) => (record ? `${record.lastName} ${record.firstName}` : ""),
                 type: "input",
                 dataIndex: "name",
+              },
+              {
+                title: "Loại",
+                align: "center",
+                width: 140,
+                render: (__, record) => (
+                  <Flex justify="center" gap={4} wrap="wrap">
+                    {record?.lecturer || record?.bLaGiangVien ? <Tag color="blue">Giảng viên</Tag> : null}
+                    {record?.staffs || record?.bLaCanBoNhanVien ? <Tag color="purple">Cán bộ</Tag> : null}
+                  </Flex>
+                ),
               },
               {
                 title: "CCCD/CMND",
@@ -485,5 +511,11 @@ export default function UserProfilePageDs() {
 }
 
 UserProfilePageDs.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout>{page}</DefaultLayout>
+  return (
+    <DefaultLayout
+      breadcrumbList={[{ title: "Hồ sơ giảng viên/cán bộ", href: "/quan-ly-ho-so" }]}
+    >
+      {page}
+    </DefaultLayout>
+  )
 }

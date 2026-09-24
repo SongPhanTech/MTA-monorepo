@@ -2813,7 +2813,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
                           expert: {
                             include: {
                               lecturer: {
-                                include: { userProfile: true, organization: true },
+                                include: { userProfile: { include: { donVi: true } } },
                               },
                             },
                           },
@@ -2822,7 +2822,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
                       expert: {
                         include: {
                           lecturer: {
-                            include: { userProfile: true, organization: true },
+                            include: { userProfile: { include: { donVi: true } } },
                           },
                         },
                       },
@@ -3027,7 +3027,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
             don_vi: safeString(
               resolveCouncilMemberUnitName({
                 inAcademy,
-                lecturerOrg: lecturer?.organization,
+                lecturerOrg: lecturer?.userProfile?.donVi,
                 organization: version?.organization,
                 orgById,
               })

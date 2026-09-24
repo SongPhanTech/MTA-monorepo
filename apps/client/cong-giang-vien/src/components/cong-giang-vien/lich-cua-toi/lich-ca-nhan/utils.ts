@@ -175,10 +175,10 @@ export const CHON_NGUOI_LIEN_QUAN = {
   lastName: true,
   email: true,
   code: true,
+  donVi: { select: { sMa: true, sCode: true } },
   lecturer: {
     select: {
       lectureID: true,
-      organization: { select: { sMa: true, sCode: true } },
     },
   },
   educationAndTraining: {
@@ -206,13 +206,11 @@ export const taoDieuKienTimNguoiLienQuan = (tuKhoa: string) => ({
       },
     },
     {
-      lecturer: {
-        organization: {
-          OR: [
-            { sMa: { contains: tuKhoa, mode: "insensitive" as const } },
-            { sCode: { contains: tuKhoa, mode: "insensitive" as const } },
-          ],
-        },
+      donVi: {
+        OR: [
+          { sMa: { contains: tuKhoa, mode: "insensitive" as const } },
+          { sCode: { contains: tuKhoa, mode: "insensitive" as const } },
+        ],
       },
     },
     {
@@ -246,9 +244,9 @@ export type NguoiLienQuanTomTat = {
   lastName?: string | null
   email?: string | null
   code?: string | null
+  donVi?: { sMa?: string | null; sCode?: string | null } | null
   lecturer?: {
     lectureID?: string | null
-    organization?: { sMa?: string | null; sCode?: string | null } | null
   } | null
   educationAndTraining?: Array<{
     registerNumber?: string | null
@@ -277,7 +275,7 @@ export const layMaNguoiLienQuan = (nguoi: NguoiLienQuanTomTat) => {
 }
 
 export const layMaDonViNguoiLienQuan = (nguoi: NguoiLienQuanTomTat) => {
-  const donViGv = nguoi.lecturer?.organization
+  const donViGv = nguoi.donVi
   if (donViGv) {
     return donViGv.sMa?.trim() || donViGv.sCode?.trim() || ""
   }

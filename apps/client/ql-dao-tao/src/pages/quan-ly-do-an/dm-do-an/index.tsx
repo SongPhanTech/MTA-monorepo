@@ -93,6 +93,7 @@ const THESIS_PROJECT_INCLUDE = {
     include: {
       userProfile: {
         include: {
+          donVi: true,
           academicRankType: true,
           academicDegreeType: true,
           level: true,
@@ -100,20 +101,19 @@ const THESIS_PROJECT_INCLUDE = {
           positionCPV: true,
         },
       },
-      organization: true,
     },
   },
   secondarySupervisor: {
     include: {
       userProfile: {
         include: {
+          donVi: true,
           academicRankType: true,
           academicDegreeType: true,
           level: true,
           positionCPV: true,
         },
       },
-      organization: true,
     },
   },
   thirdSupervisor: {
@@ -126,6 +126,7 @@ const THESIS_PROJECT_INCLUDE = {
             include: {
               userProfile: {
                 include: {
+                  donVi: true,
                   academicRankType: true,
                   academicDegreeType: true,
                   level: true,
@@ -133,7 +134,6 @@ const THESIS_PROJECT_INCLUDE = {
                   positionCPV: true,
                 },
               },
-              organization: true,
             },
           },
         },
@@ -1113,14 +1113,14 @@ export default function DanhMucDoAn() {
                   render: (_: any, record: any) => (
                     <div className="flex flex-col gap-1">
                       {record?.primarySupervisor && (
-                        <div>{record.primarySupervisor.organization?.sMa || "---"}</div>
+                        <div>{record.primarySupervisor.userProfile?.donVi?.sMa || "---"}</div>
                       )}
                       {record?.secondarySupervisor && (
-                        <div>{record.secondarySupervisor.organization?.sMa || "---"}</div>
+                        <div>{record.secondarySupervisor.userProfile?.donVi?.sMa || "---"}</div>
                       )}
                       {record?.thirdSupervisor && (
                         <div>
-                          {record.thirdSupervisor.expert?.lecturer?.organization?.sMa || "---"}
+                          {record.thirdSupervisor.expert?.lecturer?.userProfile?.donVi?.sMa || "---"}
                         </div>
                       )}
                     </div>

@@ -55,17 +55,12 @@ app.openapi(getListTeacher, async (c) => {
     },
     select: {
       code: true,
-      organization: {
-        select: {
-          sMa: true,
-          sTen: true,
-        },
-      },
       userProfile: {
         select: {
           firstName: true,
           lastName: true,
           fullname: true,
+          sDM_DonViId: true,
           rank: {
             select: {
               sTen: true,
@@ -83,11 +78,20 @@ app.openapi(getListTeacher, async (c) => {
     },
   })
 
+  const orgIds = [...new Set(res.map((item) => item.userProfile?.sDM_DonViId).filter(Boolean))] as string[]
+  const orgs = orgIds.length
+    ? await prisma.dM_DonVi.findMany({
+        where: { Id: { in: orgIds } },
+        select: { Id: true, sMa: true, sTen: true },
+      })
+    : []
+  const orgById = new Map(orgs.map((org) => [org.Id, org]))
+
   const data = res.map((item) => ({
     teacher_code: item.code ?? null,
     teacher: item.userProfile.fullname ?? "",
-    department_code: item.organization.sMa ?? null,
-    department_name: item.organization.sTen ?? "",
+    department_code: orgById.get(item.userProfile?.sDM_DonViId || "")?.sMa ?? null,
+    department_name: orgById.get(item.userProfile?.sDM_DonViId || "")?.sTen ?? "",
     rank_name: item.userProfile.rank?.sTen ?? "",
     position_name: item.userProfile.positionCPV?.sTen ?? "",
     phone_number: item.userProfile.phoneNumber ?? "",
@@ -143,18 +147,12 @@ app.openapi(getTeacherDetail, async (c) => {
     where: { code: teacher_code },
     select: {
       code: true,
-      organization: {
-        select: {
-          sMa: true,
-          sTen: true,
-        },
-      },
       userProfile: {
         select: {
           firstName: true,
           lastName: true,
           phoneNumber: true,
-
+          sDM_DonViId: true,
           email: true,
           rank: { select: { sTen: true } },
           positionCPV: { select: { sTen: true } },
@@ -162,13 +160,19 @@ app.openapi(getTeacherDetail, async (c) => {
       },
     },
   })
+  const org = lecturer?.userProfile?.sDM_DonViId
+    ? await prisma.dM_DonVi.findUnique({
+        where: { Id: lecturer.userProfile.sDM_DonViId },
+        select: { sMa: true, sTen: true },
+      })
+    : null
   const res = {
     result_code: "000" as const,
     result_desc: "success" as const,
     teacher_code: lecturer?.code ?? null,
     teacher: `${lecturer?.userProfile.lastName} ${lecturer?.userProfile.firstName}`,
-    department_code: lecturer?.organization?.sMa ?? null,
-    department_name: lecturer?.organization?.sTen ?? "",
+    department_code: org?.sMa ?? null,
+    department_name: org?.sTen ?? "",
     rank_name: lecturer?.userProfile.rank?.sTen ?? "",
     position_name: lecturer?.userProfile.positionCPV?.sTen ?? "",
     phone_number: lecturer?.userProfile.phoneNumber ?? "",

@@ -27,9 +27,9 @@ const useHoSoCaNhan = () => {
         academicDegreeType: true, // trinhDo (DM_HocVi)
         chucVuChinhQuyen: true, // chucVu (DM_ChucVu)
         trangThaiLamViec: true, // tinhTrang (DM_TrangThaiLamViec)
+        donVi: true,
         lecturer: {
           include: {
-            organization: true,
             mainSubjectClasses: { select: { subject: { select: { subjectId: true } } } },
             _count: { select: { primarySupervisorThesisProject: true } },
           },
@@ -42,7 +42,7 @@ const useHoSoCaNhan = () => {
     { enabled: !!profileId }
   )
 
-  const org = data?.lecturer?.organization
+  const org = data?.donVi
   const isBoMon = org?.iLoaiDonVi === 7 || org?.iCapDonVi === 3
 
   const { data: parentOrg } = useFindUniqueDM_DonVi(

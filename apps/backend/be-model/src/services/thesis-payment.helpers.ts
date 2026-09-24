@@ -114,14 +114,18 @@ export function resolveExpertWorkplace(
   expert?: {
     workplace?: string | null
     organization?: string | null
-    lecturer?: { organization?: { sTen?: string | null } | null } | null
-    expert?: { lecturer?: { organization?: { sTen?: string | null } | null } | null } | null
+    lecturer?: { userProfile?: { donVi?: { sTen?: string | null } | null } | null } | null
+    expert?: {
+      lecturer?: { userProfile?: { donVi?: { sTen?: string | null } | null } | null } | null
+    } | null
   } | null
 ): string {
   if (!expert) return ""
   const organization = typeof expert.organization === "string" ? expert.organization.trim() : ""
   const lecturerOrganization =
-    expert.lecturer?.organization?.sTen?.trim() || expert.expert?.lecturer?.organization?.sTen?.trim() || ""
+    expert.lecturer?.userProfile?.donVi?.sTen?.trim() ||
+    expert.expert?.lecturer?.userProfile?.donVi?.sTen?.trim() ||
+    ""
   return expert.workplace?.trim() || organization || lecturerOrganization || ""
 }
 

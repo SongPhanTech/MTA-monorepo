@@ -242,10 +242,20 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'group',
+                }, donVi: {
+                    name: "donVi",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'userProfiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "sDM_DonViId" },
                 }, sDM_DonViId: {
                     name: "sDM_DonViId",
                     type: "String",
                     isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'donVi',
                 }, sDM_ViTriCongViecId: {
                     name: "sDM_ViTriCongViecId",
                     type: "String",
@@ -5815,12 +5825,6 @@ const metadata: ModelMeta = {
                     name: "iLoaiDonVi",
                     type: "Int",
                     isOptional: true,
-                }, lecturers: {
-                    name: "lecturers",
-                    type: "Lecturer",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'organization',
                 }, lecturerHistory: {
                     name: "lecturerHistory",
                     type: "LecturerHistory",
@@ -5839,6 +5843,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'organization',
+                }, userProfiles: {
+                    name: "userProfiles",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'donVi',
                 }, curriculum: {
                     name: "curriculum",
                     type: "Curriculum",
@@ -16437,20 +16447,6 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'userProfile',
-                }, organization: {
-                    name: "organization",
-                    type: "DM_DonVi",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'lecturers',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "organizationId" },
-                }, organizationId: {
-                    name: "organizationId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'organization',
                 }, lecturerType: {
                     name: "lecturerType",
                     type: "LecturerType",

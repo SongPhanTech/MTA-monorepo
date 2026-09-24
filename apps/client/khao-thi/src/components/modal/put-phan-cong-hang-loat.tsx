@@ -46,6 +46,7 @@ export default function PutPhanCongHangLoatModal() {
         include: {
           userProfile: {
             include: {
+              donVi: true,
               academicDegreeType: {
                 select: {
                   sTen: true,
@@ -58,7 +59,6 @@ export default function PutPhanCongHangLoatModal() {
               },
             },
           },
-          organization: true,
         },
       },
     },
@@ -163,7 +163,7 @@ export default function PutPhanCongHangLoatModal() {
 
               return {
                 value: i?.lecturerId,
-                label: `${academicTitle ? `${academicTitle} ` : ""}${fullName}-${i?.lecturer?.organization?.sTen}`,
+                label: `${academicTitle ? `${academicTitle} ` : ""}${fullName}-${i?.lecturer?.userProfile?.donVi?.sTen ?? ""}`,
               }
             })}
           />

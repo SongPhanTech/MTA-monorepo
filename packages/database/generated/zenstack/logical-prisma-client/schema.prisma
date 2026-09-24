@@ -784,6 +784,8 @@ model UserProfile {
   bLaHocVien                           Boolean?
   group                                Group?                              @relation(fields: [groupId], references: [id])
   groupId                              String?
+  /// Đơn vị quản lý GV/cán bộ (nguồn duy nhất cho giảng viên)
+  donVi                                DM_DonVi?                           @relation("UserProfileDonVi", fields: [sDM_DonViId], references: [Id])
   sDM_DonViId                          String?                             @db.Uuid()
   sDM_ViTriCongViecId                  String?                             @db.Uuid()
   sQuanlyTrucTiepId                    String?                             @db.Uuid()
@@ -996,6 +998,7 @@ model UserProfile {
   individualSchedules                  IndividualSchedule[]
   subjectClassAttendance               SubjectClassAttendance[]
 
+  @@index([sDM_DonViId])
   @@schema("ql-nguoi-dung")
 }
 
@@ -2189,10 +2192,10 @@ model DM_DonVi {
   iCapDonVi             Int?
   /// 0: Phòng;1: Ban; 2: Trung tâm; 3: Văn phòng; 4: Tổ công tác; 5: Khoa; 6: Viện, 7: Bộ môn; 8: Phòng thí nghiệm; 9: Xưởng thực hành; 10: Hệ; 11: Tiểu đoàn; 12: Đại đội: 13: Trung đội; 14: Lớp/Chi đoàn
   iLoaiDonVi            Int?
-  lecturers             Lecturer[]
   lecturerHistory       LecturerHistory[]
   staffs                Staff[]
   staffHistory          StaffHistory[]
+  userProfiles          UserProfile[]          @relation("UserProfileDonVi")
   curriculum            Curriculum[]
   fixedClass            FixedClass[]
   subjectVersions       SubjectVersion[]
@@ -5150,8 +5153,6 @@ model Lecturer {
   serviceDate                      DateTime?
   userProfile                      UserProfile                   @relation(fields: [userProfileId], references: [id])
   userProfileId                    String                        @unique() @db.Uuid()
-  organization                     DM_DonVi?                     @relation(fields: [organizationId], references: [Id])
-  organizationId                   String?                       @db.Uuid()
   lecturerType                     LecturerType                  @relation(fields: [lecturerTypeId], references: [id])
   lecturerTypeId                   String
   mainSubjectClasses               SubjectClass[]                @relation("MainLecturer")

@@ -3,7 +3,12 @@ import { queryClient } from "@api/index"
 import PutFormModal from "@components/commons/put-modal"
 import useSpinner from "@hooks/spinner"
 import type { UserProfile } from "@workspace/db"
-import { useCreateLecturer, useFindUniqueLecturer, useUpdateLecturer } from "@workspace/db/hooks"
+import {
+  useCreateLecturer,
+  useFindUniqueLecturer,
+  useUpdateLecturer,
+  useUpdateUserProfile,
+} from "@workspace/db/hooks"
 import type { GetProp, UploadProps } from "antd"
 import { Col, Form, message } from "antd"
 import dayjs from "dayjs"
@@ -54,7 +59,6 @@ const PutUserProfileLectureModal = () => {
             level: true,
           },
         },
-        organization: true,
         lecturerType: true,
       },
     },
@@ -65,6 +69,7 @@ const PutUserProfileLectureModal = () => {
 
   const { mutateAsync: updateLecturer } = useUpdateLecturer()
   const { mutateAsync: createLecturer } = useCreateLecturer()
+  const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
 
   // const { data = [] } = useFindManyUserProfile({
   //     where: {
@@ -83,7 +88,6 @@ const PutUserProfileLectureModal = () => {
   ): Prisma.LecturerCreateInput => ({
     code: output.code,
     userProfile: { connect: { id: userProfileId } },
-    organization: { connect: { Id: output.organizationId } },
     lecturerType: { connect: { id: output.lecturerTypeId } },
   })
 
@@ -99,7 +103,9 @@ const PutUserProfileLectureModal = () => {
             userProfileId: output?.userProfileId,
             lecturerTypeId: output.lecturerTypeId,
             code: output.code,
-            organizationId: output.organizationId,
+            userProfile: {
+              update: { sDM_DonViId: output.organizationId || null },
+            },
           },
           where: {
             id,
@@ -113,9 +119,14 @@ const PutUserProfileLectureModal = () => {
             userProfileId: output?.userProfileId,
             lecturerTypeId: output.lecturerTypeId,
             code: output.code,
-            organizationId: output.organizationId,
           },
         })
+        if (output?.userProfileId) {
+          await updateUserProfile({
+            where: { id: output.userProfileId },
+            data: { sDM_DonViId: output.organizationId || null },
+          })
+        }
         message.success("Thêm mới giảng viên thành công")
       }
 
@@ -144,7 +155,7 @@ const PutUserProfileLectureModal = () => {
       const formData = {
         // Thông tin từ Lecturer
         code: lecturer.code,
-        organizationId: lecturer.organizationId,
+        organizationId: userProfile.sDM_DonViId,
         lecturerTypeId: lecturer.lecturerTypeId,
 
         // Thông tin cơ bản từ UserProfile

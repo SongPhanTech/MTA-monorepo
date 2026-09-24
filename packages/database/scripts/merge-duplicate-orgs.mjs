@@ -37,7 +37,6 @@ const FK_UPDATES = [
   { schema: "mta", table: "DM_DonVi", column: "sTruongDonVi" },
   { schema: "mta", table: "DM_NhanVien", column: "sDM_DonViId" },
   { schema: "ql-nguoi-dung", table: "UserProfile", column: "sDM_DonViId" },
-  { schema: "ql-dao-tao", table: "Lecturer", column: "organizationId" },
   { schema: "ql-dao-tao", table: "LecturerHistory", column: "organizationId" },
   { schema: "ql-dao-tao", table: "Staff", column: "organizationId" },
   { schema: "ql-dao-tao", table: "StaffHistory", column: "organizationId" },
@@ -130,7 +129,6 @@ async function loadTreeIds(prisma, rootId, { includeDeleted = false } = {}) {
 async function countRefs(prisma, id) {
   const rows = await prisma.$queryRaw`
     SELECT (
-      (SELECT COUNT(*)::int FROM "ql-dao-tao"."Lecturer" WHERE "organizationId" = ${id}::uuid) +
       (SELECT COUNT(*)::int FROM "ql-dao-tao"."Subject" WHERE "managementOrganizationId" = ${id}::uuid) +
       (SELECT COUNT(*)::int FROM "ql-dao-tao"."FixedClass" WHERE "managementOrganizationId" = ${id}::uuid) +
       (SELECT COUNT(*)::int FROM "ql-dao-tao"."Curriculum" WHERE "managementOrganizationId" = ${id}::uuid) +
@@ -371,7 +369,6 @@ async function countLeftoverRefs(prisma, ids) {
     const rows = await prisma.$queryRawUnsafe(
       `
       SELECT (
-        (SELECT COUNT(*)::int FROM "ql-dao-tao"."Lecturer" WHERE "organizationId" = ANY($1::uuid[])) +
         (SELECT COUNT(*)::int FROM "ql-dao-tao"."Subject" WHERE "managementOrganizationId" = ANY($1::uuid[])) +
         (SELECT COUNT(*)::int FROM "ql-dao-tao"."SubjectVersion" WHERE "managementOrganizationId" = ANY($1::uuid[])) +
         (SELECT COUNT(*)::int FROM "ql-dao-tao"."FixedClass" WHERE "managementOrganizationId" = ANY($1::uuid[])) +

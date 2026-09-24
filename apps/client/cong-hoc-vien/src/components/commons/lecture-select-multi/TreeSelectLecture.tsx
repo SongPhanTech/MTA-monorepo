@@ -11,8 +11,7 @@ function buildOrgAndLectureTree(
   list: Array<{ id: string; name: string | null; parentId: string | null }>,
   lecturers: Array<{
     id: string
-    userProfile: { fullName: string }
-    organizationId: string | null
+    userProfile: { fullName: string; sDM_DonViId: string | null }
   }>,
   parentId: string | null = null
 ): Array<TreeNodeType> {
@@ -24,7 +23,7 @@ function buildOrgAndLectureTree(
       selectable: item.parentId !== null,
       children: [
         ...lecturers
-          .filter((lecturer) => lecturer.organizationId === item.id)
+          .filter((lecturer) => lecturer.userProfile?.sDM_DonViId === item.id)
           .map((lecturer) => ({
             title: lecturer.userProfile?.fullName || "Giảng viên không tên",
             value: `${lecturer.id}`,
@@ -70,7 +69,7 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
         { iLoaiDonVi: 6 }, // Viện
         { iLoaiDonVi: 7 }, // Bộ môn
         { sParentId: null },
-        { lecturers: { some: { active: true } } },
+        { userProfiles: { some: { lecturer: { is: { active: true } } } } },
       ],
     },
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
@@ -83,7 +82,6 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
     error: lecturersError,
   } = useFindManyLecturer({
     include: {
-      organization: true,
       userProfile: {
         include: {
           academicRankType: true,
@@ -113,8 +111,8 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
         id: lec.id,
         userProfile: {
           fullName: formatLecturerName(lec) || "Giảng viên không tên",
+          sDM_DonViId: lec.userProfile?.sDM_DonViId ?? null,
         },
-        organizationId: lec.organizationId,
       })),
       null
     )

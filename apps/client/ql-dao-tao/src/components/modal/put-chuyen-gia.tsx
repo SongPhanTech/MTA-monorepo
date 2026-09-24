@@ -190,11 +190,11 @@ const PutExpert = () => {
           OR: [
             { code: { contains: search, mode: "insensitive" } },
             { userProfile: { fullname: { contains: search, mode: "insensitive" } } },
-            { organization: { sTen: { contains: search, mode: "insensitive" } } },
+            { userProfile: { donVi: { sTen: { contains: search, mode: "insensitive" } } } },
           ],
         }
       : {},
-    include: { userProfile: true, organization: true },
+    include: { userProfile: { include: { donVi: true } } },
     take: 200,
   })
 
@@ -827,7 +827,7 @@ const PutExpert = () => {
               searchValue={search}
               onSearch={setSearch}
               options={lecturer.map((item) => ({
-                label: [item.code, item?.userProfile?.fullname, item?.organization?.sTen]
+                label: [item.code, item?.userProfile?.fullname, item?.userProfile?.donVi?.sTen]
                   .filter(Boolean)
                   .join(" - "),
                 value: item.id,

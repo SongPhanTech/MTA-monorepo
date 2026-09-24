@@ -88,7 +88,6 @@ export default function NoCounCilMemberTab() {
               },
             },
           },
-          organization: true,
         },
       },
     },

@@ -121,10 +121,10 @@ model DM_DonVi extends CoreBase {
   /// 0: Phòng;1: Ban; 2: Trung tâm; 3: Văn phòng; 4: Tổ công tác; 5: Khoa; 6: Viện, 7: Bộ môn; 8: Phòng thí nghiệm; 9: Xưởng thực hành; 10: Hệ; 11: Tiểu đoàn; 12: Đại đội: 13: Trung đội; 14: Lớp/Chi đoàn
   iLoaiDonVi           Int?
 
-  lecturers            Lecturer[]
   lecturerHistory      LecturerHistory[]
   staffs               Staff[]
   staffHistory         StaffHistory[]
+  userProfiles         UserProfile[]      @relation("UserProfileDonVi")
 
   curriculum           Curriculum[]
   fixedClass           FixedClass[]

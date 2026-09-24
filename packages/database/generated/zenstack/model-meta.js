@@ -252,11 +252,22 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'group',
+                }, donVi: {
+                    name: "donVi",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "UserProfileDonVi" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'userProfiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "sDM_DonViId" },
                 }, sDM_DonViId: {
                     name: "sDM_DonViId",
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'donVi',
                 }, sDM_ViTriCongViecId: {
                     name: "sDM_ViTriCongViecId",
                     type: "String",
@@ -1538,7 +1549,7 @@ const metadata = {
                     fields: ["idCardNumber"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@auth", "args": [] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-nguoi-dung" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@auth", "args": [] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-nguoi-dung" }] }],
         },
         hocHam: {
             name: 'HocHam', fields: {
@@ -6163,12 +6174,6 @@ const metadata = {
                     name: "iLoaiDonVi",
                     type: "Int",
                     isOptional: true,
-                }, lecturers: {
-                    name: "lecturers",
-                    type: "Lecturer",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'organization',
                 }, lecturerHistory: {
                     name: "lecturerHistory",
                     type: "LecturerHistory",
@@ -6187,6 +6192,13 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'organization',
+                }, userProfiles: {
+                    name: "userProfiles",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "UserProfileDonVi" }] }],
+                    backLink: 'donVi',
                 }, curriculum: {
                     name: "curriculum",
                     type: "Curriculum",
@@ -17294,22 +17306,6 @@ const metadata = {
                     attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'userProfile',
-                }, organization: {
-                    name: "organization",
-                    type: "DM_DonVi",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'lecturers',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "organizationId" },
-                }, organizationId: {
-                    name: "organizationId",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@db.Uuid", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'organization',
                 }, lecturerType: {
                     name: "lecturerType",
                     type: "LecturerType",

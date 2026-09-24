@@ -15,10 +15,9 @@ const ThongKeDonVi: React.FC<LectureByOrgProps> = ({ className, showTable = true
       sTen: true,
       _count: {
         select: {
-          lecturers: {
+          userProfiles: {
             where: {
-              active: true,
-              deletedAt: null,
+              lecturer: { is: { active: true, deletedAt: null } },
             },
           },
         },
@@ -30,7 +29,7 @@ const ThongKeDonVi: React.FC<LectureByOrgProps> = ({ className, showTable = true
   const data = donViData
     .map((donVi) => ({
       letter: donVi.sTen,
-      frequency: donVi._count.lecturers,
+      frequency: donVi._count.userProfiles,
     }))
     .filter((item) => item.frequency > 0)
 

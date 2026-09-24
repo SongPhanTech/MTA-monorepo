@@ -36,9 +36,9 @@ export const expertVersionInclude = {
     include: {
       lecturer: {
         include: {
-          organization: true,
           userProfile: {
             include: {
+              donVi: true,
               academicRankType: true,
               academicDegreeType: true,
             },

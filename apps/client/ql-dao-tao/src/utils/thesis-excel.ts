@@ -662,7 +662,7 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
       stats = {
         expertId: expertId,
         name: (getSupervisorName(expert, false, false) as string) || "",
-        sDonvi: expert?.workplace || expert?.lecturer?.organization?.sTen || "",
+        sDonvi: expert?.workplace || expert?.lecturer?.userProfile?.donVi?.sTen || "",
         stk: expert?.bankAccountNumber || expert?.lecturer?.userProfile?.bankAccountNumber || "",
         tennganhang: expert?.bankName || expert?.lecturer?.userProfile?.bankName || "",
         GVHD1Student: 0,
@@ -2647,8 +2647,8 @@ const convertToThongKeCbThamGiaHdData = (
       const name = (getSupervisorName(expert, false, false) as string) || ""
       const donViQuanLi =
         expert?.workplace ||
-        expert?.expert?.lecturer?.organization?.sTen ||
-        expert?.lecturer?.organization?.sTen ||
+        expert?.expert?.lecturer?.userProfile?.donVi?.sTen ||
+        expert?.lecturer?.userProfile?.donVi?.sTen ||
         ""
       const stk =
         expert?.bankAccountNumber ||
@@ -4033,12 +4033,12 @@ export interface UserProfile {
   level?: { sMa?: string | null } | null
   academicDegreeType?: { sMa?: string | null } | null
   positionCPV?: { sTen?: string | null } | null
+  donVi?: { sMa?: string | null; sTen?: string | null; sCode?: string | null } | null
 }
 
 export interface Lecturer {
   id: string
   userProfile?: UserProfile | null
-  organization?: { sCode?: string | null; sTen?: string | null } | null
 }
 
 export interface StudentRegistration {
@@ -4176,7 +4176,8 @@ export const exportPhuLucHuongDanDoAn = async ({
         return {
           supervisor: prefix + formattedName,
           position: profile?.positionCPV?.sTen || "",
-          unit: supervisor.organization?.sTen || supervisor.organization?.sCode || "",
+          unit:
+            supervisor.userProfile?.donVi?.sTen || supervisor.userProfile?.donVi?.sCode || "",
         }
       }
 
@@ -4399,8 +4400,10 @@ export interface ThesisProjectProgressExportItem {
     } | null
   } | null
   primarySupervisor?: {
-    organization?: {
-      sTen?: string | null
+    userProfile?: {
+      donVi?: {
+        sTen?: string | null
+      } | null
     } | null
   } | null
   registrations?: Array<{
@@ -4465,7 +4468,7 @@ export const exportBaoCaoTienDoDoAnTotNghiep = async ({
     const khoaVien = khoaVienRaw.replace(/^(Khoa|Viện)\s+/i, "")
 
     const boMonRaw =
-      firstProj?.primarySupervisor?.organization?.sTen ||
+      firstProj?.primarySupervisor?.userProfile?.donVi?.sTen ||
       firstProj?.subjectClass?.subject?.managementOrganization?.sTen ||
       "................"
     const boMon = boMonRaw.replace(/^Bộ môn\s+/i, "")
@@ -4654,7 +4657,7 @@ export const exportDanhSachTieuBanChamDATN = async ({
     const khoaVien = khoaVienRaw.replace(/^(Khoa|Viện)\s+/i, "")
 
     const boMonRaw =
-      firstProj?.primarySupervisor?.organization?.sTen ||
+      firstProj?.primarySupervisor?.userProfile?.donVi?.sTen ||
       firstProj?.subjectClass?.subject?.managementOrganization?.sTen ||
       "................"
     const boMon = boMonRaw.replace(/^Bộ môn\s+/i, "")
@@ -4779,7 +4782,7 @@ export const exportDanhSachTieuBanChamDATN = async ({
               expert?.position ||
               "Giảng viên"
             const rawLecOrg =
-              expert?.expert?.lecturer?.organization || expert?.lecturer?.organization
+              expert?.expert?.lecturer?.userProfile?.donVi || expert?.lecturer?.userProfile?.donVi
             const rawExpOrg = expert?.organization
             const orgStr =
               typeof rawLecOrg === "string"

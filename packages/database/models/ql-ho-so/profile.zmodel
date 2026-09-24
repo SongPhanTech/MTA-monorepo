@@ -51,6 +51,8 @@ model UserProfile extends BaseUuid {
   bLaHocVien                           Boolean?
   group                                Group?                              @relation(fields: [groupId], references: [id])
   groupId                              String?
+  /// Đơn vị quản lý GV/cán bộ (nguồn duy nhất cho giảng viên)
+  donVi                                DM_DonVi?                           @relation("UserProfileDonVi", fields: [sDM_DonViId], references: [Id])
   sDM_DonViId                          String?                             @db.Uuid
   sDM_ViTriCongViecId                  String?                             @db.Uuid
   sQuanlyTrucTiepId                    String?                             @db.Uuid
@@ -307,6 +309,7 @@ model UserProfile extends BaseUuid {
   individualSchedules                  IndividualSchedule[]
   subjectClassAttendance               SubjectClassAttendance[]
 
+  @@index([sDM_DonViId])
   @@auth() 
   @@schema("ql-nguoi-dung")
 }

@@ -231,6 +231,7 @@ export default {
     "HOME": "/home",
     "INDEX": "/",
     "QL_CAN_BO": "/ql-can-bo",
+    "QUAN_LY_HO_SO_HOC_VIEN": "/quan-ly-ho-so/hoc-vien",
     "QUAN_LY_HO_SO_ID": "/quan-ly-ho-so/[id]",
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
     "QUAN_LY_HO_SO_ME": "/quan-ly-ho-so/me",

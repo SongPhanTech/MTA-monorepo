@@ -96,8 +96,42 @@ export default function UserProfilePageLecture() {
     ]
   }, [orgId, dmDonViIds])
 
-  const where = useMemo(
-    () => ({
+  const where = useMemo(() => {
+    const userProfile: Record<string, unknown> = {}
+    if (filters.name) {
+      userProfile.fullname = { contains: filters.name, mode: "insensitive" as const }
+    }
+    if (filters.idCardNumber) {
+      userProfile.idCardNumber = { contains: filters.idCardNumber, mode: "insensitive" as const }
+    }
+    if (filters.gender) {
+      userProfile.genderId = { in: filters.gender }
+    }
+    if (filters.dateOfBirth?.length === 2) {
+      userProfile.dateOfBirth = {
+        gte: dayjs(filters.dateOfBirth[0], "DD/MM/YYYY").toDate(),
+        lte: dayjs(filters.dateOfBirth[1], "DD/MM/YYYY").toDate(),
+      }
+    }
+    if (filters.officerNumber) {
+      userProfile.officerNumber = { contains: filters.officerNumber, mode: "insensitive" as const }
+    }
+    if (filters.academicRankType) {
+      userProfile.academicRankTypeId = { in: filters.academicRankType }
+    }
+    if (filters.academicDegreeType) {
+      userProfile.academicDegreeTypeId = { in: filters.academicDegreeType }
+    }
+    if (filters.rankId) {
+      userProfile.rankId = { in: filters.rankId }
+    }
+    if (filters.organization) {
+      userProfile.sDM_DonViId = { in: filters.organization }
+    } else if (!canXemTatCa) {
+      userProfile.sDM_DonViId = { in: orgIds }
+    }
+
+    return {
       deletedAt: null,
       active: true,
       ...(filters.code
@@ -108,82 +142,6 @@ export default function UserProfilePageLecture() {
             },
           }
         : {}),
-      ...(filters.name
-        ? {
-            userProfile: {
-              fullname: {
-                contains: filters.name,
-                mode: "insensitive" as const,
-              },
-            },
-          }
-        : {}),
-      ...(filters.idCardNumber
-        ? {
-            userProfile: {
-              idCardNumber: {
-                contains: filters.idCardNumber,
-                mode: "insensitive" as const,
-              },
-            },
-          }
-        : {}),
-      ...(filters.gender
-        ? {
-            userProfile: {
-              genderId: {
-                in: filters.gender,
-              },
-            },
-          }
-        : {}),
-      ...(filters.dateOfBirth?.length === 2
-        ? {
-            userProfile: {
-              dateOfBirth: {
-                gte: dayjs(filters.dateOfBirth?.[0], "DD/MM/YYYY").toDate(),
-                lte: dayjs(filters.dateOfBirth?.[1], "DD/MM/YYYY").toDate(),
-              },
-            },
-          }
-        : {}),
-      ...(filters.officerNumber
-        ? {
-            userProfile: {
-              officerNumber: {
-                contains: filters.officerNumber,
-                mode: "insensitive" as const,
-              },
-            },
-          }
-        : {}),
-      ...(filters.academicRankType
-        ? {
-            userProfile: {
-              academicRankTypeId: {
-                in: filters.academicRankType,
-              },
-            },
-          }
-        : {}),
-      ...(filters.academicDegreeType
-        ? {
-            userProfile: {
-              academicDegreeTypeId: {
-                in: filters.academicDegreeType,
-              },
-            },
-          }
-        : {}),
-      ...(filters.rankId
-        ? {
-            userProfile: {
-              rankId: {
-                in: filters.rankId,
-              },
-            },
-          }
-        : {}),
       ...(filters.lecturerType
         ? {
             lecturerTypeId: {
@@ -191,18 +149,9 @@ export default function UserProfilePageLecture() {
             },
           }
         : {}),
-      ...(filters.organization
-        ? {
-            organizationId: {
-              in: filters.organization,
-            },
-          }
-        : !canXemTatCa
-          ? { organizationId: { in: orgIds } }
-          : {}),
-    }),
-    [filters, canXemTatCa, orgIds]
-  )
+      ...(Object.keys(userProfile).length ? { userProfile } : {}),
+    }
+  }, [filters, canXemTatCa, orgIds])
 
   const { data: lecturerData = [], refetch } = useFindManyLecturer({
     where,
@@ -214,7 +163,6 @@ export default function UserProfilePageLecture() {
           rank: true,
         },
       },
-      organization: true,
       lecturerType: true,
       mainSubjectClasses: true,
       extraSubjectClasses: true,
@@ -232,7 +180,6 @@ export default function UserProfilePageLecture() {
   const { data: count, refetch: refetchCount } = useCountLecturer({
     where: {
       ...where,
-      organization: { bDeleted: false },
       deletedAt: null,
     },
   })
@@ -459,8 +406,10 @@ export default function UserProfilePageLecture() {
                 align: "center",
                 width: 200,
                 render: (_, record) => {
-                  if (record.organization) {
-                    return `${record.organization.sMa}-${record.organization.sTen}`
+                  const orgId = record.userProfile?.sDM_DonViId
+                  const org = orgId ? manageOrgData.find((item) => item.Id === orgId) : undefined
+                  if (org) {
+                    return `${org.sMa || ""}-${org.sTen || ""}`
                   }
                 },
 

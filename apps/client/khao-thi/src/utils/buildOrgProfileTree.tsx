@@ -20,26 +20,28 @@ export type OrgProfileTreeItem = BaseTreeItem & {
 export function buildOrgProfileTree(
   rawList: Array<
     Prisma.DM_DonViGetPayload<false> & {
-      lecturers?: Array<
-        Prisma.LecturerGetPayload<{
-          include: {
-            userProfile: {
+      userProfiles?: Array<
+        Prisma.UserProfileGetPayload<{
+          select: {
+            id: true
+            fullname: true
+            firstName: true
+            lastName: true
+            avatar: true
+            academicDegreeType: {
+              select: {
+                sTen: true
+              }
+            }
+            academicRankType: {
+              select: {
+                sTen: true
+              }
+            }
+            lecturer: {
               select: {
                 id: true
-                fullname: true
-                firstName: true
-                lastName: true
-                avatar: true
-                academicDegreeType: {
-                  select: {
-                    sTen: true
-                  }
-                }
-                academicRankType: {
-                  select: {
-                    sTen: true
-                  }
-                }
+                code: true
               }
             }
           }
@@ -61,10 +63,10 @@ export function buildOrgProfileTree(
       value: org.Id,
       parentId: org.sParentId,
       selectable: selectOrg,
-      children: org.lecturers
-        ? org.lecturers.flatMap((lecturer) => {
-            const profile = lecturer.userProfile
-            if (!profile) return []
+      children: org.userProfiles
+        ? org.userProfiles.flatMap((profile) => {
+            const lecturer = profile.lecturer
+            if (!lecturer) return []
 
             const academicRank = profile.academicRankType?.sTen || ""
             const degree = profile.academicDegreeType?.sTen || ""

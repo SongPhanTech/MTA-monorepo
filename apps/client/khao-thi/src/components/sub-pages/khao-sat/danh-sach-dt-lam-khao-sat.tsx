@@ -23,6 +23,11 @@ type SurveyWithObjectType = Survey & {
   surveyObjectType?: (SurveyObjectType & { type: SurveyObject[] })[]
 }
 
+function surveyObjectOrgCode(record?: unknown) {
+  const donVi = (record as { donVi?: { sMa?: string | null } | null } | null | undefined)?.donVi
+  return donVi?.sMa || ""
+}
+
 function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
   const { can, canSome } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
@@ -162,7 +167,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
               centerCell(`${record?.lastName || ""} ${record?.firstName || ""}`),
               centerCell(record?.idCardNumber || ""),
               centerCell(record?.phoneNumber || ""),
-              centerCell(record?.lecturer?.organization?.sMa || ""),
+              centerCell(surveyObjectOrgCode(record)),
               centerCell(record?.educationAndTraining?.[0]?.fixedClass?.code || ""),
               centerCell(
                 (record?.educationAndTraining?.[0]?.fixedClass as any)?.trainingCourse?.name || ""
@@ -369,7 +374,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                 type: "input",
                 width: 100,
                 align: "center",
-                render: (_, record) => record?.lecturer?.organization?.sMa || "",
+                render: (_, record) => surveyObjectOrgCode(record),
               },
               {
                 title: "Lớp QL",

@@ -12,13 +12,12 @@ function buildOrgAndLectureTree(
   list: Array<{ id: string; name: string | null; parentId: string | null }>,
   lecturers: Array<{
     id: string
-    userProfile: { fullName: string }
-    organizationId: string | null
+    userProfile: { fullName: string; sDM_DonViId: string | null }
   }>,
   parentId: string | null = null
 ): Array<TreeNodeType> {
   const organizationLecturers = lecturers
-    .filter((lecturer) => lecturer.organizationId === parentId)
+    .filter((lecturer) => lecturer.userProfile?.sDM_DonViId === parentId)
     .map((lecturer) => ({
       title: lecturer.userProfile?.fullName || "Giảng viên không tên",
       value: lecturer.id,
@@ -89,11 +88,11 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
     error: lecturersError,
   } = useFindManyLecturer({
     include: {
-      organization: true,
       userProfile: {
         select: {
           id: true,
           fullname: true,
+          sDM_DonViId: true,
           academicRankType: true,
           academicDegreeType: true,
         },
@@ -125,8 +124,8 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
         id: lec.id,
         userProfile: {
           fullName: formatLecturerName(lec),
+          sDM_DonViId: lec.userProfile?.sDM_DonViId ?? null,
         },
-        organizationId: lec.organizationId,
       }))
 
     return buildOrgAndLectureTree(
@@ -150,7 +149,7 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
     if (selectedValue === lastAutoAdjustedValue.current) return
     lastAutoAdjustedValue.current = selectedValue
     const isInCurrentOrg = lecturers.some(
-      (l) => l.id === selectedValue && l.organizationId === organizationId
+      (l) => l.id === selectedValue && l.userProfile?.sDM_DonViId === organizationId
     )
     if (!isInCurrentOrg) {
       setIsSelectAllOrgs(true)

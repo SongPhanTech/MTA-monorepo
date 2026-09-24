@@ -197,7 +197,7 @@ export default function BaoCaoGiangVien() {
 
     if (isLecturerNode(selectedNode)) {
       const { lecturer } = selectedNode
-      const org = lecturer.organization
+      const org = lecturer.userProfile?.donVi
       const isDepartment = org?.iCapDonVi === 3
       const parentOrg = isDepartment
         ? organizations.find((item) => item.Id === org?.sParentId)

@@ -747,7 +747,8 @@ app.openapi(getSurveyObjects, async (c) => {
   const profiles = await prisma.userProfile.findMany({
     where,
     include: {
-      lecturer: { include: { organization: true } },
+      donVi: true,
+      lecturer: true,
       educationAndTraining: {
         include: {
           fixedClass: {
@@ -766,7 +767,7 @@ app.openapi(getSurveyObjects, async (c) => {
     take: limit,
     skip: (page - 1) * limit,
     orderBy: [
-      { lecturer: { organizationId: "asc" } },
+      { sDM_DonViId: "asc" },
       { staffs: { organizationId: "asc" } },
       { firstName: "asc" },
     ],
@@ -1128,7 +1129,7 @@ app.openapi(getSurveysByProfile, async (c) => {
   // A user can be a lecturer, a staff member, or a student (with one or more educational records).
 
   // 1. Match by Organization (for Lecturers/Staff)
-  const organizationId = profile.lecturer?.organizationId ?? profile.staffs?.organizationId
+  const organizationId = profile.sDM_DonViId ?? profile.staffs?.organizationId
 
   // 2. Match by Student Education Records
   // A survey is relevant to a student if ONE of the survey's "SurveyObjectTypes" matches
@@ -1286,7 +1287,7 @@ app.openapi(getSurveysByProfile, async (c) => {
   const surveys = await prisma.survey.findMany({
     where,
     include: {
-      lecture: { include: { organization: true, userProfile: true } },
+      lecture: { include: { userProfile: { include: { donVi: true } } } },
       surveyTopic: true,
       subjectClass: true,
       surveyQuestion: true,
@@ -1407,11 +1408,11 @@ app.openapi(getPrivateSurvey, async (c) => {
               academicRankType: {
                 select: { sTen: true },
               },
-            },
-          },
-          organization: {
-            select: {
-              sTen: true,
+              donVi: {
+                select: {
+                  sTen: true,
+                },
+              },
             },
           },
         },
@@ -1440,7 +1441,7 @@ app.openapi(getPrivateSurvey, async (c) => {
       lastName: lecture.userProfile.lastName,
       academicDegree: lecture.userProfile.academicDegreeType?.sTen,
       academicRank: lecture.userProfile.academicRankType?.sTen,
-   organization: lecture.organization?.sTen ?? null,
+   organization: lecture.userProfile?.donVi?.sTen ?? null,
     }
     : null
 

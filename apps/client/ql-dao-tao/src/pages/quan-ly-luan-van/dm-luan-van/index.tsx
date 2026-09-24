@@ -258,12 +258,12 @@ const expertVersionSelect = {
       lecturerId: true,
       lecturer: {
         select: {
-          organization: { select: { sMa: true, sTen: true } },
           userProfile: {
             select: {
               fullname: true,
               academicRankType: { select: { sMa: true } },
               academicDegreeType: { select: { sMa: true } },
+              donVi: { select: { sMa: true, sTen: true } },
             },
           },
         },

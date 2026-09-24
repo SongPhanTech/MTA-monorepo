@@ -560,6 +560,7 @@ export default function UpdateUserPage() {
               bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
               bLaGiangVien: bLaGiangVien,
               bLaNguoiDung: values?.bLaNguoiDung,
+              sDM_DonViId: bLaGiangVien ? organizationId || null : values.sDM_DonViId,
               fullname: `${values.lastName?.trim() || ""} ${values.firstName?.trim() || ""}`.trim(),
               dateOfBirth: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
               idCardDate: values.idCardDate ? dayjs(values.idCardDate).toISOString() : null,
@@ -917,10 +918,6 @@ export default function UpdateUserPage() {
           code: lectureCode,
         }
 
-        if (organizationId) {
-          lecturerUpdateData.organizationId = organizationId
-        }
-
         listTransaction = [
           ...listTransaction,
           {
@@ -940,10 +937,6 @@ export default function UpdateUserPage() {
           userProfileId: id,
           lecturerTypeId,
           code: lectureCode,
-        }
-
-        if (organizationId) {
-          lecturerData.organizationId = organizationId
         }
 
         listTransaction = [
@@ -1129,7 +1122,7 @@ export default function UpdateUserPage() {
         // staffPositionId: userData.staffs?.staffPositionId,
         // staffTypeId: userData.staffs?.staffTypeId,
         lecturerTypeId: userData.lecturer?.lecturerTypeId,
-        organizationId: userData.lecturer?.organizationId,
+        organizationId: userData.sDM_DonViId,
         lectureCode: userData.lecturer?.code,
       })
       if (userData?.avatar) {
@@ -1313,7 +1306,10 @@ export default function UpdateUserPage() {
 UpdateUserPage.getLayout = function getLayout(page: React.ReactElement) {
   return (
     <CreateLayout
-      breadcrumbList={[{ title: "Quản lý hồ sơ", href: "/quan-ly-ho-so" }, { title: "Tạo mới" }]}
+      breadcrumbList={[
+        { title: "Hồ sơ giảng viên/cán bộ", href: "/quan-ly-ho-so" },
+        { title: "Chi tiết" },
+      ]}
     >
       {page}
     </CreateLayout>

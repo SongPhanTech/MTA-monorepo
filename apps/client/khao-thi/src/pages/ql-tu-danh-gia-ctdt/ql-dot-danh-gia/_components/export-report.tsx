@@ -146,7 +146,7 @@ export default function ExportReport({
                 new Paragraph(
                   [
                     item?.lecturer?.userProfile?.positionCPV?.sTen,
-                    item?.lecturer?.organization?.sMa,
+                    item?.lecturer?.userProfile?.donVi?.sMa,
                   ]
                     .filter(Boolean)
                     .join(", ")
@@ -846,9 +846,9 @@ export default function ExportReport({
                     include: {
                       lecturer: {
                         include: {
-                          organization: true,
                           userProfile: {
                             include: {
+                              donVi: true,
                               rank: true,
                               academicDegreeType: true,
                               academicRankType: true,

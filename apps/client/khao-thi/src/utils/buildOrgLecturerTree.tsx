@@ -1,6 +1,7 @@
 import { FolderOpenOutlined, UserOutlined } from "@ant-design/icons"
 import type { ProgressRow } from "@components/sub-pages/khao-sat/survey-progress-table"
 import type { Prisma } from "@workspace/db/client"
+import { lecturerDonViId } from "@workspace/libs"
 import type { DataNode } from "antd/es/tree"
 
 export const ORG_SELECT = {
@@ -34,8 +35,7 @@ export const CLUSTER_LECTURER_SURVEY_INCLUDE = {
 } as const
 
 export const CLUSTER_LECTURER_INCLUDE = {
-  userProfile: true,
-  organization: true,
+  userProfile: { include: { donVi: true } },
   survey: {
     include: CLUSTER_LECTURER_SURVEY_INCLUDE,
   },
@@ -87,7 +87,8 @@ function lecturerTreeTitle(lecturer: ClusterLecturer) {
 export function mergeOrgs(base: Org[], lecturers: ClusterLecturer[]): Org[] {
   const byId = new Map(base.map((org) => [org.Id, org]))
   for (const lecturer of lecturers) {
-    const org = lecturer.organization
+    const orgId = lecturerDonViId(lecturer)
+    const org = orgId ? byId.get(orgId) : undefined
     if (org && !byId.has(org.Id)) {
       byId.set(org.Id, org)
     }
@@ -101,7 +102,7 @@ export function buildOrgLecturerTree(orgs: Org[], lecturers: ClusterLecturer[]):
 
   for (const org of orgs) {
     const children: ReportTreeNode[] = lecturers
-      .filter((lecturer) => lecturer.organizationId === org.Id)
+      .filter((lecturer) => lecturerDonViId(lecturer) === org.Id)
       .map((lecturer) => {
         attachedLecturerIds.add(lecturer.id)
         return {
@@ -181,7 +182,10 @@ export function buildProgressRows(orgs: Org[], lecturers: ClusterLecturer[]): Pr
   const countByOrg = (orgId: string, field: "total" | "completed") => {
     const orgIds = [orgId, ...descendantOrgIds(orgs, orgId)]
     return lecturers
-      .filter((lecturer) => lecturer.organizationId && orgIds.includes(lecturer.organizationId))
+      .filter((lecturer) => {
+        const orgId = lecturerDonViId(lecturer)
+        return orgId && orgIds.includes(orgId)
+      })
       .reduce((sum, lecturer) => sum + (stats[lecturer.id]?.[field] ?? 0), 0)
   }
 
@@ -207,18 +211,17 @@ export function buildProgressRows(orgs: Org[], lecturers: ClusterLecturer[]): Pr
     }))
 
   const lecturerRows: ProgressRow[] = lecturers
-    .filter((lecturer) => lecturer.organizationId)
+    .filter((lecturer) => lecturerDonViId(lecturer))
     .map((lecturer) => {
-      const organization = orgs.find((org) => org.Id === lecturer.organizationId)
+      const donViId = lecturerDonViId(lecturer)
+      const organization = orgs.find((org) => org.Id === donViId)
       const code = lecturer.code?.trim() || ""
       const name = [code, lecturerTitle(lecturer)].filter(Boolean).join(" - ")
 
       return {
         key: `lecturer-${lecturer.id}`,
         parentKey:
-          organization?.iLoaiDonVi === 7
-            ? `department-${lecturer.organizationId}`
-            : `faculty-${lecturer.organizationId}`,
+          organization?.iLoaiDonVi === 7 ? `department-${donViId}` : `faculty-${donViId}`,
         type: "lecturer" as const,
         name,
         completed: stats[lecturer.id]?.completed ?? 0,

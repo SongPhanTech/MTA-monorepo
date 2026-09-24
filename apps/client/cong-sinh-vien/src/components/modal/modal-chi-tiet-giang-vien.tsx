@@ -38,9 +38,9 @@ const ModalChiTietGiangVien = () => {
             gender: true,
             academicRankType: true,
             academicDegreeType: true,
+            donVi: true,
           },
         },
-        organization: true,
         lecturerType: true,
         mainSubjectClasses: {
           include: {
@@ -245,7 +245,7 @@ const ModalChiTietGiangVien = () => {
             {lecturer.userProfile?.email}
           </Descriptions.Item>
           <Descriptions.Item label="Đơn vị" span={2}>
-            {lecturer.organization?.sTen}
+            {lecturer.userProfile?.donVi?.sTen}
           </Descriptions.Item>
           <Descriptions.Item label="Loại giảng viên" span={1}>
             {lecturer.lecturerType?.name}

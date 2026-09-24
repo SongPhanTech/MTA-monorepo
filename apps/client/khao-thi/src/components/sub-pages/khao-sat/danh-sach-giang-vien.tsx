@@ -118,21 +118,23 @@ export default function DetailSurveyPage({
         : {}),
       ...(filters.organizationId && filters.organizationId !== ""
         ? {
-            organization: {
-              OR: [
-                {
-                  sMa: {
-                    contains: filters.organizationId,
-                    mode: "insensitive" as const,
+            userProfile: {
+              donVi: {
+                OR: [
+                  {
+                    sMa: {
+                      contains: filters.organizationId,
+                      mode: "insensitive" as const,
+                    },
                   },
-                },
-                {
-                  sTen: {
-                    contains: filters.organizationId,
-                    mode: "insensitive" as const,
+                  {
+                    sTen: {
+                      contains: filters.organizationId,
+                      mode: "insensitive" as const,
+                    },
                   },
-                },
-              ],
+                ],
+              },
             },
           }
         : {}),
@@ -154,8 +156,7 @@ export default function DetailSurveyPage({
             subjectClass: true,
           },
         },
-        userProfile: true,
-        organization: true,
+        userProfile: { include: { donVi: true } },
       },
       orderBy: [
         {
@@ -288,7 +289,7 @@ export default function DetailSurveyPage({
                   width: 100,
                   align: "center",
                   render: (__, record) => {
-                    return record?.organization?.sMa || ""
+                    return record?.userProfile?.donVi?.sMa || ""
                   },
                 },
                 {

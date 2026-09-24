@@ -18,7 +18,6 @@ const baseSchema = z.object({
     bLaGiangVien: z.boolean().nullish(),
     bLaCanBoNhanVien: z.boolean().nullish(),
     bLaHocVien: z.boolean().nullish(),
-    sDM_DonViId: z.string().uuid().nullish(),
     sDM_ViTriCongViecId: z.string().uuid().nullish(),
     sQuanlyTrucTiepId: z.string().uuid().nullish(),
     iDictionaryKey: z.number().nullish(),
@@ -105,7 +104,6 @@ const baseSchemaWithoutDefaults = z.object({
     bLaGiangVien: z.boolean().nullish(),
     bLaCanBoNhanVien: z.boolean().nullish(),
     bLaHocVien: z.boolean().nullish(),
-    sDM_DonViId: z.string().uuid().nullish(),
     sDM_ViTriCongViecId: z.string().uuid().nullish(),
     sQuanlyTrucTiepId: z.string().uuid().nullish(),
     iDictionaryKey: z.number().nullish(),
@@ -181,6 +179,7 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     group: z.record(z.string(), z.unknown()).optional(),
+    donVi: z.record(z.string(), z.unknown()).optional(),
     provinceCurrentAddress: z.record(z.string(), z.unknown()).optional(),
     districtCurrentAddress: z.record(z.string(), z.unknown()).optional(),
     communeCurrentAddress: z.record(z.string(), z.unknown()).optional(),
@@ -276,6 +275,7 @@ const relationSchema = z.object({
 );
 const fkSchema = z.object({
     groupId: z.string().nullish(),
+    sDM_DonViId: z.string().uuid().nullish(),
     provinceCurrentAddressId: z.string().uuid().nullish(),
     districtCurrentAddressId: z.string().uuid().nullish(),
     communeCurrentAddressId: z.string().uuid().nullish(),
@@ -359,7 +359,6 @@ export const UserProfilePrismaUpdateSchema = z.object({
     bLaGiangVien: z.boolean().nullish(),
     bLaCanBoNhanVien: z.boolean().nullish(),
     bLaHocVien: z.boolean().nullish(),
-    sDM_DonViId: z.string().uuid().nullish(),
     sDM_ViTriCongViecId: z.string().uuid().nullish(),
     sQuanlyTrucTiepId: z.string().uuid().nullish(),
     iDictionaryKey: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),

@@ -1156,8 +1156,23 @@ const NAVIGATION: NavigationType = {
         id: QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO,
         label: "Quản lý hồ sơ",
         icon: BookUser,
-        path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO,
         description: "Quản lý hồ sơ",
+        children: [
+          {
+            id: QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO,
+            label: "Hồ sơ giảng viên/cán bộ",
+            icon: BookUser,
+            path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO,
+            description: "Hồ sơ giảng viên và cán bộ từ Lecturer và UserProfile",
+          },
+          {
+            id: QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO,
+            label: "Hồ sơ học viên/sinh viên",
+            icon: GraduationCap,
+            path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_HOC_VIEN,
+            description: "Hồ sơ học viên và sinh viên từ Student",
+          },
+        ],
       },
       // {
       //     id: QL_HO_SO_PERMISSION.QL_HO_SO_QL_GIANG_VIEN,

@@ -23,38 +23,35 @@ export default function DanhBa() {
       },
     },
     include: {
-      lecturers: {
-        include: {
-          organization: {
+      userProfiles: {
+        where: {
+          lecturer: { is: { active: true, deletedAt: null } },
+        },
+        select: {
+          fullname: true,
+          email: true,
+          phoneNumber: true,
+          gender: {
             select: {
               sTen: true,
             },
           },
-          lecturerType: {
+          academicDegreeType: {
             select: {
-              name: true,
+              sTen: true,
             },
           },
-          userProfile: {
+          academicRankType: {
             select: {
-              fullname: true,
-              email: true,
-              phoneNumber: true,
-              gender: {
+              sTen: true,
+            },
+          },
+          lecturer: {
+            select: {
+              code: true,
+              lecturerType: {
                 select: {
-                  sTen: true,
-                },
-              },
-              // học vị
-              academicDegreeType: {
-                select: {
-                  sTen: true,
-                },
-              },
-              // học hàm
-              academicRankType: {
-                select: {
-                  sTen: true,
+                  name: true,
                 },
               },
             },

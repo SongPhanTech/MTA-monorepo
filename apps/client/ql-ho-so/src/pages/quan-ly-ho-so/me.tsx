@@ -560,6 +560,7 @@ export default function UpdateUserPage() {
               firstName: values.firstName?.trim(),
               bLaHocVien: values.bLaHocVien,
               bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
+              sDM_DonViId: bLaGiangVien ? organizationId || null : values.sDM_DonViId,
               bLaGiangVien: bLaGiangVien,
               bLaNguoiDung: values?.bLaNguoiDung,
               fullname: `${values.lastName?.trim() || ""} ${values.firstName?.trim() || ""}`.trim(),
@@ -922,10 +923,6 @@ export default function UpdateUserPage() {
           code: lectureCode,
         }
 
-        if (organizationId) {
-          lecturerUpdateData.organizationId = organizationId
-        }
-
         listTransaction = [
           ...listTransaction,
           {
@@ -945,10 +942,6 @@ export default function UpdateUserPage() {
           userProfileId: id,
           lecturerTypeId,
           code: lectureCode,
-        }
-
-        if (organizationId) {
-          lecturerData.organizationId = organizationId
         }
 
         listTransaction = [
@@ -1134,7 +1127,7 @@ export default function UpdateUserPage() {
         staffPositionId: userData.staffs?.staffPositionId,
         staffTypeId: userData.staffs?.staffTypeId,
         lecturerTypeId: userData.lecturer?.lecturerTypeId,
-        organizationId: userData.lecturer?.organizationId,
+        organizationId: userData.sDM_DonViId,
         lectureCode: userData.lecturer?.code,
       })
       if (userData?.avatar) {

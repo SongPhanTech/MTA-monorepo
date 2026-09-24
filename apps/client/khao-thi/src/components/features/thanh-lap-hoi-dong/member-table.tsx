@@ -16,6 +16,11 @@ export type CouncilMemberType = Prisma.EvaluationCouncilMemberGetPayload<{
             lastName: true
             phoneNumber: true
             email: true
+            donVi: {
+              select: {
+                sTen: true
+              }
+            }
             academicDegreeType: {
               select: {
                 sTen: true
@@ -26,11 +31,6 @@ export type CouncilMemberType = Prisma.EvaluationCouncilMemberGetPayload<{
                 sTen: true
               }
             }
-          }
-        }
-        organization: {
-          select: {
-            sTen: true
           }
         }
       }
@@ -96,7 +96,7 @@ const MemberTable = ({ data, onDelete, onEdit, loading }: MemberTableProps) => {
           title: "Đơn vị",
           width: 180,
           render: (_, record) => (
-            <span className="text-gray-600">{record?.lecturer?.organization?.sTen || "-"}</span>
+            <span className="text-gray-600">{record?.lecturer?.userProfile?.donVi?.sTen || "-"}</span>
           ),
         },
         {

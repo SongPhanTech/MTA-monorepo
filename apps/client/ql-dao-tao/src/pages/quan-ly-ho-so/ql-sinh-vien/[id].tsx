@@ -219,11 +219,11 @@ export default function StudentDetailV2Page() {
                           include: {
                             userProfile: {
                               include: {
+                                donVi: true,
                                 academicRankType: true,
                                 academicDegreeType: true,
                               },
                             },
-                            organization: true,
                           },
                         },
                       },
@@ -240,11 +240,11 @@ export default function StudentDetailV2Page() {
                           include: {
                             userProfile: {
                               include: {
+                                donVi: true,
                                 academicRankType: true,
                                 academicDegreeType: true,
                               },
                             },
-                            organization: true,
                           },
                         },
                       },
@@ -261,11 +261,11 @@ export default function StudentDetailV2Page() {
                           include: {
                             userProfile: {
                               include: {
+                                donVi: true,
                                 academicRankType: true,
                                 academicDegreeType: true,
                               },
                             },
-                            organization: true,
                           },
                         },
                       },
@@ -289,11 +289,11 @@ export default function StudentDetailV2Page() {
                                   include: {
                                     userProfile: {
                                       include: {
+                                        donVi: true,
                                         academicRankType: true,
                                         academicDegreeType: true,
                                       },
                                     },
-                                    organization: true,
                                   },
                                 },
                               },
@@ -334,11 +334,11 @@ export default function StudentDetailV2Page() {
                               include: {
                                 userProfile: {
                                   include: {
+                                    donVi: true,
                                     academicRankType: true,
                                     academicDegreeType: true,
                                   },
                                 },
-                                organization: true,
                               },
                             },
                           },

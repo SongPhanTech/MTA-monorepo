@@ -45,6 +45,7 @@ export default function PutPhanCongThanhVienModal() {
         include: {
           userProfile: {
             include: {
+              donVi: true,
               academicDegreeType: {
                 select: {
                   sTen: true,
@@ -57,7 +58,6 @@ export default function PutPhanCongThanhVienModal() {
               },
             },
           },
-          organization: true,
         },
       },
     },
@@ -152,7 +152,7 @@ export default function PutPhanCongThanhVienModal() {
 
               return {
                 value: i?.lecturerId,
-                label: `${academicTitle ? `${academicTitle} ` : ""}${fullName}-${i?.lecturer?.organization?.sTen}`,
+                label: `${academicTitle ? `${academicTitle} ` : ""}${fullName}-${i?.lecturer?.userProfile?.donVi?.sTen ?? ""}`,
               }
             })}
           />

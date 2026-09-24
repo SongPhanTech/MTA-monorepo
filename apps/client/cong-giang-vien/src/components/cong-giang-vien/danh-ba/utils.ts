@@ -45,46 +45,47 @@ export function getDescendantOrgIds(
   return ids
 }
 
+export type LecturerDanhBaWithOrg = LecturerDanhBa & { donViTen: string }
+
 export function collectLecturersFromOrgIds(donViData: DonViDanhBa[], orgIds: Set<string>) {
-  const lecturers: LecturerDanhBa[] = []
+  const lecturers: LecturerDanhBaWithOrg[] = []
 
   for (const donVi of donViData) {
     if (orgIds.has(donVi.Id)) {
-      lecturers.push(...donVi.lecturers)
+      for (const profile of donVi.userProfiles) {
+        lecturers.push({ ...profile, donViTen: donVi.sTen || "" })
+      }
     }
   }
 
   return lecturers
 }
 
-export function mapLecturerToRow(lecturer: LecturerDanhBa, index: number): DanhBaRow {
-  const profile = lecturer.userProfile
-
+export function mapLecturerToRow(lecturer: LecturerDanhBaWithOrg, index: number): DanhBaRow {
   return {
-    key: lecturer.code || `lecturer-${index}`,
-    maCanBo: lecturer.code ?? "",
-    hoTen: profile?.fullname || "",
-    gioiTinh: profile?.gender?.sTen ?? "",
-    email: profile?.email || "",
-    soDienThoai: profile?.phoneNumber || "",
-    donVi: lecturer.organization?.sTen || "",
+    key: lecturer.lecturer?.code || `lecturer-${index}`,
+    maCanBo: lecturer.lecturer?.code ?? "",
+    hoTen: lecturer.fullname || "",
+    gioiTinh: lecturer.gender?.sTen ?? "",
+    email: lecturer.email || "",
+    soDienThoai: lecturer.phoneNumber || "",
+    donVi: lecturer.donViTen || "",
   }
 }
 
-export function filterLecturersBySearch(lecturers: LecturerDanhBa[], keyword: string) {
+export function filterLecturersBySearch(lecturers: LecturerDanhBaWithOrg[], keyword: string) {
   const normalizedKeyword = normalizeVietnamese(keyword.trim())
   if (!normalizedKeyword) return lecturers
 
   return lecturers.filter((lecturer) => {
-    const profile = lecturer.userProfile
     const haystack = [
-      lecturer.code,
-      profile?.fullname,
-      profile?.gender?.sTen,
-      profile?.email,
-      profile?.phoneNumber,
-      lecturer.organization?.sTen,
-      lecturer.lecturerType?.name,
+      lecturer.lecturer?.code,
+      lecturer.fullname,
+      lecturer.gender?.sTen,
+      lecturer.email,
+      lecturer.phoneNumber,
+      lecturer.donViTen,
+      lecturer.lecturer?.lecturerType?.name,
     ]
       .filter(Boolean)
       .map((value) => normalizeVietnamese(String(value)))

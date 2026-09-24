@@ -167,7 +167,7 @@ const ExportObjectInSurvey = ({ query, surveyName }: { query: any; surveyName: s
               `${i?.lastName || ""} ${i?.firstName || ""}`,
               i?.idCardNumber || "",
               i?.phoneNumber || "",
-              i?.lecturer?.organization?.sTen || "",
+              i?.donVi?.sTen || "",
               i?.educationAndTraining?.length > 0
                 ? `${i?.educationAndTraining[0]?.fixedClass?.code}-${i?.educationAndTraining[0]?.fixedClass?.name}`
                 : "",

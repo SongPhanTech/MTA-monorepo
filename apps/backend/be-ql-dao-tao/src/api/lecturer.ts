@@ -194,13 +194,12 @@ app.openapi(exportLecturerProfile, async (c) => {
               },
             }
           : {}),
-        ...(filters.organization?.length
-          ? {
-              organizationId: {
-                in: filters.organization,
-              },
-            }
-          : {}),
+      }
+      if (filters.organization?.length) {
+        where.userProfile = {
+          ...(where.userProfile || {}),
+          sDM_DonViId: { in: filters.organization },
+        }
       }
     }
 
@@ -221,7 +220,6 @@ app.openapi(exportLecturerProfile, async (c) => {
     where,
     include: {
       lecturerType: true,
-      organization: true,
       userProfile: {
         include: {
           gender: true,
@@ -238,6 +236,17 @@ app.openapi(exportLecturerProfile, async (c) => {
     },
   })
 
+  const orgIds = [
+    ...new Set(lecturers.map((item) => item.userProfile?.sDM_DonViId).filter(Boolean)),
+  ] as string[]
+  const orgs = orgIds.length
+    ? await prisma.dM_DonVi.findMany({
+        where: { Id: { in: orgIds } },
+        select: { Id: true, sTen: true },
+      })
+    : []
+  const orgNameById = new Map(orgs.map((org) => [org.Id, org.sTen || ""]))
+
   const data = lecturers.map((lecturer, idx) => ({
     no: idx + 1,
     ...lecturer,
@@ -249,8 +258,8 @@ app.openapi(exportLecturerProfile, async (c) => {
     type: lecturer.lecturerType?.name || "",
     academicRank: lecturer.userProfile?.academicRankType?.sTen || "",
     academicDegree: lecturer.userProfile?.academicDegreeType?.sTen || "",
-    facultyOrganization: lecturer.organization?.sTen || "",
-    departmentOrganization: lecturer.organization?.sTen || "",
+    facultyOrganization: orgNameById.get(lecturer.userProfile?.sDM_DonViId || "") || "",
+    departmentOrganization: orgNameById.get(lecturer.userProfile?.sDM_DonViId || "") || "",
     address: lecturer.userProfile?.currentAddress || "",
     phoneNumber: lecturer.userProfile?.phoneNumber || "",
     email: lecturer.userProfile?.email || "",

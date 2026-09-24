@@ -9447,7 +9447,6 @@ export namespace Prisma {
         lectureID: 'lectureID',
         serviceDate: 'serviceDate',
         userProfileId: 'userProfileId',
-        organizationId: 'organizationId',
         lecturerTypeId: 'lecturerTypeId'
     };
     export const LecturerHistoryScalarFieldEnum: {
@@ -13117,7 +13116,6 @@ export namespace Prisma {
         createdBy: 'createdBy',
         lectureID: 'lectureID',
         userProfileId: 'userProfileId',
-        organizationId: 'organizationId',
         lecturerTypeId: 'lecturerTypeId'
     };
     export const LecturerHistoryOrderByRelevanceFieldEnum: {
@@ -15905,6 +15903,7 @@ export namespace Prisma {
     export interface Prisma__UserProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         group<T extends UserProfile$groupArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$groupArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        donVi<T extends UserProfile$donViArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$donViArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         provinceCurrentAddress<T extends UserProfile$provinceCurrentAddressArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$provinceCurrentAddressArgs<ExtArgs>>): Prisma__DM_TinhClient<$Result.GetResult<Prisma.$DM_TinhPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         districtCurrentAddress<T extends UserProfile$districtCurrentAddressArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$districtCurrentAddressArgs<ExtArgs>>): Prisma__DM_QuanHuyenClient<$Result.GetResult<Prisma.$DM_QuanHuyenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         communeCurrentAddress<T extends UserProfile$communeCurrentAddressArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$communeCurrentAddressArgs<ExtArgs>>): Prisma__DM_XaPhuongClient<$Result.GetResult<Prisma.$DM_XaPhuongPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -35071,10 +35070,10 @@ export namespace Prisma {
      */
     export interface Prisma__DM_DonViClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
-        lecturers<T extends DM_DonVi$lecturersArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$lecturersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         lecturerHistory<T extends DM_DonVi$lecturerHistoryArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$lecturerHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LecturerHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         staffs<T extends DM_DonVi$staffsArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$staffsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StaffPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         staffHistory<T extends DM_DonVi$staffHistoryArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$staffHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StaffHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        userProfiles<T extends DM_DonVi$userProfilesArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$userProfilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         curriculum<T extends DM_DonVi$curriculumArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$curriculumArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CurriculumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         fixedClass<T extends DM_DonVi$fixedClassArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$fixedClassArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FixedClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         subjectVersions<T extends DM_DonVi$subjectVersionsArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$subjectVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -72288,7 +72287,6 @@ export namespace Prisma {
     export interface Prisma__LecturerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
-        organization<T extends Lecturer$organizationArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$organizationArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         lecturerType<T extends LecturerTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LecturerTypeDefaultArgs<ExtArgs>>): Prisma__LecturerTypeClient<$Result.GetResult<Prisma.$LecturerTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         mainSubjectClasses<T extends Lecturer$mainSubjectClassesArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$mainSubjectClassesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         extraSubjectClasses<T extends Lecturer$extraSubjectClassesArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$extraSubjectClassesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -72352,7 +72350,6 @@ export namespace Prisma {
         readonly lectureID: FieldRef<"Lecturer", 'String'>;
         readonly serviceDate: FieldRef<"Lecturer", 'DateTime'>;
         readonly userProfileId: FieldRef<"Lecturer", 'String'>;
-        readonly organizationId: FieldRef<"Lecturer", 'String'>;
         readonly lecturerTypeId: FieldRef<"Lecturer", 'String'>;
     }
 
@@ -147547,10 +147544,10 @@ export namespace Prisma {
      * Count Type DM_DonViCountOutputType
      */
     export type DM_DonViCountOutputType = {
-        lecturers: number
         lecturerHistory: number
         staffs: number
         staffHistory: number
+        userProfiles: number
         curriculum: number
         fixedClass: number
         subjectVersions: number
@@ -147565,10 +147562,10 @@ export namespace Prisma {
         guestTeachingPayments: number
     };
     export type DM_DonViCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        lecturers?: boolean | DM_DonViCountOutputTypeCountLecturersArgs
         lecturerHistory?: boolean | DM_DonViCountOutputTypeCountLecturerHistoryArgs
         staffs?: boolean | DM_DonViCountOutputTypeCountStaffsArgs
         staffHistory?: boolean | DM_DonViCountOutputTypeCountStaffHistoryArgs
+        userProfiles?: boolean | DM_DonViCountOutputTypeCountUserProfilesArgs
         curriculum?: boolean | DM_DonViCountOutputTypeCountCurriculumArgs
         fixedClass?: boolean | DM_DonViCountOutputTypeCountFixedClassArgs
         subjectVersions?: boolean | DM_DonViCountOutputTypeCountSubjectVersionsArgs
@@ -147594,12 +147591,6 @@ export namespace Prisma {
     /**
      * DM_DonViCountOutputType without action
      */
-    export type DM_DonViCountOutputTypeCountLecturersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: LecturerWhereInput
-    };
-    /**
-     * DM_DonViCountOutputType without action
-     */
     export type DM_DonViCountOutputTypeCountLecturerHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: LecturerHistoryWhereInput
     };
@@ -147614,6 +147605,12 @@ export namespace Prisma {
      */
     export type DM_DonViCountOutputTypeCountStaffHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: StaffHistoryWhereInput
+    };
+    /**
+     * DM_DonViCountOutputType without action
+     */
+    export type DM_DonViCountOutputTypeCountUserProfilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: UserProfileWhereInput
     };
     /**
      * DM_DonViCountOutputType without action
@@ -156754,6 +156751,7 @@ export namespace Prisma {
         familyName?: boolean
         trinhDoHocVanId?: boolean
         group?: boolean | UserProfile$groupArgs<ExtArgs>
+        donVi?: boolean | UserProfile$donViArgs<ExtArgs>
         provinceCurrentAddress?: boolean | UserProfile$provinceCurrentAddressArgs<ExtArgs>
         districtCurrentAddress?: boolean | UserProfile$districtCurrentAddressArgs<ExtArgs>
         communeCurrentAddress?: boolean | UserProfile$communeCurrentAddressArgs<ExtArgs>
@@ -156978,6 +156976,7 @@ export namespace Prisma {
         familyName?: boolean
         trinhDoHocVanId?: boolean
         group?: boolean | UserProfile$groupArgs<ExtArgs>
+        donVi?: boolean | UserProfile$donViArgs<ExtArgs>
         provinceCurrentAddress?: boolean | UserProfile$provinceCurrentAddressArgs<ExtArgs>
         districtCurrentAddress?: boolean | UserProfile$districtCurrentAddressArgs<ExtArgs>
         communeCurrentAddress?: boolean | UserProfile$communeCurrentAddressArgs<ExtArgs>
@@ -157154,6 +157153,7 @@ export namespace Prisma {
         familyName?: boolean
         trinhDoHocVanId?: boolean
         group?: boolean | UserProfile$groupArgs<ExtArgs>
+        donVi?: boolean | UserProfile$donViArgs<ExtArgs>
         provinceCurrentAddress?: boolean | UserProfile$provinceCurrentAddressArgs<ExtArgs>
         districtCurrentAddress?: boolean | UserProfile$districtCurrentAddressArgs<ExtArgs>
         communeCurrentAddress?: boolean | UserProfile$communeCurrentAddressArgs<ExtArgs>
@@ -157333,6 +157333,7 @@ export namespace Prisma {
     export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "officePhone" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "positionId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "chucVuChinhQuyenId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>;
     export type UserProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         group?: boolean | UserProfile$groupArgs<ExtArgs>
+        donVi?: boolean | UserProfile$donViArgs<ExtArgs>
         provinceCurrentAddress?: boolean | UserProfile$provinceCurrentAddressArgs<ExtArgs>
         districtCurrentAddress?: boolean | UserProfile$districtCurrentAddressArgs<ExtArgs>
         communeCurrentAddress?: boolean | UserProfile$communeCurrentAddressArgs<ExtArgs>
@@ -157428,6 +157429,7 @@ export namespace Prisma {
     };
     export type UserProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         group?: boolean | UserProfile$groupArgs<ExtArgs>
+        donVi?: boolean | UserProfile$donViArgs<ExtArgs>
         provinceCurrentAddress?: boolean | UserProfile$provinceCurrentAddressArgs<ExtArgs>
         districtCurrentAddress?: boolean | UserProfile$districtCurrentAddressArgs<ExtArgs>
         communeCurrentAddress?: boolean | UserProfile$communeCurrentAddressArgs<ExtArgs>
@@ -157475,6 +157477,7 @@ export namespace Prisma {
     };
     export type UserProfileIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         group?: boolean | UserProfile$groupArgs<ExtArgs>
+        donVi?: boolean | UserProfile$donViArgs<ExtArgs>
         provinceCurrentAddress?: boolean | UserProfile$provinceCurrentAddressArgs<ExtArgs>
         districtCurrentAddress?: boolean | UserProfile$districtCurrentAddressArgs<ExtArgs>
         communeCurrentAddress?: boolean | UserProfile$communeCurrentAddressArgs<ExtArgs>
@@ -157524,6 +157527,10 @@ export namespace Prisma {
         name: "UserProfile"
         objects: {
             group: Prisma.$GroupPayload<ExtArgs> | null
+            /**
+             * Đơn vị quản lý GV/cán bộ (nguồn duy nhất cho giảng viên)
+             */
+            donVi: Prisma.$DM_DonViPayload<ExtArgs> | null
             provinceCurrentAddress: Prisma.$DM_TinhPayload<ExtArgs> | null
             districtCurrentAddress: Prisma.$DM_QuanHuyenPayload<ExtArgs> | null
             communeCurrentAddress: Prisma.$DM_XaPhuongPayload<ExtArgs> | null
@@ -158159,6 +158166,24 @@ export namespace Prisma {
          */
         include?: GroupInclude<ExtArgs> | null
         where?: GroupWhereInput
+    };
+    /**
+     * UserProfile.donVi
+     */
+    export type UserProfile$donViArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DM_DonVi
+         */
+        select?: DM_DonViSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DM_DonVi
+         */
+        omit?: DM_DonViOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_DonViInclude<ExtArgs> | null
+        where?: DM_DonViWhereInput
     };
     /**
      * UserProfile.provinceCurrentAddress
@@ -195750,10 +195775,10 @@ export namespace Prisma {
         iNhomDonVi?: boolean
         iCapDonVi?: boolean
         iLoaiDonVi?: boolean
-        lecturers?: boolean | DM_DonVi$lecturersArgs<ExtArgs>
         lecturerHistory?: boolean | DM_DonVi$lecturerHistoryArgs<ExtArgs>
         staffs?: boolean | DM_DonVi$staffsArgs<ExtArgs>
         staffHistory?: boolean | DM_DonVi$staffHistoryArgs<ExtArgs>
+        userProfiles?: boolean | DM_DonVi$userProfilesArgs<ExtArgs>
         curriculum?: boolean | DM_DonVi$curriculumArgs<ExtArgs>
         fixedClass?: boolean | DM_DonVi$fixedClassArgs<ExtArgs>
         subjectVersions?: boolean | DM_DonVi$subjectVersionsArgs<ExtArgs>
@@ -195851,10 +195876,10 @@ export namespace Prisma {
     };
     export type DM_DonViOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "sMa" | "sTen" | "sGhiChu" | "iSTT" | "bActive" | "bDeleted" | "bSystem" | "iDictionaryKey" | "dNgayTao" | "dNgaySua" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "sCode" | "sTKBUCode" | "sTenVietTat" | "sParentId" | "sTruongDonVi" | "sChucNangNhiemVu" | "sDiaChi" | "iNhomDonVi" | "iCapDonVi" | "iLoaiDonVi", ExtArgs["result"]["dM_DonVi"]>;
     export type DM_DonViInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        lecturers?: boolean | DM_DonVi$lecturersArgs<ExtArgs>
         lecturerHistory?: boolean | DM_DonVi$lecturerHistoryArgs<ExtArgs>
         staffs?: boolean | DM_DonVi$staffsArgs<ExtArgs>
         staffHistory?: boolean | DM_DonVi$staffHistoryArgs<ExtArgs>
+        userProfiles?: boolean | DM_DonVi$userProfilesArgs<ExtArgs>
         curriculum?: boolean | DM_DonVi$curriculumArgs<ExtArgs>
         fixedClass?: boolean | DM_DonVi$fixedClassArgs<ExtArgs>
         subjectVersions?: boolean | DM_DonVi$subjectVersionsArgs<ExtArgs>
@@ -195874,10 +195899,10 @@ export namespace Prisma {
     export type $DM_DonViPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "DM_DonVi"
         objects: {
-            lecturers: Prisma.$LecturerPayload<ExtArgs>[]
             lecturerHistory: Prisma.$LecturerHistoryPayload<ExtArgs>[]
             staffs: Prisma.$StaffPayload<ExtArgs>[]
             staffHistory: Prisma.$StaffHistoryPayload<ExtArgs>[]
+            userProfiles: Prisma.$UserProfilePayload<ExtArgs>[]
             curriculum: Prisma.$CurriculumPayload<ExtArgs>[]
             fixedClass: Prisma.$FixedClassPayload<ExtArgs>[]
             subjectVersions: Prisma.$SubjectVersionPayload<ExtArgs>[]
@@ -196306,29 +196331,6 @@ export namespace Prisma {
         limit?: number
     };
     /**
-     * DM_DonVi.lecturers
-     */
-    export type DM_DonVi$lecturersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Lecturer
-         */
-        select?: LecturerSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Lecturer
-         */
-        omit?: LecturerOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: LecturerInclude<ExtArgs> | null
-        where?: LecturerWhereInput
-        orderBy?: LecturerOrderByWithRelationInput | LecturerOrderByWithRelationInput[]
-        cursor?: LecturerWhereUniqueInput
-        take?: number
-        skip?: number
-        distinct?: LecturerScalarFieldEnum | LecturerScalarFieldEnum[]
-    };
-    /**
      * DM_DonVi.lecturerHistory
      */
     export type DM_DonVi$lecturerHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -196396,6 +196398,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: StaffHistoryScalarFieldEnum | StaffHistoryScalarFieldEnum[]
+    };
+    /**
+     * DM_DonVi.userProfiles
+     */
+    export type DM_DonVi$userProfilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the UserProfile
+         */
+        select?: UserProfileSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the UserProfile
+         */
+        omit?: UserProfileOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: UserProfileInclude<ExtArgs> | null
+        where?: UserProfileWhereInput
+        orderBy?: UserProfileOrderByWithRelationInput | UserProfileOrderByWithRelationInput[]
+        cursor?: UserProfileWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: UserProfileScalarFieldEnum | UserProfileScalarFieldEnum[]
     };
     /**
      * DM_DonVi.curriculum
@@ -275542,7 +275567,6 @@ export namespace Prisma {
         lectureID: string | null
         serviceDate: Date | null
         userProfileId: string | null
-        organizationId: string | null
         lecturerTypeId: string | null
     };
     export type LecturerMaxAggregateOutputType = {
@@ -275558,7 +275582,6 @@ export namespace Prisma {
         lectureID: string | null
         serviceDate: Date | null
         userProfileId: string | null
-        organizationId: string | null
         lecturerTypeId: string | null
     };
     export type LecturerCountAggregateOutputType = {
@@ -275574,7 +275597,6 @@ export namespace Prisma {
         lectureID: number
         serviceDate: number
         userProfileId: number
-        organizationId: number
         lecturerTypeId: number
         _all: number
     };
@@ -275591,7 +275613,6 @@ export namespace Prisma {
         lectureID?: true
         serviceDate?: true
         userProfileId?: true
-        organizationId?: true
         lecturerTypeId?: true
     };
     export type LecturerMaxAggregateInputType = {
@@ -275607,7 +275628,6 @@ export namespace Prisma {
         lectureID?: true
         serviceDate?: true
         userProfileId?: true
-        organizationId?: true
         lecturerTypeId?: true
     };
     export type LecturerCountAggregateInputType = {
@@ -275623,7 +275643,6 @@ export namespace Prisma {
         lectureID?: true
         serviceDate?: true
         userProfileId?: true
-        organizationId?: true
         lecturerTypeId?: true
         _all?: true
     };
@@ -275706,7 +275725,6 @@ export namespace Prisma {
         lectureID: string | null
         serviceDate: Date | null
         userProfileId: string
-        organizationId: string | null
         lecturerTypeId: string
         _count: LecturerCountAggregateOutputType | null
         _min: LecturerMinAggregateOutputType | null
@@ -275737,10 +275755,8 @@ export namespace Prisma {
         lectureID?: boolean
         serviceDate?: boolean
         userProfileId?: boolean
-        organizationId?: boolean
         lecturerTypeId?: boolean
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-        organization?: boolean | Lecturer$organizationArgs<ExtArgs>
         lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
         mainSubjectClasses?: boolean | Lecturer$mainSubjectClassesArgs<ExtArgs>
         extraSubjectClasses?: boolean | Lecturer$extraSubjectClassesArgs<ExtArgs>
@@ -275781,10 +275797,8 @@ export namespace Prisma {
         lectureID?: boolean
         serviceDate?: boolean
         userProfileId?: boolean
-        organizationId?: boolean
         lecturerTypeId?: boolean
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-        organization?: boolean | Lecturer$organizationArgs<ExtArgs>
         lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["lecturer"]>;
     export type LecturerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -275800,10 +275814,8 @@ export namespace Prisma {
         lectureID?: boolean
         serviceDate?: boolean
         userProfileId?: boolean
-        organizationId?: boolean
         lecturerTypeId?: boolean
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-        organization?: boolean | Lecturer$organizationArgs<ExtArgs>
         lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["lecturer"]>;
     export type LecturerSelectScalar = {
@@ -275819,13 +275831,11 @@ export namespace Prisma {
         lectureID?: boolean
         serviceDate?: boolean
         userProfileId?: boolean
-        organizationId?: boolean
         lecturerTypeId?: boolean
     };
-    export type LecturerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "from" | "lectureID" | "serviceDate" | "userProfileId" | "organizationId" | "lecturerTypeId", ExtArgs["result"]["lecturer"]>;
+    export type LecturerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "from" | "lectureID" | "serviceDate" | "userProfileId" | "lecturerTypeId", ExtArgs["result"]["lecturer"]>;
     export type LecturerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-        organization?: boolean | Lecturer$organizationArgs<ExtArgs>
         lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
         mainSubjectClasses?: boolean | Lecturer$mainSubjectClassesArgs<ExtArgs>
         extraSubjectClasses?: boolean | Lecturer$extraSubjectClassesArgs<ExtArgs>
@@ -275855,19 +275865,16 @@ export namespace Prisma {
     };
     export type LecturerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-        organization?: boolean | Lecturer$organizationArgs<ExtArgs>
         lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
     };
     export type LecturerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-        organization?: boolean | Lecturer$organizationArgs<ExtArgs>
         lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
     };
     export type $LecturerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "Lecturer"
         objects: {
             userProfile: Prisma.$UserProfilePayload<ExtArgs>
-            organization: Prisma.$DM_DonViPayload<ExtArgs> | null
             lecturerType: Prisma.$LecturerTypePayload<ExtArgs>
             mainSubjectClasses: Prisma.$SubjectClassPayload<ExtArgs>[]
             extraSubjectClasses: Prisma.$SubjectClassPayload<ExtArgs>[]
@@ -275907,7 +275914,6 @@ export namespace Prisma {
             lectureID: string | null
             serviceDate: Date | null
             userProfileId: string
-            organizationId: string | null
             lecturerTypeId: string
         }, ExtArgs["result"]["lecturer"]>
         composites: {}
@@ -276292,24 +276298,6 @@ export namespace Prisma {
          * Limit how many Lecturers to delete.
          */
         limit?: number
-    };
-    /**
-     * Lecturer.organization
-     */
-    export type Lecturer$organizationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the DM_DonVi
-         */
-        select?: DM_DonViSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the DM_DonVi
-         */
-        omit?: DM_DonViOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: DM_DonViInclude<ExtArgs> | null
-        where?: DM_DonViWhereInput
     };
     /**
      * Lecturer.mainSubjectClasses
@@ -380886,6 +380874,7 @@ export namespace Prisma {
         familyName?: StringNullableFilter<"UserProfile"> | string | null
         trinhDoHocVanId?: StringNullableFilter<"UserProfile"> | string | null
         group?: XOR<GroupNullableScalarRelationFilter, GroupWhereInput> | null
+        donVi?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
         provinceCurrentAddress?: XOR<DM_TinhNullableScalarRelationFilter, DM_TinhWhereInput> | null
         districtCurrentAddress?: XOR<DM_QuanHuyenNullableScalarRelationFilter, DM_QuanHuyenWhereInput> | null
         communeCurrentAddress?: XOR<DM_XaPhuongNullableScalarRelationFilter, DM_XaPhuongWhereInput> | null
@@ -381109,6 +381098,7 @@ export namespace Prisma {
         familyName?: SortOrderInput | SortOrder
         trinhDoHocVanId?: SortOrderInput | SortOrder
         group?: GroupOrderByWithRelationInput
+        donVi?: DM_DonViOrderByWithRelationInput
         provinceCurrentAddress?: DM_TinhOrderByWithRelationInput
         districtCurrentAddress?: DM_QuanHuyenOrderByWithRelationInput
         communeCurrentAddress?: DM_XaPhuongOrderByWithRelationInput
@@ -381336,6 +381326,7 @@ export namespace Prisma {
         familyName?: StringNullableFilter<"UserProfile"> | string | null
         trinhDoHocVanId?: StringNullableFilter<"UserProfile"> | string | null
         group?: XOR<GroupNullableScalarRelationFilter, GroupWhereInput> | null
+        donVi?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
         provinceCurrentAddress?: XOR<DM_TinhNullableScalarRelationFilter, DM_TinhWhereInput> | null
         districtCurrentAddress?: XOR<DM_QuanHuyenNullableScalarRelationFilter, DM_QuanHuyenWhereInput> | null
         communeCurrentAddress?: XOR<DM_XaPhuongNullableScalarRelationFilter, DM_XaPhuongWhereInput> | null
@@ -386478,10 +386469,10 @@ export namespace Prisma {
         iNhomDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
         iCapDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
         iLoaiDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
-        lecturers?: LecturerListRelationFilter
         lecturerHistory?: LecturerHistoryListRelationFilter
         staffs?: StaffListRelationFilter
         staffHistory?: StaffHistoryListRelationFilter
+        userProfiles?: UserProfileListRelationFilter
         curriculum?: CurriculumListRelationFilter
         fixedClass?: FixedClassListRelationFilter
         subjectVersions?: SubjectVersionListRelationFilter
@@ -386521,10 +386512,10 @@ export namespace Prisma {
         iNhomDonVi?: SortOrderInput | SortOrder
         iCapDonVi?: SortOrderInput | SortOrder
         iLoaiDonVi?: SortOrderInput | SortOrder
-        lecturers?: LecturerOrderByRelationAggregateInput
         lecturerHistory?: LecturerHistoryOrderByRelationAggregateInput
         staffs?: StaffOrderByRelationAggregateInput
         staffHistory?: StaffHistoryOrderByRelationAggregateInput
+        userProfiles?: UserProfileOrderByRelationAggregateInput
         curriculum?: CurriculumOrderByRelationAggregateInput
         fixedClass?: FixedClassOrderByRelationAggregateInput
         subjectVersions?: SubjectVersionOrderByRelationAggregateInput
@@ -386568,10 +386559,10 @@ export namespace Prisma {
         iNhomDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
         iCapDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
         iLoaiDonVi?: IntNullableFilter<"DM_DonVi"> | number | null
-        lecturers?: LecturerListRelationFilter
         lecturerHistory?: LecturerHistoryListRelationFilter
         staffs?: StaffListRelationFilter
         staffHistory?: StaffHistoryListRelationFilter
+        userProfiles?: UserProfileListRelationFilter
         curriculum?: CurriculumListRelationFilter
         fixedClass?: FixedClassListRelationFilter
         subjectVersions?: SubjectVersionListRelationFilter
@@ -397803,10 +397794,8 @@ export namespace Prisma {
         lectureID?: StringNullableFilter<"Lecturer"> | string | null
         serviceDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
         userProfileId?: UuidFilter<"Lecturer"> | string
-        organizationId?: UuidNullableFilter<"Lecturer"> | string | null
         lecturerTypeId?: StringFilter<"Lecturer"> | string
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
-        organization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
         lecturerType?: XOR<LecturerTypeScalarRelationFilter, LecturerTypeWhereInput>
         mainSubjectClasses?: SubjectClassListRelationFilter
         extraSubjectClasses?: SubjectClassListRelationFilter
@@ -397846,10 +397835,8 @@ export namespace Prisma {
         lectureID?: SortOrderInput | SortOrder
         serviceDate?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
-        organizationId?: SortOrderInput | SortOrder
         lecturerTypeId?: SortOrder
         userProfile?: UserProfileOrderByWithRelationInput
-        organization?: DM_DonViOrderByWithRelationInput
         lecturerType?: LecturerTypeOrderByWithRelationInput
         mainSubjectClasses?: SubjectClassOrderByRelationAggregateInput
         extraSubjectClasses?: SubjectClassOrderByRelationAggregateInput
@@ -397893,10 +397880,8 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"Lecturer"> | string | null
         from?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
         serviceDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
-        organizationId?: UuidNullableFilter<"Lecturer"> | string | null
         lecturerTypeId?: StringFilter<"Lecturer"> | string
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
-        organization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
         lecturerType?: XOR<LecturerTypeScalarRelationFilter, LecturerTypeWhereInput>
         mainSubjectClasses?: SubjectClassListRelationFilter
         extraSubjectClasses?: SubjectClassListRelationFilter
@@ -397936,7 +397921,6 @@ export namespace Prisma {
         lectureID?: SortOrderInput | SortOrder
         serviceDate?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
-        organizationId?: SortOrderInput | SortOrder
         lecturerTypeId?: SortOrder
         _count?: LecturerCountOrderByAggregateInput
         _max?: LecturerMaxOrderByAggregateInput
@@ -397958,7 +397942,6 @@ export namespace Prisma {
         lectureID?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
         serviceDate?: DateTimeNullableWithAggregatesFilter<"Lecturer"> | Date | string | null
         userProfileId?: UuidWithAggregatesFilter<"Lecturer"> | string
-        organizationId?: UuidNullableWithAggregatesFilter<"Lecturer"> | string | null
         lecturerTypeId?: StringWithAggregatesFilter<"Lecturer"> | string
     };
     export type LecturerHistoryWhereInput = {
@@ -411594,7 +411577,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -411667,6 +411649,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -411950,7 +411933,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -412023,6 +412005,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -412437,7 +412420,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -418024,10 +418006,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
@@ -418067,10 +418049,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -418110,10 +418092,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
@@ -418153,10 +418135,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -431110,7 +431092,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -431150,7 +431131,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -431190,7 +431170,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -431230,7 +431209,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -431270,7 +431248,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
     };
     export type LecturerUpdateManyMutationInput = {
@@ -431299,7 +431276,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
     };
     export type LecturerHistoryCreateInput = {
@@ -446613,6 +446589,10 @@ export namespace Prisma {
         is?: GroupWhereInput | null
         isNot?: GroupWhereInput | null
     };
+    export type DM_DonViNullableScalarRelationFilter = {
+        is?: DM_DonViWhereInput | null
+        isNot?: DM_DonViWhereInput | null
+    };
     export type DM_TinhNullableScalarRelationFilter = {
         is?: DM_TinhWhereInput | null
         isNot?: DM_TinhWhereInput | null
@@ -450396,11 +450376,6 @@ export namespace Prisma {
         iSTT?: SortOrder
         iDictionaryKey?: SortOrder
     };
-    export type LecturerListRelationFilter = {
-        every?: LecturerWhereInput
-        some?: LecturerWhereInput
-        none?: LecturerWhereInput
-    };
     export type StaffListRelationFilter = {
         every?: StaffWhereInput
         some?: StaffWhereInput
@@ -450455,9 +450430,6 @@ export namespace Prisma {
         every?: GuestTeachingPaymentWhereInput
         some?: GuestTeachingPaymentWhereInput
         none?: GuestTeachingPaymentWhereInput
-    };
-    export type LecturerOrderByRelationAggregateInput = {
-        _count?: SortOrder
     };
     export type StaffOrderByRelationAggregateInput = {
         _count?: SortOrder
@@ -453859,10 +453831,6 @@ export namespace Prisma {
     export type StudentNullableScalarRelationFilter = {
         is?: StudentWhereInput | null
         isNot?: StudentWhereInput | null
-    };
-    export type DM_DonViNullableScalarRelationFilter = {
-        is?: DM_DonViWhereInput | null
-        isNot?: DM_DonViWhereInput | null
     };
     export type CurriculumVersionNullableScalarRelationFilter = {
         is?: CurriculumVersionWhereInput | null
@@ -458447,7 +458415,6 @@ export namespace Prisma {
         lectureID?: SortOrder
         serviceDate?: SortOrder
         userProfileId?: SortOrder
-        organizationId?: SortOrder
         lecturerTypeId?: SortOrder
     };
     export type LecturerMaxOrderByAggregateInput = {
@@ -458463,7 +458430,6 @@ export namespace Prisma {
         lectureID?: SortOrder
         serviceDate?: SortOrder
         userProfileId?: SortOrder
-        organizationId?: SortOrder
         lecturerTypeId?: SortOrder
     };
     export type LecturerMinOrderByAggregateInput = {
@@ -458479,7 +458445,6 @@ export namespace Prisma {
         lectureID?: SortOrder
         serviceDate?: SortOrder
         userProfileId?: SortOrder
-        organizationId?: SortOrder
         lecturerTypeId?: SortOrder
     };
     export type LecturerHistoryOrderByRelevanceInput = {
@@ -458739,6 +458704,14 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
         _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
+    };
+    export type LecturerListRelationFilter = {
+        every?: LecturerWhereInput
+        some?: LecturerWhereInput
+        none?: LecturerWhereInput
+    };
+    export type LecturerOrderByRelationAggregateInput = {
+        _count?: SortOrder
     };
     export type LecturerTypeOrderByRelevanceInput = {
         fields: LecturerTypeOrderByRelevanceFieldEnum | LecturerTypeOrderByRelevanceFieldEnum[]
@@ -467126,6 +467099,11 @@ export namespace Prisma {
         connectOrCreate?: GroupCreateOrConnectWithoutUserProfileInput
         connect?: GroupWhereUniqueInput
     };
+    export type DM_DonViCreateNestedOneWithoutUserProfilesInput = {
+        create?: XOR<DM_DonViCreateWithoutUserProfilesInput, DM_DonViUncheckedCreateWithoutUserProfilesInput>
+        connectOrCreate?: DM_DonViCreateOrConnectWithoutUserProfilesInput
+        connect?: DM_DonViWhereUniqueInput
+    };
     export type DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput = {
         create?: XOR<DM_TinhCreateWithoutUserProfileCurrentAddressInput, DM_TinhUncheckedCreateWithoutUserProfileCurrentAddressInput>
         connectOrCreate?: DM_TinhCreateOrConnectWithoutUserProfileCurrentAddressInput
@@ -467920,6 +467898,15 @@ export namespace Prisma {
         delete?: GroupWhereInput | boolean
         connect?: GroupWhereUniqueInput
         update?: XOR<XOR<GroupUpdateToOneWithWhereWithoutUserProfileInput, GroupUpdateWithoutUserProfileInput>, GroupUncheckedUpdateWithoutUserProfileInput>
+    };
+    export type DM_DonViUpdateOneWithoutUserProfilesNestedInput = {
+        create?: XOR<DM_DonViCreateWithoutUserProfilesInput, DM_DonViUncheckedCreateWithoutUserProfilesInput>
+        connectOrCreate?: DM_DonViCreateOrConnectWithoutUserProfilesInput
+        upsert?: DM_DonViUpsertWithoutUserProfilesInput
+        disconnect?: DM_DonViWhereInput | boolean
+        delete?: DM_DonViWhereInput | boolean
+        connect?: DM_DonViWhereUniqueInput
+        update?: XOR<XOR<DM_DonViUpdateToOneWithWhereWithoutUserProfilesInput, DM_DonViUpdateWithoutUserProfilesInput>, DM_DonViUncheckedUpdateWithoutUserProfilesInput>
     };
     export type DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput = {
         create?: XOR<DM_TinhCreateWithoutUserProfileCurrentAddressInput, DM_TinhUncheckedCreateWithoutUserProfileCurrentAddressInput>
@@ -471807,12 +471794,6 @@ export namespace Prisma {
         updateMany?: TiengDanTocUpdateManyWithWhereWithoutDanTocInput | TiengDanTocUpdateManyWithWhereWithoutDanTocInput[]
         deleteMany?: TiengDanTocScalarWhereInput | TiengDanTocScalarWhereInput[]
     };
-    export type LecturerCreateNestedManyWithoutOrganizationInput = {
-        create?: XOR<LecturerCreateWithoutOrganizationInput, LecturerUncheckedCreateWithoutOrganizationInput> | LecturerCreateWithoutOrganizationInput[] | LecturerUncheckedCreateWithoutOrganizationInput[]
-        connectOrCreate?: LecturerCreateOrConnectWithoutOrganizationInput | LecturerCreateOrConnectWithoutOrganizationInput[]
-        createMany?: LecturerCreateManyOrganizationInputEnvelope
-        connect?: LecturerWhereUniqueInput | LecturerWhereUniqueInput[]
-    };
     export type LecturerHistoryCreateNestedManyWithoutOrganizationInput = {
         create?: XOR<LecturerHistoryCreateWithoutOrganizationInput, LecturerHistoryUncheckedCreateWithoutOrganizationInput> | LecturerHistoryCreateWithoutOrganizationInput[] | LecturerHistoryUncheckedCreateWithoutOrganizationInput[]
         connectOrCreate?: LecturerHistoryCreateOrConnectWithoutOrganizationInput | LecturerHistoryCreateOrConnectWithoutOrganizationInput[]
@@ -471830,6 +471811,12 @@ export namespace Prisma {
         connectOrCreate?: StaffHistoryCreateOrConnectWithoutOrganizationInput | StaffHistoryCreateOrConnectWithoutOrganizationInput[]
         createMany?: StaffHistoryCreateManyOrganizationInputEnvelope
         connect?: StaffHistoryWhereUniqueInput | StaffHistoryWhereUniqueInput[]
+    };
+    export type UserProfileCreateNestedManyWithoutDonViInput = {
+        create?: XOR<UserProfileCreateWithoutDonViInput, UserProfileUncheckedCreateWithoutDonViInput> | UserProfileCreateWithoutDonViInput[] | UserProfileUncheckedCreateWithoutDonViInput[]
+        connectOrCreate?: UserProfileCreateOrConnectWithoutDonViInput | UserProfileCreateOrConnectWithoutDonViInput[]
+        createMany?: UserProfileCreateManyDonViInputEnvelope
+        connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
     };
     export type CurriculumCreateNestedManyWithoutManagementOrganizationInput = {
         create?: XOR<CurriculumCreateWithoutManagementOrganizationInput, CurriculumUncheckedCreateWithoutManagementOrganizationInput> | CurriculumCreateWithoutManagementOrganizationInput[] | CurriculumUncheckedCreateWithoutManagementOrganizationInput[]
@@ -471902,12 +471889,6 @@ export namespace Prisma {
         createMany?: GuestTeachingPaymentCreateManyHiringOrgInputEnvelope
         connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
     };
-    export type LecturerUncheckedCreateNestedManyWithoutOrganizationInput = {
-        create?: XOR<LecturerCreateWithoutOrganizationInput, LecturerUncheckedCreateWithoutOrganizationInput> | LecturerCreateWithoutOrganizationInput[] | LecturerUncheckedCreateWithoutOrganizationInput[]
-        connectOrCreate?: LecturerCreateOrConnectWithoutOrganizationInput | LecturerCreateOrConnectWithoutOrganizationInput[]
-        createMany?: LecturerCreateManyOrganizationInputEnvelope
-        connect?: LecturerWhereUniqueInput | LecturerWhereUniqueInput[]
-    };
     export type LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput = {
         create?: XOR<LecturerHistoryCreateWithoutOrganizationInput, LecturerHistoryUncheckedCreateWithoutOrganizationInput> | LecturerHistoryCreateWithoutOrganizationInput[] | LecturerHistoryUncheckedCreateWithoutOrganizationInput[]
         connectOrCreate?: LecturerHistoryCreateOrConnectWithoutOrganizationInput | LecturerHistoryCreateOrConnectWithoutOrganizationInput[]
@@ -471925,6 +471906,12 @@ export namespace Prisma {
         connectOrCreate?: StaffHistoryCreateOrConnectWithoutOrganizationInput | StaffHistoryCreateOrConnectWithoutOrganizationInput[]
         createMany?: StaffHistoryCreateManyOrganizationInputEnvelope
         connect?: StaffHistoryWhereUniqueInput | StaffHistoryWhereUniqueInput[]
+    };
+    export type UserProfileUncheckedCreateNestedManyWithoutDonViInput = {
+        create?: XOR<UserProfileCreateWithoutDonViInput, UserProfileUncheckedCreateWithoutDonViInput> | UserProfileCreateWithoutDonViInput[] | UserProfileUncheckedCreateWithoutDonViInput[]
+        connectOrCreate?: UserProfileCreateOrConnectWithoutDonViInput | UserProfileCreateOrConnectWithoutDonViInput[]
+        createMany?: UserProfileCreateManyDonViInputEnvelope
+        connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
     };
     export type CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput = {
         create?: XOR<CurriculumCreateWithoutManagementOrganizationInput, CurriculumUncheckedCreateWithoutManagementOrganizationInput> | CurriculumCreateWithoutManagementOrganizationInput[] | CurriculumUncheckedCreateWithoutManagementOrganizationInput[]
@@ -471997,19 +471984,6 @@ export namespace Prisma {
         createMany?: GuestTeachingPaymentCreateManyHiringOrgInputEnvelope
         connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
     };
-    export type LecturerUpdateManyWithoutOrganizationNestedInput = {
-        create?: XOR<LecturerCreateWithoutOrganizationInput, LecturerUncheckedCreateWithoutOrganizationInput> | LecturerCreateWithoutOrganizationInput[] | LecturerUncheckedCreateWithoutOrganizationInput[]
-        connectOrCreate?: LecturerCreateOrConnectWithoutOrganizationInput | LecturerCreateOrConnectWithoutOrganizationInput[]
-        upsert?: LecturerUpsertWithWhereUniqueWithoutOrganizationInput | LecturerUpsertWithWhereUniqueWithoutOrganizationInput[]
-        createMany?: LecturerCreateManyOrganizationInputEnvelope
-        set?: LecturerWhereUniqueInput | LecturerWhereUniqueInput[]
-        disconnect?: LecturerWhereUniqueInput | LecturerWhereUniqueInput[]
-        delete?: LecturerWhereUniqueInput | LecturerWhereUniqueInput[]
-        connect?: LecturerWhereUniqueInput | LecturerWhereUniqueInput[]
-        update?: LecturerUpdateWithWhereUniqueWithoutOrganizationInput | LecturerUpdateWithWhereUniqueWithoutOrganizationInput[]
-        updateMany?: LecturerUpdateManyWithWhereWithoutOrganizationInput | LecturerUpdateManyWithWhereWithoutOrganizationInput[]
-        deleteMany?: LecturerScalarWhereInput | LecturerScalarWhereInput[]
-    };
     export type LecturerHistoryUpdateManyWithoutOrganizationNestedInput = {
         create?: XOR<LecturerHistoryCreateWithoutOrganizationInput, LecturerHistoryUncheckedCreateWithoutOrganizationInput> | LecturerHistoryCreateWithoutOrganizationInput[] | LecturerHistoryUncheckedCreateWithoutOrganizationInput[]
         connectOrCreate?: LecturerHistoryCreateOrConnectWithoutOrganizationInput | LecturerHistoryCreateOrConnectWithoutOrganizationInput[]
@@ -472048,6 +472022,19 @@ export namespace Prisma {
         update?: StaffHistoryUpdateWithWhereUniqueWithoutOrganizationInput | StaffHistoryUpdateWithWhereUniqueWithoutOrganizationInput[]
         updateMany?: StaffHistoryUpdateManyWithWhereWithoutOrganizationInput | StaffHistoryUpdateManyWithWhereWithoutOrganizationInput[]
         deleteMany?: StaffHistoryScalarWhereInput | StaffHistoryScalarWhereInput[]
+    };
+    export type UserProfileUpdateManyWithoutDonViNestedInput = {
+        create?: XOR<UserProfileCreateWithoutDonViInput, UserProfileUncheckedCreateWithoutDonViInput> | UserProfileCreateWithoutDonViInput[] | UserProfileUncheckedCreateWithoutDonViInput[]
+        connectOrCreate?: UserProfileCreateOrConnectWithoutDonViInput | UserProfileCreateOrConnectWithoutDonViInput[]
+        upsert?: UserProfileUpsertWithWhereUniqueWithoutDonViInput | UserProfileUpsertWithWhereUniqueWithoutDonViInput[]
+        createMany?: UserProfileCreateManyDonViInputEnvelope
+        set?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        disconnect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        delete?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        update?: UserProfileUpdateWithWhereUniqueWithoutDonViInput | UserProfileUpdateWithWhereUniqueWithoutDonViInput[]
+        updateMany?: UserProfileUpdateManyWithWhereWithoutDonViInput | UserProfileUpdateManyWithWhereWithoutDonViInput[]
+        deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
     };
     export type CurriculumUpdateManyWithoutManagementOrganizationNestedInput = {
         create?: XOR<CurriculumCreateWithoutManagementOrganizationInput, CurriculumUncheckedCreateWithoutManagementOrganizationInput> | CurriculumCreateWithoutManagementOrganizationInput[] | CurriculumUncheckedCreateWithoutManagementOrganizationInput[]
@@ -472204,19 +472191,6 @@ export namespace Prisma {
         updateMany?: GuestTeachingPaymentUpdateManyWithWhereWithoutHiringOrgInput | GuestTeachingPaymentUpdateManyWithWhereWithoutHiringOrgInput[]
         deleteMany?: GuestTeachingPaymentScalarWhereInput | GuestTeachingPaymentScalarWhereInput[]
     };
-    export type LecturerUncheckedUpdateManyWithoutOrganizationNestedInput = {
-        create?: XOR<LecturerCreateWithoutOrganizationInput, LecturerUncheckedCreateWithoutOrganizationInput> | LecturerCreateWithoutOrganizationInput[] | LecturerUncheckedCreateWithoutOrganizationInput[]
-        connectOrCreate?: LecturerCreateOrConnectWithoutOrganizationInput | LecturerCreateOrConnectWithoutOrganizationInput[]
-        upsert?: LecturerUpsertWithWhereUniqueWithoutOrganizationInput | LecturerUpsertWithWhereUniqueWithoutOrganizationInput[]
-        createMany?: LecturerCreateManyOrganizationInputEnvelope
-        set?: LecturerWhereUniqueInput | LecturerWhereUniqueInput[]
-        disconnect?: LecturerWhereUniqueInput | LecturerWhereUniqueInput[]
-        delete?: LecturerWhereUniqueInput | LecturerWhereUniqueInput[]
-        connect?: LecturerWhereUniqueInput | LecturerWhereUniqueInput[]
-        update?: LecturerUpdateWithWhereUniqueWithoutOrganizationInput | LecturerUpdateWithWhereUniqueWithoutOrganizationInput[]
-        updateMany?: LecturerUpdateManyWithWhereWithoutOrganizationInput | LecturerUpdateManyWithWhereWithoutOrganizationInput[]
-        deleteMany?: LecturerScalarWhereInput | LecturerScalarWhereInput[]
-    };
     export type LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput = {
         create?: XOR<LecturerHistoryCreateWithoutOrganizationInput, LecturerHistoryUncheckedCreateWithoutOrganizationInput> | LecturerHistoryCreateWithoutOrganizationInput[] | LecturerHistoryUncheckedCreateWithoutOrganizationInput[]
         connectOrCreate?: LecturerHistoryCreateOrConnectWithoutOrganizationInput | LecturerHistoryCreateOrConnectWithoutOrganizationInput[]
@@ -472255,6 +472229,19 @@ export namespace Prisma {
         update?: StaffHistoryUpdateWithWhereUniqueWithoutOrganizationInput | StaffHistoryUpdateWithWhereUniqueWithoutOrganizationInput[]
         updateMany?: StaffHistoryUpdateManyWithWhereWithoutOrganizationInput | StaffHistoryUpdateManyWithWhereWithoutOrganizationInput[]
         deleteMany?: StaffHistoryScalarWhereInput | StaffHistoryScalarWhereInput[]
+    };
+    export type UserProfileUncheckedUpdateManyWithoutDonViNestedInput = {
+        create?: XOR<UserProfileCreateWithoutDonViInput, UserProfileUncheckedCreateWithoutDonViInput> | UserProfileCreateWithoutDonViInput[] | UserProfileUncheckedCreateWithoutDonViInput[]
+        connectOrCreate?: UserProfileCreateOrConnectWithoutDonViInput | UserProfileCreateOrConnectWithoutDonViInput[]
+        upsert?: UserProfileUpsertWithWhereUniqueWithoutDonViInput | UserProfileUpsertWithWhereUniqueWithoutDonViInput[]
+        createMany?: UserProfileCreateManyDonViInputEnvelope
+        set?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        disconnect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        delete?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+        update?: UserProfileUpdateWithWhereUniqueWithoutDonViInput | UserProfileUpdateWithWhereUniqueWithoutDonViInput[]
+        updateMany?: UserProfileUpdateManyWithWhereWithoutDonViInput | UserProfileUpdateManyWithWhereWithoutDonViInput[]
+        deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
     };
     export type CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput = {
         create?: XOR<CurriculumCreateWithoutManagementOrganizationInput, CurriculumUncheckedCreateWithoutManagementOrganizationInput> | CurriculumCreateWithoutManagementOrganizationInput[] | CurriculumUncheckedCreateWithoutManagementOrganizationInput[]
@@ -483909,11 +483896,6 @@ export namespace Prisma {
         connectOrCreate?: UserProfileCreateOrConnectWithoutLecturerInput
         connect?: UserProfileWhereUniqueInput
     };
-    export type DM_DonViCreateNestedOneWithoutLecturersInput = {
-        create?: XOR<DM_DonViCreateWithoutLecturersInput, DM_DonViUncheckedCreateWithoutLecturersInput>
-        connectOrCreate?: DM_DonViCreateOrConnectWithoutLecturersInput
-        connect?: DM_DonViWhereUniqueInput
-    };
     export type LecturerTypeCreateNestedOneWithoutLecturersInput = {
         create?: XOR<LecturerTypeCreateWithoutLecturersInput, LecturerTypeUncheckedCreateWithoutLecturersInput>
         connectOrCreate?: LecturerTypeCreateOrConnectWithoutLecturersInput
@@ -484209,15 +484191,6 @@ export namespace Prisma {
         upsert?: UserProfileUpsertWithoutLecturerInput
         connect?: UserProfileWhereUniqueInput
         update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutLecturerInput, UserProfileUpdateWithoutLecturerInput>, UserProfileUncheckedUpdateWithoutLecturerInput>
-    };
-    export type DM_DonViUpdateOneWithoutLecturersNestedInput = {
-        create?: XOR<DM_DonViCreateWithoutLecturersInput, DM_DonViUncheckedCreateWithoutLecturersInput>
-        connectOrCreate?: DM_DonViCreateOrConnectWithoutLecturersInput
-        upsert?: DM_DonViUpsertWithoutLecturersInput
-        disconnect?: DM_DonViWhereInput | boolean
-        delete?: DM_DonViWhereInput | boolean
-        connect?: DM_DonViWhereUniqueInput
-        update?: XOR<XOR<DM_DonViUpdateToOneWithWhereWithoutLecturersInput, DM_DonViUpdateWithoutLecturersInput>, DM_DonViUncheckedUpdateWithoutLecturersInput>
     };
     export type LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput = {
         create?: XOR<LecturerTypeCreateWithoutLecturersInput, LecturerTypeUncheckedCreateWithoutLecturersInput>
@@ -496061,7 +496034,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -496134,6 +496106,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -496428,7 +496401,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -496501,6 +496473,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -496798,6 +496771,94 @@ export namespace Prisma {
     export type GroupCreateOrConnectWithoutUserProfileInput = {
         where: GroupWhereUniqueInput
         create: XOR<GroupCreateWithoutUserProfileInput, GroupUncheckedCreateWithoutUserProfileInput>
+    };
+    export type DM_DonViCreateWithoutUserProfilesInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        sCode?: string | null
+        sTKBUCode?: string | null
+        sTenVietTat?: string | null
+        sParentId?: string | null
+        sTruongDonVi?: string | null
+        sChucNangNhiemVu?: string | null
+        sDiaChi?: string | null
+        iNhomDonVi?: number | null
+        iCapDonVi?: number | null
+        iLoaiDonVi?: number | null
+        lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
+        staffs?: StaffCreateNestedManyWithoutOrganizationInput
+        staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
+        fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
+        subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
+        subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
+        trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
+        trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+        secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+        thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
+        researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
+        thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
+        surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+        guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
+    };
+    export type DM_DonViUncheckedCreateWithoutUserProfilesInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        sCode?: string | null
+        sTKBUCode?: string | null
+        sTenVietTat?: string | null
+        sParentId?: string | null
+        sTruongDonVi?: string | null
+        sChucNangNhiemVu?: string | null
+        sDiaChi?: string | null
+        iNhomDonVi?: number | null
+        iCapDonVi?: number | null
+        iLoaiDonVi?: number | null
+        lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
+        staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
+        fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
+        subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
+        subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
+        trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
+        trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+        secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+        thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
+        researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
+        thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+        guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
+    };
+    export type DM_DonViCreateOrConnectWithoutUserProfilesInput = {
+        where: DM_DonViWhereUniqueInput
+        create: XOR<DM_DonViCreateWithoutUserProfilesInput, DM_DonViUncheckedCreateWithoutUserProfilesInput>
     };
     export type DM_TinhCreateWithoutUserProfileCurrentAddressInput = {
         Id?: string
@@ -499817,7 +499878,6 @@ export namespace Prisma {
         from?: Date | string | null
         lectureID?: string | null
         serviceDate?: Date | string | null
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -499856,7 +499916,6 @@ export namespace Prisma {
         from?: Date | string | null
         lectureID?: string | null
         serviceDate?: Date | string | null
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -500715,6 +500774,99 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         users?: DM_NhanVienUncheckedUpdateManyWithoutGroupNestedInput
         roles?: RoleUncheckedUpdateManyWithoutGroupsNestedInput
+    };
+    export type DM_DonViUpsertWithoutUserProfilesInput = {
+        update: XOR<DM_DonViUpdateWithoutUserProfilesInput, DM_DonViUncheckedUpdateWithoutUserProfilesInput>
+        create: XOR<DM_DonViCreateWithoutUserProfilesInput, DM_DonViUncheckedCreateWithoutUserProfilesInput>
+        where?: DM_DonViWhereInput
+    };
+    export type DM_DonViUpdateToOneWithWhereWithoutUserProfilesInput = {
+        where?: DM_DonViWhereInput
+        data: XOR<DM_DonViUpdateWithoutUserProfilesInput, DM_DonViUncheckedUpdateWithoutUserProfilesInput>
+    };
+    export type DM_DonViUpdateWithoutUserProfilesInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
+        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
+        sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
+        sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
+        sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
+        iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
+        staffs?: StaffUpdateManyWithoutOrganizationNestedInput
+        staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
+        fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
+        subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
+        subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
+        trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
+        trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+        secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+        thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
+        researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
+        thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+        guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
+    };
+    export type DM_DonViUncheckedUpdateWithoutUserProfilesInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
+        sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
+        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
+        sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
+        sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
+        sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
+        iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+        lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
+        staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+        fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+        subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+        subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+        trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
+        trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+        secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+        thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
+        researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+        thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+        guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
     };
     export type DM_TinhUpsertWithoutUserProfileCurrentAddressInput = {
         update: XOR<DM_TinhUpdateWithoutUserProfileCurrentAddressInput, DM_TinhUncheckedUpdateWithoutUserProfileCurrentAddressInput>
@@ -503700,7 +503852,6 @@ export namespace Prisma {
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -503739,7 +503890,6 @@ export namespace Prisma {
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -504426,7 +504576,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -504499,6 +504648,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -504842,7 +504992,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -504915,6 +505064,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -505248,7 +505398,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -505321,6 +505470,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -505672,7 +505822,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -505745,6 +505894,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -506078,7 +506228,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -506151,6 +506300,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -506502,7 +506652,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -506575,6 +506724,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -506972,7 +507122,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -507045,6 +507194,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -507470,7 +507620,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -507543,6 +507692,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -507850,7 +508000,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -507923,6 +508072,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -508248,7 +508398,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -508321,6 +508470,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -508602,7 +508752,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -508675,6 +508824,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -508995,7 +509145,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -509068,6 +509217,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -509380,7 +509530,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -509453,6 +509602,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -509773,7 +509923,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -509846,6 +509995,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -510236,7 +510386,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -510309,6 +510458,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -510691,7 +510841,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -510764,6 +510913,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -511083,7 +511233,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -511156,6 +511305,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -511493,7 +511643,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -511566,6 +511715,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -511847,7 +511997,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -511920,6 +512069,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -512214,7 +512364,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -512287,6 +512436,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -512608,7 +512758,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -512681,6 +512830,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -513020,7 +513170,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -513093,6 +513242,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -513452,7 +513602,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -513525,6 +513674,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -513907,7 +514057,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -513980,6 +514129,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -514391,7 +514541,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -514464,6 +514613,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -514908,7 +515058,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -514981,6 +515130,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -515314,7 +515464,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -515387,6 +515536,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -515743,7 +515893,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -515816,6 +515965,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -516123,7 +516273,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -516196,6 +516345,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -516521,7 +516671,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -516594,6 +516743,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -516875,7 +517025,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -516948,6 +517097,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -517242,7 +517392,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -517315,6 +517464,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -517596,7 +517746,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -517669,6 +517818,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -517963,7 +518113,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -518036,6 +518185,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -518317,7 +518467,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -518390,6 +518539,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -518684,7 +518834,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -518757,6 +518906,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -519082,7 +519232,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -519155,6 +519304,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -519498,7 +519648,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -519571,6 +519720,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -519852,7 +520002,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -519925,6 +520074,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -520219,7 +520369,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -520292,6 +520441,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -520617,7 +520767,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -520690,6 +520839,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -521033,7 +521183,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -521106,6 +521255,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -521413,7 +521563,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -521486,6 +521635,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -521811,7 +521961,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -521884,6 +522033,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -522165,7 +522315,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -522238,6 +522387,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -522532,7 +522682,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -522605,6 +522754,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -522966,7 +523116,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -523039,6 +523188,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -523428,7 +523578,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -523501,6 +523650,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -523808,7 +523958,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -523881,6 +524030,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -524206,7 +524356,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -524279,6 +524428,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -524612,7 +524762,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -524685,6 +524834,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -525041,7 +525191,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -525114,6 +525263,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -525507,7 +525657,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -525579,6 +525728,7 @@ export namespace Prisma {
         originalPlace?: string | null
         familyPhone?: string | null
         familyName?: string | null
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -526331,7 +526481,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -526404,6 +526553,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -526689,7 +526839,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -526762,6 +526911,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -527117,7 +527267,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -527190,6 +527339,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -527480,7 +527630,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -527553,6 +527702,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -528068,7 +528218,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -528141,6 +528290,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -528426,7 +528576,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -528499,6 +528648,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -528834,7 +528984,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -528907,6 +529056,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -529197,7 +529347,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -529270,6 +529419,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -529628,7 +529778,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -529701,6 +529850,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -530135,7 +530285,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -530208,6 +530357,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -531177,7 +531327,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -531250,6 +531399,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -531601,7 +531751,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -531674,6 +531823,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -531976,7 +532126,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -532049,6 +532198,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -532338,7 +532488,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -532411,6 +532560,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -532700,7 +532850,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -532773,6 +532922,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -533307,7 +533457,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -533380,6 +533529,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -533928,7 +534078,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -534001,6 +534150,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -534500,7 +534650,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -534573,6 +534722,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -534911,92 +535061,6 @@ export namespace Prisma {
         where: TiengDanTocScalarWhereInput
         data: XOR<TiengDanTocUpdateManyMutationInput, TiengDanTocUncheckedUpdateManyWithoutDanTocInput>
     };
-    export type LecturerCreateWithoutOrganizationInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        from?: Date | string | null
-        lectureID?: string | null
-        serviceDate?: Date | string | null
-        userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
-        mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
-        extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
-        enterGradeClasses?: SubjectClassCreateNestedManyWithoutEnterGradeLecturerInput
-        manageFixedClass?: FixedClassCreateNestedManyWithoutLecturerManagementInput
-        classSchedules?: ClassScheduleCreateNestedManyWithoutLecturerInput
-        extraClassSchedules?: ClassScheduleCreateNestedManyWithoutExtraLecturerInput
-        researchProjects?: ResearchProjectCreateNestedManyWithoutSupervisorInput
-        reviewedRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutReviewedByInput
-        reviewedThesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutReviewedByInput
-        expert?: ExpertCreateNestedManyWithoutLecturerInput
-        survey?: SurveyCreateNestedManyWithoutLectureInput
-        clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
-        examRoomsMain?: ExamListCreateNestedManyWithoutFirstSupervisorInput
-        examRoomsExtra?: ExamListCreateNestedManyWithoutSecondSupervisorInput
-        evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutLecturerInput
-        analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
-        evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
-        evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
-        primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
-        secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
-        notifications?: NotificationCreateNestedManyWithoutLecturerInput
-        personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
-        individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
-        guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
-    };
-    export type LecturerUncheckedCreateWithoutOrganizationInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        from?: Date | string | null
-        lectureID?: string | null
-        serviceDate?: Date | string | null
-        userProfileId: string
-        lecturerTypeId: string
-        mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
-        extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
-        enterGradeClasses?: SubjectClassUncheckedCreateNestedManyWithoutEnterGradeLecturerInput
-        manageFixedClass?: FixedClassUncheckedCreateNestedManyWithoutLecturerManagementInput
-        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutLecturerInput
-        extraClassSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutExtraLecturerInput
-        researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutSupervisorInput
-        reviewedRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
-        reviewedThesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
-        expert?: ExpertUncheckedCreateNestedManyWithoutLecturerInput
-        survey?: SurveyUncheckedCreateNestedManyWithoutLectureInput
-        clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
-        examRoomsMain?: ExamListUncheckedCreateNestedManyWithoutFirstSupervisorInput
-        examRoomsExtra?: ExamListUncheckedCreateNestedManyWithoutSecondSupervisorInput
-        evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerInput
-        analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
-        evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
-        evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
-        primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
-        secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
-        notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
-        personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
-        individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
-        guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
-    };
-    export type LecturerCreateOrConnectWithoutOrganizationInput = {
-        where: LecturerWhereUniqueInput
-        create: XOR<LecturerCreateWithoutOrganizationInput, LecturerUncheckedCreateWithoutOrganizationInput>
-    };
-    export type LecturerCreateManyOrganizationInputEnvelope = {
-        data: LecturerCreateManyOrganizationInput | LecturerCreateManyOrganizationInput[]
-        skipDuplicates?: boolean
-    };
     export type LecturerHistoryCreateWithoutOrganizationInput = {
         id?: string
         code?: string | null
@@ -535113,6 +535177,368 @@ export namespace Prisma {
     };
     export type StaffHistoryCreateManyOrganizationInputEnvelope = {
         data: StaffHistoryCreateManyOrganizationInput | StaffHistoryCreateManyOrganizationInput[]
+        skipDuplicates?: boolean
+    };
+    export type UserProfileCreateWithoutDonViInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        bLaNguoiDung?: boolean | null
+        bLaGiangVien?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName?: string | null
+        lastName?: string | null
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        permanentAddress?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        officePhone?: string | null
+        email?: string | null
+        officerNumber?: string | null
+        rankDate?: Date | string | null
+        academicDegreeDate?: Date | string | null
+        academicRankDate?: Date | string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        group?: GroupCreateNestedOneWithoutUserProfileInput
+        provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
+        districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
+        communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
+        newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+        newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+        provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
+        provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
+        districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
+        communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
+        newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+        newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+        nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
+        religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
+        ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
+        provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
+        districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
+        communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
+        newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
+        newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
+        rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+        level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+        position?: DM_ChucVuCreateNestedOneWithoutUserProfilePositionInput
+        chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
+        chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
+        sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
+        nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
+        tinhTrangHonNhan?: DM_TinhTrangHonNhanCreateNestedOneWithoutUserProfileInput
+        trangThaiLamViec?: DM_TrangThaiLamViecCreateNestedOneWithoutUserProfileInput
+        dM_ChucDanhCMNVGiangVien?: DM_ChucDanhCMNVGiangVienCreateNestedOneWithoutUserProfileInput
+        dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienCreateNestedOneWithoutUserProfileInput
+        dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuCreateNestedOneWithoutUserProfileInput
+        dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienCreateNestedOneWithoutUserProfileInput
+        dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoCreateNestedOneWithoutUserProfileInput
+        dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangCreateNestedOneWithoutUserProfileInput
+        positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileCPVInput
+        chucVuChinhQuyen?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+        relatives?: RelativeCreateNestedManyWithoutUserProfileInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
+        ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
+        tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
+        capBac?: CapBacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
+        khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
+        kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
+        doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
+        keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
+        hocVi?: HocViCreateNestedManyWithoutUserProfileInput
+        hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
+        tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
+        chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
+        diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
+        thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
+        danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
+        quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
+        ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+        QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangCreateNestedManyWithoutUserProfileInput
+        trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
+        educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
+        lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+        lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
+        staffs?: StaffCreateNestedOneWithoutUserProfileInput
+        staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+        evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+        documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+        documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+        faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+        faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+        conversations?: ConversationCreateNestedManyWithoutUserInput
+        subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutUpdatedByInput
+        subjectClassHistory?: SubjectClassHistoryCreateNestedManyWithoutUpdatedByInput
+        changeLog?: ChangeLogCreateNestedManyWithoutUserProfileInput
+        dataSyncHistories?: DataSyncHistoryCreateNestedManyWithoutPerformedByInput
+        surveySession?: SurveySessionCreateNestedManyWithoutProfileInput
+        evaluationCriterionComments?: EvaluationCriterionCommentCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutUserProfilesInput
+        individualSchedules?: IndividualScheduleCreateNestedManyWithoutRelatedUserProfilesInput
+        subjectClassAttendance?: SubjectClassAttendanceCreateNestedManyWithoutProfileInput
+    };
+    export type UserProfileUncheckedCreateWithoutDonViInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        bLaNguoiDung?: boolean | null
+        bLaGiangVien?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        groupId?: string | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName?: string | null
+        lastName?: string | null
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        provinceCurrentAddressId?: string | null
+        districtCurrentAddressId?: string | null
+        communeCurrentAddressId?: string | null
+        newProvinceCurrentAddressId?: string | null
+        newCommuneCurrentAddressId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        provinceOfBirthId?: string | null
+        districtOfBirthId?: string | null
+        communeOfBirthId?: string | null
+        newProvinceOfBirthId?: string | null
+        newCommuneOfBirthId?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        genderId?: string | null
+        permanentAddress?: string | null
+        provincePermanentAddressId?: string | null
+        districtPermanentAddressId?: string | null
+        communePermanentAddressId?: string | null
+        newProvincePermanentAddressId?: string | null
+        newCommunePermanentAddressId?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        officePhone?: string | null
+        email?: string | null
+        nationalityId?: string | null
+        religionId?: string | null
+        ethnicityId?: string | null
+        provinceHometownId?: string | null
+        districtHometownId?: string | null
+        communeHometownId?: string | null
+        newProvinceHometownId?: string | null
+        newCommuneHometownId?: string | null
+        officerNumber?: string | null
+        rankId?: string | null
+        rankDate?: Date | string | null
+        academicDegreeTypeId?: string | null
+        academicDegreeDate?: Date | string | null
+        academicRankTypeId?: string | null
+        academicRankDate?: Date | string | null
+        levelId?: string | null
+        positionId?: string | null
+        chiHuyQuanLyId?: string | null
+        chuyenMonKyThuatId?: string | null
+        sucKhoeId?: string | null
+        nhomMauId?: string | null
+        tinhTrangHonNhanId?: string | null
+        trangThaiLamViecId?: string | null
+        dM_ChucDanhCMNVGiangVienId?: string | null
+        dM_ChucDanhCMNVNghienCuuVienId?: string | null
+        dM_ChucDanhCMNVKySuId?: string | null
+        dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
+        dM_XepLoaiDanhGiaCanBoId?: string | null
+        dM_HinhThucKhenThuongDangId?: string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        positionCPVId?: string | null
+        chucVuChinhQuyenId?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        trinhDoHocVanId?: string | null
+        relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
+        ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
+        tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
+        capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
+        khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
+        kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
+        doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
+        keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
+        hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
+        hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
+        tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
+        chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
+        diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
+        thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
+        danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
+        ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+        QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedCreateNestedManyWithoutUserProfileInput
+        educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
+        lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+        lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
+        staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+        documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+        documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+        faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+        faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+        conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+        subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        subjectClassHistory?: SubjectClassHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
+        changeLog?: ChangeLogUncheckedCreateNestedManyWithoutUserProfileInput
+        dataSyncHistories?: DataSyncHistoryUncheckedCreateNestedManyWithoutPerformedByInput
+        surveySession?: SurveySessionUncheckedCreateNestedManyWithoutProfileInput
+        evaluationCriterionComments?: EvaluationCriterionCommentUncheckedCreateNestedManyWithoutReviewerInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutUserProfilesInput
+        individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutRelatedUserProfilesInput
+        subjectClassAttendance?: SubjectClassAttendanceUncheckedCreateNestedManyWithoutProfileInput
+    };
+    export type UserProfileCreateOrConnectWithoutDonViInput = {
+        where: UserProfileWhereUniqueInput
+        create: XOR<UserProfileCreateWithoutDonViInput, UserProfileUncheckedCreateWithoutDonViInput>
+    };
+    export type UserProfileCreateManyDonViInputEnvelope = {
+        data: UserProfileCreateManyDonViInput | UserProfileCreateManyDonViInput[]
         skipDuplicates?: boolean
     };
     export type CurriculumCreateWithoutManagementOrganizationInput = {
@@ -535899,38 +536325,6 @@ export namespace Prisma {
         data: GuestTeachingPaymentCreateManyHiringOrgInput | GuestTeachingPaymentCreateManyHiringOrgInput[]
         skipDuplicates?: boolean
     };
-    export type LecturerUpsertWithWhereUniqueWithoutOrganizationInput = {
-        where: LecturerWhereUniqueInput
-        update: XOR<LecturerUpdateWithoutOrganizationInput, LecturerUncheckedUpdateWithoutOrganizationInput>
-        create: XOR<LecturerCreateWithoutOrganizationInput, LecturerUncheckedCreateWithoutOrganizationInput>
-    };
-    export type LecturerUpdateWithWhereUniqueWithoutOrganizationInput = {
-        where: LecturerWhereUniqueInput
-        data: XOR<LecturerUpdateWithoutOrganizationInput, LecturerUncheckedUpdateWithoutOrganizationInput>
-    };
-    export type LecturerUpdateManyWithWhereWithoutOrganizationInput = {
-        where: LecturerScalarWhereInput
-        data: XOR<LecturerUpdateManyMutationInput, LecturerUncheckedUpdateManyWithoutOrganizationInput>
-    };
-    export type LecturerScalarWhereInput = {
-        AND?: LecturerScalarWhereInput | LecturerScalarWhereInput[]
-        OR?: LecturerScalarWhereInput[]
-        NOT?: LecturerScalarWhereInput | LecturerScalarWhereInput[]
-        id?: StringFilter<"Lecturer"> | string
-        code?: StringNullableFilter<"Lecturer"> | string | null
-        active?: BoolFilter<"Lecturer"> | boolean
-        description?: StringNullableFilter<"Lecturer"> | string | null
-        deletedAt?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
-        createdAt?: DateTimeFilter<"Lecturer"> | Date | string
-        updatedAt?: DateTimeFilter<"Lecturer"> | Date | string
-        createdBy?: UuidNullableFilter<"Lecturer"> | string | null
-        from?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
-        lectureID?: StringNullableFilter<"Lecturer"> | string | null
-        serviceDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
-        userProfileId?: UuidFilter<"Lecturer"> | string
-        organizationId?: UuidNullableFilter<"Lecturer"> | string | null
-        lecturerTypeId?: StringFilter<"Lecturer"> | string
-    };
     export type LecturerHistoryUpsertWithWhereUniqueWithoutOrganizationInput = {
         where: LecturerHistoryWhereUniqueInput
         update: XOR<LecturerHistoryUpdateWithoutOrganizationInput, LecturerHistoryUncheckedUpdateWithoutOrganizationInput>
@@ -535987,6 +536381,19 @@ export namespace Prisma {
     export type StaffHistoryUpdateManyWithWhereWithoutOrganizationInput = {
         where: StaffHistoryScalarWhereInput
         data: XOR<StaffHistoryUpdateManyMutationInput, StaffHistoryUncheckedUpdateManyWithoutOrganizationInput>
+    };
+    export type UserProfileUpsertWithWhereUniqueWithoutDonViInput = {
+        where: UserProfileWhereUniqueInput
+        update: XOR<UserProfileUpdateWithoutDonViInput, UserProfileUncheckedUpdateWithoutDonViInput>
+        create: XOR<UserProfileCreateWithoutDonViInput, UserProfileUncheckedCreateWithoutDonViInput>
+    };
+    export type UserProfileUpdateWithWhereUniqueWithoutDonViInput = {
+        where: UserProfileWhereUniqueInput
+        data: XOR<UserProfileUpdateWithoutDonViInput, UserProfileUncheckedUpdateWithoutDonViInput>
+    };
+    export type UserProfileUpdateManyWithWhereWithoutDonViInput = {
+        where: UserProfileScalarWhereInput
+        data: XOR<UserProfileUpdateManyMutationInput, UserProfileUncheckedUpdateManyWithoutDonViInput>
     };
     export type CurriculumUpsertWithWhereUniqueWithoutManagementOrganizationInput = {
         where: CurriculumWhereUniqueInput
@@ -536667,7 +537074,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -536740,6 +537146,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -537146,7 +537553,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -537219,6 +537625,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -537690,7 +538097,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -537763,6 +538169,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -538127,7 +538534,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -538200,6 +538606,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -538489,7 +538896,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -538562,6 +538968,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -538851,7 +539258,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -538924,6 +539330,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -539213,7 +539620,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -539286,6 +539692,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
         newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -539694,7 +540101,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -539767,6 +540173,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -540056,7 +540463,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -540129,6 +540535,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -540418,7 +540825,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -540491,6 +540897,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -540780,7 +541187,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -540853,6 +541259,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -541245,7 +541652,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -541318,6 +541724,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -541607,7 +542014,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -541680,6 +542086,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -541969,7 +542376,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -542042,6 +542448,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -542331,7 +542738,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -542404,6 +542810,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
         newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -542745,7 +543152,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -542818,6 +543224,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -543107,7 +543514,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -543180,6 +543586,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -543469,7 +543876,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -543542,6 +543948,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -543831,7 +544238,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -543904,6 +544310,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -544245,7 +544652,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -544318,6 +544724,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -544607,7 +545014,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -544680,6 +545086,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -544969,7 +545376,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -545042,6 +545448,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -545331,7 +545738,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -545404,6 +545810,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -549775,7 +550182,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -549848,6 +550254,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -550229,7 +550636,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -550302,6 +550708,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -559131,10 +559538,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
         subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
@@ -559173,10 +559580,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -559206,7 +559613,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -559245,7 +559651,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -560673,10 +561078,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
         subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
@@ -560715,10 +561120,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -560753,7 +561158,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -560792,7 +561196,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -561080,10 +561483,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
         subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
@@ -561122,10 +561525,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -561521,10 +561924,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
         subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
@@ -561563,10 +561966,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -563258,10 +563661,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
@@ -563300,10 +563703,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -563537,10 +563940,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
@@ -563579,10 +563982,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -563823,10 +564226,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
@@ -563865,10 +564268,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -565190,10 +565593,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
@@ -565232,10 +565635,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -565869,7 +566272,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -565942,6 +566344,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -566355,7 +566758,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -566428,6 +566830,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -569491,7 +569894,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
         enterGradeClasses?: SubjectClassCreateNestedManyWithoutEnterGradeLecturerInput
@@ -569530,7 +569932,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
         enterGradeClasses?: SubjectClassUncheckedCreateNestedManyWithoutEnterGradeLecturerInput
@@ -569573,7 +569974,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         enterGradeClasses?: SubjectClassCreateNestedManyWithoutEnterGradeLecturerInput
@@ -569612,7 +570012,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         enterGradeClasses?: SubjectClassUncheckedCreateNestedManyWithoutEnterGradeLecturerInput
@@ -569655,7 +570054,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -569694,7 +570092,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -570918,7 +571315,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
         enterGradeClasses?: SubjectClassUpdateManyWithoutEnterGradeLecturerNestedInput
@@ -570957,7 +571353,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
         enterGradeClasses?: SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerNestedInput
@@ -571005,7 +571400,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         enterGradeClasses?: SubjectClassUpdateManyWithoutEnterGradeLecturerNestedInput
@@ -571044,7 +571438,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         enterGradeClasses?: SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerNestedInput
@@ -571092,7 +571485,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -571131,7 +571523,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -571573,7 +571964,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -571646,6 +572036,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -572159,7 +572550,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -572232,6 +572622,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -573126,7 +573517,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -573199,6 +573589,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -573620,7 +574011,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -573693,6 +574083,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -574393,7 +574784,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -574432,7 +574822,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -574475,7 +574864,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -574514,7 +574902,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -574557,7 +574944,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -574630,6 +575016,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -575258,7 +575645,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -575297,7 +575683,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -575345,7 +575730,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -575384,7 +575768,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -576063,7 +576446,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -576136,6 +576518,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -576477,7 +576860,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -576550,6 +576932,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -580300,10 +580683,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
@@ -580342,10 +580725,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -580823,10 +581206,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
@@ -580865,10 +581248,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -581219,10 +581602,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
@@ -581261,10 +581644,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -581307,10 +581690,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
@@ -581349,10 +581732,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -581395,10 +581778,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
@@ -581437,10 +581820,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -581840,10 +582223,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
@@ -581882,10 +582265,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -581933,10 +582316,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
@@ -581975,10 +582358,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -582026,10 +582409,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
@@ -582068,10 +582451,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -585644,7 +586027,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -585717,6 +586099,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -587722,7 +588105,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -587795,6 +588177,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -590642,7 +591025,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -590681,7 +591063,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -590852,7 +591233,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -590891,7 +591271,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -590943,7 +591322,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -590982,7 +591360,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -591080,7 +591457,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -591119,7 +591495,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -591171,7 +591546,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -591210,7 +591584,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -591285,7 +591658,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -591358,6 +591730,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -591652,7 +592025,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -591691,7 +592063,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -591773,7 +592144,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -591846,6 +592216,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -592117,94 +592488,6 @@ export namespace Prisma {
     export type UserProfileCreateOrConnectWithoutLecturerInput = {
         where: UserProfileWhereUniqueInput
         create: XOR<UserProfileCreateWithoutLecturerInput, UserProfileUncheckedCreateWithoutLecturerInput>
-    };
-    export type DM_DonViCreateWithoutLecturersInput = {
-        Id?: string
-        sMa?: string | null
-        sTen?: string | null
-        sGhiChu?: string | null
-        iSTT?: number | null
-        bActive?: boolean | null
-        bDeleted?: boolean | null
-        bSystem?: boolean | null
-        iDictionaryKey?: number | null
-        dNgayTao?: Date | string | null
-        dNgaySua?: Date | string | null
-        sNguoiTao?: string | null
-        sNguoiSua?: string | null
-        sThietBiTao?: string | null
-        sThietBiSua?: string | null
-        sCode?: string | null
-        sTKBUCode?: string | null
-        sTenVietTat?: string | null
-        sParentId?: string | null
-        sTruongDonVi?: string | null
-        sChucNangNhiemVu?: string | null
-        sDiaChi?: string | null
-        iNhomDonVi?: number | null
-        iCapDonVi?: number | null
-        iLoaiDonVi?: number | null
-        lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
-        staffs?: StaffCreateNestedManyWithoutOrganizationInput
-        staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
-        curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
-        fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
-        subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
-        subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
-        trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
-        trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
-        secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
-        thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
-        researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
-        thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
-        surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
-        guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
-    };
-    export type DM_DonViUncheckedCreateWithoutLecturersInput = {
-        Id?: string
-        sMa?: string | null
-        sTen?: string | null
-        sGhiChu?: string | null
-        iSTT?: number | null
-        bActive?: boolean | null
-        bDeleted?: boolean | null
-        bSystem?: boolean | null
-        iDictionaryKey?: number | null
-        dNgayTao?: Date | string | null
-        dNgaySua?: Date | string | null
-        sNguoiTao?: string | null
-        sNguoiSua?: string | null
-        sThietBiTao?: string | null
-        sThietBiSua?: string | null
-        sCode?: string | null
-        sTKBUCode?: string | null
-        sTenVietTat?: string | null
-        sParentId?: string | null
-        sTruongDonVi?: string | null
-        sChucNangNhiemVu?: string | null
-        sDiaChi?: string | null
-        iNhomDonVi?: number | null
-        iCapDonVi?: number | null
-        iLoaiDonVi?: number | null
-        lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
-        staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
-        staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
-        curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
-        fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
-        subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
-        subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
-        trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
-        trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
-        secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
-        thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
-        researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
-        thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
-        surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
-        guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
-    };
-    export type DM_DonViCreateOrConnectWithoutLecturersInput = {
-        where: DM_DonViWhereUniqueInput
-        create: XOR<DM_DonViCreateWithoutLecturersInput, DM_DonViUncheckedCreateWithoutLecturersInput>
     };
     export type LecturerTypeCreateWithoutLecturersInput = {
         id?: string
@@ -593842,7 +594125,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -593915,6 +594197,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -594182,99 +594465,6 @@ export namespace Prisma {
         classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
         individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutRelatedUserProfilesNestedInput
         subjectClassAttendance?: SubjectClassAttendanceUncheckedUpdateManyWithoutProfileNestedInput
-    };
-    export type DM_DonViUpsertWithoutLecturersInput = {
-        update: XOR<DM_DonViUpdateWithoutLecturersInput, DM_DonViUncheckedUpdateWithoutLecturersInput>
-        create: XOR<DM_DonViCreateWithoutLecturersInput, DM_DonViUncheckedCreateWithoutLecturersInput>
-        where?: DM_DonViWhereInput
-    };
-    export type DM_DonViUpdateToOneWithWhereWithoutLecturersInput = {
-        where?: DM_DonViWhereInput
-        data: XOR<DM_DonViUpdateWithoutLecturersInput, DM_DonViUncheckedUpdateWithoutLecturersInput>
-    };
-    export type DM_DonViUpdateWithoutLecturersInput = {
-        Id?: StringFieldUpdateOperationsInput | string
-        sMa?: NullableStringFieldUpdateOperationsInput | string | null
-        sTen?: NullableStringFieldUpdateOperationsInput | string | null
-        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
-        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
-        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
-        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
-        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        sCode?: NullableStringFieldUpdateOperationsInput | string | null
-        sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
-        sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
-        sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
-        sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
-        sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
-        iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
-        staffs?: StaffUpdateManyWithoutOrganizationNestedInput
-        staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
-        curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
-        fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
-        subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
-        subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
-        trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
-        trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
-        secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
-        thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
-        researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
-        thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
-        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
-        guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
-    };
-    export type DM_DonViUncheckedUpdateWithoutLecturersInput = {
-        Id?: StringFieldUpdateOperationsInput | string
-        sMa?: NullableStringFieldUpdateOperationsInput | string | null
-        sTen?: NullableStringFieldUpdateOperationsInput | string | null
-        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
-        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
-        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
-        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
-        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-        sCode?: NullableStringFieldUpdateOperationsInput | string | null
-        sTKBUCode?: NullableStringFieldUpdateOperationsInput | string | null
-        sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
-        sParentId?: NullableStringFieldUpdateOperationsInput | string | null
-        sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
-        sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
-        sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
-        iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
-        staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
-        staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
-        curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
-        fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
-        subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
-        subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
-        trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
-        trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
-        secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
-        thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
-        researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
-        thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
-        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
-        guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
     };
     export type LecturerTypeUpsertWithoutLecturersInput = {
         update: XOR<LecturerTypeUpdateWithoutLecturersInput, LecturerTypeUncheckedUpdateWithoutLecturersInput>
@@ -594736,7 +594926,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -594809,6 +594998,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -595107,9 +595297,9 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
@@ -595149,9 +595339,9 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -595221,7 +595411,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -595294,6 +595483,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -595597,9 +595787,9 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
@@ -595639,9 +595829,9 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -596086,7 +596276,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -596125,7 +596314,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -596251,10 +596439,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
@@ -596293,10 +596481,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -596335,7 +596523,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -596374,7 +596561,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -596510,10 +596696,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
@@ -596552,10 +596738,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -596581,7 +596767,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
         enterGradeClasses?: SubjectClassCreateNestedManyWithoutEnterGradeLecturerInput
@@ -596620,7 +596805,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
         enterGradeClasses?: SubjectClassUncheckedCreateNestedManyWithoutEnterGradeLecturerInput
@@ -596708,6 +596892,24 @@ export namespace Prisma {
     export type LecturerUpdateManyWithWhereWithoutLecturerTypeInput = {
         where: LecturerScalarWhereInput
         data: XOR<LecturerUpdateManyMutationInput, LecturerUncheckedUpdateManyWithoutLecturerTypeInput>
+    };
+    export type LecturerScalarWhereInput = {
+        AND?: LecturerScalarWhereInput | LecturerScalarWhereInput[]
+        OR?: LecturerScalarWhereInput[]
+        NOT?: LecturerScalarWhereInput | LecturerScalarWhereInput[]
+        id?: StringFilter<"Lecturer"> | string
+        code?: StringNullableFilter<"Lecturer"> | string | null
+        active?: BoolFilter<"Lecturer"> | boolean
+        description?: StringNullableFilter<"Lecturer"> | string | null
+        deletedAt?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
+        createdAt?: DateTimeFilter<"Lecturer"> | Date | string
+        updatedAt?: DateTimeFilter<"Lecturer"> | Date | string
+        createdBy?: UuidNullableFilter<"Lecturer"> | string | null
+        from?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
+        lectureID?: StringNullableFilter<"Lecturer"> | string | null
+        serviceDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
+        userProfileId?: UuidFilter<"Lecturer"> | string
+        lecturerTypeId?: StringFilter<"Lecturer"> | string
     };
     export type LecturerHistoryUpsertWithWhereUniqueWithoutLecturerTypeInput = {
         where: LecturerHistoryWhereUniqueInput
@@ -596939,7 +597141,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -597012,6 +597213,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -597310,9 +597512,9 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
@@ -597352,9 +597554,9 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -597516,7 +597718,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -597589,6 +597790,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -597892,9 +598094,9 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
@@ -597934,9 +598136,9 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -598042,7 +598244,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -598115,6 +598316,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -598413,9 +598615,9 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
@@ -598455,9 +598657,9 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -598553,7 +598755,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -598626,6 +598827,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -598929,9 +599131,9 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
@@ -598971,9 +599173,9 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -599066,7 +599268,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -599105,7 +599306,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -599161,10 +599361,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
@@ -599203,10 +599403,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -599289,7 +599489,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -599328,7 +599527,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -599389,10 +599587,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
@@ -599431,10 +599629,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -599687,7 +599885,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -599726,7 +599923,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -600002,7 +600198,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -600041,7 +600236,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -600570,7 +600764,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -600609,7 +600802,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -600652,7 +600844,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -600691,7 +600882,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -601285,10 +601475,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
@@ -601327,10 +601517,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -601627,7 +601817,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -601666,7 +601855,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -601714,7 +601902,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -601753,7 +601940,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -602392,10 +602578,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
@@ -602434,10 +602620,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -603227,7 +603413,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -603266,7 +603451,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -603739,7 +603923,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -603778,7 +603961,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -603854,7 +604036,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -603893,7 +604074,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -604325,7 +604505,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -604364,7 +604543,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -624243,7 +624421,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -624316,6 +624493,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -624732,7 +624910,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -624805,6 +624982,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -625737,7 +625915,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -625776,7 +625953,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -625943,7 +626119,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -625982,7 +626157,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -626098,7 +626272,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -626137,7 +626310,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -626212,7 +626384,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -626251,7 +626422,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -626376,7 +626546,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -626415,7 +626584,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -627020,7 +627188,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -627059,7 +627226,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -627198,7 +627364,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -627237,7 +627402,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -627325,7 +627489,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -627398,6 +627561,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -627733,7 +627897,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -627806,6 +627969,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -630192,7 +630356,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -630231,7 +630394,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -630274,7 +630436,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -630313,7 +630474,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -630432,7 +630592,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -630471,7 +630630,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -630519,7 +630677,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -630558,7 +630715,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -632775,10 +632931,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
         staffs?: StaffCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
@@ -632817,10 +632973,10 @@ export namespace Prisma {
         iNhomDonVi?: number | null
         iCapDonVi?: number | null
         iLoaiDonVi?: number | null
-        lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
         staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+        userProfiles?: UserProfileUncheckedCreateNestedManyWithoutDonViInput
         curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
         subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
@@ -634036,7 +634192,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -634075,7 +634230,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -634416,7 +634570,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-        organization?: DM_DonViCreateNestedOneWithoutLecturersInput
         lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
         mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -634455,7 +634608,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
         lecturerTypeId: string
         mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
         extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -634970,7 +635122,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -635009,7 +635160,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -636131,7 +636281,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -636204,6 +636353,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -636805,7 +636955,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -636878,6 +637027,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -639172,7 +639322,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -639245,6 +639394,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -639649,7 +639799,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -639722,6 +639871,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -640079,7 +640229,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -640152,6 +640301,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -640507,7 +640657,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -640580,6 +640729,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -640882,7 +641032,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -640955,6 +641104,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -641257,7 +641407,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -641330,6 +641479,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -641968,7 +642118,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -642041,6 +642190,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -642343,7 +642493,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -642416,6 +642565,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -642718,7 +642868,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -642791,6 +642940,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -643256,7 +643406,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -643329,6 +643478,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -643631,7 +643781,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -643704,6 +643853,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -644006,7 +644156,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -644079,6 +644228,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -644381,7 +644531,6 @@ export namespace Prisma {
         bLaGiangVien?: boolean | null
         bLaCanBoNhanVien?: boolean | null
         bLaHocVien?: boolean | null
-        sDM_DonViId?: string | null
         sDM_ViTriCongViecId?: string | null
         sQuanlyTrucTiepId?: string | null
         iDictionaryKey?: number | null
@@ -644454,6 +644603,7 @@ export namespace Prisma {
         familyPhone?: string | null
         familyName?: string | null
         group?: GroupCreateNestedOneWithoutUserProfileInput
+        donVi?: DM_DonViCreateNestedOneWithoutUserProfilesInput
         provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
         districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
         communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
@@ -648359,7 +648509,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -648431,6 +648580,7 @@ export namespace Prisma {
         originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -649662,7 +649812,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -649735,6 +649884,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -650318,7 +650468,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -650391,6 +650540,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -651253,7 +651403,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -651326,6 +651475,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -651737,7 +651887,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -651810,6 +651959,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -652221,7 +652371,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -652294,6 +652443,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -653075,7 +653225,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -653148,6 +653297,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -653937,7 +654087,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -654010,6 +654159,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -654756,7 +654906,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -654829,6 +654978,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -655269,21 +655419,6 @@ export namespace Prisma {
         viet?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
-    export type LecturerCreateManyOrganizationInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        createdBy?: string | null
-        from?: Date | string | null
-        lectureID?: string | null
-        serviceDate?: Date | string | null
-        userProfileId: string
-        lecturerTypeId: string
-    };
     export type LecturerHistoryCreateManyOrganizationInput = {
         id?: string
         code?: string | null
@@ -655329,6 +655464,136 @@ export namespace Prisma {
         userProfileId: string
         staffTypeId: string
         staffPositionId: string
+    };
+    export type UserProfileCreateManyDonViInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        bLaNguoiDung?: boolean | null
+        bLaGiangVien?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        groupId?: string | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName?: string | null
+        lastName?: string | null
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        provinceCurrentAddressId?: string | null
+        districtCurrentAddressId?: string | null
+        communeCurrentAddressId?: string | null
+        newProvinceCurrentAddressId?: string | null
+        newCommuneCurrentAddressId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        provinceOfBirthId?: string | null
+        districtOfBirthId?: string | null
+        communeOfBirthId?: string | null
+        newProvinceOfBirthId?: string | null
+        newCommuneOfBirthId?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        genderId?: string | null
+        permanentAddress?: string | null
+        provincePermanentAddressId?: string | null
+        districtPermanentAddressId?: string | null
+        communePermanentAddressId?: string | null
+        newProvincePermanentAddressId?: string | null
+        newCommunePermanentAddressId?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        officePhone?: string | null
+        email?: string | null
+        nationalityId?: string | null
+        religionId?: string | null
+        ethnicityId?: string | null
+        provinceHometownId?: string | null
+        districtHometownId?: string | null
+        communeHometownId?: string | null
+        newProvinceHometownId?: string | null
+        newCommuneHometownId?: string | null
+        officerNumber?: string | null
+        rankId?: string | null
+        rankDate?: Date | string | null
+        academicDegreeTypeId?: string | null
+        academicDegreeDate?: Date | string | null
+        academicRankTypeId?: string | null
+        academicRankDate?: Date | string | null
+        levelId?: string | null
+        positionId?: string | null
+        chiHuyQuanLyId?: string | null
+        chuyenMonKyThuatId?: string | null
+        sucKhoeId?: string | null
+        nhomMauId?: string | null
+        tinhTrangHonNhanId?: string | null
+        trangThaiLamViecId?: string | null
+        dM_ChucDanhCMNVGiangVienId?: string | null
+        dM_ChucDanhCMNVNghienCuuVienId?: string | null
+        dM_ChucDanhCMNVKySuId?: string | null
+        dM_XepLoaiDanhGiaChatLuongDangVienId?: string | null
+        dM_XepLoaiDanhGiaCanBoId?: string | null
+        dM_HinhThucKhenThuongDangId?: string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        positionCPVId?: string | null
+        chucVuChinhQuyenId?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        trinhDoHocVanId?: string | null
     };
     export type CurriculumCreateManyManagementOrganizationInput = {
         id?: string
@@ -655598,99 +655863,6 @@ export namespace Prisma {
         transactionCode?: string | null
         decisionRef?: string | null
     };
-    export type LecturerUpdateWithoutOrganizationInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        lectureID?: NullableStringFieldUpdateOperationsInput | string | null
-        serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
-        mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
-        extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
-        enterGradeClasses?: SubjectClassUpdateManyWithoutEnterGradeLecturerNestedInput
-        manageFixedClass?: FixedClassUpdateManyWithoutLecturerManagementNestedInput
-        classSchedules?: ClassScheduleUpdateManyWithoutLecturerNestedInput
-        extraClassSchedules?: ClassScheduleUpdateManyWithoutExtraLecturerNestedInput
-        researchProjects?: ResearchProjectUpdateManyWithoutSupervisorNestedInput
-        reviewedRegistrations?: StudentResearchRegistrationUpdateManyWithoutReviewedByNestedInput
-        reviewedThesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutReviewedByNestedInput
-        expert?: ExpertUpdateManyWithoutLecturerNestedInput
-        survey?: SurveyUpdateManyWithoutLectureNestedInput
-        clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
-        examRoomsMain?: ExamListUpdateManyWithoutFirstSupervisorNestedInput
-        examRoomsExtra?: ExamListUpdateManyWithoutSecondSupervisorNestedInput
-        evaluationCriterions?: EvaluationCriterionUpdateManyWithoutLecturerNestedInput
-        analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
-        evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
-        evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
-        primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
-        secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
-        notifications?: NotificationUpdateManyWithoutLecturerNestedInput
-        personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
-        individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
-        guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
-    };
-    export type LecturerUncheckedUpdateWithoutOrganizationInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        lectureID?: NullableStringFieldUpdateOperationsInput | string | null
-        serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        userProfileId?: StringFieldUpdateOperationsInput | string
-        lecturerTypeId?: StringFieldUpdateOperationsInput | string
-        mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
-        extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
-        enterGradeClasses?: SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerNestedInput
-        manageFixedClass?: FixedClassUncheckedUpdateManyWithoutLecturerManagementNestedInput
-        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutLecturerNestedInput
-        extraClassSchedules?: ClassScheduleUncheckedUpdateManyWithoutExtraLecturerNestedInput
-        researchProjects?: ResearchProjectUncheckedUpdateManyWithoutSupervisorNestedInput
-        reviewedRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
-        reviewedThesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
-        expert?: ExpertUncheckedUpdateManyWithoutLecturerNestedInput
-        survey?: SurveyUncheckedUpdateManyWithoutLectureNestedInput
-        clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
-        examRoomsMain?: ExamListUncheckedUpdateManyWithoutFirstSupervisorNestedInput
-        examRoomsExtra?: ExamListUncheckedUpdateManyWithoutSecondSupervisorNestedInput
-        evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerNestedInput
-        analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
-        evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
-        evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
-        primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
-        secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
-        notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
-        personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
-        individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
-        guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
-    };
-    export type LecturerUncheckedUpdateManyWithoutOrganizationInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        lectureID?: NullableStringFieldUpdateOperationsInput | string | null
-        serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        userProfileId?: StringFieldUpdateOperationsInput | string
-        lecturerTypeId?: StringFieldUpdateOperationsInput | string
-    };
     export type LecturerHistoryUpdateWithoutOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -655830,6 +656002,490 @@ export namespace Prisma {
         userProfileId?: StringFieldUpdateOperationsInput | string
         staffTypeId?: StringFieldUpdateOperationsInput | string
         staffPositionId?: StringFieldUpdateOperationsInput | string
+    };
+    export type UserProfileUpdateWithoutDonViInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: NullableStringFieldUpdateOperationsInput | string | null
+        lastName?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        group?: GroupUpdateOneWithoutUserProfileNestedInput
+        provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
+        provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
+        religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
+        ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
+        provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
+        districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
+        communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
+        newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
+        newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
+        rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+        level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+        position?: DM_ChucVuUpdateOneWithoutUserProfilePositionNestedInput
+        chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
+        chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
+        sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
+        nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
+        tinhTrangHonNhan?: DM_TinhTrangHonNhanUpdateOneWithoutUserProfileNestedInput
+        trangThaiLamViec?: DM_TrangThaiLamViecUpdateOneWithoutUserProfileNestedInput
+        dM_ChucDanhCMNVGiangVien?: DM_ChucDanhCMNVGiangVienUpdateOneWithoutUserProfileNestedInput
+        dM_ChucDanhCMNVNghienCuuVien?: DM_ChucDanhCMNVNghienCuuVienUpdateOneWithoutUserProfileNestedInput
+        dM_ChucDanhCMNVKySu?: DM_ChucDanhCMNVKySuUpdateOneWithoutUserProfileNestedInput
+        dM_XepLoaiDanhGiaChatLuongDangVien?: DM_XepLoaiDanhGiaChatLuongDangVienUpdateOneWithoutUserProfileNestedInput
+        dM_XepLoaiDanhGiaCanBo?: DM_XepLoaiDanhGiaCanBoUpdateOneWithoutUserProfileNestedInput
+        dM_HinhThucKhenThuongDang?: DM_HinhThucKhenThuongDangUpdateOneWithoutUserProfileNestedInput
+        positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileCPVNestedInput
+        chucVuChinhQuyen?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+        relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
+        ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
+        tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
+        capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
+        khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
+        kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
+        doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
+        keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
+        hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
+        hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
+        tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
+        chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
+        diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
+        thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
+        danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
+        quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
+        ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+        QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUpdateManyWithoutUserProfileNestedInput
+        trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
+        educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
+        lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+        lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
+        staffs?: StaffUpdateOneWithoutUserProfileNestedInput
+        staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+        evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+        documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+        documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+        faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+        faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+        conversations?: ConversationUpdateManyWithoutUserNestedInput
+        subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutUpdatedByNestedInput
+        subjectClassHistory?: SubjectClassHistoryUpdateManyWithoutUpdatedByNestedInput
+        changeLog?: ChangeLogUpdateManyWithoutUserProfileNestedInput
+        dataSyncHistories?: DataSyncHistoryUpdateManyWithoutPerformedByNestedInput
+        surveySession?: SurveySessionUpdateManyWithoutProfileNestedInput
+        evaluationCriterionComments?: EvaluationCriterionCommentUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutUserProfilesNestedInput
+        individualSchedules?: IndividualScheduleUpdateManyWithoutRelatedUserProfilesNestedInput
+        subjectClassAttendance?: SubjectClassAttendanceUpdateManyWithoutProfileNestedInput
+    };
+    export type UserProfileUncheckedUpdateWithoutDonViInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        groupId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: NullableStringFieldUpdateOperationsInput | string | null
+        lastName?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        genderId?: NullableStringFieldUpdateOperationsInput | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+        religionId?: NullableStringFieldUpdateOperationsInput | string | null
+        ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankId?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        levelId?: NullableStringFieldUpdateOperationsInput | string | null
+        positionId?: NullableStringFieldUpdateOperationsInput | string | null
+        chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+        chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+        sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+        nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhTrangHonNhanId?: NullableStringFieldUpdateOperationsInput | string | null
+        trangThaiLamViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_ChucDanhCMNVGiangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+        relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
+        ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
+        tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
+        capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
+        khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
+        doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
+        keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
+        hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
+        hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
+        tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
+        chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
+        diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
+        thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
+        danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
+        ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+        QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuChinhQuyen?: ChucVuChinhQuyenUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhChucVuDang?: ChucVuDangUncheckedUpdateManyWithoutUserProfileNestedInput
+        educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
+        lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+        lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
+        staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+        documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+        documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+        faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+        faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+        conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+        subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
+        changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
+        dataSyncHistories?: DataSyncHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
+        surveySession?: SurveySessionUncheckedUpdateManyWithoutProfileNestedInput
+        evaluationCriterionComments?: EvaluationCriterionCommentUncheckedUpdateManyWithoutReviewerNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutUserProfilesNestedInput
+        individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutRelatedUserProfilesNestedInput
+        subjectClassAttendance?: SubjectClassAttendanceUncheckedUpdateManyWithoutProfileNestedInput
+    };
+    export type UserProfileUncheckedUpdateManyWithoutDonViInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        groupId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: NullableStringFieldUpdateOperationsInput | string | null
+        lastName?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        genderId?: NullableStringFieldUpdateOperationsInput | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+        religionId?: NullableStringFieldUpdateOperationsInput | string | null
+        ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankId?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        levelId?: NullableStringFieldUpdateOperationsInput | string | null
+        positionId?: NullableStringFieldUpdateOperationsInput | string | null
+        chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+        chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+        sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+        nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhTrangHonNhanId?: NullableStringFieldUpdateOperationsInput | string | null
+        trangThaiLamViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_ChucDanhCMNVGiangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_ChucDanhCMNVNghienCuuVienId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_ChucDanhCMNVKySuId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_XepLoaiDanhGiaChatLuongDangVienId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_XepLoaiDanhGiaCanBoId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_HinhThucKhenThuongDangId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+        chucVuChinhQuyenId?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type CurriculumUpdateWithoutManagementOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -657259,7 +657915,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -657332,6 +657987,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -657997,7 +658653,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -658070,6 +658725,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -658741,7 +659397,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -658814,6 +659469,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -659799,7 +660455,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -659872,6 +660527,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -660283,7 +660939,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -660356,6 +661011,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -660767,7 +661423,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -660840,6 +661495,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -661251,7 +661907,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -661324,6 +661979,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
         newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -662309,7 +662965,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -662382,6 +663037,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -662793,7 +663449,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -662866,6 +663521,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -663277,7 +663933,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -663350,6 +664005,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -663761,7 +664417,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -663834,6 +664489,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -664807,7 +665463,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -664880,6 +665535,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -665291,7 +665947,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -665364,6 +666019,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -665775,7 +666431,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -665848,6 +666503,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -666259,7 +666915,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -666332,6 +666987,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
         newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -667263,7 +667919,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -667336,6 +667991,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -667747,7 +668403,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -667820,6 +668475,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -668231,7 +668887,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -668304,6 +668959,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -668715,7 +669371,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -668788,6 +669443,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -669719,7 +670375,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -669792,6 +670447,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -670203,7 +670859,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -670276,6 +670931,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -670687,7 +671343,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -670760,6 +671415,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -671171,7 +671827,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -671244,6 +671899,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -682516,7 +683172,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -682589,6 +683244,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -692624,7 +693280,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -692697,6 +693352,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -695747,7 +696403,6 @@ export namespace Prisma {
         lectureID?: string | null
         serviceDate?: Date | string | null
         userProfileId: string
-        organizationId?: string | null
     };
     export type LecturerHistoryCreateManyLecturerTypeInput = {
         id?: string
@@ -695779,7 +696434,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
         enterGradeClasses?: SubjectClassUpdateManyWithoutEnterGradeLecturerNestedInput
@@ -695818,7 +696472,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
         enterGradeClasses?: SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerNestedInput
@@ -695857,7 +696510,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type LecturerHistoryUpdateWithoutLecturerTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -703959,7 +704611,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -703998,7 +704649,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -704037,7 +704687,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
     };
     export type EvaluationCriterionCommentUpdateWithoutEvaluationCriterionInput = {
@@ -705938,10 +706587,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
@@ -705980,10 +706629,10 @@ export namespace Prisma {
         iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
         iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
-        lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
         staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+        userProfiles?: UserProfileUncheckedUpdateManyWithoutDonViNestedInput
         curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
         subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
@@ -707085,7 +707734,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-        organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
         lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
         mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -707124,7 +707772,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
         mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
         extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -707163,7 +707810,6 @@ export namespace Prisma {
         lectureID?: NullableStringFieldUpdateOperationsInput | string | null
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
-        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
     };
     export type SurveyChoiceUpdateWithoutClusterSurveyInput = {
@@ -708300,7 +708946,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -708373,6 +709018,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -709034,7 +709680,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -709107,6 +709752,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -709716,7 +710362,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -709789,6 +710434,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -710394,7 +711040,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -710467,6 +711112,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -711008,7 +711654,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -711081,6 +711726,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -711622,7 +712268,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -711695,6 +712340,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -712656,7 +713302,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -712729,6 +713374,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -713270,7 +713916,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -713343,6 +713988,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -713884,7 +714530,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -713957,6 +714602,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -714698,7 +715344,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -714771,6 +715416,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -715312,7 +715958,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -715385,6 +716030,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -715926,7 +716572,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -715999,6 +716644,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
@@ -716540,7 +717186,6 @@ export namespace Prisma {
         bLaGiangVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
         bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
         sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
         sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
         iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
@@ -716613,6 +717258,7 @@ export namespace Prisma {
         familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
         familyName?: NullableStringFieldUpdateOperationsInput | string | null
         group?: GroupUpdateOneWithoutUserProfileNestedInput
+        donVi?: DM_DonViUpdateOneWithoutUserProfilesNestedInput
         provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
         districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
         communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput

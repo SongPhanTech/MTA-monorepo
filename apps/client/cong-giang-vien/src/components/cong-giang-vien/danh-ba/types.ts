@@ -2,26 +2,35 @@ import type { Prisma } from "@workspace/db/client"
 
 export type DonViDanhBa = Prisma.DM_DonViGetPayload<{
   include: {
-    lecturers: {
-      include: {
-        organization: {
+    userProfiles: {
+      where: {
+        lecturer: { is: { active: true; deletedAt: null } }
+      }
+      select: {
+        fullname: true
+        email: true
+        phoneNumber: true
+        gender: {
           select: {
             sTen: true
           }
         }
-        lecturerType: {
+        academicDegreeType: {
           select: {
-            name: true
+            sTen: true
           }
         }
-        userProfile: {
+        academicRankType: {
           select: {
-            fullname: true
-            email: true
-            phoneNumber: true
-            gender: {
+            sTen: true
+          }
+        }
+        lecturer: {
+          select: {
+            code: true
+            lecturerType: {
               select: {
-                sTen: true
+                name: true
               }
             }
           }
@@ -31,7 +40,7 @@ export type DonViDanhBa = Prisma.DM_DonViGetPayload<{
   }
 }>
 
-export type LecturerDanhBa = DonViDanhBa["lecturers"][number]
+export type LecturerDanhBa = DonViDanhBa["userProfiles"][number]
 
 export type DanhBaRow = {
   key: string
