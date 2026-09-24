@@ -103,36 +103,56 @@ function getCurriculumSubjects(student: any): CurriculumSubject[] {
   return [...map.values()]
 }
 
-function buildPrefillSubjectScores(
+function getConvertibleSubjects(
   cert: any,
   curriculumSubjects: CurriculumSubject[]
-): SubjectScoreItem[] {
-  if (!cert?.subjects?.length || !curriculumSubjects.length) return []
+): CurriculumSubject[] {
+  if (!cert?.subjects?.length) return []
 
-  const byParentSubject = new Map(
-    curriculumSubjects
-      .filter((s) => s.subjectId)
-      .map((s) => [s.subjectId as string, s])
-  )
-
-  const result: SubjectScoreItem[] = []
+  const curriculumById = new Map(curriculumSubjects.map((s) => [s.id, s]))
+  const result: CurriculumSubject[] = []
   const used = new Set<string>()
 
   for (const mapping of cert.subjects) {
-    const matched = byParentSubject.get(mapping.subjectId)
-    if (!matched || used.has(matched.id)) continue
-    used.add(matched.id)
-    result.push({
-      subjectVersionId: matched.id,
-      finalScore: mapping.finalScore ?? 0,
-    })
+    const versions = mapping.subject?.subjectVersion || []
+    if (!versions.length) {
+      for (const subject of curriculumSubjects) {
+        if (subject.subjectId !== mapping.subjectId || used.has(subject.id)) continue
+        used.add(subject.id)
+        result.push(subject)
+      }
+      continue
+    }
+
+    for (const version of versions) {
+      if (!version?.id || used.has(version.id)) continue
+      used.add(version.id)
+      result.push(
+        curriculumById.get(version.id) || {
+          id: version.id,
+          name: version.name,
+          code: version.code,
+          credit: version.credit,
+          subjectId: version.subjectId || mapping.subjectId,
+        }
+      )
+    }
   }
+
   return result
+}
+
+function getMappedFinalScore(cert: any, subject: CurriculumSubject): number {
+  const mapping = cert?.subjects?.find((item: any) => item.subjectId === subject.subjectId)
+  return mapping?.finalScore ?? 0
 }
 
 const PutCertificateArchivedModal = () => {
   const [documentFiles, setDocumentFiles] = useState<DocumentFile[]>([])
   const [selectedStudents, setSelectedStudents] = useState<SelectedStudentRow[]>([])
+  const [subjectScoresByRow, setSubjectScoresByRow] = useState<Record<string, SubjectScoreItem[]>>(
+    {}
+  )
   const [showLanguageScoreColumns, setShowLanguageScoreColumns] = useState(true)
   const [rowCounter, setRowCounter] = useState(0)
   const [form] = Form.useForm<PutArchivedCertificate>()
@@ -146,6 +166,7 @@ const PutCertificateArchivedModal = () => {
     onClose: () => {
       form.resetFields()
       setSelectedStudents([])
+      setSubjectScoresByRow({})
       setRowCounter(0)
     },
   })
@@ -153,15 +174,35 @@ const PutCertificateArchivedModal = () => {
 
   const { mutateAsync: createArchivedCertificate } = useCreateArchivedCertificate()
   const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
-  const { data: certificate = [] } = useFindManyCertificate({
-    include: {
-      subjects: {
-        include: {
-          subject: true,
+  const { data: certificate = [] } = useFindManyCertificate(
+    {
+      include: {
+        subjects: {
+          where: { deletedAt: null },
+          include: {
+            subject: {
+              include: {
+                subjectVersion: {
+                  where: {
+                    deletedAt: null,
+                    ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
+                  },
+                  select: {
+                    id: true,
+                    name: true,
+                    code: true,
+                    credit: true,
+                    subjectId: true,
+                  },
+                },
+              },
+            },
+          },
         },
       },
     },
-  })
+    { enabled: !!trainingObjectTypeId }
+  )
   const { runCheck } = useCertificateExpirationCheck(certificate as any)
   const { data: trainingCourses = [] } = useFindManyTrainingCourse(
     {
@@ -270,6 +311,11 @@ const PutCertificateArchivedModal = () => {
   const handleRemoveRow = useCallback(
     (rowId: string) => {
       setSelectedStudents((prev) => prev.filter((r) => r.rowId !== rowId))
+      setSubjectScoresByRow((prev) => {
+        const next = { ...prev }
+        delete next[rowId]
+        return next
+      })
       const currentStudent = form.getFieldValue("student") || {}
       delete currentStudent[rowId]
       form.setFieldValue("student", currentStudent)
@@ -277,22 +323,24 @@ const PutCertificateArchivedModal = () => {
     [form]
   )
 
-  const handleCertificateChange = useCallback(
-    (rowId: string, certificateId: string, curriculumSubjects: CurriculumSubject[]) => {
-      const cert = certificate.find((c) => c.id === certificateId)
-      const prefill = buildPrefillSubjectScores(cert, curriculumSubjects)
-      form.setFieldValue(["student", rowId, "certificateId"], certificateId)
-      form.setFieldValue(["student", rowId, "subjectScores"], prefill)
+  const setSubjectScores = useCallback(
+    (rowId: string, scores: SubjectScoreItem[]) => {
+      setSubjectScoresByRow((prev) => ({ ...prev, [rowId]: scores }))
+      form.setFieldValue(["student", rowId, "subjectScores"], scores)
     },
-    [certificate, form]
+    [form]
+  )
+
+  const handleCertificateChange = useCallback(
+    (rowId: string, certificateId: string) => {
+      form.setFieldValue(["student", rowId, "certificateId"], certificateId)
+      setSubjectScores(rowId, [])
+    },
+    [form, setSubjectScores]
   )
 
   const getSubjectScores = (rowId: string): SubjectScoreItem[] =>
-    studentFormData?.[rowId]?.subjectScores || []
-
-  const setSubjectScores = (rowId: string, scores: SubjectScoreItem[]) => {
-    form.setFieldValue(["student", rowId, "subjectScores"], scores)
-  }
+    subjectScoresByRow[rowId] || []
 
   async function onOk({ ...rest }: PutArchivedCertificate) {
     try {
@@ -310,7 +358,7 @@ const PutCertificateArchivedModal = () => {
         for (const row of selectedStudents) {
           const data = latestStudentFormData[row.rowId] || studentFormData[row.rowId] || {}
           if (!data?.certificateId) continue
-          if (data.subjectScores?.some((s: SubjectScoreItem) => s.finalScore == null)) {
+          if (subjectScoresByRow[row.rowId]?.some((s) => s.finalScore == null)) {
             message.warning(`Vui lòng nhập điểm phiên cho ${row.fullname || row.code}`)
             return
           }
@@ -349,7 +397,9 @@ const PutCertificateArchivedModal = () => {
             studentDataForRow.documentFiles ||
             []
 
-          const subjectScores: SubjectScoreItem[] = studentDataForRow.subjectScores || []
+          const subjectScores: SubjectScoreItem[] = (subjectScoresByRow[row.rowId] || []).filter(
+            (s) => s.subjectVersionId
+          )
 
           const result = await createArchivedCertificate({
             data: {
@@ -543,9 +593,7 @@ const PutCertificateArchivedModal = () => {
                           value: item.id,
                         }))}
                         placeholder="Chọn chứng chỉ"
-                        onChange={(value: string) =>
-                          handleCertificateChange(record.rowId, value, record.curriculumSubjects)
-                        }
+                        onChange={(value: string) => handleCertificateChange(record.rowId, value)}
                       />
                     </FormItem>
                   ),
@@ -555,20 +603,31 @@ const PutCertificateArchivedModal = () => {
                   width: 320,
                   align: "left",
                   render: (_, record: SelectedStudentRow) => {
+                    const selectedCertificateId = studentFormData?.[record.rowId]?.certificateId
+                    const selectedCertificate = certificate.find((c) => c.id === selectedCertificateId)
+                    const convertibleSubjects = getConvertibleSubjects(
+                      selectedCertificate,
+                      record.curriculumSubjects
+                    )
                     const scores = getSubjectScores(record.rowId)
                     const selectedIds = new Set(scores.map((s) => s.subjectVersionId))
-                    const availableSubjects = record.curriculumSubjects.filter(
+                    const availableSubjects = convertibleSubjects.filter(
                       (s: CurriculumSubject) => !selectedIds.has(s.id)
                     )
 
-                    if (!record.curriculumSubjects.length) {
+                    if (!selectedCertificateId) {
                       return (
-                        <div className="flex flex-col gap-1 py-1">
-                          <span className="text-orange-500 text-xs">
-                            SV chưa có CTĐT / không có môn
-                          </span>
-                          <span className="text-gray-500 text-xs">{OPTIONAL_SUBJECT_SCORE_HINT}</span>
-                        </div>
+                        <span className="text-gray-500 text-xs">
+                          Chọn chứng chỉ để chọn môn phiên
+                        </span>
+                      )
+                    }
+
+                    if (!convertibleSubjects.length) {
+                      return (
+                        <span className="text-orange-500 text-xs">
+                          Chứng chỉ chưa cấu hình môn phiên
+                        </span>
                       )
                     }
 
@@ -584,7 +643,7 @@ const PutCertificateArchivedModal = () => {
                                 variant="underlined"
                                 className="flex-1 min-w-0"
                                 value={item.subjectVersionId}
-                                options={record.curriculumSubjects
+                                options={convertibleSubjects
                                   .filter(
                                     (s: CurriculumSubject) =>
                                       s.id === item.subjectVersionId || !selectedIds.has(s.id)
@@ -597,7 +656,14 @@ const PutCertificateArchivedModal = () => {
                                   }))}
                                 onChange={(value: string) => {
                                   const next = [...scores]
-                                  next[idx] = { ...next[idx], subjectVersionId: value }
+                                  const subject = convertibleSubjects.find((s) => s.id === value)
+                                  next[idx] = {
+                                    ...next[idx],
+                                    subjectVersionId: value,
+                                    finalScore: subject
+                                      ? getMappedFinalScore(selectedCertificate, subject)
+                                      : next[idx].finalScore,
+                                  }
                                   setSubjectScores(record.rowId, next)
                                 }}
                               />
@@ -643,7 +709,10 @@ const PutCertificateArchivedModal = () => {
                                 ...scores,
                                 {
                                   subjectVersionId: availableSubjects[0].id,
-                                  finalScore: 0,
+                                  finalScore: getMappedFinalScore(
+                                    selectedCertificate,
+                                    availableSubjects[0]
+                                  ),
                                 },
                               ])
                             }}
