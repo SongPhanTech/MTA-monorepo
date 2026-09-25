@@ -147,6 +147,12 @@ function getMappedFinalScore(cert: any, subject: CurriculumSubject): number {
   return mapping?.finalScore ?? 0
 }
 
+function getSelectableSubjects(cert: any, curriculumSubjects: CurriculumSubject[]): CurriculumSubject[] {
+  const configured = getConvertibleSubjects(cert, curriculumSubjects)
+  if (configured.length) return configured
+  return curriculumSubjects
+}
+
 const PutCertificateArchivedModal = () => {
   const [documentFiles, setDocumentFiles] = useState<DocumentFile[]>([])
   const [selectedStudents, setSelectedStudents] = useState<SelectedStudentRow[]>([])
@@ -605,13 +611,13 @@ const PutCertificateArchivedModal = () => {
                   render: (_, record: SelectedStudentRow) => {
                     const selectedCertificateId = studentFormData?.[record.rowId]?.certificateId
                     const selectedCertificate = certificate.find((c) => c.id === selectedCertificateId)
-                    const convertibleSubjects = getConvertibleSubjects(
+                    const subjectOptions = getSelectableSubjects(
                       selectedCertificate,
                       record.curriculumSubjects
                     )
                     const scores = getSubjectScores(record.rowId)
                     const selectedIds = new Set(scores.map((s) => s.subjectVersionId))
-                    const availableSubjects = convertibleSubjects.filter(
+                    const availableSubjects = subjectOptions.filter(
                       (s: CurriculumSubject) => !selectedIds.has(s.id)
                     )
 
@@ -623,11 +629,14 @@ const PutCertificateArchivedModal = () => {
                       )
                     }
 
-                    if (!convertibleSubjects.length) {
+                    if (!subjectOptions.length) {
                       return (
-                        <span className="text-orange-500 text-xs">
-                          Chứng chỉ chưa cấu hình môn phiên
-                        </span>
+                        <div className="flex flex-col gap-1 py-1">
+                          <span className="text-orange-500 text-xs">
+                            SV chưa có CTĐT / không có môn
+                          </span>
+                          <span className="text-gray-500 text-xs">{OPTIONAL_SUBJECT_SCORE_HINT}</span>
+                        </div>
                       )
                     }
 
@@ -643,7 +652,7 @@ const PutCertificateArchivedModal = () => {
                                 variant="underlined"
                                 className="flex-1 min-w-0"
                                 value={item.subjectVersionId}
-                                options={convertibleSubjects
+                                options={subjectOptions
                                   .filter(
                                     (s: CurriculumSubject) =>
                                       s.id === item.subjectVersionId || !selectedIds.has(s.id)
@@ -656,7 +665,7 @@ const PutCertificateArchivedModal = () => {
                                   }))}
                                 onChange={(value: string) => {
                                   const next = [...scores]
-                                  const subject = convertibleSubjects.find((s) => s.id === value)
+                                  const subject = subjectOptions.find((s) => s.id === value)
                                   next[idx] = {
                                     ...next[idx],
                                     subjectVersionId: value,
