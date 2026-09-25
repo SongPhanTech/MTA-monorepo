@@ -323,6 +323,7 @@ export default function PhanCongGiangDay({
                         userProfile: {
                           select: {
                             id: true,
+                            code: true,
                             fullname: true,
                             academicRankType: true,
                             academicDegreeType: true,
@@ -335,6 +336,7 @@ export default function PhanCongGiangDay({
                         userProfile: {
                           select: {
                             id: true,
+                            code: true,
                             fullname: true,
                             academicRankType: true,
                             academicDegreeType: true,
@@ -347,6 +349,7 @@ export default function PhanCongGiangDay({
                         userProfile: {
                           select: {
                             id: true,
+                            code: true,
                             fullname: true,
                             academicRankType: true,
                             academicDegreeType: true,

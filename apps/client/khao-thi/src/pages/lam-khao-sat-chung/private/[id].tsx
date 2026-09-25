@@ -53,6 +53,9 @@ function TakeTestPage() {
     where: {
       userProfileId: profileId,
     },
+    include: {
+      userProfile: { select: { code: true } },
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -136,7 +139,7 @@ function TakeTestPage() {
           surveyId: id,
           profileId: profileId,
           studentId: student?.id,
-          studentCode: student?.code || undefined,
+          studentCode: student?.userProfile?.code || undefined,
           responses: dataSubmit?.responses?.map((i, index) => {
             return {
               surveyQuestionId: survey?.surveyQuestion[index]?.id,

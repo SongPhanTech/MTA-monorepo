@@ -129,17 +129,16 @@ export function buildSurveyObjectTypeProfileOrClauses(
 
     clauses.push({
       sDM_DonViId: { in: organizationIds },
-      lecturer: {
-        is: {
-          ...(q.lecturerCode ? { code: { contains: q.lecturerCode, mode: "insensitive" } } : {}),
-        },
-      },
+      lecturer: { isNot: null },
+      ...(q.lecturerCode ? { code: { contains: q.lecturerCode, mode: "insensitive" } } : {}),
     })
     clauses.push({
       staffs: {
-        ...(q.staffCode ? { code: { contains: q.staffCode, mode: "insensitive" } } : {}),
-        organizationId: { in: organizationIds },
+        some: {
+          organizationId: { in: organizationIds },
+        },
       },
+      ...(q.staffCode ? { code: { contains: q.staffCode, mode: "insensitive" } } : {}),
     })
   }
 
@@ -159,7 +158,9 @@ export function buildSurveyObjectTypeProfileOrClauses(
     clauses.push({
       educationAndTraining: {
         some: {
-          ...(q.studentCode ? { code: { contains: q.studentCode, mode: "insensitive" } } : {}),
+          ...(q.studentCode
+            ? { userProfile: { code: { contains: q.studentCode, mode: "insensitive" } } }
+            : {}),
           // Chỉ ràng buộc quan hệ khi thật sự có điều kiện lọc: `fixedClass: {}` bị Prisma
           // dịch thành EXISTS(...) nên sẽ loại hết HV chưa được gán lớp quản lý.
           ...(Object.keys(fixedClassFilter).length ? { fixedClass: fixedClassFilter } : {}),
@@ -223,7 +224,7 @@ export type ResolvedSurveyUser = {
 
 export async function resolveSurveyUserByCode(code: string): Promise<ResolvedSurveyUser | null> {
   const student = await prisma.student.findFirst({
-    where: { code, deletedAt: null },
+    where: { userProfile: { code }, deletedAt: null },
     select: { id: true, userProfileId: true },
   })
   if (student) {
@@ -231,7 +232,7 @@ export async function resolveSurveyUserByCode(code: string): Promise<ResolvedSur
   }
 
   const lecturer = await prisma.lecturer.findFirst({
-    where: { code, deletedAt: null },
+    where: { userProfile: { code }, deletedAt: null },
     select: { userProfileId: true },
   })
   if (lecturer) {
@@ -239,7 +240,7 @@ export async function resolveSurveyUserByCode(code: string): Promise<ResolvedSur
   }
 
   const staff = await prisma.staff.findFirst({
-    where: { code, deletedAt: null },
+    where: { userProfile: { code }, deletedAt: null },
     select: { userProfileId: true },
   })
   if (staff) {

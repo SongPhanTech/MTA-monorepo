@@ -1,4 +1,5 @@
 export * from "./constants"
 export * from "./lecturer-org"
+export * from "./profile-code"
 export * from "./timezone"
 export * from "./utils"

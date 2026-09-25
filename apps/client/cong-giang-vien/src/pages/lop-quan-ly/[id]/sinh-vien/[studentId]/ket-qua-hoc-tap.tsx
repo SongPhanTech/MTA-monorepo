@@ -43,6 +43,7 @@ export default function KetQuaHocTapSinhVienPage() {
         userProfile: {
           select: {
             id: true,
+            code: true,
             fullname: true,
             dateOfBirth: true,
             email: true,
@@ -194,7 +195,7 @@ export default function KetQuaHocTapSinhVienPage() {
     ? {
         userProfileId: student.userProfile?.id,
         hoVaTen: student.userProfile?.fullname ?? "—",
-        maSinhVien: student.code ?? "—",
+        maSinhVien: student.userProfile?.code ?? "—",
         gioiTinh: student.userProfile?.gender?.sTen ?? "—",
         lop:
           [student.fixedClass?.code, student.fixedClass?.name].filter(Boolean).join(" - ") || "—",

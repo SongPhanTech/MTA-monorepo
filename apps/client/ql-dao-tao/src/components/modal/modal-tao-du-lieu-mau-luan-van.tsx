@@ -12,7 +12,7 @@ const { Text } = Typography
 export type TaoDuLieuMauStudentRow = {
   id: string
   code?: string | null
-  userProfile?: { fullname?: string | null; dateOfBirth?: string | Date | null } | null
+  userProfile?: { code?: string | null; fullname?: string | null; dateOfBirth?: string | Date | null } | null
   fixedClass?: { name?: string | null } | null
   thesisRegistrations?: Array<{
     deletedAt?: Date | string | null
@@ -125,7 +125,7 @@ const ModalTaoDuLieuMauLuanVan = () => {
       {
         title: "Mã HV",
         width: 100,
-        render: (_, record) => record.code ?? "—",
+        render: (_, record) => record.userProfile?.code ?? "—",
       },
       {
         title: "Họ và tên",

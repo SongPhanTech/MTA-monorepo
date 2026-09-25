@@ -147,7 +147,7 @@ const ModalTraCuuVanBang = () => {
                       <Col span={7}>
                         <Image
                           src={`${getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT")}/${item?.student?.userProfile?.avatar}`}
-                          alt={item?.student?.code || ""}
+                          alt={item?.student?.userProfile?.code || ""}
                           className="h-28 w-20 border border-primary object-contain"
                         />
                       </Col>
@@ -160,7 +160,7 @@ const ModalTraCuuVanBang = () => {
                             </span>
                           </span>
                           <span>
-                            MSSV: <span className="uppercase font-bold">{item?.student?.code}</span>
+                            MSSV: <span className="uppercase font-bold">{item?.student?.userProfile?.code}</span>
                           </span>
                           <span>
                             Ngày sinh:{" "}

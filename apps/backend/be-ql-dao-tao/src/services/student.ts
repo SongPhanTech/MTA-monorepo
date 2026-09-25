@@ -31,7 +31,6 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
     select: {
       registerNumber: true,
       doctoralCode: true,
-      code: true,
       admissionCombination: true,
       entryScore: true,
       competencyScore: true,
@@ -51,6 +50,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
       facility: true,
       userProfile: {
         select: {
+          code: true,
           fullname: true,
           dateOfBirth: true,
           idCardNumber: true,
@@ -124,7 +124,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
         orderBy: { semester: { startDate: "desc" } },
       },
     },
-    orderBy: { code: "asc" },
+    orderBy: { userProfile: { code: "asc" } },
   })
 
   const TrainingObjectType = {
@@ -142,7 +142,7 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
       no: idx + 1,
       registerNumber: student.registerNumber,
       doctoralCode: student.doctoralCode,
-      code: student.code,
+      code: student.userProfile.code,
       fullname: student.userProfile.fullname,
       dateOfBirth: dateOfBirth ? `'${formatDateVn(dateOfBirth)}` : "",
       gender: student.userProfile.gender?.sTen,
@@ -560,7 +560,7 @@ export const exportStudentAcademicWarning = async ({
       const dob = (student.userProfile as any)?.dateOfBirth
         ? formatDateVn((student.userProfile as any).dateOfBirth)
         : ""
-      const studentCode = student.code || ""
+      const studentCode = student.userProfile?.code || ""
       const className = student.fixedClass?.name || ""
       const courseName = courseItem.courseName
 

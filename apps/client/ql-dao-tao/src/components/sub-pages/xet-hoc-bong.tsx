@@ -79,23 +79,24 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                 ...(trainingObjectTypeId
                   ? { fixedClass: { trainingCourse: { trainingObjectTypeId } } }
                   : {}),
-                ...(filters.code && filters.code !== ""
-                  ? {
-                      code: {
-                        contains: filters.code,
-                        mode: "insensitive" as const,
-                      },
-                    }
-                  : {}),
-                userProfile:
-                  filters.name && filters.name !== ""
+                userProfile: {
+                  ...(filters.code && filters.code !== ""
+                    ? {
+                        code: {
+                          contains: filters.code,
+                          mode: "insensitive" as const,
+                        },
+                      }
+                    : {}),
+                  ...(filters.name && filters.name !== ""
                     ? {
                         fullname: {
                           contains: filters.name,
                           mode: "insensitive" as const,
                         },
                       }
-                    : {},
+                    : {}),
+                },
               },
               ...(filters.scholarship
                 ? {
@@ -172,20 +173,19 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                 ...(trainingObjectTypeId
                   ? { fixedClass: { trainingCourse: { trainingObjectTypeId } } }
                   : {}),
-                ...(filters.code && filters.code !== ""
-                  ? {
-                      code: { contains: filters.code, mode: "insensitive" },
-                    }
-                  : {}),
-                userProfile:
-                  filters.name && filters.name !== ""
+                userProfile: {
+                  ...(filters.code && filters.code !== ""
+                    ? { code: { contains: filters.code, mode: "insensitive" } }
+                    : {}),
+                  ...(filters.name && filters.name !== ""
                     ? {
                         fullname: {
                           contains: filters.name,
                           mode: "insensitive",
                         },
                       }
-                    : {},
+                    : {}),
+                },
               },
               ...(filters.scholarship
                 ? {
@@ -294,13 +294,14 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
         ...(trainingObjectTypeId
           ? { fixedClass: { trainingCourse: { trainingObjectTypeId } } }
           : {}),
-        ...(filters.code && filters.code !== ""
-          ? { code: { contains: filters.code, mode: "insensitive" as const } }
-          : {}),
-        userProfile:
-          filters.name && filters.name !== ""
+        userProfile: {
+          ...(filters.code && filters.code !== ""
+            ? { code: { contains: filters.code, mode: "insensitive" as const } }
+            : {}),
+          ...(filters.name && filters.name !== ""
             ? { fullname: { contains: filters.name, mode: "insensitive" as const } }
-            : {},
+            : {}),
+        },
       },
       ...(filters.scholarship ? { scholarshipId: { in: filters.scholarship } } : {}),
     },
@@ -321,7 +322,7 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
               if (highestOrderScholarship) {
                 newSelectedStudents.push({
                   id: student.id,
-                  code: student.code,
+                  code: student.userProfile?.code,
                   fullname: student.userProfile.fullname,
                   scholarshipId: highestOrderScholarship.id,
                   scholarshipName: highestOrderScholarship.name,
@@ -376,7 +377,7 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
           ...filtered,
           {
             id: studentId,
-            code: studentInfo.code,
+            code: studentInfo.userProfile?.code,
             fullname: studentInfo.userProfile.fullname,
             scholarshipId: scholarship.id,
             scholarshipName: scholarship.name,
@@ -553,7 +554,7 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                         width: 120,
                         align: "center",
                         type: "input",
-                        render: (__, record) => record?.student?.code,
+                        render: (__, record) => record?.student?.userProfile?.code,
                       },
                       {
                         title: "Tên sinh viên",
@@ -763,6 +764,7 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                         dataIndex: ["code"],
                         width: 120,
                         align: "center",
+                        render: (_, record) => record?.userProfile?.code ?? "",
                       },
                       {
                         title: "Tên sinh viên",

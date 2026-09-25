@@ -27,9 +27,8 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
 
   const { data: existingLecturers } = useFindManyLecturer({
     select: {
-      code: true,
       userProfile: {
-        select: { idCardNumber: true },
+        select: { code: true, idCardNumber: true },
       },
     },
   })
@@ -46,8 +45,8 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
     reader.onload = (e) => {
       const existingLecturerMap = new Map<string, string>()
       existingLecturers?.forEach((lec) => {
-        if (lec.code && lec.userProfile?.idCardNumber) {
-          existingLecturerMap.set(lec.code, lec.userProfile.idCardNumber)
+        if (lec.userProfile?.code && lec.userProfile?.idCardNumber) {
+          existingLecturerMap.set(lec.userProfile.code, lec.userProfile.idCardNumber)
         }
       })
 

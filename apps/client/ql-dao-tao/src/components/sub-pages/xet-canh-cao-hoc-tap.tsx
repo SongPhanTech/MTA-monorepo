@@ -60,10 +60,14 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
       isFiltering
         ? {
             student: {
-              ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" } } : {}),
-              userProfile: filters.name
-                ? { fullname: { contains: filters.name, mode: "insensitive" } }
-                : {},
+              userProfile: {
+                ...(filters.code
+                  ? { code: { contains: filters.code, mode: "insensitive" } }
+                  : {}),
+                ...(filters.name
+                  ? { fullname: { contains: filters.name, mode: "insensitive" } }
+                  : {}),
+              },
               ...emptyObjectIf(
                 {
                   fixedClassId: {

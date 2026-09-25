@@ -668,7 +668,7 @@ export default function StudentGradeSystem() {
     return (studentsWithSemesters || []).map((student, index) => ({
       key: student.id,
       stt: (page - 1) * pageSize + index + 1,
-      maSinhVien: student.code,
+      maSinhVien: student.userProfile?.code,
       hoTen: student.userProfile?.fullname || "",
       lop: student.fixedClass?.name || "",
       khoa: student.fixedClass?.trainingCourse?.name || "",
@@ -1995,7 +1995,7 @@ export default function StudentGradeSystem() {
         {selectedStudent && (
           <div>
             <h3 className="text-md font-semibold mb-2">
-              Bảng điểm: {selectedStudent.userProfile?.fullname} - {selectedStudent.code}
+              Bảng điểm: {selectedStudent.userProfile?.fullname} - {selectedStudent.userProfile?.code}
             </h3>
             <TableCollapse
               data={selectedStudentGradeData}

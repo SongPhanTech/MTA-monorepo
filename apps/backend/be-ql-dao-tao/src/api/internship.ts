@@ -132,7 +132,7 @@ app.openapi(exportInternshipProfile, async (c) => {
 
   const data = internships.map((internship, idx) => ({
     no: idx + 1,
-    code: internship.studentSubjectScore?.student?.code || "",
+    code: internship.studentSubjectScore?.student?.userProfile?.code || "",
     fullname: internship.studentSubjectScore?.student?.userProfile?.fullname || "",
     dateOfBirth: internship.studentSubjectScore?.student?.userProfile?.dateOfBirth
       ? formatDateVn(internship.studentSubjectScore.student.userProfile.dateOfBirth)

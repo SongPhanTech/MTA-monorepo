@@ -7,6 +7,7 @@ export type DonViDanhBa = Prisma.DM_DonViGetPayload<{
         lecturer: { is: { active: true; deletedAt: null } }
       }
       select: {
+        code: true
         fullname: true
         email: true
         phoneNumber: true
@@ -27,7 +28,6 @@ export type DonViDanhBa = Prisma.DM_DonViGetPayload<{
         }
         lecturer: {
           select: {
-            code: true
             lecturerType: {
               select: {
                 name: true

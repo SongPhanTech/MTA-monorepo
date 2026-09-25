@@ -1022,7 +1022,7 @@ const PutOneSubjectClassModal = () => {
                     align: "center",
                     width: 150,
                     type: "input",
-                    render: (_, record) => record.student?.code || "",
+                    render: (_, record) => record.student?.userProfile?.code || "",
                   },
                   {
                     title: "Họ và tên",

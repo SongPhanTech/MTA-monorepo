@@ -493,18 +493,14 @@ export function splitFullName(fullName?: string): {
 }
 
 export function formatLecturerName(
-  lecturer?: Prisma.LecturerGetPayload<{
-    select: {
-      userProfile: {
-        select: {
-          fullname: true
-          academicRankType: { select: { sMa: true } }
-          academicDegreeType: { select: { sMa: true } }
-        }
-      }
-      code: true
-    }
-  }> | null
+  lecturer?: {
+    userProfile?: {
+      code?: string | null
+      fullname?: string | null
+      academicRankType?: { sMa?: string | null } | null
+      academicDegreeType?: { sMa?: string | null } | null
+    } | null
+  } | null
 ) {
   if (!lecturer) return ""
 
@@ -516,7 +512,7 @@ export function formatLecturerName(
     .join(".")
 
   const fullname = lecturer.userProfile?.fullname ?? ""
-  const codeSuffix = lecturer.code ? ` - ${lecturer.code}` : ""
+  const codeSuffix = lecturer.userProfile?.code ? ` - ${lecturer.userProfile.code}` : ""
 
   return `${prefix ? `${prefix} ` : ""}${fullname}${codeSuffix}`.trim()
 }

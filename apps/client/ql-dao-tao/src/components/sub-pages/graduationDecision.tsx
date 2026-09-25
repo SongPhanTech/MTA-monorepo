@@ -137,14 +137,13 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
       },
 
       student: {
-        ...(filters.code && {
-          code: {
-            contains: filters.code,
-            mode: "insensitive",
-          },
-        }),
-
         userProfile: {
+          ...(filters.code && {
+            code: {
+              contains: filters.code,
+              mode: "insensitive",
+            },
+          }),
           ...(filters.name && {
             fullname: {
               contains: filters.name,
@@ -632,7 +631,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                 width: 100,
                 fixed: "left",
                 type: "input",
-                render: (_, record) => record?.student?.code || "",
+                render: (_, record) => record?.student?.userProfile?.code || "",
               },
               {
                 title: "Họ và tên",

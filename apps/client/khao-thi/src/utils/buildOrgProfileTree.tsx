@@ -24,6 +24,7 @@ export function buildOrgProfileTree(
         Prisma.UserProfileGetPayload<{
           select: {
             id: true
+            code: true
             fullname: true
             firstName: true
             lastName: true
@@ -41,7 +42,6 @@ export function buildOrgProfileTree(
             lecturer: {
               select: {
                 id: true
-                code: true
               }
             }
           }
@@ -75,7 +75,7 @@ export function buildOrgProfileTree(
               `${profile.firstName || ""} ${profile.lastName || ""}`.trim() ||
               "-"
             const academicTitle = [academicRank, degree].filter(Boolean).join(".")
-            const title = `${lecturer.code ? `${lecturer.code} - ` : ""}${academicTitle ? `${academicTitle} ` : ""}${fullName}`
+            const title = `${profile.code ? `${profile.code} - ` : ""}${academicTitle ? `${academicTitle} ` : ""}${fullName}`
 
             return [
               {

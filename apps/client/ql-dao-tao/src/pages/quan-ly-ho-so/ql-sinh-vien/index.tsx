@@ -122,16 +122,15 @@ export default function UserProfilePageDs() {
   const where: Prisma.StudentWhereInput = useMemo(() => {
     const and: Prisma.StudentWhereInput[] = []
 
-    if (filters.code) {
-      and.push({
-        code: {
-          contains: filters.code,
-          mode: "insensitive",
-        },
-      })
-    }
-
     const userProfile: Prisma.UserProfileWhereInput = {
+      ...(filters.code
+        ? {
+            code: {
+              contains: filters.code,
+              mode: "insensitive",
+            },
+          }
+        : {}),
       ...(filters.name
         ? {
             fullname: {
@@ -572,7 +571,7 @@ export default function UserProfilePageDs() {
               if (sorter.order) {
                 const order = sorter.order === "ascend" ? "asc" : "desc"
                 if (sorter.field === "code") {
-                  setSortDescriptor({ code: order })
+                  setSortDescriptor({ userProfile: { code: order } })
                 } else if (sorter.field === "trainingField") {
                   setSortDescriptor({
                     fixedClass: {
@@ -608,7 +607,7 @@ export default function UserProfilePageDs() {
                 fixed: "left",
                 type: "input",
                 sorter: true,
-                render: (__, record: any) => (record.code ? record?.code : ""),
+                render: (__, record: any) => record.userProfile?.code ?? "",
               },
               {
                 title: "Họ và tên",

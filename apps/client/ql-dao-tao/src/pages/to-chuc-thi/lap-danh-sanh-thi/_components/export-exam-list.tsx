@@ -320,7 +320,7 @@ function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetPa
 
     row.values = [
       index + 1,
-      student?.code || "",
+      student?.userProfile?.code || "",
       student?.userProfile?.fullname || "",
       student?.userProfile?.dateOfBirth ? formatDate(student.userProfile.dateOfBirth) : "",
       student?.fixedClass?.code || "",

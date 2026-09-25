@@ -58,7 +58,7 @@ const ModalLamKhaoSat = () => {
       select: {
         educationAndTraining: {
           orderBy: { createdAt: "desc" },
-          select: { id: true, code: true },
+          select: { id: true, userProfile: { select: { code: true } } },
         },
       },
     },
@@ -153,7 +153,7 @@ const ModalLamKhaoSat = () => {
           surveyId: input.surveyId,
           profileId,
           studentId: student?.id,
-          studentCode: student?.code ?? undefined,
+          studentCode: student?.userProfile?.code ?? undefined,
           responses: dataSubmit?.responses?.map((i: any, index: number) => ({
             surveyQuestionId: survey?.surveyQuestion[index]?.id as string,
             surveyChoiceId: i.surveyChoiceId,

@@ -54,9 +54,9 @@ app.openapi(getListTeacher, async (c) => {
       },
     },
     select: {
-      code: true,
       userProfile: {
         select: {
+          code: true,
           firstName: true,
           lastName: true,
           fullname: true,
@@ -88,7 +88,7 @@ app.openapi(getListTeacher, async (c) => {
   const orgById = new Map(orgs.map((org) => [org.Id, org]))
 
   const data = res.map((item) => ({
-    teacher_code: item.code ?? null,
+    teacher_code: item.userProfile.code ?? null,
     teacher: item.userProfile.fullname ?? "",
     department_code: orgById.get(item.userProfile?.sDM_DonViId || "")?.sMa ?? null,
     department_name: orgById.get(item.userProfile?.sDM_DonViId || "")?.sTen ?? "",
@@ -118,7 +118,7 @@ const getTeacherDetail = createRoute({
 
 **Bảng dữ liệu nguồn:** Lecturer, UserProfile, Organization.
 
-**Tham số:** teacher_code — mã giảng viên (Lecturer.code).`,
+**Tham số:** teacher_code — mã giảng viên (UserProfile.code).`,
   method: "post",
   request: {
     body: {
@@ -143,12 +143,12 @@ const getTeacherDetail = createRoute({
 
 app.openapi(getTeacherDetail, async (c) => {
   const { teacher_code } = c.req.valid("json")
-  const lecturer = await prisma.lecturer.findUnique({
-    where: { code: teacher_code },
+  const lecturer = await prisma.lecturer.findFirst({
+    where: { userProfile: { code: teacher_code } },
     select: {
-      code: true,
       userProfile: {
         select: {
+          code: true,
           firstName: true,
           lastName: true,
           phoneNumber: true,
@@ -169,7 +169,7 @@ app.openapi(getTeacherDetail, async (c) => {
   const res = {
     result_code: "000" as const,
     result_desc: "success" as const,
-    teacher_code: lecturer?.code ?? null,
+    teacher_code: lecturer?.userProfile?.code ?? null,
     teacher: `${lecturer?.userProfile.lastName} ${lecturer?.userProfile.firstName}`,
     department_code: org?.sMa ?? null,
     department_name: org?.sTen ?? "",

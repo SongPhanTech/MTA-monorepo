@@ -76,7 +76,11 @@ export default function ChinhSuaDangKy({ sessionId, semesterId }: Props) {
     () => ({
       deletedAt: null,
       ...(studentFilters.code
-        ? { code: { contains: studentFilters.code, mode: "insensitive" as const } }
+        ? {
+            userProfile: {
+              code: { contains: studentFilters.code, mode: "insensitive" as const },
+            },
+          }
         : {}),
       ...(studentFilters.name
         ? {
@@ -103,7 +107,7 @@ export default function ChinhSuaDangKy({ sessionId, semesterId }: Props) {
     {
       where: studentWhere,
       include: { userProfile: true },
-      orderBy: { code: "asc" },
+      orderBy: { userProfile: { code: "asc" } },
       take: studentPageSize,
       skip: (studentPage - 1) * studentPageSize,
     },
@@ -471,7 +475,7 @@ export default function ChinhSuaDangKy({ sessionId, semesterId }: Props) {
                 dataIndex: "code",
                 type: "input",
                 width: 110,
-                render: (v) => v || "",
+                render: (_, record) => record?.userProfile?.code || "",
               },
               {
                 title: "Họ và tên",
@@ -511,7 +515,7 @@ export default function ChinhSuaDangKy({ sessionId, semesterId }: Props) {
           <Typography.Text strong>
             2. Đăng ký hiện tại
             {selectedStudent
-              ? ` — ${selectedStudent.code} ${
+              ? ` — ${selectedStudent.userProfile?.code} ${
                   selectedStudent.userProfile?.fullname ||
                   [selectedStudent.userProfile?.lastName, selectedStudent.userProfile?.firstName]
                     .filter(Boolean)

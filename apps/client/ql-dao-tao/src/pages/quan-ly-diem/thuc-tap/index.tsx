@@ -829,7 +829,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                                 studentInternshipData.reduce(
                                                     (acc, e) => {
                                                         const studentCode =
-                                                            e.studentSubjectScore.student?.code
+                                                            e.studentSubjectScore.student?.userProfile?.code
                                                         if (studentCode) {
                                                             acc[studentCode] =
                                                                 (acc[studentCode] || 0) + 1
@@ -862,7 +862,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
 
                                                         globalIndex++
                                                         const studentCode =
-                                                            e.studentSubjectScore.student?.code
+                                                            e.studentSubjectScore.student?.userProfile?.code
                                                         acc[ma_cn].students.push({
                                                             tt: globalIndex,
                                                             ten: `${
@@ -1626,7 +1626,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
               dataIndex: "code",
               type: "input",
               render: (_, record) => {
-                return record?.studentSubjectScore?.student?.code || ""
+                return record?.studentSubjectScore?.student?.userProfile?.code || ""
               },
             },
             {

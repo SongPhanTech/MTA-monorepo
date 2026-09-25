@@ -116,7 +116,7 @@ const PutThongTinCaNhanModal = () => {
       genderId: data.genderId,
       dateOfBirth: data.dateOfBirth ? dayjs(data.dateOfBirth) : null,
       idCardNumber: data.idCardNumber,
-      lectureCode: data.lecturer?.code,
+      lectureCode: data.code,
       organizationId: data.sDM_DonViId,
       email: data.email,
       phoneNumber: data.phoneNumber,
@@ -177,17 +177,9 @@ const PutThongTinCaNhanModal = () => {
           levelId: value.levelId || null,
           trangThaiLamViecId: value.trangThaiLamViecId || null,
           recruitmentDate: toISO(value.recruitmentDate),
-          // Mã GV + đơn vị công tác thuộc hồ sơ Lecturer -> cập nhật qua quan hệ.
+          // Mã người dùng thuộc UserProfile.code.
+          code: value.lectureCode || undefined,
           sDM_DonViId: value.organizationId || null,
-          ...(data?.lecturer
-            ? {
-                lecturer: {
-                  update: {
-                    code: value.lectureCode || undefined,
-                  },
-                },
-              }
-            : {}),
           // Thay thế toàn bộ danh sách quan hệ bằng dữ liệu mới trên form.
           hocVi: {
             deleteMany: {},

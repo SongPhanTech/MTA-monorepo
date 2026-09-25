@@ -7,7 +7,6 @@
 import { z } from 'zod/v3';
 const baseSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
@@ -19,7 +18,6 @@ const baseSchema = z.object({
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
@@ -70,7 +68,6 @@ export const StaffPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passt
  */
 export const StaffPrismaUpdateSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),

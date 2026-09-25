@@ -348,7 +348,7 @@ export default function SinhPhach() {
                 dataIndex: "name",
                 align: "center",
                 width: 150,
-                render: (_, record) => record?.studentSubjectScore?.student?.code || "",
+                render: (_, record) => record?.studentSubjectScore?.student?.userProfile?.code || "",
               },
               {
                 title: "Tên thí sinh",
@@ -636,7 +636,7 @@ function AddExamPaperModal({
               },
               {
                 title: "Mã sinh viên",
-                dataIndex: ["studentSubjectScore", "student", "code"],
+                dataIndex: ["studentSubjectScore", "student", "userProfile", "code"],
               },
               {
                 title: "Họ và tên",

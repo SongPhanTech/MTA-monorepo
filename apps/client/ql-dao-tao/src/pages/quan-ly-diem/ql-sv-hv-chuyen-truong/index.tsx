@@ -74,7 +74,9 @@ export default function StudentScoreConvertPage() {
       ? {}
       : {
           student: {
-            code: { contains: filters.code, mode: "insensitive" as const },
+            userProfile: {
+              code: { contains: filters.code, mode: "insensitive" as const },
+            },
           },
         }
     const st = filters.formStatus
@@ -247,7 +249,7 @@ export default function StudentScoreConvertPage() {
                 type: "input",
                 width: 150,
                 align: "center",
-                render: (_, record) => record.student.code ?? "",
+                render: (_, record) => record.student.userProfile?.code ?? "",
               },
               {
                 title: "Sinh viên",

@@ -370,7 +370,7 @@ const useHoSoSinhVienGiangVien = (studentId: string, fixedClassId: string) => {
         userProfileId: profile?.id,
         hoVaTen: profile?.fullname ?? "",
         trangThai: layNhanTrangThai(student.status),
-        maSinhVien: student.code ?? profile?.code ?? "",
+        maSinhVien: student.userProfile?.code ?? profile?.code ?? "",
         ngaySinh: dinhDangNgay(profile?.dateOfBirth),
         gioiTinh: profile?.gender?.sTen ?? "",
         lop: lop ? `${lop.code ?? ""}${lop.name ? ` - ${lop.name}` : ""}` : "",

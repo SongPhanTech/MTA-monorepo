@@ -850,18 +850,18 @@ app.openapi(uploadExcelImportScore, async (c) => {
   const students = await prisma.student.findMany({
     where: {
       active: true,
-      code: { in: studentCodes },
+      userProfile: { code: { in: studentCodes } },
     },
     select: {
       id: true,
-      code: true,
+      userProfile: { select: { code: true } },
     },
   })
 
   // Update the student scores (assuming the score field exists in studentSubjectScore)
   const updateResults = []
   for (const { studentCode, scoreCC, scoreTX, scoreThi } of scoreUpdates) {
-    const student = students.find((s) => s.code === studentCode)
+    const student = students.find((s) => s.userProfile.code === studentCode)
     if (student) {
       const res = await prisma.studentSubjectScore.updateMany({
         where: {
@@ -1283,7 +1283,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
         : null
       return {
         TT: index + 1,
-        MA_SV: scs.student.code,
+        MA_SV: scs.student.userProfile?.code ?? "",
         HO_TEN: scs.student.userProfile?.fullname || "",
         NGAY_SINH: scs.student.userProfile?.dateOfBirth
           ? formatDateVn(scs.student.userProfile.dateOfBirth)

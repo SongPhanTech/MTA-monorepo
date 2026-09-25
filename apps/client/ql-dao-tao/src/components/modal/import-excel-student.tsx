@@ -311,8 +311,8 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
           },
           {
             title: "Mã sinh viên",
-            dataIndex: "code",
-            key: "code",
+            dataIndex: "profileCode",
+            key: "profileCode",
             width: 150,
             align: "center",
             fixed: "left",

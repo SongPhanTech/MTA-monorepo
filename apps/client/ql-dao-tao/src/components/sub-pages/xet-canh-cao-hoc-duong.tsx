@@ -51,23 +51,24 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
     () => ({
       semesterId,
       student: {
-        ...(filters.code && filters.code !== ""
-          ? {
-              code: {
-                contains: filters.code,
-                mode: "insensitive" as const,
-              },
-            }
-          : {}),
-        userProfile:
-          filters.name && filters.name !== ""
+        userProfile: {
+          ...(filters.code && filters.code !== ""
+            ? {
+                code: {
+                  contains: filters.code,
+                  mode: "insensitive" as const,
+                },
+              }
+            : {}),
+          ...(filters.name && filters.name !== ""
             ? {
                 fullname: {
                   contains: filters.name,
                   mode: "insensitive" as const,
                 },
               }
-            : {},
+            : {}),
+        },
         ...(filters.fixedClassId
           ? {
               fixedClassId: {
@@ -352,7 +353,7 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                 align: "center",
                 fixed: "left",
                 type: "input",
-                render: (__, record) => record?.student?.code,
+                render: (__, record) => record?.student?.userProfile?.code,
               },
               {
                 title: "Tên sinh viên",

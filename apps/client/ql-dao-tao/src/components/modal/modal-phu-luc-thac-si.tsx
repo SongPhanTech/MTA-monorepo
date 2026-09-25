@@ -500,7 +500,7 @@ export const ModalPhuLucThacSi = () => {
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
-    documentTitle: `Phu_luc_thac_si_${data?.code}_${data?.userProfile?.fullname}.pdf`,
+    documentTitle: `Phu_luc_thac_si_${data?.userProfile?.code}_${data?.userProfile?.fullname}.pdf`,
     pageStyle: `
       @page {
         size: A4;
@@ -541,7 +541,7 @@ export const ModalPhuLucThacSi = () => {
   const basicInfoCol2 = [
     {
       title: "Mã học viên:",
-      value: <span>{data?.code}</span>,
+      value: <span>{data?.userProfile?.code}</span>,
     },
     {
       title: "Nơi sinh:",
@@ -1117,7 +1117,7 @@ export const ModalPhuLucThacSi = () => {
                 },
                 {
                   key: "masv",
-                  content: <>Mã số HV: {data?.code}</>,
+                  content: <>Mã số HV: {data?.userProfile?.code}</>,
                 },
               ]}
             />

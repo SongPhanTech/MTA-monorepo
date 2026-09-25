@@ -151,7 +151,9 @@ const ModalPrintToDSHV = () => {
               {input?.dataTable?.map((item: any, index: number) => (
                 <tr key={item?.id}>
                   <td className="border border-black px-1 py-1 text-center">{index + 1}</td>
-                  <td className="border border-black px-1 py-1 text-center">{item?.code}</td>
+                  <td className="border border-black px-1 py-1 text-center">
+                    {item?.userProfile?.code}
+                  </td>
                   <td className="border border-black px-1 py-1 text-center">
                     {item?.userProfile?.fullname}
                   </td>

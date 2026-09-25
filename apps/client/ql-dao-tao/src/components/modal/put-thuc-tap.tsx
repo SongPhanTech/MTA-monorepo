@@ -55,7 +55,6 @@ const PutInternshipModal = () => {
       },
       lecturer: {
         select: {
-          code: true,
           userProfile: {
             include: {
               academicRankType: true,
@@ -107,7 +106,6 @@ const PutInternshipModal = () => {
           include: {
             student: {
               select: {
-                code: true,
                 userProfile: true,
               },
             },
@@ -189,7 +187,7 @@ const PutInternshipModal = () => {
         address: studentInternship?.address ?? "",
         score: studentInternship?.studentSubjectScore?.finalScore?.toString() ?? "",
         studentFullname: studentInternship?.studentSubjectScore?.student?.userProfile?.fullname,
-        studentCode: studentInternship?.studentSubjectScore?.student?.code,
+        studentCode: studentInternship?.studentSubjectScore?.student?.userProfile?.code,
         studentDateOfBirth: studentInternship?.studentSubjectScore?.student?.userProfile
           ?.dateOfBirth
           ? dayjs(studentInternship?.studentSubjectScore?.student?.userProfile?.dateOfBirth).format(

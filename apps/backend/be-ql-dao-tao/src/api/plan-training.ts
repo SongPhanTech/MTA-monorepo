@@ -157,9 +157,9 @@ const importFileGiaoVienCoGioGiay = async (
     },
     select: {
       id: true,
-      code: true,
       userProfile: {
         select: {
+          code: true,
           fullname: true,
         },
       },
@@ -304,7 +304,7 @@ const importFileGiaoVienCoGioGiay = async (
         if (maGV && tenGV) {
           const [, tenGvPhu] = tenGV.split(",").map((e) => e.replace(/\([^)]*\)/g, "").trim())
           const gvChinh = danhSachGV.find(
-            (gv) => gv.code?.toLowerCase() === String(maGV).trim().toLowerCase()
+            (gv) => gv.userProfile.code?.toLowerCase() === String(maGV).trim().toLowerCase()
           )
           if (gvChinh) {
             subjectClass.gvChinh = gvChinh.id
@@ -721,14 +721,14 @@ const importFileTKBTheoLopHocPhan = async (
     where: {
       OR: [
         { userProfile: { fullname: { in: Array.from(danhSachTenGV) } } },
-        { code: { in: Array.from(danhSachMaGV) } },
+        { userProfile: { code: { in: Array.from(danhSachMaGV) } } },
       ],
     },
     select: {
       id: true,
-      code: true,
       userProfile: {
         select: {
+          code: true,
           fullname: true,
         },
       },
@@ -829,7 +829,9 @@ const importFileTKBTheoLopHocPhan = async (
             const ma = raw.match(/\(([^)]*)\)/)?.[1]?.trim()
             const ten = raw.replace(/\([^)]*\)/g, "").trim()
             if (ma) {
-              const gvTheoMa = danhSachGV.find((gv) => gv.code?.toLowerCase() === ma.toLowerCase())
+              const gvTheoMa = danhSachGV.find(
+                (gv) => gv.userProfile.code?.toLowerCase() === ma.toLowerCase()
+              )
               if (gvTheoMa) return gvTheoMa
             }
             return danhSachGV.find(

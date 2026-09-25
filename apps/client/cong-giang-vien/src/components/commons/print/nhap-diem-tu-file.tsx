@@ -21,7 +21,9 @@ interface ImportScoreModalProps {
   visible: boolean
   onCancel: () => void
   onConfirm: (data: ImportScoreData[]) => void
-  existingStudents: (StudentSubjectScore & { student: { code: string | null } })[]
+  existingStudents: (StudentSubjectScore & {
+    student: { userProfile?: { code?: string | null } | null }
+  })[]
   scoreType?: ScoreImportType
 }
 
@@ -68,7 +70,7 @@ const ImportScoreModal = ({
           const attendanceScore = Number.parseFloat(row.__EMPTY_4)
           const midtermScore = Number.parseFloat(row.__EMPTY_5)
           const examScore = Number.parseFloat(row.__EMPTY_6)
-          const id = existingStudents.find((s) => s.student?.code === row.__EMPTY)?.id
+          const id = existingStudents.find((s) => s.student?.userProfile?.code === row.__EMPTY)?.id
 
           if (!id) {
             return null
@@ -118,7 +120,7 @@ const ImportScoreModal = ({
     const errors: string[] = []
 
     selectedData.forEach((item) => {
-      const existingStudent = existingStudents.find((s) => s.student?.code === item.studentCode)
+      const existingStudent = existingStudents.find((s) => s.student?.userProfile?.code === item.studentCode)
 
       if (!existingStudent) {
         errors.push(`Mã sinh viên ${item.studentCode} không tồn tại trong lớp`)

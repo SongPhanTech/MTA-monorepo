@@ -20,7 +20,7 @@ import 'research'
 import './note.zmodel'
 
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
-model Student extends Base {
+model Student extends BaseNoCode {
   note                           String?
   from                           DateTime? // từ ngày
   to                             DateTime? // đến ngày

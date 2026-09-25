@@ -915,7 +915,6 @@ export default function UpdateUserPage() {
       if (cccdUserProfileData?.lecturer && bLaGiangVien && lecturerTypeId) {
         const lecturerUpdateData: any = {
           lecturerTypeId,
-          code: lectureCode,
         }
 
         listTransaction = [
@@ -936,7 +935,6 @@ export default function UpdateUserPage() {
         const lecturerData: any = {
           userProfileId: id,
           lecturerTypeId,
-          code: lectureCode,
         }
 
         listTransaction = [
@@ -1123,7 +1121,7 @@ export default function UpdateUserPage() {
         // staffTypeId: userData.staffs?.staffTypeId,
         lecturerTypeId: userData.lecturer?.lecturerTypeId,
         organizationId: userData.sDM_DonViId,
-        lectureCode: userData.lecturer?.code,
+        lectureCode: userData.code,
       })
       if (userData?.avatar) {
         const imageUrl = await getLInkImage()

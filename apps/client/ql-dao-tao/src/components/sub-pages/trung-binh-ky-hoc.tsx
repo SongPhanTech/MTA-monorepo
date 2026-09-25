@@ -160,6 +160,7 @@ const DiemTrungBinhKyHoc = () => {
         },
         userProfile: {
           select: {
+            code: true,
             fullname: true,
             dateOfBirth: true,
           },
@@ -401,7 +402,7 @@ const DiemTrungBinhKyHoc = () => {
                 align: "center",
                 fixed: "left",
                 type: "input",
-                render: (__, record) => record?.code,
+                render: (__, record) => record?.userProfile?.code,
               },
               {
                 title: "Tên sinh viên",

@@ -167,7 +167,7 @@ const ModalScoreDetail = () => {
           {/* MÃ SV */}
           <Col span={6}>
             <Form.Item label="Mã SV">
-              <Input value={data?.student?.code ?? ""} disabled />
+              <Input value={data?.student?.userProfile?.code ?? ""} disabled />
             </Form.Item>
           </Col>
 

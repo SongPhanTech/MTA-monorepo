@@ -61,21 +61,20 @@ const DiemTrungBinhKyHoc = () => {
         },
       ],
 
-      ...(filters.code
-        ? {
-            code: {
-              contains: filters.code,
-              mode: "insensitive" as const,
-            },
-          }
-        : {}),
-      ...(filters.name
+      ...(filters.code || filters.name
         ? {
             userProfile: {
-              fullname: {
-                contains: filters.name,
-                mode: "insensitive" as const,
-              },
+              ...(filters.code
+                ? { code: { contains: filters.code, mode: "insensitive" as const } }
+                : {}),
+              ...(filters.name
+                ? {
+                    fullname: {
+                      contains: filters.name,
+                      mode: "insensitive" as const,
+                    },
+                  }
+                : {}),
             },
           }
         : {}),
@@ -113,6 +112,7 @@ const DiemTrungBinhKyHoc = () => {
         },
         userProfile: {
           select: {
+            code: true,
             fullname: true,
             dateOfBirth: true,
           },
@@ -312,7 +312,7 @@ const DiemTrungBinhKyHoc = () => {
                 align: "center",
                 fixed: "left",
                 type: "input",
-                render: (__, record) => record?.code,
+                render: (__, record) => record?.userProfile?.code,
               },
               {
                 title: "Tên sinh viên",

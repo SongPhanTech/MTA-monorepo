@@ -122,7 +122,11 @@ const useChiTietLopQuanLyGiangVien = (fixedClassId: string) => {
       ...(boLocApDung.tuKhoa
         ? {
             OR: [
-              { code: { contains: boLocApDung.tuKhoa, mode: "insensitive" as const } },
+              {
+                userProfile: {
+                  code: { contains: boLocApDung.tuKhoa, mode: "insensitive" as const },
+                },
+              },
               { userProfile: userProfileFilter },
             ],
           }
@@ -142,7 +146,7 @@ const useChiTietLopQuanLyGiangVien = (fixedClassId: string) => {
           include: { gender: true },
         },
       },
-      orderBy: [{ code: "asc" }],
+      orderBy: [{ userProfile: { code: "asc" } }],
       take: soTrang,
       skip: (trang - 1) * soTrang,
     },
@@ -158,7 +162,7 @@ const useChiTietLopQuanLyGiangVien = (fixedClassId: string) => {
     () =>
       sinhVienData.map((sv) => ({
         id: sv.id,
-        maSinhVien: sv.userProfile?.code ?? sv.code ?? "",
+        maSinhVien: sv.userProfile?.code ?? "",
         hoVaTen: sv.userProfile?.fullname ?? "",
         gioiTinh: sv.userProfile?.gender?.sTen ?? "",
         ngaySinh: sv.userProfile?.dateOfBirth

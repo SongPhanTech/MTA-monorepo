@@ -82,7 +82,7 @@ Một số endpoint đặc biệt:
  */
 
 export type StatsArchivedAward200DataItem = {
-  /** Mã học viên (Student.code). */
+  /** Mã học viên (UserProfile.code). */
   studentCode: string;
   /** Họ tên (UserProfile.fullname). */
   studentName: string;

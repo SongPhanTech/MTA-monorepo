@@ -15159,10 +15159,6 @@ const metadata: ModelMeta = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -15604,9 +15600,6 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             },
         },
@@ -16393,10 +16386,6 @@ const metadata: ModelMeta = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -16609,9 +16598,6 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 }, lectureID: {
                     name: "lectureID",
                     fields: ["lectureID"]
@@ -17213,10 +17199,6 @@ const metadata: ModelMeta = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -17306,9 +17288,6 @@ const metadata: ModelMeta = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 }, userProfileId: {
                     name: "userProfileId",
                     fields: ["userProfileId"]

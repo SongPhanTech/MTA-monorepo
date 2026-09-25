@@ -202,7 +202,7 @@ const ExportStudentToanDot = ({
             const headerRowValue: any = worksheet.getRow(12 + index)
             headerRowValue.values = [
               index + 1,
-              i?.student?.code || "",
+              i?.student?.userProfile?.code || "",
               `${i?.student?.userProfile?.lastName || ""} ${i?.student?.userProfile?.firstName || ""}`,
               i?.student?.userProfile?.dateOfBirth
                 ? dayjs(i?.student?.userProfile?.dateOfBirth).format("DD/MM/YYYY")

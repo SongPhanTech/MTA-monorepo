@@ -70,7 +70,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
 
     return {
       studentName: data?.userProfile?.fullname,
-      studentCode: data?.student?.code,
+      studentCode: data?.userProfile?.code,
       classification: data?.latestSemesterResult?.rank?.classification,
       maxCredit: data?.creditLimit?.maxCredit,
     }

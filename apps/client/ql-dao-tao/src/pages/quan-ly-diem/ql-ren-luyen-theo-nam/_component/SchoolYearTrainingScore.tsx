@@ -36,58 +36,49 @@ export default function SchoolYearTrainingScore({
   const { getTrainingScoreStatusLabel, getTrainingScoreStatusColor } =
     useTrainingScoreStatusStatusOptions()
 
-  const where = useMemo(
-    () => ({
+  const where = useMemo(() => {
+    const userProfile: Record<string, unknown> = {}
+    if (filters.code) {
+      userProfile.code = {
+        contains: filters.code,
+        mode: "insensitive" as const,
+      }
+    }
+    if (filters.name) {
+      userProfile.OR = [
+        {
+          fullname: {
+            contains: filters.name,
+            mode: "insensitive" as const,
+          },
+        },
+        {
+          firstName: {
+            contains: filters.name,
+            mode: "insensitive" as const,
+          },
+        },
+        {
+          lastName: {
+            contains: filters.name,
+            mode: "insensitive" as const,
+          },
+        },
+      ]
+    }
+    if (filters.idCardNumber) {
+      userProfile.idCardNumber = {
+        contains: filters.idCardNumber,
+        mode: "insensitive" as const,
+      }
+    }
+    return {
       fixedClass: {
         id: selectedFixedClass,
       },
-      ...(filters.code
-        ? {
-            code: {
-              contains: filters.code,
-              mode: "insensitive" as const,
-            },
-          }
-        : {}),
-      ...(filters.name
-        ? {
-            userProfile: {
-              OR: [
-                {
-                  fullname: {
-                    contains: filters.name,
-                    mode: "insensitive" as const,
-                  },
-                },
-                {
-                  firstName: {
-                    contains: filters.name,
-                    mode: "insensitive" as const,
-                  },
-                },
-                {
-                  lastName: {
-                    contains: filters.name,
-                    mode: "insensitive" as const,
-                  },
-                },
-              ],
-            },
-          }
-        : {}),
-      ...(filters.idCardNumber
-        ? {
-            userProfile: {
-              idCardNumber: {
-                contains: filters.idCardNumber,
-                mode: "insensitive" as const,
-              },
-            },
-          }
-        : {}),
-    }),
-    [filters, selectedFixedClass]
-  )
+      ...(Object.keys(userProfile).length > 0 ? { userProfile } : {}),
+    }
+  }, [filters, selectedFixedClass])
 
   const { data = [], refetch } = useFindManyStudent(
     {
@@ -287,7 +278,7 @@ export default function SchoolYearTrainingScore({
                   title: "Mã sinh viên",
                   align: "center",
                   width: 150,
-                  render: (_, record) => record.code || "",
+                  render: (_, record) => record.userProfile?.code || "",
                 },
                 {
                   title: "Họ và tên",

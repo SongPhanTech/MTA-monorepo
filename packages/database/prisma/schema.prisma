@@ -4362,7 +4362,6 @@ model OutputStandardOnCurriculum {
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student {
   id                             String                           @id() @default(cuid())
-  code                           String?                          @unique()
   active                         Boolean                          @default(true)
   description                    String?                          @db.Text()
   deletedAt                      DateTime?
@@ -4673,7 +4672,6 @@ model IndividualSchedule {
 
 model Lecturer {
   id                               String                        @id() @default(cuid())
-  code                             String?                       @unique()
   active                           Boolean                       @default(true)
   description                      String?                       @db.Text()
   deletedAt                        DateTime?
@@ -4866,7 +4864,6 @@ model StaffPosition {
 
 model Staff {
   id              String        @id() @default(cuid())
-  code            String?       @unique()
   active          Boolean       @default(true)
   description     String?       @db.Text()
   deletedAt       DateTime?

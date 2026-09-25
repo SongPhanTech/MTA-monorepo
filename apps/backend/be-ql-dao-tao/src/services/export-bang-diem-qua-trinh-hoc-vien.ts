@@ -112,10 +112,9 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
     where: { id: studentId },
     select: {
       id: true,
-      code: true,
       curriculumVersionId: true,
       userProfile: {
-        select: { fullname: true, dateOfBirth: true },
+        select: { code: true, fullname: true, dateOfBirth: true },
       },
       fixedClass: {
         select: {
@@ -523,7 +522,7 @@ export async function exportBangDiemQuaTrinhHocVien({ studentId }: { studentId: 
   const gapRow: TableRow = { cells: [{ value: null, colSpan: 9, border: false }] }
   const today = nowVn()
   const hoVaTen = student.userProfile?.fullname ?? ""
-  const maSinhVien = student.code ?? ""
+  const maSinhVien = student.userProfile?.code ?? ""
   const fileName = `BDQT-${maSinhVien}-${hoVaTen}.xlsx`
 
   const buffer = await buildFromTemplate(prisma, {

@@ -96,22 +96,24 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
       isFiltering
         ? {
             student: {
-              ...(filters.code
-                ? {
-                    code: {
-                      contains: filters.code,
-                      mode: "insensitive",
-                    },
-                  }
-                : {}),
-              userProfile: filters.name
-                ? {
-                    fullname: {
-                      contains: filters.name,
-                      mode: "insensitive",
-                    },
-                  }
-                : {},
+              userProfile: {
+                ...(filters.code
+                  ? {
+                      code: {
+                        contains: filters.code,
+                        mode: "insensitive",
+                      },
+                    }
+                  : {}),
+                ...(filters.name
+                  ? {
+                      fullname: {
+                        contains: filters.name,
+                        mode: "insensitive",
+                      },
+                    }
+                  : {}),
+              },
               ...(filters.fixedClass
                 ? {
                     fixedClassId: {
@@ -328,7 +330,7 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
           if (studentInfo) {
             return {
               id: studentInfo.id,
-              code: studentInfo.code,
+              code: studentInfo.userProfile?.code,
               fullname: studentInfo.userProfile?.fullname,
               academicActionId: studentInfo.academicAction?.[0]?.id,
               academicActionName: studentInfo.academicAction?.[0]?.name,
@@ -498,7 +500,7 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                   align: "center",
                   fixed: "left",
                   // type: 'input',
-                  render: (__, record) => record?.student?.code,
+                  render: (__, record) => record?.student?.userProfile?.code,
                 },
                 {
                   title: "Tên sinh viên",
@@ -671,6 +673,7 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                   dataIndex: ["code"],
                   width: 100,
                   align: "center",
+                  render: (_, record) => record?.userProfile?.code ?? "",
                 },
                 {
                   title: "Tên sinh viên",

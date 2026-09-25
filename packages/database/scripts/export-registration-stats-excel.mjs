@@ -134,7 +134,7 @@ for (const log of successLogs) {
   if (!successByStudent.has(key)) {
     successByStudent.set(key, {
       studentId: key,
-      studentCode: s?.code ?? s?.userProfile?.code ?? "",
+      studentCode: s?.userProfile?.code ?? "",
       fullName: s?.userProfile?.fullname ?? "",
       fixedClassName: s?.fixedClass?.name ?? "",
       firstRegisteredAt: log.createdAt,
@@ -228,7 +228,7 @@ const failureDetails = failureRows.map((row) => {
     message: row.message,
     attempts: row.attempts,
     studentId: student?.id ?? row.studentId ?? "",
-    studentCode: student?.code ?? student?.userProfile?.code ?? "",
+    studentCode: student?.userProfile?.code ?? "",
     fullName: student?.userProfile?.fullname ?? "",
     fixedClassName: student?.fixedClass?.name ?? "",
     classes: classes.join("; "),

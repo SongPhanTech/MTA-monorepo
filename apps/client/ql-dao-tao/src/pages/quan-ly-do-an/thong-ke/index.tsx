@@ -90,23 +90,24 @@ export default function ThongKe() {
           registrations: {
             some: {
               student: {
-                ...(filters.code && filters.code !== ""
-                  ? {
-                      code: {
-                        contains: filters.code,
-                        mode: "insensitive" as const,
-                      },
-                    }
-                  : {}),
-                userProfile:
-                  filters.name && filters.name !== ""
+                userProfile: {
+                  ...(filters.code && filters.code !== ""
+                    ? {
+                        code: {
+                          contains: filters.code,
+                          mode: "insensitive" as const,
+                        },
+                      }
+                    : {}),
+                  ...(filters.name && filters.name !== ""
                     ? {
                         fullname: {
                           contains: filters.name,
                           mode: "insensitive" as const,
                         },
                       }
-                    : {},
+                    : {}),
+                },
               },
               status: StudentThesisRegistrationStatus.ACCEPTED,
             },
@@ -139,23 +140,24 @@ export default function ThongKe() {
             where: {
               status: StudentThesisRegistrationStatus.ACCEPTED,
               student: {
-                ...(filters.code && filters.code !== ""
-                  ? {
-                      code: {
-                        contains: filters.code,
-                        mode: "insensitive" as const,
-                      },
-                    }
-                  : {}),
-                userProfile:
-                  filters.name && filters.name !== ""
+                userProfile: {
+                  ...(filters.code && filters.code !== ""
+                    ? {
+                        code: {
+                          contains: filters.code,
+                          mode: "insensitive" as const,
+                        },
+                      }
+                    : {}),
+                  ...(filters.name && filters.name !== ""
                     ? {
                         fullname: {
                           contains: filters.name,
                           mode: "insensitive" as const,
                         },
                       }
-                    : {},
+                    : {}),
+                },
               },
             },
           },
@@ -313,7 +315,7 @@ export default function ThongKe() {
                     fixed: "left",
                     type: "input",
                     align: "center",
-                    render: (_, record) => record?.code,
+                    render: (_, record) => record?.userProfile?.code,
                   },
                   {
                     title: "Họ và tên",

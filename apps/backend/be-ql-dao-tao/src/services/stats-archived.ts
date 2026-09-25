@@ -6,7 +6,7 @@ import { fieldDesc } from "../dto/openapi-helpers"
 import { prisma } from ".."
 
 const StatsArchivedAwardItemSchema = z.object({
-  studentCode: z.string().openapi(fieldDesc("Mã học viên (Student.code).")),
+  studentCode: z.string().openapi(fieldDesc("Mã học viên (UserProfile.code).")),
   studentName: z.string().openapi(fieldDesc("Họ tên (UserProfile.fullname).")),
   dateOfBirth: z.date().nullable().openapi(fieldDesc("Ngày sinh.")),
   classCode: z.string().openapi(fieldDesc("Mã lớp niên chế (FixedClass.code).")),
@@ -102,7 +102,7 @@ export const getStatsArchivedAward = async ({
       if (award.studentSubjectScore.length === 0) {
         return [
           {
-            studentCode: award.student.code ?? "",
+            studentCode: award.student.userProfile.code ?? "",
             dateOfBirth: award.student.userProfile.dateOfBirth,
             studentName: award.student.userProfile.fullname || "Không xác định",
             classCode: award.student.fixedClass?.code ?? "Không xác định",
@@ -121,7 +121,7 @@ export const getStatsArchivedAward = async ({
       return award.studentSubjectScore.map((assoc) => {
         const score = assoc.studentSubjectScore
         return {
-          studentCode: award.student.code ?? "",
+          studentCode: award.student.userProfile.code ?? "",
           dateOfBirth: award.student.userProfile.dateOfBirth,
           studentName: award.student.userProfile.fullname || "Không xác định",
           classCode: award.student.fixedClass?.code ?? "Không xác định",

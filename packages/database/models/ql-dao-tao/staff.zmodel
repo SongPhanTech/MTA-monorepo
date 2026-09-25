@@ -6,7 +6,7 @@ import '../ql-dao-tao/categories'
 import '../ql-dao-tao/plan-training'
 import '../ql-ho-so/profile'
 
-model Staff extends Base {
+model Staff extends BaseNoCode {
   from            DateTime? // từ ngày
 
   userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])

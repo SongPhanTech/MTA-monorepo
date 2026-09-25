@@ -411,7 +411,7 @@ const ExportTemplateExam = ({ dataTable, dataClass, disabled }: ExportTemplateEx
       })()
       row.values = [
         index + 1,
-        record?.student?.code || "",
+        record?.student?.userProfile?.code || "",
         `${record.student?.userProfile?.fullname || ""}`,
         record.student?.userProfile?.dateOfBirth
           ? new Date(record.student.userProfile.dateOfBirth).toLocaleDateString("vi-VN")

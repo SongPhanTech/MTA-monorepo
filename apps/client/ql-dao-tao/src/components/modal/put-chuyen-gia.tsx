@@ -188,7 +188,7 @@ const PutExpert = () => {
     where: search
       ? {
           OR: [
-            { code: { contains: search, mode: "insensitive" } },
+            { userProfile: { code: { contains: search, mode: "insensitive" } } },
             { userProfile: { fullname: { contains: search, mode: "insensitive" } } },
             { userProfile: { donVi: { sTen: { contains: search, mode: "insensitive" } } } },
           ],
@@ -234,8 +234,7 @@ const PutExpert = () => {
                     select: {
                       student: {
                         select: {
-                          code: true,
-                          userProfile: { select: { fullname: true } },
+                          userProfile: { select: { code: true, fullname: true } },
                         },
                       },
                     },
@@ -272,8 +271,7 @@ const PutExpert = () => {
             select: {
               student: {
                 select: {
-                  code: true,
-                  userProfile: { select: { fullname: true, dateOfBirth: true } },
+                  userProfile: { select: { code: true, fullname: true, dateOfBirth: true } },
                   fixedClass: { select: { name: true } },
                 },
               },
@@ -742,7 +740,7 @@ const PutExpert = () => {
           key: `${membership.id}-${project.id}`,
           role: roleLabel,
           studentName: student?.userProfile?.fullname || "—",
-          studentCode: student?.code || "—",
+          studentCode: student?.userProfile?.code || "—",
           title: project.title || "—",
           sessionName: project.thesisSession?.name || "—",
           organization: project.organization?.sTen || "—",
@@ -769,7 +767,7 @@ const PutExpert = () => {
         key: project.id,
         role,
         studentName: student?.userProfile?.fullname || "—",
-        studentCode: student?.code || "—",
+        studentCode: student?.userProfile?.code || "—",
         className: student?.fixedClass?.name || "—",
         title: project.title || "—",
         sessionName: project.thesisSession?.name || "—",
@@ -827,7 +825,7 @@ const PutExpert = () => {
               searchValue={search}
               onSearch={setSearch}
               options={lecturer.map((item) => ({
-                label: [item.code, item?.userProfile?.fullname, item?.userProfile?.donVi?.sTen]
+                label: [item.userProfile?.code, item?.userProfile?.fullname, item?.userProfile?.donVi?.sTen]
                   .filter(Boolean)
                   .join(" - "),
                 value: item.id,

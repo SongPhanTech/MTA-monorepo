@@ -9233,7 +9233,6 @@ export namespace Prisma {
     };
     export const StudentScalarFieldEnum: {
         id: 'id',
-        code: 'code',
         active: 'active',
         description: 'description',
         deletedAt: 'deletedAt',
@@ -9436,7 +9435,6 @@ export namespace Prisma {
     };
     export const LecturerScalarFieldEnum: {
         id: 'id',
-        code: 'code',
         active: 'active',
         description: 'description',
         deletedAt: 'deletedAt',
@@ -9549,7 +9547,6 @@ export namespace Prisma {
     };
     export const StaffScalarFieldEnum: {
         id: 'id',
-        code: 'code',
         active: 'active',
         description: 'description',
         deletedAt: 'deletedAt',
@@ -13031,7 +13028,6 @@ export namespace Prisma {
     };
     export const StudentOrderByRelevanceFieldEnum: {
         id: 'id',
-        code: 'code',
         description: 'description',
         createdBy: 'createdBy',
         note: 'note',
@@ -13111,7 +13107,6 @@ export namespace Prisma {
     };
     export const LecturerOrderByRelevanceFieldEnum: {
         id: 'id',
-        code: 'code',
         description: 'description',
         createdBy: 'createdBy',
         lectureID: 'lectureID',
@@ -13179,7 +13174,6 @@ export namespace Prisma {
     };
     export const StaffOrderByRelevanceFieldEnum: {
         id: 'id',
-        code: 'code',
         description: 'description',
         createdBy: 'createdBy',
         userProfileId: 'userProfileId',
@@ -69510,7 +69504,6 @@ export namespace Prisma {
      */
     interface StudentFieldRefs {
         readonly id: FieldRef<"Student", 'String'>;
-        readonly code: FieldRef<"Student", 'String'>;
         readonly active: FieldRef<"Student", 'Boolean'>;
         readonly description: FieldRef<"Student", 'String'>;
         readonly deletedAt: FieldRef<"Student", 'DateTime'>;
@@ -72339,7 +72332,6 @@ export namespace Prisma {
      */
     interface LecturerFieldRefs {
         readonly id: FieldRef<"Lecturer", 'String'>;
-        readonly code: FieldRef<"Lecturer", 'String'>;
         readonly active: FieldRef<"Lecturer", 'Boolean'>;
         readonly description: FieldRef<"Lecturer", 'String'>;
         readonly deletedAt: FieldRef<"Lecturer", 'DateTime'>;
@@ -75426,7 +75418,6 @@ export namespace Prisma {
      */
     interface StaffFieldRefs {
         readonly id: FieldRef<"Staff", 'String'>;
-        readonly code: FieldRef<"Staff", 'String'>;
         readonly active: FieldRef<"Staff", 'Boolean'>;
         readonly description: FieldRef<"Staff", 'String'>;
         readonly deletedAt: FieldRef<"Staff", 'DateTime'>;
@@ -267883,7 +267874,6 @@ export namespace Prisma {
     };
     export type StudentMinAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
@@ -267930,7 +267920,6 @@ export namespace Prisma {
     };
     export type StudentMaxAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
@@ -267977,7 +267966,6 @@ export namespace Prisma {
     };
     export type StudentCountAggregateOutputType = {
         id: number
-        code: number
         active: number
         description: number
         deletedAt: number
@@ -268045,7 +268033,6 @@ export namespace Prisma {
     };
     export type StudentMinAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
@@ -268092,7 +268079,6 @@ export namespace Prisma {
     };
     export type StudentMaxAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
@@ -268139,7 +268125,6 @@ export namespace Prisma {
     };
     export type StudentCountAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
@@ -268267,7 +268252,6 @@ export namespace Prisma {
     };
     export type StudentGroupByOutputType = {
         id: string
-        code: string | null
         active: boolean
         description: string | null
         deletedAt: Date | null
@@ -268331,7 +268315,6 @@ export namespace Prisma {
     >;
     export type StudentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
@@ -268418,7 +268401,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["student"]>;
     export type StudentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
@@ -268472,7 +268454,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["student"]>;
     export type StudentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
@@ -268526,7 +268507,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["student"]>;
     export type StudentSelectScalar = {
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
@@ -268571,7 +268551,7 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
     };
-    export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "note" | "from" | "to" | "trainingFieldId" | "registerNumber" | "doctoralCode" | "admissionCombination" | "entryScore" | "competencyScore" | "department" | "departmentAddress" | "careerYear" | "universitySchool" | "universityTrainingType" | "universityGraduationYear" | "universityMajor" | "universityRank" | "basic" | "facility" | "foreignLanguage" | "priorityReason" | "trainingLocationId" | "unionLeader" | "status" | "fixedClassId" | "userProfileId" | "registrationAreaId" | "curriculumVersionId" | "curriculumVersionParallelId" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled" | "foreignLangPass" | "ITCertificationPass" | "strengthTrainingPass" | "militaryTrainingPass", ExtArgs["result"]["student"]>;
+    export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "note" | "from" | "to" | "trainingFieldId" | "registerNumber" | "doctoralCode" | "admissionCombination" | "entryScore" | "competencyScore" | "department" | "departmentAddress" | "careerYear" | "universitySchool" | "universityTrainingType" | "universityGraduationYear" | "universityMajor" | "universityRank" | "basic" | "facility" | "foreignLanguage" | "priorityReason" | "trainingLocationId" | "unionLeader" | "status" | "fixedClassId" | "userProfileId" | "registrationAreaId" | "curriculumVersionId" | "curriculumVersionParallelId" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled" | "foreignLangPass" | "ITCertificationPass" | "strengthTrainingPass" | "militaryTrainingPass", ExtArgs["result"]["student"]>;
     export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingField?: boolean | Student$trainingFieldArgs<ExtArgs>
         trainingLocation?: boolean | Student$trainingLocationArgs<ExtArgs>
@@ -268680,7 +268660,6 @@ export namespace Prisma {
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
-            code: string | null
             active: boolean
             description: string | null
             deletedAt: Date | null
@@ -275556,7 +275535,6 @@ export namespace Prisma {
     };
     export type LecturerMinAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
@@ -275571,7 +275549,6 @@ export namespace Prisma {
     };
     export type LecturerMaxAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
@@ -275586,7 +275563,6 @@ export namespace Prisma {
     };
     export type LecturerCountAggregateOutputType = {
         id: number
-        code: number
         active: number
         description: number
         deletedAt: number
@@ -275602,7 +275578,6 @@ export namespace Prisma {
     };
     export type LecturerMinAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
@@ -275617,7 +275592,6 @@ export namespace Prisma {
     };
     export type LecturerMaxAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
@@ -275632,7 +275606,6 @@ export namespace Prisma {
     };
     export type LecturerCountAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
@@ -275714,7 +275687,6 @@ export namespace Prisma {
     };
     export type LecturerGroupByOutputType = {
         id: string
-        code: string | null
         active: boolean
         description: string | null
         deletedAt: Date | null
@@ -275744,7 +275716,6 @@ export namespace Prisma {
     >;
     export type LecturerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
@@ -275786,7 +275757,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["lecturer"]>;
     export type LecturerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
@@ -275803,7 +275773,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["lecturer"]>;
     export type LecturerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
@@ -275820,7 +275789,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["lecturer"]>;
     export type LecturerSelectScalar = {
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
@@ -275833,7 +275801,7 @@ export namespace Prisma {
         userProfileId?: boolean
         lecturerTypeId?: boolean
     };
-    export type LecturerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "from" | "lectureID" | "serviceDate" | "userProfileId" | "lecturerTypeId", ExtArgs["result"]["lecturer"]>;
+    export type LecturerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "from" | "lectureID" | "serviceDate" | "userProfileId" | "lecturerTypeId", ExtArgs["result"]["lecturer"]>;
     export type LecturerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
         lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
@@ -275903,7 +275871,6 @@ export namespace Prisma {
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
-            code: string | null
             active: boolean
             description: string | null
             deletedAt: Date | null
@@ -281923,7 +281890,6 @@ export namespace Prisma {
     };
     export type StaffMinAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
@@ -281938,7 +281904,6 @@ export namespace Prisma {
     };
     export type StaffMaxAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
@@ -281953,7 +281918,6 @@ export namespace Prisma {
     };
     export type StaffCountAggregateOutputType = {
         id: number
-        code: number
         active: number
         description: number
         deletedAt: number
@@ -281969,7 +281933,6 @@ export namespace Prisma {
     };
     export type StaffMinAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
@@ -281984,7 +281947,6 @@ export namespace Prisma {
     };
     export type StaffMaxAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
@@ -281999,7 +281961,6 @@ export namespace Prisma {
     };
     export type StaffCountAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
@@ -282081,7 +282042,6 @@ export namespace Prisma {
     };
     export type StaffGroupByOutputType = {
         id: string
-        code: string | null
         active: boolean
         description: string | null
         deletedAt: Date | null
@@ -282111,7 +282071,6 @@ export namespace Prisma {
     >;
     export type StaffSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
@@ -282132,7 +282091,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["staff"]>;
     export type StaffSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
@@ -282151,7 +282109,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["staff"]>;
     export type StaffSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
@@ -282170,7 +282127,6 @@ export namespace Prisma {
     }, ExtArgs["result"]["staff"]>;
     export type StaffSelectScalar = {
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
@@ -282183,7 +282139,7 @@ export namespace Prisma {
         staffTypeId?: boolean
         staffPositionId?: boolean
     };
-    export type StaffOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "from" | "userProfileId" | "organizationId" | "staffTypeId" | "staffPositionId", ExtArgs["result"]["staff"]>;
+    export type StaffOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "from" | "userProfileId" | "organizationId" | "staffTypeId" | "staffPositionId", ExtArgs["result"]["staff"]>;
     export type StaffInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
         organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
@@ -282215,7 +282171,6 @@ export namespace Prisma {
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
-            code: string | null
             active: boolean
             description: string | null
             deletedAt: Date | null
@@ -396494,7 +396449,6 @@ export namespace Prisma {
         OR?: StudentWhereInput[]
         NOT?: StudentWhereInput | StudentWhereInput[]
         id?: StringFilter<"Student"> | string
-        code?: StringNullableFilter<"Student"> | string | null
         active?: BoolFilter<"Student"> | boolean
         description?: StringNullableFilter<"Student"> | string | null
         deletedAt?: DateTimeNullableFilter<"Student"> | Date | string | null
@@ -396580,7 +396534,6 @@ export namespace Prisma {
     };
     export type StudentOrderByWithRelationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
@@ -396667,7 +396620,6 @@ export namespace Prisma {
     };
     export type StudentWhereUniqueInput = Prisma.AtLeast<{
         id?: string
-        code?: string
         AND?: StudentWhereInput | StudentWhereInput[]
         OR?: StudentWhereInput[]
         NOT?: StudentWhereInput | StudentWhereInput[]
@@ -396753,10 +396705,9 @@ export namespace Prisma {
         schoolYearTrainingScore?: SchoolYearTrainingScoreListRelationFilter
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentListRelationFilter
         trainingActivity?: TrainingActivityListRelationFilter
-    }, "id" | "code">;
+    }, "id">;
     export type StudentOrderByWithAggregationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
@@ -396811,7 +396762,6 @@ export namespace Prisma {
         OR?: StudentScalarWhereWithAggregatesInput[]
         NOT?: StudentScalarWhereWithAggregatesInput | StudentScalarWhereWithAggregatesInput[]
         id?: StringWithAggregatesFilter<"Student"> | string
-        code?: StringNullableWithAggregatesFilter<"Student"> | string | null
         active?: BoolWithAggregatesFilter<"Student"> | boolean
         description?: StringNullableWithAggregatesFilter<"Student"> | string | null
         deletedAt?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
@@ -397783,7 +397733,6 @@ export namespace Prisma {
         OR?: LecturerWhereInput[]
         NOT?: LecturerWhereInput | LecturerWhereInput[]
         id?: StringFilter<"Lecturer"> | string
-        code?: StringNullableFilter<"Lecturer"> | string | null
         active?: BoolFilter<"Lecturer"> | boolean
         description?: StringNullableFilter<"Lecturer"> | string | null
         deletedAt?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
@@ -397824,7 +397773,6 @@ export namespace Prisma {
     };
     export type LecturerOrderByWithRelationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
@@ -397866,7 +397814,6 @@ export namespace Prisma {
     };
     export type LecturerWhereUniqueInput = Prisma.AtLeast<{
         id?: string
-        code?: string
         lectureID?: string
         userProfileId?: string
         AND?: LecturerWhereInput | LecturerWhereInput[]
@@ -397907,10 +397854,9 @@ export namespace Prisma {
         personalWorkTags?: PersonalWorkTagListRelationFilter
         individualSchedules?: IndividualScheduleListRelationFilter
         guestTeachingPayments?: GuestTeachingPaymentListRelationFilter
-    }, "id" | "code" | "lectureID" | "userProfileId">;
+    }, "id" | "lectureID" | "userProfileId">;
     export type LecturerOrderByWithAggregationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
@@ -397931,7 +397877,6 @@ export namespace Prisma {
         OR?: LecturerScalarWhereWithAggregatesInput[]
         NOT?: LecturerScalarWhereWithAggregatesInput | LecturerScalarWhereWithAggregatesInput[]
         id?: StringWithAggregatesFilter<"Lecturer"> | string
-        code?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
         active?: BoolWithAggregatesFilter<"Lecturer"> | boolean
         description?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
         deletedAt?: DateTimeNullableWithAggregatesFilter<"Lecturer"> | Date | string | null
@@ -398587,7 +398532,6 @@ export namespace Prisma {
         OR?: StaffWhereInput[]
         NOT?: StaffWhereInput | StaffWhereInput[]
         id?: StringFilter<"Staff"> | string
-        code?: StringNullableFilter<"Staff"> | string | null
         active?: BoolFilter<"Staff"> | boolean
         description?: StringNullableFilter<"Staff"> | string | null
         deletedAt?: DateTimeNullableFilter<"Staff"> | Date | string | null
@@ -398607,7 +398551,6 @@ export namespace Prisma {
     };
     export type StaffOrderByWithRelationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
@@ -398628,7 +398571,6 @@ export namespace Prisma {
     };
     export type StaffWhereUniqueInput = Prisma.AtLeast<{
         id?: string
-        code?: string
         userProfileId?: string
         AND?: StaffWhereInput | StaffWhereInput[]
         OR?: StaffWhereInput[]
@@ -398648,10 +398590,9 @@ export namespace Prisma {
         staffType?: XOR<StaffTypeScalarRelationFilter, StaffTypeWhereInput>
         staffPosition?: XOR<StaffPositionScalarRelationFilter, StaffPositionWhereInput>
         fixedClass?: FixedClassListRelationFilter
-    }, "id" | "code" | "userProfileId">;
+    }, "id" | "userProfileId">;
     export type StaffOrderByWithAggregationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
@@ -398672,7 +398613,6 @@ export namespace Prisma {
         OR?: StaffScalarWhereWithAggregatesInput[]
         NOT?: StaffScalarWhereWithAggregatesInput | StaffScalarWhereWithAggregatesInput[]
         id?: StringWithAggregatesFilter<"Staff"> | string
-        code?: StringNullableWithAggregatesFilter<"Staff"> | string | null
         active?: BoolWithAggregatesFilter<"Staff"> | boolean
         description?: StringNullableWithAggregatesFilter<"Staff"> | string | null
         deletedAt?: DateTimeNullableWithAggregatesFilter<"Staff"> | Date | string | null
@@ -429521,7 +429461,6 @@ export namespace Prisma {
     };
     export type StudentCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -429600,7 +429539,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -429679,7 +429617,6 @@ export namespace Prisma {
     };
     export type StudentUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -429758,7 +429695,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -429837,7 +429773,6 @@ export namespace Prisma {
     };
     export type StudentCreateManyInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -429884,7 +429819,6 @@ export namespace Prisma {
     };
     export type StudentUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -429924,7 +429858,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -431081,7 +431014,6 @@ export namespace Prisma {
     };
     export type LecturerCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -431120,7 +431052,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -431159,7 +431090,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -431198,7 +431128,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -431237,7 +431166,6 @@ export namespace Prisma {
     };
     export type LecturerCreateManyInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -431252,7 +431180,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -431265,7 +431192,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -431984,7 +431910,6 @@ export namespace Prisma {
     };
     export type StaffCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -432000,7 +431925,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -432016,7 +431940,6 @@ export namespace Prisma {
     };
     export type StaffUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -432032,7 +431955,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -432048,7 +431970,6 @@ export namespace Prisma {
     };
     export type StaffCreateManyInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -432063,7 +431984,6 @@ export namespace Prisma {
     };
     export type StaffUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -432074,7 +431994,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -457456,7 +457375,6 @@ export namespace Prisma {
     };
     export type StudentCountOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
@@ -457513,7 +457431,6 @@ export namespace Prisma {
     };
     export type StudentMaxOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
@@ -457560,7 +457477,6 @@ export namespace Prisma {
     };
     export type StudentMinOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
@@ -458404,7 +458320,6 @@ export namespace Prisma {
     };
     export type LecturerCountOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
@@ -458419,7 +458334,6 @@ export namespace Prisma {
     };
     export type LecturerMaxOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
@@ -458434,7 +458348,6 @@ export namespace Prisma {
     };
     export type LecturerMinOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
@@ -458845,7 +458758,6 @@ export namespace Prisma {
     };
     export type StaffCountOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
@@ -458860,7 +458772,6 @@ export namespace Prisma {
     };
     export type StaffMaxOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
@@ -458875,7 +458786,6 @@ export namespace Prisma {
     };
     export type StaffMinOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
@@ -499704,7 +499614,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutUserProfileInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -499782,7 +499691,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutUserProfileInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -499868,7 +499776,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutUserProfileInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -499906,7 +499813,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutUserProfileInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -500042,7 +499948,6 @@ export namespace Prisma {
     };
     export type StaffCreateWithoutUserProfileInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -500057,7 +499962,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedCreateWithoutUserProfileInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -503786,7 +503690,6 @@ export namespace Prisma {
         OR?: StudentScalarWhereInput[]
         NOT?: StudentScalarWhereInput | StudentScalarWhereInput[]
         id?: StringFilter<"Student"> | string
-        code?: StringNullableFilter<"Student"> | string | null
         active?: BoolFilter<"Student"> | boolean
         description?: StringNullableFilter<"Student"> | string | null
         deletedAt?: DateTimeNullableFilter<"Student"> | Date | string | null
@@ -503842,7 +503745,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -503880,7 +503782,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -504000,7 +503901,6 @@ export namespace Prisma {
     };
     export type StaffUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -504015,7 +503915,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -535105,7 +535004,6 @@ export namespace Prisma {
     };
     export type StaffCreateWithoutOrganizationInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -535120,7 +535018,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedCreateWithoutOrganizationInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -536356,7 +536253,6 @@ export namespace Prisma {
         OR?: StaffScalarWhereInput[]
         NOT?: StaffScalarWhereInput | StaffScalarWhereInput[]
         id?: StringFilter<"Staff"> | string
-        code?: StringNullableFilter<"Staff"> | string | null
         active?: BoolFilter<"Staff"> | boolean
         description?: StringNullableFilter<"Staff"> | string | null
         deletedAt?: DateTimeNullableFilter<"Staff"> | Date | string | null
@@ -536833,7 +536729,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutRegistrationAreaInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -536911,7 +536806,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutRegistrationAreaInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -547491,7 +547385,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutStudentScoreConvertInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -547569,7 +547462,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutStudentScoreConvertInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -547774,7 +547666,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutStudentScoreConvertInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -547852,7 +547743,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutStudentScoreConvertInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -548543,7 +548433,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutSubjectClassStudentInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -548621,7 +548510,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutSubjectClassStudentInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -549524,7 +549412,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutSubjectClassStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -549602,7 +549489,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutSubjectClassStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -552462,7 +552348,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutArchivedCertificateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -552540,7 +552425,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutArchivedCertificateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -552816,7 +552700,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutArchivedCertificateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -552894,7 +552777,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutArchivedCertificateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -553651,7 +553533,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutArchivedAwardInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -553729,7 +553610,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutArchivedAwardInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -553969,7 +553849,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutArchivedAwardInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -554047,7 +553926,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutArchivedAwardInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -558752,7 +558630,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutClassMonitorInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -558830,7 +558707,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutClassMonitorInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -558912,7 +558788,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutUnionLeaderOfInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -558990,7 +558865,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutUnionLeaderOfInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -559072,7 +558946,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutDeputyUnionSecretaryOfInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -559150,7 +559023,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutDeputyUnionSecretaryOfInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -559232,7 +559104,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutUnionSecretaryOfInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -559310,7 +559181,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutUnionSecretaryOfInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -559602,7 +559472,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutManageFixedClassInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -559640,7 +559509,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutManageFixedClassInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -559682,7 +559550,6 @@ export namespace Prisma {
     };
     export type StaffCreateWithoutFixedClassInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -559697,7 +559564,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedCreateWithoutFixedClassInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -559716,7 +559582,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutFixedClassInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -559794,7 +559659,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutFixedClassInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -560267,7 +560131,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutClassMonitorInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -560345,7 +560208,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutClassMonitorInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -560432,7 +560294,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutUnionLeaderOfInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -560510,7 +560371,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutUnionLeaderOfInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -560597,7 +560457,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutDeputyUnionSecretaryOfInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -560675,7 +560534,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutDeputyUnionSecretaryOfInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -560762,7 +560620,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutUnionSecretaryOfInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -560840,7 +560697,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutUnionSecretaryOfInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -561147,7 +561003,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutManageFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -561185,7 +561040,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutManageFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -561232,7 +561086,6 @@ export namespace Prisma {
     };
     export type StaffUpdateWithoutFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -561247,7 +561100,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedUpdateWithoutFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -562783,7 +562635,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutCurriculumVersionInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -562861,7 +562712,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutCurriculumVersionInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -562947,7 +562797,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutCurriculumVersionParallelInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -563025,7 +562874,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutCurriculumVersionParallelInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -568598,7 +568446,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutClassRegisterLogsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -568676,7 +568523,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutClassRegisterLogsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -568941,7 +568787,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutClassRegisterLogsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -569019,7 +568864,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutClassRegisterLogsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -569139,7 +568983,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutClassRegisterAttemptsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -569217,7 +569060,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutClassRegisterAttemptsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -569355,7 +569197,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutClassRegisterAttemptsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -569433,7 +569274,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutClassRegisterAttemptsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -569883,7 +569723,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutMainSubjectClassesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -569921,7 +569760,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutMainSubjectClassesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -569963,7 +569801,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutExtraSubjectClassesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -570001,7 +569838,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutExtraSubjectClassesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -570043,7 +569879,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutEnterGradeClassesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -570081,7 +569916,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutEnterGradeClassesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -571304,7 +571138,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutMainSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -571342,7 +571175,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutMainSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -571389,7 +571221,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutExtraSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -571427,7 +571258,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutExtraSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -571474,7 +571304,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutEnterGradeClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -571512,7 +571341,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutEnterGradeClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -573020,7 +572848,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutSubjectClassAttendanceStudentInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -573098,7 +572925,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutSubjectClassAttendanceStudentInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -573228,7 +573054,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutSubjectClassAttendanceStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -573306,7 +573131,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutSubjectClassAttendanceStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -574773,7 +574597,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutClassSchedulesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -574811,7 +574634,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutClassSchedulesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -574853,7 +574675,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutExtraClassSchedulesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -574891,7 +574712,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutExtraClassSchedulesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -575634,7 +575454,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutClassSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -575672,7 +575491,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutClassSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -575719,7 +575537,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutExtraClassSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -575757,7 +575574,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutExtraClassSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -578719,7 +578535,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutPriorityObjectInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -578797,7 +578612,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutPriorityObjectInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -579402,7 +579216,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutTrainingLocationInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -579480,7 +579293,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutTrainingLocationInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -581009,7 +580821,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutTrainingFieldInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -581087,7 +580898,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutTrainingFieldInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -589219,7 +589029,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutTrainingActivityInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -589297,7 +589106,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutTrainingActivityInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -589388,7 +589196,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutTrainingActivityInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -589466,7 +589273,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutTrainingActivityInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -589544,7 +589350,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutStudentSemesterResultInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -589622,7 +589427,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutStudentSemesterResultInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -589841,7 +589645,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutStudentSemesterResultInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -589919,7 +589722,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutStudentSemesterResultInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -590135,7 +589937,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutStudentYearResultInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -590213,7 +590014,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutStudentYearResultInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -590404,7 +590204,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutStudentYearResultInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -590482,7 +590281,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutStudentYearResultInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -590854,7 +590652,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutNotificationsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -590932,7 +590729,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutNotificationsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -591014,7 +590810,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutNotificationsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -591052,7 +590847,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutNotificationsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -591222,7 +591016,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutNotificationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -591260,7 +591053,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutNotificationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -591311,7 +591103,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutPersonalWorkTagsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -591349,7 +591140,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutPersonalWorkTagsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -591446,7 +591236,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutPersonalWorkTagsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -591484,7 +591273,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutPersonalWorkTagsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -591535,7 +591323,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutIndividualSchedulesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -591573,7 +591360,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutIndividualSchedulesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -592014,7 +591800,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutIndividualSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -592052,7 +591837,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutIndividualSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -596265,7 +596049,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutGuestTeachingPaymentsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -596303,7 +596086,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutGuestTeachingPaymentsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -596512,7 +596294,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutGuestTeachingPaymentsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -596550,7 +596331,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutGuestTeachingPaymentsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -596756,7 +596536,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutLecturerTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -596794,7 +596573,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutLecturerTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -596898,7 +596676,6 @@ export namespace Prisma {
         OR?: LecturerScalarWhereInput[]
         NOT?: LecturerScalarWhereInput | LecturerScalarWhereInput[]
         id?: StringFilter<"Lecturer"> | string
-        code?: StringNullableFilter<"Lecturer"> | string | null
         active?: BoolFilter<"Lecturer"> | boolean
         description?: StringNullableFilter<"Lecturer"> | string | null
         deletedAt?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
@@ -596926,7 +596703,6 @@ export namespace Prisma {
     };
     export type StaffCreateWithoutStaffTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -596941,7 +596717,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedCreateWithoutStaffTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -597028,7 +596803,6 @@ export namespace Prisma {
     };
     export type StaffCreateWithoutStaffPositionInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -597043,7 +596817,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedCreateWithoutStaffPositionInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -599257,7 +599030,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutResearchProjectsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -599295,7 +599067,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutResearchProjectsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -599478,7 +599249,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutResearchProjectsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -599516,7 +599286,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutResearchProjectsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -599660,7 +599429,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutResearchRegistrationsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -599738,7 +599506,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutResearchRegistrationsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -599874,7 +599641,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutReviewedRegistrationsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -599912,7 +599678,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutReviewedRegistrationsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -599963,7 +599728,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutResearchRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600041,7 +599805,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutResearchRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600187,7 +599950,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutReviewedRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600225,7 +599987,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutReviewedRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600753,7 +600514,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutPrimarySupervisorThesisProjectInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -600791,7 +600551,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutPrimarySupervisorThesisProjectInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -600833,7 +600592,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutSecondarySupervisorThesisProjectInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -600871,7 +600629,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutSecondarySupervisorThesisProjectInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -601806,7 +601563,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutPrimarySupervisorThesisProjectInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -601844,7 +601600,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutPrimarySupervisorThesisProjectInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -601891,7 +601646,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutSecondarySupervisorThesisProjectInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -601929,7 +601683,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutSecondarySupervisorThesisProjectInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -603028,7 +602781,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutThesisRegistrationsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -603106,7 +602858,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutThesisRegistrationsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -603402,7 +603153,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutReviewedThesisRegistrationsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -603440,7 +603190,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutReviewedThesisRegistrationsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -603523,7 +603272,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutThesisRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -603601,7 +603349,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutThesisRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -603912,7 +603659,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutReviewedThesisRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -603950,7 +603696,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutReviewedThesisRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -604025,7 +603770,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutExpertInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -604063,7 +603807,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutExpertInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -604494,7 +604237,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutExpertInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -604532,7 +604274,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutExpertInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -611714,7 +611455,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutStudentAcademicDecisionInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -611792,7 +611532,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutStudentAcademicDecisionInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -612107,7 +611846,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutStudentAcademicDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -612185,7 +611923,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutStudentAcademicDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -612802,7 +612539,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutStudentTrainingScoreInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -612880,7 +612616,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutStudentTrainingScoreInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -613008,7 +612743,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutStudentTrainingScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -613086,7 +612820,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutStudentTrainingScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -613234,7 +612967,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutSemesterTrainingScoreInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -613312,7 +613044,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutSemesterTrainingScoreInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -613478,7 +613209,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutSemesterTrainingScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -613556,7 +613286,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutSemesterTrainingScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -613676,7 +613405,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutSchoolYearTrainingScoreInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -613754,7 +613482,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutSchoolYearTrainingScoreInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -613892,7 +613619,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutSchoolYearTrainingScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -613970,7 +613696,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutSchoolYearTrainingScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -614506,7 +614231,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutScholarshipAwardsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -614584,7 +614308,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutScholarshipAwardsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -614785,7 +614508,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutScholarshipAwardsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -614863,7 +614585,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutScholarshipAwardsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -615615,7 +615336,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutGraduationApplicationsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -615693,7 +615413,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutGraduationApplicationsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -616282,7 +616001,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutGraduationApplicationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -616360,7 +616078,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutGraduationApplicationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -617550,7 +617267,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutGraduationDecisionInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -617628,7 +617344,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutGraduationDecisionInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -618114,7 +617829,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutGraduationDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -618192,7 +617906,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutGraduationDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -620097,7 +619810,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutDiplomaVerificationApplicationInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -620175,7 +619887,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutDiplomaVerificationApplicationInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -620441,7 +620152,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutDiplomaVerificationApplicationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -620519,7 +620229,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutDiplomaVerificationApplicationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -621790,7 +621499,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutScoreLinkStudentInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -621868,7 +621576,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutScoreLinkStudentInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -621994,7 +621701,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutScoreLinkStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -622072,7 +621778,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutScoreLinkStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -622150,7 +621855,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutNotesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -622228,7 +621932,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutNotesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -622503,7 +622206,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutNotesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -622581,7 +622283,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutNotesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -622774,7 +622475,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutNoteFoldersInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -622852,7 +622552,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutNoteFoldersInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -623059,7 +622758,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutNoteFoldersInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -623137,7 +622835,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutNoteFoldersInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -625904,7 +625601,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutAnalysisCriterionInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -625942,7 +625638,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutAnalysisCriterionInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -626108,7 +625803,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutAnalysisCriterionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -626146,7 +625840,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutAnalysisCriterionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -626261,7 +625954,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutEvaluationCriterionsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -626299,7 +625991,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutEvaluationCriterionsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -626373,7 +626064,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutEvaluationCriterionReviewsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -626411,7 +626101,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutEvaluationCriterionReviewsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -626535,7 +626224,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutEvaluationCriterionsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -626573,7 +626261,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutEvaluationCriterionsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -627177,7 +626864,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutEvaluationCouncilMemberInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -627215,7 +626901,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutEvaluationCouncilMemberInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -627353,7 +627038,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutEvaluationCouncilMemberInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -627391,7 +627075,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutEvaluationCouncilMemberInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -630345,7 +630028,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutExamRoomsMainInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -630383,7 +630065,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutExamRoomsMainInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -630425,7 +630106,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutExamRoomsExtraInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -630463,7 +630143,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutExamRoomsExtraInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -630581,7 +630260,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutExamRoomsMainInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -630619,7 +630297,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutExamRoomsMainInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -630666,7 +630343,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutExamRoomsExtraInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -630704,7 +630380,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutExamRoomsExtraInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -634181,7 +633856,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutClusterSurveyInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -634219,7 +633893,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutClusterSurveyInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -634559,7 +634232,6 @@ export namespace Prisma {
     };
     export type LecturerCreateWithoutSurveyInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -634597,7 +634269,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedCreateWithoutSurveyInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -635111,7 +634782,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -635149,7 +634819,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -636628,7 +636297,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutSurveySessionsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -636706,7 +636374,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutSurveySessionsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -637307,7 +636974,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutSurveySessionsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -637385,7 +637051,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutSurveySessionsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -638050,7 +637715,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutAcademicWarningInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -638128,7 +637792,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutAcademicWarningInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -638331,7 +637994,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutAcademicWarningInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -638409,7 +638071,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutAcademicWarningInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -638575,7 +638236,6 @@ export namespace Prisma {
     };
     export type StudentCreateWithoutDisciplinaryWarningInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -638653,7 +638313,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedCreateWithoutDisciplinaryWarningInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -638842,7 +638501,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutDisciplinaryWarningInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -638920,7 +638578,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutDisciplinaryWarningInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -645562,7 +645219,6 @@ export namespace Prisma {
     };
     export type StudentCreateManyUserProfileInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -647054,7 +646710,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -647132,7 +646787,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -647210,7 +646864,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateManyWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -655438,7 +655091,6 @@ export namespace Prisma {
     };
     export type StaffCreateManyOrganizationInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -655916,7 +655568,6 @@ export namespace Prisma {
     };
     export type StaffUpdateWithoutOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -655931,7 +655582,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedUpdateWithoutOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -655946,7 +655596,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedUpdateManyWithoutOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -657462,7 +657111,6 @@ export namespace Prisma {
     };
     export type StudentCreateManyRegistrationAreaInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -657508,7 +657156,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutRegistrationAreaInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -657586,7 +657233,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutRegistrationAreaInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -657664,7 +657310,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateManyWithoutRegistrationAreaInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -677543,7 +677188,6 @@ export namespace Prisma {
     };
     export type StudentCreateManyFixedClassInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -677604,7 +677248,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -677682,7 +677325,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -677760,7 +677402,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateManyWithoutFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -678529,7 +678170,6 @@ export namespace Prisma {
     };
     export type StudentCreateManyCurriculumVersionInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -678575,7 +678215,6 @@ export namespace Prisma {
     };
     export type StudentCreateManyCurriculumVersionParallelInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -678891,7 +678530,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutCurriculumVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -678969,7 +678607,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutCurriculumVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -679047,7 +678684,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateManyWithoutCurriculumVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -679093,7 +678729,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutCurriculumVersionParallelInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -679171,7 +678806,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutCurriculumVersionParallelInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -679249,7 +678883,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateManyWithoutCurriculumVersionParallelInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -685504,7 +685137,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutPriorityObjectInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -685582,7 +685214,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutPriorityObjectInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -685660,7 +685291,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateManyWithoutPriorityObjectInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -686219,7 +685849,6 @@ export namespace Prisma {
     };
     export type StudentCreateManyTrainingLocationInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -686323,7 +685952,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutTrainingLocationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -686401,7 +686029,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutTrainingLocationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -686479,7 +686106,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateManyWithoutTrainingLocationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -687664,7 +687290,6 @@ export namespace Prisma {
     };
     export type StudentCreateManyTrainingFieldInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -688033,7 +687658,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutTrainingFieldInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -688111,7 +687735,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutTrainingFieldInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -688189,7 +687812,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateManyWithoutTrainingFieldInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -692854,7 +692476,6 @@ export namespace Prisma {
     };
     export type StudentUpdateWithoutNotificationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -692932,7 +692553,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateWithoutNotificationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -693010,7 +692630,6 @@ export namespace Prisma {
     };
     export type StudentUncheckedUpdateManyWithoutNotificationsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -696392,7 +696011,6 @@ export namespace Prisma {
     };
     export type LecturerCreateManyLecturerTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -696423,7 +696041,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutLecturerTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -696461,7 +696078,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutLecturerTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -696499,7 +696115,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateManyWithoutLecturerTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -696564,7 +696179,6 @@ export namespace Prisma {
     };
     export type StaffCreateManyStaffTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -696593,7 +696207,6 @@ export namespace Prisma {
     };
     export type StaffUpdateWithoutStaffTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -696608,7 +696221,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedUpdateWithoutStaffTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -696623,7 +696235,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedUpdateManyWithoutStaffTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -696682,7 +696293,6 @@ export namespace Prisma {
     };
     export type StaffCreateManyStaffPositionInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
@@ -696711,7 +696321,6 @@ export namespace Prisma {
     };
     export type StaffUpdateWithoutStaffPositionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -696726,7 +696335,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedUpdateWithoutStaffPositionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -696741,7 +696349,6 @@ export namespace Prisma {
     };
     export type StaffUncheckedUpdateManyWithoutStaffPositionInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -704600,7 +704207,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutEvaluationCriterionReviewsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -704638,7 +704244,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutEvaluationCriterionReviewsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -704676,7 +704281,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateManyWithoutEvaluationCriterionReviewsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -707723,7 +707327,6 @@ export namespace Prisma {
     };
     export type LecturerUpdateWithoutClusterSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -707761,7 +707364,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateWithoutClusterSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -707799,7 +707401,6 @@ export namespace Prisma {
     };
     export type LecturerUncheckedUpdateManyWithoutClusterSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

@@ -144,7 +144,7 @@ export const exportStudentList = async ({
     row.getCell(1).value = index + 1
     row.getCell(1).alignment = ALIGN_CENTER
 
-    row.getCell(2).value = student.student?.code || ""
+    row.getCell(2).value = student.student?.userProfile?.code || ""
     row.getCell(2).alignment = ALIGN_CENTER
 
     row.getCell(3).value = student.student?.userProfile?.fullname || ""

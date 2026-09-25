@@ -81,9 +81,11 @@ const PutStudentThesisRegistration = () => {
                   OR: [
                     searchText
                       ? {
-                          code: {
-                            contains: searchText,
-                            mode: "insensitive",
+                          userProfile: {
+                            code: {
+                              contains: searchText,
+                              mode: "insensitive",
+                            },
                           },
                         }
                       : {},
@@ -311,7 +313,7 @@ const PutStudentThesisRegistration = () => {
             mode={input?.studentThesisId ? undefined : "multiple"}
             placeholder={input?.studentThesisId ? "Chọn sinh viên" : "Chọn nhiều sinh viên"}
             options={studentData?.subjectClassStudent?.map((item) => ({
-              label: [item.student.code, item.student.userProfile.fullname]
+              label: [item.student.userProfile?.code, item.student.userProfile.fullname]
                 .filter(Boolean)
                 .join(" - "),
               value: item.student.id,
@@ -347,7 +349,7 @@ const PutStudentThesisRegistration = () => {
           <Select
             placeholder="Người phê duyệt"
             options={reviewer.map((item) => ({
-              label: `${item.code ? `${item.code} -` : ""} ${item?.userProfile.fullname}`,
+              label: `${item.userProfile?.code ? `${item.userProfile.code} -` : ""} ${item?.userProfile.fullname}`,
               value: item.id,
             }))}
             showSearch

@@ -224,7 +224,7 @@ const ExportScoreTemplate = ({
       const row = worksheet.getRow(11 + index)
       row.values = [
         index + 1,
-        record.student?.code || "",
+        record.student?.userProfile?.code || "",
         `${record.student?.userProfile?.lastName || ""} ${record.student?.userProfile?.firstName || ""}`,
         record.student?.userProfile?.dateOfBirth
           ? new Date(record.student.userProfile.dateOfBirth).toLocaleDateString("vi-VN")

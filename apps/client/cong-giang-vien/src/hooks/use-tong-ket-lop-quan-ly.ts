@@ -259,7 +259,7 @@ const useTongKetLopQuanLy = (fixedClassId: string, enabled: boolean) => {
 
     return {
       id: sv.id,
-      maSinhVien: sv.userProfile?.code ?? sv.code ?? "",
+      maSinhVien: sv.userProfile?.code ?? "",
       hoVaTen: sv.userProfile?.fullname ?? "",
       ngaySinh: ngaySinh === "—" ? null : ngaySinh,
       maLop: sv.fixedClass?.code ?? "",

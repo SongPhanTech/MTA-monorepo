@@ -197,7 +197,7 @@ const ModalThongKeChungChiTheoLop = () => {
         const picked = pickCertKind(certs)
         return {
           id: s.id,
-          code: s.userProfile?.code || s.code || "",
+          code: s.userProfile?.code || "",
           fullname: s.userProfile?.fullname || "",
           kind: picked.kind,
           description: picked.description,

@@ -300,9 +300,8 @@ export async function exportCouncilImportTemplate(
           select: {
             student: {
               select: {
-                code: true,
                 userProfile: {
-                  select: { fullname: true, dateOfBirth: true },
+                  select: { code: true, fullname: true, dateOfBirth: true },
                 },
                 fixedClass: { select: { name: true } },
               },
@@ -465,7 +464,7 @@ export async function exportCouncilImportTemplate(
       row.values = [
         stt,
         project.id,
-        student?.code || "",
+        student?.userProfile?.code || "",
         student?.userProfile?.fullname || "",
         formatDate(student?.userProfile?.dateOfBirth),
         student?.fixedClass?.name || "",

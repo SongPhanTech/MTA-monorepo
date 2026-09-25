@@ -510,7 +510,9 @@ const ModalChiTietSinhVien = () => {
       children: (
         <div className="space-y-4">
           <Descriptions bordered column={2} size="small">
-            <Descriptions.Item label="Mã sinh viên">{studentData?.code}</Descriptions.Item>
+            <Descriptions.Item label="Mã sinh viên">
+              {studentData?.userProfile?.code}
+            </Descriptions.Item>
             <Descriptions.Item label="Họ và tên">
               {studentData?.userProfile?.fullname}
             </Descriptions.Item>
@@ -2085,7 +2087,7 @@ const ModalChiTietSinhVien = () => {
 
   return (
     <Modal
-      title={`Chi tiết sinh viên: ${studentData?.code || ""} - ${studentData?.userProfile?.fullname || ""}`}
+      title={`Chi tiết sinh viên: ${studentData?.userProfile?.code || ""} - ${studentData?.userProfile?.fullname || ""}`}
       open={isOpen}
       onCancel={onClose}
       width="95vw"

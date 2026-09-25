@@ -140,7 +140,7 @@ const HoSoShell = ({
         <Layout hasSider style={{ marginTop: QL_HO_SO_HEADER_HEIGHT }}>
           <SiderHoSo items={menus} collapsed={collapsed} />
           <Layout
-            className="flex flex-col"
+            className="flex min-w-0 flex-col"
             style={{
               marginInlineStart: siderWidth,
               transition: "margin-inline-start 0.2s",
@@ -150,7 +150,7 @@ const HoSoShell = ({
           >
             <Content
               className={cn(
-                "flex min-h-0 flex-1 flex-col overflow-y-auto",
+                "flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overflow-x-hidden",
                 unLayout ? "" : "px-2 py-2"
               )}
             >
@@ -163,7 +163,7 @@ const HoSoShell = ({
                 <div className={cn("flex min-h-0 flex-1 flex-col", className)}>{children}</div>
               ) : (
                 <div
-                  className={cn("rounded-lg bg-white p-4 shadow-sm", className)}
+                  className={cn("min-w-0 w-full overflow-hidden rounded-lg bg-white p-4 shadow-sm", className)}
                   style={{
                     minHeight: `calc(100vh - ${QL_HO_SO_CONTENT_VERTICAL_OFFSET + (showFooter ? 40 : 0) + (showBreadcrumb ? 28 : 0)}px)`,
                   }}

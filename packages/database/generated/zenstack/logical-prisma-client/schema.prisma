@@ -4809,7 +4809,6 @@ model OutputStandardOnCurriculum {
 /// @@allow('read', auth() != null)
 model Student {
   id                             String                           @id() @default(cuid())
-  code                           String?                          @unique()
   active                         Boolean                          @default(true)
   description                    String?                          @db.Text()
   deletedAt                      DateTime?
@@ -5141,7 +5140,6 @@ model IndividualSchedule {
 /// @@allow('read', auth() != null)
 model Lecturer {
   id                               String                        @id() @default(cuid())
-  code                             String?                       @unique()
   active                           Boolean                       @default(true)
   description                      String?                       @db.Text()
   deletedAt                        DateTime?
@@ -5358,7 +5356,6 @@ model StaffPosition {
 /// @@allow('read', auth() != null)
 model Staff {
   id              String        @id() @default(cuid())
-  code            String?       @unique()
   active          Boolean       @default(true)
   description     String?       @db.Text()
   deletedAt       DateTime?

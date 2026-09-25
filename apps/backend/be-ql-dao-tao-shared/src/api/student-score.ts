@@ -61,8 +61,8 @@ const getStudentScore = createRoute({
 
 app.openapi(getStudentScore, async (c) => {
   const { student_code } = c.req.valid("json")
-  const student = await prisma.student.findUnique({
-    where: { code: student_code },
+  const student = await prisma.student.findFirst({
+    where: { userProfile: { code: student_code } },
     include: {
       fixedClass: {
         include: {

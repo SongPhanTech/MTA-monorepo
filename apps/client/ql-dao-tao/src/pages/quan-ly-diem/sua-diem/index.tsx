@@ -438,9 +438,9 @@ function TicketDetailDrawer({
         include: {
           student: {
             select: {
-              code: true,
               userProfile: {
                 select: {
+                  code: true,
                   fullname: true,
                   dateOfBirth: true,
                 },
@@ -581,10 +581,10 @@ function TicketDetailDrawer({
           {
             title: "Mã SV",
             align: "center",
-            dataIndex: ["studentSubjectScore", "student", "code"],
+            dataIndex: ["studentSubjectScore", "student", "userProfile", "code"],
             key: "studentCode",
             render: (_: any, record: any) =>
-              record.studentSubjectScore?.student?.code ||
+              record.studentSubjectScore?.student?.userProfile?.code ||
               record.studentSubjectScore?.student?.username,
           },
           {
@@ -748,7 +748,11 @@ function AddStudentModal({
       },
       OR: searchTerm
         ? [
-            { code: { contains: searchTerm, mode: "insensitive" } },
+            {
+              userProfile: {
+                code: { contains: searchTerm, mode: "insensitive" },
+              },
+            },
             {
               userProfile: {
                 fullname: { contains: searchTerm, mode: "insensitive" },
@@ -760,9 +764,9 @@ function AddStudentModal({
     take: 20,
     select: {
       id: true,
-      code: true,
       userProfile: {
         select: {
+          code: true,
           firstName: true,
           lastName: true,
           dateOfBirth: true,
@@ -834,7 +838,7 @@ function AddStudentModal({
 
   const STUDENT_OPTIONS = (students || []).map((d) => ({
     value: d.id,
-    label: `${d.code} - ${d.userProfile?.fullname} - ${
+    label: `${d.userProfile?.code ?? ""} - ${d.userProfile?.fullname} - ${
       d.userProfile?.dateOfBirth ? dayjs(d.userProfile.dateOfBirth).format("DD/MM/YYYY") : "???"
     } - ${d.fixedClass?.name}`,
   }))

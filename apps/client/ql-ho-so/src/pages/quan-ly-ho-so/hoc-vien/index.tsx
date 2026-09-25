@@ -1,7 +1,9 @@
 import Table from "@components/commons/table"
+import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
 import type { FilterProps } from "@components/modal/quan-ly-ho-so/type"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
+import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { buildOrgTree } from "@lib/utils"
 import type { Prisma } from "@workspace/db/client"
@@ -10,21 +12,28 @@ import {
   useFindManyDM_DonVi,
   useFindManyDM_GioiTinh,
   useFindManyStudent,
+  useUpdateStudent,
+  useUpdateUserProfile,
 } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_HO_SO_PERMISSION, ROUTER_PATH } from "@workspace/router"
-import { Col, Flex, Form, Input, Row, Tag } from "antd"
+import { Button, Col, Dropdown, Flex, Form, Input, Menu, message, Row, Tag } from "antd"
 import dayjs from "dayjs"
 import _ from "lodash"
+import { Printer } from "lucide-react"
 import { useRouter } from "next/router"
 import type React from "react"
 import { useCallback, useMemo, useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 import TreeSelect from "@/components/commons/tree-select"
 
 dayjs.locale("vi")
 
 export default function StudentProfilePageDs() {
-  const { can } = useAbility()
+  const { can, canSome } = useAbility()
+  const { showSpinner, hideSpinner } = useSpinner()
+  const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
+  const { mutateAsync: updateStudent } = useUpdateStudent()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [filters, setFilters] = useState<FilterProps>({
@@ -42,6 +51,9 @@ export default function StudentProfilePageDs() {
   const router = useRouter()
   const where = useMemo(() => {
     const userProfile: Prisma.UserProfileWhereInput = {
+      ...(filters.code
+        ? { code: { contains: filters.code, mode: "insensitive" } }
+        : {}),
       ...(filters.name
         ? { fullname: { contains: filters.name, mode: "insensitive" } }
         : {}),
@@ -65,7 +77,6 @@ export default function StudentProfilePageDs() {
 
     return {
       deletedAt: null,
-      ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" } } : {}),
       ...(filters.sDM_DonViId
         ? { fixedClass: { managementOrganizationId: filters.sDM_DonViId } }
         : {}),
@@ -118,8 +129,66 @@ export default function StudentProfilePageDs() {
     })
   }
 
+  const { onOpen: onOpenModalTomTatLyLich } = useDisclosure<{
+    id: string
+  }>({
+    tag: "ModalTomTatLyLich",
+  })
+
+  const { onOpen: onOpenModalLyLichCanBo } = useDisclosure<{
+    id: string
+  }>({
+    tag: "ModalLyLichCanBo",
+  })
+
+  const { onOpen: onOpenModalSoYeuLyLich } = useDisclosure<{
+    id: string
+  }>({
+    tag: "ModalSoYeuLyLich",
+  })
+
+  const printActions = [
+    {
+      key: "1",
+      label: "Xuất dữ liệu theo mẫu trích yếu 63",
+      onClick: ({ id }: { id: string }) => onOpenModalTomTatLyLich({ id }),
+    },
+    {
+      key: "2",
+      label: "Xuất dữ liệu theo mẫu C2",
+      onClick: ({ id }: { id: string }) => onOpenModalLyLichCanBo({ id }),
+    },
+    {
+      key: "3",
+      label: "Xuất dữ liệu theo mẫu sơ yếu lý lịch",
+      onClick: ({ id }: { id: string }) => onOpenModalSoYeuLyLich({ id }),
+    },
+  ]
+
+  async function handleDelete(studentId: string, userProfileId?: string | null) {
+    try {
+      showSpinner()
+      await updateStudent({
+        where: { id: studentId },
+        data: { deletedAt: new Date() },
+      })
+      if (userProfileId) {
+        await updateUserProfile({
+          where: { id: userProfileId },
+          data: { deletedAt: new Date() },
+        })
+      }
+      message.success("Xoá hồ sơ thành công")
+      refetch()
+    } catch {
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } finally {
+      hideSpinner()
+    }
+  }
+
   return (
-    <div>
+    <div className="min-w-0 w-full">
       <Row gutter={[16, 0]}>
         <Col span={24}>
           <Row gutter={[8, 8]} align="top" justify="space-between">
@@ -178,7 +247,7 @@ export default function StudentProfilePageDs() {
                 fixed: "left",
                 dataIndex: "code",
                 type: "input",
-                render: (__, record) => record?.code || "",
+                render: (__, record) => record?.userProfile?.code || "",
               },
               {
                 title: "Họ và tên",
@@ -267,19 +336,56 @@ export default function StudentProfilePageDs() {
               },
               {
                 title: "Thao tác",
-                width: 80,
+                width: 120,
                 align: "center",
                 fixed: "right",
-                hidden: !can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, "SUA"),
-                render: (_, record) =>
-                  record.userProfileId ? (
-                    <EditIcon
-                      onClick={() => {
-                        router.push(`${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${record.userProfileId}`)
-                      }}
-                      className="text-sm text-blue-700 cursor-pointer"
-                    />
-                  ) : null,
+                hidden: !canSome(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, "IN", "XOA", "SUA"),
+                render: (_, record) => (
+                  <Row className="justify-center gap-2">
+                    {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, "IN") && record.userProfileId && (
+                      <Dropdown
+                        overlay={
+                          <Menu>
+                            {printActions.map((item) => (
+                              <Menu.Item
+                                key={item.key}
+                                onClick={() => item.onClick({ id: record.userProfileId })}
+                              >
+                                {item.label}
+                              </Menu.Item>
+                            ))}
+                          </Menu>
+                        }
+                        trigger={["click"]}
+                      >
+                        <Button
+                          className="w-fit"
+                          type="link"
+                          icon={<Printer className="text-[#212121]" />}
+                          size="large"
+                        />
+                      </Dropdown>
+                    )}
+                    {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, "SUA") &&
+                      record.userProfileId && (
+                        <EditIcon
+                          onClick={() => {
+                            router.push(
+                              `${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${record.userProfileId}`
+                            )
+                          }}
+                          className="text-sm text-blue-700 cursor-pointer"
+                        />
+                      )}
+                    {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, "XOA") && (
+                      <DeleteIcon
+                        popConfirm={{
+                          onConfirm: () => handleDelete(record.id, record.userProfileId),
+                        }}
+                      />
+                    )}
+                  </Row>
+                ),
               },
             ]}
             rowKey="id"

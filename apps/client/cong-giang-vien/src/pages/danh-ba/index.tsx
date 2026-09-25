@@ -28,6 +28,7 @@ export default function DanhBa() {
           lecturer: { is: { active: true, deletedAt: null } },
         },
         select: {
+          code: true,
           fullname: true,
           email: true,
           phoneNumber: true,
@@ -48,7 +49,6 @@ export default function DanhBa() {
           },
           lecturer: {
             select: {
-              code: true,
               lecturerType: {
                 select: {
                   name: true,

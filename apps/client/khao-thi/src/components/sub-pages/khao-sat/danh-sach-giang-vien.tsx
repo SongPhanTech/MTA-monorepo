@@ -239,7 +239,7 @@ export default function DetailSurveyPage({
 
                     return (
                       <span className={cn(isDone ? "text-red-500 font-medium" : "text-black")}>
-                        {`${record?.code} - ${record?.userProfile?.fullname}`}
+                        {`${record?.userProfile?.code} - ${record?.userProfile?.fullname}`}
                       </span>
                     )
                   },

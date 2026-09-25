@@ -226,8 +226,8 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportLecturerModalProps) =>
           },
           {
             title: "Mã GV",
-            dataIndex: "code",
-            key: "code",
+            dataIndex: "profileCode",
+            key: "profileCode",
             width: 150,
             align: "center",
             fixed: "left",

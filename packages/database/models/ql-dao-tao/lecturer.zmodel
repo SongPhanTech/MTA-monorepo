@@ -12,7 +12,7 @@ import '../khao-thi/survey'
 import '../khao-thi/exam'
 import '../ql-danh-muc/notification'
 
-model Lecturer extends Base {
+model Lecturer extends BaseNoCode {
   from                             DateTime? // từ ngày
   
   // lecture/staff information

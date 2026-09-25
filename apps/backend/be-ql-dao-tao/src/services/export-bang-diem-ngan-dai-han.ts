@@ -64,8 +64,7 @@ export async function exportBangDiemNganDaiHan({ studentIds }: { studentIds: str
     where: { id: { in: uniqueIds } },
     select: {
       id: true,
-      code: true,
-      userProfile: { select: { fullname: true, dateOfBirth: true } },
+      userProfile: { select: { code: true, fullname: true, dateOfBirth: true } },
       curriculumVersion: {
         select: {
           trainingTime: { select: { name: true } },
@@ -243,7 +242,7 @@ export async function exportBangDiemNganDaiHan({ studentIds }: { studentIds: str
     const cv = student.curriculumVersion
     const classCv = student.fixedClass?.curriculumVersion
     const fullname = student.userProfile?.fullname ?? ""
-    const maSV = student.code ?? ""
+    const maSV = student.userProfile?.code ?? ""
 
     return {
       sheet: sanitizeSheetName(`${maSV} - ${fullname}`, usedSheetNames),

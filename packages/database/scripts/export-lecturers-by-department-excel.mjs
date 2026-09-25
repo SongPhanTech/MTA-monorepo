@@ -164,7 +164,7 @@ function lecturerRow(lec, idx) {
   const p = lec.userProfile || {}
   return {
     stt: idx,
-    code: lec.code || "",
+    code: lec.userProfile?.code || "",
     lectureID: lec.lectureID || "",
     fullName: p.fullname || [p.lastName, p.firstName].filter(Boolean).join(" "),
     gender: p.gender?.sTen || "",
@@ -222,7 +222,6 @@ async function main() {
       where: { deletedAt: null },
       select: {
         id: true,
-        code: true,
         lectureID: true,
         active: true,
         lecturerType: { select: { name: true, isExternal: true } },
@@ -239,6 +238,7 @@ async function main() {
                 iCapDonVi: true,
               },
             },
+            code: true,
             fullname: true,
             firstName: true,
             lastName: true,

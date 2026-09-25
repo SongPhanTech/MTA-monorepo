@@ -74,24 +74,26 @@ const AddStudentToFixedClassModal = () => {
   const { data: dataStudentNotClass = [], refetch } = useFindManyStudent({
     where: {
       fixedClassId: null,
-      OR: [
-        {
-          code: {
-            contains: filters.searchText,
-            mode: "insensitive",
-          },
-        },
-        {
-          userProfile: filters.searchText
-            ? {
+      OR: filters.searchText
+        ? [
+            {
+              userProfile: {
+                code: {
+                  contains: filters.searchText,
+                  mode: "insensitive",
+                },
+              },
+            },
+            {
+              userProfile: {
                 fullname: {
                   contains: filters.searchText,
                   mode: "insensitive" as const,
                 },
-              }
-            : {},
-        },
-      ],
+              },
+            },
+          ]
+        : undefined,
     },
     include: {
       userProfile: true,
@@ -404,6 +406,7 @@ const AddStudentToFixedClassModal = () => {
                 dataIndex: "code",
                 width: 120,
                 align: "center",
+                render: (_, record) => record.userProfile?.code || "",
               },
               {
                 title: "Họ và tên",
@@ -541,6 +544,7 @@ const AddStudentToFixedClassModal = () => {
                 dataIndex: "code",
                 width: 120,
                 align: "center",
+                render: (_, record) => record.userProfile?.code || "",
               },
               {
                 title: "Họ và tên",

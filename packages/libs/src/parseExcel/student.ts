@@ -20,7 +20,7 @@ export const parseFixedClassesAndStudents = (file: Buffer) => {
   const startRow = 10 // Dòng bắt đầu đọc dữ liệu (0-based index)
   const cols = {
     stt: "A",
-    code: "B",
+    code: "B", // Mã người → UserProfile.code
     fullname: "C",
     dateOfBirth: "D",
     gender: "E",
@@ -93,7 +93,7 @@ export const parseFixedClassesAndStudents = (file: Buffer) => {
 
         return {
           stt: row[cols.stt],
-          code: row[cols.code]?.trim(),
+          profileCode: row[cols.code]?.trim(),
           fullname: row[cols.fullname]?.trim(),
           dateOfBirth: dateOfBirth.isValid() ? dateOfBirth.toDate() : null,
           gender: row[cols.gender]?.trim(),
@@ -134,17 +134,17 @@ export const parseFixedClassesAndStudents = (file: Buffer) => {
 function findDuplicateStudentCodes(
   classes: {
     code: string
-    students: { code?: string }[]
+    students: { profileCode?: string }[]
   }[]
 ): Map<string, string[]> {
-  const studentMap = new Map<string, string[]>() // studentCode -> list of class codes
+  const studentMap = new Map<string, string[]>() // profileCode -> list of class codes
 
   for (const classItem of classes) {
     for (const student of classItem.students) {
-      if (!student.code) continue
-      const classCodes = studentMap.get(student.code) ?? []
+      if (!student.profileCode) continue
+      const classCodes = studentMap.get(student.profileCode) ?? []
       classCodes.push(classItem.code)
-      studentMap.set(student.code, classCodes)
+      studentMap.set(student.profileCode, classCodes)
     }
   }
 
@@ -186,7 +186,7 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
   const cols = {
     stt: "A",
     registerNumber: "B",
-    code: "C",
+    code: "C", // Mã người → UserProfile.code
     fullname: "D",
     dateOfBirth: "E",
     gender: "F",
@@ -279,7 +279,7 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
       return {
         stt: row[cols.stt],
         registerNumber: row[cols.registerNumber]?.trim(),
-        code: row[cols.code]?.trim() as string,
+        profileCode: row[cols.code]?.trim() as string,
         fullname: row[cols.fullname]?.trim() as string,
         dateOfBirth: dateOfBirth.isValid() ? dateOfBirth.toDate() : null,
         gender: row[cols.gender]?.trim(),
@@ -299,7 +299,7 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
     })
 
   const duplicateCodes = students
-    .map((student) => student.code)
+    .map((student) => student.profileCode)
     .filter((code, index, arr) => arr.indexOf(code) !== index)
 
   if (duplicateCodes.length) {
@@ -348,7 +348,7 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
     stt: "A",
     registerNumber: "B", // Số báo danh
     doctoralCode: "C", // Mã hồ sơ TS
-    code: "D", // Mã sinh viên
+    code: "D", // Mã sinh viên → UserProfile.code
     fullname: "E", // Họ và tên
     dateOfBirth: "F", // Ngày sinh
     gender: "G", // Giới tính
@@ -506,7 +506,7 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
         stt: row[cols.stt],
         registerNumber: row[cols.registerNumber]?.trim(),
         doctoralCode: row[cols.doctoralCode]?.trim(),
-        code: row[cols.code]?.trim() as string,
+        profileCode: row[cols.code]?.trim() as string,
         fullname: row[cols.fullname]?.trim() as string,
         dateOfBirth: dateOfBirth.isValid() ? dateOfBirth.toDate() : null,
         gender: row[cols.gender]?.trim(),
@@ -545,7 +545,7 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
     })
 
   const duplicateCodes = students
-    .map((student) => student.code)
+    .map((student) => student.profileCode)
     .filter((code, index, arr) => arr.indexOf(code) !== index)
 
   if (duplicateCodes.length) {

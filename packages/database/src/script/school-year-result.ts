@@ -26,6 +26,7 @@ async function calcStudentYearResult({
   const student = await prisma.student.findUnique({
     where: { id: studentId },
     include: {
+      userProfile: { select: { code: true } },
       fixedClass: {
         include: {
           trainingCourse: {
@@ -253,7 +254,7 @@ async function calcStudentYearResult({
     create: {
       isClassMonitor: false,
       isUnionLeader: false,
-      code: `${student.code}_${schoolYear.code}`,
+      code: `${student.userProfile?.code ?? student.id}_${schoolYear.code}`,
       studentId: studentId,
       schoolYearId: schoolYearId,
       studyYear: new Date().getFullYear(),

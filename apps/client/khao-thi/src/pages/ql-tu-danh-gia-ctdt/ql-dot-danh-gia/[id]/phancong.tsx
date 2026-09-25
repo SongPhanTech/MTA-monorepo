@@ -241,7 +241,7 @@ export default function EvaluationAssignmentPage() {
 
                           return {
                             value: i?.id,
-                            label: `${i.code} - ${academicTitle ? `${academicTitle} ` : ""}${fullName}`,
+                            label: `${i.userProfile?.code ?? ""} - ${academicTitle ? `${academicTitle} ` : ""}${fullName}`,
                           }
                         })}
                       />

@@ -211,6 +211,7 @@ const PutStudentModal = () => {
             firstName: output.firstName,
             lastName: output.lastName,
             dateOfBirth: output.dateOfBirth,
+            code: output.code || undefined,
           },
           where: {
             // The userProfileId is taken from the cccdUserProfileData
@@ -227,7 +228,6 @@ const PutStudentModal = () => {
             curriculumVersionId: output.curriculumVersionId || null,
             curriculumVersionParallelId: output.curriculumVersionParallelId || null,
             note: output.note,
-            code: output.code,
           },
           where: {
             id,
@@ -253,9 +253,14 @@ const PutStudentModal = () => {
             curriculumVersionId: output.curriculumVersionId,
             curriculumVersionParallelId: output.curriculumVersionParallelId,
             note: output.note,
-            code: output.code,
           },
         })
+        if (output.code) {
+          await updateUserProfile({
+            where: { id: cccdUserProfileData.id },
+            data: { code: output.code },
+          })
+        }
         message.success("Thêm mới sinh viên, học viên thành công")
       }
 
@@ -288,7 +293,7 @@ const PutStudentModal = () => {
     if (studentData) {
       form.setFieldsValue({
         // Student fields với ID
-        code: studentData.code,
+        code: studentData.userProfile?.code,
         fixedClassId: studentData.fixedClassId ?? undefined,
         trainingCourseId: studentData.fixedClass?.trainingCourse?.id ?? undefined,
         status: studentData.status,
@@ -314,7 +319,7 @@ const PutStudentModal = () => {
     if (studentData) {
       form.setFieldsValue({
         // Student fields với ID
-        code: studentData.code,
+        code: studentData.userProfile?.code,
         fixedClassId: studentData.fixedClassId ?? undefined,
         trainingCourseId: studentData.fixedClass?.trainingCourse?.id ?? undefined,
         status: studentData.status,

@@ -97,7 +97,7 @@ const toDiemRenLuyenRow = (
 
   return {
     id: sv.id,
-    maSinhVien: sv.userProfile?.code ?? sv.code ?? "",
+    maSinhVien: sv.userProfile?.code ?? "",
     hoVaTen: sv.userProfile?.fullname ?? "",
     diem: choNhap
       ? (diemRecord?.score ?? null)

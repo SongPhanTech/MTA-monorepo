@@ -9,7 +9,6 @@ import { StudentStatus } from '../../zenstack/models';
 import { StudentStatusSchema } from '../enums/StudentStatus.schema';
 const baseSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
@@ -50,7 +49,6 @@ const baseSchema = z.object({
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
@@ -167,7 +165,6 @@ export const StudentPrismaCreateSchema = baseSchemaWithoutDefaults.partial().pas
  */
 export const StudentPrismaUpdateSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),

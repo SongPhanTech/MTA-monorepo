@@ -230,7 +230,7 @@ const ModalChuyenDotXetLuanVan = () => {
     () =>
       thesisProject?.registrations?.map((registration) => ({
         key: registration.id,
-        code: registration.student?.code || "—",
+        code: registration.student?.userProfile?.code || "—",
         fullname: registration.student?.userProfile?.fullname || "—",
         fixedClass: registration.student?.fixedClass?.name || "—",
         trainingCourse: registration.student?.fixedClass?.trainingCourse?.name || "—",
@@ -514,7 +514,7 @@ const ModalChuyenDotXetLuanVan = () => {
                   {conflictingRegistrations.map((registration) => (
                     <li key={registration.id}>
                       <Typography.Text strong>
-                        {registration.student?.userProfile?.fullname || registration.student?.code}
+                        {registration.student?.userProfile?.fullname || registration.student?.userProfile?.code}
                       </Typography.Text>
                       {": "}
                       {registration.thesisProject?.title || "Chưa có tên đề tài"}

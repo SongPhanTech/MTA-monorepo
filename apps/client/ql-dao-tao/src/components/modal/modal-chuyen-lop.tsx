@@ -498,6 +498,7 @@ const ModalChuyenLop = () => {
                 dataIndex: "code",
                 width: 120,
                 align: "center",
+                render: (_, record) => record.userProfile?.code || "",
               },
               {
                 title: "Họ và tên",
@@ -670,6 +671,7 @@ const ModalChuyenLop = () => {
                 dataIndex: "code",
                 width: 120,
                 align: "center",
+                render: (_, record) => record.userProfile?.code || "",
               },
               {
                 title: "Họ và tên",

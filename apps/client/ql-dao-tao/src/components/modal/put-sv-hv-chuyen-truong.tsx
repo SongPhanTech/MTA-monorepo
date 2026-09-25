@@ -78,7 +78,11 @@ const PutStudentScoreConvertModal = () => {
             ? { fullname: { contains: studentKeyword, mode: "insensitive" } }
             : {},
         },
-        { code: { contains: studentKeyword, mode: "insensitive" } },
+        {
+          userProfile: {
+            code: { contains: studentKeyword, mode: "insensitive" },
+          },
+        },
       ],
     },
     include: { userProfile: true },
@@ -386,7 +390,7 @@ const PutStudentScoreConvertModal = () => {
               const fullName =
                 s?.userProfile?.fullName ??
                 [s?.userProfile?.lastName, s?.userProfile?.firstName].filter(Boolean).join(" ")
-              const extra = s?.code ? ` - ${s.code}` : ""
+              const extra = s?.userProfile?.code ? ` - ${s.userProfile.code}` : ""
               return { value: s.id, label: `${fullName}${extra}` }
             })}
           />

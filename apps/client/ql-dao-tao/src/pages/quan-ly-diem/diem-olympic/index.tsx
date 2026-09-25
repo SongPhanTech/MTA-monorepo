@@ -171,9 +171,9 @@ export default function ArchivedAward() {
       award: true,
       student: {
         select: {
-          code: true,
           userProfile: {
             select: {
+              code: true,
               fullname: true,
               dateOfBirth: true,
             },

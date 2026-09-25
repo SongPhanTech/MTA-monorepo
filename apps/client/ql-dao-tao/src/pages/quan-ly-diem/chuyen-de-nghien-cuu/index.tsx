@@ -322,7 +322,9 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
         {
           studentSubjectScore: {
             student: {
-              code: "asc",
+              userProfile: {
+                code: "asc",
+              },
             },
           },
         },
@@ -787,7 +789,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                       // Count research topics per student
                       const researchTopicCountByStudent = studentResearchTopicData.reduce(
                         (acc, e) => {
-                          const studentCode = e.studentSubjectScore.student?.code
+                          const studentCode = e.studentSubjectScore.student?.userProfile?.code
                           if (studentCode) {
                             acc[studentCode] = (acc[studentCode] || 0) + 1
                           }
@@ -815,7 +817,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                             }
 
                             globalIndex++
-                            const studentCode = e.studentSubjectScore.student?.code
+                            const studentCode = e.studentSubjectScore.student?.userProfile?.code
                             const supervisorName =
                               (getSupervisorName(
                                 versionToPersonLike(e.supervisor),
@@ -1659,7 +1661,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
               width: 100,
               align: "center",
               render: (_, record) => {
-                return record?.studentSubjectScore?.student?.code || ""
+                return record?.studentSubjectScore?.student?.userProfile?.code || ""
               },
             },
             {

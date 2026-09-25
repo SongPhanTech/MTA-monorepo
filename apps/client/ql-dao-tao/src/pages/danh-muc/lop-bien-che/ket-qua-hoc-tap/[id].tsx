@@ -448,7 +448,7 @@ export default function StudentScoreClassPage() {
         body: JSON.stringify({ studentId }),
       })
       if (res.status === 200 && res.data instanceof Blob) {
-        const fileName = `BDCN-${student?.code ?? ""}-${student?.userProfile?.fullname ?? ""}.xlsx`
+        const fileName = `BDCN-${student?.userProfile?.code ?? ""}-${student?.userProfile?.fullname ?? ""}.xlsx`
         saveAs(res.data, fileName)
       } else {
         message.error(res.data?.message || "Xuất file thất bại")
@@ -476,7 +476,7 @@ export default function StudentScoreClassPage() {
         body: JSON.stringify({ studentId }),
       })
       if (res.status === 200 && res.data instanceof Blob) {
-        const fileName = `BDCN-${student?.code ?? ""}-${student?.userProfile?.fullname ?? ""}.xlsx`
+        const fileName = `BDCN-${student?.userProfile?.code ?? ""}-${student?.userProfile?.fullname ?? ""}.xlsx`
         saveAs(res.data, fileName)
       } else {
         message.error(res.data?.message || "Xuất file thất bại")
@@ -504,7 +504,7 @@ export default function StudentScoreClassPage() {
         body: JSON.stringify({ studentId }),
       })
       if (res.status === 200 && res.data instanceof Blob) {
-        const fileName = `BDQT-${student?.code ?? ""}-${student?.userProfile?.fullname ?? ""}.xlsx`
+        const fileName = `BDQT-${student?.userProfile?.code ?? ""}-${student?.userProfile?.fullname ?? ""}.xlsx`
         saveAs(res.data, fileName)
       } else {
         message.error(res.data?.message || "Xuất file thất bại")
@@ -536,7 +536,7 @@ export default function StudentScoreClassPage() {
       <div>
         <Divider orientation="left" orientationMargin={0}>
           {[
-            student?.code,
+            student?.userProfile?.code,
             student?.userProfile?.fullname,
             student?.fixedClass?.trainingCourse.trainingObjectType.name,
             student?.fixedClass?.trainingCourse?.name,

@@ -54,7 +54,7 @@ app.openapi(postStudentSchedule, async (c) => {
       subjectClassStudent: {
         some: {
           student: {
-            code: students_code,
+            userProfile: { code: students_code },
           },
         },
       },

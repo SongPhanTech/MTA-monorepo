@@ -327,7 +327,7 @@ export function useSuspenseCountStaff<TArgs extends Prisma.StaffCountArgs, TQuer
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Staff', `${endpoint}/staff/count`, args, options, fetch);
 }
 
-export function useCheckStaff<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; userProfileId?: string; organizationId?: string; staffTypeId?: string; staffPositionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckStaff<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; userProfileId?: string; organizationId?: string; staffTypeId?: string; staffPositionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Staff', `${endpoint}/staff/check`, args, options, fetch);
 }

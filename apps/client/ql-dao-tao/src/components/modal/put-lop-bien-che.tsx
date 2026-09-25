@@ -421,7 +421,7 @@ const PutFixedClassModal = () => {
             options={staffData.map((i) => {
               return {
                 value: i?.id,
-                label: `${i.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
+                label: `${i.userProfile?.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
               }
             })}
           />

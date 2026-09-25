@@ -421,7 +421,7 @@ const ModalPrintStudentSubjectScore = () => {
               {input?.dataTable?.map((item, index: number) => (
                 <tr key={item.id}>
                   <td className="border border-black text-center">{index + 1}</td>
-                  <td className="border border-black text-center">{item?.student?.code}</td>
+                  <td className="border border-black text-center">{item?.student?.userProfile?.code}</td>
                   <td className="border border-black text-left px-1">
                     {item?.student?.userProfile?.fullname}
                   </td>

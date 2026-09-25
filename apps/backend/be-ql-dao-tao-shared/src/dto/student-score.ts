@@ -4,7 +4,7 @@ import { SuccessResponseSchema } from "./base"
 
 export const StudentScoreRequest = z
   .object({
-    student_code: z.string().openapi(fieldDesc("Mã sinh viên (Student.code).", "21000001")),
+    student_code: z.string().openapi(fieldDesc("Mã sinh viên (UserProfile.code).", "21000001")),
   })
   .openapi("StudentScoreRequest")
 

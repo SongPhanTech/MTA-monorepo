@@ -21,8 +21,8 @@ interface ExportScoreTemplateProps {
     midtermScore?: number | null
     examScore?: number | null
     student?: {
-      code?: string | null
       userProfile?: {
+        code?: string | null
         fullname?: string | null
         dateOfBirth?: Date | string | null
       } | null
@@ -233,7 +233,7 @@ const ExportScoreTemplate = ({
       const row = worksheet.getRow(11 + index)
       row.values = [
         index + 1,
-        record.student?.code || "",
+        record.student?.userProfile?.code || "",
         record.student?.userProfile?.fullname || "",
         record.student?.userProfile?.dateOfBirth
           ? new Date(record.student.userProfile.dateOfBirth).toLocaleDateString("vi-VN")

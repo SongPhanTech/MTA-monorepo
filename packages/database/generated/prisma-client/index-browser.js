@@ -2721,7 +2721,6 @@ exports.Prisma.OutputStandardOnCurriculumScalarFieldEnum = {
 
 exports.Prisma.StudentScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
@@ -2931,7 +2930,6 @@ exports.Prisma.IndividualScheduleScalarFieldEnum = {
 
 exports.Prisma.LecturerScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
@@ -3052,7 +3050,6 @@ exports.Prisma.StaffPositionScalarFieldEnum = {
 
 exports.Prisma.StaffScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
@@ -6808,7 +6805,6 @@ exports.Prisma.OutputStandardOnCurriculumOrderByRelevanceFieldEnum = {
 
 exports.Prisma.StudentOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
   note: 'note',
@@ -6895,7 +6891,6 @@ exports.Prisma.IndividualScheduleOrderByRelevanceFieldEnum = {
 
 exports.Prisma.LecturerOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
   lectureID: 'lectureID',
@@ -6971,7 +6966,6 @@ exports.Prisma.StaffPositionOrderByRelevanceFieldEnum = {
 
 exports.Prisma.StaffOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
   createdBy: 'createdBy',
   userProfileId: 'userProfileId',

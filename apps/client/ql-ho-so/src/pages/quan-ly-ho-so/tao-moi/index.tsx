@@ -547,6 +547,7 @@ export default function CreateUserPage() {
         }
         const profileData = {
           ...values,
+          code: values.code || lectureCode,
           lastName: values.lastName?.trim(),
           firstName: values.firstName?.trim(),
           id: res?.data?.Id,
@@ -913,7 +914,6 @@ export default function CreateUserPage() {
             data: {
               userProfileId: resProfile?.id,
               lecturerTypeId: lecturerTypeId,
-              code: lectureCode || "",
             },
           })
         }
@@ -923,7 +923,6 @@ export default function CreateUserPage() {
               userProfileId: resProfile?.id,
               staffPositionId: staffPositionId,
               staffTypeId: staffTypeId,
-              code: values.code,
               organizationId: organizationId || "",
             },
           })

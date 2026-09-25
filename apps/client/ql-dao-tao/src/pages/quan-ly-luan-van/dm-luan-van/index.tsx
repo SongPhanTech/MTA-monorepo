@@ -89,6 +89,7 @@ export type StudentRow = {
   id?: string
   code?: string | null
   userProfile?: {
+    code?: string | null
     fullname?: string | null
     dateOfBirth?: string | Date | null
     [key: string]: unknown
@@ -320,9 +321,8 @@ const thesisProjectTableSelect = {
       student: {
         select: {
           id: true,
-          code: true,
           userProfile: {
-            select: { fullname: true, firstName: true, lastName: true, dateOfBirth: true },
+            select: { code: true, fullname: true, firstName: true, lastName: true, dateOfBirth: true },
           },
           fixedClass: {
             select: {
@@ -392,9 +392,8 @@ const thesisProjectExportSelect = {
       student: {
         select: {
           id: true,
-          code: true,
           userProfile: {
-            select: { fullname: true, firstName: true, lastName: true, dateOfBirth: true },
+            select: { code: true, fullname: true, firstName: true, lastName: true, dateOfBirth: true },
           },
           curriculumVersion: {
             select: {
@@ -901,7 +900,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       { fixedClassId: { in: fixedClassIds ?? [] } },
     ]
     if (filters.code) {
-      studentAnd.push({ code: { contains: filters.code, mode: "insensitive" } })
+      studentAnd.push({
+        userProfile: { code: { contains: filters.code, mode: "insensitive" } },
+      })
     }
     if (filters.name) {
       studentAnd.push({
@@ -1159,8 +1160,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       where: sampleStudentWhere,
       select: {
         id: true,
-        code: true,
-        userProfile: { select: { fullname: true, dateOfBirth: true } },
+        userProfile: { select: { code: true, fullname: true, dateOfBirth: true } },
         fixedClass: { select: { name: true } },
         thesisRegistrations: {
           where: {
@@ -1456,20 +1456,20 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
       if (hasDuplicateCouncilExperts(rowData)) {
         message.error(
-          `Các cán bộ hội đồng bảo vệ không được trùng nhau (mã học viên: ${studentRecord?.code || studentId}).`
+          `Các cán bộ hội đồng bảo vệ không được trùng nhau (mã học viên: ${studentRecord?.userProfile?.code || studentId}).`
         )
         return
       }
       if (hasSupervisorConflictWithCouncilRow(rowData)) {
         message.error(
-          `Giáo viên hướng dẫn không được trùng với các thành viên hội đồng bảo vệ (mã học viên: ${studentRecord?.code || studentId}).`
+          `Giáo viên hướng dẫn không được trùng với các thành viên hội đồng bảo vệ (mã học viên: ${studentRecord?.userProfile?.code || studentId}).`
         )
         return
       }
       if (allowSupervisorEdit) {
         if (hasDuplicateThesisSupervisors(rowData.supervisor, rowData.coSupervisor)) {
           message.error(
-            `GVHD 1 và GVHD 2 không được trùng nhau (mã học viên: ${studentRecord?.code || studentId}).`
+            `GVHD 1 và GVHD 2 không được trùng nhau (mã học viên: ${studentRecord?.userProfile?.code || studentId}).`
           )
           return
         }
@@ -1490,7 +1490,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
       items.push({
         thesisProjectId,
-        studentCode: typeof studentRecord?.code === "string" ? studentRecord.code : null,
+        studentCode:
+          typeof studentRecord?.userProfile?.code === "string"
+            ? studentRecord.userProfile.code
+            : null,
         title: rowData.title ?? "",
         type: rowData.type ?? "",
         language: rowData.language ?? "",
@@ -2452,12 +2455,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               {
                 title: "Mã sinh viên",
                 sorter: (a: StudentRow, b: StudentRow) =>
-                  (a?.code || "").localeCompare(b?.code || ""),
+                  (a?.userProfile?.code || "").localeCompare(b?.userProfile?.code || ""),
                 width: 120,
                 fixed: "left",
                 dataIndex: "code",
                 render: (_, record) => {
-                  return record?.code
+                  return record?.userProfile?.code
                 },
               },
               {

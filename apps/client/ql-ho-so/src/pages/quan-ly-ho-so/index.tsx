@@ -125,8 +125,8 @@ export default function UserProfilePageDs() {
     include: {
       gender: true,
       rank: true,
-      lecturer: { select: { id: true, code: true } },
-      staffs: { select: { id: true, code: true } },
+      lecturer: { select: { id: true } },
+      staffs: { select: { id: true } },
     },
     orderBy: {
       createdAt: "desc",
@@ -229,7 +229,7 @@ export default function UserProfilePageDs() {
   ]
 
   return (
-    <div>
+    <div className="min-w-0 w-full">
       <Row gutter={[16, 0]}>
         <Col span={24}>
           {/* Row nút thêm */}
@@ -312,14 +312,14 @@ export default function UserProfilePageDs() {
                 title: "Mã GV/CB",
                 align: "center",
                 width: 120,
-                fixed: "left",
-                render: (__, record) => record?.lecturer?.code || record?.staffs?.code || "",
+                ellipsis: true,
+                render: (__, record) => record?.code || "",
               },
               {
                 title: "Họ và tên",
                 align: "center",
                 width: 180,
-                fixed: "left",
+                ellipsis: true,
                 render: (__, record) => (record ? `${record.lastName} ${record.firstName}` : ""),
                 type: "input",
                 dataIndex: "name",
@@ -327,19 +327,23 @@ export default function UserProfilePageDs() {
               {
                 title: "Loại",
                 align: "center",
-                width: 140,
+                width: 110,
                 render: (__, record) => (
                   <Flex justify="center" gap={4} wrap="wrap">
-                    {record?.lecturer || record?.bLaGiangVien ? <Tag color="blue">Giảng viên</Tag> : null}
-                    {record?.staffs || record?.bLaCanBoNhanVien ? <Tag color="purple">Cán bộ</Tag> : null}
+                    {record?.lecturer || record?.bLaGiangVien ? (
+                      <Tag color="blue">Giảng viên</Tag>
+                    ) : null}
+                    {record?.staffs || record?.bLaCanBoNhanVien ? (
+                      <Tag color="purple">Cán bộ</Tag>
+                    ) : null}
                   </Flex>
                 ),
               },
               {
                 title: "CCCD/CMND",
                 align: "center",
-                width: 150,
-                fixed: "left",
+                width: 140,
+                ellipsis: true,
                 render: (__, record) => (record.idCardNumber ? record.idCardNumber : ""),
                 type: "input",
                 dataIndex: "idCardNumber",
@@ -370,6 +374,7 @@ export default function UserProfilePageDs() {
                 title: "Nguyên quán",
                 align: "center",
                 width: 150,
+                ellipsis: true,
                 type: "input",
                 dataIndex: "originalPlace",
                 render: (__, record) => (record?.originalPlace ? record?.originalPlace : ""),
@@ -377,7 +382,8 @@ export default function UserProfilePageDs() {
               {
                 title: "Đơn vị",
                 align: "center",
-                width: 120,
+                width: 180,
+                ellipsis: true,
                 // type: 'tree_select',
                 // options: treeData,
                 dataIndex: "sDM_DonViId",
@@ -415,7 +421,8 @@ export default function UserProfilePageDs() {
               {
                 title: "Email",
                 align: "center",
-                width: 150,
+                width: 180,
+                ellipsis: true,
                 type: "input",
                 dataIndex: "email",
                 render: (__, record) => (record.email ? record?.email : ""),

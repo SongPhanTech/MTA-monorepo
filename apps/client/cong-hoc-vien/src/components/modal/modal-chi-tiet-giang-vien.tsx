@@ -216,7 +216,7 @@ const ModalChiTietGiangVien = () => {
       children: (
         <Descriptions bordered column={2} size="small">
           <Descriptions.Item label="Mã giảng viên" span={1}>
-            {lecturer.code}
+            {lecturer.userProfile?.code}
           </Descriptions.Item>
           <Descriptions.Item label="ID giảng viên" span={1}>
             {lecturer.lectureID}
@@ -1216,7 +1216,7 @@ const ModalChiTietGiangVien = () => {
 
   return (
     <Modal
-      title={`Chi tiết giảng viên: ${lecturer.userProfile?.lastName || ""} ${lecturer.userProfile?.firstName || ""} (${lecturer.code || ""})`}
+      title={`Chi tiết giảng viên: ${lecturer.userProfile?.lastName || ""} ${lecturer.userProfile?.firstName || ""} (${lecturer.userProfile?.code || ""})`}
       open={isOpen}
       onCancel={onClose}
       width="90%"

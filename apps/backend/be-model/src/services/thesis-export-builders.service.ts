@@ -241,7 +241,7 @@ function commonStudentRows(rows: StudentRow[]) {
     const project = getProject(student)
     return {
       stt: index + 1,
-      maHv: student.code || "",
+      maHv: student.userProfile?.code || "",
       hoTen: studentName(student),
       tenhocvien: studentName(student),
       lastname: String(student.userProfile?.lastName ?? ""),

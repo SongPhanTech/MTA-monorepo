@@ -15,6 +15,7 @@ import { useMemo, useState } from "react"
 
 export type LectuerType = Lecturer & {
   survey: Survey[]
+  userProfile?: { code?: string | null; fullname?: string | null } | null
 }
 
 export default function ClussterSurveyPage() {

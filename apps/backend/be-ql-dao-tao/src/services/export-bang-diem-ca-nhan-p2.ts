@@ -131,10 +131,9 @@ async function exportBangDiemCaNhanMau({
     where: { id: studentId },
     select: {
       id: true,
-      code: true,
       curriculumVersionId: true,
       userProfile: {
-        select: { fullname: true, dateOfBirth: true },
+        select: { code: true, fullname: true, dateOfBirth: true },
       },
       studentYearResult: {
         select: {
@@ -649,7 +648,7 @@ async function exportBangDiemCaNhanMau({
 
   const today = nowVn()
   const fullname = student.userProfile?.fullname ?? ""
-  const maSV = student.code ?? ""
+  const maSV = student.userProfile?.code ?? ""
   const curriculum = student.fixedClass?.curriculumVersion?.curriculum
   const nganh =
     curriculum?.trainingMajor?.trainingField?.name || curriculum?.trainingField?.name || ""

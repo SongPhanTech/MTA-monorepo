@@ -317,7 +317,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
         subjectClass: { select: { type: true } },
         student: {
           include: {
-            userProfile: { select: { fullname: true, dateOfBirth: true } },
+            userProfile: { select: { code: true, fullname: true, dateOfBirth: true } },
             fixedClass: {
               include: {
                 trainingCourse: {
@@ -384,7 +384,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
         return { finalScore, letter: convert?.letter ?? "" }
       })(),
       id: r.id,
-      mssv: r.student?.code ?? "",
+      mssv: r.student?.userProfile?.code ?? "",
       hoTen: r.student?.userProfile?.fullname ?? "",
       attendanceScore: r.attendanceScore ?? null,
       midtermScore: r.midtermScore ?? null,

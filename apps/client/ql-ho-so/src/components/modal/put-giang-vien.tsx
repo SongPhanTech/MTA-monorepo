@@ -86,7 +86,6 @@ const PutUserProfileLectureModal = () => {
     output: LecturerProfileType,
     userProfileId: string
   ): Prisma.LecturerCreateInput => ({
-    code: output.code,
     userProfile: { connect: { id: userProfileId } },
     lecturerType: { connect: { id: output.lecturerTypeId } },
   })
@@ -102,9 +101,11 @@ const PutUserProfileLectureModal = () => {
           data: {
             userProfileId: output?.userProfileId,
             lecturerTypeId: output.lecturerTypeId,
-            code: output.code,
             userProfile: {
-              update: { sDM_DonViId: output.organizationId || null },
+              update: {
+                sDM_DonViId: output.organizationId || null,
+                code: output.code || undefined,
+              },
             },
           },
           where: {
@@ -118,13 +119,15 @@ const PutUserProfileLectureModal = () => {
           data: {
             userProfileId: output?.userProfileId,
             lecturerTypeId: output.lecturerTypeId,
-            code: output.code,
           },
         })
         if (output?.userProfileId) {
           await updateUserProfile({
             where: { id: output.userProfileId },
-            data: { sDM_DonViId: output.organizationId || null },
+            data: {
+              sDM_DonViId: output.organizationId || null,
+              code: output.code || undefined,
+            },
           })
         }
         message.success("Thêm mới giảng viên thành công")
@@ -154,7 +157,7 @@ const PutUserProfileLectureModal = () => {
 
       const formData = {
         // Thông tin từ Lecturer
-        code: lecturer.code,
+        code: userProfile.code,
         organizationId: userProfile.sDM_DonViId,
         lecturerTypeId: lecturer.lecturerTypeId,
 

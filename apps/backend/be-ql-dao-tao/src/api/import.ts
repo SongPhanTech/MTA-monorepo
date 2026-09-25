@@ -208,20 +208,19 @@ app.openapi(importLecturer, async (c) => {
   )
 
   const existingLecturer = await prisma.lecturer.findMany({
-    where: { code: { in: data.lecturers.map((lecturer) => lecturer.code) } },
+    where: { userProfile: { code: { in: data.lecturers.map((lecturer) => lecturer.code) } } },
     select: {
       id: true,
-      code: true,
       userProfileId: true,
       userProfile: {
-        select: { idCardNumber: true },
+        select: { idCardNumber: true, code: true },
       },
     },
   })
 
   const existingLecturerMap = new Map(
-    existingLecturer.map(({ code, id, userProfileId, userProfile }) => [
-      code,
+    existingLecturer.map(({ id, userProfileId, userProfile }) => [
+      userProfile.code,
       { id, userProfileId, idCardNumber: userProfile.idCardNumber },
     ])
   )
@@ -236,10 +235,9 @@ app.openapi(importLecturer, async (c) => {
     },
     select: {
       id: true,
-      code: true,
       userProfileId: true,
       userProfile: {
-        select: { idCardNumber: true },
+        select: { idCardNumber: true, code: true },
       },
     },
   })
@@ -247,9 +245,9 @@ app.openapi(importLecturer, async (c) => {
   const existingLecturerByCCCDMap = new Map(
     existingLecturerByCCCD
       .filter(({ userProfile }) => userProfile.idCardNumber)
-      .map(({ code, id, userProfileId, userProfile }) => [
+      .map(({ id, userProfileId, userProfile }) => [
         userProfile.idCardNumber,
-        { id, code, userProfileId },
+        { id, code: userProfile.code, userProfileId },
       ])
   )
 
@@ -291,7 +289,6 @@ app.openapi(importLecturer, async (c) => {
         for (const lecturer of data.lecturers) {
           const lecturerData: Prisma.LecturerCreateInput = {
             from: new Date(),
-            code: lecturer.code,
             lecturerType: {
               connect: { id: lecturerTypeMap.get(lecturer.lecturerType) },
             },
@@ -301,6 +298,7 @@ app.openapi(importLecturer, async (c) => {
 
           const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
             ...splitFullName(lecturer.fullname),
+            code: lecturer.code,
             bLaGiangVien: true,
             bLaCanBoNhanVien: true,
             dateOfBirth: lecturer.dateOfBirth,
@@ -680,17 +678,16 @@ app.openapi(importGuestLecturer, async (c) => {
   )
 
   const existingLecturer = await prisma.lecturer.findMany({
-    where: { code: { in: data.lecturers.map((lecturer) => lecturer.code) } },
+    where: { userProfile: { code: { in: data.lecturers.map((lecturer) => lecturer.code) } } },
     select: {
       id: true,
-      code: true,
       userProfileId: true,
-      userProfile: { select: { idCardNumber: true } },
+      userProfile: { select: { idCardNumber: true, code: true } },
     },
   })
   const existingLecturerMap = new Map(
-    existingLecturer.map(({ code, id, userProfileId, userProfile }) => [
-      code,
+    existingLecturer.map(({ id, userProfileId, userProfile }) => [
+      userProfile.code,
       { id, userProfileId, idCardNumber: userProfile.idCardNumber },
     ])
   )
@@ -703,17 +700,16 @@ app.openapi(importGuestLecturer, async (c) => {
     },
     select: {
       id: true,
-      code: true,
       userProfileId: true,
-      userProfile: { select: { idCardNumber: true } },
+      userProfile: { select: { idCardNumber: true, code: true } },
     },
   })
   const existingLecturerByCCCDMap = new Map(
     existingLecturerByCCCD
       .filter(({ userProfile }) => userProfile.idCardNumber)
-      .map(({ code, id, userProfileId, userProfile }) => [
+      .map(({ id, userProfileId, userProfile }) => [
         userProfile.idCardNumber,
-        { id, code, userProfileId },
+        { id, code: userProfile.code, userProfileId },
       ])
   )
 
@@ -750,7 +746,6 @@ app.openapi(importGuestLecturer, async (c) => {
         for (const lecturer of data.lecturers) {
           const lecturerData: Prisma.LecturerCreateInput = {
             from: new Date(),
-            code: lecturer.code,
             lecturerType: {
               connect: { id: lecturerTypeMap.get(lecturer.lecturerType) },
             },
@@ -760,6 +755,7 @@ app.openapi(importGuestLecturer, async (c) => {
 
           const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
             ...splitFullName(lecturer.fullname),
+            code: lecturer.code,
             bLaGiangVien: true,
             bLaCanBoNhanVien: true,
             dateOfBirth: lecturer.dateOfBirth,
@@ -1286,25 +1282,31 @@ app.openapi(importStudent, async (c) => {
   )
 
   const existingStudent = await prisma.student.findMany({
-    where: { code: { in: data.students.map((student) => student.code) } },
+    where: { userProfile: { code: { in: data.students.map((student) => student.profileCode) } } },
     select: {
       id: true,
-      code: true,
       userProfileId: true,
+      fixedClass: { select: { code: true } },
       userProfile: {
-        select: { idCardNumber: true },
+        select: { idCardNumber: true, code: true },
       },
     },
   })
 
   const existingStudentMap = new Map(
-    existingStudent.map(({ code, id, userProfileId, userProfile }) => [
-      code,
+    existingStudent.map(({ id, userProfileId, userProfile }) => [
+      userProfile.code,
+      { id, userProfileId, idCardNumber: userProfile.idCardNumber },
+    ])
+  )
+  const existingStudentByClassMap = new Map(
+    existingStudent.map(({ id, userProfileId, userProfile, fixedClass }) => [
+      `${userProfile.code}::${fixedClass?.code ?? ""}`,
       { id, userProfileId, idCardNumber: userProfile.idCardNumber },
     ])
   )
 
-  const studentCodes = data.students.map((student) => student.code)
+  const studentCodes = data.students.map((student) => student.profileCode)
   const studentCCCDs = data.students.map((student) => student.idCardNumber)
   const existingProfile = await prisma.userProfile.findMany({
     where: {
@@ -1325,12 +1327,12 @@ app.openapi(importStudent, async (c) => {
     if (profile.code) existingProfileMap.set(profile.code, { id: profile.id, code: profile.code })
   }
 
-  // validate duplicate student.code identify by student.userProfile.idCardNumber
+  // Trùng UserProfile.code nhưng khác CCCD
   const duplicateCode: string[] = []
   for (const l of data.students) {
-    const existingStudent = existingStudentMap.get(l.code)
+    const existingStudent = existingStudentMap.get(l.profileCode)
     if (existingStudent && existingStudent.idCardNumber !== l.idCardNumber) {
-      duplicateCode.push(l.code)
+      duplicateCode.push(l.profileCode)
     }
   }
 
@@ -1342,7 +1344,7 @@ app.openapi(importStudent, async (c) => {
   for (const s of data.students) {
     if (!s.idCardNumber) continue
     const codes = studentCCCDCount.get(s.idCardNumber) ?? []
-    codes.push(s.code)
+    codes.push(s.profileCode)
     studentCCCDCount.set(s.idCardNumber, codes)
   }
   const duplicateStudentCCCD = [...studentCCCDCount.entries()]
@@ -1405,7 +1407,6 @@ app.openapi(importStudent, async (c) => {
           const cvId = curriculumVersionMap.get(cvName)
 
           const studentData: Prisma.StudentCreateInput = {
-            code: student.code,
             entryScore: Number.parseFloat(student.entryScore ?? "") || null,
             fixedClass: { connect: { id: fixedClassMap.get(student.fixedClassCode) } },
             curriculumVersion: cvId ? { connect: { id: cvId } } : undefined,
@@ -1428,7 +1429,7 @@ app.openapi(importStudent, async (c) => {
           const studentEmail = studentLsbEmail(student.idCardNumber)
           const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
             ...splitFullName(student.fullname),
-            code: student.code,
+            code: student.profileCode,
             fullname: student.fullname,
             email: studentEmail,
             bLaGiangVien: false,
@@ -1446,8 +1447,10 @@ app.openapi(importStudent, async (c) => {
           }
 
           const existingProfile =
-            existingProfileMap.get(student.idCardNumber) || existingProfileMap.get(student.code)
-          const existing = existingStudentMap.get(student.code)
+            existingProfileMap.get(student.idCardNumber) || existingProfileMap.get(student.profileCode)
+          const existing =
+            existingStudentByClassMap.get(`${student.profileCode}::${student.fixedClassCode}`) ||
+            existingStudentMap.get(student.profileCode)
 
           const createStudentFn = async (tx: Prisma.TransactionClient, id?: string) => {
             const st = await tx.student.create({
@@ -1487,7 +1490,7 @@ app.openapi(importStudent, async (c) => {
 
           try {
             const lsbPayload = {
-              sMa: student.code,
+              sMa: student.profileCode,
               bLaHocVien: true,
               bLaTaiKhoan: true,
               dNgaySinh: student.dateOfBirth
@@ -1500,7 +1503,7 @@ app.openapi(importStudent, async (c) => {
               sSDTDiDong: studentLsbPhone(
                 student.phoneNumber,
                 student.idCardNumber,
-                student.code
+                student.profileCode
               ),
               sEmail: studentEmail,
               sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
@@ -1516,7 +1519,7 @@ app.openapi(importStudent, async (c) => {
               const extra = (lsbRes.data as { extra?: ErrorExtra } | undefined)?.extra
               if (isLsbDuplicate(extra, lsbRes.data)) {
                 const foundId = await findLsbNhanVienId([
-                  student.code,
+                  student.profileCode,
                   student.idCardNumber,
                   studentEmail,
                 ])
@@ -1535,7 +1538,7 @@ app.openapi(importStudent, async (c) => {
             if (lsbRes.status !== 200 || !lsbProfileId) {
               const extra = (lsbRes.data as { extra?: ErrorExtra } | undefined)?.extra
               importErrors.push({
-                code: student.code,
+                code: student.profileCode,
                 name: student.fullname,
                 error: formatLsbError(extra, `LSB API error: ${lsbRes.status}`),
               })
@@ -1564,7 +1567,7 @@ app.openapi(importStudent, async (c) => {
           } catch (error) {
             const errMsg = error instanceof Error ? error.message : String(error)
             importErrors.push({
-              code: student.code,
+              code: student.profileCode,
               name: student.fullname,
               error: errMsg,
             })
@@ -1703,11 +1706,11 @@ app.openapi(importHeQuanSu, async (c) => {
   )
 
   const existingStudent = await prisma.student.findMany({
-    where: { code: { in: data.students.map((student) => student.code) } },
-    select: { id: true, code: true },
+    where: { userProfile: { code: { in: data.students.map((student) => student.profileCode) } } },
+    select: { id: true, userProfile: { select: { code: true } } },
   })
 
-  const existingStudentMap = new Map(existingStudent.map(({ code, id }) => [code, id]))
+  const existingStudentMap = new Map(existingStudent.map((s) => [s.userProfile.code, s.id]))
 
   const start = Date.now()
   await prisma.$transaction(
@@ -1737,7 +1740,6 @@ app.openapi(importHeQuanSu, async (c) => {
 
       for (const student of data.students) {
         const studentData: Prisma.StudentCreateInput = {
-          code: student.code,
           entryScore: Number.parseFloat(student.admissionScore ?? "") || null,
           fixedClass: { connect: { id: fixedClassMap.get(student.fixedClass) } },
           curriculumVersion: {
@@ -1747,18 +1749,19 @@ app.openapi(importHeQuanSu, async (c) => {
         }
         const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
           ...splitFullName(student.fullname),
+          code: student.profileCode,
           bLaGiangVien: false,
           bLaHocVien: true,
           dateOfBirth: student.dateOfBirth,
           // TODO: need to use idCardNumber
-          idCardNumber: student.code,
+          idCardNumber: student.profileCode,
           genderId: student.gender ? genderMap.get("Nữ") : null,
           ethnicityId: ethnicityMap.get(student.ethnicity ?? "") || null,
           nationalityId: nationalityMap.get(student.nationality ?? "") || null,
           newProvinceHometownId: provinceMap.get(student.provinceHometown ?? "") || null,
         }
 
-        const existingId = existingStudentMap.get(student.code)
+        const existingId = existingStudentMap.get(student.profileCode)
         if (existingId) {
           await tx.student.update({
             where: { id: existingId },
@@ -1773,7 +1776,7 @@ app.openapi(importHeQuanSu, async (c) => {
               ...studentData,
               userProfile: {
                 connectOrCreate: {
-                  where: { idCardNumber: student.code }, // TODO: need to use idCardNumber
+                  where: { idCardNumber: student.profileCode }, // TODO: need to use idCardNumber
                   create: profileData,
                 },
               },
@@ -1852,10 +1855,10 @@ app.openapi(importInternship, async (c) => {
   const subjectClassCodes = [...new Set(data.internships.map((i) => i.subjectClassCode))]
 
   const students = await prisma.student.findMany({
-    where: { code: { in: studentCodes } },
-    select: { id: true, code: true },
+    where: { userProfile: { code: { in: studentCodes } } },
+    select: { id: true, userProfile: { select: { code: true } } },
   })
-  const studentMap = new Map(students.map((s) => [s.code, s.id]))
+  const studentMap = new Map(students.map((s) => [s.userProfile.code, s.id]))
 
   const subjectClasses = await prisma.subjectClass.findMany({
     where: { code: { in: subjectClassCodes } },

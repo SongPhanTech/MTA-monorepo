@@ -63,7 +63,7 @@ const ModalPreviewReason = () => {
     >
       <div className="mb-3">
         <Typography.Text strong className="text-base">
-          {data?.student?.code} - {data?.student?.userProfile?.fullname}
+          {data?.student?.userProfile?.code} - {data?.student?.userProfile?.fullname}
         </Typography.Text>
         {data?.graduation !== undefined && (
           <Tag color={data.graduation ? "green" : "red"} className="ml-3">

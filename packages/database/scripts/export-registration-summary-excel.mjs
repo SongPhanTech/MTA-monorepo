@@ -125,12 +125,11 @@ async function main() {
     },
     select: {
       id: true,
-      code: true,
       status: true,
       fixedClass: { select: { code: true, name: true } },
-      userProfile: { select: { fullname: true } },
+      userProfile: { select: { fullname: true, code: true } },
     },
-    orderBy: { code: "asc" },
+    orderBy: { userProfile: { code: "asc" } },
   })
 
   const logs = await prisma.classRegisterLogs.findMany({
@@ -320,7 +319,7 @@ async function main() {
       stt += 1
       s2.addRow({
         stt,
-        studentCode: sv.code || "",
+        studentCode: sv.userProfile?.code || "",
         fullName: sv.userProfile?.fullname || "",
         fixedClass: sv.fixedClass?.code || sv.fixedClass?.name || "",
         status: statusLabel(sv.status),
@@ -361,7 +360,7 @@ async function main() {
     )
     s3.addRow({
       stt: idx + 1,
-      studentCode: sv.code || "",
+      studentCode: sv.userProfile?.code || "",
       fullName: sv.userProfile?.fullname || "",
       fixedClass: sv.fixedClass?.code || sv.fixedClass?.name || "",
       status: statusLabel(sv.status),
@@ -385,7 +384,7 @@ async function main() {
   notRegActive.forEach((sv, idx) => {
     s4.addRow({
       stt: idx + 1,
-      studentCode: sv.code || "",
+      studentCode: sv.userProfile?.code || "",
       fullName: sv.userProfile?.fullname || "",
       fixedClass: sv.fixedClass?.code || sv.fixedClass?.name || "",
       status: statusLabel(sv.status),
@@ -409,7 +408,7 @@ async function main() {
     .forEach((sv, idx) => {
       s5.addRow({
         stt: idx + 1,
-        studentCode: sv.code || "",
+        studentCode: sv.userProfile?.code || "",
         fullName: sv.userProfile?.fullname || "",
         fixedClass: sv.fixedClass?.code || sv.fixedClass?.name || "",
         status: statusLabel(sv.status),
@@ -439,7 +438,7 @@ async function main() {
           : "Khác"
     s6.addRow({
       stt: idx + 1,
-      studentCode: sv.code || "",
+      studentCode: sv.userProfile?.code || "",
       fullName: sv.userProfile?.fullname || "",
       fixedClass: sv.fixedClass?.code || sv.fixedClass?.name || "",
       status: statusLabel(sv.status),

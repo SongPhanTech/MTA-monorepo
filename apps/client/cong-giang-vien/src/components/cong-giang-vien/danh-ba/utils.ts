@@ -63,8 +63,8 @@ export function collectLecturersFromOrgIds(donViData: DonViDanhBa[], orgIds: Set
 
 export function mapLecturerToRow(lecturer: LecturerDanhBaWithOrg, index: number): DanhBaRow {
   return {
-    key: lecturer.lecturer?.code || `lecturer-${index}`,
-    maCanBo: lecturer.lecturer?.code ?? "",
+    key: lecturer.code || `lecturer-${index}`,
+    maCanBo: lecturer.code ?? "",
     hoTen: lecturer.fullname || "",
     gioiTinh: lecturer.gender?.sTen ?? "",
     email: lecturer.email || "",
@@ -79,7 +79,7 @@ export function filterLecturersBySearch(lecturers: LecturerDanhBaWithOrg[], keyw
 
   return lecturers.filter((lecturer) => {
     const haystack = [
-      lecturer.lecturer?.code,
+      lecturer.code,
       lecturer.fullname,
       lecturer.gender?.sTen,
       lecturer.email,

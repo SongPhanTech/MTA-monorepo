@@ -457,7 +457,7 @@ export default function SettingCouncil() {
               <div className="font-bold text-primary">
                 {student?.userProfile?.fullname || "N/A"}
               </div>
-              <div className="text-xs text-gray-500">{student?.code || "N/A"}</div>
+              <div className="text-xs text-gray-500">{student?.userProfile?.code || "N/A"}</div>
             </div>
           )
         },

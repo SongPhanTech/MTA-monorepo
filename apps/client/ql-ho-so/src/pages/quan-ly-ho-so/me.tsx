@@ -920,7 +920,6 @@ export default function UpdateUserPage() {
       if (cccdUserProfileData?.lecturer && bLaGiangVien && lecturerTypeId) {
         const lecturerUpdateData: any = {
           lecturerTypeId,
-          code: lectureCode,
         }
 
         listTransaction = [
@@ -941,7 +940,6 @@ export default function UpdateUserPage() {
         const lecturerData: any = {
           userProfileId: id,
           lecturerTypeId,
-          code: lectureCode,
         }
 
         listTransaction = [
@@ -987,7 +985,6 @@ export default function UpdateUserPage() {
                 id: cccdUserProfileData?.staffs?.id,
               },
               data: {
-                code: values?.code,
                 staffPositionId,
                 staffTypeId,
                 organizationId: values?.sDM_DonViId,
@@ -1010,7 +1007,6 @@ export default function UpdateUserPage() {
             data: {
               data: {
                 userProfileId: id,
-                code: values?.code,
                 staffPositionId,
                 staffTypeId,
                 organizationId: values?.sDM_DonViId,
@@ -1128,7 +1124,7 @@ export default function UpdateUserPage() {
         staffTypeId: userData.staffs?.staffTypeId,
         lecturerTypeId: userData.lecturer?.lecturerTypeId,
         organizationId: userData.sDM_DonViId,
-        lectureCode: userData.lecturer?.code,
+        lectureCode: userData.code,
       })
       if (userData?.avatar) {
         const imageUrl = await getLInkImage()

@@ -121,9 +121,11 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                   },
                 },
                 {
-                  code: {
-                    contains: filters.searchText,
-                    mode: "insensitive",
+                  userProfile: {
+                    code: {
+                      contains: filters.searchText,
+                      mode: "insensitive",
+                    },
                   },
                 },
               ],
@@ -220,9 +222,11 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                 },
               },
               {
-                code: {
-                  contains: filters.searchText,
-                  mode: "insensitive",
+                userProfile: {
+                  code: {
+                    contains: filters.searchText,
+                    mode: "insensitive",
+                  },
                 },
               },
             ],
@@ -294,9 +298,11 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                 },
               },
               {
-                code: {
-                  contains: filters.searchText,
-                  mode: "insensitive",
+                userProfile: {
+                  code: {
+                    contains: filters.searchText,
+                    mode: "insensitive",
+                  },
                 },
               },
             ],

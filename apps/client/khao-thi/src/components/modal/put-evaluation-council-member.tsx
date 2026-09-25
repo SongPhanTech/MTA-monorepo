@@ -114,6 +114,7 @@ const PutEvaluationCouncilMember = () => {
         },
         select: {
           id: true,
+          code: true,
           fullname: true,
           firstName: true,
           lastName: true,
@@ -131,7 +132,6 @@ const PutEvaluationCouncilMember = () => {
           lecturer: {
             select: {
               id: true,
-              code: true,
             },
           },
         },

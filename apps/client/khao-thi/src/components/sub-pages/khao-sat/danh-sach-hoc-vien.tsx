@@ -285,7 +285,7 @@ function DanhSachHocVien({
             <Col span={24}>
               <Flex align="center" justify="space-between">
                 <div className="text-base font-bold uppercase text-gray-900">
-                  Giảng viên: {lecturer?.code} -{" "}
+                  Giảng viên: {lecturer?.userProfile?.code} -{" "}
                   {(lecturer as any)?.userProfile?.fullname || "Chưa xác định"}
                 </div>
 
@@ -321,7 +321,7 @@ function DanhSachHocVien({
                     dataIndex: "code",
                     width: 150,
                     type: "input",
-                    render: (_, record) => record?.student?.code || "",
+                    render: (_, record) => record?.student?.userProfile?.code || "",
                   },
                   {
                     title: "Họ và tên",

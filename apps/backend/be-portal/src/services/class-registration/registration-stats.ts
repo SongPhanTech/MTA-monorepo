@@ -128,7 +128,6 @@ export async function getRegistrationStats(
         student: {
           select: {
             id: true,
-            code: true,
             fixedClass: { select: { name: true } },
             userProfile: { select: { fullname: true, code: true } },
           },
@@ -145,7 +144,6 @@ export async function getRegistrationStats(
           where: { userProfileId: { in: missingProfileIds }, deletedAt: null },
           select: {
             id: true,
-            code: true,
             userProfileId: true,
             fixedClass: { select: { name: true } },
             userProfile: { select: { fullname: true, code: true } },
@@ -190,7 +188,7 @@ export async function getRegistrationStats(
       message: row.message,
       student: {
         id: student?.id ?? null,
-        studentCode: student?.code ?? student?.userProfile?.code ?? null,
+        studentCode: student?.userProfile?.code ?? student?.userProfile?.code ?? null,
         fullName: student?.userProfile?.fullname ?? null,
         fixedClassName: student?.fixedClass?.name ?? null,
       },

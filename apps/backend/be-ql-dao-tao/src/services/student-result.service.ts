@@ -853,6 +853,7 @@ export const calculateStudentSemesterResult = async (
         },
       },
       include: {
+        userProfile: { select: { code: true } },
         fixedClass: {
           select: {
             id: true,
@@ -978,7 +979,7 @@ export const calculateStudentSemesterResult = async (
     await pMap(
       studentsIDs,
       async (student) => {
-        const studentLabel = student.code ?? student.id
+        const studentLabel = student.userProfile?.code ?? student.id
         try {
           // lấy khoá học
           const trainingCourseId = student.fixedClass?.trainingCourseId
@@ -1259,7 +1260,7 @@ export const calculateStudentSemesterResult = async (
     //                 retakingCredits: 0, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
     //                 isImproving: false, // Đang cải thiện (hiện tại chưa có thông tin này)
     //                 postponeWithReason: false, // tạm ngưng có lý do
-    //                 code: student.code || '', // Mã sinh viên
+    //                 code: student.userProfile?.code || '', // Mã sinh viên
     //                 active: true,
     //                 description: null,
     //                 deletedAt: null,
@@ -2721,7 +2722,7 @@ export const resultCourseStudentScholarship = async (
 
       const result = StudentScholarshipResult.parse({
         id: studentSemesterResult.studentId,
-        code: studentSemesterResult.student?.code,
+        code: studentSemesterResult.student?.userProfile?.code,
         studentSemesterResult: filteredResult,
         userProfile: studentSemesterResult.student.userProfile,
         trainingMajor:

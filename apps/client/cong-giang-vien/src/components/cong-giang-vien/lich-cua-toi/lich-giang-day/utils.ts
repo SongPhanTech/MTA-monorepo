@@ -277,9 +277,9 @@ export const CHON_CHI_TIET_LICH_GIANG_DAY = {
       },
       mainLecturer: {
         select: {
-          code: true,
           userProfile: {
             select: {
+              code: true,
               fullname: true,
               academicRankType: { select: { sMa: true } },
               academicDegreeType: { select: { sMa: true } },
@@ -291,9 +291,9 @@ export const CHON_CHI_TIET_LICH_GIANG_DAY = {
   },
   lecturer: {
     select: {
-      code: true,
       userProfile: {
         select: {
+          code: true,
           fullname: true,
           academicRankType: { select: { sMa: true } },
           academicDegreeType: { select: { sMa: true } },
@@ -303,9 +303,9 @@ export const CHON_CHI_TIET_LICH_GIANG_DAY = {
   },
   extraLecturer: {
     select: {
-      code: true,
       userProfile: {
         select: {
+          code: true,
           fullname: true,
           academicRankType: { select: { sMa: true } },
           academicDegreeType: { select: { sMa: true } },

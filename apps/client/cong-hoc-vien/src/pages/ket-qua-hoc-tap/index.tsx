@@ -169,7 +169,7 @@ export default function StudentScoreClassPage() {
     const sampleStudentData = {
       fullname: student?.userProfile?.fullname,
       dateOfBirth: student?.userProfile?.dateOfBirth,
-      maSV: student?.code,
+      maSV: student?.userProfile?.code,
       // TODO: check htdt
       htdt: student?.fixedClass?.trainingCourse.trainingObjectType?.name || "",
       nganh: student?.curriculumVersion?.curriculum.trainingMajor?.name || "",

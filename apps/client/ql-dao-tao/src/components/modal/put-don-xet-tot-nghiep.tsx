@@ -63,7 +63,11 @@ const PutGraduationApplication = () => {
                 ? [
                     {
                       OR: [
-                        { code: { contains: searchText, mode: "insensitive" as const } },
+                        {
+                          userProfile: {
+                            code: { contains: searchText, mode: "insensitive" as const },
+                          },
+                        },
                         {
                           userProfile: {
                             fullname: { contains: searchText, mode: "insensitive" as const },
@@ -205,7 +209,9 @@ const PutGraduationApplication = () => {
             mode={input?.id ? undefined : "multiple"}
             placeholder={input?.id ? "Chọn sinh viên" : "Chọn nhiều sinh viên"}
             options={students?.map((item) => ({
-              label: [item.code, item.userProfile?.fullname].filter(Boolean).join(" - "),
+              label: [item.userProfile?.code, item.userProfile?.fullname]
+                .filter(Boolean)
+                .join(" - "),
               value: item.id,
             }))}
             onSearch={handleSearch}

@@ -227,7 +227,9 @@ const PutGraduationDecision = () => {
           <Select
             placeholder={"Chọn sinh viên"}
             options={students?.map((item) => ({
-              label: [item.code, item.userProfile.fullname].filter(Boolean).join(" - "),
+              label: [item.userProfile?.code, item.userProfile.fullname]
+                .filter(Boolean)
+                .join(" - "),
               value: item.id,
             }))}
             filterOption={false}

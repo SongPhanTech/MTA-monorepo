@@ -54,7 +54,7 @@ const GanCanBoLopModal = () => {
     () =>
       students.map((sv) => ({
         value: sv.id,
-        label: `${sv.code} - ${sv.userProfile?.fullname ?? ""}`,
+        label: `${sv.userProfile?.code ?? ""} - ${sv.userProfile?.fullname ?? ""}`,
       })),
     [students]
   )

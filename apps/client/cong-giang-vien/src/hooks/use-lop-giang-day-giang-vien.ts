@@ -103,9 +103,9 @@ const useLopGiangDayGiangVien = () => {
     },
     mainLecturer: {
       select: {
-        code: true,
         userProfile: {
           select: {
+            code: true,
             fullname: true,
             academicRankType: { select: { sMa: true } },
             academicDegreeType: { select: { sMa: true } },
@@ -115,9 +115,9 @@ const useLopGiangDayGiangVien = () => {
     },
     extraLecturer: {
       select: {
-        code: true,
         userProfile: {
           select: {
+            code: true,
             fullname: true,
             academicRankType: { select: { sMa: true } },
             academicDegreeType: { select: { sMa: true } },

@@ -182,9 +182,9 @@ export default function NhapDiem({
         student: {
           select: {
             id: true,
-            code: true,
             userProfile: {
               select: {
+                code: true,
                 fullname: true,
                 lastName: true,
                 firstName: true,
@@ -1243,7 +1243,7 @@ export default function NhapDiem({
                       onOpenDetailStudent(record.student?.id)
                     }}
                   >
-                    {record.student?.code || ""}
+                    {record.student?.userProfile?.code || ""}
                   </span>
                 ),
               },

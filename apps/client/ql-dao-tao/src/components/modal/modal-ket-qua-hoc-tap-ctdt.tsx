@@ -137,7 +137,7 @@ const ModalLearningResult = () => {
       onFinish={onClose}
       onCancel={onClose}
       maskClosable={true}
-      title={`Chi tiết kết quả học tập - ${learningResult?.userProfile.fullname} - ${learningResult?.code} `}
+      title={`Chi tiết kết quả học tập - ${learningResult?.userProfile.fullname} - ${learningResult?.userProfile?.code} `}
       className="w-[80vw]"
     >
       <Col span={24}>

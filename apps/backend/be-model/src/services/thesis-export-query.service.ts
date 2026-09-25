@@ -135,9 +135,9 @@ export const thesisProjectExportSelect = {
       student: {
         select: {
           id: true,
-          code: true,
           userProfile: {
             select: {
+              code: true,
               fullname: true,
               firstName: true,
               lastName: true,

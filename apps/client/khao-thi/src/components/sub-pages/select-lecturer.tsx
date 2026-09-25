@@ -184,9 +184,11 @@ function SelectLecturer({
             ...(filters.code && filters.code !== ""
               ? {
                   mainLecturer: {
-                    code: {
-                      contains: filters.code,
-                      mode: "insensitive" as const,
+                    userProfile: {
+                      code: {
+                        contains: filters.code,
+                        mode: "insensitive" as const,
+                      },
                     },
                   },
                 }
@@ -279,9 +281,11 @@ function SelectLecturer({
             ...(filters.code && filters.code !== ""
               ? {
                   mainLecturer: {
-                    code: {
-                      contains: filters.code,
-                      mode: "insensitive" as const,
+                    userProfile: {
+                      code: {
+                        contains: filters.code,
+                        mode: "insensitive" as const,
+                      },
                     },
                   },
                 }

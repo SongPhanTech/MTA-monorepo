@@ -187,7 +187,7 @@ const ExportStudentInSurvey = ({
         worksheet.getCell("C5").style = infoLabelStyle
         worksheet.mergeCells("D5:H5")
         worksheet.getCell("D5").value =
-          `${lecturer?.code} - ${lecturer?.userProfile?.fullname || ""}`
+          `${lecturer?.userProfile?.code} - ${lecturer?.userProfile?.fullname || ""}`
         worksheet.getCell("D5").style = infoValueStyle
         worksheet.getRow(5).height = 22
 
@@ -232,7 +232,7 @@ const ExportStudentInSurvey = ({
             dataRow.height = 24
             dataRow.values = [
               index + 1,
-              i?.student?.code || "",
+              i?.student?.userProfile?.code || "",
               `${i?.student?.userProfile?.lastName || ""} ${i?.student?.userProfile?.firstName || ""}`,
               i?.student?.userProfile?.dateOfBirth
                 ? dayjs(i?.student?.userProfile?.dateOfBirth).format("DD/MM/YYYY")

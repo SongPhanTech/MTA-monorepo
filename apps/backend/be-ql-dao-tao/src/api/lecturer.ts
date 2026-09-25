@@ -105,9 +105,11 @@ app.openapi(exportLecturerProfile, async (c) => {
         ...where,
         ...(filters.code
           ? {
-              code: {
-                contains: filters.code,
-                mode: "insensitive",
+              userProfile: {
+                code: {
+                  contains: filters.code,
+                  mode: "insensitive",
+                },
               },
             }
           : {}),

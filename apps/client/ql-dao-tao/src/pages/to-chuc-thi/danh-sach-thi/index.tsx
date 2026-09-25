@@ -263,7 +263,7 @@ export default function DanhSachThiPage() {
                             return {
                               ...i,
                               value: i?.id,
-                              label: [i?.code, i?.userProfile?.fullname]
+                              label: [i?.userProfile?.code, i?.userProfile?.fullname]
                                 .filter(Boolean)
                                 .join(" - "),
                             }
@@ -297,7 +297,7 @@ export default function DanhSachThiPage() {
                             return {
                               ...i,
                               value: i?.id,
-                              label: [i?.code, i?.userProfile?.fullname]
+                              label: [i?.userProfile?.code, i?.userProfile?.fullname]
                                 .filter(Boolean)
                                 .join(" - "),
                             }

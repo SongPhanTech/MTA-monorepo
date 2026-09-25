@@ -104,7 +104,7 @@ const ModalChuyenDiemLopMonHoc = () => {
       title: "Mã sinh viên",
       key: "code",
       width: 80,
-      render: (__: any, record: any) => record.student?.code,
+      render: (__: any, record: any) => record.student?.userProfile?.code,
     },
     {
       title: "Họ tên",

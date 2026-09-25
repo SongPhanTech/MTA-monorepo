@@ -108,7 +108,7 @@ const ModalPrintDanhSachDoiTuong = () => {
               <tr className="border border-black text-center" key={record.id}>
                 <td className="border border-black text-center">{index + 1}</td>
                 <td className="border border-black text-center">
-                  {record?.educationAndTraining?.[0]?.code || record?.lecturer?.code || ""}
+                  {record?.code || ""}
                 </td>
                 <td className="border border-black text-center">
                   {record?.lastName || ""} {record?.firstName || ""}

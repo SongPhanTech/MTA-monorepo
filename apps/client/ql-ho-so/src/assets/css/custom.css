@@ -1,3 +1,7 @@
+.ant-table-wrapper {
+  max-width: 100%;
+}
+
 .ant-table-body {
   scrollbar-color: rgba(180, 180, 180, 0.4) transparent;
 }

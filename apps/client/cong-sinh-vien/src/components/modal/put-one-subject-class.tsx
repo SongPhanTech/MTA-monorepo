@@ -534,7 +534,7 @@ const PutOneSubjectClassModal = () => {
                       return {
                         ...i,
                         value: i?.id,
-                        label: [i?.code, i?.userProfile?.fullname].filter(Boolean).join(" - "),
+                        label: [i?.userProfile?.code, i?.userProfile?.fullname].filter(Boolean).join(" - "),
                       }
                     })}
                     placeholder="Chọn giảng viên 1"
@@ -548,7 +548,7 @@ const PutOneSubjectClassModal = () => {
                     options={lecturerData.map((i) => {
                       return {
                         value: i?.id,
-                        label: [i?.code, i?.userProfile?.fullname].filter(Boolean).join(" - "),
+                        label: [i?.userProfile?.code, i?.userProfile?.fullname].filter(Boolean).join(" - "),
                       }
                     })}
                     placeholder="Chọn giảng viên"
@@ -562,7 +562,7 @@ const PutOneSubjectClassModal = () => {
                     options={lecturerData.map((i) => {
                       return {
                         value: i?.id,
-                        label: [i?.code, i?.userProfile?.fullname].filter(Boolean).join(" - "),
+                        label: [i?.userProfile?.code, i?.userProfile?.fullname].filter(Boolean).join(" - "),
                       }
                     })}
                     placeholder="Chọn giảng viên"
@@ -757,7 +757,7 @@ const PutOneSubjectClassModal = () => {
                   align: "center",
                   width: 150,
                   type: "input",
-                  render: (_, record) => record.student?.code || "",
+                  render: (_, record) => record.student?.userProfile?.code || "",
                 },
                 {
                   title: "Họ và tên",

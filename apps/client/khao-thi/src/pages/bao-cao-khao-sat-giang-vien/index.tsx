@@ -217,7 +217,7 @@ export default function BaoCaoGiangVien() {
           organizationName={(isDepartment ? parentOrg?.sTen : org?.sTen) ?? undefined}
           organizationCode={(isDepartment ? parentOrg?.sMa : org?.sMa) ?? undefined}
           lecturerName={lecturerTitle(lecturer)}
-          lecturerCode={lecturer.code ?? undefined}
+          lecturerCode={lecturer.userProfile?.code ?? undefined}
           departmentName={isDepartment ? org?.sTen ?? "" : ""}
           departmentCode={isDepartment ? org?.sMa ?? "" : ""}
         />

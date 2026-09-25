@@ -327,10 +327,10 @@ async function loadBangDiemExportData(studentIds: string[]) {
     where: { id: { in: uniqueIds } },
     select: {
       id: true,
-      code: true,
       curriculumVersionId: true,
       userProfile: {
         select: {
+          code: true,
           fullname: true,
           dateOfBirth: true,
         },
@@ -737,7 +737,7 @@ function toMonHocRow(row: ScoreRow, student: ExportStudent, data: BangDiemExport
 
 function studentSheetData(student: ExportStudent) {
   const fullname = student.userProfile?.fullname ?? ""
-  const maSV = student.code ?? ""
+  const maSV = student.userProfile?.code ?? ""
   const curriculum = student.fixedClass?.curriculumVersion?.curriculum
   const nganh =
     curriculum?.trainingMajor?.trainingField?.name || curriculum?.trainingField?.name || ""

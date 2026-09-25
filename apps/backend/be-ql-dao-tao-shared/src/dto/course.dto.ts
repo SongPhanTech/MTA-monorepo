@@ -15,7 +15,7 @@ export const TYPE_REGISTRABLE = {
 
 export const OpenCoursesRequest = z
   .object({
-    students_code: z.string().openapi(fieldDesc("Mã sinh viên (Student.code).", "21000001")),
+    students_code: z.string().openapi(fieldDesc("Mã sinh viên (UserProfile.code).", "21000001")),
     session_code: z
       .string()
       .optional()

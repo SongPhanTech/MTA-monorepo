@@ -150,17 +150,17 @@ app.openapi(uploadExcelImportTrainingScore, async (c) => {
   const students = await prisma.student.findMany({
     where: {
       active: true,
-      code: { in: studentCodes },
+      userProfile: { code: { in: studentCodes } },
     },
     select: {
       id: true,
-      code: true,
+      userProfile: { select: { code: true } },
     },
   })
   // Prepare data for bulk insert
   const recordsToInsert = scoreUpdates.reduce(
     (acc, { studentCode, scoreRL }) => {
-      const student = students.find((s) => s.code === studentCode)
+      const student = students.find((s) => s.userProfile.code === studentCode)
       if (student) {
         acc.push({
           studentId: student.id,

@@ -81,7 +81,9 @@ export default function ClassRegisterLogs() {
             OR: [
               {
                 student: {
-                  code: { contains: keyword, mode: "insensitive" as const },
+                  userProfile: {
+                    code: { contains: keyword, mode: "insensitive" as const },
+                  },
                 },
               },
               {
@@ -107,9 +109,11 @@ export default function ClassRegisterLogs() {
       ...(filters.code
         ? {
             student: {
-              code: {
-                contains: filters.code,
-                mode: "insensitive" as const,
+              userProfile: {
+                code: {
+                  contains: filters.code,
+                  mode: "insensitive" as const,
+                },
               },
             },
           }
@@ -326,7 +330,7 @@ export default function ClassRegisterLogs() {
             align: "center",
             type: "input",
             className: "!py-1.5 !px-2",
-            render: (_, record) => record?.student?.code || "",
+            render: (_, record) => record?.student?.userProfile?.code || "",
           },
           {
             title: "Họ và tên",

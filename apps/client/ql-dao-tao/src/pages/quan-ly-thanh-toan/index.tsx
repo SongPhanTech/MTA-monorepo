@@ -74,7 +74,11 @@ export default function DanhSachThanhToanMoiGiang() {
       w.lecturer = {
         is: {
           OR: [
-            { code: { contains: filters.name, mode: "insensitive" } },
+            {
+              userProfile: {
+                is: { code: { contains: filters.name, mode: "insensitive" } },
+              },
+            },
             { userProfile: { is: { fullname: { contains: filters.name, mode: "insensitive" } } } },
             { userProfile: { is: { lastName: { contains: filters.name, mode: "insensitive" } } } },
             { userProfile: { is: { firstName: { contains: filters.name, mode: "insensitive" } } } },
@@ -298,7 +302,7 @@ export default function DanhSachThanhToanMoiGiang() {
                 align: "center",
                 type: "input",
                 fixed: "left",
-                render: (_, record) => record.lecturer?.code || "-",
+                render: (_, record) => record.lecturer?.userProfile?.code || "-",
               },
               {
                 title: "Tên giảng viên",

@@ -241,10 +241,10 @@ export default function StaffManagement() {
         where: { id },
         data: {
           deletedAt: new Date(),
-          code: id,
           userProfile: {
             update: {
               idCardNumber: id,
+              code: id,
             },
           },
         },

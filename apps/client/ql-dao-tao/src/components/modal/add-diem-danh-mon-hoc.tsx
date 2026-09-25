@@ -203,7 +203,7 @@ const AddSubjectClassAttendanceStudent = () => {
             align: "center",
             dataIndex: "code",
             type: "input",
-            render: (_, record) => record?.student?.code || "",
+            render: (_, record) => record?.student?.userProfile?.code || "",
           },
           {
             title: "Tên sinh viên",

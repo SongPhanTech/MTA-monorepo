@@ -1,7 +1,12 @@
 import { queryClient } from "@api/index"
 import PutFormModal from "@components/commons/put-modal"
 import useSpinner from "@hooks/spinner"
-import { useCreateStaff, useFindUniqueStaff, useUpdateStaff } from "@workspace/db/hooks"
+import {
+  useCreateStaff,
+  useFindUniqueStaff,
+  useUpdateStaff,
+  useUpdateUserProfile,
+} from "@workspace/db/hooks"
 import { Col, Form, message } from "antd"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
@@ -59,6 +64,7 @@ const PutUserProfileStaffModal = () => {
 
   const { mutateAsync: updateStaff } = useUpdateStaff()
   const { mutateAsync: createStaff } = useCreateStaff()
+  const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
 
   // const { data = [] } = useFindManyUserProfile({
   //     where: {
@@ -82,13 +88,18 @@ const PutUserProfileStaffModal = () => {
           data: {
             userProfileId: output?.userProfileId,
             staffPositionId: output.staffPositionId,
-            code: output.code,
             staffTypeId: output.staffTypeId,
           },
           where: {
             id,
           },
         })
+        if (output?.userProfileId && output.code) {
+          await updateUserProfile({
+            where: { id: output.userProfileId },
+            data: { code: output.code },
+          })
+        }
 
         message.success("Cập nhật cán bộ, nhân viên thành công")
       } else {
@@ -97,10 +108,15 @@ const PutUserProfileStaffModal = () => {
             userProfileId: output?.userProfileId,
             staffPositionId: output.staffPositionId,
             staffTypeId: output.staffTypeId,
-            code: output.code,
             organizationId: output.organizationId,
           },
         })
+        if (output?.userProfileId && output.code) {
+          await updateUserProfile({
+            where: { id: output.userProfileId },
+            data: { code: output.code },
+          })
+        }
         message.success("Thêm mới cán bộ, nhân viên thành công")
       }
       // refetch() lại danh sách level
@@ -125,7 +141,7 @@ const PutUserProfileStaffModal = () => {
       const userProfile = staffData.userProfile
       const staff = staffData
       const formData = {
-        code: staff.code ?? undefined,
+        code: userProfile.code || undefined,
         organizationId: staff.organizationId,
         staffTypeId: staff.staffTypeId,
         staffPositionId: staff.staffPositionId,

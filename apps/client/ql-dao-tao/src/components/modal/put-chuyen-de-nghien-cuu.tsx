@@ -60,7 +60,6 @@ const PutResearchTopicModal = () => {
       },
       lecturer: {
         select: {
-          code: true,
           userProfile: {
             include: {
               academicRankType: true,
@@ -118,7 +117,6 @@ const PutResearchTopicModal = () => {
           include: {
             student: {
               select: {
-                code: true,
                 userProfile: true,
               },
             },
@@ -205,7 +203,7 @@ const PutResearchTopicModal = () => {
           : undefined,
         score: studentResearchTopic?.studentSubjectScore?.finalScore?.toString() ?? "",
         studentFullname: studentResearchTopic?.studentSubjectScore?.student?.userProfile?.fullname,
-        studentCode: studentResearchTopic?.studentSubjectScore?.student?.code,
+        studentCode: studentResearchTopic?.studentSubjectScore?.student?.userProfile?.code,
         studentDateOfBirth: studentResearchTopic?.studentSubjectScore?.student?.userProfile
           ?.dateOfBirth
           ? dayjs(

@@ -15485,10 +15485,6 @@
           "id": {
             "type": "string"
           },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
           "active": {
             "type": "boolean"
           },
@@ -16764,10 +16760,6 @@
           "id": {
             "type": "string"
           },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
           "active": {
             "type": "boolean"
           },
@@ -17504,10 +17496,6 @@
         "properties": {
           "id": {
             "type": "string"
-          },
-          "code": {
-            "type": "string",
-            "nullable": true
           },
           "active": {
             "type": "boolean"
@@ -47960,10 +47948,6 @@
           "id": {
             "type": "string"
           },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
           "active": {
             "type": "boolean"
           },
@@ -49446,10 +49430,6 @@
           "id": {
             "type": "string"
           },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
           "active": {
             "type": "boolean"
           },
@@ -50428,10 +50408,6 @@
         "properties": {
           "id": {
             "type": "string"
-          },
-          "code": {
-            "type": "string",
-            "nullable": true
           },
           "active": {
             "type": "boolean"
@@ -99536,9 +99512,6 @@
           "id": {
             "type": "integer"
           },
-          "code": {
-            "type": "integer"
-          },
           "active": {
             "type": "integer"
           },
@@ -99674,7 +99647,6 @@
         },
         "required": [
           "id",
-          "code",
           "active",
           "description",
           "deletedAt",
@@ -99799,10 +99771,6 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
             "type": "string",
             "nullable": true
           },
@@ -99993,10 +99961,6 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
             "type": "string",
             "nullable": true
           },
@@ -102979,9 +102943,6 @@
           "id": {
             "type": "integer"
           },
-          "code": {
-            "type": "integer"
-          },
           "active": {
             "type": "integer"
           },
@@ -103021,7 +102982,6 @@
         },
         "required": [
           "id",
-          "code",
           "active",
           "description",
           "deletedAt",
@@ -103040,10 +103000,6 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
             "type": "string",
             "nullable": true
           },
@@ -103102,10 +103058,6 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
             "type": "string",
             "nullable": true
           },
@@ -104515,9 +104467,6 @@
           "id": {
             "type": "integer"
           },
-          "code": {
-            "type": "integer"
-          },
           "active": {
             "type": "integer"
           },
@@ -104557,7 +104506,6 @@
         },
         "required": [
           "id",
-          "code",
           "active",
           "description",
           "deletedAt",
@@ -104576,10 +104524,6 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
             "type": "string",
             "nullable": true
           },
@@ -104637,10 +104581,6 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "code": {
             "type": "string",
             "nullable": true
           },

@@ -3048,7 +3048,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         data: {
           so_quyet_dinh: safeString(gD?.originalDiplomaNumber),
           ho_ten_hoc_vien: safeString(user?.fullname?.toUpperCase()),
-          ma_hoc_vien: safeString(student.code),
+          ma_hoc_vien: safeString(student.userProfile?.code),
           ngay_sinh: safeString(dobParts?.dateVi),
           gioi_tinh: safeString(user?.gender?.sTen),
           so_dinh_danh_ca_nhan: safeString(user?.idCardNumber),
@@ -3409,7 +3409,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
         data: {
           so_quyet_dinh: safeString(gD?.originalDiplomaNumber),
           ten_hoc_vien: safeString(user?.fullname?.toUpperCase()),
-          ma_hoc_vien: safeString(student.code),
+          ma_hoc_vien: safeString(student.userProfile?.code),
           ngay_sinh: safeString(dobParts?.dateVi),
           gioi_tinh: safeString(user?.gender?.sTen),
           so_dinh_danh_ca_nhan: safeString(user?.idCardNumber),

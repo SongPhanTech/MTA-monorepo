@@ -133,7 +133,7 @@ const useDiemDanhTroGiang = (lopIdMacDinh?: string) => {
       return {
         id: scs.studentId,
         studentId: scs.studentId,
-        maSinhVien: scs.student?.code ?? "",
+        maSinhVien: scs.student?.userProfile?.code ?? "",
         hoTen: scs.student?.userProfile?.fullname ?? "",
         trangThai: daCo?.trangThai ?? "PRESENT",
         ghiChu: daCo?.ghiChu ?? "",

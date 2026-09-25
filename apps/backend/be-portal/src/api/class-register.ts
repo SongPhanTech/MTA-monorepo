@@ -1091,7 +1091,7 @@ app.openapi(getStudentInfo, async (c) => {
       educationAndTraining: {
         orderBy: { createdAt: "desc" },
         take: 1,
-        select: { id: true, code: true, status: true },
+        select: { id: true, status: true },
       },
     },
   })
@@ -1201,7 +1201,7 @@ app.openapi(getStudentInfo, async (c) => {
     student: student
       ? {
           id: student.id,
-          code: student.code,
+          code: profile.code,
           status: student.status,
         }
       : null,

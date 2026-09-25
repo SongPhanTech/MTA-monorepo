@@ -235,6 +235,14 @@ export default function StudentFixedClassPage() {
       where: {
         fixedClassId,
         userProfile: {
+          ...(filters.code
+            ? {
+                code: {
+                  contains: filters.code,
+                  mode: "insensitive",
+                },
+              }
+            : {}),
           ...(filters.name
             ? {
                 fullname: {
@@ -277,14 +285,6 @@ export default function StudentFixedClassPage() {
               }
             : {}),
         },
-        ...(filters.code
-          ? {
-              code: {
-                contains: filters.code,
-                mode: "insensitive",
-              },
-            }
-          : {}),
         ...(filters.curriculumVersion
           ? {
               curriculumVersionId: {
@@ -795,6 +795,7 @@ export default function StudentFixedClassPage() {
                 width: 100,
                 align: "center",
                 type: "input",
+                render: (__, record) => record.userProfile?.code ?? "",
               },
               {
                 title: "Họ và tên",

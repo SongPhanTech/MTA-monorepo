@@ -229,7 +229,7 @@ const ModalChuyenLopLuuBan = () => {
             {
               title: "Mã sinh viên",
               width: 100,
-              render: (_, record) => record.student.code || "",
+              render: (_, record) => record.student.userProfile?.code || "",
             },
             {
               title: "Tên sinh viên",

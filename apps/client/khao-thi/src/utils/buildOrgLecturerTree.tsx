@@ -215,7 +215,7 @@ export function buildProgressRows(orgs: Org[], lecturers: ClusterLecturer[]): Pr
     .map((lecturer) => {
       const donViId = lecturerDonViId(lecturer)
       const organization = orgs.find((org) => org.Id === donViId)
-      const code = lecturer.code?.trim() || ""
+      const code = lecturer.userProfile?.code?.trim() || ""
       const name = [code, lecturerTitle(lecturer)].filter(Boolean).join(" - ")
 
       return {

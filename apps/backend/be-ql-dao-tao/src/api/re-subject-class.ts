@@ -547,9 +547,9 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
     },
     select: {
       id: true,
-      code: true,
       userProfile: {
         select: {
+          code: true,
           fullname: true,
         },
       },
@@ -884,9 +884,9 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
     },
     select: {
       id: true,
-      code: true,
       userProfile: {
         select: {
+          code: true,
           fullname: true,
         },
       },

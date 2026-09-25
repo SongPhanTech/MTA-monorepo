@@ -69,7 +69,7 @@ export default function StudentDetailPage() {
           <Col span={24} className="mb-6">
             <div className="text-lg font-semibold">
               {[
-                lecturerData?.code,
+                lecturerData?.userProfile?.code,
                 lecturerData?.userProfile?.fullname ??
                   [lecturerData?.userProfile?.firstName, lecturerData?.userProfile?.lastName]
                     .filter(Boolean)

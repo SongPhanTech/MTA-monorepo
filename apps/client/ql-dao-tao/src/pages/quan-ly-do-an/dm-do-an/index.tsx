@@ -917,7 +917,7 @@ export default function DanhMucDoAn() {
                   <div style={{ display: "flex", flexDirection: "column" }}>
                     {registrations.map((x: any, index: number) => (
                       <div key={index}>
-                        {x.student?.userProfile?.fullname} - {x.student?.code || "N/A"} -{" "}
+                        {x.student?.userProfile?.fullname} - {x.student?.userProfile?.code || "N/A"} -{" "}
                         {x.student?.userProfile?.dateOfBirth
                           ? dayjs(x.student?.userProfile?.dateOfBirth).format("DD/MM/YYYY")
                           : "N/A"}{" "}
@@ -1796,7 +1796,7 @@ const StudentManagementModal = ({
       {
         title: "Mã sinh viên",
         width: 100,
-        render: (_: any, reg: any) => <div>{reg.student?.code}</div>,
+        render: (_: any, reg: any) => <div>{reg.student?.userProfile?.code}</div>,
       },
       {
         title: "Ngày sinh   ",
@@ -1848,7 +1848,7 @@ const StudentManagementModal = ({
       title: "Mã sinh viên",
       width: 100,
       dataIndex: "code",
-      render: (_: any, record: any) => record.student?.code,
+      render: (_: any, record: any) => record.student?.userProfile?.code,
     },
     {
       title: "Ngày sinh",
@@ -2122,7 +2122,7 @@ const StudentManagementModal = ({
                 value={selectedStudentIds}
                 onChange={setSelectedStudentIds}
                 options={allStudentsInClass.map((item: any) => ({
-                  label: `${item.student?.code} - ${item.student?.userProfile?.fullname}`,
+                  label: `${item.student?.userProfile?.code} - ${item.student?.userProfile?.fullname}`,
                   value: item.studentId,
                 }))}
               />

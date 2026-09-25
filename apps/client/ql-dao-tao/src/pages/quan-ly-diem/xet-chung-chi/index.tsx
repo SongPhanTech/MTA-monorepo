@@ -227,7 +227,7 @@ export default function AutoCheckCertificate() {
 
         const rowData: any = {
           stt: index + 1,
-          code: record.code,
+          code: record.userProfile?.code,
           fullname: record.userProfile?.fullname || "",
           dob: record.userProfile?.dateOfBirth
             ? dayjs(record.userProfile.dateOfBirth).format("DD/MM/YYYY")
@@ -298,6 +298,7 @@ export default function AutoCheckCertificate() {
         align: "center",
         key: "code",
         width: 120,
+        render: (_: any, record: any) => record.userProfile?.code || "",
       },
       {
         title: "Họ và tên",

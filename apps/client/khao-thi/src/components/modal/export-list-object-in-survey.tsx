@@ -162,8 +162,8 @@ const ExportObjectInSurvey = ({ query, surveyName }: { query: any; surveyName: s
             const headerRowValue: any = worksheet.getRow(12 + index)
             headerRowValue.values = [
               index + 1,
-              i?.educationAndTraining?.length > 0 ? i?.educationAndTraining[0]?.code : "",
-              i?.lecturer?.code || "",
+              i?.code || "",
+              i?.lecturer?.userProfile?.code || "",
               `${i?.lastName || ""} ${i?.firstName || ""}`,
               i?.idCardNumber || "",
               i?.phoneNumber || "",

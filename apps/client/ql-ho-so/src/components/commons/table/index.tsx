@@ -759,8 +759,7 @@ const Table = <T extends Record<string, unknown>>({
           ...genFilter(column as ColumnTypeProps),
         })) as ColumnsType<T>
       }
-      // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
-      scroll={{ x: "100%", y: scrollable ? maxHeight : undefined }}
+      scroll={{ x: "max-content", y: scrollable ? maxHeight : undefined }}
       bordered
       dataSource={data}
       locale={{

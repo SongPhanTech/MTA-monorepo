@@ -340,7 +340,7 @@ const PutArchivedAwardModal = () => {
                 ? dayjs(item.userProfile.dateOfBirth).format("DD/MM/YYYY")
                 : null
               return {
-                label: [item.code, item.userProfile?.fullname, dateOfBirth]
+                label: [item.userProfile?.code, item.userProfile?.fullname, dateOfBirth]
                   .filter(Boolean)
                   .join(" - "),
                 value: item.id,

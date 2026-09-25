@@ -643,7 +643,7 @@ const PutScoreLinkSheetModal = () => {
 
                                 const student = studentList.find((s) => s.id === studentId)
 
-                                return `${student?.userProfile?.fullname} - ${student?.code}` || "—"
+                                return `${student?.userProfile?.fullname} - ${student?.userProfile?.code}` || "—"
                               },
                             },
                             {

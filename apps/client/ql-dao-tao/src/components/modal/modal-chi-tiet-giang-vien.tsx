@@ -225,7 +225,7 @@ const ModalChiTietGiangVien = () => {
             <Col span={6}>
               <Text type="secondary">Mã giảng viên</Text>
               <div>
-                <Text strong>{lecturer.code || "-"}</Text>
+                <Text strong>{lecturer.userProfile?.code || "-"}</Text>
               </div>
             </Col>
             <Col span={6}>
@@ -1291,7 +1291,7 @@ const ModalChiTietGiangVien = () => {
 
   return (
     <Modal
-      title={`Chi tiết giảng viên: ${lecturer.userProfile?.lastName || ""} ${lecturer.userProfile?.firstName || ""} (${lecturer.code || ""})`}
+      title={`Chi tiết giảng viên: ${lecturer.userProfile?.lastName || ""} ${lecturer.userProfile?.firstName || ""} (${lecturer.userProfile?.code || ""})`}
       open={isOpen}
       onCancel={onClose}
       width="90%"

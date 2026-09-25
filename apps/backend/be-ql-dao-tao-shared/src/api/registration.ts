@@ -56,8 +56,8 @@ const registration = createRoute({
 
 app.openapi(registration, async (c) => {
   const { students_code, class_data, type_res } = c.req.valid("json")
-  const student = await prisma.student.findUnique({
-    where: { code: students_code },
+  const student = await prisma.student.findFirst({
+    where: { userProfile: { code: students_code } },
     include: {
       fixedClass: {
         include: {

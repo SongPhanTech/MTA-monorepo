@@ -9,7 +9,7 @@ export const TYPE_RES = {
 
 export const RegistrationRequest = z
   .object({
-    students_code: z.string().openapi(fieldDesc("Mã sinh viên (Student.code).", "21000001")),
+    students_code: z.string().openapi(fieldDesc("Mã sinh viên (UserProfile.code).", "21000001")),
     class_data: z
       .array(z.string())
       .openapi(fieldDesc("Danh sách ID lớp học phần (SubjectClass.id) cần đăng ký hoặc hủy.")),

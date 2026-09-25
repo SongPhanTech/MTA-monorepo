@@ -206,7 +206,7 @@ const PutScholarshipAward = () => {
             options={studentData.map((i) => {
               return {
                 value: i.id,
-                label: [i.code, i.userProfile.fullname].filter(Boolean).join(" - "),
+                label: [i.userProfile?.code, i.userProfile.fullname].filter(Boolean).join(" - "),
               }
             })}
             {...(input?.id

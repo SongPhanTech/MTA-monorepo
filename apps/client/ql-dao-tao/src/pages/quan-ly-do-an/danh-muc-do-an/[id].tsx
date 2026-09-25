@@ -52,7 +52,9 @@ export default function ThesisProjectDetail() {
       thesisProjectId: thesisProjectId,
       ...(filters.code
         ? {
-            student: { code: { contains: filters.code, mode: "insensitive" } },
+            student: {
+              userProfile: { code: { contains: filters.code, mode: "insensitive" } },
+            },
           }
         : {}),
     },
@@ -255,7 +257,7 @@ export default function ThesisProjectDetail() {
               width: 120,
               fixed: "left",
               type: "input",
-              render: (_, record) => record?.student?.code,
+              render: (_, record) => record?.student?.userProfile?.code,
             },
             {
               title: "Họ và tên",

@@ -74,9 +74,9 @@ export async function exportStudentSemesterResult({
     include: {
       student: {
         select: {
-          code: true,
           userProfile: {
             select: {
+              code: true,
               fullname: true,
               dateOfBirth: true,
             },
@@ -104,7 +104,7 @@ export async function exportStudentSemesterResult({
 
     return {
       no: idx + 1,
-      code: student.code,
+      code: student.userProfile.code,
       fullname: userProfile.fullname,
       dateOfBirth: dateOfBirth ? `'${formatDateVn(dateOfBirth)}` : "",
       fixedClass: student.fixedClass?.code,
@@ -205,6 +205,7 @@ export async function exportStudentSemesterResultV2({
       include: {
         userProfile: {
           select: {
+            code: true,
             fullname: true,
             dateOfBirth: true,
             gender: { select: { sTen: true } },
@@ -366,7 +367,7 @@ export async function exportStudentSemesterResultV2({
 
       const rowValues = [
         si + 1,
-        student.code,
+        student.userProfile?.code || "",
         student.userProfile?.fullname || "",
         student.userProfile?.gender?.sTen || "",
         dob,
@@ -487,9 +488,9 @@ export async function exportStudentYearResult({
     include: {
       student: {
         select: {
-          code: true,
           userProfile: {
             select: {
+              code: true,
               fullname: true,
               dateOfBirth: true,
             },
@@ -518,7 +519,7 @@ export async function exportStudentYearResult({
 
     return {
       no: idx + 1,
-      code: student.code,
+      code: student.userProfile.code,
       fullname: userProfile.fullname,
       dateOfBirth: dateOfBirth ? `'${formatDateVn(dateOfBirth)}` : "",
       fixedClass: student.fixedClass?.code,

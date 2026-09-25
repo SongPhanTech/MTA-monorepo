@@ -73,23 +73,24 @@ export default function StudentGraduationApplication() {
       sessionId: graduationSessionId,
       deletedAt: null,
       student: {
-        ...(filters.code && filters.code !== ""
-          ? {
-              code: {
-                contains: filters.code,
-                mode: "insensitive" as const,
-              },
-            }
-          : {}),
-        userProfile:
-          filters.name && filters.name !== ""
+        userProfile: {
+          ...(filters.code && filters.code !== ""
+            ? {
+                code: {
+                  contains: filters.code,
+                  mode: "insensitive" as const,
+                },
+              }
+            : {}),
+          ...(filters.name && filters.name !== ""
             ? {
                 fullname: {
                   contains: filters.name,
                   mode: "insensitive" as const,
                 },
               }
-            : {},
+            : {}),
+        },
         fixedClass: {
           ...(filters.fixedClassName
             ? {
@@ -829,7 +830,7 @@ export default function StudentGraduationApplication() {
                           width: 100,
                           fixed: "left",
                           type: "input",
-                          render: (_, record) => record.student?.code || "",
+                          render: (_, record) => record.student?.userProfile?.code || "",
                         },
                         {
                           title: "Họ và tên",

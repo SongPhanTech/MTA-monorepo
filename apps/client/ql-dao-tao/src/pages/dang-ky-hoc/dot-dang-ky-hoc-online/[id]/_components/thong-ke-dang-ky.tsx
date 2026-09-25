@@ -48,13 +48,13 @@ type LogRow = {
   subjectClassId: string
   student?: {
     id: string
-    code: string | null
     fixedClass?: {
       id: string
       code: string
       name: string
     } | null
     userProfile?: {
+      code?: string | null
       fullname?: string | null
       lastName?: string | null
       firstName?: string | null
@@ -175,7 +175,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
         userProfile: true,
         fixedClass: true,
       },
-      orderBy: { code: "asc" },
+      orderBy: { userProfile: { code: "asc" } },
       take: 20000,
     },
     { enabled: trainingCourseIds.length > 0 }
@@ -283,7 +283,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
         } else {
           studentRegMap.set(st.id, {
             studentId: st.id,
-            code: st.code || "",
+            code: st.userProfile?.code || "",
             name: studentName(st),
             dateOfBirth: st.userProfile?.dateOfBirth || null,
             fixedClassCode: st.fixedClass?.code || "",
@@ -303,7 +303,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
       .filter((s) => !registeredIdSet.has(s.id))
       .map((s) => ({
         studentId: s.id,
-        code: s.code || "",
+        code: s.userProfile?.code || "",
         name: studentName(s),
         fixedClassCode: s.fixedClass?.code || "",
       }))
@@ -528,7 +528,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
         typedLogs.forEach((l, idx) => {
           ws.addRow([
             idx + 1,
-            l.student?.code || "",
+            l.student?.userProfile?.code || "",
             studentName(l.student),
             l.subjectClass?.code || "",
             l.subjectClass?.name || "",

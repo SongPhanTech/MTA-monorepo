@@ -69,9 +69,11 @@ export default function DangKyHocChoCaNhan() {
                 },
               },
               {
-                code: {
-                  contains: filters.searchText,
-                  mode: "insensitive",
+                userProfile: {
+                  code: {
+                    contains: filters.searchText,
+                    mode: "insensitive",
+                  },
                 },
               },
             ],
@@ -135,9 +137,11 @@ export default function DangKyHocChoCaNhan() {
                 },
               },
               {
-                code: {
-                  contains: filters.searchText,
-                  mode: "insensitive",
+                userProfile: {
+                  code: {
+                    contains: filters.searchText,
+                    mode: "insensitive",
+                  },
                 },
               },
             ],

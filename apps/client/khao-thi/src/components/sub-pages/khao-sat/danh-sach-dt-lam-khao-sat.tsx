@@ -163,7 +163,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
           new TableRow({
             children: [
               centerCell(String(index + 1)),
-              centerCell(record?.educationAndTraining?.[0]?.code || record?.lecturer?.code || ""),
+              centerCell(record?.code || ""),
               centerCell(`${record?.lastName || ""} ${record?.firstName || ""}`),
               centerCell(record?.idCardNumber || ""),
               centerCell(record?.phoneNumber || ""),
@@ -330,18 +330,14 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                 type: "input",
                 width: 125,
                 render: (_, record) =>
-                  record?.educationAndTraining?.length > 0
-                    ? record?.educationAndTraining[0]?.code
-                    : record?.lecturer?.code
-                      ? record?.lecturer?.code
-                      : "",
+                  record?.code || record?.lecturer?.userProfile?.code || "",
               },
               // {
               //     title: 'Mã GV',
               //     dataIndex: 'lecturerCode',
               //     type: 'input',
               //     width: 125,
-              //     render: (_, record) => record?.lecturer?.code || '',
+              //     render: (_, record) => record?.lecturer?.userProfile?.code || '',
               // },
               {
                 title: "Người làm khảo sát",
