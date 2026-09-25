@@ -28,7 +28,9 @@ const certificateScore = createRoute({
   summary: "Phiên điểm chứng chỉ",
   description: `Tính / ghi điểm từ phiên chứng chỉ đã lưu trữ.
 
-**Bảng dữ liệu nguồn:** ArchivedCertificate, ArchivedCertificateSubjectScore (ưu tiên), CertificateOnSubject (fallback đơn cũ), StudentSubjectScore.
+Chỉ phiên điểm khi chứng chỉ có môn được chọn (ArchivedCertificateSubjectScore). Không chọn môn thì chỉ phê duyệt chứng chỉ, không ghi điểm môn.
+
+**Bảng dữ liệu nguồn:** ArchivedCertificate, ArchivedCertificateSubjectScore, StudentSubjectScore.
 
 **Tham số:** archivedCertificateIds.`,
   method: "post",
@@ -72,39 +74,6 @@ const certificateScore = createRoute({
 app.openapi(certificateScore, async (c) => {
   const { archivedCertificateIds } = c.req.valid("json")
 
-  const certificates = await prisma.certificate.findMany({
-    where: {
-      archivedCertificate: { some: { id: { in: archivedCertificateIds } } },
-      deletedAt: null,
-      active: true,
-    },
-    include: {
-      subjects: {
-        include: {
-          subject: {
-            include: {
-              subjectVersion: true,
-            },
-          },
-        },
-      },
-    },
-  })
-
-  // Fallback catalog: CertificateOnSubject → mọi SubjectVersion thuộc Subject
-  const certMap = new Map(
-    certificates.map((cert) => {
-      const subjectVersions = cert.subjects.flatMap((s) =>
-        s.subject.subjectVersion.map((sv) => ({
-          subjectVersionId: sv.id,
-          finalScore: s.finalScore,
-        }))
-      )
-
-      return [cert.id, subjectVersions]
-    })
-  )
-
   const archivedCertificates = await prisma.archivedCertificate.findMany({
     where: {
       id: { in: archivedCertificateIds },
@@ -114,74 +83,18 @@ app.openapi(certificateScore, async (c) => {
       subjectScores: {
         where: { deletedAt: null, active: true },
       },
-      student: {
-        include: {
-          curriculumVersion: {
-            include: {
-              trainingBlocks: {
-                include: { subjects: true },
-              },
-            },
-          },
-          fixedClass: {
-            include: {
-              curriculumVersion: {
-                include: {
-                  trainingBlocks: {
-                    include: { subjects: true },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
     },
   })
 
-  const translateSubjectScore = archivedCertificates.flatMap((archived) => {
-    const curriculumVersion =
-      archived.student.curriculumVersion || archived.student.fixedClass?.curriculumVersion
-
-    if (!curriculumVersion) {
-      return []
-    }
-
-    const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap(({ subjects }) =>
-      subjects.map(({ subjectId }) => subjectId)
-    )
-
-    // Ưu tiên mapping theo SV (ArchivedCertificateSubjectScore)
-    const perStudentScores = archived.subjectScores
-      .filter(({ subjectVersionId }) => curriculumSubjects.includes(subjectVersionId))
-      .map(({ subjectVersionId, finalScore }) => ({
-        id: createId(),
-        archivedCertificateId: archived.id,
-        studentId: archived.studentId,
-        subjectVersionId,
-        manualFinalScore: finalScore,
-      }))
-
-    if (perStudentScores.length > 0) {
-      return perStudentScores
-    }
-
-    // Fallback đơn cũ: catalog CertificateOnSubject
-    const cert = certMap.get(archived.certificateId)
-    if (!cert) {
-      return []
-    }
-
-    return cert
-      .filter(({ subjectVersionId }) => curriculumSubjects.includes(subjectVersionId))
-      .map(({ subjectVersionId, finalScore }) => ({
-        id: createId(),
-        archivedCertificateId: archived.id,
-        studentId: archived.studentId,
-        subjectVersionId,
-        manualFinalScore: finalScore,
-      }))
-  })
+  const translateSubjectScore = archivedCertificates.flatMap((archived) =>
+    archived.subjectScores.map(({ subjectVersionId, finalScore }) => ({
+      id: createId(),
+      archivedCertificateId: archived.id,
+      studentId: archived.studentId,
+      subjectVersionId,
+      manualFinalScore: finalScore,
+    }))
+  )
 
   await prisma.$transaction(async (tx) => {
     await tx.studentSubjectScore.createMany({

@@ -110,6 +110,30 @@ app.openapi(
             }
           }
 
+          // Đăng ký cá nhân xóa điểm khi đổi lớp. Bài thi chưa phách chặn khóa ngoại ExamPaper.
+          if (
+            element.model === "StudentSubjectScore" &&
+            (operation === "delete" || operation === "deleteMany") &&
+            element.data?.where
+          ) {
+            const scores = await tx.studentSubjectScore.findMany({
+              where: element.data.where,
+              select: {
+                id: true,
+                examPaper: { select: { examCode: true } },
+              },
+            })
+            if (scores.some((score) => score.examPaper?.examCode)) {
+              throw new Error("Học phần đã đánh phách, không thể đổi lớp.")
+            }
+            const scoreIds = scores.map((score) => score.id)
+            if (scoreIds.length > 0) {
+              const where = { studentSubjectScoreId: { in: scoreIds } }
+              await tx.examPaper.deleteMany({ where })
+              await tx.studentSubjectScoreHistory.deleteMany({ where })
+            }
+          }
+
           // @ts-expect-error
           result.push(await tx[key][operation](element.data))
         }
