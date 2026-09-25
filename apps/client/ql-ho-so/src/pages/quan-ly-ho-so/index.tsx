@@ -117,6 +117,14 @@ export default function UserProfilePageDs() {
             },
           }
         : {}),
+      ...(filters.code
+        ? {
+            code: {
+              contains: filters.code,
+              mode: "insensitive",
+            },
+          }
+        : {}),
     } as any
   }, [filters])
 
@@ -313,6 +321,8 @@ export default function UserProfilePageDs() {
                 align: "center",
                 width: 120,
                 ellipsis: true,
+                dataIndex: "code",
+                type: "input",
                 render: (__, record) => record?.code || "",
               },
               {

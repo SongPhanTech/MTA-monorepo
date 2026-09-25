@@ -6,7 +6,9 @@ import TreeSelect from "@components/commons/tree-select"
 import type { DomProps } from "@constants/type"
 import { buildOrgTree } from "@lib/utils"
 import type { SubmitForm } from "@pages/quan-ly-ho-so/tao-moi"
+import { useSession } from "@workspace/auth/react"
 import {
+  useFindFirstStudent,
   useFindManyDM_ChucDanh,
   useFindManyDM_DanToc,
   useFindManyDM_DonVi,
@@ -23,6 +25,7 @@ import {
 } from "@workspace/db/hooks"
 import { Checkbox, Col, Collapse, Flex, Form, Input, InputNumber, Row, Typography } from "antd"
 import dayjs from "dayjs"
+import { useRouter } from "next/router"
 
 dayjs.locale("vi")
 const { Title, Text } = Typography
@@ -124,9 +127,36 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     where: watchedDistrictHometownId ? { sDM_QuanHuyenId: watchedDistrictHometownId } : undefined,
   })
 
+  const router = useRouter()
+  const { data: session } = useSession()
+  const routerProfileId = typeof router.query.id === "string" ? router.query.id : ""
+  const isMePage = router.pathname === "/quan-ly-ho-so/me"
+  const profileId = routerProfileId || (isMePage ? session?.sDM_NhanVienId || "" : "")
+  const bLaHocVien = Form.useWatch("bLaHocVien", form) || false
   const bLaGiangVien = Form.useWatch("bLaGiangVien", form) || false
   // const bLaCanBoNhanVien = Form.useWatch('bLaCanBoNhanVien', form)
   const { data: lecturerTypeData = [] } = useFindManyLecturerType({}, { enabled: bLaGiangVien })
+  const { data: student } = useFindFirstStudent(
+    {
+      where: { userProfileId: profileId },
+      include: {
+        fixedClass: {
+          select: {
+            id: true,
+            name: true,
+            managementOrganizationId: true,
+            managementOrganization: { select: { Id: true, sTen: true } },
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    },
+    { enabled: !!bLaHocVien && !!profileId }
+  )
+  const studentOrgId =
+    student?.fixedClass?.managementOrganizationId ||
+    student?.fixedClass?.managementOrganization?.Id ||
+    undefined
   // const { data: staffTypeData = [] } = useFindManyStaffType({}, { enabled: !!bLaCanBoNhanVien })
   // const { data: staffPositionData = [] } = useFindManyStaffPosition(
   //     {},
@@ -392,6 +422,23 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
               </FormItem>
             </Flex>
           </Col>
+          {bLaHocVien && (
+            <Col span={12}>
+              <Form.Item label="Đơn vị quản lý" className="mb-0">
+                <TreeSelect
+                  disabled
+                  allowClear={false}
+                  placeholder="Chưa có đơn vị từ lớp quản lý"
+                  treeDefaultExpandAll
+                  treeData={treeData}
+                  value={studentOrgId}
+                />
+              </Form.Item>
+              <Typography.Text type="danger" className="block mt-1">
+                Lấy theo lớp quản lý của sinh viên, không tự thay đổi được
+              </Typography.Text>
+            </Col>
+          )}
           {bLaGiangVien && (
             <>
               <Col span={12}>

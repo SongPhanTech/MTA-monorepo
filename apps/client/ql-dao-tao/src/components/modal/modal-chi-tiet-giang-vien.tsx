@@ -207,12 +207,14 @@ const ModalChiTietGiangVien = () => {
 
   useSpinner()
 
-  if (!lecturerData) return null // Type cast để tránh lỗi TypeScript
-  const lecturer = lecturerData
+  const donViId = lecturerData?.userProfile?.sDM_DonViId || ""
   const { data: donVi } = useFindUniqueDM_DonVi(
-    { where: { Id: lecturer?.userProfile?.sDM_DonViId || "" } },
-    { enabled: !!lecturer?.userProfile?.sDM_DonViId }
+    { where: { Id: donViId } },
+    { enabled: !!donViId }
   )
+
+  if (!lecturerData) return null
+  const lecturer = lecturerData
 
   const tabItems = [
     {

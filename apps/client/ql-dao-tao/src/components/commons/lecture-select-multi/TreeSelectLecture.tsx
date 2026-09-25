@@ -91,6 +91,7 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
       userProfile: {
         select: {
           id: true,
+          code: true,
           fullname: true,
           sDM_DonViId: true,
           academicRankType: true,

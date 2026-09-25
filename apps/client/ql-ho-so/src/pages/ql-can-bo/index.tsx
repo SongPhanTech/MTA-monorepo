@@ -101,15 +101,15 @@ export default function StaffManagement() {
               },
             }
           : {}),
+        ...(filters.code
+          ? {
+              code: {
+                contains: filters.code,
+                mode: "insensitive",
+              },
+            }
+          : {}),
       },
-      ...(filters.code
-        ? {
-            code: {
-              contains: filters.code,
-              mode: "insensitive",
-            },
-          }
-        : {}),
       ...(filters.organization
         ? {
             organizationId: {
@@ -195,15 +195,15 @@ export default function StaffManagement() {
               },
             }
           : {}),
+        ...(filters.code
+          ? {
+              code: {
+                contains: filters.code,
+                mode: "insensitive",
+              },
+            }
+          : {}),
       },
-      ...(filters.code
-        ? {
-            code: {
-              contains: filters.code,
-              mode: "insensitive",
-            },
-          }
-        : {}),
       ...(filters.organization
         ? {
             organizationId: {
@@ -422,6 +422,7 @@ export default function StaffManagement() {
                 align: "center",
                 width: 150,
                 type: "input",
+                render: (__, record) => record.userProfile?.code || "",
               },
               {
                 title: "Họ và tên",

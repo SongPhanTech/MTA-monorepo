@@ -207,12 +207,7 @@ function TicketList() {
                       title="Bạn có chắc chắn muốn duyệt phiếu này?"
                       onConfirm={async () => {
                         // Validation
-                        if (
-                          !record.proposal ||
-                          !record.decision ||
-                          !record.date ||
-                          !record.number
-                        ) {
+                        if (!record.number) {
                           message.error("Thông tin phiếu chưa đầy đủ")
                           return
                         }
@@ -478,11 +473,6 @@ function TicketDetailDrawer({
         message.error(
           `Số lượng sinh viên (${items?.length}) không khớp với số lượng dự kiến (${ticket?.number})`
         )
-        return
-      }
-      // Validate ticket info
-      if (!ticket.proposal || !ticket.decision || !ticket.date) {
-        message.error("Thông tin phiếu chưa đầy đủ (Tờ trình, Số quyết định, Ngày)")
         return
       }
       // Validate items

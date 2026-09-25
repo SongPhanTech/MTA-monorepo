@@ -110,21 +110,30 @@ export const findOpenKeys = (menus: MenuItem[], currentPath: string | null): str
   return []
 }
 
+const isPathMatch = (itemPath: string, pathname: string) => {
+  const normalizedPath = itemPath.replace(/\/$/, "")
+  const normalizedPathname = pathname.replace(/\/$/, "")
+  return normalizedPathname === normalizedPath || normalizedPathname.startsWith(`${normalizedPath}/`)
+}
+
 export const findMatchingKey = (menus: MenuItem[], pathname: string | null): string | undefined => {
   if (!pathname) return undefined
 
-  for (const item of menus) {
-    if (item.children?.length) {
-      const childMatch = findMatchingKey(item.children, pathname)
-      if (childMatch) return childMatch
-    }
-    if (item.path) {
-      const normalizedPath = item.path.replace(/\/$/, "")
-      const normalizedPathname = pathname.replace(/\/$/, "")
-      if (normalizedPathname === normalizedPath || pathname.startsWith(`${item.path}/`)) {
-        return item.path
+  let bestPath: string | undefined
+  let bestLength = -1
+
+  const walk = (items: MenuItem[]) => {
+    for (const item of items) {
+      if (item.children?.length) walk(item.children)
+      if (!item.path || !isPathMatch(item.path, pathname)) continue
+      const length = item.path.replace(/\/$/, "").length
+      if (length > bestLength) {
+        bestPath = item.path
+        bestLength = length
       }
     }
   }
-  return undefined
+
+  walk(menus)
+  return bestPath
 }

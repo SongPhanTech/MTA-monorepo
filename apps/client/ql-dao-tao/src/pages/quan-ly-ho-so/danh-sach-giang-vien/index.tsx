@@ -130,18 +130,13 @@ export default function UserProfilePageLecture() {
     } else if (!canXemTatCa) {
       userProfile.sDM_DonViId = { in: orgIds }
     }
+    if (filters.code) {
+      userProfile.code = { contains: filters.code, mode: "insensitive" as const }
+    }
 
     return {
       deletedAt: null,
       active: true,
-      ...(filters.code
-        ? {
-            code: {
-              contains: filters.code,
-              mode: "insensitive" as const,
-            },
-          }
-        : {}),
       ...(filters.lecturerType
         ? {
             lecturerTypeId: {
@@ -362,6 +357,8 @@ export default function UserProfilePageLecture() {
                 align: "center",
                 width: 120,
                 type: "input",
+                render: (__, record: { userProfile?: { code?: string | null } }) =>
+                  record.userProfile?.code || "",
               },
               {
                 title: "Họ và tên",

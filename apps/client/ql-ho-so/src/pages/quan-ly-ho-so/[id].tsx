@@ -439,9 +439,10 @@ export default function UpdateUserPage() {
 
     try {
       showSpinner()
+      const profileCode = (bLaGiangVien ? lectureCode || values.code : values.code)?.trim()
       putDMNhanViens({
         sDM_DonViId: organizationId,
-        sMa: values.code,
+        sMa: profileCode,
         sHoVaDem: values.lastName?.trim(),
         sTen: values.firstName?.trim(),
         sTenDayDu: `${values.lastName?.trim() || ""} ${values.firstName?.trim() || ""}`.trim(),
@@ -554,6 +555,7 @@ export default function UpdateUserPage() {
             },
             data: {
               ...values,
+              code: profileCode,
               lastName: values.lastName?.trim(),
               firstName: values.firstName?.trim(),
               bLaHocVien: values.bLaHocVien,

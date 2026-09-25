@@ -5,27 +5,29 @@ import { fetchUserPermissions } from "../services/user-permissions"
 
 const app = new OpenAPIHono({ strict: false })
 
+const PermissionSchema = z
+  .object({
+    sFormName: z.string().nullish().openapi(fieldDesc("Mã chức năng")),
+    sTen: z.string().nullish().openapi(fieldDesc("Tên chức năng")),
+    lPermission: z.number().nullish().openapi(fieldDesc("Tổng quyền bitwise")),
+    PermissionNames: z.array(z.string()).nullish().openapi(fieldDesc("Tên các quyền đang bật")),
+  })
+  .openapi("UserPermissionItem")
+
 const RoleSchema = z
   .object({
     sRoleId: z.string().nullish().openapi(fieldDesc("ID vai trò")),
     sCodeName: z.string().nullish().openapi(fieldDesc("Mã vai trò")),
     sRoleName: z.string().nullish().openapi(fieldDesc("Tên vai trò")),
     sVersion: z.string().nullish().openapi(fieldDesc("Phiên bản vai trò")),
+    Permissions: z.array(PermissionSchema).openapi(fieldDesc("Danh sách quyền của vai trò")),
   })
   .openapi("UserPermissionRole")
-
-const PermissionSchema = z
-  .object({
-    sFormName: z.string().nullish().openapi(fieldDesc("Mã chức năng")),
-    lPermission: z.number().nullish().openapi(fieldDesc("Tổng quyền bitwise")),
-  })
-  .openapi("UserPermissionItem")
 
 const UserPermissionSchema = z
   .object({
     UserId: z.string().openapi(fieldDesc("ID người dùng")),
-    Roles: z.array(RoleSchema).openapi(fieldDesc("Danh sách vai trò")),
-    Permissions: z.array(PermissionSchema).openapi(fieldDesc("Danh sách quyền chức năng")),
+    Roles: z.array(RoleSchema).openapi(fieldDesc("Danh sách vai trò kèm quyền")),
   })
   .openapi("UserPermission")
 

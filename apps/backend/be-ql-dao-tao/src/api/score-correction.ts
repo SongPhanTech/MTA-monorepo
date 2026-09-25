@@ -123,10 +123,6 @@ app.openapi(approveScoreCorrection, async (c) => {
         throw new Error("Phiếu đã được duyệt")
       }
 
-      if (!ticket.proposal || !ticket.decision || !ticket.date) {
-        throw new Error("Thông tin phiếu chưa đầy đủ (Tờ trình, Số quyết định, Ngày)")
-      }
-
       if (!ticket.items || ticket.items.length === 0) {
         throw new Error("Phiếu chưa có sinh viên")
       }

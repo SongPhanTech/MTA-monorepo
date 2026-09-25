@@ -1,22 +1,24 @@
 import { useQuery } from "@tanstack/react-query"
 import { customTrainingFetch } from "./custom-instance"
 
+export type SystemPermission = {
+  sFormName?: string | null
+  sTen?: string | null
+  lPermission?: number | null
+  PermissionNames?: string[] | null
+}
+
 export type SystemRole = {
   sRoleId?: string | null
   sCodeName?: string | null
   sRoleName?: string | null
   sVersion?: string | null
-}
-
-export type SystemPermission = {
-  sFormName?: string | null
-  lPermission?: number | null
+  Permissions: SystemPermission[]
 }
 
 export type UserPermissionItem = {
   UserId: string
   Roles: SystemRole[]
-  Permissions: SystemPermission[]
 }
 
 type UserPermissionsSuccess = {
