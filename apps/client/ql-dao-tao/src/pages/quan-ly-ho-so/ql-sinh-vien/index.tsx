@@ -48,7 +48,7 @@ export default function UserProfilePageDs() {
   const { can } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-  const [sortDescriptor, setSortDescriptor] = useState<any>(null)
+  const [sortDescriptor, setSortDescriptor] = useState<any>({ userProfile: { code: "asc" } })
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
     name: "",
@@ -313,7 +313,7 @@ export default function UserProfilePageDs() {
       },
     },
     orderBy: [
-      ...(sortDescriptor ? [sortDescriptor] : []),
+      ...(sortDescriptor ? [sortDescriptor] : [{ userProfile: { code: "asc" } }]),
       {
         fixedClass: {
           trainingCourse: {
@@ -607,6 +607,13 @@ export default function UserProfilePageDs() {
                 fixed: "left",
                 type: "input",
                 sorter: true,
+                defaultSortOrder: "ascend",
+                sortOrder:
+                  sortDescriptor?.userProfile?.code === "asc"
+                    ? "ascend"
+                    : sortDescriptor?.userProfile?.code === "desc"
+                      ? "descend"
+                      : null,
                 render: (__, record: any) => record.userProfile?.code ?? "",
               },
               {
@@ -699,6 +706,12 @@ export default function UserProfilePageDs() {
                 dataIndex: "trainingField",
                 type: "select",
                 sorter: true,
+                sortOrder: sortDescriptor?.fixedClass
+                  ? sortDescriptor.fixedClass.curriculumVersion.curriculum.trainingMajor
+                      .trainingField.name === "asc"
+                    ? "ascend"
+                    : "descend"
+                  : null,
                 options: trainingFieldData.map((item: TrainingField) => ({
                   label: item.name,
                   value: item.id,
