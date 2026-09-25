@@ -1,4 +1,4 @@
-import { getMinioUrl } from "@workspace/libs"
+import { fetchMinio } from "@workspace/libs"
 import XlsxTemplate from "xlsx-template"
 import { mergeXlsxBlocksToOneSheet } from "../utils/merge-xlsx-blocks"
 
@@ -15,9 +15,9 @@ export async function renderThesisPaymentXlsx(payload: ExcelTemplatePayload): Pr
   const templatePrefix = (payload.prefix ?? "/mta/luan-van").replace(/\/+$/, "")
   const templatePath = payload.path.replace(/^\/+/, "")
 
-  let res = await fetch(getMinioUrl(`${templatePrefix}/${templatePath}`))
+  let res = await fetchMinio(`${templatePrefix}/${templatePath}`)
   if (!res.ok && templatePrefix !== "/mta/template") {
-    res = await fetch(getMinioUrl(`/mta/template/${templatePath}`))
+    res = await fetchMinio(`/mta/template/${templatePath}`)
   }
   if (!res.ok) {
     throw new Error("Không tìm thấy template")

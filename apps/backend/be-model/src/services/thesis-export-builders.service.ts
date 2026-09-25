@@ -1,5 +1,5 @@
 import { CouncilRole, SupervisorRole, TrainingObjectTypes } from "@workspace/db/client"
-import { getMinioUrl } from "@workspace/libs"
+import { fetchMinio } from "@workspace/libs"
 import { buildExcelFromTemplate, type TableRow } from "@workspace/libs/template-excel-core"
 import "@workspace/libs/utils"
 import dayjs from "dayjs"
@@ -212,7 +212,12 @@ async function renderMinioTemplate(
   options: Omit<Parameters<typeof buildExcelFromTemplate>[0], "templateBuffer" | "fileName">,
   fileName: string
 ) {
-  const response = await fetch(getMinioUrl(templatePath))
+  const objectName = templatePath.split("/").pop() || templatePath
+  const uploadedPath = `${TEMPLATE_PREFIX}/${objectName}`
+  let response = await fetchMinio(uploadedPath)
+  if (!response.ok && uploadedPath !== templatePath) {
+    response = await fetchMinio(templatePath)
+  }
   if (!response.ok) {
     throw new Error(`Không tải được template: ${response.status} ${response.statusText}`)
   }
@@ -234,6 +239,18 @@ async function renderDocx(
 ) {
   const buffer = await renderDocxTemplate({ path, prefix: TEMPLATE_PREFIX, data, patchDocumentXml })
   return { buffer, fileName, contentType: DOCX_CONTENT_TYPE }
+}
+
+/** Phụ lục danh sách luận văn: đơn vị công tác chỉ hiện với giảng viên ngoài học viện. */
+function supervisorNameForPhuLuc(expert: Parameters<typeof getSupervisorName>[0]) {
+  return getSupervisorName(expert, !resolveInAcademy(expert))
+}
+
+function formatPhuLucSupervisors(project: Project | undefined) {
+  const gvhd1 = supervisorNameForPhuLuc(project?.supervisor)
+  const gvhd2 = supervisorNameForPhuLuc(project?.coSupervisor)
+  if (gvhd1 && gvhd2) return `1. ${gvhd1}\n2. ${gvhd2}`
+  return gvhd1 || gvhd2 || ""
 }
 
 function commonStudentRows(rows: StudentRow[]) {
@@ -327,10 +344,7 @@ async function buildPhuLucDsLuanVan(rows: StudentRow[]) {
         },
         { value: thesis.tendetai, border: true, align: "left", wrapText: true, fontSize: 12 },
         {
-          value:
-            thesis.gvhd1 && thesis.gvhd2
-              ? `1. ${thesis.gvhd1}\n2. ${thesis.gvhd2}`
-              : thesis.gvhd1 || thesis.gvhd2 || "",
+          value: formatPhuLucSupervisors(thesis.project),
           border: true,
           align: "left",
           wrapText: true,

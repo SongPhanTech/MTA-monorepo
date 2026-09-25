@@ -1,4 +1,4 @@
-import { getMinioUrl } from "@workspace/libs"
+import { fetchMinio, getMinioUrl } from "@workspace/libs"
 import { TemplateHandler } from "easy-template-x"
 import type { TemplateData } from "easy-template-x"
 import PizZip from "pizzip"
@@ -44,7 +44,7 @@ export async function renderDocxTemplate({
   let res: Response
   try {
     console.log(`${logPrefix} Fetch primary MinIO`, { url: primaryUrl })
-    res = await fetch(primaryUrl)
+    res = await fetchMinio(primaryUri)
     console.log(`${logPrefix} Primary response`, {
       url: primaryUrl,
       ok: res.ok,
@@ -70,7 +70,7 @@ export async function renderDocxTemplate({
         fallbackUrl,
       })
       usedUrl = fallbackUrl
-      res = await fetch(fallbackUrl)
+      res = await fetchMinio(fallbackUri)
       console.log(`${logPrefix} Fallback response`, {
         url: fallbackUrl,
         ok: res.ok,

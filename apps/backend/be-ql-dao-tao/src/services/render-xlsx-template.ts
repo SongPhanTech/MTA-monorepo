@@ -1,5 +1,5 @@
 import { getTemplateBuffer } from "@workspace/libs/server"
-import { getMinioUrl } from "@workspace/libs/utils"
+import { fetchMinio } from "@workspace/libs/utils"
 import type { PrismaClient } from "@workspace/db"
 import XlsxTemplate from "xlsx-template"
 import { mergeXlsxBlocksToOneSheet } from "../utils/merge-xlsx-blocks"
@@ -60,8 +60,7 @@ export async function loadTemplateBuffer(
   // Có prefix → luôn lấy từ MinIO theo prefix + file name
   if (prefix?.trim()) {
     const fullPath = joinPrefixAndPath(prefix, normalized)
-    const url = getMinioUrl(fullPath)
-    const res = await fetch(url)
+    const res = await fetchMinio(fullPath)
     if (!res.ok) {
       throw new Error(`Không tải được template: ${fullPath}`)
     }
@@ -70,8 +69,7 @@ export async function loadTemplateBuffer(
 
   // Path tuyệt đối (bắt đầu /) → MinIO trực tiếp
   if (normalized.startsWith("/")) {
-    const url = getMinioUrl(normalized)
-    const res = await fetch(url)
+    const res = await fetchMinio(normalized)
     if (!res.ok) {
       throw new Error(`Không tải được template: ${templatePath}`)
     }

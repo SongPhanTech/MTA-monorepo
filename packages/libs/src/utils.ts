@@ -257,6 +257,15 @@ export const getMinioUrl = (uri: string | undefined | null) => {
   return new URL(uri, publicEndpoint).href
 }
 
+/** Tải object MinIO mới nhất. Không dùng cache tiến trình; query `v` buộc proxy bỏ bản cũ sau khi upload đè. */
+export const fetchMinio = (uri: string) => {
+  const url = new URL(getMinioUrl(uri))
+  if (!url.searchParams.has("X-Amz-Signature")) {
+    url.searchParams.set("v", Date.now().toString())
+  }
+  return fetch(url, { cache: "no-store" })
+}
+
 export function range(start: number, end: number): number[] {
   const result: number[] = []
   for (let i = start; i < end; i++) {

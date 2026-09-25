@@ -1,64 +1,31 @@
 import type { PrismaClient } from "@workspace/db"
-import { getMinioUrl } from "./utils"
+import { fetchMinio } from "./utils"
 
-const templateCache: Record<string, Buffer> = {}
+const resolveTemplatePath = (templateCode: string, folder: "template" | "luan-van") =>
+  templateCode.endsWith(".xlsx") || templateCode.endsWith(".docx")
+    ? `/mta/${folder}/${templateCode}`
+    : `/mta/${folder}/${templateCode}.xlsx`
 
-export const getTemplateBuffer = async (prisma: PrismaClient, templateCode: string) => {
-  if (templateCache[templateCode]) {
-    return templateCache[templateCode]
-  }
-
+const readTemplateBuffer = async (
+  prisma: PrismaClient,
+  templateCode: string,
+  folder: "template" | "luan-van"
+) => {
   const templateFile = await prisma.templateFile.findUnique({
     where: { code: templateCode },
   })
 
-  // if (!templateFile) {
-  //     throw new HTTPException(404, { message: `template not found (${templateCode})` })
-  // }
-  const fallbackPath =
-    templateCode.endsWith(".xlsx") || templateCode.endsWith(".docx")
-      ? `/mta/template/${templateCode}`
-      : `/mta/template/${templateCode}.xlsx`
-  const url = getMinioUrl(templateFile?.path || fallbackPath)
-
-  const res = await fetch(url)
+  const res = await fetchMinio(templateFile?.path || resolveTemplatePath(templateCode, folder))
 
   if (!res.ok) {
     throw new Error(`Failed to fetch template: ${res.status} ${res.statusText}`)
   }
 
-  const buffer = await res.arrayBuffer()
-  const nodeBuffer: Buffer<ArrayBuffer> = Buffer.from(buffer)
-
-  templateCache[templateCode] = nodeBuffer
-  return nodeBuffer
+  return Buffer.from(await res.arrayBuffer())
 }
 
-export const getLuanVanTemplateBuffer = async (prisma: PrismaClient, templateCode: string) => {
-  const cacheKey = `luan-van-${templateCode}`
-  if (templateCache[cacheKey]) {
-    return templateCache[cacheKey]
-  }
+export const getTemplateBuffer = (prisma: PrismaClient, templateCode: string) =>
+  readTemplateBuffer(prisma, templateCode, "template")
 
-  const templateFile = await prisma.templateFile.findUnique({
-    where: { code: templateCode },
-  })
-
-  const fallbackPath =
-    templateCode.endsWith(".xlsx") || templateCode.endsWith(".docx")
-      ? `/mta/luan-van/${templateCode}`
-      : `/mta/luan-van/${templateCode}.xlsx`
-  const url = getMinioUrl(templateFile?.path || fallbackPath)
-
-  const res = await fetch(url)
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch template: ${res.status} ${res.statusText}`)
-  }
-
-  const buffer = await res.arrayBuffer()
-  const nodeBuffer: Buffer<ArrayBuffer> = Buffer.from(buffer)
-
-  templateCache[cacheKey] = nodeBuffer
-  return nodeBuffer
-}
+export const getLuanVanTemplateBuffer = (prisma: PrismaClient, templateCode: string) =>
+  readTemplateBuffer(prisma, templateCode, "luan-van")

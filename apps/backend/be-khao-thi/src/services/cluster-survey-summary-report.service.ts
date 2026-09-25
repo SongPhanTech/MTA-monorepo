@@ -48,9 +48,8 @@ const choiceLabel = (choices: { id: string; description: string; answer: string 
 async function loadSummaryReportTemplate(prisma: PrismaClient): Promise<Buffer> {
   // Fetch trực tiếp MinIO (không dùng cache) để nhận template mới sau khi upload
   try {
-    const { getMinioUrl } = await import("@workspace/libs/utils")
-    const url = getMinioUrl("/mta/template/BaoCaoKhaoSatCum.docx")
-    const res = await fetch(url)
+    const { fetchMinio } = await import("@workspace/libs/utils")
+    const res = await fetchMinio("/mta/template/BaoCaoKhaoSatCum.docx")
     if (res.ok) {
       return Buffer.from(await res.arrayBuffer())
     }

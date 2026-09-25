@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
-import { getMinioUrl } from "@workspace/libs"
+import { fetchMinio } from "@workspace/libs"
 import ExcelJS from "exceljs"
 import XlsxTemplate from "xlsx-template"
 import {
@@ -151,7 +151,7 @@ export async function buildExcelWorkbookBuffer(body: ExcelTemplateInput): Promis
   } = body
   const templatePrefix = (prefix ?? "/mta/template").replace(/\/+$/, "")
   const templatePath = path.replace(/^\/+/, "")
-  const res = await fetch(getMinioUrl(`${templatePrefix}/${templatePath}`))
+  const res = await fetchMinio(`${templatePrefix}/${templatePath}`)
   const buffer = await res.arrayBuffer()
   const nodeBuffer = Buffer.from(buffer)
 

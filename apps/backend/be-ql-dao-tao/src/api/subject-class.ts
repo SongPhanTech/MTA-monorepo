@@ -2,7 +2,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums, Prisma, type ScoreConvert } from "@workspace/db"
 import { examTypeOptions } from "@workspace/libs/constants"
 import { formatDateTimeVn, formatDateVn, nowVn } from "@workspace/libs/timezone"
-import { getMinioUrl, getScoreStatistics, convertScoreWithCourseConfig, courseScoreConfigFrom } from "@workspace/libs/utils"
+import { fetchMinio, getScoreStatistics, convertScoreWithCourseConfig, courseScoreConfigFrom } from "@workspace/libs/utils"
 import { read, utils } from "xlsx"
 import XlsxTemplate from "xlsx-template"
 import ExcelJS from "exceljs"
@@ -988,7 +988,7 @@ app.openapi(exportSubjectClassListExcel, async (c) => {
     }
 
     const templateFileName = "DS_LOP_MON_HOC.xlsx"
-    const res = await fetch(getMinioUrl(`/mta/template/${templateFileName}`))
+    const res = await fetchMinio(`/mta/template/${templateFileName}`)
     if (!res.ok) {
       throw new Error("Không lấy được file mẫu xuất Excel")
     }
@@ -1194,7 +1194,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
     return c.json({ message: "Không tìm thấy lớp học" }, 404)
   }
 
-  const res = await fetch(getMinioUrl(`/mta/template/PHIEU-DIEM${type ? `-${type}` : ""}.xlsx`))
+  const res = await fetchMinio(`/mta/template/PHIEU-DIEM${type ? `-${type}` : ""}.xlsx`)
   const buffer = await res.arrayBuffer()
   const nodeBuffer = Buffer.from(buffer)
   const template = new XlsxTemplate(nodeBuffer)
