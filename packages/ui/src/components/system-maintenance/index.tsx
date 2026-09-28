@@ -16,6 +16,11 @@ type SystemStatusResponse = {
 
 const POLL_MS = 30_000
 
+const DEFAULT_MESSAGES = new Set([
+  "Hệ thống đang được bảo trì. Vui lòng quay lại sau.",
+  "Hệ thống đang bảo trì",
+])
+
 export function SystemMaintenanceScreen({
   message,
   onRetry,
@@ -25,60 +30,145 @@ export function SystemMaintenanceScreen({
   onRetry?: () => void
   checking?: boolean
 }) {
+  const customMessage = message?.trim()
+  const subtitle =
+    customMessage && !DEFAULT_MESSAGES.has(customMessage) ? customMessage : undefined
+
   return (
     <ConfigProvider theme={lightThemeCustom}>
+      <style>{`
+        @keyframes mta-maint-pulse {
+          0%, 100% { transform: scale(1); opacity: 0.55; }
+          50% { transform: scale(1.18); opacity: 0.18; }
+        }
+        @keyframes mta-maint-fade {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
       <div
         style={{
-          minHeight: "100vh",
+          minHeight: "100vh", 
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           padding: 24,
-          background: "linear-gradient(160deg, #0b3d2e 0%, #028850 48%, #e8f5ee 100%)",
+          position: "relative",
+          overflow: "hidden",
+          background: "#07090d",
+          fontFamily: '"Noto Serif", "SF Pro Display", system-ui, sans-serif',
         }}
       >
         <div
           style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.045) 1px, transparent 0)",
+            backgroundSize: "28px 28px",
+            maskImage: "radial-gradient(circle at center, black 35%, transparent 78%)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            width: 480,
+            height: 480,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(2,136,80,0.22) 0%, transparent 68%)",
+            filter: "blur(8px)",
+          }}
+        />
+
+        <div
+          style={{
+            position: "relative",
             width: "100%",
-            maxWidth: 520,
+            maxWidth: 440,
             textAlign: "center",
-            background: "#fff",
-            borderRadius: 16,
-            padding: "40px 32px 32px",
-            boxShadow: "0 20px 48px rgba(11, 61, 46, 0.22)",
+            animation: "mta-maint-fade 0.55s ease-out",
           }}
         >
           <div
             style={{
-              width: 72,
-              height: 72,
-              margin: "0 auto 20px",
-              borderRadius: 999,
-              background: "#e8f5ee",
-              color: "#028850",
+              width: 88,
+              height: 88,
+              margin: "0 auto 28px",
+              position: "relative",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <Construction size={34} />
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                borderRadius: "50%",
+                background: "rgba(2,136,80,0.35)",
+                animation: "mta-maint-pulse 2.6s ease-in-out infinite",
+              }}
+            />
+            <div
+              style={{
+                width: 64,
+                height: 64,
+                borderRadius: 20,
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                backdropFilter: "blur(16px)",
+                color: "#7ee0b0",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 12px 40px rgba(0,0,0,0.35)",
+              }}
+            >
+              <Construction size={28} strokeWidth={1.6} />
+            </div>
           </div>
-          <div style={{ color: "#028850", fontSize: 13, fontWeight: 600, letterSpacing: 0.4 }}>
-            HỌC VIỆN KỸ THUẬT QUÂN SỰ
-          </div>
-          <h1 style={{ margin: "10px 0 12px", fontSize: 28, color: "#1a1a1a", lineHeight: 1.3 }}>
+
+          <h1
+            style={{
+              margin: 0,
+              fontSize: 32,
+              fontWeight: 600,
+              letterSpacing: "-0.03em",
+              color: "#f4f7f5",
+              lineHeight: 1.25,
+            }}
+          >
             Hệ thống đang bảo trì
           </h1>
-          <p style={{ margin: 0, color: "#4b5563", fontSize: 15, lineHeight: 1.6 }}>
-            {message || "Hệ thống đang được bảo trì. Vui lòng quay lại sau."}
-          </p>
+          {subtitle ? (
+            <p
+              style={{
+                margin: "14px 0 0",
+                color: "rgba(244,247,245,0.62)",
+                fontSize: 15,
+                lineHeight: 1.65,
+              }}
+            >
+              {subtitle}
+            </p>
+          ) : null}
+
           {onRetry ? (
             <Button
-              type="primary"
               size="large"
               onClick={onRetry}
               loading={checking}
-              style={{ marginTop: 24, minWidth: 140 }}
+              style={{
+                marginTop: 32,
+                minWidth: 148,
+                height: 44,
+                borderRadius: 999,
+                border: "1px solid rgba(255,255,255,0.14)",
+                background: "rgba(255,255,255,0.06)",
+                color: "#f4f7f5",
+                fontWeight: 500,
+                boxShadow: "none",
+              }}
             >
               Thử lại
             </Button>
