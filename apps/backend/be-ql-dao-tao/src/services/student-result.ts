@@ -310,7 +310,7 @@ export async function exportStudentSemesterResultV2({
     // Row 5-6: header (merged vertically)
     const headerValues: string[] = [
       "TT",
-      "Mã SV",
+      "Mã định danh",
       "Họ tên",
       "GT",
       "Ngày sinh",
@@ -334,7 +334,7 @@ export async function exportStudentSemesterResultV2({
 
     // Column widths (from sample file)
     ws.getColumn(1).width = 5.86 // TT
-    ws.getColumn(2).width = 13.43 // Mã SV
+    ws.getColumn(2).width = 13.43 // Mã định danh
     ws.getColumn(3).width = 42.14 // Họ tên
     ws.getColumn(4).width = 7 // GT
     ws.getColumn(5).width = 15.71 // Ngày sinh

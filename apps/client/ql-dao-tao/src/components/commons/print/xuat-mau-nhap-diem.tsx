@@ -286,7 +286,7 @@ const ExportScoreTemplate = ({
     // Điều chỉnh độ rộng cột
     worksheet.columns = [
       { width: 10 }, // STT
-      { width: 20 }, // Mã SV
+      { width: 20 }, // Mã định danh
       { width: 30 }, // Họ tên
       { width: 20 }, // Ngày sinh
       { width: 20 }, // Tên lớp

@@ -85,7 +85,7 @@ Một số endpoint đặc biệt:
  * Bộ lọc khi isSelectAll = true.
  */
 export type ExportLecturerProfileRequestFilters = {
-  /** Lọc mã GV. */
+  /** Lọc mã định danh. */
   code?: string;
   /** Lọc họ tên. */
   name?: string;

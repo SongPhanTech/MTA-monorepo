@@ -151,16 +151,16 @@ export default function ThongTinCaNhanTab({
               <FormItem
                 form={form}
                 name="code"
-                label="Mã giảng viên"
+                label="Mã định danh"
                 rules={[
                   {
                     required: true,
-                    message: "Vui lòng nhập mã giảng viên",
+                    message: "Vui lòng nhập Mã định danh",
                   },
                 ]}
                 className="mb-0"
               >
-                <Input placeholder="Nhập mã giảng viên" />
+                <Input placeholder="Nhập Mã định danh" />
               </FormItem>
             </Col>
           )}

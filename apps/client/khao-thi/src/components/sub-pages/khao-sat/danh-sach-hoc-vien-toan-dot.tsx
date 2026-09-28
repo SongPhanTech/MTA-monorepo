@@ -252,7 +252,7 @@ function DanhSachHocVienToanDot({ selectedId }: { selectedId: string }) {
                 className="w-full"
                 columns={[
                   {
-                    title: "Mã SV",
+                    title: "Mã định danh",
                     dataIndex: "code",
                     width: 150,
                     type: "input",

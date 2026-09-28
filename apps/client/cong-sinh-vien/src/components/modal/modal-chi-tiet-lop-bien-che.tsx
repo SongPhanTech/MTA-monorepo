@@ -229,7 +229,7 @@ export default function ModalChiTietLopBienChe() {
           <Descriptions.Item label="Giáo viên chủ nhiệm" span={1}>
             {fixedClassData?.lecturerManagement?.userProfile?.fullname || ""}
           </Descriptions.Item>
-          <Descriptions.Item label="Mã GV" span={1}>
+          <Descriptions.Item label="Mã định danh" span={1}>
             {fixedClassData?.lecturerManagement?.userProfile?.code || ""}
           </Descriptions.Item>
           <Descriptions.Item label="Cán bộ quản lý" span={1}>
@@ -241,13 +241,13 @@ export default function ModalChiTietLopBienChe() {
           <Descriptions.Item label="Lớp trưởng" span={1}>
             {fixedClassData?.classMonitor?.userProfile?.fullname || ""}
           </Descriptions.Item>
-          <Descriptions.Item label="Mã SV" span={1}>
+          <Descriptions.Item label="Mã định danh" span={1}>
             {fixedClassData?.classMonitor?.userProfile?.code || ""}
           </Descriptions.Item>
           <Descriptions.Item label="Bí thư" span={1}>
             {fixedClassData?.unionLeader?.userProfile?.fullname || ""}
           </Descriptions.Item>
-          <Descriptions.Item label="Mã SV" span={1}>
+          <Descriptions.Item label="Mã định danh" span={1}>
             {fixedClassData?.unionLeader?.userProfile?.code || ""}
           </Descriptions.Item>
         </Descriptions>

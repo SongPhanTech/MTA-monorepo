@@ -51,7 +51,7 @@ type TableProps<T> = {
   id?: string
   selectedRow?: string | null
   scrollable?: boolean
-  maxHeight?: number
+  maxHeight?: number | string
   rowSelection?: TableRowSelection<T>
 } & Omit<TableAntdProps, "pagination">
 
@@ -70,6 +70,7 @@ const Table = <T extends Record<string, unknown>>({
   scrollable,
   maxHeight,
   rowSelection,
+  className,
   ...rest
 }: TableProps<T>) => {
   const [filtersTable, setFiltersTable] = useState<FilterProps>(filters || {})
@@ -750,7 +751,7 @@ const Table = <T extends Record<string, unknown>>({
       id={id}
       rowKey={rowKey}
       size="small"
-      className="mt-4 custom-scrollbar"
+      className={cn("mt-4 custom-scrollbar", className)}
       rowSelection={rowSelection}
       columns={
         columns.map((column) => ({
@@ -759,7 +760,10 @@ const Table = <T extends Record<string, unknown>>({
           ...genFilter(column as ColumnTypeProps),
         })) as ColumnsType<T>
       }
-      scroll={{ x: "max-content", y: scrollable ? maxHeight : undefined }}
+      scroll={{
+        x: "max-content",
+        y: scrollable ? (maxHeight ?? "calc(100vh - 340px)") : undefined,
+      }}
       bordered
       dataSource={data}
       locale={{

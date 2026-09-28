@@ -296,7 +296,7 @@ export default function DanhSachThanhToanMoiGiang() {
                 render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
-                title: "Mã GV",
+                title: "Mã định danh",
                 dataIndex: "name",
                 width: 120,
                 align: "center",

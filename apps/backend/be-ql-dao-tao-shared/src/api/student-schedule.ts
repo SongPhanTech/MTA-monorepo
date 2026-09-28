@@ -15,7 +15,7 @@ const postStudentSchedule = createRoute({
 
 **Bảng dữ liệu nguồn:** SubjectClass, SubjectClassStudent, Student, Semester, Subject, SubjectClassTime, Room.
 
-**Tham số:** class_terms (tên học kỳ), students_code (mã SV).`,
+**Tham số:** class_terms (tên học kỳ), students_code (Mã định danh).`,
   method: "post",
   request: {
     body: {

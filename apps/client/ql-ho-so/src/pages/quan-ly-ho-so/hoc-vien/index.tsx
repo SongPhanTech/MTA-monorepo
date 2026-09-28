@@ -188,9 +188,9 @@ export default function StudentProfilePageDs() {
   }
 
   return (
-    <div className="min-w-0 w-full">
-      <Row gutter={[16, 0]}>
-        <Col span={24}>
+    <div className="flex h-full min-h-0 min-w-0 w-full flex-col overflow-hidden">
+      <Row gutter={[16, 0]} className="flex min-h-0 flex-1 flex-col">
+        <Col span={24} className="shrink-0">
           <Row gutter={[8, 8]} align="top" justify="space-between">
             <Col xs={24} md={20}>
               <Flex wrap="wrap" gap={12}>
@@ -225,8 +225,9 @@ export default function StudentProfilePageDs() {
             </Col>
           </Row>
         </Col>
-        <Col span={24}>
+        <Col span={24} className="min-h-0 flex-1">
           <Table
+            scrollable
             filters={filters}
             setFilters={(value) => {
               setFilters(value)

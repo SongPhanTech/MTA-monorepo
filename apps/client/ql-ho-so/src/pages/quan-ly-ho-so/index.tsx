@@ -237,9 +237,9 @@ export default function UserProfilePageDs() {
   ]
 
   return (
-    <div className="min-w-0 w-full">
-      <Row gutter={[16, 0]}>
-        <Col span={24}>
+    <div className="flex h-full min-h-0 min-w-0 w-full flex-col overflow-hidden">
+      <Row gutter={[16, 0]} className="flex min-h-0 flex-1 flex-col">
+        <Col span={24} className="shrink-0">
           {/* Row nút thêm */}
           <Row gutter={[8, 8]} align="top" justify="space-between">
             <Col xs={12} md={12}>
@@ -301,8 +301,9 @@ export default function UserProfilePageDs() {
             </Col>
           </Row>
         </Col>
-        <Col span={24}>
+        <Col span={24} className="min-h-0 flex-1">
           <Table
+            scrollable
             filters={filters}
             setFilters={(value) => {
               setFilters(value)
@@ -317,7 +318,7 @@ export default function UserProfilePageDs() {
                 render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
-                title: "Mã GV/CB",
+                title: "Mã định danh",
                 align: "center",
                 width: 120,
                 ellipsis: true,

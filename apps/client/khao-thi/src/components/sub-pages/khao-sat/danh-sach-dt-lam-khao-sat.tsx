@@ -70,7 +70,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
   const isMixed = hasLecturer && hasStudent
 
   // Tiêu đề cột mã theo từng trường hợp
-  const codeColumnTitle = isLecturerOnly ? "Mã GV" : isMixed ? "Mã HV/GV" : "Mã HV"
+  const codeColumnTitle = isLecturerOnly ? "Mã định danh" : isMixed ? "Mã HV/GV" : "Mã HV"
 
   // Tự động set bộ lọc isStudent khi đổi đợt khảo sát
   useEffect(() => {
@@ -333,7 +333,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                   record?.code || record?.lecturer?.userProfile?.code || "",
               },
               // {
-              //     title: 'Mã GV',
+              //     title: 'Mã định danh',
               //     dataIndex: 'lecturerCode',
               //     type: 'input',
               //     width: 125,

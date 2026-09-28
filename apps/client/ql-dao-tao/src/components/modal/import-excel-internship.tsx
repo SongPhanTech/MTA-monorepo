@@ -196,7 +196,7 @@ const ImportInternshipModal = ({ visible, onSuccess, onCancel }: ImportInternshi
             render: (_, __, index: number) => index + 1 + (currentPage - 1) * 10,
           },
           {
-            title: "Mã SV",
+            title: "Mã định danh",
             dataIndex: "code",
             key: "code",
             width: 120,

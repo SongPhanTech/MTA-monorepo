@@ -155,7 +155,7 @@ make all-cong-hoc-vien
 ### Việc cần làm
 
 1. **Đối soát tài khoản SV sau import**
-   - [ ] Mapping mã SV ↔ user login (username / email / mã định danh đang dùng).
+   - [ ] Mapping Mã định danh ↔ user login (username / email / mã định danh đang dùng).
    - [ ] Sampling đăng nhập 10–20 tài khoản (mỗi lớp/khóa một vài).
    - [ ] SV thấy đúng menu: Hồ sơ, Đăng ký học (không thấy Đồng bộ nếu không phải role vận hành).
 2. **Tài khoản vận hành**

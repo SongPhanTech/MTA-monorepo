@@ -385,7 +385,7 @@ const ModalPrintStudentSubjectScore = () => {
                   TT
                 </th>
                 <th rowSpan={2} className="border border-black px-1 py-1 text-center w-[100px]">
-                  Mã SV
+                  Mã định danh
                 </th>
                 <th rowSpan={2} className="border border-black px-1 py-1 text-center w-[200px]">
                   Họ tên

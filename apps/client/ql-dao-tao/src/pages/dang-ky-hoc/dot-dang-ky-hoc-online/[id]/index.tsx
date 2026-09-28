@@ -272,7 +272,7 @@ export default function ClassRegisterLogs() {
           allowClear
           size="small"
           prefix={<Search size={13} className="text-gray-400" />}
-          placeholder="Tìm theo mã SV, tên học viên hoặc tên/mã lớp môn học"
+          placeholder="Tìm theo Mã định danh, tên học viên hoặc tên/mã lớp môn học"
           value={searchText}
           onChange={(e) => {
             setSearchText(e.target.value)

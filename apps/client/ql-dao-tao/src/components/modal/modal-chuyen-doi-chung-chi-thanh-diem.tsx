@@ -193,7 +193,7 @@ const ModalChuyenDoiChungChiThanhDiem = () => {
               render: (_, __, index) => index + 1,
             },
             {
-              title: "Mã SV",
+              title: "Mã định danh",
               dataIndex: ["userProfile", "code"],
               width: 120,
               align: "center",

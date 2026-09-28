@@ -367,7 +367,7 @@ const AddStudentToFixedClassModal = () => {
           <Input
             id="search"
             onChange={(e) => handleFilterChange("searchText", e.target.value)}
-            placeholder="Tìm kiếm theo tên,mã sinh viên"
+            placeholder="Tìm kiếm theo tên,mã định danh"
             style={{
               width: 300,
               marginRight: 8,

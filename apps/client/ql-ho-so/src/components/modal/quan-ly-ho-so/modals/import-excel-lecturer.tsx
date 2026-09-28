@@ -225,7 +225,7 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportLecturerModalProps) =>
             render: (_, __, index: number) => index + 1 + (currentPage - 1) * 10,
           },
           {
-            title: "Mã GV",
+            title: "Mã định danh",
             dataIndex: "profileCode",
             key: "profileCode",
             width: 150,

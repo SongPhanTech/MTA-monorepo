@@ -1,18 +1,34 @@
 import { useStoreActions, useStoreState } from "@redux/hook"
+import { useSession } from "@workspace/auth/react"
 import ability from "@workspace/permissions/ability"
-import { useAbility, usePermissions } from "@workspace/permissions/hooks"
+import { useAbility, usePermissionsState } from "@workspace/permissions/hooks"
 import NAVIGATION, { type QL_HO_SO_PERMISSION, ROUTER_PATH } from "@workspace/router"
 import { useEffect, useMemo } from "react"
 
 const useMenuList = () => {
   const isUpdateAbility = useStoreState((actions) => actions.appState.isUpdateAbility)
   const setIsUpdateAbility = useStoreActions((actions) => actions.appState.setIsUpdateAbility)
-  const permissions = usePermissions()
+  const { data: session, status: sessionStatus } = useSession()
+  const userId = session?.sDM_NhanVienId || session?.userId || ""
+  const { permissions, isReady } = usePermissionsState(userId)
   const { can } = useAbility()
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
-    if (!permissions.length) return
+    if (!session) return
+    window.contextData = {
+      userId: session.sDM_NhanVienId || session.userId,
+      userName: session.username,
+      organizationId: session.sDM_DonViId || session.organizationId,
+    }
+  }, [session])
+
+  useEffect(() => {
+    if (sessionStatus === "loading" || !sessionStatus) return
+    if (sessionStatus === "unauthenticated") {
+      setIsUpdateAbility(true)
+      return
+    }
+    if (!isReady) return
     ability.update(
       permissions.map((permission) => ({
         action: String(permission.permission),
@@ -20,14 +36,13 @@ const useMenuList = () => {
       }))
     )
     setIsUpdateAbility(true)
-  }, [permissions])
+  }, [isReady, permissions, sessionStatus, setIsUpdateAbility])
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <needed>
   const menus = useMemo(
     () =>
       NAVIGATION.QL_HO_SO.menus
         .map((menu) => {
-          if (menu.path === ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_ME) return menu // Luôn hiển thị menu "Hồ sơ của tôi"
+          if (menu.path === ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_ME) return menu
           if (menu.children) {
             const filteredChildren = menu.children.filter((child) => {
               return can(child.id as QL_HO_SO_PERMISSION, "XEM")
@@ -42,10 +57,13 @@ const useMenuList = () => {
           return can(menu.id as QL_HO_SO_PERMISSION, "XEM") ? menu : null
         })
         .filter((menu) => menu !== null),
-    [isUpdateAbility, permissions, ability]
+    [isUpdateAbility, permissions, can]
   )
 
-  return process?.env?.NODE_ENV === "development" ? NAVIGATION.QL_HO_SO.menus : menus
+  return {
+    menus: process?.env?.NODE_ENV === "development" ? NAVIGATION.QL_HO_SO.menus : menus,
+    isMenuReady: isUpdateAbility,
+  }
 }
 
 export { useMenuList }

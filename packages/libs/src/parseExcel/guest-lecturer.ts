@@ -211,7 +211,7 @@ export const parseSheetGuestLecturer = (
       errors.push({
         sheetRef: sheetName,
         cellRef: rowNums.map((r) => `${cols.code}${r}`).join(", "),
-        message: `Mã giảng viên bị trùng trong file: ${code}`,
+        message: `Mã định danh bị trùng trong file: ${code}`,
       })
     }
   }
@@ -234,7 +234,7 @@ export const parseSheetGuestLecturer = (
       errors.push({
         sheetRef: sheetName,
         cellRef: rowNums.map((r) => `${cols.code}${r}`).join(", "),
-        message: `Mã giảng viên đã tồn tại trong hệ thống: ${code}`,
+        message: `Mã định danh đã tồn tại trong hệ thống: ${code}`,
       })
     }
   }

@@ -396,7 +396,7 @@ const DiemTrungBinhKyHoc = () => {
             data={dataStudents}
             columns={[
               {
-                title: "Mã SV",
+                title: "Mã định danh",
                 dataIndex: "code",
                 width: 120,
                 align: "center",

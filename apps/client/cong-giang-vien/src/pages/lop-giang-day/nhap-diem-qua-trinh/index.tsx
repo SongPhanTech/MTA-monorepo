@@ -808,7 +808,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
             }
             columns={[
               { title: "STT", width: 56, align: "center", render: (_v, _r, i) => i + 1 },
-              { title: "MÃ SV", dataIndex: "mssv", width: 100, align: "center" },
+              { title: "Mã định danh", dataIndex: "mssv", width: 100, align: "center" },
               { title: "Họ và tên", dataIndex: "hoTen", width: 180 },
               {
                 title: "Chuyên cần",

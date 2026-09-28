@@ -163,7 +163,7 @@ const ModalPrintSurveylecturer = () => {
           <div className="mt-4 text-sm leading-6 text-left">
             <div className="flex justify-between">
               <div>1. Họ và tên giảng viên: {input.lecturerName || ""}</div>
-              <div>Mã giảng viên: {input.lecturerCode || ""}</div>
+              <div>Mã định danh: {input.lecturerCode || ""}</div>
             </div>
 
             {hasDepartment && (

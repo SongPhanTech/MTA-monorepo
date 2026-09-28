@@ -234,3 +234,9 @@
   color: #4b5563;
   line-height: 1.4;
 }
+
+.ho-so-page-card > * {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: auto;
+}

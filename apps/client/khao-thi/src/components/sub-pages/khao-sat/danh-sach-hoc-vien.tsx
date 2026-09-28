@@ -317,7 +317,7 @@ function DanhSachHocVien({
                       render: (_, record, index) => record.$type === 'child' ? index + 1 : '',
                   },
                   {
-                    title: "Mã SV",
+                    title: "Mã định danh",
                     dataIndex: "code",
                     width: 150,
                     type: "input",

@@ -380,7 +380,7 @@ const ExportTemplateExam = ({ dataTable, dataClass, disabled }: ExportTemplateEx
     const headerRow = worksheet.getRow(11)
     headerRow.values = [
       "TT",
-      "Mã SV",
+      "Mã định danh",
       "Họ tên",
       "Ngày sinh",
       "Lớp",

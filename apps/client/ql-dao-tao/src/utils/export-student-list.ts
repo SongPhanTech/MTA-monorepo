@@ -37,7 +37,7 @@ export const exportStudentList = async ({
 
   worksheet.columns = [
     { width: 8 },  // STT
-    { width: 15 }, // Mã SV
+    { width: 15 }, // Mã định danh
     { width: 30 }, // Họ và tên
     { width: 15 }, // Ngày sinh
     { width: 15 }, // Lớp khóa học
@@ -128,7 +128,7 @@ export const exportStudentList = async ({
   worksheet.getCell("F7").font = FONT_NORMAL
   worksheet.getCell("F7").alignment = ALIGN_LEFT
 
-  const headers = ["STT", "Mã SV", "Họ và tên", "Ngày sinh", "Lớp khóa học", "Ghi chú"]
+  const headers = ["STT", "Mã định danh", "Họ và tên", "Ngày sinh", "Lớp khóa học", "Ghi chú"]
   const headerRow = worksheet.getRow(8)
   headerRow.values = headers
   headerRow.eachCell((cell) => {

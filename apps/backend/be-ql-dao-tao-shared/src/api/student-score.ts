@@ -28,7 +28,7 @@ const getStudentScore = createRoute({
 
 **Bảng dữ liệu nguồn:** Student, Semester, SubjectClass, SubjectClassStudent, SubjectVersion, ScoreConvert, ArchivedAward, ArchivedCertificate.
 
-**Tham số:** student_code — mã sinh viên.`,
+**Tham số:** student_code — mã định danh.`,
   method: "post",
   request: {
     body: {

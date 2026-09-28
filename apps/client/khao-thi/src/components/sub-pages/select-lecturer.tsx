@@ -456,7 +456,7 @@ function SelectLecturer({
                 render: (__, record) => <span>{record?.mainLecturer?.userProfile?.fullname}</span>,
               },
               {
-                title: "Mã GV",
+                title: "Mã định danh",
                 dataIndex: "code",
                 type: "input",
                 width: 150,

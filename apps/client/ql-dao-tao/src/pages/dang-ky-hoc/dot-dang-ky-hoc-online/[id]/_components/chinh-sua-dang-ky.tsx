@@ -471,7 +471,7 @@ export default function ChinhSuaDangKy({ sessionId, semesterId }: Props) {
             })}
             columns={[
               {
-                title: "Mã SV",
+                title: "Mã định danh",
                 dataIndex: "code",
                 type: "input",
                 width: 110,

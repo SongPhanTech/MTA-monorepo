@@ -1,4 +1,4 @@
-/** Mã người (MSSV/MSHV/mã GV/CB): chỉ UserProfile.code. */
+/** Mã người (MSSV/MSHV/mã định danh/CB): chỉ UserProfile.code. */
 
 export type ProfileCodeSource = {
   code?: string | null

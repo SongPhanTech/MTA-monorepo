@@ -336,7 +336,7 @@ function createExamSheet(worksheet: ExcelJS.Worksheet, params: CreateExamSheetPa
 
     // Apply styles
     row.getCell(1).style = cellStyle // TT
-    row.getCell(2).style = cellStyle // Mã SV
+    row.getCell(2).style = cellStyle // Mã định danh
     row.getCell(3).style = cellStyleLeft // Họ tên
     row.getCell(4).style = cellStyle // Ngày sinh
     row.getCell(5).style = cellStyle // Lớp

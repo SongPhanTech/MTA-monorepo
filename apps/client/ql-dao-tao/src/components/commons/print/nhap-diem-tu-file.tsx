@@ -122,7 +122,7 @@ const ImportScoreModal = ({
     const errors: string[] = []
 
     selectedData.forEach((item) => {
-      // Kiểm tra mã sinh viên
+      // Kiểm tra mã định danh
       const existingStudent = existingStudents.find((s) => s.student?.userProfile?.code === item.studentCode)
 
       if (!existingStudent) {

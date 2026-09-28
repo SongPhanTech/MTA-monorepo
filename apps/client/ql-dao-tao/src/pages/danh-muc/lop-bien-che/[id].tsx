@@ -789,7 +789,7 @@ export default function StudentFixedClassPage() {
                 render: (_, __, index) => index + 1,
               },
               {
-                title: "Mã SV",
+                title: "Mã định danh",
                 dataIndex: "code",
                 fixed: "left",
                 width: 100,

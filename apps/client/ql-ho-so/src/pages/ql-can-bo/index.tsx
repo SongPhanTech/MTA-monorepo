@@ -417,7 +417,7 @@ export default function StaffManagement() {
               //     },
               // },
               {
-                title: "Mã giảng viên",
+                title: "Mã định danh",
                 dataIndex: "code",
                 align: "center",
                 width: 150,
