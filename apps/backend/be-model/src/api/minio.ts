@@ -11,7 +11,20 @@ import {
 import { fieldDesc } from "../dto/openapi-helpers"
 import { jsonSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 import { MinIOService } from "../services/minio"
-import { onlyOfficeAuthHeaders, signOnlyOfficeJwt } from "../utils/onlyoffice-jwt"
+import { getOnlyOfficeJwtHeader, signOnlyOfficeJwt } from "../utils/onlyoffice-jwt"
+
+const ONLYOFFICE_CONVERT_ERROR_MESSAGE: Record<number, string> = {
+  [-1]: "Lỗi không xác định từ OnlyOffice",
+  [-2]: "Hết thời gian chuyển đổi tài liệu",
+  [-3]: "OnlyOffice không chuyển đổi được file",
+  [-4]: "OnlyOffice không tải được file nguồn (URL export không truy cập được từ Document Server)",
+  [-5]: "File có mật khẩu không đúng",
+  [-6]: "Lỗi cơ sở dữ liệu chuyển đổi OnlyOffice",
+  [-7]: "Dữ liệu đầu vào không hợp lệ",
+  [-8]: "Token JWT OnlyOffice không hợp lệ (sai ONLYOFFICE_JWT_SECRET hoặc thiếu token trong body/header)",
+  [-9]: "Không xác định được định dạng file đích",
+  [-10]: "File vượt quá giới hạn kích thước OnlyOffice",
+}
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -145,15 +158,24 @@ app.openapi(
       key: createId(),
       url,
     }
-    const authHeaders = await onlyOfficeAuthHeaders(payload)
+    const token = await signOnlyOfficeJwt(payload)
+    const jwtHeader = getOnlyOfficeJwtHeader()
+    const authHeaders: Record<string, string> = token
+      ? {
+          [jwtHeader]: `Bearer ${token}`,
+          ...(jwtHeader !== "Authorization" ? { Authorization: `Bearer ${token}` } : {}),
+        }
+      : {}
 
     const requestOptions = {
       method: "POST",
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
         ...authHeaders,
       },
-      body: JSON.stringify(payload),
+      // OnlyOffice inbox JWT (error -8 nếu thiếu): token trong body + header
+      body: JSON.stringify(token ? { ...payload, token } : payload),
     }
 
     const onlyOfficeBase = (process.env.ONLY_OFFICE_ENDPOINT || "").replace(/\/+$/, "")
@@ -185,10 +207,16 @@ app.openapi(
     }
 
     if (res.status !== 200 || !resJson.fileUrl) {
+      const errorCode = Number(resJson.error)
+      const errorHint =
+        Number.isFinite(errorCode) && ONLYOFFICE_CONVERT_ERROR_MESSAGE[errorCode]
+          ? ONLYOFFICE_CONVERT_ERROR_MESSAGE[errorCode]
+          : null
       return c.json(
         {
           message:
             resJson.message ||
+            errorHint ||
             `Chuyển đổi tài liệu thất bại (HTTP ${res.status}${
               resJson.error != null ? `, error=${resJson.error}` : ""
             }) từ ${onlyOfficeBase}`,
