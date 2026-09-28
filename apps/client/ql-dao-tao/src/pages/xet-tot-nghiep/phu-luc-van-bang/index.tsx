@@ -43,9 +43,11 @@ import { exportFromTemplate, TableRow } from "@workspace/libs/template-excel"
 import { getMinioUrl } from "@workspace/libs/utils"
 import { docxTemplate } from "../../../utils/docx-template"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
+import { DownOutlined } from "@ant-design/icons"
 import {
   Button,
   DatePicker,
+  Dropdown,
   Form,
   Input,
   message,
@@ -207,6 +209,7 @@ type TExportPayload = {
   printDate?: string
   signerName?: string
   isChief?: boolean
+  includeNamePrefix?: boolean
 }
 
 type TExportApiResponse = {
@@ -1397,7 +1400,12 @@ export default function StudentGradeSystem() {
 
   const handleCommonExport = async (
     config: TExportConfig,
-    signerOverride?: { signerName: string; isChief?: boolean; printDate?: string }
+    signerOverride?: {
+      signerName?: string
+      isChief?: boolean
+      printDate?: string
+      includeNamePrefix?: boolean
+    }
   ) => {
     if (!trainingObjectTypeId) {
       message.warning("Vui lòng chọn loại đối tượng đào tạo")
@@ -1411,6 +1419,7 @@ export default function StudentGradeSystem() {
       printDate: signerOverride?.printDate ?? printDate,
       signerName: signerOverride?.signerName ?? signerName ?? "",
       isChief: signerOverride?.isChief,
+      includeNamePrefix: signerOverride?.includeNamePrefix,
     }
 
     try {
@@ -1718,7 +1727,6 @@ export default function StudentGradeSystem() {
       {
         id: 20,
         name: "In phôi bằng CAO HỌC",
-        onClick: () => handleCommonExport(exportHandlers.phoiBangCaoHoc),
       },
       {
         id: 21,
@@ -1915,16 +1923,50 @@ export default function StudentGradeSystem() {
         <div className="mb-6">
           <h3 className="text-sm font-bold color text-primary mb-3">III. Cao học</h3>
           <div className="grid grid-cols-4 gap-3">
-            {subjects.caoHoc.map((subject, index) => (
-              <Button
-                key={index}
-                onClick={subject?.onClick}
-                type="primary"
-                className="h-auto py-2 px-3 text-xs justify-start text-white"
-              >
-                {index + 1}. {subject.name}
-              </Button>
-            ))}
+            {subjects.caoHoc.map((subject, index) =>
+              subject.id === 20 ? (
+                <Dropdown
+                  key={subject.id}
+                  trigger={["click"]}
+                  menu={{
+                    items: [
+                      {
+                        key: "civilian",
+                        label: "DÂN SỰ",
+                        onClick: () =>
+                          handleCommonExport(exportHandlers.phoiBangCaoHoc, {
+                            includeNamePrefix: true,
+                          }),
+                      },
+                      {
+                        key: "military",
+                        label: "QUÂN SỰ",
+                        onClick: () =>
+                          handleCommonExport(exportHandlers.phoiBangCaoHoc, {
+                            includeNamePrefix: false,
+                          }),
+                      },
+                    ],
+                  }}
+                >
+                  <Button
+                    type="primary"
+                    className="h-auto w-full py-2 px-3 text-xs justify-start text-white"
+                  >
+                    {index + 1}. {subject.name} <DownOutlined />
+                  </Button>
+                </Dropdown>
+              ) : (
+                <Button
+                  key={subject.id}
+                  onClick={subject?.onClick}
+                  type="primary"
+                  className="h-auto py-2 px-3 text-xs justify-start text-white"
+                >
+                  {index + 1}. {subject.name}
+                </Button>
+              )
+            )}
           </div>
         </div>
 

@@ -2300,6 +2300,7 @@ const exportPhoiBangCaoHoc = createRoute({
             managementOrganizationId: z.string().optional(),
             printDate: z.string().optional(),
             signerName: z.string().optional(),
+            includeNamePrefix: z.boolean().optional(),
           }),
         },
       },
@@ -2332,6 +2333,7 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
     trainingCourseIds,
     thesisSessionIds,
     signerName,
+    includeNamePrefix,
   } = c.req.valid("json")
 
   const students = await prisma.student.findMany({
@@ -2392,8 +2394,9 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
     const isCivilian =
       student.fixedClass?.trainingCourse?.trainingObjectType?.type === TrainingObjectTypes.CIVILIAN
     const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ"
-    const prefixVi = isCivilian ? (isFemale ? "Bà " : "Ông ") : ""
-    const prefixEn = isCivilian ? (isFemale ? "Miss " : "Mr ") : ""
+    const usePrefix = includeNamePrefix ?? isCivilian
+    const prefixVi = usePrefix ? (isFemale ? "Bà " : "Ông ") : ""
+    const prefixEn = usePrefix ? (isFemale ? "Miss " : "Mr ") : ""
 
     const fullnameVi = `${prefixVi}${user?.fullname?.toUpperCase() || ""}`
     const fullnameEn = `${prefixEn}${

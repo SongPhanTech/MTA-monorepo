@@ -1,7 +1,7 @@
 import { CouncilRole, SupervisorRole, TrainingObjectTypes } from "@workspace/db/client"
 import { fetchMinio } from "@workspace/libs"
 import { buildExcelFromTemplate, type TableRow } from "@workspace/libs/template-excel-core"
-import "@workspace/libs/utils"
+import { resolveCouncilMemberUnitName, type OrgUnitNode } from "@workspace/libs/utils"
 import dayjs from "dayjs"
 import ExcelJS from "exceljs"
 import { buildExcelWorkbookBuffer } from "../api/excel-template"
@@ -1147,7 +1147,32 @@ async function buildBanSaoHd(rows: StudentRow[], filters: ThesisExportFilter) {
   return renderDocx("BanSaoHoiDongDanhGiaLuanVan.docx", { items }, "BanSaoHoiDongDanhGiaLuanVan.docx")
 }
 
+async function loadAcademyOrgById() {
+  const organizations = await prisma.dM_DonVi.findMany({
+    where: { bDeleted: { not: true } },
+    select: { Id: true, sTen: true, sParentId: true, iCapDonVi: true },
+  })
+  return new Map<string, OrgUnitNode>(organizations.map((org) => [org.Id, org]))
+}
+
+/** Giảng viên trong HV: đơn vị cấp học viện (cùng phụ lục văn bằng). Ngoài HV: nơi công tác. */
+function councilDecisionUnit(expert: any, orgById: Map<string, OrgUnitNode>) {
+  const lecturerOrg = expert?.expert?.lecturer?.userProfile?.donVi ?? expert?.lecturer?.userProfile?.donVi
+  if (resolveInAcademy(expert)) {
+    return resolveCouncilMemberUnitName({
+      inAcademy: true,
+      lecturerOrg: lecturerOrg?.Id ? lecturerOrg : undefined,
+      organization: typeof expert?.organization === "string" ? expert.organization : undefined,
+      orgById,
+    })
+  }
+  return resolveExpertWorkplace(expert)
+}
+
 async function buildPhuLucQdHd(rows: StudentRow[]) {
+  const orgById = await loadAcademyOrgById()
+  const unitOf = (role: CouncilRole, project: Project | undefined) =>
+    councilDecisionUnit(getMemberProfile(project, role), orgById)
   const data = commonStudentRows(rows).map((r) => ({
     ...r,
     sttHoiDong: String(r.stt),
@@ -1155,15 +1180,15 @@ async function buildPhuLucQdHd(rows: StudentRow[]) {
     tenDeTai: r.deTai,
     tenHocVien: r.hoTen,
     tenChuTich: getSupervisorName(getMemberProfile(r.project, CouncilRole.CHAIRMAN)),
-    toChucChuTich: resolveExpertWorkplace(getMemberProfile(r.project, CouncilRole.CHAIRMAN)) || "Học viện KTQS",
+    toChucChuTich: unitOf(CouncilRole.CHAIRMAN, r.project),
     tenThuKy: getSupervisorName(getMemberProfile(r.project, CouncilRole.SECRETARY)),
-    toChucThuKy: resolveExpertWorkplace(getMemberProfile(r.project, CouncilRole.SECRETARY)) || "Học viện KTQS",
+    toChucThuKy: unitOf(CouncilRole.SECRETARY, r.project),
     tenUyVien: getSupervisorName(getMemberProfile(r.project, CouncilRole.MEMBER)),
-    toChucUyVien: resolveExpertWorkplace(getMemberProfile(r.project, CouncilRole.MEMBER)) || "Học viện KTQS",
+    toChucUyVien: unitOf(CouncilRole.MEMBER, r.project),
     tenPb1: getSupervisorName(getMemberProfile(r.project, CouncilRole.REVIEWER_1)),
-    toChucPb1: resolveExpertWorkplace(getMemberProfile(r.project, CouncilRole.REVIEWER_1)) || "Học viện KTQS",
+    toChucPb1: unitOf(CouncilRole.REVIEWER_1, r.project),
     tenPb2: getSupervisorName(getMemberProfile(r.project, CouncilRole.REVIEWER_2)),
-    toChucPb2: resolveExpertWorkplace(getMemberProfile(r.project, CouncilRole.REVIEWER_2)) || "Học viện KTQS",
+    toChucPb2: unitOf(CouncilRole.REVIEWER_2, r.project),
   }))
   const first = firstRow(rows)
   const session = getProject(first)?.thesisSession

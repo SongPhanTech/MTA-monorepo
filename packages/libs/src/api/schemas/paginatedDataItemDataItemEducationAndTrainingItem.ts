@@ -60,8 +60,6 @@ import type { PaginatedDataItemDataItemEducationAndTrainingItemTrainingCourse } 
 
 export type PaginatedDataItemDataItemEducationAndTrainingItem = {
   id: string;
-  /** @nullable */
-  code?: string | null;
   active?: boolean;
   /** @nullable */
   description?: string | null;

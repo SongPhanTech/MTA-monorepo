@@ -83,8 +83,6 @@ export type PaginatedDataItemDataItem = {
   /** @nullable */
   bLaHocVien?: boolean | null;
   /** @nullable */
-  sDM_DonViId?: string | null;
-  /** @nullable */
   sDM_ViTriCongViecId?: string | null;
   /** @nullable */
   sQuanlyTrucTiepId?: string | null;

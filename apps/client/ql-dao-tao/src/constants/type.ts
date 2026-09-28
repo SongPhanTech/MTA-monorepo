@@ -174,6 +174,7 @@ export type FilterProps = {
   formStatus?: ScoreConvertStatus
   subjects?: string
   certificateId?: string
+  certificateStatus?: ArchivedCertificateStatus[]
   awardName?: string
   archivedAwardStatus?: ArchivedCertificateStatus[]
   bonusScoreStatus?: ArchivedCertificateStatus[]

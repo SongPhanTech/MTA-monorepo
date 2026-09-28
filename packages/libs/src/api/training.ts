@@ -191,6 +191,8 @@ import type {
   GetLecturerExamScheduleParams,
   GetPhuLucIXData200,
   GetPhuLucIXDataParams,
+  GetUserPermissions401,
+  GetUserPermissionsBody,
   GraduationApplicationInitBody,
   GraduationCheckBody,
   GraduationCheckResponse,
@@ -305,6 +307,8 @@ import type {
   SuccessMessageResponse,
   SyncExamDatesRequest,
   SyncExamDatesResponse,
+  SyncStudentDonViFromFixedClassRequest,
+  SyncStudentDonViFromFixedClassResponse,
   TrainingField200Item,
   UnmergeExamBadResponse,
   UnmergeExamRequest,
@@ -315,7 +319,8 @@ import type {
   UploadExcelImportScore200,
   UploadExcelImportTrainingScore,
   UploadExcelImportTrainingScore200,
-  UploadExcelUpdateUserProfile
+  UploadExcelUpdateUserProfile,
+  UserPermission
 } from './schemas';
 
 import { customTrainingFetch } from './custom-instance';
@@ -6705,6 +6710,118 @@ export const useUploadExcelUpdateUserProfile = <TError = ErrorMessageResponse,
     }
     
 /**
+ * Proxy tới system public `POST /UserPermissions/permissions`. FE không gọi trực tiếp system API.
+ * @summary Lấy vai trò và quyền theo danh sách user
+ */
+export type getUserPermissionsResponse200 = {
+  data: UserPermission[]
+  status: 200
+}
+
+export type getUserPermissionsResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type getUserPermissionsResponse401 = {
+  data: GetUserPermissions401
+  status: 401
+}
+
+export type getUserPermissionsResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type getUserPermissionsResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type getUserPermissionsResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type getUserPermissionsResponseSuccess = (getUserPermissionsResponse200) & {
+  headers: Headers;
+};
+export type getUserPermissionsResponseError = (getUserPermissionsResponse400 | getUserPermissionsResponse401 | getUserPermissionsResponse404 | getUserPermissionsResponse409 | getUserPermissionsResponse500) & {
+  headers: Headers;
+};
+
+export type getUserPermissionsResponse = (getUserPermissionsResponseSuccess | getUserPermissionsResponseError)
+
+export const getGetUserPermissionsUrl = () => {
+
+
+  
+
+  return `/api/user-permissions/permissions`
+}
+
+export const getUserPermissions = async (getUserPermissionsBody: GetUserPermissionsBody, options?: RequestInit): Promise<getUserPermissionsResponse> => {
+  
+  return customTrainingFetch<getUserPermissionsResponse>(getGetUserPermissionsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      getUserPermissionsBody,)
+  }
+);}
+
+
+
+
+export const getGetUserPermissionsMutationOptions = <TError = ErrorMessageResponse | GetUserPermissions401,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getUserPermissions>>, TError,{data: GetUserPermissionsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof getUserPermissions>>, TError,{data: GetUserPermissionsBody}, TContext> => {
+
+const mutationKey = ['getUserPermissions'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getUserPermissions>>, {data: GetUserPermissionsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  getUserPermissions(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type GetUserPermissionsMutationResult = NonNullable<Awaited<ReturnType<typeof getUserPermissions>>>
+    export type GetUserPermissionsMutationBody = GetUserPermissionsBody
+    export type GetUserPermissionsMutationError = ErrorMessageResponse | GetUserPermissions401
+
+    /**
+ * @summary Lấy vai trò và quyền theo danh sách user
+ */
+export const useGetUserPermissions = <TError = ErrorMessageResponse | GetUserPermissions401,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getUserPermissions>>, TError,{data: GetUserPermissionsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof getUserPermissions>>,
+        TError,
+        {data: GetUserPermissionsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getGetUserPermissionsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
  * Import Excel gán học viên vào lớp niên chế (quản lý).
 
 **Bảng dữ liệu nguồn:** FixedClass, UserProfile, Student.
@@ -10287,6 +10404,225 @@ export const useExportStudentProfiles = <TError = ErrorMessageResponse,
       > => {
 
       const mutationOptions = getExportStudentProfilesMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Cập nhật UserProfile.sDM_DonViId theo FixedClass.managementOrganizationId và đồng bộ LSB.
+
+**Bảng dữ liệu nguồn:** Student, FixedClass, UserProfile, DM_NhanVien.
+
+**Tham số:** studentIds hoặc fixedClassId.
+ * @summary Đồng bộ đơn vị quản lý từ lớp niên chế
+ */
+export type syncStudentDonViFromFixedClassResponse200 = {
+  data: SyncStudentDonViFromFixedClassResponse
+  status: 200
+}
+
+export type syncStudentDonViFromFixedClassResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type syncStudentDonViFromFixedClassResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type syncStudentDonViFromFixedClassResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type syncStudentDonViFromFixedClassResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type syncStudentDonViFromFixedClassResponseSuccess = (syncStudentDonViFromFixedClassResponse200) & {
+  headers: Headers;
+};
+export type syncStudentDonViFromFixedClassResponseError = (syncStudentDonViFromFixedClassResponse400 | syncStudentDonViFromFixedClassResponse404 | syncStudentDonViFromFixedClassResponse409 | syncStudentDonViFromFixedClassResponse500) & {
+  headers: Headers;
+};
+
+export type syncStudentDonViFromFixedClassResponse = (syncStudentDonViFromFixedClassResponseSuccess | syncStudentDonViFromFixedClassResponseError)
+
+export const getSyncStudentDonViFromFixedClassUrl = () => {
+
+
+  
+
+  return `/api/student/sync-don-vi-from-fixed-class`
+}
+
+export const syncStudentDonViFromFixedClass = async (syncStudentDonViFromFixedClassRequest: SyncStudentDonViFromFixedClassRequest, options?: RequestInit): Promise<syncStudentDonViFromFixedClassResponse> => {
+  
+  return customTrainingFetch<syncStudentDonViFromFixedClassResponse>(getSyncStudentDonViFromFixedClassUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      syncStudentDonViFromFixedClassRequest,)
+  }
+);}
+
+
+
+
+export const getSyncStudentDonViFromFixedClassMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncStudentDonViFromFixedClass>>, TError,{data: SyncStudentDonViFromFixedClassRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof syncStudentDonViFromFixedClass>>, TError,{data: SyncStudentDonViFromFixedClassRequest}, TContext> => {
+
+const mutationKey = ['syncStudentDonViFromFixedClass'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncStudentDonViFromFixedClass>>, {data: SyncStudentDonViFromFixedClassRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  syncStudentDonViFromFixedClass(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SyncStudentDonViFromFixedClassMutationResult = NonNullable<Awaited<ReturnType<typeof syncStudentDonViFromFixedClass>>>
+    export type SyncStudentDonViFromFixedClassMutationBody = SyncStudentDonViFromFixedClassRequest
+    export type SyncStudentDonViFromFixedClassMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Đồng bộ đơn vị quản lý từ lớp niên chế
+ */
+export const useSyncStudentDonViFromFixedClass = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncStudentDonViFromFixedClass>>, TError,{data: SyncStudentDonViFromFixedClassRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof syncStudentDonViFromFixedClass>>,
+        TError,
+        {data: SyncStudentDonViFromFixedClassRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getSyncStudentDonViFromFixedClassMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Xóa hồ sơ sinh viên trên QL đào tạo.
+
+**Bảng dữ liệu nguồn:** Student, UserProfile.
+ * @summary Xóa sinh viên
+ */
+export type deleteStudentResponse200 = {
+  data: SuccessMessageResponse
+  status: 200
+}
+
+export type deleteStudentResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type deleteStudentResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type deleteStudentResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type deleteStudentResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type deleteStudentResponseSuccess = (deleteStudentResponse200) & {
+  headers: Headers;
+};
+export type deleteStudentResponseError = (deleteStudentResponse400 | deleteStudentResponse404 | deleteStudentResponse409 | deleteStudentResponse500) & {
+  headers: Headers;
+};
+
+export type deleteStudentResponse = (deleteStudentResponseSuccess | deleteStudentResponseError)
+
+export const getDeleteStudentUrl = (id: string,) => {
+
+
+  
+
+  return `/api/student/${id}`
+}
+
+export const deleteStudent = async (id: string, options?: RequestInit): Promise<deleteStudentResponse> => {
+  
+  return customTrainingFetch<deleteStudentResponse>(getDeleteStudentUrl(id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+
+export const getDeleteStudentMutationOptions = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteStudent>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteStudent>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['deleteStudent'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteStudent>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteStudent(id,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteStudentMutationResult = NonNullable<Awaited<ReturnType<typeof deleteStudent>>>
+    
+    export type DeleteStudentMutationError = ErrorMessageResponse
+
+    /**
+ * @summary Xóa sinh viên
+ */
+export const useDeleteStudent = <TError = ErrorMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteStudent>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteStudent>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteStudentMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }
@@ -14195,7 +14531,9 @@ export const useApproveScoreCorrection = <TError = FailureBooleanResponse | Erro
 /**
  * Tính / ghi điểm từ phiên chứng chỉ đã lưu trữ.
 
-**Bảng dữ liệu nguồn:** ArchivedCertificate, ArchivedCertificateSubjectScore (ưu tiên), CertificateOnSubject (fallback đơn cũ), StudentSubjectScore.
+Chỉ phiên điểm khi chứng chỉ có môn được chọn (ArchivedCertificateSubjectScore). Không chọn môn thì chỉ phê duyệt chứng chỉ, không ghi điểm môn.
+
+**Bảng dữ liệu nguồn:** ArchivedCertificate, ArchivedCertificateSubjectScore, StudentSubjectScore.
 
 **Tham số:** archivedCertificateIds.
  * @summary Phiên điểm chứng chỉ

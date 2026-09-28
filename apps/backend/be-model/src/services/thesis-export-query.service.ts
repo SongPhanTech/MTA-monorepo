@@ -30,7 +30,9 @@ const expertVersionSelect = {
               academicDegreeType: { select: { sMa: true } },
               rank: { select: { sMa: true, sTen: true } },
               position: { select: { sTen: true } },
-              donVi: { select: { sMa: true, sTen: true, sParentId: true, iCapDonVi: true, iLoaiDonVi: true } },
+              donVi: {
+                select: { Id: true, sMa: true, sTen: true, sParentId: true, iCapDonVi: true, iLoaiDonVi: true },
+              },
             },
           },
         },
