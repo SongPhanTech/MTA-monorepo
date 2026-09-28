@@ -237,9 +237,9 @@ export default function UserProfilePageDs() {
   ]
 
   return (
-    <div className="flex h-full min-h-0 min-w-0 w-full flex-col overflow-hidden">
-      <Row gutter={[16, 0]} className="flex min-h-0 flex-1 flex-col">
-        <Col span={24} className="shrink-0">
+    <div className="min-w-0 w-full">
+      <Row gutter={[16, 0]}>
+        <Col span={24}>
           {/* Row nút thêm */}
           <Row gutter={[8, 8]} align="top" justify="space-between">
             <Col xs={12} md={12}>
@@ -301,7 +301,7 @@ export default function UserProfilePageDs() {
             </Col>
           </Row>
         </Col>
-        <Col span={24} className="min-h-0 flex-1">
+        <Col span={24}>
           <Table
             scrollable
             filters={filters}

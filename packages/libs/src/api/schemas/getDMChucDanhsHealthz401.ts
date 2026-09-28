@@ -24,6 +24,12 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 - Không chia sẻ thông tin xác thực với bên thứ 3
 - Báo cáo ngay cho QTHT nếu phát hiện thông tin xác thực bị lộ
 
+### Lấy vai trò và quyền theo danh sách user
+- Endpoint: `POST /UserPermissions/permissions`
+- Body: `{ "userIds": ["guid1", "guid2", ...] }` (tối đa 100 Id)
+- AppCode lấy từ ứng dụng đã đăng ký của client (không truyền trong body)
+- Response: danh sách `{ userId, roles, permissions }` cho từng user
+
 ## Các lỗi thường gặp
 | Status Code | Mô tả |
 |-------|-------|

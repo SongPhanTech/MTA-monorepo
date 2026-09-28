@@ -24,6 +24,12 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 - Không chia sẻ thông tin xác thực với bên thứ 3
 - Báo cáo ngay cho QTHT nếu phát hiện thông tin xác thực bị lộ
 
+### Lấy vai trò và quyền theo danh sách user
+- Endpoint: `POST /UserPermissions/permissions`
+- Body: `{ "userIds": ["guid1", "guid2", ...] }` (tối đa 100 Id)
+- AppCode lấy từ ứng dụng đã đăng ký của client (không truyền trong body)
+- Response: danh sách `{ userId, roles, permissions }` cho từng user
+
 ## Các lỗi thường gặp
 | Status Code | Mô tả |
 |-------|-------|
@@ -871,6 +877,7 @@ export * from './getPublicSurveysV2ResultDataItemSurveyTopicType';
 export * from './getRegistrationStatus200';
 export * from './getRegistrationStatus200Status';
 export * from './getRegistrationStatus404';
+export * from './getRolePermissionDTO';
 export * from './getSessionParams';
 export * from './getStudentExamSchedule200';
 export * from './getStudentExamSchedule200DataItem';
@@ -965,10 +972,12 @@ export * from './getTablesDbType';
 export * from './getTablesParams';
 export * from './getUngDungPermissionByUserDTO';
 export * from './getUserPermissionDTO';
+export * from './getUserPermissions401';
 export * from './getUserPermissionsAccessLevelAppCodeUserId400';
 export * from './getUserPermissionsAccessLevelAppCodeUserId401';
 export * from './getUserPermissionsAccessLevelAppCodeUserId403';
 export * from './getUserPermissionsAccessLevelAppCodeUserId500';
+export * from './getUserPermissionsBody';
 export * from './getUserPermissionsHealthz400';
 export * from './getUserPermissionsHealthz401';
 export * from './getUserPermissionsHealthz403';
@@ -981,6 +990,8 @@ export * from './getUserPermissionsPermissionAppCodeUserId400';
 export * from './getUserPermissionsPermissionAppCodeUserId401';
 export * from './getUserPermissionsPermissionAppCodeUserId403';
 export * from './getUserPermissionsPermissionAppCodeUserId500';
+export * from './getUserRoleDTO';
+export * from './getUsersPermissionsDTO';
 export * from './getVersion200';
 export * from './getVersion400';
 export * from './getVersion400Message';
@@ -1595,6 +1606,10 @@ export * from './postFilesSingleStorageTypeParams';
 export * from './postNotificationsEnqueue400One';
 export * from './postNotificationsEnqueue400Three';
 export * from './postNotificationsEnqueue400Two';
+export * from './postUserPermissionsPermissions400';
+export * from './postUserPermissionsPermissions401';
+export * from './postUserPermissionsPermissions403';
+export * from './postUserPermissionsPermissions500';
 export * from './presignedGetObjectParams';
 export * from './presignedUrlDto';
 export * from './problemDetails';
@@ -1701,6 +1716,8 @@ export * from './setExamScoreDeadLine200';
 export * from './setExamScoreDeadLineBody';
 export * from './setScoreDeadLine200';
 export * from './setScoreDeadLineBody';
+export * from './signOnlyOfficeConfig200';
+export * from './signOnlyOfficeConfigBody';
 export * from './singleTopicGeneration200';
 export * from './singleTopicGeneration400';
 export * from './singleTopicGenerationBody';
@@ -1753,12 +1770,16 @@ export * from './surveyStatisticsByFieldResponseDataItemQuestionsItemAnswersItem
 export * from './syncExamDatesRequest';
 export * from './syncExamDatesRequestType';
 export * from './syncExamDatesResponse';
+export * from './syncStudentDonViFromFixedClassRequest';
+export * from './syncStudentDonViFromFixedClassResponse';
+export * from './syncStudentDonViFromFixedClassResponseFailedItem';
 export * from './syncThesisCouncilPayments200';
 export * from './syncThesisCouncilPayments400';
 export * from './syncThesisCouncilPaymentsBody';
 export * from './syncThesisSupervisorPayments200';
 export * from './syncThesisSupervisorPayments400';
 export * from './syncThesisSupervisorPaymentsBody';
+export * from './systemStatusResponse';
 export * from './tableName';
 export * from './templateExcelSheetInput';
 export * from './templateExcelSheetInputData';
@@ -1823,6 +1844,9 @@ export * from './uploadExcelUpdateUserProfile';
 export * from './uploadExcelUpdateUserProfile400';
 export * from './urlDto';
 export * from './userId';
+export * from './userPermission';
+export * from './userPermissionItem';
+export * from './userPermissionRole';
 export * from './userSession';
 export * from './validateUserSurvey200';
 export * from './validateUserSurvey400';

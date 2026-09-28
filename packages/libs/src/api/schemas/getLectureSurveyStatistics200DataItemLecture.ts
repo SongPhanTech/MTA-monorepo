@@ -58,8 +58,6 @@ import type { GetLectureSurveyStatistics200DataItemLectureUserProfile } from './
 
 export type GetLectureSurveyStatistics200DataItemLecture = {
   id: string;
-  /** @nullable */
-  code?: string | null;
   active?: boolean;
   /** @nullable */
   description?: string | null;

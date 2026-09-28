@@ -235,6 +235,10 @@ export default function ArchivedCertificate() {
     if (filters.certificateId) {
       conditions.certificateId = filters.certificateId
     }
+    if (hasValue(filters.certificateStatus)) {
+      const val = filters.certificateStatus
+      conditions.status = Array.isArray(val) ? { in: val } : val
+    }
     if ((filters as any).decisionNumber) {
       conditions.decisionNumber = {
         contains: (filters as any).decisionNumber,
@@ -1012,7 +1016,15 @@ export default function ArchivedCertificate() {
               title: "Trạng thái",
               align: "center",
               fixed: "right",
-              width: 120,
+              width: 140,
+              dataIndex: "certificateStatus",
+              type: "select",
+              options: [
+                { label: "Chờ duyệt", value: "PENDING" },
+                { label: "Đã duyệt", value: "APPROVED" },
+                { label: "Từ chối", value: "REJECTED" },
+                { label: "Đã huỷ", value: "CANCEL" },
+              ],
               render: (__, record) => {
                 const statusMap: Record<string, { text: string; color: string }> = {
                   PENDING: { text: "Chờ duyệt", color: "orange" },

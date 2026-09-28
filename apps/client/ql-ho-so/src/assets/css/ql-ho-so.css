@@ -235,8 +235,6 @@
   line-height: 1.4;
 }
 
-.ho-so-page-card > * {
-  min-height: 0;
-  flex: 1 1 auto;
-  overflow: auto;
+.ho-so-page-card .ant-table-wrapper .ant-table-pagination {
+  margin-bottom: 0 !important;
 }

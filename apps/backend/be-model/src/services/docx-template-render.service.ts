@@ -11,11 +11,13 @@ export async function renderDocxTemplate({
   prefix,
   data,
   patchDocumentXml,
+  patchRenderedXml,
 }: {
   path: string
   prefix?: string | null
   data: Record<string, unknown>
   patchDocumentXml?: (xml: string) => string
+  patchRenderedXml?: (xml: string) => string
 }): Promise<Buffer> {
   const logPrefix = "[DOCX-TEMPLATE-RENDER]"
   const templatePrefix = (prefix ?? "/mta/luan-van").replace(/\/+$/, "")
@@ -119,7 +121,7 @@ export async function renderDocxTemplate({
       durationMs: Date.now() - processStartedAt,
     })
 
-    const finalBuffer = applyPageBreaks(Buffer.from(renderedBuffer))
+    const finalBuffer = applyPageBreaks(Buffer.from(renderedBuffer), patchRenderedXml)
     console.log(`${logPrefix} DONE applyPageBreaks`, {
       finalBytes: finalBuffer.length,
     })
@@ -159,7 +161,7 @@ function crc32(data: Buffer): number {
   return (crc ^ 0xffffffff) >>> 0
 }
 
-function applyPageBreaks(docxBuffer: Buffer): Buffer {
+function applyPageBreaks(docxBuffer: Buffer, patchXml?: (xml: string) => string): Buffer {
   let pos = 0
   const files: { name: string; data: Buffer }[] = []
 
@@ -178,6 +180,7 @@ function applyPageBreaks(docxBuffer: Buffer): Buffer {
 
     if (name === "word/document.xml") {
       let xml = data.toString("utf8")
+      if (patchXml) xml = patchXml(xml)
       xml = xml.replace(/<w:p\b[^>]*>(?:(?!<\/w:p>).)*ngắt trang.*?<\/w:p>/g, () => {
         return '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
       })

@@ -61,8 +61,6 @@ import type { PaginatedDataItemDataItemLecturerOrganization } from './paginatedD
  */
 export type PaginatedDataItemDataItemLecturer = {
   id: string;
-  /** @nullable */
-  code?: string | null;
   active?: boolean;
   /** @nullable */
   description?: string | null;

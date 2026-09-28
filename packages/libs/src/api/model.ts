@@ -138,12 +138,15 @@ import type {
   RenewApiKey200,
   RevokeApiKey200,
   Session,
+  SignOnlyOfficeConfig200,
+  SignOnlyOfficeConfigBody,
   SqlCheckResponse,
   SqlTransaction200Item,
   SqlTransactionItem,
   SuccessBooleanResponse,
   SyncThesisCouncilPaymentsBody,
   SyncThesisSupervisorPaymentsBody,
+  SystemStatusResponse,
   TableName,
   TemplatePreviewResponse,
   ThesisExportFilter,
@@ -162,6 +165,154 @@ type AwaitedInput<T> = PromiseLike<T> | T;
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
+/**
+ * API công khai. Đọc cờ `SYSTEM_MAINTENANCE` trên be-model.
+
+**Tham số:** không có.
+ * @summary Kiểm tra trạng thái bảo trì
+ */
+export type getSystemStatusResponse200 = {
+  data: SystemStatusResponse
+  status: 200
+}
+
+export type getSystemStatusResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type getSystemStatusResponse401 = {
+  data: UnauthorizedResponse
+  status: 401
+}
+
+export type getSystemStatusResponse403 = {
+  data: ErrorMessageResponse
+  status: 403
+}
+
+export type getSystemStatusResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type getSystemStatusResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type getSystemStatusResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type getSystemStatusResponseSuccess = (getSystemStatusResponse200) & {
+  headers: Headers;
+};
+export type getSystemStatusResponseError = (getSystemStatusResponse400 | getSystemStatusResponse401 | getSystemStatusResponse403 | getSystemStatusResponse404 | getSystemStatusResponse409 | getSystemStatusResponse500) & {
+  headers: Headers;
+};
+
+export type getSystemStatusResponse = (getSystemStatusResponseSuccess | getSystemStatusResponseError)
+
+export const getGetSystemStatusUrl = () => {
+
+
+  
+
+  return `/api/system-status`
+}
+
+export const getSystemStatus = async ( options?: RequestInit): Promise<getSystemStatusResponse> => {
+  
+  return customModelFetch<getSystemStatusResponse>(getGetSystemStatusUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetSystemStatusQueryKey = () => {
+    return [
+    `/api/system-status`
+    ] as const;
+    }
+
+    
+export const getGetSystemStatusQueryOptions = <TData = Awaited<ReturnType<typeof getSystemStatus>>, TError = ErrorMessageResponse | UnauthorizedResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSystemStatus>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSystemStatusQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSystemStatus>>> = ({ signal }) => getSystemStatus({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSystemStatus>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSystemStatusQueryResult = NonNullable<Awaited<ReturnType<typeof getSystemStatus>>>
+export type GetSystemStatusQueryError = ErrorMessageResponse | UnauthorizedResponse
+
+
+export function useGetSystemStatus<TData = Awaited<ReturnType<typeof getSystemStatus>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSystemStatus>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSystemStatus>>,
+          TError,
+          Awaited<ReturnType<typeof getSystemStatus>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customModelFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSystemStatus<TData = Awaited<ReturnType<typeof getSystemStatus>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSystemStatus>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSystemStatus>>,
+          TError,
+          Awaited<ReturnType<typeof getSystemStatus>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customModelFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSystemStatus<TData = Awaited<ReturnType<typeof getSystemStatus>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSystemStatus>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Kiểm tra trạng thái bảo trì
+ */
+
+export function useGetSystemStatus<TData = Awaited<ReturnType<typeof getSystemStatus>>, TError = ErrorMessageResponse | UnauthorizedResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSystemStatus>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetSystemStatusQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
 
 
 
@@ -5742,6 +5893,122 @@ export function useConvertDocument<TData = Awaited<ReturnType<typeof convertDocu
 
 
 
+/**
+ * @summary Ký JWT cấu hình OnlyOffice Document Editor
+ */
+export type signOnlyOfficeConfigResponse200 = {
+  data: SignOnlyOfficeConfig200
+  status: 200
+}
+
+export type signOnlyOfficeConfigResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type signOnlyOfficeConfigResponse401 = {
+  data: UnauthorizedResponse
+  status: 401
+}
+
+export type signOnlyOfficeConfigResponse403 = {
+  data: ErrorMessageResponse
+  status: 403
+}
+
+export type signOnlyOfficeConfigResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type signOnlyOfficeConfigResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type signOnlyOfficeConfigResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type signOnlyOfficeConfigResponseSuccess = (signOnlyOfficeConfigResponse200) & {
+  headers: Headers;
+};
+export type signOnlyOfficeConfigResponseError = (signOnlyOfficeConfigResponse400 | signOnlyOfficeConfigResponse401 | signOnlyOfficeConfigResponse403 | signOnlyOfficeConfigResponse404 | signOnlyOfficeConfigResponse409 | signOnlyOfficeConfigResponse500) & {
+  headers: Headers;
+};
+
+export type signOnlyOfficeConfigResponse = (signOnlyOfficeConfigResponseSuccess | signOnlyOfficeConfigResponseError)
+
+export const getSignOnlyOfficeConfigUrl = () => {
+
+
+  
+
+  return `/api/minio/onlyoffice-sign`
+}
+
+export const signOnlyOfficeConfig = async (signOnlyOfficeConfigBody: SignOnlyOfficeConfigBody, options?: RequestInit): Promise<signOnlyOfficeConfigResponse> => {
+  
+  return customModelFetch<signOnlyOfficeConfigResponse>(getSignOnlyOfficeConfigUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      signOnlyOfficeConfigBody,)
+  }
+);}
+
+
+
+
+export const getSignOnlyOfficeConfigMutationOptions = <TError = ErrorMessageResponse | UnauthorizedResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof signOnlyOfficeConfig>>, TError,{data: SignOnlyOfficeConfigBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof signOnlyOfficeConfig>>, TError,{data: SignOnlyOfficeConfigBody}, TContext> => {
+
+const mutationKey = ['signOnlyOfficeConfig'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof signOnlyOfficeConfig>>, {data: SignOnlyOfficeConfigBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  signOnlyOfficeConfig(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SignOnlyOfficeConfigMutationResult = NonNullable<Awaited<ReturnType<typeof signOnlyOfficeConfig>>>
+    export type SignOnlyOfficeConfigMutationBody = SignOnlyOfficeConfigBody
+    export type SignOnlyOfficeConfigMutationError = ErrorMessageResponse | UnauthorizedResponse
+
+    /**
+ * @summary Ký JWT cấu hình OnlyOffice Document Editor
+ */
+export const useSignOnlyOfficeConfig = <TError = ErrorMessageResponse | UnauthorizedResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof signOnlyOfficeConfig>>, TError,{data: SignOnlyOfficeConfigBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof signOnlyOfficeConfig>>,
+        TError,
+        {data: SignOnlyOfficeConfigBody},
+        TContext
+      > => {
+
+      const mutationOptions = getSignOnlyOfficeConfigMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * @summary Thực thi batch thao tác Prisma trong transaction
  */

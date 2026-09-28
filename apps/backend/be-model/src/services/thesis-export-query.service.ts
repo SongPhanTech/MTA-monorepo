@@ -30,7 +30,9 @@ const expertVersionSelect = {
               academicDegreeType: { select: { sMa: true } },
               rank: { select: { sMa: true, sTen: true } },
               position: { select: { sTen: true } },
-              donVi: { select: { sMa: true, sTen: true, sParentId: true, iCapDonVi: true, iLoaiDonVi: true } },
+              donVi: {
+                select: { Id: true, sMa: true, sTen: true, sParentId: true, iCapDonVi: true, iLoaiDonVi: true },
+              },
             },
           },
         },
@@ -156,6 +158,7 @@ export const thesisProjectExportSelect = {
                   trainingMajor: {
                     select: {
                       name: true,
+                      shortName: true,
                       organization: { select: { Id: true, sMa: true, sTen: true, sParentId: true, iLoaiDonVi: true, iCapDonVi: true } },
                       trainingField: { select: { name: true } },
                     },
@@ -189,6 +192,7 @@ export const thesisProjectExportSelect = {
                       trainingMajor: {
                         select: {
                           name: true,
+                          shortName: true,
                           organization: { select: { Id: true, sMa: true, sTen: true, sParentId: true, iLoaiDonVi: true, iCapDonVi: true } },
                           trainingField: { select: { name: true } },
                         },

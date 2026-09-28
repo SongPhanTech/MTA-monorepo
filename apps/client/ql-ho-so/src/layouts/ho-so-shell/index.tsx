@@ -3,6 +3,7 @@ import logo_mta from "@assets/images/hoso.svg"
 import HeaderApp from "@components/header"
 import SiderHoSo from "@components/layouts/sider"
 import {
+  QL_HO_SO_DEFAULT_SCHOOL_NAME,
   QL_HO_SO_HEADER_HEIGHT,
   QL_HO_SO_PORTAL_TITLE,
   QL_HO_SO_SIDEBAR_COLLAPSE_STORAGE_KEY,
@@ -170,7 +171,7 @@ const HoSoShell = ({
               ) : (
                 <div
                   className={cn(
-                    "ho-so-page-card flex min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden rounded-lg bg-white p-4 shadow-sm",
+                    "ho-so-page-card flex min-h-0 min-w-0 w-full flex-1 flex-col overflow-auto rounded-lg bg-white p-4 shadow-sm",
                     className
                   )}
                 >

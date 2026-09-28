@@ -89,4 +89,5 @@ export type ExportPhoiBangCaoHocBody = {
   managementOrganizationId?: string;
   printDate?: string;
   signerName?: string;
+  includeNamePrefix?: boolean;
 };

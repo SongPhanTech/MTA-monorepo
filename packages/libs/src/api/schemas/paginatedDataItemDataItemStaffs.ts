@@ -61,8 +61,6 @@ import type { PaginatedDataItemDataItemStaffsOrganization } from './paginatedDat
  */
 export type PaginatedDataItemDataItemStaffs = {
   id: string;
-  /** @nullable */
-  code?: string | null;
   active?: boolean;
   /** @nullable */
   description?: string | null;

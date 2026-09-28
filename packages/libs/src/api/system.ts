@@ -24,6 +24,12 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 - Không chia sẻ thông tin xác thực với bên thứ 3
 - Báo cáo ngay cho QTHT nếu phát hiện thông tin xác thực bị lộ
 
+### Lấy vai trò và quyền theo danh sách user
+- Endpoint: `POST /UserPermissions/permissions`
+- Body: `{ "userIds": ["guid1", "guid2", ...] }` (tối đa 100 Id)
+- AppCode lấy từ ứng dụng đã đăng ký của client (không truyền trong body)
+- Response: danh sách `{ userId, roles, permissions }` cho từng user
+
 ## Các lỗi thường gặp
 | Status Code | Mô tả |
 |-------|-------|
@@ -290,6 +296,7 @@ import type {
   GetUserPermissionsPermissionAppCodeUserId401,
   GetUserPermissionsPermissionAppCodeUserId403,
   GetUserPermissionsPermissionAppCodeUserId500,
+  GetUsersPermissionsDTO,
   GetVersionAppDTO,
   NhanVienEditDto,
   PostDMCapBacsList400,
@@ -373,6 +380,10 @@ import type {
   PostNotificationsEnqueue400One,
   PostNotificationsEnqueue400Three,
   PostNotificationsEnqueue400Two,
+  PostUserPermissionsPermissions400,
+  PostUserPermissionsPermissions401,
+  PostUserPermissionsPermissions403,
+  PostUserPermissionsPermissions500,
   PublicApiGetAllDMCapBacDTO,
   PublicApiGetAllDMChucDanhDTO,
   PublicApiGetAllDMChucVuDTO,
@@ -11840,6 +11851,113 @@ export function useGetUserPermissionsMenusPermissionUserId<TData = Awaited<Retur
 
 
 
+/**
+ * Nhận danh sách Id nhân viên/user (JSON array), trả về từng user với Roles; mỗi Role kèm Permissions (sFormName, sTen, lPermission, PermissionNames) theo ứng dụng client (x-clientid). Tối đa 100 userIds mỗi request. Yêu cầu header x-clientid và x-clientsecret.
+ * @summary Quyền, Lấy vai trò và quyền theo danh sách user
+ */
+export type postUserPermissionsPermissionsResponse200 = {
+  data: GetUsersPermissionsDTO[]
+  status: 200
+}
+
+export type postUserPermissionsPermissionsResponse400 = {
+  data: PostUserPermissionsPermissions400
+  status: 400
+}
+
+export type postUserPermissionsPermissionsResponse401 = {
+  data: PostUserPermissionsPermissions401
+  status: 401
+}
+
+export type postUserPermissionsPermissionsResponse403 = {
+  data: PostUserPermissionsPermissions403
+  status: 403
+}
+
+export type postUserPermissionsPermissionsResponse500 = {
+  data: PostUserPermissionsPermissions500
+  status: 500
+}
+    
+export type postUserPermissionsPermissionsResponseSuccess = (postUserPermissionsPermissionsResponse200) & {
+  headers: Headers;
+};
+export type postUserPermissionsPermissionsResponseError = (postUserPermissionsPermissionsResponse400 | postUserPermissionsPermissionsResponse401 | postUserPermissionsPermissionsResponse403 | postUserPermissionsPermissionsResponse500) & {
+  headers: Headers;
+};
+
+export type postUserPermissionsPermissionsResponse = (postUserPermissionsPermissionsResponseSuccess | postUserPermissionsPermissionsResponseError)
+
+export const getPostUserPermissionsPermissionsUrl = () => {
+
+
+  
+
+  return `/UserPermissions/permissions`
+}
+
+export const postUserPermissionsPermissions = async (postUserPermissionsPermissionsBody: string[], options?: RequestInit): Promise<postUserPermissionsPermissionsResponse> => {
+  
+  return customSystemFetch<postUserPermissionsPermissionsResponse>(getPostUserPermissionsPermissionsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+    body: JSON.stringify(
+      postUserPermissionsPermissionsBody,)
+  }
+);}
+
+
+
+
+export const getPostUserPermissionsPermissionsMutationOptions = <TError = PostUserPermissionsPermissions400 | PostUserPermissionsPermissions401 | PostUserPermissionsPermissions403 | PostUserPermissionsPermissions500,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postUserPermissionsPermissions>>, TError,{data: string[]}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postUserPermissionsPermissions>>, TError,{data: string[]}, TContext> => {
+
+const mutationKey = ['postUserPermissionsPermissions'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postUserPermissionsPermissions>>, {data: string[]}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postUserPermissionsPermissions(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostUserPermissionsPermissionsMutationResult = NonNullable<Awaited<ReturnType<typeof postUserPermissionsPermissions>>>
+    export type PostUserPermissionsPermissionsMutationBody = string[]
+    export type PostUserPermissionsPermissionsMutationError = PostUserPermissionsPermissions400 | PostUserPermissionsPermissions401 | PostUserPermissionsPermissions403 | PostUserPermissionsPermissions500
+
+    /**
+ * @summary Quyền, Lấy vai trò và quyền theo danh sách user
+ */
+export const usePostUserPermissionsPermissions = <TError = PostUserPermissionsPermissions400 | PostUserPermissionsPermissions401 | PostUserPermissionsPermissions403 | PostUserPermissionsPermissions500,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postUserPermissionsPermissions>>, TError,{data: string[]}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postUserPermissionsPermissions>>,
+        TError,
+        {data: string[]},
+        TContext
+      > => {
+
+      const mutationOptions = getPostUserPermissionsPermissionsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API

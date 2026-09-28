@@ -10,7 +10,8 @@ import PizZip from "pizzip"
 import { excelTemplate } from "@workspace/libs/api/model"
 import type { ExcelTemplateBody } from "@workspace/libs/api/schemas"
 import { exportFromTemplate, type TableRow } from "@workspace/libs/template-excel"
-import { getMinioUrl } from "@workspace/libs/utils"
+import { getMinioUrl, getRuntimeEnv, resolveCouncilMemberUnitName, type OrgUnitNode } from "@workspace/libs/utils"
+import { fetchInstance } from "@api/index"
 import { dayjs } from "@workspace/ui"
 import { toRoman } from "./romans"
 import {
@@ -3293,7 +3294,8 @@ export const exportPhuLucQdhdd = async ({
   })
   try {
     showSpinner?.()
-    const dataConvert = convertToPhuLucQdhdTemplateData(project)
+    const orgById = await loadAcademyOrgById()
+    const dataConvert = convertToPhuLucQdhdTemplateData(project, orgById)
     if (!dataConvert) {
       message.error("Chưa có dữ liệu để xuất phụ lục QĐHĐ")
       return []
@@ -3347,7 +3349,62 @@ export const exportPhuLucQdhdd = async ({
     hideSpinner?.()
   }
 }
-const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdhdTemplateData => {
+async function loadAcademyOrgById() {
+  const base = getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL")
+  const response = await fetchInstance(`${base}/api/model/dM_DonVi/findMany`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      where: { bDeleted: { not: true } },
+      select: { Id: true, sTen: true, sParentId: true, iCapDonVi: true },
+    }),
+  })
+  if (!response.ok) return new Map<string, OrgUnitNode>()
+  const organizations = (await response.json()) as OrgUnitNode[]
+  if (!Array.isArray(organizations)) return new Map<string, OrgUnitNode>()
+  return new Map(organizations.map((org) => [org.Id, org]))
+}
+
+/** Trong học viện: đơn vị cấp nhà trường. Ngoài học viện: nơi công tác giữ nguyên. */
+const councilAppendixUnit = (expert: any, orgById: Map<string, OrgUnitNode>) => {
+  if (!expert) return ""
+  const workplace = typeof expert?.workplace === "string" ? expert.workplace.trim() : ""
+  const organization = typeof expert?.organization === "string" ? expert.organization.trim() : ""
+  if (!versionInAcademy(expert)) return workplace || organization
+  const lecturerOrg = expert?.lecturer?.userProfile?.donVi ?? expert?.expert?.lecturer?.userProfile?.donVi
+  return resolveCouncilMemberUnitName({
+    inAcademy: true,
+    lecturerOrg: lecturerOrg?.Id ? lecturerOrg : undefined,
+    organization: typeof expert?.organization === "string" ? expert.organization : undefined,
+    orgById,
+  })
+}
+
+const appendixAdvisorLine = (expert: any, orgById: Map<string, OrgUnitNode>) => {
+  const name = (getSupervisorName(expert, false, false) as string) || ""
+  if (!name) return ""
+  const unit = councilAppendixUnit(expert, orgById)
+  return unit ? `${name}, ${unit}` : name
+}
+
+const formatCouncilMajorLine = (nganh: string, chuyenNganh: string) => {
+  const field = nganh.trim()
+  const specialization = chuyenNganh.trim()
+  if (
+    field &&
+    specialization &&
+    field.localeCompare(specialization, "vi", { sensitivity: "accent" }) !== 0
+  ) {
+    return `Ngành ${field} (chuyên ngành ${specialization})`
+  }
+  const label = field || specialization
+  return label ? `Ngành ${label}` : ""
+}
+
+const convertToPhuLucQdhdTemplateData = (
+  allStudentsInClasses: any[],
+  orgById: Map<string, OrgUnitNode>
+): PhuLucQdhdTemplateData => {
   if (!allStudentsInClasses?.length) {
     return {
       head: { data: { khoa: "", dotXet: "", soQd: "", ngayQd: "" } },
@@ -3373,29 +3430,26 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
     },
   }
 
-  const majorMap = new Map<string, any[]>()
+  const majorMap = new Map<string, { label: string; students: any[] }>()
   allStudentsInClasses.forEach((student) => {
     if (!student?.thesisRegistrations?.[0]?.thesisProject) return
     const majorName =
-      student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "Chưa xác định"
+      student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
     const trainingField =
       student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
-    const groupName = trainingField || majorName
-    const groupKey =
-      trainingField && trainingField !== majorName
-        ? `Ngành ${groupName} (CHUYÊN NGÀNH ${majorName.toUpperCase()})`
-        : `Ngành ${groupName}`
+    const label = (trainingField || majorName || "Chưa xác định").trim()
+    const groupKey = label.replace(/\s+/g, " ").toLocaleLowerCase("vi")
     if (!majorMap.has(groupKey)) {
-      majorMap.set(groupKey, [])
+      majorMap.set(groupKey, { label, students: [] })
     }
-    majorMap.get(groupKey)?.push(student)
+    majorMap.get(groupKey)?.students.push(student)
   })
 
   let totalCouncils = 0
   const groupedData: PhuLucQdhdData[] = []
   let majorIndex = 1
 
-  majorMap.forEach((students, groupKey) => {
+  majorMap.forEach(({ label, students }) => {
     const validStudents = students.filter(
       (student) =>
         student?.thesisRegistrations?.[0]?.thesisProject &&
@@ -3423,15 +3477,14 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
       const reviewer2Expert = councilMemberProfile(reviewer2)
       const ngaySinhStr = formatBirthDate(student.userProfile?.dateOfBirth)
       const khoaHocStr = student.fixedClass?.trainingCourse?.name || ""
-      const rawGvhd1 = (getSupervisorName(project?.supervisor, false, false) as string) || ""
-      const rawGvhd2 = (getSupervisorName(project?.coSupervisor, false, false) as string) || ""
-      const hasTwoGvhd = Boolean(rawGvhd1 && rawGvhd2)
-      const gvhd1 = hasTwoGvhd ? `1. ${rawGvhd1}` : rawGvhd1
-      const gvhd2 = hasTwoGvhd ? `2. ${rawGvhd2}` : rawGvhd2
+      const specialization =
+        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
+      const gvhd1 = appendixAdvisorLine(project?.supervisor, orgById)
+      const gvhd2 = appendixAdvisorLine(project?.coSupervisor, orgById)
       return {
         sttHoiDong: (studentIdx + 1).toString(),
         loaiLuanVan: project?.type?.trim().toLowerCase() || "luận văn",
-        nganh: groupKey,
+        nganh: formatCouncilMajorLine(label, specialization),
         tenDeTai: project?.title?.trim().replace(/\s+/g, " ") || "",
         tenHocVien: student.userProfile?.fullname || "",
         ngaySinh: ngaySinhStr,
@@ -3440,26 +3493,26 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
         gvhd2,
 
         tenChuTich: (getSupervisorName(chairmanExpert, false, false) as string) || "",
-        toChucChuTich: chairmanExpert?.workplace || "Học viện KTQS",
+        toChucChuTich: councilAppendixUnit(chairmanExpert, orgById),
 
         tenThuKy: (getSupervisorName(secretaryExpert, false, false) as string) || "",
-        toChucThuKy: secretaryExpert?.workplace || "Học viện KTQS",
+        toChucThuKy: councilAppendixUnit(secretaryExpert, orgById),
 
         tenUyVien: (getSupervisorName(memberExpert, false, false) as string) || "",
-        toChucUyVien: memberExpert?.workplace || "Học viện KTQS",
+        toChucUyVien: councilAppendixUnit(memberExpert, orgById),
 
         tenPb1: (getSupervisorName(reviewer1Expert, false, false) as string) || "",
-        toChucPb1: reviewer1Expert?.workplace || "Học viện KTQS",
+        toChucPb1: councilAppendixUnit(reviewer1Expert, orgById),
 
         tenPb2: (getSupervisorName(reviewer2Expert, false, false) as string) || "",
-        toChucPb2: reviewer2Expert?.workplace || "Học viện KTQS",
+        toChucPb2: councilAppendixUnit(reviewer2Expert, orgById),
       }
     })
 
     groupedData.push({
       data: {
-        sttChuyenNganh: toRoman(majorIndex),
-        tenChuyenNganh: `${groupKey.toUpperCase()} (${tableRows.length} HỘI ĐỒNG)`,
+        sttChuyenNganh: `${toRoman(majorIndex)}.`,
+        tenChuyenNganh: `NGÀNH ${label.toLocaleUpperCase("vi")} (${String(tableRows.length).padStart(2, "0")} HỘI ĐỒNG)`,
         data: tableRows,
       },
     })

@@ -62,8 +62,6 @@ import type { GetSurveysOfProfile200AllOfDataItemLectureUserProfile } from './ge
  */
 export type GetSurveysOfProfile200AllOfDataItemLecture = {
   id: string;
-  /** @nullable */
-  code?: string | null;
   active?: boolean;
   /** @nullable */
   description?: string | null;
