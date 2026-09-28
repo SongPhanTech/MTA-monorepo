@@ -2964,6 +2964,38 @@ export type DM_BacLuong = $Result.DefaultSelection<Prisma.$DM_BacLuongPayload>;
  */
 export type TemplateFile = $Result.DefaultSelection<Prisma.$TemplateFilePayload>;
 /**
+ * Model AccessRoleGrant
+ * Vai trò được giao cho cán bộ hoặc giảng viên.
+ * Catalog vai trò vẫn nằm ở system. Bảng này chỉ lưu lần giao.
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ * @
+ * @deny ('create,update,delete', true)
+ * @
+ * @deny ('read', true)
+ */
+export type AccessRoleGrant = $Result.DefaultSelection<Prisma.$AccessRoleGrantPayload>;
+/**
+ * Model AccessPermissionGrant
+ * Quyền theo chức năng của một lần giao vai trò.
+ * lPermission là bit đã chọn (Xem, Thêm, Sửa, …), không phải cả mask vai trò trên system.
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ * @
+ * @deny ('create,update,delete', true)
+ * @
+ * @deny ('read', true)
+ */
+export type AccessPermissionGrant = $Result.DefaultSelection<Prisma.$AccessPermissionGrantPayload>;
+/**
  * Model BlockedIp
  * @
  * @allow ('all', auth() != null)
@@ -5624,6 +5656,24 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      */
     get templateFile(): Prisma.TemplateFileDelegate<ExtArgs, ClientOptions>;
     /**
+     * `prisma.accessRoleGrant`: Exposes CRUD operations for the **AccessRoleGrant** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more AccessRoleGrants
+     * const accessRoleGrants = await prisma.accessRoleGrant.findMany()
+     * ```
+     */
+    get accessRoleGrant(): Prisma.AccessRoleGrantDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.accessPermissionGrant`: Exposes CRUD operations for the **AccessPermissionGrant** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more AccessPermissionGrants
+     * const accessPermissionGrants = await prisma.accessPermissionGrant.findMany()
+     * ```
+     */
+    get accessPermissionGrant(): Prisma.AccessPermissionGrantDelegate<ExtArgs, ClientOptions>;
+    /**
      * `prisma.blockedIp`: Exposes CRUD operations for the **BlockedIp** model.
      * Example usage:
      * ```ts
@@ -6760,6 +6810,8 @@ export namespace Prisma {
         DM_Ngach: 'DM_Ngach',
         DM_BacLuong: 'DM_BacLuong',
         TemplateFile: 'TemplateFile',
+        AccessRoleGrant: 'AccessRoleGrant',
+        AccessPermissionGrant: 'AccessPermissionGrant',
         BlockedIp: 'BlockedIp'
     };
     export const defineExtension: $Extensions.ExtendsHook<"define", Prisma.TypeMapCb, $Extensions.DefaultArgs>;
@@ -11487,6 +11539,33 @@ export namespace Prisma {
         extensions: 'extensions',
         numberField: 'numberField'
     };
+    export const AccessRoleGrantScalarFieldEnum: {
+        id: 'id',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        granterId: 'granterId',
+        recipientId: 'recipientId',
+        sRoleId: 'sRoleId',
+        sRoleName: 'sRoleName',
+        sCodeName: 'sCodeName'
+    };
+    export const AccessPermissionGrantScalarFieldEnum: {
+        id: 'id',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        roleGrantId: 'roleGrantId',
+        sFormName: 'sFormName',
+        sTen: 'sTen',
+        lPermission: 'lPermission'
+    };
     export const BlockedIpScalarFieldEnum: {
         id: 'id',
         code: 'code',
@@ -14336,6 +14415,24 @@ export namespace Prisma {
         name: 'name',
         path: 'path',
         extensions: 'extensions'
+    };
+    export const AccessRoleGrantOrderByRelevanceFieldEnum: {
+        id: 'id',
+        description: 'description',
+        createdBy: 'createdBy',
+        granterId: 'granterId',
+        recipientId: 'recipientId',
+        sRoleId: 'sRoleId',
+        sRoleName: 'sRoleName',
+        sCodeName: 'sCodeName'
+    };
+    export const AccessPermissionGrantOrderByRelevanceFieldEnum: {
+        id: 'id',
+        description: 'description',
+        createdBy: 'createdBy',
+        roleGrantId: 'roleGrantId',
+        sFormName: 'sFormName',
+        sTen: 'sTen'
     };
     export const BlockedIpOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -124599,6 +124696,773 @@ export namespace Prisma {
         readonly numberField: FieldRef<"TemplateFile", 'Int'>;
     }
 
+    export interface AccessRoleGrantDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AccessRoleGrant'], meta: { name: 'AccessRoleGrant' } };
+        /**
+         * Fields of the AccessRoleGrant model
+         */
+        readonly fields: AccessRoleGrantFieldRefs;
+        /**
+         * Find zero or one AccessRoleGrant that matches the filter.
+         * @param {AccessRoleGrantFindUniqueArgs} args - Arguments to find a AccessRoleGrant
+         * @example
+         * // Get one AccessRoleGrant
+         * const accessRoleGrant = await prisma.accessRoleGrant.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends AccessRoleGrantFindUniqueArgs>(args: SelectSubset<T, AccessRoleGrantFindUniqueArgs<ExtArgs>>): Prisma__AccessRoleGrantClient<$Result.GetResult<Prisma.$AccessRoleGrantPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one AccessRoleGrant that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {AccessRoleGrantFindUniqueOrThrowArgs} args - Arguments to find a AccessRoleGrant
+         * @example
+         * // Get one AccessRoleGrant
+         * const accessRoleGrant = await prisma.accessRoleGrant.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends AccessRoleGrantFindUniqueOrThrowArgs>(args: SelectSubset<T, AccessRoleGrantFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AccessRoleGrantClient<$Result.GetResult<Prisma.$AccessRoleGrantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first AccessRoleGrant that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AccessRoleGrantFindFirstArgs} args - Arguments to find a AccessRoleGrant
+         * @example
+         * // Get one AccessRoleGrant
+         * const accessRoleGrant = await prisma.accessRoleGrant.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends AccessRoleGrantFindFirstArgs>(args?: SelectSubset<T, AccessRoleGrantFindFirstArgs<ExtArgs>>): Prisma__AccessRoleGrantClient<$Result.GetResult<Prisma.$AccessRoleGrantPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first AccessRoleGrant that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AccessRoleGrantFindFirstOrThrowArgs} args - Arguments to find a AccessRoleGrant
+         * @example
+         * // Get one AccessRoleGrant
+         * const accessRoleGrant = await prisma.accessRoleGrant.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends AccessRoleGrantFindFirstOrThrowArgs>(args?: SelectSubset<T, AccessRoleGrantFindFirstOrThrowArgs<ExtArgs>>): Prisma__AccessRoleGrantClient<$Result.GetResult<Prisma.$AccessRoleGrantPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more AccessRoleGrants that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AccessRoleGrantFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all AccessRoleGrants
+         * const accessRoleGrants = await prisma.accessRoleGrant.findMany()
+         *
+         * // Get first 10 AccessRoleGrants
+         * const accessRoleGrants = await prisma.accessRoleGrant.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const accessRoleGrantWithIdOnly = await prisma.accessRoleGrant.findMany({ select: { id: true } })
+         */
+        findMany<T extends AccessRoleGrantFindManyArgs>(args?: SelectSubset<T, AccessRoleGrantFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccessRoleGrantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a AccessRoleGrant.
+         * @param {AccessRoleGrantCreateArgs} args - Arguments to create a AccessRoleGrant.
+         * @example
+         * // Create one AccessRoleGrant
+         * const AccessRoleGrant = await prisma.accessRoleGrant.create({
+         *   data: {
+         *     // ... data to create a AccessRoleGrant
+         *   }
+         * })
+         */
+        create<T extends AccessRoleGrantCreateArgs>(args: SelectSubset<T, AccessRoleGrantCreateArgs<ExtArgs>>): Prisma__AccessRoleGrantClient<$Result.GetResult<Prisma.$AccessRoleGrantPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many AccessRoleGrants.
+         * @param {AccessRoleGrantCreateManyArgs} args - Arguments to create many AccessRoleGrants.
+         * @example
+         * // Create many AccessRoleGrants
+         * const accessRoleGrant = await prisma.accessRoleGrant.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends AccessRoleGrantCreateManyArgs>(args?: SelectSubset<T, AccessRoleGrantCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many AccessRoleGrants and returns the data saved in the database.
+         * @param {AccessRoleGrantCreateManyAndReturnArgs} args - Arguments to create many AccessRoleGrants.
+         * @example
+         * // Create many AccessRoleGrants
+         * const accessRoleGrant = await prisma.accessRoleGrant.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many AccessRoleGrants and only return the `id`
+         * const accessRoleGrantWithIdOnly = await prisma.accessRoleGrant.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends AccessRoleGrantCreateManyAndReturnArgs>(args?: SelectSubset<T, AccessRoleGrantCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccessRoleGrantPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a AccessRoleGrant.
+         * @param {AccessRoleGrantDeleteArgs} args - Arguments to delete one AccessRoleGrant.
+         * @example
+         * // Delete one AccessRoleGrant
+         * const AccessRoleGrant = await prisma.accessRoleGrant.delete({
+         *   where: {
+         *     // ... filter to delete one AccessRoleGrant
+         *   }
+         * })
+         */
+        delete<T extends AccessRoleGrantDeleteArgs>(args: SelectSubset<T, AccessRoleGrantDeleteArgs<ExtArgs>>): Prisma__AccessRoleGrantClient<$Result.GetResult<Prisma.$AccessRoleGrantPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one AccessRoleGrant.
+         * @param {AccessRoleGrantUpdateArgs} args - Arguments to update one AccessRoleGrant.
+         * @example
+         * // Update one AccessRoleGrant
+         * const accessRoleGrant = await prisma.accessRoleGrant.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends AccessRoleGrantUpdateArgs>(args: SelectSubset<T, AccessRoleGrantUpdateArgs<ExtArgs>>): Prisma__AccessRoleGrantClient<$Result.GetResult<Prisma.$AccessRoleGrantPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more AccessRoleGrants.
+         * @param {AccessRoleGrantDeleteManyArgs} args - Arguments to filter AccessRoleGrants to delete.
+         * @example
+         * // Delete a few AccessRoleGrants
+         * const { count } = await prisma.accessRoleGrant.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends AccessRoleGrantDeleteManyArgs>(args?: SelectSubset<T, AccessRoleGrantDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more AccessRoleGrants.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AccessRoleGrantUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many AccessRoleGrants
+         * const accessRoleGrant = await prisma.accessRoleGrant.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends AccessRoleGrantUpdateManyArgs>(args: SelectSubset<T, AccessRoleGrantUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more AccessRoleGrants and returns the data updated in the database.
+         * @param {AccessRoleGrantUpdateManyAndReturnArgs} args - Arguments to update many AccessRoleGrants.
+         * @example
+         * // Update many AccessRoleGrants
+         * const accessRoleGrant = await prisma.accessRoleGrant.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more AccessRoleGrants and only return the `id`
+         * const accessRoleGrantWithIdOnly = await prisma.accessRoleGrant.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends AccessRoleGrantUpdateManyAndReturnArgs>(args: SelectSubset<T, AccessRoleGrantUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccessRoleGrantPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one AccessRoleGrant.
+         * @param {AccessRoleGrantUpsertArgs} args - Arguments to update or create a AccessRoleGrant.
+         * @example
+         * // Update or create a AccessRoleGrant
+         * const accessRoleGrant = await prisma.accessRoleGrant.upsert({
+         *   create: {
+         *     // ... data to create a AccessRoleGrant
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the AccessRoleGrant we want to update
+         *   }
+         * })
+         */
+        upsert<T extends AccessRoleGrantUpsertArgs>(args: SelectSubset<T, AccessRoleGrantUpsertArgs<ExtArgs>>): Prisma__AccessRoleGrantClient<$Result.GetResult<Prisma.$AccessRoleGrantPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of AccessRoleGrants.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AccessRoleGrantCountArgs} args - Arguments to filter AccessRoleGrants to count.
+         * @example
+         * // Count the number of AccessRoleGrants
+         * const count = await prisma.accessRoleGrant.count({
+         *   where: {
+         *     // ... the filter for the AccessRoleGrants we want to count
+         *   }
+         * })
+         */
+        count<T extends AccessRoleGrantCountArgs>(args?: Subset<T, AccessRoleGrantCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], AccessRoleGrantCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a AccessRoleGrant.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AccessRoleGrantAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends AccessRoleGrantAggregateArgs>(args: Subset<T, AccessRoleGrantAggregateArgs>): Prisma.PrismaPromise<GetAccessRoleGrantAggregateType<T>>;
+        /**
+         * Group by AccessRoleGrant.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AccessRoleGrantGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends AccessRoleGrantGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AccessRoleGrantGroupByArgs['orderBy'] }
+        : { orderBy?: AccessRoleGrantGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, AccessRoleGrantGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAccessRoleGrantGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for AccessRoleGrant.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__AccessRoleGrantClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        permissions<T extends AccessRoleGrant$permissionsArgs<ExtArgs> = {}>(args?: Subset<T, AccessRoleGrant$permissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccessPermissionGrantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the AccessRoleGrant model
+     */
+    interface AccessRoleGrantFieldRefs {
+        readonly id: FieldRef<"AccessRoleGrant", 'String'>;
+        readonly active: FieldRef<"AccessRoleGrant", 'Boolean'>;
+        readonly description: FieldRef<"AccessRoleGrant", 'String'>;
+        readonly deletedAt: FieldRef<"AccessRoleGrant", 'DateTime'>;
+        readonly createdAt: FieldRef<"AccessRoleGrant", 'DateTime'>;
+        readonly updatedAt: FieldRef<"AccessRoleGrant", 'DateTime'>;
+        readonly createdBy: FieldRef<"AccessRoleGrant", 'String'>;
+        readonly granterId: FieldRef<"AccessRoleGrant", 'String'>;
+        readonly recipientId: FieldRef<"AccessRoleGrant", 'String'>;
+        readonly sRoleId: FieldRef<"AccessRoleGrant", 'String'>;
+        readonly sRoleName: FieldRef<"AccessRoleGrant", 'String'>;
+        readonly sCodeName: FieldRef<"AccessRoleGrant", 'String'>;
+    }
+
+    export interface AccessPermissionGrantDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AccessPermissionGrant'], meta: { name: 'AccessPermissionGrant' } };
+        /**
+         * Fields of the AccessPermissionGrant model
+         */
+        readonly fields: AccessPermissionGrantFieldRefs;
+        /**
+         * Find zero or one AccessPermissionGrant that matches the filter.
+         * @param {AccessPermissionGrantFindUniqueArgs} args - Arguments to find a AccessPermissionGrant
+         * @example
+         * // Get one AccessPermissionGrant
+         * const accessPermissionGrant = await prisma.accessPermissionGrant.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends AccessPermissionGrantFindUniqueArgs>(args: SelectSubset<T, AccessPermissionGrantFindUniqueArgs<ExtArgs>>): Prisma__AccessPermissionGrantClient<$Result.GetResult<Prisma.$AccessPermissionGrantPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one AccessPermissionGrant that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {AccessPermissionGrantFindUniqueOrThrowArgs} args - Arguments to find a AccessPermissionGrant
+         * @example
+         * // Get one AccessPermissionGrant
+         * const accessPermissionGrant = await prisma.accessPermissionGrant.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends AccessPermissionGrantFindUniqueOrThrowArgs>(args: SelectSubset<T, AccessPermissionGrantFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AccessPermissionGrantClient<$Result.GetResult<Prisma.$AccessPermissionGrantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first AccessPermissionGrant that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AccessPermissionGrantFindFirstArgs} args - Arguments to find a AccessPermissionGrant
+         * @example
+         * // Get one AccessPermissionGrant
+         * const accessPermissionGrant = await prisma.accessPermissionGrant.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends AccessPermissionGrantFindFirstArgs>(args?: SelectSubset<T, AccessPermissionGrantFindFirstArgs<ExtArgs>>): Prisma__AccessPermissionGrantClient<$Result.GetResult<Prisma.$AccessPermissionGrantPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first AccessPermissionGrant that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AccessPermissionGrantFindFirstOrThrowArgs} args - Arguments to find a AccessPermissionGrant
+         * @example
+         * // Get one AccessPermissionGrant
+         * const accessPermissionGrant = await prisma.accessPermissionGrant.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends AccessPermissionGrantFindFirstOrThrowArgs>(args?: SelectSubset<T, AccessPermissionGrantFindFirstOrThrowArgs<ExtArgs>>): Prisma__AccessPermissionGrantClient<$Result.GetResult<Prisma.$AccessPermissionGrantPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more AccessPermissionGrants that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AccessPermissionGrantFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all AccessPermissionGrants
+         * const accessPermissionGrants = await prisma.accessPermissionGrant.findMany()
+         *
+         * // Get first 10 AccessPermissionGrants
+         * const accessPermissionGrants = await prisma.accessPermissionGrant.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const accessPermissionGrantWithIdOnly = await prisma.accessPermissionGrant.findMany({ select: { id: true } })
+         */
+        findMany<T extends AccessPermissionGrantFindManyArgs>(args?: SelectSubset<T, AccessPermissionGrantFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccessPermissionGrantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a AccessPermissionGrant.
+         * @param {AccessPermissionGrantCreateArgs} args - Arguments to create a AccessPermissionGrant.
+         * @example
+         * // Create one AccessPermissionGrant
+         * const AccessPermissionGrant = await prisma.accessPermissionGrant.create({
+         *   data: {
+         *     // ... data to create a AccessPermissionGrant
+         *   }
+         * })
+         */
+        create<T extends AccessPermissionGrantCreateArgs>(args: SelectSubset<T, AccessPermissionGrantCreateArgs<ExtArgs>>): Prisma__AccessPermissionGrantClient<$Result.GetResult<Prisma.$AccessPermissionGrantPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many AccessPermissionGrants.
+         * @param {AccessPermissionGrantCreateManyArgs} args - Arguments to create many AccessPermissionGrants.
+         * @example
+         * // Create many AccessPermissionGrants
+         * const accessPermissionGrant = await prisma.accessPermissionGrant.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends AccessPermissionGrantCreateManyArgs>(args?: SelectSubset<T, AccessPermissionGrantCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many AccessPermissionGrants and returns the data saved in the database.
+         * @param {AccessPermissionGrantCreateManyAndReturnArgs} args - Arguments to create many AccessPermissionGrants.
+         * @example
+         * // Create many AccessPermissionGrants
+         * const accessPermissionGrant = await prisma.accessPermissionGrant.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many AccessPermissionGrants and only return the `id`
+         * const accessPermissionGrantWithIdOnly = await prisma.accessPermissionGrant.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends AccessPermissionGrantCreateManyAndReturnArgs>(args?: SelectSubset<T, AccessPermissionGrantCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccessPermissionGrantPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a AccessPermissionGrant.
+         * @param {AccessPermissionGrantDeleteArgs} args - Arguments to delete one AccessPermissionGrant.
+         * @example
+         * // Delete one AccessPermissionGrant
+         * const AccessPermissionGrant = await prisma.accessPermissionGrant.delete({
+         *   where: {
+         *     // ... filter to delete one AccessPermissionGrant
+         *   }
+         * })
+         */
+        delete<T extends AccessPermissionGrantDeleteArgs>(args: SelectSubset<T, AccessPermissionGrantDeleteArgs<ExtArgs>>): Prisma__AccessPermissionGrantClient<$Result.GetResult<Prisma.$AccessPermissionGrantPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one AccessPermissionGrant.
+         * @param {AccessPermissionGrantUpdateArgs} args - Arguments to update one AccessPermissionGrant.
+         * @example
+         * // Update one AccessPermissionGrant
+         * const accessPermissionGrant = await prisma.accessPermissionGrant.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends AccessPermissionGrantUpdateArgs>(args: SelectSubset<T, AccessPermissionGrantUpdateArgs<ExtArgs>>): Prisma__AccessPermissionGrantClient<$Result.GetResult<Prisma.$AccessPermissionGrantPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more AccessPermissionGrants.
+         * @param {AccessPermissionGrantDeleteManyArgs} args - Arguments to filter AccessPermissionGrants to delete.
+         * @example
+         * // Delete a few AccessPermissionGrants
+         * const { count } = await prisma.accessPermissionGrant.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends AccessPermissionGrantDeleteManyArgs>(args?: SelectSubset<T, AccessPermissionGrantDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more AccessPermissionGrants.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AccessPermissionGrantUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many AccessPermissionGrants
+         * const accessPermissionGrant = await prisma.accessPermissionGrant.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends AccessPermissionGrantUpdateManyArgs>(args: SelectSubset<T, AccessPermissionGrantUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more AccessPermissionGrants and returns the data updated in the database.
+         * @param {AccessPermissionGrantUpdateManyAndReturnArgs} args - Arguments to update many AccessPermissionGrants.
+         * @example
+         * // Update many AccessPermissionGrants
+         * const accessPermissionGrant = await prisma.accessPermissionGrant.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more AccessPermissionGrants and only return the `id`
+         * const accessPermissionGrantWithIdOnly = await prisma.accessPermissionGrant.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends AccessPermissionGrantUpdateManyAndReturnArgs>(args: SelectSubset<T, AccessPermissionGrantUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccessPermissionGrantPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one AccessPermissionGrant.
+         * @param {AccessPermissionGrantUpsertArgs} args - Arguments to update or create a AccessPermissionGrant.
+         * @example
+         * // Update or create a AccessPermissionGrant
+         * const accessPermissionGrant = await prisma.accessPermissionGrant.upsert({
+         *   create: {
+         *     // ... data to create a AccessPermissionGrant
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the AccessPermissionGrant we want to update
+         *   }
+         * })
+         */
+        upsert<T extends AccessPermissionGrantUpsertArgs>(args: SelectSubset<T, AccessPermissionGrantUpsertArgs<ExtArgs>>): Prisma__AccessPermissionGrantClient<$Result.GetResult<Prisma.$AccessPermissionGrantPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of AccessPermissionGrants.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AccessPermissionGrantCountArgs} args - Arguments to filter AccessPermissionGrants to count.
+         * @example
+         * // Count the number of AccessPermissionGrants
+         * const count = await prisma.accessPermissionGrant.count({
+         *   where: {
+         *     // ... the filter for the AccessPermissionGrants we want to count
+         *   }
+         * })
+         */
+        count<T extends AccessPermissionGrantCountArgs>(args?: Subset<T, AccessPermissionGrantCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], AccessPermissionGrantCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a AccessPermissionGrant.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AccessPermissionGrantAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends AccessPermissionGrantAggregateArgs>(args: Subset<T, AccessPermissionGrantAggregateArgs>): Prisma.PrismaPromise<GetAccessPermissionGrantAggregateType<T>>;
+        /**
+         * Group by AccessPermissionGrant.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AccessPermissionGrantGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends AccessPermissionGrantGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AccessPermissionGrantGroupByArgs['orderBy'] }
+        : { orderBy?: AccessPermissionGrantGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, AccessPermissionGrantGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAccessPermissionGrantGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for AccessPermissionGrant.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__AccessPermissionGrantClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        roleGrant<T extends AccessRoleGrantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AccessRoleGrantDefaultArgs<ExtArgs>>): Prisma__AccessRoleGrantClient<$Result.GetResult<Prisma.$AccessRoleGrantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the AccessPermissionGrant model
+     */
+    interface AccessPermissionGrantFieldRefs {
+        readonly id: FieldRef<"AccessPermissionGrant", 'String'>;
+        readonly active: FieldRef<"AccessPermissionGrant", 'Boolean'>;
+        readonly description: FieldRef<"AccessPermissionGrant", 'String'>;
+        readonly deletedAt: FieldRef<"AccessPermissionGrant", 'DateTime'>;
+        readonly createdAt: FieldRef<"AccessPermissionGrant", 'DateTime'>;
+        readonly updatedAt: FieldRef<"AccessPermissionGrant", 'DateTime'>;
+        readonly createdBy: FieldRef<"AccessPermissionGrant", 'String'>;
+        readonly roleGrantId: FieldRef<"AccessPermissionGrant", 'String'>;
+        readonly sFormName: FieldRef<"AccessPermissionGrant", 'String'>;
+        readonly sTen: FieldRef<"AccessPermissionGrant", 'String'>;
+        readonly lPermission: FieldRef<"AccessPermissionGrant", 'Int'>;
+    }
+
     export interface BlockedIpDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
         [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BlockedIp'], meta: { name: 'BlockedIp' } };
         /**
@@ -125222,7 +126086,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedCertificateSubjectScore" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "classRegisterAttempt" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "dataSyncHistory" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "officerBonusScore" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "personalWorkTag" | "individualSchedule" | "lecturer" | "lecturerHistory" | "guestTeachingRateConfig" | "guestTeachingRate" | "guestTeachingPayment" | "lecturerType" | "staffType" | "staffPosition" | "staff" | "staffHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expert" | "expertProfileVersion" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "configPaymentSession" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedCertificateSubjectScore" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "classRegisterAttempt" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "dataSyncHistory" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "officerBonusScore" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "personalWorkTag" | "individualSchedule" | "lecturer" | "lecturerHistory" | "guestTeachingRateConfig" | "guestTeachingRate" | "guestTeachingPayment" | "lecturerType" | "staffType" | "staffPosition" | "staff" | "staffHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expert" | "expertProfileVersion" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "configPaymentSession" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "accessRoleGrant" | "accessPermissionGrant" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -146168,6 +147032,154 @@ export namespace Prisma {
                     }
                 }
             }
+            AccessRoleGrant: {
+                payload: Prisma.$AccessRoleGrantPayload<ExtArgs>
+                fields: Prisma.AccessRoleGrantFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.AccessRoleGrantFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessRoleGrantPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.AccessRoleGrantFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessRoleGrantPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.AccessRoleGrantFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessRoleGrantPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.AccessRoleGrantFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessRoleGrantPayload>
+                    }
+                    findMany: {
+                        args: Prisma.AccessRoleGrantFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessRoleGrantPayload>[]
+                    }
+                    create: {
+                        args: Prisma.AccessRoleGrantCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessRoleGrantPayload>
+                    }
+                    createMany: {
+                        args: Prisma.AccessRoleGrantCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.AccessRoleGrantCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessRoleGrantPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.AccessRoleGrantDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessRoleGrantPayload>
+                    }
+                    update: {
+                        args: Prisma.AccessRoleGrantUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessRoleGrantPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.AccessRoleGrantDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.AccessRoleGrantUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.AccessRoleGrantUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessRoleGrantPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.AccessRoleGrantUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessRoleGrantPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.AccessRoleGrantAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateAccessRoleGrant>
+                    }
+                    groupBy: {
+                        args: Prisma.AccessRoleGrantGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<AccessRoleGrantGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.AccessRoleGrantCountArgs<ExtArgs>
+                        result: $Utils.Optional<AccessRoleGrantCountAggregateOutputType> | number
+                    }
+                }
+            }
+            AccessPermissionGrant: {
+                payload: Prisma.$AccessPermissionGrantPayload<ExtArgs>
+                fields: Prisma.AccessPermissionGrantFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.AccessPermissionGrantFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessPermissionGrantPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.AccessPermissionGrantFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessPermissionGrantPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.AccessPermissionGrantFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessPermissionGrantPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.AccessPermissionGrantFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessPermissionGrantPayload>
+                    }
+                    findMany: {
+                        args: Prisma.AccessPermissionGrantFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessPermissionGrantPayload>[]
+                    }
+                    create: {
+                        args: Prisma.AccessPermissionGrantCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessPermissionGrantPayload>
+                    }
+                    createMany: {
+                        args: Prisma.AccessPermissionGrantCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.AccessPermissionGrantCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessPermissionGrantPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.AccessPermissionGrantDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessPermissionGrantPayload>
+                    }
+                    update: {
+                        args: Prisma.AccessPermissionGrantUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessPermissionGrantPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.AccessPermissionGrantDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.AccessPermissionGrantUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.AccessPermissionGrantUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessPermissionGrantPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.AccessPermissionGrantUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AccessPermissionGrantPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.AccessPermissionGrantAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateAccessPermissionGrant>
+                    }
+                    groupBy: {
+                        args: Prisma.AccessPermissionGrantGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<AccessPermissionGrantGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.AccessPermissionGrantCountArgs<ExtArgs>
+                        result: $Utils.Optional<AccessPermissionGrantCountAggregateOutputType> | number
+                    }
+                }
+            }
             BlockedIp: {
                 payload: Prisma.$BlockedIpPayload<ExtArgs>
                 fields: Prisma.BlockedIpFieldRefs
@@ -146556,6 +147568,8 @@ export namespace Prisma {
         dM_Ngach?: DM_NgachOmit
         dM_BacLuong?: DM_BacLuongOmit
         templateFile?: TemplateFileOmit
+        accessRoleGrant?: AccessRoleGrantOmit
+        accessPermissionGrant?: AccessPermissionGrantOmit
         blockedIp?: BlockedIpOmit
     };
     export type LogLevel = 'info' | 'query' | 'warn' | 'error';
@@ -153730,6 +154744,30 @@ export namespace Prisma {
      */
     export type DM_BacLuongCountOutputTypeCountQuaTrinhLuongArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: QuaTrinhLuongWhereInput
+    };
+    /**
+     * Count Type AccessRoleGrantCountOutputType
+     */
+    export type AccessRoleGrantCountOutputType = {
+        permissions: number
+    };
+    export type AccessRoleGrantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        permissions?: boolean | AccessRoleGrantCountOutputTypeCountPermissionsArgs
+    };
+    /**
+     * AccessRoleGrantCountOutputType without action
+     */
+    export type AccessRoleGrantCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessRoleGrantCountOutputType
+         */
+        select?: AccessRoleGrantCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * AccessRoleGrantCountOutputType without action
+     */
+    export type AccessRoleGrantCountOutputTypeCountPermissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: AccessPermissionGrantWhereInput
     };
     /**
      * Models
@@ -378692,6 +379730,1389 @@ export namespace Prisma {
         omit?: TemplateFileOmit<ExtArgs> | null
     };
     /**
+     * Model AccessRoleGrant
+     */
+    export type AggregateAccessRoleGrant = {
+        _count: AccessRoleGrantCountAggregateOutputType | null
+        _min: AccessRoleGrantMinAggregateOutputType | null
+        _max: AccessRoleGrantMaxAggregateOutputType | null
+    };
+    export type AccessRoleGrantMinAggregateOutputType = {
+        id: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        granterId: string | null
+        recipientId: string | null
+        sRoleId: string | null
+        sRoleName: string | null
+        sCodeName: string | null
+    };
+    export type AccessRoleGrantMaxAggregateOutputType = {
+        id: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        granterId: string | null
+        recipientId: string | null
+        sRoleId: string | null
+        sRoleName: string | null
+        sCodeName: string | null
+    };
+    export type AccessRoleGrantCountAggregateOutputType = {
+        id: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        granterId: number
+        recipientId: number
+        sRoleId: number
+        sRoleName: number
+        sCodeName: number
+        _all: number
+    };
+    export type AccessRoleGrantMinAggregateInputType = {
+        id?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        granterId?: true
+        recipientId?: true
+        sRoleId?: true
+        sRoleName?: true
+        sCodeName?: true
+    };
+    export type AccessRoleGrantMaxAggregateInputType = {
+        id?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        granterId?: true
+        recipientId?: true
+        sRoleId?: true
+        sRoleName?: true
+        sCodeName?: true
+    };
+    export type AccessRoleGrantCountAggregateInputType = {
+        id?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        granterId?: true
+        recipientId?: true
+        sRoleId?: true
+        sRoleName?: true
+        sCodeName?: true
+        _all?: true
+    };
+    export type AccessRoleGrantAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which AccessRoleGrant to aggregate.
+         */
+        where?: AccessRoleGrantWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of AccessRoleGrants to fetch.
+         */
+        orderBy?: AccessRoleGrantOrderByWithRelationInput | AccessRoleGrantOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: AccessRoleGrantWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` AccessRoleGrants from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` AccessRoleGrants.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned AccessRoleGrants
+        **/
+        _count?: true | AccessRoleGrantCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: AccessRoleGrantMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: AccessRoleGrantMaxAggregateInputType
+    };
+    export type GetAccessRoleGrantAggregateType<T extends AccessRoleGrantAggregateArgs> = {
+        [P in keyof T & keyof AggregateAccessRoleGrant]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAccessRoleGrant[P]>
+        : GetScalarType<T[P], AggregateAccessRoleGrant[P]>
+    };
+    export type AccessRoleGrantGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: AccessRoleGrantWhereInput
+        orderBy?: AccessRoleGrantOrderByWithAggregationInput | AccessRoleGrantOrderByWithAggregationInput[]
+        by: AccessRoleGrantScalarFieldEnum[] | AccessRoleGrantScalarFieldEnum
+        having?: AccessRoleGrantScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: AccessRoleGrantCountAggregateInputType | true
+        _min?: AccessRoleGrantMinAggregateInputType
+        _max?: AccessRoleGrantMaxAggregateInputType
+    };
+    export type AccessRoleGrantGroupByOutputType = {
+        id: string
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        granterId: string
+        recipientId: string
+        sRoleId: string
+        sRoleName: string | null
+        sCodeName: string | null
+        _count: AccessRoleGrantCountAggregateOutputType | null
+        _min: AccessRoleGrantMinAggregateOutputType | null
+        _max: AccessRoleGrantMaxAggregateOutputType | null
+    };
+    type GetAccessRoleGrantGroupByPayload<T extends AccessRoleGrantGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<AccessRoleGrantGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof AccessRoleGrantGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], AccessRoleGrantGroupByOutputType[P]>
+                : GetScalarType<T[P], AccessRoleGrantGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type AccessRoleGrantSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        granterId?: boolean
+        recipientId?: boolean
+        sRoleId?: boolean
+        sRoleName?: boolean
+        sCodeName?: boolean
+        permissions?: boolean | AccessRoleGrant$permissionsArgs<ExtArgs>
+        _count?: boolean | AccessRoleGrantCountOutputTypeDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["accessRoleGrant"]>;
+    export type AccessRoleGrantSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        granterId?: boolean
+        recipientId?: boolean
+        sRoleId?: boolean
+        sRoleName?: boolean
+        sCodeName?: boolean
+    }, ExtArgs["result"]["accessRoleGrant"]>;
+    export type AccessRoleGrantSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        granterId?: boolean
+        recipientId?: boolean
+        sRoleId?: boolean
+        sRoleName?: boolean
+        sCodeName?: boolean
+    }, ExtArgs["result"]["accessRoleGrant"]>;
+    export type AccessRoleGrantSelectScalar = {
+        id?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        granterId?: boolean
+        recipientId?: boolean
+        sRoleId?: boolean
+        sRoleName?: boolean
+        sCodeName?: boolean
+    };
+    export type AccessRoleGrantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "granterId" | "recipientId" | "sRoleId" | "sRoleName" | "sCodeName", ExtArgs["result"]["accessRoleGrant"]>;
+    export type AccessRoleGrantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        permissions?: boolean | AccessRoleGrant$permissionsArgs<ExtArgs>
+        _count?: boolean | AccessRoleGrantCountOutputTypeDefaultArgs<ExtArgs>
+    };
+    export type AccessRoleGrantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type AccessRoleGrantIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type $AccessRoleGrantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "AccessRoleGrant"
+        objects: {
+            permissions: Prisma.$AccessPermissionGrantPayload<ExtArgs>[]
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            granterId: string
+            recipientId: string
+            sRoleId: string
+            sRoleName: string | null
+            sCodeName: string | null
+        }, ExtArgs["result"]["accessRoleGrant"]>
+        composites: {}
+    };
+    type AccessRoleGrantGetPayload<S extends boolean | null | undefined | AccessRoleGrantDefaultArgs> = $Result.GetResult<Prisma.$AccessRoleGrantPayload, S>;
+    type AccessRoleGrantCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<AccessRoleGrantFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: AccessRoleGrantCountAggregateInputType | true
+    };
+    /**
+     * AccessRoleGrant findUnique
+     */
+    export type AccessRoleGrantFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessRoleGrant
+         */
+        select?: AccessRoleGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessRoleGrant
+         */
+        omit?: AccessRoleGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessRoleGrantInclude<ExtArgs> | null
+        /**
+         * Filter, which AccessRoleGrant to fetch.
+         */
+        where: AccessRoleGrantWhereUniqueInput
+    };
+    /**
+     * AccessRoleGrant findUniqueOrThrow
+     */
+    export type AccessRoleGrantFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessRoleGrant
+         */
+        select?: AccessRoleGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessRoleGrant
+         */
+        omit?: AccessRoleGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessRoleGrantInclude<ExtArgs> | null
+        /**
+         * Filter, which AccessRoleGrant to fetch.
+         */
+        where: AccessRoleGrantWhereUniqueInput
+    };
+    /**
+     * AccessRoleGrant findFirst
+     */
+    export type AccessRoleGrantFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessRoleGrant
+         */
+        select?: AccessRoleGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessRoleGrant
+         */
+        omit?: AccessRoleGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessRoleGrantInclude<ExtArgs> | null
+        /**
+         * Filter, which AccessRoleGrant to fetch.
+         */
+        where?: AccessRoleGrantWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of AccessRoleGrants to fetch.
+         */
+        orderBy?: AccessRoleGrantOrderByWithRelationInput | AccessRoleGrantOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for AccessRoleGrants.
+         */
+        cursor?: AccessRoleGrantWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` AccessRoleGrants from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` AccessRoleGrants.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of AccessRoleGrants.
+         */
+        distinct?: AccessRoleGrantScalarFieldEnum | AccessRoleGrantScalarFieldEnum[]
+    };
+    /**
+     * AccessRoleGrant findFirstOrThrow
+     */
+    export type AccessRoleGrantFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessRoleGrant
+         */
+        select?: AccessRoleGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessRoleGrant
+         */
+        omit?: AccessRoleGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessRoleGrantInclude<ExtArgs> | null
+        /**
+         * Filter, which AccessRoleGrant to fetch.
+         */
+        where?: AccessRoleGrantWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of AccessRoleGrants to fetch.
+         */
+        orderBy?: AccessRoleGrantOrderByWithRelationInput | AccessRoleGrantOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for AccessRoleGrants.
+         */
+        cursor?: AccessRoleGrantWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` AccessRoleGrants from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` AccessRoleGrants.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of AccessRoleGrants.
+         */
+        distinct?: AccessRoleGrantScalarFieldEnum | AccessRoleGrantScalarFieldEnum[]
+    };
+    /**
+     * AccessRoleGrant findMany
+     */
+    export type AccessRoleGrantFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessRoleGrant
+         */
+        select?: AccessRoleGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessRoleGrant
+         */
+        omit?: AccessRoleGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessRoleGrantInclude<ExtArgs> | null
+        /**
+         * Filter, which AccessRoleGrants to fetch.
+         */
+        where?: AccessRoleGrantWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of AccessRoleGrants to fetch.
+         */
+        orderBy?: AccessRoleGrantOrderByWithRelationInput | AccessRoleGrantOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing AccessRoleGrants.
+         */
+        cursor?: AccessRoleGrantWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` AccessRoleGrants from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` AccessRoleGrants.
+         */
+        skip?: number
+        distinct?: AccessRoleGrantScalarFieldEnum | AccessRoleGrantScalarFieldEnum[]
+    };
+    /**
+     * AccessRoleGrant create
+     */
+    export type AccessRoleGrantCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessRoleGrant
+         */
+        select?: AccessRoleGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessRoleGrant
+         */
+        omit?: AccessRoleGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessRoleGrantInclude<ExtArgs> | null
+        /**
+         * The data needed to create a AccessRoleGrant.
+         */
+        data: XOR<AccessRoleGrantCreateInput, AccessRoleGrantUncheckedCreateInput>
+    };
+    /**
+     * AccessRoleGrant createMany
+     */
+    export type AccessRoleGrantCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many AccessRoleGrants.
+         */
+        data: AccessRoleGrantCreateManyInput | AccessRoleGrantCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * AccessRoleGrant createManyAndReturn
+     */
+    export type AccessRoleGrantCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessRoleGrant
+         */
+        select?: AccessRoleGrantSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessRoleGrant
+         */
+        omit?: AccessRoleGrantOmit<ExtArgs> | null
+        /**
+         * The data used to create many AccessRoleGrants.
+         */
+        data: AccessRoleGrantCreateManyInput | AccessRoleGrantCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * AccessRoleGrant update
+     */
+    export type AccessRoleGrantUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessRoleGrant
+         */
+        select?: AccessRoleGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessRoleGrant
+         */
+        omit?: AccessRoleGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessRoleGrantInclude<ExtArgs> | null
+        /**
+         * The data needed to update a AccessRoleGrant.
+         */
+        data: XOR<AccessRoleGrantUpdateInput, AccessRoleGrantUncheckedUpdateInput>
+        /**
+         * Choose, which AccessRoleGrant to update.
+         */
+        where: AccessRoleGrantWhereUniqueInput
+    };
+    /**
+     * AccessRoleGrant updateMany
+     */
+    export type AccessRoleGrantUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update AccessRoleGrants.
+         */
+        data: XOR<AccessRoleGrantUpdateManyMutationInput, AccessRoleGrantUncheckedUpdateManyInput>
+        /**
+         * Filter which AccessRoleGrants to update
+         */
+        where?: AccessRoleGrantWhereInput
+        /**
+         * Limit how many AccessRoleGrants to update.
+         */
+        limit?: number
+    };
+    /**
+     * AccessRoleGrant updateManyAndReturn
+     */
+    export type AccessRoleGrantUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessRoleGrant
+         */
+        select?: AccessRoleGrantSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessRoleGrant
+         */
+        omit?: AccessRoleGrantOmit<ExtArgs> | null
+        /**
+         * The data used to update AccessRoleGrants.
+         */
+        data: XOR<AccessRoleGrantUpdateManyMutationInput, AccessRoleGrantUncheckedUpdateManyInput>
+        /**
+         * Filter which AccessRoleGrants to update
+         */
+        where?: AccessRoleGrantWhereInput
+        /**
+         * Limit how many AccessRoleGrants to update.
+         */
+        limit?: number
+    };
+    /**
+     * AccessRoleGrant upsert
+     */
+    export type AccessRoleGrantUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessRoleGrant
+         */
+        select?: AccessRoleGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessRoleGrant
+         */
+        omit?: AccessRoleGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessRoleGrantInclude<ExtArgs> | null
+        /**
+         * The filter to search for the AccessRoleGrant to update in case it exists.
+         */
+        where: AccessRoleGrantWhereUniqueInput
+        /**
+         * In case the AccessRoleGrant found by the `where` argument doesn't exist, create a new AccessRoleGrant with this data.
+         */
+        create: XOR<AccessRoleGrantCreateInput, AccessRoleGrantUncheckedCreateInput>
+        /**
+         * In case the AccessRoleGrant was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<AccessRoleGrantUpdateInput, AccessRoleGrantUncheckedUpdateInput>
+    };
+    /**
+     * AccessRoleGrant delete
+     */
+    export type AccessRoleGrantDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessRoleGrant
+         */
+        select?: AccessRoleGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessRoleGrant
+         */
+        omit?: AccessRoleGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessRoleGrantInclude<ExtArgs> | null
+        /**
+         * Filter which AccessRoleGrant to delete.
+         */
+        where: AccessRoleGrantWhereUniqueInput
+    };
+    /**
+     * AccessRoleGrant deleteMany
+     */
+    export type AccessRoleGrantDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which AccessRoleGrants to delete
+         */
+        where?: AccessRoleGrantWhereInput
+        /**
+         * Limit how many AccessRoleGrants to delete.
+         */
+        limit?: number
+    };
+    /**
+     * AccessRoleGrant.permissions
+     */
+    export type AccessRoleGrant$permissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessPermissionGrant
+         */
+        select?: AccessPermissionGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessPermissionGrant
+         */
+        omit?: AccessPermissionGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessPermissionGrantInclude<ExtArgs> | null
+        where?: AccessPermissionGrantWhereInput
+        orderBy?: AccessPermissionGrantOrderByWithRelationInput | AccessPermissionGrantOrderByWithRelationInput[]
+        cursor?: AccessPermissionGrantWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: AccessPermissionGrantScalarFieldEnum | AccessPermissionGrantScalarFieldEnum[]
+    };
+    /**
+     * AccessRoleGrant without action
+     */
+    export type AccessRoleGrantDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessRoleGrant
+         */
+        select?: AccessRoleGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessRoleGrant
+         */
+        omit?: AccessRoleGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessRoleGrantInclude<ExtArgs> | null
+    };
+    /**
+     * Model AccessPermissionGrant
+     */
+    export type AggregateAccessPermissionGrant = {
+        _count: AccessPermissionGrantCountAggregateOutputType | null
+        _avg: AccessPermissionGrantAvgAggregateOutputType | null
+        _sum: AccessPermissionGrantSumAggregateOutputType | null
+        _min: AccessPermissionGrantMinAggregateOutputType | null
+        _max: AccessPermissionGrantMaxAggregateOutputType | null
+    };
+    export type AccessPermissionGrantAvgAggregateOutputType = {
+        lPermission: number | null
+    };
+    export type AccessPermissionGrantSumAggregateOutputType = {
+        lPermission: number | null
+    };
+    export type AccessPermissionGrantMinAggregateOutputType = {
+        id: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        roleGrantId: string | null
+        sFormName: string | null
+        sTen: string | null
+        lPermission: number | null
+    };
+    export type AccessPermissionGrantMaxAggregateOutputType = {
+        id: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        roleGrantId: string | null
+        sFormName: string | null
+        sTen: string | null
+        lPermission: number | null
+    };
+    export type AccessPermissionGrantCountAggregateOutputType = {
+        id: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        roleGrantId: number
+        sFormName: number
+        sTen: number
+        lPermission: number
+        _all: number
+    };
+    export type AccessPermissionGrantAvgAggregateInputType = {
+        lPermission?: true
+    };
+    export type AccessPermissionGrantSumAggregateInputType = {
+        lPermission?: true
+    };
+    export type AccessPermissionGrantMinAggregateInputType = {
+        id?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        roleGrantId?: true
+        sFormName?: true
+        sTen?: true
+        lPermission?: true
+    };
+    export type AccessPermissionGrantMaxAggregateInputType = {
+        id?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        roleGrantId?: true
+        sFormName?: true
+        sTen?: true
+        lPermission?: true
+    };
+    export type AccessPermissionGrantCountAggregateInputType = {
+        id?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        roleGrantId?: true
+        sFormName?: true
+        sTen?: true
+        lPermission?: true
+        _all?: true
+    };
+    export type AccessPermissionGrantAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which AccessPermissionGrant to aggregate.
+         */
+        where?: AccessPermissionGrantWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of AccessPermissionGrants to fetch.
+         */
+        orderBy?: AccessPermissionGrantOrderByWithRelationInput | AccessPermissionGrantOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: AccessPermissionGrantWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` AccessPermissionGrants from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` AccessPermissionGrants.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned AccessPermissionGrants
+        **/
+        _count?: true | AccessPermissionGrantCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: AccessPermissionGrantAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: AccessPermissionGrantSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: AccessPermissionGrantMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: AccessPermissionGrantMaxAggregateInputType
+    };
+    export type GetAccessPermissionGrantAggregateType<T extends AccessPermissionGrantAggregateArgs> = {
+        [P in keyof T & keyof AggregateAccessPermissionGrant]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAccessPermissionGrant[P]>
+        : GetScalarType<T[P], AggregateAccessPermissionGrant[P]>
+    };
+    export type AccessPermissionGrantGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: AccessPermissionGrantWhereInput
+        orderBy?: AccessPermissionGrantOrderByWithAggregationInput | AccessPermissionGrantOrderByWithAggregationInput[]
+        by: AccessPermissionGrantScalarFieldEnum[] | AccessPermissionGrantScalarFieldEnum
+        having?: AccessPermissionGrantScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: AccessPermissionGrantCountAggregateInputType | true
+        _avg?: AccessPermissionGrantAvgAggregateInputType
+        _sum?: AccessPermissionGrantSumAggregateInputType
+        _min?: AccessPermissionGrantMinAggregateInputType
+        _max?: AccessPermissionGrantMaxAggregateInputType
+    };
+    export type AccessPermissionGrantGroupByOutputType = {
+        id: string
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        roleGrantId: string
+        sFormName: string
+        sTen: string | null
+        lPermission: number
+        _count: AccessPermissionGrantCountAggregateOutputType | null
+        _avg: AccessPermissionGrantAvgAggregateOutputType | null
+        _sum: AccessPermissionGrantSumAggregateOutputType | null
+        _min: AccessPermissionGrantMinAggregateOutputType | null
+        _max: AccessPermissionGrantMaxAggregateOutputType | null
+    };
+    type GetAccessPermissionGrantGroupByPayload<T extends AccessPermissionGrantGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<AccessPermissionGrantGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof AccessPermissionGrantGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], AccessPermissionGrantGroupByOutputType[P]>
+                : GetScalarType<T[P], AccessPermissionGrantGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type AccessPermissionGrantSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        roleGrantId?: boolean
+        sFormName?: boolean
+        sTen?: boolean
+        lPermission?: boolean
+        roleGrant?: boolean | AccessRoleGrantDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["accessPermissionGrant"]>;
+    export type AccessPermissionGrantSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        roleGrantId?: boolean
+        sFormName?: boolean
+        sTen?: boolean
+        lPermission?: boolean
+        roleGrant?: boolean | AccessRoleGrantDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["accessPermissionGrant"]>;
+    export type AccessPermissionGrantSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        roleGrantId?: boolean
+        sFormName?: boolean
+        sTen?: boolean
+        lPermission?: boolean
+        roleGrant?: boolean | AccessRoleGrantDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["accessPermissionGrant"]>;
+    export type AccessPermissionGrantSelectScalar = {
+        id?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        roleGrantId?: boolean
+        sFormName?: boolean
+        sTen?: boolean
+        lPermission?: boolean
+    };
+    export type AccessPermissionGrantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "roleGrantId" | "sFormName" | "sTen" | "lPermission", ExtArgs["result"]["accessPermissionGrant"]>;
+    export type AccessPermissionGrantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        roleGrant?: boolean | AccessRoleGrantDefaultArgs<ExtArgs>
+    };
+    export type AccessPermissionGrantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        roleGrant?: boolean | AccessRoleGrantDefaultArgs<ExtArgs>
+    };
+    export type AccessPermissionGrantIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        roleGrant?: boolean | AccessRoleGrantDefaultArgs<ExtArgs>
+    };
+    export type $AccessPermissionGrantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "AccessPermissionGrant"
+        objects: {
+            roleGrant: Prisma.$AccessRoleGrantPayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            roleGrantId: string
+            sFormName: string
+            sTen: string | null
+            lPermission: number
+        }, ExtArgs["result"]["accessPermissionGrant"]>
+        composites: {}
+    };
+    type AccessPermissionGrantGetPayload<S extends boolean | null | undefined | AccessPermissionGrantDefaultArgs> = $Result.GetResult<Prisma.$AccessPermissionGrantPayload, S>;
+    type AccessPermissionGrantCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<AccessPermissionGrantFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: AccessPermissionGrantCountAggregateInputType | true
+    };
+    /**
+     * AccessPermissionGrant findUnique
+     */
+    export type AccessPermissionGrantFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessPermissionGrant
+         */
+        select?: AccessPermissionGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessPermissionGrant
+         */
+        omit?: AccessPermissionGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessPermissionGrantInclude<ExtArgs> | null
+        /**
+         * Filter, which AccessPermissionGrant to fetch.
+         */
+        where: AccessPermissionGrantWhereUniqueInput
+    };
+    /**
+     * AccessPermissionGrant findUniqueOrThrow
+     */
+    export type AccessPermissionGrantFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessPermissionGrant
+         */
+        select?: AccessPermissionGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessPermissionGrant
+         */
+        omit?: AccessPermissionGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessPermissionGrantInclude<ExtArgs> | null
+        /**
+         * Filter, which AccessPermissionGrant to fetch.
+         */
+        where: AccessPermissionGrantWhereUniqueInput
+    };
+    /**
+     * AccessPermissionGrant findFirst
+     */
+    export type AccessPermissionGrantFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessPermissionGrant
+         */
+        select?: AccessPermissionGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessPermissionGrant
+         */
+        omit?: AccessPermissionGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessPermissionGrantInclude<ExtArgs> | null
+        /**
+         * Filter, which AccessPermissionGrant to fetch.
+         */
+        where?: AccessPermissionGrantWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of AccessPermissionGrants to fetch.
+         */
+        orderBy?: AccessPermissionGrantOrderByWithRelationInput | AccessPermissionGrantOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for AccessPermissionGrants.
+         */
+        cursor?: AccessPermissionGrantWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` AccessPermissionGrants from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` AccessPermissionGrants.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of AccessPermissionGrants.
+         */
+        distinct?: AccessPermissionGrantScalarFieldEnum | AccessPermissionGrantScalarFieldEnum[]
+    };
+    /**
+     * AccessPermissionGrant findFirstOrThrow
+     */
+    export type AccessPermissionGrantFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessPermissionGrant
+         */
+        select?: AccessPermissionGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessPermissionGrant
+         */
+        omit?: AccessPermissionGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessPermissionGrantInclude<ExtArgs> | null
+        /**
+         * Filter, which AccessPermissionGrant to fetch.
+         */
+        where?: AccessPermissionGrantWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of AccessPermissionGrants to fetch.
+         */
+        orderBy?: AccessPermissionGrantOrderByWithRelationInput | AccessPermissionGrantOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for AccessPermissionGrants.
+         */
+        cursor?: AccessPermissionGrantWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` AccessPermissionGrants from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` AccessPermissionGrants.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of AccessPermissionGrants.
+         */
+        distinct?: AccessPermissionGrantScalarFieldEnum | AccessPermissionGrantScalarFieldEnum[]
+    };
+    /**
+     * AccessPermissionGrant findMany
+     */
+    export type AccessPermissionGrantFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessPermissionGrant
+         */
+        select?: AccessPermissionGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessPermissionGrant
+         */
+        omit?: AccessPermissionGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessPermissionGrantInclude<ExtArgs> | null
+        /**
+         * Filter, which AccessPermissionGrants to fetch.
+         */
+        where?: AccessPermissionGrantWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of AccessPermissionGrants to fetch.
+         */
+        orderBy?: AccessPermissionGrantOrderByWithRelationInput | AccessPermissionGrantOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing AccessPermissionGrants.
+         */
+        cursor?: AccessPermissionGrantWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` AccessPermissionGrants from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` AccessPermissionGrants.
+         */
+        skip?: number
+        distinct?: AccessPermissionGrantScalarFieldEnum | AccessPermissionGrantScalarFieldEnum[]
+    };
+    /**
+     * AccessPermissionGrant create
+     */
+    export type AccessPermissionGrantCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessPermissionGrant
+         */
+        select?: AccessPermissionGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessPermissionGrant
+         */
+        omit?: AccessPermissionGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessPermissionGrantInclude<ExtArgs> | null
+        /**
+         * The data needed to create a AccessPermissionGrant.
+         */
+        data: XOR<AccessPermissionGrantCreateInput, AccessPermissionGrantUncheckedCreateInput>
+    };
+    /**
+     * AccessPermissionGrant createMany
+     */
+    export type AccessPermissionGrantCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many AccessPermissionGrants.
+         */
+        data: AccessPermissionGrantCreateManyInput | AccessPermissionGrantCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * AccessPermissionGrant createManyAndReturn
+     */
+    export type AccessPermissionGrantCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessPermissionGrant
+         */
+        select?: AccessPermissionGrantSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessPermissionGrant
+         */
+        omit?: AccessPermissionGrantOmit<ExtArgs> | null
+        /**
+         * The data used to create many AccessPermissionGrants.
+         */
+        data: AccessPermissionGrantCreateManyInput | AccessPermissionGrantCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessPermissionGrantIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * AccessPermissionGrant update
+     */
+    export type AccessPermissionGrantUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessPermissionGrant
+         */
+        select?: AccessPermissionGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessPermissionGrant
+         */
+        omit?: AccessPermissionGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessPermissionGrantInclude<ExtArgs> | null
+        /**
+         * The data needed to update a AccessPermissionGrant.
+         */
+        data: XOR<AccessPermissionGrantUpdateInput, AccessPermissionGrantUncheckedUpdateInput>
+        /**
+         * Choose, which AccessPermissionGrant to update.
+         */
+        where: AccessPermissionGrantWhereUniqueInput
+    };
+    /**
+     * AccessPermissionGrant updateMany
+     */
+    export type AccessPermissionGrantUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update AccessPermissionGrants.
+         */
+        data: XOR<AccessPermissionGrantUpdateManyMutationInput, AccessPermissionGrantUncheckedUpdateManyInput>
+        /**
+         * Filter which AccessPermissionGrants to update
+         */
+        where?: AccessPermissionGrantWhereInput
+        /**
+         * Limit how many AccessPermissionGrants to update.
+         */
+        limit?: number
+    };
+    /**
+     * AccessPermissionGrant updateManyAndReturn
+     */
+    export type AccessPermissionGrantUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessPermissionGrant
+         */
+        select?: AccessPermissionGrantSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessPermissionGrant
+         */
+        omit?: AccessPermissionGrantOmit<ExtArgs> | null
+        /**
+         * The data used to update AccessPermissionGrants.
+         */
+        data: XOR<AccessPermissionGrantUpdateManyMutationInput, AccessPermissionGrantUncheckedUpdateManyInput>
+        /**
+         * Filter which AccessPermissionGrants to update
+         */
+        where?: AccessPermissionGrantWhereInput
+        /**
+         * Limit how many AccessPermissionGrants to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessPermissionGrantIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * AccessPermissionGrant upsert
+     */
+    export type AccessPermissionGrantUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessPermissionGrant
+         */
+        select?: AccessPermissionGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessPermissionGrant
+         */
+        omit?: AccessPermissionGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessPermissionGrantInclude<ExtArgs> | null
+        /**
+         * The filter to search for the AccessPermissionGrant to update in case it exists.
+         */
+        where: AccessPermissionGrantWhereUniqueInput
+        /**
+         * In case the AccessPermissionGrant found by the `where` argument doesn't exist, create a new AccessPermissionGrant with this data.
+         */
+        create: XOR<AccessPermissionGrantCreateInput, AccessPermissionGrantUncheckedCreateInput>
+        /**
+         * In case the AccessPermissionGrant was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<AccessPermissionGrantUpdateInput, AccessPermissionGrantUncheckedUpdateInput>
+    };
+    /**
+     * AccessPermissionGrant delete
+     */
+    export type AccessPermissionGrantDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessPermissionGrant
+         */
+        select?: AccessPermissionGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessPermissionGrant
+         */
+        omit?: AccessPermissionGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessPermissionGrantInclude<ExtArgs> | null
+        /**
+         * Filter which AccessPermissionGrant to delete.
+         */
+        where: AccessPermissionGrantWhereUniqueInput
+    };
+    /**
+     * AccessPermissionGrant deleteMany
+     */
+    export type AccessPermissionGrantDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which AccessPermissionGrants to delete
+         */
+        where?: AccessPermissionGrantWhereInput
+        /**
+         * Limit how many AccessPermissionGrants to delete.
+         */
+        limit?: number
+    };
+    /**
+     * AccessPermissionGrant without action
+     */
+    export type AccessPermissionGrantDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AccessPermissionGrant
+         */
+        select?: AccessPermissionGrantSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the AccessPermissionGrant
+         */
+        omit?: AccessPermissionGrantOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AccessPermissionGrantInclude<ExtArgs> | null
+    };
+    /**
      * Model BlockedIp
      */
     export type AggregateBlockedIp = {
@@ -379581,6 +382002,8 @@ export namespace Prisma {
     export type DM_NgachScalarFieldEnum = (typeof DM_NgachScalarFieldEnum)[keyof typeof DM_NgachScalarFieldEnum];
     export type DM_BacLuongScalarFieldEnum = (typeof DM_BacLuongScalarFieldEnum)[keyof typeof DM_BacLuongScalarFieldEnum];
     export type TemplateFileScalarFieldEnum = (typeof TemplateFileScalarFieldEnum)[keyof typeof TemplateFileScalarFieldEnum];
+    export type AccessRoleGrantScalarFieldEnum = (typeof AccessRoleGrantScalarFieldEnum)[keyof typeof AccessRoleGrantScalarFieldEnum];
+    export type AccessPermissionGrantScalarFieldEnum = (typeof AccessPermissionGrantScalarFieldEnum)[keyof typeof AccessPermissionGrantScalarFieldEnum];
     export type BlockedIpScalarFieldEnum = (typeof BlockedIpScalarFieldEnum)[keyof typeof BlockedIpScalarFieldEnum];
     export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
     export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput];
@@ -379870,6 +382293,8 @@ export namespace Prisma {
     export type DM_NgachOrderByRelevanceFieldEnum = (typeof DM_NgachOrderByRelevanceFieldEnum)[keyof typeof DM_NgachOrderByRelevanceFieldEnum];
     export type DM_BacLuongOrderByRelevanceFieldEnum = (typeof DM_BacLuongOrderByRelevanceFieldEnum)[keyof typeof DM_BacLuongOrderByRelevanceFieldEnum];
     export type TemplateFileOrderByRelevanceFieldEnum = (typeof TemplateFileOrderByRelevanceFieldEnum)[keyof typeof TemplateFileOrderByRelevanceFieldEnum];
+    export type AccessRoleGrantOrderByRelevanceFieldEnum = (typeof AccessRoleGrantOrderByRelevanceFieldEnum)[keyof typeof AccessRoleGrantOrderByRelevanceFieldEnum];
+    export type AccessPermissionGrantOrderByRelevanceFieldEnum = (typeof AccessPermissionGrantOrderByRelevanceFieldEnum)[keyof typeof AccessPermissionGrantOrderByRelevanceFieldEnum];
     export type BlockedIpOrderByRelevanceFieldEnum = (typeof BlockedIpOrderByRelevanceFieldEnum)[keyof typeof BlockedIpOrderByRelevanceFieldEnum];
     /**
      * Field references
@@ -411174,6 +413599,177 @@ export namespace Prisma {
         fileType?: EnumTemplateFileTypeNullableWithAggregatesFilter<"TemplateFile"> | $Enums.TemplateFileType | null
         extensions?: StringNullableWithAggregatesFilter<"TemplateFile"> | string | null
         numberField?: IntNullableWithAggregatesFilter<"TemplateFile"> | number | null
+    };
+    export type AccessRoleGrantWhereInput = {
+        AND?: AccessRoleGrantWhereInput | AccessRoleGrantWhereInput[]
+        OR?: AccessRoleGrantWhereInput[]
+        NOT?: AccessRoleGrantWhereInput | AccessRoleGrantWhereInput[]
+        id?: StringFilter<"AccessRoleGrant"> | string
+        active?: BoolFilter<"AccessRoleGrant"> | boolean
+        description?: StringNullableFilter<"AccessRoleGrant"> | string | null
+        deletedAt?: DateTimeNullableFilter<"AccessRoleGrant"> | Date | string | null
+        createdAt?: DateTimeFilter<"AccessRoleGrant"> | Date | string
+        updatedAt?: DateTimeFilter<"AccessRoleGrant"> | Date | string
+        createdBy?: UuidNullableFilter<"AccessRoleGrant"> | string | null
+        granterId?: UuidFilter<"AccessRoleGrant"> | string
+        recipientId?: UuidFilter<"AccessRoleGrant"> | string
+        sRoleId?: StringFilter<"AccessRoleGrant"> | string
+        sRoleName?: StringNullableFilter<"AccessRoleGrant"> | string | null
+        sCodeName?: StringNullableFilter<"AccessRoleGrant"> | string | null
+        permissions?: AccessPermissionGrantListRelationFilter
+    };
+    export type AccessRoleGrantOrderByWithRelationInput = {
+        id?: SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        granterId?: SortOrder
+        recipientId?: SortOrder
+        sRoleId?: SortOrder
+        sRoleName?: SortOrderInput | SortOrder
+        sCodeName?: SortOrderInput | SortOrder
+        permissions?: AccessPermissionGrantOrderByRelationAggregateInput
+        _relevance?: AccessRoleGrantOrderByRelevanceInput
+    };
+    export type AccessRoleGrantWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        recipientId_sRoleId?: AccessRoleGrantRecipientIdSRoleIdCompoundUniqueInput
+        AND?: AccessRoleGrantWhereInput | AccessRoleGrantWhereInput[]
+        OR?: AccessRoleGrantWhereInput[]
+        NOT?: AccessRoleGrantWhereInput | AccessRoleGrantWhereInput[]
+        active?: BoolFilter<"AccessRoleGrant"> | boolean
+        description?: StringNullableFilter<"AccessRoleGrant"> | string | null
+        deletedAt?: DateTimeNullableFilter<"AccessRoleGrant"> | Date | string | null
+        createdAt?: DateTimeFilter<"AccessRoleGrant"> | Date | string
+        updatedAt?: DateTimeFilter<"AccessRoleGrant"> | Date | string
+        createdBy?: UuidNullableFilter<"AccessRoleGrant"> | string | null
+        granterId?: UuidFilter<"AccessRoleGrant"> | string
+        recipientId?: UuidFilter<"AccessRoleGrant"> | string
+        sRoleId?: StringFilter<"AccessRoleGrant"> | string
+        sRoleName?: StringNullableFilter<"AccessRoleGrant"> | string | null
+        sCodeName?: StringNullableFilter<"AccessRoleGrant"> | string | null
+        permissions?: AccessPermissionGrantListRelationFilter
+    }, "id" | "recipientId_sRoleId">;
+    export type AccessRoleGrantOrderByWithAggregationInput = {
+        id?: SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        granterId?: SortOrder
+        recipientId?: SortOrder
+        sRoleId?: SortOrder
+        sRoleName?: SortOrderInput | SortOrder
+        sCodeName?: SortOrderInput | SortOrder
+        _count?: AccessRoleGrantCountOrderByAggregateInput
+        _max?: AccessRoleGrantMaxOrderByAggregateInput
+        _min?: AccessRoleGrantMinOrderByAggregateInput
+    };
+    export type AccessRoleGrantScalarWhereWithAggregatesInput = {
+        AND?: AccessRoleGrantScalarWhereWithAggregatesInput | AccessRoleGrantScalarWhereWithAggregatesInput[]
+        OR?: AccessRoleGrantScalarWhereWithAggregatesInput[]
+        NOT?: AccessRoleGrantScalarWhereWithAggregatesInput | AccessRoleGrantScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"AccessRoleGrant"> | string
+        active?: BoolWithAggregatesFilter<"AccessRoleGrant"> | boolean
+        description?: StringNullableWithAggregatesFilter<"AccessRoleGrant"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"AccessRoleGrant"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"AccessRoleGrant"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"AccessRoleGrant"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"AccessRoleGrant"> | string | null
+        granterId?: UuidWithAggregatesFilter<"AccessRoleGrant"> | string
+        recipientId?: UuidWithAggregatesFilter<"AccessRoleGrant"> | string
+        sRoleId?: StringWithAggregatesFilter<"AccessRoleGrant"> | string
+        sRoleName?: StringNullableWithAggregatesFilter<"AccessRoleGrant"> | string | null
+        sCodeName?: StringNullableWithAggregatesFilter<"AccessRoleGrant"> | string | null
+    };
+    export type AccessPermissionGrantWhereInput = {
+        AND?: AccessPermissionGrantWhereInput | AccessPermissionGrantWhereInput[]
+        OR?: AccessPermissionGrantWhereInput[]
+        NOT?: AccessPermissionGrantWhereInput | AccessPermissionGrantWhereInput[]
+        id?: StringFilter<"AccessPermissionGrant"> | string
+        active?: BoolFilter<"AccessPermissionGrant"> | boolean
+        description?: StringNullableFilter<"AccessPermissionGrant"> | string | null
+        deletedAt?: DateTimeNullableFilter<"AccessPermissionGrant"> | Date | string | null
+        createdAt?: DateTimeFilter<"AccessPermissionGrant"> | Date | string
+        updatedAt?: DateTimeFilter<"AccessPermissionGrant"> | Date | string
+        createdBy?: UuidNullableFilter<"AccessPermissionGrant"> | string | null
+        roleGrantId?: StringFilter<"AccessPermissionGrant"> | string
+        sFormName?: StringFilter<"AccessPermissionGrant"> | string
+        sTen?: StringNullableFilter<"AccessPermissionGrant"> | string | null
+        lPermission?: IntFilter<"AccessPermissionGrant"> | number
+        roleGrant?: XOR<AccessRoleGrantScalarRelationFilter, AccessRoleGrantWhereInput>
+    };
+    export type AccessPermissionGrantOrderByWithRelationInput = {
+        id?: SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        roleGrantId?: SortOrder
+        sFormName?: SortOrder
+        sTen?: SortOrderInput | SortOrder
+        lPermission?: SortOrder
+        roleGrant?: AccessRoleGrantOrderByWithRelationInput
+        _relevance?: AccessPermissionGrantOrderByRelevanceInput
+    };
+    export type AccessPermissionGrantWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        roleGrantId_sFormName?: AccessPermissionGrantRoleGrantIdSFormNameCompoundUniqueInput
+        AND?: AccessPermissionGrantWhereInput | AccessPermissionGrantWhereInput[]
+        OR?: AccessPermissionGrantWhereInput[]
+        NOT?: AccessPermissionGrantWhereInput | AccessPermissionGrantWhereInput[]
+        active?: BoolFilter<"AccessPermissionGrant"> | boolean
+        description?: StringNullableFilter<"AccessPermissionGrant"> | string | null
+        deletedAt?: DateTimeNullableFilter<"AccessPermissionGrant"> | Date | string | null
+        createdAt?: DateTimeFilter<"AccessPermissionGrant"> | Date | string
+        updatedAt?: DateTimeFilter<"AccessPermissionGrant"> | Date | string
+        createdBy?: UuidNullableFilter<"AccessPermissionGrant"> | string | null
+        roleGrantId?: StringFilter<"AccessPermissionGrant"> | string
+        sFormName?: StringFilter<"AccessPermissionGrant"> | string
+        sTen?: StringNullableFilter<"AccessPermissionGrant"> | string | null
+        lPermission?: IntFilter<"AccessPermissionGrant"> | number
+        roleGrant?: XOR<AccessRoleGrantScalarRelationFilter, AccessRoleGrantWhereInput>
+    }, "id" | "roleGrantId_sFormName">;
+    export type AccessPermissionGrantOrderByWithAggregationInput = {
+        id?: SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        roleGrantId?: SortOrder
+        sFormName?: SortOrder
+        sTen?: SortOrderInput | SortOrder
+        lPermission?: SortOrder
+        _count?: AccessPermissionGrantCountOrderByAggregateInput
+        _avg?: AccessPermissionGrantAvgOrderByAggregateInput
+        _max?: AccessPermissionGrantMaxOrderByAggregateInput
+        _min?: AccessPermissionGrantMinOrderByAggregateInput
+        _sum?: AccessPermissionGrantSumOrderByAggregateInput
+    };
+    export type AccessPermissionGrantScalarWhereWithAggregatesInput = {
+        AND?: AccessPermissionGrantScalarWhereWithAggregatesInput | AccessPermissionGrantScalarWhereWithAggregatesInput[]
+        OR?: AccessPermissionGrantScalarWhereWithAggregatesInput[]
+        NOT?: AccessPermissionGrantScalarWhereWithAggregatesInput | AccessPermissionGrantScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"AccessPermissionGrant"> | string
+        active?: BoolWithAggregatesFilter<"AccessPermissionGrant"> | boolean
+        description?: StringNullableWithAggregatesFilter<"AccessPermissionGrant"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"AccessPermissionGrant"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"AccessPermissionGrant"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"AccessPermissionGrant"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"AccessPermissionGrant"> | string | null
+        roleGrantId?: StringWithAggregatesFilter<"AccessPermissionGrant"> | string
+        sFormName?: StringWithAggregatesFilter<"AccessPermissionGrant"> | string
+        sTen?: StringNullableWithAggregatesFilter<"AccessPermissionGrant"> | string | null
+        lPermission?: IntWithAggregatesFilter<"AccessPermissionGrant"> | number
     };
     export type BlockedIpWhereInput = {
         AND?: BlockedIpWhereInput | BlockedIpWhereInput[]
@@ -446035,6 +448631,198 @@ export namespace Prisma {
         extensions?: NullableStringFieldUpdateOperationsInput | string | null
         numberField?: NullableIntFieldUpdateOperationsInput | number | null
     };
+    export type AccessRoleGrantCreateInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        granterId: string
+        recipientId: string
+        sRoleId: string
+        sRoleName?: string | null
+        sCodeName?: string | null
+        permissions?: AccessPermissionGrantCreateNestedManyWithoutRoleGrantInput
+    };
+    export type AccessRoleGrantUncheckedCreateInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        granterId: string
+        recipientId: string
+        sRoleId: string
+        sRoleName?: string | null
+        sCodeName?: string | null
+        permissions?: AccessPermissionGrantUncheckedCreateNestedManyWithoutRoleGrantInput
+    };
+    export type AccessRoleGrantUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        granterId?: StringFieldUpdateOperationsInput | string
+        recipientId?: StringFieldUpdateOperationsInput | string
+        sRoleId?: StringFieldUpdateOperationsInput | string
+        sRoleName?: NullableStringFieldUpdateOperationsInput | string | null
+        sCodeName?: NullableStringFieldUpdateOperationsInput | string | null
+        permissions?: AccessPermissionGrantUpdateManyWithoutRoleGrantNestedInput
+    };
+    export type AccessRoleGrantUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        granterId?: StringFieldUpdateOperationsInput | string
+        recipientId?: StringFieldUpdateOperationsInput | string
+        sRoleId?: StringFieldUpdateOperationsInput | string
+        sRoleName?: NullableStringFieldUpdateOperationsInput | string | null
+        sCodeName?: NullableStringFieldUpdateOperationsInput | string | null
+        permissions?: AccessPermissionGrantUncheckedUpdateManyWithoutRoleGrantNestedInput
+    };
+    export type AccessRoleGrantCreateManyInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        granterId: string
+        recipientId: string
+        sRoleId: string
+        sRoleName?: string | null
+        sCodeName?: string | null
+    };
+    export type AccessRoleGrantUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        granterId?: StringFieldUpdateOperationsInput | string
+        recipientId?: StringFieldUpdateOperationsInput | string
+        sRoleId?: StringFieldUpdateOperationsInput | string
+        sRoleName?: NullableStringFieldUpdateOperationsInput | string | null
+        sCodeName?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type AccessRoleGrantUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        granterId?: StringFieldUpdateOperationsInput | string
+        recipientId?: StringFieldUpdateOperationsInput | string
+        sRoleId?: StringFieldUpdateOperationsInput | string
+        sRoleName?: NullableStringFieldUpdateOperationsInput | string | null
+        sCodeName?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type AccessPermissionGrantCreateInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sFormName: string
+        sTen?: string | null
+        lPermission: number
+        roleGrant: AccessRoleGrantCreateNestedOneWithoutPermissionsInput
+    };
+    export type AccessPermissionGrantUncheckedCreateInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        roleGrantId: string
+        sFormName: string
+        sTen?: string | null
+        lPermission: number
+    };
+    export type AccessPermissionGrantUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sFormName?: StringFieldUpdateOperationsInput | string
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        lPermission?: IntFieldUpdateOperationsInput | number
+        roleGrant?: AccessRoleGrantUpdateOneRequiredWithoutPermissionsNestedInput
+    };
+    export type AccessPermissionGrantUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        roleGrantId?: StringFieldUpdateOperationsInput | string
+        sFormName?: StringFieldUpdateOperationsInput | string
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        lPermission?: IntFieldUpdateOperationsInput | number
+    };
+    export type AccessPermissionGrantCreateManyInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        roleGrantId: string
+        sFormName: string
+        sTen?: string | null
+        lPermission: number
+    };
+    export type AccessPermissionGrantUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sFormName?: StringFieldUpdateOperationsInput | string
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        lPermission?: IntFieldUpdateOperationsInput | number
+    };
+    export type AccessPermissionGrantUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        roleGrantId?: StringFieldUpdateOperationsInput | string
+        sFormName?: StringFieldUpdateOperationsInput | string
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        lPermission?: IntFieldUpdateOperationsInput | number
+    };
     export type BlockedIpCreateInput = {
         id?: string
         code?: string | null
@@ -466929,6 +469717,123 @@ export namespace Prisma {
         _count?: NestedIntNullableFilter<$PrismaModel>
         _min?: NestedEnumTemplateFileTypeNullableFilter<$PrismaModel>
         _max?: NestedEnumTemplateFileTypeNullableFilter<$PrismaModel>
+    };
+    export type AccessPermissionGrantListRelationFilter = {
+        every?: AccessPermissionGrantWhereInput
+        some?: AccessPermissionGrantWhereInput
+        none?: AccessPermissionGrantWhereInput
+    };
+    export type AccessPermissionGrantOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type AccessRoleGrantOrderByRelevanceInput = {
+        fields: AccessRoleGrantOrderByRelevanceFieldEnum | AccessRoleGrantOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type AccessRoleGrantRecipientIdSRoleIdCompoundUniqueInput = {
+        recipientId: string
+        sRoleId: string
+    };
+    export type AccessRoleGrantCountOrderByAggregateInput = {
+        id?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        granterId?: SortOrder
+        recipientId?: SortOrder
+        sRoleId?: SortOrder
+        sRoleName?: SortOrder
+        sCodeName?: SortOrder
+    };
+    export type AccessRoleGrantMaxOrderByAggregateInput = {
+        id?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        granterId?: SortOrder
+        recipientId?: SortOrder
+        sRoleId?: SortOrder
+        sRoleName?: SortOrder
+        sCodeName?: SortOrder
+    };
+    export type AccessRoleGrantMinOrderByAggregateInput = {
+        id?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        granterId?: SortOrder
+        recipientId?: SortOrder
+        sRoleId?: SortOrder
+        sRoleName?: SortOrder
+        sCodeName?: SortOrder
+    };
+    export type AccessRoleGrantScalarRelationFilter = {
+        is?: AccessRoleGrantWhereInput
+        isNot?: AccessRoleGrantWhereInput
+    };
+    export type AccessPermissionGrantOrderByRelevanceInput = {
+        fields: AccessPermissionGrantOrderByRelevanceFieldEnum | AccessPermissionGrantOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type AccessPermissionGrantRoleGrantIdSFormNameCompoundUniqueInput = {
+        roleGrantId: string
+        sFormName: string
+    };
+    export type AccessPermissionGrantCountOrderByAggregateInput = {
+        id?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        roleGrantId?: SortOrder
+        sFormName?: SortOrder
+        sTen?: SortOrder
+        lPermission?: SortOrder
+    };
+    export type AccessPermissionGrantAvgOrderByAggregateInput = {
+        lPermission?: SortOrder
+    };
+    export type AccessPermissionGrantMaxOrderByAggregateInput = {
+        id?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        roleGrantId?: SortOrder
+        sFormName?: SortOrder
+        sTen?: SortOrder
+        lPermission?: SortOrder
+    };
+    export type AccessPermissionGrantMinOrderByAggregateInput = {
+        id?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        roleGrantId?: SortOrder
+        sFormName?: SortOrder
+        sTen?: SortOrder
+        lPermission?: SortOrder
+    };
+    export type AccessPermissionGrantSumOrderByAggregateInput = {
+        lPermission?: SortOrder
     };
     export type BlockedIpOrderByRelevanceInput = {
         fields: BlockedIpOrderByRelevanceFieldEnum | BlockedIpOrderByRelevanceFieldEnum[]
@@ -494519,6 +497424,56 @@ export namespace Prisma {
     };
     export type NullableEnumTemplateFileTypeFieldUpdateOperationsInput = {
         set?: $Enums.TemplateFileType | null
+    };
+    export type AccessPermissionGrantCreateNestedManyWithoutRoleGrantInput = {
+        create?: XOR<AccessPermissionGrantCreateWithoutRoleGrantInput, AccessPermissionGrantUncheckedCreateWithoutRoleGrantInput> | AccessPermissionGrantCreateWithoutRoleGrantInput[] | AccessPermissionGrantUncheckedCreateWithoutRoleGrantInput[]
+        connectOrCreate?: AccessPermissionGrantCreateOrConnectWithoutRoleGrantInput | AccessPermissionGrantCreateOrConnectWithoutRoleGrantInput[]
+        createMany?: AccessPermissionGrantCreateManyRoleGrantInputEnvelope
+        connect?: AccessPermissionGrantWhereUniqueInput | AccessPermissionGrantWhereUniqueInput[]
+    };
+    export type AccessPermissionGrantUncheckedCreateNestedManyWithoutRoleGrantInput = {
+        create?: XOR<AccessPermissionGrantCreateWithoutRoleGrantInput, AccessPermissionGrantUncheckedCreateWithoutRoleGrantInput> | AccessPermissionGrantCreateWithoutRoleGrantInput[] | AccessPermissionGrantUncheckedCreateWithoutRoleGrantInput[]
+        connectOrCreate?: AccessPermissionGrantCreateOrConnectWithoutRoleGrantInput | AccessPermissionGrantCreateOrConnectWithoutRoleGrantInput[]
+        createMany?: AccessPermissionGrantCreateManyRoleGrantInputEnvelope
+        connect?: AccessPermissionGrantWhereUniqueInput | AccessPermissionGrantWhereUniqueInput[]
+    };
+    export type AccessPermissionGrantUpdateManyWithoutRoleGrantNestedInput = {
+        create?: XOR<AccessPermissionGrantCreateWithoutRoleGrantInput, AccessPermissionGrantUncheckedCreateWithoutRoleGrantInput> | AccessPermissionGrantCreateWithoutRoleGrantInput[] | AccessPermissionGrantUncheckedCreateWithoutRoleGrantInput[]
+        connectOrCreate?: AccessPermissionGrantCreateOrConnectWithoutRoleGrantInput | AccessPermissionGrantCreateOrConnectWithoutRoleGrantInput[]
+        upsert?: AccessPermissionGrantUpsertWithWhereUniqueWithoutRoleGrantInput | AccessPermissionGrantUpsertWithWhereUniqueWithoutRoleGrantInput[]
+        createMany?: AccessPermissionGrantCreateManyRoleGrantInputEnvelope
+        set?: AccessPermissionGrantWhereUniqueInput | AccessPermissionGrantWhereUniqueInput[]
+        disconnect?: AccessPermissionGrantWhereUniqueInput | AccessPermissionGrantWhereUniqueInput[]
+        delete?: AccessPermissionGrantWhereUniqueInput | AccessPermissionGrantWhereUniqueInput[]
+        connect?: AccessPermissionGrantWhereUniqueInput | AccessPermissionGrantWhereUniqueInput[]
+        update?: AccessPermissionGrantUpdateWithWhereUniqueWithoutRoleGrantInput | AccessPermissionGrantUpdateWithWhereUniqueWithoutRoleGrantInput[]
+        updateMany?: AccessPermissionGrantUpdateManyWithWhereWithoutRoleGrantInput | AccessPermissionGrantUpdateManyWithWhereWithoutRoleGrantInput[]
+        deleteMany?: AccessPermissionGrantScalarWhereInput | AccessPermissionGrantScalarWhereInput[]
+    };
+    export type AccessPermissionGrantUncheckedUpdateManyWithoutRoleGrantNestedInput = {
+        create?: XOR<AccessPermissionGrantCreateWithoutRoleGrantInput, AccessPermissionGrantUncheckedCreateWithoutRoleGrantInput> | AccessPermissionGrantCreateWithoutRoleGrantInput[] | AccessPermissionGrantUncheckedCreateWithoutRoleGrantInput[]
+        connectOrCreate?: AccessPermissionGrantCreateOrConnectWithoutRoleGrantInput | AccessPermissionGrantCreateOrConnectWithoutRoleGrantInput[]
+        upsert?: AccessPermissionGrantUpsertWithWhereUniqueWithoutRoleGrantInput | AccessPermissionGrantUpsertWithWhereUniqueWithoutRoleGrantInput[]
+        createMany?: AccessPermissionGrantCreateManyRoleGrantInputEnvelope
+        set?: AccessPermissionGrantWhereUniqueInput | AccessPermissionGrantWhereUniqueInput[]
+        disconnect?: AccessPermissionGrantWhereUniqueInput | AccessPermissionGrantWhereUniqueInput[]
+        delete?: AccessPermissionGrantWhereUniqueInput | AccessPermissionGrantWhereUniqueInput[]
+        connect?: AccessPermissionGrantWhereUniqueInput | AccessPermissionGrantWhereUniqueInput[]
+        update?: AccessPermissionGrantUpdateWithWhereUniqueWithoutRoleGrantInput | AccessPermissionGrantUpdateWithWhereUniqueWithoutRoleGrantInput[]
+        updateMany?: AccessPermissionGrantUpdateManyWithWhereWithoutRoleGrantInput | AccessPermissionGrantUpdateManyWithWhereWithoutRoleGrantInput[]
+        deleteMany?: AccessPermissionGrantScalarWhereInput | AccessPermissionGrantScalarWhereInput[]
+    };
+    export type AccessRoleGrantCreateNestedOneWithoutPermissionsInput = {
+        create?: XOR<AccessRoleGrantCreateWithoutPermissionsInput, AccessRoleGrantUncheckedCreateWithoutPermissionsInput>
+        connectOrCreate?: AccessRoleGrantCreateOrConnectWithoutPermissionsInput
+        connect?: AccessRoleGrantWhereUniqueInput
+    };
+    export type AccessRoleGrantUpdateOneRequiredWithoutPermissionsNestedInput = {
+        create?: XOR<AccessRoleGrantCreateWithoutPermissionsInput, AccessRoleGrantUncheckedCreateWithoutPermissionsInput>
+        connectOrCreate?: AccessRoleGrantCreateOrConnectWithoutPermissionsInput
+        upsert?: AccessRoleGrantUpsertWithoutPermissionsInput
+        connect?: AccessRoleGrantWhereUniqueInput
+        update?: XOR<XOR<AccessRoleGrantUpdateToOneWithWhereWithoutPermissionsInput, AccessRoleGrantUpdateWithoutPermissionsInput>, AccessRoleGrantUncheckedUpdateWithoutPermissionsInput>
     };
     export type NestedStringFilter<$PrismaModel = never> = {
         equals?: string | StringFieldRefInput<$PrismaModel>
@@ -644821,6 +647776,136 @@ export namespace Prisma {
         where: QuaTrinhLuongScalarWhereInput
         data: XOR<QuaTrinhLuongUpdateManyMutationInput, QuaTrinhLuongUncheckedUpdateManyWithoutBacLuongInput>
     };
+    export type AccessPermissionGrantCreateWithoutRoleGrantInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sFormName: string
+        sTen?: string | null
+        lPermission: number
+    };
+    export type AccessPermissionGrantUncheckedCreateWithoutRoleGrantInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sFormName: string
+        sTen?: string | null
+        lPermission: number
+    };
+    export type AccessPermissionGrantCreateOrConnectWithoutRoleGrantInput = {
+        where: AccessPermissionGrantWhereUniqueInput
+        create: XOR<AccessPermissionGrantCreateWithoutRoleGrantInput, AccessPermissionGrantUncheckedCreateWithoutRoleGrantInput>
+    };
+    export type AccessPermissionGrantCreateManyRoleGrantInputEnvelope = {
+        data: AccessPermissionGrantCreateManyRoleGrantInput | AccessPermissionGrantCreateManyRoleGrantInput[]
+        skipDuplicates?: boolean
+    };
+    export type AccessPermissionGrantUpsertWithWhereUniqueWithoutRoleGrantInput = {
+        where: AccessPermissionGrantWhereUniqueInput
+        update: XOR<AccessPermissionGrantUpdateWithoutRoleGrantInput, AccessPermissionGrantUncheckedUpdateWithoutRoleGrantInput>
+        create: XOR<AccessPermissionGrantCreateWithoutRoleGrantInput, AccessPermissionGrantUncheckedCreateWithoutRoleGrantInput>
+    };
+    export type AccessPermissionGrantUpdateWithWhereUniqueWithoutRoleGrantInput = {
+        where: AccessPermissionGrantWhereUniqueInput
+        data: XOR<AccessPermissionGrantUpdateWithoutRoleGrantInput, AccessPermissionGrantUncheckedUpdateWithoutRoleGrantInput>
+    };
+    export type AccessPermissionGrantUpdateManyWithWhereWithoutRoleGrantInput = {
+        where: AccessPermissionGrantScalarWhereInput
+        data: XOR<AccessPermissionGrantUpdateManyMutationInput, AccessPermissionGrantUncheckedUpdateManyWithoutRoleGrantInput>
+    };
+    export type AccessPermissionGrantScalarWhereInput = {
+        AND?: AccessPermissionGrantScalarWhereInput | AccessPermissionGrantScalarWhereInput[]
+        OR?: AccessPermissionGrantScalarWhereInput[]
+        NOT?: AccessPermissionGrantScalarWhereInput | AccessPermissionGrantScalarWhereInput[]
+        id?: StringFilter<"AccessPermissionGrant"> | string
+        active?: BoolFilter<"AccessPermissionGrant"> | boolean
+        description?: StringNullableFilter<"AccessPermissionGrant"> | string | null
+        deletedAt?: DateTimeNullableFilter<"AccessPermissionGrant"> | Date | string | null
+        createdAt?: DateTimeFilter<"AccessPermissionGrant"> | Date | string
+        updatedAt?: DateTimeFilter<"AccessPermissionGrant"> | Date | string
+        createdBy?: UuidNullableFilter<"AccessPermissionGrant"> | string | null
+        roleGrantId?: StringFilter<"AccessPermissionGrant"> | string
+        sFormName?: StringFilter<"AccessPermissionGrant"> | string
+        sTen?: StringNullableFilter<"AccessPermissionGrant"> | string | null
+        lPermission?: IntFilter<"AccessPermissionGrant"> | number
+    };
+    export type AccessRoleGrantCreateWithoutPermissionsInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        granterId: string
+        recipientId: string
+        sRoleId: string
+        sRoleName?: string | null
+        sCodeName?: string | null
+    };
+    export type AccessRoleGrantUncheckedCreateWithoutPermissionsInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        granterId: string
+        recipientId: string
+        sRoleId: string
+        sRoleName?: string | null
+        sCodeName?: string | null
+    };
+    export type AccessRoleGrantCreateOrConnectWithoutPermissionsInput = {
+        where: AccessRoleGrantWhereUniqueInput
+        create: XOR<AccessRoleGrantCreateWithoutPermissionsInput, AccessRoleGrantUncheckedCreateWithoutPermissionsInput>
+    };
+    export type AccessRoleGrantUpsertWithoutPermissionsInput = {
+        update: XOR<AccessRoleGrantUpdateWithoutPermissionsInput, AccessRoleGrantUncheckedUpdateWithoutPermissionsInput>
+        create: XOR<AccessRoleGrantCreateWithoutPermissionsInput, AccessRoleGrantUncheckedCreateWithoutPermissionsInput>
+        where?: AccessRoleGrantWhereInput
+    };
+    export type AccessRoleGrantUpdateToOneWithWhereWithoutPermissionsInput = {
+        where?: AccessRoleGrantWhereInput
+        data: XOR<AccessRoleGrantUpdateWithoutPermissionsInput, AccessRoleGrantUncheckedUpdateWithoutPermissionsInput>
+    };
+    export type AccessRoleGrantUpdateWithoutPermissionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        granterId?: StringFieldUpdateOperationsInput | string
+        recipientId?: StringFieldUpdateOperationsInput | string
+        sRoleId?: StringFieldUpdateOperationsInput | string
+        sRoleName?: NullableStringFieldUpdateOperationsInput | string | null
+        sCodeName?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type AccessRoleGrantUncheckedUpdateWithoutPermissionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        granterId?: StringFieldUpdateOperationsInput | string
+        recipientId?: StringFieldUpdateOperationsInput | string
+        sRoleId?: StringFieldUpdateOperationsInput | string
+        sRoleName?: NullableStringFieldUpdateOperationsInput | string | null
+        sCodeName?: NullableStringFieldUpdateOperationsInput | string | null
+    };
     export type RelativeCreateManyUserProfileInput = {
         id?: string
         code?: string | null
@@ -717589,6 +720674,54 @@ export namespace Prisma {
         phuCapChucVu?: NullableStringFieldUpdateOperationsInput | string | null
         phuCapKhac?: NullableStringFieldUpdateOperationsInput | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
+    };
+    export type AccessPermissionGrantCreateManyRoleGrantInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        sFormName: string
+        sTen?: string | null
+        lPermission: number
+    };
+    export type AccessPermissionGrantUpdateWithoutRoleGrantInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sFormName?: StringFieldUpdateOperationsInput | string
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        lPermission?: IntFieldUpdateOperationsInput | number
+    };
+    export type AccessPermissionGrantUncheckedUpdateWithoutRoleGrantInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sFormName?: StringFieldUpdateOperationsInput | string
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        lPermission?: IntFieldUpdateOperationsInput | number
+    };
+    export type AccessPermissionGrantUncheckedUpdateManyWithoutRoleGrantInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        sFormName?: StringFieldUpdateOperationsInput | string
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        lPermission?: IntFieldUpdateOperationsInput | number
     };
     /**
      * Batch Payload for updateMany & deleteMany & createMany

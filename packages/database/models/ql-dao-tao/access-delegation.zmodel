@@ -1,0 +1,34 @@
+import '../base'
+
+/// Vai trò được giao cho cán bộ hoặc giảng viên.
+/// Catalog vai trò vẫn nằm ở system. Bảng này chỉ lưu lần giao.
+model AccessRoleGrant extends BaseNoCode {
+  granterId   String                  @db.Uuid
+  recipientId String                  @db.Uuid
+  sRoleId     String
+  sRoleName   String?
+  sCodeName   String?
+  permissions AccessPermissionGrant[]
+
+  @@unique([recipientId, sRoleId])
+  @@index([recipientId])
+  @@deny('create,update,delete', true)
+  @@deny('read', true)
+  @@schema("ql-dao-tao")
+}
+
+/// Quyền theo chức năng của một lần giao vai trò.
+/// lPermission là bit đã chọn (Xem, Thêm, Sửa, …), không phải cả mask vai trò trên system.
+model AccessPermissionGrant extends BaseNoCode {
+  roleGrant   AccessRoleGrant @relation(fields: [roleGrantId], references: [id], onDelete: Cascade)
+  roleGrantId String
+  sFormName   String
+  sTen        String?
+  lPermission Int
+
+  @@unique([roleGrantId, sFormName])
+  @@index([sFormName])
+  @@deny('create,update,delete', true)
+  @@deny('read', true)
+  @@schema("ql-dao-tao")
+}

@@ -287,4 +287,6 @@ export * from './DM_ToChucXaHoi.schema';
 export * from './DM_Ngach.schema';
 export * from './DM_BacLuong.schema';
 export * from './TemplateFile.schema';
+export * from './AccessRoleGrant.schema';
+export * from './AccessPermissionGrant.schema';
 export * from './BlockedIp.schema';

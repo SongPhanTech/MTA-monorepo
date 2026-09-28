@@ -29020,6 +29020,140 @@ const metadata: ModelMeta = {
                 },
             },
         },
+        accessRoleGrant: {
+            name: 'AccessRoleGrant', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AccessRoleGrant$createdBy,
+                }, granterId: {
+                    name: "granterId",
+                    type: "String",
+                }, recipientId: {
+                    name: "recipientId",
+                    type: "String",
+                }, sRoleId: {
+                    name: "sRoleId",
+                    type: "String",
+                }, sRoleName: {
+                    name: "sRoleName",
+                    type: "String",
+                    isOptional: true,
+                }, sCodeName: {
+                    name: "sCodeName",
+                    type: "String",
+                    isOptional: true,
+                }, permissions: {
+                    name: "permissions",
+                    type: "AccessPermissionGrant",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'roleGrant',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, recipientId_sRoleId: {
+                    name: "recipientId_sRoleId",
+                    fields: ["recipientId", "sRoleId"]
+                },
+            },
+        },
+        accessPermissionGrant: {
+            name: 'AccessPermissionGrant', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AccessPermissionGrant$createdBy,
+                }, roleGrant: {
+                    name: "roleGrant",
+                    type: "AccessRoleGrant",
+                    isDataModel: true,
+                    backLink: 'permissions',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "roleGrantId" },
+                }, roleGrantId: {
+                    name: "roleGrantId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'roleGrant',
+                }, sFormName: {
+                    name: "sFormName",
+                    type: "String",
+                }, sTen: {
+                    name: "sTen",
+                    type: "String",
+                    isOptional: true,
+                }, lPermission: {
+                    name: "lPermission",
+                    type: "Int",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, roleGrantId_sFormName: {
+                    name: "roleGrantId_sFormName",
+                    fields: ["roleGrantId", "sFormName"]
+                },
+            },
+        },
         blockedIp: {
             name: 'BlockedIp', fields: {
                 id: {
@@ -29097,6 +29231,7 @@ const metadata: ModelMeta = {
         evaluationCouncilMember: ['EvaluationCriterion'],
         question: ['MultipleChoiceOption', 'FillInBlankSlot', 'OrderingItem'],
         examBank: ['ExamBankQuestion'],
+        accessRoleGrant: ['AccessPermissionGrant'],
 
     },
     authModel: 'UserProfile'
@@ -30128,6 +30263,14 @@ function $default$DM_BacLuong$createdBy(user: any): unknown {
 }
 
 function $default$TemplateFile$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$AccessRoleGrant$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$AccessPermissionGrant$createdBy(user: any): unknown {
     return user?.id;
 }
 

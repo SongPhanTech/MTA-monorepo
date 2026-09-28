@@ -7717,6 +7717,49 @@ model TemplateFile {
   @@schema("ql-danh-muc")
 }
 
+/// Vai trò được giao cho cán bộ hoặc giảng viên.
+/// Catalog vai trò vẫn nằm ở system. Bảng này chỉ lưu lần giao.
+model AccessRoleGrant {
+  id          String                  @id() @default(cuid())
+  active      Boolean                 @default(true)
+  description String?                 @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @default(now()) @updatedAt()
+  createdBy   String?                 @db.Uuid()
+  granterId   String                  @db.Uuid()
+  recipientId String                  @db.Uuid()
+  sRoleId     String
+  sRoleName   String?
+  sCodeName   String?
+  permissions AccessPermissionGrant[]
+
+  @@unique([recipientId, sRoleId])
+  @@index([recipientId])
+  @@schema("ql-dao-tao")
+}
+
+/// Quyền theo chức năng của một lần giao vai trò.
+/// lPermission là bit đã chọn (Xem, Thêm, Sửa, …), không phải cả mask vai trò trên system.
+model AccessPermissionGrant {
+  id          String          @id() @default(cuid())
+  active      Boolean         @default(true)
+  description String?         @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @default(now()) @updatedAt()
+  createdBy   String?         @db.Uuid()
+  roleGrant   AccessRoleGrant @relation(fields: [roleGrantId], references: [id], onDelete: Cascade)
+  roleGrantId String
+  sFormName   String
+  sTen        String?
+  lPermission Int
+
+  @@unique([roleGrantId, sFormName])
+  @@index([sFormName])
+  @@schema("ql-dao-tao")
+}
+
 model BlockedIp {
   id          String    @id() @default(cuid())
   code        String?   @unique()

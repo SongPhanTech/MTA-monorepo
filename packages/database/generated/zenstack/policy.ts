@@ -5737,6 +5737,46 @@ const policy: PolicyDef = {
             },
 
         },
+        accessRoleGrant: {
+            modelLevel: {
+                read: { guard: AccessRoleGrant_read, },
+                create: { guard: AccessRoleGrant_create, inputChecker: AccessRoleGrant_create_input, },
+                update: { guard: AccessRoleGrant_update, },
+                postUpdate: { guard: AccessRoleGrant_postUpdate, },
+                delete: { guard: AccessRoleGrant_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        accessPermissionGrant: {
+            modelLevel: {
+                read: { guard: AccessPermissionGrant_read, },
+                create: { guard: AccessPermissionGrant_create, inputChecker: AccessPermissionGrant_create_input, },
+                update: { guard: AccessPermissionGrant_update, },
+                postUpdate: { guard: AccessPermissionGrant_postUpdate, },
+                delete: { guard: AccessPermissionGrant_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         blockedIp: {
             modelLevel: {
                 read: { guard: BlockedIp_read, },
@@ -6042,6 +6082,8 @@ const policy: PolicyDef = {
         dM_Ngach: { hasValidation: false },
         dM_BacLuong: { hasValidation: false },
         templateFile: { hasValidation: false },
+        accessRoleGrant: { hasValidation: false },
+        accessPermissionGrant: { hasValidation: false },
         blockedIp: { hasValidation: true },
     },
 
@@ -24418,6 +24460,144 @@ function TemplateFile_delete(context: QueryContext, db: CrudContract): any {
 
 function $check_TemplateFile_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AccessRoleGrant_read(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_AccessRoleGrant_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if (true) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AccessRoleGrant_create(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_AccessRoleGrant_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if (true) { return false; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AccessRoleGrant_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return !(true) && ((user != null))
+}
+
+function AccessRoleGrant_update(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_AccessRoleGrant_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if (true) { return false; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AccessRoleGrant_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_AccessRoleGrant_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function AccessRoleGrant_delete(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_AccessRoleGrant_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if (true) { return false; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AccessPermissionGrant_read(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_AccessPermissionGrant_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if (true) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AccessPermissionGrant_create(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_AccessPermissionGrant_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if (true) { return false; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AccessPermissionGrant_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return !(true) && ((user != null))
+}
+
+function AccessPermissionGrant_update(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_AccessPermissionGrant_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if (true) { return false; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AccessPermissionGrant_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_AccessPermissionGrant_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function AccessPermissionGrant_delete(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
+}
+
+function $check_AccessPermissionGrant_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if (true) { return false; }
+
     if ((user != null)) { return true; }
 
     return false;

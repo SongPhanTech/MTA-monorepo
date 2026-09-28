@@ -2,6 +2,7 @@ import DefaultLayout from "@layouts/default-layout"
 import { useSession } from "@workspace/auth/react"
 import { useFindManyUserProfile } from "@workspace/db/hooks"
 import {
+  useAssignDelegation,
   useUserPermissions,
   type SystemPermission,
   type SystemRole,
@@ -12,6 +13,7 @@ import {
   Alert,
   Button,
   Card,
+  Checkbox,
   Col,
   Flex,
   Input,
@@ -78,6 +80,16 @@ const formatPermissionTags = (permission: SystemPermission) => {
   )
 }
 
+const ownedMask = (permission: SystemPermission) => Number(permission.lPermission ?? 0)
+
+const withViewBit = (mask: number, owned: number) => {
+  let stored = mask & owned
+  if ((stored & ~PERMISSIONS.XEM) !== 0 && (owned & PERMISSIONS.XEM) === PERMISSIONS.XEM) {
+    stored |= PERMISSIONS.XEM
+  }
+  return stored
+}
+
 const getRecipientKind = (user: {
   lecturer?: { id: string } | null
   staffs?: { id: string } | null
@@ -97,7 +109,9 @@ export default function UyQuyenTruyCapPage() {
   const [search, setSearch] = useState("")
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([])
   const [selectedRoleKeys, setSelectedRoleKeys] = useState<string[]>([])
+  const [bitMasks, setBitMasks] = useState<Record<string, Record<string, number>>>({})
   const [detailRole, setDetailRole] = useState<SystemRole | null>(null)
+  const assignDelegation = useAssignDelegation()
 
   const canAssign = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_UY_QUYEN_TRUY_CAP, "SUA")
 
@@ -113,7 +127,8 @@ export default function UyQuyenTruyCapPage() {
   const currentRoles = currentUser?.Roles ?? []
 
   useEffect(() => {
-    setSelectedRoleKeys((currentUser?.Roles ?? []).map((role, index) => getRoleKey(role, index)))
+    setSelectedRoleKeys([])
+    setBitMasks({})
   }, [currentUser])
 
   const recipientWhere = useMemo(
@@ -208,21 +223,64 @@ export default function UyQuyenTruyCapPage() {
     },
   ]
 
+  const detailRoleKey = detailRole ? getRoleKey(detailRole) : ""
+
+  const togglePermissionBit = (permission: SystemPermission, bit: number, checked: boolean) => {
+    const formName = permission.sFormName
+    if (!detailRoleKey || !formName) return
+    const owned = ownedMask(permission)
+    setBitMasks((current) => {
+      const roleMasks = current[detailRoleKey] ?? {}
+      const mask = roleMasks[formName] ?? 0
+      return {
+        ...current,
+        [detailRoleKey]: {
+          ...roleMasks,
+          [formName]: withViewBit(checked ? mask | bit : mask & ~bit, owned),
+        },
+      }
+    })
+  }
+
   const permissionColumns: ColumnsType<SystemPermission> = [
     {
       title: "Chức năng",
       key: "sTen",
-      width: 320,
+      width: 280,
       render: (_, row) => row.sTen || row.sFormName || "—",
     },
     {
-      title: "Quyền",
+      title: "Quyền được giao",
       key: "permissions",
-      render: (_, row) => formatPermissionTags(row),
+      render: (_, row) => {
+        const owned = ownedMask(row)
+        const available = PERMISSION_LABELS.filter((item) => (owned & item.bit) === item.bit)
+        if (!available.length || !row.sFormName) {
+          return formatPermissionTags(row)
+        }
+        const selected = bitMasks[detailRoleKey]?.[row.sFormName] ?? 0
+        return (
+          <Flex wrap="wrap" gap={8}>
+            {available.map((item) => (
+              <Checkbox
+                key={item.key}
+                checked={(selected & item.bit) === item.bit}
+                onChange={(event) => togglePermissionBit(row, item.bit, event.target.checked)}
+              >
+                {item.label}
+              </Checkbox>
+            ))}
+          </Flex>
+        )
+      },
     },
   ]
 
-  const handleAssign = () => {
+  const handleAssign = async () => {
+    if (!currentUserId) {
+      message.warning("Chưa xác định được người giao")
+      return
+    }
     if (!selectedUserIds.length) {
       message.warning("Chọn ít nhất một người nhận ủy quyền")
       return
@@ -231,7 +289,57 @@ export default function UyQuyenTruyCapPage() {
       message.warning("Chọn ít nhất một vai trò để ủy quyền")
       return
     }
-    message.info("API gán quyền chưa được cung cấp. Màn hình đã sẵn sàng để gắn khi có API.")
+
+    const selectedKeys = new Set(selectedRoleKeys)
+    const grants = currentRoles.flatMap((role, index) => {
+      const roleKey = getRoleKey(role, index)
+      if (!selectedKeys.has(roleKey) || !role.sRoleId) return []
+      const roleMasks = bitMasks[roleKey] ?? {}
+      return [
+        {
+          sRoleId: role.sRoleId,
+          permissions: role.Permissions.flatMap((permission) => {
+            if (!permission.sFormName) return []
+            const owned = ownedMask(permission)
+            const selected = withViewBit(roleMasks[permission.sFormName] ?? 0, owned)
+            if (selected === 0) return []
+            return [{ sFormName: permission.sFormName, lPermission: selected }]
+          }),
+        },
+      ]
+    })
+
+    const grantsWithBits = grants.filter((grant) => grant.permissions.length > 0)
+    if (!grantsWithBits.length) {
+      message.warning("Chọn ít nhất một quyền trong vai trò để ủy quyền")
+      return
+    }
+
+    let response: Awaited<ReturnType<typeof assignDelegation.mutateAsync>>
+    try {
+      response = await assignDelegation.mutateAsync({
+        recipientIds: selectedUserIds,
+        grants: grantsWithBits,
+        granterId: currentUserId,
+      })
+    } catch {
+      message.error("Không gán được quyền")
+      return
+    }
+    if (response.status !== 200) {
+      const errorMessage =
+        typeof response.data === "string"
+          ? response.data
+          : response.data.message || "Không gán được quyền"
+      message.error(errorMessage)
+      return
+    }
+
+    const { assigned, skippedRecipientIds, skippedRoleIds } = response.data
+    message.success(`Đã gán quyền cho ${assigned} người`)
+    if (skippedRecipientIds.length || skippedRoleIds.length) {
+      message.warning("Một số người nhận hoặc vai trò không hợp lệ nên đã được bỏ qua")
+    }
   }
 
   return (
@@ -247,7 +355,7 @@ export default function UyQuyenTruyCapPage() {
           type="info"
           showIcon
           message="Giao vai trò hiện có của bạn cho cán bộ hoặc giảng viên."
-          description="Tick vai trò cần ủy quyền, xem chi tiết quyền trong modal. Cột phải chỉ chọn cán bộ/giảng viên, không gồm học viên."
+          description="Tick vai trò cần ủy quyền. Trong chi tiết, bỏ từng quyền như Thêm hoặc Sửa. Cột phải chỉ chọn cán bộ/giảng viên, không gồm học viên."
         />
       </Card>
 
@@ -301,6 +409,7 @@ export default function UyQuyenTruyCapPage() {
                   <Button
                     type="primary"
                     icon={<UserPlus size={16} />}
+                    loading={assignDelegation.isPending}
                     disabled={!canAssign || !selectedUserIds.length || !selectedRoleKeys.length}
                     onClick={handleAssign}
                   >

@@ -10,6 +10,7 @@ import './ql-danh-muc/core-categories.zmodel'
 import './ql-danh-muc/document.zmodel'
 import './ql-danh-muc/notification.zmodel'
 
+import './ql-dao-tao/access-delegation'
 import './ql-dao-tao/plan-training'
 import './ql-dao-tao/categories'
 import './ql-dao-tao/criteria.zmodel'

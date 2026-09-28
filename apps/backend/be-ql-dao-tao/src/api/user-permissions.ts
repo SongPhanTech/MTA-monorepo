@@ -1,6 +1,7 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { fieldDesc } from "../dto/openapi-helpers"
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
+import { assignDelegation, listDelegatedPermissions } from "../services/access-delegation"
 import { fetchUserPermissions } from "../services/user-permissions"
 
 const app = new OpenAPIHono({ strict: false })
@@ -100,6 +101,158 @@ app.openapi(getUserPermissions, async (c) => {
       return c.json({ message: String(upstreamMessage) }, 401)
     }
     return c.json({ message: String(upstreamMessage) }, 500)
+  }
+})
+
+const AssignPermissionSchema = z
+  .object({
+    sFormName: z.string().min(1).openapi(fieldDesc("Mã chức năng")),
+    lPermission: z.number().int().nonnegative().openapi(fieldDesc("Bit quyền đã chọn")),
+  })
+  .openapi("AssignPermissionInput")
+
+const AssignGrantSchema = z
+  .object({
+    sRoleId: z.string().min(1).openapi(fieldDesc("ID vai trò trên system")),
+    permissions: z.array(AssignPermissionSchema).openapi(fieldDesc("Quyền đã tick trong vai trò")),
+  })
+  .openapi("AssignGrantInput")
+
+const AssignDelegationBodySchema = z
+  .object({
+    recipientIds: z
+      .array(z.string().min(1))
+      .min(1)
+      .max(50)
+      .openapi(fieldDesc("Id hồ sơ cán bộ hoặc giảng viên nhận ủy quyền")),
+    grants: z.array(AssignGrantSchema).min(1).max(50).openapi(fieldDesc("Vai trò và bit quyền được giao")),
+    granterId: z
+      .string()
+      .min(1)
+      .optional()
+      .openapi(fieldDesc("Id hồ sơ người giao. Dùng khi request chưa gắn jwt.")),
+  })
+  .openapi("AssignDelegationBody")
+
+const AssignDelegationResultSchema = z
+  .object({
+    assigned: z.number().openapi(fieldDesc("Số người nhận đã ghi")),
+    skippedRecipientIds: z.array(z.string()).openapi(fieldDesc("Người nhận không hợp lệ")),
+    skippedRoleIds: z.array(z.string()).openapi(fieldDesc("Vai trò người giao không có")),
+  })
+  .openapi("AssignDelegationResult")
+
+const DelegatedPermissionSchema = z
+  .object({
+    name: z.string().openapi(fieldDesc("Mã chức năng")),
+    permission: z.number().openapi(fieldDesc("Bit quyền sau khi OR")),
+  })
+  .openapi("DelegatedPermission")
+
+const assignDelegationRoute = createRoute({
+  operationId: "assign-delegation",
+  path: "/assign",
+  method: "post",
+  tags: ["Ủy quyền"],
+  summary: "Gán vai trò và bit quyền cho cán bộ hoặc giảng viên",
+  description:
+    "Chỉ ghi bit người giao đang có. Tick Thêm hoặc Sửa thì kèm bit Xem nếu người giao có Xem. Ghi AccessRoleGrant và AccessPermissionGrant.",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: AssignDelegationBodySchema,
+        },
+      },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Đã ghi ủy quyền",
+      content: {
+        "application/json": {
+          schema: AssignDelegationResultSchema,
+        },
+      },
+    },
+    401: {
+      description: "Chưa đăng nhập",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+  },
+})
+
+const getDelegatedPermissions = createRoute({
+  operationId: "get-delegated-permissions",
+  path: "/delegated",
+  method: "get",
+  tags: ["Ủy quyền"],
+  summary: "Quyền được ủy quyền của user",
+  description:
+    "OR bit theo mã chức năng từ các AccessPermissionGrant còn hiệu lực. Không trả 401 để menu localhost không bị coi là hết phiên.",
+  request: {
+    query: z.object({
+      userId: z.string().optional().openapi(fieldDesc("Id hồ sơ. Dùng khi request chưa gắn jwt.")),
+    }),
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Danh sách quyền đã gộp",
+      content: {
+        "application/json": {
+          schema: z.object({
+            permissions: z.array(DelegatedPermissionSchema),
+          }),
+        },
+      },
+    },
+    401: {
+      description: "Chưa đăng nhập",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(assignDelegationRoute, async (c) => {
+  const body = c.req.valid("json")
+  const userId = c.get("user")?.id || body.granterId
+  if (!userId) {
+    return c.json({ message: "Chưa xác định được người giao" }, 400)
+  }
+
+  try {
+    const result = await assignDelegation(userId, body.recipientIds, body.grants)
+    return c.json(result, 200)
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Không gán được quyền"
+    console.error("[user-permissions] assign failed", message)
+    return c.json({ message }, 400)
+  }
+})
+
+app.openapi(getDelegatedPermissions, async (c) => {
+  const userId = c.get("user")?.id || c.req.valid("query").userId
+  if (!userId) {
+    return c.json({ permissions: [] }, 200)
+  }
+
+  try {
+    const permissions = await listDelegatedPermissions(userId)
+    return c.json({ permissions }, 200)
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Không lấy được quyền được ủy quyền"
+    console.error("[user-permissions] delegated failed", message)
+    return c.json({ message }, 500)
   }
 })
 

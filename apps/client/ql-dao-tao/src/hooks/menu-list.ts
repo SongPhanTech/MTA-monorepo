@@ -1,18 +1,65 @@
 import { useStoreActions, useStoreState } from "@redux/hook"
 import ability from "@workspace/permissions/ability"
-import { useAbility, usePermissions } from "@workspace/permissions/hooks"
+import { useAbility } from "@workspace/permissions/hooks"
+import { useDelegatedPermissions } from "@workspace/libs/api/user-permissions"
+import { useGetUserPermissionsPermissionAppCodeUserId } from "@workspace/libs/api/system"
+import { getRuntimeEnv } from "@workspace/libs/utils"
 import NAVIGATION, { type QL_DAO_TAO_PERMISSION } from "@workspace/router"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
+
+type PermissionMask = {
+  name: string
+  permission: number
+}
+
+const mergePermissions = (system: PermissionMask[], delegated: PermissionMask[]) => {
+  const merged = new Map<string, number>()
+  for (const item of [...system, ...delegated]) {
+    if (!item.name) continue
+    merged.set(item.name, (merged.get(item.name) ?? 0) | item.permission)
+  }
+  return [...merged.entries()].map(([name, permission]) => ({ name, permission }))
+}
+
+const showAllMenus = () =>
+  process.env.NODE_ENV === "development" ||
+  (typeof window !== "undefined" &&
+    (window.location.host.startsWith("localhost") || window.contextData?.userName === "superadmin"))
 
 const useMenuList = () => {
   const isUpdateAbility = useStoreState((actions) => actions.appState.isUpdateAbility)
   const setIsUpdateAbility = useStoreActions((actions) => actions.appState.setIsUpdateAbility)
-  const permissions = usePermissions()
+  const [abilityVersion, setAbilityVersion] = useState(0)
   const { can } = useAbility()
+  const userId = typeof window === "undefined" ? "" : (window.contextData?.userId ?? "")
+  const appCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE")
+  const systemQuery = useGetUserPermissionsPermissionAppCodeUserId(appCode, userId)
+  const delegatedQuery = useDelegatedPermissions(userId)
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+  const systemPermissions = useMemo(() => {
+    if (systemQuery.data?.status !== 200) return []
+    return (systemQuery.data.data.Permissions ?? []).map((permission) => ({
+      name: permission.sFormName ?? "",
+      permission: permission.lPermission ?? 0,
+    }))
+  }, [systemQuery.data])
+
+  const delegatedPermissions = useMemo(() => {
+    if (delegatedQuery.data?.status !== 200) return []
+    return delegatedQuery.data.data.permissions
+  }, [delegatedQuery.data])
+
+  const permissions = useMemo(
+    () => mergePermissions(systemPermissions, delegatedPermissions),
+    [systemPermissions, delegatedPermissions]
+  )
+
+  const systemEnabled = Boolean(appCode && userId)
+  const systemSettled = !systemEnabled || systemQuery.isFetched
+  const delegatedSettled = !userId || delegatedQuery.isFetched
+
   useEffect(() => {
-    if (!permissions.length) return
+    if (!systemSettled || !delegatedSettled) return
     ability.update(
       permissions.map((permission) => ({
         action: String(permission.permission),
@@ -20,31 +67,31 @@ const useMenuList = () => {
       }))
     )
     setIsUpdateAbility(true)
-  }, [permissions])
+    setAbilityVersion((version) => version + 1)
+  }, [permissions, systemSettled, delegatedSettled, setIsUpdateAbility])
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <needed>
-  const menus = useMemo(
-    () =>
-      NAVIGATION.QL_DAO_TAO.menus
-        .map((menu) => {
-          if (menu.children) {
-            const filteredChildren = menu.children.filter((child) => {
-              return can(child.id as QL_DAO_TAO_PERMISSION, "XEM")
-            })
-            return filteredChildren.length > 0
-              ? {
-                  ...menu,
-                  children: filteredChildren,
-                }
-              : null
-          }
-          return can(menu.id as QL_DAO_TAO_PERMISSION, "XEM") ? menu : null
-        })
-        .filter((menu) => menu !== null),
-    [isUpdateAbility, permissions, ability]
-  )
+  const menus = useMemo(() => {
+    if (showAllMenus()) return NAVIGATION.QL_DAO_TAO.menus
 
-  return process?.env?.NODE_ENV === "development" ? NAVIGATION.QL_DAO_TAO.menus : menus
+    return NAVIGATION.QL_DAO_TAO.menus
+      .map((menu) => {
+        if (menu.children) {
+          const filteredChildren = menu.children.filter((child) => {
+            return can(child.id as QL_DAO_TAO_PERMISSION, "XEM")
+          })
+          return filteredChildren.length > 0
+            ? {
+                ...menu,
+                children: filteredChildren,
+              }
+            : null
+        }
+        return can(menu.id as QL_DAO_TAO_PERMISSION, "XEM") ? menu : null
+      })
+      .filter((menu) => menu !== null)
+  }, [isUpdateAbility, permissions, abilityVersion, can])
+
+  return menus
 }
 
 export { useMenuList }

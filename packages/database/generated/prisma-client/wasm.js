@@ -5118,6 +5118,35 @@ exports.Prisma.TemplateFileScalarFieldEnum = {
   numberField: 'numberField'
 };
 
+exports.Prisma.AccessRoleGrantScalarFieldEnum = {
+  id: 'id',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  granterId: 'granterId',
+  recipientId: 'recipientId',
+  sRoleId: 'sRoleId',
+  sRoleName: 'sRoleName',
+  sCodeName: 'sCodeName'
+};
+
+exports.Prisma.AccessPermissionGrantScalarFieldEnum = {
+  id: 'id',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  roleGrantId: 'roleGrantId',
+  sFormName: 'sFormName',
+  sTen: 'sTen',
+  lPermission: 'lPermission'
+};
+
 exports.Prisma.BlockedIpScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -8257,6 +8286,26 @@ exports.Prisma.TemplateFileOrderByRelevanceFieldEnum = {
   extensions: 'extensions'
 };
 
+exports.Prisma.AccessRoleGrantOrderByRelevanceFieldEnum = {
+  id: 'id',
+  description: 'description',
+  createdBy: 'createdBy',
+  granterId: 'granterId',
+  recipientId: 'recipientId',
+  sRoleId: 'sRoleId',
+  sRoleName: 'sRoleName',
+  sCodeName: 'sCodeName'
+};
+
+exports.Prisma.AccessPermissionGrantOrderByRelevanceFieldEnum = {
+  id: 'id',
+  description: 'description',
+  createdBy: 'createdBy',
+  roleGrantId: 'roleGrantId',
+  sFormName: 'sFormName',
+  sTen: 'sTen'
+};
+
 exports.Prisma.BlockedIpOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -9073,6 +9122,8 @@ exports.Prisma.ModelName = {
   DM_Ngach: 'DM_Ngach',
   DM_BacLuong: 'DM_BacLuong',
   TemplateFile: 'TemplateFile',
+  AccessRoleGrant: 'AccessRoleGrant',
+  AccessPermissionGrant: 'AccessPermissionGrant',
   BlockedIp: 'BlockedIp'
 };
 

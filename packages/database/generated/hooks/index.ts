@@ -287,6 +287,8 @@ export * from './dm-to-chuc-xa-hoi';
 export * from './dm-ngach';
 export * from './dm-bac-luong';
 export * from './template-file';
+export * from './access-role-grant';
+export * from './access-permission-grant';
 export * from './blocked-ip';
 export { getQueryKey } from '@zenstackhq/tanstack-query/runtime-v5';
 export { Provider } from '@zenstackhq/tanstack-query/runtime-v5/react';
