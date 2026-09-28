@@ -29,7 +29,7 @@ import "@assets/css/cong-giang-vien.css"
 import "@assets/css/custom.css"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { setupAppTimezone } from "@workspace/libs/timezone"
-import { lightThemeCustom } from "@workspace/ui"
+import { lightThemeCustom, MaintenanceGate } from "@workspace/ui"
 import "@workspace/libs"
 import { fetchInstance } from "@workspace/libs/api/custom-instance"
 
@@ -84,6 +84,7 @@ function App({ Component, pageProps }: AppProps) {
   if (!isClient) return null
 
   return (
+    <MaintenanceGate>
     <SessionProvider session={pageProps.session}>
       <StoreProvider store={store}>
         <LoadingBar
@@ -117,6 +118,7 @@ function App({ Component, pageProps }: AppProps) {
         </ConfigProvider>
       </StoreProvider>
     </SessionProvider>
+    </MaintenanceGate>
   )
 }
 

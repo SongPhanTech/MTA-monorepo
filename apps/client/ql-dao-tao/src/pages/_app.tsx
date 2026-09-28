@@ -26,7 +26,7 @@ import LoadingBar from "react-top-loading-bar"
 import "@assets/css/custom.css"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { setupAppTimezone } from "@workspace/libs/timezone"
-import { lightThemeCustom } from "@workspace/ui"
+import { lightThemeCustom, MaintenanceGate } from "@workspace/ui"
 
 setupAppTimezone()
 dayjs.locale("vi")
@@ -90,6 +90,7 @@ function App({ Component, pageProps }: AppProps) {
   if (!isClient) return null
 
   return (
+    <MaintenanceGate>
     <SessionProvider session={pageProps.session}>
       <StoreProvider store={store}>
         <LoadingBar
@@ -120,6 +121,7 @@ function App({ Component, pageProps }: AppProps) {
         </ConfigProvider>
       </StoreProvider>
     </SessionProvider>
+    </MaintenanceGate>
   )
 }
 

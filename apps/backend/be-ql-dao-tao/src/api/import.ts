@@ -1397,18 +1397,28 @@ app.openapi(importStudent, async (c) => {
           where: {
             code: { in: Array.from(new Set(data.students.map((s) => s.fixedClassCode))) },
           },
-          select: { id: true, code: true },
+          select: { id: true, code: true, managementOrganizationId: true },
         })
 
-        const fixedClassMap = new Map(fixedClasses.map(({ code, id }) => [code, id]))
+        const fixedClassMap = new Map(
+          fixedClasses.map(({ code, id, managementOrganizationId }) => [
+            code,
+            { id, managementOrganizationId },
+          ])
+        )
 
         for (const student of data.students) {
           const cvName = student.curriculum?.trim()
           const cvId = curriculumVersionMap.get(cvName)
+          const fixedClass = fixedClassMap.get(student.fixedClassCode)
+          const donViId =
+            fixedClass?.managementOrganizationId ||
+            organizationMap.get(student.managementOrganization?.trim() || "") ||
+            null
 
           const studentData: Prisma.StudentCreateInput = {
             entryScore: Number.parseFloat(student.entryScore ?? "") || null,
-            fixedClass: { connect: { id: fixedClassMap.get(student.fixedClassCode) } },
+            fixedClass: { connect: { id: fixedClass?.id } },
             curriculumVersion: cvId ? { connect: { id: cvId } } : undefined,
             userProfile: {},
             department: student.department,
@@ -1444,6 +1454,7 @@ app.openapi(importStudent, async (c) => {
             officerNumber: student.officerNumber,
             rankId: rankMap.get(student.rank ?? "") || null,
             positionCPVId: positionMap.get(normalizeCatalogName(student.position)) || null,
+            sDM_DonViId: donViId,
           }
 
           const existingProfile =
@@ -1507,7 +1518,7 @@ app.openapi(importStudent, async (c) => {
               ),
               sEmail: studentEmail,
               sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
-              sDM_DonViId: organizationMap.get(student.managementOrganization?.trim() || ""),
+              sDM_DonViId: donViId,
             }
 
             let lsbProfileId = existingProfile?.id

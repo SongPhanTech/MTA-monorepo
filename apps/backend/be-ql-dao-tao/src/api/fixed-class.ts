@@ -14,6 +14,7 @@ import { ClassDivisionResultSchema } from "../dto/student-result-openapi.dto"
 import { excelSuccess, standardErrorResponses } from "../dto/openapi-route-helpers"
 import { renderXlsxTemplate } from "../services/render-xlsx-template"
 import { CtdtExportMau, exportChuongTrinhDaoTao } from "../services/export-chuong-trinh-dao-tao"
+import { syncStudentsDonViFromFixedClass } from "../services/sync-student-don-vi"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -123,6 +124,12 @@ app.openapi(classDivision, async (c) => {
       })
     )
   })
+  const studentIds = data
+    .map((item) => (typeof item === "object" && item && "id" in item ? item.id : null))
+    .filter((id): id is string => Boolean(id))
+  if (studentIds.length) {
+    await syncStudentsDonViFromFixedClass({ studentIds })
+  }
   return c.json(data, 200)
 })
 

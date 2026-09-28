@@ -13,6 +13,7 @@ import {
   useFindManyStudent,
   useUpdateManyStudent,
 } from "@workspace/db/hooks"
+import { syncStudentDonViFromFixedClass } from "@lib/sync-student-don-vi"
 import { Select } from "@workspace/ui"
 import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
@@ -363,6 +364,7 @@ const ModalChuyenLop = () => {
         },
         data: updateData,
       })
+      await syncStudentDonViFromFixedClass({ studentIds: selectedRows })
 
       message.success("Cập nhật thành công")
       setTransferredStudentIds((prev) => [...prev, ...selectedRows])
@@ -409,6 +411,9 @@ const ModalChuyenLop = () => {
             ?.curriculumVersionId,
         },
       })
+      if (filter.fixedClassId) {
+        await syncStudentDonViFromFixedClass({ studentIds: selectedRowsInClass })
+      }
 
       message.success("Cập nhật thành công")
       setTransferredStudentIds((prev) => prev.filter((id) => !selectedRowsInClass.includes(id)))

@@ -19,6 +19,7 @@ import ThesisApp from "./api/thesis"
 import ThesisPaymentApp from "./api/thesis-payment"
 import MinIOApp from "./api/minio"
 import SqlTransactionApp from "./api/transaction"
+import SystemStatusApp from "./api/system-status"
 import WSO2AmApp from "./api/wso2am"
 import { startPreviewCleanupCron } from "./cron/cleanup-preview"
 import { checkIp } from "./middlewares/check-ip"
@@ -77,6 +78,7 @@ app.use("*", checkIp)
 
 // public route
 setupOpenApi(app)
+app.route("/api/system-status", SystemStatusApp)
 app.route("/api/auth", AuthApp)
 app.route("/api/apim-logs", ApimLogsApp)
 app.route("/api/wso2am", WSO2AmApp)

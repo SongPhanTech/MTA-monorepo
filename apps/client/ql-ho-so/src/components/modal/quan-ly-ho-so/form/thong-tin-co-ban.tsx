@@ -423,15 +423,18 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
             </Flex>
           </Col>
           {bLaHocVien && (
-            <Col span={12}>
+            <Col span={24}>
               <Form.Item label="Đơn vị quản lý" className="mb-0">
                 <TreeSelect
                   disabled
                   allowClear={false}
+                  className="w-full"
                   placeholder="Chưa có đơn vị từ lớp quản lý"
                   treeDefaultExpandAll
                   treeData={treeData}
                   value={studentOrgId}
+                  popupMatchSelectWidth={false}
+                  dropdownStyle={{ minWidth: 560, maxHeight: 400 }}
                 />
               </Form.Item>
               <Typography.Text type="danger" className="block mt-1">
@@ -473,7 +476,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                 <FormItem
                   form={form}
                   required
-                  name="organizationId"
+                  name="sDM_DonViId"
                   label="Chọn đơn vị"
                   className="mb-2"
                 >

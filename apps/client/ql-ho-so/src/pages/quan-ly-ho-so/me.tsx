@@ -34,6 +34,7 @@ import type { SubmitForm } from "@pages/quan-ly-ho-so/tao-moi"
 import { useSession } from "@workspace/auth/react"
 import { useFindUniqueUserProfile } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
+import { buildLsbNhanVienPayload, getLsbErrorMessage } from "@lib/lsb-nhan-vien"
 import { putDMNhanViens } from "@workspace/libs/api/system"
 import { useAbility } from "@workspace/permissions/hooks"
 import { ROUTER_PATH } from "@workspace/router"
@@ -451,24 +452,32 @@ export default function UpdateUserPage() {
     try {
       showSpinner()
       const profileCode = (bLaGiangVien ? lectureCode || values.code : values.code)?.trim()
-      putDMNhanViens({
-        sDM_DonViId: organizationId,
-        sMa: profileCode,
-        sHoVaDem: values.lastName?.trim(),
-        sTen: values.firstName?.trim(),
-        sTenDayDu: `${values.lastName?.trim() || ""} ${values.firstName?.trim() || ""}`.trim(),
-        sDM_GioiTinhId: genderId,
-        dNgaySinh: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
-        sCCCD: values.idCardNumber,
-        sSDTDiDong: values?.phoneNumber || "",
-        sEmail: values?.email || "",
-        Id: id,
-        sAvatarId: form.getFieldValue("avatar"),
-        bLaHocVien: values.bLaHocVien || undefined,
-        bLaCanBoNhanVien: values.bLaCanBoNhanVien || undefined,
-        bLaGiangVien: bLaGiangVien || undefined,
-      }).catch((error) => {
-      })
+      const donViId = values.sDM_DonViId || organizationId || null
+      const lsbRes = await putDMNhanViens(
+        buildLsbNhanVienPayload({
+          id,
+          donViId,
+          code: profileCode,
+          lastName: values.lastName,
+          firstName: values.firstName,
+          genderId,
+          dateOfBirth: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
+          idCardNumber: values.idCardNumber,
+          phoneNumber: values.phoneNumber,
+          email: values.email,
+          avatar: form.getFieldValue("avatar"),
+          officerNumber: values.officerNumber,
+          nationalityId,
+          currentAddress: values.currentAddress,
+          bLaHocVien: values.bLaHocVien,
+          bLaCanBoNhanVien: values.bLaCanBoNhanVien,
+          bLaGiangVien,
+        })
+      )
+      if (lsbRes.status !== 200) {
+        message.error(getLsbErrorMessage(lsbRes, "Đồng bộ LSB thất bại, hồ sơ chưa được lưu"))
+        return
+      }
       let rank = null
       let hocvi = null
       let hocham = null
@@ -562,7 +571,7 @@ export default function UpdateUserPage() {
               firstName: values.firstName?.trim(),
               bLaHocVien: values.bLaHocVien,
               bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
-              sDM_DonViId: bLaGiangVien ? organizationId || null : values.sDM_DonViId,
+              sDM_DonViId: donViId,
               bLaGiangVien: bLaGiangVien,
               bLaNguoiDung: values?.bLaNguoiDung,
               fullname: `${values.lastName?.trim() || ""} ${values.firstName?.trim() || ""}`.trim(),

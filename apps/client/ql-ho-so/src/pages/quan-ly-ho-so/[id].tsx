@@ -54,6 +54,7 @@ import type { SubmitForm } from "@pages/quan-ly-ho-so/tao-moi"
 import { useSession } from "@workspace/auth/react"
 import { useFindUniqueUserProfile } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
+import { buildLsbNhanVienPayload, getLsbErrorMessage } from "@lib/lsb-nhan-vien"
 import { putDMNhanViens } from "@workspace/libs/api/system"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
@@ -440,24 +441,32 @@ export default function UpdateUserPage() {
     try {
       showSpinner()
       const profileCode = (bLaGiangVien ? lectureCode || values.code : values.code)?.trim()
-      putDMNhanViens({
-        sDM_DonViId: organizationId,
-        sMa: profileCode,
-        sHoVaDem: values.lastName?.trim(),
-        sTen: values.firstName?.trim(),
-        sTenDayDu: `${values.lastName?.trim() || ""} ${values.firstName?.trim() || ""}`.trim(),
-        sDM_GioiTinhId: genderId,
-        dNgaySinh: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
-        sCCCD: values.idCardNumber,
-        sSDTDiDong: values?.phoneNumber || "",
-        sEmail: values?.email || "",
-        Id: id,
-        sAvatarId: form.getFieldValue("avatar"),
-        bLaHocVien: values.bLaHocVien || undefined,
-        bLaCanBoNhanVien: values.bLaCanBoNhanVien || undefined,
-        bLaGiangVien: bLaGiangVien || undefined,
-      }).catch((error) => {
-      })
+      const donViId = values.sDM_DonViId || organizationId || null
+      const lsbRes = await putDMNhanViens(
+        buildLsbNhanVienPayload({
+          id,
+          donViId,
+          code: profileCode,
+          lastName: values.lastName,
+          firstName: values.firstName,
+          genderId,
+          dateOfBirth: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
+          idCardNumber: values.idCardNumber,
+          phoneNumber: values.phoneNumber,
+          email: values.email,
+          avatar: form.getFieldValue("avatar"),
+          officerNumber: values.officerNumber,
+          nationalityId,
+          currentAddress: values.currentAddress,
+          bLaHocVien: values.bLaHocVien,
+          bLaCanBoNhanVien: values.bLaCanBoNhanVien,
+          bLaGiangVien,
+        })
+      )
+      if (lsbRes.status !== 200) {
+        message.error(getLsbErrorMessage(lsbRes, "Đồng bộ LSB thất bại, hồ sơ chưa được lưu"))
+        return
+      }
       let rank = null
       let hocvi = null
       let hocham = null
@@ -562,7 +571,7 @@ export default function UpdateUserPage() {
               bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
               bLaGiangVien: bLaGiangVien,
               bLaNguoiDung: values?.bLaNguoiDung,
-              sDM_DonViId: bLaGiangVien ? organizationId || null : values.sDM_DonViId,
+              sDM_DonViId: donViId,
               fullname: `${values.lastName?.trim() || ""} ${values.firstName?.trim() || ""}`.trim(),
               dateOfBirth: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
               idCardDate: values.idCardDate ? dayjs(values.idCardDate).toISOString() : null,
@@ -1184,6 +1193,21 @@ export default function UpdateUserPage() {
     }
   }, [cccdUserProfileData, fillUserInfo])
 
+  const isStudentHoSo = router.pathname.includes("/quan-ly-ho-so/hoc-vien")
+  const studentListPath = ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_HOC_VIEN
+  const staffListPath = ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO
+
+  useEffect(() => {
+    if (!id || !cccdUserProfileData) return
+    const isStudentOnly =
+      !!cccdUserProfileData.bLaHocVien &&
+      !cccdUserProfileData.bLaGiangVien &&
+      !cccdUserProfileData.bLaCanBoNhanVien
+    if (isStudentOnly && router.pathname === "/quan-ly-ho-so/[id]") {
+      void router.replace(`${studentListPath}/${id}`)
+    }
+  }, [cccdUserProfileData, id, router, studentListPath])
+
   if (status === "loading") {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -1203,7 +1227,7 @@ export default function UpdateUserPage() {
                 <Button
                   className="mr-3"
                   onClick={() => {
-                    router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
+                    router.push(isStudentHoSo ? studentListPath : staffListPath)
                   }}
                 >
                   Hủy
@@ -1303,15 +1327,23 @@ export default function UpdateUserPage() {
   )
 }
 
-UpdateUserPage.getLayout = function getLayout(page: React.ReactElement) {
+function HoSoDetailLayout({ children }: { children: React.ReactElement }) {
+  const router = useRouter()
+  const isStudentHoSo = router.pathname.includes("/quan-ly-ho-so/hoc-vien")
   return (
     <CreateLayout
       breadcrumbList={[
-        { title: "Hồ sơ giảng viên/cán bộ", href: "/quan-ly-ho-so" },
+        isStudentHoSo
+          ? { title: "Hồ sơ học viên/sinh viên", href: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_HOC_VIEN }
+          : { title: "Hồ sơ giảng viên/cán bộ", href: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO },
         { title: "Chi tiết" },
       ]}
     >
-      {page}
+      {children}
     </CreateLayout>
   )
+}
+
+UpdateUserPage.getLayout = function getLayout(page: React.ReactElement) {
+  return <HoSoDetailLayout>{page}</HoSoDetailLayout>
 }

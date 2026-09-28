@@ -37,6 +37,7 @@ import { CalculateSemesterResultResponseSchema } from "../dto/student-result-ope
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
 import { queryDebtExportRows, type DebtExportRow } from "../services/student-debt"
 import { deleteStudent, DeleteStudentError } from "../services/delete-student"
+import { syncStudentsDonViFromFixedClass } from "../services/sync-student-don-vi"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -481,7 +482,9 @@ app.openapi(PheDuyetLuuBan, async (c) => {
     return { count }
   })
 
-  // const listStudentRepeatGrade = await StudentRepeatGradeService(studentIds, semesterId)
+  if (academicActionType === AcademicActionType.REPEAT_YEAR && studentIds.length) {
+    await syncStudentsDonViFromFixedClass({ studentIds })
+  }
 
   return c.json({ message: `Đã cập nhật ${count} trạng thái sinh viên`, count }, 200)
 })
@@ -853,6 +856,85 @@ app.openapi(exportStudentProfiles, async (c) => {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })
+})
+
+const syncDonViFromFixedClass = createRoute({
+  operationId: "syncStudentDonViFromFixedClass",
+  tags: ["Học viên / Sinh viên"],
+  path: "/sync-don-vi-from-fixed-class",
+  method: "post",
+  summary: "Đồng bộ đơn vị quản lý từ lớp niên chế",
+  description: `Cập nhật UserProfile.sDM_DonViId theo FixedClass.managementOrganizationId và đồng bộ LSB.
+
+**Bảng dữ liệu nguồn:** Student, FixedClass, UserProfile, DM_NhanVien.
+
+**Tham số:** studentIds hoặc fixedClassId.`,
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              studentIds: z
+                .array(z.string())
+                .optional()
+                .openapi(fieldDesc("Danh sách ID sinh viên cần đồng bộ.")),
+              fixedClassId: z
+                .string()
+                .optional()
+                .openapi(fieldDesc("ID lớp quản lý — đồng bộ toàn bộ sinh viên trong lớp.")),
+            })
+            .openapi("SyncStudentDonViFromFixedClassRequest"),
+        },
+      },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Đồng bộ đơn vị thành công",
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              message: z.string().openapi(fieldDesc("Thông báo kết quả.")),
+              synced: z.number().openapi(fieldDesc("Số hồ sơ đã đồng bộ LSB.")),
+              failed: z
+                .array(
+                  z.object({
+                    studentId: z.string(),
+                    message: z.string(),
+                  })
+                )
+                .openapi(fieldDesc("Danh sách hồ sơ đồng bộ LSB thất bại.")),
+            })
+            .openapi("SyncStudentDonViFromFixedClassResponse"),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(syncDonViFromFixedClass, async (c) => {
+  const { studentIds, fixedClassId } = c.req.valid("json")
+  try {
+    const result = await syncStudentsDonViFromFixedClass({ studentIds, fixedClassId })
+    return c.json(
+      {
+        message: `Đã đồng bộ ${result.synced} hồ sơ`,
+        synced: result.synced,
+        failed: result.failed,
+      },
+      200
+    )
+  } catch (error) {
+    return c.json(
+      {
+        message: error instanceof Error ? error.message : "Đồng bộ đơn vị thất bại",
+      },
+      500
+    )
+  }
 })
 
 const deleteStudentRoute = createRoute({

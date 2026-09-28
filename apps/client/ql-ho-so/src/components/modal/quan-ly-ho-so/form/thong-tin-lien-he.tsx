@@ -3,6 +3,7 @@ import FormItem from "@components/commons/form-item"
 import Select from "@components/commons/select"
 import TreeSelect from "@components/commons/tree-select"
 import type { DomProps } from "@constants/type"
+import { useSyncQuaTrinhCongTacOnOrgChange } from "@lib/qua-trinh-cong-tac"
 import { buildOrgTree } from "@lib/utils"
 import type { SubmitForm } from "@pages/quan-ly-ho-so/tao-moi"
 import {
@@ -36,6 +37,8 @@ export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
   })
 
   const treeData = buildOrgTree(organizations)
+  const sDM_DonViId = Form.useWatch("sDM_DonViId", form)
+  useSyncQuaTrinhCongTacOnOrgChange(form, sDM_DonViId, organizations)
 
   const renderContent = () => {
     return (

@@ -371,7 +371,7 @@ export default function StudentProfilePageDs() {
                         <EditIcon
                           onClick={() => {
                             router.push(
-                              `${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO}/${record.userProfileId}`
+                              `${ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_HOC_VIEN}/${record.userProfileId}`
                             )
                           }}
                           className="text-sm text-blue-700 cursor-pointer"

@@ -7,7 +7,7 @@ import * as modals from "@components/modal"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { SessionProvider } from "@workspace/auth/react"
 import { Provider as ZenStackHooksProvider } from "@workspace/db/hooks"
-import { lightThemeCustom } from "@workspace/ui"
+import { lightThemeCustom, MaintenanceGate } from "@workspace/ui"
 import { ConfigProvider } from "antd"
 import dayjs from "dayjs"
 import isBetween from "dayjs/plugin/isBetween"
@@ -82,6 +82,7 @@ function App({ Component, pageProps }: AppProps) {
   if (!isClient) return null
 
   return (
+    <MaintenanceGate>
     <SessionProvider session={pageProps.session}>
       <StoreProvider store={store}>
         <LoadingBar
@@ -111,6 +112,7 @@ function App({ Component, pageProps }: AppProps) {
         </ConfigProvider>
       </StoreProvider>
     </SessionProvider>
+    </MaintenanceGate>
   )
 }
 

@@ -68,7 +68,7 @@ export default function PutQuaTrinhCongTacModal() {
       layout="vertical"
     >
       <Col span={12}>
-        <FormItem label="Từ tháng năm" name="tuThangNam" required form={form}>
+        <FormItem label="Từ tháng năm" name="tuThangNam" form={form}>
           <DatePicker
             placeholder="Chọn từ tháng năm"
             className="w-full"
@@ -81,7 +81,7 @@ export default function PutQuaTrinhCongTacModal() {
       </Col>
 
       <Col span={12}>
-        <FormItem label="Đến tháng năm" name="denThangNam" required form={form}>
+        <FormItem label="Đến tháng năm" name="denThangNam" form={form}>
           <DatePicker
             placeholder="Chọn đến tháng năm"
             className="w-full"
@@ -93,7 +93,7 @@ export default function PutQuaTrinhCongTacModal() {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem label="Loại hình công tác" name="loaiHinhCongTacId" required form={form}>
+        <FormItem label="Loại hình công tác" name="loaiHinhCongTacId" form={form}>
           <Select
             placeholder="Chọn loại hình công tác"
             options={loaiHinhCongTacList?.map((item) => ({
@@ -104,12 +104,12 @@ export default function PutQuaTrinhCongTacModal() {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem label="Đơn vị" name="donVi" required form={form}>
+        <FormItem label="Đơn vị" name="donVi" form={form}>
           <Input placeholder="Nhập tên đơn vị" />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem label="Chức vụ" name="chucVuId" required form={form}>
+        <FormItem label="Chức vụ" name="chucVuId" form={form}>
           <Select
             placeholder="Chọn chức vụ"
             options={chucVuOptions?.map((item) => ({

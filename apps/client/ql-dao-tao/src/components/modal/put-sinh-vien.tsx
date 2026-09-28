@@ -20,6 +20,7 @@ import { ExportOutlined } from "@ant-design/icons"
 import FormItem from "@components/commons/form-item"
 import Select from "@components/commons/select"
 import { STUDENT_STATUS_OPTIONS } from "@constants/constants"
+import { syncStudentDonViFromFixedClass } from "@lib/sync-student-don-vi"
 import { ROUTER_PATH } from "@workspace/router"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { useCallback, useEffect, useMemo } from "react"
@@ -233,6 +234,9 @@ const PutStudentModal = () => {
             id,
           },
         })
+        if (output.fixedClassId) {
+          await syncStudentDonViFromFixedClass({ studentIds: [id] })
+        }
 
         message.success("Cập nhật sinh viên, học viên thành công")
       } else {
@@ -244,7 +248,7 @@ const PutStudentModal = () => {
           return
         }
 
-        await createStudent({
+        const created = await createStudent({
           data: {
             userProfileId: cccdUserProfileData?.id,
             fixedClassId: output.fixedClassId,
@@ -260,6 +264,9 @@ const PutStudentModal = () => {
             where: { id: cccdUserProfileData.id },
             data: { code: output.code },
           })
+        }
+        if (output.fixedClassId && created?.id) {
+          await syncStudentDonViFromFixedClass({ studentIds: [created.id] })
         }
         message.success("Thêm mới sinh viên, học viên thành công")
       }

@@ -26,6 +26,7 @@ import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
 import { queryClient } from "@api/index"
+import { syncStudentDonViFromFixedClass } from "@lib/sync-student-don-vi"
 import TreeSelectDepartment from "@components/commons/department-select/TreeSelectDepartment"
 import LectureTreeSelect from "@components/commons/lecture-select-multi/TreeSelectLecture"
 import { buildOrgTree } from "@lib/utils"
@@ -185,6 +186,9 @@ const PutFixedClassModal = () => {
         id,
       },
     })
+    if (id && dataOutput.managementOrganizationId !== oldFixedClass?.managementOrganizationId) {
+      await syncStudentDonViFromFixedClass({ fixedClassId: id })
+    }
     message.success("Cập nhật thành công")
     queryClient.invalidateQueries({
       queryKey: ["FixedClass"],
@@ -228,6 +232,9 @@ const PutFixedClassModal = () => {
               id,
             },
           })
+          if (output.managementOrganizationId !== oldFixedClass?.managementOrganizationId) {
+            await syncStudentDonViFromFixedClass({ fixedClassId: id })
+          }
           message.success("Cập nhật thành công")
           queryClient.invalidateQueries({
             queryKey: ["FixedClass"],

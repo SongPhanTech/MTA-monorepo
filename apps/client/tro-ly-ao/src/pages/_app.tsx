@@ -9,7 +9,7 @@ import { SessionProvider } from "@workspace/auth/react"
 import { Provider as ZenStackHooksProvider } from "@workspace/db/hooks"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { setupAppTimezone } from "@workspace/libs/timezone"
-import { lightThemeCustom } from "@workspace/ui"
+import { lightThemeCustom, MaintenanceGate } from "@workspace/ui"
 import { ConfigProvider } from "antd"
 import dayjs from "dayjs"
 import { StoreProvider } from "easy-peasy"
@@ -101,13 +101,13 @@ function App({ Component, pageProps }: AppProps) {
     </StoreProvider>
   )
 
-  // Only wrap with SessionProvider for admin pages that need SSO
-  if (requiresAuth) {
-    return <SessionProvider session={pageProps.session}>{appContent}</SessionProvider>
-  }
+  const content = requiresAuth ? (
+    <SessionProvider session={pageProps.session}>{appContent}</SessionProvider>
+  ) : (
+    appContent
+  )
 
-  // Public pages (chatbot) - no SessionProvider, no SSO check
-  return appContent
+  return <MaintenanceGate>{content}</MaintenanceGate>
 }
 
 export default App

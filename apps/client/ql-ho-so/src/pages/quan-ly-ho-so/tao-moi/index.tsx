@@ -52,6 +52,7 @@ import useSpinner from "@hooks/spinner"
 import { emptyObjectIf } from "@workspace/constant"
 import type { Prisma } from "@workspace/db"
 import { useCreateLecturer, useCreateStaff, useUpsertUserProfile } from "@workspace/db/hooks"
+import { buildLsbNhanVienPayload, getLsbErrorMessage } from "@lib/lsb-nhan-vien"
 import { postDMNhanViens } from "@workspace/libs/api/system"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
@@ -506,22 +507,31 @@ export default function CreateUserPage() {
     }
     try {
       showSpinner()
-      const res = await postDMNhanViens({
-        sDM_DonViId: organizationId,
-        sMa: values.code,
-        sHoVaDem: values.lastName?.trim(),
-        sTen: values.firstName?.trim(),
-        sTenDayDu: `${values.lastName?.trim() || ""} ${values.firstName?.trim() || ""}`.trim(),
-        sDM_GioiTinhId: values.genderId,
-        dNgaySinh: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
-        sCCCD: values.idCardNumber,
-        sSDTDiDong: values?.phoneNumber || "",
-        sEmail: values?.email || "",
-        sAvatarId: form.getFieldValue("avatar"),
-        bLaHocVien: values.bLaHocVien || undefined,
-        bLaCanBoNhanVien: values.bLaCanBoNhanVien || undefined,
-        bLaGiangVien: bLaGiangVien || undefined,
-      })
+      const donViId = values.sDM_DonViId || organizationId || null
+      const res = await postDMNhanViens(
+        buildLsbNhanVienPayload({
+          donViId,
+          code: values.code,
+          lastName: values.lastName,
+          firstName: values.firstName,
+          genderId: values.genderId,
+          dateOfBirth: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
+          idCardNumber: values.idCardNumber,
+          phoneNumber: values.phoneNumber,
+          email: values.email,
+          avatar: form.getFieldValue("avatar"),
+          officerNumber: values.officerNumber,
+          nationalityId: values.nationalityId,
+          currentAddress: values.currentAddress,
+          bLaHocVien: values.bLaHocVien,
+          bLaCanBoNhanVien: values.bLaCanBoNhanVien,
+          bLaGiangVien,
+        })
+      )
+      if (res?.status !== 200) {
+        message.error(getLsbErrorMessage(res, "Đồng bộ LSB thất bại, hồ sơ chưa được tạo"))
+        return
+      }
       if (res?.status === 200) {
         let rank = null
         let hocvi = null
@@ -554,7 +564,7 @@ export default function CreateUserPage() {
           bLaCanBoNhanVien: values?.bLaCanBoNhanVien,
           bLaGiangVien: bLaGiangVien || undefined,
           bLaNguoiDung: values?.bLaNguoiDung,
-          sDM_DonViId: bLaGiangVien ? organizationId || null : values.sDM_DonViId,
+          sDM_DonViId: donViId,
           dateOfBirth: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
           idCardDate: values.idCardDate ? dayjs(values.idCardDate).toISOString() : null,
           unionDate: values.unionDate ? dayjs(values.unionDate).toISOString() : null,
@@ -923,7 +933,7 @@ export default function CreateUserPage() {
               userProfileId: resProfile?.id,
               staffPositionId: staffPositionId,
               staffTypeId: staffTypeId,
-              organizationId: organizationId || "",
+              organizationId: donViId || "",
             },
           })
         }

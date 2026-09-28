@@ -8,6 +8,7 @@ import {
 import useSpinner from "@hooks/spinner"
 import { StudentStatus, type Student } from "@workspace/db/client"
 import { useCountStudent, useFindManyStudent, useFindUniqueFixedClass } from "@workspace/db/hooks"
+import { syncStudentDonViFromFixedClass } from "@lib/sync-student-don-vi"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { Button, Col, Divider, Flex, Form, Input, message, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
@@ -311,6 +312,9 @@ const AddStudentToFixedClassModal = () => {
       await queryClient.invalidateQueries({
         queryKey: ["zenstack", "Student"],
       })
+      if (addIds.length) {
+        await syncStudentDonViFromFixedClass({ studentIds: addIds })
+      }
       message.success("Cập nhật thành công")
       onCloseModalConfirm()
       onClose()
