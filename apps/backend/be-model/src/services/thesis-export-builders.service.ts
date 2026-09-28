@@ -235,9 +235,16 @@ async function renderDocx(
   path: string,
   data: Record<string, unknown>,
   fileName: string,
-  patchDocumentXml?: (xml: string) => string
+  patchDocumentXml?: (xml: string) => string,
+  patchRenderedXml?: (xml: string) => string
 ) {
-  const buffer = await renderDocxTemplate({ path, prefix: TEMPLATE_PREFIX, data, patchDocumentXml })
+  const buffer = await renderDocxTemplate({
+    path,
+    prefix: TEMPLATE_PREFIX,
+    data,
+    patchDocumentXml,
+    patchRenderedXml,
+  })
   return { buffer, fileName, contentType: DOCX_CONTENT_TYPE }
 }
 
@@ -1016,53 +1023,92 @@ async function buildGiayMoiHdlv(rows: StudentRow[], filters: ThesisExportFilter)
   return renderDocx("GiayMoiHDLV.docx", { items }, "GiayMoiHDLV.docx")
 }
 
-function reviewerInviteItems(rows: StudentRow[], filters: ThesisExportFilter, inAcademy?: boolean) {
+const councilInviteRoleLabel: Partial<Record<CouncilRole, string>> = {
+  [CouncilRole.CHAIRMAN]: "Chủ tịch",
+  [CouncilRole.SECRETARY]: "Thư ký",
+  [CouncilRole.REVIEWER_1]: "Phản biện 1",
+  [CouncilRole.REVIEWER_2]: "Phản biện 2",
+  [CouncilRole.MEMBER]: "Ủy viên",
+}
+
+/** Một giấy mời cho mỗi cán bộ, liệt kê mọi học viên mà cán bộ đó tham gia hội đồng. */
+function reviewerInviteItems(
+  rows: StudentRow[],
+  filters: ThesisExportFilter,
+  orgById: Map<string, OrgUnitNode>
+) {
   const date = formatDocDate(filters.signingDate)
   const sign = signer(filters)
-  const result: Record<string, unknown>[] = []
+  const groups = new Map<
+    string,
+    {
+      dotXet: string
+      types: Set<string>
+      students: Set<string>
+      rows: Record<string, string>[]
+      tenThanhVien: string
+    }
+  >()
+
   for (const r of commonStudentRows(rows)) {
-    for (const role of [CouncilRole.REVIEWER_1, CouncilRole.REVIEWER_2]) {
-      const member = getCouncilMember(r.project, role)
+    const members = [...(r.project?.council?.members ?? [])].sort(
+      (a, b) => (councilRoleOrder[a.role as CouncilRole] ?? 99) - (councilRoleOrder[b.role as CouncilRole] ?? 99)
+    )
+    for (const member of members) {
       const expert = councilMemberProfile(member)
       if (!expert) continue
-      if (typeof inAcademy === "boolean" && resolveInAcademy(expert) !== inAcademy) continue
-      result.push({
-        dotXet: r.project?.thesisSession?.name || "",
-        ngay: date.day,
-        thang: date.month,
-        nam: date.year,
-        type: r.type || "luận văn",
-        tongSoHocVien: rows.length,
-        text1: sign.text1,
-        text2: sign.text2,
-        nguoiki: sign.name,
-        tenThanhVien: getSupervisorName(expert, true),
-        data: [
-          {
-            stt: 1,
-            ngaybaove: r.ngaybaove,
-            giobaove: r.giobaove,
-            phongbaove: r.phongbaove,
-            tenhocvien: r.hoTen,
-            chuyennganh: r.chuyennganh,
-            tenchucdanh: role === CouncilRole.REVIEWER_1 ? "Phản biện 1" : "Phản biện 2",
-          },
-        ],
+      const key = String(member.expertId || expert.expertId || getSupervisorName(expert, false))
+      if (!key) continue
+      if (!groups.has(key)) {
+        const unit = councilDecisionUnit(expert, orgById)
+        const name = getSupervisorName(expert, false)
+        groups.set(key, {
+          dotXet: r.project?.thesisSession?.name || "",
+          types: new Set(),
+          students: new Set(),
+          rows: [],
+          tenThanhVien: [name, unit].filter(Boolean).join(", "),
+        })
+      }
+      const group = groups.get(key)!
+      const thesisType = r.type || "luận văn"
+      group.types.add(thesisType)
+      group.students.add(r.maHv || r.hoTen)
+      group.rows.push({
+        ngaybaove: r.ngaybaove,
+        giobaove: r.giobaove,
+        phongbaove: r.phongbaove,
+        tenhocvien: r.hoTen,
+        chuyennganh: studentMajor(r.student)?.shortName?.trim() || r.chuyennganh,
+        tenchucdanh: councilInviteRoleLabel[member.role as CouncilRole] || "",
       })
     }
   }
-  return result
+
+  return Array.from(groups.values()).map((group) => ({
+    dotXet: group.dotXet,
+    ngay: date.day,
+    thang: date.month,
+    nam: date.year,
+    type: group.types.size > 1 ? "luận văn/đề án" : [...group.types][0] || "luận văn",
+    tongSoHocVien: group.students.size,
+    text1: sign.text1,
+    text2: sign.text2,
+    nguoiki: sign.name,
+    tenThanhVien: group.tenThanhVien,
+    data: group.rows.map((row, index) => ({ ...row, stt: index + 1 })),
+  }))
 }
 
-async function buildGiayMoiChamPb(rows: StudentRow[], filters: ThesisExportFilter) {
-  const inRows = reviewerInviteItems(rows, filters, true)
-  const outRows = reviewerInviteItems(rows, filters, false)
-  const items = inRows.length ? inRows : outRows
-  const suffix = inRows.length && outRows.length ? "_TrongHocVien" : inRows.length ? "_TrongHocVien" : "_NgoaiHocVien"
+async function buildGiayMoiChamPb(_rows: StudentRow[], filters: ThesisExportFilter) {
+  const sessionRows = await findThesisExportStudentRows({ thesisSessionId: filters.thesisSessionId })
+  assertRows(sessionRows, "Không có học viên trong đợt để xuất giấy mời.")
+  const orgById = await loadAcademyOrgById()
+  const items = reviewerInviteItems(sessionRows, filters, orgById)
   return renderDocx(
     "GiayMoiChamLuanVan.docx",
     { items: items.map((item, idx) => ({ ...item, "ngắt trang": idx === items.length - 1 ? "" : "ngắt trang" })) },
-    `GiayMoiChamLuanVan${suffix}.docx`
+    "GiayMoiChamLuanVan.docx"
   )
 }
 
@@ -1147,6 +1193,33 @@ async function buildBanSaoHd(rows: StudentRow[], filters: ThesisExportFilter) {
   return renderDocx("BanSaoHoiDongDanhGiaLuanVan.docx", { items }, "BanSaoHoiDongDanhGiaLuanVan.docx")
 }
 
+function toRoman(num: number) {
+  const romans: [number, string][] = [
+    [1000, "M"],
+    [900, "CM"],
+    [500, "D"],
+    [400, "CD"],
+    [100, "C"],
+    [90, "XC"],
+    [50, "L"],
+    [40, "XL"],
+    [10, "X"],
+    [9, "IX"],
+    [5, "V"],
+    [4, "IV"],
+    [1, "I"],
+  ]
+  let result = ""
+  let n = num
+  for (const [value, symbol] of romans) {
+    while (n >= value) {
+      result += symbol
+      n -= value
+    }
+  }
+  return result
+}
+
 async function loadAcademyOrgById() {
   const organizations = await prisma.dM_DonVi.findMany({
     where: { bDeleted: { not: true } },
@@ -1155,43 +1228,118 @@ async function loadAcademyOrgById() {
   return new Map<string, OrgUnitNode>(organizations.map((org) => [org.Id, org]))
 }
 
-/** Giảng viên trong HV: đơn vị cấp học viện (cùng phụ lục văn bằng). Ngoài HV: nơi công tác. */
+/** Ngoài học viện: giữ nguyên nơi công tác đã lưu, không suy từ đơn vị giảng viên. */
+function storedOutsideUnit(expert: any) {
+  const workplace = typeof expert?.workplace === "string" ? expert.workplace.trim() : ""
+  const organization = typeof expert?.organization === "string" ? expert.organization.trim() : ""
+  return workplace || organization
+}
+
+/** Trong học viện: đơn vị cấp nhà trường. Ngoài học viện: nơi công tác giữ nguyên. */
 function councilDecisionUnit(expert: any, orgById: Map<string, OrgUnitNode>) {
+  if (!expert) return ""
+  if (!resolveInAcademy(expert)) return storedOutsideUnit(expert)
   const lecturerOrg = expert?.expert?.lecturer?.userProfile?.donVi ?? expert?.lecturer?.userProfile?.donVi
-  if (resolveInAcademy(expert)) {
-    return resolveCouncilMemberUnitName({
-      inAcademy: true,
-      lecturerOrg: lecturerOrg?.Id ? lecturerOrg : undefined,
-      organization: typeof expert?.organization === "string" ? expert.organization : undefined,
-      orgById,
-    })
+  return resolveCouncilMemberUnitName({
+    inAcademy: true,
+    lecturerOrg: lecturerOrg?.Id ? lecturerOrg : undefined,
+    organization: typeof expert?.organization === "string" ? expert.organization : undefined,
+    orgById,
+  })
+}
+
+function appendixSupervisorLine(expert: any, orgById: Map<string, OrgUnitNode>) {
+  const name = getSupervisorName(expert, false)
+  if (!name) return ""
+  const unit = councilDecisionUnit(expert, orgById)
+  return unit ? `${name}, ${unit}` : name
+}
+
+/** Câu trong từng hội đồng: Ngành ... (chuyên ngành ...) khi hai tên khác nhau. */
+function formatCouncilMajorLine(nganh: string, chuyenNganh: string) {
+  const field = nganh.trim()
+  const specialization = chuyenNganh.trim()
+  if (field && specialization && shouldShowSpecialization(field, specialization)) {
+    return `Ngành ${field} (chuyên ngành ${specialization})`
   }
-  return resolveExpertWorkplace(expert)
+  const label = field || specialization
+  return label ? `Ngành ${label}` : ""
+}
+
+/** Bỏ đoạn trống sau mỗi hội đồng và khoảng cách trên tiêu đề ngành. */
+function patchPhuLucQdHdTemplate(xml: string) {
+  if (!xml.includes("{#items}") || xml.includes("{#groups}")) return xml
+  let next = xml.replace("{#items}", "{#groups}")
+  next = next.replace(/<w:docGrid\b[^>]*\/>/g, "")
+  next = next.replace(
+    '<w:spacing w:before="200" w:after="100"/>',
+    '<w:snapToGrid w:val="100"/><w:spacing w:before="100" w:after="100" w:line="240" w:lineRule="auto"/>'
+  )
+  next = next.replace(
+    "{sttChuyenNganh} {tenChuyenNganh}</w:t></w:r></w:p>",
+    '{sttChuyenNganh} {tenChuyenNganh}</w:t></w:r></w:p><w:p><w:r><w:rPr><w:sz w:val="2"/><w:szCs w:val="2"/></w:rPr><w:t>{#items}</w:t></w:r></w:p>'
+  )
+  next = next.replace(/<w:p\b[^>]*>(?:(?!<\/w:p>).)*<\/w:p>/g, (paragraph) => {
+    if (paragraph.includes("<w:t") || !paragraph.includes('w:after="400"')) return paragraph
+    return ""
+  })
+  next = next.replace(
+    "{/items}</w:t></w:r></w:p>",
+    '{/items}</w:t></w:r></w:p><w:p><w:r><w:rPr><w:sz w:val="2"/><w:szCs w:val="2"/></w:rPr><w:t>{/groups}</w:t></w:r></w:p>'
+  )
+  next = next.replace("Cán bộ hướng dẫn: {gvhd1}; {gvhd2}.", "Cán bộ hướng dẫn: {gvhd}.")
+  return next
+}
+
+/** Thẻ lặp để lại đoạn văn rỗng sau bảng thành viên. Chỉ xóa khi còn đoạn văn phía sau, để file không mất đoạn kết. */
+function stripCouncilAppendixBlankLines(xml: string) {
+  return xml
+    .replace(/<\/w:tbl>(?:<w:p\/>|<w:p\b[^>]*\/>)+(?=<w:p\b)/g, "</w:tbl>")
+    .replace(/<w:p\/>(?=<w:p\b)/g, "")
 }
 
 async function buildPhuLucQdHd(rows: StudentRow[]) {
   const orgById = await loadAcademyOrgById()
-  const unitOf = (role: CouncilRole, project: Project | undefined) =>
-    councilDecisionUnit(getMemberProfile(project, role), orgById)
-  const data = commonStudentRows(rows).map((r) => ({
-    ...r,
-    sttHoiDong: String(r.stt),
-    loaiLuanVan: r.loaiLuanVan || "luận văn",
-    tenDeTai: r.deTai,
-    tenHocVien: r.hoTen,
-    tenChuTich: getSupervisorName(getMemberProfile(r.project, CouncilRole.CHAIRMAN)),
-    toChucChuTich: unitOf(CouncilRole.CHAIRMAN, r.project),
-    tenThuKy: getSupervisorName(getMemberProfile(r.project, CouncilRole.SECRETARY)),
-    toChucThuKy: unitOf(CouncilRole.SECRETARY, r.project),
-    tenUyVien: getSupervisorName(getMemberProfile(r.project, CouncilRole.MEMBER)),
-    toChucUyVien: unitOf(CouncilRole.MEMBER, r.project),
-    tenPb1: getSupervisorName(getMemberProfile(r.project, CouncilRole.REVIEWER_1)),
-    toChucPb1: unitOf(CouncilRole.REVIEWER_1, r.project),
-    tenPb2: getSupervisorName(getMemberProfile(r.project, CouncilRole.REVIEWER_2)),
-    toChucPb2: unitOf(CouncilRole.REVIEWER_2, r.project),
+  const groups = new Map<string, { label: string; items: Record<string, string>[] }>()
+  for (const row of commonStudentRows(rows)) {
+    if (!row.project?.council) continue
+    const field = row.nganh.trim() || row.chuyennganh.trim() || "Chưa xác định"
+    const key = normalizeDisplayName(field)
+    if (!groups.has(key)) groups.set(key, { label: field, items: [] })
+    const group = groups.get(key)!
+    const project = row.project
+    const unitOf = (role: CouncilRole) => councilDecisionUnit(getMemberProfile(project, role), orgById)
+    group.items.push({
+      sttHoiDong: String(group.items.length + 1),
+      loaiLuanVan: row.loaiLuanVan || "luận văn",
+      nganh: formatCouncilMajorLine(group.label, row.chuyennganh),
+      tenDeTai: String(row.deTai || "").trim().replace(/\s+/g, " "),
+      tenHocVien: row.hoTen,
+      ngaySinh: row.ngaySinh,
+      khoaHoc: row.khoaHoc,
+      gvhd: [appendixSupervisorLine(project?.supervisor, orgById), appendixSupervisorLine(project?.coSupervisor, orgById)]
+        .filter(Boolean)
+        .join("; "),
+      tenChuTich: getSupervisorName(getMemberProfile(project, CouncilRole.CHAIRMAN)),
+      toChucChuTich: unitOf(CouncilRole.CHAIRMAN),
+      tenThuKy: getSupervisorName(getMemberProfile(project, CouncilRole.SECRETARY)),
+      toChucThuKy: unitOf(CouncilRole.SECRETARY),
+      tenUyVien: getSupervisorName(getMemberProfile(project, CouncilRole.MEMBER)),
+      toChucUyVien: unitOf(CouncilRole.MEMBER),
+      tenPb1: getSupervisorName(getMemberProfile(project, CouncilRole.REVIEWER_1)),
+      toChucPb1: unitOf(CouncilRole.REVIEWER_1),
+      tenPb2: getSupervisorName(getMemberProfile(project, CouncilRole.REVIEWER_2)),
+      toChucPb2: unitOf(CouncilRole.REVIEWER_2),
+    })
+  }
+  const groupList = Array.from(groups.values()).map((group, index) => ({
+    sttChuyenNganh: `${toRoman(index + 1)}.`,
+    tenChuyenNganh: `NGÀNH ${group.label.toLocaleUpperCase("vi")} (${String(group.items.length).padStart(2, "0")} HỘI ĐỒNG)`,
+    items: group.items,
   }))
   const first = firstRow(rows)
   const session = getProject(first)?.thesisSession
+  const total = groupList.reduce((sum, group) => sum + group.items.length, 0)
   return renderDocx(
     "PhuLucQDHoiDong.docx",
     {
@@ -1199,10 +1347,12 @@ async function buildPhuLucQdHd(rows: StudentRow[]) {
       dotXet: session?.name || "",
       soQd: session?.defenseDecisionNumber || "",
       ngayQd: formatBirthDate(session?.defenseDecisionDate),
-      soHoiDong: data.length.toString(),
-      items: data,
+      soHoiDong: total.toString(),
+      groups: groupList,
     },
-    "PhuLucQdhd.docx"
+    "PhuLucQdhd.docx",
+    patchPhuLucQdHdTemplate,
+    stripCouncilAppendixBlankLines
   )
 }
 

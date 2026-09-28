@@ -3365,21 +3365,40 @@ async function loadAcademyOrgById() {
   return new Map(organizations.map((org) => [org.Id, org]))
 }
 
-/** Giảng viên trong HV: đơn vị cấp học viện (cùng phụ lục văn bằng). Ngoài HV: nơi công tác. */
+/** Trong học viện: đơn vị cấp nhà trường. Ngoài học viện: nơi công tác giữ nguyên. */
 const councilAppendixUnit = (expert: any, orgById: Map<string, OrgUnitNode>) => {
-  const lecturerOrg = expert?.lecturer?.userProfile?.donVi ?? expert?.expert?.lecturer?.userProfile?.donVi
-  if (versionInAcademy(expert)) {
-    return resolveCouncilMemberUnitName({
-      inAcademy: true,
-      lecturerOrg: lecturerOrg?.Id ? lecturerOrg : undefined,
-      organization: typeof expert?.organization === "string" ? expert.organization : undefined,
-      orgById,
-    })
-  }
+  if (!expert) return ""
   const workplace = typeof expert?.workplace === "string" ? expert.workplace.trim() : ""
   const organization = typeof expert?.organization === "string" ? expert.organization.trim() : ""
-  const lecturerOrganization = typeof lecturerOrg?.sTen === "string" ? lecturerOrg.sTen.trim() : ""
-  return workplace || organization || lecturerOrganization
+  if (!versionInAcademy(expert)) return workplace || organization
+  const lecturerOrg = expert?.lecturer?.userProfile?.donVi ?? expert?.expert?.lecturer?.userProfile?.donVi
+  return resolveCouncilMemberUnitName({
+    inAcademy: true,
+    lecturerOrg: lecturerOrg?.Id ? lecturerOrg : undefined,
+    organization: typeof expert?.organization === "string" ? expert.organization : undefined,
+    orgById,
+  })
+}
+
+const appendixAdvisorLine = (expert: any, orgById: Map<string, OrgUnitNode>) => {
+  const name = (getSupervisorName(expert, false, false) as string) || ""
+  if (!name) return ""
+  const unit = councilAppendixUnit(expert, orgById)
+  return unit ? `${name}, ${unit}` : name
+}
+
+const formatCouncilMajorLine = (nganh: string, chuyenNganh: string) => {
+  const field = nganh.trim()
+  const specialization = chuyenNganh.trim()
+  if (
+    field &&
+    specialization &&
+    field.localeCompare(specialization, "vi", { sensitivity: "accent" }) !== 0
+  ) {
+    return `Ngành ${field} (chuyên ngành ${specialization})`
+  }
+  const label = field || specialization
+  return label ? `Ngành ${label}` : ""
 }
 
 const convertToPhuLucQdhdTemplateData = (
@@ -3411,29 +3430,26 @@ const convertToPhuLucQdhdTemplateData = (
     },
   }
 
-  const majorMap = new Map<string, any[]>()
+  const majorMap = new Map<string, { label: string; students: any[] }>()
   allStudentsInClasses.forEach((student) => {
     if (!student?.thesisRegistrations?.[0]?.thesisProject) return
     const majorName =
-      student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "Chưa xác định"
+      student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
     const trainingField =
       student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
-    const groupName = trainingField || majorName
-    const groupKey =
-      trainingField && trainingField !== majorName
-        ? `Ngành ${groupName} (CHUYÊN NGÀNH ${majorName.toUpperCase()})`
-        : `Ngành ${groupName}`
+    const label = (trainingField || majorName || "Chưa xác định").trim()
+    const groupKey = label.replace(/\s+/g, " ").toLocaleLowerCase("vi")
     if (!majorMap.has(groupKey)) {
-      majorMap.set(groupKey, [])
+      majorMap.set(groupKey, { label, students: [] })
     }
-    majorMap.get(groupKey)?.push(student)
+    majorMap.get(groupKey)?.students.push(student)
   })
 
   let totalCouncils = 0
   const groupedData: PhuLucQdhdData[] = []
   let majorIndex = 1
 
-  majorMap.forEach((students, groupKey) => {
+  majorMap.forEach(({ label, students }) => {
     const validStudents = students.filter(
       (student) =>
         student?.thesisRegistrations?.[0]?.thesisProject &&
@@ -3461,15 +3477,14 @@ const convertToPhuLucQdhdTemplateData = (
       const reviewer2Expert = councilMemberProfile(reviewer2)
       const ngaySinhStr = formatBirthDate(student.userProfile?.dateOfBirth)
       const khoaHocStr = student.fixedClass?.trainingCourse?.name || ""
-      const rawGvhd1 = (getSupervisorName(project?.supervisor, false, false) as string) || ""
-      const rawGvhd2 = (getSupervisorName(project?.coSupervisor, false, false) as string) || ""
-      const hasTwoGvhd = Boolean(rawGvhd1 && rawGvhd2)
-      const gvhd1 = hasTwoGvhd ? `1. ${rawGvhd1}` : rawGvhd1
-      const gvhd2 = hasTwoGvhd ? `2. ${rawGvhd2}` : rawGvhd2
+      const specialization =
+        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
+      const gvhd1 = appendixAdvisorLine(project?.supervisor, orgById)
+      const gvhd2 = appendixAdvisorLine(project?.coSupervisor, orgById)
       return {
         sttHoiDong: (studentIdx + 1).toString(),
         loaiLuanVan: project?.type?.trim().toLowerCase() || "luận văn",
-        nganh: groupKey,
+        nganh: formatCouncilMajorLine(label, specialization),
         tenDeTai: project?.title?.trim().replace(/\s+/g, " ") || "",
         tenHocVien: student.userProfile?.fullname || "",
         ngaySinh: ngaySinhStr,
@@ -3496,8 +3511,8 @@ const convertToPhuLucQdhdTemplateData = (
 
     groupedData.push({
       data: {
-        sttChuyenNganh: toRoman(majorIndex),
-        tenChuyenNganh: `${groupKey.toUpperCase()} (${tableRows.length} HỘI ĐỒNG)`,
+        sttChuyenNganh: `${toRoman(majorIndex)}.`,
+        tenChuyenNganh: `NGÀNH ${label.toLocaleUpperCase("vi")} (${String(tableRows.length).padStart(2, "0")} HỘI ĐỒNG)`,
         data: tableRows,
       },
     })
