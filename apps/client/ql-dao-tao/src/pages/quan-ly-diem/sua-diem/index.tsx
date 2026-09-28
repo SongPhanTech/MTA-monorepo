@@ -569,7 +569,7 @@ function TicketDetailDrawer({
         dataSource={items}
         columns={[
           {
-            title: "Mã SV",
+            title: "Mã định danh",
             align: "center",
             dataIndex: ["studentSubjectScore", "student", "userProfile", "code"],
             key: "studentCode",
@@ -880,10 +880,10 @@ function AddStudentModal({
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item label="Tìm kiếm sinh viên (Mã SV, Tên)">
+        <Form.Item label="Tìm kiếm sinh viên (Mã định danh, Tên)">
           <Select
             showSearch
-            placeholder="Nhập mã SV hoặc tên"
+            placeholder="Nhập Mã định danh hoặc tên"
             defaultActiveFirstOption={false}
             filterOption={false}
             onSearch={setSearchTerm}

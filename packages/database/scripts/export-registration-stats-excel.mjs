@@ -313,7 +313,7 @@ wb.created = new Date()
   const ws = wb.addWorksheet("SV dang ky thanh cong")
   ws.columns = [
     { header: "STT", key: "stt", width: 6 },
-    { header: "Mã SV", key: "studentCode", width: 14 },
+    { header: "Mã định danh", key: "studentCode", width: 14 },
     { header: "Họ tên", key: "fullName", width: 28 },
     { header: "Lớp cố định", key: "fixedClassName", width: 18 },
     { header: "Số lớp đã ĐK", key: "classCount", width: 12 },
@@ -345,7 +345,7 @@ wb.created = new Date()
   const ws = wb.addWorksheet("SV khong DK duoc (tong hop)")
   ws.columns = [
     { header: "STT", key: "stt", width: 6 },
-    { header: "Mã SV", key: "studentCode", width: 14 },
+    { header: "Mã định danh", key: "studentCode", width: 14 },
     { header: "Họ tên", key: "fullName", width: 28 },
     { header: "Lớp cố định", key: "fixedClassName", width: 18 },
     { header: "Số lần lỗi", key: "failCount", width: 12 },
@@ -382,7 +382,7 @@ wb.created = new Date()
   ws.columns = [
     { header: "STT", key: "stt", width: 6 },
     { header: "Thời điểm", key: "occurredAt", width: 20 },
-    { header: "Mã SV", key: "studentCode", width: 14 },
+    { header: "Mã định danh", key: "studentCode", width: 14 },
     { header: "Họ tên", key: "fullName", width: 28 },
     { header: "Lớp cố định", key: "fixedClassName", width: 18 },
     { header: "Mã lỗi", key: "errorCode", width: 24 },

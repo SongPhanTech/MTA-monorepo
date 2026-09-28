@@ -52,7 +52,7 @@ const ImportScoreModal = ({
       // Format dữ liệu theo cấu trúc mong muốn
       const formattedData = tableData
         .map((row: any) => ({
-          key: row.__EMPTY, // Sử dụng mã sinh viên làm key
+          key: row.__EMPTY, // Sử dụng mã định danh làm key
           studentCode: row.__EMPTY, // Mã sinh viên
           studentName: row.__EMPTY_1, // Họ và Tên
           dobStudent: row.__EMPTY_2, // Ngày sinh
@@ -97,7 +97,7 @@ const ImportScoreModal = ({
     const errors: string[] = []
 
     selectedData.forEach((item) => {
-      // Kiểm tra mã sinh viên
+      // Kiểm tra mã định danh
       const existingStudent = existingStudents.find((s) => s.student?.userProfile?.code === item.studentCode)
 
       if (!existingStudent) {

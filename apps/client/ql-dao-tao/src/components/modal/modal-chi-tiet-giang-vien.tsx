@@ -223,9 +223,9 @@ const ModalChiTietGiangVien = () => {
       children: (
         <Card className="border-primary" size="small">
           <Row gutter={[16, 24]}>
-            {/* Hàng 1: Mã giảng viên, ID, Loại, Từ ngày */}
+            {/* Hàng 1: Mã định danh, ID, Loại, Từ ngày */}
             <Col span={6}>
-              <Text type="secondary">Mã giảng viên</Text>
+              <Text type="secondary">Mã định danh</Text>
               <div>
                 <Text strong>{lecturer.userProfile?.code || "-"}</Text>
               </div>

@@ -244,7 +244,7 @@ export default function ModalPreviewImportJson({
                   pagination={{ pageSize: 15, showSizeChanger: true }}
                   scroll={{ y: 380 }}
                   columns={[
-                    { title: "Mã SV", dataIndex: "code", width: 130 },
+                    { title: "Mã định danh", dataIndex: "code", width: 130 },
                     { title: "Họ tên", dataIndex: "fullName" },
                     { title: "Lớp quản lý", dataIndex: "fixedClass", width: 140 },
                     {

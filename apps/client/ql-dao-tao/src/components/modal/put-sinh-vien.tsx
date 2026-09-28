@@ -386,7 +386,7 @@ const PutStudentModal = () => {
           </Col>
           <Col span={12}>
             <FormItem form={form} name="code" label="Mã sinh viên, học viên" required>
-              <Input placeholder="Nhập mã sinh viên, học viên" />
+              <Input placeholder="Nhập mã định danh, học viên" />
             </FormItem>
           </Col>
           <Col sm={12} lg={12}>

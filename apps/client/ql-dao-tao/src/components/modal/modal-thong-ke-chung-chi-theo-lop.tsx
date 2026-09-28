@@ -278,7 +278,7 @@ const ModalThongKeChungChiTheoLop = () => {
 
         const headerRow = sheet.getRow(3)
         headerRow.getCell(1).value = "STT"
-        headerRow.getCell(2).value = "Mã SV"
+        headerRow.getCell(2).value = "Mã định danh"
         headerRow.getCell(3).value = "Họ và tên"
         headerRow.getCell(4).value = "Tình trạng"
         headerRow.getCell(5).value = "Ngày cấp"
@@ -383,7 +383,7 @@ const ModalThongKeChungChiTheoLop = () => {
                         render: (_: unknown, __: StudentRow, index: number) => index + 1,
                       },
                       {
-                        title: "Mã SV",
+                        title: "Mã định danh",
                         dataIndex: "code",
                         width: 140,
                         align: "center",

@@ -824,7 +824,7 @@ export default function StudentGraduationApplication() {
                           render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
                         },
                         {
-                          title: "Mã SV",
+                          title: "Mã định danh",
                           align: "center",
                           dataIndex: "code",
                           width: 100,

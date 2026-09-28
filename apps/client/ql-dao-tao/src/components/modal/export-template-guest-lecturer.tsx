@@ -72,7 +72,7 @@ const ExportTemplateGuestLecturer = () => {
     const headerRow = worksheet.getRow(4)
     headerRow.values = [
       "STT",
-      "Mã GV",
+      "Mã định danh",
       "Tên giảng viên",
       "Ngày sinh (dd/mm/yyyy)",
       "Giới tính",
@@ -111,7 +111,7 @@ const ExportTemplateGuestLecturer = () => {
       { width: 20 },
       { width: 20 },
     ]
-    // Cột Mã GV (B), CCCD (L), Ngân hàng (M), Số tài khoản (N) ép kiểu text
+    // Cột Mã định danh (B), CCCD (L), Ngân hàng (M), Số tài khoản (N) ép kiểu text
     ;["B", "L", "M", "N"].forEach((col) => {
       worksheet.getColumn(col).numFmt = "@"
 

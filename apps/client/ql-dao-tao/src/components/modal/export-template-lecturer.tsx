@@ -72,7 +72,7 @@ const ExportTemplateLecturer = () => {
     const headerRow = worksheet.getRow(4)
     headerRow.values = [
       "STT",
-      "Mã GV",
+      "Mã định danh",
       "Tên giảng viên",
       "Ngày sinh (dd/mm/yyyy)",
       "Giới tính",

@@ -34,7 +34,7 @@ const TheThongTinCaNhan = ({ thongTin, isLoading, profileId }: TheThongTinCaNhan
     {
       key: "ma-gv",
       icon: <Users size={14} />,
-      nhan: "Mã giảng viên",
+      nhan: "Mã định danh",
       giaTri: thongTin.maGiangVien,
     },
     { key: "khoa", icon: <Building2 size={14} />, nhan: "Khoa/Viện", giaTri: thongTin.khoa },

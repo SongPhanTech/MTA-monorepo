@@ -593,7 +593,7 @@ export const exportStudentAcademicWarning = async ({
   const worksheet = workbook.addWorksheet("Danh sách cảnh báo học tập")
 
   worksheet.columns = [
-    { header: "Mã SV", key: "studentCode", width: 15 },
+    { header: "Mã định danh", key: "studentCode", width: 15 },
     { header: "Họ và tên", key: "studentName", width: 25 },
     { header: "Ngày sinh", key: "dob", width: 15 },
     { header: "Lớp", key: "className", width: 15 },

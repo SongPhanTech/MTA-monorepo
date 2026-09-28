@@ -203,7 +203,7 @@ export default function AutoCheckCertificate() {
 
       const allCols = [
         { header: "STT", key: "stt", width: 10, style: centerStyle },
-        { header: "Mã SV", key: "code", width: 15 },
+        { header: "Mã định danh", key: "code", width: 15 },
         { header: "Họ và tên", key: "fullname", width: 25 },
         { header: "Ngày sinh", key: "dob", width: 15 },
         { header: "CCCD/CMND", key: "cccd", width: 20 },
@@ -293,7 +293,7 @@ export default function AutoCheckCertificate() {
         render: (_: any, __: any, index: number) => index + 1,
       },
       {
-        title: "Mã SV",
+        title: "Mã định danh",
         dataIndex: "code",
         align: "center",
         key: "code",

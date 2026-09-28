@@ -559,7 +559,7 @@ const ModalThemLichCaNhan = () => {
             allowClear
             showSearch
             filterOption={false}
-            placeholder="Tìm theo mã SV/GV, tên, mã đơn vị..."
+            placeholder="Tìm theo Mã định danh/GV, tên, mã đơn vị..."
             className="w-full [&_.ant-select-selector]:!min-h-9"
             options={tuyChonNguoiLienQuan}
             optionRender={(option) => (

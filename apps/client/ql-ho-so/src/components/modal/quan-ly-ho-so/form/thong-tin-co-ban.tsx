@@ -466,10 +466,10 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                   required
                   form={form}
                   name="lectureCode"
-                  label="Mã giảng viên"
+                  label="Mã định danh"
                   className="mb-0"
                 >
-                  <Input placeholder="Nhập mã giảng viên" className="h-9" />
+                  <Input placeholder="Nhập Mã định danh" className="h-9" />
                 </FormItem>
               </Col>
               <Col span={12}>

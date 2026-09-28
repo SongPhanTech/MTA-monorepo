@@ -301,7 +301,7 @@ async function main() {
   const s2 = wb.addWorksheet("Da dang ky - chi tiet")
   s2.columns = [
     { header: "STT", key: "stt", width: 8 },
-    { header: "Mã SV", key: "studentCode", width: 14 },
+    { header: "Mã định danh", key: "studentCode", width: 14 },
     { header: "Họ tên", key: "fullName", width: 28 },
     { header: "Lớp quản lý", key: "fixedClass", width: 14 },
     { header: "Trạng thái SV", key: "status", width: 18 },
@@ -337,7 +337,7 @@ async function main() {
   const s3 = wb.addWorksheet("Da dang ky - tom tat SV")
   s3.columns = [
     { header: "STT", key: "stt", width: 8 },
-    { header: "Mã SV", key: "studentCode", width: 14 },
+    { header: "Mã định danh", key: "studentCode", width: 14 },
     { header: "Họ tên", key: "fullName", width: 28 },
     { header: "Lớp quản lý", key: "fixedClass", width: 14 },
     { header: "Trạng thái SV", key: "status", width: 18 },
@@ -375,7 +375,7 @@ async function main() {
   const s4 = wb.addWorksheet("Chua DK - dang hoc")
   s4.columns = [
     { header: "STT", key: "stt", width: 8 },
-    { header: "Mã SV", key: "studentCode", width: 14 },
+    { header: "Mã định danh", key: "studentCode", width: 14 },
     { header: "Họ tên", key: "fullName", width: 28 },
     { header: "Lớp quản lý", key: "fixedClass", width: 14 },
     { header: "Trạng thái SV", key: "status", width: 18 },
@@ -396,7 +396,7 @@ async function main() {
   const s5 = wb.addWorksheet("Chua DK - thoi nghi hoc")
   s5.columns = [
     { header: "STT", key: "stt", width: 8 },
-    { header: "Mã SV", key: "studentCode", width: 14 },
+    { header: "Mã định danh", key: "studentCode", width: 14 },
     { header: "Họ tên", key: "fullName", width: 28 },
     { header: "Lớp quản lý", key: "fixedClass", width: 14 },
     { header: "Trạng thái SV", key: "status", width: 18 },
@@ -421,7 +421,7 @@ async function main() {
   const s6 = wb.addWorksheet("Chua DK - tat ca")
   s6.columns = [
     { header: "STT", key: "stt", width: 8 },
-    { header: "Mã SV", key: "studentCode", width: 14 },
+    { header: "Mã định danh", key: "studentCode", width: 14 },
     { header: "Họ tên", key: "fullName", width: 28 },
     { header: "Lớp quản lý", key: "fixedClass", width: 14 },
     { header: "Trạng thái SV", key: "status", width: 18 },

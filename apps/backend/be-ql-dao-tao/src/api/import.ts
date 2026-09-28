@@ -265,7 +265,7 @@ app.openapi(importLecturer, async (c) => {
   }
 
   if (duplicateCode.length) {
-    return c.json({ message: "Mã giảng viên đã tồn tại", errors: duplicateCode }, 400)
+    return c.json({ message: "Mã định danh đã tồn tại", errors: duplicateCode }, 400)
   }
   const cccdCount = new Map<string, string[]>()
   for (const l of data.lecturers) {
@@ -276,7 +276,7 @@ app.openapi(importLecturer, async (c) => {
   }
   const duplicateCCCD = [...cccdCount.entries()]
     .filter(([, codes]) => codes.length > 1)
-    .map(([cccd, codes]) => `CCCD ${cccd} bị trùng ở mã GV: ${codes.join(", ")}`)
+    .map(([cccd, codes]) => `CCCD ${cccd} bị trùng ở mã định danh: ${codes.join(", ")}`)
   if (duplicateCCCD.length) {
     return c.json({ message: "Số CCCD bị trùng trong file Excel", errors: duplicateCCCD }, 400)
   }
@@ -411,14 +411,14 @@ app.openapi(importLecturer, async (c) => {
                   importErrors.push({
                     code: lecturer.code,
                     name: lecturer.fullname,
-                    error: `CCCD "${lecturer.idCardNumber}" đã liên kết với giảng viên mã "${lecturerByCCCD.code}". Không thể tạo giảng viên mới hoặc đổi mã GV với CCCD này.`,
+                    error: `CCCD "${lecturer.idCardNumber}" đã liên kết với giảng viên mã "${lecturerByCCCD.code}". Không thể tạo giảng viên mới hoặc đổi mã định danh với CCCD này.`,
                   })
                   continue
                 }
 
                 if (res.status === 200) {
                   if (typeof res.data !== "string" || !res.data) {
-                    const errMsg = `LSB trả về dữ liệu không hợp lệ (mã GV: ${lecturer.code})`
+                    const errMsg = `LSB trả về dữ liệu không hợp lệ (mã định danh: ${lecturer.code})`
                     importErrors.push({
                       code: lecturer.code,
                       name: lecturer.fullname,
@@ -480,7 +480,7 @@ app.openapi(importLecturer, async (c) => {
               if (res.status === 200) {
                 // Validate res.data is a string ID before using it
                 if (typeof res.data !== "string" || !res.data) {
-                  const errMsg = `LSB trả về dữ liệu không hợp lệ (mã GV: ${lecturer.code})`
+                  const errMsg = `LSB trả về dữ liệu không hợp lệ (mã định danh: ${lecturer.code})`
                   importErrors.push({
                     code: lecturer.code,
                     name: lecturer.fullname,
@@ -721,7 +721,7 @@ app.openapi(importGuestLecturer, async (c) => {
     }
   }
   if (duplicateCode.length) {
-    return c.json({ message: "Mã giảng viên đã tồn tại", errors: duplicateCode }, 400)
+    return c.json({ message: "Mã định danh đã tồn tại", errors: duplicateCode }, 400)
   }
 
   const cccdCount = new Map<string, string[]>()
@@ -733,7 +733,7 @@ app.openapi(importGuestLecturer, async (c) => {
   }
   const duplicateCCCD = [...cccdCount.entries()]
     .filter(([, codes]) => codes.length > 1)
-    .map(([cccd, codes]) => `CCCD ${cccd} bị trùng ở mã GV: ${codes.join(", ")}`)
+    .map(([cccd, codes]) => `CCCD ${cccd} bị trùng ở mã định danh: ${codes.join(", ")}`)
   if (duplicateCCCD.length) {
     return c.json({ message: "Số CCCD bị trùng trong file Excel", errors: duplicateCCCD }, 400)
   }
@@ -861,7 +861,7 @@ app.openapi(importGuestLecturer, async (c) => {
                   importErrors.push({
                     code: lecturer.code,
                     name: lecturer.fullname,
-                    error: `CCCD "${lecturer.idCardNumber}" đã liên kết với giảng viên mã "${lecturerByCCCD.code}". Không thể tạo giảng viên mới hoặc đổi mã GV với CCCD này.`,
+                    error: `CCCD "${lecturer.idCardNumber}" đã liên kết với giảng viên mã "${lecturerByCCCD.code}". Không thể tạo giảng viên mới hoặc đổi mã định danh với CCCD này.`,
                   })
                   continue
                 }
@@ -871,7 +871,7 @@ app.openapi(importGuestLecturer, async (c) => {
                     importErrors.push({
                       code: lecturer.code,
                       name: lecturer.fullname,
-                      error: `LSB trả về dữ liệu không hợp lệ (mã GV: ${lecturer.code})`,
+                      error: `LSB trả về dữ liệu không hợp lệ (mã định danh: ${lecturer.code})`,
                     })
                   } else {
                     await tx.lecturer.create({
@@ -922,7 +922,7 @@ app.openapi(importGuestLecturer, async (c) => {
                   importErrors.push({
                     code: lecturer.code,
                     name: lecturer.fullname,
-                    error: `LSB trả về dữ liệu không hợp lệ (mã GV: ${lecturer.code})`,
+                    error: `LSB trả về dữ liệu không hợp lệ (mã định danh: ${lecturer.code})`,
                   })
                 } else {
                   await tx.lecturer.create({
@@ -1349,7 +1349,7 @@ app.openapi(importStudent, async (c) => {
   }
   const duplicateStudentCCCD = [...studentCCCDCount.entries()]
     .filter(([, codes]) => codes.length > 1)
-    .map(([cccd, codes]) => `CCCD ${cccd} bị trùng ở mã SV: ${codes.join(", ")}`)
+    .map(([cccd, codes]) => `CCCD ${cccd} bị trùng ở Mã định danh: ${codes.join(", ")}`)
   if (duplicateStudentCCCD.length) {
     return c.json(
       { message: "Số CCCD bị trùng trong file Excel", errors: duplicateStudentCCCD },

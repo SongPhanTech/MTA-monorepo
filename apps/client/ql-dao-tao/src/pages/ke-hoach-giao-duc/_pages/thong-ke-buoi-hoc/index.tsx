@@ -180,7 +180,7 @@ export default function ThongKeBuoiHoc() {
   }
 
   const colMaGv = {
-    title: "Mã GV",
+    title: "Mã định danh",
     align: "center" as const,
     render: (_: unknown, record: unknown) => {
       const item = record as ClassScheduleData

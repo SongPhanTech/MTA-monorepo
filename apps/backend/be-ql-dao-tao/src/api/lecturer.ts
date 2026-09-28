@@ -41,7 +41,7 @@ const exportLecturerProfile = createRoute({
                 .openapi(fieldDesc("ID loại trừ khi isSelectAll.")),
               filters: z
                 .object({
-                  code: z.string().optional().openapi(fieldDesc("Lọc mã GV.")),
+                  code: z.string().optional().openapi(fieldDesc("Lọc mã định danh.")),
                   name: z.string().optional().openapi(fieldDesc("Lọc họ tên.")),
                   dateOfBirth: z
                     .string()

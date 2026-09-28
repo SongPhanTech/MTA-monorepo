@@ -494,7 +494,7 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                   render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
                 },
                 {
-                  title: "Mã SV",
+                  title: "Mã định danh",
                   dataIndex: "code",
                   width: 100,
                   align: "center",
@@ -669,7 +669,7 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
               }}
               columns={[
                 {
-                  title: "Mã SV",
+                  title: "Mã định danh",
                   dataIndex: ["code"],
                   width: 100,
                   align: "center",

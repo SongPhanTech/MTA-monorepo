@@ -564,7 +564,7 @@ const PutCertificateArchivedModal = () => {
                   render: (_, __, index) => index + 1,
                 },
                 {
-                  title: "Mã SV",
+                  title: "Mã định danh",
                   width: 120,
                   align: "center",
                   render: (_, record) => record.code,

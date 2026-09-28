@@ -2,7 +2,7 @@
  * Đồng bộ mã người: Lecturer.code / Staff.code / Student.code → UserProfile.code
  *
  * Ưu tiên: Lecturer > Staff > Student.
- * Vừa GV vừa HV: luôn dùng mã giảng viên (ghi đè profile nếu khác).
+ * Vừa GV vừa HV: luôn dùng Mã định danh (ghi đè profile nếu khác).
  * Profile trống: copy mã theo ưu tiên trên. Profile đã có mã (không phải case GV+HV) thì giữ.
  * Trùng unique UserProfile.code → skip.
  *
@@ -160,7 +160,7 @@ async function main() {
     )
 
     if (overwriteLecturer.length) {
-      console.log(`\noverwrite_to_lecturer (${overwriteLecturer.length} GV+HV → dùng mã GV):`)
+      console.log(`\noverwrite_to_lecturer (${overwriteLecturer.length} GV+HV → dùng mã định danh):`)
       for (const row of overwriteLecturer.slice(0, 50)) {
         console.log(
           `  ${row.fullname || row.userProfileId} profile=${row.profileCode} → ${row.chosen} (student=${row.studentCode})`
@@ -197,7 +197,7 @@ async function main() {
 
     if (!APPLY) {
       console.log(
-        "\nDry-run. Chạy thêm --apply để ghi UserProfile.code (profile trống + GV+HV ưu tiên mã GV)."
+        "\nDry-run. Chạy thêm --apply để ghi UserProfile.code (profile trống + GV+HV ưu tiên mã định danh)."
       )
       return
     }
@@ -233,7 +233,9 @@ async function main() {
       `
       overwritten += Number(result)
     }
-    console.log(`Updated ${updated} empty profiles, overwritten ${overwritten} GV+HV to lecturer code`)
+    console.log(
+      `Updated ${updated} empty profiles, overwritten ${overwritten} GV+HV to lecturer code`
+    )
   } finally {
     await prisma.$disconnect()
   }

@@ -352,7 +352,7 @@ export default function UserProfilePageLecture() {
                 render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
-                title: "Mã giảng viên",
+                title: "Mã định danh",
                 dataIndex: "code",
                 align: "center",
                 width: 120,

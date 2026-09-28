@@ -105,7 +105,7 @@ const ThongTinChung = ({ thongTin, thongKe, profileId }: ThongTinChungProps) => 
                 <InputRow label="Email" value={thongTin.email} />
                 <InputRow label="Số điện thoại" value={thongTin.soDienThoai} />
                 <InputRow label="CMND/CCCD" value={thongTin.cmndCccd} />
-                <InputRow label="Mã giảng viên" value={thongTin.maGiangVien} />
+                <InputRow label="Mã định danh" value={thongTin.maGiangVien} />
               </div>
             </Col>
             <Col xs={24} md={12}>

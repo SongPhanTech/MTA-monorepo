@@ -17,7 +17,7 @@ const getRegistration = createRoute({
 
 **Bảng dữ liệu nguồn:** Student, ClassRegisterSession, Semester, ClassRegisterLogs, SubjectClass.
 
-**Tham số:** class_terms (tên học kỳ), students_code (mã SV).`,
+**Tham số:** class_terms (tên học kỳ), students_code (Mã định danh).`,
   method: "post",
   request: {
     body: {

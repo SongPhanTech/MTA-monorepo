@@ -66,7 +66,7 @@ const cellBorder = {
 
 const LECTURER_COLUMNS = [
   { header: "STT", key: "stt", width: 6 },
-  { header: "Mã GV", key: "code", width: 14 },
+  { header: "Mã định danh", key: "code", width: 14 },
   { header: "Mã cán bộ", key: "lectureID", width: 14 },
   { header: "Họ tên", key: "fullName", width: 28 },
   { header: "Giới tính", key: "gender", width: 10 },

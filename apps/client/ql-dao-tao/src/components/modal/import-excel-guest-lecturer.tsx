@@ -250,7 +250,7 @@ const ImportGuestLecturerModal = ({
             render: (_, __, index: number) => index + 1 + (currentPage - 1) * 10,
           },
           {
-            title: "Mã GV",
+            title: "Mã định danh",
             dataIndex: "code",
             key: "code",
             width: 150,

@@ -44,6 +44,6 @@
         "editor.defaultFormatter": "TypeScriptTeam.native-preview"
     },
     "[javascript]": {
-        "editor.defaultFormatter": "TypeScriptTeam.native-preview"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
 }

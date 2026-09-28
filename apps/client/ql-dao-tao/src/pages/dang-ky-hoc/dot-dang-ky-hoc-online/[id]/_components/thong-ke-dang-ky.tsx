@@ -420,7 +420,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
           const ws = workbook.addWorksheet("SV da dang ky")
           ws.addRow([
             "STT",
-            "Mã SV",
+            "Mã định danh",
             "Họ và tên",
             "Ngày sinh",
             "Lớp quản lý",
@@ -450,7 +450,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
 
         if (kind === "full" || kind === "not-registered") {
           const ws = workbook.addWorksheet("SV chua dang ky")
-          ws.addRow(["STT", "Mã SV", "Họ và tên", "Lớp quản lý"])
+          ws.addRow(["STT", "Mã định danh", "Họ và tên", "Lớp quản lý"])
           styleHeader(ws, 4)
           stats.notRegisteredStudents.forEach((s, idx) => {
             ws.addRow([idx + 1, s.code, s.name, s.fixedClassCode])
@@ -516,7 +516,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
         const ws = workbook.addWorksheet("Chi tiet don")
         ws.addRow([
           "STT",
-          "Mã SV",
+          "Mã định danh",
           "Họ và tên",
           "Mã LMH",
           "Lớp môn học",
@@ -849,7 +849,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
                         align: "center",
                         render: (_, __, i) => i + 1,
                       },
-                      { title: "Mã SV", dataIndex: "code", width: 120 },
+                      { title: "Mã định danh", dataIndex: "code", width: 120 },
                       { title: "Họ và tên", dataIndex: "name", width: 200 },
                       {
                         title: "Số lớp ĐK",
@@ -888,7 +888,7 @@ export default function ThongKeDangKy({ sessionId }: Props) {
                         align: "center",
                         render: (_, __, i) => i + 1,
                       },
-                      { title: "Mã SV", dataIndex: "code", width: 120 },
+                      { title: "Mã định danh", dataIndex: "code", width: 120 },
                       { title: "Họ và tên", dataIndex: "name" },
                       { title: "Lớp quản lý", dataIndex: "fixedClassCode", width: 140 },
                     ]}

@@ -164,9 +164,9 @@ const ModalScoreDetail = () => {
             </Form.Item>
           </Col>
 
-          {/* MÃ SV */}
+          {/* Mã định danh */}
           <Col span={6}>
-            <Form.Item label="Mã SV">
+            <Form.Item label="Mã định danh">
               <Input value={data?.student?.userProfile?.code ?? ""} disabled />
             </Form.Item>
           </Col>

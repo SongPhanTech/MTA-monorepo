@@ -97,7 +97,7 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
             const cellRefs = matchingRows.map((item) => `B${item.rowNum}`).join(", ")
             return {
               cellRef: cellRefs || code,
-              message: `Mã giảng viên đã tồn tại trong hệ thống: ${code}`,
+              message: `Mã định danh đã tồn tại trong hệ thống: ${code}`,
             }
           })
           setErrorData(importErrors)
@@ -245,7 +245,7 @@ const ImportLecturerModal = ({ visible, onSuccess, onCancel }: ImportStudentModa
             render: (_, __, index: number) => index + 1 + (currentPage - 1) * 10,
           },
           {
-            title: "Mã GV",
+            title: "Mã định danh",
             dataIndex: "code",
             key: "code",
             width: 150,

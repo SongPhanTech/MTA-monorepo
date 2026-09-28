@@ -215,7 +215,7 @@ const ModalChiTietGiangVien = () => {
       label: "Thông tin cơ bản",
       children: (
         <Descriptions bordered column={2} size="small">
-          <Descriptions.Item label="Mã giảng viên" span={1}>
+          <Descriptions.Item label="Mã định danh" span={1}>
             {lecturer.userProfile?.code}
           </Descriptions.Item>
           <Descriptions.Item label="ID giảng viên" span={1}>

@@ -3,7 +3,6 @@ import logo_mta from "@assets/images/hoso.svg"
 import HeaderApp from "@components/header"
 import SiderHoSo from "@components/layouts/sider"
 import {
-  QL_HO_SO_CONTENT_VERTICAL_OFFSET,
   QL_HO_SO_DEFAULT_SCHOOL_NAME,
   QL_HO_SO_HEADER_HEIGHT,
   QL_HO_SO_PORTAL_TITLE,
@@ -18,7 +17,7 @@ import { useFindUniqueConfig } from "@workspace/db/hooks"
 import { useGetUnitInfosInfo } from "@workspace/libs/api/system"
 import { getDynamicBreadcrumb } from "@workspace/permissions/hooks"
 import { Breadcrumb, Button, Layout } from "antd"
-import { Menu as MenuIcon } from "lucide-react"
+import { Loader2, Menu as MenuIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -74,7 +73,7 @@ const HoSoShell = ({
   showBreadcrumb?: boolean
   showFooter?: boolean
 }) => {
-  const menus = useMenuList()
+  const { menus, isMenuReady } = useMenuList()
   const router = useRouter()
   const breadcrumb = getDynamicBreadcrumb("QL_HO_SO", router.pathname)
   const listBreadcrumb = useMemo(
@@ -105,6 +104,14 @@ const HoSoShell = ({
   const unitInfo = unitInfoResponse?.data
   const schoolName = unitInfo?.sTenDayDu || QL_HO_SO_DEFAULT_SCHOOL_NAME
   const siderWidth = collapsed ? QL_HO_SO_SIDER_COLLAPSED_WIDTH : QL_HO_SO_SIDER_WIDTH
+
+  if (!isMenuReady) {
+    return (
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#f3f4f6]">
+        <Loader2 className="size-10 animate-spin text-[#028850]" />
+      </div>
+    )
+  }
 
   return (
     <IdleTimerProvider
@@ -150,7 +157,7 @@ const HoSoShell = ({
           >
             <Content
               className={cn(
-                "flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overflow-x-hidden",
+                "flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden",
                 unLayout ? "" : "px-2 py-2"
               )}
             >
@@ -163,10 +170,10 @@ const HoSoShell = ({
                 <div className={cn("flex min-h-0 flex-1 flex-col", className)}>{children}</div>
               ) : (
                 <div
-                  className={cn("min-w-0 w-full overflow-hidden rounded-lg bg-white p-4 shadow-sm", className)}
-                  style={{
-                    minHeight: `calc(100vh - ${QL_HO_SO_CONTENT_VERTICAL_OFFSET + (showFooter ? 40 : 0) + (showBreadcrumb ? 28 : 0)}px)`,
-                  }}
+                  className={cn(
+                    "ho-so-page-card flex min-h-0 min-w-0 w-full flex-1 flex-col overflow-auto rounded-lg bg-white p-4 shadow-sm",
+                    className
+                  )}
                 >
                   {children}
                 </div>

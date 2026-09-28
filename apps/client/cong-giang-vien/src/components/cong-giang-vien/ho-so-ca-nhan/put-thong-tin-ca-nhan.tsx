@@ -274,8 +274,8 @@ const PutThongTinCaNhanModal = () => {
         </Form.Item>
       </Col>
       <Col span={12}>
-        <Form.Item name="lectureCode" label="Mã giảng viên">
-          <Input placeholder="Nhập mã giảng viên" />
+        <Form.Item name="lectureCode" label="Mã định danh">
+          <Input placeholder="Nhập Mã định danh" />
         </Form.Item>
       </Col>
       <Col span={12}>

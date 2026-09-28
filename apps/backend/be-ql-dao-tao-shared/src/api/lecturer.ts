@@ -118,7 +118,7 @@ const getTeacherDetail = createRoute({
 
 **Bảng dữ liệu nguồn:** Lecturer, UserProfile, Organization.
 
-**Tham số:** teacher_code — mã giảng viên (UserProfile.code).`,
+**Tham số:** teacher_code — Mã định danh (UserProfile.code).`,
   method: "post",
   request: {
     body: {

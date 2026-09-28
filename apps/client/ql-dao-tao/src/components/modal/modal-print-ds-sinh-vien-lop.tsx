@@ -139,7 +139,7 @@ const ModalPrintToDSHV = () => {
             <thead>
               <tr>
                 <th className="border border-black px-1 py-1 w-[40px] text-center">TT</th>
-                <th className="border border-black px-1 py-1 text-center">Mã SV</th>
+                <th className="border border-black px-1 py-1 text-center">Mã định danh</th>
                 <th className="border border-black px-1 py-1 text-center">Họ và tên</th>
                 <th className="border border-black px-1 py-1 text-center">Ngày sinh</th>
                 <th className="border border-black px-1 py-1 text-center">Giới tính</th>

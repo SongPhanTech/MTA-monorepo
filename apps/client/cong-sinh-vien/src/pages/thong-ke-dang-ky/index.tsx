@@ -107,7 +107,7 @@ export default function ThongKeDangKyHocPage() {
       render: (v: string) => dayjs(v).format("DD/MM/YYYY HH:mm:ss"),
     },
     {
-      title: "Mã SV",
+      title: "Mã định danh",
       width: 120,
       render: (_, row) => row.student.studentCode || "—",
     },

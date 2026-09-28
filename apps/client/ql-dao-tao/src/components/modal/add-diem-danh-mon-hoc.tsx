@@ -198,7 +198,7 @@ const AddSubjectClassAttendanceStudent = () => {
             render: (_, __, index) => index + 1,
           },
           {
-            title: "Mã SV",
+            title: "Mã định danh",
             width: 150,
             align: "center",
             dataIndex: "code",

@@ -131,7 +131,7 @@ const ExportObjectInSurvey = ({ query, surveyName }: { query: any; surveyName: s
         headerRow.values = [
           "STT",
           "Mã học viên",
-          "Mã giảng viên",
+          "Mã định danh",
           "Họ và tên",
           "CCCD",
           "SĐT",

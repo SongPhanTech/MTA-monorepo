@@ -1619,7 +1619,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
               },
             },
             {
-              title: "Mã SV",
+              title: "Mã định danh",
               width: 100,
               align: "center",
               fixed: "left",

@@ -227,6 +227,7 @@ export default function StudentProfilePageDs() {
         </Col>
         <Col span={24}>
           <Table
+            scrollable
             filters={filters}
             setFilters={(value) => {
               setFilters(value)

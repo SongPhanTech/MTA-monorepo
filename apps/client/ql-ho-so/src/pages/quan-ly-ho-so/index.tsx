@@ -303,6 +303,7 @@ export default function UserProfilePageDs() {
         </Col>
         <Col span={24}>
           <Table
+            scrollable
             filters={filters}
             setFilters={(value) => {
               setFilters(value)
@@ -317,7 +318,7 @@ export default function UserProfilePageDs() {
                 render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
-                title: "Mã GV/CB",
+                title: "Mã định danh",
                 align: "center",
                 width: 120,
                 ellipsis: true,
