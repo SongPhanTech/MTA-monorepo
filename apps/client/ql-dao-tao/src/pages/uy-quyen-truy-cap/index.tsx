@@ -1,12 +1,18 @@
 import DefaultLayout from "@layouts/default-layout"
 import { useSession } from "@workspace/auth/react"
 import { useFindManyUserProfile } from "@workspace/db/hooks"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import type { GrantedRole, UserPermissionItem, UserPermissionRole } from "@workspace/libs/api/schemas"
 import {
+  getListGrantedRolesQueryKey,
+  getUserPermissions,
   useAssignDelegation,
-  useUserPermissions,
-  type SystemPermission,
-  type SystemRole,
-} from "@workspace/libs/api/user-permissions"
+  useListGrantedRoles,
+  useRevokeGrants,
+} from "@workspace/libs/api/training"
+
+type SystemPermission = UserPermissionItem
+type SystemRole = UserPermissionRole
 import { PERMISSIONS, useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import {
@@ -18,6 +24,7 @@ import {
   Flex,
   Input,
   Modal,
+  Popconfirm,
   Row,
   Table,
   Tag,
@@ -26,7 +33,7 @@ import {
   message,
 } from "antd"
 import type { ColumnsType } from "antd/es/table"
-import { InfoIcon, ShieldCheck, UserPlus } from "lucide-react"
+import { InfoIcon, ShieldCheck, Undo2, UserPlus } from "lucide-react"
 import type React from "react"
 import { useEffect, useMemo, useState } from "react"
 
@@ -50,6 +57,20 @@ const PERMISSION_LABELS: { key: keyof typeof PERMISSIONS; bit: number; label: st
 const getRoleKey = (role: SystemRole, index = 0) =>
   role.sRoleId || role.sCodeName || role.sRoleName || `role-${index}`
 
+const formatMaskTags = (mask: number) => {
+  const matched = PERMISSION_LABELS.filter((item) => (mask & item.bit) === item.bit)
+  if (!matched.length) return <Tag>Không có quyền</Tag>
+  return (
+    <Flex wrap="wrap" gap={4}>
+      {matched.map((item) => (
+        <Tag key={item.key} color="blue">
+          {item.label}
+        </Tag>
+      ))}
+    </Flex>
+  )
+}
+
 const formatPermissionTags = (permission: SystemPermission) => {
   const names = permission.PermissionNames?.filter(Boolean) ?? []
   if (names.length) {
@@ -64,20 +85,7 @@ const formatPermissionTags = (permission: SystemPermission) => {
     )
   }
 
-  const mask = Number(permission.lPermission ?? 0)
-  const matched = PERMISSION_LABELS.filter((item) => (mask & item.bit) === item.bit)
-  if (!matched.length) {
-    return <Tag>Không có quyền</Tag>
-  }
-  return (
-    <Flex wrap="wrap" gap={4}>
-      {matched.map((item) => (
-        <Tag key={item.key} color="blue">
-          {item.label}
-        </Tag>
-      ))}
-    </Flex>
-  )
+  return formatMaskTags(Number(permission.lPermission ?? 0))
 }
 
 const ownedMask = (permission: SystemPermission) => Number(permission.lPermission ?? 0)
@@ -111,14 +119,29 @@ export default function UyQuyenTruyCapPage() {
   const [selectedRoleKeys, setSelectedRoleKeys] = useState<string[]>([])
   const [bitMasks, setBitMasks] = useState<Record<string, Record<string, number>>>({})
   const [detailRole, setDetailRole] = useState<SystemRole | null>(null)
+  const [selectedGrantIds, setSelectedGrantIds] = useState<string[]>([])
+  const queryClient = useQueryClient()
   const assignDelegation = useAssignDelegation()
+  const revokeGrants = useRevokeGrants()
+  const { data: grantsRes, isFetching: loadingGrants } = useListGrantedRoles(
+    { granterId: currentUserId },
+    { query: { enabled: Boolean(currentUserId) } }
+  )
+  const grantedRoles = grantsRes?.status === 200 ? grantsRes.data.grants : []
+  const grantsError =
+    grantsRes && grantsRes.status !== 200
+      ? typeof grantsRes.data === "string"
+        ? grantsRes.data
+        : grantsRes.data.message
+      : undefined
 
   const canAssign = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_UY_QUYEN_TRUY_CAP, "SUA")
 
-  const { data: currentRes, isFetching: loadingCurrent } = useUserPermissions(
-    currentUserId ? [currentUserId] : [],
-    { enabled: !!currentUserId }
-  )
+  const { data: currentRes, isFetching: loadingCurrent } = useQuery({
+    queryKey: ["/api/user-permissions/permissions", currentUserId],
+    queryFn: () => getUserPermissions({ UserIds: [currentUserId] }),
+    enabled: Boolean(currentUserId),
+  })
   const currentUser =
     currentRes?.status === 200
       ? currentRes.data.find((item) => item.UserId === currentUserId) ?? currentRes.data[0]
@@ -318,9 +341,11 @@ export default function UyQuyenTruyCapPage() {
     let response: Awaited<ReturnType<typeof assignDelegation.mutateAsync>>
     try {
       response = await assignDelegation.mutateAsync({
-        recipientIds: selectedUserIds,
-        grants: grantsWithBits,
-        granterId: currentUserId,
+        data: {
+          recipientIds: selectedUserIds,
+          grants: grantsWithBits,
+          granterId: currentUserId,
+        },
       })
     } catch {
       message.error("Không gán được quyền")
@@ -340,7 +365,99 @@ export default function UyQuyenTruyCapPage() {
     if (skippedRecipientIds.length || skippedRoleIds.length) {
       message.warning("Một số người nhận hoặc vai trò không hợp lệ nên đã được bỏ qua")
     }
+    await queryClient.invalidateQueries({
+      queryKey: getListGrantedRolesQueryKey({ granterId: currentUserId }),
+    })
   }
+
+  const handleRevoke = async (grantIds: string[]) => {
+    if (!currentUserId) {
+      message.warning("Chưa xác định được người giao")
+      return
+    }
+    if (!grantIds.length) {
+      message.warning("Chọn quyền cần thu hồi")
+      return
+    }
+
+    let response: Awaited<ReturnType<typeof revokeGrants.mutateAsync>>
+    try {
+      response = await revokeGrants.mutateAsync({
+        data: { grantIds, granterId: currentUserId },
+      })
+    } catch {
+      message.error("Không thu hồi được quyền")
+      return
+    }
+    if (response.status !== 200) {
+      const errorMessage =
+        typeof response.data === "string"
+          ? response.data
+          : response.data.message || "Không thu hồi được quyền"
+      message.error(errorMessage)
+      return
+    }
+
+    message.success(`Đã thu hồi ${response.data.revoked} quyền`)
+    setSelectedGrantIds((current) => current.filter((id) => !grantIds.includes(id)))
+    await queryClient.invalidateQueries({
+      queryKey: getListGrantedRolesQueryKey({ granterId: currentUserId }),
+    })
+  }
+
+  const grantColumns: ColumnsType<GrantedRole> = [
+    {
+      title: "Người nhận",
+      key: "recipient",
+      render: (_, row) => row.fullname || row.code || row.recipientId,
+    },
+    {
+      title: "Mã / số hiệu",
+      key: "code",
+      width: 140,
+      render: (_, row) => row.code || row.officerNumber || "—",
+    },
+    {
+      title: "Vai trò",
+      key: "role",
+      width: 200,
+      render: (_, row) => row.sRoleName || row.sCodeName || row.sRoleId,
+    },
+    {
+      title: "Quyền đã giao",
+      key: "permissions",
+      render: (_, row) => (
+        <Flex vertical gap={6}>
+          {row.permissions.map((permission) => (
+            <Flex key={permission.sFormName} vertical gap={4}>
+              <Typography.Text>{permission.sTen || permission.sFormName}</Typography.Text>
+              {formatMaskTags(permission.lPermission)}
+            </Flex>
+          ))}
+        </Flex>
+      ),
+    },
+    {
+      title: "",
+      key: "revoke",
+      width: 120,
+      align: "center",
+      render: (_, row) => (
+        <Popconfirm
+          title="Thu hồi quyền này?"
+          description="Người nhận sẽ mất các quyền của lần giao này."
+          okText="Thu hồi"
+          cancelText="Hủy"
+          okButtonProps={{ danger: true }}
+          onConfirm={() => handleRevoke([row.id])}
+        >
+          <Button type="link" danger icon={<Undo2 size={16} />} disabled={!canAssign}>
+            Thu hồi
+          </Button>
+        </Popconfirm>
+      ),
+    },
+  ]
 
   return (
     <Flex vertical gap={16}>
@@ -355,7 +472,7 @@ export default function UyQuyenTruyCapPage() {
           type="info"
           showIcon
           message="Giao vai trò hiện có của bạn cho cán bộ hoặc giảng viên."
-          description="Tick vai trò cần ủy quyền. Trong chi tiết, bỏ từng quyền như Thêm hoặc Sửa. Cột phải chỉ chọn cán bộ/giảng viên, không gồm học viên."
+          description="Tick vai trò cần ủy quyền. Trong chi tiết, chọn từng quyền như Thêm hoặc Sửa. Bảng bên dưới liệt kê các lần đã giao; thu hồi sẽ tắt quyền đó của người nhận."
         />
       </Card>
 
@@ -421,6 +538,45 @@ export default function UyQuyenTruyCapPage() {
           </Col>
         </Row>
       )}
+
+      <Card
+        title="Quyền đã ủy quyền"
+        extra={
+          <Popconfirm
+            title={`Thu hồi ${selectedGrantIds.length} quyền đã chọn?`}
+            description="Người nhận sẽ mất các quyền của những lần giao này."
+            okText="Thu hồi"
+            cancelText="Hủy"
+            okButtonProps={{ danger: true }}
+            disabled={!selectedGrantIds.length}
+            onConfirm={() => handleRevoke(selectedGrantIds)}
+          >
+            {/* <Button
+              danger
+              icon={<Undo2 size={16} />}
+              disabled={!canAssign || !selectedGrantIds.length}
+              loading={revokeGrants.isPending}
+            >
+              Thu hồi đã chọn
+            </Button> */}
+          </Popconfirm>
+        }
+      >
+        {grantsError ? <Alert type="error" showIcon message={grantsError} className="mb-3" /> : null}
+        <Table
+          rowKey="id"
+          size="small"
+          loading={loadingGrants || revokeGrants.isPending}
+          columns={grantColumns}
+          dataSource={grantedRoles}
+          pagination={{ pageSize: 8, hideOnSinglePage: true }}
+          locale={{ emptyText: "Chưa ủy quyền cho ai" }}
+          rowSelection={{
+            selectedRowKeys: selectedGrantIds,
+            onChange: (keys) => setSelectedGrantIds(keys.map(String)),
+          }}
+        />
+      </Card>
 
       <Modal
         title={`Quyền trong vai trò: ${detailRole?.sRoleName || detailRole?.sCodeName || ""}`}

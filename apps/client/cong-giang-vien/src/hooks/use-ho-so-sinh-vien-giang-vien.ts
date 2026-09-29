@@ -104,17 +104,17 @@ const STUDENT_INCLUDE = {
               credit: true, 
               name: true, 
               code: true,
-              trainingBlockSubjects: {
+              trainingBlocks: {
                 select: {
                   trainingBlockOnCurriculumVersion: {
                     select: {
                       trainingBlock: {
-                        select: { isNationalDefense: true }
-                      }
-                    }
-                  }
-                }
-              }
+                        select: { isNationalDefense: true },
+                      },
+                    },
+                  },
+                },
+              },
             } 
           },
           semester: {

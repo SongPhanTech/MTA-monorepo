@@ -102,6 +102,9 @@ import type {
 import type {
   AdmissionStatisticsRequest,
   ApproveScoreCorrectionInput,
+  AssignDelegation401,
+  AssignDelegationBody,
+  AssignDelegationResult,
   AwardIds,
   AwardIdsResult,
   CalculateGuestTeachingPaymentBody,
@@ -184,6 +187,9 @@ import type {
   GetDanhSachHVChuaTotNghiepTAParams,
   GetDanhSachTotNghiepData200,
   GetDanhSachTotNghiepDataParams,
+  GetDelegatedPermissions200,
+  GetDelegatedPermissions401,
+  GetDelegatedPermissionsParams,
   GetLecturerExamSchedule200,
   GetLecturerExamSchedule400,
   GetLecturerExamSchedule401,
@@ -214,6 +220,8 @@ import type {
   ImportTrainingDataResponse,
   InvalidateClassRegisterSessionCache200,
   InvalidateClassRegisterSessionCacheRequest,
+  ListGrantedRoles200,
+  ListGrantedRolesParams,
   MergeExamBadResponse,
   MergeExamRequest,
   MergeExamResponse,
@@ -291,6 +299,9 @@ import type {
   ReclaimStaleGraduation200,
   RenderXlsxTemplateRequest,
   RetestRelearnRatesResponse,
+  RevokeGrants200,
+  RevokeGrants401,
+  RevokeGrantsBody,
   Room200Item,
   SaveExamCodesResult,
   SetExamScoreDeadLineBody,
@@ -6821,6 +6832,521 @@ export const useGetUserPermissions = <TError = ErrorMessageResponse | GetUserPer
       return useMutation(mutationOptions, queryClient);
     }
     
+/**
+ * Chỉ ghi bit người giao đang có. Tick Thêm hoặc Sửa thì kèm bit Xem nếu người giao có Xem. Ghi AccessRoleGrant và AccessPermissionGrant.
+ * @summary Gán vai trò và bit quyền cho cán bộ hoặc giảng viên
+ */
+export type assignDelegationResponse200 = {
+  data: AssignDelegationResult
+  status: 200
+}
+
+export type assignDelegationResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type assignDelegationResponse401 = {
+  data: AssignDelegation401
+  status: 401
+}
+
+export type assignDelegationResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type assignDelegationResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type assignDelegationResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type assignDelegationResponseSuccess = (assignDelegationResponse200) & {
+  headers: Headers;
+};
+export type assignDelegationResponseError = (assignDelegationResponse400 | assignDelegationResponse401 | assignDelegationResponse404 | assignDelegationResponse409 | assignDelegationResponse500) & {
+  headers: Headers;
+};
+
+export type assignDelegationResponse = (assignDelegationResponseSuccess | assignDelegationResponseError)
+
+export const getAssignDelegationUrl = () => {
+
+
+  
+
+  return `/api/user-permissions/assign`
+}
+
+export const assignDelegation = async (assignDelegationBody: AssignDelegationBody, options?: RequestInit): Promise<assignDelegationResponse> => {
+  
+  return customTrainingFetch<assignDelegationResponse>(getAssignDelegationUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      assignDelegationBody,)
+  }
+);}
+
+
+
+
+export const getAssignDelegationMutationOptions = <TError = ErrorMessageResponse | AssignDelegation401,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof assignDelegation>>, TError,{data: AssignDelegationBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof assignDelegation>>, TError,{data: AssignDelegationBody}, TContext> => {
+
+const mutationKey = ['assignDelegation'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof assignDelegation>>, {data: AssignDelegationBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  assignDelegation(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AssignDelegationMutationResult = NonNullable<Awaited<ReturnType<typeof assignDelegation>>>
+    export type AssignDelegationMutationBody = AssignDelegationBody
+    export type AssignDelegationMutationError = ErrorMessageResponse | AssignDelegation401
+
+    /**
+ * @summary Gán vai trò và bit quyền cho cán bộ hoặc giảng viên
+ */
+export const useAssignDelegation = <TError = ErrorMessageResponse | AssignDelegation401,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof assignDelegation>>, TError,{data: AssignDelegationBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof assignDelegation>>,
+        TError,
+        {data: AssignDelegationBody},
+        TContext
+      > => {
+
+      const mutationOptions = getAssignDelegationMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * Chỉ các AccessRoleGrant còn hiệu lực do người giao này tạo.
+ * @summary Danh sách quyền người đang đăng nhập đã giao
+ */
+export type listGrantedRolesResponse200 = {
+  data: ListGrantedRoles200
+  status: 200
+}
+
+export type listGrantedRolesResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type listGrantedRolesResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type listGrantedRolesResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type listGrantedRolesResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type listGrantedRolesResponseSuccess = (listGrantedRolesResponse200) & {
+  headers: Headers;
+};
+export type listGrantedRolesResponseError = (listGrantedRolesResponse400 | listGrantedRolesResponse404 | listGrantedRolesResponse409 | listGrantedRolesResponse500) & {
+  headers: Headers;
+};
+
+export type listGrantedRolesResponse = (listGrantedRolesResponseSuccess | listGrantedRolesResponseError)
+
+export const getListGrantedRolesUrl = (params?: ListGrantedRolesParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/user-permissions/grants?${stringifiedParams}` : `/api/user-permissions/grants`
+}
+
+export const listGrantedRoles = async (params?: ListGrantedRolesParams, options?: RequestInit): Promise<listGrantedRolesResponse> => {
+  
+  return customTrainingFetch<listGrantedRolesResponse>(getListGrantedRolesUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getListGrantedRolesQueryKey = (params?: ListGrantedRolesParams,) => {
+    return [
+    `/api/user-permissions/grants`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getListGrantedRolesQueryOptions = <TData = Awaited<ReturnType<typeof listGrantedRoles>>, TError = ErrorMessageResponse>(params?: ListGrantedRolesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listGrantedRoles>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListGrantedRolesQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listGrantedRoles>>> = ({ signal }) => listGrantedRoles(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listGrantedRoles>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListGrantedRolesQueryResult = NonNullable<Awaited<ReturnType<typeof listGrantedRoles>>>
+export type ListGrantedRolesQueryError = ErrorMessageResponse
+
+
+export function useListGrantedRoles<TData = Awaited<ReturnType<typeof listGrantedRoles>>, TError = ErrorMessageResponse>(
+ params: undefined |  ListGrantedRolesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listGrantedRoles>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listGrantedRoles>>,
+          TError,
+          Awaited<ReturnType<typeof listGrantedRoles>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListGrantedRoles<TData = Awaited<ReturnType<typeof listGrantedRoles>>, TError = ErrorMessageResponse>(
+ params?: ListGrantedRolesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listGrantedRoles>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listGrantedRoles>>,
+          TError,
+          Awaited<ReturnType<typeof listGrantedRoles>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListGrantedRoles<TData = Awaited<ReturnType<typeof listGrantedRoles>>, TError = ErrorMessageResponse>(
+ params?: ListGrantedRolesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listGrantedRoles>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Danh sách quyền người đang đăng nhập đã giao
+ */
+
+export function useListGrantedRoles<TData = Awaited<ReturnType<typeof listGrantedRoles>>, TError = ErrorMessageResponse>(
+ params?: ListGrantedRolesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listGrantedRoles>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getListGrantedRolesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * Chỉ thu hồi lần giao của chính người gọi. Người nhận mất các bit của lần giao đó.
+ * @summary Thu hồi quyền đã giao
+ */
+export type revokeGrantsResponse200 = {
+  data: RevokeGrants200
+  status: 200
+}
+
+export type revokeGrantsResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type revokeGrantsResponse401 = {
+  data: RevokeGrants401
+  status: 401
+}
+
+export type revokeGrantsResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type revokeGrantsResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type revokeGrantsResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type revokeGrantsResponseSuccess = (revokeGrantsResponse200) & {
+  headers: Headers;
+};
+export type revokeGrantsResponseError = (revokeGrantsResponse400 | revokeGrantsResponse401 | revokeGrantsResponse404 | revokeGrantsResponse409 | revokeGrantsResponse500) & {
+  headers: Headers;
+};
+
+export type revokeGrantsResponse = (revokeGrantsResponseSuccess | revokeGrantsResponseError)
+
+export const getRevokeGrantsUrl = () => {
+
+
+  
+
+  return `/api/user-permissions/revoke`
+}
+
+export const revokeGrants = async (revokeGrantsBody: RevokeGrantsBody, options?: RequestInit): Promise<revokeGrantsResponse> => {
+  
+  return customTrainingFetch<revokeGrantsResponse>(getRevokeGrantsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      revokeGrantsBody,)
+  }
+);}
+
+
+
+
+export const getRevokeGrantsMutationOptions = <TError = ErrorMessageResponse | RevokeGrants401,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof revokeGrants>>, TError,{data: RevokeGrantsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof revokeGrants>>, TError,{data: RevokeGrantsBody}, TContext> => {
+
+const mutationKey = ['revokeGrants'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof revokeGrants>>, {data: RevokeGrantsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  revokeGrants(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RevokeGrantsMutationResult = NonNullable<Awaited<ReturnType<typeof revokeGrants>>>
+    export type RevokeGrantsMutationBody = RevokeGrantsBody
+    export type RevokeGrantsMutationError = ErrorMessageResponse | RevokeGrants401
+
+    /**
+ * @summary Thu hồi quyền đã giao
+ */
+export const useRevokeGrants = <TError = ErrorMessageResponse | RevokeGrants401,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof revokeGrants>>, TError,{data: RevokeGrantsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof revokeGrants>>,
+        TError,
+        {data: RevokeGrantsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getRevokeGrantsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+/**
+ * OR bit theo mã chức năng từ các AccessPermissionGrant còn hiệu lực. Không trả 401 để menu localhost không bị coi là hết phiên.
+ * @summary Quyền được ủy quyền của user
+ */
+export type getDelegatedPermissionsResponse200 = {
+  data: GetDelegatedPermissions200
+  status: 200
+}
+
+export type getDelegatedPermissionsResponse400 = {
+  data: ErrorMessageResponse
+  status: 400
+}
+
+export type getDelegatedPermissionsResponse401 = {
+  data: GetDelegatedPermissions401
+  status: 401
+}
+
+export type getDelegatedPermissionsResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type getDelegatedPermissionsResponse409 = {
+  data: ErrorMessageResponse
+  status: 409
+}
+
+export type getDelegatedPermissionsResponse500 = {
+  data: ErrorMessageResponse
+  status: 500
+}
+    
+export type getDelegatedPermissionsResponseSuccess = (getDelegatedPermissionsResponse200) & {
+  headers: Headers;
+};
+export type getDelegatedPermissionsResponseError = (getDelegatedPermissionsResponse400 | getDelegatedPermissionsResponse401 | getDelegatedPermissionsResponse404 | getDelegatedPermissionsResponse409 | getDelegatedPermissionsResponse500) & {
+  headers: Headers;
+};
+
+export type getDelegatedPermissionsResponse = (getDelegatedPermissionsResponseSuccess | getDelegatedPermissionsResponseError)
+
+export const getGetDelegatedPermissionsUrl = (params?: GetDelegatedPermissionsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/user-permissions/delegated?${stringifiedParams}` : `/api/user-permissions/delegated`
+}
+
+export const getDelegatedPermissions = async (params?: GetDelegatedPermissionsParams, options?: RequestInit): Promise<getDelegatedPermissionsResponse> => {
+  
+  return customTrainingFetch<getDelegatedPermissionsResponse>(getGetDelegatedPermissionsUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetDelegatedPermissionsQueryKey = (params?: GetDelegatedPermissionsParams,) => {
+    return [
+    `/api/user-permissions/delegated`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetDelegatedPermissionsQueryOptions = <TData = Awaited<ReturnType<typeof getDelegatedPermissions>>, TError = ErrorMessageResponse | GetDelegatedPermissions401>(params?: GetDelegatedPermissionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDelegatedPermissions>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDelegatedPermissionsQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDelegatedPermissions>>> = ({ signal }) => getDelegatedPermissions(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDelegatedPermissions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDelegatedPermissionsQueryResult = NonNullable<Awaited<ReturnType<typeof getDelegatedPermissions>>>
+export type GetDelegatedPermissionsQueryError = ErrorMessageResponse | GetDelegatedPermissions401
+
+
+export function useGetDelegatedPermissions<TData = Awaited<ReturnType<typeof getDelegatedPermissions>>, TError = ErrorMessageResponse | GetDelegatedPermissions401>(
+ params: undefined |  GetDelegatedPermissionsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDelegatedPermissions>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDelegatedPermissions>>,
+          TError,
+          Awaited<ReturnType<typeof getDelegatedPermissions>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDelegatedPermissions<TData = Awaited<ReturnType<typeof getDelegatedPermissions>>, TError = ErrorMessageResponse | GetDelegatedPermissions401>(
+ params?: GetDelegatedPermissionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDelegatedPermissions>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDelegatedPermissions>>,
+          TError,
+          Awaited<ReturnType<typeof getDelegatedPermissions>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDelegatedPermissions<TData = Awaited<ReturnType<typeof getDelegatedPermissions>>, TError = ErrorMessageResponse | GetDelegatedPermissions401>(
+ params?: GetDelegatedPermissionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDelegatedPermissions>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Quyền được ủy quyền của user
+ */
+
+export function useGetDelegatedPermissions<TData = Awaited<ReturnType<typeof getDelegatedPermissions>>, TError = ErrorMessageResponse | GetDelegatedPermissions401>(
+ params?: GetDelegatedPermissionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDelegatedPermissions>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetDelegatedPermissionsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
 /**
  * Import Excel gán học viên vào lớp niên chế (quản lý).
 

@@ -1,7 +1,7 @@
 import { useStoreActions, useStoreState } from "@redux/hook"
 import ability from "@workspace/permissions/ability"
 import { useAbility } from "@workspace/permissions/hooks"
-import { useDelegatedPermissions } from "@workspace/libs/api/user-permissions"
+import { useGetDelegatedPermissions } from "@workspace/libs/api/training"
 import { useGetUserPermissionsPermissionAppCodeUserId } from "@workspace/libs/api/system"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import NAVIGATION, { type QL_DAO_TAO_PERMISSION } from "@workspace/router"
@@ -34,7 +34,10 @@ const useMenuList = () => {
   const userId = typeof window === "undefined" ? "" : (window.contextData?.userId ?? "")
   const appCode = getRuntimeEnv("NEXT_PUBLIC_APP_CODE")
   const systemQuery = useGetUserPermissionsPermissionAppCodeUserId(appCode, userId)
-  const delegatedQuery = useDelegatedPermissions(userId)
+  const delegatedQuery = useGetDelegatedPermissions(
+    { userId },
+    { query: { enabled: Boolean(userId) } }
+  )
 
   const systemPermissions = useMemo(() => {
     if (systemQuery.data?.status !== 200) return []

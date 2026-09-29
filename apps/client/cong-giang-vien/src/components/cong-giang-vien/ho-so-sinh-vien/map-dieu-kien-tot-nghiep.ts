@@ -39,7 +39,7 @@ type MonHocRow = {
     subject?: { 
       name?: string | null; 
       code?: string | null;
-      trainingBlockSubjects?: {
+      trainingBlocks?: {
         trainingBlockOnCurriculumVersion?: {
           trainingBlock?: {
             isNationalDefense?: boolean | null
@@ -145,7 +145,7 @@ const timMonHocTheoLoai = (monHoc: MonHocRow[], loai: LoaiDieuKienTotNghiep) =>
   monHoc.filter((item) => {
     // Ưu tiên check flag isNationalDefense từ database trước
     if (loai === "giaoDucQuocPhong") {
-      const isGDQPFlag = item.subjectClass?.subject?.trainingBlockSubjects?.some(
+      const isGDQPFlag = item.subjectClass?.subject?.trainingBlocks?.some(
         (tbs) => tbs.trainingBlockOnCurriculumVersion?.trainingBlock?.isNationalDefense
       )
       if (isGDQPFlag) return true

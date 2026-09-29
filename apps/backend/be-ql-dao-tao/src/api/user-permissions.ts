@@ -1,8 +1,14 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { fieldDesc } from "../dto/openapi-helpers"
 import { standardErrorResponses } from "../dto/openapi-route-helpers"
-import { assignDelegation, listDelegatedPermissions } from "../services/access-delegation"
-import { fetchUserPermissions } from "../services/user-permissions"
+import {
+  applyActualRolePermissions,
+  assignDelegation,
+  fetchUserPermissions,
+  listDelegatedPermissions,
+  listGrantedRoles,
+  revokeGrants,
+} from "../services/access-delegation"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -84,7 +90,7 @@ app.openapi(getUserPermissions, async (c) => {
   const body = c.req.valid("json")
 
   try {
-    const data = await fetchUserPermissions(body.UserIds)
+    const data = await applyActualRolePermissions(await fetchUserPermissions(body.UserIds))
     return c.json(data, 200)
   } catch (error: any) {
     const status = error?.response?.status
@@ -236,6 +242,139 @@ app.openapi(assignDelegationRoute, async (c) => {
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Không gán được quyền"
     console.error("[user-permissions] assign failed", message)
+    return c.json({ message }, 400)
+  }
+})
+
+const GrantedPermissionSchema = z
+  .object({
+    sFormName: z.string().openapi(fieldDesc("Mã chức năng")),
+    sTen: z.string().nullable().openapi(fieldDesc("Tên chức năng")),
+    lPermission: z.number().openapi(fieldDesc("Bit quyền đã giao")),
+  })
+  .openapi("GrantedPermission")
+
+const GrantedRoleSchema = z
+  .object({
+    id: z.string().openapi(fieldDesc("Id lần giao")),
+    recipientId: z.string().openapi(fieldDesc("Id người nhận")),
+    fullname: z.string().nullable().openapi(fieldDesc("Họ tên người nhận")),
+    code: z.string().nullable().openapi(fieldDesc("Mã hồ sơ")),
+    officerNumber: z.string().nullable().openapi(fieldDesc("Số hiệu")),
+    sRoleId: z.string().openapi(fieldDesc("ID vai trò")),
+    sRoleName: z.string().nullable().openapi(fieldDesc("Tên vai trò")),
+    sCodeName: z.string().nullable().openapi(fieldDesc("Mã vai trò")),
+    permissions: z.array(GrantedPermissionSchema).openapi(fieldDesc("Quyền đang giao")),
+    createdAt: z.string().openapi(fieldDesc("Thời điểm giao")),
+  })
+  .openapi("GrantedRole")
+
+const listGrantedRolesRoute = createRoute({
+  operationId: "list-granted-roles",
+  path: "/grants",
+  method: "get",
+  tags: ["Ủy quyền"],
+  summary: "Danh sách quyền người đang đăng nhập đã giao",
+  description: "Chỉ các AccessRoleGrant còn hiệu lực do người giao này tạo.",
+  request: {
+    query: z.object({
+      granterId: z.string().optional().openapi(fieldDesc("Id hồ sơ người giao. Dùng khi request chưa gắn jwt.")),
+    }),
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Danh sách lần giao còn hiệu lực",
+      content: {
+        "application/json": {
+          schema: z.object({
+            grants: z.array(GrantedRoleSchema),
+          }),
+        },
+      },
+    },
+  },
+})
+
+const RevokeGrantsBodySchema = z
+  .object({
+    grantIds: z.array(z.string().min(1)).min(1).max(50).openapi(fieldDesc("Id các lần giao cần thu hồi")),
+    granterId: z
+      .string()
+      .min(1)
+      .optional()
+      .openapi(fieldDesc("Id hồ sơ người giao. Dùng khi request chưa gắn jwt.")),
+  })
+  .openapi("RevokeGrantsBody")
+
+const revokeGrantsRoute = createRoute({
+  operationId: "revoke-grants",
+  path: "/revoke",
+  method: "post",
+  tags: ["Ủy quyền"],
+  summary: "Thu hồi quyền đã giao",
+  description: "Chỉ thu hồi lần giao của chính người gọi. Người nhận mất các bit của lần giao đó.",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: RevokeGrantsBodySchema,
+        },
+      },
+    },
+  },
+  responses: {
+    ...standardErrorResponses(),
+    200: {
+      description: "Đã thu hồi",
+      content: {
+        "application/json": {
+          schema: z.object({
+            revoked: z.number().openapi(fieldDesc("Số lần giao đã thu hồi")),
+          }),
+        },
+      },
+    },
+    401: {
+      description: "Chưa đăng nhập",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(listGrantedRolesRoute, async (c) => {
+  const granterId = c.get("user")?.id || c.req.valid("query").granterId
+  if (!granterId) {
+    return c.json({ grants: [] }, 200)
+  }
+
+  try {
+    const grants = await listGrantedRoles(granterId)
+    return c.json({ grants }, 200)
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Không lấy được danh sách đã ủy quyền"
+    console.error("[user-permissions] grants failed", message)
+    return c.json({ message }, 500)
+  }
+})
+
+app.openapi(revokeGrantsRoute, async (c) => {
+  const body = c.req.valid("json")
+  const granterId = c.get("user")?.id || body.granterId
+  if (!granterId) {
+    return c.json({ message: "Chưa xác định được người giao" }, 400)
+  }
+
+  try {
+    const result = await revokeGrants(granterId, body.grantIds)
+    return c.json(result, 200)
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Không thu hồi được quyền"
+    console.error("[user-permissions] revoke failed", message)
     return c.json({ message }, 400)
   }
 })
