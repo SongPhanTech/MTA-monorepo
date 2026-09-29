@@ -1066,6 +1066,34 @@ app.openapi(exportSubjectClassScore, async (c) => {
       },
       trainingObjectType: true,
       subjectClassStudent: {
+        where: {
+          deletedAt: null,
+          student: { deletedAt: null },
+          ...(type === "DANH-SACH-THI"
+            ? {
+                examPaper: {
+                  is: {
+                    deletedAt: null,
+                    examList: {
+                      is: {
+                        deletedAt: null,
+                        examRoom: {
+                          is: {
+                            deletedAt: null,
+                            ...(examId ? { examId } : {}),
+                            exam: {
+                              deletedAt: null,
+                              subjectClass: { some: { id: id ?? "" } },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              }
+            : {}),
+        },
         include: {
           student: {
             include: {
@@ -1107,7 +1135,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
     },
   })
 
-  if (examId) {
+  if (examId && type !== "DANH-SACH-THI") {
     const exam = await prisma.exam.findUnique({
       where: {
         id: examId,
@@ -1137,6 +1165,10 @@ app.openapi(exportSubjectClassScore, async (c) => {
             },
             trainingObjectType: true,
             subjectClassStudent: {
+              where: {
+                deletedAt: null,
+                student: { deletedAt: null },
+              },
               include: {
                 student: {
                   include: {

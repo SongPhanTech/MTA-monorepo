@@ -543,6 +543,17 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
       return
     }
 
+    const coDiem = (diem: number | null) => diem != null && !Number.isNaN(diem)
+    const thieuDiemQuaTrinh = rows.filter(
+      (r) => !coDiem(r.attendanceScore) || !coDiem(r.midtermScore)
+    ).length
+    if (thieuDiemQuaTrinh > 0) {
+      message.warning(
+        `Còn ${thieuDiemQuaTrinh} sinh viên chưa nhập đủ điểm chuyên cần và định kỳ`
+      )
+      return
+    }
+
     const changed = rows.filter((r) => r.isChanged)
     if (changed.length === 0) {
       message.info("Không có thay đổi để lưu")
@@ -786,8 +797,7 @@ const NhapDiemQuaTrinhGiangDayPage = () => {
               disabled={quaHanNhapDiemQuaTrinh}
             />
             <XuatDanhSachThiButton
-              examId={lopMonHoc?.exam?.id}
-              examName={[lopMonHoc?.subject?.name, lopMonHoc?.code].filter(Boolean).join(" - ")}
+              subjectClassId={lopId}
               disabled={!coTheXuatDanhSachThi}
             />
           </div>

@@ -524,6 +524,15 @@ const NhapDiemThiGiangDayPage = () => {
       return
     }
 
+    const coDiemThi = (diem: number | null) => diem != null && !Number.isNaN(diem)
+    const thieuDiemThi = rows.filter(
+      (r) => !r.examBanned && !r.examPostponed && !r.suspended && !coDiemThi(r.examScore)
+    ).length
+    if (thieuDiemThi > 0) {
+      message.warning(`Còn ${thieuDiemThi} sinh viên chưa nhập điểm thi`)
+      return
+    }
+
     Modal.confirm({
       title: "Xác nhận",
       content: "Bạn có chắc chắn muốn lưu điểm không?",
@@ -545,17 +554,13 @@ const NhapDiemThiGiangDayPage = () => {
           return
         }
 
-        const allHaveExamScore = rows.every(
-          (r) => r.examBanned || r.examPostponed || r.suspended || r.examScore != null
-        )
-
         const tx: SqlTransactionBodyItem[] = [
           {
             model: "SubjectClass",
             operation: "update",
             data: {
               where: { id: lopId },
-              data: { enteredExamScore: allHaveExamScore },
+              data: { enteredExamScore: true },
             },
           },
           ...changed.map((r) => ({
@@ -856,8 +861,7 @@ const NhapDiemThiGiangDayPage = () => {
               Lưu
             </Button>
             <XuatDanhSachThiButton
-              examId={lopMonHoc?.exam?.id}
-              examName={[lopMonHoc?.subject?.name, lopMonHoc?.code].filter(Boolean).join(" - ")}
+              subjectClassId={lopId}
               disabled={!coTheXuatDanhSachThi}
             />
           </div>

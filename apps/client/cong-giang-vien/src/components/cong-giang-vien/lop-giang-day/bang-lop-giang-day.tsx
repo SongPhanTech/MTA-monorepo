@@ -1,5 +1,5 @@
 import type { LopGiangDayRow } from "@components/cong-giang-vien/lop-giang-day/types"
-import { xuatDanhSachThiTheoKyThi } from "@components/commons/print/xuat-danh-sach-thi"
+import { useMoDanhSachThi } from "@components/commons/print/xuat-danh-sach-thi"
 import {
   chiTietMonHocGiangDayPath,
   diemDanhGiangDayPath,
@@ -34,6 +34,7 @@ interface BangLopGiangDayProps {
 
 const BangLopGiangDay = ({ danhSach, loading, trang, soTrang }: BangLopGiangDayProps) => {
   const router = useRouter()
+  const moDanhSachThi = useMoDanhSachThi()
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(320)
 
@@ -62,17 +63,14 @@ const BangLopGiangDay = ({ danhSach, loading, trang, soTrang }: BangLopGiangDayP
     router.push(diemDanhGiangDayPath(id))
   }
 
-  const xuatDanhSachThi = async (record: LopGiangDayRow) => {
+  const xuatDanhSachThi = (record: LopGiangDayRow) => {
     if (!record.canXuatDanhSachThi) {
       message.warning(
         "Chưa thể xuất danh sách thi. Phòng đào tạo cần lên kỳ thi và lấy điểm sinh viên trước."
       )
       return
     }
-    await xuatDanhSachThiTheoKyThi(
-      record.examId,
-      [record.tenMonHoc, record.maLop].filter(Boolean).join(" - ")
-    )
+    moDanhSachThi(record.id, record.examId)
   }
 
   const columns: ColumnsType<LopGiangDayRow> = [
