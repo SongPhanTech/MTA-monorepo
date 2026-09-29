@@ -387,21 +387,28 @@ const mapPermissionResponse = (data?: getUserPermissionsPermissionAppCodeUserIdR
 const usePermissionsState = (userId?: string) => {
   const resolvedUserId =
     userId || (typeof window !== "undefined" ? window.contextData?.userId ?? "" : "")
-  const { data, isFetched, isError } = useGetUserPermissionsPermissionAppCodeUserId(
-    getRuntimeEnv("NEXT_PUBLIC_APP_CODE"),
-    resolvedUserId,
-    {
-      query: {
-        enabled: Boolean(resolvedUserId),
-      },
-    }
-  )
+  const { data, isFetched, isError, isSuccess: isQuerySuccess } =
+    useGetUserPermissionsPermissionAppCodeUserId(
+      getRuntimeEnv("NEXT_PUBLIC_APP_CODE"),
+      resolvedUserId,
+      {
+        query: {
+          enabled: Boolean(resolvedUserId),
+        },
+      }
+    )
 
   const permissions = useMemo(() => mapPermissionResponse(data), [data])
+  const hasUserId = Boolean(resolvedUserId)
+  const isSuccess = hasUserId && isFetched && isQuerySuccess && data?.status === 200
 
   return {
     permissions,
-    isReady: Boolean(resolvedUserId) && (isFetched || isError),
+    isFetched: hasUserId && isFetched,
+    isError: hasUserId && (isError || (isFetched && data?.status !== 200)),
+    isSuccess,
+    /** Settled (fetched or errored) — does not mean permissions are usable. Prefer `isSuccess`. */
+    isReady: hasUserId && (isFetched || isError),
   }
 }
 

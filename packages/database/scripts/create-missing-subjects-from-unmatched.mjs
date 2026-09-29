@@ -4,7 +4,10 @@
  * and create QuestionBanks.
  *
  * Usage:
- *   DATABASE_URL=... bun scripts/create-missing-subjects-from-unmatched.mjs [--dry-run]
+ *   bun scripts/create-missing-subjects-from-unmatched.mjs [--dry-run]
+ *
+ * Chạy sau remap + create-sv, trước bulk-import-questions --with-images.
+ * Full pipeline: xem header bulk-import-catalog.mjs
  */
 import { readFileSync, writeFileSync } from "node:fs"
 import { join, dirname } from "node:path"

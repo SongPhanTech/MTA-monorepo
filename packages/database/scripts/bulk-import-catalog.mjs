@@ -5,6 +5,32 @@
  *   DATABASE_URL="postgresql://..." bun scripts/bulk-import-catalog.mjs [--root /path/to/root]
  *
  * The root defaults to the well-known "Convert ngân hàng câu hỏi" folder.
+ *
+ * ── Đối tượng đào tạo ──────────────────────────────────────────────
+ * Không có chú thích trên folder/file bên trong → mặc định QUÂN SỰ.
+ *
+ *   Folder bậc                         Không chú thích              Có chú thích
+ *   01 Đại học / Đại học               05 ĐH quân sự                01 ĐH dân sự (DÂN SỰ, DHDS)
+ *   02 Cao học / Sau đại học           11 CH quân sự                12 CH dân sự (CHDS)
+ *   03 Cao đẳng                        07 Liên thông QS CĐ          giữ 07
+ *   04 Liên thông, CC, VB2             15 Liên thông QS TC          08 nếu folder/file có VB2
+ *   K-series chỉ có BM, không ghi bậc  05 ĐH quân sự                01 nếu có dân sự
+ *
+ * VB2 / văn bằng 2 = 08 Văn bằng 2 quân sự (kể cả khi nằm trong folder Đại học).
+ * Nhãn gộp "04 Liên thông, CC, VB2" không biến cả thư mục thành VB2;
+ * chỉ khi folder hoặc file bên trong có VB2 / văn bằng 2.
+ *
+ * ── Chạy từ đầu (cwd: packages/database, bun đọc .env) ─────────────
+ *   bun scripts/bulk-import-catalog.mjs
+ *   bun scripts/remap-unmatched-from-excel.mjs
+ *   bun scripts/bulk-import-create-sv.mjs
+ *   bun scripts/create-missing-subjects-from-unmatched.mjs
+ *   bun scripts/bulk-import-questions.mjs --with-images
+ *   bun scripts/bulk-import-questions.mjs --errors-only --via-word --with-images
+ *   bun scripts/fix-question-bank-tree-orgs.mjs
+ *
+ * Cần MINIO_* trong .env khi --with-images. Root mặc định:
+ *   ~/Downloads/Convert ngân hàng câu hỏi/Ngân hàng câu hỏi thi
  */
 import { readdirSync, statSync, writeFileSync } from "node:fs"
 import { basename, join, relative } from "node:path"
@@ -29,31 +55,24 @@ const prisma = new PrismaClient({
   },
 })
 
-// ── Training object type mapping from folder names ──────────────────
-// Folder prefix -> TrainingObjectType.id in DB (mta_in)
-const TRAINING_TYPE_MAP = {
-  "01": "01", // Đại học dân sự
-  "02": "12", // Cao học dân sự
-  "03": "07", // Cao đẳng -> Liên thông quân sự CĐ
-  "04": "15", // Liên thông, CC, VB2 -> Liên thông quân sự TC
-  "05": "05", // Đại học quân sự
+// Bậc đào tạo (folder 01 Đại học / 02 Cao học / …) → mặc định QUÂN SỰ.
+// Dân sự chỉ khi folder/file bên trong có chú thích (CHDS, dân sự, DHDS, …).
+const LEVEL_TYPE = {
+  daihoc: { mil: "05", civ: "01" }, // ĐH QS / ĐH DS
+  caohoc: { mil: "11", civ: "12" }, // CH QS / CH DS
+  caodang: { mil: "07", civ: "07" }, // LT QS CĐ (không có bản DS)
+  lienthong: { mil: "15", civ: "15" }, // LT QS TC
+  vb2: { mil: "08", civ: "08" }, // Văn bằng 2 quân sự
 }
 
-// Additional keywords that appear in K-series folders without numeric prefix
-const TRAINING_TYPE_KEYWORDS = {
-  "đại học": "01",
-  "cao học": "12",
-  "sau đại học": "12",
-  "cao đẳng": "07",
-  "liên thông": "15",
-  "tiến sĩ": "14",
-  "nghiên cứu sinh": "14",
-  "chỉ huy tham mưu": "09",
-  "chủ nhiệm hckt": "17",
-  "chủ nhiệm hậu cần kỹ thuật": "17",
-  "chủ nhiệm kho": "20",
-  "chỉ huy tham mưu kỹ thuật": "09",
-}
+const EXPLICIT_FOLDER_TYPES = [
+  { re: /chi huy tham muu/, id: "09" },
+  { re: /chu nhiem kho/, id: "20" },
+  { re: /chu nhiem hau can ky thuat.*ngan han|chu nhiem hckt.*ngan han/, id: "18" },
+  { re: /chu nhiem hau can ky thuat|chu nhiem hckt/, id: "17" },
+  { re: /tien si|nghien cuu sinh/, id: "14" },
+  { re: /cao hoc quoc te/, id: "21" },
+]
 
 const NON_SUBJECT_FOLDER_PATTERNS = [
   /^nhch[\s_-]?/i,
@@ -122,15 +141,83 @@ const MANUAL_SUBJECT_MAP = {
   "Cơ sở DL phân tán": "Cơ sở dữ liệu phân tán",
 }
 
-function detectTrainingType(folderName) {
-  const prefix = folderName.substring(0, 2)
-  if (TRAINING_TYPE_MAP[prefix]) return TRAINING_TYPE_MAP[prefix]
-
-  const lower = folderName.toLowerCase()
-  for (const [kw, code] of Object.entries(TRAINING_TYPE_KEYWORDS)) {
-    if (lower.includes(kw)) return code
+function detectLevel(folderName) {
+  const a = stripDiacritics(folderName).toLowerCase()
+  for (const { re, id } of EXPLICIT_FOLDER_TYPES) {
+    if (re.test(a)) return { kind: "explicit", id }
   }
+  const prefix = folderName.trim().match(/^(\d{2})(?:\s|$)/)?.[1]
+  if (/dai hoc/.test(a) || prefix === "01") return { kind: "level", level: "daihoc" }
+  if (/cao hoc/.test(a) || /sau dai hoc/.test(a) || prefix === "02") {
+    return { kind: "level", level: "caohoc" }
+  }
+  if (/cao dang/.test(a) || prefix === "03") return { kind: "level", level: "caodang" }
+  if (/lien thong/.test(a) || prefix === "04") return { kind: "level", level: "lienthong" }
+  // Folder riêng "VB2" / "Văn bằng 2" — không áp cho "04 Liên thông, CC, VB2"
+  if (!/lien thong/.test(a) && isVb2Text(a)) return { kind: "level", level: "vb2" }
+  if (prefix === "05" && /dai hoc/.test(a)) return { kind: "level", level: "daihoc" }
   return null
+}
+
+/** VB2 / văn bằng 2 → TrainingObjectType 08 (Văn bằng 2 quân sự). */
+function isVb2Text(text) {
+  const a = stripDiacritics(text).toLowerCase()
+  if (/van\s*bang\s*2/.test(a) || /vanbang2/.test(a)) return true
+  return /(^|[^a-z0-9])vb\s*2([^a-z0-9]|$)/.test(a) || /(^|[^a-z0-9])vb2([^a-z0-9]|$)/.test(a)
+}
+
+/** Chú thích trên folder/file bên trong (bỏ qua nhãn gộp "04 Liên thông, CC, VB2"). */
+function annotationFromText(text) {
+  const a = stripDiacritics(text).toLowerCase()
+  if (!a.trim()) return null
+  if (isVb2Text(a)) return { kind: "id", id: "08" }
+  if (/chds/.test(a) || /cao hoc dan su/.test(a)) return { kind: "id", id: "12" }
+  if (/chqs/.test(a) || /cao hoc quan su/.test(a)) return { kind: "id", id: "11" }
+  if (/dai hoc dan su/.test(a) || /dhds/.test(a)) return { kind: "id", id: "01" }
+  if (/dai hoc quan su/.test(a) || /dhqs/.test(a)) return { kind: "id", id: "05" }
+  if (/\bncs\b/.test(a) || /nghien cuu sinh/.test(a) || /tien si/.test(a)) {
+    return { kind: "id", id: "14" }
+  }
+  if (/dan\s*su/.test(a)) return { kind: "side", side: "civilian" }
+  if (/quan\s*su/.test(a)) return { kind: "side", side: "military" }
+  return null
+}
+
+function detectTrainingType(folderName) {
+  const d = detectLevel(folderName)
+  if (!d) return null
+  if (d.kind === "explicit") return d.id
+  return LEVEL_TYPE[d.level].mil
+}
+
+function resolveTrainingType(parts, fileName) {
+  let level = null
+  let levelIdx = -1
+  let explicitFromFolder = null
+  for (let i = 1; i < parts.length; i++) {
+    const d = detectLevel(parts[i])
+    if (!d) continue
+    if (d.kind === "explicit") {
+      explicitFromFolder = d.id
+      levelIdx = i
+      break
+    }
+    if (!level) {
+      level = d.level
+      levelIdx = i
+    }
+  }
+
+  const rest = [...parts.slice(levelIdx >= 0 ? levelIdx + 1 : 1), fileName].join(" ")
+  const ann = annotationFromText(rest)
+  if (ann?.kind === "id") return ann.id
+  if (explicitFromFolder) return explicitFromFolder
+  if (level) {
+    const pair = LEVEL_TYPE[level]
+    return ann?.side === "civilian" ? pair.civ : pair.mil
+  }
+  if (ann?.side === "civilian") return "01"
+  return "05"
 }
 
 function stripDiacritics(s) {
@@ -265,18 +352,13 @@ function parseFilePath(filePath) {
   const topFolder = parts[0]
   const fileName = basename(filePath, /\.docx?$/i.exec(filePath)?.[0] || ".doc")
 
-  let trainingTypeId = null
   let bmName = null
   let subjectFolderName = null
+  const trainingTypeId = resolveTrainingType(parts, fileName)
 
-  // Try to find training type and BM from path segments
+  // Try to find BM from path segments
   for (let i = 1; i < parts.length - 1; i++) {
     const seg = parts[i]
-    const tt = detectTrainingType(seg)
-    if (tt && !trainingTypeId) {
-      trainingTypeId = tt
-      continue
-    }
     if (
       /^(\d+\s+)?BM\s/i.test(seg) ||
       /^(\d+\s+)?B[oộ]\s+m[oô]n/i.test(seg) ||
@@ -297,17 +379,6 @@ function parseFilePath(filePath) {
     if (looksLikeNonSubjectFolder(seg)) continue
     subjectFolderName = seg
     break
-  }
-
-  // For K-series without explicit training type subfolder,
-  // if there's no training type detected, default to null (will be "unmatched")
-  // For direct BM folders under K-series (e.g., K11/BM Vật lý/Subject/file.doc)
-  // training type is ambiguous — default to "01" (Đại học)
-  if (!trainingTypeId && topFolder.startsWith("K")) {
-    // Direct BM folder under K-series without training type — default to "01" (Đại học)
-    if (bmName) {
-      trainingTypeId = "01"
-    }
   }
 
   const subjectName = subjectFolderName ? extractSubjectName(subjectFolderName) : null
@@ -608,6 +679,15 @@ async function main() {
   console.log(`Matched:      ${catalog.summary.matched}`)
   console.log(`Missing SV:   ${catalog.summary.missingSv}`)
   console.log(`Unmatched:    ${catalog.summary.unmatched}`)
+  const typeCount = new Map()
+  for (const e of [...matched, ...missingSv]) {
+    const t = e.trainingTypeId || "?"
+    typeCount.set(t, (typeCount.get(t) || 0) + 1)
+  }
+  console.log("Training types (matched+missingSv):")
+  for (const [t, n] of [...typeCount.entries()].sort((a, b) => b[1] - a[1])) {
+    console.log(`  ${t}: ${n}`)
+  }
   console.log(`\nCatalog written to ${outPath}`)
 
   // Print some unmatched samples for debugging
@@ -627,6 +707,34 @@ async function main() {
       )
     }
   }
+}
+
+if (process.argv.includes("--self-test")) {
+  const cases = [
+    [["V6", "01 Đại học", "BM X", "Môn A"], "file.doc", "05"],
+    [["V6", "01 Đại học", "BM X", "Y học - DÂN SỰ"], "file.doc", "01"],
+    [["V6", "02 Cao học", "BM X", "Môn A"], "file.doc", "11"],
+    [["V6", "02 Cao học", "BM X", "Môn A - CHDS"], "file.doc", "12"],
+    [["K21", "02 Cao học", "BM X", "Môn - CHQS"], "a.doc", "11"],
+    [["K6", "Chủ nhiệm HCKT", "Môn"], "a.doc", "17"],
+    [["K11", "BM Vật lý", "Môn"], "a.doc", "05"],
+    [["V6", "04 Liên thông, CC, VB2", "BM X", "Môn"], "a.doc", "15"],
+    [["V6", "04 Liên thông, CC, VB2", "BM X", "Môn VB2"], "a.doc", "08"],
+    [["V4", "04 Liên thông, CC, VB2", "Lập trình nhúng - VB2 - 30 phút"], "a.doc", "08"],
+    [["V2", "01 Đại học", "BM X", "Động lực học công trình - VB2 bình dương"], "CAU 1.doc", "08"],
+    [["K13", "04 Liên thông, CC, VB2", "Bộ môn tiếng nga", "Tiếng Nga"], "x.doc", "15"],
+  ]
+  let fail = 0
+  for (const [parts, file, expect] of cases) {
+    const got = resolveTrainingType(parts, file)
+    if (got !== expect) {
+      fail++
+      console.error(`FAIL ${parts.join("/")} ${file} => ${got} (want ${expect})`)
+    }
+  }
+  if (fail) process.exit(1)
+  console.log("self-test ok", cases.length)
+  process.exit(0)
 }
 
 main()

@@ -178,7 +178,7 @@ export default function DetailSurveyPage() {
               type: "input",
               render: (__, record) => {
                 return record?.lecture
-                  ? `${record?.lecture?.code} - ${record?.lecture?.userProfile?.lastName} ${record?.lecture?.userProfile?.firstName}`
+                  ? `${record?.lecture?.userProfile?.code || ""} - ${record?.lecture?.userProfile?.lastName || ""} ${record?.lecture?.userProfile?.firstName || ""}`
                   : ""
               },
             },

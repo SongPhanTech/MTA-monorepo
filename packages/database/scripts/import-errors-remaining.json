@@ -1,0 +1,26 @@
+[
+  {
+    "file": "K13/01 Đại học/Bộ môn tiếng nga/Tiếng Nga A1 Dự khóa_Kỹ năng nói - k59 - 30 phút/Câu hỏi 3.doc",
+    "error": "Word convert failed: Word text looks wrongly decoded"
+  },
+  {
+    "file": "K13/01 Đại học/Bộ môn tiếng nga/Tiếng Nga A1 Dự khóa_Kỹ năng nói - k59 - 30 phút/Câu hỏi 3.docx",
+    "error": "Word convert failed: Word text looks wrongly decoded"
+  },
+  {
+    "file": "V4/01 Đại học/04 BM Khoa học máy tính/Học máy - lớp VB2 - 20.03.25 - 30 phút/TL/tl.doc",
+    "error": "Cannot convert /Users/minhah/Downloads/Convert ngân hàng câu hỏi/Ngân hàng câu hỏi thi/V4/01 Đại học/04 BM Khoa học máy tính/Học máy - lớp VB2 - 20.03.25 - 30 phút/TL/tl.doc: textutil output looks binary/garbage"
+  },
+  {
+    "file": "V4/01 Đại học/04 BM Khoa học máy tính/Mô phỏng quân sự -24.06.25 - 30 phút/Câu hỏi 5đ .doc",
+    "error": "Cannot convert /Users/minhah/Downloads/Convert ngân hàng câu hỏi/Ngân hàng câu hỏi thi/V4/01 Đại học/04 BM Khoa học máy tính/Mô phỏng quân sự -24.06.25 - 30 phút/Câu hỏi 5đ .doc: textutil output looks binary/garbage"
+  },
+  {
+    "file": "K22/02 Cao học/BM khí tài quang/Cơ sở linh kiện và thiết bị photonics - CH 23.06.22 - 30 phút/03ly thuyet 2_3d.doc",
+    "error": "Cannot convert /Users/minhah/Downloads/Convert ngân hàng câu hỏi/Ngân hàng câu hỏi thi/K22/02 Cao học/BM khí tài quang/Cơ sở linh kiện và thiết bị photonics - CH 23.06.22 - 30 phút/03ly thuyet 2_3d.doc: textutil output looks binary/garbage"
+  },
+  {
+    "file": "K22/02 Cao học/BM khí tài quang/Cơ sở linh kiện và thiết bị photonics - CH 23.06.22 - 30 phút/04bai tap-4d.doc",
+    "error": "Cannot convert /Users/minhah/Downloads/Convert ngân hàng câu hỏi/Ngân hàng câu hỏi thi/K22/02 Cao học/BM khí tài quang/Cơ sở linh kiện và thiết bị photonics - CH 23.06.22 - 30 phút/04bai tap-4d.doc: textutil output looks binary/garbage"
+  }
+]
