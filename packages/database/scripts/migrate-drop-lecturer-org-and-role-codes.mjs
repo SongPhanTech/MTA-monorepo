@@ -161,6 +161,22 @@ async function main() {
       console.log("\n[org] Lecturer.organizationId đã không còn — skip copy.")
     }
 
+    // Profile.sDM_DonViId orphan (không có trên DM_DonVi) — chặn ADD FK
+    const orphanRows = await prisma.$queryRaw`
+      SELECT COUNT(*)::int AS n
+      FROM "ql-nguoi-dung"."UserProfile" up
+      WHERE up."sDM_DonViId" IS NOT NULL
+        AND NOT EXISTS (
+          SELECT 1 FROM mta."DM_DonVi" dv WHERE dv."Id" = up."sDM_DonViId"
+        )
+    `
+    const orphanOrg = orphanRows[0]?.n ?? 0
+    if (orphanOrg) {
+      console.log(
+        `[org] UserProfile.sDM_DonViId orphan (không có trên DM_DonVi) → sẽ NULL trước khi gắn FK: ${orphanOrg}`
+      )
+    }
+
     // ── 2) Preview / copy codes ─────────────────────────────────────
     const wouldCopy = []
     const overwriteLecturer = []
@@ -314,7 +330,19 @@ async function main() {
       console.log(`[org] đã copy ${copied} UserProfile.sDM_DonViId`)
     }
 
-    // ── 5) FK + index trên UserProfile.sDM_DonViId ─────────────────
+    // ── 5) Dọn orphan rồi FK + index trên UserProfile.sDM_DonViId ───
+    // Profile đã có sDM_DonViId (không phải từ bước copy) nhưng Id đã bị xóa
+    // trên DM_DonVi → ADD CONSTRAINT sẽ fail 23503 nếu không NULL trước.
+    const cleared = await prisma.$executeRaw`
+      UPDATE "ql-nguoi-dung"."UserProfile" up
+      SET "sDM_DonViId" = NULL
+      WHERE up."sDM_DonViId" IS NOT NULL
+        AND NOT EXISTS (
+          SELECT 1 FROM mta."DM_DonVi" dv WHERE dv."Id" = up."sDM_DonViId"
+        )
+    `
+    if (cleared) console.log(`[org] đã NULL ${cleared} sDM_DonViId orphan`)
+
     await prisma.$executeRawUnsafe(`
       CREATE INDEX IF NOT EXISTS "UserProfile_sDM_DonViId_idx"
         ON "ql-nguoi-dung"."UserProfile" ("sDM_DonViId")

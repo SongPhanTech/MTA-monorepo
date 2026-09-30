@@ -277,6 +277,7 @@ deploy-all-be:
 	@zip -r docker-images.zip docker-images
 	$(SCP) -O docker-images.zip $(SERVER_HOST):$(BE_DEPLOY_DIR)
 	$(SSH) $(SERVER_HOST) "cd $(BE_DEPLOY_DIR) && \
+	rm -rf docker-images && \
 	unzip -o docker-images.zip && \
 	cd docker-images && ls *.tar.gz | xargs -I {} docker load -i {} && \
 	cd $(BE_APP_DIR) && \
