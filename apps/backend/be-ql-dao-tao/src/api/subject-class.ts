@@ -1069,7 +1069,9 @@ app.openapi(exportSubjectClassScore, async (c) => {
         where: {
           deletedAt: null,
           student: { deletedAt: null },
-          ...(type === "DANH-SACH-THI"
+          // Phiếu danh sách thi trên màn quản lý điểm không truyền examId và in toàn bộ
+          // sinh viên của lớp. Chỉ lọc theo bài thi khi cổng giảng viên truyền kỳ thi.
+          ...(type === "DANH-SACH-THI" && examId
             ? {
                 examPaper: {
                   is: {
@@ -1080,7 +1082,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
                         examRoom: {
                           is: {
                             deletedAt: null,
-                            ...(examId ? { examId } : {}),
+                            examId,
                             exam: {
                               deletedAt: null,
                               subjectClass: { some: { id: id ?? "" } },

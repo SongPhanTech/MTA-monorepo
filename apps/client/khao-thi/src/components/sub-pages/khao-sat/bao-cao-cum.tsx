@@ -84,7 +84,7 @@ function ClusterSurveyReport({
       yAxis: {
         type: "category",
         data: dataLevel?.data?.data.map(
-          (i) => `${i?.lecture?.code || ""} - ${i?.lecture?.userProfile?.fullname || ""}`
+          (i) => `${i?.lecture?.userProfile?.code || ""} - ${i?.lecture?.userProfile?.fullname || ""}`
         ),
       },
       series: choices,

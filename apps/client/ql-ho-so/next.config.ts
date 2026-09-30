@@ -5,6 +5,9 @@ const assetPrefix = process.env.NEXT_PUBLIC_ASSET_PREFIX || ""
 const nextConfig: NextConfig = {
   basePath,
   assetPrefix,
+  experimental: {
+    clientRouterFilter: false,
+  },
   /* config options here */
   reactStrictMode: true,
   transpilePackages: [
