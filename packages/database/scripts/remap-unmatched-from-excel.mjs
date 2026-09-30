@@ -11,7 +11,8 @@
  *   bun scripts/remap-unmatched-from-excel.mjs
  *   bun scripts/bulk-import-create-sv.mjs
  *   bun scripts/create-missing-subjects-from-unmatched.mjs
- *   bun scripts/bulk-import-questions.mjs
+ *   bun scripts/bulk-import-questions.mjs --with-images
+ *   bun scripts/bulk-import-questions.mjs --errors-only --via-word --with-images
  *   bun scripts/fix-question-bank-tree-orgs.mjs
  *
  * Skips:

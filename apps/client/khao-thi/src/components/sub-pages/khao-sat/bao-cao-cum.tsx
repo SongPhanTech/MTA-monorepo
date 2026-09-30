@@ -198,7 +198,7 @@ function ClusterSurveyReport({
           const headerRowValue: any = worksheet.getRow(8 + index)
           headerRowValue.values = [
             index + 1,
-            `${i?.lecture?.code || ""} - ${i?.lecture?.userProfile?.fullname || ""}`,
+            `${i?.lecture?.userProfile?.code || ""} - ${i?.lecture?.userProfile?.fullname || ""}`,
             ...calculatePercent(i?.average).map(
               (a: any) => `${a.percent || 0}% (${a?.totalCount || 0}/${a?.total || 0})`
             ),
@@ -264,7 +264,7 @@ function ClusterSurveyReport({
                   title: "Đối tượng",
                   align: "center",
                   render: (_, record) => {
-                    return `${record?.lecture?.code || ""} - ${record?.lecture?.userProfile?.fullname || ""}`
+                    return `${record?.lecture?.userProfile?.code || ""} - ${record?.lecture?.userProfile?.fullname || ""}`
                   },
                 },
                 // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>

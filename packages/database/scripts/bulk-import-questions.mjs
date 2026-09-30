@@ -5,17 +5,35 @@
  * batches, and syncs MultipleChoiceOption rows for MC questions.
  *
  * Usage:
- *   DATABASE_URL="postgresql://..." bun scripts/bulk-import-questions.mjs [--dry-run] [--limit N] [--concurrency N] [--batch N]
- *   DATABASE_URL="postgresql://..." bun scripts/bulk-import-questions.mjs --errors-only --via-word
+ *   bun scripts/bulk-import-questions.mjs --with-images
+ *   bun scripts/bulk-import-questions.mjs --errors-only --via-word --with-images
+ *   bun scripts/retry-import-errors.mjs   # Word Save As .docx rồi import lại 105 file lỗi
+ *
+ * Full pipeline: xem header bulk-import-catalog.mjs
+ *
+ * --with-images: .docx/.docx.doc lấy ảnh từ ZIP; .doc OLE convert HTML bằng Word rồi upload MinIO.
+ * --catalog <path>: dùng catalog khác (retry-import-errors tạo patched catalog).
+ * --errors-out <path>: ghi lỗi ra file chỉ định (mặc định import-errors.json / import-errors-word.json).
+ * Cần MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET (thiếu thì nhúng data URL).
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs"
 import { join, basename } from "node:path"
 import { execFileSync, execSync } from "node:child_process"
 import { PrismaClient } from "../generated/prisma-client/index.js"
+import {
+  isZipContainer,
+  zipHasMedia,
+  oleMayHavePictures,
+  extractDocxTextAndImages,
+  docToHtmlViaWord,
+  uploadImageList,
+  applyImgTokensToQuestions,
+} from "./nhch-images.mjs"
 
 const dryRun = process.argv.includes("--dry-run")
 const errorsOnly = process.argv.includes("--errors-only")
 const viaWord = process.argv.includes("--via-word")
+const withImages = process.argv.includes("--with-images")
 const limitArg = process.argv.indexOf("--limit")
 const limit = limitArg !== -1 ? Number(process.argv[limitArg + 1]) : Infinity
 const offsetArg = process.argv.indexOf("--offset")
@@ -33,6 +51,14 @@ const CONNECTION_LIMIT = Math.max(FILE_CONCURRENCY + 2, 12)
 const MAX_QUESTIONS_PER_FILE = 2000
 const MAX_TEXT_CHARS = 2_000_000
 const WORD_SCRIPT = join(import.meta.dir || ".", "word-extract-text.applescript")
+const catalogArg = process.argv.indexOf("--catalog")
+const CATALOG_PATH =
+  catalogArg !== -1
+    ? process.argv[catalogArg + 1]
+    : join(import.meta.dir || ".", "import-catalog.json")
+const errorsOutArg = process.argv.indexOf("--errors-out")
+const ERRORS_OUT_PATH =
+  errorsOutArg !== -1 ? process.argv[errorsOutArg + 1] : null
 
 const url = process.env.DATABASE_URL
 if (!url) {
@@ -50,7 +76,6 @@ const prisma = new PrismaClient({
   },
 })
 
-const CATALOG_PATH = join(import.meta.dir || ".", "import-catalog.json")
 const TMP_DIR = "/tmp/nhch-convert"
 
 const TYPE_MAP = {
@@ -226,6 +251,29 @@ function docToTextViaWord(docPath) {
   }
 }
 
+async function convertDocument(docPath) {
+  if (withImages) {
+    const zip = isZipContainer(docPath)
+    if (zip && zipHasMedia(docPath)) {
+      const { text, images } = extractDocxTextAndImages(docPath)
+      if (text.trim().length >= 10 || images.length) {
+        const urlByName = dryRun ? {} : await uploadImageList(images)
+        return { text, urlByName, imageCount: images.length }
+      }
+    }
+    if (!zip && (viaWord || oleMayHavePictures(docPath))) {
+      try {
+        const { text, images } = await docToHtmlViaWord(docPath)
+        const urlByName = dryRun ? {} : await uploadImageList(images)
+        return { text, urlByName, imageCount: images.length }
+      } catch (e) {
+        console.warn(`    Word HTML fallback to text: ${e.message}`)
+      }
+    }
+  }
+  return { text: docToText(docPath), urlByName: {}, imageCount: 0 }
+}
+
 function docToText(docPath) {
   // --via-word: always use Word (soft textutil often under-parses OLE .doc as 1 blob)
   if (viaWord) return docToTextViaWord(docPath)
@@ -393,25 +441,122 @@ function parseStandardHeader(line) {
   }
 }
 
+function isJunkLine(line) {
+  const t = String(line || "").replace(/\s+/g, " ").trim()
+  if (!t) return true
+  if (/MERGEFORMAT|PAGEREF|HYPERLINK|TOC \\/i.test(t)) return true
+  if (/^PAGE\b/i.test(t)) return true
+  if (/^NHÓM\s+CÂU\s+HỎI/i.test(t)) return true
+  return false
+}
+
+function isJunkQuestion(content) {
+  const t = String(content || "").replace(/\s+/g, " ").trim()
+  if (/\{img_\d+\}|<img\s/i.test(t) && t.length >= 7) return false
+  if (t.length < 8) return true
+  if (isJunkLine(t)) return true
+  if (/^Câu hỏi\s*:\s*$/i.test(t)) return true
+  return false
+}
+
+function extractGroupPointFromText(text) {
+  const m = String(text).match(/NHÓM\s+CÂU\s+HỎI\s+(\d+[.,]?\d*)\s*ĐIỂM/i)
+  if (!m) return null
+  const n = Number.parseFloat(m[1].replace(",", "."))
+  return Number.isFinite(n) ? n : null
+}
+
+function stripWordNoise(text) {
+  return String(text || "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n")
+    .replace(/PAGE\s*\\\*\s*MERGEFORMAT\s*\d*/gi, " ")
+    .replace(/PAGE\s*\\\*\s*MERGEFORMAT/gi, " ")
+    .replace(/^\s*PAGE\s+\d+\s*$/gim, "")
+    .replace(/^\s*NHÓM\s+CÂU\s+HỎI[^\n]*/gim, "")
+    .replace(/\nGhi chú:[\s\S]*$/i, "")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+}
+
+function parsePointToken(token) {
+  const m = String(token || "").match(/^(\d+[.,]?\d*)\s*(?:đ|điểm)?$/i)
+  if (!m) return null
+  const n = Number.parseFloat(m[1].replace(",", "."))
+  if (!Number.isFinite(n) || n <= 0 || n > 10) return null
+  return n
+}
+
+/** Tách đề / điểm / đáp án cho dạng NHCH tự luận: "Câu hỏi: …? 2 <đáp án>" */
+function parseEssayStemAndAnswer(raw, defaultPoint) {
+  let text = stripWordNoise(raw).replace(/\u00A0/g, " ").trim()
+  text = text.replace(/^Câu hỏi\s*:\s*/i, "")
+  const keptLines = text
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l && !isJunkLine(l))
+
+  const pointLineIdx = keptLines.findIndex((l) => parsePointToken(l) != null)
+  if (pointLineIdx >= 0) {
+    const point = parsePointToken(keptLines[pointLineIdx])
+    const stem = keptLines
+      .slice(0, pointLineIdx)
+      .join(" ")
+      .replace(/\?+\s*$/, "")
+      .trim()
+    const explanation = keptLines.slice(pointLineIdx + 1).join("\n").trim() || null
+    if (stem) return { content: stem, point: point ?? defaultPoint ?? 1, explanation }
+  }
+
+  const collapsed = keptLines.join(" ").replace(/\s+/g, " ").trim()
+  const qMark = collapsed.indexOf("?")
+  if (qMark >= 8) {
+    const stem = collapsed.slice(0, qMark).trim()
+    let rest = collapsed.slice(qMark + 1).trim()
+    const m = rest.match(/^(\d+[.,]?\d*)\s*(?:đ|điểm)?(?:\s+|$)([\s\S]*)$/i)
+    if (m) {
+      const pt = parsePointToken(m[1])
+      const after = (m[2] || "").trim()
+      const looksLikeAnswerStart = /^[A-ZÀ-Ỹ0-9«"“]/.test(after) || after.length > 40
+      const matchesGroup = defaultPoint != null && pt === defaultPoint
+      if (pt != null && (looksLikeAnswerStart || matchesGroup || after.length > 0)) {
+        return { content: stem, point: pt, explanation: after || null }
+      }
+    }
+    if (rest.length > 40) {
+      return { content: stem, point: defaultPoint ?? 1, explanation: rest }
+    }
+    return { content: stem, point: defaultPoint ?? 1, explanation: rest || null }
+  }
+
+  return { content: collapsed, point: defaultPoint ?? 1, explanation: null }
+}
+
 function parseQuestions(text, bankName, bankId) {
-  text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n")
-  text = text.replace(/\nGhi chú:[\s\S]*$/i, "")
+  const groupPoint = extractGroupPointFromText(text)
+  text = stripWordNoise(text)
 
   const defaultDifficult = extractDifficulty(bankName)
-  const pointHint = extractPointHint(bankName)
+  const pointHint = extractPointHint(bankName) ?? groupPoint
   const questions = []
   const seenNums = new Set()
 
   const pushQ = (q) => {
-    if (!q.content || q.content.length < 2) return
+    const parsed =
+      q.type === "ESSAY" && !q.options?.length
+        ? parseEssayStemAndAnswer(q.content, q.point ?? pointHint)
+        : { content: q.content, point: q.point, explanation: q.explanation }
+    const content = sanitizeText(parsed.content || q.content || "").trim()
+    if (isJunkQuestion(content)) return
     const num = q.num
     if (seenNums.has(num)) return
     seenNums.add(num)
+    const explanation = sanitizeText(q.explanation || parsed.explanation || "").trim() || null
     questions.push({
       num,
-      content: sanitizeText(q.content),
-      point: q.point ?? pointHint ?? 1,
-      explanation: q.explanation ? sanitizeText(q.explanation) : null,
+      content,
+      point: finitePoint(parsed.point ?? q.point ?? pointHint, pointHint ?? 1),
+      explanation,
       type: q.type || "ESSAY",
       difficult: q.difficult || defaultDifficult,
       isAutoGraded: q.type === "SINGLE_CHOICE" || q.type === "MULTIPLE_CHOICE",
@@ -441,6 +586,16 @@ function parseQuestions(text, bankName, bankId) {
         explanation: mc.answerText || null,
         options: mc.options,
       })
+    } else if (header.type === "ESSAY" || header.type === "ORAL") {
+      const essay = parseEssayStemAndAnswer(mc.content || restBody, header.point)
+      pushQ({
+        num: header.num,
+        content: essay.content,
+        point: essay.point,
+        difficult: header.difficult,
+        type: header.type,
+        explanation: mc.answerText || essay.explanation,
+      })
     } else {
       pushQ({
         num: header.num,
@@ -453,6 +608,40 @@ function parseQuestions(text, bankName, bankId) {
     }
   }
   if (usedStd && questions.length > 0) return questions
+
+  // ── Strategy C0: "Câu hỏi: stem? POINT answer" (NHCH tự luận phổ biến) ──
+  const cauHoiCount = (text.match(/Câu hỏi\s*:/gi) || []).length
+  if (cauHoiCount >= 2) {
+    const cauHoiParts = text.split(/\n(?=\s*Câu hỏi\s*:)/i)
+    let localNum = 0
+    for (const part of cauHoiParts) {
+      if (!/^\s*Câu hỏi\s*:/i.test(part)) continue
+      const numbered = part.match(/^\s*Câu\s+(\d+)\s*\n/)
+      const num = numbered ? Number(numbered[1]) : ++localNum
+      const after = part.replace(/^\s*Câu hỏi\s*:\s*/i, "")
+      const mc = extractMcOptions(after)
+      if (mc.isMc) {
+        pushQ({
+          num,
+          content: mc.content,
+          type: "SINGLE_CHOICE",
+          options: mc.options,
+          explanation: mc.answerText || null,
+          point: pointHint ?? 1,
+        })
+        continue
+      }
+      const essay = parseEssayStemAndAnswer(after, pointHint)
+      pushQ({
+        num,
+        content: essay.content,
+        point: essay.point,
+        explanation: essay.explanation,
+        type: "ESSAY",
+      })
+    }
+    if (questions.length > 0) return questions
+  }
 
   // ── Strategy B: "Câu N:" / "Câu hỏi N:" with optional MC options ──
   const colonParts = text.split(/\n(?=\s*Câu(?:\s*hỏi)?\s*\d+\s*[:.])/i)
@@ -472,20 +661,19 @@ function parseQuestions(text, bankName, bankId) {
         point: pointHint ?? 1,
       })
     } else if (body.length > 10) {
-      // essay-ish under Câu N:
-      let content = body
-      let point = pointHint ?? 1
-      const pointMatch = content.match(/\((\d+[.,]?\d*)\s*(?:điểm|đ)\)\s*$/i)
-      if (pointMatch) {
-        point = Number.parseFloat(pointMatch[1].replace(",", "."))
-        content = content.slice(0, pointMatch.index).trim()
-      }
-      pushQ({ num, content, type: "ESSAY", point })
+      const essay = parseEssayStemAndAnswer(body, pointHint)
+      pushQ({
+        num,
+        content: essay.content,
+        type: "ESSAY",
+        point: essay.point,
+        explanation: essay.explanation,
+      })
     }
   }
   if (questions.length > 0) return questions
 
-  // ── Strategy C: essay "Câu N\n...Câu hỏi:...\nX đ" (allow leading spaces) ──
+  // ── Strategy C: essay "Câu N\n...Câu hỏi:...\nX đ" ──
   const essayParts = text.split(/\n(?=\s*Câu\s+\d+\s*\n)/)
   for (const part of essayParts) {
     const m = part.match(/^\s*Câu\s+(\d+)\s*\n([\s\S]*)/)
@@ -494,7 +682,6 @@ function parseQuestions(text, bankName, bankId) {
     const body = m[2]
     const idx = body.search(/Câu hỏi:\s*/i)
     if (idx < 0) {
-      // maybe MC without "Câu hỏi:"
       const mc = extractMcOptions(body)
       if (mc.isMc) {
         pushQ({
@@ -521,43 +708,22 @@ function parseQuestions(text, bankName, bankId) {
       continue
     }
 
-    const lines = after.split("\n")
-    const contentLines = []
-    let point = null
-    let explanation = null
-    for (let i = 0; i < lines.length; i++) {
-      if (/^\s*[\d.,]+\s*đ\s*$/i.test(lines[i])) {
-        point = Number.parseFloat(lines[i].replace(/đ/gi, "").replace(",", ".").trim())
-        explanation =
-          lines
-            .slice(i + 1)
-            .filter(
-              (l) =>
-                l.trim().length &&
-                !/^PAGE\s+\d+/i.test(l.trim()) &&
-                !/^NHÓM CÂU HỎI/i.test(l.trim())
-            )
-            .join("\n")
-            .trim() || null
-        break
-      }
-      contentLines.push(lines[i])
-    }
+    const essay = parseEssayStemAndAnswer(after, pointHint)
     pushQ({
       num,
-      content: contentLines.join("\n").trim(),
-      point: point ?? 1,
-      explanation,
+      content: essay.content,
+      point: essay.point,
+      explanation: essay.explanation,
       type: "ESSAY",
     })
   }
   if (questions.length > 0) return questions
 
-  // ── Strategy D: paragraph fallback ──
+  // ── Strategy D: paragraph fallback (bỏ header/rác Word) ──
   const paragraphs = text
     .split(/\n{2,}/)
     .map((p) => p.trim())
-    .filter((p) => p.length > 20)
+    .filter((p) => p.length > 20 && !isJunkQuestion(p))
   let num = 0
   for (const p of paragraphs) {
     num++
@@ -568,9 +734,17 @@ function parseQuestions(text, bankName, bankId) {
         content: mc.content,
         type: "SINGLE_CHOICE",
         options: mc.options,
+        explanation: mc.answerText || null,
       })
     } else {
-      pushQ({ num, content: p, type: "ESSAY" })
+      const essay = parseEssayStemAndAnswer(p, pointHint)
+      pushQ({
+        num,
+        content: essay.content,
+        type: "ESSAY",
+        point: essay.point,
+        explanation: essay.explanation,
+      })
     }
   }
 
@@ -591,25 +765,60 @@ async function mapPool(items, concurrency, worker) {
   return results
 }
 
+function formatUpsertError(err) {
+  const message = String(err?.message || err || "")
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .slice(-2)
+    .join(" | ")
+  const code = err?.code || err?.meta?.target || ""
+  return [code, message].filter(Boolean).join(" ").slice(0, 300)
+}
+
+function finitePoint(value, fallback = 1) {
+  const n = Number(value)
+  return Number.isFinite(n) && n > 0 && n <= 10 ? n : fallback
+}
+
+const bankLocks = new Map()
+function withBankLock(bankId, fn) {
+  const prev = bankLocks.get(bankId) || Promise.resolve()
+  const next = prev.then(fn, fn)
+  bankLocks.set(bankId, next.then(
+    () => {},
+    () => {}
+  ))
+  return next
+}
+
 async function upsertQuestion(q) {
   const data = {
     content: sanitizeText(q.content),
-    type: q.type,
-    point: q.point,
+    type: q.type || "ESSAY",
+    point: finitePoint(q.point),
     explanation: q.explanation ? sanitizeText(q.explanation) : null,
-    difficult: q.difficult,
+    difficult: ["D1", "D2", "D3", "D4"].includes(q.difficult) ? q.difficult : "D3",
     isAutoGraded: !!q.isAutoGraded,
     questionBankId: q.questionBankId,
     active: true,
     deletedAt: null,
   }
 
-  const row = await prisma.question.upsert({
+  const existing = await prisma.question.findUnique({
     where: { code: q.code },
-    create: { ...data, code: q.code },
-    update: data,
     select: { id: true },
   })
+  const row = existing
+    ? await prisma.question.update({
+        where: { id: existing.id },
+        data,
+        select: { id: true },
+      })
+    : await prisma.question.create({
+        data: { ...data, code: q.code },
+        select: { id: true },
+      })
 
   // Sync MC options (replace set)
   if (q.type === "SINGLE_CHOICE" || q.type === "MULTIPLE_CHOICE") {
@@ -628,7 +837,6 @@ async function upsertQuestion(q) {
       })
     }
   } else {
-    // Was wrongly MC before? clear leftover options
     await prisma.multipleChoiceOption.deleteMany({
       where: { questionId: row.id },
     })
@@ -639,19 +847,14 @@ async function upsertQuestionsBatched(questions) {
   let ok = 0
   let failed = 0
   let mc = 0
-  for (let i = 0; i < questions.length; i += UPSERT_BATCH) {
-    const chunk = questions.slice(i, i + UPSERT_BATCH)
-    const settled = await Promise.allSettled(chunk.map((q) => upsertQuestion(q)))
-    for (let j = 0; j < settled.length; j++) {
-      const r = settled[j]
-      if (r.status === "fulfilled") {
-        ok++
-        if (chunk[j].type === "SINGLE_CHOICE" || chunk[j].type === "MULTIPLE_CHOICE") mc++
-      } else {
-        failed++
-        const msg = String(r.reason?.message || r.reason).split("\n")[0]
-        console.warn(`    upsert fail ${chunk[j].code}: ${msg}`)
-      }
+  for (const q of questions) {
+    try {
+      await upsertQuestion(q)
+      ok++
+      if (q.type === "SINGLE_CHOICE" || q.type === "MULTIPLE_CHOICE") mc++
+    } catch (err) {
+      failed++
+      console.warn(`    upsert fail ${q.code}: ${formatUpsertError(err)}`)
     }
   }
   return { ok, failed, mc }
@@ -661,8 +864,13 @@ async function processEntry(entry, index, total) {
   const pct = `[${index + 1}/${total}]`
   try {
     let text
+    let urlByName = {}
+    let imageCount = 0
     try {
-      text = docToText(entry.filePath)
+      const converted = await convertDocument(entry.filePath)
+      text = converted.text
+      urlByName = converted.urlByName || {}
+      imageCount = converted.imageCount || 0
     } catch (e) {
       console.log(`${pct} SKIP (convert failed): ${entry.relativePath} — ${e.message}`)
       return { status: "failed", questions: 0, error: e.message, file: entry.relativePath }
@@ -674,6 +882,7 @@ async function processEntry(entry, index, total) {
     }
 
     let questions = parseQuestions(text, entry.bankName, entry.questionBankId)
+    questions = applyImgTokensToQuestions(questions, urlByName)
     if (questions.length === 0) {
       console.log(`${pct} SKIP (0 questions parsed): ${entry.relativePath}`)
       return { status: "skipped", questions: 0, file: entry.relativePath }
@@ -690,7 +899,9 @@ async function processEntry(entry, index, total) {
     ).length
 
     if (dryRun) {
-      console.log(`${pct} ${entry.relativePath} -> ${questions.length} q (mc=${mcCount}) [dry-run]`)
+      console.log(
+        `${pct} ${entry.relativePath} -> ${questions.length} q (mc=${mcCount} img=${imageCount}) [dry-run]`
+      )
       return {
         status: "success",
         questions: questions.length,
@@ -699,10 +910,13 @@ async function processEntry(entry, index, total) {
       }
     }
 
-    const { ok, failed, mc } = await upsertQuestionsBatched(questions)
+    const { ok, failed, mc } = await withBankLock(entry.questionBankId, () =>
+      upsertQuestionsBatched(questions)
+    )
     const suffix = failed ? ` (failed ${failed})` : ""
+    const imgSuffix = imageCount ? ` img=${imageCount}` : ""
     console.log(
-      `${pct} ${entry.relativePath} -> ${ok}/${questions.length} upserted (mc=${mc})${suffix}`
+      `${pct} ${entry.relativePath} -> ${ok}/${questions.length} upserted (mc=${mc}${imgSuffix})${suffix}`
     )
     return {
       status: failed && ok === 0 ? "failed" : "success",
@@ -737,7 +951,7 @@ async function main() {
   if (Number.isFinite(limit)) entries = entries.slice(0, limit)
 
   console.log(
-    `Processing ${entries.length} files (offset=${offset}) via=${viaWord ? "Word" : "textutil"} | fileConcurrency=${FILE_CONCURRENCY} upsertBatch=${UPSERT_BATCH} connection_limit=${CONNECTION_LIMIT}`
+    `Processing ${entries.length} files (offset=${offset}) via=${viaWord ? "Word" : "textutil"}${withImages ? "+images" : ""} | fileConcurrency=${FILE_CONCURRENCY} upsertBatch=${UPSERT_BATCH} connection_limit=${CONNECTION_LIMIT}`
   )
 
   const started = Date.now()
@@ -775,17 +989,50 @@ async function main() {
   console.log(`Duration:   ${secs}s`)
 
   if (results.errors.length > 0) {
-    const errPath = join(
-      import.meta.dir || ".",
-      errorsOnly ? "import-errors-word.json" : "import-errors.json"
-    )
+    const errPath =
+      ERRORS_OUT_PATH ||
+      join(
+        import.meta.dir || ".",
+        errorsOnly ? "import-errors-word.json" : "import-errors.json"
+      )
     writeFileSync(errPath, JSON.stringify(results.errors, null, 2), "utf8")
     console.log(`Errors saved to ${errPath}`)
+  } else if (ERRORS_OUT_PATH) {
+    writeFileSync(ERRORS_OUT_PATH, "[]", "utf8")
   } else if (errorsOnly) {
     // clear residual word-error file on full success
     const errPath = join(import.meta.dir || ".", "import-errors-word.json")
     writeFileSync(errPath, "[]", "utf8")
   }
+}
+
+if (process.argv.includes("--self-test")) {
+  const sample = `
+NHÓM CÂU HỎI 2 ĐIỂM (19 câu)
+PAGE \\* MERGEFORMAT 6
+
+Câu hỏi: Công dụng và cấu tạo của hệ thống chữa cháy? 2 đầu, khoang điều khiển và khoang động cơ.
+
+Câu hỏi: Công dụng và cấu tạo của hệ thống lội ngầm? 2 Hệ thống lội ngầm đảm bảo cho xe có thể làm việc được ngay cả khi toàn bộ phần thân xe bị chìm dưới nước. xe tăng T – 62 là xe có hệ thống lội ngầm dưới đáy nước thỏa mãn yêu cầu làm tăng khả năng thông qua của xe. Cấu tạo chính của hệ thống lội ngầm bao gồm ống dẫn không khí đảm bảo cho người và xe làm việc khi xe chìm hoàn toàn trong nước, ống thoàt hiểm, các kết cấu bịt kín để nước không vào được xe, la bàn để định hướng và các bơm nước đảm bảo thoát nước trong xe.
+`
+  const qs = parseQuestions(sample, "Nhóm câu hỏi 2 điểm", "bank")
+  console.log(JSON.stringify(qs, null, 2))
+  const junk = qs.some((q) => /MERGEFORMAT|NHÓM CÂU HỎI/i.test(q.content))
+  const lnm = qs.find((q) => /lội ngầm/i.test(q.content))
+  if (junk) {
+    console.error("FAIL: junk question leaked")
+    process.exit(1)
+  }
+  if (!lnm || /Hệ thống lội ngầm đảm bảo/i.test(lnm.content)) {
+    console.error("FAIL: stem/answer not split", lnm)
+    process.exit(1)
+  }
+  if (!lnm.explanation || !/Hệ thống lội ngầm đảm bảo/i.test(lnm.explanation)) {
+    console.error("FAIL: explanation missing", lnm)
+    process.exit(1)
+  }
+  console.log("self-test ok", qs.length)
+  process.exit(0)
 }
 
 main()
