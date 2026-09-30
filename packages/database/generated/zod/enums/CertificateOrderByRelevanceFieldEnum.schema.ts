@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const CertificateOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name", "englishName", "outputStandardId"])
+export const CertificateOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "name", "englishName", "outputStandardId"])

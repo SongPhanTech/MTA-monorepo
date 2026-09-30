@@ -328,7 +328,7 @@ export function useSuspenseCountIndividualSchedule<TArgs extends Prisma.Individu
 }
 import type { ScheduleRepeatType } from '../zenstack/models';
 
-export function useCheckIndividualSchedule<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; title?: string; allDay?: boolean; location?: string; content?: string; isCompleted?: boolean; reminderMinutes?: number; repeatType?: ScheduleRepeatType; lecturerId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckIndividualSchedule<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; title?: string; allDay?: boolean; location?: string; content?: string; isCompleted?: boolean; reminderMinutes?: number; repeatType?: ScheduleRepeatType; lecturerId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('IndividualSchedule', `${endpoint}/individualSchedule/check`, args, options, fetch);
 }

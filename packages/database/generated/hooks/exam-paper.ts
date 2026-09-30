@@ -327,7 +327,7 @@ export function useSuspenseCountExamPaper<TArgs extends Prisma.ExamPaperCountArg
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ExamPaper', `${endpoint}/examPaper/count`, args, options, fetch);
 }
 
-export function useCheckExamPaper<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; examListId?: string; studentSubjectScoreId?: string; examCode?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckExamPaper<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; examListId?: string; studentSubjectScoreId?: string; examCode?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ExamPaper', `${endpoint}/examPaper/check`, args, options, fetch);
 }

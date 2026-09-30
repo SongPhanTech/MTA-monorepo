@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const CouncilScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "proposedDate", "status", "studentThesisRegistrationId"])
+export const CouncilScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "proposedDate", "status", "studentThesisRegistrationId"])

@@ -327,7 +327,7 @@ export function useSuspenseCountTrainingMajor<TArgs extends Prisma.TrainingMajor
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TrainingMajor', `${endpoint}/trainingMajor/count`, args, options, fetch);
 }
 
-export function useCheckTrainingMajor<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; englishName?: string; shortName?: string; summary?: string; numberCreditsMajor?: number; numberCreditsRequired?: number; numberCreditsElective?: number; organizationId?: string; secondOrganizationId?: string; thirdOrganizationId?: string; trainingFieldId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTrainingMajor<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; englishName?: string; shortName?: string; summary?: string; numberCreditsMajor?: number; numberCreditsRequired?: number; numberCreditsElective?: number; organizationId?: string; secondOrganizationId?: string; thirdOrganizationId?: string; trainingFieldId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TrainingMajor', `${endpoint}/trainingMajor/check`, args, options, fetch);
 }

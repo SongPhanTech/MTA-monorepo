@@ -328,7 +328,7 @@ export function useSuspenseCountStudentThesisRegistration<TArgs extends Prisma.S
 }
 import type { StudentThesisRegistrationStatus } from '../zenstack/models';
 
-export function useCheckStudentThesisRegistration<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; studentId?: string; studentSubjectScoreId?: string; thesisProjectId?: string; motivation?: string; experience?: string; proposedIdeas?: string; status?: StudentThesisRegistrationStatus; reviewedById?: string; reviewNote?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckStudentThesisRegistration<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; studentId?: string; studentSubjectScoreId?: string; thesisProjectId?: string; motivation?: string; experience?: string; proposedIdeas?: string; status?: StudentThesisRegistrationStatus; reviewedById?: string; reviewNote?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('StudentThesisRegistration', `${endpoint}/studentThesisRegistration/check`, args, options, fetch);
 }

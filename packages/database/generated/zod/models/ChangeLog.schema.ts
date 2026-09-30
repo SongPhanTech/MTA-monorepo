@@ -15,6 +15,12 @@ const baseSchema = z.object({
     newData: z.any().nullish(),
     transactionId: z.string().nullish(),
     source: z.string().nullish(),
+    sNguoiTao: z.string().nullish(),
+    sNguoiSua: z.string().nullish(),
+    dNgayTao: z.coerce.date().nullish(),
+    dNgaySua: z.coerce.date().nullish(),
+    sThietBiTao: z.string().nullish(),
+    sThietBiSua: z.string().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -27,6 +33,12 @@ const baseSchemaWithoutDefaults = z.object({
     newData: z.any().nullish(),
     transactionId: z.string().nullish(),
     source: z.string().nullish(),
+    sNguoiTao: z.string().nullish(),
+    sNguoiSua: z.string().nullish(),
+    dNgayTao: z.coerce.date().nullish(),
+    dNgaySua: z.coerce.date().nullish(),
+    sThietBiTao: z.string().nullish(),
+    sThietBiSua: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -70,7 +82,13 @@ export const ChangeLogPrismaUpdateSchema = z.object({
     oldData: z.any().nullish(),
     newData: z.any().nullish(),
     transactionId: z.string().nullish(),
-    source: z.string().nullish()
+    source: z.string().nullish(),
+    sNguoiTao: z.string().nullish(),
+    sNguoiSua: z.string().nullish(),
+    dNgayTao: z.coerce.date().nullish(),
+    dNgaySua: z.coerce.date().nullish(),
+    sThietBiTao: z.string().nullish(),
+    sThietBiSua: z.string().nullish()
 }).partial().passthrough();
 
 

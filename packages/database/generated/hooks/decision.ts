@@ -328,7 +328,7 @@ export function useSuspenseCountDecision<TArgs extends Prisma.DecisionCountArgs,
 }
 import type { DecisionType } from '../zenstack/models';
 
-export function useCheckDecision<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; type?: DecisionType; thesisProjectId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDecision<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; type?: DecisionType; thesisProjectId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Decision', `${endpoint}/decision/check`, args, options, fetch);
 }

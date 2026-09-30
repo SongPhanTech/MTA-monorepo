@@ -327,7 +327,7 @@ export function useSuspenseCountDoiTuongChinhSach<TArgs extends Prisma.DoiTuongC
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DoiTuongChinhSach', `${endpoint}/doiTuongChinhSach/count`, args, options, fetch);
 }
 
-export function useCheckDoiTuongChinhSach<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; tenDoiTuong?: string; ghiChu?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDoiTuongChinhSach<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; tenDoiTuong?: string; ghiChu?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('DoiTuongChinhSach', `${endpoint}/doiTuongChinhSach/check`, args, options, fetch);
 }

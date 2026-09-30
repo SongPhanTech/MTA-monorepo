@@ -327,7 +327,7 @@ export function useSuspenseCountInvitation<TArgs extends Prisma.InvitationCountA
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Invitation', `${endpoint}/invitation/count`, args, options, fetch);
 }
 
-export function useCheckInvitation<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; isConfirmed?: boolean; councilMemberId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckInvitation<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; isConfirmed?: boolean; councilMemberId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Invitation', `${endpoint}/invitation/check`, args, options, fetch);
 }

@@ -327,7 +327,7 @@ export function useSuspenseCountSubjectClassTime<TArgs extends Prisma.SubjectCla
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('SubjectClassTime', `${endpoint}/subjectClassTime/count`, args, options, fetch);
 }
 
-export function useCheckSubjectClassTime<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; subjectClassId?: string; dayOfWeek?: number; startPeriod?: number; endPeriod?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSubjectClassTime<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; subjectClassId?: string; dayOfWeek?: number; startPeriod?: number; endPeriod?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SubjectClassTime', `${endpoint}/subjectClassTime/check`, args, options, fetch);
 }

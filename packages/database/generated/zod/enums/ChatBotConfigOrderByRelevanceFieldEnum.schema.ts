@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const ChatBotConfigOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name", "value"])
+export const ChatBotConfigOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "name", "value"])

@@ -327,7 +327,7 @@ export function useSuspenseCountDM_HinhThucKhenThuongDang<TArgs extends Prisma.D
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DM_HinhThucKhenThuongDang', `${endpoint}/dM_HinhThucKhenThuongDang/count`, args, options, fetch);
 }
 
-export function useCheckDM_HinhThucKhenThuongDang<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDM_HinhThucKhenThuongDang<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('DM_HinhThucKhenThuongDang', `${endpoint}/dM_HinhThucKhenThuongDang/check`, args, options, fetch);
 }

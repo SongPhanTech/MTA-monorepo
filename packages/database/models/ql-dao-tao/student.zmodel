@@ -130,6 +130,7 @@ model Student extends BaseNoCode {
   classRegisterAttempts          ClassRegisterAttempt[]
   notes                          Note[]
   noteFolders                    NoteFolder[]
+  personalEvents                 StudentPersonalEvent[]
   semesterTrainingScore          SemesterTrainingScore[]
   schoolYearTrainingScore        SchoolYearTrainingScore[]
   subjectClassAttendanceStudent  SubjectClassAttendanceStudent[]

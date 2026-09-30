@@ -327,7 +327,7 @@ export function useSuspenseCountOrderingItem<TArgs extends Prisma.OrderingItemCo
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('OrderingItem', `${endpoint}/orderingItem/count`, args, options, fetch);
 }
 
-export function useCheckOrderingItem<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; questionId?: string; content?: string; correctOrder?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckOrderingItem<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; questionId?: string; content?: string; correctOrder?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('OrderingItem', `${endpoint}/orderingItem/check`, args, options, fetch);
 }

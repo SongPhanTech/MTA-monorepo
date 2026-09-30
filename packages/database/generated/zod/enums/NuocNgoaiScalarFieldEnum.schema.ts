@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const NuocNgoaiScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "tenNuocId", "tuNgay", "denNgay", "lyDo", "userProfileId"])
+export const NuocNgoaiScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "tenNuocId", "tuNgay", "denNgay", "lyDo", "userProfileId"])

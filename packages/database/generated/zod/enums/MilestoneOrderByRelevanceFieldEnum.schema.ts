@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const MilestoneOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name", "period", "schoolYearId"])
+export const MilestoneOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "name", "period", "schoolYearId"])

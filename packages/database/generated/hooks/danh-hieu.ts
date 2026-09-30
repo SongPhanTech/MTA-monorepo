@@ -327,7 +327,7 @@ export function useSuspenseCountDanhHieu<TArgs extends Prisma.DanhHieuCountArgs,
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DanhHieu', `${endpoint}/danhHieu/count`, args, options, fetch);
 }
 
-export function useCheckDanhHieu<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; ten?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDanhHieu<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; ten?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('DanhHieu', `${endpoint}/danhHieu/check`, args, options, fetch);
 }

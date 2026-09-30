@@ -328,7 +328,7 @@ export function useSuspenseCountTemplateFile<TArgs extends Prisma.TemplateFileCo
 }
 import type { TemplateFileType } from '../zenstack/models';
 
-export function useCheckTemplateFile<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; path?: string; fileType?: TemplateFileType; extensions?: string; numberField?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTemplateFile<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; path?: string; fileType?: TemplateFileType; extensions?: string; numberField?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TemplateFile', `${endpoint}/templateFile/check`, args, options, fetch);
 }

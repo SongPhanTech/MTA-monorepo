@@ -327,7 +327,7 @@ export function useSuspenseCountRelative<TArgs extends Prisma.RelativeCountArgs,
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Relative', `${endpoint}/relative/count`, args, options, fetch);
 }
 
-export function useCheckRelative<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; birthYear?: number; queQuan?: string; noiOHienTai?: string; job?: string; information?: string; quanHeThanNhanId?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckRelative<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; birthYear?: number; queQuan?: string; noiOHienTai?: string; job?: string; information?: string; quanHeThanNhanId?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Relative', `${endpoint}/relative/check`, args, options, fetch);
 }

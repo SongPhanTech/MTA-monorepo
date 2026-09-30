@@ -327,7 +327,7 @@ export function useSuspenseCountTinHoc<TArgs extends Prisma.TinHocCountArgs, TQu
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TinHoc', `${endpoint}/tinHoc/count`, args, options, fetch);
 }
 
-export function useCheckTinHoc<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; hinhThucDaoTao?: string; noiDaoTao?: string; dM_TrinhDoTinHocId?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTinHoc<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; hinhThucDaoTao?: string; noiDaoTao?: string; dM_TrinhDoTinHocId?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TinHoc', `${endpoint}/tinHoc/check`, args, options, fetch);
 }

@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const DoiTuongChinhSachScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "tenDoiTuong", "ngayBatDau", "ngayKetThuc", "ghiChu", "userProfileId"])
+export const DoiTuongChinhSachScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "tenDoiTuong", "ngayBatDau", "ngayKetThuc", "ghiChu", "userProfileId"])

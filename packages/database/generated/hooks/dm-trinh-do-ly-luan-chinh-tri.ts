@@ -327,7 +327,7 @@ export function useSuspenseCountDM_TrinhDoLyLuanChinhTri<TArgs extends Prisma.DM
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DM_TrinhDoLyLuanChinhTri', `${endpoint}/dM_TrinhDoLyLuanChinhTri/count`, args, options, fetch);
 }
 
-export function useCheckDM_TrinhDoLyLuanChinhTri<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDM_TrinhDoLyLuanChinhTri<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('DM_TrinhDoLyLuanChinhTri', `${endpoint}/dM_TrinhDoLyLuanChinhTri/check`, args, options, fetch);
 }

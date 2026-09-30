@@ -327,7 +327,7 @@ export function useSuspenseCountDM_ChucDanhCMNVNghienCuuVien<TArgs extends Prism
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DM_ChucDanhCMNVNghienCuuVien', `${endpoint}/dM_ChucDanhCMNVNghienCuuVien/count`, args, options, fetch);
 }
 
-export function useCheckDM_ChucDanhCMNVNghienCuuVien<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDM_ChucDanhCMNVNghienCuuVien<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('DM_ChucDanhCMNVNghienCuuVien', `${endpoint}/dM_ChucDanhCMNVNghienCuuVien/check`, args, options, fetch);
 }

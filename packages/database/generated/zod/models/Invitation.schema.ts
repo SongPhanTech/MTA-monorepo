@@ -14,6 +14,12 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
+    sNguoiTao: z.string().nullish(),
+    sNguoiSua: z.string().nullish(),
+    dNgayTao: z.coerce.date().nullish(),
+    dNgaySua: z.coerce.date().nullish(),
+    sThietBiTao: z.string().nullish(),
+    sThietBiSua: z.string().nullish(),
     sentDate: z.coerce.date().default(() => new Date()),
     isConfirmed: z.boolean().default(false),
 }
@@ -27,6 +33,12 @@ const baseSchemaWithoutDefaults = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    sNguoiTao: z.string().nullish(),
+    sNguoiSua: z.string().nullish(),
+    dNgayTao: z.coerce.date().nullish(),
+    dNgaySua: z.coerce.date().nullish(),
+    sThietBiTao: z.string().nullish(),
+    sThietBiSua: z.string().nullish(),
     sentDate: z.coerce.date(),
     isConfirmed: z.boolean(),
 }
@@ -72,6 +84,12 @@ export const InvitationPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    sNguoiTao: z.string().nullish(),
+    sNguoiSua: z.string().nullish(),
+    dNgayTao: z.coerce.date().nullish(),
+    dNgaySua: z.coerce.date().nullish(),
+    sThietBiTao: z.string().nullish(),
+    sThietBiSua: z.string().nullish(),
     sentDate: z.coerce.date(),
     isConfirmed: z.boolean()
 }).partial().passthrough();

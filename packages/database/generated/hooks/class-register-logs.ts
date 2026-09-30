@@ -328,7 +328,7 @@ export function useSuspenseCountClassRegisterLogs<TArgs extends Prisma.ClassRegi
 }
 import type { ClassRegisterStatus } from '../zenstack/models';
 
-export function useCheckClassRegisterLogs<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; classRegisterSessionId?: string; subjectClassId?: string; studentId?: string; status?: ClassRegisterStatus; reason?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckClassRegisterLogs<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; classRegisterSessionId?: string; subjectClassId?: string; studentId?: string; status?: ClassRegisterStatus; reason?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ClassRegisterLogs', `${endpoint}/classRegisterLogs/check`, args, options, fetch);
 }

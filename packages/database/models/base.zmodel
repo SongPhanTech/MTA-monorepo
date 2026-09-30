@@ -7,6 +7,12 @@ abstract model Base {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt @default(now())
   createdBy   String?   @db.Uuid @default(auth().id)
+  sNguoiTao   String?
+  sNguoiSua   String?
+  dNgayTao    DateTime? @db.Timestamp(6)
+  dNgaySua    DateTime? @db.Timestamp(6)
+  sThietBiTao String?
+  sThietBiSua String?
   // TODO: change this
   @@allow('all', auth() != null)
 
@@ -24,6 +30,12 @@ abstract model BaseNoCode {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt @default(now())
   createdBy   String?   @db.Uuid @default(auth().id)
+  sNguoiTao   String?
+  sNguoiSua   String?
+  dNgayTao    DateTime? @db.Timestamp(6)
+  dNgaySua    DateTime? @db.Timestamp(6)
+  sThietBiTao String?
+  sThietBiSua String?
   // TODO: change this
   @@allow('all', auth() != null)
 

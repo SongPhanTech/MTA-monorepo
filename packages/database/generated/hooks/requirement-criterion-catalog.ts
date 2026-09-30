@@ -327,7 +327,7 @@ export function useSuspenseCountRequirementCriterionCatalog<TArgs extends Prisma
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('RequirementCriterionCatalog', `${endpoint}/requirementCriterionCatalog/count`, args, options, fetch);
 }
 
-export function useCheckRequirementCriterionCatalog<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; criterionCatalogId?: string; order?: number; name?: string; questions?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckRequirementCriterionCatalog<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; criterionCatalogId?: string; order?: number; name?: string; questions?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('RequirementCriterionCatalog', `${endpoint}/requirementCriterionCatalog/check`, args, options, fetch);
 }

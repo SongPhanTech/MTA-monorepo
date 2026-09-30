@@ -327,7 +327,7 @@ export function useSuspenseCountOutputStandardOnCurriculum<TArgs extends Prisma.
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('OutputStandardOnCurriculum', `${endpoint}/outputStandardOnCurriculum/count`, args, options, fetch);
 }
 
-export function useCheckOutputStandardOnCurriculum<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; outputStandardId?: string; curriculumVersionId?: string; isRequired?: boolean; semesterIndex?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckOutputStandardOnCurriculum<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; outputStandardId?: string; curriculumVersionId?: string; isRequired?: boolean; semesterIndex?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('OutputStandardOnCurriculum', `${endpoint}/outputStandardOnCurriculum/check`, args, options, fetch);
 }

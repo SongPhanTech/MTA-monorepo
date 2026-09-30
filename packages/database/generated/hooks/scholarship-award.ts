@@ -327,7 +327,7 @@ export function useSuspenseCountScholarshipAward<TArgs extends Prisma.Scholarshi
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ScholarshipAward', `${endpoint}/scholarshipAward/count`, args, options, fetch);
 }
 
-export function useCheckScholarshipAward<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; studentId?: string; semesterId?: string; scholarshipId?: string; priorityRank?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckScholarshipAward<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; studentId?: string; semesterId?: string; scholarshipId?: string; priorityRank?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ScholarshipAward', `${endpoint}/scholarshipAward/check`, args, options, fetch);
 }

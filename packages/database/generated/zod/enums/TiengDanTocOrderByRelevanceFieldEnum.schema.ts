@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const TiengDanTocOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "danTocId", "nghe", "noi", "viet", "userProfileId"])
+export const TiengDanTocOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "danTocId", "nghe", "noi", "viet", "userProfileId"])

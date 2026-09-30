@@ -328,7 +328,7 @@ export function useSuspenseCountSchoolYearTrainingScore<TArgs extends Prisma.Sch
 }
 import type { TrainingScoreStatus } from '../zenstack/models';
 
-export function useCheckSchoolYearTrainingScore<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; schoolYearId?: string; studentId?: string; score?: number; status?: TrainingScoreStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSchoolYearTrainingScore<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; schoolYearId?: string; studentId?: string; score?: number; status?: TrainingScoreStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SchoolYearTrainingScore', `${endpoint}/schoolYearTrainingScore/check`, args, options, fetch);
 }

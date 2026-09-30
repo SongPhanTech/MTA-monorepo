@@ -327,7 +327,7 @@ export function useSuspenseCountScoreCorrectionItem<TArgs extends Prisma.ScoreCo
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ScoreCorrectionItem', `${endpoint}/scoreCorrectionItem/count`, args, options, fetch);
 }
 
-export function useCheckScoreCorrectionItem<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; ticketId?: string; studentSubjectScoreId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckScoreCorrectionItem<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; ticketId?: string; studentSubjectScoreId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ScoreCorrectionItem', `${endpoint}/scoreCorrectionItem/check`, args, options, fetch);
 }

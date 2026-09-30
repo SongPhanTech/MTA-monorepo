@@ -327,7 +327,7 @@ export function useSuspenseCountTrinhDoLyLuanChinhTri<TArgs extends Prisma.Trinh
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TrinhDoLyLuanChinhTri', `${endpoint}/trinhDoLyLuanChinhTri/count`, args, options, fetch);
 }
 
-export function useCheckTrinhDoLyLuanChinhTri<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; hinhThucDaoTao?: string; noiDaoTao?: string; userProfileId?: string; trinhDoId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTrinhDoLyLuanChinhTri<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; hinhThucDaoTao?: string; noiDaoTao?: string; userProfileId?: string; trinhDoId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TrinhDoLyLuanChinhTri', `${endpoint}/trinhDoLyLuanChinhTri/check`, args, options, fetch);
 }

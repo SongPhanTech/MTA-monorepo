@@ -327,7 +327,7 @@ export function useSuspenseCountStandardPeriod<TArgs extends Prisma.StandardPeri
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('StandardPeriod', `${endpoint}/standardPeriod/count`, args, options, fetch);
 }
 
-export function useCheckStandardPeriod<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; periodId?: string; name?: string; order?: number; opening?: string; conclusion?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckStandardPeriod<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; periodId?: string; name?: string; order?: number; opening?: string; conclusion?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('StandardPeriod', `${endpoint}/standardPeriod/check`, args, options, fetch);
 }

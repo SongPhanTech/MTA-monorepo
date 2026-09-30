@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const DefaultSupervisorPayAmountOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "configPaymentSessionId"])
+export const DefaultSupervisorPayAmountOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "configPaymentSessionId"])

@@ -327,7 +327,7 @@ export function useSuspenseCountKyLuat<TArgs extends Prisma.KyLuatCountArgs, TQu
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('KyLuat', `${endpoint}/kyLuat/count`, args, options, fetch);
 }
 
-export function useCheckKyLuat<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; hinhThucKyLuat?: string; capKyLuat?: string; soQuyetDinh?: string; nguoiKy?: string; lyDo?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckKyLuat<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; hinhThucKyLuat?: string; capKyLuat?: string; soQuyetDinh?: string; nguoiKy?: string; lyDo?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('KyLuat', `${endpoint}/kyLuat/check`, args, options, fetch);
 }

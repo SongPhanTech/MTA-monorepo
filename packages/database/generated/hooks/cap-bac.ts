@@ -327,7 +327,7 @@ export function useSuspenseCountCapBac<TArgs extends Prisma.CapBacCountArgs, TQu
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('CapBac', `${endpoint}/capBac/count`, args, options, fetch);
 }
 
-export function useCheckCapBac<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; noiRaQuyetDinh?: string; capRaQuyetDinh?: string; capBacId?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckCapBac<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; noiRaQuyetDinh?: string; capRaQuyetDinh?: string; capBacId?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('CapBac', `${endpoint}/capBac/check`, args, options, fetch);
 }

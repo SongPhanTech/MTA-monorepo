@@ -327,7 +327,7 @@ export function useSuspenseCountConversation<TArgs extends Prisma.ConversationCo
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Conversation', `${endpoint}/conversation/count`, args, options, fetch);
 }
 
-export function useCheckConversation<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; userId?: string; sessionId?: string; topicId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckConversation<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; userId?: string; sessionId?: string; topicId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Conversation', `${endpoint}/conversation/check`, args, options, fetch);
 }

@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const DocumentScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "title", "body", "status", "classificationId", "uri", "fileType", "fileSize", "reason", "uploadedById", "approvedById"])
+export const DocumentScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "title", "body", "status", "classificationId", "uri", "fileType", "fileSize", "reason", "uploadedById", "approvedById"])

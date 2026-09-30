@@ -327,7 +327,7 @@ export function useSuspenseCountCitationMessage<TArgs extends Prisma.CitationMes
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('CitationMessage', `${endpoint}/citationMessage/count`, args, options, fetch);
 }
 
-export function useCheckCitationMessage<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; content?: string; index?: number; documentId?: string; documentType?: string; messageId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckCitationMessage<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; content?: string; index?: number; documentId?: string; documentType?: string; messageId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('CitationMessage', `${endpoint}/citationMessage/check`, args, options, fetch);
 }

@@ -327,7 +327,7 @@ export function useSuspenseCountStaffPosition<TArgs extends Prisma.StaffPosition
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('StaffPosition', `${endpoint}/staffPosition/count`, args, options, fetch);
 }
 
-export function useCheckStaffPosition<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckStaffPosition<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('StaffPosition', `${endpoint}/staffPosition/check`, args, options, fetch);
 }

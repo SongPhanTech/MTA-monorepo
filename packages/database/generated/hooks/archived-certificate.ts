@@ -328,7 +328,7 @@ export function useSuspenseCountArchivedCertificate<TArgs extends Prisma.Archive
 }
 import type { ArchivedCertificateStatus } from '../zenstack/models';
 
-export function useCheckArchivedCertificate<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; certificateId?: string; studentId?: string; issuedBy?: string; status?: ArchivedCertificateStatus; decisionNumber?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckArchivedCertificate<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; certificateId?: string; studentId?: string; issuedBy?: string; status?: ArchivedCertificateStatus; decisionNumber?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ArchivedCertificate', `${endpoint}/archivedCertificate/check`, args, options, fetch);
 }

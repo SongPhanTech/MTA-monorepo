@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const NoteReminderScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "title", "reminderTime", "isCompleted", "completedAt", "repeatType", "isNotified", "noteId"])
+export const NoteReminderScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "title", "reminderTime", "isCompleted", "completedAt", "repeatType", "isNotified", "noteId"])

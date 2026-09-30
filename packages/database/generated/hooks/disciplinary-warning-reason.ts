@@ -327,7 +327,7 @@ export function useSuspenseCountDisciplinaryWarningReason<TArgs extends Prisma.D
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DisciplinaryWarningReason', `${endpoint}/disciplinaryWarningReason/count`, args, options, fetch);
 }
 
-export function useCheckDisciplinaryWarningReason<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; severityLevel?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDisciplinaryWarningReason<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; severityLevel?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('DisciplinaryWarningReason', `${endpoint}/disciplinaryWarningReason/check`, args, options, fetch);
 }

@@ -327,7 +327,7 @@ export function useSuspenseCountEvidence<TArgs extends Prisma.EvidenceCountArgs,
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Evidence', `${endpoint}/evidence/count`, args, options, fetch);
 }
 
-export function useCheckEvidence<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; categoryId?: string; name?: string; information?: string; issuer?: string; suffix?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckEvidence<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; categoryId?: string; name?: string; information?: string; issuer?: string; suffix?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Evidence', `${endpoint}/evidence/check`, args, options, fetch);
 }

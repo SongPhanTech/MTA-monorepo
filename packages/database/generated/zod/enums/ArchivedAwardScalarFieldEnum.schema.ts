@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const ArchivedAwardScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "awardId", "studentId", "bonusScore", "date", "status"])
+export const ArchivedAwardScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "awardId", "studentId", "bonusScore", "date", "status"])

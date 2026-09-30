@@ -327,7 +327,7 @@ export function useSuspenseCountSuggestion<TArgs extends Prisma.SuggestionCountA
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Suggestion', `${endpoint}/suggestion/count`, args, options, fetch);
 }
 
-export function useCheckSuggestion<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; key?: string; value?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSuggestion<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; key?: string; value?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Suggestion', `${endpoint}/suggestion/check`, args, options, fetch);
 }

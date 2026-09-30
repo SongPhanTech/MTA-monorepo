@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const DataSyncHistoryOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "sessionName", "classRegisterSessionId", "fileName", "fileVersion", "errorMessage", "performedById"])
+export const DataSyncHistoryOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "sNguoiTao", "sNguoiSua", "sThietBiTao", "sThietBiSua", "sessionName", "classRegisterSessionId", "fileName", "fileVersion", "errorMessage", "performedById"])

@@ -327,7 +327,7 @@ export function useSuspenseCountAccessPermissionGrant<TArgs extends Prisma.Acces
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('AccessPermissionGrant', `${endpoint}/accessPermissionGrant/count`, args, options, fetch);
 }
 
-export function useCheckAccessPermissionGrant<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; roleGrantId?: string; sFormName?: string; sTen?: string; lPermission?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckAccessPermissionGrant<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; roleGrantId?: string; sFormName?: string; sTen?: string; lPermission?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('AccessPermissionGrant', `${endpoint}/accessPermissionGrant/check`, args, options, fetch);
 }

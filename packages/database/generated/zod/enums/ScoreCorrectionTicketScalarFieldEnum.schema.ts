@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const ScoreCorrectionTicketScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "trainingObjectTypeId", "number", "proposal", "decision", "date", "deadline", "status"])
+export const ScoreCorrectionTicketScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "trainingObjectTypeId", "number", "proposal", "decision", "date", "deadline", "status"])

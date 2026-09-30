@@ -327,7 +327,7 @@ export function useSuspenseCountDM_ChuyenMonKyThuat<TArgs extends Prisma.DM_Chuy
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DM_ChuyenMonKyThuat', `${endpoint}/dM_ChuyenMonKyThuat/count`, args, options, fetch);
 }
 
-export function useCheckDM_ChuyenMonKyThuat<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDM_ChuyenMonKyThuat<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('DM_ChuyenMonKyThuat', `${endpoint}/dM_ChuyenMonKyThuat/check`, args, options, fetch);
 }

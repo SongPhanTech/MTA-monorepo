@@ -328,7 +328,7 @@ export function useSuspenseCountSupervisorPaymentRecord<TArgs extends Prisma.Sup
 }
 import type { PaymentStatus } from '../zenstack/models';
 
-export function useCheckSupervisorPaymentRecord<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; status?: PaymentStatus; transactionCode?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSupervisorPaymentRecord<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; status?: PaymentStatus; transactionCode?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SupervisorPaymentRecord', `${endpoint}/supervisorPaymentRecord/check`, args, options, fetch);
 }

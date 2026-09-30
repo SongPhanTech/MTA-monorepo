@@ -327,7 +327,7 @@ export function useSuspenseCountCriterionPeriod<TArgs extends Prisma.CriterionPe
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('CriterionPeriod', `${endpoint}/criterionPeriod/count`, args, options, fetch);
 }
 
-export function useCheckCriterionPeriod<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; order?: number; evaluationStandardId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckCriterionPeriod<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; order?: number; evaluationStandardId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('CriterionPeriod', `${endpoint}/criterionPeriod/check`, args, options, fetch);
 }

@@ -327,7 +327,7 @@ export function useSuspenseCountNgoaiNgu<TArgs extends Prisma.NgoaiNguCountArgs,
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('NgoaiNgu', `${endpoint}/ngoaiNgu/count`, args, options, fetch);
 }
 
-export function useCheckNgoaiNgu<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; ngonNguId?: string; hinhThucDaoTao?: string; noiDaoTao?: string; trinhDoId?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckNgoaiNgu<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; ngonNguId?: string; hinhThucDaoTao?: string; noiDaoTao?: string; trinhDoId?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('NgoaiNgu', `${endpoint}/ngoaiNgu/check`, args, options, fetch);
 }

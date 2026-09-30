@@ -327,7 +327,7 @@ export function useSuspenseCountScoreConvert<TArgs extends Prisma.ScoreConvertCo
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ScoreConvert', `${endpoint}/scoreConvert/count`, args, options, fetch);
 }
 
-export function useCheckScoreConvert<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; classification?: string; letter?: string; pass?: boolean; improvementRegister?: boolean; trainingCourseId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckScoreConvert<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; classification?: string; letter?: string; pass?: boolean; improvementRegister?: boolean; trainingCourseId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ScoreConvert', `${endpoint}/scoreConvert/check`, args, options, fetch);
 }

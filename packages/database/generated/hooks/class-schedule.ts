@@ -328,7 +328,7 @@ export function useSuspenseCountClassSchedule<TArgs extends Prisma.ClassSchedule
 }
 import type { PeriodType } from '../zenstack/models';
 
-export function useCheckClassSchedule<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; subjectClassId?: string; periodType?: PeriodType; startPeriod?: number; endPeriod?: number; roomId?: string; lecturerId?: string; extraLecturerId?: string; location?: string; notes?: string; isReplacement?: boolean; originalScheduleId?: string; cancelReason?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckClassSchedule<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; subjectClassId?: string; periodType?: PeriodType; startPeriod?: number; endPeriod?: number; roomId?: string; lecturerId?: string; extraLecturerId?: string; location?: string; notes?: string; isReplacement?: boolean; originalScheduleId?: string; cancelReason?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ClassSchedule', `${endpoint}/classSchedule/check`, args, options, fetch);
 }

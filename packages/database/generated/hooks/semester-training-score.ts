@@ -328,7 +328,7 @@ export function useSuspenseCountSemesterTrainingScore<TArgs extends Prisma.Semes
 }
 import type { TrainingScoreStatus } from '../zenstack/models';
 
-export function useCheckSemesterTrainingScore<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; semesterId?: string; studentId?: string; score?: number; status?: TrainingScoreStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSemesterTrainingScore<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; semesterId?: string; studentId?: string; score?: number; status?: TrainingScoreStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SemesterTrainingScore', `${endpoint}/semesterTrainingScore/check`, args, options, fetch);
 }

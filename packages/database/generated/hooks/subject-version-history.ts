@@ -327,7 +327,7 @@ export function useSuspenseCountSubjectVersionHistory<TArgs extends Prisma.Subje
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('SubjectVersionHistory', `${endpoint}/subjectVersionHistory/count`, args, options, fetch);
 }
 
-export function useCheckSubjectVersionHistory<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; subjectVersionId?: string; content?: string; action?: string; updatedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSubjectVersionHistory<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; subjectVersionId?: string; content?: string; action?: string; updatedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SubjectVersionHistory', `${endpoint}/subjectVersionHistory/check`, args, options, fetch);
 }

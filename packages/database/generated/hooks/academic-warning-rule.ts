@@ -328,7 +328,7 @@ export function useSuspenseCountAcademicWarningRule<TArgs extends Prisma.Academi
 }
 import type { CriteriaField, CriteriaOperator } from '../zenstack/models';
 
-export function useCheckAcademicWarningRule<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; field?: CriteriaField; operator?: CriteriaOperator; invert?: boolean; tuple?: string; severity?: number; yearCondition?: number; semesterCondition?: number; trainingCourseId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckAcademicWarningRule<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; field?: CriteriaField; operator?: CriteriaOperator; invert?: boolean; tuple?: string; severity?: number; yearCondition?: number; semesterCondition?: number; trainingCourseId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('AcademicWarningRule', `${endpoint}/academicWarningRule/check`, args, options, fetch);
 }

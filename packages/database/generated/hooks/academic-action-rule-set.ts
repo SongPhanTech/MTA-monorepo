@@ -327,7 +327,7 @@ export function useSuspenseCountAcademicActionRuleSet<TArgs extends Prisma.Acade
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('AcademicActionRuleSet', `${endpoint}/academicActionRuleSet/count`, args, options, fetch);
 }
 
-export function useCheckAcademicActionRuleSet<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; configId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckAcademicActionRuleSet<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; configId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('AcademicActionRuleSet', `${endpoint}/academicActionRuleSet/check`, args, options, fetch);
 }

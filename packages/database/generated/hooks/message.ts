@@ -328,7 +328,7 @@ export function useSuspenseCountMessage<TArgs extends Prisma.MessageCountArgs, T
 }
 import type { MessageSender } from '../zenstack/models';
 
-export function useCheckMessage<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; conversationId?: string; content?: string; sender?: MessageSender }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckMessage<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; conversationId?: string; content?: string; sender?: MessageSender }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Message', `${endpoint}/message/check`, args, options, fetch);
 }

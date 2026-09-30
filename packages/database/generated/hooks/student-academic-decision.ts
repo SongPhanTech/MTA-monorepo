@@ -328,7 +328,7 @@ export function useSuspenseCountStudentAcademicDecision<TArgs extends Prisma.Stu
 }
 import type { AcademicActionType, DecisionStatus } from '../zenstack/models';
 
-export function useCheckStudentAcademicDecision<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; studentId?: string; semesterId?: string; schoolYearId?: string; appliedConfigId?: string; actionTaken?: AcademicActionType; reason?: string; status?: DecisionStatus; updatedResult?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckStudentAcademicDecision<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; studentId?: string; semesterId?: string; schoolYearId?: string; appliedConfigId?: string; actionTaken?: AcademicActionType; reason?: string; status?: DecisionStatus; updatedResult?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('StudentAcademicDecision', `${endpoint}/studentAcademicDecision/check`, args, options, fetch);
 }

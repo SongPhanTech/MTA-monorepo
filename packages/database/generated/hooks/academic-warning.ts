@@ -327,7 +327,7 @@ export function useSuspenseCountAcademicWarning<TArgs extends Prisma.AcademicWar
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('AcademicWarning', `${endpoint}/academicWarning/count`, args, options, fetch);
 }
 
-export function useCheckAcademicWarning<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; studentId?: string; semesterId?: string; level?: number; increasedFrom?: number; decreasedFrom?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckAcademicWarning<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; studentId?: string; semesterId?: string; level?: number; increasedFrom?: number; decreasedFrom?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('AcademicWarning', `${endpoint}/academicWarning/check`, args, options, fetch);
 }

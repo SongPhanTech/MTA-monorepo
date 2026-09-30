@@ -327,7 +327,7 @@ export function useSuspenseCountGraduationDecision<TArgs extends Prisma.Graduati
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('GraduationDecision', `${endpoint}/graduationDecision/count`, args, options, fetch);
 }
 
-export function useCheckGraduationDecision<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; applicationId?: string; studentId?: string; notes?: string; trainingMajorId?: string; finalRankingId?: string; diplomaTypeId?: string; originalDiplomaNumber?: string; diplomaNumber?: string; totalCopy?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckGraduationDecision<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; applicationId?: string; studentId?: string; notes?: string; trainingMajorId?: string; finalRankingId?: string; diplomaTypeId?: string; originalDiplomaNumber?: string; diplomaNumber?: string; totalCopy?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('GraduationDecision', `${endpoint}/graduationDecision/check`, args, options, fetch);
 }

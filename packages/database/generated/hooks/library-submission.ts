@@ -327,7 +327,7 @@ export function useSuspenseCountLibrarySubmission<TArgs extends Prisma.LibrarySu
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('LibrarySubmission', `${endpoint}/librarySubmission/count`, args, options, fetch);
 }
 
-export function useCheckLibrarySubmission<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; isHardcopy?: boolean; isSoftcopy?: boolean; librarianNote?: string; thesisId?: string; confirmedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckLibrarySubmission<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; isHardcopy?: boolean; isSoftcopy?: boolean; librarianNote?: string; thesisId?: string; confirmedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('LibrarySubmission', `${endpoint}/librarySubmission/check`, args, options, fetch);
 }

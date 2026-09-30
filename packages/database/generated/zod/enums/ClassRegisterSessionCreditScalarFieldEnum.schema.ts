@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const ClassRegisterSessionCreditScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "classRegisterSessionId", "minCredit", "maxCredit", "baseScore", "base10Min", "base10Max", "base4Min", "base4Max"])
+export const ClassRegisterSessionCreditScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "classRegisterSessionId", "minCredit", "maxCredit", "baseScore", "base10Min", "base10Max", "base4Min", "base4Max"])

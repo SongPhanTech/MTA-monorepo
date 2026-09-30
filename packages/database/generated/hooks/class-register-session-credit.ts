@@ -328,7 +328,7 @@ export function useSuspenseCountClassRegisterSessionCredit<TArgs extends Prisma.
 }
 import type { AcademicRankingBaseType } from '../zenstack/models';
 
-export function useCheckClassRegisterSessionCredit<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; classRegisterSessionId?: string; minCredit?: number; maxCredit?: number; baseScore?: AcademicRankingBaseType }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckClassRegisterSessionCredit<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; classRegisterSessionId?: string; minCredit?: number; maxCredit?: number; baseScore?: AcademicRankingBaseType }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ClassRegisterSessionCredit', `${endpoint}/classRegisterSessionCredit/check`, args, options, fetch);
 }

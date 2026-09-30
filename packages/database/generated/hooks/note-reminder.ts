@@ -328,7 +328,7 @@ export function useSuspenseCountNoteReminder<TArgs extends Prisma.NoteReminderCo
 }
 import type { ReminderRepeatType } from '../zenstack/models';
 
-export function useCheckNoteReminder<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; title?: string; isCompleted?: boolean; repeatType?: ReminderRepeatType; isNotified?: boolean; noteId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckNoteReminder<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; title?: string; isCompleted?: boolean; repeatType?: ReminderRepeatType; isNotified?: boolean; noteId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('NoteReminder', `${endpoint}/noteReminder/check`, args, options, fetch);
 }

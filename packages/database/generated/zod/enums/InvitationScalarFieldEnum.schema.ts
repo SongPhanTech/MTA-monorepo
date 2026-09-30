@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const InvitationScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sentDate", "isConfirmed", "councilMemberId"])
+export const InvitationScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "sentDate", "isConfirmed", "councilMemberId"])

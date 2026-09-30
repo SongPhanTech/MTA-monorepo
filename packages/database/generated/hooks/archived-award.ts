@@ -328,7 +328,7 @@ export function useSuspenseCountArchivedAward<TArgs extends Prisma.ArchivedAward
 }
 import type { ArchivedCertificateStatus } from '../zenstack/models';
 
-export function useCheckArchivedAward<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; awardId?: string; studentId?: string; status?: ArchivedCertificateStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckArchivedAward<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; awardId?: string; studentId?: string; status?: ArchivedCertificateStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ArchivedAward', `${endpoint}/archivedAward/check`, args, options, fetch);
 }

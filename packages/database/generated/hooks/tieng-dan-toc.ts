@@ -327,7 +327,7 @@ export function useSuspenseCountTiengDanToc<TArgs extends Prisma.TiengDanTocCoun
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TiengDanToc', `${endpoint}/tiengDanToc/count`, args, options, fetch);
 }
 
-export function useCheckTiengDanToc<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; danTocId?: string; nghe?: string; noi?: string; viet?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTiengDanToc<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; danTocId?: string; nghe?: string; noi?: string; viet?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TiengDanToc', `${endpoint}/tiengDanToc/check`, args, options, fetch);
 }

@@ -327,7 +327,7 @@ export function useSuspenseCountTrainingCourseRegulation<TArgs extends Prisma.Tr
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TrainingCourseRegulation', `${endpoint}/trainingCourseRegulation/count`, args, options, fetch);
 }
 
-export function useCheckTrainingCourseRegulation<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; trainingCourseId?: string; code?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTrainingCourseRegulation<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; trainingCourseId?: string; code?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TrainingCourseRegulation', `${endpoint}/trainingCourseRegulation/check`, args, options, fetch);
 }

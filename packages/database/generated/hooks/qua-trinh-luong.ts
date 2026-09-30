@@ -327,7 +327,7 @@ export function useSuspenseCountQuaTrinhLuong<TArgs extends Prisma.QuaTrinhLuong
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('QuaTrinhLuong', `${endpoint}/quaTrinhLuong/count`, args, options, fetch);
 }
 
-export function useCheckQuaTrinhLuong<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; ngachId?: string; bacLuongId?: string; heSo?: string; maNgach?: string; phuCapChucVu?: string; phuCapKhac?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckQuaTrinhLuong<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; ngachId?: string; bacLuongId?: string; heSo?: string; maNgach?: string; phuCapChucVu?: string; phuCapKhac?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('QuaTrinhLuong', `${endpoint}/quaTrinhLuong/check`, args, options, fetch);
 }

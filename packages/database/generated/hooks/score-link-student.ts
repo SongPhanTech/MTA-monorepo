@@ -327,7 +327,7 @@ export function useSuspenseCountScoreLinkStudent<TArgs extends Prisma.ScoreLinkS
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ScoreLinkStudent', `${endpoint}/scoreLinkStudent/count`, args, options, fetch);
 }
 
-export function useCheckScoreLinkStudent<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; scoreLinkSubjectVersionId?: string; studentId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckScoreLinkStudent<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; scoreLinkSubjectVersionId?: string; studentId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ScoreLinkStudent', `${endpoint}/scoreLinkStudent/check`, args, options, fetch);
 }

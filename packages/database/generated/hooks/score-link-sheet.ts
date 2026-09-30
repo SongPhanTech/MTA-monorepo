@@ -328,7 +328,7 @@ export function useSuspenseCountScoreLinkSheet<TArgs extends Prisma.ScoreLinkShe
 }
 import type { ScoreLinkStatus } from '../zenstack/models';
 
-export function useCheckScoreLinkSheet<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; trainingObjectTypeId?: string; note?: string; decision?: string; fixedClassId?: string; semesterId?: string; status?: ScoreLinkStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckScoreLinkSheet<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; trainingObjectTypeId?: string; note?: string; decision?: string; fixedClassId?: string; semesterId?: string; status?: ScoreLinkStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ScoreLinkSheet', `${endpoint}/scoreLinkSheet/check`, args, options, fetch);
 }

@@ -327,7 +327,7 @@ export function useSuspenseCountStudentScoreConvert<TArgs extends Prisma.Student
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('StudentScoreConvert', `${endpoint}/studentScoreConvert/count`, args, options, fetch);
 }
 
-export function useCheckStudentScoreConvert<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; studentId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckStudentScoreConvert<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; studentId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('StudentScoreConvert', `${endpoint}/studentScoreConvert/check`, args, options, fetch);
 }

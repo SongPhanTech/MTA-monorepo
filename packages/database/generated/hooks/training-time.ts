@@ -327,7 +327,7 @@ export function useSuspenseCountTrainingTime<TArgs extends Prisma.TrainingTimeCo
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TrainingTime', `${endpoint}/trainingTime/count`, args, options, fetch);
 }
 
-export function useCheckTrainingTime<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTrainingTime<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TrainingTime', `${endpoint}/trainingTime/check`, args, options, fetch);
 }

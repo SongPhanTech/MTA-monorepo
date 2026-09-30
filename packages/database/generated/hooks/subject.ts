@@ -327,7 +327,7 @@ export function useSuspenseCountSubject<TArgs extends Prisma.SubjectCountArgs, T
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Subject', `${endpoint}/subject/count`, args, options, fetch);
 }
 
-export function useCheckSubject<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; englishName?: string; managementOrganizationId?: string; information?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSubject<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; englishName?: string; managementOrganizationId?: string; information?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Subject', `${endpoint}/subject/check`, args, options, fetch);
 }

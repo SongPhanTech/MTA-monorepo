@@ -328,7 +328,7 @@ export function useSuspenseCountPaymentRecord<TArgs extends Prisma.PaymentRecord
 }
 import type { PaymentStatus } from '../zenstack/models';
 
-export function useCheckPaymentRecord<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; status?: PaymentStatus; transactionCode?: string; councilMemberId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckPaymentRecord<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; status?: PaymentStatus; transactionCode?: string; councilMemberId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('PaymentRecord', `${endpoint}/paymentRecord/check`, args, options, fetch);
 }

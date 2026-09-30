@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const LoadCategoryScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "unit", "standardHours", "category", "note", "isOverageCalculated"])
+export const LoadCategoryScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "name", "unit", "standardHours", "category", "note", "isOverageCalculated"])

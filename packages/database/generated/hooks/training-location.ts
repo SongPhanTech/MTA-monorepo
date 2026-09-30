@@ -327,7 +327,7 @@ export function useSuspenseCountTrainingLocation<TArgs extends Prisma.TrainingLo
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TrainingLocation', `${endpoint}/trainingLocation/count`, args, options, fetch);
 }
 
-export function useCheckTrainingLocation<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; dM_TinhId?: string; dM_Tinh_NewId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTrainingLocation<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; dM_TinhId?: string; dM_Tinh_NewId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TrainingLocation', `${endpoint}/trainingLocation/check`, args, options, fetch);
 }

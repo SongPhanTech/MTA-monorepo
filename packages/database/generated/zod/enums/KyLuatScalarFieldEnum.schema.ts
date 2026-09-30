@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const KyLuatScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "hinhThucKyLuat", "capKyLuat", "soQuyetDinh", "nguoiKy", "ngayNhanQuyetDinh", "lyDo", "userProfileId"])
+export const KyLuatScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "hinhThucKyLuat", "capKyLuat", "soQuyetDinh", "nguoiKy", "ngayNhanQuyetDinh", "lyDo", "userProfileId"])

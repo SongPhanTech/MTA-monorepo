@@ -328,7 +328,7 @@ export function useSuspenseCountAcademicActionConfig<TArgs extends Prisma.Academ
 }
 import type { AcademicActionType } from '../zenstack/models';
 
-export function useCheckAcademicActionConfig<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; actionType?: AcademicActionType; trainingCourseId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckAcademicActionConfig<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; actionType?: AcademicActionType; trainingCourseId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('AcademicActionConfig', `${endpoint}/academicActionConfig/check`, args, options, fetch);
 }

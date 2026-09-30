@@ -327,7 +327,7 @@ export function useSuspenseCountNote<TArgs extends Prisma.NoteCountArgs, TQueryF
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Note', `${endpoint}/note/count`, args, options, fetch);
 }
 
-export function useCheckNote<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; content?: string; isPinned?: boolean; studentId?: string; folderId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckNote<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; content?: string; isPinned?: boolean; studentId?: string; folderId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Note', `${endpoint}/note/check`, args, options, fetch);
 }

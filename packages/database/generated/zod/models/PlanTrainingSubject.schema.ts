@@ -15,6 +15,12 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
+    sNguoiTao: z.string().nullish(),
+    sNguoiSua: z.string().nullish(),
+    dNgayTao: z.coerce.date().nullish(),
+    dNgaySua: z.coerce.date().nullish(),
+    sThietBiTao: z.string().nullish(),
+    sThietBiSua: z.string().nullish(),
     studentCount: z.number().default(0),
     subjectClassType: SubjectClassTypeSchema,
 }
@@ -27,6 +33,12 @@ const baseSchemaWithoutDefaults = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    sNguoiTao: z.string().nullish(),
+    sNguoiSua: z.string().nullish(),
+    dNgayTao: z.coerce.date().nullish(),
+    dNgaySua: z.coerce.date().nullish(),
+    sThietBiTao: z.string().nullish(),
+    sThietBiSua: z.string().nullish(),
     studentCount: z.number(),
     subjectClassType: SubjectClassTypeSchema,
 }
@@ -74,6 +86,12 @@ export const PlanTrainingSubjectPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
+    sNguoiTao: z.string().nullish(),
+    sNguoiSua: z.string().nullish(),
+    dNgayTao: z.coerce.date().nullish(),
+    dNgaySua: z.coerce.date().nullish(),
+    sThietBiTao: z.string().nullish(),
+    sThietBiSua: z.string().nullish(),
     studentCount: z.union([z.number(), z.record(z.string(), z.unknown())]),
     subjectClassType: SubjectClassTypeSchema
 }).partial().passthrough();

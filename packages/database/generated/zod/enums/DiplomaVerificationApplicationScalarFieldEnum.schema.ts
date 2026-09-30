@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const DiplomaVerificationApplicationScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "fullname", "idCardNumber", "dateOfBirth", "phoneNumber", "email", "reason", "originalDiplomaNumber", "diplomaNumber", "trainingMajor", "trainingLevel", "trainingForm", "trainingCourseStartYear", "trainingCourseEndYear", "diplomaIssueDate", "classification", "status", "studentId"])
+export const DiplomaVerificationApplicationScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "fullname", "idCardNumber", "dateOfBirth", "phoneNumber", "email", "reason", "originalDiplomaNumber", "diplomaNumber", "trainingMajor", "trainingLevel", "trainingForm", "trainingCourseStartYear", "trainingCourseEndYear", "diplomaIssueDate", "classification", "status", "studentId"])

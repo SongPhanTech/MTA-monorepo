@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const PersonalWorkTagScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "color", "sortOrder", "lecturerId"])
+export const PersonalWorkTagScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "sNguoiTao", "sNguoiSua", "dNgayTao", "dNgaySua", "sThietBiTao", "sThietBiSua", "name", "color", "sortOrder", "lecturerId"])

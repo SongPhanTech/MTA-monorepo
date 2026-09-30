@@ -327,7 +327,7 @@ export function useSuspenseCountBlockedIp<TArgs extends Prisma.BlockedIpCountArg
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('BlockedIp', `${endpoint}/blockedIp/count`, args, options, fetch);
 }
 
-export function useCheckBlockedIp<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; ipAddress?: string; reason?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckBlockedIp<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; ipAddress?: string; reason?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('BlockedIp', `${endpoint}/blockedIp/check`, args, options, fetch);
 }

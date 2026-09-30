@@ -327,7 +327,7 @@ export function useSuspenseCountKnowledgeBlock<TArgs extends Prisma.KnowledgeBlo
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('KnowledgeBlock', `${endpoint}/knowledgeBlock/count`, args, options, fetch);
 }
 
-export function useCheckKnowledgeBlock<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; examMatrixId?: string; subjectVersionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckKnowledgeBlock<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; sNguoiTao?: string; sNguoiSua?: string; sThietBiTao?: string; sThietBiSua?: string; name?: string; examMatrixId?: string; subjectVersionId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('KnowledgeBlock', `${endpoint}/knowledgeBlock/check`, args, options, fetch);
 }
